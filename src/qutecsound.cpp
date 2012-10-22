@@ -2471,7 +2471,7 @@ void CsoundQt::createActions()
 	stopAct->setShortcutContext(Qt::ApplicationShortcut);
 	connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
 
-	pauseAct = new QAction(QIcon(prefix + "gtk-media-stop.png"), tr("Pause"), this);
+	pauseAct = new QAction(QIcon(prefix + "gtk-media-pause.png"), tr("Pause"), this);
 	pauseAct->setStatusTip(tr("Pause"));
 	pauseAct->setIconText(tr("Pause"));
 	pauseAct->setShortcutContext(Qt::ApplicationShortcut);

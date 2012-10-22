@@ -145,6 +145,7 @@ outs asig*klevel, asig*klevel
 endin
 
 instr 99 ; Always on
+krel init -1
 krel chnget "rel"
 kfreq chnget "freq"
 
@@ -249,10 +250,10 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>145</x>
- <y>155</y>
- <width>713</width>
- <height>535</height>
+ <x>203</x>
+ <y>124</y>
+ <width>703</width>
+ <height>470</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -836,7 +837,7 @@ e
   <midicc>-3</midicc>
   <minimum>100.00000000</minimum>
   <maximum>1500.00000000</maximum>
-  <value>439.99999808</value>
+  <value>440.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -957,7 +958,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>448.801</label>
+  <label>440.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -986,7 +987,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>462.001</label>
+  <label>880.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -1015,7 +1016,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>492.801</label>
+  <label>1320.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -1044,7 +1045,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>501.601</label>
+  <label>1760.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -1073,7 +1074,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>523.601</label>
+  <label>2200.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -1102,7 +1103,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>532.401</label>
+  <label>2640.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -1131,7 +1132,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>554.401</label>
+  <label>3080.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -1160,7 +1161,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>567.601</label>
+  <label>3520.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -1189,7 +1190,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>580.801</label>
+  <label>3960.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -1218,7 +1219,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>594.001</label>
+  <label>4400.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -1247,7 +1248,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>598.401</label>
+  <label>4840.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -1276,7 +1277,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>611.601</label>
+  <label>5280.000</label>
   <alignment>left</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -1456,7 +1457,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.02</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac2</objectName>
@@ -1485,7 +1486,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.05</value>
+  <value>2</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac3</objectName>
@@ -1514,7 +1515,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.12</value>
+  <value>3</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac4</objectName>
@@ -1543,7 +1544,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.14</value>
+  <value>4</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac5</objectName>
@@ -1572,7 +1573,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.19</value>
+  <value>5</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac6</objectName>
@@ -1601,7 +1602,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.21</value>
+  <value>6</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac7</objectName>
@@ -1630,7 +1631,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.26</value>
+  <value>7</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac8</objectName>
@@ -1659,7 +1660,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.29</value>
+  <value>8</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac9</objectName>
@@ -1688,7 +1689,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.32</value>
+  <value>9</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac10</objectName>
@@ -1717,7 +1718,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.35</value>
+  <value>10</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac11</objectName>
@@ -1746,7 +1747,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.36</value>
+  <value>11</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>fac12</objectName>
@@ -1775,7 +1776,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.39</value>
+  <value>12</value>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>reset</objectName>
@@ -2220,7 +2221,7 @@ e
   <image>/</image>
   <eventLine>i1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

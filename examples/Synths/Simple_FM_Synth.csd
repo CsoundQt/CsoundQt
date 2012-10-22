@@ -89,64 +89,913 @@ e
 </CsScore>
 </CsoundSynthesizer>
 
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 510 165 437 500
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {38550, 41634, 35209}
-ioText {303, 57} {124, 189} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border Carrier Amp Env
-ioSlider {317, 78} {20, 100} 0.000001 1.000000 0.050001 aatt
-ioSlider {344, 78} {20, 100} 0.000001 1.000000 0.110001 adec
-ioSlider {369, 78} {20, 100} 0.000000 1.000000 0.680000 asus
-ioSlider {396, 78} {20, 100} 0.000001 1.000000 0.460001 arel
-ioText {319, 177} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder A
-ioText {347, 177} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder D
-ioText {372, 177} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder S
-ioText {397, 176} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder R
-ioKnob {367, 196} {56, 50} 0.000000 1.000000 0.010000 0.212121 level
-ioText {323, 211} {45, 26} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Level
-ioButton {326, 255} {93, 28} event 1.000000 "" "Note" "/" i98 0 3
-ioKnob {326, 288} {48, 49} 110.000000 880.000000 0.010000 312.222222 freq
-ioText {360, 336} {35, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Hz
-ioText {313, 341} {49, 23} scroll 312.222222 0.100000 "freq" right "Helvetica" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 312.2
-ioText {7, 3} {421, 46} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 20 {65280, 65280, 65280} {21760, 21760, 0} background noborder Simple FM Synth
-ioText {7, 57} {291, 189} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border Modulator
-ioSlider {18, 91} {20, 100} 0.000001 1.000000 0.220001 modatt
-ioSlider {45, 91} {20, 100} 0.000001 1.000000 0.600000 moddec
-ioSlider {70, 91} {20, 100} 0.000000 1.000000 1.000000 modsus
-ioSlider {97, 91} {20, 100} 0.000001 1.000000 0.000001 modrel
-ioText {20, 191} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder A
-ioText {48, 191} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder D
-ioText {73, 191} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder S
-ioText {98, 190} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder R
-ioText {209, 71} {78, 25} editnum 0.250000 0.010000 "modfactor" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.250000
-ioText {127, 72} {82, 24} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Freq factor
-ioText {127, 101} {82, 25} label 0.000000 0.00100 "" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequency
-ioText {207, 101} {81, 26} display 78.055557 0.00100 "mod1freq" left "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 78.0556
-ioKnob {136, 151} {52, 51} 0.000000 5.000000 0.010000 4.141414 modindex
-ioText {124, 201} {80, 25} label 0.000000 0.00100 "" center "Bitstream Vera Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Index
-ioGraph {6, 254} {312, 107} scope 4.000000 1.000000 
-ioGraph {7, 367} {420, 122} table 0.000000 5.000000 
-ioText {187, 162} {80, 25} display 4.141414 0.00100 "index" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4.1414
-ioCheckbox {378, 292} {20, 20} off on
-ioText {394, 291} {28, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder On
-</MacGUI>
-
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="945" y="397" width="596" height="322"> 
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>458</x>
+ <y>188</y>
+ <width>434</width>
+ <height>497</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>150</r>
+  <g>162</g>
+  <b>137</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>303</x>
+  <y>57</y>
+  <width>124</width>
+  <height>189</height>
+  <uuid>{d24a6567-245e-4b96-a96c-265154ea2763}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Carrier Amp Env</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>aatt</objectName>
+  <x>317</x>
+  <y>78</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{52285914-cd8e-4320-83ed-740bb6e00cc5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000100</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.05000100</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>adec</objectName>
+  <x>344</x>
+  <y>78</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{ae9a1fd4-3a2d-455e-8cf9-0bee3b33cf35}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000100</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.11000100</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>asus</objectName>
+  <x>369</x>
+  <y>78</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{3f6778f4-f803-452b-8ad0-0c9d5c4cbd5d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.68000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>arel</objectName>
+  <x>396</x>
+  <y>78</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{ca4f7523-9201-4206-b2b6-a072148c3a2c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000100</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.46000100</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>319</x>
+  <y>177</y>
+  <width>18</width>
+  <height>24</height>
+  <uuid>{bcf32e26-2bf7-4ad4-8a7b-69ef032ace4a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>A</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>347</x>
+  <y>177</y>
+  <width>18</width>
+  <height>24</height>
+  <uuid>{d5344ca1-d562-4dd8-a4fe-8dd5733a623e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>D</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>372</x>
+  <y>177</y>
+  <width>18</width>
+  <height>24</height>
+  <uuid>{73d35ddb-baba-41e2-bf82-d6b91c90cf99}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>S</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>397</x>
+  <y>176</y>
+  <width>18</width>
+  <height>24</height>
+  <uuid>{a656444c-2c8f-4ec7-ba9d-28908c0c930b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>R</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob">
+  <objectName>level</objectName>
+  <x>367</x>
+  <y>196</y>
+  <width>56</width>
+  <height>50</height>
+  <uuid>{72278ecf-6354-4450-ac8e-0dd2e1ae75a8}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.21212100</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>323</x>
+  <y>211</y>
+  <width>45</width>
+  <height>26</height>
+  <uuid>{28be316d-00c7-4ce9-aa38-795d5e410491}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Level</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBButton">
+  <objectName/>
+  <x>326</x>
+  <y>255</y>
+  <width>93</width>
+  <height>28</height>
+  <uuid>{8fd7940b-e8ae-4dcc-ad46-a1122c8304dc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Note</text>
+  <image>/</image>
+  <eventLine>i98 0 3</eventLine>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob">
+  <objectName>freq</objectName>
+  <x>326</x>
+  <y>288</y>
+  <width>48</width>
+  <height>49</height>
+  <uuid>{b570746e-7bce-4da8-8d2c-484962ef3051}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>110.00000000</minimum>
+  <maximum>880.00000000</maximum>
+  <value>312.22222200</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>360</x>
+  <y>336</y>
+  <width>35</width>
+  <height>25</height>
+  <uuid>{440ae8a0-c22e-4bc6-90b6-b38735055e8a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Hz</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBScrollNumber">
+  <objectName>freq</objectName>
+  <x>313</x>
+  <y>341</y>
+  <width>49</width>
+  <height>23</height>
+  <uuid>{b7c10b60-531a-4d72-9e4b-5481a69f0863}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>right</alignment>
+  <font>Helvetica</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>312.20000000</value>
+  <resolution>0.10000000</resolution>
+  <minimum>-999999999999.00000000</minimum>
+  <maximum>99999999999999.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act="continuous"/>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>7</x>
+  <y>3</y>
+  <width>421</width>
+  <height>46</height>
+  <uuid>{7d867dcb-f254-41e1-9688-ac4493acaffa}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Simple FM Synth</label>
+  <alignment>left</alignment>
+  <font>Bitstream Vera Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="background">
+   <r>85</r>
+   <g>85</g>
+   <b>0</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>7</x>
+  <y>57</y>
+  <width>291</width>
+  <height>189</height>
+  <uuid>{997d3d17-6315-467b-87e9-f90019528715}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Modulator</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>modatt</objectName>
+  <x>18</x>
+  <y>91</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{92b90402-b30e-4fe4-89cf-1d190c50ac1f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000100</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.22000100</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>moddec</objectName>
+  <x>45</x>
+  <y>91</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{154d0574-233c-4e7e-99d0-40f38e808105}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000100</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.60000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>modsus</objectName>
+  <x>70</x>
+  <y>91</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{43b9c7cb-bb3e-4ac4-bf07-f36f2f672969}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>modrel</objectName>
+  <x>97</x>
+  <y>91</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{bf98c730-c083-47f3-81b9-1f6c760589ab}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000100</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000100</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>20</x>
+  <y>191</y>
+  <width>18</width>
+  <height>24</height>
+  <uuid>{226aa66a-4728-443b-943b-11fd61f3d619}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>A</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>48</x>
+  <y>191</y>
+  <width>18</width>
+  <height>24</height>
+  <uuid>{0705b2ef-d2e0-4e2f-9849-12a2e972b3a7}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>D</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>73</x>
+  <y>191</y>
+  <width>18</width>
+  <height>24</height>
+  <uuid>{dac7bfb6-8958-4e09-9e92-a120e30d88f0}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>S</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>98</x>
+  <y>190</y>
+  <width>18</width>
+  <height>24</height>
+  <uuid>{75f53fde-54c5-44de-a089-5b1a603e64ff}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>R</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>modfactor</objectName>
+  <x>209</x>
+  <y>71</y>
+  <width>78</width>
+  <height>25</height>
+  <uuid>{02d4392c-1838-481c-b42d-3fc69183fff6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>0.01000000</resolution>
+  <minimum>-1e+12</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>0.25</value>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>127</x>
+  <y>72</y>
+  <width>82</width>
+  <height>24</height>
+  <uuid>{85f65a4a-d052-4eb3-bb50-5e8c38687862}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Freq factor</label>
+  <alignment>left</alignment>
+  <font>Bitstream Vera Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>127</x>
+  <y>101</y>
+  <width>82</width>
+  <height>25</height>
+  <uuid>{3fde78a2-f109-4353-a6cf-7cb11b6785d4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Frequency</label>
+  <alignment>left</alignment>
+  <font>Bitstream Vera Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>mod1freq</objectName>
+  <x>207</x>
+  <y>101</y>
+  <width>81</width>
+  <height>26</height>
+  <uuid>{96ac1dfc-84fa-4ea8-a8c2-c9a0cf1cae9a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>78.0556</label>
+  <alignment>left</alignment>
+  <font>Bitstream Vera Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBKnob">
+  <objectName>modindex</objectName>
+  <x>136</x>
+  <y>151</y>
+  <width>52</width>
+  <height>51</height>
+  <uuid>{fec82d6b-f6d2-4998-b80a-aa8767afe151}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>5.00000000</maximum>
+  <value>4.14141400</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>124</x>
+  <y>201</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{5abc7fa0-6696-4ce5-a5ba-a57ab880c052}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Index</label>
+  <alignment>center</alignment>
+  <font>Bitstream Vera Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBScope">
+  <objectName/>
+  <x>6</x>
+  <y>254</y>
+  <width>312</width>
+  <height>107</height>
+  <uuid>{ac1cafe0-a2b2-40e3-9eb7-ba9181805e25}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <value>1.00000000</value>
+  <type>scope</type>
+  <zoomx>4.00000000</zoomx>
+  <zoomy>1.00000000</zoomy>
+  <dispx>1.00000000</dispx>
+  <dispy>1.00000000</dispy>
+  <mode>0.00000000</mode>
+ </bsbObject>
+ <bsbObject version="2" type="BSBGraph">
+  <objectName/>
+  <x>7</x>
+  <y>367</y>
+  <width>420</width>
+  <height>122</height>
+  <uuid>{0e18b8a6-dd3a-493d-8a28-89046c1e1d66}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <value>0</value>
+  <objectName2/>
+  <zoomx>5.00000000</zoomx>
+  <zoomy>1.00000000</zoomy>
+  <dispx>1.00000000</dispx>
+  <dispy>1.00000000</dispy>
+  <modex>auto</modex>
+  <modey>auto</modey>
+  <all>true</all>
+ </bsbObject>
+ <bsbObject version="2" type="BSBDisplay">
+  <objectName>index</objectName>
+  <x>187</x>
+  <y>162</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{44744181-1d69-4efd-b3f4-10bf29cbb42c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>4.1414</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBCheckBox">
+  <objectName>on</objectName>
+  <x>378</x>
+  <y>292</y>
+  <width>20</width>
+  <height>20</height>
+  <uuid>{2bd0732f-6957-498c-8422-3ef8e269f5fe}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <selected>false</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>394</x>
+  <y>291</y>
+  <width>28</width>
+  <height>24</height>
+  <uuid>{c76f669d-1d21-4fb7-bab3-304ad6fb12ef}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>On</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="945" y="397" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    
 i 1 0 1 440 
- 
- 
- 
- 
- 
- 
- 
- </EventPanel>
+    
+    
+    
+    
+    
+    
+    
+    </EventPanel>
