@@ -341,6 +341,7 @@ private:
 	QAction *editAct;
 	QAction *runAct;
 	QAction *runTermAct;
+	QAction *pauseAct;
 	QAction *stopAct;
 	QAction *stopAllAct;
 	QAction *recAct;

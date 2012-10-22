@@ -590,8 +590,10 @@ void CsoundEngine::stop()
 void CsoundEngine::pause()
 {
 	if (isRunning() && ud->perfThread->GetStatus() == 0) {
-		ud->perfThread->Pause();
+		//ud->perfThread->Pause();
+		ud->perfThread->TogglePause();
 	}
+
 }
 
 int CsoundEngine::startRecording(int sampleformat, QString fileName)

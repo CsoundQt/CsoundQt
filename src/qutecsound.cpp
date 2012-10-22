@@ -2172,6 +2172,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	runAct->setShortcut(tr("CTRL+R"));
 	runTermAct->setShortcut(tr(""));
 	stopAct->setShortcut(tr("Alt+S"));
+	pauseAct->setShortcut(tr(""));
 	stopAllAct->setShortcut(tr("Ctrl+."));
 	recAct->setShortcut(tr("Ctrl+Space"));
 	renderAct->setShortcut(tr("Alt+F"));
@@ -2469,6 +2470,12 @@ void CsoundQt::createActions()
 	stopAct->setIconText(tr("Stop"));
 	stopAct->setShortcutContext(Qt::ApplicationShortcut);
 	connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
+
+	pauseAct = new QAction(QIcon(prefix + "gtk-media-stop.png"), tr("Pause"), this);
+	pauseAct->setStatusTip(tr("Pause"));
+	pauseAct->setIconText(tr("Pause"));
+	pauseAct->setShortcutContext(Qt::ApplicationShortcut);
+	connect(pauseAct, SIGNAL(triggered()), this, SLOT(pause()));
 
 	stopAllAct = new QAction(QIcon(prefix + "gtk-media-stop.png"), tr("Stop All"), this);
 	stopAllAct->setStatusTip(tr("Stop all running documents"));
@@ -2821,6 +2828,7 @@ void CsoundQt::setKeyboardShortcutsList()
 	m_keyActions.append(runAct);
 	m_keyActions.append(runTermAct);
 	m_keyActions.append(stopAct);
+	m_keyActions.append(pauseAct);
 	m_keyActions.append(stopAllAct);
 	m_keyActions.append(recAct);
 	m_keyActions.append(renderAct);
@@ -2996,6 +3004,7 @@ void CsoundQt::createMenus()
 	controlMenu = menuBar()->addMenu(tr("Control"));
 	controlMenu->addAction(runAct);
 	controlMenu->addAction(runTermAct);
+	controlMenu->addAction(pauseAct);
 	controlMenu->addAction(renderAct);
 	controlMenu->addAction(recAct);
 	controlMenu->addAction(stopAct);
@@ -3760,6 +3769,7 @@ void CsoundQt::createToolBars()
 	controlToolBar = addToolBar(tr("Control"));
 	controlToolBar->setObjectName("controlToolBar");
 	controlToolBar->addAction(runAct);
+	controlToolBar->addAction(pauseAct);
 	controlToolBar->addAction(stopAct);
 	controlToolBar->addAction(runTermAct);
 	controlToolBar->addAction(recAct);
