@@ -950,7 +950,7 @@ Aborting.</translation>
     <message>
         <location filename="../configdialog.ui" line="744"/>
         <source>Debug mode for Live Event Sheet</source>
-        <translation>Debug-Modus für Live Event Blatt</translation>
+        <translation>Debug-Modus für Live Event Sheet</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="901"/>
@@ -2692,7 +2692,7 @@ Erweiterte Python-Features sind nicht verfügbar</translation>
     <message>
         <location filename="../qutecsound.cpp" line="3153"/>
         <source>Examples</source>
-        <translation>Examples</translation>
+        <translation>Beispiele</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3166"/>
