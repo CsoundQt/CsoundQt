@@ -52,6 +52,7 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
 #define DEFAULT_DOT_EXECUTABLE "dot"
 #define DEFAULT_LOG_FILE ""
+#define DEFAULT_SCRIPT_DIR "../../csoundqt/src/Scripts"
 #endif
 #ifdef Q_OS_SOLARIS
 #define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"
@@ -62,6 +63,7 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
 #define DEFAULT_DOT_EXECUTABLE "dot"
 #define DEFAULT_LOG_FILE ""
+#define DEFAULT_SCRIPT_DIR "../../csoundqt/src/Scripts"
 #endif
 #ifdef Q_WS_MAC
 #define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Resources/Manual"
@@ -72,6 +74,7 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/Applications/Preview.app"
 #define DEFAULT_DOT_EXECUTABLE "/usr/local/bin/dot"
 #define DEFAULT_LOG_FILE ""
+#define DEFAULT_SCRIPT_DIR qApp->applicationDirPath() + "/../Resources/Scripts"
 #endif
 #ifdef Q_OS_WIN32
 #define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
@@ -82,6 +85,7 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #define DEFAULT_DOT_EXECUTABLE ""
 #define DEFAULT_LOG_FILE ""
+#define DEFAULT_SCRIPT_DIR qApp->applicationDirPath() + "/Scripts"
 #endif
 
 #define QCS_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"

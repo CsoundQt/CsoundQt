@@ -77,6 +77,8 @@ def deployWithPython(PRECISION, NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, C
     # os.mkdir(APP_NAME + '/Contents/Resources')
     shutil.copytree(
         '../src/Examples/McCurdy Collection', ORIG_APP_NAME + '/Contents/Resources/McCurdy Collection')
+    shutil.copytree(
+        '../src/Scripts', ORIG_APP_NAME + '/Contents/Resources/Scripts')
     
     #chmod -R a-w $APP_NAME/Contents/Resources
     #pdb.set_trace()

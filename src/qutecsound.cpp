@@ -3642,8 +3642,11 @@ void CsoundQt::fillFavoriteMenu()
 	favoriteMenu->clear();
 	if (!m_options->favoriteDir.isEmpty()) {
 		QDir dir(m_options->favoriteDir);
-		QStringList filters;
 		fillFavoriteSubMenu(dir.absolutePath(), favoriteMenu, 0);
+	}
+	else {
+		favoriteMenu->addAction(tr("Set the Favourites folder in the Configuration Window"),
+								this, SLOT(configure()));
 	}
 }
 
@@ -3679,16 +3682,12 @@ void CsoundQt::fillScriptsMenu()
 {
 #ifdef QCS_PYTHONQT
 	scriptsMenu->clear();
-	if (!m_options->pythonDir.isEmpty()) {
-		QDir dir(m_options->pythonDir);
-		QStringList filters;
+	QString dirName = m_options->pythonDir.isEmpty() ? DEFAULT_SCRIPT_DIR : m_options->pythonDir;
+	QDir dir(dirName);
+	if (dir.count() > 0) {
 		fillScriptsSubMenu(dir.absolutePath(), scriptsMenu, 0);
-	}
-	scriptsMenu->addSeparator();
-	QMenu *editMenu = scriptsMenu->addMenu("Edit");
-	if (!m_options->pythonDir.isEmpty()) {
-		QDir dir(m_options->pythonDir);
-		QStringList filters;
+		scriptsMenu->addSeparator();
+		QMenu *editMenu = scriptsMenu->addMenu("Edit");
 		fillEditScriptsSubMenu(dir.absolutePath(), editMenu, 0);
 	}
 #endif
