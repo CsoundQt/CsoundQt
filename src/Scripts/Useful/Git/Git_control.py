@@ -1,4 +1,7 @@
 # By Andres Cabrera 2012
+# Basic git version control from a simple GUI
+# Designed for local storage only
+# Does not support remote repositories yet
 
 import PythonQt.QtGui as pqt
 import PythonQt.QtCore as pqtc
@@ -7,16 +10,12 @@ from subprocess import call
 import errno
 
 git_bin = 'git'
-git_dir = ''
-
-
-w = pqt.QWidget() # Create main widget
-text = pqt.QTextBrowser(w) # and text output display
 
 def commit():
     os.chdir(q.getFilePath())
     comment = pqt.QInputDialog.getText(0, "Comment",
-                                          "Enter comment", pqt.QLineEdit.Normal,
+                                          "Enter comment",
+                                          pqt.QLineEdit.Normal,
                                           "")
     if comment != '':
         full_out = ''
@@ -39,7 +38,7 @@ def commit():
 def initialize():
     os.chdir(q.getFilePath())
     f = file('git-log.txt', 'w')
-    call(["git", "init"], stderr=f, stdout = f)
+    call([git_bin, "init"], stderr=f, stdout = f)
     f.close()
     f = file('git-log.txt', 'r')
     o = f.readlines()
@@ -78,6 +77,10 @@ def gitk():
     for line in o:
         full_out += line
     #text.setPlainText(full_out);
+
+w = pqt.QWidget() # Create main widget
+text = pqt.QTextBrowser(w) # and text output display
+text.setPlainText('Simple Git version control for local files.')
 
 w.setGeometry(50,50, 250,200)
 l = pqt.QGridLayout(w) # Layout to organize widgets

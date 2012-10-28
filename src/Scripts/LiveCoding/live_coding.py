@@ -1,3 +1,8 @@
+# Simple live coding demo
+# by Andres Cabrera 2012
+# This file opens a csd file in a separate tab, runs it and
+# sends events to it.
+
 ## Load and play the csd file
 if (q.getDocument("live_coding.py") == -1):
     q.loadDocument("live_coding.py") # load if not already open
@@ -19,7 +24,7 @@ def randomLadder(remaining, dur, next = 0):
     text = "i 1 %f %f %f %f\n"%(next + dur/2, dur, freq, amp)
     
     if remaining > 0:
-        text = text + randomLadder(remaining - 1.0, dur*0.8,next + dur)
+        text = text + randomLadder(remaining - 1.0, dur*0.9,next + dur)
     return text
 
 q.sendEvent(d,randomLadder(10, 1))
@@ -33,4 +38,6 @@ q.sendEvent(d,randomLadder(30, 0.9))
 q.sendEvent(d,randomLadder(30, 0.899))
 q.sendEvent(d,randomLadder(30, 0.898))
 q.sendEvent(d,randomLadder(30, 0.897))
-## Now your turn
+
+## Now your turn...
+
