@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# This script indents the selection on the current document
+# or the whole document if nothing is selected
+
+import PythonQt.QtGui as pqt
 
 selection = q.getSelectedText()  # Get current selection
 # Careful, you must select a whole instrument block, or you will get strange indentation
@@ -33,9 +37,18 @@ for line in orcLines:  # go through all the lines
     newOrcText += line + "\n"
     level = newlevel
 
-if (selection == ""):
-    q.setOrc(newOrcText)  # Write all the orchestra section
+if (q.getFileName().endswith('.csd')):
+    if (selection == ""):
+        q.setOrc(newOrcText)  # Write all the orchestra section
+        pqt.QMessageBox.information(0, 'Indent script',
+            'Selection has been indented')
+    else:
+        if selection[-1] != "\n":  # If selection doesn't end with line ending
+            newOrcText = newOrcText[0:-2] # Remove extra line ending
+        q.insertText(newOrcText)  # Peplaces the current selection
+        pqt.QMessageBox.information(0, 'Indent script',
+            'All document indented')
 else:
-    if selection[-1] != "\n":  # If selection doesn't end with line ending
-        newOrcText = newOrcText[0:-2] # Remove extra line ending
-    q.insertText(newOrcText)  # Peplaces the current selection
+    pqt.QMessageBox.information(0, 'Indent script',
+            'Not a csd file!')
+   

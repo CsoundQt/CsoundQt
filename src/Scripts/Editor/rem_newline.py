@@ -18,7 +18,7 @@ def remNewline():
 
 #info and render window
 w = pqt.QWidget() 
-w.setGeometry(200,50, 100,200)
+w.setGeometry(200,50, 200,100)
 l = pqt.QGridLayout(w) 
 w.setLayout(l)
 w.setWindowTitle("Remove Newlines")
