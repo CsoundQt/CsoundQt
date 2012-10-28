@@ -1,46 +1,28 @@
-<CsoundSynthesizer>
-<CsOptions>
-</CsOptions>
-<CsInstruments>
+q.loadDocument('bytesong.py')
+q.play()
+q.setDocument(q.getDocument('bytesongs.py'))
 
+1/0
+##You should now be able to run any of these to enjoy 8-bit glory!
 
-</CsInstruments>
-<CsScore>
+bytesong('kt*((kt>>12|kt>>8)&63&kt>>4)')                         # by viznut
+##
+bytesong('(kt*(kt>>5|kt>>8))>>(kt>>16)')                         # by tejeez
+##
+bytesong('kt*((kt>>9|kt>>13)&25&kt>>6)')                          # by visy
+##
+bytesong('kt*(kt>>11&kt>>8&123&kt>>3)')                           # by tejeez
+##
+bytesong('kt*(kt>>((kt>>9|kt>>8))&63&kt>>4)')                     # by visy
+##
+bytesong('(kt>>6|kt|kt>>(kt>>16))*10+((kt>>11)&7)')               # by viznut
+##
+bytesong('(av>>1)+(av>>4)+kt*(((kt>>16)|(kt>>6))&(69&(kt>>9)))')  # by pyryp
+##
+bytesong('kt*5&(kt>>7)|kt*3&(kt*4>>10)')                          # by miiro
+##
+bytesong('(kt>>7|kt|kt>>6)*10+4*(kt&kt>>13|kt>>6)')               # by viznut
+##
 
-</CsScore>
-</CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>0</x>
- <y>30</y>
- <width>30</width>
- <height>105</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>231</r>
-  <g>46</g>
-  <b>255</b>
- </bgcolor>
- <bsbObject version="2" type="BSBVSlider">
-  <objectName>slider1</objectName>
-  <x>5</x>
-  <y>5</y>
-  <width>20</width>
-  <height>100</height>
-  <uuid>{b3c59237-a149-468a-bf4b-efb9fffa94a2}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <minimum>0.00000000</minimum>
-  <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
-  <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
-  <resolution>-1.00000000</resolution>
-  <randomizable group="0">false</randomizable>
- </bsbObject>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+# And execute the following line to stop the song
+stopsong()

@@ -1,7 +1,7 @@
 
 <CsoundSynthesizer>
 <CsOptions>
--m0 -odac --omacro:PAT=kt*(kt>>((kt>>9|kt>>8))&63&kt>>4)
+-m0 -odac --omacro:PAT=(kt*(kt>>5|kt>>8))>>(kt>>16)
 </CsOptions>
 <CsInstruments>
 
@@ -46,10 +46,10 @@ i 1 0 3600
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>1047</x>
- <y>389</y>
- <width>575</width>
- <height>528</height>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>200</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="nobackground">
