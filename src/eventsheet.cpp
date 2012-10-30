@@ -154,7 +154,7 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
 	// undo history. This seems better than calling markHistory() when a cell
 	// changes because large operations like add or subractract will produce
 	// many steps in the history
-	connect(this, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(cellDoubleClickedSlot(int, int)));
+//	connect(this, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(cellDoubleClickedSlot(int, int)));
 	connect(this, SIGNAL(cellChanged (int, int)), this, SLOT(cellChangedSlot(int, int)));
 
 	loopTimer.setSingleShot(true);

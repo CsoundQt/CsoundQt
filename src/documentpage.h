@@ -46,7 +46,6 @@ public:
 	DocumentPage(QWidget *parent, OpEntryParser *opcodeTree);
 	~DocumentPage();
 
-	virtual void setFileName(QString name);
 	virtual void setTextString(QString &text);
 	void setCompanionFileName(QString name);
 	void setEditorFocus();

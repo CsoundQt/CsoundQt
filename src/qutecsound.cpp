@@ -857,12 +857,8 @@ void CsoundQt::showNewFormatWarning()
 bool CsoundQt::saveAs()
 {
 	QString fileName = getSaveFileName();
-	if (fileName != "") {
-		if (saveFile(fileName)) {
-			setCurrentFile(fileName);
-			documentPages[curPage]->setFileName(fileName);
-			return true;
-		}
+	if (!fileName.isEmpty() && saveFile(fileName)) {
+		return true;
 	}
 	return false;
 }
@@ -4444,7 +4440,7 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
 		text = documentPages[curPage]->getBasicText();
 	QApplication::restoreOverrideCursor();
 
-	if (fileName != documentPages[curPage]->getFileName() && saveWidgets) {
+	if (fileName != documentPages[curPage]->getFileName()) {
 		documentPages[curPage]->setFileName(fileName);
 		setCurrentFile(fileName);
 	}

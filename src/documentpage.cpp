@@ -57,29 +57,6 @@ DocumentPage::~DocumentPage()
 	//  deleteAllLiveEvents(); // FIXME This is also crashing...
 }
 
-void DocumentPage::setFileName(QString name)
-{
-	fileName = name;
-	if (name.endsWith(".csd") || name.isEmpty()) {
-		m_view->setFileType(0);
-	}
-	else if (name.endsWith(".py")) {
-		m_view->setFileType(1);
-	}
-	else if (name.endsWith(".xml")) {
-		m_view->setFileType(2);
-	}
-	else if (name.endsWith(".orc")) {
-		m_view->setFileType(3);
-	}
-	else if (name.endsWith(".sco")) {
-		m_view->setFileType(4);
-	}
-	else {
-		m_view->setFileType(-1);
-	}
-}
-
 void DocumentPage::setCompanionFileName(QString name)
 {
 	companionFile = name;
