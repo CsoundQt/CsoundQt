@@ -45,8 +45,8 @@ DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
 DEFAULT_PYTHONQT_SRC_DIRS = ../../../PythonQt2.0.1 \
         ../PythonQt2.0.1 \
         PythonQt2.0.1
-PYTHONQT_LIB = PythonQt_QtAll$${DEBUG_EXT}
-
+#PYTHONQT_LIB = PythonQt_QtAll$${DEBUG_EXT}
+PYTHONQT_LIB = PythonQt_QtAll
 # Do configuration step
 include(config.pri)
 
