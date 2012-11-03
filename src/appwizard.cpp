@@ -2,14 +2,14 @@
 	Copyright (C) 2010 Andres Cabrera
 	mantaraya36@gmail.com
 
-	This file is part of QuteCsound.
+	This file is part of CsoundQt.
 
-	QuteCsound is free software; you can redistribute it
+	CsoundQt is free software; you can redistribute it
 	and/or modify it under the terms of the GNU Lesser General Public
 	License as published by the Free Software Foundation; either
 	version 2.1 of the License, or (at your option) any later version.
 
-	QuteCsound is distributed in the hope that it will be useful,
+	CsoundQt is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU Lesser General Public License for more details.
@@ -104,7 +104,7 @@ void AppWizard::makeApp()
 	QStringList dataFiles = this->page(m_additionalsPage)->property("dataFiles").toStringList();
 
 	if (!QFile::exists(targetDir)) {
-		QMessageBox::critical(this, tr("QuteCsound App Creator"),
+		QMessageBox::critical(this, tr("CsoundQt App Creator"),
 							  tr("The destination directory does not exist!\n"
 								 "Aborting."));
 		return;
@@ -236,7 +236,7 @@ void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFi
 	//      dir.mkdir("lib");
 	//      dir.mkdir("data");
 	//      dir.cd("data");
-	//      QMessageBox::critical(this, tr("QuteCsound App Creator"),
+	//      QMessageBox::critical(this, tr("CsoundQt App Creator"),
 	//                            tr("Plugins:") + dataFiles.join("\n"));
 	//      foreach(QString file, dataFiles) {
 	//        QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
@@ -251,7 +251,7 @@ void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFi
 	//      }
 	//    }
 	//    else {
-	//      QMessageBox::critical(this, tr("QuteCsound App Creator"),
+	//      QMessageBox::critical(this, tr("CsoundQt App Creator"),
 	//                            tr("Error creating app directory."));
 	//    }
 	//  }
@@ -347,7 +347,7 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
 						  | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
 	}
 	else {
-		QMessageBox::critical(this, tr("QuteCsound App Creator"),
+		QMessageBox::critical(this, tr("CsoundQt App Creator"),
 							  tr("Error creating app directory."));
 	}
 }
@@ -469,7 +469,7 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
 						  | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
 	}
 	else {
-		QMessageBox::critical(this, tr("QuteCsound App Creator"),
+		QMessageBox::critical(this, tr("CsoundQt App Creator"),
 							  tr("Error creating app directory."));
 	}
 }

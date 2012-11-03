@@ -2,14 +2,14 @@
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
 
-	This file is part of QuteCsound.
+	This file is part of CsoundQt.
 
-	QuteCsound is free software; you can redistribute it
+	CsoundQt is free software; you can redistribute it
 	and/or modify it under the terms of the GNU Lesser General Public
 	License as published by the Free Software Foundation; either
 	version 2.1 of the License, or (at your option) any later version.
 
-	QuteCsound is distributed in the hope that it will be useful,
+	CsoundQt is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU Lesser General Public License for more details.
@@ -443,7 +443,7 @@ void UtilitiesDialog::changeHelp(QString filename)
 	//  qDebug() << "UtilitiesDialog::changeHelp "  << filename;
 	QFile file(filename);
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
-		//     QMessageBox::warning(this, tr("QuteCsound"),
+		//     QMessageBox::warning(this, tr("CsoundQt"),
 		//                          tr("Cannot read file %1:\n%2.")
 		//                              .arg(fileName)
 		//                              .arg(file.errorString()));

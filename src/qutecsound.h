@@ -2,14 +2,14 @@
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
 
-	This file is part of QuteCsound.
+	This file is part of CsoundQt.
 
-	QuteCsound is free software; you can redistribute it
+	CsoundQt is free software; you can redistribute it
 	and/or modify it under the terms of the GNU Lesser General Public
 	License as published by the Free Software Foundation; either
 	version 2.1 of the License, or (at your option) any later version.
 
-	QuteCsound is distributed in the hope that it will be useful,
+	CsoundQt is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU Lesser General Public License for more details.
@@ -405,7 +405,7 @@ private:
 	int lastTabIndex;
 	bool m_resetPrefs; // Flag to reset preferences to default when closing
 	bool m_inspectorNeedsUpdate;
-	bool m_closing; // QuteCsound is closing (to inform timer threads)
+	bool m_closing; // CsoundQt is closing (to inform timer threads)
 
 	UtilitiesDialog *utilitiesDialog;
 
