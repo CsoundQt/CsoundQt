@@ -63,7 +63,8 @@ view.show()
 w.show()
 
 path = pqt.QPainterPath()
-[path.lineTo(x,y) for (x,y) in enumerate(tab)]
+# must switch y axis!
+[path.lineTo(x,-y) for (x,y) in enumerate(tab)]
 pathItem = scene.addPath(path)
 view.fitInView(pathItem)
 #def update():
