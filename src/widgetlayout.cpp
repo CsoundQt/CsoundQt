@@ -247,16 +247,13 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 		setEditMode(true);
 	}
 	QSize s = getUsedSize();
-	int neww, newh;
-	neww = m_w < s.width() ? s.width() : m_w;
-	newh = m_h < s.height() ? s.height() : m_h;
 	if (m_contained) {
 		this->resize(s.width(), s.height());
-		setOuterGeometry(m_posx, m_posx, s.width(), s.height());
+		setOuterGeometry(m_posx, m_posx, m_w, m_h);
 	}
 	else {
 		this->move(m_posx, m_posy);
-		this->resize(neww,newh);
+		this->resize(m_w, m_h);
 		//    setOuterGeometry();
 	}
 }
@@ -455,7 +452,7 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
 
 void WidgetLayout::setOuterGeometry(int newx, int newy, int neww, int newh)
 {
-	qDebug() << "WidgetLayout::setOuterGeometry" << newx << newy << neww << newh;
+//	qDebug() << "WidgetLayout::setOuterGeometry" << newx << newy << neww << newh;
 	m_posx = newx >= 0 && newx < 4096? newx : m_posx;
 	m_posy = newy >= 0 && newy < 4096? newy : m_posy;
 	m_w = neww >= 0 && neww < 4096? neww : m_w;
@@ -2408,15 +2405,19 @@ void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
 void WidgetLayout::resizeEvent(QResizeEvent * event)
 {
 	QWidget::resizeEvent(event);
-	QSize s = event->size();
-	setOuterGeometry(-1, -1, s.width(), s.height());
+	if (m_contained) {
+		QSize s = event->size();
+		setOuterGeometry(-1, -1, s.width(), s.height());
+	}
 }
 
 void WidgetLayout::moveEvent(QMoveEvent * event)
 {
 	QWidget::moveEvent(event);
-	QPoint p = event->pos();
-	setOuterGeometry(p.x(), p.y(), -1, -1);
+	if (m_contained) {
+		QPoint p = event->pos();
+		setOuterGeometry(p.x(), p.y(), -1, -1);
+	}
 }
 
 //void WidgetLayout::showEvent(QShowEvent * event)
@@ -2960,6 +2961,9 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
 	w->setPalette(QPalette(bgColor));
 	w->setBackgroundRole(QPalette::Window);
 	w->setAutoFillBackground(bg);
+	if (!m_contained && !bg) {
+		w->setPalette(QPalette());
+	}
 	layoutMutex.unlock();
 	this->setProperty("QCS_bg", QVariant(bg));
 	this->setProperty("QCS_bgcolor", QVariant(bgColor));

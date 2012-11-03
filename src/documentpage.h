@@ -46,7 +46,6 @@ public:
 	DocumentPage(QWidget *parent, OpEntryParser *opcodeTree);
 	~DocumentPage();
 
-	virtual void setTextString(QString &text);
 	void setCompanionFileName(QString name);
 	void setEditorFocus();
 	void showLineNumbers(bool show);
@@ -58,7 +57,8 @@ public:
 	void setWidgetsText(QString text);
 	void setPresetsText(QString text);
 	void setOptionsText(QString text);
-	void loadTextString(QString &text, bool autoCreateMacCsoundSections = false);
+	void loadTextString(QString &text); // sets the text string and resets the undo history
+	int setTextString(QString &text);
 	void toggleLineArea();
 
 	virtual QString getFullText();
@@ -200,13 +200,9 @@ public slots:
 
 	void showWidgets(bool show = true);
 	void hideWidgets();
-	//    void detachWidgets();
-	//    void attachWidgets(QDockWidget *panel);
 
 	void applyMacOptions(QStringList options);
 	void setMacOption(QString option, QString newValue);
-	void setWidgetPanelPosition(QPoint position);
-	void setWidgetPanelSize(QSize size);
 	void setModified(bool mod = true);
 
 	//Passed directly to widget layout
@@ -249,13 +245,9 @@ public slots:
 	void setPanelLoopRangeSlot(int index, double start, double end);
 
 protected:
-	//    virtual void keyPressEvent(QKeyEvent *event);
-	//    virtual void contextMenuEvent(QContextMenuEvent *event);
-	//    virtual void closeEvent(QCloseEvent *event);
 
 private:
 	virtual void init(QWidget *parent,OpEntryParser *opcodeTree);
-	int setTextString(QString text, bool autoCreateMacCsoundSections);
 	CsoundOptions getParentOptions();
 	void deleteAllLiveEvents();
 	virtual WidgetLayout* newWidgetLayout();
@@ -289,7 +281,6 @@ private slots:
 	void setPanelLoopEnabled(LiveEventFrame *panel, bool enabled);
 
 	void opcodeSyntax(QString message);
-	//    void setWidgetClipboard(QString text);
 	void evaluatePython(QString code);
 
 signals:

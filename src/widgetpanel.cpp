@@ -33,13 +33,11 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 	//   connect(this,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
 	connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
 
-	stack = new QStackedWidget(this);
-	stack->show();
-	setWidget(stack);
+	m_stack = new QStackedWidget(this);
+	m_stack->show();
+	setWidget(m_stack);
 
 	setMouseTracking(true);
-
-	//  setFocusPolicy(Qt::NoFocus);
 }
 
 WidgetPanel::~WidgetPanel()
@@ -51,26 +49,27 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 	QScrollArea *scrollArea;
 	scrollArea = new QScrollArea(this);
 	scrollArea->setWidget(w);
-	stack->addWidget(scrollArea);
-	stack->setFocusProxy(w);
+	m_stack->addWidget(scrollArea);
+	m_stack->setFocusProxy(w);
 	scrollArea->setFocusProxy(w);
 	//    QHBoxLayout *l = new QHBoxLayout(this);
 	//    l->addWidget(scrollArea);
 	//    stack->setLayout(l);
-	scrollArea->show();
+	this->setGeometry(w->getOuterGeometry());
 	connect(scrollArea->horizontalScrollBar(), SIGNAL(valueChanged(int)),
 			this, SLOT(scrollBarMoved(int)));
 	connect(scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)),
 			this, SLOT(scrollBarMoved(int)));
-	w->show();
 	w->setContained(true);
+	w->show();
+	scrollArea->show();
 }
 
 WidgetLayout * WidgetPanel::takeWidgetLayout()
 {
 	//  qDebug() << "WidgetPanel::takeWidgetLayout()";
 	disconnect(this,SIGNAL(topLevelChanged(bool)));
-	QScrollArea *s = (QScrollArea*) stack->currentWidget();
+	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
 	if (!s) // scroll area is sometimes null during startup and shutdown
 		return 0;
 	WidgetLayout * w = (WidgetLayout *) s->widget();
@@ -82,41 +81,10 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
 	if (w) {
 		w->setParent(0);
 	}
-	stack->removeWidget(s);
+	m_stack->removeWidget(s);
 	delete s;
 	return w;
 }
-
-//void WidgetPanel::setCurrentLayout(WidgetLayout *layoutWidget)
-//{
-////  QWidget *w = layoutWidget->parentWidget();
-//  for (int i = 0; i < stack->count(); i++) {
-//    QScrollArea *s = (QScrollArea*) stack->widget(i);
-//    qDebug() << "WidgetPanel::setCurrentLayout checking " << s;
-//    if (s->widget() == layoutWidget) {
-//      stack->setCurrentIndex(i);
-//      s->show();
-//      s->widget()->show();
-//      return;
-//    }
-//  }
-//  qDebug() << "WidgetPanel::setCurrentLayout widget not contained!! " << layoutWidget;
-//}
-
-//void WidgetPanel::widgetChanged()
-//{
-////  QWidget *w;
-////  if (m_sbActive) {
-////    w = scrollArea->widget();
-////  }
-////  else {
-////    w = widget();
-////  }
-////  this->setAutoFillBackground(true);
-////  this->setBackgroundRole(QPalette::Window);
-////  this->setPalette(w->palette());
-////  w->setAutoFillBackground(false);
-//}
 
 void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 {
@@ -125,7 +93,7 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 
 void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 {
-	QScrollArea *s = (QScrollArea*) stack->currentWidget();
+	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
 	Q_ASSERT(s != 0);
 	static_cast<WidgetLayout *>(s->widget())->createContextMenu(event);
 }
@@ -134,17 +102,23 @@ void WidgetPanel::resizeEvent(QResizeEvent * event)
 {
 	//   qDebug( ) << "WidgetPanel::resizeEvent() " << event->oldSize() << event->size() ;
 	QDockWidget::resizeEvent(event);
-	oldSize = event->oldSize();
-	QScrollArea *s = (QScrollArea*) stack->currentWidget();
-	if (s != 0) {
-		emit resized(s->maximumViewportSize());
+	QSize size = event->size();
+	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
+	if (s){
+		static_cast<WidgetLayout *>(s->widget())
+				->setOuterGeometry(-1, -1, size.width(), size.height());
 	}
 }
 
 void WidgetPanel::moveEvent(QMoveEvent * event)
 {
 	QDockWidget::moveEvent(event);
-	emit moved(event->pos());
+	QPoint pos = event->pos();
+	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
+	if (s){
+		static_cast<WidgetLayout *>(s->widget())
+				->setOuterGeometry(pos.x(), pos.y());
+	}
 }
 
 void WidgetPanel::mousePressEvent(QMouseEvent * event)
@@ -156,7 +130,7 @@ void WidgetPanel::mousePressEvent(QMouseEvent * event)
 	//                event->buttons(),
 	//                Qt::NoModifier );
 
-	QScrollArea *s = (QScrollArea*) stack->currentWidget();
+	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
 	if (!s) // scroll area is sometimes null during startup and shutdown
 		return;
 	static_cast<WidgetLayout *>(s->widget())->mousePressEventParent(event);
@@ -164,7 +138,7 @@ void WidgetPanel::mousePressEvent(QMouseEvent * event)
 
 void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
 {
-	QScrollArea *s = (QScrollArea*) stack->currentWidget();
+	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
 	if (!s) // scroll area is sometimes null during startup and shutdown
 		return;
 	static_cast<WidgetLayout *>(s->widget())->mouseReleaseEventParent(event);
@@ -172,7 +146,7 @@ void WidgetPanel::mouseReleaseEvent(QMouseEvent * event)
 
 void WidgetPanel::mouseMoveEvent(QMouseEvent * event)
 {
-	QScrollArea *s = (QScrollArea*) stack->currentWidget();
+	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
 	if (!s) // scroll area is sometimes null during startup and shutdown
 		return;
 	WidgetLayout *w  = static_cast<WidgetLayout *>(s->widget());
@@ -188,7 +162,7 @@ void WidgetPanel::dockStateChanged(bool undocked)
 
 void WidgetPanel::scrollBarMoved(int /*value*/)
 {
-	QScrollArea *s = (QScrollArea*) stack->currentWidget();
+	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
 	if (!s) // scroll area is sometimes null during startup and shutdown
 		return;
 	int v = s->verticalScrollBar()->value();

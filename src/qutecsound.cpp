@@ -83,7 +83,6 @@ static void midiMessageCallback(double deltatime,
 
 CsoundQt::CsoundQt(QStringList fileNames)
 {
-	m_startingUp = true;
 	m_closing = false;
 	m_resetPrefs = false;
 	utilitiesDialog = 0;
@@ -147,9 +146,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
 	readSettings();
 
-	bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state
-	if (widgetsVisible)
-		widgetPanel->hide();  // Hide until CsoundQt has finished loading
+	bool widgetsVisible = widgetPanel->isVisible(); // Must be after readSettings() to save last state
+	showWidgetsAct->setChecked(false); // To avoid showing and reshowing panels during initial load
+	widgetPanel->hide();  // Hide until CsoundQt has finished loading
+
 #ifdef QCS_PYTHONQT
 	bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
 	if (scratchPadVisible)
@@ -217,7 +217,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 		qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nCsoundQt will probably crash if you try to run Csound.");
 	}
 	qApp->processEvents(); // To finish settling dock widgets and other stuff before messing with them (does it actually work?)
-	m_startingUp = false;
+
 	if (lastTabIndex < documentPages.size() && documentTabs->currentIndex() != lastTabIndex) {
 		documentTabs->setCurrentIndex(lastTabIndex);
 	}
@@ -236,11 +236,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
 	m_closing = false;
 	updateInspector(); //Starts update inspector thread
+
+	showWidgetsAct->setChecked(widgetsVisible);
 	if (!m_options->widgetsIndependent) {
-		if (widgetsVisible) { // Reshow widget panel if necessary
-			widgetPanel->show();
-			showWidgetsAct->setChecked(widgetsVisible);
-		}
+		// FIXME: for some reason this produces a move event for widgetlayout with pos (0,0)
+		widgetPanel->setVisible(widgetsVisible);
 	}
 
 #ifdef QCS_PYTHONQT
@@ -280,10 +280,6 @@ void CsoundQt::changePage(int index)
 {
 	// Previous page has already been destroyed here (if it was closed)
 	// Remember this is called when opening, closing or switching tabs (including loading)
-	//  qDebug() << "CsoundQt::changePage " << curPage << "--" << index << "-" << documentPages.size();
-	if (m_startingUp) {  // If starting up or loading many, don't bother with all this as files are being loaded
-		return;
-	}
 	if (documentPages.size() > curPage && documentPages.size() > 0 && documentPages[curPage]) {
 		disconnect(showLiveEventsAct, 0,0,0);
 		disconnect(documentPages[curPage], SIGNAL(stopSignal()),0,0);
@@ -298,6 +294,7 @@ void CsoundQt::changePage(int index)
 	if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
 		if (!m_options->widgetsIndependent) {
 			QWidget *w = widgetPanel->widget();
+//			widgetPanel->applySize(); //Store size of outer panel as size of widget
 			if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
 				w = widgetPanel->takeWidgetLayout();
 			}
@@ -425,7 +422,7 @@ void CsoundQt::newFile()
 	//    loadFile(":/default.csd");
 	//  }
 	loadFile(":/default.csd");
-	documentPages[curPage]->loadTextString(m_options->csdTemplate, m_options->saveWidgets);
+	documentPages[curPage]->loadTextString(m_options->csdTemplate);
 	documentPages[curPage]->setFileName("");
 	setWindowModified(false);
 	documentTabs->setTabIcon(curPage, modIcon);
@@ -458,11 +455,7 @@ void CsoundQt::open()
 		helpPanel->show();
 	if (inspectorVisible)
 		m_inspector->show();
-	m_startingUp = true; // To avoid changing all display unnecessarily
 	foreach (QString fileName, fileNames) {
-		if (fileNames.last() == fileName) {
-			m_startingUp = false;
-		}
 		if (!fileName.isEmpty()) {
 			loadFile(fileName, m_options->autoPlay);
 		}
@@ -1161,7 +1154,7 @@ bool CsoundQt::join(bool ask)
 		text += scoText;
 		text += "</CsScore>\n</CsoundSynthesizer>\n";
 		newFile();
-		documentPages[curPage]->loadTextString(text, m_options->saveWidgets);
+		documentPages[curPage]->loadTextString(text);
 		return true;
 	}
 	//   else {
@@ -2870,16 +2863,6 @@ void CsoundQt::setKeyboardShortcutsList()
 void CsoundQt::connectActions()
 {
 	DocumentPage * doc = documentPages[curPage];
-	//  disconnect(undoAct, 0, 0, 0);
-	//  connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
-	//  disconnect(redoAct, 0, 0, 0);
-	//  connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
-	//  disconnect(cutAct, 0, 0, 0);
-	//  connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
-	//  disconnect(copyAct, 0, 0, 0);
-	//  connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
-	//  disconnect(pasteAct, 0, 0, 0);
-	//  connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 
 	disconnect(commentAct, 0, 0, 0);
 	//  disconnect(uncommentAct, 0, 0, 0);
@@ -2910,12 +2893,6 @@ void CsoundQt::connectActions()
 	//  disconnect(widgetPanel, SIGNAL(widgetsChanged(QString)),0,0);
 	//   connect(widgetPanel, SIGNAL(widgetsChanged(QString)),
 	//           doc, SLOT(setMacWidgetsText(QString)) );
-	disconnect(widgetPanel, SIGNAL(moved(QPoint)),0,0);
-	connect(widgetPanel, SIGNAL(moved(QPoint)),
-			doc, SLOT(setWidgetPanelPosition(QPoint)) );
-	disconnect(widgetPanel, SIGNAL(resized(QSize)),0,0);
-	connect(widgetPanel, SIGNAL(resized(QSize)),
-			doc, SLOT(setWidgetPanelSize(QSize)) );
 
 	// Connect inspector actions to document
 	disconnect(m_inspector, 0, 0, 0);
@@ -4372,8 +4349,6 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 	//  documentPages[curPage]->setOpcodeNameList(m_opcodeTree->opcodeNameList());
 	documentPages[curPage]->setInitialDir(initialDir);
 	documentPages[curPage]->showLiveEventPanels(false);
-	documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");
-	documentTabs->setCurrentIndex(curPage);
 	if (documentPages[curPage]->getFileName().endsWith(".csd")) {
 		curCsdPage = curPage;
 	}
@@ -4397,7 +4372,7 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 			this, SLOT(displayLineNumber(int)));
 	connect(documentPages[curPage], SIGNAL(evaluatePythonSignal(QString)),
 			this, SLOT(evaluatePython(QString)));
-	documentPages[curPage]->loadTextString(text, m_options->saveWidgets);
+	documentPages[curPage]->loadTextString(text);
 
 	if (!fileName.startsWith(":/")) {  // Don't store internal examples directory as last used dir
 		lastUsedDir = fileName;
@@ -4409,6 +4384,8 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 			recentFiles.removeLast();
 		fillFileMenu();
 	}
+	documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");
+	documentTabs->setCurrentIndex(curPage);
 }
 
 bool CsoundQt::loadCompanionFile(const QString &fileName)

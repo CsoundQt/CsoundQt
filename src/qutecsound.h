@@ -403,7 +403,6 @@ private:
 
 	QStringList tempScriptFiles; //Remember temp files to delete them later
 	int lastTabIndex;
-	bool m_startingUp; // set while starting up
 	bool m_resetPrefs; // Flag to reset preferences to default when closing
 	bool m_inspectorNeedsUpdate;
 	bool m_closing; // QuteCsound is closing (to inform timer threads)

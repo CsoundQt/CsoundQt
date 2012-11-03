@@ -43,10 +43,10 @@ public:
 	BaseDocument(QWidget *parent, OpEntryParser *opcodeTree);
 	~BaseDocument();
 
-	virtual void setTextString(QString &text) = 0;
+	virtual int setTextString(QString &text) = 0;
 	virtual void loadTextString(QString &text);
 	virtual void setFileName(QString name);
-	int parseTextString(QString &text);
+	int parseWidgetText(QString &text);
 	virtual WidgetLayout* newWidgetLayout();
 	void widgetsVisible(bool visible);
 	void setFlags(int flags);

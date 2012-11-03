@@ -53,7 +53,7 @@ public:
 class WidgetLayout : public QWidget
 {
 	Q_OBJECT
-	Q_PROPERTY(bool openProperties READ getOpenProperties WRITE setOpenProperties); // To make sure only one properties dialog is displayed at any one time
+	Q_PROPERTY(bool openProperties READ getOpenProperties WRITE setOpenProperties) // To make sure only one properties dialog is displayed at any one time
 public:
 	WidgetLayout(QWidget* parent);
 	~WidgetLayout();
@@ -104,7 +104,8 @@ public:
 	// Properties
 	bool getOpenProperties() { return m_openProperties; }
 	void setOpenProperties(bool open) {m_openProperties = open; }
-	void setOuterGeometry(int newx = -1 , int newy = -1 , int neww = -1, int newh = -1); // Will only set if component >= 0
+	// Outer geometry refers to the geometry of the parent panel if not separate window
+	void setOuterGeometry(int newx = -1 , int newy = -1 , int neww = -1, int newh = -1);
 	QRect getOuterGeometry();
 
 	//    void getValues(QVector<QString> *channelNames,

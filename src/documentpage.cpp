@@ -62,14 +62,9 @@ void DocumentPage::setCompanionFileName(QString name)
 	companionFile = name;
 }
 
-void DocumentPage::setTextString(QString &text)
+void DocumentPage::loadTextString(QString &text)
 {
-	setTextString(text, false);
-}
-
-void DocumentPage::loadTextString(QString &text, bool autoCreateMacCsoundSections)
-{
-	setTextString(text, autoCreateMacCsoundSections);
+	setTextString(text);
 	m_view->clearUndoRedoStack();
 }
 
@@ -78,7 +73,7 @@ void DocumentPage::toggleLineArea()
 	m_view->toggleLineArea();
 }
 
-int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
+int DocumentPage::setTextString(QString &text)
 {
 	int ret = 0;
 	deleteAllLiveEvents();
@@ -87,7 +82,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 		m_view->setModified(false);
 		return ret;
 	}
-	int baseRet = parseTextString(text);
+	int baseRet = parseWidgetText(text);
 	if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
 		QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
 		options.resize(options.indexOf("</MacOptions>") + 13);
@@ -128,14 +123,7 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 		}
 	}
 	else {
-		if (autoCreateMacCsoundSections && baseRet != 1) {
-			QString m_macGUI = "<MacGUI>\nioView nobackground {59352, 11885, 65535}\nioSlider {5, 5} {20, 100} 0.000000 1.000000 0.000000 slider1\n</MacGUI>";
-			//FIXME allow multiple
-			m_widgetLayouts[0]->loadMacWidgets(m_macGUI);
-		}
-		else {
-			m_macGUI = "";
-		}
+		m_macGUI = "";
 	}
 	if (baseRet != 1) {  // Use the old options only if the new ones are not present
 		// This here is for compatibility with MacCsound (copy output filename from <MacOptions> to <CsOptions>)
@@ -164,16 +152,6 @@ int DocumentPage::setTextString(QString text, bool autoCreateMacCsoundSections)
 	if (baseRet != 1) {
 		applyMacOptions(m_macOptions);
 		qDebug("<MacOptions> loaded.");
-	}
-	else {
-		if (autoCreateMacCsoundSections && baseRet==1) {
-			QString defaultMacOptions = "<MacOptions>\nVersion: 3\nRender: Real\nAsk: Yes\nFunctions: ioObject\nListing: Window\nWindowBounds: 72 179 400 200\nCurrentView: io\nIOViewEdit: On\nOptions:\n</MacOptions>\n";
-			m_macOptions = defaultMacOptions.split('\n');
-			applyMacOptions(m_macOptions);
-		}
-		else {
-			m_macOptions = QStringList();
-		}
 	}
 	// Load Live Event Panels ------------------------
 	while (text.indexOf("<EventPanel") != -1 && text.indexOf("<EventPanel") < text.indexOf("</EventPanel>")) {
@@ -1289,7 +1267,7 @@ int DocumentPage::runPython()
 void DocumentPage::showWidgets(bool show)
 {
 	//  qDebug() << "DocumentPage::showWidgets" << show;
-	if (!show) {
+	if (!show || !fileName.endsWith(".csd")) {
 		hideWidgets();
 		return;
 	}
@@ -1306,32 +1284,6 @@ void DocumentPage::hideWidgets()
 		wl->setVisible(false);
 	}
 }
-
-//void DocumentPage::detachWidgets()
-//{
-//  foreach (WidgetLayout *wl, m_widgetLayouts) {
-////    wl->setParent(static_cast<QWidget *>(parent()));
-//    qDebug() << "DocumentPage::detachWidgets() " << wl;
-//    wl->setParent(0);
-//    wl->setWindowFlags(Qt::Window);
-//  }
-//}
-//
-//void DocumentPage::attachWidgets(QDockWidget *panel)
-//{
-//  panel->setWidget(m_widgetLayouts[0]);
-////  foreach (WidgetLayout *wl, m_widgetLayouts) {
-////  }
-//  //FIXME fix when implementing multiple widget panels
-//}
-
-//void DocumentPage::setMacWidgetsText(QString widgetText)
-//{
-////   qDebug() << "DocumentPage::setMacWidgetsText: ";
-//
-////   document()->setModified(true);
-//}
-
 
 void DocumentPage::applyMacOptions(QStringList options)
 {
@@ -1362,45 +1314,6 @@ void DocumentPage::setMacOption(QString option, QString newValue)
 	}
 	m_macOptions[index] = option + newValue;
 	qDebug("DocumentPage::setMacOption() %s", m_macOptions[index].toLocal8Bit().constData());
-}
-
-void DocumentPage::setWidgetPanelPosition(QPoint position)
-{
-	//FIXME allow multiple layout
-	m_widgetLayouts[0]->setOuterGeometry(position.x(), position.y(), -1, -1);
-	int index = m_macOptions.indexOf(QRegExp("WindowBounds: .*"));
-	if (index < 0) {
-		//    qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
-		return;
-	}
-	QStringList parts = m_macOptions[index].split(" ");
-	parts.removeFirst();
-	QString newline = "WindowBounds: " + QString::number(position.x()) + " ";
-	newline += QString::number(position.y()) + " ";
-	newline += parts[2] + " " + parts[3];
-	m_macOptions[index] = newline;
-
-	//   qDebug("DocumentPage::setWidgetPanelPosition() %i %i", position.x(), position.y());
-}
-
-void DocumentPage::setWidgetPanelSize(QSize size)
-{
-	// Slot called from resizing Widget panel container
-	//FIXME allow multiple layouts
-	//  qDebug("DocumentPage::setWidgetPanelSize() %i %i", size.width(), size.height());
-	m_widgetLayouts[0]->setOuterGeometry(-1, -1, size.width(), size.height());
-	int index = m_macOptions.indexOf(QRegExp("WindowBounds: .*"));
-	if (index < 0) {
-		//    qDebug ("DocumentPage::getWidgetPanelGeometry() no Geometry!");
-		return;
-	}
-	QStringList parts = m_macOptions[index].split(" ");
-	parts.removeFirst();
-	QString newline = "WindowBounds: ";
-	newline += parts[0] + " " + parts[1] + " ";
-	newline += QString::number(size.width()) + " ";
-	newline += QString::number(size.height());
-	m_macOptions[index] = newline;
 }
 
 void DocumentPage::setWidgetEditMode(bool active)
@@ -1632,11 +1545,6 @@ void DocumentPage::opcodeSyntax(QString message)
 {
 	emit opcodeSyntaxSignal(message);
 }
-
-//void DocumentPage::setWidgetClipboard(QString message)
-//{
-//  emit setWidgetClipboardSignal(message);
-//}
 
 void DocumentPage::evaluatePython(QString code)
 {

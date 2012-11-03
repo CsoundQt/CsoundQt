@@ -39,12 +39,10 @@ public:
 
 	void addWidgetLayout(WidgetLayout *layoutWidget);
 	WidgetLayout * takeWidgetLayout();
-	//    void setCurrentLayout(WidgetLayout *layoutWidget);
 
 	void setWidgetScrollBarsActive(bool active);
 
 public slots:
-	//    void widgetChanged();
 
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -58,7 +56,7 @@ protected:
 	virtual void closeEvent(QCloseEvent * event);
 
 private:
-	QStackedWidget *stack;
+	QStackedWidget *m_stack;
 
 	QStringList clipboard;
 	QSize oldSize;
@@ -70,10 +68,7 @@ private slots:
 	void scrollBarMoved(int);
 
 signals:
-	//    void widgetsChanged(QString text);
 	void Close(bool visible);
-	void moved(QPoint position);
-	void resized(QSize size);
 };
 
 #endif

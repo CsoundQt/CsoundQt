@@ -73,7 +73,7 @@ BaseDocument::~BaseDocument()
 //  m_view->setFileType(0);
 //}
 
-int BaseDocument::parseTextString(QString &text)
+int BaseDocument::parseWidgetText(QString &text)
 {
 	int ret = 0;
 	bool xmlFormatFound = false;
