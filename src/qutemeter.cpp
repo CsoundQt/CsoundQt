@@ -348,7 +348,7 @@ void QuteMeter::applyProperties()
 	widgetLock.unlock();
 #endif
 	QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
-	qDebug("QuteMeter::applyProperties()");
+//	qDebug("QuteMeter::applyProperties()");
 }
 
 void QuteMeter::setWidgetGeometry(int x,int y,int width,int height)

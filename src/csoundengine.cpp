@@ -69,7 +69,7 @@ CsoundEngine::CsoundEngine()
 
 CsoundEngine::~CsoundEngine()
 {
-	qDebug() << "CsoundEngine::~CsoundEngine() ";
+//	qDebug() << "CsoundEngine::~CsoundEngine() ";
 	disconnect(SIGNAL(passMessages(QString)),0,0);
 	stop();
 

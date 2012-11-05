@@ -448,7 +448,7 @@ void QuteText::createPropertiesDialog()
 
 void QuteText::applyProperties()
 {
-	qDebug() << "QuteText::applyProperties()";
+//	qDebug() << "QuteText::applyProperties()";
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif

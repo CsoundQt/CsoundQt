@@ -348,7 +348,7 @@ void QuteWidget::deleteWidget()
 
 void QuteWidget::createPropertiesDialog()
 {
-	qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n" << dynamicPropertyNames ();
+//	qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n" << dynamicPropertyNames ();
 	dialog = new QDialog(this);
 	dialog->resize(300, 300);
 	//  dialog->setModal(true);
@@ -420,7 +420,7 @@ void QuteWidget::createPropertiesDialog()
 
 void QuteWidget::applyProperties()
 {
-	qDebug() << "QuteWidget::applyProperties()";
+//	qDebug() << "QuteWidget::applyProperties()";
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
