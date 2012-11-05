@@ -41,6 +41,7 @@ LIBS *= -L$${CSOUND_LIBRARY_DIR}
 LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
 rtmidi {
 DEFINES += __LINUX_ALSASEQ__
+DEFINES += __LINUX_ALSA__
 LIBS += -lasound
 }
 quteapp_f {
