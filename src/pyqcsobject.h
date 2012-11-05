@@ -34,7 +34,7 @@
 
 #include <csound.hpp>
 
-#define PYQCSVERSION "0.9.0"
+#define PYQCSVERSION "1.0"
 
 class CsoundQt;
 class QuteSheet;
