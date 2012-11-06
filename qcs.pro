@@ -31,10 +31,7 @@ DEFINES += CSOUND6
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")
 
 !build32: CONFIG += build64
-!build32:!build64 {
-    win32: CONFIG += build64
-    else: CONFIG += build32
-}
+
 build32:build64:CONFIG -= build32
 unix {
     macx:include (qcs-macx.pro)
