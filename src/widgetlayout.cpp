@@ -312,8 +312,9 @@ void WidgetLayout::loadMacWidgets(QString macWidgets)
 	foreach (QString line, widgetLines) {
 		//     qDebug("WidgetLine: %s", line.toStdString().c_str());
 		if (line.startsWith("i")) {
-			if (newMacWidget(line) == "")
+			if (newMacWidget(line) == "") {
 				qDebug() << "WidgetPanel::loadMacWidgets error processing line: " << line;
+			}
 		}
 		else {
 			if (!line.contains("<MacGUI>") && !line.contains("</MacGUI>"))
@@ -323,7 +324,7 @@ void WidgetLayout::loadMacWidgets(QString macWidgets)
 	if (m_editMode) {
 		setEditMode(true);
 	}
-	adjustLayoutSize();
+	widgetChanged();
 }
 
 QString WidgetLayout::getWidgetsText()
@@ -862,7 +863,7 @@ QString WidgetLayout::newMacWidget(QString widgetLine, bool offset)
 							 parts[4].toInt()/256
 							 )
 					  );
-		return 0;
+		return "";
 	}
 	else {
 		int x,y,width,height;

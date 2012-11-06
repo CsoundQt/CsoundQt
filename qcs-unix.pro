@@ -29,7 +29,7 @@ DEFAULT_PYTHONQT_SRC_DIRS += ../../../PythonQt2.0.1 \
         ../PythonQt2.0.1 \
         PythonQt2.0.1
 #PYTHONQT_LIB += PythonQt_QtAll$${DEBUG_EXT}
-PYTHONQT_LIB += PythonQt_QtAll
+PYTHONQT_LIB += PythonQt
 
 DEFAULT_PORTMIDI_DIR +=  /usr/local/include
 

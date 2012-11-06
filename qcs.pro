@@ -55,7 +55,8 @@ pythonqt {
     include ( $${PYTHONQT_SRC_DIR}/build/PythonQt.prf )
     include ( $${PYTHONQT_SRC_DIR}/build/PythonQt_QtAll.prf )
 
-    LIBS *= -L$${PYTHONQT_LIB_DIR} -l$${PYTHONQT_LIB}
+    LIBS *= -L$${PYTHONQT_LIB_DIR} -l$${PYTHONQT_LIB} -l$${PYTHONQT_LIB}_QtAll
+    LIBS -= -l$${PYTHONQT_LIB}_d -l$${PYTHONQT_LIB}_QtAll_d
 
 # Note, this is Python, not PythonQt include dir!
     win32:INCLUDEPATH *= $${PYTHON_INCLUDE_DIR}
