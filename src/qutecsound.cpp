@@ -59,6 +59,7 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 #endif
 
 
+#ifdef QCS_RTMIDI
 static void midiMessageCallback(double deltatime,
 								std::vector< unsigned char > *message,
 								void *userData)
@@ -77,9 +78,7 @@ static void midiMessageCallback(double deltatime,
 	//    qDebug() << "stamp = " << deltatime;
 	//  }
 }
-
-////csound performance thread function prototype
-//uintptr_t csThread(void *clientData);
+#endif
 
 CsoundQt::CsoundQt(QStringList fileNames)
 {

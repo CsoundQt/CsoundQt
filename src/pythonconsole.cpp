@@ -77,11 +77,7 @@ void PythonConsole::runScript(QString fileName)
 		mainContext.evalScript(printScript);
 	}
 	QString evalCode = QString(file.readAll());
-	mainContext.evalScript(evalCode);
-	QString printScript = "print 'Evaluated " + QString::number(countLines(evalCode));
-	printScript += " lines.'";
-	mainContext.evalScript(printScript);
-	m_console->appendCommandPrompt();
+	evaluate(evalCode);
 	//  mainContext.removeVariable("currentScript");
 	QDir::setCurrent (dir.absolutePath());
 }

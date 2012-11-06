@@ -64,6 +64,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
 		// Handle the exception here
 		error.printMessage();
 	}
+#else
+	midiInterfaceComboBox->addItem(tr("No RtMidi support"));
 #endif
 
 	midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI internal interface")), QVariant(9999));
