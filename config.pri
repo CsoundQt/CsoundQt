@@ -157,8 +157,7 @@ isEmpty(RTMIDI_DIR) {
                 message(RTMIDI_DIR set to $${dir})
                 message()
             }
-            RTMIDI_DIR = $${dir}
-            DEFINES += QCS_RTMIDI
+			RTMIDI_DIR = $${dir}
             break()
         }
     }
@@ -184,6 +183,7 @@ win32 {
     }
     rtmidi {
         message(RtMidi directory is $${RTMIDI_DIR})
+		DEFINES += QCS_RTMIDI
     }
     message()
 }

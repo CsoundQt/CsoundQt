@@ -15,10 +15,6 @@ CONFIG += i386
 CONFIG += ppc
 }
 
-# DEFINES += MACOSX_PRE_SNOW # Use this if you are building for OS X < 10.6
-# QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
-# QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
-
 build32: MAC_LIB = CsoundLib
 build64: MAC_LIB = CsoundLib64
 
