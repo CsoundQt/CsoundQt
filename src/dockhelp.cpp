@@ -29,26 +29,27 @@ DockHelp::DockHelp(QWidget *parent)
 	findFlags = 0;
 	setWindowTitle("Opcode Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
-	QPushButton* toggleFindButton = new QPushButton(QIcon(":/images/gtk-search.png"), "", this);
+	setContentsMargins(3,3,3,3);
+	QGroupBox *helpBox = new QGroupBox;
+	QVBoxLayout *helpLayout = new QVBoxLayout;
+	helpLayout->setContentsMargins(3,30,3,3);
+	helpBox->setLayout(helpLayout);
+
+	QPushButton* toggleFindButton = new QPushButton(QIcon(":/images/gtk-search.png"), "", helpBox);
 	toggleFindButton->resize(25,25);
 	toggleFindButton->move(fontMetrics().width("Opcode help")+10 ,0);
 	toggleFindButton->setFlat(true);
 	connect(toggleFindButton, SIGNAL(released()), this, SLOT(toggleFindBarVisible()));
-	backButton = new QPushButton(QIcon(":/images/br_prev.png"), "", this);
+	backButton = new QPushButton(QIcon(":/images/br_prev.png"), "", helpBox);
 	backButton->move(frameGeometry().width()/2-25, 0);
 	backButton->resize(25, 25);
 	backButton->setFlat(true); // no border
 	connect(backButton, SIGNAL(released()), this, SLOT(browseBack()));
-	forwardButton = new QPushButton(QIcon(":/images/br_next.png"), "", this);
+	forwardButton = new QPushButton(QIcon(":/images/br_next.png"), "", helpBox);
 	forwardButton->move(this->width()/2, 0);
 	forwardButton->resize(25, 25);
 	forwardButton->setFlat(true);
 	connect(forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
-	setContentsMargins(3,3,3,3);
-	QGroupBox *helpBox = new QGroupBox;
-	QVBoxLayout *helpLayout = new QVBoxLayout;
-	helpLayout->setContentsMargins(3,3,3,3);
-	helpBox->setLayout(helpLayout);
 
 	findBar = new QToolBar("findBar");   // search bar, hidden by default
 	findBar->setIconSize(QSize(10,10));

@@ -155,6 +155,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 		m_scratchPad->hide();  // Hide until CsoundQt has finished loading
 #endif
 
+	setUnifiedTitleAndToolBarOnMac(true);
 	createMenus();
 	createToolBars();
 	createStatusBar();
@@ -165,6 +166,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	connect(documentTabs, SIGNAL(tabCloseRequested(int)), documentTabs, SLOT(setCurrentIndex(int))); // To force changing to clicked tab before closing
 	connect(documentTabs, SIGNAL(tabCloseRequested(int)), closeTabAct, SLOT(trigger()));
 	setCentralWidget(documentTabs);
+	documentTabs->setDocumentMode(true);
 	modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
 	modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
 

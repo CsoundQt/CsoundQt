@@ -1,4 +1,5 @@
 from subprocess import call
+import subprocess
 import shutil
 import os
 import pdb
@@ -208,16 +209,21 @@ def deployCsound(app_name, bin_name, doubles=True):
 
 if __name__=='__main__':
     # make version including Qt
-    print "start"
-    QUTECSOUND_VERSION = '0.7.0-alpha'
+    QUTECSOUND_VERSION = '0.7.0'
     NEW_NAME='CsoundQt'
-    QtFrameworksDir = '/Users/andres/QtSDK/Desktop/Qt/4.8.1/'
-    QtBinDir = '/Users/andres/QtSDK/Desktop/Qt/4.8.1/gcc/bin'
-    CsoundQtBinPath = '../../qcs-build-desktop-Desktop_Qt_4_8_1_for_GCC__Qt_SDK__Release/bin'
-    # for non QtSDK libs 
-    QtFrameworksDir = '/Library/Frameworks'
-    QtBinDir = '/usr/bin'
-    CsoundQtBinPath = './'
+    QMakePath = ''
+    QtFrameworksDir = subprocess.Popen([QMakePath + 'qmake',
+                                        '-query', 'QT_INSTALL_LIBS'],
+        stdout=subprocess.PIPE).communicate()[0].strip()
+    QtBinDir = subprocess.Popen([QMakePath + 'qmake',
+                                        '-query', 'QT_INSTALL_BINS'],
+        stdout=subprocess.PIPE).communicate()[0].strip()
+
+    if QMakePath == '':
+        # for non QtSDK libs 
+        CsoundQtBinPath = './'
+    else:
+        CsoundQtBinPath = '../../qcs-build-desktop-Desktop_Qt_4_8_1_for_GCC__Qt_SDK__Release/bin'
     
     PythonQtLibPaths = ['/usr/local/lib/', '../../PythonQt2.1_Qt4.8/lib/', '../../../../PythonQt2.1_Qt4.8/lib/', './']
 
