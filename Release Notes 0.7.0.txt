@@ -1,131 +1,1827 @@
 Hi all!
 
-QuteCsound 0.7.0 is out! It's been so long since the last release, that
-even though some of the features I wanted to complete for it aren't done,
-the amount of changes and fixes, will hopefully be welcome.
+CsoundQt 0.7.0 is finally ready! It's been more than a year and a half since the
+last release, so even though some of the features I wanted to complete for it
+aren't done, there are many new features and fixes, that make this realease an
+important milestone.
 
-QuteCsound is a frontend for Csound featuring a highlighting
-editor with autocomplete, interactive widgets and integrated help. It
-can open files created in MacCsound, and aims to be a simple yet
-powerful and complete development environment for Csound.
-
-QuteCsound has been tested on Windows, OS X, Linux and Solaris,
-and it is free software released under the LGPLv2 or at your option
-GPLv3.
+CsoundQt (formerly known as QuteCsound) is an IDE for Csound featuring a
+highlighting editor with autocomplete, interactive widgets, python scripting
+and integrated help. It aims to be a simple yet powerful and complete
+development environment for Csound.
 
 There are binary packages for Windows and OS X, and a source package
 for other platforms.
 You can get it here:
-http://sourceforge.net/projects/qutecsound/files/QuteCsound/0.7.0/
+http://sourceforge.net/projects/qutecsound/files/CsoundQt/0.7.0/
 
-There's more information here (along with an overdue home page revamp):
-http://qutecsound.sourceforge.net/
-
-There is also an experimental package for OS X (called "-full"), which
-contains Csound inside, so you don't need a separate Csound installation,
-(which means it will work immediately without installation - very handy if
-you don't have the root password for a system).
-
-Please try it and let us know any issues.
-
-Questions, comments and suggestions for QuteCsound are very welcome
+Questions, comments and suggestions for CsoundQt are very welcome
 and can be posted to the main Csound mailing list, but better still,
-join the QuteCsound users mailing list at:
+join the CsoundQt users mailing list at:
 http://lists.sourceforge.net/lists/listinfo/qutecsound-users
 
-Thanks as usual to the testing team, who made sure regular users get a
-smooth ride by taking a bumpy ride...
-Thanks especially to Francois Pinot, Andy Fillebrown, Joachim Heintz
-and Rene Djack, but also to the translators and the rest of the testers.
+A Big thanks to the many contributors to this release, including Joachim Heintz,
+Andy Fillebrown, Marco Gasperini, Iain McCurdy, Rene Djack, Tarmo Johannes,
+Francois Pinot, Andy Fillebrown, Johannes Schuett, Jim Aikin, Rene Djack
+and many other bug reporters and testers.
 
-QuteCsound accepts donations. If you find QuteCsound useful
+CsoundQt accepts donations. If you find CsoundQt useful
 and have some money to spare, please consider donating to the project,
 to support development:
 http://sourceforge.net/project/project_donations.php?group_id=227265
 
 New in version 0.7.0:
+* Python scripting support (including a realization of GM Koenig's "Essay" by
+    Marco Gasperini)
+* Example collection by Iain MCurdy
+* Split view, to show the csd sections as separate panel with the score as
+    a spreadsheet
+* Csound FLOSS manual examples
+* Support for exporting to Cabbage
+* Russian translation (Gleb Rogozinski)
+* Made both invalue/outvalue and chnget/chnset available simultaneously
+* Searchbar in Help Window (Tarmo Johannes)
+* Line numbers in editor (Tarmo Johannes)
+* New icon theme
 
 Fixed in version 0.7.0:
+ * Too many fixes to list here....
 
-Internal changes in 0.7.0:
-
-
-If PythonQt is available, run in a python file runs it in the internal
-interpreter. Run in term will run it on a separate terminal.
-
-
-Revision 712
-Modified Mon Aug 16 16:18:08 2010 UTC (4 months ago) by mantaraya36
-Updated translation.
-
-Revision 711
-Modified Mon Aug 16 16:14:02 2010 UTC (4 months ago) by mantaraya36
-Added new functions for widget control from python console api:
-+    void setChannelValue(QString channel, double value, int index =
--1);
-+    double getChannelValue(QString channel, int index = -1);
-+    void setChannelString(QString channel, QString value, int index =
--1);
-+    QString getChannelString(QString channel, int index = -1);
-+
-+    void createNewLabel(int x = -1, int y = -1, int index = -1);
-+    void createNewDisplay(int x = -1, int y = -1, int index = -1);
-+    void createNewScrollNumber(int x = -1, int y = -1, int index = -1);
-+    void createNewLineEdit(int x = -1, int y = -1, int index = -1);
-+    void createNewSpinBox(int x = -1, int y = -1, int index = -1);
-+    void createNewSlider(int x = -1, int y = -1, int index = -1);
-+    void createNewButton(int x = -1, int y = -1, int index = -1);
-+    void createNewKnob(int x = -1, int y = -1, int index = -1);
-+    void createNewCheckBox(int x = -1, int y = -1, int index = -1);
-+    void createNewMenu(int x = -1, int y = -1, int index = -1);
-+    void createNewMeter(int x = -1, int y = -1, int index = -1);
-+    void createNewConsole(int x = -1, int y = -1, int index = -1);
-+    void createNewGraph(int x = -1, int y = -1, int index = -1);
-+    void createNewScope(int x = -1, int y = -1, int index = -1);
-
-Added opcodeExists() function to API.
-
-
-Revision 710
-Modified Fri Aug 13 08:52:55 2010 UTC (4 months ago) by mantaraya36
-Added checks for portmidi libs and headers for future work.
-Linking to PythonQt should now be done to the correct lib (debug|
-Added functions to the python pyqcsobject object to manipulate the
-editor. The new functions are:
-insertText(QString text, int index = -1, int section = -1)
-setFullText(QString text, int index = -1)
-setCsd(QString text, int index = -1)
-setOrc(QString text, int index = -1)
-setSco(QString text, int index = -1)
-setWidgetsText(QString text, int index = -1);
-setPresetsText(QString text, int index = -1);
-setOptionsText(QString text, int index = -1);
-
-getSelectedText(int section = -1)
-getFullText(int index)
-getCsdint index()
-getOrc(int index)
-getSco(int index)
-getWidgetsText(int index);
-getPresetsText(int index);
-getOptionsText(int index);
-
-
-Revision 704
-Modified Tue Aug 10 06:10:21 2010 UTC (4 months, 1 week ago) by mantaraya36
-
-
-Revision 703
-Modified Mon Aug 9 10:42:08 2010 UTC (4 months, 1 week ago) by mantaraya36
-Fixed event sheet issue: when editing in text and adding lines, these
-would not show up when changing back to sheet view
-Live Events are now longer shown for Python files.
-
-
-
-
-
+Enjoy!
 
 
 Full ChangeLog:
+
+commit c1151e5f67f53fffff863791198761f6b49caa70
+Author: Andres Cabrera <andres@hw-mini-1.mat.ucsb.edu>
+Date:   Fri Nov 9 10:25:47 2012 -0800
+
+    Cosmetic changes on OS X for help panel and main window
+    Improvements to packaging script
+
+commit 27ca705e5cb51a524aab08c33ecf2e409d04c8a5
+Author: Andres Cabrera <andres@hw-mini-1.mat.ucsb.edu>
+Date:   Mon Nov 5 19:46:31 2012 -0800
+
+    Fixed MIDI_IO_Test example
+
+commit cab5b69f9b8bfc63734d1e112bd16dbecfc4bc42
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Nov 6 21:26:32 2012 -0800
+
+    Fixed setting of RtMidi macro when dir is pecified manually
+
+commit 10ba29215ae6a847220fddfc1cbce54d57d3e3e5
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Nov 6 11:58:20 2012 -0800
+
+    Minor change
+
+commit 64cd4d124a8a94504c00188d89f672b67aabdcdf
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Nov 5 18:58:41 2012 -0800
+
+    When there is no RtMidi support, the MIDI selection box tells the user.
+    Other minor changes
+
+commit 2c9e8f5549a6ac2c9c7baaea438ee1eaf90976b2
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Nov 4 20:21:42 2012 -0800
+
+    Bumped version of application and pyqcs API for release.
+
+commit 436679133f5f78ec4faba2ca0dae27d6c6dbad42
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Nov 4 20:20:24 2012 -0800
+
+    Removed some unnecessary debug text output
+
+commit 89ef3515fcb535d3f36f70e36645020efc36985e
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Nov 4 20:19:21 2012 -0800
+
+    Added support for RtMidi 2.0.1
+
+commit 968d0697639a9a2ca8b9f2893f939704cb291400
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Nov 2 18:53:40 2012 -0700
+
+    Removed almost all traces of "QuteCsound"
+
+commit 5218303227aa07b7736c426cedca915b3abbf56f
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Nov 2 18:50:01 2012 -0700
+
+    Fixed storing and recalling of size and position of widget panel when not independent window.
+
+commit 370e2f221df16616f6855dbd9b67e0d117a8a16f
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Nov 2 18:39:16 2012 -0700
+
+    minor fix
+
+commit a11efc30a86da7512facd1718e70210f826c0dd4
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Oct 29 22:32:31 2012 -0700
+
+    Fixed issues with score editor (values from previous change were kept)
+    Moved setFileName to basedocument
+
+commit ee6fc089924a1ed54585c41d8fe699b64a1c0ab1
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Oct 29 22:30:47 2012 -0700
+
+    Added python API tutorial scripts
+
+commit 8d6d420424dcd8e9ac11397883fee4a79976da1d
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Oct 29 20:19:34 2012 -0700
+
+    Small fixes to accept non debug version of PythonQt (works on Linux, untested on OS X
+
+commit 5f0381f8a336f28f6ef35a5591ec76554f4e86c4
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Oct 28 14:58:38 2012 -0700
+
+    Improvents to indent script and added table viewer script
+
+commit 11360112109ba49abb9b6b0b129368fc2272141d
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Oct 28 12:25:44 2012 -0700
+
+    Improved bytesong script
+
+commit d3845e4937504a9a8fb44135da1132057e5ac3a6
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Oct 28 12:10:47 2012 -0700
+
+    Script reorganization and improvements
+
+commit d9dcf56005e4bc339c0f3e123bec83def1aca85e
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Wed Oct 24 00:42:58 2012 +0200
+
+    small fixes for german translation
+
+commit 984d14da85a0c06308aff9f67f3ac371216d4d4c
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Tue Oct 23 23:56:36 2012 +0200
+
+    german translation updated
+
+commit 4f6608f3afb12204b573c3a5f8cb925105048a13
+Author: Andres Cabrera <andres@hw-mini-1.mat.ucsb.edu>
+Date:   Mon Oct 22 20:34:08 2012 -0700
+
+    Added python scripts to os x bundle
+
+commit 993e10bdb67292dccfbadc46c80d4a4306f57a7a
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Oct 22 08:50:20 2012 -0700
+
+    Added icon to pause button
+    Removed warning from keyselector.ui
+    Fixed additive and simple FM synth examples
+
+commit 308fe3b5407faf9ce4933022f565731a89548199
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Mon Oct 22 13:47:00 2012 +0300
+
+    Added pause button and menu entry. NOTE: no proper icon yet
+
+commit 06651a618b4bd16feef61a02ef9e8895515eaf1e
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Oct 20 21:23:59 2012 -0700
+
+    Added open online FLOSS manual on examples menu
+    Minor fixes for PythonQt on Linux
+
+commit b3cbfe10180f2cbb672756bf86b50f8af87d5b82
+Merge: 8c413f3 c2bf6ad
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Oct 20 21:23:10 2012 -0700
+
+    Merge branch 'master' of ssh://qutecsound.git.sourceforge.net/gitroot/qutecsound/qutecsound
+    
+    Conflicts:
+    	src/configdialog.ui
+
+commit 8c413f35f5ba3a3379ba00995d6f65fb15767300
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Oct 19 21:39:28 2012 -0700
+
+    Added icon theme selector
+
+commit bb85ef1094bf38c8f0354838e8cff46bc244b133
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Oct 19 21:15:54 2012 -0700
+
+    Made line numbers area display an option.
+
+commit c2bf6adb0e062503244ea8c9c23c4a37367665f2
+Author: Andres Cabrera <andres@hw-mini-1.mat.ucsb.edu>
+Date:   Fri Oct 19 15:48:42 2012 -0700
+
+    Fixed OS X packaging script for building using Qt on PATH
+
+commit eb94e07dd6caacf1535a66ee9c8a8f38a0d60061
+Author: Andres Cabrera <andres@hw-mini-1.mat.ucsb.edu>
+Date:   Fri Oct 19 10:27:57 2012 -0700
+
+    Fixes for current QtSDK
+    Removed warnings for widgetlayouts
+
+commit 15e1f693a426e8a3250679a3c9fc0afc9f7f9006
+Merge: d1aa21c d71b93a
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Oct 18 00:50:13 2012 +0200
+
+    Merge branch 'master' of ssh://qutecsound.git.sourceforge.net/gitroot/qutecsound/qutecsound
+
+commit d1aa21c5227f90f0670bbb60a6312227a92f9a5b
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Oct 18 00:48:45 2012 +0200
+
+    Waveform_Mix.csd performance improvement
+
+commit d71b93a6cf9f8a5491510beaf2263920f0f5572c
+Author: Francois PINOT <fggpinot@gmail.com>
+Date:   Tue Oct 16 20:51:17 2012 +0200
+
+    Updated
+
+commit 8db6f2d471c4f83a4e4b2ac1fa1cf2dbb78e63d6
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Oct 15 21:48:36 2012 -0700
+
+    Updated spanish translation
+
+commit c13a995a0cf7b08d94fc41d756886749b3c54569
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Oct 15 21:33:02 2012 -0700
+
+    Fixed problem with copy paste in event sheet introduced when fixing column names
+    Fixed scaling of graph when there is only one
+    Updated translations
+
+commit b7720d51fb272891952484e4f50da20082461a0e
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Oct 14 20:47:53 2012 -0700
+
+    Modified Pipe Synth to use chnget to boost performance
+    Fixed typo in Language_Features example (thanks to Alex Hofmann)
+    Put back icons in live event sheets and help panel
+    Default template is now filled automatically on first run.
+    Added more icons to boring theme
+
+commit a9bc81da62c196171691cc4e98f06f3176609f76
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Oct 13 22:13:16 2012 -0700
+
+    Cleaned up indentation. Now tabs are used throughout.
+
+commit e33083bf45c9e0a95d6eae5fa23e72f171322a5d
+Merge: 9846c80 c3bf5c6
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Oct 13 21:58:35 2012 -0700
+
+    Merge branch 'master' of ssh://qutecsound.git.sourceforge.net/gitroot/qutecsound/qutecsound
+
+commit 9846c80b0c1207c68b3dfdcf46408eb15fdf53c0
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Oct 13 21:56:28 2012 -0700
+
+    Fixed line number display for large fonts
+
+commit 8d3c1ee4cb1a4ab16a4df1fe5b81c7d68adeab9c
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Oct 13 21:43:32 2012 -0700
+
+    Fixed names of columns for event sheet and split score spreadsheets
+    Fixed finding McCurdy collection on Linux for out of tree builds
+    Reorganized graph widget resizing in hope of finding scaling bug, but behaviour continues
+    Forced QuteApp to always be doubles
+
+commit c3bf5c62a5908f8992ac1d3ecf26e8623009625c
+Merge: 9125e7a 2e22b68
+Author: Andres Cabrera <andres@hw-mini-1.mat.ucsb.edu>
+Date:   Fri Oct 12 15:00:41 2012 -0700
+
+    Merge branch 'master' of ssh://qutecsound.git.sourceforge.net/gitroot/qutecsound/qutecsound
+
+commit 2e22b68db331bcdb1d9d7e02c409ab95ed8986aa
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Oct 11 22:04:34 2012 -0700
+
+    Added new icon theme
+    Removed create app action for release
+
+commit 9125e7aa2a674b5280f78da9e1d2cacaab6f479f
+Author: Andres Cabrera <andres@hw-mini-1.mat.ucsb.edu>
+Date:   Thu Oct 11 12:54:34 2012 -0700
+
+    Doubles is now default build
+    Removed annoying warnings about layout names
+    Fixed know exporting for Cabagge
+
+commit 97f09d31a111d25aa7b5ebcf06a9135a73f5b7b9
+Merge: fb69397 1dc239a
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Oct 4 21:30:53 2012 -0700
+
+    Merge branch 'master' of ssh://qutecsound.git.sourceforge.net/gitroot/qutecsound/qutecsound
+
+commit fb6939759a283d28504ac048361ce2281bbd44f8
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Oct 4 21:01:54 2012 -0700
+
+    Made coreaudio module default on OS X and portaudio default on linux.
+
+commit 3f9da89ae24452d09d8d896e5541d7f03dd9402a
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Oct 4 20:23:18 2012 -0700
+
+    Fixed typos in examples. Thanks to Peiman Khosravi
+
+commit 1dc239a78f696720f7c0903f4d1fd8aa2bb80338
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Oct 4 22:51:48 2012 +0200
+
+    finally found the correct new version of MIDI_Tunings.csd example
+
+commit 0c8071377957ee18d36f20ecdbff70dd5fb5fc94
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Oct 4 22:23:39 2012 +0200
+
+    improved and fixed version of some examples
+
+commit cd69bd4853ec076470a98bff42485679ede5d28f
+Merge: afd4e7c 2df000d
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Oct 4 21:53:08 2012 +0200
+
+    Merge branch 'master' of ssh://qutecsound.git.sourceforge.net/gitroot/qutecsound/qutecsound
+
+commit 2df000d92cafc1e5a4156f6dbf9c096023d763df
+Merge: 3dadc3e 86a1f41
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Oct 2 21:59:23 2012 -0700
+
+    Merge branch 'master' of ssh://qutecsound.git.sourceforge.net/gitroot/qutecsound/qutecsound
+    
+    Conflicts:
+    	src/application.qrc
+    	src/dockhelp.cpp
+    	src/dockhelp.h
+
+commit afd4e7c4785090fc774e85edcf01bd7e865f3985
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Tue Oct 2 18:00:40 2012 +0200
+
+    fixes from peiman khoshravi
+
+commit 3dadc3eb4df03b41708ffa9253f209a70f5c3c92
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Sep 14 10:39:19 2012 -0700
+
+    Forced usage of pa_bl on OS X when using portaudio to avoid crashes.
+
+commit 429ef048df68c9368ee0a1f852f4c20f9b536a58
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Aug 16 23:48:57 2012 +0200
+
+    More fixes in indent2.py
+
+commit a54a042f340352fe74f77d3db50dd777d480a3ab
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Aug 16 22:49:20 2012 +0200
+
+    Fixed a problem with long comments in indent2.py
+
+commit 288e0642a4b6de66aad7a34ad34ea5e24f5e7f7d
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Aug 16 17:51:11 2012 +0200
+
+    Some more and some extended Python scripts
+
+commit 7ab4fe55b67aa5f82f6fc23bd8463152b0f8230b
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Aug 16 17:07:41 2012 +0200
+
+    Added some minor comments
+
+commit db62b0db1e66f5474507d9bbc21625df3936bcac
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Aug 16 13:56:36 2012 +0200
+
+    Corrected a typo in Mixdown_Player.csd
+
+commit bffd79b253f6fd406a4accee5f237640079917d2
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Aug 12 21:42:01 2012 -0700
+
+    Attempt to improve border in help panel.
+
+commit d17c984e010b155555036645cd8734ed21523360
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Aug 12 21:41:36 2012 -0700
+
+    Put back some messages in message buffer.
+
+commit fa0139d841f3757347d8d42d7f3f64849ed42bcd
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Tue Jul 17 10:39:01 2012 +0300
+
+    Implemented searchbar in DockHelp
+
+commit b9c6e36ada18f349becbbe7ef706f38e301be511
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Sat Jul 14 11:54:00 2012 +0300
+
+    Experimental find-field in help window
+
+commit b06c27e0f870e3deb18861f607fabeec329b2957
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Sat Jul 14 11:52:35 2012 +0300
+
+    more compact DocumentView::markErrorLines
+
+commit 86a1f41a733d14f91150c75f3498119a1fa3552f
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Sat Sep 1 11:07:32 2012 +0300
+
+    Created global shortcut (default Shift-Alt-L) for line number area,
+    entry in menu and contextmenu of texteditor.
+
+commit 1a54e9e4a1e4c787ec000cac3afbb30731a3b564
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Mon Aug 27 23:56:02 2012 +0300
+
+    added forgotten gtk-search.png
+
+commit 79b078335d4bf1b07445f11d36006b0573b8918a
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Mon Aug 27 23:47:33 2012 +0300
+
+    Better look to searchbar in help window
+
+commit 0189bb2051f09827a76fc67f20418cf0cbae0757
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Mon Aug 20 01:13:35 2012 +0300
+
+    Corrected merge marks from console.cpp
+
+commit 64d09cb2db8e4a3f6da119d16fbfc0499cd4eb35
+Merge: 7a3ed87 221bc57
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Sat Aug 18 19:45:42 2012 +0300
+
+    Merged conflicts
+
+commit 221bc57a6a2b6a3a4b59b4af0f63bb0b8ce8a38f
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Fri Aug 17 21:02:05 2012 +0200
+
+    Example MIDI_Tunings.csd simplified and fixed
+
+commit 7a3ed877d8497198819e87c3d880fb52133b7ae4
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Fri Aug 17 10:02:32 2012 +0300
+
+    Added line number area to main editor. TODO: better show/hide shortcut
+    hadnling (now ctrl+F11 when the editor has focus)
+
+commit 1731095ab798685f14bc6231475dbfb3b2f7aa50
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Aug 16 23:48:57 2012 +0200
+
+    More fixes in indent2.py
+
+commit 708d757fdfec989faff8a7f20fd9ea2d7be469eb
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Aug 16 22:49:20 2012 +0200
+
+    Fixed a problem with long comments in indent2.py
+
+commit 81a5e245da15a10f1f158883ab9bb24c54d1a058
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Aug 16 17:51:11 2012 +0200
+
+    Some more and some extended Python scripts
+
+commit be91646429456fbcdfa39193479435fc9cc2cb30
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Aug 16 17:07:41 2012 +0200
+
+    Added some minor comments
+
+commit 7e1abe465894af10f953ceab65de92ca996a302c
+Author: joachim heintz <jh@joachimheintz.de>
+Date:   Thu Aug 16 13:56:36 2012 +0200
+
+    Corrected a typo in Mixdown_Player.csd
+
+commit 53d1e4942c235d69785c41e6ceb0ec0ce548a37f
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Aug 12 21:42:01 2012 -0700
+
+    Attempt to improve border in help panel.
+
+commit 7104751a7b9a30a16a027e8bf795ee3a2619d678
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Aug 12 21:41:36 2012 -0700
+
+    Put back some messages in message buffer.
+
+commit 69c0e44dbed266185b04d7f91545b0bb3d36f44d
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Tue Jul 17 10:39:01 2012 +0300
+
+    Implemented searchbar in DockHelp
+
+commit d376c99560aae1e87da9f19fc887cff3e2d0c2d4
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Sat Jul 14 11:54:00 2012 +0300
+
+    Experimental find-field in help window
+
+commit 1e9ed93521e5ac7c3a76986a67b519563e0ac1da
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Sat Jul 14 11:52:35 2012 +0300
+
+    more compact DocumentView::markErrorLines
+
+commit e97a0fc994ed089c8b5db669646df90fc9a7770c
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Jul 11 07:36:16 2012 -0500
+
+    Fixes by Tarmo to console error messages
+
+commit 818ec2e32c4cd6249866fef9b6183ee7efef06fc
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Tue Jul 17 10:39:01 2012 +0300
+
+    Implemented searchbar in DockHelp
+
+commit 2c6001344c98b3255485b52d075ab1d538d4e502
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Sat Jul 14 11:54:00 2012 +0300
+
+    Experimental find-field in help window
+
+commit ae30f9b2849251073cc99944778fa202a3733302
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Sat Jul 14 11:52:35 2012 +0300
+
+    more compact DocumentView::markErrorLines
+
+commit 58e1bfcdd94b63a6799a880997092ff34c652b7b
+Merge: 9a4e62a ed65ef6
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Fri Jul 13 16:57:29 2012 +0300
+
+    Merge branch 'tarmo-error-markup' of ssh://qutecsound.git.sourceforge.net/gitroot/qutecsound/qutecsound into tarmo-error-markup
+    
+    Conflicts:
+    	src/pyqcsobject.h
+
+commit 9a4e62aaf32703fe20af528baf881ea8fd2435f0
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Thu Jul 12 09:07:49 2012 +0300
+
+    Added methods setCsChannel, getCsChannel and getCsStringChannel to
+    PyQcsObject to reach Csound directly
+
+commit ed65ef630b51b9861775d66fa51345fd0dc669b6
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Jul 11 07:36:16 2012 -0500
+
+    Fixes by Tarmo to console error messages
+
+commit 4be34ea2577dcb5a892fc51054fe487a998498c7
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Jul 2 17:15:45 2012 -0500
+
+    Minor cleanup of python interface files
+
+commit 776e83f7f2ed94f3810432af63b7a94c72455432
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Jul 2 17:15:25 2012 -0500
+
+    Added initial untested nightly build script
+
+commit e347945e457606d4ab35e959bb6e2f64b9568467
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Jul 2 16:46:12 2012 -0500
+
+    Minor change
+
+commit a49a8b5167878283220ccc54fd9ceee69f3bfd5a
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Jul 2 16:45:54 2012 -0500
+
+    More work on nightly build scripts
+
+commit 4eb738150ad3358818964c41f48cb22096b789a0
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Jul 2 16:45:33 2012 -0500
+
+    Fixed table display
+
+commit fda26ca160a95233fcdda427ecd257307ba8f441
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Mon Jul 2 17:53:48 2012 +0300
+
+    Added method PyQcsObject::loadPreset to be able to activate widget
+    preset from python API
+
+commit dcddc0acdfdd32b784d79564944e7c79494e4a72
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Jun 25 22:00:50 2012 -0500
+
+    Fixed synchronization of buttons with panel states at startup
+
+commit a6e86af55a0d3c5db5584bcedc95729ca3068318
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Jun 3 16:47:38 2012 -0500
+
+    Added Circle Map example by Michael Gogins.
+
+commit 446680aacdbdc9bffe56daca5df341a3141f28be
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Thu May 24 16:22:04 2012 +0300
+
+    Now it is possible to hide/show widget via
+    setWidgetProperty(widgetid,"QCS_visible",True/False)
+
+commit 99d801999ad223aea65da6942217bae426a56ad6
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed May 23 11:30:29 2012 +0000
+
+    Minor change
+
+commit 668710e1ae166982964a9b49eeb49602e3bdd66d
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Sun May 20 09:00:51 2012 +0000
+
+    Fix createNewSlider - open properties dialog if no channel name is given
+
+commit a35ca4521aaf1bc04a3dc3ab02a7e92fa8b6b5c4
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Fri May 11 22:28:57 2012 +0000
+
+    indent2.py added
+
+commit 5c1edf34a04542ce51badbe357da1b965c5e343e
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue May 8 10:03:41 2012 +0000
+
+    Fixed crashing when selecting audio and midi devices on preferences
+
+commit 3a7f27ccfbca1448b7ae388ba369ebbde3c31286
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Apr 25 21:11:27 2012 +0000
+
+    Updated things to work with Qt 4.8
+    Several fixes to QuteApp and main app packaging for OS X
+
+commit 96e6cde6298e36909a465ce761fef46bb54c81f0
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Apr 24 13:15:28 2012 +0000
+
+    Cursor jumps to next line when
+    Fixed several examples that were not working properly with current sources.
+    Cleanup.
+
+commit 9dbf7e33deeb0553441e58157d05189dbad1346f
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Apr 10 16:24:17 2012 +0000
+
+    Added option and macro to support changes in Csound6.
+    Updated opcodes.xml to latest
+
+commit ed5f24836640dbf3bccd502d07ffc20332a86168
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Sun Apr 1 17:24:16 2012 +0000
+
+    small typo fix in McCurdy Example mode.csd
+
+commit 46243952e790a5999ce08ef5178c7eb80d2c06b8
+Author: Andy Fillebrown <andy.fillebrown@gmail.com>
+Date:   Mon Mar 26 20:56:15 2012 +0000
+
+    work around OleInitialize/Uninitialize bug in FLTK 1.1 that causes clipboard to stop working on Windows
+
+commit 96c0850efc407a72f28d44887503dd991a857160
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Mar 26 16:42:56 2012 +0000
+
+    /usr/local/lib now included in PATH when running CsoundQt (useful for csbeats)
+    Some small improvements to App wizard.
+
+commit 3a54470ac848aeb4717189ec70119bfc61f1cc2d
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Mar 17 11:11:38 2012 +0000
+
+    Added /usr/local/bin path to enable finding binaries like csbeats
+
+commit ae42b973273097dab4ad86a5ac388ff241006b04
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Mar 15 12:02:13 2012 +0000
+
+    QuteApp deploy script now working.
+    getSco and setSco now working with tags like <CsScore bin="csbeats">
+
+commit e2b95489d706ec515b8f5ceb5995ed1afa4dfd56
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Mar 12 16:32:09 2012 +0000
+
+    Changes to testing scripts
+
+commit 36fa400b92516d5b02139bb149d0c79cb11a9215
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Fri Mar 9 07:23:41 2012 +0000
+
+    Work with python<->widgets methods: parameter 'widgetid' (can be either
+    channel or uuid of a widget) instead of 'channel' in setWidgetProperty
+    and getWidgetProperty, fixed  WidgetLayout::setWidgetProperty that did
+    not react to widget geometry changes before.
+
+commit 8bbc93d996d1ce02c334e519c76d77514fbc89aa
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Tue Mar 6 08:20:25 2012 +0000
+
+    new python script dir 'Useful' with all_instrs.py (returns all instruments in current csd)
+
+commit aad05428b8aa940ec9731bd42e98513aaebb0ffd
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Thu Mar 1 20:29:19 2012 +0000
+
+    removed PyQcsObject::openDocument as dublicate of loadDocument, added
+    parameter runNow to loadDocument, changed CsoundQt::loadFile so that it
+    does not for m_options->autoPlay, it has to be done by calling function
+
+commit 1d310313ef9da4963662b97bdaa37778a18ce757
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Feb 27 21:34:19 2012 +0000
+
+    Moved as much of mouse value storage from csound engine into widget layout
+
+commit 41581a8e8d45570c39ac745936a890e4f023c5b4
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Sat Feb 25 16:29:41 2012 +0000
+
+    implemented PyQcsObject::destroyWidget, added PyQcsObject::openDocument
+
+commit f3101ca6709747ed8bdfb22242c4e43ea9fd90e9
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Feb 24 18:30:34 2012 +0000
+
+    Added bytesong python example. Thanks to Tito Latini.
+
+commit bc3fa2e5681bc972928eebacd95ef3dc599c12e0
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Feb 24 16:06:55 2012 +0000
+
+    Added needed headers for OS X.
+
+commit f631c45d509197878461e3d0c45a2c7d587809c9
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Feb 24 13:58:29 2012 +0000
+
+    Better passing of messages from Csound to consoles, by refactoring the thread tha processes these messages. Seems to fix some serious stability issues.
+    Cleanup.
+    Build QuteApp for doubles by default.
+
+commit 0877f7aaff3af5ad721e7abbeee49e81218d60f1
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Feb 23 14:19:30 2012 +0000
+
+    Fixed building OS X
+
+commit b7b997197669d6055644c8caa71869816c5fd67a
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Sun Feb 19 17:12:15 2012 +0000
+
+    Recover from lost changes (to rev 965)
+
+commit bb94e7df2d2cb54b858b809366bcda9e6edc5ad5
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Sat Feb 18 00:35:15 2012 +0000
+
+    Recovered lost changes to revision 965, work with widget creation
+    methods, added methods listWidgetProperities, getWidgetUuids
+
+commit 489be79e99e883b6ce1e96bd59df34108c41e5ed
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Thu Feb 16 22:33:11 2012 +0000
+
+    small improvements to Cross_Synthesis.csd
+
+commit 442a029157712ae0c1cac0c393fadb745d581e36
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Thu Feb 16 11:10:30 2012 +0000
+
+commit 6272ee7b2e19b9bbe3ed6f1fa99b7fc7902ef500
+Author: Tarmo Johannes <tarmo@otsakool.edu.ee>
+Date:   Thu Feb 16 09:18:18 2012 +0000
+
+commit f85a32b6df93bc393fa7f374be10046d86fcdd9c
+Author: Andy Fillebrown <andy.fillebrown@gmail.com>
+Date:   Wed Feb 15 21:59:51 2012 +0000
+
+    more changing of QString::toStdString to QString::toLocal8Bit
+
+commit 7d760a19dacb96420885b4b43029c8f28e485b14
+Author: Andy Fillebrown <andy.fillebrown@gmail.com>
+Date:   Wed Feb 15 21:57:03 2012 +0000
+
+    add QTimer #include to fix compile error on Windows
+
+commit e38cd8f205b3cb089f948713fe28523c902c1595
+Author: Andy Fillebrown <andy.fillebrown@gmail.com>
+Date:   Wed Feb 15 21:55:52 2012 +0000
+
+    change use of QString::toStdString to QString::toLocal8Bit
+
+commit bf706462be48564187ea2237661bf5d83108d7f5
+Author: Andy Fillebrown <andy.fillebrown@gmail.com>
+Date:   Wed Feb 15 21:54:32 2012 +0000
+
+    make build64 the default CONFIG option on Windows
+
+commit d1979fce4bf030559b588632f9701997ddbe047e
+Author: Andy Fillebrown <andy.fillebrown@gmail.com>
+Date:   Wed Feb 15 21:53:38 2012 +0000
+
+    change libcsnd.dll to csnd.dll to fix link error on Windows
+
+commit 931b8742f2b5939aed3fc79a05358c2bbf241eb4
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Feb 15 21:33:11 2012 +0000
+
+    Improvements to invalue->chnget script
+
+commit fee3a862dac171b2564784832606fd3b371dfd6c
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Feb 15 13:52:10 2012 +0000
+
+    Added git and invalue->chnget python scripts
+
+commit e198de52ebf5b66454561b22b34029cb7adce88a
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Feb 9 08:07:32 2012 +0000
+
+    Fixed copy/paste undo/redo for split csd sections.
+
+commit 2543e23460b04a779cbb99f18fca8113b89f671e
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Feb 8 07:10:21 2012 +0000
+
+    Changed button to close tabs. Each tab now has its own better looking close button.
+    Presets now work properly with chnget/chnset
+
+commit bf302e8d18f40e3c55b361b1bc35de78986b9452
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Feb 6 21:47:22 2012 +0000
+
+    Added GoOSC examples
+
+commit 31813ad0af20d2371c2694b57300c42adee7b6db
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Feb 6 21:25:05 2012 +0000
+
+    Reinstated usage of CsoundPerfThread instead of the custom QCsPerfThread. Tested only on linux so far.
+
+commit 306b4fad728accfbab11e01bf1d341e57373e422
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Feb 6 20:50:37 2012 +0000
+
+    Moved curve class to use MYFLT instead of float.
+    Improved performance of chnget/chnset channels which have mode 2 or 3 (use chnset)
+    Moved Phase Mod Synth to use chnget/chnset
+
+commit f9e8ecd3437b3a7d989b3c8a10cf573e27be0bde
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Feb 3 11:26:11 2012 +0000
+
+    Adde code to populate MIDI widget control interface selection, but hid it because it is not yet implemented.
+
+commit 7b2f14dfc28426d3cb655e027518e9091ab92e8b
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Feb 2 21:15:41 2012 +0000
+
+    Configuration menu for QuteApp now populates with available devices.
+    Implemented setWidgettext and setPresetsText in python API.
+
+commit 91b713557992ca87e48a2f4f80a12f425c98abbb
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Feb 2 15:57:55 2012 +0000
+
+    Added channel argument to widget creation to allow specifying it from the python API.
+
+commit a02c93e45b3d30a66df005afbb6d4c8ae8ef0c48
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Jan 27 19:51:51 2012 +0000
+
+    Deployment of QuteApp on OS X now working.
+
+commit b46b7e537de9be5601dc602df3c9a7ac8f1aa2d9
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Jan 23 20:18:52 2012 +0000
+
+    Made both invalue/outvalue and chnget/chnset available simultaneously and controlled by the single option to enable/disable widgets.
+    Small improvements to look of config dialog.
+
+commit cfe61e2df79541370b6edbef78ede5406d2f1879
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Sat Jan 21 23:18:53 2012 +0000
+
+    Jukebox example fixed. Now plays mp3 files (csound 5.16 or higher required) and uses a better random algorithm (avoiding any repetition).
+
+commit 5b674be8f2edd83aff0dc8f4fd157646f77ef0b3
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Jan 21 16:20:45 2012 +0000
+
+    Fixed storing Opcode64dir property
+    Fixed chnget/chnset interaction with widgets.
+
+commit 69bcfed54a91682de1de3bdc4ac5f5a93785fc43
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Jan 16 10:29:56 2012 +0000
+
+    Added argument to set widget channel from python API when creating it. Thanks to Tarmo Johannes.
+
+commit 3ccd087fe0372c59098a71dcbcf13986fc01ba5b
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Jan 10 18:44:39 2012 +0000
+
+    A bit more work on script
+
+commit 87bc9f529bcc6cfcc9e001f780c23f327110c865
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Jan 10 18:30:18 2012 +0000
+
+    More work on OS X standalone and packaging.
+    Started work on script to deploy QuteApp for OS X (unfinished)
+
+commit a7285aa46ef838f012557e8246ddcd7663e9d508
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Mon Jan 9 20:40:30 2012 +0000
+
+    fix to example SF_Play_from_HD_2.csd by victor lazzarini (multiple pause/resume actions now possible)
+
+commit 6789156c3a5ddeeb0a8c7c13d77db34c46ee4c52
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Dec 28 18:08:48 2011 +0000
+
+    Untested changes to OS X packaging
+
+commit e1f24d8d9d900a201f4bf1e64fbb5d6e0515c135
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Dec 19 19:24:54 2011 +0000
+
+    Several improvements to OS X app creator, but not working yet.
+
+commit 57c67b980875a9bd55bdfe2b2a67ea01a79d45b0
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Dec 19 14:26:08 2011 +0000
+
+    More untested work on OS X app
+
+commit 85733e15902b0c5b78a846fd5226038b4d6bce00
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Dec 19 09:01:45 2011 +0000
+
+    Some untested work for OS X.
+
+commit ed0ae646b62194194ed9d6a7fd710c3d1e97585d
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Dec 18 17:05:34 2011 +0000
+
+    More work on QuteApp. Added half working config menu. Fixed many issues and implemented a lot of missing stuff.
+
+commit 40b56a4423710fef0d9bcd87d4a2a2b8e89242bb
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Dec 13 18:49:00 2011 +0000
+
+    Use TogglePause to restart from pause. Tested on OS X and works.
+
+commit 9b062d503320a5c61c0094a50b926273f55daddc
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Dec 11 21:19:18 2011 +0000
+
+    Conditionally bundle doubles and floats versions of QuteApp separately
+
+commit 2a57f4f3d5ceea935bf784425455ac38c5f250f5
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Dec 10 22:17:12 2011 +0000
+
+    App properties are now saved in CsApp section in the csd.
+
+commit 13b0147e26c6d6c1512fa6bd7d6f802250eb64d0
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Dec 10 14:57:43 2011 +0000
+
+    Intial proof of concept for app generator for Linux.
+
+commit 33836fc7aae2c77377436d1e8c70267658c05119
+Author: Francois Pinot <fggpinot@gmail.com>
+Date:   Mon Nov 28 18:17:38 2011 +0000
+
+    Updated French translation
+
+commit 2f047417b977d28e365ded970d04c9619d34c9ce
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Sun Nov 27 19:58:13 2011 +0000
+
+    new example 'Mincer_Loop' added
+
+commit 72ee177cc8987511128897390235f8b86744fc70
+Author: Gleb Rogozinsky <gleb.rogozinsky@gmail.com>
+Date:   Sat Nov 26 09:11:11 2011 +0000
+
+    updated russian translation
+
+commit d1774342a76d1bdf68d16feac2f489b91ddc0bd8
+Author: Gleb Rogozinsky <gleb.rogozinsky@gmail.com>
+Date:   Sat Nov 26 09:10:46 2011 +0000
+
+    updated russian translation
+
+commit 3e588a2c4771612914f9f07bdaf0cc15a08666a3
+Author: Gleb Rogozinsky <gleb.rogozinsky@gmail.com>
+Date:   Sat Nov 26 09:10:16 2011 +0000
+
+commit abc7085e14d8f71c3ca32b94027d90af329d5c3e
+Author: Gleb Rogozinsky <gleb.rogozinsky@gmail.com>
+Date:   Sat Nov 26 09:09:49 2011 +0000
+
+commit 80eb178686e5a1e8ee6b5a8bae211572ec19f555
+Author: Gleb Rogozinsky <gleb.rogozinsky@gmail.com>
+Date:   Thu Nov 24 12:23:38 2011 +0000
+
+commit c6f6a5881faca6cebf2bae782687540efdb1d299
+Author: Gleb Rogozinsky <gleb.rogozinsky@gmail.com>
+Date:   Thu Nov 24 12:23:01 2011 +0000
+
+commit ae9d7f7085146a14d43450b80624809849bbd495
+Author: Gleb Rogozinsky <gleb.rogozinsky@gmail.com>
+Date:   Thu Nov 24 12:22:21 2011 +0000
+
+    Russian translation
+
+commit 414e8592558adfde989922d09aa5c4aa1e14c05f
+Author: Gleb Rogozinsky <gleb.rogozinsky@gmail.com>
+Date:   Thu Nov 24 12:21:50 2011 +0000
+
+commit 661e53299459729cb904ce63533be7a7d2ef219a
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Nov 24 11:46:25 2011 +0000
+
+    Fixed buttons in config dialog to fit longer international texts.
+    Updated translation ts files
+
+commit 98890c6e1664f53e6430b592a6126fd47ea26995
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Nov 22 21:34:02 2011 +0000
+
+    Made Russian translation functional
+
+commit 588aaea1714562cbe73a2ca2cc6fcdc0ec6b35fd
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Nov 22 19:10:36 2011 +0000
+
+    Added russian language translation to menu list
+
+commit 3941167d3e6a4e5a5a0a87421723bbbeefc861fc
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Nov 21 16:44:45 2011 +0000
+
+    Added Russian translation
+
+commit e28310cb017fb5b914587051e7860678c2280f4c
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Nov 21 16:40:23 2011 +0000
+
+    Fixed path issue with dock help. Thanks to Hector Centeno.
+    Improvements to OS X packaging script
+
+commit 69b7f609988f326e5e5c9c102bf1d8f1eb0b7757
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Nov 21 07:10:17 2011 +0000
+
+    Fixed output dialogs to allows creating a new file, rather than only selecting a file.
+    Browse dialogs now show the currently selected file.
+
+commit c1544b9f9610d5bc65dc53cbbd53a21768c10113
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Nov 20 09:26:58 2011 +0000
+
+    Added support for OPCODEDIR64
+
+commit 7efa3aa187e0873a069236a8f33b76b292c1b708
+Author: Francois Pinot <fggpinot@gmail.com>
+Date:   Sat Nov 19 16:41:12 2011 +0000
+
+    Minor fix
+
+commit 4145bd30dfed64936e32ac8bbfa1f2892a43ee7b
+Author: Francois Pinot <fggpinot@gmail.com>
+Date:   Sat Nov 19 16:33:39 2011 +0000
+
+    Updated French translation
+
+commit ac00cfe3aefaab6b95797bee2c7e9b91f8f105f8
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Nov 15 10:40:11 2011 +0000
+
+    Updated translations after name change. Unfortunately many old translations have been lost, but they can be quickly recovered manually inside QtLinguist.
+    Fixed storing of enable widgets property
+
+commit dffe3babff52eec060bfab53788b11952ba19722
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Sat Nov 12 10:53:03 2011 +0000
+
+    osx-package script improved
+
+commit 0ea97fe2a75d263da6e9acfbd89f2088bd569d32
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Fri Nov 11 19:24:03 2011 +0000
+
+    small fix in useful>io_test
+
+commit 7d5e943bcc6ef896c201e8871277d2d1326edec2
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Nov 8 18:18:36 2011 +0000
+
+    Updated RtMIDI default version to 1.0.15
+
+commit e60d3a1e7c3a3fde1e0a1226e1f996010dc7416d
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Nov 8 14:06:22 2011 +0000
+
+    Updated name in Config dialog
+
+commit 66cc119c97806eb88b42150593c250d95ebf7f17
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Nov 8 13:24:32 2011 +0000
+
+    New installer script.
+
+commit 2bffefaf7d63c7b6ce39764808a77f4f1c4e6708
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Oct 24 07:08:05 2011 +0000
+
+    Fixed a few minor issues with uninitialez variables and memory leaks.
+
+commit d604d7553315be141639d8d3bddd0cf6b549d6c1
+Author: Andy Fillebrown <andy.fillebrown@gmail.com>
+Date:   Fri Oct 21 04:13:15 2011 +0000
+
+    revert changes to dock windows and buttons back to r904
+
+commit 0d842c3d64f20d7d9b8801cf7cef6d0e63d3ac46
+Author: Andy Fillebrown <andy.fillebrown@gmail.com>
+Date:   Fri Oct 21 00:28:13 2011 +0000
+
+    more work on dock window restorations and button checked states when starting up
+
+commit 487f78bdd5c24a68109b70fd5c89b9d4a161da87
+Author: Andy Fillebrown <andy.fillebrown@gmail.com>
+Date:   Thu Oct 20 12:42:46 2011 +0000
+
+    fix console dock restoration and button checked states when starting up
+
+commit 5ce9e0407644718dbba4466a2c7bfa0b9685f9b4
+Author: Andy Fillebrown <andy.fillebrown@gmail.com>
+Date:   Thu Oct 20 05:55:54 2011 +0000
+
+    clean stale code in project files and add rc file back into windows build to fix missing program icon
+
+commit 67652f7794df2feb66dda4361b14a69b4a19f8cd
+Author: Andy Fillebrown <andy.fillebrown@gmail.com>
+Date:   Thu Oct 20 05:40:20 2011 +0000
+
+    clean whitespace
+
+commit fdaf2a0c4bae7a8ab8487a64fa39e08d6a79039d
+Author: Andy Fillebrown <andy.fillebrown@gmail.com>
+Date:   Thu Oct 20 05:31:23 2011 +0000
+
+    move qmake DESTDIR and TARGET variables from config.pri to qcs.pro so QtCreator sets up the default run targets correctly
+
+commit 8c9c79264d09ee083ed8a74ac8c8811ed861bfaf
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Oct 17 16:37:18 2011 +0000
+
+    Hopefully fixed os x installer scripts.
+
+commit c4d6a58c8aec1ce474dbbcefdb2bef3a67796d58
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Oct 12 08:12:29 2011 +0000
+
+    Fixed build.
+
+commit 99c341186e3c9efc1b7b94036739ffffa2fc86f2
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Oct 12 07:57:42 2011 +0000
+
+    If Csound version is less than 5.14 don't allow new parser flags
+
+commit d8b0c92f28735bec0e8c8415bcd3f7aaf64113f6
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Oct 12 07:21:05 2011 +0000
+
+    Fixed memory errors
+    Added newDocument() function to python API
+    Added chat link to help menu
+
+commit a2f866e2d9e453e641843aed29a49a867825608e
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Oct 4 08:49:19 2011 +0000
+
+    Added proof of concept opengl python script
+    Added additional index argument to registerProcessCallback python API function.
+    Added refresh function to make python yield to qcs
+
+commit 2ad9b09b7953b8b64ff46384b8622223912b3acc
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Oct 3 09:54:34 2011 +0000
+
+    Added loadDocument function to Python API
+    Added live coding example for Python API
+
+commit 091610ca07aaacea6424d7572e7d4456463a04f3
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Oct 2 20:31:01 2011 +0000
+
+    Fixed getSelectedWidgetsText python object function.
+    Added script which can generate the invalue text for all selected widgets.
+    Added Report Bug and Request feature items in help menu.
+
+commit 3d50ddfc0fd11872097e6486f0be82a9a899809c
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Oct 2 17:37:36 2011 +0000
+
+    Changed splash screen to CsoundQt
+
+commit 6ccb725b8da217d9a6ae3d54ad62a82d45890148
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Oct 2 17:20:44 2011 +0000
+
+    Changed name to CsoundQt.
+
+commit 7aa2dc88cf9834f8707744ecc0f2f1e766384cf7
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Oct 2 11:12:06 2011 +0000
+
+    Fixed split view score editor not reporting it had been modified.
+
+commit 48e9d2af982e1a7f3357cc235bdd3821986f1600
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Oct 2 10:22:24 2011 +0000
+
+    Fixed number of threads option. It's -j.
+    Removed Create App menu option for upcoming release.
+    Fixed inspector identifying colons within /* */ comments as labels
+
+commit 86254a8cad02b18491e8adec4942732e97bb7fd7
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Oct 1 20:20:17 2011 +0000
+
+    Added options to configure using new parser and ParCS with control of number of threads.
+    Implemented index for play function of qcs python object
+
+commit de6e2f03c36747e32bef7b45e9b252565fcc5ff0
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Oct 1 06:21:14 2011 +0000
+
+    setValue for widget panel now accepts Uuid as well as channel name to specify widgets
+    The qcs python object creates a variable called "currentScript" if it is running a file.
+    Koenig-Essay no longer requires user to open the file, as it queries the "currentScript" variable.
+
+commit 432c498fcff16d9f163492660469ddaf0eeb0786
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Sep 27 20:21:17 2011 +0000
+
+    Fixed images for buttons.
+    Split view now shows autocompletion menu and status bar info.
+
+commit 7a064250b5623938ab82f994c1f0f78ec7a16af2
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Sep 26 15:39:00 2011 +0000
+
+    Fixed basic installer scripts for OS X, but still some issues with PythonQt.
+    FIxed paths to McCurdy collection on OS X.
+
+commit 5da7fa49917efc8e55f621222d950fc71d8c43ec
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Sep 26 06:34:47 2011 +0000
+
+    Made default paths for building configurable from the command line. By Felipe Sateler.
+
+commit 146b88004bd2dea9b250e379c2a3eb189a0f51b2
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Sep 22 07:45:36 2011 +0000
+
+    Fixed swapping of channels with record button.
+    FIxed record button occasionally not working.
+
+commit 6df702f301462784c23a713079665292bb0eb256
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Sep 18 08:24:51 2011 +0000
+
+    Fixed innitial undo clearing editors
+
+commit ff8f23d13c2faf1d5b87e1ad9eb1e5a3cceda0cc
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Sep 16 17:33:13 2011 +0000
+
+    FIxed Mark Loop and Clone Sheet in Live event panel menu
+
+commit 996f10611952ee88a92db531215665c777595610
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Sep 16 17:20:10 2011 +0000
+
+    Hide stop all button until it is implemented.
+
+commit b747550fd4a834a5bd73ce5e2f47fb102a614e8a
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Sep 16 17:13:26 2011 +0000
+
+    Fixed changing of loop range display in Live events controller when it is set from the live event panel using "loop selected"
+    Fixed setting the loop checkbox for live events controller when loop is started from the live event panel.
+
+commit e23bc95d582eca3bd0cb4c268eff4656484eea04
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Sep 16 10:00:22 2011 +0000
+
+    Fixed infinite loop with corrupted live event sheets.
+
+commit fd15bdba912dc3ef463d47827dec7aa329d809a4
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Sep 16 08:33:44 2011 +0000
+
+    Small fix
+
+commit 9e6b130a537a5946b231cdb24b413de188698bd6
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Sep 16 08:06:02 2011 +0000
+
+    Some sanity for .pro files
+
+commit aa195f4fc05f86444886e13929e4e75e8ced5568
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Sep 12 10:22:59 2011 +0000
+
+    Fixed formant synth
+
+commit da1151343bd2a4cd5ca13307b5cad425bfb30d89
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Sep 12 07:48:10 2011 +0000
+
+    Added Mono Synth Example by Victor Lazzarini, Jim Aikin and Andres Cabrera
+
+commit fe1d63407eacd67a24c4275eb3453a5c7789a326
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Sep 12 07:05:27 2011 +0000
+
+    Added text "Needs restart" to widgets independent option in config dialog
+    Hopefully fixed the url issues with external browser opening help pages
+
+commit efb7ba7c76bb3d8161f703db53926a8fa007e035
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Sep 11 10:38:41 2011 +0000
+
+    Corrected text for "Run utilities using: API/external"
+
+commit fd34fa39b06bc72c599ff4891390936e9b00954e
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Sep 11 10:22:45 2011 +0000
+
+    Improved Formant Synth example.
+    FIxed spinbox to send values when using the arrows, but not send values when changing text until return is pressed.
+    Fixed widgets crashing with negative coordinates.
+
+commit 516255a85abcda6abcf151d1aec971784451e51f
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Sep 11 07:46:15 2011 +0000
+
+    Attempt to fix passing urls to command line. There were problems with spaces in the paths.
+
+commit 969ec09e18ee8aeee3c359eef5a0e572b710e93c
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Sep 11 07:19:51 2011 +0000
+
+    Disabled setting python options when PythonQt has not been enabled for build
+
+commit 98455fcb590d4c76bf1c15aa5139652b5463a387
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Sep 10 21:15:32 2011 +0000
+
+    Hopefully fixed opening of external player on windows
+
+commit 1cf65f7a7f66922b2f16e128b634b03f3b865770
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Aug 30 11:10:14 2011 +0000
+
+    Fixed error for windows build
+
+commit b1c85856b8cde11e1bf07be2c1098b5a1c45027b
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Aug 30 10:37:25 2011 +0000
+
+    Fixed Display Widget example. Thanks to Jim Aikin.
+
+commit 173c985477631ad68fe3d98e7a086bddb3e1e6b0
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Aug 29 20:48:45 2011 +0000
+
+    Implemented getSelectedWidgetsText function for Python API
+    Python scripts are now run in their directory.
+    SpinBox now only transmits value when editing is finished, not on every change.
+
+commit d4de3b217fb4e34e9dcf97f488caca5d00f9cded
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Mon Aug 8 15:47:00 2011 +0000
+
+    small improvement in imitative additive example
+
+commit 40d89df01923b32816b2040d7428bfcd7572aafc
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Thu Aug 4 20:27:58 2011 +0000
+
+    removed duplicate example (Live_Granular has moved from Miscellaneous to Live_Collection)
+
+commit 51ae6051d46a3916f737b36f015cba64cbd61fa1
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Thu Aug 4 20:14:51 2011 +0000
+
+    small changes on some examples because of other label and button size on mac osx
+
+commit 4057e45292777f64d1acd0e970a8982c702e31e7
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Tue Aug 2 21:49:11 2011 +0000
+
+    SF_Record example fixed. Small improvements for other examples.
+
+commit 1bd61d08db743c619052a6ad0d3553efbbabe4a3
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Tue Aug 2 20:04:41 2011 +0000
+
+    some fixes and improvements for McCurdy Collection
+
+commit f6790aef12b4f949348164f6222f5e4bc66dd1cf
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Jul 31 16:49:46 2011 +0000
+
+    Fixed path for McCurdy collection on OS X
+
+commit 2e0e24e3fd663ea7e4fafff393de99e4cc235c07
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Jul 30 22:26:57 2011 +0000
+
+    Moved McCurdy collection and added code to place all examples in the menu.
+
+commit e2a6ed3c9c220038a20b24efcebd340204f08700
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Sat Jul 30 16:46:11 2011 +0000
+
+    small fix in qutecsound.cpp
+
+commit 2a771f44bfc36e0c82572cc06a1b380a874f388c
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Sat Jul 30 09:39:18 2011 +0000
+
+    new implementation of McCurdy examples (internal linking instead of embedded files)
+
+commit c5e38845c168639487778f2fb870c9134ec54928
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Jul 29 22:54:20 2011 +0000
+
+    Added building of version without Python
+
+commit 4e6f52f908b4cde65604bc1e9bce88ca48a665a2
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Jul 29 22:49:06 2011 +0000
+
+    Hopefully fixed OS X bundle creator so it includes the McCurdy collection.
+
+commit a1c3a0cd8aac5b98434676db49737a10ee95f5b9
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Jul 24 21:06:08 2011 +0000
+
+    Commit of french translation by Francois Pinot.
+
+commit 854ed7a7710b876013018fc4572522bb620eddb9
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Fri Jul 22 20:12:52 2011 +0000
+
+    new german translation
+
+commit d8c75cbfa3f780af4a43aac712451262f8e8d7d9
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Jul 12 07:24:12 2011 +0000
+
+    Updated translations for upcoming release
+    Minor fixes to app generation code.
+
+commit cfa67f249eb132570f738dd33a3c841f8ea354d1
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Sun Jun 26 21:50:27 2011 +0000
+
+    New example folder 'Live Collection' created
+
+commit c0622dfca321e5b31ae48e832dd31a7a105ce659
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Jun 22 17:51:46 2011 +0000
+
+    Removed McCurdy qrc file as files are now "real" files.
+    Implemented getNumChannels, getKsmps and getSampleRate
+    Changed behavior of embedded files to use quotes
+    File with old format is no longer backed up.
+
+commit 8a5e26548267c7e95abbb3714a1d4fd765b46d87
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Jun 22 11:14:01 2011 +0000
+
+    Implemented support for generating Cabbage text from existing widgets.
+    Fixed building and starting of QuteApp, but running still crashes.
+
+commit 104f56586bde50ebc970e84d859248643929a028
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Jun 21 18:53:10 2011 +0000
+
+    More work on improving OS X distribution. Seems to work OK for the
+    versions without PythonQt.
+
+commit 1cc8197c53f2ee863fe5a97572a774b43a8f847e
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Sun May 22 18:50:37 2011 +0000
+
+    examples added and improved
+
+commit da01b28a76bad0f1f9c6849146b9a9147065164d
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Sun May 22 18:49:34 2011 +0000
+
+    examples added and improved
+
+commit 662eb376114f37b54cdf2fd6a02e622f8bea04bc
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu May 5 19:10:51 2011 +0000
+
+    Added menu option to open Opcode Help in the editor right click context menu
+
+commit 1697ce7e56e9e74c99abaf0fb47ca644cafc0992
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue May 3 17:43:39 2011 +0000
+
+    Fixed problem with Internal MIDI on Linux
+
+commit 62ac4fef1b2bdd04bd8445b1ac17cb8133d8ad85
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Apr 30 11:12:57 2011 +0000
+
+    Added more embedded file examples in McCurdy Collection
+
+commit 1de623d640ac0c8c1cceef6297002a02f482c333
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sat Apr 30 10:57:28 2011 +0000
+
+    Added more embedded file examples in McCurdy Collection
+
+commit 034c1fde4df60fe36c578cc15480616105eb4515
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Apr 28 09:48:33 2011 +0000
+
+    Temporarily removed quotes from CsFileB section waiting for Csound to release the change.
+
+commit 74b8262439bf1bfc295b896aa25ec7d18a0d3706
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Apr 27 20:16:16 2011 +0000
+
+    Added Reverb examples from the McCurdy Collection by Rene
+
+commit 9a0edd8c605a980b7913f968ecd057fdedfb74a4
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Apr 25 21:14:54 2011 +0000
+
+    Updated Marco gasperini's work on Koenig's Essay
+
+commit 4d3edd07a2f9ecd8335ff1f6f8946936e7e0c5b9
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Apr 25 16:08:43 2011 +0000
+
+    Added Realtime Score generation examples from the McCurdy Collection by Rene Jopi
+
+commit e79348ae5212a159b8656ce597b3271c88dd7aa2
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Apr 25 15:59:59 2011 +0000
+
+    Added new examples by Rene
+
+commit 6be75b750c6dbaecf94af62f547f5f25bbf39fe7
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Apr 10 08:02:31 2011 +0000
+
+    Inspector now works for split view orchestra (not score yet...)
+    Added new examples by Rene Jopi and made all examples from the McCurdy collection included embedded audio files.
+
+commit aff016e2a32ed65e2af66f9a105c59cb85d83a98
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Fri Apr 8 15:36:27 2011 +0000
+
+    Csound FLOSS Manual examples menu completed and links corrected
+
+commit 9a0dea722c0ffafa387bea6899b4ebef03d275e8
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Apr 3 21:03:24 2011 +0000
+
+    Fixed spelling errors, thanks to the Debian build system!
+    Added live samplng examples by Rene Jopi
+
+commit 33f929e060c491eaf0f7bac4226880b74213d1ae
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Apr 3 07:29:58 2011 +0000
+
+    Moved Circle example into Controller Widget example
+
+commit aba6b7ece5271d6a6494c3a558e0440c23144af4
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Mar 30 17:34:47 2011 +0000
+
+    Updated FFT examples by Rene. These will eventually be replaced by the embedded versions and will be included as real files in the installers.
+    Implemented FileB editor, which allows embedding, extracting and removing files from the CsFileB section of csd files.
+    Fixed pasting on event sheet when no selection is active.
+    Removed unnecessary check for interfaces directory when running qmake.
+
+commit a44108c79c38bbfb98a19b9edd156d77c554d772
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Sun Mar 27 12:16:55 2011 +0000
+
+    Some examples improved.
+
+commit 5d17e3bfce9cca23c49bcc08b5cf53707a293df1
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Sun Mar 20 19:24:42 2011 +0000
+
+    New examples: Imitative_Additive.csd and Envelope_Extractor.
+
+commit dba6cda63f12521ace083649030abe066fe5bbbc
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Mar 15 18:33:16 2011 +0000
+
+    Fixed crashing of split view when focus is not on editor.
+
+commit 4d17e1150599d78637310d408db7ff774b0e3c50
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Mon Mar 14 22:25:11 2011 +0000
+
+    Fixed parsing of command line for international characters.
+    Made sure file from command line shows as active tab.
+
+commit 0270bcdd9232fae16d3f56beb844c6fe2c260431
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Mar 13 22:22:10 2011 +0000
+
+    Fixed offset in widget panel.
+    Show state of split view sections is retained after consecutive splits.
+    Gave distinctive colours to split sections.
+    More fixes to parsing for split view.
+    Attempt to solve loading of files with international characters from the command line. Not tested on windows
+
+commit 258133c336f3380f3bb9b8ad239c92fc191989c2
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Mar 11 18:30:23 2011 +0000
+
+    FIxed bug with comments on live event sheets when switching from text.
+
+commit 427f771fd66d70b9396b3fc11eb34754d2cb361e
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Mar 11 17:26:58 2011 +0000
+
+    Added new performance improvement flags.
+    Removed unnecessary process events for qApp in the middle of the Csound callback.
+
+commit f62259b99e13b5c87cc25d71dec86f120335c596
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Sun Feb 20 21:39:09 2011 +0000
+
+    ASCII_Key example fixed
+
+commit f4c0341e9b00d09fc85621e80a7d8c8f134bb51a
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Feb 18 13:40:50 2011 +0000
+
+    Added actions and shortcuts to show/hide split panels.
+    Removed unnecessary panels (csVersion, CsLisence panels)
+
+commit 9fa50a9375c153c72f0776215b131367c5545789
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Feb 17 22:12:52 2011 +0000
+
+    Significantly improved performance when loading large scores to event sheet.
+    Fixed recent bug that prevented evaluation of python code.
+    Scratch pad now starts blank.
+
+commit fb78a2cd947ffd23b57c04f1bb82efaec7da98a4
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Feb 16 21:57:55 2011 +0000
+
+    Fixed many small issues with split mode when going to and from it.
+    Fixed latching of event button when triggering an idefinite duration note.
+
+commit a23d77ba62abd1bcd135728ee6e94cfde898621b
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Feb 15 19:44:22 2011 +0000
+
+    Initial buggy implementation of Split View action to edit parts of the
+    csd in separate panels.
+
+commit 5dac8c0857621edf71764a1ed51591dbda500739
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Tue Feb 15 14:21:08 2011 +0000
+
+    Significant work on implementing separate section view and sheet edit of main score.
+
+commit 5399fe730a5944da0851161412145e744ddfb243
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Feb 11 21:13:50 2011 +0000
+
+    Temporarily removed convolution examples with embedded files as they were causing long compilations.
+    More work towards supporting data files for standalone applications.
+
+commit 46c9e5760574537dcbb6e24b79ee31c6369e0333
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Feb 11 16:59:47 2011 +0000
+
+    Made Riley in C use qwerty codes.
+    Minor modifications to app wizard to copy csd file.
+
+commit ba2c5409957b645c50572eb7e8037da42e15306c
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Feb 11 09:58:46 2011 +0000
+
+    Additions to Riley in C example by Rene Djopi.
+    Fixed bug with key presses on widget layout (was passing all key presses twice)
+
+commit 3de28997524f155041b0a0f62d7b831c26160fa2
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Feb 10 11:01:51 2011 +0000
+
+    Updated opcodes.xml file
+
+commit a72a400a2ec0b93942a11a1bb90e561010efbd17
+Author: Joachim Heintz <jh@joachimheintz.de>
+Date:   Mon Feb 7 21:01:21 2011 +0000
+
+    Spatilization example fixed
+
+commit 346df4128f3719f2382a7e61787ab380404ed5a5
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Feb 4 17:03:11 2011 +0000
+
+    Set OK button as default again.
+
+commit f661840fd57a532b7bf8c1d112a76ab22164c465
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Fri Feb 4 12:38:00 2011 +0000
+
+    Improved loading of embedded files. They are now not shown in main editor, but loaded and saved properly.
+    Some work towards supporting including external files in standalone app.
+
+commit 0cabf771260e2e594b5a67a70c5df1a3b525497d
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Jan 27 16:08:18 2011 +0000
+
+    Fixed running in term McCurdy Examples
+
+commit b254c5ace3fdbc2bc79bbf5d1dd1aaa30b2e5d91
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Thu Jan 27 10:54:40 2011 +0000
+
+    When rendering, if output file name is empty, use "test.wav"
+
+commit 698c74c4835a8baea62ab328c7379ba381bbbd21
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Jan 26 08:18:14 2011 +0000
+
+    Added linking to winmm thanks to Mike Gogins. Bumped version number to
+    alpha.
+
+commit 16ba9b1c64188e4edcf067648bec517817fc3bb6
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Sun Jan 23 12:50:57 2011 +0000
+
+    Minor change to mouse example. Added LiveAudioIn examples from the McCurdy collection, thanks to Rene Djack
+
+commit d3b74eb7020c6900db7d3f7c7f720265b16e9b6d
+Author: Andres Cabrera <mantaraya36@gmail.com>
+Date:   Wed Jan 19 17:38:53 2011 +0000
+
+    Fixed OSX installer script.
+    Added mouse examples by Iain McCurdy, ported by Rene Djack.
+
 

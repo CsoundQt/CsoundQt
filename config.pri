@@ -3,8 +3,8 @@ CONFIG *= thread \
 CONFIG -= stl
 QT *= xml
 
-build32:TMPDIR = floats
-build64:TMPDIR = doubles
+build32:TMPDIR = build/floats
+build64:TMPDIR = build/doubles
 build64:DEFINES += USE_DOUBLE
 OBJECTS_DIR = "$${TMPDIR}/obj"
 
