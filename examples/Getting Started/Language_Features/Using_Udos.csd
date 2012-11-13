@@ -70,29 +70,48 @@ e
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Mar. 2010) - Incontri HMT-Hannover 
 
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 1094 305 392 303
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {1799, 24415, 41634}
-ioGraph {56, 51} {266, 147} scope 2.000000 -1.000000 
-</MacGUI>
-
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="323" y="111" width="616" height="389">i 1 1 1 400 
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>1013</x>
+ <y>279</y>
+ <width>563</width>
+ <height>397</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>7</r>
+  <g>95</g>
+  <b>162</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBScope">
+  <objectName/>
+  <x>56</x>
+  <y>51</y>
+  <width>266</width>
+  <height>147</height>
+  <uuid>{6886a8e1-368e-408c-b028-88d9716ca673}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <value>-255.00000000</value>
+  <type>scope</type>
+  <zoomx>2.00000000</zoomx>
+  <zoomy>1.00000000</zoomy>
+  <dispx>1.00000000</dispx>
+  <dispy>1.00000000</dispy>
+  <mode>0.00000000</mode>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="323" y="111" width="616" height="389" visible="true" loopStart="0" loopEnd="0">i 1 1 1 400 
 i 1 2 1 
 i 1 3 1 
 i 1 4 1 
-hi 
-hi 
-hi 
-hi 
-hi hi 
-hi hi </EventPanel>
+hi    
+hi    
+hi    
+hi    
+hi hi   
+hi hi   </EventPanel>

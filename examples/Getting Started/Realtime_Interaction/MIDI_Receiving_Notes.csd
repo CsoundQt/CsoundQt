@@ -29,39 +29,50 @@ e 3600
 </CsoundSynthesizer>
 ; written by Alex Hofmann & Joachim Heintz (Dec. 2009) - Incontri HMT-Hannover 
 
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 611 164 296 321
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {1799, 24415, 41634}
-ioText {25, 24} {137, 53} label 0.000000 0.00100 "" left "Lucida Grande" 16 {65280, 65280, 65280} {65280, 65280, 65280} nobackground noborder ..nothing here!
-</MacGUI>
-
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="60" y="304" width="513" height="322"> 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- </EventPanel>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>1013</x>
+ <y>279</y>
+ <width>563</width>
+ <height>397</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>7</r>
+  <g>95</g>
+  <b>162</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>25</x>
+  <y>24</y>
+  <width>137</width>
+  <height>53</height>
+  <uuid>{9bdfe824-cf72-4d54-ad73-95b589534259}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>..nothing here!</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="60" y="304" width="513" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

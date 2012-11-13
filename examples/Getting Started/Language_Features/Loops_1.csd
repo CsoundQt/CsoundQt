@@ -64,14 +64,13 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Mar. 2010) - Incontri HMT-Hannover 
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>912</x>
- <y>243</y>
- <width>200</width>
- <height>140</height>
+ <x>1013</x>
+ <y>279</y>
+ <width>563</width>
+ <height>397</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -111,19 +110,4 @@ e
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 912 243 200 140
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {65535, 65535, 65535}
-ioText {185, 161} {80, 25} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Nothing here...
-</MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

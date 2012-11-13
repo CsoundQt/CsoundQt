@@ -96,10 +96,10 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>305</x>
- <y>172</y>
- <width>866</width>
- <height>678</height>
+ <x>0</x>
+ <y>0</y>
+ <width>612</width>
+ <height>448</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -1041,52 +1041,4 @@ e
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 305 172 866 678
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {46774, 28013, 0}
-ioSlider {22, 555} {311, 38} 0.000000 1.000000 0.000000 d_w_reverb
-ioText {22, 518} {131, 35} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Reverb Mix
-ioSlider {22, 374} {311, 38} 0.000000 1.000000 0.000000 d_w_delay
-ioText {22, 337} {131, 35} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Delay Mix
-ioSlider {244, 244} {20, 100} 0.050000 1.000000 0.601000 time_delay
-ioSlider {313, 245} {20, 100} 0.050000 1.000000 0.050000 feedb_delay
-ioText {235, 218} {45, 23} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Time
-ioText {294, 218} {57, 23} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Feedback
-ioText {22, 213} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder DELAY SECTION
-ioText {21, 410} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dry
-ioText {294, 412} {37, 27} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Wet
-ioText {22, 591} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dry
-ioText {296, 591} {37, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Wet
-ioText {20, 478} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder REVERB SECTION
-ioText {223, 347} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 50-1000 ms
-ioText {300, 348} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0-100 %
-ioText {19, 141} {273, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder LP-Filter Cutoff-frequency
-ioText {20, 107} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder SYNTH SECTION
-ioSlider {18, 165} {311, 38} 10.000000 5000.000000 1454.051447 filter_freq
-ioText {382, 107} {319, 64} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder CONTROLLER NUMBERS FOR THE DIFFERENT SLIDERS
-ioText {513, 178} {54, 27} editnum 1.000000 1.000000 "ctrl#filt_freq" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
-ioText {333, 169} {169, 35} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ---------->
-ioText {513, 257} {54, 27} editnum 21.000000 1.000000 "ctrl#_time_delay" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 21.000000
-ioText {278, 252} {221, 36} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ---------------->
-ioText {513, 312} {54, 27} editnum 3.000000 1.000000 "ctrl#_feedb_delay" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3.000000
-ioText {342, 304} {162, 39} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ---------->
-ioText {513, 385} {54, 27} editnum 4.000000 1.000000 "ctrl#_d_w_delay" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4.000000
-ioText {338, 376} {169, 35} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ---------->
-ioText {513, 565} {54, 27} editnum 6.000000 1.000000 "ctrl#_d_w_reverb" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 6.000000
-ioText {339, 556} {169, 35} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ---------->
-ioText {404, 6} {267, 64} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder CHANNEL NUMBER FOR ALL SLIDERS
-ioText {17, 7} {304, 64} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder MIDI KEYBOARD MUST SEND ON MIDI CHANNEL 1!
-ioText {511, 76} {54, 27} editnum 1.000000 1.000000 "#midichn_slider" right "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
-ioText {4, 70} {335, 23} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder (or you must change the massign statement in the orc header)
-</MacGUI>
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="410" y="239" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="410" y="239" width="604" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

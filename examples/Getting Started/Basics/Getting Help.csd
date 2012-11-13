@@ -54,29 +54,51 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover 
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 883 62 400 483
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {41120, 40606, 41634}
-ioText {21, 17} {241, 137} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This is a widget window. More information about widgets can be found in the menu: Examples-> Widgets
-</MacGUI>
 
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322"> 
-
-
-
-
-
-
-
-
-</EventPanel>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>1013</x>
+ <y>279</y>
+ <width>563</width>
+ <height>397</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>160</r>
+  <g>158</g>
+  <b>162</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>21</x>
+  <y>17</y>
+  <width>241</width>
+  <height>137</height>
+  <uuid>{f643e4a3-2682-4978-afb1-0a55dfaa1063}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>This is a widget window. More information about widgets can be found in the menu: Examples-> Widgets</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

@@ -71,14 +71,13 @@ e
 
 
 
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>498</x>
- <y>177</y>
- <width>597</width>
- <height>485</height>
+ <x>1013</x>
+ <y>279</y>
+ <width>563</width>
+ <height>397</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -354,29 +353,4 @@ e
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 498 177 597 485
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {33924, 41634, 2056}
-ioMeter {30, 195} {318, 253} {0, 59904, 0} "point_y" 0.613484 "point_x" 0.474895 point 7 0 mouse
-ioText {37, 2} {134, 30} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1. Run Csound
-ioText {37, 93} {135, 73} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Read out the point position and print it to the console.
-ioText {367, 93} {120, 70} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Send random position data to the point.
-ioText {188, 94} {161, 64} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Use point position data to control an oscils amplitude and frequency.
-ioListing {361, 195} {183, 252}
-ioText {36, 36} {514, 39} label 0.000000 0.00100 "" left "Helvetica" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2. Press one of these three buttons and move the point.
-ioButton {173, 32} {100, 30} value 1.000000 "_Play" "Run Csound" "/" i1 0 10
-ioCheckbox {30, 103} {20, 20} off read
-ioCheckbox {183, 103} {20, 20} off sound
-ioCheckbox {360, 105} {20, 20} off dance
-</MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

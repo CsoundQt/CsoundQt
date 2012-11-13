@@ -35,23 +35,132 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 725 230 309 434
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {41120, 40606, 41634}
-ioGraph {16, 234} {266, 147} scope 2.000000 -1.000000 
-ioSlider {16, 45} {257, 38} 200.000000 1000.000000 433.463035 freq
-ioSlider {17, 149} {267, 43} 0.000000 1.000000 0.176030 amp
-ioText {16, 12} {231, 31} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequency: 200-1000 Hz
-ioText {16, 118} {231, 31} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amplitude: 0-1
-</MacGUI>
-
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>1013</x>
+ <y>279</y>
+ <width>563</width>
+ <height>397</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>160</r>
+  <g>158</g>
+  <b>162</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBScope">
+  <objectName/>
+  <x>16</x>
+  <y>234</y>
+  <width>266</width>
+  <height>147</height>
+  <uuid>{546018a6-f10c-4f00-b707-593b7713dd57}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <value>-255.00000000</value>
+  <type>scope</type>
+  <zoomx>2.00000000</zoomx>
+  <zoomy>1.00000000</zoomy>
+  <dispx>1.00000000</dispx>
+  <dispy>1.00000000</dispy>
+  <mode>0.00000000</mode>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider">
+  <objectName>freq</objectName>
+  <x>16</x>
+  <y>45</y>
+  <width>257</width>
+  <height>38</height>
+  <uuid>{40fda0db-fe7a-4e5e-83b7-efb1aa9fdd7e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>200.00000000</minimum>
+  <maximum>1000.00000000</maximum>
+  <value>433.46303500</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider">
+  <objectName>amp</objectName>
+  <x>17</x>
+  <y>149</y>
+  <width>267</width>
+  <height>43</height>
+  <uuid>{923df544-20e6-4881-a63e-e1d5cbacb793}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.17603000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>16</x>
+  <y>12</y>
+  <width>231</width>
+  <height>31</height>
+  <uuid>{2f6e0bb1-0572-4de2-a4a7-f0cff14be5e6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Frequency: 200-1000 Hz</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>16</x>
+  <y>118</y>
+  <width>231</width>
+  <height>31</height>
+  <uuid>{248a601f-2231-437b-bd55-306f2dd67c1a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Amplitude: 0-1</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

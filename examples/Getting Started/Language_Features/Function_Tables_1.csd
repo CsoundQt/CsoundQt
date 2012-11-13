@@ -118,32 +118,117 @@ e
 */
 ; written by Alex Hofmann (Mar. 2010) - Incontri HMT-Hannover 
 
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 1052 201 382 432
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {65535, 65535, 65535}
-ioGraph {7, 61} {253, 115} table 0.000000 1.000000 
-ioGraph {6, 223} {258, 153} scope 2.000000 -1.000000 
-ioText {6, 5} {254, 53} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder In this graph, one can see the result of the  generated F-Table values.
-ioText {7, 193} {256, 26} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The output-waveform..
-</MacGUI>
-
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322"> 
- 
- 
- 
- 
- 
- 
- 
- 
- </EventPanel>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>1013</x>
+ <y>279</y>
+ <width>563</width>
+ <height>397</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBGraph">
+  <objectName/>
+  <x>7</x>
+  <y>61</y>
+  <width>253</width>
+  <height>115</height>
+  <uuid>{2b94b9d8-9c17-4f6c-84f3-ceed3cb1f77f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <value>0</value>
+  <objectName2/>
+  <zoomx>1.00000000</zoomx>
+  <zoomy>1.00000000</zoomy>
+  <dispx>1.00000000</dispx>
+  <dispy>1.00000000</dispy>
+  <modex>auto</modex>
+  <modey>auto</modey>
+  <all>true</all>
+ </bsbObject>
+ <bsbObject version="2" type="BSBScope">
+  <objectName/>
+  <x>6</x>
+  <y>223</y>
+  <width>258</width>
+  <height>153</height>
+  <uuid>{95ae72b5-8d91-48ee-9b31-9a558fa60d6e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <value>-255.00000000</value>
+  <type>scope</type>
+  <zoomx>2.00000000</zoomx>
+  <zoomy>1.00000000</zoomy>
+  <dispx>1.00000000</dispx>
+  <dispy>1.00000000</dispy>
+  <mode>0.00000000</mode>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>6</x>
+  <y>5</y>
+  <width>254</width>
+  <height>53</height>
+  <uuid>{aff020c4-672c-4c00-8937-59ec577b32c5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>In this graph, one can see the result of the  generated F-Table values.</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>7</x>
+  <y>193</y>
+  <width>256</width>
+  <height>26</height>
+  <uuid>{8edf0582-7277-4f42-8228-0ba867eea2ca}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>The output-waveform..</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

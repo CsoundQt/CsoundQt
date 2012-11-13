@@ -75,20 +75,67 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 837 327 318 321
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {41120, 40606, 41634}
-ioGraph {8, 110} {268, 148} scope 2.000000 -1.000000 
-ioText {8, 20} {269, 86} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder See how the SAW output-waveform changes, because of the used LP filter and the modulation.
-</MacGUI>
-
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>1013</x>
+ <y>279</y>
+ <width>563</width>
+ <height>397</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>160</r>
+  <g>158</g>
+  <b>162</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBScope">
+  <objectName/>
+  <x>8</x>
+  <y>110</y>
+  <width>268</width>
+  <height>148</height>
+  <uuid>{ee2f60f5-c718-47df-ad36-170aa0c4f1c7}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <value>-255.00000000</value>
+  <type>scope</type>
+  <zoomx>2.00000000</zoomx>
+  <zoomy>1.00000000</zoomy>
+  <dispx>1.00000000</dispx>
+  <dispy>1.00000000</dispy>
+  <mode>0.00000000</mode>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>8</x>
+  <y>20</y>
+  <width>269</width>
+  <height>86</height>
+  <uuid>{c2f4b44b-da01-4878-83a8-fbfe5cc43a54}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>See how the SAW output-waveform changes, because of the used LP filter and the modulation.</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

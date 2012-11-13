@@ -39,20 +39,72 @@ e 							; e - ends the score
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover 
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 911 307 308 378
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {41120, 40606, 41634}
-ioListing {24, 2} {250, 158}
-ioText {25, 166} {249, 164} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This is a widget window. In this case, the Console Output is also visible here. More information about widgets can be found in the menu: Examples-> Widgets
-</MacGUI>
-
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>1013</x>
+ <y>279</y>
+ <width>563</width>
+ <height>397</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>160</r>
+  <g>158</g>
+  <b>162</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBConsole">
+  <objectName/>
+  <x>24</x>
+  <y>2</y>
+  <width>250</width>
+  <height>158</height>
+  <uuid>{1802f52a-87e1-4b4e-8d07-4995b2f04435}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <font>Courier</font>
+  <fontsize>8</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>25</x>
+  <y>166</y>
+  <width>249</width>
+  <height>164</height>
+  <uuid>{7f895e8a-7492-42e7-ac81-27023be7ff44}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>This is a widget window. In this case, the Console Output is also visible here. More information about widgets can be found in the menu: Examples-> Widgets</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

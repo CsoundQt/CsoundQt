@@ -51,14 +51,13 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>980</x>
- <y>299</y>
- <width>321</width>
- <height>461</height>
+ <x>1013</x>
+ <y>279</y>
+ <width>563</width>
+ <height>397</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -165,22 +164,4 @@ e
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 980 299 321 461
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {41120, 40606, 41634}
-ioGraph {28, 282} {255, 150} scope 2.000000 -255 
-ioText {30, 229} {254, 53} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The scope shows the current output-waveform.
-ioGraph {29, 80} {251, 109} table 0.000000 1.000000 
-ioText {29, 21} {251, 61} label 0.000000 0.00100 "" left "DejaVu Sans" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The pure waveform used by the oscillator is displayed in this Graph widget.
-</MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

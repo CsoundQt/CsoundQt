@@ -57,14 +57,13 @@ e 3600
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>507</x>
- <y>301</y>
- <width>629</width>
- <height>433</height>
+ <x>1013</x>
+ <y>279</y>
+ <width>563</width>
+ <height>397</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -161,7 +160,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
   <randomizable group="0">false</randomizable>
-  <mouseControl act="continuous"/>
+  <mouseControl act=""/>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>sendSlider</objectName>
@@ -241,7 +240,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
   <randomizable group="0">false</randomizable>
-  <mouseControl act="continuous"/>
+  <mouseControl act=""/>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -641,38 +640,4 @@ e 3600
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 507 301 629 433
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {32125, 41634, 41120}
-ioText {314, 1} {286, 407} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {24576, 56064, 65280} nobackground noborder Instr 1001 receives OSC messages from port:
-ioText {8, 0} {286, 407} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {62976, 65280, 4352} nobackground noborder Instr 1000 send values via OSC to port:
-ioText {16, 154} {80, 25} scroll 7.800000 0.100000 "sendNumber" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioSlider {22, 245} {20, 100} 0.000000 1.000000 0.480000 sendSlider
-ioText {10, 120} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Send this value
-ioText {329, 143} {80, 25} scroll 7.800000 0.001000 "rcvNumber" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {319, 105} {108, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Receive the value
-ioText {11, 209} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Send this value
-ioText {323, 217} {109, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Receive the value
-ioText {219, 10} {58, 24} display 47120.000000 0.00100 "sndPortNum" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 47120
-ioText {548, 11} {51, 25} display 47120.000000 0.00100 "rcvPortNum" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 47120
-ioText {10, 24} {281, 70} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder You can set the send port in the orc, by changing the macro S_PORT. The messages can be received by other OSC software like Pd, Max/Msp or SuperCollider, if Csound is not receiving the same port.
-ioText {315, 25} {281, 70} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder You can set the receive port in the orc by the macro R_PORT. Pay attention that no other software (like Pd or SuperCollider) is already bound to the same Port, otherwhise Csound will crash.
-ioText {11, 342} {80, 25} display 0.480000 0.00100 "sendSlider" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.480
-ioText {319, 351} {80, 25} display 0.480000 0.00100 "rcvSlider" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.480
-ioSlider {332, 253} {22, 99} 0.000000 1.000000 0.480000 rcvSlider
-ioText {89, 147} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -> Channel "sendNumber"
-ioText {86, 270} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -> Channel "sendSlider"
-ioText {407, 288} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channel "rcvSlider"
-ioText {409, 136} {151, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Channel "rcvNumber"
-</MacGUI>
 <EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

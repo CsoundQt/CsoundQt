@@ -72,14 +72,13 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>700</x>
- <y>218</y>
- <width>389</width>
- <height>553</height>
+ <x>1013</x>
+ <y>279</y>
+ <width>563</width>
+ <height>397</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -586,37 +585,4 @@ e
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 700 218 389 553
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {46774, 28013, 0}
-ioSlider {22, 458} {311, 38} 0.000000 1.000000 0.189711 d_w_reverb
-ioText {22, 421} {131, 35} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Reverb Mix
-ioSlider {22, 277} {311, 38} 0.000000 1.000000 0.070740 d_w_delay
-ioText {22, 240} {131, 35} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Delay Mix
-ioSlider {244, 147} {20, 100} 0.050000 1.000000 0.268500 time_delay
-ioSlider {313, 148} {20, 100} 0.050000 1.000000 0.525000 feedb_delay
-ioText {235, 121} {45, 23} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Time
-ioText {294, 121} {57, 23} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Feedback
-ioText {22, 116} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder DELAY SECTION
-ioText {21, 313} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dry
-ioText {294, 315} {37, 27} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Wet
-ioText {22, 494} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dry
-ioText {296, 494} {37, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Wet
-ioText {20, 381} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder REVERB SECTION
-ioText {223, 250} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 50-1000 ms
-ioText {300, 251} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0-100 %
-ioText {19, 44} {273, 25} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Filterfrequency Control for Instr 1
-ioText {19, 9} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 22 {0, 0, 0} {65280, 65280, 65280} nobackground noborder SYNTH SECTION
-ioSlider {18, 68} {311, 38} 10.000000 5000.000000 1919.356913 filter_freq
-</MacGUI>
 <EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="60" y="304" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

@@ -84,56 +84,518 @@ e
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
 
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 664 149 468 564
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {46774, 28013, 0}
-ioSlider {22, 458} {311, 38} 0.000000 1.000000 0.244373 d_w_reverb
-ioText {22, 421} {131, 35} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Reverb Mix
-ioSlider {22, 277} {311, 38} 0.000000 1.000000 0.257235 d_w_delay
-ioText {22, 240} {131, 35} label 0.000000 0.00100 "" left "Lucida Grande" 16 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Delay Mix
-ioSlider {244, 147} {20, 100} 0.050000 1.000000 0.401500 time_delay
-ioSlider {313, 148} {20, 100} 0.050000 1.000000 0.316000 feedb_delay
-ioText {235, 121} {45, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Time
-ioText {294, 121} {57, 23} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Feedback
-ioText {22, 116} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border DELAY SECTION
-ioText {21, 313} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dry
-ioText {294, 315} {37, 27} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Wet
-ioText {22, 494} {80, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dry
-ioText {296, 494} {37, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Wet
-ioText {20, 381} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border REVERB SECTION
-ioText {223, 250} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 50-1000 ms
-ioText {300, 251} {69, 24} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0-100 %
-ioText {19, 44} {273, 25} label 0.000000 0.00100 "" left "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Filterfrequency Control with CC 01 (Modulation)
-ioText {20, 10} {184, 35} label 0.000000 0.00100 "" left "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border SYNTH SECTION
-ioSlider {18, 68} {311, 38} 10.000000 5000.000000 2288.392283 filter_freq
-</MacGUI>
 
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" name="Events" x="383" y="237" width="513" height="322"> 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- </EventPanel>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>0</x>
+ <y>0</y>
+ <width>599</width>
+ <height>453</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>182</r>
+  <g>109</g>
+  <b>0</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBHSlider">
+  <objectName>d_w_reverb</objectName>
+  <x>22</x>
+  <y>458</y>
+  <width>311</width>
+  <height>38</height>
+  <uuid>{a933ecca-4f6f-4c37-8612-e80ccaeab1ff}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.24437300</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>22</x>
+  <y>421</y>
+  <width>131</width>
+  <height>35</height>
+  <uuid>{8c2bf2d5-2f2a-4aa8-95f5-fd459644d3b3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Reverb Mix</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider">
+  <objectName>d_w_delay</objectName>
+  <x>22</x>
+  <y>277</y>
+  <width>311</width>
+  <height>38</height>
+  <uuid>{252c3435-b659-4c63-a7eb-6d8ba725081a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.25723500</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>22</x>
+  <y>240</y>
+  <width>131</width>
+  <height>35</height>
+  <uuid>{b2a47e2f-a70f-4ac8-afd0-89ebec44cf27}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Delay Mix</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>time_delay</objectName>
+  <x>244</x>
+  <y>147</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{9eda359f-2e35-416a-9486-75e2b8609bac}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.05000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.40150000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBVSlider">
+  <objectName>feedb_delay</objectName>
+  <x>313</x>
+  <y>148</y>
+  <width>20</width>
+  <height>100</height>
+  <uuid>{9b9faa01-b3b1-42b6-b3ea-942190c61015}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>0.05000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.31600000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>235</x>
+  <y>121</y>
+  <width>45</width>
+  <height>23</height>
+  <uuid>{a34714d9-8caa-4e71-993d-adc95b6d4ef6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Time</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>294</x>
+  <y>121</y>
+  <width>57</width>
+  <height>23</height>
+  <uuid>{38d17cf1-8311-44a5-bbcd-e89f2a0a341e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Feedback</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>22</x>
+  <y>116</y>
+  <width>184</width>
+  <height>35</height>
+  <uuid>{00c81148-ef01-44bb-af39-743e7597a9a3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>DELAY SECTION</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>21</x>
+  <y>313</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{ff2f6506-d383-4b73-8cc8-325a13c76301}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Dry</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>294</x>
+  <y>315</y>
+  <width>37</width>
+  <height>27</height>
+  <uuid>{deb507a6-bbc9-4875-ab32-b98d0fd9ca21}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Wet</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>22</x>
+  <y>494</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{1a2bb9cb-d541-4c5f-8c71-07b4c279ed43}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Dry</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>296</x>
+  <y>494</y>
+  <width>37</width>
+  <height>25</height>
+  <uuid>{c0a097a0-f5e0-4041-a760-cb8edbe42625}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Wet</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>20</x>
+  <y>381</y>
+  <width>184</width>
+  <height>35</height>
+  <uuid>{6a214d2b-c15f-4749-81a6-00a359668d41}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>REVERB SECTION</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>223</x>
+  <y>250</y>
+  <width>69</width>
+  <height>24</height>
+  <uuid>{c6be046b-6565-487b-82aa-7153da5ce460}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>50-1000 ms</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>300</x>
+  <y>251</y>
+  <width>69</width>
+  <height>24</height>
+  <uuid>{9dcc5341-ac6e-4568-b661-9a08ffa7bafd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>0-100 %</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>19</x>
+  <y>44</y>
+  <width>273</width>
+  <height>25</height>
+  <uuid>{5f7f6f96-32f1-47ba-a896-ca4f6e4eaf11}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Filterfrequency Control with CC 01 (Modulation)</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>20</x>
+  <y>10</y>
+  <width>184</width>
+  <height>35</height>
+  <uuid>{2f8d8395-c26a-4531-a1a5-d94df807fac9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>SYNTH SECTION</label>
+  <alignment>left</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBHSlider">
+  <objectName>filter_freq</objectName>
+  <x>18</x>
+  <y>68</y>
+  <width>311</width>
+  <height>38</height>
+  <uuid>{e0262b2c-5f78-4d11-9b16-1fd70b8bbefd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <minimum>10.00000000</minimum>
+  <maximum>5000.00000000</maximum>
+  <value>2288.39228300</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="383" y="237" width="513" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
