@@ -77,7 +77,7 @@ void BaseView::setFullText(QString text, bool goToTop)
 	clearFileBText();
 	while (text.contains("<CsFileB ") and text.contains("</CsFileB>")) {
 		bool endsWithBreak = false;
-		if (text.indexOf("</CsFileB>") > text.indexOf("<CsFileB>")) {
+		if (text.indexOf("</CsFileB>") < text.indexOf("<CsFileB ")) {
 			qDebug() << "BaseView::setFullText: File corrupt, not loading remaining CsFileB sections.";
 			break;
 		}

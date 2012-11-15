@@ -101,9 +101,14 @@ void FileBEditor::add()
 		QStringList args;
 		args << file;
 		QProcess *encProcess = new QProcess();
+#ifdef Q_OS_MACX
+		encProcess->start("/usr/local/bin/csb64enc", args);
+#else
 		encProcess->start("csb64enc", args);
+#endif
 		bool finished = encProcess->waitForFinished(10000);
 		if (!finished) {
+			qDebug() << "FileBEditor::add() Error: " << encProcess->errorString();
 			QMessageBox::warning(this, tr("Encoding file"),
 								 tr("Error encoding file. Aborting."));
 			return;
