@@ -61,6 +61,7 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 	connect(scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)),
 			this, SLOT(scrollBarMoved(int)));
 	w->setContained(true);
+	w->adjustSize();
 	w->show();
 	scrollArea->show();
 }

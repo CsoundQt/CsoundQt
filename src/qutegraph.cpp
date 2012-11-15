@@ -537,11 +537,11 @@ void QuteGraph::scaleGraph(int index)
 	int size = curves[index]->get_size();
 	QString caption = curves[index]->get_caption();
 	QGraphicsView *view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
-	qDebug() << "QuteGraph::scaleGraph"<< curves[index]->get_caption() << index <<max<< min<< zoomx<< zoomy << size;
+//	qDebug() << "QuteGraph::scaleGraph"<< curves[index]->get_caption() << index <<max<< min<< zoomx<< zoomy << size;
 	//  view->setResizeAnchor(QGraphicsView::NoAnchor);
 	if (caption.contains("ftable")) {
 		view->setSceneRect (0, min - (max - min)*0.17, (double) size, (max - min)*1.17);
-		qDebug() << view->sceneRect();
+//		qDebug() << view->sceneRect();
 		view->fitInView(0, min, (double) size/zoomx, (max - min)*1.17/zoomy);
 	}
 	else {
