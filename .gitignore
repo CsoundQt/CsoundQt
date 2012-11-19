@@ -2,3 +2,6 @@
 rtmidi*
 config.user.pri
 qcs.pro.user
+
+bin/*.exe
+bin/*.dll
