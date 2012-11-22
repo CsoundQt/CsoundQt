@@ -72,6 +72,7 @@ Section "Main" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   File "..\bin\CsoundQt-d-py.exe"
+  File "..\bin\libstdc++-6.dll"
   File "..\bin\QtXml4.dll"
   File "..\bin\QtWebKit4.dll"
   File "..\bin\QtSvg4.dll"
