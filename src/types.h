@@ -29,12 +29,10 @@
 #include "configlists.h"
 #include <csound.h>
 
-#define QCS_VERSION "0.7.0"
+#define QCS_VERSION "0.7.1"
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_DEFAULT_TIME 50
-// Maximum pfields CsoundQt can accept for realtime score events
-#define QCS_EVENTS_MAX_PFIELDS 256
 // Maximum number of files in recent files menu
 #define QCS_MAX_RECENT_FILES 20
 // Maximum undo history depth for widget panel and event sheet
