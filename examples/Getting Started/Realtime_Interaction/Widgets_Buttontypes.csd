@@ -2,7 +2,7 @@
 
 This example concentrates on the different button-types. 
 
-Buttons send momentary values (0 or 1) to a channel. There are some reserved Channel names in QuteCsound, which enable to control functionality of QuteCsound from the Widgets Panel. In this example we use Channel "_Play", to run Csound. Therefor button has to be in "value" mode! 
+Buttons send momentary values (0 or 1) to a channel. There are some reserved Channel names in CsoundQt, which enable to control functionality of CsoundQt from the Widgets Panel. In this example we use Channel "_Play", to run Csound. Therefor button has to be in "value" mode! 
 Read more about reserved channels in: (Examples-> Widgets->Reserved Channels)
 
 The "Move Fader!" button is in "event" mode, so it sends a "scoreline-event", when pressed.
@@ -313,7 +313,7 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>_Play is a reserved channel to control QuteCsound functionality. (Run Csound) The button has to be in value mode, to send this message. </label>
+  <label>_Play is a reserved channel to control CsoundQt functionality. (Run Csound) The button has to be in value mode, to send this message. </label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>

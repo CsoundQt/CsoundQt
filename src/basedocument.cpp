@@ -106,6 +106,10 @@ int BaseDocument::parseWidgetText(QString &text)
 			m_widgetLayouts[0]->loadXmlPresets(presets);
 		}
 		ret = 1;
+	} else {
+		xmlPanels = "<bsbPanel><visible>true</visible><x>100</x><y>100</y><width>320</width><height>240</height></bsbPanel>";
+		m_widgetLayouts[0]->loadXmlWidgets(xmlPanels);
+		m_widgetLayouts[0]->markHistory();
 	}
 	return ret;
 }

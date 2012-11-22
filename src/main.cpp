@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
 	app.installEventFilter(&filterObj);
 	QPixmap pixmap(":/images/splashscreen.png");
 	QSplashScreen *splash = new QSplashScreen(pixmap);
+	splash->showMessage(QString("Version %1").arg(QCS_VERSION), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
 	splash->show();
 	splash->raise();
 	app.processEvents();

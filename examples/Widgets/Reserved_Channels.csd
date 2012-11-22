@@ -51,7 +51,7 @@ i 1 0 3600  ;turn on instr 1 for 3600 seconds
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>Some channel names are reserved for special operations inside QuteCsound. These channel names send information to QuteCsound instead of to Csound allowing you to control certain aspects of QuteCsound from the Widget Panel.
+  <label>Some channel names are reserved for special operations inside CsoundQt. These channel names send information to CsoundQt instead of to Csound allowing you to control certain aspects of CsoundQt from the Widget Panel.
 
 NOTE: Buttons must be of "value" type for this to work!</label>
   <alignment>center</alignment>
@@ -995,7 +995,7 @@ Run offline
 </bsbPresets>
 <MacGUI>
 ioView background {24929, 34952, 26471}
-ioText {6, 11} {418, 106} label 0.000000 0.00100 "" center "Arial" 12 {5120, 13312, 1536} {62464, 63488, 51200} nobackground noborder Some channel names are reserved for special operations inside QuteCsound. These channel names send information to QuteCsound instead of to Csound allowing you to control certain aspects of QuteCsound from the Widget Panel.Â¬Â¬NOTE: Buttons must be of "value" type for this to work!
+ioText {6, 11} {418, 106} label 0.000000 0.00100 "" center "Arial" 12 {5120, 13312, 1536} {62464, 63488, 51200} nobackground noborder Some channel names are reserved for special operations inside CsoundQt. These channel names send information to CsoundQt instead of to Csound allowing you to control certain aspects of CsoundQt from the Widget Panel.Â¬Â¬NOTE: Buttons must be of "value" type for this to work!
 ioText {7, 315} {418, 234} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File browsing
 ioButton {327, 325} {80, 25} value 1.000000 "_Browse1" "Browse A" "/" i1 0 10
 ioText {204, 326} {118, 24} label 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Browse1 channel ->

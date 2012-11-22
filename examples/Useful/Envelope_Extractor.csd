@@ -5,7 +5,7 @@
 <CsInstruments>
 
 /***Envelope Extractor***/
-;example for qutecsound
+;example for CsoundQt
 ;joachim heintz mar 2011
 
 sr = 44100

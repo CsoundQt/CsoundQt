@@ -1267,7 +1267,7 @@ int DocumentPage::runPython()
 void DocumentPage::showWidgets(bool show)
 {
 	//  qDebug() << "DocumentPage::showWidgets" << show;
-	if (!show || !fileName.endsWith(".csd")) {
+	if (!show || (!fileName.endsWith(".csd") && !fileName.isEmpty())) {
 		hideWidgets();
 		return;
 	}

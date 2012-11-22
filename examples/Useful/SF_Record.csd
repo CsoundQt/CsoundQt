@@ -9,7 +9,7 @@ nchnls = 2; change this in respect to your audio device
 0dbfs = 1
 
 /*****Recording a soundfile*****/
-;example for qutecsound
+;example for CsoundQt
 ;written by joachim heintz apr 2009
 ;please send bug reports and suggestions
 ;to jh at joachimheintz.de
@@ -710,7 +710,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>Note: You can also use the Record Button in the QuteCsound interface for quick simple recording on any csd.</label>
+  <label>Note: You can also use the Record Button in the CsoundQt interface for quick simple recording on any csd.</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>

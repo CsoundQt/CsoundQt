@@ -5,7 +5,7 @@
 
 /*****SIMPLE LIVE INPUT AND OUTPUT TEST (STEREO)*****/
 
-/*example for qutecsound
+/*example for CsoundQt
 written by joachim heintz
 jan 2009*/
 

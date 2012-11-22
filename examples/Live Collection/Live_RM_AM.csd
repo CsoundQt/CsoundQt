@@ -5,7 +5,7 @@
 <CsInstruments>
 
 /*****LIVE RING MODULATION / AMPLITUDE MODULATION*****/
-;example for qutecsound
+;example for CsoundQt
 ;written by joachim heintz
 ;may 2011
 ;please send bug reports and suggestions

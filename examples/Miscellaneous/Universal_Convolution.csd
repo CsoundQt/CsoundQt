@@ -5,7 +5,7 @@
 <CsInstruments>
 
 /*****Universal Convolution*****/
-;example for qutecsound
+;example for CsoundQt
 ;written by joachim heintz
 ;jul 2009
 ;please send bug reports and suggestions

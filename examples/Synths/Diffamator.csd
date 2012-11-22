@@ -5,7 +5,7 @@
 ; by Andrés Cabrera (GUI by my wife Cristina =) )
 ; Released under the GPL license.
 ; 
-; QuteCsound version by Rene Djack Sept. 2010
+; CsoundQt version by Rene Djack Sept. 2010
 ;
 ; Diffamator is an MIDI controlled FM synth which can be randomized to find interesting sounds. It features the same algorithms available in the Yamaha DX7 synth, but might not really sound exactly like it, since not all of the synth is implemented. It can also store presets in one of its 30 memory slots.
 ; 
@@ -47,7 +47,7 @@
 ; Presets
 ; -------
 ; To recall a preset, just use the preset menu.
-; To store a new preset or modify an existing preset, use QuteCsound Preset facilities.
+; To store a new preset or modify an existing preset, use CsoundQt Preset facilities.
 ; 
 ; Please send problems, comments and suggestions to mantaraya36 at gmail or the csound mailing list.
 ; 

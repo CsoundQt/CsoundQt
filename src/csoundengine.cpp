@@ -48,8 +48,6 @@ CsoundEngine::CsoundEngine()
 	ud->m_pythonCallback = "";
 #endif
 
-	pFields = (MYFLT *) calloc(QCS_EVENTS_MAX_PFIELDS, sizeof(MYFLT)); // Maximum number of p-fields for events
-
 	m_recording = false;
 	m_consoleBufferSize = 0;
 	m_recBufferSize = 4096;
@@ -82,7 +80,6 @@ CsoundEngine::~CsoundEngine()
 	//  consoles.clear();
 	//  for (int i = 0; i < consoles.size(); i++) {
 	//  }
-	free(pFields);
 	delete ud;
 	free(m_recBuffer);
 }
@@ -542,14 +539,7 @@ void CsoundEngine::processEventQueue()
 					->InputMessage(eventQueue[eventQueueSize].toLocal8Bit());
 		}
 		else {
-			char type = eventQueue[eventQueueSize][0].unicode();
-			QStringList eventElements = eventQueue[eventQueueSize].remove(0,1).split(" ",QString::SkipEmptyParts);
-			// eventElements.size() should never be larger than QCS_EVENTS_MAX_PFIELDS
-			for (int j = 0; j < eventElements.size(); j++) {
-				pFields[j] = (MYFLT) eventElements[j].toDouble();
-			}
-			qDebug("type %c line: %s", type, eventQueue[eventQueueSize].toLocal8Bit().constData());
-			csoundScoreEvent(ud->csound, type, pFields, eventElements.size());
+			qDebug() << "WARNING: ud->perfThread is NULL";
 		}
 	}
 	eventMutex.unlock();

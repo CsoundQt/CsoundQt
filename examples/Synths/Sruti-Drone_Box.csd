@@ -5,9 +5,9 @@
 ; and Andres Cabrera.
 ;
 ; Written with Csound 5.12.1 (http://www.csounds.com)
-; and QuteCsound 0.6.0 (http://qutecsound.sourceforge.net/).
+; and CsoundQt 0.6.0 (http://CsoundQt.sourceforge.net/).
 ;
-; To use, open in QuteCsound, make sure the Widgets window
+; To use, open in CsoundQt, make sure the Widgets window
 ; is open, and click the Start button.  Then use On/Off
 ; buttons to play or stop the drones.
 ;
@@ -40,7 +40,7 @@
 ;	- better "on" indicators fron joachim
 ;	- added binaural beating effect
 ; version 2.0 (06-Sep-2010)
-;	- rewrite for QuteCsound
+;	- rewrite for CsoundQt
 ;
 ; Copyright 2005,2010, Dave Seidel. Some rights reserved.
 ; This work is licensed under a Creative Commons

@@ -9,7 +9,7 @@ nchnls = 8
 0dbfs = 1
 
 /*****Simple 8 channel soundfile player*****/
-;example for qutecsound
+;example for CsoundQt
 ;written by joachim heintz
 ;apr 2009
 ;please send bug reports and suggestions
@@ -52,6 +52,6 @@ ioButton {151, 172} {100, 30} value 1.000000 "_Play" "Play" "/"
 ioButton {261, 172} {100, 30} value 1.000000 "_Stop" "Stop" "/" 
 ioText {7, 8} {398, 43} label 0.000000 0.00100 "" center "Lucida Grande" 24 {0, 0, 0} {65280, 65280, 65280} nobackground noborder SIMPLE 8 CHANNEL
 ioText {6, 50} {398, 43} label 0.000000 0.00100 "" center "Lucida Grande" 24 {0, 0, 0} {65280, 65280, 65280} nobackground noborder  SOUNDFILE PLAYER
-ioText {11, 232} {392, 85} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Uses the reserved channels for Start and Stop. Just select your soundfile and push the Play button (No need to use the Run Button in QuteCsound).
+ioText {11, 232} {392, 85} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Uses the reserved channels for Start and Stop. Just select your soundfile and push the Play button (No need to use the Run Button in CsoundQt).
 </MacGUI>
 

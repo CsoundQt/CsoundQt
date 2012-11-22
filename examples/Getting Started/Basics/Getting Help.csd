@@ -1,11 +1,11 @@
 /*Getting started.. 1.5 Getting Help
 
-General information about QuteCsound's buttons and windows, can be found in the 'Open Quick Reference Guide' located in the Help Menu.
+General information about CsoundQt's buttons and windows, can be found in the 'Open Quick Reference Guide' located in the Help Menu.
 
 Help for most of the used Csound vocabulary is available, by marking the words with the cursor and selecting
 Show Opcode Entry from the Help Menu (or with shortcut: Shift+F1)
 
-A short definition about opcodes' inputs and outputs, can be found on the QuteCsound status bar at the bottom when the cursor is over an opcode. 
+A short definition about opcodes' inputs and outputs, can be found on the CsoundQt status bar at the bottom when the cursor is over an opcode. 
 As an example, click on the opcode line below:
 
 kres line ia, idur, ib 

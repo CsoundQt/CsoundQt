@@ -5,7 +5,7 @@
 <CsInstruments>
 
 /*****DIFFERENT METHODS OF CROSS SYNTHESIS*****/
-;example for qutecsound
+;example for CsoundQt
 ;written by joachim heintz
 ;jan 2010
 ;please send bug reports and suggestions

@@ -55,13 +55,24 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 	//    QHBoxLayout *l = new QHBoxLayout(this);
 	//    l->addWidget(scrollArea);
 	//    stack->setLayout(l);
-	this->setGeometry(w->getOuterGeometry());
 	connect(scrollArea->horizontalScrollBar(), SIGNAL(valueChanged(int)),
 			this, SLOT(scrollBarMoved(int)));
 	connect(scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)),
 			this, SLOT(scrollBarMoved(int)));
 	w->setContained(true);
-	w->adjustSize();
+	QRect outer = w->getOuterGeometry();
+	
+	this->setGeometry(outer);
+	QRect cRect = w->childrenRect();
+	if (cRect.width() < outer.width()) {
+		cRect.setWidth(outer.width());
+	}
+	if (cRect.height() < outer.height()) {
+		cRect.setHeight(outer.height());
+	}
+	w->blockSignals(true);
+	w->setGeometry(cRect);
+	w->blockSignals(true);
 	w->show();
 	scrollArea->show();
 }

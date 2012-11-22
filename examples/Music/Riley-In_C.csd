@@ -8,12 +8,12 @@
 
 ;Table reading optimization to 1 instrument by Andres Cabrera
 
-;Modified for QuteCsound by Rene, January 2011
-;Tested on Ubuntu 10.04 with csound-float 5.13.0 and QuteCsound svn rev 812
+;Modified for CsoundQt by Rene, January 2011
+;Tested on Ubuntu 10.04 with csound-float 5.13.0 and CsoundQt svn rev 812
 
 
 ;Notes on modifications from original csd
-;	Removed record performance because included in QuteCsound
+;	Removed record performance because included in CsoundQt
 ;	Use of macro
 
 ;	This example use the ascii keyboard to control the Players. It uses an always on instrument (99),

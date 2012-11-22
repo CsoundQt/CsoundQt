@@ -55,7 +55,7 @@ nchnls = 2
 ;                                                                            ;
 ;     joachim heintz, 15.11.09                                               ;
 ;                                                                            ;
-;                                               (for QuteCsound: TabWidth 70);
+;                                               (for CsoundQt: TabWidth 70);
 
 
 

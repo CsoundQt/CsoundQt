@@ -2,7 +2,7 @@
 
 Open Sound Control (OSC) is a network protocol format for musical control data communication. A few of its advantages compared to MIDI are, that it's more accurate, quicker and much more flexible. With OSC you can easily send messages to other software like Max/Msp, Chuck or SuperCollider.
 
-In this example, two instruments are built, which show OSC usage with Qutecsound. 
+In this example, two instruments are built, which show OSC usage with CsoundQt. 
 
 Instrument 1000 will send OSC messages to an IP-adress. You can generate values on two different channels, on the yellow side of the Widget-Panel.
 Instrument 1001 will receive the OSC data from an this IP-adress. When Csound is running, you can see the reactions on the blue side of the Widget-Panel.
@@ -33,7 +33,7 @@ instr	1000
 	kSlider		invalue "sendSlider"	
 	Stext sprintf "%i", $S_PORT									
 	outvalue "sndPortNum", Stext											; show the macro defined send-port-number on the Widget 
-	OSCsend   kNumber+kSlider, $IPADDRESS, $S_PORT, "/QuteCsound", "ff", kNumber, kSlider			; send data to the IP-adress, and port, when slider or number change
+	OSCsend   kNumber+kSlider, $IPADDRESS, $S_PORT, "/CsoundQt", "ff", kNumber, kSlider			; send data to the IP-adress, and port, when slider or number change
 endin
 
 
@@ -43,7 +43,7 @@ instr 1001
 	Stext sprintf "%i", $R_PORT
 	outvalue "rcvPortNum", Stext											; show the macro defined receive-port-number on the Widget 
 	ihandle OSCinit $R_PORT ;												; start the listening process for OSC messages on the defined receive port
-	kAction  OSClisten	ihandle, "/QuteCsound", "ff", kNumRcv, kSldRcv						; you must define the kind of data to receive, in this case (ff) both are floating point numbers
+	kAction  OSClisten	ihandle, "/CsoundQt", "ff", kNumRcv, kSldRcv						; you must define the kind of data to receive, in this case (ff) both are floating point numbers
 		if (kAction == 1) then												; if data is received, then...											
 			outvalue "rcvNumber", kNumRcv									; send the value to the channel, to update the Widgets right side
 			outvalue "rcvSlider", kSldRcv

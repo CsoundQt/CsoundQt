@@ -85,7 +85,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	m_closing = false;
 	m_resetPrefs = false;
 	utilitiesDialog = 0;
-	curCsdPage = 0;
+	curCsdPage = -1;
 #ifdef QCS_RTMIDI
 	m_midiin = 0;
 #endif
@@ -308,7 +308,8 @@ void CsoundQt::changePage(int index)
 			widgetPanel->addWidgetLayout(documentPages[curPage]->getWidgetLayout());
 		}
 		setWidgetPanelGeometry();
-		if (documentPages[curPage]->getFileName().endsWith(".py")) {
+		if (!documentPages[curPage]->getFileName().endsWith(".csd")
+				&& !documentPages[curPage]->getFileName().isEmpty()) {
 			widgetPanel->hide();
 		}
 		else {
@@ -409,19 +410,8 @@ void CsoundQt::closeEvent(QCloseEvent *event)
 	close();
 }
 
-//void CsoundQt::keyPressEvent(QKeyEvent *event)
-//{
-////  qDebug() << "CsoundQt::keyPressEvent " << event->key();
-//}
-
 void CsoundQt::newFile()
 {
-	//  if (m_options->defaultCsdActive && m_options->defaultCsd.endsWith(".csd",Qt::CaseInsensitive)) {
-	//    loadFile(m_options->defaultCsd);
-	//  }
-	//  else {
-	//    loadFile(":/default.csd");
-	//  }
 	loadFile(":/default.csd");
 	documentPages[curPage]->loadTextString(m_options->csdTemplate);
 	documentPages[curPage]->setFileName("");
@@ -4193,6 +4183,13 @@ int CsoundQt::loadFileFromSystem(QString fileName)
 int CsoundQt::loadFile(QString fileName, bool runNow)
 {
 	//  qDebug() << "CsoundQt::loadFile" << fileName;
+	int index = isOpen(fileName);
+	if (index != -1) {
+		documentTabs->setCurrentIndex(index);
+		changePage(index);
+		statusBar()->showMessage(tr("File already open"), 10000);
+		return index;
+	}
 	QFile file(fileName);
 	if (!file.open(QFile::ReadOnly)) {
 		QMessageBox::warning(this, tr("CsoundQt"),
@@ -4200,13 +4197,6 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 							 .arg(fileName)
 							 .arg(file.errorString()));
 		return -1;
-	}
-	int index = isOpen(fileName);
-	if (index != -1) {
-		documentTabs->setCurrentIndex(index);
-		changePage(index);
-		statusBar()->showMessage(tr("File already open"), 10000);
-		return index;
 	}
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -4350,11 +4340,7 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 	//  documentPages[curPage]->setOpcodeNameList(m_opcodeTree->opcodeNameList());
 	documentPages[curPage]->setInitialDir(initialDir);
 	documentPages[curPage]->showLiveEventPanels(false);
-	if (documentPages[curPage]->getFileName().endsWith(".csd")) {
-		curCsdPage = curPage;
-	}
 	setCurrentOptionsForPage(documentPages[curPage]);
-	setCurrentFile(fileName);
 
 	documentPages[curPage]->setFileName(fileName);  // Must set before sending text to set highlighting mode
 #ifdef QCS_PYTHONQT
@@ -4375,7 +4361,7 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 			this, SLOT(evaluatePython(QString)));
 	documentPages[curPage]->loadTextString(text);
 
-	if (!fileName.startsWith(":/")) {  // Don't store internal examples directory as last used dir
+	if (!fileName.startsWith(":/")) {  // Don't store internal examples in recents menu
 		lastUsedDir = fileName;
 		lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")) + 1);
 	}
@@ -4610,8 +4596,8 @@ void CsoundQt::setWidgetPanelGeometry()
 		geometry.setX(20);
 		qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: X position invalid.";
 	}
-	if (geometry.y() < 30 || geometry.y() > 4096) {
-		geometry.setY(30);
+	if (geometry.y() < 0 || geometry.y() > 4096) {
+		geometry.setY(0);
 		qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: Y position invalid.";
 	}
 	widgetPanel->setGeometry(geometry);

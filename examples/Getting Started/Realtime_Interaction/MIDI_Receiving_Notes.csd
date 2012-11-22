@@ -1,6 +1,6 @@
 /*Getting started.. Realtime Interaction: MIDI Notes
 
-Select the MIDI input port in QuteCsounds "preferences" menu under the tab "run" -> "RT MIDI Module". Then you can choose between "portmidi" or "virtual". "portmidi" with option "a", enables all available midi-devices. "Virtual" enables the virtual midikeyboard, which you can play with your alphabetic computer keyboard.
+Select the MIDI input port in CsoundQts "preferences" menu under the tab "run" -> "RT MIDI Module". Then you can choose between "portmidi" or "virtual". "portmidi" with option "a", enables all available midi-devices. "Virtual" enables the virtual midikeyboard, which you can play with your alphabetic computer keyboard.
 
 Without modification, the MIDI-Channel-Number selects the Csound Instrument Number.  (MIDI Ch 1 = instr 1, MIDI Ch 2 = instr 2, ...)
 To route the desired MIDI-information (note-number and velocity) to the p-arguments (4 and 5), it will be defined in CsOptions:

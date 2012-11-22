@@ -211,8 +211,6 @@ private:
 	// variables to pass on next run.
 	bool m_threaded;
 
-	MYFLT *pFields; // array of pfields for score and rt events
-
 	QVector<ConsoleWidget *> consoles;  // Consoles registered for message printing
 	int m_consoleBufferSize;
 	QMutex m_messageMutex; // Protection for message queue
