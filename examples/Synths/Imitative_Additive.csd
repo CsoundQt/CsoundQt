@@ -4,7 +4,7 @@
 </CsOptions>
 <CsInstruments>
 /***Imitative Additive Synthesis***/
-;example for qutecsound
+;example for CsoundQt
 ;joachim heintz mar 2011
 
 sr = 44100

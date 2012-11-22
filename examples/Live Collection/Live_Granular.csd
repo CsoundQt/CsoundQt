@@ -5,7 +5,7 @@
 <CsInstruments>
 
 /*****LIVE GRANULAR SYNTHESIS*****/
-;example for qutecsound
+;example for CsoundQt
 ;written by joachim heintz
 ;jan 2010 / june 2011
 ;please send bug reports and suggestions

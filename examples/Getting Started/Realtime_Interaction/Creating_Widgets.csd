@@ -1,6 +1,6 @@
 /* Getting Started .. Realtime Interaction: Widgets
 
-Qutecsound's Widgets provide a quick and easy way to build your customised GUI to communicate with csound's synthesis engine in realtime. 
+CsoundQt's Widgets provide a quick and easy way to build your customised GUI to communicate with csound's synthesis engine in realtime. 
 To make the Widgets-Panel visible, click the Widgets symbol in the menu or press (Alt+1).
 
 */

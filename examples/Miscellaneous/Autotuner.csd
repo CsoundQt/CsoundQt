@@ -10,7 +10,7 @@ nchnls = 1
 
 ; By Victor Lazzarini 2010
 ; From an original idea by Brian Carty
-; Adapted for QuteCsound by Andres Cabrera
+; Adapted for CsoundQt by Andres Cabrera
 
 gktrack_opcode init 0
 gktrans_method init 0

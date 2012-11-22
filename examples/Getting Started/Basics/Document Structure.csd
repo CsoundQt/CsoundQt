@@ -8,7 +8,7 @@ A Csound document is structured in four main sections. Each sections is opened w
 <CsoundSynthesizer> 	; START OF A CSOUND FILE
 
 <CsOptions> 		; OPTIONS
-; If you run Csound from QuteCsound, you can set options in the 'Preferences' menu more comfortably.
+; If you run Csound from CsoundQt, you can set options in the 'Preferences' menu more comfortably.
 ; Read more details in the Csound Manual under: 1.Overview->The Csound Command->Comand-line Flags (by Category).
 </CsOptions> 		;close OPTIONS
 

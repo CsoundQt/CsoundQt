@@ -9,7 +9,7 @@ nchnls = 2
 0dbfs = 1
 
 /*****multi channel soundfile player*****/
-;example for qutecsound
+;example for CsoundQt
 ;written by joachim heintz
 ;jul 2010
 ;please send bug reports and suggestions

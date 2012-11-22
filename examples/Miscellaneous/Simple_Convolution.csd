@@ -9,7 +9,7 @@ nchnls = 2
 0dbfs = 1
 
 /*****Simple convolution*****/
-;example for qutecsound
+;example for CsoundQt
 ;written by joachim heintz
 ;apr 2009
 ;using the code from matt ingalls (manual for pconvolve)

@@ -4,7 +4,7 @@
 <CsInstruments>
 
 /*****INPUT TEST*****/
-;example for qutecsound
+;example for CsoundQt
 ;written by joachim heintz
 ;jan 2009
 

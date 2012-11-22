@@ -6,7 +6,7 @@
 
 ; by Sean Costello, August 23-26, 1999
 ; GUI and some additions by Josep M Comajuncosas, July 2001
-; QuteCsound version by Andres Cabrera 2010
+; CsoundQt version by Andres Cabrera 2010
 
 sr = 44100
 ksmps = 128

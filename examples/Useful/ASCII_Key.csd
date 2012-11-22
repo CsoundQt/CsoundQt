@@ -8,7 +8,7 @@ ksmps = 128
 0dbfs = 1
 
 ;Get the ASCII key number
-;Example for QuteCsound
+;Example for CsoundQt
 ;joachim heintz && andrés cabrera mar 2010 / feb 2011
 
 

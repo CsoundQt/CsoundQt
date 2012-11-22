@@ -1,7 +1,7 @@
 /*Getting started.. 1.3 Basic Elements: Opcodes
 
 The fundamental building blocks of a Csound instrument is the opcode. 
-Each opcode can be seen as little program itself, that does a specific task. Opcodes get a bold-blue highlightning in the QuteCsound editor. In this example 'line', 'expon', 'oscil', 'outvalue' and 'outs', are the opcodes used.
+Each opcode can be seen as little program itself, that does a specific task. Opcodes get a bold-blue highlightning in the CsoundQt editor. In this example 'line', 'expon', 'oscil', 'outvalue' and 'outs', are the opcodes used.
 
 The names of opcodes are usually a short form of their functionality.
 'line' -  generates a linear changing value between specified points

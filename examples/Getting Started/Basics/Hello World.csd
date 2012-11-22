@@ -1,11 +1,11 @@
 /* Getting started.. 1.1 Hello World
 
-The 'Basics Chapter' of the Tutorials, will explain the root functionality of QuteCsound.
+The 'Basics Chapter' of the Tutorials, will explain the root functionality of CsoundQt.
 You will find the descriptions as comments directly in the code. 
 
 This first example is focused on the different comment-types and shows a simple program, which outputs a "Hello World - 440Hz beep" to the computer's audio output and the "Hello World" string to the console.
 
-To start it, press the RUN Button in the QuteCsound-toolbar, or choose "Control->Run Csound" from the menu. 
+To start it, press the RUN Button in the CsoundQt-toolbar, or choose "Control->Run Csound" from the menu. 
 */
 
 <CsoundSynthesizer>
@@ -15,7 +15,7 @@ To start it, press the RUN Button in the QuteCsound-toolbar, or choose "Control-
 
 ; This is a comment!
 ; Comments describe how things are done, and help to explain the code.
-; They are shown in green in QuteCsound.
+; They are shown in green in CsoundQt.
 ; Anything after a semicolon will be ignored by Csound, so you can use it for human readable information.
 
 /*

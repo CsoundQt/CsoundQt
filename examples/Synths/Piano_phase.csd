@@ -1,7 +1,7 @@
 ; Written by Aaron Krister Johnson, 2009 based on code by Ian McCurdy, 2006
 
-; Ported to QuteCsound by René, January 2011
-; Tested on Ubuntu 10.04 with csound-double cvs January 2011 (previous version have a bug in madsr opcode) and QuteCsound svn rev 800
+; Ported to CsoundQt by René, January 2011
+; Tested on Ubuntu 10.04 with csound-double cvs January 2011 (previous version have a bug in madsr opcode) and CsoundQt svn rev 800
 
 ;my flags on Ubuntu: -dm0 -odac:plughw -b1024 -B2048 -+rtaudio=alsa -+rtmidi=alsa -Ma
 <CsoundSynthesizer>

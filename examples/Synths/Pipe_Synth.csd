@@ -3,8 +3,8 @@
 -fdm0 --midi-key=4
 </CsOptions>
 <CsInstruments>
-;Physical Waveguide Midi synth with Qutecsound GUI by René Djack 2009.
-;Modified for QuteCsound examples by Andres Cabrera
+;Physical Waveguide Midi synth with CsoundQt GUI by René Djack 2009.
+;Modified for CsoundQt examples by Andres Cabrera
 
 sr 		= 48000
 ksmps	= 512

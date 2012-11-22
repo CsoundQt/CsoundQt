@@ -9,7 +9,7 @@ nchnls = 2
 0dbfs = 1
 
 /*****pvstencil simple*****/
-;example for qutecsound
+;example for CsoundQt
 ;written by joachim heintz
 ;mai 2009
 

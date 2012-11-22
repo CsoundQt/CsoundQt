@@ -5,7 +5,7 @@
 <CsInstruments>
 
 /*****GRANULAR SYNTHESIS OF A SOUNDFILE*****/
-;example for qutecsound
+;example for CsoundQt
 ;written by joachim heintz (with thanks to Oeyvind Brandtsegg)
 ;jan 2010 / mar 2011
 ;please send bug reports and suggestions

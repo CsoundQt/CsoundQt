@@ -4,7 +4,7 @@
 </CsOptions>
 <CsInstruments>
 /*****WAVEFORM MIX*****/
-;example for qutecsound
+;example for CsoundQt
 ;written by joachim heintz
 ;feb 2010 / oct 2012
 

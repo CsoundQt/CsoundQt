@@ -3,7 +3,7 @@
 </CsOptions>
 <CsInstruments>
 
-;example for qutecsound
+;example for CsoundQt
 ;joachim heintz
 ;2nd version feb 2011
 
@@ -23,7 +23,7 @@ vbaplsinit 2, 15, -45, -22.5, 0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, -157.5, 
 ;octo: vbaplsinit 2, 8, -22.5, 22.5, 67.5, 112.5, 157.5, -157.5, -112.5, -67.5
 
   opcode XYToDegr, kk, kko
-;transforms the xy values in the range 0-1 (for instance from a qutecsound controller widget) to degrees (anticlockwise or clockwise) and returns the radius in relation to the middle point
+;transforms the xy values in the range 0-1 (for instance from a CsoundQt controller widget) to degrees (anticlockwise or clockwise) and returns the radius in relation to the middle point
 kx, ky, idir xin; idir=0 (default): anticlockwise; any other value = clockwise
 ka		=	kx - 0.5
 kb		=	ky - 0.5
