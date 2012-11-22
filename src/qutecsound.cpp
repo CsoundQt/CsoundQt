@@ -1676,7 +1676,13 @@ void CsoundQt::openExternalBrowser(QUrl url)
 {
 	if (!url.isEmpty()) {
 		if (!m_options->browser.isEmpty()) {
-			execute(m_options->browser,"\"" + url.toString() + "\"");
+			if (QFile::exists(m_options->browser)) {
+				execute(m_options->browser,"\"" + url.toString() + "\"");
+			}
+			else {
+				QMessageBox::critical(this, tr("Error"),
+									  tr("Could not open external browser:\n%1\nPlease check preferences.").arg(m_options->browser));
+			}
 		}
 		else {
 			QDesktopServices::openUrl(url);
