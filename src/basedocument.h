@@ -46,7 +46,7 @@ public:
 	virtual int setTextString(QString &text) = 0;
 	virtual void loadTextString(QString &text);
 	virtual void setFileName(QString name);
-	int parseWidgetText(QString &text);
+	int parseAndRemoveWidgetText(QString &text);
 	virtual WidgetLayout* newWidgetLayout();
 	void widgetsVisible(bool visible);
 	void setFlags(int flags);

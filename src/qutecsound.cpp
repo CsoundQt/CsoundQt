@@ -118,7 +118,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	widgetPanel->setObjectName("widgetPanel");
 	widgetPanel->show();
 	addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
-	//  connect(widgetPanel,SIGNAL(topLevelChanged(bool)), this, SLOT(widgetDockStateChanged(bool)));
 
 	m_inspector = new Inspector(this);
 	m_inspector->parseText(QString());
@@ -286,6 +285,15 @@ void CsoundQt::changePage(int index)
 		disconnect(documentPages[curPage], SIGNAL(stopSignal()),0,0);
 		documentPages[curPage]->showLiveEventPanels(false);
 		documentPages[curPage]->hideWidgets();
+		if (!m_options->widgetsIndependent) {
+			QWidget *s = widgetPanel->widget();
+//			widgetPanel->applySize(); //Store size of outer panel as size of widget
+			if (s != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
+				widgetPanel->takeWidgetLayout(); // Make sure it's no longer a child of scroll area
+				QRect r = widgetPanel->geometry();
+				documentPages[curPage]->setWidgetPanelGeometry(r);
+			}
+		}
 	}
 	if (index < 0) { // No tabs left
 		qDebug() << "CsoundQt::changePage index < 0";
@@ -293,13 +301,7 @@ void CsoundQt::changePage(int index)
 	}
 	curPage = index;
 	if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
-		if (!m_options->widgetsIndependent) {
-			QWidget *w = widgetPanel->widget();
-//			widgetPanel->applySize(); //Store size of outer panel as size of widget
-			if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
-				w = widgetPanel->takeWidgetLayout();
-			}
-		}
+
 		setCurrentFile(documentPages[curPage]->getFileName());
 		connectActions();
 		documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
@@ -751,6 +753,13 @@ void CsoundQt::deleteCurrentTab()
 	DocumentPage *d = documentPages[curPage];
 	documentPages.remove(curPage);
 	documentTabs->removeTab(curPage);
+	if (!m_options->widgetsIndependent) {
+		QWidget *s = widgetPanel->widget();
+//			widgetPanel->applySize(); //Store size of outer panel as size of widget
+		if (s != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
+			widgetPanel->takeWidgetLayout(); // Make sure it's no longer a child of scroll area
+		}
+	}
 	delete  d;
 	if (curPage >= documentPages.size()) {
 		curPage = documentPages.size() - 1;
@@ -1872,8 +1881,8 @@ void CsoundQt::applySettings()
 	editToolBar->setToolButtonStyle(toolButtonStyle);
 	controlToolBar->setToolButtonStyle(toolButtonStyle);
 	configureToolBar->setToolButtonStyle(toolButtonStyle);
-	fileToolBar->setVisible(m_options->showToolbar);
-	editToolBar->setVisible(m_options->showToolbar);
+//	fileToolBar->setVisible(m_options->showToolbar);
+//	editToolBar->setVisible(m_options->showToolbar);
 	controlToolBar->setVisible(m_options->showToolbar);
 	configureToolBar->setVisible(m_options->showToolbar);
 
@@ -2064,28 +2073,6 @@ void CsoundQt::runUtility(QString flags)
 		execute(m_options->terminal, options);
 	}
 }
-
-//void CsoundQt::widgetDockStateChanged(bool topLevel)
-//{
-//  //   qDebug("CsoundQt::widgetDockStateChanged()");
-//  if (documentPages.size() < 1)
-//    return; //necessary check, since widget panel is created early by consructor
-//  //   qApp->processEvents();
-//  if (topLevel) {
-//    //     widgetPanel->setGeometry(documentPages[curPage]->getWidgetPanelGeometry());
-//    QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
-//    widgetPanel->move(geometry.x(), geometry.y());
-//    widgetPanel->widget()->resize(geometry.width(), geometry.height());
-//    qDebug(" %i %i %i %i",geometry.x(), geometry.y(), geometry.width(), geometry.height());
-//  }
-//}
-
-
-//
-// void CsoundQt::widgetDockLocationChanged(Qt::DockWidgetArea area)
-// {
-//   qDebug("CsoundQt::widgetDockLocationChanged() %i", area);
-// }
 
 void CsoundQt::displayLineNumber(int lineNumber)
 {
@@ -3717,25 +3704,25 @@ void CsoundQt::createToolBars()
 {
 	fileToolBar = addToolBar(tr("File"));
 	fileToolBar->setObjectName("fileToolBar");
-	fileToolBar->addAction(newAct);
-	fileToolBar->addAction(openAct);
-	fileToolBar->addAction(saveAct);
+//	fileToolBar->addAction(newAct);
+//	fileToolBar->addAction(openAct);
+//	fileToolBar->addAction(saveAct);
 
 	editToolBar = addToolBar(tr("Edit"));
 	editToolBar->setObjectName("editToolBar");
-	editToolBar->addAction(undoAct);
-	editToolBar->addAction(redoAct);
-	editToolBar->addAction(cutAct);
-	editToolBar->addAction(copyAct);
-	editToolBar->addAction(pasteAct);
+//	editToolBar->addAction(undoAct);
+//	editToolBar->addAction(redoAct);
+//	editToolBar->addAction(cutAct);
+//	editToolBar->addAction(copyAct);
+//	editToolBar->addAction(pasteAct);
 
 	controlToolBar = addToolBar(tr("Control"));
 	controlToolBar->setObjectName("controlToolBar");
 	controlToolBar->addAction(runAct);
 	controlToolBar->addAction(pauseAct);
 	controlToolBar->addAction(stopAct);
-	controlToolBar->addAction(runTermAct);
 	controlToolBar->addAction(recAct);
+	controlToolBar->addAction(runTermAct);
 	controlToolBar->addAction(renderAct);
 	controlToolBar->addAction(externalEditorAct);
 	controlToolBar->addAction(externalPlayerAct);
@@ -3757,7 +3744,7 @@ void CsoundQt::createToolBars()
 	Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
 											   Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
 	fileToolBar->setToolButtonStyle(toolButtonStyle);
-	editToolBar->setToolButtonStyle(toolButtonStyle);
+//	editToolBar->setToolButtonStyle(toolButtonStyle);
 	controlToolBar->setToolButtonStyle(toolButtonStyle);
 	configureToolBar->setToolButtonStyle(toolButtonStyle);
 }
@@ -4316,14 +4303,12 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 	}
 	QApplication::restoreOverrideCursor();
 	statusBar()->showMessage(tr("File loaded"), 2000);
-	//  setWidgetPanelGeometry();
 
 	// FIXME put back
 	//  widgetPanel->clearHistory();
 	if (runNow) {
 		play();
 	}
-	//  qApp->processEvents();  // Is this still needed?
 	return curPage;
 }
 
@@ -4359,7 +4344,9 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 			this, SLOT(displayLineNumber(int)));
 	connect(documentPages[curPage], SIGNAL(evaluatePythonSignal(QString)),
 			this, SLOT(evaluatePython(QString)));
+	
 	documentPages[curPage]->loadTextString(text);
+	setWidgetPanelGeometry();
 
 	if (!fileName.startsWith(":/")) {  // Don't store internal examples in recents menu
 		lastUsedDir = fileName;
@@ -4398,6 +4385,14 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
 	//  qDebug("CsoundQt::saveFile");
 	QString text;
 	QApplication::setOverrideCursor(Qt::WaitCursor);
+	if (!m_options->widgetsIndependent) { // Update outer geometry information for writing
+		QWidget *s = widgetPanel->widget();
+//			widgetPanel->applySize(); //Store size of outer panel as size of widget
+		if (s != 0) {
+			QRect r = widgetPanel->geometry();
+			documentPages[curPage]->setWidgetPanelGeometry(r);
+		}
+	}
 	if (m_options->saveWidgets && saveWidgets)
 		text = documentPages[curPage]->getFullText();
 	else
@@ -4581,9 +4576,11 @@ void CsoundQt::getCompanionFileName()
 		}
 	}
 }
+
 void CsoundQt::setWidgetPanelGeometry()
 {
 	QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
+//	qDebug() << "CsoundQt::setWidgetPanelGeometry() " << geometry;
 	if (geometry.width() <= 0 || geometry.width() > 4096) {
 		geometry.setWidth(400);
 		qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: width invalid.";

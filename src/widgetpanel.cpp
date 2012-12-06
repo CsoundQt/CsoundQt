@@ -62,17 +62,9 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 	w->setContained(true);
 	QRect outer = w->getOuterGeometry();
 	
-	this->setGeometry(outer);
-	QRect cRect = w->childrenRect();
-	if (cRect.width() < outer.width()) {
-		cRect.setWidth(outer.width());
-	}
-	if (cRect.height() < outer.height()) {
-		cRect.setHeight(outer.height());
-	}
-	w->blockSignals(true);
-	w->setGeometry(cRect);
-	w->blockSignals(true);
+	w->setGeometry(outer);
+	this->adjustSize();
+	w->adjustSize();
 	w->show();
 	scrollArea->show();
 }
@@ -98,6 +90,18 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
 	return w;
 }
 
+QRect WidgetPanel::getOuterGeometry()
+{
+	QRect g;
+	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
+	if (s){
+		if (x() >= 0 && y() >= 0) {
+			g = this->geometry();
+		}
+	}
+	return g;
+}
+
 void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 {
 	emit Close(false);
@@ -108,29 +112,6 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
 	Q_ASSERT(s != 0);
 	static_cast<WidgetLayout *>(s->widget())->createContextMenu(event);
-}
-
-void WidgetPanel::resizeEvent(QResizeEvent * event)
-{
-	//   qDebug( ) << "WidgetPanel::resizeEvent() " << event->oldSize() << event->size() ;
-	QDockWidget::resizeEvent(event);
-	QSize size = event->size();
-	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
-	if (s){
-		static_cast<WidgetLayout *>(s->widget())
-				->setOuterGeometry(-1, -1, size.width(), size.height());
-	}
-}
-
-void WidgetPanel::moveEvent(QMoveEvent * event)
-{
-	QDockWidget::moveEvent(event);
-	QPoint pos = event->pos();
-	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
-	if (s){
-		static_cast<WidgetLayout *>(s->widget())
-				->setOuterGeometry(pos.x(), pos.y());
-	}
 }
 
 void WidgetPanel::mousePressEvent(QMouseEvent * event)
@@ -165,11 +146,6 @@ void WidgetPanel::mouseMoveEvent(QMouseEvent * event)
 	if (w != 0) {
 		w->mouseMoveEventParent(event);
 	}
-}
-
-void WidgetPanel::dockStateChanged(bool undocked)
-{
-	qDebug() << "WidgetPanel::dockStateChanged" << undocked;
 }
 
 void WidgetPanel::scrollBarMoved(int /*value*/)

@@ -249,7 +249,8 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 	QSize s = getUsedSize();
 	if (m_contained) {
 		this->resize(s.width(), s.height());
-		setOuterGeometry(m_posx, m_posx, m_w, m_h);
+		QRect r(m_posx, m_posx, m_w, m_h);
+		setOuterGeometry(r);
 	}
 	else {
 		this->move(m_posx, m_posy);
@@ -451,9 +452,16 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
 	m_repeatKeys = repeat;
 }
 
-void WidgetLayout::setOuterGeometry(int newx, int newy, int neww, int newh)
+void WidgetLayout::setOuterGeometry(QRect r)
 {
-//	qDebug() << "WidgetLayout::setOuterGeometry" << newx << newy << neww << newh;
+	if (!r.isValid()) {
+		return;
+	}
+	int newx = r.x();
+	int newy = r.y();
+	int neww = r.width();
+	int newh = r.height();
+//	qDebug() << "WidgetLayout::setOuterGeometry" << this << newx << newy << neww << newh;
 	m_posx = newx >= 0 && newx < 4096? newx : m_posx;
 	m_posy = newy >= 0 && newy < 4096? newy : m_posy;
 	m_w = neww >= 0 && neww < 4096? neww : m_w;
@@ -2402,30 +2410,6 @@ void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
 		event->accept();
 	}
 }
-
-void WidgetLayout::resizeEvent(QResizeEvent * event)
-{
-	QWidget::resizeEvent(event);
-	if (m_contained) {
-		QSize s = event->size();
-		setOuterGeometry(-1, -1, s.width(), s.height());
-	}
-}
-
-void WidgetLayout::moveEvent(QMoveEvent * event)
-{
-	QWidget::moveEvent(event);
-	if (m_contained) {
-		QPoint p = event->pos();
-		setOuterGeometry(p.x(), p.y(), -1, -1);
-	}
-}
-
-//void WidgetLayout::showEvent(QShowEvent * event)
-//{
-//  QWidget::showEvent(event);
-//  setOuterGeometry();
-//}
 
 int WidgetLayout::parseXmlNode(QDomNode node)
 {

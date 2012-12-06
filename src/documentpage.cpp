@@ -82,7 +82,7 @@ int DocumentPage::setTextString(QString &text)
 		m_view->setModified(false);
 		return ret;
 	}
-	int baseRet = parseWidgetText(text);
+	int baseRet = parseAndRemoveWidgetText(text);
 	if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
 		QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
 		options.resize(options.indexOf("</MacOptions>") + 13);
@@ -116,7 +116,7 @@ int DocumentPage::setTextString(QString &text)
 		if (text.indexOf("<MacGUI>") > 0 and text[text.indexOf("<MacGUI>") - 1] == '\n')
 			text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
 		text.remove(m_macGUI);
-		if (baseRet != 1) {
+		if (baseRet < 1) {
 			//FIXME allow multiple
 			m_widgetLayouts[0]->loadMacWidgets(m_macGUI);
 			qDebug("<MacGUI> loaded.");
@@ -367,6 +367,11 @@ QRect DocumentPage::getWidgetPanelGeometry()
 {
 	//FIXME allow multiple
 	return m_widgetLayouts[0]->getOuterGeometry();
+}
+
+void DocumentPage::setWidgetPanelGeometry(QRect r)
+{
+	m_widgetLayouts[0]->setOuterGeometry(r);
 }
 
 void DocumentPage::setChannelValue(QString channel, double value)
@@ -1293,8 +1298,11 @@ void DocumentPage::applyMacOptions(QStringList options)
 		QStringList values = line.split(" ");
 		values.removeFirst();  //remove property name
 		// FIXME allow multiple layouts
-		m_widgetLayouts[0]->setOuterGeometry(values[0].toInt(),values[1].toInt(),
-											 values[2].toInt(), values[3].toInt());
+		QRect r(values[0].toInt(),values[1].toInt(),
+		        values[2].toInt(), values[3].toInt());
+		if (r.isValid()) {
+			m_widgetLayouts[0]->setOuterGeometry(r);
+		}
 	}
 	else {
 		qDebug ("DocumentPage::applyMacOptions() no Geometry!");

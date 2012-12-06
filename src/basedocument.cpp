@@ -73,11 +73,9 @@ BaseDocument::~BaseDocument()
 //  m_view->setFileType(0);
 //}
 
-int BaseDocument::parseWidgetText(QString &text)
+int BaseDocument::parseAndRemoveWidgetText(QString &text)
 {
-	int ret = 0;
-	bool xmlFormatFound = false;
-	QString xmlPanels = QString();
+	QStringList xmlPanels;
 	while (text.contains("<bsbPanel") and text.contains("</bsbPanel>")) {
 		QString panel = text.right(text.size()-text.indexOf("<bsbPanel"));
 		panel.resize(panel.indexOf("</bsbPanel>") + 11);
@@ -86,13 +84,12 @@ int BaseDocument::parseWidgetText(QString &text)
 		if (text.indexOf("<bsbPanel") > 0 and text[text.indexOf("<bsbPanel") - 1] == '\n')
 			text.remove(text.indexOf("<bsbPanel") - 1, 1); //remove initial line break
 		text.remove(text.indexOf("<bsbPanel"), panel.size());
-		xmlFormatFound = true;
-		xmlPanels += panel;
+		xmlPanels << panel;
 		// TODO enable creation of several panels
 	}
-	if (xmlFormatFound) {
+	if (!xmlPanels.isEmpty()) {
 		//FIXME allow multiple layouts
-		m_widgetLayouts[0]->loadXmlWidgets(xmlPanels);
+		m_widgetLayouts[0]->loadXmlWidgets(xmlPanels[0]);
 		m_widgetLayouts[0]->markHistory();
 		if (text.contains("<bsbPresets>") and text.contains("</bsbPresets>")) {
 			QString presets = text.right(text.size()-text.indexOf("<bsbPresets>"));
@@ -105,13 +102,12 @@ int BaseDocument::parseWidgetText(QString &text)
 			//FIXME allow multiple
 			m_widgetLayouts[0]->loadXmlPresets(presets);
 		}
-		ret = 1;
 	} else {
-		xmlPanels = "<bsbPanel><visible>true</visible><x>100</x><y>100</y><width>320</width><height>240</height></bsbPanel>";
-		m_widgetLayouts[0]->loadXmlWidgets(xmlPanels);
+		QString defaultPanel = "<bsbPanel><visible>true</visible><x>100</x><y>100</y><width>320</width><height>240</height></bsbPanel>";
+		m_widgetLayouts[0]->loadXmlWidgets(defaultPanel);
 		m_widgetLayouts[0]->markHistory();
 	}
-	return ret;
+	return xmlPanels.size();
 }
 
 WidgetLayout* BaseDocument::newWidgetLayout()

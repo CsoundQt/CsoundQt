@@ -105,7 +105,7 @@ public:
 	bool getOpenProperties() { return m_openProperties; }
 	void setOpenProperties(bool open) {m_openProperties = open; }
 	// Outer geometry refers to the geometry of the parent panel if not separate window
-	void setOuterGeometry(int newx = -1 , int newy = -1 , int neww = -1, int newh = -1);
+	void setOuterGeometry(QRect r);
 	QRect getOuterGeometry();
 
 	//    void getValues(QVector<QString> *channelNames,
@@ -290,8 +290,6 @@ protected:
 	virtual void keyPressEvent(QKeyEvent *event);
 	virtual void keyReleaseEvent(QKeyEvent *event);
 	virtual void contextMenuEvent(QContextMenuEvent *event);
-	virtual void resizeEvent(QResizeEvent * event);
-	virtual void moveEvent(QMoveEvent * event);
 	//    virtual void showEvent(QShowEvent * event);
 	QRubberBand *selectionFrame;
 	int startx, starty;

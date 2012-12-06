@@ -39,6 +39,8 @@ public:
 
 	void addWidgetLayout(WidgetLayout *layoutWidget);
 	WidgetLayout * takeWidgetLayout();
+	
+	QRect getOuterGeometry();
 
 	void setWidgetScrollBarsActive(bool active);
 
@@ -46,13 +48,10 @@ public slots:
 
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent *event);
-	virtual void resizeEvent(QResizeEvent * event);
-	virtual void moveEvent(QMoveEvent * event);
 	virtual void mousePressEvent(QMouseEvent * event);
 	virtual void mouseReleaseEvent(QMouseEvent * event);
 	virtual void mouseMoveEvent (QMouseEvent * event);
-	//    virtual void keyPressEvent(QKeyEvent *event);
-	//    virtual void keyReleaseEvent(QKeyEvent *event);
+
 	virtual void closeEvent(QCloseEvent * event);
 
 private:
@@ -64,7 +63,6 @@ private:
 	int m_height;
 
 private slots:
-	void dockStateChanged(bool);
 	void scrollBarMoved(int);
 
 signals:
