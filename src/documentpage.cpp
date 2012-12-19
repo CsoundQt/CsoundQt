@@ -1165,10 +1165,8 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 	connect(m_csEngine, SIGNAL(stopSignal()),
 			this, SLOT(perfEnded()));
 
-	//  m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine
-
 	//  detachWidgets();
-	saveOldFormat = true; // save Mac widgets by default
+	saveOldFormat = false; // don't save Mac widgets by default
 	m_pythonRunning = false;
 }
 

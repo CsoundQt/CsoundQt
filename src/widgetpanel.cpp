@@ -87,12 +87,12 @@ WidgetLayout * WidgetPanel::takeWidgetLayout()
 	WidgetLayout * w = (WidgetLayout *) s->widget();
 	if (w != 0) {
 		w->setContained(false);  // Must set before removing from container to get background
-		disconnect(w, SIGNAL(selection(QRect)));
+		disconnect(w, SIGNAL(selection(QRect)), 0, 0);
 	}
 	w = (WidgetLayout *) s->takeWidget();  //This transfers ownership of the widget to the caller
-	if (w) {
-		w->setParent(0);
-	}
+//	if (w) {
+//		w->setParent(0);
+//	}
 	m_stack->removeWidget(s);
 	delete s;
 	return w;

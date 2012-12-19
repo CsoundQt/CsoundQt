@@ -185,7 +185,9 @@ instr	1	;SNDWARP INSTRUMENT
 endin
 
 instr	2	;INIT
+;		Sfilename invalue "_Browse"
 		outvalue	"_SetPresetIndex", 0
+;		outvalue "_Browse", Sfilename
 endin
 </CsInstruments>
 <CsScore>
@@ -196,13 +198,17 @@ i 2	     0.1		 0		;INIT
 </CsScore>
 </CsoundSynthesizer>
 
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>332</x>
- <y>360</y>
- <width>1033</width>
- <height>397</height>
+ <x>0</x>
+ <y>0</y>
+ <width>495</width>
+ <height>446</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -432,9 +438,9 @@ i 2	     0.1		 0		;INIT
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>240</r>
+   <g>235</g>
+   <b>226</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -1479,4 +1485,4 @@ i 2	     0.1		 0		;INIT
 <value id="{cdf66a23-91bd-4fe3-987f-dfc531c78348}" mode="4" >0</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

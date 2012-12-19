@@ -676,7 +676,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 	else if (type == "BSBButton") {
 		QuteButton *w = new QuteButton(this);
 		widget = static_cast<QuteWidget *>(w);
-		connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
+		connect(widget, SIGNAL(queueEventSignal(QString)), this, SLOT(queueEvent(QString)));
 		connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
 		connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
 		emit registerButton(w);
@@ -2713,7 +2713,7 @@ QString WidgetLayout::createButton(int x, int y, int width, int height, QString 
 		quoteParts[6].remove(0,1); //remove initial space
 		widget->setProperty("QCS_eventLine", quoteParts[6]);
 	}
-	connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
+	connect(widget, SIGNAL(queueEventSignal(QString)), this, SLOT(queueEvent(QString)));
 	connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
 	connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
 	emit registerButton(widget);
@@ -3727,13 +3727,9 @@ void WidgetLayout::processNewValues()
 
 void WidgetLayout::queueEvent(QString eventLine)
 {
-	// FIXME connect this!!
+	qDebug() << "WidgetLayout::queueEvent";
 	emit queueEventSignal(eventLine);
 }
-
-//void WidgetLayout::paste(QPoint /*pos*/)
-//{
-//}
 
 void WidgetLayout::duplicate()
 {

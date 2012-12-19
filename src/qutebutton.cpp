@@ -77,7 +77,7 @@ void QuteButton::setValue(double value)
 
 void QuteButton::setValue(QString text)
 {
-	qDebug() << "QuteButton::setValue" << text;
+//	qDebug() << "QuteButton::setValue" << text;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif
@@ -413,19 +413,19 @@ void QuteButton::buttonReleased()
 					lineElements[0].prepend("-");
 					lineElements.prepend("i");
 					setValue(0);
-					emit(queueEvent(lineElements.join(" ")));
+					emit(queueEventSignal(lineElements.join(" ")));
 				}
 				else { // Button has turned on. Turn on instrument
 					setValue(1);
-					emit(queueEvent(eventLine));
+					emit(queueEventSignal(eventLine));
 				}
 			}
 			else {
-				emit(queueEvent(eventLine));
+				emit(queueEventSignal(eventLine));
 			}
 		}
 		else {
-			emit(queueEvent(eventLine));
+			emit(queueEventSignal(eventLine));
 		}
 	}
 	else if (type == "value" or type == "pictvalue") {

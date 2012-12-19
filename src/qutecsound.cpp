@@ -295,7 +295,6 @@ void CsoundQt::changePage(int index)
 	if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
 		if (!m_options->widgetsIndependent) {
 			QWidget *w = widgetPanel->widget();
-//			widgetPanel->applySize(); //Store size of outer panel as size of widget
 			if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
 				w = widgetPanel->takeWidgetLayout();
 			}
@@ -305,7 +304,8 @@ void CsoundQt::changePage(int index)
 		documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
 		//    documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
 		if (!m_options->widgetsIndependent) {
-			widgetPanel->addWidgetLayout(documentPages[curPage]->getWidgetLayout());
+			WidgetLayout *w = documentPages[curPage]->getWidgetLayout();
+			widgetPanel->addWidgetLayout(w);
 		}
 		setWidgetPanelGeometry();
 		if (!documentPages[curPage]->getFileName().endsWith(".csd")
@@ -457,7 +457,7 @@ void CsoundQt::reload()
 {
 	if (documentPages[curPage]->isModified()) {
 		QString fileName = documentPages[curPage]->getFileName();
-		deleteCurrentTab();
+		deleteTab();
 		loadFile(fileName);
 	}
 }
@@ -742,15 +742,18 @@ void CsoundQt::createQuickRefPdf()
 	quickRefFileName = tempFileName;
 }
 
-void CsoundQt::deleteCurrentTab()
+void CsoundQt::deleteTab(int index)
 {
+	if (index == -1) {
+		index = curPage;
+	}
 	//  qDebug() << "CsoundQt::deleteCurrentTab()";
 	disconnect(showLiveEventsAct, 0,0,0);
-	documentPages[curPage]->stop();
-	documentPages[curPage]->showLiveEventPanels(false);
-	DocumentPage *d = documentPages[curPage];
-	documentPages.remove(curPage);
-	documentTabs->removeTab(curPage);
+	documentPages[index]->stop();
+	documentPages[index]->showLiveEventPanels(false);
+	DocumentPage *d = documentPages[index];
+	documentPages.remove(index);
+	documentTabs->removeTab(index);
 	delete  d;
 	if (curPage >= documentPages.size()) {
 		curPage = documentPages.size() - 1;
@@ -1012,13 +1015,16 @@ void CsoundQt::info()
 							 QMessageBox::Ok);
 }
 
-bool CsoundQt::closeTab(bool askCloseApp)
+bool CsoundQt::closeTab(bool forceCloseApp, int index)
 {
+	if (index == -1) {
+		index = curPage;
+	}
 	//   qDebug("CsoundQt::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
-	if (documentPages.size() > 0 && documentPages[curPage]->isModified()) {
+	if (documentPages.size() > 0 && documentPages[index]->isModified()) {
 		QString message = tr("The document ")
-				+ (documentPages[curPage]->getFileName() != ""
-				? documentPages[curPage]->getFileName(): "untitled.csd")
+				+ (documentPages[index]->getFileName() != ""
+				? documentPages[index]->getFileName(): "untitled.csd")
 				+ tr("\nhas been modified.\nDo you want to save the changes before closing?");
 		int ret = QMessageBox::warning(this, tr("CsoundQt"),
 									   message,
@@ -1032,7 +1038,7 @@ bool CsoundQt::closeTab(bool askCloseApp)
 				return false;
 		}
 	}
-	if (!askCloseApp) {
+	if (!forceCloseApp) {
 		if (documentPages.size() <= 1) {
 			if (QMessageBox::warning(this, tr("CsoundQt"),
 									 tr("Do you want to exit CsoundQt?"),
@@ -1048,7 +1054,7 @@ bool CsoundQt::closeTab(bool askCloseApp)
 			}
 		}
 	}
-	deleteCurrentTab();
+	deleteTab(index);
 	changePage(curPage);
 	return true;
 }
