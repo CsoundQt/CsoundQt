@@ -141,6 +141,7 @@ public slots:
 	int loadFile(QString fileName, bool runNow = false);
 	int loadFileFromSystem(QString fileName); // checks for m_options->autoPlay, if the function is called from other class
 	void newFile();
+	bool closeTab(bool forceCloseApp = false, int index = -1);
 	bool saveFile(const QString &fileName, bool saveWidgets = true);
 	void play(bool realtime = true, int index = -1);
 	void runInTerm(bool realtime = true);
@@ -188,7 +189,6 @@ private slots:
 	void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
 	//    void setWidgetClipboard(QString text);
 	void duplicate();
-	bool closeTab(bool askCloseApp = false);
 	void print();
 	void findReplace();  // Direct to current Page
 	void findString();  // Direct to current Page
@@ -267,7 +267,7 @@ private:
 	//    void markErrorLine();
 	QString getSaveFileName();
 	void createQuickRefPdf();
-	void deleteCurrentTab();
+	void deleteTab(int index = -1);
 	void openLogFile();
 
 	void setMidiInterface(int number);
