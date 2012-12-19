@@ -72,7 +72,7 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 	}
 	w->blockSignals(true);
 	w->setGeometry(cRect);
-	w->blockSignals(true);
+	w->blockSignals(false);
 	w->show();
 	scrollArea->show();
 }
