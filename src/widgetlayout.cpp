@@ -246,10 +246,8 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 	if (m_editMode) {
 		setEditMode(true);
 	}
-	QSize s = getUsedSize();
 	if (m_contained) {
-		this->resize(s.width(), s.height());
-		setOuterGeometry(m_posx, m_posx, m_w, m_h);
+		adjustLayoutSize();
 	}
 	else {
 		this->move(m_posx, m_posy);
@@ -454,10 +452,12 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
 void WidgetLayout::setOuterGeometry(int newx, int newy, int neww, int newh)
 {
 //	qDebug() << "WidgetLayout::setOuterGeometry" << newx << newy << neww << newh;
-	m_posx = newx >= 0 && newx < 4096? newx : m_posx;
-	m_posy = newy >= 0 && newy < 4096? newy : m_posy;
-	m_w = neww >= 0 && neww < 4096? neww : m_w;
-	m_h = newh >= 0 && newh < 4096? newh : m_h;
+	if (m_contained && newx < 0 && newy > 0 ) {
+		m_posx = newx >= 0 && newx < 4096? newx : m_posx;
+		m_posy = newy >= 0 && newy < 4096? newy : m_posy;
+		m_w = neww >= 0 && neww < 4096? neww : m_w;
+		m_h = newh >= 0 && newh < 4096? newh : m_h;
+	}
 }
 
 QRect WidgetLayout::getOuterGeometry()
@@ -1472,17 +1472,12 @@ QSize WidgetLayout::getUsedSize()
 
 void WidgetLayout::adjustLayoutSize()
 {
-	// This function should not be locked as it is sometimes called from another function that locks.
-
-	QSize s = getUsedSize();
 	if (m_contained) {
+		QSize s = this->childrenRect().size();
 		if (this->size() != s) {
 			this->resize(s);
 		}
 	}
-	//  QRect r = this->geometry();
-	//  //      qDebug() << "WidgetLayout::layoutResized()" <<r.width() << r.height() ;
-	//      setOuterGeometry(r.x(), r.y(), r.width(), r.height());
 }
 
 void WidgetLayout::selectionChanged(QRect selection)
@@ -2402,30 +2397,6 @@ void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
 		event->accept();
 	}
 }
-
-void WidgetLayout::resizeEvent(QResizeEvent * event)
-{
-	QWidget::resizeEvent(event);
-	if (m_contained) {
-		QSize s = event->size();
-		setOuterGeometry(-1, -1, s.width(), s.height());
-	}
-}
-
-void WidgetLayout::moveEvent(QMoveEvent * event)
-{
-	QWidget::moveEvent(event);
-	if (m_contained) {
-		QPoint p = event->pos();
-		setOuterGeometry(p.x(), p.y(), -1, -1);
-	}
-}
-
-//void WidgetLayout::showEvent(QShowEvent * event)
-//{
-//  QWidget::showEvent(event);
-//  setOuterGeometry();
-//}
 
 int WidgetLayout::parseXmlNode(QDomNode node)
 {

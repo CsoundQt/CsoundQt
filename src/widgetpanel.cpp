@@ -72,9 +72,9 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 	}
 	w->blockSignals(true);
 	w->setGeometry(cRect);
-	w->blockSignals(false);
 	w->show();
 	scrollArea->show();
+	w->blockSignals(false);
 }
 
 WidgetLayout * WidgetPanel::takeWidgetLayout()
@@ -110,28 +110,28 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 	static_cast<WidgetLayout *>(s->widget())->createContextMenu(event);
 }
 
-void WidgetPanel::resizeEvent(QResizeEvent * event)
-{
-	//   qDebug( ) << "WidgetPanel::resizeEvent() " << event->oldSize() << event->size() ;
-	QDockWidget::resizeEvent(event);
-	QSize size = event->size();
-	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
-	if (s){
-		static_cast<WidgetLayout *>(s->widget())
-				->setOuterGeometry(-1, -1, size.width(), size.height());
-	}
-}
+//void WidgetPanel::resizeEvent(QResizeEvent * event)
+//{
+//	//   qDebug( ) << "WidgetPanel::resizeEvent() " << event->oldSize() << event->size() ;
+//	QDockWidget::resizeEvent(event);
+//	QSize size = event->size();
+//	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
+//	if (s){
+//		static_cast<WidgetLayout *>(s->widget())
+//				->setOuterGeometry(-1, -1, size.width(), size.height());
+//	}
+//}
 
-void WidgetPanel::moveEvent(QMoveEvent * event)
-{
-	QDockWidget::moveEvent(event);
-	QPoint pos = event->pos();
-	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
-	if (s){
-		static_cast<WidgetLayout *>(s->widget())
-				->setOuterGeometry(pos.x(), pos.y());
-	}
-}
+//void WidgetPanel::moveEvent(QMoveEvent * event)
+//{
+//	QDockWidget::moveEvent(event);
+//	QPoint pos = event->pos();
+//	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
+//	if (s){
+//		static_cast<WidgetLayout *>(s->widget())
+//				->setOuterGeometry(pos.x(), pos.y());
+//	}
+//}
 
 void WidgetPanel::mousePressEvent(QMouseEvent * event)
 {

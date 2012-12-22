@@ -103,7 +103,7 @@ public:
 	QString desc;
 };
 
-static ConfigLists _configlists;
+static ConfigLists configlists;
 
 class RingBuffer
 {

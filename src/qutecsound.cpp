@@ -294,9 +294,15 @@ void CsoundQt::changePage(int index)
 	curPage = index;
 	if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
 		if (!m_options->widgetsIndependent) {
-			QWidget *w = widgetPanel->widget();
-			if (w != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
-				w = widgetPanel->takeWidgetLayout();
+			WidgetLayout *l = widgetPanel->takeWidgetLayout();
+			if (l != 0) {
+				QRect panelGeometry = widgetPanel->geometry();
+				if (!widgetPanel->isFloating()) {
+					panelGeometry.setX(-1);
+					panelGeometry.setY(-1);
+				}
+				l->setOuterGeometry(panelGeometry.x(), panelGeometry.y(),
+									panelGeometry.width(), panelGeometry.height());
 			}
 		}
 		setCurrentFile(documentPages[curPage]->getFileName());
@@ -727,7 +733,7 @@ void CsoundQt::createQuickRefPdf()
 	//
 	//  }
 	QString internalFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
-	internalFileName += _configlists.languageCodes[m_options->language];
+	internalFileName += configlists.languageCodes[m_options->language];
 	internalFileName += ".pdf";
 	if (!QFile::exists(internalFileName)) {
 		internalFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
@@ -1495,11 +1501,11 @@ void CsoundQt::render()
 		QFileDialog dialog(this,tr("Output Filename"),defaultFile);
 		dialog.setAcceptMode(QFileDialog::AcceptSave);
 		//    dialog.setConfirmOverwrite(false);
-		QString filter = QString(_configlists.fileTypeLongNames[m_options->fileFileType] + " Files ("
-								 + _configlists.fileTypeExtensions[m_options->fileFileType] + ")");
+		QString filter = QString(configlists.fileTypeLongNames[m_options->fileFileType] + " Files ("
+								 + configlists.fileTypeExtensions[m_options->fileFileType] + ")");
 		dialog.setFilter(filter);
 		if (dialog.exec() == QDialog::Accepted) {
-			QString extension = _configlists.fileTypeExtensions[m_options->fileFileType].left(_configlists.fileTypeExtensions[m_options->fileFileType].indexOf(";"));
+			QString extension = configlists.fileTypeExtensions[m_options->fileFileType].left(configlists.fileTypeExtensions[m_options->fileFileType].indexOf(";"));
 			//       // Remove the '*' from the extension
 			extension.remove(0,1);
 			m_options->fileOutputFilename = dialog.selectedFiles()[0];
@@ -1896,8 +1902,8 @@ void CsoundQt::applySettings()
 
 	// Display a summary of options on the status bar
 	currentOptions +=  (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
-	QString playOptions = " (Audio:" + _configlists.rtAudioNames[m_options->rtAudioModule] + " ";
-	playOptions += "MIDI:" +  _configlists.rtMidiNames[m_options->rtMidiModule] + ")";
+	QString playOptions = " (Audio:" + configlists.rtAudioNames[m_options->rtAudioModule] + " ";
+	playOptions += "MIDI:" +  configlists.rtMidiNames[m_options->rtMidiModule] + ")";
 	playOptions += " (" + (m_options->rtUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions"));
 	playOptions += " " + (m_options->rtOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
 	playOptions += currentOptions;
@@ -3798,7 +3804,7 @@ void CsoundQt::readSettings()
 	lastUsedDir = settings.value("lastuseddir", "").toString();
 	lastFileDir = settings.value("lastfiledir", "").toString();
 	//  showLiveEventsAct->setChecked(settings.value("liveEventsActive", true).toBool());
-	m_options->language = _configlists.languageCodes.indexOf(settings.value("language", QLocale::system().name()).toString());
+	m_options->language = configlists.languageCodes.indexOf(settings.value("language", QLocale::system().name()).toString());
 	if (m_options->language < 0)
 		m_options->language = 0;
 	recentFiles.clear();
@@ -3976,7 +3982,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("dockstate", saveState());
 		settings.setValue("lastuseddir", lastUsedDir);
 		settings.setValue("lastfiledir", lastFileDir);
-		settings.setValue("language", _configlists.languageCodes[m_options->language]);
+		settings.setValue("language", configlists.languageCodes[m_options->language]);
 		//  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
 		settings.setValue("recentFiles", recentFiles);
 		settings.setValue("theme", m_options->theme);
