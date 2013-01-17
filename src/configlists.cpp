@@ -62,7 +62,7 @@ ConfigLists::ConfigLists()
 	rtAudioNames << "portaudio" << "winmm" << "jack" <<  "none";
 #endif
 #ifdef Q_OS_LINUX
-	rtMidiNames << "none" << "alsa"  << "portmidi"<< "virtual";
+	rtMidiNames << "none" << "alsa"  << "portmidi" << "virtual";
 #endif
 #ifdef Q_OS_SOLARIS
 	rtMidiNames << "none" << "portmidi"<< "virtual";
@@ -84,6 +84,7 @@ ConfigLists::~ConfigLists()
 
 void ConfigLists::msgCallback(CSOUND *csound, int attr, const char *fmt, va_list args)
 {
+	Q_UNUSED(attr);
 	QString *ud = (QString *) csoundGetHostData(csound);
 	QString msg;
 	msg = msg.vsprintf(fmt, args);
@@ -93,10 +94,10 @@ void ConfigLists::msgCallback(CSOUND *csound, int attr, const char *fmt, va_list
 	ud->append(msg);
 }
 
-QList<QPair<QString, QString> > ConfigLists::getMidiInputDevices(int moduleIndex)
+QHash<QString,QString> ConfigLists::getMidiInputDevices(int moduleIndex)
 {
 	// based on code by Steven Yi
-	QList<QPair<QString, QString> > deviceList;
+	QHash<QString,QString> deviceList;
 	QString module = rtMidiNames[moduleIndex];
 	if (module == "none") {
 		return deviceList;
@@ -114,23 +115,17 @@ QList<QPair<QString, QString> > ConfigLists::getMidiInputDevices(int moduleIndex
 		for (int i = 0; i < st.size(); i++){
 			QStringList parts = st[i].split(" ", QString::SkipEmptyParts);
 			if (parts.size() > 0 && parts[0].contains("I")) {
-				QPair<QString, QString> device;
-				device.second = parts[1]; // Devce name
+				QString devname = parts[1]; // Devce name
 				parts.takeFirst(); // Remove IO flags
-				device.first = parts.join(" ") ; // Full name with description
-				deviceList.append(device);
+				QString fullname = parts.join(" ") ; // Full name with description
+				deviceList.insert(fullname, devname);
 			}
 		}
-		QPair<QString, QString> device;
-		device.first = "All available devices "; // Full name with description
-		device.second = "a"; // Devce name
-		deviceList.append(device);
+		deviceList.insert("All available devices ", "a");
 	}
 	else if (module == "virtual") {
-		QPair<QString, QString> device;
-		device.first = qApp->translate("Enabled", "Virtual MIDI keyboard Enabled");
-		device.second = "0";
-		deviceList.append(device);
+		QString name = qApp->translate("Enabled", "Virtual MIDI keyboard Enabled");
+		deviceList.insert(name, "0");
 	}
 	else { // if not alsa (i.e. winmm or portmidi)
 		QFile file(":/test.csd");
@@ -171,11 +166,10 @@ QList<QPair<QString, QString> > ConfigLists::getMidiInputDevices(int moduleIndex
 				}
 				else {
 					if (line.indexOf(":") >= 0) {
-						qDebug("%s", line.toLocal8Bit().constData());
-						QPair<QString, QString> device;
-						device.first = line.mid(line.indexOf(":") + 1).trimmed();
-						device.second = line.mid(0,line.indexOf(":")).trimmed();
-						deviceList.append(device);
+//						qDebug() << "getMidiInputDevices " << line;
+						QString fullname = line.mid(line.indexOf(":") + 1).trimmed();
+						QString devname = line.mid(0,line.indexOf(":")).trimmed();
+						deviceList.insert(fullname, devname);
 					}
 				}
 			}
@@ -599,14 +593,15 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
 	csoundD=csoundCreate(0);
 	csoundSetHostData(csoundD, &m_messages);
 
+	m_messages.clear();
 	csoundSetMessageCallback(csoundD, msgCallback);
 	int result = csoundCompile(csoundD,argc,argv);
 	if(!result) {
 		csoundPerform(csoundD);
 	}
 
-	//  csoundDestroyMessageBuffer(csoundD); // This should be here but it is crashing!!
 	csoundDestroy(csoundD);
+	// FIXME This crashes on Linux for portmidi!
 
 #ifdef MACOSX_PRE_SNOW
 	// Put menu bar back

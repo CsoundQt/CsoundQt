@@ -62,29 +62,37 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 	w->setContained(true);
 	QRect outer = w->getOuterGeometry();
 	
-	w->setGeometry(outer);
-	this->adjustSize();
-	w->adjustSize();
+	this->setGeometry(outer);
+	QRect cRect = w->childrenRect();
+	if (cRect.width() < outer.width()) {
+		cRect.setWidth(outer.width());
+	}
+	if (cRect.height() < outer.height()) {
+		cRect.setHeight(outer.height());
+	}
+	w->blockSignals(true);
+	w->setGeometry(cRect);
 	w->show();
 	scrollArea->show();
+	w->blockSignals(false);
 }
 
-WidgetLayout * WidgetPanel::takeWidgetLayout()
+WidgetLayout * WidgetPanel::takeWidgetLayout(QRect outerGeometry)
 {
 	//  qDebug() << "WidgetPanel::takeWidgetLayout()";
 	disconnect(this,SIGNAL(topLevelChanged(bool)));
 	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
 	if (!s) // scroll area is sometimes null during startup and shutdown
 		return 0;
-	WidgetLayout * w = (WidgetLayout *) s->widget();
+	WidgetLayout *w = (WidgetLayout *) s->takeWidget();  //This transfers ownership of the widget to the caller
 	if (w != 0) {
+		w->setOuterGeometry(outerGeometry);
 		w->setContained(false);  // Must set before removing from container to get background
-		disconnect(w, SIGNAL(selection(QRect)));
+		disconnect(w, SIGNAL(selection(QRect)), 0, 0);
 	}
-	w = (WidgetLayout *) s->takeWidget();  //This transfers ownership of the widget to the caller
-	if (w) {
-		w->setParent(0);
-	}
+//	if (w) {
+//		w->setParent(0);
+//	}
 	m_stack->removeWidget(s);
 	delete s;
 	return w;
@@ -116,7 +124,7 @@ void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 
 void WidgetPanel::mousePressEvent(QMouseEvent * event)
 {
-	qDebug() << "WidgetPanel::mousePressEvent";
+//	qDebug() << "WidgetPanel::mousePressEvent";
 	//  QMouseEvent e(QEvent::MouseButtonPress,
 	//                QPoint(event->x(), event->y()),
 	//                event->button(),

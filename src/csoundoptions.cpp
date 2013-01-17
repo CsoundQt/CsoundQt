@@ -118,9 +118,9 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 	if (rt && rtUseOptions) {
 		if (rtOverrideOptions)
 			list << "-+ignore_csopts=1";
-		if (_configlists.rtAudioNames[rtAudioModule] != "none") {
+		if (configlists.rtAudioNames[rtAudioModule] != "none") {
 			QString module;
-			module = _configlists.rtAudioNames[rtAudioModule];
+			module = configlists.rtAudioNames[rtAudioModule];
 #ifdef Q_OS_MAC
 			if (module=="portaudio") {
 				module = "pa_bl"; // Force pa_bl on OS X as it crashes otherwise!
@@ -131,7 +131,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 				list << "-i" + rtInputDevice;
 			}
 			list << "-o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
-			if (rtJackName != "" && _configlists.rtAudioNames[rtAudioModule] == "jack") {
+			if (rtJackName != "" && configlists.rtAudioNames[rtAudioModule] == "jack") {
 				QString jackName = rtJackName;
 				if (jackName.contains("*")) {
 					jackName.replace("*",fileName1.mid(fileName1.lastIndexOf(QDir::separator()) + 1));
@@ -143,8 +143,8 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 				list << "-+jack_client=" + jackName;
 			}
 		}
-		if (_configlists.rtMidiNames[rtMidiModule] != "none") {
-			list << "-+rtmidi=" + _configlists.rtMidiNames[rtMidiModule];
+		if (configlists.rtMidiNames[rtMidiModule] != "none") {
+			list << "-+rtmidi=" + configlists.rtMidiNames[rtMidiModule];
 			if (rtMidiInputDevice != "")
 				list << "-M" + rtMidiInputDevice;
 			if (rtMidiOutputDevice != "")
@@ -152,8 +152,8 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 		}
 	}
 	else {
-		list << "--format=" + _configlists.fileTypeNames[fileFileType]
-				+ ":" + _configlists.fileFormatFlags[fileSampleFormat];
+		list << "--format=" + configlists.fileTypeNames[fileFileType]
+				+ ":" + configlists.fileFormatFlags[fileSampleFormat];
 		if (fileInputFilenameActive)
 			list << "-i" + fileInputFilename + "";
 		if (fileOutputFilenameActive or fileAskFilename) {

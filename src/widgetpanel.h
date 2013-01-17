@@ -38,7 +38,7 @@ public:
 	~WidgetPanel();
 
 	void addWidgetLayout(WidgetLayout *layoutWidget);
-	WidgetLayout * takeWidgetLayout();
+	WidgetLayout * takeWidgetLayout(QRect outerGeometry);
 	
 	QRect getOuterGeometry();
 

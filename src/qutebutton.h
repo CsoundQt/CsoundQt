@@ -78,7 +78,7 @@ private slots:
 	void browseFile();
 
 signals:
-	void queueEvent(QString eventLine);
+	void queueEventSignal(QString eventLine);
 	void play();
 	void pause();
 	void stop();

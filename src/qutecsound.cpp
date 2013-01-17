@@ -286,13 +286,12 @@ void CsoundQt::changePage(int index)
 		documentPages[curPage]->showLiveEventPanels(false);
 		documentPages[curPage]->hideWidgets();
 		if (!m_options->widgetsIndependent) {
-			QWidget *s = widgetPanel->widget();
-//			widgetPanel->applySize(); //Store size of outer panel as size of widget
-			if (s != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
-				widgetPanel->takeWidgetLayout(); // Make sure it's no longer a child of scroll area
-				QRect r = widgetPanel->geometry();
-				documentPages[curPage]->setWidgetPanelGeometry(r);
+			QRect panelGeometry = widgetPanel->geometry();
+			if (!widgetPanel->isFloating()) {
+				panelGeometry.setX(-1);
+				panelGeometry.setY(-1);
 			}
+			widgetPanel->takeWidgetLayout(panelGeometry);
 		}
 	}
 	if (index < 0) { // No tabs left
@@ -301,13 +300,13 @@ void CsoundQt::changePage(int index)
 	}
 	curPage = index;
 	if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
-
 		setCurrentFile(documentPages[curPage]->getFileName());
 		connectActions();
 		documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
 		//    documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
 		if (!m_options->widgetsIndependent) {
-			widgetPanel->addWidgetLayout(documentPages[curPage]->getWidgetLayout());
+			WidgetLayout *w = documentPages[curPage]->getWidgetLayout();
+			widgetPanel->addWidgetLayout(w);
 		}
 		setWidgetPanelGeometry();
 		if (!documentPages[curPage]->getFileName().endsWith(".csd")
@@ -439,11 +438,11 @@ void CsoundQt::open()
 	fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"), lastUsedDir ,
 											  tr("Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)",
 												 "Be careful to respect spacing parenthesis and usage of punctuation"));
-	if (widgetsVisible) {
-		if (!m_options->widgetsIndependent) {
-			//      widgetPanel->show();
-		}
-	}
+//	if (widgetsVisible) {
+//		if (!m_options->widgetsIndependent) {
+//			//      widgetPanel->show();
+//		}
+//	}
 	if (helpVisible)
 		helpPanel->show();
 	if (inspectorVisible)
@@ -459,7 +458,7 @@ void CsoundQt::reload()
 {
 	if (documentPages[curPage]->isModified()) {
 		QString fileName = documentPages[curPage]->getFileName();
-		deleteCurrentTab();
+		deleteTab();
 		loadFile(fileName);
 	}
 }
@@ -729,7 +728,7 @@ void CsoundQt::createQuickRefPdf()
 	//
 	//  }
 	QString internalFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
-	internalFileName += _configlists.languageCodes[m_options->language];
+	internalFileName += configlists.languageCodes[m_options->language];
 	internalFileName += ".pdf";
 	if (!QFile::exists(internalFileName)) {
 		internalFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
@@ -744,22 +743,18 @@ void CsoundQt::createQuickRefPdf()
 	quickRefFileName = tempFileName;
 }
 
-void CsoundQt::deleteCurrentTab()
+void CsoundQt::deleteTab(int index)
 {
+	if (index == -1) {
+		index = curPage;
+	}
 	//  qDebug() << "CsoundQt::deleteCurrentTab()";
 	disconnect(showLiveEventsAct, 0,0,0);
-	documentPages[curPage]->stop();
-	documentPages[curPage]->showLiveEventPanels(false);
-	DocumentPage *d = documentPages[curPage];
-	documentPages.remove(curPage);
-	documentTabs->removeTab(curPage);
-	if (!m_options->widgetsIndependent) {
-		QWidget *s = widgetPanel->widget();
-//			widgetPanel->applySize(); //Store size of outer panel as size of widget
-		if (s != 0) {  // Reparent, otherwise it might be destroyed when setting a new widget in a QScrollArea
-			widgetPanel->takeWidgetLayout(); // Make sure it's no longer a child of scroll area
-		}
-	}
+	documentPages[index]->stop();
+	documentPages[index]->showLiveEventPanels(false);
+	DocumentPage *d = documentPages[index];
+	documentPages.remove(index);
+	documentTabs->removeTab(index);
 	delete  d;
 	if (curPage >= documentPages.size()) {
 		curPage = documentPages.size() - 1;
@@ -1021,13 +1016,16 @@ void CsoundQt::info()
 							 QMessageBox::Ok);
 }
 
-bool CsoundQt::closeTab(bool askCloseApp)
+bool CsoundQt::closeTab(bool forceCloseApp, int index)
 {
+	if (index == -1) {
+		index = curPage;
+	}
 	//   qDebug("CsoundQt::closeTab() curPage = %i documentPages.size()=%i", curPage, documentPages.size());
-	if (documentPages.size() > 0 && documentPages[curPage]->isModified()) {
+	if (documentPages.size() > 0 && documentPages[index]->isModified()) {
 		QString message = tr("The document ")
-				+ (documentPages[curPage]->getFileName() != ""
-				? documentPages[curPage]->getFileName(): "untitled.csd")
+				+ (documentPages[index]->getFileName() != ""
+				? documentPages[index]->getFileName(): "untitled.csd")
 				+ tr("\nhas been modified.\nDo you want to save the changes before closing?");
 		int ret = QMessageBox::warning(this, tr("CsoundQt"),
 									   message,
@@ -1041,7 +1039,7 @@ bool CsoundQt::closeTab(bool askCloseApp)
 				return false;
 		}
 	}
-	if (!askCloseApp) {
+	if (!forceCloseApp) {
 		if (documentPages.size() <= 1) {
 			if (QMessageBox::warning(this, tr("CsoundQt"),
 									 tr("Do you want to exit CsoundQt?"),
@@ -1057,7 +1055,7 @@ bool CsoundQt::closeTab(bool askCloseApp)
 			}
 		}
 	}
-	deleteCurrentTab();
+	deleteTab(index);
 	changePage(curPage);
 	return true;
 }
@@ -1498,11 +1496,11 @@ void CsoundQt::render()
 		QFileDialog dialog(this,tr("Output Filename"),defaultFile);
 		dialog.setAcceptMode(QFileDialog::AcceptSave);
 		//    dialog.setConfirmOverwrite(false);
-		QString filter = QString(_configlists.fileTypeLongNames[m_options->fileFileType] + " Files ("
-								 + _configlists.fileTypeExtensions[m_options->fileFileType] + ")");
+		QString filter = QString(configlists.fileTypeLongNames[m_options->fileFileType] + " Files ("
+								 + configlists.fileTypeExtensions[m_options->fileFileType] + ")");
 		dialog.setFilter(filter);
 		if (dialog.exec() == QDialog::Accepted) {
-			QString extension = _configlists.fileTypeExtensions[m_options->fileFileType].left(_configlists.fileTypeExtensions[m_options->fileFileType].indexOf(";"));
+			QString extension = configlists.fileTypeExtensions[m_options->fileFileType].left(configlists.fileTypeExtensions[m_options->fileFileType].indexOf(";"));
 			//       // Remove the '*' from the extension
 			extension.remove(0,1);
 			m_options->fileOutputFilename = dialog.selectedFiles()[0];
@@ -1685,7 +1683,13 @@ void CsoundQt::openExternalBrowser(QUrl url)
 {
 	if (!url.isEmpty()) {
 		if (!m_options->browser.isEmpty()) {
-			execute(m_options->browser,"\"" + url.toString() + "\"");
+			if (QFile::exists(m_options->browser)) {
+				execute(m_options->browser,"\"" + url.toString() + "\"");
+			}
+			else {
+				QMessageBox::critical(this, tr("Error"),
+									  tr("Could not open external browser:\n%1\nPlease check preferences.").arg(m_options->browser));
+			}
 		}
 		else {
 			QDesktopServices::openUrl(url);
@@ -1893,8 +1897,8 @@ void CsoundQt::applySettings()
 
 	// Display a summary of options on the status bar
 	currentOptions +=  (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
-	QString playOptions = " (Audio:" + _configlists.rtAudioNames[m_options->rtAudioModule] + " ";
-	playOptions += "MIDI:" +  _configlists.rtMidiNames[m_options->rtMidiModule] + ")";
+	QString playOptions = " (Audio:" + configlists.rtAudioNames[m_options->rtAudioModule] + " ";
+	playOptions += "MIDI:" +  configlists.rtMidiNames[m_options->rtMidiModule] + ")";
 	playOptions += " (" + (m_options->rtUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions"));
 	playOptions += " " + (m_options->rtOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
 	playOptions += currentOptions;
@@ -3773,7 +3777,7 @@ void CsoundQt::readSettings()
 	lastUsedDir = settings.value("lastuseddir", "").toString();
 	lastFileDir = settings.value("lastfiledir", "").toString();
 	//  showLiveEventsAct->setChecked(settings.value("liveEventsActive", true).toBool());
-	m_options->language = _configlists.languageCodes.indexOf(settings.value("language", QLocale::system().name()).toString());
+	m_options->language = configlists.languageCodes.indexOf(settings.value("language", QLocale::system().name()).toString());
 	if (m_options->language < 0)
 		m_options->language = 0;
 	recentFiles.clear();
@@ -3951,7 +3955,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("dockstate", saveState());
 		settings.setValue("lastuseddir", lastUsedDir);
 		settings.setValue("lastfiledir", lastFileDir);
-		settings.setValue("language", _configlists.languageCodes[m_options->language]);
+		settings.setValue("language", configlists.languageCodes[m_options->language]);
 		//  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
 		settings.setValue("recentFiles", recentFiles);
 		settings.setValue("theme", m_options->theme);
@@ -4389,8 +4393,12 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
 		QWidget *s = widgetPanel->widget();
 //			widgetPanel->applySize(); //Store size of outer panel as size of widget
 		if (s != 0) {
-			QRect r = widgetPanel->geometry();
-			documentPages[curPage]->setWidgetPanelGeometry(r);
+			QRect panelGeometry = widgetPanel->geometry();
+			if (!widgetPanel->isFloating()) {
+				panelGeometry.setX(-1);
+				panelGeometry.setY(-1);
+			}
+			documentPages[curPage]->setWidgetPanelGeometry(panelGeometry);
 		}
 	}
 	if (m_options->saveWidgets && saveWidgets)
@@ -4597,6 +4605,7 @@ void CsoundQt::setWidgetPanelGeometry()
 		geometry.setY(0);
 		qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: Y position invalid.";
 	}
+//	qDebug() << "geom " << widgetPanel->geometry() << " frame " << widgetPanel->frameGeometry();
 	widgetPanel->setGeometry(geometry);
 }
 

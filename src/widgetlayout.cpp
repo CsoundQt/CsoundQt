@@ -246,11 +246,8 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 	if (m_editMode) {
 		setEditMode(true);
 	}
-	QSize s = getUsedSize();
 	if (m_contained) {
-		this->resize(s.width(), s.height());
-		QRect r(m_posx, m_posx, m_w, m_h);
-		setOuterGeometry(r);
+		adjustLayoutSize();
 	}
 	else {
 		this->move(m_posx, m_posy);
@@ -454,6 +451,7 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
 
 void WidgetLayout::setOuterGeometry(QRect r)
 {
+//	qDebug() << "WidgetLayout::setOuterGeometry" << newx << newy << neww << newh;
 	if (!r.isValid()) {
 		return;
 	}
@@ -461,11 +459,12 @@ void WidgetLayout::setOuterGeometry(QRect r)
 	int newy = r.y();
 	int neww = r.width();
 	int newh = r.height();
-//	qDebug() << "WidgetLayout::setOuterGeometry" << this << newx << newy << neww << newh;
-	m_posx = newx >= 0 && newx < 4096? newx : m_posx;
-	m_posy = newy >= 0 && newy < 4096? newy : m_posy;
-	m_w = neww >= 0 && neww < 4096? neww : m_w;
-	m_h = newh >= 0 && newh < 4096? newh : m_h;
+	if (m_contained && newx > 0 && newy > 0 ) {
+		m_posx = newx >= 0 && newx < 4096? newx : m_posx;
+		m_posy = newy >= 0 && newy < 4096? newy : m_posy;
+		m_w = neww >= 0 && neww < 4096? neww : m_w;
+		m_h = newh >= 0 && newh < 4096? newh : m_h;
+	}
 }
 
 QRect WidgetLayout::getOuterGeometry()
@@ -684,7 +683,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 	else if (type == "BSBButton") {
 		QuteButton *w = new QuteButton(this);
 		widget = static_cast<QuteWidget *>(w);
-		connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
+		connect(widget, SIGNAL(queueEventSignal(QString)), this, SLOT(queueEvent(QString)));
 		connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
 		connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
 		emit registerButton(w);
@@ -1480,17 +1479,12 @@ QSize WidgetLayout::getUsedSize()
 
 void WidgetLayout::adjustLayoutSize()
 {
-	// This function should not be locked as it is sometimes called from another function that locks.
-
-	QSize s = getUsedSize();
 	if (m_contained) {
+		QSize s = this->childrenRect().size();
 		if (this->size() != s) {
 			this->resize(s);
 		}
 	}
-	//  QRect r = this->geometry();
-	//  //      qDebug() << "WidgetLayout::layoutResized()" <<r.width() << r.height() ;
-	//      setOuterGeometry(r.x(), r.y(), r.width(), r.height());
 }
 
 void WidgetLayout::selectionChanged(QRect selection)
@@ -2697,7 +2691,7 @@ QString WidgetLayout::createButton(int x, int y, int width, int height, QString 
 		quoteParts[6].remove(0,1); //remove initial space
 		widget->setProperty("QCS_eventLine", quoteParts[6]);
 	}
-	connect(widget, SIGNAL(queueEvent(QString)), this, SLOT(queueEvent(QString)));
+	connect(widget, SIGNAL(queueEventSignal(QString)), this, SLOT(queueEvent(QString)));
 	connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
 	connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
 	emit registerButton(widget);
@@ -3711,13 +3705,9 @@ void WidgetLayout::processNewValues()
 
 void WidgetLayout::queueEvent(QString eventLine)
 {
-	// FIXME connect this!!
+	qDebug() << "WidgetLayout::queueEvent";
 	emit queueEventSignal(eventLine);
 }
-
-//void WidgetLayout::paste(QPoint /*pos*/)
-//{
-//}
 
 void WidgetLayout::duplicate()
 {

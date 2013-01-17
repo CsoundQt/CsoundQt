@@ -73,31 +73,38 @@ def indent():
             pos = 0
             opcdpos = 0
             firstarg = 0
+            opcd = 0 #opcode has not already been in this line
             newline = ""
             for word in words:
                 #word is the opcode
                 if q.opcodeExists(word) or word in udoList:
+                    #opcode position is more left than desired
                     if opcdpos < space_left.value:
-                        format = '%%-%ds%%s' % space_left.value
+                        format = '%%-%ds%%s ' % space_left.value
                         newline = format % (newline, word)
                         opcdpos = space_left.value #new position of the opcode
+                    #opcode position stays at pos
                     else:
                         newline = '%s%s ' % (newline, word)
-                        opcdpos = pos + 1
-                    pos = opcdpos + len(word)
+                    pos = opcdpos + len(word) + 1
                     firstarg = 1 #next word is the first argument
+                    opcd = 1 #opcode has been already
                 #word is the first argument
                 elif firstarg == 1:
                     if pos - opcdpos < space_left.value and pos < space_right.value:
-                        format = '%%-%ds%%s ' % space_right.value
+                        format = '%%-%ds%%s ' % space_right.value 
                         newline = format % (newline, word)
+                        pos = space_right.value + len(word) + 1
                     else:
-                        newline = '%s %s ' % (newline, word)
+                        newline = '%s%s ' % (newline, word)
+                        pos = pos + len(word) + 1
                     firstarg = 0 #reset 
                 #all other cases
                 else:
                     newline = '%s%s ' % (newline, word)
                     pos = pos + len(word) + 1
+                    if opcd == 0:
+                        opcdpos = pos
         newOrcText = "%s\n%s" % (newOrcText, newline.rstrip())
         prev = longComment #reset prev for analysing long comments
 
