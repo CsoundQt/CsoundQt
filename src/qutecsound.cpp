@@ -154,7 +154,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 		m_scratchPad->hide();  // Hide until CsoundQt has finished loading
 #endif
 
-	setUnifiedTitleAndToolBarOnMac(true);
 	createMenus();
 	createToolBars();
 	createStatusBar();
@@ -219,6 +218,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	qApp->processEvents(); // To finish settling dock widgets and other stuff before messing with them (does it actually work?)
 
 	if (lastTabIndex < documentPages.size() && documentTabs->currentIndex() != lastTabIndex) {
+		changePage(lastTabIndex);
 		documentTabs->setCurrentIndex(lastTabIndex);
 	}
 	else {
@@ -753,6 +753,14 @@ void CsoundQt::deleteTab(int index)
 	documentPages[index]->stop();
 	documentPages[index]->showLiveEventPanels(false);
 	DocumentPage *d = documentPages[index];
+	if (!m_options->widgetsIndependent) {
+		QRect panelGeometry = widgetPanel->geometry();
+		if (!widgetPanel->isFloating()) {
+			panelGeometry.setX(-1);
+			panelGeometry.setY(-1);
+		}
+		widgetPanel->takeWidgetLayout(panelGeometry);
+	}
 	documentPages.remove(index);
 	documentTabs->removeTab(index);
 	delete  d;
@@ -1881,8 +1889,10 @@ void CsoundQt::applySettings()
 	}
 	Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
 											   Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
-	fileToolBar->setToolButtonStyle(toolButtonStyle);
-	editToolBar->setToolButtonStyle(toolButtonStyle);
+	
+	setUnifiedTitleAndToolBarOnMac(m_options->iconText);
+//	fileToolBar->setToolButtonStyle(toolButtonStyle);
+//	editToolBar->setToolButtonStyle(toolButtonStyle);
 	controlToolBar->setToolButtonStyle(toolButtonStyle);
 	configureToolBar->setToolButtonStyle(toolButtonStyle);
 //	fileToolBar->setVisible(m_options->showToolbar);
@@ -3706,14 +3716,14 @@ void CsoundQt::fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth)
 
 void CsoundQt::createToolBars()
 {
-	fileToolBar = addToolBar(tr("File"));
-	fileToolBar->setObjectName("fileToolBar");
+//	fileToolBar = addToolBar(tr("File"));
+//	fileToolBar->setObjectName("fileToolBar");
 //	fileToolBar->addAction(newAct);
 //	fileToolBar->addAction(openAct);
 //	fileToolBar->addAction(saveAct);
 
-	editToolBar = addToolBar(tr("Edit"));
-	editToolBar->setObjectName("editToolBar");
+//	editToolBar = addToolBar(tr("Edit"));
+//	editToolBar->setObjectName("editToolBar");
 //	editToolBar->addAction(undoAct);
 //	editToolBar->addAction(redoAct);
 //	editToolBar->addAction(cutAct);
@@ -3747,7 +3757,7 @@ void CsoundQt::createToolBars()
 
 	Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
 											   Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
-	fileToolBar->setToolButtonStyle(toolButtonStyle);
+//	fileToolBar->setToolButtonStyle(toolButtonStyle);
 //	editToolBar->setToolButtonStyle(toolButtonStyle);
 	controlToolBar->setToolButtonStyle(toolButtonStyle);
 	configureToolBar->setToolButtonStyle(toolButtonStyle);
@@ -4350,7 +4360,7 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 			this, SLOT(evaluatePython(QString)));
 	
 	documentPages[curPage]->loadTextString(text);
-	setWidgetPanelGeometry();
+//	setWidgetPanelGeometry();
 
 	if (!fileName.startsWith(":/")) {  // Don't store internal examples in recents menu
 		lastUsedDir = fileName;

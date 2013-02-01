@@ -64,6 +64,11 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 	
 	this->setGeometry(outer);
 	QRect cRect = w->childrenRect();
+	// Start rectangle from upper left corner, so adjust.
+	cRect.setWidth(cRect.width() + cRect.x());
+	cRect.setHeight(cRect.height() + cRect.y());
+	cRect.setX(0);
+	cRect.setY(0);
 	if (cRect.width() < outer.width()) {
 		cRect.setWidth(outer.width());
 	}

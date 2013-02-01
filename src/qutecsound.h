@@ -303,8 +303,8 @@ private:
 	QMenu *favoriteMenu;
 	QMenu *scriptsMenu;
 	QMenu *helpMenu;
-	QToolBar *fileToolBar;
-	QToolBar *editToolBar;
+//	QToolBar *fileToolBar;
+//	QToolBar *editToolBar;
 	QToolBar *controlToolBar;
 	QToolBar *configureToolBar;
 	QAction *newAct;
