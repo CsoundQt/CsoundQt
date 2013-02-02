@@ -72,8 +72,8 @@ public:
 	int getViewMode();
 	QString getLiveEventsText();
 	QString wordUnderCursor();
-	QRect getWidgetPanelGeometry();
-	void setWidgetPanelGeometry(QRect r);
+	QRect getWidgetLayoutOuterGeometry();
+	void setWidgetLayoutOuterGeometry(QRect r);
 
 	void setLineEnding(int lineEndingMode);
 

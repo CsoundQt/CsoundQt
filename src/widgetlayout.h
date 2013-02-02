@@ -234,6 +234,7 @@ public slots:
 	void selectionChanged(QRect selection);
 	QSize getUsedSize();
 	void adjustLayoutSize();
+	void adjustWidgetSize();
 	void setModified(bool mod = true);
 	void setMouseOffset(int x, int y);
 

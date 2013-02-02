@@ -292,6 +292,8 @@ void CsoundQt::changePage(int index)
 				panelGeometry.setY(-1);
 			}
 			widgetPanel->takeWidgetLayout(panelGeometry);
+		} else {
+			documentPages[curPage]->setWidgetLayoutOuterGeometry(QRect());
 		}
 	}
 	if (index < 0) { // No tabs left
@@ -307,8 +309,11 @@ void CsoundQt::changePage(int index)
 		if (!m_options->widgetsIndependent) {
 			WidgetLayout *w = documentPages[curPage]->getWidgetLayout();
 			widgetPanel->addWidgetLayout(w);
+			setWidgetPanelGeometry();
+		} else {
+			WidgetLayout *w = documentPages[curPage]->getWidgetLayout();
+			w->adjustWidgetSize();
 		}
-		setWidgetPanelGeometry();
 		if (!documentPages[curPage]->getFileName().endsWith(".csd")
 				&& !documentPages[curPage]->getFileName().isEmpty()) {
 			widgetPanel->hide();
@@ -4360,6 +4365,10 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 			this, SLOT(evaluatePython(QString)));
 	
 	documentPages[curPage]->loadTextString(text);
+	if (m_options->widgetsIndependent) {
+//		documentPages[curPage]->setWidgetLayoutOuterGeometry(documentPages[curPage]->getWidgetLayoutOuterGeometry());
+		documentPages[curPage]->getWidgetLayout()->setGeometry(documentPages[curPage]->getWidgetLayoutOuterGeometry());
+	}
 //	setWidgetPanelGeometry();
 
 	if (!fileName.startsWith(":/")) {  // Don't store internal examples in recents menu
@@ -4408,7 +4417,9 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
 				panelGeometry.setX(-1);
 				panelGeometry.setY(-1);
 			}
-			documentPages[curPage]->setWidgetPanelGeometry(panelGeometry);
+			documentPages[curPage]->setWidgetLayoutOuterGeometry(panelGeometry);
+		} else {
+			documentPages[curPage]->setWidgetLayoutOuterGeometry(QRect());
 		}
 	}
 	if (m_options->saveWidgets && saveWidgets)
@@ -4597,7 +4608,7 @@ void CsoundQt::getCompanionFileName()
 
 void CsoundQt::setWidgetPanelGeometry()
 {
-	QRect geometry = documentPages[curPage]->getWidgetPanelGeometry();
+	QRect geometry = documentPages[curPage]->getWidgetLayoutOuterGeometry();
 //	qDebug() << "CsoundQt::setWidgetPanelGeometry() " << geometry;
 	if (geometry.width() <= 0 || geometry.width() > 4096) {
 		geometry.setWidth(400);

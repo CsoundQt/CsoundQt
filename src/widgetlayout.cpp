@@ -49,7 +49,6 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
 	selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
 	selectionFrame->hide();
-	//  setOuterGeometry(100, 100, 100, 100);
 	m_trackMouse = true;
 	m_editMode = false;
 	m_enableEdit = true;
@@ -246,14 +245,15 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 	if (m_editMode) {
 		setEditMode(true);
 	}
-	if (m_contained) {
-		adjustLayoutSize();
-	}
-	else {
-		this->move(m_posx, m_posy);
-		this->resize(m_w, m_h);
-		//    setOuterGeometry();
-	}
+	
+//	if (m_contained) {
+//		adjustLayoutSize();
+//	}
+//	else {
+//		this->move(m_posx, m_posy);
+//		this->resize(m_w, m_h);
+//		//    setOuterGeometry();
+//	}
 }
 
 void WidgetLayout::loadXmlPresets(QString xmlPresets)
@@ -453,13 +453,18 @@ void WidgetLayout::setOuterGeometry(QRect r)
 {
 //	qDebug() << "WidgetLayout::setOuterGeometry" << newx << newy << neww << newh;
 	if (!r.isValid()) {
+		r = this->geometry();
+		m_posx = r.x();
+		m_posy = r.y();
+		m_w = r.width();
+		m_h = r.height();
 		return;
 	}
 	int newx = r.x();
 	int newy = r.y();
 	int neww = r.width();
 	int newh = r.height();
-	if (m_contained && newx > 0 && newy > 0 ) {
+	if (newx > 0 && newy > 0 ) {
 		m_posx = newx >= 0 && newx < 4096? newx : m_posx;
 		m_posy = newy >= 0 && newy < 4096? newy : m_posy;
 		m_w = neww >= 0 && neww < 4096? neww : m_w;
@@ -1481,9 +1486,20 @@ void WidgetLayout::adjustLayoutSize()
 {
 	if (m_contained) {
 		QSize s = this->childrenRect().size();
+		QPoint pos = this->childrenRect().topLeft();
+		s.rwidth() += pos.x();
+		s.rheight() += pos.y();
 		if (this->size() != s) {
 			this->resize(s);
 		}
+	}
+}
+
+void WidgetLayout::adjustWidgetSize()
+{
+	if (!m_contained) {
+		this->resize(m_w, m_h);
+		this->move(m_posx, m_posy);
 	}
 }
 
@@ -2927,7 +2943,6 @@ QString WidgetLayout::createDummy(int x, int y, int width, int height, QString w
 	}
 	setWidgetToolTip(widget, m_tooltips);
 	widgetsMutex.unlock();
-	adjustLayoutSize();
 	return widget->getUuid();
 }
 

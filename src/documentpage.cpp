@@ -363,13 +363,13 @@ QString DocumentPage::wordUnderCursor()
 	return m_view->wordUnderCursor();
 }
 
-QRect DocumentPage::getWidgetPanelGeometry()
+QRect DocumentPage::getWidgetLayoutOuterGeometry()
 {
 	//FIXME allow multiple
 	return m_widgetLayouts[0]->getOuterGeometry();
 }
 
-void DocumentPage::setWidgetPanelGeometry(QRect r)
+void DocumentPage::setWidgetLayoutOuterGeometry(QRect r)
 {
 	m_widgetLayouts[0]->setOuterGeometry(r);
 }
@@ -1275,6 +1275,7 @@ void DocumentPage::showWidgets(bool show)
 		return;
 	}
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
+		wl->adjustWidgetSize();
 		wl->setVisible(true);
 		wl->raise();
 	}
