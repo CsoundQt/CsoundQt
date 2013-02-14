@@ -209,7 +209,7 @@ def deployCsound(app_name, bin_name, doubles=True):
 
 if __name__=='__main__':
     # make version including Qt
-    QUTECSOUND_VERSION = '0.7.1'
+    QUTECSOUND_VERSION = '0.7.2'
     NEW_NAME='CsoundQt'
     QMakePath = ''
     QtFrameworksDir = subprocess.Popen([QMakePath + 'qmake',
