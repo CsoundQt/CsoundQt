@@ -62,7 +62,7 @@ ConfigLists::ConfigLists()
 	rtAudioNames << "portaudio" << "winmm" << "jack" <<  "none";
 #endif
 #ifdef Q_OS_LINUX
-	rtMidiNames << "none" << "alsa"  << "portmidi" << "virtual";
+	rtMidiNames << "none" << "alsa" << "alsaseq" << "portmidi" << "virtual";
 #endif
 #ifdef Q_OS_SOLARIS
 	rtMidiNames << "none" << "portmidi"<< "virtual";
@@ -160,6 +160,9 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(int moduleIndex)
 			for (int i = 0; i < messages[index].split(" ")[0].toInt(); i++) {
 				deviceList.insert(QString::number(i), QString::number(i));
 			}
+		}
+		else if (module == "alsaseq") {
+			//FIXME parse alsaseq devices
 		}
 		if (startText == "" && endText == "") {
 			return deviceList;
