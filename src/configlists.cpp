@@ -68,7 +68,7 @@ ConfigLists::ConfigLists()
 	rtMidiNames << "none" << "portmidi"<< "virtual";
 #endif
 #ifdef Q_WS_MAC
-	rtMidiNames << "none" << "portmidi" << "virtual";
+	rtMidiNames << "none" << "coremidi" << "portmidi" << "virtual";
 #endif
 #ifdef Q_OS_WIN32
 	rtMidiNames << "none" << "winmm" << "portmidi" << "virtual";
@@ -142,8 +142,8 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(int moduleIndex)
 		tempFile.open();
 
 		QStringList flags;
-		//     QString rtAudioFlag = "-+rtaudio=" + module;
-		flags << "-+msg_color=false"/* << rtAudioFlag*/ << "-otest"  << "-n"  << "-M999" << tempFile.fileName();
+		QString rtMidiFlag = "-+rtmidi=" + module;
+		flags << "-+msg_color=false" << rtMidiFlag << "-otest"  << "-n"  << "-M999" << tempFile.fileName();
 		QStringList messages = runCsoundInternally(flags);
 
 		QString startText, endText;
@@ -154,6 +154,12 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(int moduleIndex)
 		else if (module == "winmm") {
 			startText = "The available MIDI";
 			endText = "rtmidi: input device number is out of range";
+		}
+		else if (module == "coremidi") {
+			int index = messages.indexOf(QRegExp("[0-9]{1,1} MIDI sources in system\\s*"));
+			for (int i = 0; i < messages[index].split(" ")[0].toInt(); i++) {
+				deviceList.insert(QString::number(i), QString::number(i));
+			}
 		}
 		if (startText == "" && endText == "") {
 			return deviceList;
