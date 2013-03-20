@@ -79,6 +79,7 @@ public:
 
 	QString csdPath; //path of active csd needed for setting -o -i paths
 
+	int menuDepth;
 	QString defaultCsd;
 	bool defaultCsdActive;
 	QString opcodexmldir;
