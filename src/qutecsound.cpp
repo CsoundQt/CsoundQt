@@ -1568,6 +1568,10 @@ void CsoundQt::openExternalEditor()
 				name += optionsText;
 		}
 	}
+	if (!QFile::exists(name)) {
+		QMessageBox::critical(this, tr("Render not available"),
+							  tr("Could not find rendered file. Please render before calling external editor."));
+	}
 	if (!m_options->waveeditor.isEmpty()) {
 		name = "\"" + name + "\"";
 		execute(m_options->waveeditor, name);
@@ -1596,6 +1600,10 @@ void CsoundQt::openExternalPlayer()
 			if (!optionsText.startsWith("dac"))
 				name += optionsText;
 		}
+	}
+	if (!QFile::exists(name)) {
+		QMessageBox::critical(this, tr("Render not available"),
+							  tr("Could not find rendered file. Please render before calling external player."));
 	}
 	if (!m_options->waveplayer.isEmpty()) {
 		name = "\"" + name + "\"";
