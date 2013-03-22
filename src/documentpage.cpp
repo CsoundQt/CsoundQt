@@ -376,8 +376,9 @@ void DocumentPage::setWidgetLayoutOuterGeometry(QRect r)
 
 void DocumentPage::setChannelValue(QString channel, double value)
 {
-	//FIXME allow multiple
-	return m_widgetLayouts[0]->setValue(channel, value);
+	for (int i = 0; i < m_widgetLayouts.size(); i++) {
+		m_widgetLayouts[i]->newValue(QPair<QString,double>(channel, value));
+	}
 }
 
 double DocumentPage::getChannelValue(QString channel)
@@ -389,7 +390,7 @@ double DocumentPage::getChannelValue(QString channel)
 void DocumentPage::setChannelString(QString channel, QString value)
 {
 	for (int i = 0; i < m_widgetLayouts.size(); i++) {
-		m_widgetLayouts[i]->setValue(channel, value);
+		m_widgetLayouts[i]->newValue(QPair<QString,QString>(channel, value));
 	}
 }
 
