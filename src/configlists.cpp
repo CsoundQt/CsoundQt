@@ -61,6 +61,9 @@ ConfigLists::ConfigLists()
 #ifdef Q_OS_WIN32
 	rtAudioNames << "portaudio" << "winmm" << "jack" <<  "none";
 #endif
+#ifdef Q_OS_HAIKU
+  rtAudioNames << "haiku" << "none";
+#endif
 #ifdef Q_OS_LINUX
 	rtMidiNames << "none" << "alsa"  << "portmidi" << "virtual";
 #endif

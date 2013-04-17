@@ -85,6 +85,16 @@
 #define DEFAULT_LOG_FILE ""
 #define DEFAULT_SCRIPT_DIR qApp->applicationDirPath() + "/Scripts"
 #endif
+#ifdef Q_OS_HAIKU
+#define DEFAULT_HTML_DIR "/boot/common/share/doc/csound-doc/html"
+#define DEFAULT_TERM_EXECUTABLE "Terminal"
+#define DEFAULT_BROWSER_EXECUTABLE "/boot/apps/WebPositive/WebPositive"
+#define DEFAULT_WAVEEDITOR_EXECUTABLE ""
+#define DEFAULT_WAVEPLAYER_EXECUTABLE "/boot/system/apps/MediaPlayer"
+#define DEFAULT_PDFVIEWER_EXECUTABLE "/boot/apps/BePDF/BePDF"
+#define DEFAULT_DOT_EXECUTABLE "dot"
+#define DEFAULT_LOG_FILE ""
+#endif
 
 #define QCS_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
 
