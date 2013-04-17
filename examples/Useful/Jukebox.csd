@@ -321,7 +321,7 @@ Showplay  sprintf   "Selected File:\n%d\n '%s'\nDuration %02d:%02d:%03d (min:sec
 ifilenk   =         ilen * kr; length of file in k-cycles
   ;stop the clock if pause button has been pressed
   if gkplay == 0 then
-ktim      =		ktim
+ktimk      =		ktimk
   ;if no pause
   else
     ;if end of file plus pause time has been reached
@@ -446,9 +446,9 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>302</x>
- <y>62</y>
- <width>590</width>
+ <x>329</x>
+ <y>22</y>
+ <width>720</width>
  <height>705</height>
  <visible>true</visible>
  <uuid/>
@@ -472,7 +472,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-0.37972087</xValue>
+  <xValue>-0.56089731</xValue>
   <yValue>0.57894700</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -538,7 +538,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-0.39139950</xValue>
+  <xValue>-0.56089731</xValue>
   <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -601,7 +601,7 @@ e
   <midicc>-3</midicc>
   <minimum>-18.00000000</minimum>
   <maximum>18.00000000</maximum>
-  <value>-5.55390335</value>
+  <value>7.96282528</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -617,7 +617,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>-5.55 dB</label>
+  <label>+7.96 dB</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -709,7 +709,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.99849890</xValue>
   <yValue>0.13513500</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
@@ -824,7 +824,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>000</label>
+  <label>001</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -1299,9 +1299,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -1317,7 +1317,7 @@ e
   <midicc>-3</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/wineStereo.aif|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/WhiteNoise.aif|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/SpracheStereo.mp3|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/SpracheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.ogg</stringvalue>
+  <stringvalue/>
   <text>Select Files</text>
   <image>/</image>
   <eventLine/>

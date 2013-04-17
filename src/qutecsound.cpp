@@ -1568,6 +1568,10 @@ void CsoundQt::openExternalEditor()
 				name += optionsText;
 		}
 	}
+	if (!QFile::exists(name)) {
+		QMessageBox::critical(this, tr("Render not available"),
+							  tr("Could not find rendered file. Please render before calling external editor."));
+	}
 	if (!m_options->waveeditor.isEmpty()) {
 		name = "\"" + name + "\"";
 		execute(m_options->waveeditor, name);
@@ -1596,6 +1600,10 @@ void CsoundQt::openExternalPlayer()
 			if (!optionsText.startsWith("dac"))
 				name += optionsText;
 		}
+	}
+	if (!QFile::exists(name)) {
+		QMessageBox::critical(this, tr("Render not available"),
+							  tr("Could not find rendered file. Please render before calling external player."));
 	}
 	if (!m_options->waveplayer.isEmpty()) {
 		name = "\"" + name + "\"";
@@ -3627,7 +3635,7 @@ void CsoundQt::fillFavoriteSubMenu(QDir dir, QMenu *m, int depth)
 	dir.setNameFilters(filters);
 	QStringList files = dir.entryList(QDir::Files,QDir::Name);
 	QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
-	if (depth > 3)
+	if (depth > m_options->menuDepth)
 		return;
 	for (int i = 0; i < dirs.size() && i < 64; i++) {
 		QDir newDir(dir.absolutePath() + "/" + dirs[i]);
@@ -3670,7 +3678,7 @@ void CsoundQt::fillScriptsSubMenu(QDir dir, QMenu *m, int depth)
 	dir.setNameFilters(filters);
 	QStringList files = dir.entryList(QDir::Files,QDir::Name);
 	QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
-	if (depth > 3)
+	if (depth > m_options->menuDepth)
 		return;
 	for (int i = 0; i < dirs.size() && i < 64; i++) {
 		QDir newDir(dir.absolutePath() + "/" + dirs[i]);
@@ -3698,7 +3706,7 @@ void CsoundQt::fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth)
 	dir.setNameFilters(filters);
 	QStringList files = dir.entryList(QDir::Files,QDir::Name);
 	QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
-	if (depth > 3)
+	if (depth > m_options->menuDepth)
 		return;
 	for (int i = 0; i < dirs.size() && i < 64; i++) {
 		QDir newDir(dir.absolutePath() + "/" + dirs[i]);
@@ -3834,6 +3842,7 @@ void CsoundQt::readSettings()
 	m_options->colorVariables = settings.value("colorvariables", true).toBool();
 	m_options->autoPlay = settings.value("autoplay", false).toBool();
 	m_options->autoJoin = settings.value("autoJoin", true).toBool();
+	m_options->menuDepth = settings.value("menuDepth", 3).toInt();
 	m_options->saveChanges = settings.value("savechanges", true).toBool();
 	m_options->rememberFile = settings.value("rememberfile", true).toBool();
 	m_options->saveWidgets = settings.value("savewidgets", true).toBool();
@@ -3999,6 +4008,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("colorvariables", m_options->colorVariables);
 		settings.setValue("autoplay", m_options->autoPlay);
 		settings.setValue("autoJoin", m_options->autoJoin);
+		settings.setValue("menuDepth", m_options->menuDepth);
 		settings.setValue("savechanges", m_options->saveChanges);
 		settings.setValue("rememberfile", m_options->rememberFile);
 		settings.setValue("savewidgets", m_options->saveWidgets);

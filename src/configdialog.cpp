@@ -94,6 +94,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
 	colorVariablesCheckBox->setChecked(m_options->colorVariables);
 	autoplayCheckBox->setChecked(m_options->autoPlay);
 	autoJoinCheckBox->setChecked(m_options->autoJoin);
+	menusDepthSpinBox->setValue(m_options->menuDepth);
 	saveChangesCheckBox->setChecked(m_options->saveChanges);
 	rememberFileCheckBox->setChecked(m_options->rememberFile);
 	saveWidgetsCheckBox->setChecked(m_options->saveWidgets);
@@ -291,6 +292,7 @@ void ConfigDialog::accept()
 	m_options->colorVariables = colorVariablesCheckBox->isChecked();
 	m_options->autoPlay = autoplayCheckBox->isChecked();
 	m_options->autoJoin = autoJoinCheckBox->isChecked();
+	m_options->menuDepth = menusDepthSpinBox->value();
 	m_options->saveChanges = saveChangesCheckBox->isChecked();
 	m_options->widgetsIndependent = widgetsIndependentCheckBox->isChecked();
 	m_options->rememberFile = rememberFileCheckBox->isChecked();

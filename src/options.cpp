@@ -67,6 +67,7 @@ Options::Options()
 
 	csdPath = "./"; //path of active csd needed for setting -o -i paths
 
+	menuDepth = 3;
 	defaultCsd = "";
 	defaultCsdActive = false;
 	opcodexmldir = "";

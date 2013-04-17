@@ -4,7 +4,8 @@ import shutil
 import os
 import pdb
 import fileinput
-import glob 
+import glob
+import sys
 
 # Build everything just to make sure all versions packaged are synchronized
 #cd ..
@@ -209,7 +210,10 @@ def deployCsound(app_name, bin_name, doubles=True):
 
 if __name__=='__main__':
     # make version including Qt
-    QUTECSOUND_VERSION = '0.7.2'
+    if len(sys.argv) == 1:
+        QUTECSOUND_VERSION = raw_input('Enter version number:')
+    else:
+        QUTECSOUND_VERSION = sys.argv[1]
     NEW_NAME='CsoundQt'
     QMakePath = ''
     QtFrameworksDir = subprocess.Popen([QMakePath + 'qmake',
