@@ -50,7 +50,9 @@ TRANSLATIONS = "src/translations/qutecsound_en.ts" \
     "src/translations/qutecsound_el.ts" \
     "src/translations/qutecsound_uk.ts" \
     "src/translations/qutecsound_fi.ts" \
-    "src/translations/qutecsound_ru.ts"
+    "src/translations/qutecsound_ru.ts" \
+    "src/translations/qutecsound_fa.ts"
+
 pythonqt {
     include ( $${PYTHONQT_SRC_DIR}/build/PythonQt.prf )
     include ( $${PYTHONQT_SRC_DIR}/build/PythonQt_QtAll.prf )

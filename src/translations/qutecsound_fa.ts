@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="fa_IR">
 <context>
     <name>About</name>
     <message>
@@ -37,6 +37,11 @@
     <message>
         <location filename="../appdetailspage.ui" line="33"/>
         <source>Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../appdetailspage.ui" line="39"/>
+        <source>Platform</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -143,6 +148,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../appdetailspage.ui" line="278"/>
+        <source>Opcode Dir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../appdetailspage.ui" line="309"/>
+        <source>Csound Lib Dir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../appdetailspage.ui" line="351"/>
         <source>Leave these settings unchanged if you don&apos;t need a special configuration.</source>
         <translation type="unfinished"></translation>
@@ -155,21 +170,6 @@
     <message>
         <location filename="../appdetailspage.ui" line="373"/>
         <source>Qt Libs dir</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../appdetailspage.ui" line="39"/>
-        <source>Platform</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../appdetailspage.ui" line="309"/>
-        <source>Csound Lib Dir</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../appdetailspage.ui" line="278"/>
-        <source>Opcode Dir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -213,6 +213,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../appwizard.cpp" line="108"/>
+        <source>The destination directory does not exist!
+Aborting.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../appwizard.cpp" line="137"/>
         <source>Can&apos;t build</source>
         <translation type="unfinished"></translation>
@@ -250,50 +256,12 @@
         <source>Error creating app directory.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../appwizard.cpp" line="108"/>
-        <source>The destination directory does not exist!
-Aborting.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ConfigDialog</name>
     <message>
-        <location filename="../configdialog.cpp" line="68"/>
-        <source>No RtMidi support</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.cpp" line="71"/>
-        <source>None</source>
-        <comment>No MIDI internal interface</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.cpp" line="270"/>
-        <source>Please note that OPCODEDIR and OPCODEDIR64 will overwrite current settings so you will need to restart CsoundQt to return to default.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.cpp" line="616"/>
-        <location filename="../configdialog.cpp" line="623"/>
-        <source>Select File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.cpp" line="630"/>
-        <source>Select Directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="1822"/>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="1835"/>
-        <source>Cancel</source>
+        <location filename="../configdialog.ui" line="15"/>
+        <source>CsoundQt Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -302,8 +270,63 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../configdialog.ui" line="51"/>
+        <source>Buffer Size (-b)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="61"/>
+        <source>HW Buffer Size (-B)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="71"/>
+        <source>Dither</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="78"/>
+        <source>Use new parser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="85"/>
+        <source>Number of threads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="95"/>
+        <source>Use multicore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="145"/>
+        <source>Additional command line flags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../configdialog.ui" line="161"/>
         <source>File (offline render)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="172"/>
+        <source>Ask for filename every time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="182"/>
+        <source>Play file when finished</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="193"/>
+        <source>File type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="203"/>
+        <source>Sample format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -344,29 +367,15 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../configdialog.ui" line="253"/>
+        <location filename="../configdialog.ui" line="276"/>
+        <source>Use CsoundQt options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../configdialog.ui" line="260"/>
         <location filename="../configdialog.ui" line="283"/>
         <source>Ignore CsOptions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="193"/>
-        <source>File type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="203"/>
-        <source>Sample format</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="172"/>
-        <source>Ask for filename every time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="182"/>
-        <source>Play file when finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -405,23 +414,8 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="71"/>
-        <source>Dither</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="145"/>
-        <source>Additional command line flags</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="51"/>
-        <source>Buffer Size (-b)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="61"/>
-        <source>HW Buffer Size (-B)</source>
+        <location filename="../configdialog.ui" line="388"/>
+        <source>Jack client name (use * for current filename)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -430,8 +424,18 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="493"/>
-        <source>Internal MIDI interface</source>
+        <location filename="../configdialog.ui" line="410"/>
+        <source>Run Utilities using:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="418"/>
+        <source>Csound API</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="425"/>
+        <source>External shell</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -465,90 +469,44 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="831"/>
-        <source>Make the widget panel visible when a csd is played</source>
+        <location filename="../configdialog.ui" line="493"/>
+        <source>Internal MIDI interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="927"/>
-        <source>Store Old Widget Format</source>
+        <location filename="../configdialog.ui" line="505"/>
+        <source>Record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="934"/>
-        <source>Automatically open properties dialog when a new widget is created</source>
+        <location filename="../configdialog.ui" line="513"/>
+        <source>Record sample format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="937"/>
-        <source>Open Properties when creating widget</source>
+        <location filename="../configdialog.ui" line="521"/>
+        <source>16 Bit Int</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="953"/>
-        <source>Font scaling</source>
+        <location filename="../configdialog.ui" line="526"/>
+        <source>24 Bit Int</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="966"/>
-        <source>Font offset</source>
+        <location filename="../configdialog.ui" line="531"/>
+        <source>32 bit float</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1000"/>
-        <location filename="../configdialog.ui" line="1006"/>
-        <source>Editor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="1250"/>
-        <source>Automatically Join orc/sco files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="1531"/>
-        <source>OPCODEDIR64</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="1548"/>
-        <source>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="1551"/>
-        <source>QuteApp SDK Dir</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="1754"/>
-        <source>Template</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="1760"/>
-        <source>csd Template</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="1784"/>
-        <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="1791"/>
-        <source>Default</source>
+        <location filename="../configdialog.ui" line="544"/>
+        <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="552"/>
         <location filename="../configdialog.ui" line="1014"/>
         <source>Font</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="866"/>
-        <source>Enable FLTK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -636,6 +594,154 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../configdialog.ui" line="645"/>
+        <source>Font Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="655"/>
+        <source>Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="693"/>
+        <source>Console Message buffer size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="707"/>
+        <source>256</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="712"/>
+        <source>1024</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="717"/>
+        <source>No limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="732"/>
+        <source>Allow key repeats for sensekey</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="739"/>
+        <source>Debug mode for Live Event Sheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="749"/>
+        <source>Allow simultaneous play (May have problems with portmidi,coreaudio, and alsa audio) </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="773"/>
+        <source>Theme (requires restart)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="784"/>
+        <source>boring</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="789"/>
+        <source>fun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="800"/>
+        <location filename="../configdialog.ui" line="806"/>
+        <source>Widgets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="814"/>
+        <source>Enable Widgets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="824"/>
+        <source>Save widgets in csd file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="831"/>
+        <source>Make the widget panel visible when a csd is played</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="834"/>
+        <source>Show Widgets on Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="841"/>
+        <source>Show Tooltips for widgets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="863"/>
+        <location filename="../configdialog.ui" line="914"/>
+        <source>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="866"/>
+        <source>Enable FLTK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="917"/>
+        <source>Run FLTK csds in Terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="924"/>
+        <source>Store old widget format section in csd file, to allow older versions of CsoundQt to load most of the widget characteristics from the file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="927"/>
+        <source>Store Old Widget Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="934"/>
+        <source>Automatically open properties dialog when a new widget is created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="937"/>
+        <source>Open Properties when creating widget</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="944"/>
+        <source>Widgets are an independent window (requires restart)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="953"/>
+        <source>Font scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="966"/>
+        <source>Font offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1000"/>
+        <location filename="../configdialog.ui" line="1006"/>
+        <source>Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../configdialog.ui" line="1103"/>
         <source>Tab Width</source>
         <translation type="unfinished"></translation>
@@ -661,206 +767,8 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1222"/>
-        <source>Save changes automatically on run</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="1229"/>
-        <source>Remember open files from previous session</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="1236"/>
-        <source>Show text for toolbar icons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../configdialog.ui" line="1164"/>
         <source>Wrap Lines</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="800"/>
-        <location filename="../configdialog.ui" line="806"/>
-        <source>Widgets</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="388"/>
-        <source>Jack client name (use * for current filename)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="814"/>
-        <source>Enable Widgets</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="824"/>
-        <source>Save widgets in csd file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="834"/>
-        <source>Show Widgets on Play</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="841"/>
-        <source>Show Tooltips for widgets</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="863"/>
-        <location filename="../configdialog.ui" line="914"/>
-        <source>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="917"/>
-        <source>Run FLTK csds in Terminal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="418"/>
-        <source>Csound API</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="425"/>
-        <source>External shell</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="732"/>
-        <source>Allow key repeats for sensekey</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="693"/>
-        <source>Console Message buffer size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="707"/>
-        <source>256</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="712"/>
-        <source>1024</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="717"/>
-        <source>No limit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="544"/>
-        <source>Console</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="749"/>
-        <source>Allow simultaneous play (May have problems with portmidi,coreaudio, and alsa audio) </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="645"/>
-        <source>Font Color</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="15"/>
-        <source>CsoundQt Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="253"/>
-        <location filename="../configdialog.ui" line="276"/>
-        <source>Use CsoundQt options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="78"/>
-        <source>Use new parser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="85"/>
-        <source>Number of threads</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="95"/>
-        <source>Use multicore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="410"/>
-        <source>Run Utilities using:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="655"/>
-        <source>Background Color</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="505"/>
-        <source>Record</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="513"/>
-        <source>Record sample format</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="521"/>
-        <source>16 Bit Int</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="526"/>
-        <source>24 Bit Int</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="531"/>
-        <source>32 bit float</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="739"/>
-        <source>Debug mode for Live Event Sheet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="773"/>
-        <source>Theme (requires restart)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="784"/>
-        <source>boring</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="789"/>
-        <source>fun</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="924"/>
-        <source>Store old widget format section in csd file, to allow older versions of CsoundQt to load most of the widget characteristics from the file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../configdialog.ui" line="944"/>
-        <source>Widgets are an independent window (requires restart)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -879,8 +787,33 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../configdialog.ui" line="1212"/>
+        <source>Autoplay files when launched from file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1222"/>
+        <source>Save changes automatically on run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1229"/>
+        <source>Remember open files from previous session</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1236"/>
+        <source>Show text for toolbar icons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../configdialog.ui" line="1243"/>
         <source>Show Toolbars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1250"/>
+        <source>Automatically Join orc/sco files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -941,6 +874,11 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../configdialog.ui" line="1486"/>
+        <source>Log file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../configdialog.ui" line="1507"/>
         <source>Python Executable</source>
         <translation type="unfinished"></translation>
@@ -951,8 +889,18 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1486"/>
-        <source>Log file</source>
+        <location filename="../configdialog.ui" line="1531"/>
+        <source>OPCODEDIR64</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1548"/>
+        <source>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1551"/>
+        <source>QuteApp SDK Dir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -992,8 +940,60 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="1212"/>
-        <source>Autoplay files when launched from file</source>
+        <location filename="../configdialog.ui" line="1754"/>
+        <source>Template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1760"/>
+        <source>csd Template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1784"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1791"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1822"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.ui" line="1835"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.cpp" line="68"/>
+        <source>No RtMidi support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.cpp" line="71"/>
+        <source>None</source>
+        <comment>No MIDI internal interface</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.cpp" line="270"/>
+        <source>Please note that OPCODEDIR and OPCODEDIR64 will overwrite current settings so you will need to restart CsoundQt to return to default.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.cpp" line="616"/>
+        <location filename="../configdialog.cpp" line="623"/>
+        <source>Select File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.cpp" line="630"/>
+        <source>Select Directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1073,6 +1073,41 @@ File not saved!</source>
         <source>  This version of CsoundQt implements a new format for storing widgets, which enables many of the new widget features you will find now.
   The old format is still read and saved, so you will be able to open files in older versions but some of the features will not be passed to older versions.
 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="871"/>
+        <location filename="../qutecsound.cpp" line="1662"/>
+        <location filename="../qutecsound.cpp" line="1711"/>
+        <location filename="../qutecsound.cpp" line="1732"/>
+        <location filename="../qutecsound.cpp" line="1750"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="871"/>
+        <source>You can only create an app with a csd file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="876"/>
+        <location filename="../qutecsound.cpp" line="2290"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="876"/>
+        <source>Do you want to save before creating app?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="885"/>
+        <source>Abort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="885"/>
+        <source>You must save the csd before creating the App!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1198,12 +1233,19 @@ Do you want to overwrite it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="871"/>
-        <location filename="../qutecsound.cpp" line="1662"/>
-        <location filename="../qutecsound.cpp" line="1711"/>
-        <location filename="../qutecsound.cpp" line="1732"/>
-        <location filename="../qutecsound.cpp" line="1750"/>
-        <source>Error</source>
+        <location filename="../qutecsound.cpp" line="1572"/>
+        <location filename="../qutecsound.cpp" line="1605"/>
+        <source>Render not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1573"/>
+        <source>Could not find rendered file. Please render before calling external editor.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1606"/>
+        <source>Could not find rendered file. Please render before calling external player.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1212,6 +1254,13 @@ Do you want to overwrite it?</source>
         <source>HTML Documentation directory not set!
 Please go to Edit-&gt;Options-&gt;Environment and select directory
 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="1712"/>
+        <source>Could not open external browser:
+%1
+Please check preferences.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1652,6 +1701,11 @@ You must restart CsoundQt.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qutecsound.cpp" line="2213"/>
+        <source>Shift+Alt+L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qutecsound.cpp" line="2218"/>
         <source>No PythonQt support</source>
         <translation type="unfinished"></translation>
@@ -1710,60 +1764,6 @@ Extended Python features are not available</source>
     <message>
         <location filename="../qutecsound.cpp" line="2289"/>
         <source>Save the document to disk</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="876"/>
-        <location filename="../qutecsound.cpp" line="2290"/>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="871"/>
-        <source>You can only create an app with a csd file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="876"/>
-        <source>Do you want to save before creating app?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="885"/>
-        <source>Abort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="885"/>
-        <source>You must save the csd before creating the App!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="1572"/>
-        <location filename="../qutecsound.cpp" line="1605"/>
-        <source>Render not available</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="1573"/>
-        <source>Could not find rendered file. Please render before calling external editor.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="1606"/>
-        <source>Could not find rendered file. Please render before calling external player.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="1712"/>
-        <source>Could not open external browser:
-%1
-Please check preferences.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="2213"/>
-        <source>Shift+Alt+L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2707,14 +2707,14 @@ Please check preferences.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4212"/>
-        <source>Cannot read file %1:
-%2.</source>
+        <location filename="../qutecsound.cpp" line="4206"/>
+        <source>File already open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4206"/>
-        <source>File already open</source>
+        <location filename="../qutecsound.cpp" line="4212"/>
+        <source>Cannot read file %1:
+%2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2966,6 +2966,16 @@ Would you like to start from the top?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../eventsheet.cpp" line="1389"/>
+        <source>&amp;Loop Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../eventsheet.cpp" line="1390"/>
+        <source>Mark loop to current selection and start looping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../eventsheet.cpp" line="1391"/>
         <source>Loop Events</source>
         <translation type="unfinished"></translation>
@@ -3146,24 +3156,14 @@ Would you like to start from the top?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1465"/>
-        <source>Insert a row at the current position</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../eventsheet.cpp" line="1464"/>
         <location filename="../eventsheet.cpp" line="1466"/>
         <source>Insert Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventsheet.cpp" line="1389"/>
-        <source>&amp;Loop Selection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../eventsheet.cpp" line="1390"/>
-        <source>Mark loop to current selection and start looping</source>
+        <location filename="../eventsheet.cpp" line="1465"/>
+        <source>Insert a row at the current position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3558,6 +3558,16 @@ Would you like to start from the top?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../keyboardshortcuts.ui" line="62"/>
+        <source>Restore Defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../keyboardshortcuts.ui" line="69"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../keyboardshortcuts.cpp" line="120"/>
         <source>Invalid shortcut</source>
         <translation type="unfinished"></translation>
@@ -3566,16 +3576,6 @@ Would you like to start from the top?</source>
         <location filename="../keyboardshortcuts.cpp" line="121"/>
         <source>Shortcut cannot be assigned.
 It is already used.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../keyboardshortcuts.ui" line="62"/>
-        <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../keyboardshortcuts.ui" line="69"/>
-        <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3681,6 +3681,12 @@ It is already used.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../liveeventframe.ui" line="41"/>
+        <location filename="../liveeventframe.cpp" line="193"/>
+        <source>Delete Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../liveeventframe.ui" line="46"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
@@ -3713,12 +3719,6 @@ It is already used.</source>
     <message>
         <location filename="../liveeventframe.ui" line="136"/>
         <source>Loop Length</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../liveeventframe.ui" line="41"/>
-        <location filename="../liveeventframe.cpp" line="193"/>
-        <source>Delete Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3888,21 +3888,6 @@ It is already used.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qutewidget.cpp" line="402"/>
-        <source>Apply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutewidget.cpp" line="404"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutewidget.cpp" line="400"/>
-        <source>Ok</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qutewidget.cpp" line="369"/>
         <source>Width =</source>
         <translation type="unfinished"></translation>
@@ -3917,33 +3902,24 @@ It is already used.</source>
         <source>Channel name =</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../qutewidget.cpp" line="400"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutewidget.cpp" line="402"/>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qutewidget.cpp" line="404"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UtilitiesDialog</name>
-    <message>
-        <location filename="../utilitiesdialog.cpp" line="359"/>
-        <location filename="../utilitiesdialog.cpp" line="373"/>
-        <location filename="../utilitiesdialog.cpp" line="387"/>
-        <location filename="../utilitiesdialog.cpp" line="401"/>
-        <location filename="../utilitiesdialog.cpp" line="415"/>
-        <source>Open File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../utilitiesdialog.cpp" line="366"/>
-        <location filename="../utilitiesdialog.cpp" line="380"/>
-        <location filename="../utilitiesdialog.cpp" line="394"/>
-        <location filename="../utilitiesdialog.cpp" line="408"/>
-        <location filename="../utilitiesdialog.cpp" line="422"/>
-        <location filename="../utilitiesdialog.cpp" line="429"/>
-        <source>Select File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../utilitiesdialog.cpp" line="436"/>
-        <source>Select Directory</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="14"/>
         <source>Csound Utilities</source>
@@ -3955,17 +3931,49 @@ It is already used.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utilitiesdialog.ui" line="169"/>
-        <location filename="../utilitiesdialog.ui" line="215"/>
-        <location filename="../utilitiesdialog.ui" line="714"/>
-        <location filename="../utilitiesdialog.ui" line="745"/>
-        <location filename="../utilitiesdialog.ui" line="987"/>
-        <source>Reset Defaults</source>
+        <location filename="../utilitiesdialog.ui" line="50"/>
+        <location filename="../utilitiesdialog.ui" line="329"/>
+        <location filename="../utilitiesdialog.ui" line="476"/>
+        <location filename="../utilitiesdialog.ui" line="859"/>
+        <location filename="../utilitiesdialog.ui" line="1016"/>
+        <source>Input File Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utilitiesdialog.ui" line="176"/>
-        <source>Run CVANAL</source>
+        <location filename="../utilitiesdialog.ui" line="57"/>
+        <location filename="../utilitiesdialog.ui" line="336"/>
+        <location filename="../utilitiesdialog.ui" line="483"/>
+        <location filename="../utilitiesdialog.ui" line="866"/>
+        <location filename="../utilitiesdialog.ui" line="1023"/>
+        <source>input.wav</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utilitiesdialog.ui" line="64"/>
+        <location filename="../utilitiesdialog.ui" line="85"/>
+        <location filename="../utilitiesdialog.ui" line="343"/>
+        <location filename="../utilitiesdialog.ui" line="364"/>
+        <location filename="../utilitiesdialog.ui" line="490"/>
+        <location filename="../utilitiesdialog.ui" line="511"/>
+        <location filename="../utilitiesdialog.ui" line="873"/>
+        <location filename="../utilitiesdialog.ui" line="894"/>
+        <location filename="../utilitiesdialog.ui" line="1030"/>
+        <location filename="../utilitiesdialog.ui" line="1051"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utilitiesdialog.ui" line="71"/>
+        <location filename="../utilitiesdialog.ui" line="350"/>
+        <location filename="../utilitiesdialog.ui" line="497"/>
+        <location filename="../utilitiesdialog.ui" line="880"/>
+        <location filename="../utilitiesdialog.ui" line="1037"/>
+        <source>Output File Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utilitiesdialog.ui" line="78"/>
+        <source>output.cv</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4023,49 +4031,17 @@ It is already used.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utilitiesdialog.ui" line="50"/>
-        <location filename="../utilitiesdialog.ui" line="329"/>
-        <location filename="../utilitiesdialog.ui" line="476"/>
-        <location filename="../utilitiesdialog.ui" line="859"/>
-        <location filename="../utilitiesdialog.ui" line="1016"/>
-        <source>Input File Name</source>
+        <location filename="../utilitiesdialog.ui" line="169"/>
+        <location filename="../utilitiesdialog.ui" line="215"/>
+        <location filename="../utilitiesdialog.ui" line="714"/>
+        <location filename="../utilitiesdialog.ui" line="745"/>
+        <location filename="../utilitiesdialog.ui" line="987"/>
+        <source>Reset Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utilitiesdialog.ui" line="57"/>
-        <location filename="../utilitiesdialog.ui" line="336"/>
-        <location filename="../utilitiesdialog.ui" line="483"/>
-        <location filename="../utilitiesdialog.ui" line="866"/>
-        <location filename="../utilitiesdialog.ui" line="1023"/>
-        <source>input.wav</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../utilitiesdialog.ui" line="64"/>
-        <location filename="../utilitiesdialog.ui" line="85"/>
-        <location filename="../utilitiesdialog.ui" line="343"/>
-        <location filename="../utilitiesdialog.ui" line="364"/>
-        <location filename="../utilitiesdialog.ui" line="490"/>
-        <location filename="../utilitiesdialog.ui" line="511"/>
-        <location filename="../utilitiesdialog.ui" line="873"/>
-        <location filename="../utilitiesdialog.ui" line="894"/>
-        <location filename="../utilitiesdialog.ui" line="1030"/>
-        <location filename="../utilitiesdialog.ui" line="1051"/>
-        <source>...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../utilitiesdialog.ui" line="71"/>
-        <location filename="../utilitiesdialog.ui" line="350"/>
-        <location filename="../utilitiesdialog.ui" line="497"/>
-        <location filename="../utilitiesdialog.ui" line="880"/>
-        <location filename="../utilitiesdialog.ui" line="1037"/>
-        <source>Output File Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../utilitiesdialog.ui" line="78"/>
-        <source>output.cv</source>
+        <location filename="../utilitiesdialog.ui" line="176"/>
+        <source>Run CVANAL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4458,6 +4434,30 @@ It is already used.</source>
         <source>Von Hamm</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../utilitiesdialog.cpp" line="359"/>
+        <location filename="../utilitiesdialog.cpp" line="373"/>
+        <location filename="../utilitiesdialog.cpp" line="387"/>
+        <location filename="../utilitiesdialog.cpp" line="401"/>
+        <location filename="../utilitiesdialog.cpp" line="415"/>
+        <source>Open File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utilitiesdialog.cpp" line="366"/>
+        <location filename="../utilitiesdialog.cpp" line="380"/>
+        <location filename="../utilitiesdialog.cpp" line="394"/>
+        <location filename="../utilitiesdialog.cpp" line="408"/>
+        <location filename="../utilitiesdialog.cpp" line="422"/>
+        <location filename="../utilitiesdialog.cpp" line="429"/>
+        <source>Select File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utilitiesdialog.cpp" line="436"/>
+        <source>Select Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WidgetLayout</name>
@@ -4672,6 +4672,12 @@ It may be saved with errors.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../widgetlayout.cpp" line="239"/>
+        <source>The file was was saved by a more recent version of CsoundQt.
+Some features may not be available and will not be saved!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../widgetlayout.cpp" line="994"/>
         <source>ChannelH:</source>
         <translation type="unfinished"></translation>
@@ -4679,6 +4685,30 @@ It may be saved with errors.</source>
     <message>
         <location filename="../widgetlayout.cpp" line="995"/>
         <source>ChannelV:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widgetlayout.cpp" line="1002"/>
+        <source>Channel:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widgetlayout.cpp" line="1945"/>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widgetlayout.cpp" line="1947"/>
+        <location filename="../widgetlayout.cpp" line="3210"/>
+        <location filename="../widgetlayout.cpp" line="3250"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widgetlayout.cpp" line="1949"/>
+        <location filename="../widgetlayout.cpp" line="3209"/>
+        <location filename="../widgetlayout.cpp" line="3249"/>
+        <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4715,44 +4745,6 @@ It may be saved with errors.</source>
         <location filename="../widgetlayout.cpp" line="3253"/>
         <source>Select Preset to save</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../widgetlayout.cpp" line="1002"/>
-        <source>Channel:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../widgetlayout.cpp" line="239"/>
-        <source>The file was was saved by a more recent version of CsoundQt.
-Some features may not be available and will not be saved!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../widgetlayout.cpp" line="1945"/>
-        <source>Apply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../widgetlayout.cpp" line="1947"/>
-        <location filename="../widgetlayout.cpp" line="3210"/>
-        <location filename="../widgetlayout.cpp" line="3250"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../widgetlayout.cpp" line="1949"/>
-        <location filename="../widgetlayout.cpp" line="3209"/>
-        <location filename="../widgetlayout.cpp" line="3249"/>
-        <source>Ok</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>qutecsound</name>
-    <message>
-        <location filename="qutecsound.cpp" line="1367"/>
-        <source></source>
-        <translation></translation>
     </message>
 </context>
 </TS>
