@@ -4171,6 +4171,9 @@ int CsoundQt::execute(QString executable, QString options)
 #ifdef Q_OS_LINUX
 	QString commandLine = "\"" + executable + "\" " + options;
 #endif
+#ifdef Q_OS_HAIKU
+  QString commandLine = "\"" + executable + "\" " + options;
+#endif
 #ifdef Q_OS_SOLARIS
 	QString commandLine = "\"" + executable + "\" " + options;
 #endif
