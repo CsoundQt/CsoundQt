@@ -235,7 +235,7 @@
     <message>
         <location filename="../appdetailspage.cpp" line="133"/>
         <source>Select CsoundQt SDK Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisir le répertoire du SDK de CsoundQt</translation>
     </message>
     <message>
         <source>Select QuteCsound SDK Directory</source>
@@ -258,7 +258,7 @@
         <location filename="../appwizard.cpp" line="350"/>
         <location filename="../appwizard.cpp" line="472"/>
         <source>CsoundQt App Creator</source>
-        <translation type="unfinished"></translation>
+        <translation>Créateur d&apos;application CsoundQt</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="137"/>
@@ -332,7 +332,7 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.cpp" line="68"/>
         <source>No RtMidi support</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de RtMidi</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="270"/>
@@ -1028,17 +1028,17 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="773"/>
         <source>Theme (requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Thème (nécessite un redémarrage)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="784"/>
         <source>boring</source>
-        <translation type="unfinished"></translation>
+        <translation>ennuyeux</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="789"/>
         <source>fun</source>
-        <translation type="unfinished"></translation>
+        <translation>amusement</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="924"/>
@@ -1053,12 +1053,12 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="1178"/>
         <source>Show line numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer les numéros de ligne</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1259"/>
         <source>Favorites/Scripts menus maximum depth</source>
-        <translation type="unfinished"></translation>
+        <translation>Profondeur maximale des menus Favoris/Scripts</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1531"/>
@@ -1908,24 +1908,26 @@ Les fonctionnalités étendues de Python ne sont pas disponibles</translation>
         <location filename="../qutecsound.cpp" line="1572"/>
         <location filename="../qutecsound.cpp" line="1605"/>
         <source>Render not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Restitution impossible</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1573"/>
         <source>Could not find rendered file. Please render before calling external editor.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de restitution introuvable. Restituer avant d&apos;appeler un éditeur externe.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1606"/>
         <source>Could not find rendered file. Please render before calling external player.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de restitution introuvable. Restituer avant d&apos;appeler un lecteur externe.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1712"/>
         <source>Could not open external browser:
 %1
 Please check preferences.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir le navigateur externe :
+%1
+Vérifier les préférences.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2213"/>
@@ -2243,7 +2245,7 @@ Please check preferences.</source>
         <location filename="../qutecsound.cpp" line="2469"/>
         <location filename="../qutecsound.cpp" line="2470"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pause</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2474"/>
@@ -2795,7 +2797,7 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="3225"/>
         <source>Read FLOSS Manual Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Lire le manuel FLOSS en ligne</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3236"/>
@@ -2865,7 +2867,7 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="3626"/>
         <source>Set the Favourites folder in the Configuration Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Fixer le répertoire des favoris dans le fenêtre de configuration</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3781"/>
@@ -4931,7 +4933,8 @@ Il pourrait être enregistré avec des erreurs.</translation>
         <location filename="../widgetlayout.cpp" line="239"/>
         <source>The file was was saved by a more recent version of CsoundQt.
 Some features may not be available and will not be saved!</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier a été sauvegardé depuis une version plus récente de CsoundQt.
+Certaines propriétés peuvent manquer et ne seront pas enregistrées !</translation>
     </message>
     <message>
         <source>The file was was saved by a more recent version of QuteCsound.
