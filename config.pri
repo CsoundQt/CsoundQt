@@ -226,7 +226,7 @@ win32 {
     !csoundApiHeaderExists(cwindow.h):error(cwindow.h not found)
     !csoundLibraryExists($${CSOUND_LIB}):error(Csound API library not found)
     !libsndfileHeaderExists(sndfile.h):error(sndfile.h not found)
-    !libsndfileLibraryExists($${LIBSNDFILE_LIB}):error(libsndfile library not found)
+    !libsndfileLibraryExists($${LIBSNDFILE_LIB}):error(libsndfile library not found: $${LIBSNDFILE_LIB})
 }
 !is_quteapp {
 win32-g++ {
