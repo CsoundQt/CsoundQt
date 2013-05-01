@@ -5,3 +5,9 @@ qcs.pro.user
 
 bin/*.exe
 bin/*.dll
+
+Makefile
+bin/CsoundQt-d-py
+build/
+
+

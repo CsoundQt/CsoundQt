@@ -3030,6 +3030,8 @@ void CsoundQt::createMenus()
 	QStringList flossman07Files;
 	QStringList flossman08Files;
 	QStringList flossman09Files;
+	QStringList flossman12Files;
+	QStringList flossmanScFiles;
 	QStringList livecollFiles;
 	QStringList widgetFiles;
 	QStringList synthFiles;
@@ -3225,14 +3227,18 @@ void CsoundQt::createMenus()
 	flossmanMenu->addAction(tr("Read FLOSS Manual Online"),this, SLOT(openFLOSSManual()));
 	flossmanMenu->addSeparator();
 
-	//01
-	flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01A01.csd");
-	flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01B01.csd");
-	flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01B02.csd");
-	flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01C01.csd");
-	flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01C02.csd");
-	flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01C03.csd");
+//re-new the following section if the examples have changed
+//for completely new chapters, you must also add a line like
+//	QStringList flossman01Files;
+//in the listing some lines above
 
+//01
+flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01A01_Aliasing.csd");
+flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01B01_BordersForHearing.csd");
+flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01B02_Adding_vs_ratio.csd");
+flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01C01_db_vs_linear.csd");
+flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01C02_rms_feedback_system.csd");
+flossman01Files.append(":/examples/FLOSS Manual Examples/01 Basics/01C03_FletcherMunson.csd");
 	submenu = flossmanMenu->addMenu(tr("01 Basics"));
 	foreach (QString fileName, flossman01Files) {
 		QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
@@ -3241,17 +3247,16 @@ void CsoundQt::createMenus()
 		connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
 	}
 
-	//02
-	flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02A01.csd");
-	flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02B01.csd");
-	flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02C01.csd");
-	flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02C02.csd");
-	flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02C03.csd");
-	flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02D01.csd");
-	flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02D02.csd");
-	flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02E01.csd");
-	flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02E02.csd");
-
+//02
+flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02A01_HelloWorld.csd");
+flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02B01_DocStruct.csd");
+flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02C01_Midi_Keybd_in.csd");
+flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02C02_Midi_Ctl_in.csd");
+flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02C03_Midi_all_in.csd");
+flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02D01_GetDeviceList.csd");
+flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02D02_LiveInput.csd");
+flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02E01_Render.csd");
+flossman02Files.append(":/examples/FLOSS Manual Examples/02 Quick Start/02E02_RecordRT.csd");
 	submenu = flossmanMenu->addMenu(tr("02 Quick Start"));
 	foreach (QString fileName, flossman02Files) {
 		QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
@@ -3260,80 +3265,91 @@ void CsoundQt::createMenus()
 		connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
 	}
 
-	//03
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A01.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A02.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A03.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A04.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A05.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A06.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A07.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A08.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A09.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B01.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B02.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B03.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B04.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B05.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B06.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B07.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B08.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B09.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B10.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B11.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C01.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C02.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C03.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C04.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C05.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C06.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C07.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C08.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C09.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C10.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C11.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C12.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C13.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C14.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C15.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C16.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C17.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C18.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C19.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C20.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D01.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D02.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D03.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D04.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D05.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D06.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D07.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D08.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D09.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D10.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03E01.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03E02.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03E03.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03E04.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03E05.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03E06.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03E07.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03E08.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03E09.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F01.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F02.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F03.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F04.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F05.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F06.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F07.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F08.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F09.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F10.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F11.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F12.csd");
-	flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F13.csd");
-
+//03
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A01_Init-pass.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A02_Perf-pass_incr.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A03_Perf-pass_incr_listen.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A04_Perf-pass_no_incr.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A05_Audio_vector.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A06_Init_perf_audio.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A07_Init-values_of_k-variables.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A08_Init_no_incr.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A09_Re-init.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A10_Order_of_calc.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A11_Order_of_calc_named.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A12_Random_at_ika.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A13_Zipper.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03A14_Time_Impossible.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B01_Variable_types.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B02_Local_scope.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B03_Global_scope.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B04_Global_audio_intro.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B05_Global_audio_overwritten.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B06_Global_audio_added.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B07_Global_control_added.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B08_Local_audio_add.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B09_Global_audio_add.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B10_Global_with_clear.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03B11_Chn_demo.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C01_IfThen_i.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C02_IfThen_k.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C03_IfThen_short_form.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C04_IfGoto_i.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C05_IfGoto_ik.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C06_IfGoto_k.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C07_Loops_with_if.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C08_Loop_opcodes_i.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C09_Random_string.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C10_Random_ftable_fill.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C11_Table_random_dev.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C12_Timout_pre.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C13_Timout_basics.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C14_Timeloop_and_not.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C15_Timout_different_durations.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C16_Timout_random_durations.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C17_Timout_trigger_events.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C18_Timout_random_envelope.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C19_Timeloop_metro.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03C20_Metro_trigger_events.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D01_Table_norm_notNorm.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D02_Table_ftgen.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D03_Sample_to_table.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D04_Standard_waveforms_with_GEN10.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D05_Write_Fibo_to_table.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D06_Record_ksig_to_table.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D07_Record_audio_to_table.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D08_RecPlay_ak_signals.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D09_ftsave.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03D10_Table_to_soundfile.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03E01_Array_to_table.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03E02_norm_to_max.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03E03_FFT_peaks_arpegg.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F01_OrderOfExc_event_i.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F02_OrderOfExc_event_k.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F03_Score_tricks.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F04_Midi_triggered_events.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F05_FLTK_triggered_events.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F06_Commandline_rt_events.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F07_Event_by_condition.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F08_Generate_event_pool.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F09_Events_sprintf.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F10_Events_collected.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03F11_Events_time_loop.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03G01_Pre_UDO.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03G02_All_to_UDO.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03G03_UDO_more_flex.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03G04_UDO_calls_UDO.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03G06_UDO_setksmps.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03G07_UDO_default_args.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03G08_Recursive_UDO.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03G09_UDO_FilePlay.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03G10_UDO_rand_dev.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03G11_TabPermRnd.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03G12_TableDumpSimp.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03G13_UDO_Recursive_AddSynth.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03H01_Macros_basic.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03H02_Macro_6partials.csd");
+flossman03Files.append(":/examples/FLOSS Manual Examples/03 Csound Language/03H03_Score_macro.csd");
 	submenu = flossmanMenu->addMenu(tr("03 Csound Language"));
 	foreach (QString fileName, flossman03Files) {
 		QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
@@ -3342,42 +3358,47 @@ void CsoundQt::createMenus()
 		connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
 	}
 
-	//04
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A01.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A02.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A03.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A04.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A05.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A06.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A07.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A08.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04B01.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04B02.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04B03.csd");
-
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04C01.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04C02.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04C03.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04C04.csd");
-
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04D01.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04D02.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04D03.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04D04.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04D05.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04D06.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04D07.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04D08.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04D09.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04D10.csd");
-
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04F01.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04F02.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04F03.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04F04.csd");
-	flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04F05.csd");
-
-
+//04
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A01_AddSynth_simple.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A02_AddSynth_score.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A03_AddSynth_GEN.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A04_Standard_waveforms.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A05_Flexible_number_of_partials.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A06_Play_it_with_Midi.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A07_Risset_variations.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A08_Risset_played_by_Midi.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A09_Wobble_bass.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A10_gbuzz.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A11_gbuzz_partials_rise.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A12gbuzz_amp_coeff_rise.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04B01_Subtractive_Midi.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04B02_Subtractive_timbres.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04B03_Subtractive_vowels.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04E01_Simple_waveshaping.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04F01_GranSynth_basic.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04F02_Fof_vowels.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04F03_Asynchronous_GS.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04F04_grain3.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04F05_grain3_random.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04G01_Mass_spring_sine.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04G02_MS_sine_audible.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04G03_MS_variable_constant.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04G04_KarplusStrong.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04G05_Plucked.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04G06_wgbow.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04G07_barmodel.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04G07_wgbow_enhanced.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04G08_PhiSEM.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04H01_scantable.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04H02_Dynamic_tables.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04H03_Scantable_pvsmaska.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04H04_Hammer.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04H05_Scan_trajectories.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04H06_Scan_trajectories2.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04H07_Scan_matrices.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04H08_Scan_tablesize.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04H09_Scan_extreme_amplitude.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04H10_Scan_balanced_amplitudes.csd");
 	submenu = flossmanMenu->addMenu(tr("04 Sound Synthesis"));
 	foreach (QString fileName, flossman04Files) {
 		QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
@@ -3386,44 +3407,53 @@ void CsoundQt::createMenus()
 		connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
 	}
 
-	//05
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A01.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A02.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A03.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A04.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A05.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A06.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A07.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A08.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A09.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A10.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05B01.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05B02.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05B03.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05C01.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05C02.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05C03.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05C04.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05D01.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05D02.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05D03.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05D04.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05D05.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05E01.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05E02.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05E03.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05E04.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05F01.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05G01.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05G02.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05G03.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05I01.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05I02.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05I03.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05I04.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05I05.csd");
-	flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05I06.csd");
-
+//05
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A01_line.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A02_line_p3.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A03_linseg.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A04_linseg_p3_fractions.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A05_line_vs_linseg.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A06_line_vs_expon.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A07_expon_pings.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A08_linsegr.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A09_sine_env.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05A10_lpshold_loopseg.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05B01_Pan_stereo.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05B02_pan2.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05B03_Different_pan_layers.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05B04_hrtfmove.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05B05_VBAP_circle.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05B06_VBAP_spread.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05B07_VBAP_new.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05B08_Ambi_circle.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05B09_Ambi_orders.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05C01_tone_butlp_moogladder.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05C02_atone_buthp_bqrez.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05C03_reson_butbp.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05C04_comb.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05D01_delay.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05D02_delay_feedback.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05D03_deltapi.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05D04_multi-tap_delay.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05D05_flanger.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05E01_freeverb.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05E02_reverbsc.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05E03_reverb_with_chn.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05E04_schroeder_reverb.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05F02_Wvshp_bit_crunch.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05F03_Wvshp_different_transfer_funs.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05F04_distort.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05G01_sndwarp.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05G02_selfmade_grain.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05G03_granule.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05G04_grain_delay.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05G05_grain.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05H01_pconvolve.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05I01_pvsanal.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05I02_pvscale.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05I04_phase_vocoder.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05I05_pvscross.csd");
+flossman05Files.append(":/examples/FLOSS Manual Examples/05 Sound Modification/05I06_pvsfilter.csd");
 	submenu = flossmanMenu->addMenu(tr("05 Sound Modification"));
 	foreach (QString fileName, flossman05Files) {
 		QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
@@ -3432,16 +3462,15 @@ void CsoundQt::createMenus()
 		connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
 	}
 
-	//06
-	flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06A01.csd");
-	flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06A02.csd");
-	flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06A03.csd");
-	flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06B01.csd");
-	flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06B02.csd");
-	flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06B03.csd");
-	flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06B04.csd");
-	flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06B05.csd");
-
+//06
+flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06A01_Play_soundfile.csd");
+flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06A02_Write_soundfile.csd");
+flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06A06_pdcs_tabset_tabget.csd");
+flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06B01_flooper2.csd");
+flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06B02_sndloop.csd");
+flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06B03_RecPlayToTable.csd");
+flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06B04_BufRecPlay_UDO.csd");
+flossman06Files.append(":/examples/FLOSS Manual Examples/06 Samples/06B05_BufRecPlay_complex.csd");
 	submenu = flossmanMenu->addMenu(tr("06 Samples"));
 	foreach (QString fileName, flossman06Files) {
 		QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
@@ -3450,26 +3479,17 @@ void CsoundQt::createMenus()
 		connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
 	}
 
-	//07
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07A01.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07B01.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07B02.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07B03.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07B04.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07C01.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07C02.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07C03.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07C04.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07C05.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07D01.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07D02.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E01.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E02.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E03.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E04.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E05.csd");
-	flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E06.csd");
-
+//07
+flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07A01_midiin_print.csd");
+flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07B01_MidiInstrTrigger.csd");
+flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07B04_MidiMultiTrigg.csd");
+flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07D01_ReadMidiFile.csd");
+flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E01_midiout.csd");
+flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E02_score_to_midiout.csd");
+flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E03_midiout_cc.csd");
+flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E04_midion.csd");
+flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E05_midion2.csd");
+flossman07Files.append(":/examples/FLOSS Manual Examples/07 MIDI/07E06_moscil.csd");
 	submenu = flossmanMenu->addMenu(tr("07 MIDI"));
 	foreach (QString fileName, flossman07Files) {
 		QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
@@ -3478,10 +3498,12 @@ void CsoundQt::createMenus()
 		connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
 	}
 
-	//08
-	flossman08Files.append(":/examples/FLOSS Manual Examples/08 OSC and WII/08A01.csd");
-
-	submenu = flossmanMenu->addMenu(tr("08 OSC and WII"));
+//08
+flossman08Files.append(":/examples/FLOSS Manual Examples/08 Other Communication/08A01_osc.csd");
+flossman08Files.append(":/examples/FLOSS Manual Examples/08 Other Communication/08B01_Pd_to_Csound.csd");
+flossman08Files.append(":/examples/FLOSS Manual Examples/08 Other Communication/08B02_Processing_to_Csound.csd");
+flossman08Files.append(":/examples/FLOSS Manual Examples/08 Other Communication/08B03_Serial_Read.csd");
+	submenu = flossmanMenu->addMenu(tr("08 Other Communication"));
 	foreach (QString fileName, flossman08Files) {
 		QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
 		newAction = submenu->addAction(name);
@@ -3489,18 +3511,17 @@ void CsoundQt::createMenus()
 		connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
 	}
 
-	//09
-	flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09A01.csd");
-	flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09A02.csd");
-	flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09A03.csd");
-	flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09A04.csd");
-	flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09A05.csd");
-	flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09B01.csd");
-	flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09B02.csd");
-	flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09B03.csd");
-	flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09B04.csd");
-	flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09B05.csd");
-
+//09
+flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09A01_pdcs_control_in.csd");
+flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09A02_pdcs_live_in.csd");
+flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09A03_pdcs_midi.csd");
+flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09A04_pdcs_events.csd");
+flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09A05_pdcs_control_out.csd");
+flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09B01_maxcs_helloworld.csd");
+flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09B02_maxcs_audio_io.csd");
+flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09B03_maxcs_control_in.csd");
+flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09B04_maxcs_midi.csd");
+flossman09Files.append(":/examples/FLOSS Manual Examples/09 Csound in other Applications/09B05_maxcs_events.csd");
 	submenu = flossmanMenu->addMenu(tr("09 Csound in other Applications"));
 	foreach (QString fileName, flossman09Files) {
 		QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
@@ -3508,6 +3529,42 @@ void CsoundQt::createMenus()
 		newAction->setData(fileName);
 		connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
 	}
+
+//12
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12B01_pyinit.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12B02_python_global.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12B03_pyrun.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12B04_pyevali.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12B05_pyassigni.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12B06_pycall.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12B07_local_vs_global.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12B08_markov.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12C01_run_pause_stop.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12C02_score_generated.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12C03_presets.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12C04_dialog.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12C05_string_sound.csd");
+flossman12Files.append(":/examples/FLOSS Manual Examples/12 Csound and other Languages/12C06_color_controller.csd");
+	submenu = flossmanMenu->addMenu(tr("12 Csound and other Languages"));
+	foreach (QString fileName, flossman12Files) {
+		QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+		newAction = submenu->addAction(name);
+		newAction->setData(fileName);
+		connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+	}
+
+//Sc
+flossmanScFiles.append(":/examples/FLOSS Manual Examples/Score Methods/Score_methods_01.csd");
+flossmanScFiles.append(":/examples/FLOSS Manual Examples/Score Methods/Score_methods_02.csd");
+flossmanScFiles.append(":/examples/FLOSS Manual Examples/Score Methods/Score_methods_03.csd");
+	submenu = flossmanMenu->addMenu(tr("Score Methods"));
+	foreach (QString fileName, flossmanScFiles) {
+		QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+		newAction = submenu->addAction(name);
+		newAction->setData(fileName);
+		connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+	}
+
 
 	QString mcCurdyPath;
 #ifdef Q_OS_WIN32
