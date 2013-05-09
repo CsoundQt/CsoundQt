@@ -740,8 +740,9 @@ int CsoundEngine::runCsound()
 
 	//  csoundReset(ud->csound);
 	csoundSetHostData(ud->csound, (void *) ud);
+#ifndef CSOUND6
 	csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
-
+#endif
 	if (csoundCreateGlobalVariable(ud->csound, "FLTK_Flags", sizeof(int)) != CSOUND_SUCCESS) {
 		ud->runDispatcher = false;
 		m_msgUpdateThread.waitForFinished(); // Join the message thread
@@ -810,9 +811,14 @@ int CsoundEngine::runCsound()
 		ud->outputStringChannelNames.clear();
 		ud->previousOutputValues.clear();
 		ud->previousStringOutputValues.clear();
+#ifndef CSOUND6
 		// For invalue/outvalue
 		csoundSetInputValueCallback(ud->csound, &CsoundEngine::inputValueCallback);
 		csoundSetOutputValueCallback(ud->csound, &CsoundEngine::outputValueCallback);
+#else
+		csoundSetInputChannelCallback(ud->csound, &CsoundEngine::inputValueCallback);
+		csoundSetOutputChannelCallback(ud->csound, &CsoundEngine::outputValueCallback);
+#endif
 		// For chnget/chnset
 		MYFLT *pvalue;
 		CsoundChannelListEntry **channelList

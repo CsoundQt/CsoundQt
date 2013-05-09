@@ -25,6 +25,10 @@
 # ##############################################################################
 
 csound6: { # Csound6 requires some internal changes
+# Temporary testing paths
+CSOUND_INCLUDE_DIR = /home/andres/src/csound6/include
+INCLUDEPATH += /home/andres/src/csound6/interfaces
+CSOUND_LIBRARY_DIR = /home/andres/src/csound6-build/
 DEFINES += CSOUND6
 }
 
