@@ -70,10 +70,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Select QuteCsound SDK Directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Properties</source>
         <translation type="unfinished"></translation>
     </message>
@@ -157,15 +153,15 @@
         <source>Select Qt Libraries Directory</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Select CsoundQt SDK Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AppWizard</name>
     <message>
         <source>Standalone Application Generator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>QuteCsound App Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -199,6 +195,10 @@ Aborting.</source>
     </message>
     <message>
         <source>Could not delete old application directory! Aborted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CsoundQt App Creator</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -731,6 +731,30 @@ Aborting.</source>
     </message>
     <message>
         <source>QuteApp SDK Dir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme (requires restart)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>boring</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>fun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show line numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Favorites/Scripts menus maximum depth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No RtMidi support</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2071,6 +2095,36 @@ Extended Python features are not available</source>
     </message>
     <message>
         <source>Show/hide line number area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Render not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not find rendered file. Please render before calling external editor.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not find rendered file. Please render before calling external player.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open external browser:
+%1
+Please check preferences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read FLOSS Manual Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set the Favourites folder in the Configuration Window</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3549,11 +3603,6 @@ It may be saved with errors.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The file was was saved by a more recent version of QuteCsound.
-Some features may not be available and will not be saved!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>ChannelH:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3611,6 +3660,11 @@ Some features may not be available and will not be saved!</source>
     </message>
     <message>
         <source>Widgets can&apos;t be read! No widgets created.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file was was saved by a more recent version of CsoundQt.
+Some features may not be available and will not be saved!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

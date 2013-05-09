@@ -211,9 +211,9 @@ def deployCsound(app_name, bin_name, doubles=True):
 if __name__=='__main__':
     # make version including Qt
     if len(sys.argv) == 1:
-        QUTECSOUND_VERSION = raw_input('Enter version number:')
+        version = raw_input('Enter version number:')
     else:
-        QUTECSOUND_VERSION = sys.argv[1]
+        version = sys.argv[1]
     NEW_NAME='CsoundQt'
     QMakePath = ''
     QtFrameworksDir = subprocess.Popen([QMakePath + 'qmake',
@@ -232,4 +232,4 @@ if __name__=='__main__':
     PythonQtLibPaths = ['/usr/local/lib/', '../../PythonQt2.1_Qt4.8/lib/', '../../../../PythonQt2.1_Qt4.8/lib/', './']
 
     print "---------------- Making doubles package"
-    deployWithPython('-d', NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, CsoundQtBinPath,PythonQtLibPaths)
+    deployWithPython('-d', NEW_NAME, version, QtFrameworksDir, CsoundQtBinPath,PythonQtLibPaths)
