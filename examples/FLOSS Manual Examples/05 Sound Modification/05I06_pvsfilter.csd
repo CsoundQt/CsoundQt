@@ -29,7 +29,7 @@ fsigA     pvstanal  .5, giamp, gipitch, gifilA, gidet, giwrap, giskip,\
                      gifftsiz, giovlp, githresh
 fsigB     pvstanal  2, 5, gipitch, gifilB, gidet, giwrap, giskip,\
                      gifftsiz, giovlp, githresh
-ffilt     pvsfilter fsigA, fsigB, 1	
+ffilt     pvsfilter fsigA, fsigB, 1     
 aout      pvsynth   ffilt
 aenv      linen     aout, .1, p3, .5
           out       aout
@@ -39,4 +39,4 @@ endin
 <CsScore>
 i 1 0 11
 </CsScore>
-</CsoundSynthesizer> </p>
+</CsoundSynthesizer> 

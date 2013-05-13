@@ -11,7 +11,7 @@ ksmps  = 32
 nchnls = 1
 0dbfs  = 1
 
- instr	1 ; tambourine
+ instr  1 ; tambourine
 iAmp      =           p4
 iDettack  =           0.01
 iNum      =           p5
@@ -24,7 +24,7 @@ aSig      tambourine  iAmp,iDettack,iNum,iDamp,iMaxShake,iFreq,iFreq1,iFreq2
           out         aSig
  endin
 
- instr	2 ; bamboo
+ instr  2 ; bamboo
 iAmp      =           p4
 iDettack  =           0.01
 iNum      =           p5
@@ -37,7 +37,7 @@ aSig      bamboo      iAmp,iDettack,iNum,iDamp,iMaxShake,iFreq,iFreq1,iFreq2
           out         aSig
  endin
 
- instr	3 ; sleighbells
+ instr  3 ; sleighbells
 iAmp      =           p4
 iDettack  =           0.01
 iNum      =           p5

@@ -8,14 +8,14 @@
 <CsInstruments>
 ;example written by Iain McCurdy
 
-sr 	= 	44100
-ksmps 	= 	32
-nchnls 	= 	1	
+sr      =       44100
+ksmps   =       32
+nchnls  =       1       
 
-  instr	1
+  instr 1
 ; PRINT INSTRUCTIONS
            prints  "Press 'r' to record, 's' to stop playback, "
-           prints  "'+' to increase pitch, '-' to decrease pitch.\\n"
+           prints  "'+' to increase pitch, '-' to decrease pitch.\n"
 ; SENSE KEYBOARD ACTIVITY
 kKey sensekey; sense activity on the computer keyboard
 aIn        inch    1             ; read audio from first input channel

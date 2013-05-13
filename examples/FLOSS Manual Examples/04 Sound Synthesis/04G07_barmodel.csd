@@ -27,9 +27,9 @@ ivel    =               1000
 ; width of strike
 iwid    =               0.1156
 aSig    barmodel        kbcL,kbcR,iK,ib,kscan,iT30,ipos,ivel,iwid
-kPan	rspline	        0.1,0.9,0.5,2
+kPan    rspline         0.1,0.9,0.5,2
 aL,aR   pan2            aSig,kPan
-	outs             aL,aR
+        outs             aL,aR
  endin
 
 </CsInstruments>

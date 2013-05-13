@@ -7,15 +7,15 @@
 <CsInstruments>
 ; example written by Iain McCurdy
 
-sr 	= 	44100
-ksmps 	= 	32
-nchnls 	= 	1	
+sr      =       44100
+ksmps   =       32
+nchnls  =       1       
 0dbfs   =       1
 
 ; STORE AUDIO IN RAM USING GEN01 FUNCTION TABLE
 giSoundFile   ftgen   0, 0, 262144, 1, "loop.wav", 0, 0, 0
 
-  instr	1 ; play audio from function table using flooper2 opcode
+  instr 1 ; play audio from function table using flooper2 opcode
 kAmp         =         1   ; amplitude
 kPitch       =         p4  ; pitch/speed
 kLoopStart   =         0   ; point where looping begins (in seconds)

@@ -37,18 +37,17 @@ kamp = 0dbfs*.2
 kfreq = 200
 ifn ftgen 7, 0, 128, -5, .001, 128, 128.
 a1 scans kamp, kfreq, ifn, id
-1 dcblock2 a1
+a1 dcblock2 a1
 iatt = .005
 idec = 1
 islev = 1
 irel = 2
 aenv adsr iatt, idec, islev, irel
 ;outs a1*aenv,a1*aenv; Uncomment for speaker destruction;
-endin</code>
-<code><code><code></CsInstruments></code></code>
+endin
+</CsInstruments>
 <CsScore>
 f8 0 8192 10 1;
 i 1 0 5
 </CsScore>
 </CsoundSynthesizer>
-</code>

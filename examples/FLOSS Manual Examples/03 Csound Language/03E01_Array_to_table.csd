@@ -14,20 +14,20 @@ giTab1 ftgen 0, 0, -6, -2, 10,11,12,13,14,15
 giTab2 ftgen 0, 0, -6, -2, 0
 
 instr 1
-	tvar init ftlen(giTab1) ; declare and initialize array tvar
-	copy2ttab tvar,giTab1 ; copy giTab1 to tvar
-	printk2 tvar[4]
-	tvar[4]=tvar[4]+tvar[3] ;    change a value
-	copy2ftab tvar, giTab2 ; write the whole array to the other table
-	turnoff ; stop after 1st k-cycle	
+        tvar init ftlen(giTab1) ; declare and initialize array tvar
+        copy2ttab tvar,giTab1 ; copy giTab1 to tvar
+        printk2 tvar[4]
+        tvar[4]=tvar[4]+tvar[3] ;    change a value
+        copy2ftab tvar, giTab2 ; write the whole array to the other table
+        turnoff ; stop after 1st k-cycle        
 endin
 
 instr 2
-	index = 0
+        index = 0
 loophere:
     ival tab_i index,giTab2
     print index,ival
-    loop_lt index, 1, ftlen(giTab2), loophere	
+    loop_lt index, 1, ftlen(giTab2), loophere   
 endin
 
 </CsInstruments>

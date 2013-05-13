@@ -26,8 +26,7 @@ instr 1000  ; this instrument sends OSC-values
 	kValue2 = cpsmidinn (kMidiKey*kOctave+33)
 	kValue3 randomh 0.4, 1, 4
 	Stext sprintf "%i", $S_PORT
-	OSCsend   kValue1+kValue2, $IPADDRESS, $S_PORT, "/QuteCsound",
-                  "fff", kValue1, kValue2, kValue3
+	OSCsend   kValue1+kValue2, $IPADDRESS, $S_PORT, "/QuteCsound", "fff", kValue1, kValue2, kValue3
 endin
 
 
@@ -37,8 +36,7 @@ instr 1001  ; this instrument receives OSC-values
 	kValue3Received init 0.0
 	Stext sprintf "%i", $R_PORT
 	ihandle OSCinit $R_PORT
-	kAction  OSClisten	ihandle, "/QuteCsound", "fff",
-                 kValue1Received, kValue2Received, kValue3Received
+	kAction  OSClisten	ihandle, "/QuteCsound", "fff", kValue1Received, kValue2Received, kValue3Received
 		if (kAction == 1) then	
 			printk2 kValue2Received
 			printk2 kValue1Received

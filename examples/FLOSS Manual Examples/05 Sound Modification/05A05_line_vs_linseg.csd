@@ -5,7 +5,7 @@
 </CsOptions>
 
 <CsInstruments>
-; Example by Iain McCurdy<p>sr = 44100
+; Example by Iain McCurdy<br>sr = 44100
 ksmps = 32
 nchnls = 1
 0dbfs = 1
@@ -33,4 +33,4 @@ e
 </CsScore>
 
 </CsoundSynthesizer> 
-</p><p></p>
+<br>

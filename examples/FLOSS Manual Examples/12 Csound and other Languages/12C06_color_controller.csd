@@ -50,7 +50,7 @@ aleft  =       ((a3 * k9) * .7) + ((a5 * k9) * .3)
 k10    randh   1, k6
 aright =       ((a3 * k10) * .3)+((a5 * k10) * .7)
 klevel invalue "red"
-klevel port klevel,0.05	
+klevel port klevel,0.05 
        outs    aleft*klevel, aright*klevel
 garvb  =       garvb + (a3 * p10)*klevel
 endin
@@ -81,7 +81,7 @@ kenv   expseg   .001, p3 * .01, p6, p3 * .99, .001
 asig   gbuzz    kenv, ifreq + k3, k5, ksweep, k1, 15
 
 klevel invalue "blue"
-klevel port klevel,0.05	
+klevel port klevel,0.05 
 asig = asig*klevel
        outs     asig, asig
 garvb  =        garvb + (asig * p7)
@@ -132,7 +132,7 @@ garvb  =       garvb + (amix * p7)
 p4 = 1/10                          ; p4 = panrate
 k1     oscil   .5, p4, 1
 k2     =       .5 + k1
-k3     =       1 - k2	
+k3     =       1 - k2   
 asig   reverb  garvb, 2.1
        outs    asig * k2, (asig * k3) * (-1)
 garvb  =       0

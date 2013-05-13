@@ -35,7 +35,7 @@ aL        diskin2    Sfil, kspeed, iskip, iloop, iformat, iwsize,\
                      ibufsize, iskipinit
 aR        =          aL
  else
-aL, aR	    diskin2    Sfil, kspeed, iskip, iloop, iformat, iwsize,\
+aL, aR      diskin2    Sfil, kspeed, iskip, iloop, iformat, iwsize,\
                       ibufsize, iskipinit
  endif
           xout       aL, aR

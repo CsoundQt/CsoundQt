@@ -11,7 +11,7 @@ instr 1
   iCps = cpsmidinn(p4)
  iMeth = 1
        print iDur, iCps, iMeth
-aPluck pluck .2, iCps, iCps, 0, iMeth	
+aPluck pluck .2, iCps, iCps, 0, iMeth   
        outch 1, aPluck, 2, aPluck
 endin
 </CsInstruments>

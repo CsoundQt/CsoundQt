@@ -5,10 +5,10 @@
 </CsOptions>
 
 <CsInstruments>
-sr 	= 	44100
-ksmps 	= 	16
-nchnls 	= 	1
-0dbfs	=	1
+sr      =       44100
+ksmps   =       16
+nchnls  =       1
+0dbfs   =       1
 
 gisine  ftgen  0,0,2^10,10,1
 

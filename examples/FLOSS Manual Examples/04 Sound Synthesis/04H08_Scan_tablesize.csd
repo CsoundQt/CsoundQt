@@ -36,8 +36,8 @@ a1 scans iamp, ifreq, 7, id, 4
 a1 dcblock a1
 outs a1, a1
 endin
-</code><code><code><code><code></CsInstruments></code></code>
-<CsScore></code>
+</CsInstruments>
+<CsScore>
 #define SIZE #128#
 f7 0 $SIZE. -7 0 $SIZE. $SIZE.
 i 1 0 5
@@ -47,4 +47,3 @@ f7 10 $SIZE. -7 [$SIZE.-1] 64 1 63 [$SIZE.-1]
 i 1 10 5
 </CsScore>
 </CsoundSynthesizer>
-</code>

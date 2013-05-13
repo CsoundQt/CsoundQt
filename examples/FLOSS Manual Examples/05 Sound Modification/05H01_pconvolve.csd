@@ -22,8 +22,8 @@ gasig           diskin2   p4,1,0,1
 ; Larger values require less CPU but result in more latency.
 ; Smaller values produce lower latency but may cause -
 ; - realtime performance issues
-ipartitionsize	=	  256
-ar1,ar2	        pconvolve gasig, p4,ipartitionsize
+ipartitionsize  =         256
+ar1,ar2         pconvolve gasig, p4,ipartitionsize
 ; create a delayed version of the input signal that will sync -
 ; - with convolution output
 adel            delay     gasig,ipartitionsize/sr
@@ -31,7 +31,7 @@ adel            delay     gasig,ipartitionsize/sr
 aMixL           ntrpol    adel,ar1*0.1,p5
 aMixR           ntrpol    adel,ar2*0.1,p5
                 outs      aMixL,aMixR
-gasig	        =         0
+gasig           =         0
  endin
 
 </CsInstruments>

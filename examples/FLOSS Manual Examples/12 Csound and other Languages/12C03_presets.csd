@@ -7,8 +7,8 @@
 pyinit
 
 instr loadPreset
-	index = p4
-	pycalli "q.loadPreset", index
+        index = p4
+        pycalli "q.loadPreset", index
 endin
 
 </CsInstruments>

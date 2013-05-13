@@ -18,7 +18,7 @@ kctrl2  invalue  "ctrl2"
 koct    =        (kctrl2*4)+7
 ; create an oscillator
 a1      vco2     kctrl1,cpsoct(koct),4,0.1
-        outs     a1,a1	
+        outs     a1,a1  
  endin
 </CsInstruments>
 
