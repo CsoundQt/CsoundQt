@@ -3370,7 +3370,7 @@ flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A0
 flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A09_Wobble_bass.csd");
 flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A10_gbuzz.csd");
 flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A11_gbuzz_partials_rise.csd");
-flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A12gbuzz_amp_coeff_rise.csd");
+flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04A12_gbuzz_amp_coeff_rise.csd");
 flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04B01_Subtractive_Midi.csd");
 flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04B02_Subtractive_timbres.csd");
 flossman04Files.append(":/examples/FLOSS Manual Examples/04 Sound Synthesis/04B03_Subtractive_vowels.csd");
