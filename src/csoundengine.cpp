@@ -24,6 +24,8 @@
 #include "widgetlayout.h"
 //#include "curve.h"
 
+#include "csound_standard_types.h"
+
 #include "console.h"
 #include "qutescope.h"  // Needed for passing the ud to the scope for display data
 #include "qutegraph.h"  // Needed for passing the ud to the graph for display data
@@ -117,6 +119,7 @@ void CsoundEngine::messageCallbackThread(CSOUND *csound,
 	}
 }
 
+#ifndef CSOUND6
 void CsoundEngine::outputValueCallback (CSOUND *csound,
 										const char *channelName,
 										MYFLT value)
@@ -177,6 +180,70 @@ void CsoundEngine::inputValueCallback(CSOUND *csound,
 		}
 	}
 }
+#else
+void CsoundEngine::outputValueCallback (CSOUND *csound,
+								 const char *channelName,
+								 void *channelValuePtr,
+								 const void *channelType)
+{
+	// Called by the csound running engine when 'outvalue' opcode is used
+	// To pass data from Csound to CsoundQt
+	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+	if (channelType == &CS_VAR_TYPE_S) {
+		ud->csEngine->passOutString(channelName, (const char *) channelValuePtr);
+	}
+	else if (channelType == &CS_VAR_TYPE_K){
+		ud->csEngine->passOutValue(channelName, *((MYFLT *)channelValuePtr));
+	} else {
+		qDebug() << "outputValueCallback: Unsupported type";
+	}
+}
+
+void CsoundEngine::inputValueCallback (CSOUND *csound,
+								const char *channelName,
+								void *channelValuePtr,
+								const void *channelType)
+{
+	// Called by the csound running engine when 'invalue' opcode is used
+	// To pass data from qutecsound to Csound
+	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+	if (channelType == &CS_VAR_TYPE_S) { // channel is a string channel
+		char *string = (char *) channelValuePtr;
+		QString newValue = ud->wl->getStringForChannel(channelName);
+		int maxlen = csoundGetStrVarMaxLen(csound);
+		strncpy(string, newValue.toLocal8Bit(), maxlen);
+	}
+	else if (channelType == &CS_VAR_TYPE_K) {  // Not a string channel
+		//FIXME check if mouse tracking is active, and move this from here
+		QString name(channelName);
+		MYFLT *value = (MYFLT *) channelValuePtr;
+		if (name == "_MouseX") {
+			*value = (MYFLT) ud->mouseValues[0];
+		}
+		else if (name == "_MouseY") {
+			*value = (MYFLT) ud->mouseValues[1];
+		}
+		else if(name == "_MouseRelX") {
+			*value = (MYFLT) ud->mouseValues[2];
+		}
+		else if(name == "_MouseRelY") {
+			*value = (MYFLT) ud->mouseValues[3];
+		}
+		else if(name == "_MouseBut1") {
+			*value = (MYFLT) ud->mouseValues[4];
+		}
+		else if(name == "_MouseBut2") {
+			*value = (MYFLT) ud->mouseValues[5];
+		}
+		else {
+			*value = (MYFLT) ud->wl->getValueForChannel(name);
+		}
+	} else {
+		qDebug() << "inputValueCallback: Unsupported type";
+	}
+}
+
+#endif
 
 void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char * /*name*/)
 {
