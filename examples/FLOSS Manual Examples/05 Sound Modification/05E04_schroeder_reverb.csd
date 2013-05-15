@@ -70,7 +70,7 @@ kMix        =           p5
 ; print some information about current settings gleaned from the score
             prints      "Type:"
             prints      p6
-            prints      "\\nReverb Time:%2.1f\\nDry/Wet Mix:%2.1f\\n\\n",p4,p5
+            prints      "\nReverb Time:%2.1f\nDry/Wet Mix:%2.1f\n\n",p4,p5
 
 ; four parallel comb filters
 a1          comb        gaRvbSend, kRvt, 0.0297; comb filter 1

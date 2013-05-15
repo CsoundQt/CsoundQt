@@ -12,7 +12,7 @@ nchnls  =       2
 0dbfs   =       1
         seed    0
 
-gisine  ftgen	0,0,4096,10,1
+gisine  ftgen   0,0,4096,10,1
 
 gaSend init 0
 
@@ -24,7 +24,7 @@ krat     rspline  0.006,0.988,0.1,0.4
 kvibf    =        4.5
 kvibamp  =        0
 iminfreq =        20
-aSig	 wgbow    kamp,kfreq,kpres,krat,kvibf,kvibamp,gisine,iminfreq
+aSig     wgbow    kamp,kfreq,kpres,krat,kvibf,kvibamp,gisine,iminfreq
 aSig     butlp     aSig,2000
 aSig     pareq    aSig,80,6,0.707
          outs     aSig,aSig

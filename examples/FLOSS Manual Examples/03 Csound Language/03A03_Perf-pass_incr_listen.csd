@@ -44,5 +44,4 @@ i "Rise" 0 3
 i "Partials" 4 31
 </CsScore>
 </CsoundSynthesizer>
-<p>;example by joachim heintz
-</p>
+<br>;example by joachim heintz

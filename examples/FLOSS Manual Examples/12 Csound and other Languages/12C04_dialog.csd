@@ -16,7 +16,7 @@ dia.getDouble(dia,"CS question","Enter number: ")
 }} ; get the number from Qt dialog
 
 instr 1
-	print giNumber
+        print giNumber
 endin
 
 </CsInstruments>

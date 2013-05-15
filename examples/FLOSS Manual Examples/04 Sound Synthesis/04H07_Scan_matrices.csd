@@ -20,7 +20,7 @@ istif = 1.1
 icentr = .1
 idamp = -0.01
 ileft = 0.
-right = .5
+iright = .5
 ipos = 0.
 istrngth = 0.
 ain = 0
@@ -34,8 +34,8 @@ a1 scans iamp, ifreq, 7, id
 a1 dcblock a1
 outs a1, a1
 endin
-</code><code><code><code><code></CsInstruments></code></code>
-<CsScore></code>
+</CsInstruments>
+<CsScore>
 f7 0 128 -7 0 128 128
 i 1 0 5
 f7 5 128 -23 "spiral-8,16,128,2,1over2"
@@ -44,4 +44,3 @@ f7 10 128 -7 127 64 1 63 127
 i 1 10 5
 </CsScore>
 </CsoundSynthesizer>
-</code>

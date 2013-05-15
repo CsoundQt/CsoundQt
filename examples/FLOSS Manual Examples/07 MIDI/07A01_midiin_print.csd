@@ -12,7 +12,7 @@
 ksmps = 32
 
 ; using massign with these arguments disables default instrument triggering
-massign	0,0
+massign 0,0
 
   instr 1
 kstatus, kchan, kdata1, kdata2  midiin            ;read in midi

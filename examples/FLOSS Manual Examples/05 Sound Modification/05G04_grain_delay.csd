@@ -17,7 +17,7 @@ giTablen  = 131072
 giLive    ftgen 0,0,giTablen,2,0
 
 ; sigmoid rise/decay shape for fof2, half cycle from bottom to top
-giSigRise ftgen 0,0,8192,19,0.5,1,270,1		
+giSigRise ftgen 0,0,8192,19,0.5,1,270,1         
 
 ; test sound
 giSample  ftgen 0,0,524288,1,"fox.wav", 0,0,0
@@ -25,7 +25,7 @@ giSample  ftgen 0,0,524288,1,"fox.wav", 0,0,0
 instr 1
 ; test sound, replace with live input
   a1      loscil 1, 1, giSample, 1
-  	  outch 1, a1
+          outch 1, a1
           chnmix a1, "liveAudio"
 endin
 
@@ -42,17 +42,17 @@ endin
 
 instr 3
 ; delay parameters
-  kDelTim = 0.5			; delay time in seconds (max 2.8 seconds)
+  kDelTim = 0.5                 ; delay time in seconds (max 2.8 seconds)
   kFeed   = 0.8
 ; delay time random dev
-  kTmod	  = 0.2
+  kTmod   = 0.2
   kTmod   rnd31 kTmod, 1
   kDelTim = kDelTim+kTmod
 ; delay pitch random dev
   kFmod   linseg 0, 1, 0, 1, 0.1, 2, 0, 1, 0
-  kFmod	  rnd31 kFmod, 1
+  kFmod   rnd31 kFmod, 1
  ; grain delay processing
-  kamp	  = ampdbfs(-8)
+  kamp    = ampdbfs(-8)
   kfund   = 25 ; grain rate
   kform   = (1+kFmod)*(sr/giTablen) ; grain pitch transposition
   koct    = 0

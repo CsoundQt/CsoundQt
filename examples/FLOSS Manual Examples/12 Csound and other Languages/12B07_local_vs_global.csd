@@ -15,7 +15,7 @@ giInstanceLocal = giInstanceLocal+1
 if kTime == 0.5 then
 kvalue pyleval "value"
 printks "Python variable 'value' in instr %d, instance %d = %d\n", 0, p1, giInstanceLocal, kvalue
-turnoff	
+turnoff 
 endif
 endin
 
@@ -26,7 +26,7 @@ giInstanceGlobal = giInstanceGlobal+1
 if kTime == 0.5 then
 kvalue pyleval "value"
 printks "Python variable 'value' in instr %d, instance %d = %d\n", 0, p1, giInstanceGlobal, kvalue
-turnoff	
+turnoff 
 endif
 endin
 

@@ -33,8 +33,8 @@ Sdump     =         ""
  if indx < iend igoto loop
           puts      Sdump, 1
   endop
-	
-	
+        
+        
 instr 1
           TableDumpSimp p4, p5, p6
           prints    "%n"
@@ -45,7 +45,7 @@ endin
 ;i1   st   dur   ftab   prec   ppr
 i1    0    0     1      -1
 i1    .    .     1       0
-i1    .    .     2       3     10	
+i1    .    .     2       3     10       
 i1    .    .     2       6     32
 </CsScore>
 </CsoundSynthesizer>

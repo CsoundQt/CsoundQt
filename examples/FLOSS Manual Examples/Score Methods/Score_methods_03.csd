@@ -28,7 +28,7 @@ open(EXT, "<", $in);
 open(SCO, ">", $out);
 
 while (<EXT>) {
-  s/SEED\s+(\d+)/srand($1);$&/e;
+  s/SEED\s+(\d+)/srand();$&/e;
   s/rand\(\d*\)/eval $&/ge;
   print SCO;
 }

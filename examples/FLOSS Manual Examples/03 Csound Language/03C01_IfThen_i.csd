@@ -10,12 +10,12 @@ nchnls = 2
 0dbfs = 1
 
   instr 1
-Sfile     =          "/my/file.wav" ;your soundfile path here
+Sfile     =          "ClassGuit.wav" ;your soundfile path here
 ifilchnls filenchnls Sfile
  if ifilchnls == 1 then ;mono
 aL        soundin    Sfile
 aR        =          aL
- else	;stereo
+ else   ;stereo
 aL, aR    soundin    Sfile
  endif
           outs       aL, aR

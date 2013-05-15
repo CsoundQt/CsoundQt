@@ -29,7 +29,7 @@ fsigA     pvstanal  1, giamp, gipitch, gifilA, gidet, giwrap, giskip,\
                     gifftsiz, giovlp, githresh
 fsigB     pvstanal  .5, giamp, gipitch, gifilB, gidet, giwrap, giskip,\
                      gifftsiz, giovlp, githresh
-fcross    pvscross  fsigA, fsigB, 0, 1	
+fcross    pvscross  fsigA, fsigB, 0, 1  
 aout      pvsynth   fcross
 aenv      linen     aout, .1, p3, .5
           out       aout

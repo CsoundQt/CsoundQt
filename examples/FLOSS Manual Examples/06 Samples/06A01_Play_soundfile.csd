@@ -7,11 +7,11 @@
 <CsInstruments>
 ; example written by Iain McCurdy
 
-sr 	= 	44100
-ksmps 	= 	32
-nchnls 	= 	1	
+sr      =       44100
+ksmps   =       32
+nchnls  =       1       
 
-  instr	1 ; play audio from disk
+  instr 1 ; play audio from disk
 kSpeed  init     1           ; playback speed
 iSkip   init     0           ; inskip into file (in seconds)
 iLoop   init     0           ; looping switch (0=off 1=on)

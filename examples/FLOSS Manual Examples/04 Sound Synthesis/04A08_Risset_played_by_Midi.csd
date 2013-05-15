@@ -27,7 +27,7 @@ imxampdv  =         12
 ;duration (%)
 imxdurdv  =         100
 ;;get midi values
-ibasfreq  cpsmidi	;base frequency
+ibasfreq  cpsmidi       ;base frequency
 iampmid   ampmidi   1 ;receive midi-velocity and scale 0-1
 ;;calculate maximum deviations depending on midi-velocity
 ifqdev    =         imxfqdv * iampmid

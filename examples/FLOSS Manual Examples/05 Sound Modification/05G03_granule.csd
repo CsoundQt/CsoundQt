@@ -14,8 +14,8 @@ nchnls = 2
 0dbfs = 1
 
 ;waveforms used for granulation
-giSoundL ftgen 1,0,1048576,1,"ClassicalGuitar.wav",0,0,1
-giSoundR ftgen 2,0,1048576,1,"ClassicalGuitar.wav",0,0,2
+giSoundL ftgen 1,0,1048576,1,"ClassGuit.wav",0,0,1
+giSoundR ftgen 2,0,1048576,1,"ClassGuit.wav",0,0,2
 
 seed 0; seed the random generators from the system clock
 gaSendL init 0

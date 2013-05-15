@@ -58,15 +58,13 @@ e
 </CsScore>
 <CsoundSynthesizer>
 </pre>
-<h2>Using massign to Map MIDI Channels to Instruments
-</h2>
-<p>We can use the <a target="_blank" href="http://www.csounds.com/manual/html/massign.html">massign</a> opcode, which is used just after the header statement, to explicitly map midi channels to specific instruments and thereby overrule Csound's default mappings. <em>massign</em> takes two input arguments, the first defines the midi channel to be redirected and the second stipulates which instrument it should be directed to. The following example is identical to the previous one except that the <em>massign</em> statements near the top of the orchestra jumble up the default mappings. Midi notes on channel 1 will be mapped to instrument 3, notes on channel 2 to instrument 1 and notes on channel 3 to instrument 2. Undefined channel mappings will be mapped according to the default arrangement and once again midi notes on channels for which an instrument does not exist will be mapped to instrument 1.
-  <br />
-</p>
-<p><strong> <em>  EXAMPLE 07B02_massign.csd</em></strong>
-  <br />
-</p>
-<pre><CsoundSynthesizer>
+
+  <h2>Using massign to Map MIDI Channels to Instruments</h2>
+
+  <p>We can use the <a target="_top" href="http://www.csounds.com/manual/html/massign.html">massign</a> opcode, which is used just after the header statement, to explicitly map midi channels to specific instruments and thereby overrule Csound's default mappings. <em>massign</em> takes two input arguments, the first defines the midi channel to be redirected and the second stipulates which instrument it should be directed to. The following example is identical to the previous one except that the <em>massign</em> statements near the top of the orchestra jumble up the default mappings. Midi notes on channel 1 will be mapped to instrument 3, notes on channel 2 to instrument 1 and notes on channel 3 to instrument 2. Undefined channel mappings will be mapped according to the default arrangement and once again midi notes on channels for which an instrument does not exist will be mapped to instrument 1.<br></p>
+
+  <p><strong> <em>  EXAMPLE 07B02_massign.csd</em></strong><br></p>
+  <pre><CsoundSynthesizer>
 
 <CsOptions>
 -Ma -odac -m0
@@ -135,24 +133,23 @@ e
 
 <CsoundSynthesizer>
 </pre>
-<p><em>massign</em> also<em> </em>has a couple of additional functions that may come in useful. A channel number of zero is interpreted as meaning 'any'. The following instruction will map notes on any and all channels to instrument 1.
-</p>
-<pre>massign 0,1
+
+  <p><em>massign</em> also has a couple of additional functions that may come in useful. A channel number of zero is interpreted as meaning 'any'. The following instruction will map notes on any and all channels to instrument 1.</p>
+  <pre>massign 0,1
 </pre>
-<p> An instrument number of zero is interpreted as meaning 'none' so the following instruction will instruct Csound to ignore triggering for notes received on any and all channels.
-</p>
-<pre>massign 0,0
+
+  <p>An instrument number of zero is interpreted as meaning 'none' so the following instruction will instruct Csound to ignore triggering for notes received on any and all channels.</p>
+  <pre>massign 0,0
 </pre>
-<p>The above feature is useful when we want to scan midi data from an already active instrument using the <a target="_blank" href="http://www.csounds.com/manual/html/midiin.html">midiin</a> opcode, as we did in EXAMPLE 0701.csd.
-</p>
-<h2> Using Multiple Triggering
-  <br />
-</h2>
-<p>Csound's <a href="http://www.csounds.com/manual/html/event.html">event</a>/<a href="http://www.csounds.com/manual/html/event_i.html">event_i</a> opcode (see the <a href="http://en.flossmanuals.net/bin/view/Csound/TriggeringInstrumentEvents">Triggering Instrument Events chapter</a>) makes it possible to trigger any other instrument from a midi-triggered one. As you can assign a fractional number to an instrument, you can distinguish the single instances from each other. This is an example for using fractional instrument numbers.
-</p>
-<p><strong> <em>  EXAMPLE 07B03_MidiTriggerChain.csd</em></strong>
-</p>
-<pre><CsoundSynthesizer>
+
+  <p>The above feature is useful when we want to scan midi data from an already active instrument using the <a target="_top" href="http://www.csounds.com/manual/html/midiin.html">midiin</a> opcode, as we did in EXAMPLE 0701.csd.</p>
+
+  <h2>Using Multiple Triggering<br></h2>
+
+  <p>Csound's <a href="http://www.csounds.com/manual/html/event.html">event</a>/<a href="http://www.csounds.com/manual/html/event_i.html">event_i</a> opcode (see the <a href="http://en.flossmanuals.net/bin/view/Csound/TriggeringInstrumentEvents">Triggering Instrument Events chapter</a>) makes it possible to trigger any other instrument from a midi-triggered one. As you can assign a fractional number to an instrument, you can distinguish the single instances from each other. This is an example for using fractional instrument numbers.</p>
+
+  <p><strong> <em>  EXAMPLE 07B03_MidiTriggerChain.csd</em></strong></p>
+  <pre><CsoundSynthesizer>
 <CsOptions>
 -Ma
 </CsOptions>

@@ -48,11 +48,10 @@ islev = 1
 irel = 2
 aenv adsr iatt, idec, islev, irel
 outs a1*aenv,a1*aenv
-endin</code>
-<code><code></CsInstruments></code>
+endin
+</CsInstruments>
 <CsScore>
 f8 0 8192 10 1;
 i 1 0 5
 </CsScore>
 </CsoundSynthesizer>
-</code>

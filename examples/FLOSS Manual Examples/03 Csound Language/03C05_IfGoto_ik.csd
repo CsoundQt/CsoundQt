@@ -10,7 +10,7 @@ nchnls = 2
 0dbfs = 1
 
   instr 1
-Sfile     =          "my/file.wav"
+Sfile     =          "ClassGuit.wav.wav"
 ifilchnls filenchnls Sfile
  if ifilchnls == 1 kgoto mono
   kgoto stereo

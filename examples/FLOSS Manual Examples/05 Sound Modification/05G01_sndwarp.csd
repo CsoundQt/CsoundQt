@@ -14,7 +14,7 @@ nchnls = 2
 0dbfs = 1
 
 ; waveform used for granulation
-giSound  ftgen 1,0,2097152,1,"ClassicalGuitar.wav",0,0,0
+giSound  ftgen 1,0,2097152,1,"ClassGuit.wav",0,0,0
 
 ; window function - used as an amplitude envelope for each grain
 ; (first half of a sine wave)

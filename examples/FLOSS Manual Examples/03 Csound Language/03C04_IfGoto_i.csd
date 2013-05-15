@@ -7,7 +7,7 @@ nchnls = 2
 0dbfs = 1
 
   instr 1
-Sfile     = "/Joachim/Materialien/SamplesKlangbearbeitung/Kontrabass.aif"
+Sfile     = "ClassGuit.wav"
 ifilchnls filenchnls Sfile
 if ifilchnls == 1 igoto mono; condition if true
  igoto stereo; else condition

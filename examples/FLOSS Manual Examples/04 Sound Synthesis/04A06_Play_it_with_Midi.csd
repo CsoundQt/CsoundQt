@@ -13,7 +13,7 @@ giSine    ftgen     0, 0, 2^10, 10, 1
           massign   0, 1 ;all midi channels to instr 1
 
 instr 1 ;master instrument
-ibasfreq  cpsmidi	;base frequency
+ibasfreq  cpsmidi       ;base frequency
 iampmid   ampmidi   20 ;receive midi-velocity and scale 0-20
 inparts   =         int(iampmid)+1 ;exclude zero
 ipart     =         1 ;count variable for loop

@@ -30,7 +30,7 @@ fsigA     pvstanal  .5, giamp, gipitch, gifilA, gidet, giwrap, giskip,\
                      gifftsiz, giovlp, githresh
 fsigB     pvstanal  1, giamp, gipitch, gifilB, gidet, giwrap, giskip,\
                      gifftsiz, giovlp, githresh
-fvoc      pvsvoc    fsigA, fsigB, 1, 1	
+fvoc      pvsvoc    fsigA, fsigB, 1, 1  
 aout      pvsynth   fvoc
 aenv      linen     aout, .1, p3, .5
           out       aout

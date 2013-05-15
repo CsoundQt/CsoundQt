@@ -12,12 +12,12 @@
 
 sr     =  44100
 ksmps  =  32
-nchnls =  1	
+nchnls =  1     
 0dbfs  =  1
 
 giSine  ftgen  0, 0, 4096, 10, 1             ; a sine wave
 
-  instr	1 ; a simple tone generator
+  instr 1 ; a simple tone generator
 aEnv    expon    0.2, p3, 0.001              ; a percussive envelope
 aSig    poscil   aEnv, cpsmidinn(p4), giSine ; audio oscillator
         out      aSig                        ; send audio to output

@@ -60,17 +60,15 @@ e
 
 <CsoundSynthesizer>
 </pre>
-<p>Midi file input can be combined with other Csound inputs from the score or from live midi and also bear in mind that a midi file doesn't need to contain midi note events, it could instead contain, for example, a sequence of controller data used to automate parameters of effects during a live performance.
-</p>
-<p>Rather than to directly play back a midi file using Csound instruments it might be useful to import midi note events as a standard Csound score. This way events could be edited within the Csound editor or several scores could be combined. The following example takes a midi file as input and outputs standard Csound .sco files of the events contained therein. For convenience each midi channel is output to a separate .sco file, therefore up to 16 .sco files will be created. Multiple .sco files can be later recombined by using <a href="http://www.csounds.com/manual/html/include.html">#include</a>... statements or simply by using copy and paste.
-</p>
-<p>The only tricky aspect of this example is that note-ons followed by note-offs need to be sensed and calculated as p3 duration values. This is implemented by sensing the note-off by using the <a href="http://www.csounds.com/manual/html/release.html">release</a> opcode and at that moment triggering a note in another instrument with the required score data. It is this second instrument that is responsible for writing this data to a score file. Midi channels are rendered as p1 values, midi note numbers as p4 and velocity values as p5.
-  <br />
-</p>
-<p><strong><em>  EXAMPLE 07D02_MidiToScore.csd</em></strong>
-  <br />
-</p>
-<pre><CsoundSynthesizer>
+
+  <p>Midi file input can be combined with other Csound inputs from the score or from live midi and also bear in mind that a midi file doesn't need to contain midi note events, it could instead contain, for example, a sequence of controller data used to automate parameters of effects during a live performance.</p>
+
+  <p>Rather than to directly play back a midi file using Csound instruments it might be useful to import midi note events as a standard Csound score. This way events could be edited within the Csound editor or several scores could be combined. The following example takes a midi file as input and outputs standard Csound .sco files of the events contained therein. For convenience each midi channel is output to a separate .sco file, therefore up to 16 .sco files will be created. Multiple .sco files can be later recombined by using <a href="http://www.csounds.com/manual/html/include.html">#include</a>... statements or simply by using copy and paste.</p>
+
+  <p>The only tricky aspect of this example is that note-ons followed by note-offs need to be sensed and calculated as p3 duration values. This is implemented by sensing the note-off by using the <a href="http://www.csounds.com/manual/html/release.html">release</a> opcode and at that moment triggering a note in another instrument with the required score data. It is this second instrument that is responsible for writing this data to a score file. Midi channels are rendered as p1 values, midi note numbers as p4 and velocity values as p5.<br></p>
+
+  <p><strong><em>  EXAMPLE 07D02_MidiToScore.csd</em></strong><br></p>
+  <pre><CsoundSynthesizer>
 
 <CsOptions>
 ; enter name of input midi file
@@ -88,7 +86,7 @@ massign 0,1
   instr 1
 iChan       midichn
 iCps        cpsmidi            ; read pitch in frequency from midi notes
-iVel        veloc	0, 127 ; read in velocity from midi notes
+iVel        veloc       0, 127 ; read in velocity from midi notes
 kDur        timeinsts          ; running total of duration of this note
 kRelease    release            ; sense when note is ending
  if kRelease=1 then            ; if note is about to end
@@ -106,8 +104,8 @@ iStartTime  times        ; read current time since the start of performance
 ; form file name for this channel (1-16) as a string variable
 SFileName   sprintf  "Channel%d.sco",iChan
 ; write a line to the score for this channel's .sco file
-            fprints  SFileName, "i%d\\t%f\\t%f\\t%f\\t%d\\n",\
-	                         iChan,iStartTime-iDur,iDur,iCps,iVel
+            fprints  SFileName, "i%d\t%f\t%f\t%f\t%d\n",\
+                                 iChan,iStartTime-iDur,iDur,iCps,iVel
   endin
 
 </CsInstruments>
