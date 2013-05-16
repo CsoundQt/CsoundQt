@@ -888,10 +888,9 @@ int CsoundEngine::runCsound()
 #endif
 		// For chnget/chnset
 		MYFLT *pvalue;
-		CsoundChannelListEntry **channelList
-				= (CsoundChannelListEntry **) malloc(sizeof(CsoundChannelListEntry *));
-		int numChannels = csoundListChannels(ud->csound, channelList);
-		CsoundChannelListEntry *entry = *channelList;
+		controlChannelInfo_t *channelList;
+		int numChannels = csoundListChannels(ud->csound, &channelList);
+		controlChannelInfo_t *entry = channelList;
 		for (int i = 0; i < numChannels; i++) {
 			int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name,
 											   0);
@@ -946,10 +945,6 @@ int CsoundEngine::runCsound()
 			}
 			entry++;
 		}
-		// Not really sure that this is worth the trouble, as it
-		// is used only with chnsend and chnrecv which are unfinished:
-		//         qDebug() << "csoundSetChannelIOCallback";
-		//         csoundSetChannelIOCallback(csound, &CsoundQt::ioCallback);
 	}
 
 	if (ud->threaded) {

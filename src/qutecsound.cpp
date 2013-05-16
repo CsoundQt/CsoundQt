@@ -2022,9 +2022,7 @@ void CsoundQt::runUtility(QString flags)
 		int argc = index;
 		CSOUND *csoundU;
 		csoundU=csoundCreate(0);
-		csoundReset(csoundU);
 		csoundSetHostData(csoundU, (void *) m_console);
-		csoundPreCompile(csoundU);
 		csoundSetMessageCallback(csoundU, &CsoundQt::utilitiesMessageCallback);
 		// Utilities always run in the same thread as CsoundQt
 		csoundRunUtility(csoundU, name.toLocal8Bit(), argc, argv);
