@@ -26,6 +26,13 @@
 
 csound6: { # Csound6 requires some internal changes
 DEFINES += CSOUND6
+unix {
+    macx {
+CSOUND_API_INCLUDE_DIR = /Users/andres/Library/Frameworks/CsoundLib64.framework/Headers
+CSOUND_LIBRARY_DIR = /Users/andres/Library/Frameworks/CsoundLib64.framework
+}
+}
+message("Building for Csound 6")
 }
 
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")
