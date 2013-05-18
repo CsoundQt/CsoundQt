@@ -118,12 +118,25 @@ public:
 	//    static void inputValueCallbackThread (CSOUND *csound,
 	//                                   const char *channelName,
 	//                                   MYFLT *value);
+
+#ifndef CSOUND6
 	static void outputValueCallback (CSOUND *csound,
 									 const char *channelName,
 									 MYFLT value);
 	static void inputValueCallback (CSOUND *csound,
 									const char *channelName,
 									MYFLT *value);
+#else
+	static void outputValueCallback (CSOUND *csound,
+									 const char *channelName,
+									 void *channelValuePtr,
+									 const void *channelType);
+	static void inputValueCallback (CSOUND *csound,
+									const char *channelName,
+									void *channelValuePtr,
+									const void *channelType);
+
+#endif
 
 	static void makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name);
 	static void drawGraphCallback(CSOUND *csound, WINDAT *windat);

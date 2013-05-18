@@ -24,6 +24,8 @@
 #include "widgetlayout.h"
 //#include "curve.h"
 
+#include "csound_standard_types.h"
+
 #include "console.h"
 #include "qutescope.h"  // Needed for passing the ud to the scope for display data
 #include "qutegraph.h"  // Needed for passing the ud to the graph for display data
@@ -117,6 +119,7 @@ void CsoundEngine::messageCallbackThread(CSOUND *csound,
 	}
 }
 
+#ifndef CSOUND6
 void CsoundEngine::outputValueCallback (CSOUND *csound,
 										const char *channelName,
 										MYFLT value)
@@ -177,6 +180,70 @@ void CsoundEngine::inputValueCallback(CSOUND *csound,
 		}
 	}
 }
+#else
+void CsoundEngine::outputValueCallback (CSOUND *csound,
+								 const char *channelName,
+								 void *channelValuePtr,
+								 const void *channelType)
+{
+	// Called by the csound running engine when 'outvalue' opcode is used
+	// To pass data from Csound to CsoundQt
+	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+	if (channelType == &CS_VAR_TYPE_S) {
+		ud->csEngine->passOutString(channelName, (const char *) channelValuePtr);
+	}
+	else if (channelType == &CS_VAR_TYPE_K){
+		ud->csEngine->passOutValue(channelName, *((MYFLT *)channelValuePtr));
+	} else {
+		qDebug() << "outputValueCallback: Unsupported type";
+	}
+}
+
+void CsoundEngine::inputValueCallback (CSOUND *csound,
+								const char *channelName,
+								void *channelValuePtr,
+								const void *channelType)
+{
+	// Called by the csound running engine when 'invalue' opcode is used
+	// To pass data from qutecsound to Csound
+	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+	if (channelType == &CS_VAR_TYPE_S) { // channel is a string channel
+		char *string = (char *) channelValuePtr;
+		QString newValue = ud->wl->getStringForChannel(channelName);
+		int maxlen = csoundGetStrVarMaxLen(csound);
+		strncpy(string, newValue.toLocal8Bit(), maxlen);
+	}
+	else if (channelType == &CS_VAR_TYPE_K) {  // Not a string channel
+		//FIXME check if mouse tracking is active, and move this from here
+		QString name(channelName);
+		MYFLT *value = (MYFLT *) channelValuePtr;
+		if (name == "_MouseX") {
+			*value = (MYFLT) ud->mouseValues[0];
+		}
+		else if (name == "_MouseY") {
+			*value = (MYFLT) ud->mouseValues[1];
+		}
+		else if(name == "_MouseRelX") {
+			*value = (MYFLT) ud->mouseValues[2];
+		}
+		else if(name == "_MouseRelY") {
+			*value = (MYFLT) ud->mouseValues[3];
+		}
+		else if(name == "_MouseBut1") {
+			*value = (MYFLT) ud->mouseValues[4];
+		}
+		else if(name == "_MouseBut2") {
+			*value = (MYFLT) ud->mouseValues[5];
+		}
+		else {
+			*value = (MYFLT) ud->wl->getValueForChannel(name);
+		}
+	} else {
+		qDebug() << "inputValueCallback: Unsupported type";
+	}
+}
+
+#endif
 
 void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char * /*name*/)
 {
@@ -740,8 +807,9 @@ int CsoundEngine::runCsound()
 
 	//  csoundReset(ud->csound);
 	csoundSetHostData(ud->csound, (void *) ud);
+#ifndef CSOUND6
 	csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
-
+#endif
 	if (csoundCreateGlobalVariable(ud->csound, "FLTK_Flags", sizeof(int)) != CSOUND_SUCCESS) {
 		ud->runDispatcher = false;
 		m_msgUpdateThread.waitForFinished(); // Join the message thread
@@ -810,15 +878,19 @@ int CsoundEngine::runCsound()
 		ud->outputStringChannelNames.clear();
 		ud->previousOutputValues.clear();
 		ud->previousStringOutputValues.clear();
+#ifndef CSOUND6
 		// For invalue/outvalue
 		csoundSetInputValueCallback(ud->csound, &CsoundEngine::inputValueCallback);
 		csoundSetOutputValueCallback(ud->csound, &CsoundEngine::outputValueCallback);
+#else
+		csoundSetInputChannelCallback(ud->csound, &CsoundEngine::inputValueCallback);
+		csoundSetOutputChannelCallback(ud->csound, &CsoundEngine::outputValueCallback);
+#endif
 		// For chnget/chnset
 		MYFLT *pvalue;
-		CsoundChannelListEntry **channelList
-				= (CsoundChannelListEntry **) malloc(sizeof(CsoundChannelListEntry *));
-		int numChannels = csoundListChannels(ud->csound, channelList);
-		CsoundChannelListEntry *entry = *channelList;
+		controlChannelInfo_t *channelList;
+		int numChannels = csoundListChannels(ud->csound, &channelList);
+		controlChannelInfo_t *entry = channelList;
 		for (int i = 0; i < numChannels; i++) {
 			int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name,
 											   0);
@@ -873,10 +945,6 @@ int CsoundEngine::runCsound()
 			}
 			entry++;
 		}
-		// Not really sure that this is worth the trouble, as it
-		// is used only with chnsend and chnrecv which are unfinished:
-		//         qDebug() << "csoundSetChannelIOCallback";
-		//         csoundSetChannelIOCallback(csound, &CsoundQt::ioCallback);
 	}
 
 	if (ud->threaded) {

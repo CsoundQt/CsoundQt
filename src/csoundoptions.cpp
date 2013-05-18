@@ -103,18 +103,18 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 	if (dither) {
 		list << " -Z";
 	}
-	if (newParser == 1) {
 #ifndef CSOUND6
+    if (newParser == 1) {
 		list << "--new-parser";
 #endif
 		if (multicore) {
 			list << "-j" + QString::number(numThreads);
 		}
-	} else if (newParser == 0) {
 #ifndef CSOUND6
-		list << "--old-parser";
-#endif
+    } else if (newParser == 0) {
+        list << "--old-parser";
 	}
+#endif
 	if (rt && rtUseOptions) {
 		if (rtOverrideOptions)
 			list << "-+ignore_csopts=1";
