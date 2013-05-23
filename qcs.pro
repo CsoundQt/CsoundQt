@@ -26,14 +26,18 @@
 
 csound6: { # Csound6 requires some internal changes
 # Temporary testing paths
-CSOUND_INCLUDE_DIR = /home/andres/src/csound6/include
-INCLUDEPATH += /home/andres/src/csound6/interfaces
-CSOUND_LIBRARY_DIR = /home/andres/src/csound6-build/
 DEFINES += CSOUND6
 unix {
+
     macx {
 CSOUND_API_INCLUDE_DIR = /Users/andres/Library/Frameworks/CsoundLib64.framework/Headers
 CSOUND_LIBRARY_DIR = /Users/andres/Library/Frameworks/CsoundLib64.framework
+LIBS += -F/Users/andres/Library/Frameworks
+} else {
+CSOUND_INCLUDE_DIR = /home/andres/src/csound6/include
+INCLUDEPATH += /home/andres/src/csound6/interfaces
+CSOUND_LIBRARY_DIR = /home/andres/src/csound6-build/
+
 }
 }
 message("Building for Csound 6")
