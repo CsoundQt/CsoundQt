@@ -23,7 +23,14 @@
 #ifndef DOCUMENTVIEW_H
 #define DOCUMENTVIEW_H
 
+#ifdef USE_QT5
+#include <QtWidgets>
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
+#else
 #include <QtGui>
+#endif
+
 #include "baseview.h"
 
 #include <QKeyEvent> // For syntax menu class

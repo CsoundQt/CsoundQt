@@ -23,7 +23,8 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include <QtGui>
+#include <QTextEdit>
+#include <QDockWidget>
 
 class Console : public QTextEdit
 {

@@ -166,6 +166,7 @@ public:
 	void passOutValue(QString channelName, double value);
 	void passOutString(QString channelName, QString value);
 	void flushQueues();
+	void queueMessage(QString message);
 
 	bool isRunning();
 	bool isRecording();

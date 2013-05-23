@@ -363,7 +363,7 @@ void CsoundQt::openExample()
 void CsoundQt::logMessage(QString msg)
 {
 	if (logFile.isOpen()) {
-		logFile.write(msg.toAscii());
+		logFile.write(msg.toLatin1());
 	}
 }
 
@@ -514,7 +514,7 @@ void CsoundQt::createCodeGraph()
 	command.replace("/", "\\");
 #endif
 
-	int ret = system(command.toAscii());
+	int ret = system(command.toLatin1());
 	if (ret != 0) {
 		QMessageBox::warning(this, tr("CsoundQt"),
 							 tr("Dot executable not found.\n"
@@ -554,7 +554,7 @@ void CsoundQt::createCodeGraph()
 #endif
 
 	//   qDebug() << command;
-	ret = system(command.toAscii());
+	ret = system(command.toLatin1());
 	if (ret != 0) {
 		qDebug() << "CsoundQt::createCodeGraph() Error running dot";
 	}
@@ -789,7 +789,7 @@ void CsoundQt::openLogFile()
 		QString text = "--**-- " + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss")
 				+ " CsoundQt Logging Started: "
 				+ "\n";
-		logFile.write(text.toAscii());
+		logFile.write(text.toLatin1());
 	}
 	else {
 		qDebug() << "CsoundQt::openLogFile() Error. Could not open log file! NO logging. " << logFile.fileName();
@@ -1300,7 +1300,7 @@ void CsoundQt::play(bool realtime, int index)
 			}
 			QString csdText = documentPages[curPage]->getBasicText();
 			runFileName1 = csdFile.fileName();
-			csdFile.write(csdText.toAscii());
+			csdFile.write(csdText.toLatin1());
 			csdFile.flush();
 		}
 	}
@@ -1368,7 +1368,7 @@ void CsoundQt::runInTerm(bool realtime)
 		}
 		QString csdText = documentPages[curPage]->getBasicText();
 		fileName = tempFile.fileName();
-		tempFile.write(csdText.toAscii());
+		tempFile.write(csdText.toLatin1());
 		tempFile.flush();
 		if (!tempScriptFiles.contains(fileName))
 			tempScriptFiles << fileName;
@@ -1511,7 +1511,7 @@ void CsoundQt::render()
 		//    dialog.setConfirmOverwrite(false);
 		QString filter = QString(configlists.fileTypeLongNames[m_options->fileFileType] + " Files ("
 								 + configlists.fileTypeExtensions[m_options->fileFileType] + ")");
-		dialog.setFilter(filter);
+		dialog.selectNameFilter(filter);
 		if (dialog.exec() == QDialog::Accepted) {
 			QString extension = configlists.fileTypeExtensions[m_options->fileFileType].left(configlists.fileTypeExtensions[m_options->fileFileType].indexOf(";"));
 			//       // Remove the '*' from the extension

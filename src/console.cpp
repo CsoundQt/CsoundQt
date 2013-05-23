@@ -22,6 +22,13 @@
 
 #include "console.h"
 
+#include <QDebug>
+#ifdef USE_QT5
+#include <QtWidgets>
+#else
+#include <QtGui>
+#endif
+
 Console::Console(QWidget *parent) : QTextEdit(parent)
 {
 	error = false;

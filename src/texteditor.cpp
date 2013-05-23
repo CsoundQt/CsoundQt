@@ -20,8 +20,14 @@
 	02111-1307 USA
 */
 
-#include "texteditor.h"
+#ifdef USE_QT5
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
+
+#include "texteditor.h"
+
 
 TextEditor::TextEditor(QWidget *parent) :
 	QTextEdit(parent)

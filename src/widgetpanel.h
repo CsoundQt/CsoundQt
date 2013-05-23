@@ -23,7 +23,11 @@
 #ifndef WIDGETPANEL_H
 #define WIDGETPANEL_H
 
+#ifdef USE_QT5
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 
 class WidgetLayout;
 

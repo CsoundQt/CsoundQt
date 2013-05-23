@@ -21,7 +21,12 @@
 #ifndef BASEVIEW_H
 #define BASEVIEW_H
 
+#ifdef USE_QT5
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
+
 #include "highlighter.h"
 #include "scoreeditor.h"
 #include "filebeditor.h"

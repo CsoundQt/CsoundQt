@@ -24,6 +24,10 @@
 #include "widgetlayout.h"
 //#include "curve.h"
 
+#ifdef USE_QT5
+#include <QtConcurrent/QtConcurrent>
+#endif
+
 #ifdef CSOUND6
 #include "csound_standard_types.h"
 #endif
@@ -36,6 +40,7 @@
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
 #include <unistd.h> // for usleep()
 #endif
+
 
 CsoundEngine::CsoundEngine()
 {
@@ -69,17 +74,19 @@ CsoundEngine::CsoundEngine()
 	eventQueueSize = 0;
 
 	m_refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // TODO Eventually allow this to be changed
-
+#ifdef CSOUND6
 	m_msgUpdateThread = QtConcurrent::run(messageListDispatcher, (void *) ud);
+#endif
 }
 
 CsoundEngine::~CsoundEngine()
 {
 //	qDebug() << "CsoundEngine::~CsoundEngine() ";
 
+#ifdef CSOUND6
 	ud->runDispatcher = false;
-
 	m_msgUpdateThread.waitForFinished(); // Join the message thread
+#endif
 
 	disconnect(SIGNAL(passMessages(QString)),0,0);
 	stop();
@@ -561,7 +568,7 @@ int CsoundEngine::popKeyPressEvent()
 	keyMutex.lock();
 	int value = -1;
 	if (!keyPressBuffer.isEmpty()) {
-		value = (int) keyPressBuffer.takeFirst()[0].toAscii();
+		value = (int) keyPressBuffer.takeFirst()[0].toLatin1();
 	}
 	keyMutex.unlock();
 	return value;
@@ -572,7 +579,7 @@ int CsoundEngine::popKeyReleaseEvent()
 	keyMutex.lock();
 	int value = -1;
 	if (!keyReleaseBuffer.isEmpty()) {
-		value = (int) keyReleaseBuffer.takeFirst()[0].toAscii() + 0x10000;
+		value = (int) keyReleaseBuffer.takeFirst()[0].toLatin1() + 0x10000;
 	}
 	keyMutex.unlock();
 	return value;
@@ -849,6 +856,8 @@ int CsoundEngine::runCsound()
 		emit (errorLines(getErrorLines()));
 #ifndef CSOUND6
 		csoundSetMessageCallback(ud->csound, 0);
+		ud->runDispatcher = false;
+		m_msgUpdateThread.waitForFinished(); // Join the message thread
 #else
 		csoundDestroyMessageBuffer(ud->csound);
 #endif
@@ -883,9 +892,16 @@ int CsoundEngine::runCsound()
 #endif
 		// For chnget/chnset
 		MYFLT *pvalue;
+#ifndef CSOUND6
+		CsoundChannelListEntry **channelList
+				= (CsoundChannelListEntry **) malloc(sizeof(CsoundChannelListEntry *));
+		int numChannels = csoundListChannels(ud->csound, channelList);
+		CsoundChannelListEntry *entry = *channelList;
+#else
 		controlChannelInfo_t *channelList;
 		int numChannels = csoundListChannels(ud->csound, &channelList);
 		controlChannelInfo_t *entry = channelList;
+#endif
 		for (int i = 0; i < numChannels; i++) {
 			int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name,
 											   0);
@@ -1104,6 +1120,13 @@ void CsoundEngine::flushQueues()
 	m_messageMutex.unlock();
 	ud->wl->flushGraphBuffer();
 	qApp->processEvents();
+}
+
+void CsoundEngine::queueMessage(QString message)
+{
+	m_messageMutex.lock();
+	messageQueue << message;
+	m_messageMutex.unlock();
 }
 
 void CsoundEngine::recordBuffer()

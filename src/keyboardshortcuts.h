@@ -23,7 +23,11 @@
 #ifndef KEYBOARDSHORTCUTS_H
 #define KEYBOARDSHORTCUTS_H
 
+#ifdef USE_QT5
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 #include "ui_keyboardshortcuts.h"
 #include "ui_keyselector.h"
 

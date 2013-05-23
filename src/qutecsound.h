@@ -23,7 +23,11 @@
 #ifndef QUTECSOUND_H
 #define QUTECSOUND_H
 
+#ifdef USE_QT5
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 
 #include "types.h"
 

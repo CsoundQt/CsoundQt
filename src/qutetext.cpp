@@ -43,7 +43,7 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_fontsize", 12.0);
 	setProperty("QCS_bgcolor", QColor());
 	setProperty("QCS_bgcolormode", false);
-	setProperty("QCS_color", Qt::black);
+	setProperty("QCS_color", QColor(Qt::black));
 	setProperty("QCS_bordermode", "noborder");
 	setProperty("QCS_borderradius", 1);
 	setProperty("QCS_borderwidth", 1);
