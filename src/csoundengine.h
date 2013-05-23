@@ -104,6 +104,8 @@ class CsoundEngine : public QObject
 public:
 	CsoundEngine();
 	~CsoundEngine();
+
+#ifndef CSOUND6
 	static void messageCallbackNoThread(CSOUND *csound,
 										int attr,
 										const char *fmt,
@@ -112,12 +114,8 @@ public:
 									  int attr,
 									  const char *fmt,
 									  va_list args);
-	//    static void outputValueCallbackThread (CSOUND *csound,
-	//                                    const char *channelName,
-	//                                    MYFLT value);
-	//    static void inputValueCallbackThread (CSOUND *csound,
-	//                                   const char *channelName,
-	//                                   MYFLT *value);
+#endif
+
 
 #ifndef CSOUND6
 	static void outputValueCallback (CSOUND *csound,
@@ -142,10 +140,6 @@ public:
 	static void drawGraphCallback(CSOUND *csound, WINDAT *windat);
 	static void killGraphCallback(CSOUND *csound, WINDAT *windat);
 	static int exitGraphCallback(CSOUND *csound);
-	//     static void ioCallback (CSOUND *csound,
-	//                             const char *channelName,
-	//                             MYFLT *value,
-	//                             int channelType);
 	static int keyEventCallback(void *userData,
 								void *p,
 								unsigned int type);
@@ -171,7 +165,6 @@ public:
 	void processEventQueue();
 	void passOutValue(QString channelName, double value);
 	void passOutString(QString channelName, QString value);
-	void queueMessage(QString message);
 	void flushQueues();
 
 	bool isRunning();

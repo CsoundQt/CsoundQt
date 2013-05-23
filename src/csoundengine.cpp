@@ -24,7 +24,9 @@
 #include "widgetlayout.h"
 //#include "curve.h"
 
+#ifdef CSOUND6
 #include "csound_standard_types.h"
+#endif
 
 #include "console.h"
 #include "qutescope.h"  // Needed for passing the ud to the scope for display data
@@ -46,6 +48,8 @@ CsoundEngine::CsoundEngine()
 	ud->perfThread = 0;
 	ud->flags = QCS_NO_FLAGS;
 	ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
+	ud->runDispatcher = true;
+	ud->wl = NULL;
 #ifdef QCS_PYTHONQT
 	ud->m_pythonCallback = "";
 #endif
@@ -65,11 +69,18 @@ CsoundEngine::CsoundEngine()
 	eventQueueSize = 0;
 
 	m_refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // TODO Eventually allow this to be changed
+
+	m_msgUpdateThread = QtConcurrent::run(messageListDispatcher, (void *) ud);
 }
 
 CsoundEngine::~CsoundEngine()
 {
 //	qDebug() << "CsoundEngine::~CsoundEngine() ";
+
+	ud->runDispatcher = false;
+
+	m_msgUpdateThread.waitForFinished(); // Join the message thread
+
 	disconnect(SIGNAL(passMessages(QString)),0,0);
 	stop();
 
@@ -86,6 +97,7 @@ CsoundEngine::~CsoundEngine()
 	free(m_recBuffer);
 }
 
+#ifndef CSOUND6
 void CsoundEngine::messageCallbackNoThread(CSOUND *csound,
 										   int /*attr*/,
 										   const char *fmt,
@@ -118,6 +130,7 @@ void CsoundEngine::messageCallbackThread(CSOUND *csound,
 		ud->csEngine->queueMessage(msg);
 	}
 }
+#endif
 
 #ifndef CSOUND6
 void CsoundEngine::outputValueCallback (CSOUND *csound,
@@ -300,33 +313,6 @@ int CsoundEngine::keyEventCallback(void *userData,
 	}
 	return 0;
 }
-
-// void CsoundEngine::ioCallback (CSOUND *csound,
-//                              const char *channelName,
-//                              MYFLT *value,
-//                              int channelType
-//                             )
-// {
-//   qDebug() << "qutecsound::ioCallback";
-//   if (channelType & CSOUND_INPUT_CHANNEL) { // is Input Channel
-//     if (channelType & CSOUND_CONTROL_CHANNEL) {
-//       inputValueCallback(csound, channelName, value);
-//     }
-//     else if (channelType & CSOUND_AUDIO_CHANNEL) {
-//     }
-//     else if (channelType & CSOUND_STRING_CHANNEL) {
-//     }
-//   }
-//   else if (channelType & CSOUND_OUTPUT_CHANNEL) { // Is output channel
-//     if (channelType & CSOUND_CONTROL_CHANNEL) {
-//       outputValueCallback(csound, channelName, *value);
-//     }
-//     else if (channelType & CSOUND_AUDIO_CHANNEL) {
-//     }
-//     else if (channelType & CSOUND_STRING_CHANNEL) {
-//     }
-//   }
-// }
 
 void CsoundEngine::csThread(void *data)
 {
@@ -650,7 +636,6 @@ void CsoundEngine::pause()
 		//ud->perfThread->Pause();
 		ud->perfThread->TogglePause();
 	}
-
 }
 
 int CsoundEngine::startRecording(int sampleformat, QString fileName)
@@ -690,7 +675,8 @@ void CsoundEngine::queueEvent(QString eventLine, int delay)
 	// TODO: implement delayed events
 	//   qDebug("CsoundEngine::queueEvent %s", eventLine.toStdString().c_str());
 	if (!isRunning()) {
-		queueMessage(tr("Csound is not running! Event ignored.\n"));
+		QMutexLocker lock(&m_messageMutex);
+		messageQueue << tr("Csound is not running! Event ignored.\n");
 		return;
 	}
 	if (eventQueueSize < QCS_MAX_EVENTS) {
@@ -793,10 +779,10 @@ int CsoundEngine::runCsound()
 	}
 #endif
 
-	ud->runDispatcher = true;
 	ud->msgRefreshTime = m_refreshTime*1000;
+#ifndef CSOUND6
+	ud->runDispatcher = true;
 	m_msgUpdateThread = QtConcurrent::run(messageListDispatcher, (void *) ud);
-
 	// Message Callbacks must be set before compile, otherwise some information is missed
 	if (ud->threaded) {
 		csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
@@ -804,30 +790,36 @@ int CsoundEngine::runCsound()
 	else {
 		csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackNoThread);
 	}
+	csoundReset(ud->csound);
+#else
+	csoundEnableMessageBuffer(ud->csound, 0);
+#endif
 
-	//  csoundReset(ud->csound);
 	csoundSetHostData(ud->csound, (void *) ud);
 #ifndef CSOUND6
 	csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
 #endif
 	if (csoundCreateGlobalVariable(ud->csound, "FLTK_Flags", sizeof(int)) != CSOUND_SUCCESS) {
-		ud->runDispatcher = false;
-		m_msgUpdateThread.waitForFinished(); // Join the message thread
-#ifdef QCS_DESTROY_CSOUND
-		csoundDestroy(ud->csound);
-#else
-		csoundReset(ud->csound);
-#endif
-		return -3;
+		qDebug() << "Error creating the FTLK_Flags variable";
 	}
 	if (m_options.enableFLTK) {
 		// disable FLTK graphs, but allow FLTK widgets
-		*((int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags")) = 4;
+		int *var = (int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags");
+		if (var) {
+			*var = 4;
+		} else {
+			qDebug() << "Error reading the FTLK_Flags variable";
+		}
 	}
 	else {
 		//       qDebug("play() FLTK Disabled");
 		csoundSetGlobalEnv("CS_OMIT_LIBS", "fluidOpcodes,virtual,widgets");
-		*((int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags")) = 3;
+		int *var = (int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags");
+		if (var) {
+			*var = 3;
+		} else {
+			qDebug() << "Error reading the FTLK_Flags variable";
+		}
 	}
 
 	if (true) {
@@ -848,8 +840,6 @@ int CsoundEngine::runCsound()
 	ud->result=csoundCompile(ud->csound,argc,argv);
 	if (ud->result!=CSOUND_SUCCESS) {
 		qDebug() << "Csound compile failed! "  << ud->result;
-		ud->runDispatcher = false;
-		m_msgUpdateThread.waitForFinished(); // Join the message thread
 		flushQueues();
 		for (int i = 0; i < argc; i++) {
 			qDebug() << argv[i];
@@ -857,6 +847,11 @@ int CsoundEngine::runCsound()
 		}
 		free(argv);
 		emit (errorLines(getErrorLines()));
+#ifndef CSOUND6
+		csoundSetMessageCallback(ud->csound, 0);
+#else
+		csoundDestroyMessageBuffer(ud->csound);
+#endif
 #ifdef QCS_DESTROY_CSOUND
 		csoundDestroy(ud->csound);
 #else
@@ -962,7 +957,11 @@ int CsoundEngine::runCsound()
 		}
 		ud->PERF_STATUS = 0;
 		csoundStop(ud->csound);
-		csoundSetMessageCallback(ud->csound, 0); // This seems to fix the messages that appear when closing QCS?
+#ifndef CSOUND6
+		csoundSetMessageCallback(ud->csound, 0);
+#else
+		csoundDestroyMessageBuffer(ud->csound);
+#endif
 #ifdef QCS_DESTROY_CSOUND
 		csoundDestroy(ud->csound);
 #else
@@ -993,10 +992,6 @@ void CsoundEngine::stopCsound()
 	if (ud->threaded) {
 		//    perfThread->ScoreEvent(0, 'e', 0, 0);
 		if (ud->perfThread != 0) {
-			ud->runDispatcher = false;
-			if (m_msgUpdateThread.isRunning()) {
-				m_msgUpdateThread.waitForFinished(); // Join the message thread
-			}
 			cleanupCsound();
 			flushQueues();
 		}
@@ -1012,6 +1007,7 @@ void CsoundEngine::stopCsound()
 		}
 #ifdef QCS_DESTROY_CSOUND
 		csoundDestroy(ud->csound);
+		ud->csound = NULL;
 #else
 		csoundReset(ud->csound);
 #endif
@@ -1045,10 +1041,35 @@ void CsoundEngine::messageListDispatcher(void *data)
 	CsoundUserData *ud_local = (CsoundUserData *) data;
 
 	while (ud_local->runDispatcher) {
-		ud_local->wl->getMouseValues(&ud_local->mouseValues);
+		if (ud_local->threaded && ud_local->perfThread) {
+			if (ud_local->perfThread->GetStatus() != 0) { // In case score has ended
+				ud_local->csEngine->stop();
+			}
+		}
+		CSOUND *csound = ud_local->csEngine->getCsound();
+
+		if (csound) {
+			if (ud_local->wl) {
+				ud_local->wl->getMouseValues(&ud_local->mouseValues);
+			}
+#ifndef CSOUND6
+
+#else
+			int count = csoundGetMessageCnt(csound);
+
+			ud_local->csEngine->m_messageMutex.lock();
+			for (int i = 0; i< count; i++) {
+				ud_local->csEngine->messageQueue << csoundGetFirstMessage(csound);
+				// FIXME: Is this thread safe?
+				csoundPopFirstMessage(csound);
+			}
+			ud_local->csEngine->m_messageMutex.unlock();
+#endif
+		}
+
 		int counter = 0;
-		ud_local->csEngine->m_messageMutex.lock();
 		QString completeMessages;
+		ud_local->csEngine->m_messageMutex.lock();
 		while ((ud_local->csEngine->m_consoleBufferSize <= 0 || counter++ < ud_local->csEngine->m_consoleBufferSize)) {
 			if (ud_local->csEngine->messageQueue.isEmpty()) {
 				break;
@@ -1063,26 +1084,11 @@ void CsoundEngine::messageListDispatcher(void *data)
 			ud_local->csEngine->messageQueue << "\nCsoundQt: Message buffer overflow. Messages discarded!\n";
 		}
 		ud_local->csEngine->m_messageMutex.unlock();
-		emit ud_local->csEngine->passMessages(completeMessages); //Must use signals o make things thread safe
+		emit ud_local->csEngine->passMessages(completeMessages); //Must use signals to make things thread safe
 
-		if (ud_local->threaded && ud_local->perfThread) {
-			if (ud_local->perfThread->GetStatus() != 0) {
-				ud_local->runDispatcher = false;
-				ud_local->csEngine->cleanupCsound();
-				qDebug() << "messageListDispatcher quit 1";
-				return;
-			}
-		}
 		usleep(ud_local->msgRefreshTime);
 	}
 	qDebug() << "messageListDispatcher quit";
-}
-
-void CsoundEngine::queueMessage(QString message)
-{
-	m_messageMutex.lock();
-	messageQueue << message;
-	m_messageMutex.unlock();
 }
 
 void CsoundEngine::flushQueues()
