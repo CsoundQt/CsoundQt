@@ -23,7 +23,13 @@
 #ifndef GRAPHICWINDOW_H
 #define GRAPHICWINDOW_H
 
+#ifdef USE_QT5
+#include <QtWidgets>
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
+#else
 #include <QtGui>
+#endif
 
 class GraphicWindow : public QWidget
 {

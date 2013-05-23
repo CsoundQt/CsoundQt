@@ -23,7 +23,11 @@
 #ifndef LIVEEVENTCONTROL_H
 #define LIVEEVENTCONTROL_H
 
+#ifdef USE_QT5
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 #include "liveeventframe.h"
 
 namespace Ui {

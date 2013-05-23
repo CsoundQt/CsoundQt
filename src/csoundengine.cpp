@@ -24,7 +24,13 @@
 #include "widgetlayout.h"
 //#include "curve.h"
 
+#ifdef USE_QT5
+#include <QtConcurrent/QtConcurrent>
+#endif
+
+#ifdef CSOUND6
 #include "csound_standard_types.h"
+#endif
 
 #include "console.h"
 #include "qutescope.h"  // Needed for passing the ud to the scope for display data
@@ -34,6 +40,7 @@
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
 #include <unistd.h> // for usleep()
 #endif
+
 
 CsoundEngine::CsoundEngine()
 {
@@ -575,7 +582,7 @@ int CsoundEngine::popKeyPressEvent()
 	keyMutex.lock();
 	int value = -1;
 	if (!keyPressBuffer.isEmpty()) {
-		value = (int) keyPressBuffer.takeFirst()[0].toAscii();
+		value = (int) keyPressBuffer.takeFirst()[0].toLatin1();
 	}
 	keyMutex.unlock();
 	return value;
@@ -586,7 +593,7 @@ int CsoundEngine::popKeyReleaseEvent()
 	keyMutex.lock();
 	int value = -1;
 	if (!keyReleaseBuffer.isEmpty()) {
-		value = (int) keyReleaseBuffer.takeFirst()[0].toAscii() + 0x10000;
+		value = (int) keyReleaseBuffer.takeFirst()[0].toLatin1() + 0x10000;
 	}
 	keyMutex.unlock();
 	return value;
@@ -888,9 +895,16 @@ int CsoundEngine::runCsound()
 #endif
 		// For chnget/chnset
 		MYFLT *pvalue;
+#ifndef CSOUND6
+		CsoundChannelListEntry **channelList
+				= (CsoundChannelListEntry **) malloc(sizeof(CsoundChannelListEntry *));
+		int numChannels = csoundListChannels(ud->csound, channelList);
+		CsoundChannelListEntry *entry = *channelList;
+#else
 		controlChannelInfo_t *channelList;
 		int numChannels = csoundListChannels(ud->csound, &channelList);
 		controlChannelInfo_t *entry = channelList;
+#endif
 		for (int i = 0; i < numChannels; i++) {
 			int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name,
 											   0);

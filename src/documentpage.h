@@ -23,6 +23,11 @@
 #ifndef DOCUMENTPAGE_H
 #define DOCUMENTPAGE_H
 
+#ifdef USE_QT5
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
+#endif
+
 #include <QTextEdit>
 #include <QDomElement>
 #include <QStack>
