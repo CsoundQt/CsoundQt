@@ -633,6 +633,11 @@ void DocumentPage::setModified(bool mod)
 	}
 }
 
+void DocumentPage::sendCodeToEngine(QString code)
+{
+	m_csEngine->evaluate(code);
+}
+
 bool DocumentPage::isModified()
 {
 	if (m_view->isModified())

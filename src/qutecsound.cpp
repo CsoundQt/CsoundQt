@@ -132,8 +132,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	m_pythonConsole->show();
 	m_scratchPad = new QDockWidget(this);
 	addDockWidget(Qt::LeftDockWidgetArea, m_scratchPad);
-	m_scratchPad->setObjectName("Python Scratch Pad");
-	m_scratchPad->setWindowTitle(tr("Python Scratch Pad"));
+	m_scratchPad->setObjectName("Scratch Pad");
+	m_scratchPad->setWindowTitle(tr("Scratch Pad"));
 #endif
 
 	connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
@@ -625,19 +625,24 @@ void CsoundQt::redo()
 
 void CsoundQt::evaluateSection()
 {
+	QString text;
 	if (!m_scratchPad->hasFocus()) {
-		evaluatePython(documentPages[curPage]->getActiveSection());
+		text = documentPages[curPage]->getActiveSection();
 	}
 	else {
-		evaluatePython(static_cast<DocumentView *>(m_scratchPad->widget())->getActiveSection());
+		text = static_cast<DocumentView *>(m_scratchPad->widget())->getActiveSection();
+	}
+	if (text.indexOf("instr") >= 0 && text.indexOf("'''") < 0) {
+		evaluateCsound(text);
+	} else {
+		evaluatePython(text);
 	}
 }
 
-void CsoundQt::evaluatePython(QString code)
+void CsoundQt::evaluate(QString code)
 {
-#ifdef QCS_PYTHONQT
-	QString evalCode = QString();
-	if (code == QString()) { //evaluate current selection in current document
+	QString evalCode;
+	if (code.isEmpty()) { //evaluate current selection in current document
 		if (!m_scratchPad->hasFocus()) {
 			evalCode = documentPages[curPage]->getActiveText();
 			if (evalCode.count("\n") <= 1) {
@@ -651,8 +656,27 @@ void CsoundQt::evaluatePython(QString code)
 	else {
 		evalCode = code;
 	}
-	m_pythonConsole->evaluate(evalCode);
+	if (evalCode.indexOf("instr") >= 0 && evalCode.indexOf("'''") < 0) {
+		evaluateCsound(evalCode);
+	} else {
+		evaluatePython(evalCode);
+	}
+}
 
+
+void CsoundQt::evaluateCsound(QString code)
+{
+#ifdef CSOUND6
+	documentPages[curPage]->sendCodeToEngine(code);
+#else
+	qDebug() << "evaluateCsound only available in Csound6";
+#endif
+}
+
+void CsoundQt::evaluatePython(QString code)
+{
+#ifdef QCS_PYTHONQT
+	m_pythonConsole->evaluate(evalCode);
 #else
 	showNoPythonQtWarning();
 #endif
@@ -2198,7 +2222,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	evaluateAct->setShortcut(tr("Alt+E"));
 	evaluateSectionAct->setShortcut(tr("Shift+Alt+E"));
 	showPythonConsoleAct->setShortcut(tr("Alt+7"));
-	showPythonScratchPadAct->setShortcut(tr("Alt+8"));
+	showScratchPadAct->setShortcut(tr("Alt+8"));
 	killLineAct->setShortcut(tr("Ctrl+K"));
 	killToEndAct->setShortcut(tr("Shift+Alt+K"));
 	showOrcAct->setShortcut(tr("Shift+Alt+1"));
@@ -2551,17 +2575,17 @@ void CsoundQt::createActions()
 	connect(showPythonConsoleAct, SIGNAL(triggered()), this, SLOT(showNoPythonQtWarning()));
 #endif
 
-	showPythonScratchPadAct = new QAction(QIcon(prefix + "scratchpad.png"), tr("ScratchPad"), this);
-	showPythonScratchPadAct->setCheckable(true);
+	showScratchPadAct = new QAction(QIcon(prefix + "scratchpad.png"), tr("ScratchPad"), this);
+	showScratchPadAct->setCheckable(true);
 	//  showPythonConsoleAct->setChecked(true);  // Unnecessary because it is set by options
-	showPythonScratchPadAct->setStatusTip(tr("Show Python Scratch Pad"));
-	showPythonScratchPadAct->setIconText(tr("ScratchPad"));
-	showPythonScratchPadAct->setShortcutContext(Qt::ApplicationShortcut);
+	showScratchPadAct->setStatusTip(tr("Show Scratch Pad"));
+	showScratchPadAct->setIconText(tr("ScratchPad"));
+	showScratchPadAct->setShortcutContext(Qt::ApplicationShortcut);
 #ifdef QCS_PYTHONQT
 	connect(showPythonScratchPadAct, SIGNAL(triggered(bool)), m_scratchPad, SLOT(setVisible(bool)));
 	connect(m_scratchPad, SIGNAL(visibilityChanged(bool)), showPythonScratchPadAct, SLOT(setChecked(bool)));
 #else
-	connect(showPythonScratchPadAct, SIGNAL(triggered()), this, SLOT(showNoPythonQtWarning()));
+	connect(showScratchPadAct, SIGNAL(triggered()), this, SLOT(showNoPythonQtWarning()));
 #endif
 
 	showManualAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("Csound Manual"), this);
@@ -2838,7 +2862,7 @@ void CsoundQt::setKeyboardShortcutsList()
 	m_keyActions.append(showInspectorAct);
 	m_keyActions.append(showLiveEventsAct);
 	m_keyActions.append(showPythonConsoleAct);
-	m_keyActions.append(showPythonScratchPadAct);
+	m_keyActions.append(showScratchPadAct);
 	m_keyActions.append(showUtilitiesAct);
 	m_keyActions.append(setHelpEntryAct);
 	m_keyActions.append(browseBackAct);

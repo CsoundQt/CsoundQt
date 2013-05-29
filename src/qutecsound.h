@@ -189,6 +189,8 @@ private slots:
 	void undo();
 	void redo();
 	void evaluateSection();
+	void evaluate(QString code = QString());
+	void evaluateCsound(QString code = QString());
 	void evaluatePython(QString code = QString());
 	void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
 	//    void setWidgetClipboard(QString text);
@@ -380,7 +382,7 @@ private:
 	QAction *showInspectorAct;
 	QAction *showLiveEventsAct;
 	QAction *showPythonConsoleAct;
-	QAction *showPythonScratchPadAct;
+	QAction *showScratchPadAct;
 	QAction *commentAct;
 	//    QAction *uncommentAct;
 	QAction *indentAct;

@@ -557,6 +557,16 @@ void CsoundEngine::registerGraph(QuteGraph *graph)
 	graph->setUd(ud);
 }
 
+void CsoundEngine::evaluate(QString code)
+{
+#ifdef CSOUND6
+	csoundCompileOrc(getCsound(), code.asAscii());
+#else
+	Q_UNUSED(code);
+	qDebug() << "CsoundEngine::evaluate only available in Csound6";
+#endif
+}
+
 //void CsoundEngine::unregisterScope(QuteScope *scope)
 //{
 //  // TODO is it necessary to unregiter scopes?
@@ -891,17 +901,16 @@ int CsoundEngine::runCsound()
 		csoundSetOutputChannelCallback(ud->csound, &CsoundEngine::outputValueCallback);
 #endif
 		// For chnget/chnset
-		MYFLT *pvalue;
 #ifndef CSOUND6
-		CsoundChannelListEntry **channelList
-				= (CsoundChannelListEntry **) malloc(sizeof(CsoundChannelListEntry *));
-		int numChannels = csoundListChannels(ud->csound, channelList);
-		CsoundChannelListEntry *entry = *channelList;
+		CsoundChannelListEntry *channelList;
+		int numChannels = csoundListChannels(ud->csound, &channelList);
+		CsoundChannelListEntry *entry = channelList;
 #else
 		controlChannelInfo_t *channelList;
 		int numChannels = csoundListChannels(ud->csound, &channelList);
 		controlChannelInfo_t *entry = channelList;
 #endif
+		MYFLT *pvalue;
 		for (int i = 0; i < numChannels; i++) {
 			int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name,
 											   0);
@@ -956,6 +965,7 @@ int CsoundEngine::runCsound()
 			}
 			entry++;
 		}
+		csoundDeleteChannelList(ud->csound, channelList);
 	}
 
 	if (ud->threaded) {
@@ -1005,6 +1015,12 @@ int CsoundEngine::runCsound()
 void CsoundEngine::stopCsound()
 {
 	//  qDebug() << "CsoundEngine::stopCsound()";
+#ifndef CSOUND6
+	ud->runDispatcher = false;
+	if (m_msgUpdateThread.isRunning()) {
+		m_msgUpdateThread.waitForFinished(); // Join the message thread
+	}
+#endif
 	if (ud->threaded) {
 		//    perfThread->ScoreEvent(0, 'e', 0, 0);
 		if (ud->perfThread != 0) {
@@ -1036,13 +1052,10 @@ void CsoundEngine::stopCsound()
 
 void CsoundEngine::cleanupCsound()
 {
-	CsoundPerformanceThread *pt = ud->perfThread;
-	ud->perfThread = 0;
-	pt->Stop();
-	//      qDebug() << "CsoundEngine::stopCsound() stopped";
-	pt->Join();
-	qDebug() << "CsoundEngine::stopCsound() joined";
-	delete pt;
+	ud->perfThread->Stop();
+	ud->perfThread->Join();
+	delete ud->perfThread;
+	ud->perfThread = NULL;
 #ifdef QCS_DESTROY_CSOUND
 	csoundDestroy(ud->csound);
 #else
@@ -1053,7 +1066,7 @@ void CsoundEngine::cleanupCsound()
 
 void CsoundEngine::messageListDispatcher(void *data)
 {
-	qDebug("CsoundEngine::messageListDispatcher()");
+	qDebug("CsoundEngine::message=Dispatcher()");
 	CsoundUserData *ud_local = (CsoundUserData *) data;
 
 	while (ud_local->runDispatcher) {

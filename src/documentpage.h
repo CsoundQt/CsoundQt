@@ -211,6 +211,9 @@ public slots:
 	void setMacOption(QString option, QString newValue);
 	void setModified(bool mod = true);
 
+	// For Csound Engine
+	void sendCodeToEngine(QString code);
+
 	//Passed directly to widget layout
 	void setWidgetEditMode(bool active);
 	void duplicateWidgets();

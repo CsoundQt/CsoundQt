@@ -194,6 +194,8 @@ public slots:
 	void registerGraph(QuteGraph *scope);
 	void setFlags(PerfFlags flags) {ud->flags = flags;}
 
+	void evaluate(QString code);
+
 private:
 	int runCsound();
 	void stopCsound();
