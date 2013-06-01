@@ -149,7 +149,7 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
 	m_stopScript = false;
 	m_looping = false;
 	createActions();
-	connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
+	connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(newSelection()));
 	// a bit of a hack to ensure that manual changes to the sheet are stored in the
 	// undo history. This seems better than calling markHistory() when a cell
 	// changes because large operations like add or subractract will produce
@@ -1616,7 +1616,7 @@ QList<QPair<QString, QString> > EventSheet::parseLine(QString line)
 	return list;
 }
 
-void EventSheet::selectionChanged()
+void EventSheet::newSelection()
 {
 	QModelIndexList list = this->selectedIndexes();
 	if (list.size() > 1) {

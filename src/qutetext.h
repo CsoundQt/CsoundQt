@@ -41,7 +41,7 @@ public:
 	virtual void setValue(QString value);
 
 	void setType(QString type);
-	virtual void setAlignment(QString alignment);
+    virtual void setAlignment(QString alignment);
 	void setFont(QString font);
 	void setFontSize(int fontSize);
 	void setTextColor(QColor textColor);
@@ -113,7 +113,7 @@ public:
 	QuteScrollNumber(QWidget* parent);
 	~QuteScrollNumber();
 
-	virtual void setAlignment(int alignment);
+    virtual void setTextAlignment(int alignment);
 	virtual QString getWidgetLine();
 	virtual QString getCsladspaLine();
 	virtual QString getWidgetXmlText();
@@ -183,7 +183,7 @@ protected:
 
 private:
 	double m_resolution;
-	double m_min, m_max;
+//	double m_min, m_max;
 	int oldy;
 	bool pressed;
 
