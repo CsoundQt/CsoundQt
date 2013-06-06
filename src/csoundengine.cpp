@@ -789,7 +789,7 @@ int CsoundEngine::runCsound()
 	ud->msgRefreshTime = m_refreshTime*1000;
 #ifndef CSOUND6
 	ud->runDispatcher = true;
-	m_msgUpdateThread = QtConcurrent::run(messageListDispatcher, (void *) ud);
+    m_msgUpdateThread = QtConcurrent::run(messageListDispatcher, (void *) ud);
 	// Message Callbacks must be set before compile, otherwise some information is missed
 	if (ud->threaded) {
 		csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
@@ -853,14 +853,7 @@ int CsoundEngine::runCsound()
 			free(argv[i]);
 		}
 		free(argv);
-		emit (errorLines(getErrorLines()));
-#ifndef CSOUND6
-		csoundSetMessageCallback(ud->csound, 0);
-		ud->runDispatcher = false;
-		m_msgUpdateThread.waitForFinished(); // Join the message thread
-#else
-		csoundDestroyMessageBuffer(ud->csound);
-#endif
+        emit (errorLines(getErrorLines()));
 #ifdef QCS_DESTROY_CSOUND
 		csoundDestroy(ud->csound);
 #else
@@ -1006,11 +999,19 @@ void CsoundEngine::stopCsound()
 {
 	//  qDebug() << "CsoundEngine::stopCsound()";
 	if (ud->threaded) {
-		//    perfThread->ScoreEvent(0, 'e', 0, 0);
-		if (ud->perfThread != 0) {
-			cleanupCsound();
-			flushQueues();
-		}
+        //    perfThread->ScoreEvent(0, 'e', 0, 0);
+        if (ud->perfThread != 0) {
+            CsoundPerformanceThread *pt = ud->perfThread;
+            ud->perfThread = 0;
+            pt->Stop();
+            //      qDebug() << "CsoundEngine::stopCsound() stopped";
+            pt->FlushMessageQueue();
+            pt->Join();
+            qDebug() << "CsoundEngine::stopCsound() joined";
+            delete pt;
+        }
+        flushQueues();
+        cleanupCsound();
 	} /*if (ud->threaded)*/
 	else {  // in same thread
 		if (ud->PERF_STATUS == 1) {
@@ -1036,13 +1037,6 @@ void CsoundEngine::stopCsound()
 
 void CsoundEngine::cleanupCsound()
 {
-	CsoundPerformanceThread *pt = ud->perfThread;
-	ud->perfThread = 0;
-	pt->Stop();
-	//      qDebug() << "CsoundEngine::stopCsound() stopped";
-	pt->Join();
-	qDebug() << "CsoundEngine::stopCsound() joined";
-	delete pt;
 #ifdef QCS_DESTROY_CSOUND
 	csoundDestroy(ud->csound);
 #else
@@ -1109,6 +1103,10 @@ void CsoundEngine::messageListDispatcher(void *data)
 
 void CsoundEngine::flushQueues()
 {
+#ifndef CSOUND6
+        ud->runDispatcher = false;
+        m_msgUpdateThread.waitForFinished(); // Join the message thread
+#endif
 	m_messageMutex.lock();
 	while (!messageQueue.isEmpty()) {
 		QString msg = messageQueue.takeFirst();
@@ -1116,8 +1114,12 @@ void CsoundEngine::flushQueues()
 			ud->csEngine->consoles[i]->appendMessage(msg);
 		}
 		ud->wl->appendMessage(msg);
-	}
+    }
 	m_messageMutex.unlock();
+#ifndef CSOUND6
+#else
+        csoundDestroyMessageBuffer(ud->csound);
+#endif
 	ud->wl->flushGraphBuffer();
 	qApp->processEvents();
 }

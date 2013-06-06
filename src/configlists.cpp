@@ -599,7 +599,7 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
 
 	foreach (QString flag, flags) {
 		argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
-        strncpy(argv[index], flag.toLatin1(), flag.size()*sizeof(char));
+		strncpy(argv[index], flag.toLatin1(), flag.size());
 		index++;
 	}
     int argc = flags.size() + 1;
@@ -608,10 +608,9 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
 	menuBarHandle = GetMenuBar();
 #endif
 	CSOUND *csoundD;
-	csoundD=csoundCreate(0);
-	csoundSetHostData(csoundD, &m_messages);
-
 	m_messages.clear();
+	csoundD=csoundCreate(&m_messages);
+
 	csoundSetMessageCallback(csoundD, msgCallback);
 	int result = csoundCompile(csoundD,argc,argv);
 
@@ -622,8 +621,8 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
         qDebug() << m_messages;
     }
 
-	csoundDestroy(csoundD);
-	// FIXME This crashes on Linux for portmidi!
+    // FIXME This crashes on Linux for portmidi! And messes up devices on OS X
+//	csoundDestroy(csoundD);
 
 #ifdef MACOSX_PRE_SNOW
 	// Put menu bar back
