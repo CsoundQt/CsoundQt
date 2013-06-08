@@ -170,10 +170,10 @@ void CsoundEngine::inputValueCallback(CSOUND *csound,
 	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
 	QString name = QString(channelName);
 	if (name.startsWith('$')) { // channel is a string channel
-		char *string = (char *) value;
-		// FIXME: check string length
+        char *string = (char *) value;
 		QString newValue = ud->wl->getStringForChannel(name.mid(1));
-		strcpy(string, newValue.toLocal8Bit());
+        int maxlen = csoundGetChannelDataSize(csound, channelName);
+        strncpy(string, newValue.toLocal8Bit(), maxlen);
 	}
 	else {  // Not a string channel
 		//FIXME check if mouse tracking is active, and move this from here
@@ -560,7 +560,7 @@ void CsoundEngine::registerGraph(QuteGraph *graph)
 void CsoundEngine::evaluate(QString code)
 {
 #ifdef CSOUND6
-	csoundCompileOrc(getCsound(), code.asAscii());
+	csoundCompileOrc(getCsound(), code.toLatin1());
 #else
 	Q_UNUSED(code);
 	qDebug() << "CsoundEngine::evaluate only available in Csound6";

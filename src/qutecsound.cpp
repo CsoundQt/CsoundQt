@@ -86,6 +86,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	m_resetPrefs = false;
 	utilitiesDialog = 0;
 	curCsdPage = -1;
+    configureTab = 0;
 #ifdef QCS_RTMIDI
 	m_midiin = 0;
 #endif

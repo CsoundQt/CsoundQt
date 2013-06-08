@@ -33,9 +33,9 @@ csound6: { # Csound6 requires some internal changes
             CSOUND_LIBRARY_DIR = /Users/andres/Library/Frameworks/CsoundLib64.framework
             LIBS += -F/Users/andres/Library/Frameworks
         } else {
-	    CSOUND_INCLUDE_DIR = /home/andres/src/csound-csound6-git/include
-	    INCLUDEPATH += /home/andres/src/csound-csound6-git/interfaces
-            CSOUND_LIBRARY_DIR = /home/andres/src/csound6-build/
+            CSOUND_INCLUDE_DIR = /home/andres/Documents/src/csound-csound6-git/include
+            INCLUDEPATH += /home/andres/Documents/src/csound-csound6-git/interfaces
+            CSOUND_LIBRARY_DIR = /home/andres/Documents/src/csound6-build/
         }
     }
     message("Building for Csound 6")
