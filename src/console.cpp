@@ -70,7 +70,7 @@ void Console::appendMessage(QString msg)
 	messageLine.append(msg);
 
 	if (messageLine.contains("\n")) { // line finished, analyze it now
-		// qDebug() << "Messageline: " << messageLine;
+//		 qDebug() << "Messageline: " << messageLine;
 		if (messageLine.contains("error:", Qt::CaseInsensitive) && messageLine.contains("line ")) { // kas vahel ka nii, et rea numbrit pole?
 			errorTexts.append(messageLine); // .remove("\n")
 			errorTexts.last().remove("\n");

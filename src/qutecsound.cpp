@@ -329,7 +329,7 @@ void CsoundQt::changePage(int index)
 			}
 		}
 		m_console->setWidget(documentPages[curPage]->getConsole());
-		updateInspector();
+//		updateInspector();
 		runAct->setChecked(documentPages[curPage]->isRunning());
 		recAct->setChecked(documentPages[curPage]->isRecording());
 		splitViewAct->setChecked(documentPages[curPage]->getViewMode() > 1);
@@ -1421,7 +1421,7 @@ void CsoundQt::runInTerm(bool realtime)
 #ifdef Q_OS_SOLARIS
 	options = "-e " + scriptFileName;
 #endif
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 	options = scriptFileName;
 #endif
 #ifdef Q_OS_WIN32
@@ -1769,7 +1769,7 @@ void CsoundQt::openFLOSSManual()
 void CsoundQt::openQuickRef()
 {
 	if (!m_options->pdfviewer.isEmpty()) {
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
 		if (!QFile::exists(m_options->pdfviewer)) {
 			QMessageBox::critical(this,
 								  tr("Error"),
@@ -2087,7 +2087,7 @@ void CsoundQt::runUtility(QString flags)
 		// Only OPCODEDIR left here as it must be present before csound initializes
 
 		script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 		script += "/usr/local/bin/csound " + flags + "\n";
 #else
 		script += "csound " + flags + "\n";
@@ -2114,7 +2114,7 @@ void CsoundQt::runUtility(QString flags)
 #ifdef Q_OS_SOLARIS
 		options = "-e " + SCRIPT_NAME;
 #endif
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 		options = SCRIPT_NAME;
 #endif
 #ifdef Q_OS_WIN32
@@ -2201,7 +2201,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	showGenAct->setShortcut(tr(""));
 	showOverviewAct->setShortcut(tr(""));
 	showConsoleAct->setShortcut(tr("Alt+3"));
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 	viewFullScreenAct->setShortcut(tr("Ctrl+Alt+F"));
 #else
 	viewFullScreenAct->setShortcut(tr("F11"));
@@ -4245,7 +4245,7 @@ int CsoundQt::execute(QString executable, QString options)
 	//  QString cdLine = "cd \"" + documentPages[curPage]->getFilePath() + "\"";
 	//  QProcess::execute(cdLine);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 	QString commandLine = "open -a \"" + executable + "\" " + options;
 #endif
 #ifdef Q_OS_LINUX
@@ -4595,7 +4595,7 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
 #endif
 
 	if (executable.isEmpty()) {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 		cmdLine = "/usr/local/bin/csound ";
 #else
 		cmdLine = "csound ";

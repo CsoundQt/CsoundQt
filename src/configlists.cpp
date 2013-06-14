@@ -55,7 +55,7 @@ ConfigLists::ConfigLists()
 #ifdef Q_OS_SOLARIS
 	rtAudioNames << "portaudio" << "pulse" << "none";
 #endif
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 	rtAudioNames << "coreaudio" << "portaudio" << "auhal" << "jack" << "none";
 #endif
 #ifdef Q_OS_WIN32
@@ -70,7 +70,7 @@ ConfigLists::ConfigLists()
 #ifdef Q_OS_SOLARIS
 	rtMidiNames << "none" << "portmidi"<< "virtual";
 #endif
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 	rtMidiNames << "none" << "coremidi" << "portmidi" << "virtual";
 #endif
 #ifdef Q_OS_WIN32
@@ -94,7 +94,7 @@ void ConfigLists::msgCallback(CSOUND *csound, int attr, const char *fmt, va_list
 	if (msg.isEmpty()) {
 		return;
 	}
-	ud->append(msg);
+    ud->append(msg);
 }
 
 QHash<QString,QString> ConfigLists::getMidiInputDevices(int moduleIndex)
@@ -160,9 +160,11 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(int moduleIndex)
 		}
 		else if (module == "coremidi") {
 			int index = messages.indexOf(QRegExp("[0-9]{1,1} MIDI sources in system\\s*"));
-			for (int i = 0; i < messages[index].split(" ")[0].toInt(); i++) {
-				deviceList.insert(QString::number(i), QString::number(i));
-			}
+            if (index >= 0) {
+                for (int i = 0; i < messages[index].split(" ")[0].toInt(); i++) {
+                    deviceList.insert(QString::number(i), QString::number(i));
+                }
+            }
 		}
 		else if (module == "alsaseq") {
 			//FIXME parse alsaseq devices
@@ -589,31 +591,38 @@ QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(int moduleInd
 
 QStringList ConfigLists::runCsoundInternally(QStringList flags)
 {
-	static char *argv[33];
-	int index = 0;
+    char *argv[33];
+    int index = 1;
+    Q_ASSERT(flags.size() < 32);
+    argv[0]  = (char *) calloc(7, sizeof(char));
+    strncpy(argv[0], "csound", 6);
+
 	foreach (QString flag, flags) {
 		argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
-		strcpy(argv[index], flag.toLocal8Bit());
+		strncpy(argv[index], flag.toLatin1(), flag.size());
 		index++;
 	}
-	int argc = flags.size();
+    int argc = flags.size() + 1;
 #ifdef MACOSX_PRE_SNOW
 	//Remember menu bar to set it after FLTK grabs it
 	menuBarHandle = GetMenuBar();
 #endif
 	CSOUND *csoundD;
-	csoundD=csoundCreate(0);
-	csoundSetHostData(csoundD, &m_messages);
-
 	m_messages.clear();
+	csoundD=csoundCreate(&m_messages);
+
 	csoundSetMessageCallback(csoundD, msgCallback);
 	int result = csoundCompile(csoundD,argc,argv);
+
 	if(!result) {
 		csoundPerform(csoundD);
-	}
+    } else {
+        qDebug() << "ConfigLists::runCsoundInternally: Error compiling.";
+        qDebug() << m_messages;
+    }
 
-	csoundDestroy(csoundD);
-	// FIXME This crashes on Linux for portmidi!
+    // FIXME This crashes on Linux for portmidi! And messes up devices on OS X
+//	csoundDestroy(csoundD);
 
 #ifdef MACOSX_PRE_SNOW
 	// Put menu bar back

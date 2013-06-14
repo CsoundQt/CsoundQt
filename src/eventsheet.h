@@ -174,7 +174,7 @@ private:
 	QStringList testScripts;
 
 private slots:
-	void selectionChanged();
+    void newSelection();
 	void cellDoubleClickedSlot(int row, int column);
 	void cellChangedSlot(int row, int column);
 	void stopScript();

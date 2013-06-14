@@ -793,7 +793,7 @@ void QuteScrollNumber::setResolution(double resolution)
 	m_places = i;
 }
 
-void QuteScrollNumber::setAlignment(int alignment)
+void QuteScrollNumber::setTextAlignment(int alignment)
 {
 	//   qDebug("QuteText::setAlignment %i", alignment);
 	Qt::Alignment align;

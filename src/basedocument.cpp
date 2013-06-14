@@ -54,13 +54,15 @@ BaseDocument::~BaseDocument()
 {
 	disconnect(m_csEngine, 0,0,0);
 	//  disconnect(m_widgetLayout, 0,0,0);
-	m_csEngine->stop();
+    m_csEngine->stop();
+    delete m_csEngine;
 	while (!m_widgetLayouts.isEmpty()) {
 		WidgetLayout *wl = m_widgetLayouts.takeLast();
 		wl->hide();
-		wl->deleteLater();  //FIXME Still crashing ocassionally?
-	}
-	m_csEngine->deleteLater();
+        delete wl;
+//		wl->deleteLater();  //FIXME Still crashing ocassionally?
+    }
+//	m_csEngine->deleteLater();
 	//  m_view->deleteLater();   // Crashes. Already destroyed?
 	//  m_widgetLayout->setParent(0);  //To make sure the widget panel from the main application doesn't attempt to delete it as its child
 }

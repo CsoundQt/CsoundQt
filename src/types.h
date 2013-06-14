@@ -63,7 +63,7 @@
 #define DEFAULT_LOG_FILE ""
 #define DEFAULT_SCRIPT_DIR "../../csoundqt/src/Scripts"
 #endif
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 #define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib.framework/Resources/Manual"
 #define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
 #define DEFAULT_BROWSER_EXECUTABLE "/Applications/Firefox.app"

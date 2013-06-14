@@ -230,7 +230,11 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
 	if (channelType == &CS_VAR_TYPE_S) { // channel is a string channel
 		char *string = (char *) channelValuePtr;
 		QString newValue = ud->wl->getStringForChannel(channelName);
-		int maxlen = csoundGetStrVarMaxLen(csound);
+#ifdef CSOUND6
+        int maxlen = csoundGetChannelDatasize(csound, channelName);
+#else
+        int maxlen = csoundGetStrVarMaxLen(csound);
+#endif
 		strncpy(string, newValue.toLocal8Bit(), maxlen);
 	}
 	else if (channelType == &CS_VAR_TYPE_K) {  // Not a string channel
@@ -865,17 +869,11 @@ int CsoundEngine::runCsound()
 		free(argv);
 		emit (errorLines(getErrorLines()));
 #ifndef CSOUND6
-		csoundSetMessageCallback(ud->csound, 0);
 		ud->runDispatcher = false;
 		m_msgUpdateThread.waitForFinished(); // Join the message thread
 #else
-		csoundDestroyMessageBuffer(ud->csound);
 #endif
-#ifdef QCS_DESTROY_CSOUND
-		csoundDestroy(ud->csound);
-#else
-		csoundReset(ud->csound);
-#endif
+		cleanupCsound();
 		return -3;
 	}
 	for (int i = 0; i < argc; i++) {
@@ -983,16 +981,7 @@ int CsoundEngine::runCsound()
 		}
 		ud->PERF_STATUS = 0;
 		csoundStop(ud->csound);
-#ifndef CSOUND6
-		csoundSetMessageCallback(ud->csound, 0);
-#else
-		csoundDestroyMessageBuffer(ud->csound);
-#endif
-#ifdef QCS_DESTROY_CSOUND
-		csoundDestroy(ud->csound);
-#else
-		csoundCleanup(ud->csound);
-#endif
+		cleanupCsound();
 		flushQueues();  // To flush pending queues
 #ifdef MACOSX_PRE_SNOW
 		// Put menu bar back
@@ -1022,11 +1011,18 @@ void CsoundEngine::stopCsound()
 	}
 #endif
 	if (ud->threaded) {
-		//    perfThread->ScoreEvent(0, 'e', 0, 0);
-		if (ud->perfThread != 0) {
-			cleanupCsound();
-			flushQueues();
-		}
+        //    perfThread->ScoreEvent(0, 'e', 0, 0);
+        if (ud->perfThread != 0) {
+            CsoundPerformanceThread *pt = ud->perfThread;
+            ud->perfThread = NULL;
+            pt->Stop();
+            //      qDebug() << "CsoundEngine::stopCsound() stopped";
+            pt->Join();
+            pt->FlushMessageQueue();
+            qDebug() << "CsoundEngine::stopCsound() joined";
+            delete pt;  
+        }
+        flushQueues();
 	} /*if (ud->threaded)*/
 	else {  // in same thread
 		if (ud->PERF_STATUS == 1) {
@@ -1035,8 +1031,25 @@ void CsoundEngine::stopCsound()
 				usleep(100000);
 				qApp->processEvents();
 			}
-			emit stopSignal();
 		}
+	}
+	cleanupCsound();
+#ifdef MACOSX_PRE_SNOW
+	// Put menu bar back
+	SetMenuBar(menuBarHandle);
+#endif
+	emit stopSignal();
+}
+
+void CsoundEngine::cleanupCsound()
+{
+	if (ud->csound) {
+#ifndef CSOUND6
+		csoundSetMessageCallback(ud->csound, 0);
+#else
+		csoundDestroyMessageBuffer(ud->csound);
+#endif
+		csoundCleanup(ud->csound);
 #ifdef QCS_DESTROY_CSOUND
 		csoundDestroy(ud->csound);
 		ud->csound = NULL;
@@ -1044,29 +1057,11 @@ void CsoundEngine::stopCsound()
 		csoundReset(ud->csound);
 #endif
 	}
-#ifdef MACOSX_PRE_SNOW
-	// Put menu bar back
-	SetMenuBar(menuBarHandle);
-#endif
-}
-
-void CsoundEngine::cleanupCsound()
-{
-	ud->perfThread->Stop();
-	ud->perfThread->Join();
-	delete ud->perfThread;
-	ud->perfThread = NULL;
-#ifdef QCS_DESTROY_CSOUND
-	csoundDestroy(ud->csound);
-#else
-	csoundReset(ud->csound);
-#endif
-	emit stopSignal();
 }
 
 void CsoundEngine::messageListDispatcher(void *data)
 {
-	qDebug("CsoundEngine::message=Dispatcher()");
+	qDebug("CsoundEngine::messageListDispatcher()");
 	CsoundUserData *ud_local = (CsoundUserData *) data;
 
 	while (ud_local->runDispatcher) {
@@ -1097,14 +1092,13 @@ void CsoundEngine::messageListDispatcher(void *data)
 		}
 
 		int counter = 0;
-		QString completeMessages;
 		ud_local->csEngine->m_messageMutex.lock();
 		while ((ud_local->csEngine->m_consoleBufferSize <= 0 || counter++ < ud_local->csEngine->m_consoleBufferSize)) {
 			if (ud_local->csEngine->messageQueue.isEmpty()) {
 				break;
 			}
 			QString msg = ud_local->csEngine->messageQueue.takeFirst();
-			completeMessages += msg;
+			emit ud_local->csEngine->passMessages(msg); //Must use signals to make things thread safe
 		}
 		if (!ud_local->csEngine->messageQueue.isEmpty()
 				&& ud_local->csEngine->m_consoleBufferSize > 0
@@ -1113,7 +1107,6 @@ void CsoundEngine::messageListDispatcher(void *data)
 			ud_local->csEngine->messageQueue << "\nCsoundQt: Message buffer overflow. Messages discarded!\n";
 		}
 		ud_local->csEngine->m_messageMutex.unlock();
-		emit ud_local->csEngine->passMessages(completeMessages); //Must use signals to make things thread safe
 
 		usleep(ud_local->msgRefreshTime);
 	}
@@ -1122,6 +1115,10 @@ void CsoundEngine::messageListDispatcher(void *data)
 
 void CsoundEngine::flushQueues()
 {
+#ifndef CSOUND6
+        ud->runDispatcher = false;
+        m_msgUpdateThread.waitForFinished(); // Join the message thread
+#endif
 	m_messageMutex.lock();
 	while (!messageQueue.isEmpty()) {
 		QString msg = messageQueue.takeFirst();
@@ -1129,8 +1126,8 @@ void CsoundEngine::flushQueues()
 			ud->csEngine->consoles[i]->appendMessage(msg);
 		}
 		ud->wl->appendMessage(msg);
-	}
-	m_messageMutex.unlock();
+    }
+    m_messageMutex.unlock();
 	ud->wl->flushGraphBuffer();
 	qApp->processEvents();
 }

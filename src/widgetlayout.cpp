@@ -3482,7 +3482,7 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
 {
 	// This function should be locked from outside always
 	FrameWidget * frame = new FrameWidget(this);
-	QPalette palette(QColor(Qt::red),QColor(Qt::red));
+    QPalette palette = QPalette(QColor(Qt::red),QColor(Qt::red));
 	palette.setColor(QPalette::WindowText, QColor(Qt::red));
 	frame->setWidget(widget);
 	frame->setPalette(palette);
