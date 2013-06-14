@@ -131,11 +131,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	addDockWidget(Qt::LeftDockWidgetArea, m_pythonConsole);
 	m_pythonConsole->setObjectName("Python Console");
 	m_pythonConsole->show();
+#endif
 	m_scratchPad = new QDockWidget(this);
 	addDockWidget(Qt::LeftDockWidgetArea, m_scratchPad);
 	m_scratchPad->setObjectName("Scratch Pad");
 	m_scratchPad->setWindowTitle(tr("Scratch Pad"));
-#endif
 
 	connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
 	QSettings settings("csound", "qutecsound");
@@ -149,11 +149,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	showWidgetsAct->setChecked(false); // To avoid showing and reshowing panels during initial load
 	widgetPanel->hide();  // Hide until CsoundQt has finished loading
 
-#ifdef QCS_PYTHONQT
 	bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
 	if (scratchPadVisible)
 		m_scratchPad->hide();  // Hide until CsoundQt has finished loading
-#endif
 
 	createMenus();
 	createToolBars();
@@ -178,7 +176,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	else
 		m_opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "/opcodes.xml"));
 
-#ifdef QCS_PYTHONQT
 	DocumentView *padview = new DocumentView(m_scratchPad, m_opcodeTree);
 	padview->setBackgroundColor(QColor(240, 230, 230));
 	padview->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -186,10 +183,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	padview->show();
 	padview->showLineArea(true);
 	padview->setFullText("");
-	connect(padview, SIGNAL(evaluate(QString)), m_pythonConsole, SLOT(evaluate(QString)));
+	connect(padview, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
 	m_scratchPad->setWidget(padview);
 	m_scratchPad->setFocusProxy(padview);
-#endif
+
 	// Open files saved from last session
 	if (!lastFiles.isEmpty()) {
 		foreach (QString lastFile, lastFiles) {
@@ -244,23 +241,22 @@ CsoundQt::CsoundQt(QStringList fileNames)
 		widgetPanel->setVisible(widgetsVisible);
 	}
 
-#ifdef QCS_PYTHONQT
 	if (scratchPadVisible) { // Reshow scratch panel if necessary
 		m_scratchPad->show();
 	}
-#endif
 	// Initialize buttons to current state of panels
 	showConsoleAct->setChecked(!m_console->isHidden());
 	showHelpAct->setChecked(!helpPanel->isHidden());
 	showInspectorAct->setChecked(!m_inspector->isHidden());
 #ifdef QCS_PYTHONQT
 	showPythonConsoleAct->setChecked(!m_pythonConsole->isHidden());
-	showPythonScratchPadAct->setChecked(!m_scratchPad->isHidden());
 #endif
+	showScratchPadAct->setChecked(!m_scratchPad->isHidden());
 }
 
 CsoundQt::~CsoundQt()
 {
+
 	qDebug() << "CsoundQt::~CsoundQt()";
 	// This function is not called... see closeEvent()
 }
@@ -2411,7 +2407,7 @@ void CsoundQt::createActions()
 	evaluateAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Evaluate selection"), this);
 	evaluateAct->setStatusTip(tr("Evaluate selection in Python Console"));
 	evaluateAct->setShortcutContext(Qt::ApplicationShortcut);
-	connect(evaluateAct, SIGNAL(triggered()), this, SLOT(evaluatePython()));
+	connect(evaluateAct, SIGNAL(triggered()), this, SLOT(evaluate()));
 
 	evaluateSectionAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Evaluate section"), this);
 	evaluateSectionAct->setStatusTip(tr("Evaluate current section in Python Console"));
@@ -2583,8 +2579,8 @@ void CsoundQt::createActions()
 	showScratchPadAct->setIconText(tr("ScratchPad"));
 	showScratchPadAct->setShortcutContext(Qt::ApplicationShortcut);
 #ifdef QCS_PYTHONQT
-	connect(showPythonScratchPadAct, SIGNAL(triggered(bool)), m_scratchPad, SLOT(setVisible(bool)));
-	connect(m_scratchPad, SIGNAL(visibilityChanged(bool)), showPythonScratchPadAct, SLOT(setChecked(bool)));
+	connect(showScratchPadAct, SIGNAL(triggered(bool)), m_scratchPad, SLOT(setVisible(bool)));
+	connect(m_scratchPad, SIGNAL(visibilityChanged(bool)), showScratchPadAct, SLOT(setChecked(bool)));
 #else
 	connect(showScratchPadAct, SIGNAL(triggered()), this, SLOT(showNoPythonQtWarning()));
 #endif
@@ -3024,7 +3020,7 @@ void CsoundQt::createMenus()
 	viewMenu->addAction(showLiveEventsAct);
 #ifdef QCS_PYTHONQT
 	viewMenu->addAction(showPythonConsoleAct);
-	viewMenu->addAction(showPythonScratchPadAct);
+	viewMenu->addAction(showScratchPadAct);
 #endif
 	viewMenu->addAction(showUtilitiesAct);
 	viewMenu->addSeparator();
@@ -3844,7 +3840,7 @@ void CsoundQt::createToolBars()
 	configureToolBar->addAction(showLiveEventsAct);
 #ifdef QCS_PYTHONQT
 	configureToolBar->addAction(showPythonConsoleAct);
-	configureToolBar->addAction(showPythonScratchPadAct);
+	configureToolBar->addAction(showScratchPadAct);
 #endif
 	configureToolBar->addAction(showUtilitiesAct);
 

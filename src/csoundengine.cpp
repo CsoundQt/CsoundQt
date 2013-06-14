@@ -564,7 +564,10 @@ void CsoundEngine::registerGraph(QuteGraph *graph)
 void CsoundEngine::evaluate(QString code)
 {
 #ifdef CSOUND6
-	csoundCompileOrc(getCsound(), code.toLatin1());
+	CSOUND *csound = getCsound();
+	if (csound) {
+		csoundCompileOrc(csound, code.toLatin1());
+	}
 #else
 	Q_UNUSED(code);
 	qDebug() << "CsoundEngine::evaluate only available in Csound6";
