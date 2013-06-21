@@ -366,6 +366,7 @@ void CsoundQt::logMessage(QString msg)
 
 void CsoundQt::closeEvent(QCloseEvent *event)
 {
+	m_closing = true;
 	this->showNormal();  // Don't store full screen size in preferences
 	qApp->processEvents();
 	QStringList files;
@@ -2063,6 +2064,8 @@ void CsoundQt::runUtility(QString flags)
 #ifdef USE_DOUBLE
 		if (m_options->opcodedir64Active)
 			script += "set OPCODEDIR64=" + m_options->opcodedir64 + "\n";
+		if (m_options->opcode6dir64Active)
+			script += "set OPCODE6DIR64=" + m_options->opcode6dir64 + "\n";
 #else
 		if (m_options->opcodedirActive)
 			script += "set OPCODEDIR=" + m_options->opcodedir + "\n";
@@ -2076,6 +2079,8 @@ void CsoundQt::runUtility(QString flags)
 #ifdef USE_DOUBLE
 		if (m_options->opcodedir64Active)
 			script += "set OPCODEDIR64=" + m_options->opcodedir64 + "\n";
+		if (m_options->opcode6dir64Active)
+			script += "set OPCODE6DIR64=" + m_options->opcode6dir64 + "\n";
 #else
 		if (m_options->opcodedirActive)
 			script += "export OPCODEDIR=" + m_options->opcodedir + "\n";
@@ -3995,6 +4000,8 @@ void CsoundQt::readSettings()
 	m_options->opcodedirActive = settings.value("opcodedirActive",false).toBool();
 	m_options->opcodedir64 = settings.value("opcodedir64","").toString();
 	m_options->opcodedir64Active = settings.value("opcodedir64Active",false).toBool();
+	m_options->opcode6dir64 = settings.value("opcode6dir64","").toString();
+	m_options->opcode6dir64Active = settings.value("opcode6dir64Active",false).toBool();
 	m_options->sadir = settings.value("sadir","").toString();
 	m_options->sadirActive = settings.value("sadirActive","").toBool();
 	m_options->ssdir = settings.value("ssdir","").toString();
@@ -4165,6 +4172,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("opcodedirActive",m_options->opcodedirActive);
 		settings.setValue("opcodedir64",m_options->opcodedir64);
 		settings.setValue("opcodedir64Active",m_options->opcodedir64Active);
+		settings.setValue("opcode6dir64",m_options->opcode6dir64);
+		settings.setValue("opcode6dir64Active",m_options->opcode6dir64Active);
 		settings.setValue("sadir",m_options->sadir);
 		settings.setValue("sadirActive",m_options->sadirActive);
 		settings.setValue("ssdir",m_options->ssdir);
@@ -4577,6 +4586,8 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
 #ifdef USE_DOUBLE
 	if (m_options->opcodedir64Active)
 		script += "export OPCODEDIR64=" + m_options->opcodedir64 + "\n";
+	if (m_options->opcode6dir64Active)
+		script += "export OPCODE6DIR64=" + m_options->opcode6dir64 + "\n";
 #else
 	if (m_options->opcodedirActive)
 		script += "export OPCODEDIR=" + m_options->opcodedir + "\n";

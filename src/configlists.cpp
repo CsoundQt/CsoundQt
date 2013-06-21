@@ -199,6 +199,21 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(int moduleInde
 {
 	QList<QPair<QString, QString> > deviceList;
 	QString module = rtMidiNames[moduleIndex];
+#ifdef CSOUND6
+	CSOUND *cs = csoundCreate(NULL);
+	csoundSetMIDIModule(cs, rtMidiNames[moduleIndex].toLatin1().data());
+	int i,n = csoundMIDIDevList(cs,NULL,1);
+	CS_MIDIDEVICE *devs = (CS_MIDIDEVICE *) malloc(n*sizeof(CS_MIDIDEVICE));
+	csoundMIDIDevList(cs,devs,1);
+	for (i = 0; i < n; i++) {
+		qDebug() << devs[i].device_name;
+		if (module == QString(devs[i].midi_module)) {
+			QString displayName = QString("%s (%s)").arg(devs[i].device_name).arg(devs[i].interface_name);
+			deviceList.append(QPair<QString,QString>(displayName, QString(devs[i].device_id)));
+		}
+	}
+	free(devs);
+#else
 	if (module == "none") {
 		return deviceList;
 	}
@@ -277,6 +292,7 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(int moduleInde
 			}
 		}
 	}
+#endif
 	return deviceList;
 }
 

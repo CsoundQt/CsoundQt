@@ -36,7 +36,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -1309,6 +1309,20 @@
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
            <layout class="QGridLayout" name="environLayout">
+            <item row="5" column="3">
+             <widget class="QToolButton" name="ssdirToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="2">
+             <widget class="QLineEdit" name="SfdirLineEdit">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
             <item row="0" column="2">
              <widget class="QLineEdit" name="CsdocdirLineEdit"/>
             </item>
@@ -1339,7 +1353,14 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
+            <item row="4" column="2">
+             <widget class="QLineEdit" name="SadirLineEdit">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
              <widget class="QCheckBox" name="SadirCheckBox">
               <property name="enabled">
                <bool>true</bool>
@@ -1349,21 +1370,21 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="2">
-             <widget class="QLineEdit" name="SadirLineEdit">
+            <item row="5" column="2">
+             <widget class="QLineEdit" name="SsdirLineEdit">
               <property name="enabled">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="3" column="3">
+            <item row="4" column="3">
              <widget class="QToolButton" name="sadirToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="0">
+            <item row="5" column="0">
              <widget class="QCheckBox" name="SsdirCheckBox">
               <property name="enabled">
                <bool>true</bool>
@@ -1373,21 +1394,7 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="2">
-             <widget class="QLineEdit" name="SsdirLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="3">
-             <widget class="QToolButton" name="ssdirToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
+            <item row="6" column="0">
              <widget class="QCheckBox" name="SfdirCheckBox">
               <property name="enabled">
                <bool>true</bool>
@@ -1397,21 +1404,21 @@
               </property>
              </widget>
             </item>
-            <item row="5" column="2">
-             <widget class="QLineEdit" name="SfdirLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="3">
+            <item row="6" column="3">
              <widget class="QToolButton" name="sfdirToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="0">
+            <item row="7" column="2">
+             <widget class="QLineEdit" name="IncdirLineEdit">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
              <widget class="QCheckBox" name="IncdirCheckBox">
               <property name="enabled">
                <bool>true</bool>
@@ -1421,17 +1428,17 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="2">
-             <widget class="QLineEdit" name="IncdirLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="3">
+            <item row="7" column="3">
              <widget class="QToolButton" name="incdirToolButton">
               <property name="text">
                <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="2">
+             <widget class="QLineEdit" name="favoriteLineEdit">
+              <property name="enabled">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -1445,80 +1452,103 @@
               </property>
              </widget>
             </item>
-            <item row="7" column="2">
-             <widget class="QLineEdit" name="favoriteLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="3">
+            <item row="8" column="3">
              <widget class="QToolButton" name="favoriteToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="7" column="0">
-             <widget class="QLabel" name="label_28">
-              <property name="text">
-               <string>Favorite dir</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="3">
-             <widget class="QToolButton" name="pythonDirToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="2">
+            <item row="9" column="2">
              <widget class="QLineEdit" name="pythonDirLineEdit">
               <property name="enabled">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="10" column="0">
+            <item row="8" column="0">
+             <widget class="QLabel" name="label_28">
+              <property name="text">
+               <string>Favorite dir</string>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="0">
              <widget class="QLabel" name="label_30">
               <property name="text">
                <string>Log file</string>
               </property>
              </widget>
             </item>
-            <item row="10" column="2">
+            <item row="9" column="3">
+             <widget class="QToolButton" name="pythonDirToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="2">
              <widget class="QLineEdit" name="logFileLineEdit">
               <property name="enabled">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="10" column="3">
+            <item row="11" column="3">
              <widget class="QToolButton" name="logFileToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="9" column="0">
+            <item row="10" column="0">
              <widget class="QLabel" name="label_29">
               <property name="text">
                <string>Python Executable</string>
               </property>
              </widget>
             </item>
-            <item row="8" column="0">
+            <item row="10" column="2">
+             <widget class="QLineEdit" name="pythonExecutableLineEdit">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="0">
              <widget class="QLabel" name="pythonDirlabel">
               <property name="text">
                <string>Python Script Dir </string>
               </property>
              </widget>
             </item>
-            <item row="9" column="2">
-             <widget class="QLineEdit" name="pythonExecutableLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
+            <item row="2" column="3">
+             <widget class="QToolButton" name="opcodedir64ToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="Opcodedir64LineEdit"/>
+            </item>
+            <item row="12" column="0">
+             <widget class="QLabel" name="label_25">
+              <property name="toolTip">
+               <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
+              </property>
+              <property name="text">
+               <string>QuteApp SDK Dir</string>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="2">
+             <widget class="QLineEdit" name="sdkLineEdit"/>
+            </item>
+            <item row="12" column="3">
+             <widget class="QToolButton" name="sdkToolButton">
+              <property name="text">
+               <string>...</string>
               </property>
              </widget>
             </item>
@@ -1532,35 +1562,15 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="2">
-             <widget class="QLineEdit" name="Opcodedir64LineEdit"/>
-            </item>
-            <item row="2" column="3">
-             <widget class="QToolButton" name="opcodedir64ToolButton">
+            <item row="3" column="0">
+             <widget class="QCheckBox" name="Opcode6dir64CheckBox">
               <property name="text">
-               <string>...</string>
+               <string>OPCODE6DIR64</string>
               </property>
              </widget>
             </item>
-            <item row="11" column="0">
-             <widget class="QLabel" name="label_25">
-              <property name="toolTip">
-               <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
-              </property>
-              <property name="text">
-               <string>QuteApp SDK Dir</string>
-              </property>
-             </widget>
-            </item>
-            <item row="11" column="2">
-             <widget class="QLineEdit" name="sdkLineEdit"/>
-            </item>
-            <item row="11" column="3">
-             <widget class="QToolButton" name="sdkToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
+            <item row="3" column="2">
+             <widget class="QLineEdit" name="Opcode6dir64LineEdit"/>
             </item>
            </layout>
           </item>
@@ -1849,8 +1859,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>533</x>
-     <y>559</y>
+     <x>532</x>
+     <y>621</y>
     </hint>
     <hint type="destinationlabel">
      <x>233</x>
@@ -1865,8 +1875,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>619</x>
-     <y>559</y>
+     <x>623</x>
+     <y>621</y>
     </hint>
     <hint type="destinationlabel">
      <x>219</x>
@@ -1881,12 +1891,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>130</y>
+     <x>120</x>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
-     <x>529</x>
-     <y>133</y>
+     <x>571</x>
+     <y>129</y>
     </hint>
    </hints>
   </connection>
@@ -1897,8 +1907,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>196</y>
+     <x>120</x>
+     <y>220</y>
     </hint>
     <hint type="destinationlabel">
      <x>529</x>
@@ -1917,8 +1927,8 @@
      <y>262</y>
     </hint>
     <hint type="destinationlabel">
-     <x>392</x>
-     <y>242</y>
+     <x>546</x>
+     <y>284</y>
     </hint>
    </hints>
   </connection>
@@ -1929,12 +1939,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>274</y>
+     <x>115</x>
+     <y>313</y>
     </hint>
     <hint type="destinationlabel">
-     <x>392</x>
-     <y>277</y>
+     <x>546</x>
+     <y>315</y>
     </hint>
    </hints>
   </connection>
@@ -1945,12 +1955,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>229</y>
+     <x>120</x>
+     <y>251</y>
     </hint>
     <hint type="destinationlabel">
-     <x>392</x>
-     <y>207</y>
+     <x>546</x>
+     <y>253</y>
     </hint>
    </hints>
   </connection>
@@ -1965,8 +1975,8 @@
      <y>58</y>
     </hint>
     <hint type="destinationlabel">
-     <x>113</x>
-     <y>72</y>
+     <x>112</x>
+     <y>77</y>
     </hint>
    </hints>
   </connection>
@@ -1977,12 +1987,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>113</x>
-     <y>72</y>
+     <x>112</x>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
-     <x>113</x>
-     <y>72</y>
+     <x>112</x>
+     <y>77</y>
     </hint>
    </hints>
   </connection>
@@ -1993,12 +2003,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>113</x>
-     <y>132</y>
+     <x>112</x>
+     <y>82</y>
     </hint>
     <hint type="destinationlabel">
-     <x>113</x>
-     <y>132</y>
+     <x>112</x>
+     <y>82</y>
     </hint>
    </hints>
   </connection>
@@ -2009,12 +2019,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>123</x>
-     <y>300</y>
+     <x>112</x>
+     <y>87</y>
     </hint>
     <hint type="destinationlabel">
-     <x>123</x>
-     <y>300</y>
+     <x>112</x>
+     <y>87</y>
     </hint>
    </hints>
   </connection>
@@ -2025,12 +2035,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>95</x>
-     <y>300</y>
+     <x>99</x>
+     <y>87</y>
     </hint>
     <hint type="destinationlabel">
-     <x>123</x>
-     <y>300</y>
+     <x>112</x>
+     <y>87</y>
     </hint>
    </hints>
   </connection>
@@ -2041,12 +2051,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>113</x>
-     <y>72</y>
+     <x>112</x>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
-     <x>113</x>
-     <y>72</y>
+     <x>112</x>
+     <y>77</y>
     </hint>
    </hints>
   </connection>
@@ -2057,12 +2067,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>113</x>
-     <y>72</y>
+     <x>112</x>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
-     <x>113</x>
-     <y>72</y>
+     <x>112</x>
+     <y>77</y>
     </hint>
    </hints>
   </connection>
@@ -2077,8 +2087,24 @@
      <y>150</y>
     </hint>
     <hint type="destinationlabel">
-     <x>181</x>
-     <y>161</y>
+     <x>335</x>
+     <y>160</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Opcode6dir64CheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Opcode6dir64LineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>98</x>
+     <y>178</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>242</x>
+     <y>179</y>
     </hint>
    </hints>
   </connection>

@@ -35,7 +35,7 @@ csound6: { # Csound6 requires some internal changes
         } else {
             CSOUND_INCLUDE_DIR = /home/andres/Documents/src/csound-csound6-git/include
             INCLUDEPATH += /home/andres/Documents/src/csound-csound6-git/interfaces
-            CSOUND_LIBRARY_DIR = /home/andres/Documents/src/csound6-build/
+            CSOUND_LIBRARY_DIR = /home/andres/Documents/src/csound-csound6-git-build/
         }
     }
     message("Building for Csound 6")

@@ -74,19 +74,17 @@ CsoundEngine::CsoundEngine()
 	eventQueueSize = 0;
 
 	m_refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // TODO Eventually allow this to be changed
-#ifdef CSOUND6
+
 	m_msgUpdateThread = QtConcurrent::run(messageListDispatcher, (void *) ud);
-#endif
+
 }
 
 CsoundEngine::~CsoundEngine()
 {
 //	qDebug() << "CsoundEngine::~CsoundEngine() ";
 
-#ifdef CSOUND6
 	ud->runDispatcher = false;
 	m_msgUpdateThread.waitForFinished(); // Join the message thread
-#endif
 
 	disconnect(SIGNAL(passMessages(QString)),0,0);
 	stop();
@@ -171,8 +169,8 @@ void CsoundEngine::inputValueCallback(CSOUND *csound,
 	QString name = QString(channelName);
 	if (name.startsWith('$')) { // channel is a string channel
         char *string = (char *) value;
-		QString newValue = ud->wl->getStringForChannel(name.mid(1));
-        int maxlen = csoundGetChannelDataSize(csound, channelName);
+        QString newValue = ud->wl->getStringForChannel(name.mid(1));
+        int maxlen = csoundGetStrVarMaxLen(csound);
         strncpy(string, newValue.toLocal8Bit(), maxlen);
 	}
 	else {  // Not a string channel
@@ -230,11 +228,7 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
 	if (channelType == &CS_VAR_TYPE_S) { // channel is a string channel
 		char *string = (char *) channelValuePtr;
 		QString newValue = ud->wl->getStringForChannel(channelName);
-#ifdef CSOUND6
-        int maxlen = csoundGetChannelDatasize(csound, channelName);
-#else
-        int maxlen = csoundGetStrVarMaxLen(csound);
-#endif
+		int maxlen = csoundGetChannelDatasize(csound, channelName);
 		strncpy(string, newValue.toLocal8Bit(), maxlen);
 	}
 	else if (channelType == &CS_VAR_TYPE_K) {  // Not a string channel
@@ -776,15 +770,16 @@ int CsoundEngine::runCsound()
 	else {
 		csoundSetGlobalEnv("INCDIR", "");
 	}
+	// csoundGetEnv must be called after Compile or Precompile,
+	// But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
 	if (m_options.opcodedirActive) {
-		// csoundGetEnv must be called after Compile or Precompile,
-		// But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
-		csoundSetGlobalEnv("OPCODEDIR", m_options.opcodedir.toLocal8Bit().constData());
+		csoundSetGlobalEnv("OPCODEDIR", m_options.opcodedir.toLatin1().constData());
 	}
 	if (m_options.opcodedir64Active) {
-		// csoundGetEnv must be called after Compile or Precompile,
-		// But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
-		csoundSetGlobalEnv("OPCODEDIR64", m_options.opcodedir64.toLocal8Bit().constData());
+		csoundSetGlobalEnv("OPCODEDIR64", m_options.opcodedir64.toLatin1().constData());
+	}
+	if (m_options.opcode6dir64Active) {
+		csoundSetGlobalEnv("OPCODEDIR64", m_options.opcode6dir64.toLatin1().constData());
 	}
 #ifdef Q_OS_MAC
 	else { // Set opcode dir for bundled Csound if present
@@ -805,8 +800,6 @@ int CsoundEngine::runCsound()
 
 	ud->msgRefreshTime = m_refreshTime*1000;
 #ifndef CSOUND6
-	ud->runDispatcher = true;
-	m_msgUpdateThread = QtConcurrent::run(messageListDispatcher, (void *) ud);
 	// Message Callbacks must be set before compile, otherwise some information is missed
 	if (ud->threaded) {
 		csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
@@ -871,11 +864,6 @@ int CsoundEngine::runCsound()
 		}
 		free(argv);
 		emit (errorLines(getErrorLines()));
-#ifndef CSOUND6
-		ud->runDispatcher = false;
-		m_msgUpdateThread.waitForFinished(); // Join the message thread
-#else
-#endif
 		cleanupCsound();
 		return -3;
 	}
@@ -1007,12 +995,6 @@ int CsoundEngine::runCsound()
 void CsoundEngine::stopCsound()
 {
 	//  qDebug() << "CsoundEngine::stopCsound()";
-#ifndef CSOUND6
-	ud->runDispatcher = false;
-	if (m_msgUpdateThread.isRunning()) {
-		m_msgUpdateThread.waitForFinished(); // Join the message thread
-	}
-#endif
 	if (ud->threaded) {
         //    perfThread->ScoreEvent(0, 'e', 0, 0);
         if (ud->perfThread != 0) {
@@ -1047,13 +1029,14 @@ void CsoundEngine::stopCsound()
 void CsoundEngine::cleanupCsound()
 {
 	if (ud->csound) {
+		csoundCleanup(ud->csound);
 #ifndef CSOUND6
 		csoundSetMessageCallback(ud->csound, 0);
-#else
+#endif
+#ifdef QCS_DESTROY_CSOUND
+#ifdef CSOUND6
 		csoundDestroyMessageBuffer(ud->csound);
 #endif
-		csoundCleanup(ud->csound);
-#ifdef QCS_DESTROY_CSOUND
 		csoundDestroy(ud->csound);
 		ud->csound = NULL;
 #else
@@ -1064,7 +1047,7 @@ void CsoundEngine::cleanupCsound()
 
 void CsoundEngine::messageListDispatcher(void *data)
 {
-	qDebug("CsoundEngine::messageListDispatcher()");
+//	qDebug("CsoundEngine::messageListDispatcher()");
 	CsoundUserData *ud_local = (CsoundUserData *) data;
 
 	while (ud_local->runDispatcher) {
@@ -1113,15 +1096,11 @@ void CsoundEngine::messageListDispatcher(void *data)
 
 		usleep(ud_local->msgRefreshTime);
 	}
-	qDebug() << "messageListDispatcher quit";
+//	qDebug() << "messageListDispatcher quit";
 }
 
 void CsoundEngine::flushQueues()
 {
-#ifndef CSOUND6
-        ud->runDispatcher = false;
-        m_msgUpdateThread.waitForFinished(); // Join the message thread
-#endif
 	m_messageMutex.lock();
 	while (!messageQueue.isEmpty()) {
 		QString msg = messageQueue.takeFirst();
@@ -1163,10 +1142,7 @@ void CsoundEngine::recordBuffer()
 bool CsoundEngine::isRunning()
 {
 	if (ud->threaded) {
-		if (ud->perfThread != 0 && ud->perfThread->GetStatus() == 0)
-			return true;
-		else
-			return false;
+		return (ud->perfThread != 0 && ud->perfThread->GetStatus() == 0);
 	}
 	else {
 		return (ud->PERF_STATUS == 1);

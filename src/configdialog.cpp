@@ -180,6 +180,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
 	Opcodedir64CheckBox->setChecked(m_options->opcodedir64Active);
 	Opcodedir64LineEdit->setText(m_options->opcodedir64);
 	Opcodedir64LineEdit->setEnabled(m_options->opcodedir64Active);
+	Opcode6dir64CheckBox->setChecked(m_options->opcode6dir64Active);
+	Opcode6dir64LineEdit->setText(m_options->opcode6dir64);
+	Opcode6dir64LineEdit->setEnabled(m_options->opcode6dir64Active);
 	SadirCheckBox->setChecked(m_options->sadirActive);
 	SadirLineEdit->setText(m_options->sadir);
 	SadirLineEdit->setEnabled(m_options->sadirActive);
@@ -216,6 +219,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
 	connect(csdocdirToolButton, SIGNAL(clicked()), this, SLOT(browseCsdocdir()));
 	connect(opcodedirToolButton, SIGNAL(clicked()), this, SLOT(browseOpcodedir()));
 	connect(opcodedir64ToolButton, SIGNAL(clicked()), this, SLOT(browseOpcodedir64()));
+//	connect(Opcode6dir64ToolButton, SIGNAL(clicked()), this, SLOT(browseOpcode6dir64()));
 	connect(sadirToolButton, SIGNAL(clicked()), this, SLOT(browseSadir()));
 	connect(ssdirToolButton, SIGNAL(clicked()), this, SLOT(browseSsdir()));
 	connect(sfdirToolButton, SIGNAL(clicked()), this, SLOT(browseSfdir()));
@@ -245,6 +249,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
 
 	connect(OpcodedirCheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
 	connect(Opcodedir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
+	connect(Opcode6dir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
 
 #ifndef QCS_PYTHONQT
 	pythonDirLineEdit->setEnabled(false);
@@ -361,6 +366,8 @@ void ConfigDialog::accept()
 	m_options->opcodedir = OpcodedirLineEdit->text();
 	m_options->opcodedir64Active = Opcodedir64CheckBox->isChecked();
 	m_options->opcodedir64 = Opcodedir64LineEdit->text();
+	m_options->opcode6dir64Active = Opcode6dir64CheckBox->isChecked();
+	m_options->opcode6dir64 = Opcode6dir64LineEdit->text();
 	m_options->sadirActive = SadirCheckBox->isChecked();
 	m_options->sadir = SadirLineEdit->text();
 	m_options->ssdirActive = SsdirCheckBox->isChecked();
