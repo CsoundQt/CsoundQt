@@ -561,6 +561,8 @@ void CsoundEngine::evaluate(QString code)
 	CSOUND *csound = getCsound();
 	if (csound) {
 		csoundCompileOrc(csound, code.toLatin1());
+	} else {
+		queueMessage(tr("Csound is not running. Code not evaluated."));
 	}
 #else
 	Q_UNUSED(code);
@@ -809,7 +811,7 @@ int CsoundEngine::runCsound()
 	}
 	csoundReset(ud->csound);
 #else
-	csoundEnableMessageBuffer(ud->csound, 0);
+	csoundCreateMessageBuffer(ud->csound, 0);
 #endif
 
 	csoundSetHostData(ud->csound, (void *) ud);
@@ -1032,11 +1034,10 @@ void CsoundEngine::cleanupCsound()
 		csoundCleanup(ud->csound);
 #ifndef CSOUND6
 		csoundSetMessageCallback(ud->csound, 0);
-#endif
-#ifdef QCS_DESTROY_CSOUND
-#ifdef CSOUND6
+#else
 		csoundDestroyMessageBuffer(ud->csound);
 #endif
+#ifdef QCS_DESTROY_CSOUND
 		csoundDestroy(ud->csound);
 		ud->csound = NULL;
 #else

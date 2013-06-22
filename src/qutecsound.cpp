@@ -656,6 +656,8 @@ void CsoundQt::evaluate(QString code)
 	}
 	if (evalCode.indexOf("instr") >= 0 && evalCode.indexOf("'''") < 0) {
 		evaluateCsound(evalCode);
+	} else if (QRegExp("\\s*[if]\\s*[0-9]*\\s*[0-9]*\\s*[0-9]*.*" ).exactMatch(evalCode)) {
+		sendEvent(evalCode);
 	} else {
 		evaluatePython(evalCode);
 	}
