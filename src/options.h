@@ -30,7 +30,7 @@
 
 class Options: public CsoundOptions{
 public:
-	Options();
+	Options(ConfigLists *configlists);
 	~Options();
 
 	QString theme;  // Icon theme name

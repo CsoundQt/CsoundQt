@@ -30,6 +30,7 @@
 #endif
 
 #include "types.h"
+#include "configlists.h"
 
 #ifdef MACOSX_PRE_SNOW
 // Needed to be able to grab menus back from FLTK
@@ -280,6 +281,9 @@ private:
 	void openMidiPort(int port);
 	void closeMidiPort();
 	void showNewFormatWarning();
+
+
+	ConfigLists m_configlists;
 
 	QTabWidget *documentTabs;
 	GraphicWindow *m_graphic;  // To display the code graph images

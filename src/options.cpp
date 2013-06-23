@@ -25,7 +25,8 @@
 #include "types.h"
 #include "stdlib.h"
 
-Options::Options()
+Options::Options(ConfigLists *configlists) :
+	CsoundOptions(configlists)
 {
 	theme = "boring";
 	font = "Courier";

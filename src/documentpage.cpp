@@ -42,8 +42,8 @@
 
 
 // TODO is is possible to move the editor to a separate child class, to be able to use a cleaner class?
-DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree):
-	BaseDocument(parent, opcodeTree)
+DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists):
+	BaseDocument(parent, opcodeTree, configlists)
 {
 	init(parent, opcodeTree);
 	m_view->showLineArea(true);

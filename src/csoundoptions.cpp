@@ -21,10 +21,11 @@
 */
 
 #include "csoundoptions.h"
-#include "types.h" // for _configlists
+#include "configlists.h"
 #include <QDir> // for static QDir::separator()
 
-CsoundOptions::CsoundOptions()
+CsoundOptions::CsoundOptions(ConfigLists *configlists) :
+	m_configlists(configlists)
 {
 	m_jackNameSize = 16; //a small default
 
@@ -120,9 +121,9 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 	if (rt && rtUseOptions) {
 		if (rtOverrideOptions)
 			list << "-+ignore_csopts=1";
-		if (configlists.rtAudioNames[rtAudioModule] != "none") {
+		if (m_configlists->rtAudioNames[rtAudioModule] != "none") {
 			QString module;
-			module = configlists.rtAudioNames[rtAudioModule];
+			module = m_configlists->rtAudioNames[rtAudioModule];
 #ifdef Q_OS_MAC
 			if (module=="portaudio") {
 				module = "pa_bl"; // Force pa_bl on OS X as it crashes otherwise!
@@ -133,7 +134,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 				list << "-i" + rtInputDevice;
 			}
 			list << "-o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
-			if (rtJackName != "" && configlists.rtAudioNames[rtAudioModule] == "jack") {
+			if (rtJackName != "" && m_configlists->rtAudioNames[rtAudioModule] == "jack") {
 				QString jackName = rtJackName;
 				if (jackName.contains("*")) {
 					jackName.replace("*",fileName1.mid(fileName1.lastIndexOf(QDir::separator()) + 1));
@@ -145,8 +146,8 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 				list << "-+jack_client=" + jackName;
 			}
 		}
-		if (configlists.rtMidiNames[rtMidiModule] != "none") {
-			list << "-+rtmidi=" + configlists.rtMidiNames[rtMidiModule];
+		if (m_configlists->rtMidiNames[rtMidiModule] != "none") {
+			list << "-+rtmidi=" + m_configlists->rtMidiNames[rtMidiModule];
 			if (rtMidiInputDevice != "")
 				list << "-M" + rtMidiInputDevice;
 			if (rtMidiOutputDevice != "")
@@ -154,8 +155,8 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 		}
 	}
 	else {
-		list << "--format=" + configlists.fileTypeNames[fileFileType]
-				+ ":" + configlists.fileFormatFlags[fileSampleFormat];
+		list << "--format=" + m_configlists->fileTypeNames[fileFileType]
+				+ ":" + m_configlists->fileFormatFlags[fileSampleFormat];
 		if (fileInputFilenameActive)
 			list << "-i" + fileInputFilename + "";
 		if (fileOutputFilenameActive or fileAskFilename) {

@@ -27,7 +27,6 @@
 #endif
 
 #include "utilitiesdialog.h"
-#include "configlists.h"
 #include "options.h"
 #include "types.h"
 

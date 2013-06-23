@@ -23,6 +23,8 @@
 #ifndef CSOUNDENGINE_H
 #define CSOUNDENGINE_H
 
+#include <QStringList>
+
 #include <csound.hpp>
 #include <sndfile.hh>
 #include <csPerfThread.hpp>
@@ -102,7 +104,7 @@ class CsoundEngine : public QObject
 {
 	Q_OBJECT
 public:
-	CsoundEngine();
+	CsoundEngine(ConfigLists *configlists);
 	~CsoundEngine();
 
 #ifndef CSOUND6

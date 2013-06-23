@@ -28,8 +28,8 @@
 #include <QApplication>
 #include <QDebug>
 
-#include "configlists.h"
 #include "csound.h"
+#include "configlists.h"
 
 ConfigLists::ConfigLists()
 {
@@ -49,6 +49,25 @@ ConfigLists::ConfigLists()
 					<< "schar"<< "float"<< "long";
 	fileFormatNames << "24 Bit" << "16 Bit (short)" << "unsigned 8-bit"
 					<< "signed 8-bit" << "32 bit float"<< "long (32-bit)";
+
+#ifdef CSOUND6
+	CSOUND *csound = csoundCreate(NULL);
+	char *name, *type;
+	int n = 0;
+	while(!csoundGetModule(csound, n++, &name, &type)) {
+		if (strcmp(type, "audio") == 0) {
+			rtAudioNames << name;
+			printf("Module %d:  %s (%s) \n", n, name, type);
+		}
+	}
+	n = 0;
+	while(!csoundGetModule(csound, n++, &name, &type)) {
+		if (strcmp(type, "midi") == 0) {
+			rtMidiNames << name;
+			printf("MIDI Module %d:  %s (%s) \n", n, name, type);
+		}
+	}
+#else
 #ifdef Q_OS_LINUX
 	rtAudioNames << "portaudio" << "alsa" << "jack" << "pulse" << "none";
 #endif
@@ -76,6 +95,7 @@ ConfigLists::ConfigLists()
 #ifdef Q_OS_WIN32
 	rtMidiNames << "none" << "winmm" << "portmidi" << "virtual";
 #endif
+#endif
 	languages << "English" << "Spanish" << "German" << "French" << "Portuguese" << "Italian"  << "Turkish"  << "Finnish" << "Russian";
 	languageCodes << "en" << "es" << "de" << "fr" << "pt" << "it" << "tr" << "fi" << "ru";
 }
@@ -102,6 +122,21 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(int moduleIndex)
 	// based on code by Steven Yi
 	QHash<QString,QString> deviceList;
 	QString module = rtMidiNames[moduleIndex];
+#ifdef CSOUND6
+	CSOUND *cs = csoundCreate(NULL);
+	csoundSetMIDIModule(cs, rtMidiNames[moduleIndex].toLatin1().data());
+	int i,n = csoundMIDIDevList(cs,NULL,0);
+	CS_MIDIDEVICE *devs = (CS_MIDIDEVICE *) malloc(n*sizeof(CS_MIDIDEVICE));
+	csoundMIDIDevList(cs,devs,0);
+	for (i = 0; i < n; i++) {
+//		qDebug() << devs[i].device_name;
+		if (module == QString(devs[i].midi_module)) {
+			QString displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
+			deviceList.insert(displayName, QString(devs[i].device_id));
+		}
+	}
+	free(devs);
+#else
 	if (module == "none") {
 		return deviceList;
 	}
@@ -192,6 +227,7 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(int moduleIndex)
 			}
 		}
 	}
+#endif
 	return deviceList;
 }
 
@@ -206,9 +242,9 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(int moduleInde
 	CS_MIDIDEVICE *devs = (CS_MIDIDEVICE *) malloc(n*sizeof(CS_MIDIDEVICE));
 	csoundMIDIDevList(cs,devs,1);
 	for (i = 0; i < n; i++) {
-		qDebug() << devs[i].device_name;
+//		qDebug() << devs[i].device_name;
 		if (module == QString(devs[i].midi_module)) {
-			QString displayName = QString("%s (%s)").arg(devs[i].device_name).arg(devs[i].interface_name);
+			QString displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
 			deviceList.append(QPair<QString,QString>(displayName, QString(devs[i].device_id)));
 		}
 	}
@@ -301,6 +337,19 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(int moduleInde
 	//  qDebug("CsoundQt::getAudioInputDevices()");
 	QList<QPair<QString, QString> > deviceList;
 	QString module = rtAudioNames[moduleIndex];
+#ifdef CSOUND6
+	CSOUND *cs = csoundCreate(NULL);
+	csoundSetRTAudioModule(cs, rtAudioNames[moduleIndex].toLatin1().data());
+	int i,n = csoundAudioDevList(cs,NULL,0);
+	CS_AUDIODEVICE *devs = (CS_AUDIODEVICE *) malloc(n*sizeof(CS_AUDIODEVICE));
+	csoundAudioDevList(cs,devs,0);
+	for (i = 0; i < n; i++) {
+//		qDebug() << devs[i].device_name;
+		QString displayName = QString(devs[i].device_name);
+		deviceList.append(QPair<QString,QString>(displayName, QString(devs[i].device_id)));
+	}
+	free(devs);
+#else
 	if (module == "none") {
 		return deviceList;
 	}
@@ -448,6 +497,7 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(int moduleInde
 			}
 		}
 	}
+#endif
 	return deviceList;
 }
 
@@ -456,6 +506,19 @@ QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(int moduleInd
 	//  qDebug("CsoundQt::getAudioOutputDevices()");
 	QList<QPair<QString, QString> > deviceList;
 	QString module = rtAudioNames[moduleIndex];
+#ifdef CSOUND6
+	CSOUND *cs = csoundCreate(NULL);
+	csoundSetRTAudioModule(cs, rtAudioNames[moduleIndex].toLatin1().data());
+	int i,n = csoundAudioDevList(cs,NULL,1);
+	CS_AUDIODEVICE *devs = (CS_AUDIODEVICE *) malloc(n*sizeof(CS_AUDIODEVICE));
+	csoundAudioDevList(cs,devs,1);
+	for (i = 0; i < n; i++) {
+		//		qDebug() << devs[i].device_name;
+		QString displayName = QString(devs[i].device_name);
+		deviceList.append(QPair<QString,QString>(displayName, QString(devs[i].device_id)));
+	}
+	free(devs);
+#else
 	if (module == "none") {
 		return deviceList;
 	}
@@ -602,6 +665,7 @@ QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(int moduleInd
 			}
 		}
 	}
+#endif
 	return deviceList;
 }
 

@@ -30,11 +30,11 @@
 #include "console.h"
 
 
-BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree) :
+BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists) :
 	QObject(parent), m_opcodeTree(opcodeTree), m_csEngine(0)
 {
 	m_view = 0;
-	m_csEngine = new CsoundEngine();
+	m_csEngine = new CsoundEngine(configlists);
 	//FIXME widgetlayout should have the chance of being empty
 	m_widgetLayouts.append(newWidgetLayout());
 	m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine

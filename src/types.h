@@ -26,7 +26,6 @@
 #include <QMutex>
 #include <QtGlobal>
 #include <QDebug>
-#include "configlists.h"
 #include <csound.h>
 
 #define QCS_VERSION "0.7.3"
@@ -112,8 +111,6 @@ public:
 	QString inArgs;
 	QString desc;
 };
-
-static ConfigLists configlists;
 
 class RingBuffer
 {

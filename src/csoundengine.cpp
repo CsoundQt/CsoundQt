@@ -42,7 +42,8 @@
 #endif
 
 
-CsoundEngine::CsoundEngine()
+CsoundEngine::CsoundEngine(ConfigLists *configlists) :
+	m_options(configlists)
 {
 	// Initialize user data pointer passed to Csound
 	ud = new CsoundUserData();
@@ -841,13 +842,11 @@ int CsoundEngine::runCsound()
 		}
 	}
 
-	if (true) {
-		csoundSetIsGraphable(ud->csound, true);
-		csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
-		csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
-		csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
-		csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
-	}
+	csoundSetIsGraphable(ud->csound, true);
+	csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
+	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
+	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
+	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
 
 	csoundSetCallback(ud->csound,
 					  &CsoundEngine::keyEventCallback,

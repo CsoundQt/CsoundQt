@@ -25,10 +25,12 @@
 
 #include <QString>
 
+class ConfigLists;
+
 class CsoundOptions
 {
 public:
-	CsoundOptions();
+	CsoundOptions(ConfigLists *configlists);
 
 	QString generateCmdLineFlags();
 	QStringList generateCmdLineFlagsList();
@@ -94,6 +96,7 @@ public:
 
 private:
 	int m_jackNameSize;
+	ConfigLists *m_configlists;
 };
 
 #endif // CSOUNDOPTIONS_H

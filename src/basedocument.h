@@ -40,7 +40,7 @@ class BaseDocument : public QObject
 {
 	Q_OBJECT
 public:
-	BaseDocument(QWidget *parent, OpEntryParser *opcodeTree);
+	BaseDocument(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists);
 	~BaseDocument();
 
 	virtual int setTextString(QString &text) = 0;

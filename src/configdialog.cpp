@@ -26,30 +26,31 @@
 #include "configdialog.h"
 #include "options.h"
 #include "types.h"
+#include "configlists.h"
 
 #ifdef QCS_RTMIDI
 #include "RtMidi.h"
 #endif
 
-ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options)
-	: QDialog(parent), m_parent(parent), m_options(options)
+ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *configlists)
+	: QDialog(parent), m_parent(parent), m_options(options), m_configlists(configlists)
 {
 	setupUi(this);
 
-	foreach (QString item, configlists.fileTypeLongNames) {
+	foreach (QString item, m_configlists->fileTypeLongNames) {
 		FileTypeComboBox->addItem(item);
 	}
-	foreach (QString item, configlists.fileFormatNames) {
+	foreach (QString item, m_configlists->fileFormatNames) {
 		FileFormatComboBox->addItem(item);
 	}
-	foreach (QString item, configlists.rtAudioNames) {
+	foreach (QString item, m_configlists->rtAudioNames) {
 		RtModuleComboBox->addItem(item);
 	}
-	foreach (QString item, configlists.rtMidiNames) {
+	foreach (QString item, m_configlists->rtMidiNames) {
 		RtMidiModuleComboBox->addItem(item);
 	}
-	for (int i = 0; i < configlists.languages.size(); i++) {
-		languageComboBox->addItem(configlists.languages[i], QVariant(configlists.languageCodes[i]));
+	for (int i = 0; i < m_configlists->languages.size(); i++) {
+		languageComboBox->addItem(m_configlists->languages[i], QVariant(m_configlists->languageCodes[i]));
 	}
 	midiInterfaceComboBox->clear();
 
@@ -525,7 +526,7 @@ void ConfigDialog::browseSdkDir()
 
 void ConfigDialog::selectAudioInput()
 {
-	QList<QPair<QString, QString> > deviceList = configlists.getAudioInputDevices(RtModuleComboBox->currentIndex());
+	QList<QPair<QString, QString> > deviceList = m_configlists->getAudioInputDevices(RtModuleComboBox->currentIndex());
 	QMenu menu(this);
 	QVector<QAction*> actions;
 
@@ -550,7 +551,7 @@ void ConfigDialog::selectAudioInput()
 
 void ConfigDialog::selectAudioOutput()
 {
-	QList<QPair<QString, QString> > deviceList = configlists.getAudioOutputDevices(RtModuleComboBox->currentIndex());
+	QList<QPair<QString, QString> > deviceList = m_configlists->getAudioOutputDevices(RtModuleComboBox->currentIndex());
 	QMenu menu(this);
 	QVector<QAction*> actions;
 
@@ -575,8 +576,8 @@ void ConfigDialog::selectAudioOutput()
 
 void ConfigDialog::selectMidiInput()
 {
-	QHash<QString, QString> deviceList = configlists.getMidiInputDevices(RtMidiModuleComboBox->currentIndex());
-	QString module = configlists.rtMidiNames[RtMidiModuleComboBox->currentIndex()];
+	QHash<QString, QString> deviceList = m_configlists->getMidiInputDevices(RtMidiModuleComboBox->currentIndex());
+	QString module = m_configlists->rtMidiNames[RtMidiModuleComboBox->currentIndex()];
 	QMenu menu(this);
 
 	deviceList.insert("Disabled", "");
@@ -599,7 +600,7 @@ void ConfigDialog::selectMidiInput()
 
 void ConfigDialog::selectMidiOutput()
 {
-	QList<QPair<QString, QString> > deviceList = configlists.getMidiOutputDevices(RtMidiModuleComboBox->currentIndex());
+	QList<QPair<QString, QString> > deviceList = m_configlists->getMidiOutputDevices(RtMidiModuleComboBox->currentIndex());
 	QMenu menu(this);
 	QVector<QAction*> actions;
 

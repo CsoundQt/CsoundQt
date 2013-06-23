@@ -27,12 +27,13 @@
 
 class CsoundQt;
 class Options;
+class ConfigLists;
 
 class ConfigDialog : public QDialog, public Ui::ConfigDialog
 {
 	Q_OBJECT
 public:
-	ConfigDialog(CsoundQt *parent = 0, Options *options = 0);
+	ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *configlists);
 
 	~ConfigDialog();
 	int currentTab();
@@ -44,6 +45,7 @@ public slots:
 private:
 	CsoundQt* m_parent;
 	Options *m_options;
+	ConfigLists *m_configlists;
 	void browseFile(QString &destination);
 	void browseSaveFile(QString &destination);
 	void browseDir(QString &destination);

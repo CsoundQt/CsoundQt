@@ -48,7 +48,7 @@ class DocumentPage : public BaseDocument
 {
 	Q_OBJECT
 public:
-	DocumentPage(QWidget *parent, OpEntryParser *opcodeTree);
+	DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists);
 	~DocumentPage();
 
 	void setCompanionFileName(QString name);

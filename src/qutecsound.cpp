@@ -29,7 +29,6 @@
 #include "options.h"
 #include "highlighter.h"
 #include "configdialog.h"
-#include "configlists.h"
 #include "documentpage.h"
 #include "utilitiesdialog.h"
 #include "graphicwindow.h"
@@ -98,7 +97,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	QLocale::setDefault(QLocale::system());  //Does this take care of the decimal separator for different locales?
 	curPage = -1;
 
-	m_options = new Options();
+	m_options = new Options(&m_configlists);
 	m_options->thread = true; // Always run threaded
 	// Create GUI panels
 	lineNumberLabel = new QLabel("Line 1"); // Line number display
@@ -757,7 +756,7 @@ void CsoundQt::createQuickRefPdf()
 	//
 	//  }
 	QString internalFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
-	internalFileName += configlists.languageCodes[m_options->language];
+	internalFileName += m_configlists.languageCodes[m_options->language];
 	internalFileName += ".pdf";
 	if (!QFile::exists(internalFileName)) {
 		internalFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
@@ -1533,11 +1532,11 @@ void CsoundQt::render()
 		QFileDialog dialog(this,tr("Output Filename"),defaultFile);
 		dialog.setAcceptMode(QFileDialog::AcceptSave);
 		//    dialog.setConfirmOverwrite(false);
-		QString filter = QString(configlists.fileTypeLongNames[m_options->fileFileType] + " Files ("
-								 + configlists.fileTypeExtensions[m_options->fileFileType] + ")");
+		QString filter = QString(m_configlists.fileTypeLongNames[m_options->fileFileType] + " Files ("
+								 + m_configlists.fileTypeExtensions[m_options->fileFileType] + ")");
 		dialog.selectNameFilter(filter);
 		if (dialog.exec() == QDialog::Accepted) {
-			QString extension = configlists.fileTypeExtensions[m_options->fileFileType].left(configlists.fileTypeExtensions[m_options->fileFileType].indexOf(";"));
+			QString extension = m_configlists.fileTypeExtensions[m_options->fileFileType].left(m_configlists.fileTypeExtensions[m_options->fileFileType].indexOf(";"));
 			//       // Remove the '*' from the extension
 			extension.remove(0,1);
 			m_options->fileOutputFilename = dialog.selectedFiles()[0];
@@ -1908,7 +1907,7 @@ void CsoundQt::documentWasModified()
 
 void CsoundQt::configure()
 {
-	ConfigDialog dialog(this, m_options);
+	ConfigDialog dialog(this, m_options, &m_configlists);
 	dialog.setCurrentTab(configureTab);
 	dialog.newParserCheckBox->setEnabled(csoundGetVersion() > 5125);
 	dialog.multicoreCheckBox->setEnabled(csoundGetVersion() > 5125);
@@ -1944,8 +1943,8 @@ void CsoundQt::applySettings()
 
 	// Display a summary of options on the status bar
 	currentOptions +=  (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
-	QString playOptions = " (Audio:" + configlists.rtAudioNames[m_options->rtAudioModule] + " ";
-	playOptions += "MIDI:" +  configlists.rtMidiNames[m_options->rtMidiModule] + ")";
+	QString playOptions = " (Audio:" + m_configlists.rtAudioNames[m_options->rtAudioModule] + " ";
+	playOptions += "MIDI:" +  m_configlists.rtMidiNames[m_options->rtMidiModule] + ")";
 	playOptions += " (" + (m_options->rtUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions"));
 	playOptions += " " + (m_options->rtOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
 	playOptions += currentOptions;
@@ -3883,7 +3882,7 @@ void CsoundQt::readSettings()
 	lastUsedDir = settings.value("lastuseddir", "").toString();
 	lastFileDir = settings.value("lastfiledir", "").toString();
 	//  showLiveEventsAct->setChecked(settings.value("liveEventsActive", true).toBool());
-	m_options->language = configlists.languageCodes.indexOf(settings.value("language", QLocale::system().name()).toString());
+	m_options->language = m_configlists.languageCodes.indexOf(settings.value("language", QLocale::system().name()).toString());
 	if (m_options->language < 0)
 		m_options->language = 0;
 	recentFiles.clear();
@@ -4064,7 +4063,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("dockstate", saveState());
 		settings.setValue("lastuseddir", lastUsedDir);
 		settings.setValue("lastfiledir", lastFileDir);
-		settings.setValue("language", configlists.languageCodes[m_options->language]);
+		settings.setValue("language", m_configlists.languageCodes[m_options->language]);
 		//  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
 		settings.setValue("recentFiles", recentFiles);
 		settings.setValue("theme", m_options->theme);
@@ -4433,7 +4432,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 
 void CsoundQt::makeNewPage(QString fileName, QString text)
 {
-	DocumentPage *newPage = new DocumentPage(this, m_opcodeTree);
+	DocumentPage *newPage = new DocumentPage(this, m_opcodeTree, &m_configlists);
 	int insertPoint = curPage + 1;
 	curPage += 1;
 	if (documentPages.size() == 0) {
