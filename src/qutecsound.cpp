@@ -675,7 +675,7 @@ void CsoundQt::evaluateCsound(QString code)
 void CsoundQt::evaluatePython(QString code)
 {
 #ifdef QCS_PYTHONQT
-	m_pythonConsole->evaluate(evalCode);
+	m_pythonConsole->evaluate(code);
 #else
 	showNoPythonQtWarning();
 #endif
@@ -3118,6 +3118,7 @@ void CsoundQt::createMenus()
 	musicFiles.append(":/examples/Music/Kung-Xanadu.csd");
 	musicFiles.append(":/examples/Music/Riley-In_C.csd");
 	musicFiles.append(":/examples/Music/Stockhausen-Studie_II.csd");
+	musicFiles.append(":/examples/Music/Bach-Invention_1.csd");
 
 	subMenus << musicFiles;
 	subMenuNames << tr("Music");
@@ -3130,6 +3131,7 @@ void CsoundQt::createMenus()
 	usefulFiles.append(":/examples/Useful/MIDI_Recorder.csd");
 	usefulFiles.append(":/examples/Useful/MIDI_Layering.csd");
 	usefulFiles.append(":/examples/Useful/ASCII_Key.csd");
+	usefulFiles.append(":/examples/Useful/Monome_basic.csd");
 	usefulFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
 	usefulFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
 	usefulFiles.append(":/examples/Useful/SF_Play_from_HD.csd");

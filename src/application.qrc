@@ -336,6 +336,7 @@
         <file>../examples/Useful/Multichannel_Player.csd</file>
         <file>../examples/Useful/Jukebox.csd</file>
         <file>../examples/Useful/SF_Record.csd</file>
+        <file>../examples/Useful/Monome_basic.csd</file>
         <file>../examples/Useful/Audio_Input_Test.csd</file>
         <file>../examples/Useful/Audio_Output_Test.csd</file>
         <file>../examples/Useful/Audio_Thru_Test.csd</file>
@@ -355,6 +356,7 @@
         <file>../examples/Music/Boulanger-Trapped_in_Convert.csd</file>
         <file>../examples/Music/Kung-Xanadu.csd</file>
         <file>../examples/Music/Stockhausen-Studie_II.csd</file>
+        <file>../examples/Music/Bach-Invention_1.csd</file>
         <file>../examples/Live Collection/Live_Accordizer.csd</file>
         <file>../examples/Live Collection/Live_Delay_Feedback.csd</file>
         <file>../examples/Live Collection/Live_Granular.csd</file>
