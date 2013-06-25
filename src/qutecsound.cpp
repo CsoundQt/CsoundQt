@@ -4018,6 +4018,7 @@ void CsoundQt::readSettings()
 	m_options->favoriteDir = settings.value("favoriteDir","").toString();
 	m_options->pythonDir = settings.value("pythonDir","").toString();
 	m_options->pythonExecutable = settings.value("pythonExecutable","python").toString();
+	m_options->csoundExecutable = settings.value("csoundExecutable","csound").toString();
 	m_options->logFile = settings.value("logFile",DEFAULT_LOG_FILE).toString();
 	m_options->sdkDir = settings.value("sdkDir","").toString();
 	m_options->opcodexmldir = settings.value("opcodexmldir", "").toString();
@@ -4190,6 +4191,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("favoriteDir",m_options->favoriteDir);
 		settings.setValue("pythonDir",m_options->pythonDir);
 		settings.setValue("pythonExecutable",m_options->pythonExecutable);
+		settings.setValue("csoundExecutable", m_options->csoundExecutable);
 		settings.setValue("logFile",m_options->logFile);
 		settings.setValue("sdkDir",m_options->sdkDir);
 		settings.setValue("opcodexmldir", m_options->opcodexmldir);
@@ -4605,11 +4607,13 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
 #endif
 
 	if (executable.isEmpty()) {
-#ifdef Q_OS_MAC
-		cmdLine = "/usr/local/bin/csound ";
-#else
-		cmdLine = "csound ";
-#endif
+		cmdLine = m_options->csoundExecutable+ " ";
+		qDebug()<<cmdLine;
+//#ifdef Q_OS_MAC
+//		cmdLine = "/usr/local/bin/csound ";
+//#else
+//		cmdLine = "csound ";
+//#endif
 		m_options->rt = (realtime and m_options->rtUseOptions)
 				or (!realtime and m_options->fileUseOptions);
 		cmdLine += m_options->generateCmdLineFlags() + " ";

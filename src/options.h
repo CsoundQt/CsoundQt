@@ -87,6 +87,7 @@ public:
 	QString favoriteDir;
 	QString pythonDir;
 	QString pythonExecutable;
+	QString csoundExecutable;
 	QString logFile;
 	QString sdkDir;
 
