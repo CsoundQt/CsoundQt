@@ -180,7 +180,7 @@ int CsoundOptions::generateCmdLine(char **argv)
 {
 	int index = 0;
 	argv[index] = (char *) calloc(7, sizeof(char));
-	strc(argv[index++], "csound");
+	strcpy(argv[index++], "csound");
 	QStringList indFlags = generateCmdLineFlagsList();
 	foreach (QString flag, indFlags) {
 		flag = flag.simplified();
