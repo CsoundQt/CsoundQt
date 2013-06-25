@@ -802,6 +802,12 @@ int CsoundEngine::runCsound()
 #endif
 
 	ud->msgRefreshTime = m_refreshTime*1000;
+#ifdef CSOUND6
+	csoundCreateMessageBuffer(ud->csound, 0);
+#endif
+
+	csoundSetHostData(ud->csound, (void *) ud);
+
 #ifndef CSOUND6
 	// Message Callbacks must be set before compile, otherwise some information is missed
 	if (ud->threaded) {
@@ -810,13 +816,6 @@ int CsoundEngine::runCsound()
 	else {
 		csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackNoThread);
 	}
-	csoundReset(ud->csound);
-#else
-	csoundCreateMessageBuffer(ud->csound, 0);
-#endif
-
-	csoundSetHostData(ud->csound, (void *) ud);
-#ifndef CSOUND6
 	csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
 #endif
 	if (csoundCreateGlobalVariable(ud->csound, "FLTK_Flags", sizeof(int)) != CSOUND_SUCCESS) {
@@ -1062,9 +1061,7 @@ void CsoundEngine::messageListDispatcher(void *data)
 			if (ud_local->wl) {
 				ud_local->wl->getMouseValues(&ud_local->mouseValues);
 			}
-#ifndef CSOUND6
-
-#else
+#ifdef CSOUND6
 			int count = csoundGetMessageCnt(csound);
 
 			ud_local->csEngine->m_messageMutex.lock();
