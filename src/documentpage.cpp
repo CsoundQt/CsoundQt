@@ -1143,7 +1143,7 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 	saveLiveEvents = true;
 
 	m_view = new DocumentView(parent, opcodeTree);
-	connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluatePython(QString)));
+	connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
 	connect(m_view,SIGNAL(setHelp()), this, SLOT(setHelp()));
 
 	// For logging of Csound output to file

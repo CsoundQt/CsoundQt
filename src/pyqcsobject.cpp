@@ -308,7 +308,8 @@ QString PyQcsObject::getCsStringChannel(QString channel, int index)
 	if (e != NULL) {
 		CSOUND *cs = e->getCsound();
 		if (cs != NULL) {
-			char *value = new char[csoundGetStrVarMaxLen(cs)];
+			char *value = new char[1024];// error: [csoundGetStrVarMaxLen(cs)];
+//			char *value = new char[csoundGetStrVarMaxLen(cs)];
 			if ( !( csoundGetChannelPtr(cs,(MYFLT **) &value,channel.toLocal8Bit(),
 										CSOUND_STRING_CHANNEL | CSOUND_OUTPUT_CHANNEL))) {
 				return QString(value);
@@ -544,6 +545,13 @@ MYFLT *PyQcsObject::getTableArray(int ftable, int index)
 	}
 	return *m_tablePtr;
 }
+
+#ifdef CSOUND6
+void PyQcsObject::evaluateCsound(QString code)
+{
+	m_qcs->evaluateCsound(code);
+}
+#endif
 
 //void PyQcsObject::writeListToTable(int ftable, QVariantList values, int offset, int count)
 //{
