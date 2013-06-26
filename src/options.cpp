@@ -76,6 +76,11 @@ Options::Options(ConfigLists *configlists) :
 	favoriteDir = "";
 	pythonDir = "";
 	pythonExecutable = "python";
+#ifdef Q_OS_MAC
+	csoundExecutable = "/usr/local/bin/csound ";
+#else
+	csoundExecutable = "csound ";
+#endif
 	logFile = "log.txt";
 	sdkDir = "";
 

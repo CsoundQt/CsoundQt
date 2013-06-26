@@ -202,6 +202,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	favoriteLineEdit->setText(m_options->favoriteDir);
 	pythonDirLineEdit->setText(m_options->pythonDir);
 	pythonExecutableLineEdit->setText(m_options->pythonExecutable);
+	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
 	logFileLineEdit->setText(m_options->logFile);
 	sdkLineEdit->setText(m_options->sdkDir);
 
@@ -251,6 +252,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(OpcodedirCheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
 	connect(Opcodedir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
 	connect(Opcode6dir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
+
+	connect(csoundExecutableToolButton,SIGNAL(clicked()),this, SLOT(browseCsoundExecutable()));
 
 #ifndef QCS_PYTHONQT
 	pythonDirLineEdit->setEnabled(false);
@@ -382,6 +385,7 @@ void ConfigDialog::accept()
 	m_options->favoriteDir = favoriteLineEdit->text();
 	m_options->pythonDir = pythonDirLineEdit->text();
 	m_options->pythonExecutable = pythonExecutableLineEdit->text();
+	m_options->csoundExecutable = csoundExecutableLineEdit->text();
 	m_options->logFile = logFileLineEdit->text();
 	m_options->sdkDir = sdkLineEdit->text();
 
@@ -451,6 +455,12 @@ void ConfigDialog::browseIncdir()
 {
 	browseDir(m_options->incdir);
 	IncdirLineEdit->setText(m_options->incdir);
+}
+
+void ConfigDialog::browseCsoundExecutable()
+{
+	browseFile(m_options->csoundExecutable);
+	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
 }
 
 //void ConfigDialog::browseDefaultCsd()

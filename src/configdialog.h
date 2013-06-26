@@ -39,6 +39,7 @@ public:
 	int currentTab();
 	void setCurrentTab(int index);
 
+
 public slots:
 	void warnOpcodeDir(bool on);
 
@@ -64,6 +65,7 @@ private slots:
 	//    void browseDefaultCsd();
 	void browseFavorite();
 	void browsePythonDir();
+	void browseCsoundExecutable();
 	void browseLogFile();
 	void browseSdkDir();
 	void browseTerminal();

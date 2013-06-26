@@ -653,9 +653,10 @@ void CsoundQt::evaluate(QString code)
 	else {
 		evalCode = code;
 	}
-	if (evalCode.indexOf("instr") >= 0 && evalCode.indexOf("'''") < 0) {
+	if ((evalCode.indexOf("instr") >= 0 || evalCode.indexOf("event") >=0  || evalCode.indexOf("ftgen") >=0 || evalCode.indexOf("init") >=0 ) && evalCode.indexOf("'''") < 0) { // perhaps better to do a list of keywords, also chn_k, etc can be here?
 		evaluateCsound(evalCode);
-	} else if (QRegExp("\\s*[if]\\s*[0-9]*\\s*[0-9]*\\s*[0-9]*.*" ).exactMatch(evalCode)) {
+	} else if (QRegExp("\\s*[if]\\s*[0-9]*\\s*[0-9]*\\s*[0-9]*.*" ).exactMatch(evalCode)) { // TODO: something wrong here
+		// now thinks also that for and if are scorelines
 		sendEvent(evalCode);
 	} else {
 		evaluatePython(evalCode);
@@ -675,7 +676,7 @@ void CsoundQt::evaluateCsound(QString code)
 void CsoundQt::evaluatePython(QString code)
 {
 #ifdef QCS_PYTHONQT
-	m_pythonConsole->evaluate(evalCode);
+	m_pythonConsole->evaluate(code);
 #else
 	showNoPythonQtWarning();
 #endif
@@ -3118,6 +3119,7 @@ void CsoundQt::createMenus()
 	musicFiles.append(":/examples/Music/Kung-Xanadu.csd");
 	musicFiles.append(":/examples/Music/Riley-In_C.csd");
 	musicFiles.append(":/examples/Music/Stockhausen-Studie_II.csd");
+	musicFiles.append(":/examples/Music/Bach-Invention_1.csd");
 
 	subMenus << musicFiles;
 	subMenuNames << tr("Music");
@@ -3130,6 +3132,7 @@ void CsoundQt::createMenus()
 	usefulFiles.append(":/examples/Useful/MIDI_Recorder.csd");
 	usefulFiles.append(":/examples/Useful/MIDI_Layering.csd");
 	usefulFiles.append(":/examples/Useful/ASCII_Key.csd");
+	usefulFiles.append(":/examples/Useful/Monome_basic.csd");
 	usefulFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
 	usefulFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
 	usefulFiles.append(":/examples/Useful/SF_Play_from_HD.csd");
@@ -4016,6 +4019,7 @@ void CsoundQt::readSettings()
 	m_options->favoriteDir = settings.value("favoriteDir","").toString();
 	m_options->pythonDir = settings.value("pythonDir","").toString();
 	m_options->pythonExecutable = settings.value("pythonExecutable","python").toString();
+	m_options->csoundExecutable = settings.value("csoundExecutable","csound").toString();
 	m_options->logFile = settings.value("logFile",DEFAULT_LOG_FILE).toString();
 	m_options->sdkDir = settings.value("sdkDir","").toString();
 	m_options->opcodexmldir = settings.value("opcodexmldir", "").toString();
@@ -4188,6 +4192,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("favoriteDir",m_options->favoriteDir);
 		settings.setValue("pythonDir",m_options->pythonDir);
 		settings.setValue("pythonExecutable",m_options->pythonExecutable);
+		settings.setValue("csoundExecutable", m_options->csoundExecutable);
 		settings.setValue("logFile",m_options->logFile);
 		settings.setValue("sdkDir",m_options->sdkDir);
 		settings.setValue("opcodexmldir", m_options->opcodexmldir);
@@ -4603,11 +4608,13 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
 #endif
 
 	if (executable.isEmpty()) {
-#ifdef Q_OS_MAC
-		cmdLine = "/usr/local/bin/csound ";
-#else
-		cmdLine = "csound ";
-#endif
+		cmdLine = m_options->csoundExecutable+ " ";
+		qDebug()<<cmdLine;
+//#ifdef Q_OS_MAC
+//		cmdLine = "/usr/local/bin/csound ";
+//#else
+//		cmdLine = "csound ";
+//#endif
 		m_options->rt = (realtime and m_options->rtUseOptions)
 				or (!realtime and m_options->fileUseOptions);
 		cmdLine += m_options->generateCmdLineFlags() + " ";
