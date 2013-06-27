@@ -655,8 +655,12 @@ void CsoundQt::evaluate(QString code)
 	}
 	if ((evalCode.indexOf("instr") >= 0 || evalCode.indexOf("event") >=0  || evalCode.indexOf("ftgen") >=0 || evalCode.indexOf("init") >=0 ) && evalCode.indexOf("'''") < 0) { // perhaps better to do a list of keywords, also chn_k, etc can be here?
 		evaluateCsound(evalCode);
-	} else if (QRegExp("\\s*[if]\\s*[0-9]*\\s*[0-9]*\\s*[0-9]*.*" ).exactMatch(evalCode)) { // TODO: something wrong here
+	} //else if (QRegExp("\\s*[if]\\s*[0-9]*\\s*[0-9]*\\s*[0-9]*.*" ).exactMatch(evalCode)) { // TODO: something wrong here
 		// now thinks also that for and if are scorelines
+	else if ( (evalCode.simplified().at(0).toAscii() == 'i' || evalCode.simplified().at(0).toAscii() == 'f' ) &&
+			  (isdigit(evalCode.simplified().at(1).toAscii()) || isspace(evalCode.simplified().at(1).toAscii())
+			   || evalCode.simplified().at(1).toAscii() == '-') )	{ // instr number can be also negative
+		//qDebug()<<"SCORELINE"<<evalCode.simplified().at(0).toAscii();
 		sendEvent(evalCode);
 	} else {
 		evaluatePython(evalCode);
