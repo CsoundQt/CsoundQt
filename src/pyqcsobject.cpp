@@ -302,14 +302,22 @@ double PyQcsObject::getCsChannel(QString channel, int index)
 	return 0;//m_qcs->getCsChannel(channel, index);
 }
 
+
+
 QString PyQcsObject::getCsStringChannel(QString channel, int index)
 {
 	CsoundEngine *e = m_qcs->getEngine(index);
+
 	if (e != NULL) {
 		CSOUND *cs = e->getCsound();
+
 		if (cs != NULL) {
-			char *value = new char[1024];// error: [csoundGetStrVarMaxLen(cs)];
-//			char *value = new char[csoundGetStrVarMaxLen(cs)];
+#ifdef CSOUND6
+			int maxlen = csoundGetChannelDatasize(cs, channel.toLocal8Bit());
+#else
+			int maxlen = csoundGetStrVarMaxLen(cs);
+#endif
+			char *value = new char[maxlen];
 			if ( !( csoundGetChannelPtr(cs,(MYFLT **) &value,channel.toLocal8Bit(),
 										CSOUND_STRING_CHANNEL | CSOUND_OUTPUT_CHANNEL))) {
 				return QString(value);
@@ -320,7 +328,9 @@ QString PyQcsObject::getCsStringChannel(QString channel, int index)
 	PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
 	mainContext.evalScript("print \'"+message+"\'");
 	return QString();//m_qcs->getCsChannel(channel, index);
+
 }
+
 
 void PyQcsObject::setWidgetProperty(QString widgetid, QString property, QVariant value, int index)
 {
