@@ -655,7 +655,7 @@ void CsoundQt::evaluate(QString code)
 	}
 	if ((evalCode.indexOf("instr") >= 0 || evalCode.indexOf("event") >=0  || evalCode.indexOf("ftgen") >=0 || evalCode.indexOf("init") >=0 ) && evalCode.indexOf("'''") < 0) { // perhaps better to do a list of keywords, also chn_k, etc can be here?
 		evaluateCsound(evalCode);
-	} else if (QRegExp("\\s*[if]\\s*-*[0-9].*\\s.*[0-9].*\\s.*[0-9].*" ).exactMatch(evalCode)) {
+	} else if (QRegExp("\\s*[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+" ).exactMatch(evalCode)) {
 		sendEvent(evalCode);
 	} else {
 		evaluatePython(evalCode);
