@@ -336,6 +336,10 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(int moduleInde
 	QList<QPair<QString, QString> > deviceList;
 	QString module = rtAudioNames[moduleIndex];
 #ifdef CSOUND6
+	QString prefix="";
+	if (module=="jack" || module=="alsa" ) {
+		prefix = "adc:";
+	}
 	CSOUND *cs = csoundCreate(NULL);
 	csoundSetRTAudioModule(cs, rtAudioNames[moduleIndex].toLatin1().data());
 	int i,n = csoundGetAudioDevList(cs,NULL,0);
@@ -343,8 +347,8 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(int moduleInde
 	csoundGetAudioDevList(cs,devs,0);
 	for (i = 0; i < n; i++) {
 //		qDebug() << devs[i].device_name;
-		QString displayName = QString(devs[i].device_name);
-		deviceList.append(QPair<QString,QString>(displayName, QString(devs[i].device_id)));
+		QString displayName = prefix+QString(devs[i].device_name); // jack, maybe also alsa must have adc: prefix to work
+		deviceList.append(QPair<QString,QString>(displayName,  prefix+QString(devs[i].device_id)));
 	}
 	free(devs);
 #else
@@ -505,15 +509,19 @@ QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(int moduleInd
 	QList<QPair<QString, QString> > deviceList;
 	QString module = rtAudioNames[moduleIndex];
 #ifdef CSOUND6
+	QString prefix="";
 	CSOUND *cs = csoundCreate(NULL);
-	csoundSetRTAudioModule(cs, module.toLatin1().data());
+	if (module=="jack" || module=="alsa" ) {
+		prefix = "dac:";
+	}
+	csoundSetRTAudioModule(cs, rtAudioNames[moduleIndex].toLatin1().data());
 	int i,n = csoundGetAudioDevList(cs,NULL,1);
 	CS_AUDIODEVICE *devs = (CS_AUDIODEVICE *) malloc(n*sizeof(CS_AUDIODEVICE));
 	csoundGetAudioDevList(cs,devs,1);
 	for (i = 0; i < n; i++) {
 		//		qDebug() << devs[i].device_name;
-		QString displayName = QString(devs[i].device_name);
-		deviceList.append(QPair<QString,QString>(displayName, QString(devs[i].device_id)));
+		QString displayName = prefix+QString(devs[i].device_name); // must have dac: prefix to work
+		deviceList.append(QPair<QString,QString>(displayName,  prefix+QString(devs[i].device_id)));
 	}
 	free(devs);
 #else
