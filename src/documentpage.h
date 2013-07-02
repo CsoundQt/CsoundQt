@@ -182,7 +182,6 @@ public:
 	// Internal Options setters
 	void setConsoleBufferSize(int size);
 	void setWidgetEnabled(bool enabled);
-	void setRunThreaded(bool thread);
 	void useOldFormat(bool use);
 	void setPythonExecutable(QString pythonExec);
 

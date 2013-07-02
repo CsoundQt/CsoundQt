@@ -49,7 +49,9 @@ class WidgetLayout;
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
 // This still necessary for 5.12
+#ifndef CSOUND6
 #define QCS_DESTROY_CSOUND
+#endif
 
 typedef enum {
 	QCS_NO_FLAGS = 0,
@@ -66,8 +68,6 @@ struct CsoundUserData {
 	CsoundEngine *csEngine; // Pass engine
 	WidgetLayout *wl; // Pass widgets
 	/* performance */
-	// PERF_STATUS stores performance state when run in the same thread. Should not be used when threaded.
-	int PERF_STATUS; //0=stopped 1=running
 	bool runDispatcher;
 	QVector<double> mouseValues;
 	RingBuffer audioOutputBuffer;
@@ -81,7 +81,6 @@ struct CsoundUserData {
 	int numChnls;
 	int sampleRate;
 	long outputBufferSize;
-	bool threaded; // Whether running in a separate thread or not
 	int msgRefreshTime; // In micro seconds
 
 	// Channels are only queried at the start of run, so only channels defined in instr 0 are available
@@ -153,7 +152,6 @@ public:
 	//    void setCsoundOptions(const CsoundOptions &options);
 	// Options unsafe to change while running
 	void setWidgetLayout(WidgetLayout *wl);
-	void setThreaded(bool threaded);
 	// Options safe to change while running
 	void enableWidgets(bool enable);
 	void setInitialDir(QString initialDir);
@@ -218,9 +216,6 @@ private:
 	QString m_initialDir;
 
 	CsoundOptions m_options;
-	// Options which are not safe to pass while running are stored in these
-	// variables to pass on next run.
-	bool m_threaded;
 
 	QVector<ConsoleWidget *> consoles;  // Consoles registered for message printing
 	int m_consoleBufferSize;

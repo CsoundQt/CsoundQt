@@ -66,7 +66,6 @@ public:
 	bool enableWidgets;
 	bool widgetsIndependent;  // Widget layouts in Separate Window (instead of Dock Widget)
 	bool useInvalue; // If false use chnget
-	bool thread;
 	bool keyRepeat;
 	bool debugLiveEvents;
 	int consoleBufferSize;

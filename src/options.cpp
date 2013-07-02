@@ -60,7 +60,6 @@ Options::Options(ConfigLists *configlists) :
 	useAPI = true;
 	enableWidgets = true;
 	widgetsIndependent = true;  // Widget layouts in Separate Window (instead of Dock Widget)
-	thread = true;
 	keyRepeat = true;
 	debugLiveEvents = false;
 	consoleBufferSize = 1024;

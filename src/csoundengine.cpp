@@ -20,41 +20,35 @@
 	02111-1307 USA
 */
 
-#include "csoundengine.h"
-#include "widgetlayout.h"
-//#include "curve.h"
 
 #ifdef USE_QT5
 #include <QtConcurrent/QtConcurrent>
 #endif
-
-#ifdef CSOUND6
-#include "csound_standard_types.h"
-#endif
-
-#include "console.h"
-#include "qutescope.h"  // Needed for passing the ud to the scope for display data
-#include "qutegraph.h"  // Needed for passing the ud to the graph for display data
 
 #ifdef Q_OS_WIN
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
 #include <unistd.h> // for usleep()
 #endif
 
+#ifdef CSOUND6
+#include "csound_standard_types.h"
+#endif
+
+#include "csoundengine.h"
+#include "widgetlayout.h"
+#include "console.h"
+#include "qutescope.h"  // Needed for passing the ud to the scope for display data
+#include "qutegraph.h"  // Needed for passing the ud to the graph for display data
 
 CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 	m_options(configlists)
 {
-	// Initialize user data pointer passed to Csound
 	ud = new CsoundUserData();
-	ud->PERF_STATUS = 0;
 	ud->csEngine = this;
-	ud->threaded = true;
 	ud->csound = 0;
 	ud->perfThread = 0;
 	ud->flags = QCS_NO_FLAGS;
 	ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
-	ud->runDispatcher = true;
 	ud->wl = NULL;
 #ifdef QCS_PYTHONQT
 	ud->m_pythonCallback = "";
@@ -76,49 +70,42 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 
 	m_refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // TODO Eventually allow this to be changed
 
+	ud->runDispatcher = true;
 	m_msgUpdateThread = QtConcurrent::run(messageListDispatcher, (void *) ud);
 
 }
 
 CsoundEngine::~CsoundEngine()
 {
-//	qDebug() << "CsoundEngine::~CsoundEngine() ";
-
+	stop();
 	ud->runDispatcher = false;
 	m_msgUpdateThread.waitForFinished(); // Join the message thread
-
 	disconnect(SIGNAL(passMessages(QString)),0,0);
-	stop();
 
 	disconnect(this, 0,0,0);
 #ifndef QCS_DESTROY_CSOUND
 	csoundDestroy(ud->csound);
 #endif
-	//  flushQueues();
-	//  free(ud);
-	//  consoles.clear();
-	//  for (int i = 0; i < consoles.size(); i++) {
-	//  }
 	delete ud;
 	free(m_recBuffer);
 }
 
 #ifndef CSOUND6
-void CsoundEngine::messageCallbackNoThread(CSOUND *csound,
-										   int /*attr*/,
-										   const char *fmt,
-										   va_list args)
-{
-	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-	QString msg;
-	msg = msg.vsprintf(fmt, args);
-	if (msg.isEmpty()) {
-		return;
-	}
-	for (int i = 0; i < ud->csEngine->consoles.size(); i++) {
-		ud->csEngine->consoles[i]->appendMessage(msg);
-	}
-}
+//void CsoundEngine::messageCallbackNoThread(CSOUND *csound,
+//										   int /*attr*/,
+//										   const char *fmt,
+//										   va_list args)
+//{
+//	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+//	QString msg;
+//	msg = msg.vsprintf(fmt, args);
+//	if (msg.isEmpty()) {
+//		return;
+//	}
+//	for (int i = 0; i < ud->csEngine->consoles.size(); i++) {
+//		ud->csEngine->consoles[i]->appendMessage(msg);
+//	}
+//}
 
 void CsoundEngine::messageCallbackThread(CSOUND *csound,
 										 int /*attr*/,
@@ -300,8 +287,8 @@ int CsoundEngine::keyEventCallback(void *userData,
 								   void *p,
 								   unsigned int type)
 {
-	if (type != CSOUND_CALLBACK_KBD_EVENT)
-		return 1;
+//	if (type != CSOUND_CALLBACK_KBD_EVENT)
+//		return 1;
 	CsoundUserData *ud = (CsoundUserData *) userData;
 	//  WidgetLayout *wl = (WidgetLayout *) ud->wl;
 	int *value = (int *) p;
@@ -460,18 +447,6 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
 	}
 }
 
-//
-//void CsoundEngine::setFiles(QString fileName1, QString fileName2)
-//{
-//  m_fileName1 = fileName1;
-//  m_fileName2 = fileName2;
-//}
-
-//void CsoundEngine::setCsoundOptions(const CsoundOptions &options)
-//{
-//  m_options = options;
-//}
-
 void CsoundEngine::setWidgetLayout(WidgetLayout *wl)
 {
 	ud->wl = wl;
@@ -488,11 +463,6 @@ void CsoundEngine::setWidgetLayout(WidgetLayout *wl)
 	connect(wl, SIGNAL(registerGraph(QuteGraph*)),
 			this,SLOT(registerGraph(QuteGraph*)));
 	connect(this, SIGNAL(passMessages(QString)), wl, SLOT(appendMessage(QString)));
-}
-
-void CsoundEngine::setThreaded(bool threaded)
-{
-	m_threaded = threaded;
 }
 
 void CsoundEngine::enableWidgets(bool enable)
@@ -638,9 +608,7 @@ int CsoundEngine::play(CsoundOptions *options)
 		return runCsound();
 	}
 	else {
-		if (ud->threaded) { // TODO is this action correct?
-			ud->perfThread->TogglePause();
-		}
+		ud->perfThread->TogglePause();
 		return 0;
 	}
 }
@@ -727,7 +695,6 @@ int CsoundEngine::runCsound()
 	ud->audioOutputBuffer.allZero();
 
 	QDir::setCurrent(m_options.fileName1);
-	ud->threaded = m_threaded;
 	for (int i = 0; i < consoles.size(); i++) {
 		consoles[0]->reset();
 	}
@@ -782,7 +749,7 @@ int CsoundEngine::runCsound()
 		csoundSetGlobalEnv("OPCODEDIR64", m_options.opcodedir64.toLatin1().constData());
 	}
 	if (m_options.opcode6dir64Active) {
-		csoundSetGlobalEnv("OPCODEDIR64", m_options.opcode6dir64.toLatin1().constData());
+		csoundSetGlobalEnv("OPCODE6DIR64", m_options.opcode6dir64.toLatin1().constData());
 	}
 #ifdef Q_OS_MAC
 	else { // Set opcode dir for bundled Csound if present
@@ -803,31 +770,33 @@ int CsoundEngine::runCsound()
 
 	ud->msgRefreshTime = m_refreshTime*1000;
 #ifdef CSOUND6
-	csoundCreateMessageBuffer(ud->csound, 0);
+	csoundCreateMessageBuffer(ud->csound, 1);
 #endif
 
 	csoundSetHostData(ud->csound, (void *) ud);
 
 #ifndef CSOUND6
 	// Message Callbacks must be set before compile, otherwise some information is missed
-	if (ud->threaded) {
-		csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
-	}
-	else {
-		csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackNoThread);
-	}
+	csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
 	csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
 #endif
-	if (csoundCreateGlobalVariable(ud->csound, "FLTK_Flags", sizeof(int)) != CSOUND_SUCCESS) {
-		qDebug() << "Error creating the FTLK_Flags variable";
-	}
+
 	if (m_options.enableFLTK) {
 		// disable FLTK graphs, but allow FLTK widgets
 		int *var = (int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags");
 		if (var) {
 			*var = 4;
 		} else {
-			qDebug() << "Error reading the FTLK_Flags variable";
+			if (csoundCreateGlobalVariable(ud->csound, "FLTK_Flags", sizeof(int)) != CSOUND_SUCCESS) {
+				qDebug() << "Error creating the FTLK_Flags variable";
+			}  else {
+				int *var = (int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags");
+				if (var) {
+					*var = 4;
+				} else {
+					qDebug() << "Error reading the FTLK_Flags variable";
+				}
+			}
 		}
 	}
 	else {
@@ -847,9 +816,9 @@ int CsoundEngine::runCsound()
 	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
 	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
 
-	csoundSetCallback(ud->csound,
-					  &CsoundEngine::keyEventCallback,
-					  (void *) ud, CSOUND_CALLBACK_KBD_EVENT);
+	csoundRegisterKeyboardCallback(ud->csound,
+								   &CsoundEngine::keyEventCallback,
+								   (void *) ud, CSOUND_CALLBACK_KBD_EVENT | CSOUND_CALLBACK_KBD_TEXT);
 
 	char **argv;
 	argv = (char **) calloc(33, sizeof(char*));
@@ -957,28 +926,10 @@ int CsoundEngine::runCsound()
 		csoundDeleteChannelList(ud->csound, channelList);
 	}
 
-	if (ud->threaded) {
-		ud->perfThread = new CsoundPerformanceThread(ud->csound);
-		ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
-		//    qDebug() << "CsoundQt::runCsound perfThread->Play";
-		ud->perfThread->Play();
-	} /*if (ud->thread)*/
-	else { // Run in the same thread
-		ud->PERF_STATUS = 1;
-		while(ud->PERF_STATUS == 1 && csoundPerformKsmps(ud->csound)==0) {
-			processEventQueue();
-			CsoundEngine::csThread(ud);
-			qApp->processEvents(); // Must process events last to avoid stopping and calling csThread invalidly
-		}
-		ud->PERF_STATUS = 0;
-		csoundStop(ud->csound);
-		cleanupCsound();
-		flushQueues();  // To flush pending queues
-#ifdef MACOSX_PRE_SNOW
-		// Put menu bar back
-		SetMenuBar(menuBarHandle);
-#endif
-	}
+	ud->perfThread = new CsoundPerformanceThread(ud->csound);
+	ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
+	//    qDebug() << "CsoundQt::runCsound perfThread->Play";
+	ud->perfThread->Play();
 	for (int i = 0; i < argc; i++) {
 		free(argv[i]);
 	}
@@ -995,29 +946,18 @@ int CsoundEngine::runCsound()
 void CsoundEngine::stopCsound()
 {
 	//  qDebug() << "CsoundEngine::stopCsound()";
-	if (ud->threaded) {
-        //    perfThread->ScoreEvent(0, 'e', 0, 0);
-        if (ud->perfThread != 0) {
-            CsoundPerformanceThread *pt = ud->perfThread;
-            ud->perfThread = NULL;
-            pt->Stop();
-            //      qDebug() << "CsoundEngine::stopCsound() stopped";
-            pt->Join();
-            pt->FlushMessageQueue();
-            qDebug() << "CsoundEngine::stopCsound() joined";
-            delete pt;  
-        }
-        flushQueues();
-	} /*if (ud->threaded)*/
-	else {  // in same thread
-		if (ud->PERF_STATUS == 1) {
-			ud->PERF_STATUS = -1;
-			while (ud->PERF_STATUS == -1) { // Wait until performance has stopped
-				usleep(100000);
-				qApp->processEvents();
-			}
-		}
+	//    perfThread->ScoreEvent(0, 'e', 0, 0);
+	if (ud->perfThread != 0) {
+		CsoundPerformanceThread *pt = ud->perfThread;
+		ud->perfThread = NULL;
+		pt->Stop();
+		//      qDebug() << "CsoundEngine::stopCsound() stopped";
+		pt->Join();
+		pt->FlushMessageQueue();
+		qDebug() << "CsoundEngine::stopCsound() joined";
+		delete pt;
 	}
+	flushQueues();
 	cleanupCsound();
 #ifdef MACOSX_PRE_SNOW
 	// Put menu bar back
@@ -1030,6 +970,8 @@ void CsoundEngine::cleanupCsound()
 {
 	if (ud->csound) {
 		csoundCleanup(ud->csound);
+		usleep(ud->msgRefreshTime);
+		flushQueues();
 #ifndef CSOUND6
 		csoundSetMessageCallback(ud->csound, 0);
 #else
@@ -1050,7 +992,7 @@ void CsoundEngine::messageListDispatcher(void *data)
 	CsoundUserData *ud_local = (CsoundUserData *) data;
 
 	while (ud_local->runDispatcher) {
-		if (ud_local->threaded && ud_local->perfThread) {
+		if (ud_local->perfThread) {
 			if (ud_local->perfThread->GetStatus() != 0) { // In case score has ended
 				ud_local->csEngine->stop();
 			}
@@ -1138,12 +1080,7 @@ void CsoundEngine::recordBuffer()
 
 bool CsoundEngine::isRunning()
 {
-	if (ud->threaded) {
-		return (ud->perfThread != 0 && ud->perfThread->GetStatus() == 0);
-	}
-	else {
-		return (ud->PERF_STATUS == 1);
-	}
+	return (ud->perfThread && (ud->perfThread->GetStatus() == 0));
 }
 
 bool CsoundEngine::isRecording()

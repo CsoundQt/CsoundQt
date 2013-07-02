@@ -98,7 +98,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	curPage = -1;
 
 	m_options = new Options(&m_configlists);
-	m_options->thread = true; // Always run threaded
 	// Create GUI panels
 	lineNumberLabel = new QLabel("Line 1"); // Line number display
 	statusBar()->addPermanentWidget(lineNumberLabel); // This must be done before a file is loaded
@@ -208,7 +207,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
 	openLogFile();
 
-	int init = csoundInitialize(0,0,0);
+	// FIXME is there still need for no atexit?
+	int init = csoundInitialize(CSOUNDINIT_NO_ATEXIT);
 	if (init < 0) {
 		qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nCsoundQt will probably crash if you try to run Csound.");
 	}
@@ -255,7 +255,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
 CsoundQt::~CsoundQt()
 {
-
 	qDebug() << "CsoundQt::~CsoundQt()";
 	// This function is not called... see closeEvent()
 }
@@ -655,7 +654,7 @@ void CsoundQt::evaluate(QString code)
 	}
 	if ((evalCode.indexOf("instr") >= 0 || evalCode.indexOf("event") >=0  || evalCode.indexOf("ftgen") >=0 || evalCode.indexOf("init") >=0 ) && evalCode.indexOf("'''") < 0) { // perhaps better to do a list of keywords, also chn_k, etc can be here?
 		evaluateCsound(evalCode);
-	} else if (QRegExp("\\s*[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+" ).exactMatch(evalCode)) {
+	} else if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
 		sendEvent(evalCode);
 	} else {
 		evaluatePython(evalCode);
@@ -1976,7 +1975,6 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
 	p->setTabStopWidth(m_options->tabWidth);
 	p->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
 	p->setAutoComplete(m_options->autoComplete);
-	p->setRunThreaded(m_options->thread);
 	p->setWidgetEnabled(m_options->enableWidgets);
 	p->showWidgetTooltips(m_options->showTooltips);
 	p->setKeyRepeatMode(m_options->keyRepeat);
@@ -3950,7 +3948,6 @@ void CsoundQt::readSettings()
 	settings.endGroup();
 	settings.beginGroup("Run");
 	m_options->useAPI = settings.value("useAPI", true).toBool();
-	//  m_options->thread = settings.value("thread", true).toBool();
 	m_options->keyRepeat = settings.value("keyRepeat", false).toBool();
 	m_options->debugLiveEvents = settings.value("debugLiveEvents", false).toBool();
 	m_options->consoleBufferSize = settings.value("consoleBufferSize", 1024).toInt();
@@ -4124,7 +4121,6 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 	settings.beginGroup("Run");
 	if (!m_resetPrefs) {
 		settings.setValue("useAPI", m_options->useAPI);
-		//    settings.setValue("thread", m_options->thread);
 		settings.setValue("keyRepeat", m_options->keyRepeat);
 		settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
 		settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
