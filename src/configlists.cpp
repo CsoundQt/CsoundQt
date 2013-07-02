@@ -124,16 +124,18 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(int moduleIndex)
 	QString module = rtMidiNames[moduleIndex];
 #ifdef CSOUND6
 	CSOUND *cs = csoundCreate(NULL);
-	csoundSetMIDIModule(cs, rtMidiNames[moduleIndex].toLatin1().data());
-	int i,n = csoundGetMIDIDevList(cs,NULL,0);
+	csoundSetMIDIModule(cs, module.toLatin1().data());
+	int i,newn, n = csoundGetMIDIDevList(cs,NULL,0);
 	CS_MIDIDEVICE *devs = (CS_MIDIDEVICE *) malloc(n*sizeof(CS_MIDIDEVICE));
-	csoundGetMIDIDevList(cs,devs,0);
+	newn = csoundGetMIDIDevList(cs,devs,0);
+	if (newn != n) {
+		qDebug() << "ConfigLists::getMidiInputDevices Device number changed";
+		return deviceList;
+	}
 	for (i = 0; i < n; i++) {
 //		qDebug() << devs[i].device_name;
-		if (module == QString(devs[i].midi_module)) {
-			QString displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
-			deviceList.insert(displayName, QString(devs[i].device_id));
-		}
+		QString displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
+		deviceList.insert(displayName, QString(devs[i].device_id));
 	}
 	free(devs);
 #else
@@ -238,9 +240,13 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(int moduleInde
 #ifdef CSOUND6
 	CSOUND *cs = csoundCreate(NULL);
 	csoundSetMIDIModule(cs, module.toLatin1().data());
-	int i,n = csoundGetMIDIDevList(cs,NULL,1);
+	int i,newn, n = csoundGetMIDIDevList(cs,NULL,1);
 	CS_MIDIDEVICE *devs = (CS_MIDIDEVICE *) malloc(n*sizeof(CS_MIDIDEVICE));
-	csoundGetMIDIDevList(cs,devs,1);
+	newn = csoundGetMIDIDevList(cs,devs,1);
+	if (newn != n) {
+		qDebug() << "ConfigLists::getMidiOutputDevices Device number changed";
+		return deviceList;
+	}
 	for (i = 0; i < n; i++) {
 //		qDebug() << devs[i].device_name;
 		QString displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
@@ -342,9 +348,13 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(int moduleInde
 	}
 	CSOUND *cs = csoundCreate(NULL);
 	csoundSetRTAudioModule(cs, rtAudioNames[moduleIndex].toLatin1().data());
-	int i,n = csoundGetAudioDevList(cs,NULL,0);
+	int i,newn, n = csoundGetAudioDevList(cs,NULL,0);
 	CS_AUDIODEVICE *devs = (CS_AUDIODEVICE *) malloc(n*sizeof(CS_AUDIODEVICE));
-	csoundGetAudioDevList(cs,devs,0);
+	newn = csoundGetAudioDevList(cs,devs,0);
+	if (newn != n) {
+		qDebug() << "ConfigLists::getAudioInputDevices Device number changed";
+		return deviceList;
+	}
 	for (i = 0; i < n; i++) {
 //		qDebug() << devs[i].device_name;
 		QString displayName = prefix+QString(devs[i].device_name); // jack, maybe also alsa must have adc: prefix to work
@@ -515,9 +525,13 @@ QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(int moduleInd
 		prefix = "dac:";
 	}
 	csoundSetRTAudioModule(cs, rtAudioNames[moduleIndex].toLatin1().data());
-	int i,n = csoundGetAudioDevList(cs,NULL,1);
+	int i,newn, n = csoundGetAudioDevList(cs,NULL,1);
 	CS_AUDIODEVICE *devs = (CS_AUDIODEVICE *) malloc(n*sizeof(CS_AUDIODEVICE));
-	csoundGetAudioDevList(cs,devs,1);
+	newn = csoundGetAudioDevList(cs,devs,1);
+	if (newn != n) {
+		qDebug() << "ConfigLists::getAudio OutputDevices Device number changed";
+		return deviceList;
+	}
 	for (i = 0; i < n; i++) {
 		//		qDebug() << devs[i].device_name;
 		QString displayName = prefix+QString(devs[i].device_name); // must have dac: prefix to work
