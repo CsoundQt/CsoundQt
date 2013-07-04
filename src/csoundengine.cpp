@@ -62,6 +62,8 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 #ifndef QCS_DESTROY_CSOUND
 	// Create only once
 	ud->csound=csoundCreate(0);
+	ud->perfThread = new CsoundPerformanceThread(ud->csound);
+	ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
 #endif
 
 	eventQueue.resize(QCS_MAX_EVENTS);
@@ -77,12 +79,12 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 
 CsoundEngine::~CsoundEngine()
 {
-	stop();
-	ud->runDispatcher = false;
-	m_msgUpdateThread.waitForFinished(); // Join the message thread
 	disconnect(SIGNAL(passMessages(QString)),0,0);
 
 	disconnect(this, 0,0,0);
+	ud->runDispatcher = false;
+	m_msgUpdateThread.waitForFinished(); // Join the message thread
+	stop();
 #ifndef QCS_DESTROY_CSOUND
 	csoundDestroy(ud->csound);
 #endif
@@ -575,16 +577,21 @@ void CsoundEngine::processEventQueue()
 	eventMutex.lock();
 	while (eventQueueSize > 0) {
 		eventQueueSize--;
+#ifdef QCS_DESTROY_CSOUND
 		if (ud->perfThread != 0) {
 			//ScoreEvent is not working
 			//      ud->perfThread->ScoreEvent(0, type, eventElements.size(), pFields);
 			//      qDebug() << "CsoundEngine::processEventQueue()" << eventQueue[eventQueueSize];
 			ud->perfThread
-					->InputMessage(eventQueue[eventQueueSize].toLocal8Bit());
+					->InputMessage(eventQueue[eventQueueSize].toLatin1());
 		}
 		else {
 			qDebug() << "WARNING: ud->perfThread is NULL";
 		}
+#else
+		ud->perfThread
+				->InputMessage(eventQueue[eventQueueSize].toLatin1());
+#endif
 	}
 	eventMutex.unlock();
 }
@@ -815,10 +822,17 @@ int CsoundEngine::runCsound()
 	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
 	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
 	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
-
+#ifdef CSOUND6
 	csoundRegisterKeyboardCallback(ud->csound,
 								   &CsoundEngine::keyEventCallback,
 								   (void *) ud, CSOUND_CALLBACK_KBD_EVENT | CSOUND_CALLBACK_KBD_TEXT);
+#else
+	csoundSetCallback(ud->csound,
+					  &CsoundEngine::keyEventCallback,
+					  (void *) ud, CSOUND_CALLBACK_KBD_EVENT | CSOUND_CALLBACK_KBD_TEXT);
+
+#endif
+
 
 	char **argv;
 	argv = (char **) calloc(33, sizeof(char*));
@@ -969,6 +983,18 @@ void CsoundEngine::stopCsound()
 void CsoundEngine::cleanupCsound()
 {
 	if (ud->csound) {
+		csoundSetIsGraphable(ud->csound, 0);
+		csoundSetMakeGraphCallback(ud->csound, NULL);
+		csoundSetDrawGraphCallback(ud->csound, NULL);
+		csoundSetKillGraphCallback(ud->csound, NULL);
+		csoundSetExitGraphCallback(ud->csound, NULL);
+#ifdef CSOUND6
+		csoundRemoveKeyboardCallback(ud->csound,
+									 &CsoundEngine::keyEventCallback);
+#else
+		csoundRemoveCallback(ud->csound,
+							 &CsoundEngine::keyEventCallback);
+#endif
 		csoundCleanup(ud->csound);
 		usleep(ud->msgRefreshTime);
 		flushQueues();
@@ -1035,7 +1061,7 @@ void CsoundEngine::messageListDispatcher(void *data)
 
 		usleep(ud_local->msgRefreshTime);
 	}
-//	qDebug() << "messageListDispatcher quit";
+	qDebug() << "messageListDispatcher quit";
 }
 
 void CsoundEngine::flushQueues()

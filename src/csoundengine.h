@@ -48,10 +48,8 @@ class CsoundEngine;
 class WidgetLayout;
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
-// This still necessary for 5.12
-#ifndef CSOUND6
+// This still necessary for 5.12 and Csound6
 #define QCS_DESTROY_CSOUND
-#endif
 
 typedef enum {
 	QCS_NO_FLAGS = 0,
