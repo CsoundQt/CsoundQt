@@ -199,6 +199,8 @@ private:
 	void stopCsound();
 
 	void cleanupCsound();
+	void setupChannels();
+	void setupEnvironment();
 
 	QFuture<void> m_msgUpdateThread;
 	static void messageListDispatcher(void *data); // Function run in updater thread
