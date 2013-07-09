@@ -208,7 +208,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	openLogFile();
 
 	// FIXME is there still need for no atexit?
+#ifdef CSOUND6
 	int init = csoundInitialize(CSOUNDINIT_NO_ATEXIT);
+#else
+	int init = csoundInitialize(NULL, NULL, CSOUNDINIT_NO_ATEXIT);
+#endif
 	if (init < 0) {
 		qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nCsoundQt will probably crash if you try to run Csound.");
 	}

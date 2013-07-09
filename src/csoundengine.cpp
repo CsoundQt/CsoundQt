@@ -765,7 +765,11 @@ int CsoundEngine::runCsound()
 	csoundSetCallback(ud->csound,
 					  &CsoundEngine::keyEventCallback,
 					  (void *) ud, CSOUND_CALLBACK_KBD_EVENT | CSOUND_CALLBACK_KBD_TEXT);
-
+	csoundSetIsGraphable(ud->csound, true);
+	csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
+	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
+	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
+	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
 #endif
 
 
@@ -786,13 +790,13 @@ int CsoundEngine::runCsound()
 		emit (errorLines(getErrorLines()));
 		return -3;
 	}
-
+#ifdef CSOUND6
 	csoundSetIsGraphable(ud->csound, true);
 	csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
 	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
 	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
 	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
-
+#endif
 	ud->zerodBFS = csoundGet0dBFS(ud->csound);
 	ud->sampleRate = csoundGetSr(ud->csound);
 	ud->numChnls = csoundGetNchnls(ud->csound);
