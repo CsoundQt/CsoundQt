@@ -117,11 +117,10 @@ void ConfigLists::msgCallback(CSOUND *csound, int attr, const char *fmt, va_list
     ud->append(msg);
 }
 
-QHash<QString,QString> ConfigLists::getMidiInputDevices(int moduleIndex)
+QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 {
 	// based on code by Steven Yi
 	QHash<QString,QString> deviceList;
-	QString module = rtMidiNames[moduleIndex];
 #ifdef CSOUND6
 	CSOUND *cs = csoundCreate(NULL);
 	csoundSetMIDIModule(cs, module.toLatin1().data());
@@ -233,10 +232,9 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(int moduleIndex)
 	return deviceList;
 }
 
-QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(int moduleIndex)
+QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(QString module)
 {
 	QList<QPair<QString, QString> > deviceList;
-	QString module = rtMidiNames[moduleIndex];
 #ifdef CSOUND6
 	CSOUND *cs = csoundCreate(NULL);
 	csoundSetMIDIModule(cs, module.toLatin1().data());
@@ -336,11 +334,10 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(int moduleInde
 	return deviceList;
 }
 
-QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(int moduleIndex)
+QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(QString module)
 {
 	//  qDebug("CsoundQt::getAudioInputDevices()");
 	QList<QPair<QString, QString> > deviceList;
-	QString module = rtAudioNames[moduleIndex];
 #ifdef CSOUND6
 	CSOUND *cs = csoundCreate(NULL);
 	csoundSetRTAudioModule(cs, module.toLatin1().data());
@@ -508,11 +505,10 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(int moduleInde
 	return deviceList;
 }
 
-QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(int moduleIndex)
+QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(QString module)
 {
 	//  qDebug("CsoundQt::getAudioOutputDevices()");
 	QList<QPair<QString, QString> > deviceList;
-	QString module = rtAudioNames[moduleIndex];
 #ifdef CSOUND6
 	CSOUND *cs = csoundCreate(NULL);
 	csoundSetRTAudioModule(cs, module.toLatin1().data());

@@ -58,11 +58,11 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 
 	rtUseOptions = true;
 	rtOverrideOptions = false;
-	rtAudioModule = 0;
+	rtAudioModule = "";
 	rtInputDevice = "adc";
 	rtOutputDevice = "dac";
 	rtJackName = "*";
-	rtMidiModule = 0;
+	rtMidiModule = "";
 	rtMidiInputDevice = "0";
 	rtMidiOutputDevice = "0";
 	simultaneousRun = true; // Allow running various instances (tabs) simultaneously.
@@ -121,20 +121,14 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 	if (rt && rtUseOptions) {
 		if (rtOverrideOptions)
 			list << "-+ignore_csopts=1";
-		if (m_configlists->rtAudioNames[rtAudioModule] != "none") {
-			QString module;
-			module = m_configlists->rtAudioNames[rtAudioModule];
-#ifdef Q_OS_MAC
-			if (module=="portaudio") {
-				module = "pa_bl"; // Force pa_bl on OS X as it crashes otherwise!
-			}
-#endif
-			list << "-+rtaudio=" + module;
+		if (m_configlists->rtMidiNames.indexOf(rtAudioModule) >= 0
+				&& rtAudioModule != "none") {
+			list << "-+rtaudio=" + rtAudioModule;
 			if (rtInputDevice != "") {
 				list << "-i" + rtInputDevice;
 			}
 			list << "-o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
-			if (rtJackName != "" && m_configlists->rtAudioNames[rtAudioModule] == "jack") {
+			if (rtJackName != "" && rtAudioModule == "jack") {
 				QString jackName = rtJackName;
 				if (jackName.contains("*")) {
 					jackName.replace("*",fileName1.mid(fileName1.lastIndexOf(QDir::separator()) + 1));
@@ -146,8 +140,9 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 				list << "-+jack_client=" + jackName;
 			}
 		}
-		if (m_configlists->rtMidiNames[rtMidiModule] != "none") {
-			list << "-+rtmidi=" + m_configlists->rtMidiNames[rtMidiModule];
+		if (m_configlists->rtMidiNames.indexOf(rtMidiModule) >= 0
+				&& rtMidiModule != "none") {
+			list << "-+rtmidi=" + rtMidiModule;
 			if (rtMidiInputDevice != "")
 				list << "-M" + rtMidiInputDevice;
 			if (rtMidiOutputDevice != "")
