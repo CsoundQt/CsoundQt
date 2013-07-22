@@ -207,10 +207,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
 	openLogFile();
 
+	// FIXME is there still need for no atexit?
 #ifdef CSOUND6
-	int init = csoundInitialize(CSOUNDINIT_NO_ATEXIT);
+	int init = csoundInitialize(0);
 #else
-	int init = csoundInitialize(NULL, NULL, CSOUNDINIT_NO_ATEXIT);
+	int init = csoundInitialize(0,0,0);
 #endif
 	if (init < 0) {
 		qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nCsoundQt will probably crash if you try to run Csound.");
@@ -1459,18 +1460,13 @@ void CsoundQt::stop(int index)
 	if (curPage >= documentPages.size()) {
 		return; // A bit of a hack to avoid crashing when documents are deleted very quickly...
 	}
-	if (docIndex >= 0 && docIndex < documentPages.size()) {
-		if (documentPages[docIndex]->isRunning())
+	Q_ASSERT(docIndex >= 0);
+	if (docIndex < documentPages.size()) {
+		if (documentPages[docIndex]->isRunning()) {
 			documentPages[docIndex]->stop();
+		}
 		runAct->setChecked(false);
 		recAct->setChecked(false);
-		//  if (ud->isRunning()) {
-		//    stopCsound();
-		//  }
-		//  m_console->scrollToEnd();
-		//  if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
-		//    //widgetPanel->setVisible(false);
-		//  }
 	}
 }
 
@@ -1945,8 +1941,8 @@ void CsoundQt::applySettings()
 
 	// Display a summary of options on the status bar
 	currentOptions +=  (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
-	QString playOptions = " (Audio:" + m_configlists.rtAudioNames[m_options->rtAudioModule] + " ";
-	playOptions += "MIDI:" +  m_configlists.rtMidiNames[m_options->rtMidiModule] + ")";
+	QString playOptions = " (Audio:" + m_options->rtAudioModule + " ";
+	playOptions += "MIDI:" +  m_options->rtMidiModule + ")";
 	playOptions += " (" + (m_options->rtUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions"));
 	playOptions += " " + (m_options->rtOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
 	playOptions += currentOptions;
@@ -3984,7 +3980,7 @@ void CsoundQt::readSettings()
 	m_options->fileOutputFilename = settings.value("fileOutputFilename", "").toString();
 	m_options->rtUseOptions = settings.value("rtUseOptions", true).toBool();
 	m_options->rtOverrideOptions = settings.value("rtOverrideOptions", false).toBool();
-	m_options->rtAudioModule = settings.value("rtAudioModule", 0).toInt();
+	m_options->rtAudioModule = settings.value("rtAudioModule", m_configlists.rtAudioNames[0]).toString();
 	m_options->rtInputDevice = settings.value("rtInputDevice", "adc").toString();
 	m_options->rtOutputDevice = settings.value("rtOutputDevice", "dac").toString();
 	m_options->rtJackName = settings.value("rtJackName", "").toString();
@@ -3992,7 +3988,7 @@ void CsoundQt::readSettings()
 		if (!m_options->rtJackName.endsWith("*"))
 			m_options->rtJackName.append("*");
 	}
-	m_options->rtMidiModule = settings.value("rtMidiModule", 0).toInt();
+	m_options->rtMidiModule = settings.value("rtMidiModule", m_configlists.rtMidiNames[0]).toString();
 	m_options->rtMidiInputDevice = settings.value("rtMidiInputDevice", "0").toString();
 	m_options->rtMidiOutputDevice = settings.value("rtMidiOutputDevice", "").toString();
 	m_options->simultaneousRun = settings.value("simultaneousRun", "").toBool();

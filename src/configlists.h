@@ -50,10 +50,10 @@ public:
 	QStringList languages;
 	QStringList languageCodes;
 
-	QHash<QString, QString> getMidiInputDevices(int moduleIndex);
-	QList<QPair<QString, QString> > getMidiOutputDevices(int moduleIndex);
-	QList<QPair<QString, QString> > getAudioInputDevices(int moduleIndex);
-	QList<QPair<QString, QString> > getAudioOutputDevices(int moduleIndex);
+	QHash<QString, QString> getMidiInputDevices(QString module);
+	QList<QPair<QString, QString> > getMidiOutputDevices(QString module);
+	QList<QPair<QString, QString> > getAudioInputDevices(QString module);
+	QList<QPair<QString, QString> > getAudioOutputDevices(QString module);
 
 	QStringList runCsoundInternally(QStringList flags);
 

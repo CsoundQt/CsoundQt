@@ -163,11 +163,11 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	OutputFilenameLineEdit->setEnabled(m_options->fileOutputFilenameActive);
 	RtUseOptionsCheckBox->setChecked(m_options->rtUseOptions);
 	RtOverrideCheckBox->setChecked(m_options->rtOverrideOptions);
-	RtModuleComboBox->setCurrentIndex(m_options->rtAudioModule);
+	RtModuleComboBox->setCurrentIndex(RtModuleComboBox->findText(m_options->rtAudioModule));
 	RtInputLineEdit->setText(m_options->rtInputDevice);
 	RtOutputLineEdit->setText(m_options->rtOutputDevice);
 	JackNameLineEdit->setText(m_options->rtJackName);
-	RtMidiModuleComboBox->setCurrentIndex(m_options->rtMidiModule);
+	RtMidiModuleComboBox->setCurrentIndex(RtMidiModuleComboBox->findText(m_options->rtMidiModule));
 	RtMidiInputLineEdit->setText(m_options->rtMidiInputDevice);
 	RtMidiOutputLineEdit->setText(m_options->rtMidiOutputDevice);
 	simultaneousCheckBox->setChecked(m_options->simultaneousRun);
@@ -354,11 +354,11 @@ void ConfigDialog::accept()
 	m_options->fileOutputFilename = OutputFilenameLineEdit->text();
 	m_options->rtUseOptions = RtUseOptionsCheckBox->isChecked();
 	m_options->rtOverrideOptions = RtOverrideCheckBox->isChecked();
-	m_options->rtAudioModule = RtModuleComboBox->currentIndex();
+	m_options->rtAudioModule = RtModuleComboBox->currentText();
 	m_options->rtInputDevice = RtInputLineEdit->text();
 	m_options->rtOutputDevice = RtOutputLineEdit->text();
 	m_options->rtJackName = JackNameLineEdit->text();
-	m_options->rtMidiModule = RtMidiModuleComboBox->currentIndex();
+	m_options->rtMidiModule = RtMidiModuleComboBox->currentText();
 	m_options->rtMidiInputDevice = RtMidiInputLineEdit->text();
 	m_options->rtMidiOutputDevice = RtMidiOutputLineEdit->text();
 	m_options->simultaneousRun = simultaneousCheckBox->isChecked();
@@ -536,7 +536,7 @@ void ConfigDialog::browseSdkDir()
 
 void ConfigDialog::selectAudioInput()
 {
-	QList<QPair<QString, QString> > deviceList = m_configlists->getAudioInputDevices(RtModuleComboBox->currentIndex());
+	QList<QPair<QString, QString> > deviceList = m_configlists->getAudioInputDevices(RtModuleComboBox->currentText());
 	QMenu menu(this);
 	QVector<QAction*> actions;
 
@@ -561,7 +561,7 @@ void ConfigDialog::selectAudioInput()
 
 void ConfigDialog::selectAudioOutput()
 {
-	QList<QPair<QString, QString> > deviceList = m_configlists->getAudioOutputDevices(RtModuleComboBox->currentIndex());
+	QList<QPair<QString, QString> > deviceList = m_configlists->getAudioOutputDevices(RtModuleComboBox->currentText());
 	QMenu menu(this);
 	QVector<QAction*> actions;
 
@@ -586,8 +586,9 @@ void ConfigDialog::selectAudioOutput()
 
 void ConfigDialog::selectMidiInput()
 {
-	QHash<QString, QString> deviceList = m_configlists->getMidiInputDevices(RtMidiModuleComboBox->currentIndex());
-	QString module = m_configlists->rtMidiNames[RtMidiModuleComboBox->currentIndex()];
+	QString module = RtMidiModuleComboBox->currentText();
+	QHash<QString, QString> deviceList = m_configlists->getMidiInputDevices(module);
+
 	QMenu menu(this);
 
 	deviceList.insert("Disabled", "");
@@ -610,7 +611,7 @@ void ConfigDialog::selectMidiInput()
 
 void ConfigDialog::selectMidiOutput()
 {
-	QList<QPair<QString, QString> > deviceList = m_configlists->getMidiOutputDevices(RtMidiModuleComboBox->currentIndex());
+	QList<QPair<QString, QString> > deviceList = m_configlists->getMidiOutputDevices(RtMidiModuleComboBox->currentText());
 	QMenu menu(this);
 	QVector<QAction*> actions;
 
