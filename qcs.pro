@@ -32,6 +32,7 @@ csound6: { # Csound6 requires some internal changes
             CSOUND_API_INCLUDE_DIR = /Users/andres/Library/Frameworks/CsoundLib64.framework/Headers
             CSOUND_LIBRARY_DIR = /Users/andres/Library/Frameworks/CsoundLib64.framework
             LIBS += -F/Users/andres/Library/Frameworks
+            LIBS += -framework CsoundLib64
         } else {
             CSOUND_INCLUDE_DIR = /home/andres/Documents/src/csound-csound6-git/include
             INCLUDEPATH += /home/andres/Documents/src/csound-csound6-git/interfaces
