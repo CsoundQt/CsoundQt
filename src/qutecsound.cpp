@@ -207,7 +207,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
 	openLogFile();
 
-	// FIXME is there still need for no atexit?
 #ifdef CSOUND6
 	int init = csoundInitialize(CSOUNDINIT_NO_ATEXIT);
 #else
