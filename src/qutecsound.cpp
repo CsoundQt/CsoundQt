@@ -1460,18 +1460,13 @@ void CsoundQt::stop(int index)
 	if (curPage >= documentPages.size()) {
 		return; // A bit of a hack to avoid crashing when documents are deleted very quickly...
 	}
-	if (docIndex >= 0 && docIndex < documentPages.size()) {
-		if (documentPages[docIndex]->isRunning())
+	Q_ASSERT(docIndex >= 0);
+	if (docIndex < documentPages.size()) {
+		if (documentPages[docIndex]->isRunning()) {
 			documentPages[docIndex]->stop();
+		}
 		runAct->setChecked(false);
 		recAct->setChecked(false);
-		//  if (ud->isRunning()) {
-		//    stopCsound();
-		//  }
-		//  m_console->scrollToEnd();
-		//  if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
-		//    //widgetPanel->setVisible(false);
-		//  }
 	}
 }
 
