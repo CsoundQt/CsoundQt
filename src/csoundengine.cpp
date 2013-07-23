@@ -72,6 +72,7 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 	eventQueueSize = 0;
 
 	m_refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // TODO Eventually allow this to be changed
+	ud->msgRefreshTime = m_refreshTime*1000;
 
 	ud->runDispatcher = true;
 	m_msgUpdateThread = QtConcurrent::run(messageListDispatcher, (void *) ud);
@@ -828,7 +829,6 @@ void CsoundEngine::stopCsound()
 	// Put menu bar back
 	SetMenuBar(menuBarHandle);
 #endif
-	locker.unlock();
 	emit stopSignal();
 }
 
@@ -1086,7 +1086,7 @@ void CsoundEngine::flushQueues()
     }
     m_messageMutex.unlock();
 	ud->wl->flushGraphBuffer();
-	qApp->processEvents();
+//	qApp->processEvents();
 }
 
 void CsoundEngine::queueMessage(QString message)

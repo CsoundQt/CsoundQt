@@ -1465,9 +1465,8 @@ void CsoundQt::stop(int index)
 		if (documentPages[docIndex]->isRunning()) {
 			documentPages[docIndex]->stop();
 		}
-		runAct->setChecked(false);
-		recAct->setChecked(false);
 	}
+	markStopped();
 }
 
 void CsoundQt::stopAll()
@@ -1475,6 +1474,11 @@ void CsoundQt::stopAll()
 	for (int i = 0; i < documentPages.size(); i++) {
 		documentPages[i]->stop();
 	}
+	markStopped();
+}
+
+void CsoundQt::markStopped()
+{
 	runAct->setChecked(false);
 	recAct->setChecked(false);
 }
@@ -2933,7 +2937,7 @@ void CsoundQt::connectActions()
 	disconnect(showLiveEventsAct, 0,0,0);
 	connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventPanels(bool)));
 	connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
-	connect(doc, SIGNAL(stopSignal()), this, SLOT(stop()));
+	connect(doc, SIGNAL(stopSignal()), this, SLOT(markStopped()));
 	connect(doc, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
 	connect(doc, SIGNAL(setHelpSignal()), this, SLOT(setHelpEntry()));
 

@@ -64,7 +64,7 @@ RESOURCES += "src/quteapp_d_osx.qrc"
 }
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -framework $${MAC_LIB}
-csound6: LCSND = -lcsnd
+csound6: LCSND = -lcsnd.6.0
 else: LCSND = -l_csnd
 
 LSNDFILE = -lsndfile

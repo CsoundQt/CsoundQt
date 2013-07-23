@@ -101,7 +101,11 @@ UI_DIR = build/ui
 RCC_DIR = build/rc
 
 TARGET = CsoundQt
+
 build32:TARGET = $${TARGET}-f
 build64:TARGET = $${TARGET}-d
 pythonqt:TARGET = $${TARGET}-py
+
+csound6:TARGET = $${TARGET}-cs6
+
 CONFIG(debug, debug|release):TARGET = $${TARGET}-debug
