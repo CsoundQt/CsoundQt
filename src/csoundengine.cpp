@@ -43,6 +43,7 @@
 CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 	m_options(configlists)
 {
+	QMutexLocker locker(&m_playMutex);
 	ud = new CsoundUserData();
 	ud->csEngine = this;
 	ud->csound = 0;
@@ -71,6 +72,7 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 	eventQueueSize = 0;
 
 	m_refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // TODO Eventually allow this to be changed
+	ud->msgRefreshTime = m_refreshTime*1000;
 
 	ud->runDispatcher = true;
 	m_msgUpdateThread = QtConcurrent::run(messageListDispatcher, (void *) ud);
@@ -688,6 +690,7 @@ void CsoundEngine::queueEvent(QString eventLine, int delay)
 
 int CsoundEngine::runCsound()
 {
+	QMutexLocker locker(&m_playMutex);
 #ifdef MACOSX_PRE_SNOW
 	//Remember menu bar to set it after FLTK grabs it
 	menuBarHandle = GetMenuBar();
@@ -706,20 +709,16 @@ int CsoundEngine::runCsound()
 		consoles[0]->reset();
 	}
 
-
 #ifdef QCS_DESTROY_CSOUND
 	ud->csound=csoundCreate(0);
 #endif
 
-	setupEnvironment();
-	// Environment variables must be set before csoundCompile
-
+	setupEnvironment(); // Environment variables must be set before csoundCompile
 
 	ud->msgRefreshTime = m_refreshTime*1000;
 #ifdef CSOUND6
-	csoundCreateMessageBuffer(ud->csound, 1);
+	csoundCreateMessageBuffer(ud->csound, 0);
 #endif
-
 	csoundSetHostData(ud->csound, (void *) ud);
 
 #ifndef CSOUND6
@@ -765,7 +764,11 @@ int CsoundEngine::runCsound()
 	csoundSetCallback(ud->csound,
 					  &CsoundEngine::keyEventCallback,
 					  (void *) ud, CSOUND_CALLBACK_KBD_EVENT | CSOUND_CALLBACK_KBD_TEXT);
-
+	csoundSetIsGraphable(ud->csound, true);
+	csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
+	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
+	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
+	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
 #endif
 
 
@@ -775,24 +778,22 @@ int CsoundEngine::runCsound()
 	ud->result=csoundCompile(ud->csound,argc,argv);
 	for (int i = 0; i < argc; i++) {
 		qDebug() << argv[i];
+		free(argv[i]);
 	}
+	free(argv);
 	if (ud->result!=CSOUND_SUCCESS) {
 		qDebug() << "Csound compile failed! "  << ud->result;
 		stop();
-		for (int i = 0; i < argc; i++) {
-			free(argv[i]);
-		}
-		free(argv);
 		emit (errorLines(getErrorLines()));
 		return -3;
 	}
-
+#ifdef CSOUND6
 	csoundSetIsGraphable(ud->csound, true);
 	csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
 	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
 	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
 	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
-
+#endif
 	ud->zerodBFS = csoundGet0dBFS(ud->csound);
 	ud->sampleRate = csoundGetSr(ud->csound);
 	ud->numChnls = csoundGetNchnls(ud->csound);
@@ -805,31 +806,25 @@ int CsoundEngine::runCsound()
 	ud->perfThread = new CsoundPerformanceThread(ud->csound);
 	ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
 	ud->perfThread->Play();
-	for (int i = 0; i < argc; i++) {
-		free(argv[i]);
-	}
-	free(argv);
 	return 0;
 }
-
-
 
 void CsoundEngine::stopCsound()
 {
 	//  qDebug() << "CsoundEngine::stopCsound()";
 	//    perfThread->ScoreEvent(0, 'e', 0, 0);
+	QMutexLocker locker(&m_playMutex);
 	if (ud->perfThread != 0) {
 		CsoundPerformanceThread *pt = ud->perfThread;
 		ud->perfThread = NULL;
 		pt->Stop();
 		//      qDebug() << "CsoundEngine::stopCsound() stopped";
+//		pt->FlushMessageQueue();
 		pt->Join();
-		pt->FlushMessageQueue();
 		qDebug() << "CsoundEngine::stopCsound() joined";
 		delete pt;
+		cleanupCsound();
 	}
-	flushQueues();
-	cleanupCsound();
 #ifdef MACOSX_PRE_SNOW
 	// Put menu bar back
 	SetMenuBar(menuBarHandle);
@@ -840,6 +835,7 @@ void CsoundEngine::stopCsound()
 void CsoundEngine::cleanupCsound()
 {
 	if (ud->csound) {
+
 		csoundSetIsGraphable(ud->csound, 0);
 		csoundSetMakeGraphCallback(ud->csound, NULL);
 		csoundSetDrawGraphCallback(ud->csound, NULL);
@@ -853,7 +849,6 @@ void CsoundEngine::cleanupCsound()
 							 &CsoundEngine::keyEventCallback);
 #endif
 		csoundCleanup(ud->csound);
-		usleep(ud->msgRefreshTime);
 		flushQueues();
 #ifndef CSOUND6
 		csoundSetMessageCallback(ud->csound, 0);
@@ -862,10 +857,10 @@ void CsoundEngine::cleanupCsound()
 #endif
 #ifdef QCS_DESTROY_CSOUND
 		csoundDestroy(ud->csound);
-		ud->csound = NULL;
 #else
 		csoundReset(ud->csound);
 #endif
+		ud->csound = NULL;
 	}
 }
 
@@ -1021,7 +1016,7 @@ void CsoundEngine::setupEnvironment()
 
 void CsoundEngine::messageListDispatcher(void *data)
 {
-//	qDebug("CsoundEngine::messageListDispatcher()");
+	qDebug("CsoundEngine::messageListDispatcher()");
 	CsoundUserData *ud_local = (CsoundUserData *) data;
 
 	while (ud_local->runDispatcher) {
@@ -1074,6 +1069,14 @@ void CsoundEngine::messageListDispatcher(void *data)
 void CsoundEngine::flushQueues()
 {
 	m_messageMutex.lock();
+#ifdef CSOUND6
+	int count = csoundGetMessageCnt(ud->csound);
+	for (int i = 0; i < count; i++) {
+		messageQueue << csoundGetFirstMessage(ud->csound);
+		// FIXME: Is this thread safe?
+		csoundPopFirstMessage(ud->csound);
+	}
+#endif
 	while (!messageQueue.isEmpty()) {
 		QString msg = messageQueue.takeFirst();
 		for (int i = 0; i < ud->csEngine->consoles.size(); i++) {
@@ -1083,7 +1086,7 @@ void CsoundEngine::flushQueues()
     }
     m_messageMutex.unlock();
 	ud->wl->flushGraphBuffer();
-	qApp->processEvents();
+//	qApp->processEvents();
 }
 
 void CsoundEngine::queueMessage(QString message)
@@ -1113,6 +1116,7 @@ void CsoundEngine::recordBuffer()
 
 bool CsoundEngine::isRunning()
 {
+	QMutexLocker locker(&m_playMutex);
 	return (ud->perfThread && (ud->perfThread->GetStatus() == 0));
 }
 

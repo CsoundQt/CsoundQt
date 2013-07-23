@@ -1460,19 +1460,13 @@ void CsoundQt::stop(int index)
 	if (curPage >= documentPages.size()) {
 		return; // A bit of a hack to avoid crashing when documents are deleted very quickly...
 	}
-	if (docIndex >= 0 && docIndex < documentPages.size()) {
-		if (documentPages[docIndex]->isRunning())
+	Q_ASSERT(docIndex >= 0);
+	if (docIndex < documentPages.size()) {
+		if (documentPages[docIndex]->isRunning()) {
 			documentPages[docIndex]->stop();
-		runAct->setChecked(false);
-		recAct->setChecked(false);
-		//  if (ud->isRunning()) {
-		//    stopCsound();
-		//  }
-		//  m_console->scrollToEnd();
-		//  if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
-		//    //widgetPanel->setVisible(false);
-		//  }
+		}
 	}
+	markStopped();
 }
 
 void CsoundQt::stopAll()
@@ -1480,6 +1474,11 @@ void CsoundQt::stopAll()
 	for (int i = 0; i < documentPages.size(); i++) {
 		documentPages[i]->stop();
 	}
+	markStopped();
+}
+
+void CsoundQt::markStopped()
+{
 	runAct->setChecked(false);
 	recAct->setChecked(false);
 }
@@ -2938,7 +2937,7 @@ void CsoundQt::connectActions()
 	disconnect(showLiveEventsAct, 0,0,0);
 	connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventPanels(bool)));
 	connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
-	connect(doc, SIGNAL(stopSignal()), this, SLOT(stop()));
+	connect(doc, SIGNAL(stopSignal()), this, SLOT(markStopped()));
 	connect(doc, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
 	connect(doc, SIGNAL(setHelpSignal()), this, SLOT(setHelpEntry()));
 

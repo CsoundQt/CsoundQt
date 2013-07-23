@@ -227,6 +227,8 @@ private:
 	QStringList keyPressBuffer; // protected by keyMutex
 	QStringList keyReleaseBuffer; // protected by keyMutex
 
+
+	QMutex m_playMutex; // To prevent from starting a Csound instance while another is starting or closing
 	QMutex eventMutex;
 	QVector<QString> eventQueue;
 	int m_refreshTime; // time in milliseconds for widget value updates (both input and output)

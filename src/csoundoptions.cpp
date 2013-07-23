@@ -121,7 +121,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 	if (rt && rtUseOptions) {
 		if (rtOverrideOptions)
 			list << "-+ignore_csopts=1";
-		if (m_configlists->rtMidiNames.indexOf(rtAudioModule) >= 0
+		if (m_configlists->rtAudioNames.indexOf(rtAudioModule) >= 0
 				&& rtAudioModule != "none") {
 			list << "-+rtaudio=" + rtAudioModule;
 			if (rtInputDevice != "") {

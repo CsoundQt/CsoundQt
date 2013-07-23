@@ -254,29 +254,33 @@ void PyQcsObject::setCsChannel(QString channel, double value, int index)
 	MYFLT *p;
 	if (e != NULL) {
 		CSOUND *cs = e->getCsound();
-		if (cs != NULL && !(csoundGetChannelPtr(cs, &p, channel.toLocal8Bit(), CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL))) {
-			*p = (MYFLT) value;
-			return;
+		if (cs) {
+			controlChannelHints_t hints;
+			int ret = csoundGetControlChannelHints(cs, channel.toLocal8Bit(), &hints);
+			if (ret == 0) {
+				csoundSetControlChannel(cs, channel.toLocal8Bit(), (MYFLT) value);
+				return;
+			}
 		}
 	}
-	QString message="Could not set value " + QString::number(value) + " into channel "+channel;
+	QString message="Channel '" + channel + "' does not exist or is not exposed with chn_k.";
 	PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
 	mainContext.evalScript("print \'"+message+"\'");
-
 }
 
-void PyQcsObject::setCsChannel(QString channel, QString stringValue, int index) // code taken from csound.hpp of csound source, does not work!
+void PyQcsObject::setCsChannel(QString channel, QString stringValue, int index)
 {
 	CsoundEngine *e = m_qcs->getEngine(index);
 	MYFLT *p;
 	if (e != NULL) {
 		CSOUND *cs = e->getCsound();
 		if (cs != NULL && !(csoundGetChannelPtr(cs, &p, channel.toLocal8Bit().constData(), CSOUND_STRING_CHANNEL | CSOUND_INPUT_CHANNEL))) {
+			// FIXME not thread safe and not checking string bounds.
 			strcpy((char*) p,stringValue.toLocal8Bit().constData() );
 			return;
 		}
 	}
-	QString message="Could not set string into channel "+channel;
+	QString message="Could not set string into channel "+ channel;
 	PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
 	mainContext.evalScript("print \'"+message+"\'");
 }
