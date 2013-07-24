@@ -784,7 +784,8 @@ int CsoundEngine::runCsound()
 	free(argv);
 	if (ud->result!=CSOUND_SUCCESS) {
 		qDebug() << "Csound compile failed! "  << ud->result;
-		stop();
+        locker.unlock(); // otherwise csoundStop will freeze
+        stop();
 		emit (errorLines(getErrorLines()));
 		return -3;
 	}
