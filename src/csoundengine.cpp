@@ -536,6 +536,7 @@ void CsoundEngine::evaluate(QString code)
 	CSOUND *csound = getCsound();
 	if (csound) {
 		csoundCompileOrc(csound, code.toLatin1());
+        queueMessage(tr("Csound code evaluated.\n"));
 	} else {
 		queueMessage(tr("Csound is not running. Code not evaluated."));
 	}
@@ -813,7 +814,7 @@ void CsoundEngine::stopCsound()
 {
 	//  qDebug() << "CsoundEngine::stopCsound()";
 	//    perfThread->ScoreEvent(0, 'e', 0, 0);
-	QMutexLocker locker(&m_playMutex);
+    QMutexLocker locker(&m_playMutex);
 	if (ud->perfThread != 0) {
 		CsoundPerformanceThread *pt = ud->perfThread;
 		ud->perfThread = NULL;
