@@ -489,7 +489,7 @@ QList<QPair<int, QString> > CsoundEngine::getErrorLines()
 {
 	QList<QPair<int, QString> > list;
 	if (consoles.size() > 0) {
-		QList<int> lines = consoles[0]->errorLines;
+        QList<int> lines = consoles[0]->errorLines;
 		QStringList texts = consoles[0]->errorTexts;
 		for (int i = 0; i < lines.size(); i++) {
 			list.append(QPair<int, QString>(lines[i], texts[i]));
@@ -784,6 +784,7 @@ int CsoundEngine::runCsound()
 	free(argv);
 	if (ud->result!=CSOUND_SUCCESS) {
 		qDebug() << "Csound compile failed! "  << ud->result;
+        flushQueues(); // the line was here in some earlier version. Otherwise errormessaged won't be processed by Console::appendMessage()
         locker.unlock(); // otherwise csoundStop will freeze
         stop();
 		emit (errorLines(getErrorLines()));
