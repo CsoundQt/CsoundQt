@@ -254,15 +254,23 @@ void PyQcsObject::setCsChannel(QString channel, double value, int index)
 	MYFLT *p;
 	if (e != NULL) {
 		CSOUND *cs = e->getCsound();
-		if (cs) {
-			controlChannelHints_t hints;
+#ifndef CSOUND6
+        if (cs != NULL && !(csoundGetChannelPtr(cs, &p, channel.toLocal8Bit(), CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL))) {
+            *p = (MYFLT) value;
+            return;
+        }
+#else
+        if (cs) {
+            controlChannelHints_t hints;  // this does not work with csound5
 			int ret = csoundGetControlChannelHints(cs, channel.toLocal8Bit(), &hints);
 			if (ret == 0) {
 				csoundSetControlChannel(cs, channel.toLocal8Bit(), (MYFLT) value);
 				return;
 			}
 		}
-	}
+#endif
+    }
+
 	QString message="Channel '" + channel + "' does not exist or is not exposed with chn_k.";
 	PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
 	mainContext.evalScript("print \'"+message+"\'");

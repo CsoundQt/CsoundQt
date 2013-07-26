@@ -659,8 +659,9 @@ void CsoundQt::evaluate(QString code)
 
     // test if the code is valid csound code and can be compiled:
     // NB! this is csoun6 specific!
-    TREE *testTree = NULL;
+
 #ifdef CSOUND6
+    TREE *testTree = NULL;
     if  (documentPages[curPage]->isRunning()) { // is it best way to if csound is running?
         CSOUND *csound = getEngine(curPage)->getCsound();
         if (csound!=NULL) {
@@ -674,9 +675,13 @@ void CsoundQt::evaluate(QString code)
     // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
     if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
         sendEvent(evalCode);
-    } else if (testTree!=NULL) { // the problem is, when the code is csound code, but with errors, it will be sent to python interpreter too
+    }
+#ifdef CSOUND6
+    else if (testTree!=NULL) { // the problem is, when the code is csound code, but with errors, it will be sent to python interpreter too
         evaluateCsound(evalCode);
-    } else {
+    }
+#endif
+    else {
         evaluatePython(evalCode);
     }
 
