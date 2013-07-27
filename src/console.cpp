@@ -48,7 +48,8 @@ void Console::appendMessage(QString msg)
 	// Filter unnecessary messages
 	if (msg.startsWith("libsndfile-1") || msg.startsWith("UnifiedCSD: ")
 			|| msg.startsWith("orchname: ") || msg.startsWith("scorename: ")
-			|| msg.startsWith("PortMIDI real time MIDI plugin for Csound")
+            /* // acutally - why not to show theses messages
+            || msg.startsWith("PortMIDI real time MIDI plugin for Csound")
 			|| msg.startsWith("PortAudio real-time audio module for Csound")
 			|| msg.startsWith("virtual_keyboard real time MIDI plugin for Csound")
 			|| msg.startsWith("Removing temporary file")
@@ -58,7 +59,7 @@ void Console::appendMessage(QString msg)
 			|| msg.startsWith("Parsing")
 			//          || msg.startsWith("0dBFS")
 			|| msg.startsWith("add a global")
-			|| msg.startsWith("rtaudio:")
+            || msg.startsWith("rtaudio:") */
 			) {
 		// This filtering should ideally happen inside Csound!
 		//    consoleLock.unlock();
@@ -72,7 +73,7 @@ void Console::appendMessage(QString msg)
 	if (messageLine.contains("\n")) { // line finished, analyze it now
 //		 qDebug() << "Messageline: " << messageLine;
 		if (messageLine.contains("error:", Qt::CaseInsensitive) && messageLine.contains("line ")) { // kas vahel ka nii, et rea numbrit pole?
-			errorTexts.append(messageLine); // .remove("\n")
+            errorTexts.append(messageLine); // .remove("\n")
 			errorTexts.last().remove("\n");
 
 			QStringList parts = messageLine.split("line "); // get the line number
@@ -83,7 +84,7 @@ void Console::appendMessage(QString msg)
 			qDebug() << "error line appended --- " << lnr.toInt();
 
 		}
-		if (messageLine.startsWith("B ") or messageLine.contains("rtevent", Qt::CaseInsensitive)) {
+        if (messageLine.startsWith("B ") or messageLine.contains("rtevent", Qt::CaseInsensitive) or  messageLine.contains("evaluated", Qt::CaseInsensitive)) {
 			setTextColor(QColor("blue"));
 		}
 		if (messageLine.contains("overall samples out of range")

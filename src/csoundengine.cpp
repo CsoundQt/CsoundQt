@@ -489,7 +489,7 @@ QList<QPair<int, QString> > CsoundEngine::getErrorLines()
 {
 	QList<QPair<int, QString> > list;
 	if (consoles.size() > 0) {
-		QList<int> lines = consoles[0]->errorLines;
+        QList<int> lines = consoles[0]->errorLines;
 		QStringList texts = consoles[0]->errorTexts;
 		for (int i = 0; i < lines.size(); i++) {
 			list.append(QPair<int, QString>(lines[i], texts[i]));
@@ -536,6 +536,7 @@ void CsoundEngine::evaluate(QString code)
 	CSOUND *csound = getCsound();
 	if (csound) {
 		csoundCompileOrc(csound, code.toLatin1());
+        queueMessage(tr("Csound code evaluated.\n"));
 	} else {
 		queueMessage(tr("Csound is not running. Code not evaluated."));
 	}
@@ -783,7 +784,9 @@ int CsoundEngine::runCsound()
 	free(argv);
 	if (ud->result!=CSOUND_SUCCESS) {
 		qDebug() << "Csound compile failed! "  << ud->result;
-		stop();
+        flushQueues(); // the line was here in some earlier version. Otherwise errormessaged won't be processed by Console::appendMessage()
+        locker.unlock(); // otherwise csoundStop will freeze
+        stop();
 		emit (errorLines(getErrorLines()));
 		return -3;
 	}
@@ -813,7 +816,7 @@ void CsoundEngine::stopCsound()
 {
 	//  qDebug() << "CsoundEngine::stopCsound()";
 	//    perfThread->ScoreEvent(0, 'e', 0, 0);
-	QMutexLocker locker(&m_playMutex);
+    QMutexLocker locker(&m_playMutex);
 	if (ud->perfThread != 0) {
 		CsoundPerformanceThread *pt = ud->perfThread;
 		ud->perfThread = NULL;
