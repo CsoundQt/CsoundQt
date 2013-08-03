@@ -1367,16 +1367,16 @@ void CsoundQt::play(bool realtime, int index)
 	m_options->fileName1 = runFileName1;
 	m_options->fileName2 = runFileName2;
 	m_options->rt = realtime;
-	//
-	//  if (_configlists.rtAudioNames[m_options->rtAudioModule] == "alsa"
-	//      or _configlists.rtAudioNames[m_options->rtAudioModule] == "coreaudio"
-	////      or _configlists.rtAudioNames[m_options->rtAudioModule] == "portaudio"
-	//      or _configlists.rtMidiNames[m_options->rtMidiModule] == "portmidi") {
 	if (!m_options->simultaneousRun) {
 		stopAll();
 	}
 	if (curPage == oldPage) {
 		runAct->setChecked(true);  // In case the call comes from a button
+	}
+	if (documentPages[curPage]->usesFltk() && m_options->terminalFLTK) {
+		runInTerm();
+		curPage = oldPage;
+		return;
 	}
 	int ret = documentPages[curPage]->play(m_options);
 	if (ret == -1) {
@@ -1384,15 +1384,12 @@ void CsoundQt::play(bool realtime, int index)
 							  tr("CsoundQt"),
 							  tr("Internal error running Csound."),
 							  QMessageBox::Ok);
-	}
-	else if (ret == -2) { // Error creating temporary file
+	} else if (ret == -2) { // Error creating temporary file
 		runAct->setChecked(false);
 		qDebug() << "CsoundQt::play - Error creating temporary file";
-	}
-	else if (ret == -3) { // Csound compilation failed
+	} else if (ret == -3) { // Csound compilation failed
 		runAct->setChecked(false);
-	}
-	else if (ret == 0) { // No problem
+	} else if (ret == 0) { // No problem
 		if (m_options->enableWidgets and m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
 			showWidgetsAct->setChecked(true);
 			if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
@@ -1459,7 +1456,11 @@ void CsoundQt::runInTerm(bool realtime)
 	options = scriptFileName;
 	qDebug() << "m_options.terminal == " << m_options->terminal;
 #endif
-	execute(m_options->terminal, options);
+	if (execute(m_options->terminal, options)) {
+		QMessageBox::critical(this, tr("Error running terminal"),
+							  tr("Could not run terminal program:\n   %1\n"
+								 "Check environment tab in preferences.").arg(m_options->terminal));
+	}
 	runAct->setChecked(false);
 	if (!tempScriptFiles.contains(scriptFileName))
 		tempScriptFiles << scriptFileName;
@@ -4014,7 +4015,8 @@ void CsoundQt::readSettings()
 	m_options->fileOutputFilename = settings.value("fileOutputFilename", "").toString();
 	m_options->rtUseOptions = settings.value("rtUseOptions", true).toBool();
 	m_options->rtOverrideOptions = settings.value("rtOverrideOptions", false).toBool();
-	m_options->rtAudioModule = settings.value("rtAudioModule", m_configlists.rtAudioNames[0]).toString();
+	m_options->rtAudioModule = settings.value("rtAudioModule", "pa_bl").toString();
+	if (m_options->rtAudioModule.isEmpty()) { m_options->rtAudioModule = "pa_bl"; }
 	m_options->rtInputDevice = settings.value("rtInputDevice", "adc").toString();
 	m_options->rtOutputDevice = settings.value("rtOutputDevice", "dac").toString();
 	m_options->rtJackName = settings.value("rtJackName", "").toString();
@@ -4022,7 +4024,8 @@ void CsoundQt::readSettings()
 		if (!m_options->rtJackName.endsWith("*"))
 			m_options->rtJackName.append("*");
 	}
-	m_options->rtMidiModule = settings.value("rtMidiModule", m_configlists.rtMidiNames[0]).toString();
+	m_options->rtMidiModule = settings.value("rtMidiModule", "portmidi").toString();
+	if (m_options->rtMidiModule.isEmpty()) { m_options->rtMidiModule = "portmidi"; }
 	m_options->rtMidiInputDevice = settings.value("rtMidiInputDevice", "0").toString();
 	m_options->rtMidiOutputDevice = settings.value("rtMidiOutputDevice", "").toString();
 	m_options->simultaneousRun = settings.value("simultaneousRun", "").toBool();
@@ -4278,12 +4281,7 @@ void CsoundQt::clearSettings()
 
 int CsoundQt::execute(QString executable, QString options)
 {
-	//  qDebug() << "CsoundQt::execute";
-	//  QStringList optionlist;
-
-	//  // cd to current directory on all platforms
-	//  QString cdLine = "cd \"" + documentPages[curPage]->getFilePath() + "\"";
-	//  QProcess::execute(cdLine);
+	int ret;
 
 #ifdef Q_OS_MAC
 	QString commandLine = "open -a \"" + executable + "\" " + options;
@@ -4299,8 +4297,7 @@ int CsoundQt::execute(QString executable, QString options)
 #endif
 #ifdef Q_OS_WIN32
 	QString commandLine = "\"" + executable + "\" " + (executable.startsWith("cmd")? " /k ": " ") + options;
-	if (!QProcess::startDetached(commandLine))
-		return 1;
+	ret = !QProcess::startDetached(commandLine) ? 1: 0;
 #else
 	qDebug() << "CsoundQt::execute   " << commandLine << documentPages[curPage]->getFilePath();
 	QProcess *p = new QProcess(this);
@@ -4308,10 +4305,9 @@ int CsoundQt::execute(QString executable, QString options)
 	p->start(commandLine);
 	Q_PID id = p->pid();
 	qDebug() << "Launched external program with id:" << id;
-	if (!p->waitForStarted())
-		return 1;
+	ret = !p->waitForStarted() ? 1 : 0;
 #endif
-	return 0;
+	return ret;
 }
 
 int CsoundQt::loadFileFromSystem(QString fileName)
