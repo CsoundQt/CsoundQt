@@ -40,12 +40,16 @@ def adjust_link(old_link, new_link, app_name, bin_name, suffix = '64'):
     change_link(old_link, new_link, app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix, suffix))
     change_link(old_link, new_link, app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/lib_csnd.dylib'%suffix)
 
-def deployWithPython(PRECISION, NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, CsoundQtBinPath, PythonQtLibPaths, debug=False):
+def deployWithPython(PRECISION, NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, CsoundQtBinPath, PythonQtLibPaths, cs6, debug=False):
     if PythonQtLibPaths:
         py_ext = '-py'
     else:
         py_ext = ''
-    ORIGINAL_NAME = NEW_NAME + PRECISION + py_ext
+    if cs6:
+        cs6_ext = '-cs6'
+    else:
+        cs6_ext = ''
+    ORIGINAL_NAME = NEW_NAME + PRECISION + py_ext + cs6_ext
     if debug:
         ORIGINAL_NAME += '-debug'
     APP_NAME= NEW_NAME + PRECISION + py_ext + QUTECSOUND_VERSION + '.app'
@@ -91,11 +95,12 @@ def deployWithPython(PRECISION, NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, C
 
     #os.mkdir(ORIG_APP_NAME+ '/Contents/Frameworks')
     # PythonQt is not copied by macdeployqt so copy it manually
-    PythonQtPath = ''
-    for path in PythonQtLibPaths:
-        if os.path.exists(path + 'libPythonQt.1.0.0.dylib'):
-            PythonQtPath = path
-            break
+    PythonQtPath = None
+    if PythonQtLibPaths:
+        for path in PythonQtLibPaths:
+            if os.path.exists(path + 'libPythonQt.1.0.0.dylib'):
+                PythonQtPath = path
+                break
     if PythonQtPath:
         print "Using PythonQtPath: " + PythonQtPath
         shutil.copy(PythonQtPath + 'libPythonQt.1.0.0.dylib', ORIG_APP_NAME + '/Contents/Frameworks/libPythonQt.1.dylib')
@@ -218,7 +223,7 @@ if __name__=='__main__':
         version = raw_input('Enter version number:')
     else:
         version = sys.argv[1]
-    NEW_NAME='Csound6Qt'
+    NEW_NAME='CsoundQt'
     QMakePath = ''
     QtFrameworksDir = subprocess.Popen([QMakePath + 'qmake',
                                         '-query', 'QT_INSTALL_LIBS'],
@@ -236,4 +241,5 @@ if __name__=='__main__':
     PythonQtLibPaths = ['/usr/local/lib/', '../../PythonQt2.1_Qt4.8/lib/', '../../../../PythonQt2.1_Qt4.8/lib/', './']
 
     print "---------------- Making doubles package"
-    deployWithPython('-d', NEW_NAME, version, QtFrameworksDir, CsoundQtBinPath,PythonQtLibPaths)
+    deployWithPython('-d', NEW_NAME, version, QtFrameworksDir, CsoundQtBinPath,None, cs6=True)
+    deployWithPython('-d', NEW_NAME, version, QtFrameworksDir, CsoundQtBinPath,PythonQtLibPaths, cs6=True)
