@@ -79,6 +79,8 @@ static void midiMessageCallback(double deltatime,
 }
 #endif
 
+#define MAX_THREAD_COUNT 12 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
+
 CsoundQt::CsoundQt(QStringList fileNames)
 {
 	m_closing = false;
@@ -255,6 +257,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	showPythonConsoleAct->setChecked(!m_pythonConsole->isHidden());
 #endif
 	showScratchPadAct->setChecked(!m_scratchPad->isHidden());
+
+    //qDebug()<<"Max thread count: "<< QThreadPool::globalInstance()->maxThreadCount();
+    QThreadPool::globalInstance()->setMaxThreadCount(MAX_THREAD_COUNT);
+
 }
 
 CsoundQt::~CsoundQt()
