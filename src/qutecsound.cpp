@@ -79,6 +79,8 @@ static void midiMessageCallback(double deltatime,
 }
 #endif
 
+#define MAX_THREAD_COUNT 12 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
+
 CsoundQt::CsoundQt(QStringList fileNames)
 {
 	m_closing = false;
@@ -208,7 +210,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	openLogFile();
 
 	// FIXME is there still need for no atexit?
+#ifdef CSOUND6
 	int init = csoundInitialize(0);
+#else
+	int init = csoundInitialize(0,0,0);
+#endif
 	if (init < 0) {
 		qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nCsoundQt will probably crash if you try to run Csound.");
 	}
@@ -251,6 +257,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	showPythonConsoleAct->setChecked(!m_pythonConsole->isHidden());
 #endif
 	showScratchPadAct->setChecked(!m_scratchPad->isHidden());
+
+    //qDebug()<<"Max thread count: "<< QThreadPool::globalInstance()->maxThreadCount();
+    QThreadPool::globalInstance()->setMaxThreadCount(MAX_THREAD_COUNT);
+
 }
 
 CsoundQt::~CsoundQt()
@@ -651,14 +661,44 @@ void CsoundQt::evaluate(QString code)
 	}
 	else {
 		evalCode = code;
-	}
-	if ((evalCode.indexOf("instr") >= 0 || evalCode.indexOf("event") >=0  || evalCode.indexOf("ftgen") >=0 || evalCode.indexOf("init") >=0 ) && evalCode.indexOf("'''") < 0) { // perhaps better to do a list of keywords, also chn_k, etc can be here?
-		evaluateCsound(evalCode);
-	} else if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
-		sendEvent(evalCode);
-	} else {
-		evaluatePython(evalCode);
-	}
+	}	
+
+    // test if the code is valid csound code and can be compiled:
+    // NB! this is csoun6 specific!
+
+#ifdef CSOUND6
+    TREE *testTree = NULL;
+    if  (documentPages[curPage]->isRunning()) { // is it best way to if csound is running?
+        CSOUND *csound = getEngine(curPage)->getCsound();
+        if (csound!=NULL) {
+            testTree = csoundParseOrc(csound,evalCode.toLocal8Bit()); // return not NULL, if the code is valid
+            if (testTree == NULL)
+                qDebug("Not csound code or cannot compile");
+        }
+    }
+#endif
+
+    // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
+    if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
+        sendEvent(evalCode);
+    }
+#ifdef CSOUND6
+    else if (testTree!=NULL) { // the problem is, when the code is csound code, but with errors, it will be sent to python interpreter too
+        evaluateCsound(evalCode);
+    }
+#endif
+    else {
+        evaluatePython(evalCode);
+    }
+
+// orig:
+//    if ((evalCode.indexOf("instr") >= 0 || evalCode.indexOf("event") >=0  || evalCode.indexOf("ftgen") >=0 || evalCode.indexOf("init") >=0 ) && evalCode.indexOf("'''") < 0) { // perhaps better to do a list of keywords, also chn_k, etc can be here?
+//		evaluateCsound(evalCode);
+//	} else if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
+//		sendEvent(evalCode);
+//	} else {
+//		evaluatePython(evalCode);
+//	}
 }
 
 
@@ -1333,16 +1373,16 @@ void CsoundQt::play(bool realtime, int index)
 	m_options->fileName1 = runFileName1;
 	m_options->fileName2 = runFileName2;
 	m_options->rt = realtime;
-	//
-	//  if (_configlists.rtAudioNames[m_options->rtAudioModule] == "alsa"
-	//      or _configlists.rtAudioNames[m_options->rtAudioModule] == "coreaudio"
-	////      or _configlists.rtAudioNames[m_options->rtAudioModule] == "portaudio"
-	//      or _configlists.rtMidiNames[m_options->rtMidiModule] == "portmidi") {
 	if (!m_options->simultaneousRun) {
 		stopAll();
 	}
 	if (curPage == oldPage) {
 		runAct->setChecked(true);  // In case the call comes from a button
+	}
+	if (documentPages[curPage]->usesFltk() && m_options->terminalFLTK) {
+		runInTerm();
+		curPage = oldPage;
+		return;
 	}
 	int ret = documentPages[curPage]->play(m_options);
 	if (ret == -1) {
@@ -1350,15 +1390,12 @@ void CsoundQt::play(bool realtime, int index)
 							  tr("CsoundQt"),
 							  tr("Internal error running Csound."),
 							  QMessageBox::Ok);
-	}
-	else if (ret == -2) { // Error creating temporary file
+	} else if (ret == -2) { // Error creating temporary file
 		runAct->setChecked(false);
 		qDebug() << "CsoundQt::play - Error creating temporary file";
-	}
-	else if (ret == -3) { // Csound compilation failed
+	} else if (ret == -3) { // Csound compilation failed
 		runAct->setChecked(false);
-	}
-	else if (ret == 0) { // No problem
+	} else if (ret == 0) { // No problem
 		if (m_options->enableWidgets and m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
 			showWidgetsAct->setChecked(true);
 			if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
@@ -1425,7 +1462,11 @@ void CsoundQt::runInTerm(bool realtime)
 	options = scriptFileName;
 	qDebug() << "m_options.terminal == " << m_options->terminal;
 #endif
-	execute(m_options->terminal, options);
+	if (execute(m_options->terminal, options)) {
+		QMessageBox::critical(this, tr("Error running terminal"),
+							  tr("Could not run terminal program:\n   %1\n"
+								 "Check environment tab in preferences.").arg(m_options->terminal));
+	}
 	runAct->setChecked(false);
 	if (!tempScriptFiles.contains(scriptFileName))
 		tempScriptFiles << scriptFileName;
@@ -1456,19 +1497,13 @@ void CsoundQt::stop(int index)
 	if (curPage >= documentPages.size()) {
 		return; // A bit of a hack to avoid crashing when documents are deleted very quickly...
 	}
-	if (docIndex >= 0 && docIndex < documentPages.size()) {
-		if (documentPages[docIndex]->isRunning())
+	Q_ASSERT(docIndex >= 0);
+	if (docIndex < documentPages.size()) {
+		if (documentPages[docIndex]->isRunning()) {
 			documentPages[docIndex]->stop();
-		runAct->setChecked(false);
-		recAct->setChecked(false);
-		//  if (ud->isRunning()) {
-		//    stopCsound();
-		//  }
-		//  m_console->scrollToEnd();
-		//  if (m_options->enableWidgets and m_options->showWidgetsOnRun) {
-		//    //widgetPanel->setVisible(false);
-		//  }
+		}
 	}
+	markStopped();
 }
 
 void CsoundQt::stopAll()
@@ -1476,6 +1511,11 @@ void CsoundQt::stopAll()
 	for (int i = 0; i < documentPages.size(); i++) {
 		documentPages[i]->stop();
 	}
+	markStopped();
+}
+
+void CsoundQt::markStopped()
+{
 	runAct->setChecked(false);
 	recAct->setChecked(false);
 }
@@ -1942,8 +1982,8 @@ void CsoundQt::applySettings()
 
 	// Display a summary of options on the status bar
 	currentOptions +=  (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
-	QString playOptions = " (Audio:" + m_configlists.rtAudioNames[m_options->rtAudioModule] + " ";
-	playOptions += "MIDI:" +  m_configlists.rtMidiNames[m_options->rtMidiModule] + ")";
+	QString playOptions = " (Audio:" + m_options->rtAudioModule + " ";
+	playOptions += "MIDI:" +  m_options->rtMidiModule + ")";
 	playOptions += " (" + (m_options->rtUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions"));
 	playOptions += " " + (m_options->rtOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
 	playOptions += currentOptions;
@@ -2934,7 +2974,7 @@ void CsoundQt::connectActions()
 	disconnect(showLiveEventsAct, 0,0,0);
 	connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventPanels(bool)));
 	connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
-	connect(doc, SIGNAL(stopSignal()), this, SLOT(stop()));
+	connect(doc, SIGNAL(stopSignal()), this, SLOT(markStopped()));
 	connect(doc, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
 	connect(doc, SIGNAL(setHelpSignal()), this, SLOT(setHelpEntry()));
 
@@ -3981,7 +4021,8 @@ void CsoundQt::readSettings()
 	m_options->fileOutputFilename = settings.value("fileOutputFilename", "").toString();
 	m_options->rtUseOptions = settings.value("rtUseOptions", true).toBool();
 	m_options->rtOverrideOptions = settings.value("rtOverrideOptions", false).toBool();
-	m_options->rtAudioModule = settings.value("rtAudioModule", 0).toInt();
+	m_options->rtAudioModule = settings.value("rtAudioModule", "pa_bl").toString();
+	if (m_options->rtAudioModule.isEmpty()) { m_options->rtAudioModule = "pa_bl"; }
 	m_options->rtInputDevice = settings.value("rtInputDevice", "adc").toString();
 	m_options->rtOutputDevice = settings.value("rtOutputDevice", "dac").toString();
 	m_options->rtJackName = settings.value("rtJackName", "").toString();
@@ -3989,7 +4030,8 @@ void CsoundQt::readSettings()
 		if (!m_options->rtJackName.endsWith("*"))
 			m_options->rtJackName.append("*");
 	}
-	m_options->rtMidiModule = settings.value("rtMidiModule", 0).toInt();
+	m_options->rtMidiModule = settings.value("rtMidiModule", "portmidi").toString();
+	if (m_options->rtMidiModule.isEmpty()) { m_options->rtMidiModule = "portmidi"; }
 	m_options->rtMidiInputDevice = settings.value("rtMidiInputDevice", "0").toString();
 	m_options->rtMidiOutputDevice = settings.value("rtMidiOutputDevice", "").toString();
 	m_options->simultaneousRun = settings.value("simultaneousRun", "").toBool();
@@ -4245,12 +4287,7 @@ void CsoundQt::clearSettings()
 
 int CsoundQt::execute(QString executable, QString options)
 {
-	//  qDebug() << "CsoundQt::execute";
-	//  QStringList optionlist;
-
-	//  // cd to current directory on all platforms
-	//  QString cdLine = "cd \"" + documentPages[curPage]->getFilePath() + "\"";
-	//  QProcess::execute(cdLine);
+	int ret;
 
 #ifdef Q_OS_MAC
 	QString commandLine = "open -a \"" + executable + "\" " + options;
@@ -4266,8 +4303,7 @@ int CsoundQt::execute(QString executable, QString options)
 #endif
 #ifdef Q_OS_WIN32
 	QString commandLine = "\"" + executable + "\" " + (executable.startsWith("cmd")? " /k ": " ") + options;
-	if (!QProcess::startDetached(commandLine))
-		return 1;
+	ret = !QProcess::startDetached(commandLine) ? 1: 0;
 #else
 	qDebug() << "CsoundQt::execute   " << commandLine << documentPages[curPage]->getFilePath();
 	QProcess *p = new QProcess(this);
@@ -4275,10 +4311,9 @@ int CsoundQt::execute(QString executable, QString options)
 	p->start(commandLine);
 	Q_PID id = p->pid();
 	qDebug() << "Launched external program with id:" << id;
-	if (!p->waitForStarted())
-		return 1;
+	ret = !p->waitForStarted() ? 1 : 0;
 #endif
-	return 0;
+	return ret;
 }
 
 int CsoundQt::loadFileFromSystem(QString fileName)

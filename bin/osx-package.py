@@ -40,13 +40,21 @@ def adjust_link(old_link, new_link, app_name, bin_name, suffix = '64'):
     change_link(old_link, new_link, app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/CsoundLib%s'%(suffix, suffix))
     change_link(old_link, new_link, app_name + '/Contents/Frameworks/CsoundLib%s.framework/Versions/5.2/lib_csnd.dylib'%suffix)
 
-def deployWithPython(PRECISION, NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, CsoundQtBinPath, PythonQtLibPaths, debug=False):
-    ORIGINAL_NAME = 'CsoundQt' + PRECISION + '-py'
+def deployWithPython(PRECISION, NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, CsoundQtBinPath, PythonQtLibPaths, cs6, debug=False):
+    if PythonQtLibPaths:
+        py_ext = '-py'
+    else:
+        py_ext = ''
+    if cs6:
+        cs6_ext = '-cs6'
+    else:
+        cs6_ext = ''
+    ORIGINAL_NAME = NEW_NAME + PRECISION + py_ext + cs6_ext
     if debug:
         ORIGINAL_NAME += '-debug'
-    APP_NAME= NEW_NAME + PRECISION + '-py-' + QUTECSOUND_VERSION + '.app'
+    APP_NAME= NEW_NAME + PRECISION + py_ext + QUTECSOUND_VERSION + '.app'
 
-    ORIG_APP_NAME=ORIGINAL_NAME + '.app'
+    ORIG_APP_NAME = ORIGINAL_NAME + '.app'
     # if (os.path.exists(ORIG_APP_NAME)):
     #     shutil.rmtree(ORIG_APP_NAME)
     #shutil.copytree(CsoundQtBinPath + '/' + ORIG_APP_NAME, ORIG_APP_NAME)
@@ -87,34 +95,35 @@ def deployWithPython(PRECISION, NEW_NAME, QUTECSOUND_VERSION, QtFrameworksDir, C
 
     #os.mkdir(ORIG_APP_NAME+ '/Contents/Frameworks')
     # PythonQt is not copied by macdeployqt so copy it manually
-    PythonQtPath = ''
-    for path in PythonQtLibPaths:
-        if os.path.exists(path + 'libPythonQt.1.0.0.dylib'):
-            PythonQtPath = path
-            break
-    if PythonQtPath == '':
+    PythonQtPath = None
+    if PythonQtLibPaths:
+        for path in PythonQtLibPaths:
+            if os.path.exists(path + 'libPythonQt.1.0.0.dylib'):
+                PythonQtPath = path
+                break
+    if PythonQtPath:
+        print "Using PythonQtPath: " + PythonQtPath
+        shutil.copy(PythonQtPath + 'libPythonQt.1.0.0.dylib', ORIG_APP_NAME + '/Contents/Frameworks/libPythonQt.1.dylib')
+        shutil.copy(PythonQtPath + 'libPythonQt_QtAll.1.0.0.dylib', ORIG_APP_NAME + '/Contents/Frameworks/libPythonQt_QtAll.1.dylib')
+        arguments = ['-id',  '@executable_path/../Frameworks/libPythonQt.1.dylib',
+                     '%s/Contents/Frameworks/libPythonQt.1.dylib'%(ORIG_APP_NAME)]
+        retcode = call(['install_name_tool'] + arguments)
+        arguments = ['-id',  '@executable_path/../Frameworks/libPythonQt_QtAll.1.dylib',
+                     '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME)]
+        retcode = call(['install_name_tool'] + arguments)
+
+        change_link('libPythonQt.1.dylib',
+                '@executable_path/../Frameworks/libPythonQt.1.dylib',
+                '%s/Contents/MacOs/%s'%(ORIG_APP_NAME, ORIGINAL_NAME))
+        change_link('libPythonQt.1.dylib',
+                '@executable_path/../Frameworks/libPythonQt.1.dylib',
+                '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME))
+        change_link('libPythonQt_QtAll.1.dylib',
+                '@executable_path/../Frameworks/libPythonQt_QtAll.1.dylib',
+                '%s/Contents/MacOS/%s'%(ORIG_APP_NAME, ORIGINAL_NAME))
+    else:
         print "Can't find libPythonQt. Exiting."
         return
-    print "Using PythonQtPath: " + PythonQtPath 
-    shutil.copy(PythonQtPath + 'libPythonQt.1.0.0.dylib', ORIG_APP_NAME + '/Contents/Frameworks/libPythonQt.1.dylib')
-    shutil.copy(PythonQtPath + 'libPythonQt_QtAll.1.0.0.dylib', ORIG_APP_NAME + '/Contents/Frameworks/libPythonQt_QtAll.1.dylib')
-    arguments = ['-id',  '@executable_path/../Frameworks/libPythonQt.1.dylib',
-                 '%s/Contents/Frameworks/libPythonQt.1.dylib'%(ORIG_APP_NAME)]
-    retcode = call(['install_name_tool'] + arguments)
-    arguments = ['-id',  '@executable_path/../Frameworks/libPythonQt_QtAll.1.dylib',
-                 '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME)]
-    retcode = call(['install_name_tool'] + arguments)
-
-
-    change_link('libPythonQt.1.dylib',
-            '@executable_path/../Frameworks/libPythonQt.1.dylib',
-            '%s/Contents/MacOs/%s'%(ORIG_APP_NAME, ORIGINAL_NAME))
-    change_link('libPythonQt.1.dylib',
-            '@executable_path/../Frameworks/libPythonQt.1.dylib',
-            '%s/Contents/Frameworks/libPythonQt_QtAll.1.dylib'%(ORIG_APP_NAME))
-    change_link('libPythonQt_QtAll.1.dylib',
-            '@executable_path/../Frameworks/libPythonQt_QtAll.1.dylib',
-            '%s/Contents/MacOS/%s'%(ORIG_APP_NAME, ORIGINAL_NAME))
 
     change_link('libsndfile.1.dylib',
                  '@executable_path/../Frameworks/libsndfile.1.dylib',
@@ -232,4 +241,5 @@ if __name__=='__main__':
     PythonQtLibPaths = ['/usr/local/lib/', '../../PythonQt2.1_Qt4.8/lib/', '../../../../PythonQt2.1_Qt4.8/lib/', './']
 
     print "---------------- Making doubles package"
-    deployWithPython('-d', NEW_NAME, version, QtFrameworksDir, CsoundQtBinPath,PythonQtLibPaths)
+    deployWithPython('-d', NEW_NAME, version, QtFrameworksDir, CsoundQtBinPath,None, cs6=True)
+    deployWithPython('-d', NEW_NAME, version, QtFrameworksDir, CsoundQtBinPath,PythonQtLibPaths, cs6=True)

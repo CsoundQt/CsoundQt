@@ -69,11 +69,11 @@ public:
 
 	bool rtUseOptions;
 	bool rtOverrideOptions;
-	int rtAudioModule;
+	QString rtAudioModule;
 	QString rtInputDevice;
 	QString rtOutputDevice;
 	QString rtJackName;
-	int rtMidiModule;
+	QString rtMidiModule;
 	QString rtMidiInputDevice;
 	QString rtMidiOutputDevice;
 	bool simultaneousRun; // Allow running various instances (tabs) simultaneously.

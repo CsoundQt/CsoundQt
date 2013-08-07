@@ -29,9 +29,10 @@ csound6: { # Csound6 requires some internal changes
     DEFINES += CSOUND6
     unix {
         macx {
-            CSOUND_API_INCLUDE_DIR = /Users/andres/Library/Frameworks/CsoundLib64.framework/Headers
-            CSOUND_LIBRARY_DIR = /Users/andres/Library/Frameworks/CsoundLib64.framework
-            LIBS += -F/Users/andres/Library/Frameworks
+#            CSOUND_API_INCLUDE_DIR = /Users/cristina/Library/Frameworks/CsoundLib64.framework/Headers
+#            CSOUND_LIBRARY_DIR = /Users/cristina/Library/Frameworks/CsoundLib64.framework
+#            LIBS += -F/Users/cristina/Library/Frameworks
+#            LIBS += -framework CsoundLib64
         } else {
             CSOUND_INCLUDE_DIR = /home/andres/Documents/src/csound-csound6-git/include
             INCLUDEPATH += /home/andres/Documents/src/csound-csound6-git/interfaces
@@ -89,7 +90,7 @@ pythonqt {
 }
 
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
-#INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
+INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
 INCLUDEPATH *= $${LIBSNDFILE_INCLUDE_DIR}
 
 
@@ -100,7 +101,11 @@ UI_DIR = build/ui
 RCC_DIR = build/rc
 
 TARGET = CsoundQt
+
 build32:TARGET = $${TARGET}-f
 build64:TARGET = $${TARGET}-d
 pythonqt:TARGET = $${TARGET}-py
+
+csound6:TARGET = $${TARGET}-cs6
+
 CONFIG(debug, debug|release):TARGET = $${TARGET}-debug

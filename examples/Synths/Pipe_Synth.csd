@@ -186,7 +186,7 @@ kRes_GEN	= 0.5  / (1 - kRes_GEN)
 aout_LPF	lowpass2	anoise_GEN, kCut_GEN, kRes_GEN
 
 Done_GEN:
-aout_Air	= aout_LPF * kDC_Noise_GEN + a (kout_ENV) *  (1 - kDC_Noise_GEN)
+aout_Air	= aout_LPF * kDC_Noise_GEN + a(kout_ENV) *  (1 - kDC_Noise_GEN)
 
 ;*******************************************************************************************PIPE SECTION
 ;Input aout_Air (output from AIR)
@@ -307,12 +307,12 @@ aout_PPull	= (aout_Pipe * kPush + kPolarity * kOffset) * aout_Air
 kPitch_FB	= (iPitch - 60) * kK_TrackFB  + kRT_FB
 kFreq_FB	table	kPitch_FB + 192, 11								;exp table; add 192 for positive index
 kLevel_FB	= 60.0 * (1 - kdly_DT * kFreq_FB)
-kLevel_FB	= 0.001 * ampdb (kLevel_FB)
+kLevel_FB	= 0.001 * ampdb(kLevel_FB)
 
 kPitch_FB_Rel	= kPitch_FB + kDamp_FB
 kFreq_FB_Rel	table	kPitch_FB_Rel + 192, 11						;exp table; add 192 for positive index
 kLevel_FB_Rel	= 60.0 * (1 - kdly_DT * kFreq_FB_Rel)
-kLevel_FB_Rel	= 0.001 * ampdb (kLevel_FB_Rel)
+kLevel_FB_Rel	= 0.001 * ampdb(kLevel_FB_Rel)
 
 		if   (krel_ENV > .5)	kgoto	Rel_FB
 aout_FBack	= aout_Pipe * kLevel_FB
@@ -439,8 +439,8 @@ aoutR_LP		tone		ainR_EDiff, kfreq_LP
 ;Inputs aoutR_LP (from LOPASS) and aoutL_Feed (from DIFF L)
 ;Outputs aoutL_Damp (to DIFF L) and aoutR_Damp (to DIFF R)
 
-kvH			= ampdb (-kHD_Rev)
-kvL			= ampdb (-kLD_Rev)
+kvH			= ampdb(-kHD_Rev)
+kvL			= ampdb(-kLD_Rev)
 
 ainL_Damp		=		aoutL_LP + aoutR_Feed
 aH			pareq	ainL_Damp, 2093, kvH, 0.707 , 2	;L Damp HiShelfEQ
@@ -527,12 +527,12 @@ adel3L_Diff	deltap3	ktime_3L_Diff				; DELAY
 			delayw	aDiff_2L - kDffs * aoutL_Diff	; FEEDBACK
 
 ;Single delay 4L
-aoutL_SD		vdelay	aoutL_Diff, a (ktime_4L_Diff), 1500
+aoutL_SD		vdelay	aoutL_Diff, a(ktime_4L_Diff), 1500
 
 kFeed1		table	kRT_Rev, 1				;exp table
 kFeed2		=	-1.115 / kFeed1
 
-aoutL_Feed	= aoutL_SD * ampdb ( ktime_4L_DiffRT * kFeed2)
+aoutL_Feed	= aoutL_SD * ampdb( ktime_4L_DiffRT * kFeed2)
 
 ;******************************************************************************************DIFF R
 ;Input aoutR_Damp (from DAMP R)
@@ -578,18 +578,18 @@ adel3R_Diff	deltap3	ktime_3R_Diff				; DELAY
 			delayw	aDiff_2R - kDffs * aoutR_Diff	; FEEDBACK
 
 ;Single delay 4R
-aoutR_SD		vdelay	aoutR_Diff, a (ktime_4R_Diff), 1500
+aoutR_SD		vdelay	aoutR_Diff, a(ktime_4R_Diff), 1500
 
 ;iFeed2 same as in DIFF L
-aoutR_Feed	= aoutR_SD * ampdb ( ktime_4R_DiffRT * kFeed2)
+aoutR_Feed	= aoutR_SD * ampdb( ktime_4R_DiffRT * kFeed2)
 
 ;*******************************************************************************POWER FADE L and R
 ;Inputs aoutL_LP (from LOPASS) and aoutL_Diff (from DIFF L)
 ;Inputs aoutR_LP (from LOPASS) and aoutR_Diff (from DIFF R)
 ;Outputs ainL_wet and ainR_wet (to OUT)
 
-ksqrtPos_Rev0	= sqrt (1 - kPos_Rev)
-ksqrtPos_Rev1	= sqrt (kPos_Rev)
+ksqrtPos_Rev0	= sqrt(1 - kPos_Rev)
+ksqrtPos_Rev1	= sqrt(kPos_Rev)
 
 ainL_wet		= ksqrtPos_Rev0 * aoutL_LP + ksqrtPos_Rev1 * aoutL_Diff
 ainR_wet		= ksqrtPos_Rev0 * aoutR_LP + ksqrtPos_Rev1 * aoutR_Diff
@@ -602,8 +602,8 @@ ainR_wet		= ksqrtPos_Rev0 * aoutR_LP + ksqrtPos_Rev1 * aoutR_Diff
 ;Inputs ainL_wet and ainR_wet (from DIFFUSION)
 ;Outputs audio aoutL and aoutR
 
-ksqrtMix_Rev0	= sqrt (1 - kMix_Rev)
-ksqrtMix_Rev1	= sqrt (kMix_Rev)
+ksqrtMix_Rev0	= sqrt(1 - kMix_Rev)
+ksqrtMix_Rev1	= sqrt(kMix_Rev)
 
 aoutL		= ksqrtMix_Rev0 * ainL_dry + ksqrtMix_Rev1 * ainL_wet
 aoutR		= ksqrtMix_Rev0 * ainR_dry + ksqrtMix_Rev1 * ainR_wet
@@ -727,13 +727,15 @@ i 99 0 3600
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>216</x>
- <y>100</y>
- <width>949</width>
- <height>641</height>
+ <x>316</x>
+ <y>79</y>
+ <width>968</width>
+ <height>707</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -4809,7 +4811,7 @@ i 99 0 3600
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.42857099</xValue>
-  <yValue>0.00009271</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4819,7 +4821,7 @@ i 99 0 3600
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -4842,7 +4844,7 @@ i 99 0 3600
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.42857099</xValue>
-  <yValue>0.00006818</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4852,7 +4854,7 @@ i 99 0 3600
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -4943,7 +4945,7 @@ i 99 0 3600
    <g>232</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -5138,7 +5140,7 @@ i 99 0 3600
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Play</objectName>
