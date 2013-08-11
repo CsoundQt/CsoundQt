@@ -18,7 +18,8 @@
 # ##############################################################################
 # BUILD OPTIONS:
 # CONFIG+=build32    To build floats version
-# CONFIG+=pythonqt  # To build with PythonQt support
+CONFIG+=pythonqt  # To build with PythonQt support
+CONFIG+=csound6
 # CONFIG+=rtmidi   To build with RtMidi support
 # OS X only OPTIONS:
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
