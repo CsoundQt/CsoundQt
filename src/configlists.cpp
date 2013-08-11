@@ -54,18 +54,20 @@ ConfigLists::ConfigLists()
 	CSOUND *csound = csoundCreate(NULL);
 	char *name, *type;
 	int n = 0;
-	while(!csoundGetModule(csound, n++, &name, &type)) {
+    while(!csoundGetModule(csound, n++, &name, &type)) {
 		if (strcmp(type, "audio") == 0) {
 			rtAudioNames << name;
 //			printf("Module %d:  %s (%s) \n", n, name, type);
 		}
 	}
+    rtAudioNames << "null"; // add also none (-+rtaudio=null)
 	n = 0;
 	while(!csoundGetModule(csound, n++, &name, &type)) {
 		if (strcmp(type, "midi") == 0) {
 			rtMidiNames << name;
 //			printf("MIDI Module %d:  %s (%s) \n", n, name, type);
 		}
+     rtMidiNames << "virtual" << "none";
 	}
 #else
 #ifdef Q_OS_LINUX
