@@ -447,7 +447,7 @@ void CsoundQt::open()
 	if (inspectorVisible && m_inspector->isFloating())
 		m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
 	fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"), lastUsedDir ,
-											  tr("Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)",
+                                              tr("Known Files (*.csd *.orc *.sco *.py *.inc);;Csound Files (*.csd *.orc *.sco *.inc *.CSD *.ORC *.SCO *.INC);;Python Files (*.py);;All Files (*)",
 												 "Be careful to respect spacing parenthesis and usage of punctuation"));
 //	if (widgetsVisible) {
 //		if (!m_options->widgetsIndependent) {

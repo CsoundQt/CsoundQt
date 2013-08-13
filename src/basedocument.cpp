@@ -290,6 +290,9 @@ void BaseDocument::setFileName(QString name)
 	else if (name.endsWith(".sco")) {
 		m_view->setFileType(4);
 	}
+    else if (name.endsWith(".inc")) {
+        m_view->setFileType(5);
+    }
 	else {
 		m_view->setFileType(-1);
 	}

@@ -140,9 +140,12 @@ void Highlighter::highlightBlock(const QString &text)
 	case 3:  // Orc
 		highlightCsoundBlock(text);
 		break;
-	case 4:  // Orc
+    case 4:  // Sco
 		highlightCsoundBlock(text);
 		break;
+    case 5:  // Inc
+        highlightCsoundBlock(text); // maybe anything not python or xml should be higlighter as csound?
+        break;
 	}
 }
 
