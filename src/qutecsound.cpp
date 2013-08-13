@@ -4420,14 +4420,17 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 			}
 		}
 	}
-	else {
-		loadCompanionFile(fileName);
-	}
+    //else {
+    //    loadCompanionFile(fileName); // If here and autojoin unchecked and you open an sco or orc, it falls to endless loop loadFile<->loadCompanionFile
+    //}
 
 	if (fileName == ":/default.csd")
 		fileName = QString("");
 
 	makeNewPage(fileName, text);
+    if (!m_options->autoJoin && (fileName.endsWith(".sco") || fileName.endsWith(".orc")) ) { // load companion, when the new page is made, otherwise isOpen works uncorrect
+        loadCompanionFile(fileName);
+    }
 	if (!m_options->autoJoin) {
 		documentPages[curPage]->setModified(false);
 		setWindowModified(false);
