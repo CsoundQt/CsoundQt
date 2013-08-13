@@ -67,8 +67,8 @@ ConfigLists::ConfigLists()
 			rtMidiNames << name;
 //			printf("MIDI Module %d:  %s (%s) \n", n, name, type);
 		}
-     rtMidiNames << "virtual" << "none";
 	}
+    rtMidiNames << "virtual" << "none";
 #else
 #ifdef Q_OS_LINUX
 	rtAudioNames << "portaudio" << "alsa" << "jack" << "pulse" << "none";
