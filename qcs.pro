@@ -18,8 +18,8 @@
 # ##############################################################################
 # BUILD OPTIONS:
 # CONFIG+=build32    To build floats version
-CONFIG+=pythonqt  # To build with PythonQt support
-CONFIG+=csound6
+# CONFIG+=pythonqt  # To build with PythonQt support
+# CONFIG+=csound6
 # CONFIG+=rtmidi   To build with RtMidi support
 # OS X only OPTIONS:
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
@@ -28,9 +28,9 @@ CONFIG+=csound6
 csound6: {
     DEFINES += CSOUND6
     unix {
-        macx {
-        } else {
-            isEmpty(CSOUND_INCLUDE_DIR) { # Use my paths by default
+        macx {}
+        else {
+            isEmpty(${CSOUND_INCLUDE_DIR}) { # Use my paths by default
                 CSOUND_INCLUDE_DIR = /home/andres/Documents/src/csound-csound6-git/include
                 INCLUDEPATH += /home/andres/Documents/src/csound-csound6-git/interfaces
                 CSOUND_LIBRARY_DIR = /home/andres/Documents/src/csound-csound6-git-build/
