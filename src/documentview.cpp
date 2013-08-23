@@ -303,29 +303,56 @@ QString DocumentView::getActiveSection()
 	// Will return all document if there are no ## boundaries (for any kind of file)
 	QString section;
 	if (m_viewMode < 2) {
-		QTextCursor cursor = m_mainEditor->textCursor();
-		cursor.select(QTextCursor::LineUnderCursor);
-		bool sectionStart = cursor.selectedText().simplified().startsWith("##");
-		while (!sectionStart && !cursor.anchor() == 0) {
-			cursor.movePosition(QTextCursor::PreviousBlock);
+		if (m_mode == EDIT_PYTHON_MODE) {
+			QTextCursor cursor = m_mainEditor->textCursor();
 			cursor.select(QTextCursor::LineUnderCursor);
-			sectionStart = cursor.selectedText().simplified().startsWith("##");
-		}
-		int start = cursor.anchor();
-		cursor = m_mainEditor->textCursor();
-		cursor.movePosition(QTextCursor::NextBlock);
-		cursor.select(QTextCursor::LineUnderCursor);
-		bool sectionEnd = cursor.selectedText().simplified().startsWith("##");
-		while (!sectionEnd && !cursor.atEnd()) {
+			bool sectionStart = cursor.selectedText().simplified().startsWith("##");
+			while (!sectionStart && !cursor.anchor() == 0) {
+				cursor.movePosition(QTextCursor::PreviousBlock);
+				cursor.select(QTextCursor::LineUnderCursor);
+				sectionStart = cursor.selectedText().simplified().startsWith("##");
+			}
+			int start = cursor.anchor();
+			cursor = m_mainEditor->textCursor();
 			cursor.movePosition(QTextCursor::NextBlock);
 			cursor.select(QTextCursor::LineUnderCursor);
-			sectionEnd = cursor.selectedText().simplified().startsWith("##");
+			bool sectionEnd = cursor.selectedText().simplified().startsWith("##");
+			while (!sectionEnd && !cursor.atEnd()) {
+				cursor.movePosition(QTextCursor::NextBlock);
+				cursor.select(QTextCursor::LineUnderCursor);
+				sectionEnd = cursor.selectedText().simplified().startsWith("##");
+			}
+			cursor.movePosition(QTextCursor::EndOfLine);
+			cursor.setPosition(start, QTextCursor::KeepAnchor);
+			m_mainEditor->setTextCursor(cursor);
+			section = cursor.selectedText();
+			section.replace(QChar(0x2029), QChar('\n'));
+		} else if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {
+			QTextCursor cursor = m_mainEditor->textCursor();
+			cursor.select(QTextCursor::LineUnderCursor);
+			bool sectionStart = cursor.selectedText().simplified().startsWith("instr");
+			while (!sectionStart && !cursor.anchor() == 0) {
+				cursor.movePosition(QTextCursor::PreviousBlock);
+				cursor.select(QTextCursor::LineUnderCursor);
+				sectionStart = cursor.selectedText().simplified().startsWith("instr");
+			}
+			int start = cursor.anchor();
+			cursor = m_mainEditor->textCursor();
+			cursor.movePosition(QTextCursor::NextBlock);
+			cursor.select(QTextCursor::LineUnderCursor);
+			bool sectionEnd = cursor.selectedText().simplified().startsWith("endin");
+			while (!sectionEnd && !cursor.atEnd()) {
+				cursor.movePosition(QTextCursor::NextBlock);
+				cursor.select(QTextCursor::LineUnderCursor);
+				sectionEnd = cursor.selectedText().simplified().startsWith("endin");
+			}
+			cursor.movePosition(QTextCursor::EndOfLine);
+			cursor.setPosition(start, QTextCursor::KeepAnchor);
+			m_mainEditor->setTextCursor(cursor);
+			section = cursor.selectedText();
+			section.replace(QChar(0x2029), QChar('\n'));
+
 		}
-		cursor.movePosition(QTextCursor::EndOfLine);
-		cursor.setPosition(start, QTextCursor::KeepAnchor);
-		m_mainEditor->setTextCursor(cursor);
-		section = cursor.selectedText();
-		section.replace(QChar(0x2029), QChar('\n'));
 	}
 	else { //  Split view
 		// TODO check properly for line number also from other editors
@@ -409,7 +436,7 @@ void DocumentView::textChanged()
 	}
 	TextEditor *editor = (TextEditor *) sender();
 	unmarkErrorLines();
-	if (m_mode == 0 || m_mode == 3) {  // CSD or ORC mode
+	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {  // CSD or ORC mode
 		if (m_autoComplete) {
 			QTextCursor cursor = editor->textCursor();
 			int curIndex = cursor.position();
@@ -491,7 +518,7 @@ void DocumentView::textChanged()
 		}
 		syntaxCheck();
 	}
-	else if (m_mode == 1) { // Python Mode
+	else if (m_mode == EDIT_PYTHON_MODE) { // Python Mode
 		// Nothing for now
 	}
 
@@ -905,10 +932,11 @@ void DocumentView::comment()
 	if (m_viewMode < 2) {
 		internalChange = true;
 		QString commentChar = "";
-		if (m_mode == 0) {
+		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
+				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
 			commentChar = ";";
 		}
-		else if (m_mode == 1) { // Python Mode
+		else if (m_mode == EDIT_PYTHON_MODE) { // Python Mode
 			commentChar = "#";
 		}
 		QTextCursor cursor = m_mainEditor->textCursor();
@@ -947,10 +975,11 @@ void DocumentView::uncomment()
 	if (m_viewMode < 2) {
 		internalChange = true;
 		QString commentChar = "";
-		if (m_mode == 0) {
+		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
+				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
 			commentChar = ";";
 		}
-		else if (m_mode == 1) { // Python Mode
+		else if (m_mode == EDIT_PYTHON_MODE) { // Python Mode
 			commentChar = "#";
 		}
 		QTextCursor cursor = m_mainEditor->textCursor();
@@ -987,10 +1016,11 @@ void DocumentView::indent()
 		//   qDebug("DocumentPage::indent");
 		internalChange = true;
 		QString indentChar = "";
-		if (m_mode == 0) {
+		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
+				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
 			indentChar = "\t";
 		}
-		else if (m_mode == 1) { // Python Mode
+		else if (m_mode == EDIT_PYTHON_MODE) { // Python Mode
 			indentChar = "    ";
 		}
 		QTextCursor cursor = m_mainEditor->textCursor();
@@ -1025,10 +1055,11 @@ void DocumentView::unindent()
 	if (m_viewMode < 2) {
 		internalChange = true;
 		QString indentChar = "";
-		if (m_mode == 0) {
+		if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
+				|| m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
 			indentChar = "\t";
 		}
-		else if (m_mode == 1) { // Python Mode
+		else if (m_mode == EDIT_PYTHON_MODE) { // Python Mode
 			indentChar = "    ";
 		}
 		QTextCursor cursor = m_mainEditor->textCursor();

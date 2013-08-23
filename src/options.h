@@ -90,6 +90,15 @@ public:
 	QString logFile;
 	QString sdkDir;
 
+	typedef enum {
+		CS_ORC = 0x01,
+		CS_SCORE = 0x02,
+		PYTHON = 0x04,
+		LUA = 0x08,
+		QML = 0x0F
+	} CodeLanguage;
+
+	CodeLanguage evalLanguage;
 	// External applications
 	QString terminal;
 	QString browser;

@@ -34,6 +34,16 @@
 class TextEditor;
 class OpEntryParser;
 
+typedef enum {
+	EDIT_CSOUND_MODE = 0,
+	EDIT_PYTHON_MODE = 1,
+	EDIT_XML_MODE = 2,
+	EDIT_ORC_MODE = 3,
+	EDIT_SCO_MODE = 4,
+	EDIT_INC_MODE = 5,
+	EDIT_GENERIC_MODE = -1
+} editor_mode_t;
+
 class AppProperties {
 public:
 	bool used; // Flag to mark if properties are used
@@ -68,7 +78,7 @@ public:
 
 	void setFullText(QString text, bool goToTop = false);
 	void setBasicText(QString text);
-	void setFileType(int mode); // For higlighting mode
+	void setFileType(editor_mode_t mode); // For higlighting mode
 	void setFont(QFont font);
 	void setFontPointSize(float size);
 	void setTabStopWidth(int width);
@@ -113,7 +123,7 @@ public slots:
 protected:
 	void hideAllEditors();
 
-	int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
+	editor_mode_t m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
 	int m_viewMode; // 0 = csd without widget + preset section
 	// 1 = full plain text
 	// From here on, you can have an or'd combination

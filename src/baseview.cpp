@@ -59,7 +59,7 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
 	QStackedLayout *l = new QStackedLayout(this);  // Deleted with parent
 	l->addWidget(splitter);
 	setLayout(l);
-	m_mode = 0;
+	m_mode = EDIT_CSOUND_MODE;
 	m_highlighter.setOpcodeNameList(opcodeTree->opcodeNameList());
 	m_highlighter.setDocument(m_mainEditor->document());
 	m_viewMode = 0;
@@ -225,7 +225,7 @@ void BaseView::setBasicText(QString text)
 	}
 }
 
-void BaseView::setFileType(int mode)
+void BaseView::setFileType(editor_mode_t mode)
 {
 	m_highlighter.setMode(mode);
 	m_mode = mode;

@@ -276,25 +276,25 @@ void BaseDocument::setFileName(QString name)
 {
 	fileName = name;
 	if (name.endsWith(".csd") || name.isEmpty()) {
-		m_view->setFileType(0);
+		m_view->setFileType(EDIT_CSOUND_MODE);
 	}
 	else if (name.endsWith(".py")) {
-		m_view->setFileType(1);
+		m_view->setFileType(EDIT_PYTHON_MODE);
 	}
 	else if (name.endsWith(".xml")) {
-		m_view->setFileType(2);
+		m_view->setFileType(EDIT_XML_MODE);
 	}
 	else if (name.endsWith(".orc")) {
-		m_view->setFileType(3);
+		m_view->setFileType(EDIT_ORC_MODE);
 	}
 	else if (name.endsWith(".sco")) {
-		m_view->setFileType(4);
+		m_view->setFileType(EDIT_SCO_MODE);
 	}
     else if (name.endsWith(".inc")) {
-        m_view->setFileType(5);
+        m_view->setFileType(EDIT_INC_MODE);
     }
 	else {
-		m_view->setFileType(-1);
+		m_view->setFileType(EDIT_GENERIC_MODE);
 	}
 }
 

@@ -179,7 +179,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	DocumentView *padview = new DocumentView(m_scratchPad, m_opcodeTree);
 	padview->setBackgroundColor(QColor(240, 230, 230));
 	padview->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-	padview->setFileType(1); // Python type (for highlighting and completion)
+	padview->setFileType(EDIT_PYTHON_MODE); // Python type (for highlighting and completion)
 	padview->show();
 	padview->showLineArea(true);
 	padview->setFullText("");
