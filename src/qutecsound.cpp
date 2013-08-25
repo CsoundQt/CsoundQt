@@ -179,7 +179,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	DocumentView *padview = new DocumentView(m_scratchPad, m_opcodeTree);
 	padview->setBackgroundColor(QColor(240, 230, 230));
 	padview->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-	padview->setFileType(1); // Python type (for highlighting and completion)
+	padview->setFileType(EDIT_PYTHON_MODE); // Python type (for highlighting and completion)
 	padview->show();
 	padview->showLineArea(true);
 	padview->setFullText("");
@@ -447,7 +447,7 @@ void CsoundQt::open()
 	if (inspectorVisible && m_inspector->isFloating())
 		m_inspector->hide(); // Necessary for Mac, as widget Panel covers open dialog
 	fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"), lastUsedDir ,
-											  tr("Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)",
+                                              tr("Known Files (*.csd *.orc *.sco *.py *.inc);;Csound Files (*.csd *.orc *.sco *.inc *.CSD *.ORC *.SCO *.INC);;Python Files (*.py);;All Files (*)",
 												 "Be careful to respect spacing parenthesis and usage of punctuation"));
 //	if (widgetsVisible) {
 //		if (!m_options->widgetsIndependent) {
@@ -4420,14 +4420,17 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 			}
 		}
 	}
-	else {
-		loadCompanionFile(fileName);
-	}
+    //else {
+    //    loadCompanionFile(fileName); // If here and autojoin unchecked and you open an sco or orc, it falls to endless loop loadFile<->loadCompanionFile
+    //}
 
 	if (fileName == ":/default.csd")
 		fileName = QString("");
 
 	makeNewPage(fileName, text);
+    if (!m_options->autoJoin && (fileName.endsWith(".sco") || fileName.endsWith(".orc")) ) { // load companion, when the new page is made, otherwise isOpen works uncorrect
+        loadCompanionFile(fileName);
+    }
 	if (!m_options->autoJoin) {
 		documentPages[curPage]->setModified(false);
 		setWindowModified(false);
