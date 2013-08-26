@@ -348,9 +348,13 @@ QString DocumentView::getActiveSection()
 			}
 			cursor.movePosition(QTextCursor::EndOfLine);
 			cursor.setPosition(start, QTextCursor::KeepAnchor);
-			m_mainEditor->setTextCursor(cursor);
-			section = cursor.selectedText();
-			section.replace(QChar(0x2029), QChar('\n'));
+            if (sectionStart && sectionEnd) { // do not evaluate when either instr or endin was not found
+                m_mainEditor->setTextCursor(cursor);
+                section = cursor.selectedText();
+                section.replace(QChar(0x2029), QChar('\n'));
+            } else {
+                section = "";
+            }
 
 		}
 	}
