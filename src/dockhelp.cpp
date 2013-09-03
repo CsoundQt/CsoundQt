@@ -34,10 +34,10 @@ DockHelp::DockHelp(QWidget *parent)
 	findFlags = 0;
 	setWindowTitle("Opcode Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
-	setContentsMargins(3,3,3,3);
+	setContentsMargins(0,0,0,0);
 	QGroupBox *helpBox = new QGroupBox;
 	QVBoxLayout *helpLayout = new QVBoxLayout;
-	helpLayout->setContentsMargins(3,30,3,3);
+	helpLayout->setContentsMargins(0,10,0,0);
 	helpBox->setLayout(helpLayout);
 
 	QPushButton* toggleFindButton = new QPushButton(QIcon(":/images/gtk-search.png"), "", helpBox);
@@ -209,6 +209,9 @@ void DockHelp::onPreviousButtonPressed()
 void DockHelp::toggleFindBarVisible()
 {
 	findBar->setVisible(!findBar->isVisible());
+	if (findBar->isVisible()) {
+		findLine->setFocus();
+	}
 }
 
 void DockHelp::onCaseBoxChanged(int value)
