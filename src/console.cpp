@@ -72,7 +72,7 @@ void Console::appendMessage(QString msg)
 
 	if (messageLine.contains("\n")) { // line finished, analyze it now
 //		 qDebug() << "Messageline: " << messageLine;
-		if (messageLine.contains("error:", Qt::CaseInsensitive) && messageLine.contains("line ")) { // kas vahel ka nii, et rea numbrit pole?
+        if (messageLine.contains("error:", Qt::CaseInsensitive) && messageLine.contains("line ")) {
             errorTexts.append(messageLine); // .remove("\n")
 			errorTexts.last().remove("\n");
 
@@ -84,12 +84,23 @@ void Console::appendMessage(QString msg)
 			qDebug() << "error line appended --- " << lnr.toInt();
 
 		}
+        if (messageLine.contains("Line:", Qt::CaseSensitive))  { // as in type erroris in csound6 like  'Line: 54 Loc: 1'
+            errorTexts.append("Error");
+
+            QStringList parts = messageLine.split(" "); // get the line number
+            QString lnr = parts[1]; // should be second element in the array
+            errorLines.append(lnr.toInt());
+            qDebug() << "error line appended --- " << lnr.toInt();
+        }
+
         if (messageLine.startsWith("B ") or messageLine.contains("rtevent", Qt::CaseInsensitive) or  messageLine.contains("evaluated", Qt::CaseInsensitive)) {
 			setTextColor(QColor("blue"));
 		}
 		if (messageLine.contains("overall samples out of range")
 				or messageLine.contains("disabled")
-				or messageLine.contains("error", Qt::CaseInsensitive)) { // any error
+                or messageLine.contains("error", Qt::CaseInsensitive)
+                or messageLine.contains("Found:")
+                or messageLine.contains("Line:")) { // any error
 			setTextColor(QColor("red"));
 		}
 		if (messageLine.contains("warning", Qt::CaseInsensitive)) {

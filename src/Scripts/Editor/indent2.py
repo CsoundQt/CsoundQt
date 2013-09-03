@@ -9,7 +9,7 @@
 import PythonQt.QtGui as pqt
 
 # tell here which keywords (at first position) leave a line unchanged
-excpList = ('instr', 'endin', 'if', 'elseif', 'endif', 'opcode', 'endop', 'sr', 'ksmps', 'kr', 'nchnls', '0dbfs')
+excpList = ('instr', 'endin', 'if', 'elseif', 'endif', 'opcode', 'endop', 'sr', 'ksmps', 'kr', 'nchnls', '0dbfs', 'until')
 
 def exceptions(line, excptlis):
     """returns t if line starts with a word from excptlis"""
