@@ -37,6 +37,10 @@ protected:
 	//    virtual void dropEvent(QDropEvent *event);  // See note on code
 	//    virtual void dragEnterEvent(QDragEnterEvent *event);
 	//    virtual void dragMoveEvent(QDragMoveEvent *event);
+
+signals:
+	void escapePressed();
+	void newLine();
 };
 
 class LineNumberArea;

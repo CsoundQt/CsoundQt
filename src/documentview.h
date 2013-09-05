@@ -85,6 +85,8 @@ public slots:
 	//    void updateFromDocumentModel();
 	void syntaxCheck();
 	void textChanged();
+	void escapePressed();
+	void indentNewLine();
 	void findReplace();
 	void getToIn(); // chnget/chnset to invalue/outvalue
 	void inToGet(); // invalue/outvalue to chnget/chnset
@@ -151,6 +153,7 @@ signals:
 	void lineNumberSignal(int number); // Sends current line number when cursor is moved
 	void setHelp(); // Request execute open opcode help action
 	void contentsChanged();
+	void closeConsole();
 	void evaluate(QString code);
 };
 

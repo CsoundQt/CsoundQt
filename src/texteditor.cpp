@@ -39,27 +39,11 @@ TextEditor::TextEditor(QWidget *parent) :
 
 void TextEditor::keyPressEvent (QKeyEvent * event)
 {
-	//  if (event->key() == Qt::Tab) {
-	//
-	//  }
 	QTextEdit::keyPressEvent(event);
-	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
-		QTextCursor cursor = textCursor();
-		if (!cursor.atStart()) {
-			cursor.movePosition(QTextCursor::PreviousBlock);
-			QTextCursor linecursor = cursor;
-			linecursor.select(QTextCursor::LineUnderCursor);
-			QString line = linecursor.selectedText().trimmed();
-			if (line.endsWith(":")) {
-				textCursor().insertText("    ");
-			}
-			cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-			while (cursor.selectedText().endsWith(" ") || cursor.selectedText().endsWith("\t") ) {
-				cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-			}
-			cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-			insertPlainText(cursor.selectedText());
-		}
+	if (event->key() == Qt::Key_Escape) {
+		emit escapePressed();
+	} else if(event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+		emit newLine();
 	}
 }
 

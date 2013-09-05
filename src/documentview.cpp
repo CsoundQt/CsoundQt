@@ -53,6 +53,10 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(textChanged()));
 	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
 			this, SLOT(syntaxCheck()));
+	connect(m_mainEditor, SIGNAL(escapePressed()),
+			this, SLOT(escapePressed()));
+	connect(m_mainEditor, SIGNAL(newLine()),
+			this, SLOT(indentNewLine()));
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
@@ -438,8 +442,9 @@ void DocumentView::textChanged()
 		internalChange = false;
 		return;
 	}
-	TextEditor *editor = (TextEditor *) sender();
+	TextEditor *editor = m_mainEditor;
 	unmarkErrorLines();
+
 	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {  // CSD or ORC mode
 		if (m_autoComplete) {
 			QTextCursor cursor = editor->textCursor();
@@ -526,6 +531,24 @@ void DocumentView::textChanged()
 		// Nothing for now
 	}
 
+}
+
+void DocumentView::escapePressed()
+{
+	emit closeConsole();
+}
+
+void DocumentView::indentNewLine()
+{
+	QTextCursor linecursor = m_mainEditor->textCursor();
+	linecursor.movePosition(QTextCursor::PreviousCharacter);
+	linecursor.select(QTextCursor::LineUnderCursor);
+	QString line = linecursor.selectedText();
+	if (m_mode == EDIT_PYTHON_MODE){
+		if (line.endsWith(":")) {
+			m_mainEditor->insertPlainText("    ");
+		}
+	}
 }
 
 void DocumentView::findReplace()
