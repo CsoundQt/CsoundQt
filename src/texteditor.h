@@ -32,15 +32,20 @@ class TextEditor : public QTextEdit
 public:
 	TextEditor(QWidget *parent = 0);
 
+	void setTabIndents(bool indents) {m_tabIndents = indents;}
+
 protected:
 	virtual void keyPressEvent (QKeyEvent * event);
 	//    virtual void dropEvent(QDropEvent *event);  // See note on code
 	//    virtual void dragEnterEvent(QDragEnterEvent *event);
 	//    virtual void dragMoveEvent(QDragMoveEvent *event);
 
+	bool m_tabIndents;
+
 signals:
 	void escapePressed();
 	void newLine();
+	void requestIndent();
 };
 
 class LineNumberArea;

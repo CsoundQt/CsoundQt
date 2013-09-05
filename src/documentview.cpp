@@ -57,6 +57,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(escapePressed()));
 	connect(m_mainEditor, SIGNAL(newLine()),
 			this, SLOT(indentNewLine()));
+	connect(m_mainEditor, SIGNAL(requestIndent()),
+			this, SLOT(indent()));
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),

@@ -82,6 +82,7 @@ public:
 	void setFont(QFont font);
 	void setFontPointSize(float size);
 	void setTabStopWidth(int width);
+	void setTabIndents(bool indents);
 	void setLineWrapMode(QTextEdit::LineWrapMode mode);
 	void setAutoComplete(bool autoComplete);
 	void setColorVariables(bool color);

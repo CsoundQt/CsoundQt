@@ -43,6 +43,7 @@ public:
 	QColor consoleFontColor;
 	QColor consoleBgColor;
 	int tabWidth;
+	bool tabIndents;
 	bool colorVariables;
 	bool autoPlay;
 	bool autoJoin;

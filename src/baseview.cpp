@@ -270,6 +270,11 @@ void BaseView::setTabStopWidth(int width)
 	m_appEditor->setTabStopWidth(width);
 }
 
+void BaseView::setTabIndents(bool indents)
+{
+	m_mainEditor->setTabIndents(indents);
+}
+
 void BaseView::setLineWrapMode(QTextEdit::LineWrapMode mode)
 {
 	m_mainEditor->setLineWrapMode(mode);

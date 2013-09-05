@@ -92,6 +92,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	consoleBgColorPushButton->setPalette(palette);
 
 	tabWidthSpinBox->setValue(m_options->tabWidth);
+	tabIndentCheckBox->setChecked(m_options->tabIndents);
 	colorVariablesCheckBox->setChecked(m_options->colorVariables);
 	autoplayCheckBox->setChecked(m_options->autoPlay);
 	autoJoinCheckBox->setChecked(m_options->autoJoin);
@@ -298,6 +299,7 @@ void ConfigDialog::accept()
 	m_options->consoleFont = consoleFontComboBox->currentText();
 	m_options->consoleFontPointSize = consoleFontSizeComboBox->currentText().toDouble();
 	m_options->tabWidth = tabWidthSpinBox->value();
+	m_options->tabIndents = tabIndentCheckBox->isChecked();
 	m_options->colorVariables = colorVariablesCheckBox->isChecked();
 	m_options->autoPlay = autoplayCheckBox->isChecked();
 	m_options->autoJoin = autoJoinCheckBox->isChecked();

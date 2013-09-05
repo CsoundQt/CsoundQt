@@ -2024,6 +2024,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
 {
 	p->setColorVariables(m_options->colorVariables);
 	p->setTabStopWidth(m_options->tabWidth);
+	p->setTabIndents(m_options->tabIndents);
 	p->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
 	p->setAutoComplete(m_options->autoComplete);
 	p->setWidgetEnabled(m_options->enableWidgets);
@@ -3975,6 +3976,7 @@ void CsoundQt::readSettings()
 	m_options->consoleFontColor = settings.value("consoleFontColor", QVariant(QColor(Qt::black))).value<QColor>();
 	m_options->consoleBgColor = settings.value("consoleBgColor", QVariant(QColor(Qt::white))).value<QColor>();
 	m_options->tabWidth = settings.value("tabWidth", 40).toInt();
+	m_options->tabIndents = settings.value("tabIndents", true).toBool();
 	m_options->colorVariables = settings.value("colorvariables", true).toBool();
 	m_options->autoPlay = settings.value("autoplay", false).toBool();
 	m_options->autoJoin = settings.value("autoJoin", true).toBool();
@@ -4145,6 +4147,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("consoleFontColor", QVariant(m_options->consoleFontColor));
 		settings.setValue("consoleBgColor", QVariant(m_options->consoleBgColor));
 		settings.setValue("tabWidth", m_options->tabWidth );
+		settings.setValue("tabIndents", m_options->tabIndents);
 		settings.setValue("colorvariables", m_options->colorVariables);
 		settings.setValue("autoplay", m_options->autoPlay);
 		settings.setValue("autoJoin", m_options->autoJoin);

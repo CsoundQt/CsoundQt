@@ -39,6 +39,10 @@ TextEditor::TextEditor(QWidget *parent) :
 
 void TextEditor::keyPressEvent (QKeyEvent * event)
 {
+	if(event->key() == Qt::Key_Tab && m_tabIndents) {
+		emit requestIndent();
+		return;
+	}
 	QTextEdit::keyPressEvent(event);
 	if (event->key() == Qt::Key_Escape) {
 		emit escapePressed();

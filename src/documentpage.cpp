@@ -859,6 +859,11 @@ void DocumentPage::setTabStopWidth(int tabWidth)
 	m_view->setTabStopWidth(tabWidth);
 }
 
+void DocumentPage::setTabIndents(bool indents)
+{
+	m_view->setTabIndents(indents);
+}
+
 void DocumentPage::setLineWrapMode(QTextEdit::LineWrapMode wrapLines)
 {
 	m_view->setLineWrapMode(wrapLines);
