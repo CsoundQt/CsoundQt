@@ -94,6 +94,8 @@ public slots:
 	void insertTextFromAction();
 	void findString(QString query = QString());
 	void evaluate();
+	void updateContext();
+	void updateOrcContext(QString orc);
 	void createContextMenu(QPoint pos);
 
 	void showOrc(bool);
@@ -126,8 +128,6 @@ public slots:
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent *event);
 
-	//    void setModified(bool mod = true);
-
 private:
 	QString changeToChnget(QString text);
 	QString changeToInvalue(QString text);
@@ -142,7 +142,8 @@ private:
 	bool lastCaseSensitive; // These last three are for search and replace
 	QString lastSearch;
 	QString lastReplace;
-
+	QStringList m_localVariables;
+	QStringList m_globalVariables;
 
 private slots:
 	void destroySyntaxMenu();

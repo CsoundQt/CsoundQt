@@ -53,6 +53,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(textChanged()));
 	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
 			this, SLOT(syntaxCheck()));
+	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
+			this, SLOT(updateContext()));
 	connect(m_mainEditor, SIGNAL(escapePressed()),
 			this, SLOT(escapePressed()));
 	connect(m_mainEditor, SIGNAL(newLine()),
@@ -112,6 +114,100 @@ bool DocumentView::childHasFocus()
 void DocumentView::print(QPrinter *printer)
 {
 	m_mainEditor->print(printer);
+}
+
+void DocumentView::updateContext()
+{
+	QStringList contextStart;
+	contextStart << "<CsInstruments>" << "<CsScore" << "<CsOptions>";
+	QTextCursor cursor = m_mainEditor->textCursor();
+	cursor.select(QTextCursor::LineUnderCursor);
+	QString line = cursor.selection().toPlainText();
+	int outerContext = 0;
+	while (!cursor.atStart() && outerContext == 0) {
+		foreach(QString startText, contextStart) {
+			if (line.contains(startText)) {
+				outerContext = contextStart.indexOf(startText) + 1;
+				break;
+			}
+		}
+		cursor.movePosition(QTextCursor::PreviousBlock);
+		cursor.select(QTextCursor::LineUnderCursor);
+		line = cursor.selection().toPlainText();
+		cursor.movePosition(QTextCursor::StartOfLine);
+	}
+	if (outerContext == 1) { // Instrument section
+		QString endText = "</CsInstruments>";
+		QTextCursor linecursor = cursor;
+		linecursor.select(QTextCursor::LineUnderCursor);
+		line = linecursor.selection().toPlainText();
+		linecursor.movePosition(QTextCursor::EndOfLine);
+		while (!linecursor.atEnd() && !line.contains(endText)) {
+			cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+			cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+			linecursor = cursor;
+			linecursor.select(QTextCursor::LineUnderCursor);
+			line = linecursor.selection().toPlainText();
+			linecursor.movePosition(QTextCursor::EndOfLine);
+		}
+		QString orc = cursor.selection().toPlainText();
+		updateOrcContext(orc);
+	}
+}
+
+void DocumentView::updateOrcContext(QString orc)
+{
+	// TODO: add string as context
+	QStringList innerContextStart;
+	innerContextStart << "instr" << "opcode";
+	QTextCursor cursor = m_mainEditor->textCursor();
+	cursor.select(QTextCursor::LineUnderCursor);
+	QString line = cursor.selection().toPlainText().trimmed();
+	int innerContext = 0;
+	while (!cursor.atStart() && innerContext == 0) {
+		foreach(QString startText, innerContextStart) {
+			if (line.startsWith(startText)) {
+				innerContext = innerContextStart.indexOf(startText) + 1;
+				break;
+			}
+		}
+		cursor.movePosition(QTextCursor::PreviousBlock);
+		cursor.select(QTextCursor::LineUnderCursor);
+		line = cursor.selection().toPlainText();
+		cursor.movePosition(QTextCursor::StartOfLine);
+	}
+	cursor.movePosition(QTextCursor::NextBlock);
+	QString endText = "endin";
+	QTextCursor linecursor = cursor;
+	linecursor.select(QTextCursor::LineUnderCursor);
+	line = linecursor.selection().toPlainText().trimmed();
+	linecursor.movePosition(QTextCursor::EndOfLine);
+	while (!linecursor.atEnd() && !line.startsWith(endText)) {
+		cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+		cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+		linecursor = cursor;
+		linecursor.select(QTextCursor::LineUnderCursor);
+		line = linecursor.selection().toPlainText();
+		linecursor.movePosition(QTextCursor::EndOfLine);
+	}
+	QString instr = cursor.selection().toPlainText();
+	QStringList lines = instr.split("\n", QString::SkipEmptyParts);
+
+	m_localVariables.clear();
+	foreach(QString line, lines) {
+		QStringList words = line.split(QRegExp("[\\s,]"), QString::SkipEmptyParts);
+		int opcodeIndex = -1;
+		foreach(QString word, words) {
+			if (m_opcodeTree->isOpcode(word)) {
+				opcodeIndex = words.indexOf(word);
+			}
+		}
+		if(opcodeIndex > 0) {
+			words = words.mid(0, opcodeIndex);
+			m_localVariables << words;
+		}
+	}
+	qDebug() << "local" << m_localVariables;
 }
 
 void DocumentView::setModified(bool mod)
