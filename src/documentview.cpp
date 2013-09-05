@@ -535,7 +535,7 @@ void DocumentView::textChanged()
 
 void DocumentView::escapePressed()
 {
-	emit closeConsole();
+	emit closeExtraPanels();
 }
 
 void DocumentView::indentNewLine()

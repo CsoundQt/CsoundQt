@@ -355,6 +355,17 @@ void CsoundQt::setWidgetTooltipsVisible(bool visible)
 	documentPages[curPage]->showWidgetTooltips(visible);
 }
 
+void CsoundQt::closeExtraPanels()
+{
+	if (m_console->isVisible()) {
+		m_console->hide();
+		showConsoleAct->setChecked(false);
+	} else if (helpPanel->isVisible()) {
+		helpPanel->hide();
+		showHelpAct->setChecked(false);
+	}
+}
+
 void CsoundQt::openExample()
 {
 	QObject *sender = QObject::sender();
@@ -2973,10 +2984,12 @@ void CsoundQt::connectActions()
 
 	disconnect(showLiveEventsAct, 0,0,0);
 	connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventPanels(bool)));
+	disconnect(doc, 0,0,0);
 	connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
 	connect(doc, SIGNAL(stopSignal()), this, SLOT(markStopped()));
 	connect(doc, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
 	connect(doc, SIGNAL(setHelpSignal()), this, SLOT(setHelpEntry()));
+	connect(doc, SIGNAL(closeExtraPanelsSignal()), this, SLOT(closeExtraPanels()));
 
 	disconnect(showWidgetsAct, 0,0,0);
 	if (m_options->widgetsIndependent) {

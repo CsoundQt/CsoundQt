@@ -161,6 +161,7 @@ public slots:
 	void sendEvent(int index, QString line, double delay = 0);
 	void changePage(int index);
 	void setWidgetTooltipsVisible(bool visible);
+	void closeExtraPanels(); // to close help and console panels when esc is pressed in the editor
 	//    void updateWidgets();
 	void openExample();
 	void logMessage(QString msg);

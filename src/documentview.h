@@ -153,7 +153,7 @@ signals:
 	void lineNumberSignal(int number); // Sends current line number when cursor is moved
 	void setHelp(); // Request execute open opcode help action
 	void contentsChanged();
-	void closeConsole();
+	void closeExtraPanels();
 	void evaluate(QString code);
 };
 

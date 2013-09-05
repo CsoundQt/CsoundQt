@@ -1140,6 +1140,7 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 	m_view = new DocumentView(parent, opcodeTree);
 	connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
 	connect(m_view,SIGNAL(setHelp()), this, SLOT(setHelp()));
+	connect(m_view, SIGNAL(closeExtraPanels()), this, SLOT(closeExtraPanels()));
 
 	// For logging of Csound output to file
 	connect(m_console, SIGNAL(logMessage(QString)),
@@ -1266,6 +1267,11 @@ int DocumentPage::runPython()
 	m_console->appendMessage(serr);
 	emit stopSignal();
 	return p.exitCode();
+}
+
+void DocumentPage::closeExtraPanels()
+{
+	emit closeExtraPanelsSignal();
 }
 
 void DocumentPage::showWidgets(bool show)

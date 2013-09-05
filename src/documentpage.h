@@ -202,6 +202,7 @@ public slots:
 	void perfEnded();
 	void setHelp();
 	int runPython();  // Called when file is a python file
+	void closeExtraPanels();
 
 	void showWidgets(bool show = true);
 	void hideWidgets();
@@ -302,6 +303,7 @@ signals:
 	void setHelpSignal(); // Propagated from view
 	void setWidgetClipboardSignal(QString text);
 	void evaluatePythonSignal(QString code);
+	void closeExtraPanelsSignal();
 };
 
 #endif
