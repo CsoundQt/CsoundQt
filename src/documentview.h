@@ -90,12 +90,13 @@ public slots:
 	void findReplace();
 	void getToIn(); // chnget/chnset to invalue/outvalue
 	void inToGet(); // invalue/outvalue to chnget/chnset
-	void autoComplete();
-	void insertTextFromAction();
+	void insertAutoCompleteText();
 	void findString(QString query = QString());
 	void evaluate();
 	void updateContext();
 	void updateOrcContext(QString orc);
+	void nextParameter();
+	void prevParameter();
 	void createContextMenu(QPoint pos);
 
 	void showOrc(bool);

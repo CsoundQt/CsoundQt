@@ -227,7 +227,6 @@ public slots:
 	void unindent();
 	void killLine();
 	void killToEnd();
-	void autoComplete();
 	void setViewMode(int mode);
 	void showOrc(bool);
 	void showScore(bool);

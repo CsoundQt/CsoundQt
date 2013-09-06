@@ -33,6 +33,8 @@ public:
 	TextEditor(QWidget *parent = 0);
 
 	void setTabIndents(bool indents) {m_tabIndents = indents;}
+	void setParameterMode(bool on) {m_parameterMode = on; setCursorWidth(on ? 8 : 1);}
+	bool getParameterMode() {return m_parameterMode;}
 
 protected:
 	virtual void keyPressEvent (QKeyEvent * event);
@@ -41,11 +43,15 @@ protected:
 	//    virtual void dragMoveEvent(QDragMoveEvent *event);
 
 	bool m_tabIndents;
+	bool m_parameterMode;
 
 signals:
 	void escapePressed();
+	void tabPressed();
+	void backtabPressed();
 	void newLine();
 	void requestIndent();
+	void requestUnindent();
 };
 
 class LineNumberArea;

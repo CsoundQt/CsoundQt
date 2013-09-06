@@ -1395,11 +1395,6 @@ void DocumentPage::killLine()
 	m_view->killLine();
 }
 
-void DocumentPage::autoComplete()
-{
-	m_view->autoComplete();
-}
-
 void DocumentPage::setViewMode(int mode)
 {
 	m_view->setViewMode(mode);

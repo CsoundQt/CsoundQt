@@ -202,7 +202,6 @@ private slots:
 	void print();
 	void findReplace();  // Direct to current Page
 	void findString();  // Direct to current Page
-	void autoComplete();  // Direct to current Page
 	bool join(bool ask = true);
 	void showUtilities(bool);
 	void getToIn();
@@ -348,7 +347,6 @@ private:
 	QAction *cabbageAct;
 	QAction *findAct;
 	QAction *findAgainAct;
-	QAction *autoCompleteAct;
 	QAction *configureAct;
 	QAction *setShortcutsAct;
 	QAction *editAct;

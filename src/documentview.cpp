@@ -61,6 +61,12 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(indentNewLine()));
 	connect(m_mainEditor, SIGNAL(requestIndent()),
 			this, SLOT(indent()));
+	connect(m_mainEditor, SIGNAL(requestUnindent()),
+			this, SLOT(unindent()));
+	connect(m_mainEditor, SIGNAL(tabPressed()),
+			this, SLOT(nextParameter()));
+	connect(m_mainEditor, SIGNAL(backtabPressed()),
+			this, SLOT(prevParameter()));
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
@@ -207,7 +213,54 @@ void DocumentView::updateOrcContext(QString orc)
 			m_localVariables << words;
 		}
 	}
-	qDebug() << "local" << m_localVariables;
+}
+
+void DocumentView::nextParameter()
+{
+	QChar character = m_mainEditor->document()->characterAt(m_mainEditor->textCursor().position());
+	// First move forward a word
+	while(!m_mainEditor->textCursor().atBlockEnd() &&
+		  !(character.isSpace() || character == ',' || character == '(' || character == ')'
+			|| character == '[' || character == ']' || character == '\\')) {
+		m_mainEditor->moveCursor(QTextCursor::NextCharacter);
+		character = m_mainEditor->document()->characterAt(m_mainEditor->textCursor().position());
+	}
+	// Then move forward all white space
+	while(!m_mainEditor->textCursor().atBlockEnd() &&
+		  (character.isSpace() || character == ',' || character == '(' || character == ')'
+		   || character == '[' || character == ']' || character == '\\')) {
+		m_mainEditor->moveCursor(QTextCursor::NextCharacter);
+		character = m_mainEditor->document()->characterAt(m_mainEditor->textCursor().position());
+	}
+	if (m_mainEditor->textCursor().atBlockStart()) {
+		m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
+	}
+	QTextCursor cursor = m_mainEditor->textCursor();
+	cursor.select(QTextCursor::WordUnderCursor);
+	m_mainEditor->setTextCursor(cursor);
+}
+
+void DocumentView::prevParameter()
+{
+	if (!m_mainEditor->textCursor().atBlockStart()) {
+		m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
+	}
+	QChar character = m_mainEditor->document()->characterAt(m_mainEditor->textCursor().position());
+	while(!m_mainEditor->textCursor().atBlockStart() &&
+		  !(character.isSpace() || character == ',' || character == '(' || character == ')'
+			|| character == '[' || character == ']' || character == '\\')) {
+		m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
+		character = m_mainEditor->document()->characterAt(m_mainEditor->textCursor().position());
+	}
+	while(!m_mainEditor->textCursor().atBlockStart() &&
+		  (character.isSpace() || character == ',' || character == '(' || character == ')'
+		   || character == '[' || character == ']' || character == '\\')) {
+		m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
+		character = m_mainEditor->document()->characterAt(m_mainEditor->textCursor().position());
+	}
+	QTextCursor cursor = m_mainEditor->textCursor();
+	cursor.select(QTextCursor::WordUnderCursor);
+	m_mainEditor->setTextCursor(cursor);
 }
 
 void DocumentView::setModified(bool mod)
@@ -605,7 +658,7 @@ void DocumentView::textChanged()
 								syntaxText += " " + syntax[i].inArgs.simplified();
 							}
 							QAction *a = syntaxMenu->addAction(text,
-															   this, SLOT(insertTextFromAction()));
+															   this, SLOT(insertAutoCompleteText()));
 							a->setData(syntaxText);
 						}
 						QRect r =  editor->cursorRect();
@@ -628,12 +681,18 @@ void DocumentView::textChanged()
 	else if (m_mode == EDIT_PYTHON_MODE) { // Python Mode
 		// Nothing for now
 	}
-
 }
 
 void DocumentView::escapePressed()
 {
-	emit closeExtraPanels();
+	if (m_mainEditor->getParameterMode()) {
+		// Force unselecting
+		m_mainEditor->moveCursor(QTextCursor::NextCharacter);
+		m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
+		m_mainEditor->setParameterMode(false);
+	} else {
+		emit closeExtraPanels();
+	}
 }
 
 void DocumentView::indentNewLine()
@@ -704,28 +763,7 @@ void DocumentView::inToGet()
 	}
 }
 
-void DocumentView::autoComplete()
-{
-	if (m_viewMode < 2) {
-		internalChange = true;
-		QTextCursor cursor = m_mainEditor->textCursor();
-		cursor.select(QTextCursor::WordUnderCursor);
-		QString opcodeName = cursor.selectedText();
-		if (opcodeName=="")
-			return;
-		m_mainEditor->setTextCursor(cursor);
-		m_mainEditor->cut();
-		QString syntax = m_opcodeTree->getSyntax(opcodeName);
-		internalChange = true;
-		m_mainEditor->insertPlainText(syntax);
-	}
-	else { //  Split view
-		// TODO check properly for line number also from other editors
-		qDebug() << "DocumentView::autoComplete() not implemented for split view.";
-	}
-}
-
-void DocumentView::insertTextFromAction()
+void DocumentView::insertAutoCompleteText()
 {
 	TextEditor *editor;
 	if (m_viewMode < 2) {
@@ -734,7 +772,7 @@ void DocumentView::insertTextFromAction()
 	else { //  Split view
 		editor = (TextEditor *) focusWidget();
 		// TODO check properly for line number also from other editors
-		qDebug() << "DocumentView::insertTextFromAction() not implemented for split view.";
+		qDebug() << "DocumentView::insertAutoCompleteText() not implemented for split view.";
 	}
 	if (editor != 0) {
 		internalChange = true;
@@ -771,7 +809,9 @@ void DocumentView::insertTextFromAction()
 				editor->insertPlainText(action->text());
 			}
 		}
-
+		m_mainEditor->moveCursor(QTextCursor::StartOfBlock);
+		m_mainEditor->setParameterMode(true);
+		prevParameter();
 	}
 }
 

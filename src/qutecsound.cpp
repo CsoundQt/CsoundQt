@@ -1168,11 +1168,6 @@ void CsoundQt::findString()
 	documentPages[curPage]->findString();
 }
 
-void CsoundQt::autoComplete()
-{
-	documentPages[curPage]->autoComplete();
-}
-
 bool CsoundQt::join(bool ask)
 {
 	QDialog dialog(this);
@@ -2235,7 +2230,6 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	csladspaAct->setShortcut(tr(""));
 	findAct->setShortcut(tr("Ctrl+F"));
 	findAgainAct->setShortcut(tr("Ctrl+G"));
-	autoCompleteAct->setShortcut(tr("Alt+C"));
 	configureAct->setShortcut(tr(""));
 	editAct->setShortcut(tr("CTRL+E"));
 	runAct->setShortcut(tr("CTRL+R"));
@@ -2501,12 +2495,6 @@ void CsoundQt::createActions()
 	//   findAct->setIconText(tr("Find"));
 	findAgainAct->setShortcutContext(Qt::ApplicationShortcut);
 	connect(findAgainAct, SIGNAL(triggered()), this, SLOT(findString()));
-
-	autoCompleteAct = new QAction(tr("AutoComplete"), this);
-	autoCompleteAct->setStatusTip(tr("Autocomplete according to Status bar display"));
-	//   autoCompleteAct->setIconText(tr("AutoComplete"));
-	autoCompleteAct->setShortcutContext(Qt::ApplicationShortcut);
-	connect(autoCompleteAct, SIGNAL(triggered()), this, SLOT(autoComplete()));
 
 	configureAct = new QAction(QIcon(prefix + "control-center2.png"), tr("Configuration"), this);
 	configureAct->setStatusTip(tr("Open configuration dialog"));
@@ -2891,7 +2879,6 @@ void CsoundQt::setKeyboardShortcutsList()
 	m_keyActions.append(getToInAct);
 	m_keyActions.append(csladspaAct);
 	m_keyActions.append(findAct);
-	m_keyActions.append(autoCompleteAct);
 	m_keyActions.append(configureAct);
 	m_keyActions.append(editAct);
 	m_keyActions.append(runAct);
@@ -3035,7 +3022,6 @@ void CsoundQt::createMenus()
 	editMenu->addSeparator();
 	editMenu->addAction(findAct);
 	editMenu->addAction(findAgainAct);
-	editMenu->addAction(autoCompleteAct);
 	editMenu->addSeparator();
 	editMenu->addAction(commentAct);
 	//  editMenu->addAction(uncommentAct);

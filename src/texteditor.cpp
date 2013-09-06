@@ -34,14 +34,30 @@ TextEditor::TextEditor(QWidget *parent) :
 {
 	setAcceptDrops(true);
 	setAcceptRichText(false);
+	m_parameterMode = false;
 	//  qDebug() << "TextEditor::TextEditor" << acceptDrops();
 }
 
 void TextEditor::keyPressEvent (QKeyEvent * event)
 {
-	if(event->key() == Qt::Key_Tab && m_tabIndents) {
-		emit requestIndent();
-		return;
+	if(event->key() == Qt::Key_Tab) {
+		if (m_parameterMode) {
+			emit tabPressed();
+			return;
+
+		} else if(m_tabIndents) {
+			emit requestIndent();
+			return;
+		}
+	}
+	if(event->key() == Qt::Key_Backtab) {
+		if (m_parameterMode) {
+			emit backtabPressed();
+			return;
+		} else if(m_tabIndents) {
+			emit requestUnindent();
+			return;
+		}
 	}
 	QTextEdit::keyPressEvent(event);
 	if (event->key() == Qt::Key_Escape) {
@@ -49,6 +65,7 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 	} else if(event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
 		emit newLine();
 	}
+	return;
 }
 
 //The following makes the editor almost accept drop events on OS X, but breaks all dragging on the same document on linux
