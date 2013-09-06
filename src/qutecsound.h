@@ -246,6 +246,7 @@ private slots:
 	void showOtherCsd(bool);
 	void showWidgetEdit(bool);
 	void toggleLineArea();
+	void toggleParameterMode();
 
 private:
 	void createActions();
@@ -402,6 +403,7 @@ private:
 	QAction *requestFeatureAct;
 	QAction *chatAct;
 	QAction *lineNumbersAct;
+	QAction *parameterModeAct;
 
 	int curPage;
 	int curCsdPage;  // To recall last csd visited

@@ -73,6 +73,11 @@ void DocumentPage::toggleLineArea()
 	m_view->toggleLineArea();
 }
 
+void DocumentPage::toggleParameterMode()
+{
+	m_view->toggleParameterMode();
+}
+
 int DocumentPage::setTextString(QString &text)
 {
 	int ret = 0;

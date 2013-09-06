@@ -121,6 +121,8 @@ signals:
 
 public slots:
 	void toggleLineArea();
+	void toggleParameterMode();
+
 protected:
 	void hideAllEditors();
 

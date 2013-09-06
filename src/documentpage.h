@@ -65,6 +65,7 @@ public:
 	void loadTextString(QString &text); // sets the text string and resets the undo history
 	int setTextString(QString &text);
 	void toggleLineArea();
+	void toggleParameterMode();
 
 	virtual QString getFullText();
 	QString getDotText();

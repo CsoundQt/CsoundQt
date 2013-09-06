@@ -541,6 +541,11 @@ void BaseView::toggleLineArea()
 	showLineArea(!m_mainEditor->lineAreaVisble());
 }
 
+void BaseView::toggleParameterMode()
+{
+	m_mainEditor->setParameterMode(!m_mainEditor->getParameterMode());
+}
+
 void BaseView::showLineArea(bool visible)
 {
 	m_mainEditor->setLineAreaVisble(visible);

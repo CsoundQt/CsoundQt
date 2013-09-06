@@ -2280,6 +2280,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	showOtherCsdAct->setShortcut(tr("Shift+Alt+6"));
 	showWidgetEditAct->setShortcut(tr("Shift+Alt+7"));
 	lineNumbersAct->setShortcut(tr("Shift+Alt+L"));
+	lineNumbersAct->setShortcut(tr("Shift+Alt+P"));
 }
 
 void CsoundQt::showNoPythonQtWarning()
@@ -2328,6 +2329,11 @@ void CsoundQt::showWidgetEdit(bool show)
 void CsoundQt::toggleLineArea()
 {
 	documentPages[curPage]->toggleLineArea();
+}
+
+void CsoundQt::toggleParameterMode()
+{
+	documentPages[curPage]->toggleParameterMode();
 }
 
 void CsoundQt::createActions()
@@ -2853,6 +2859,10 @@ void CsoundQt::createActions()
 	lineNumbersAct->setShortcutContext(Qt::ApplicationShortcut);
 	connect(lineNumbersAct,SIGNAL(triggered()), this, SLOT(toggleLineArea()));
 
+	parameterModeAct = new QAction(tr("Toggle parameter mode"),this);
+//	parameterModeAct->setShortcutContext(Qt::ApplicationShortcut);
+	connect(parameterModeAct,SIGNAL(triggered()), this, SLOT(toggleParameterMode()));
+
 	setKeyboardShortcutsList();
 }
 
@@ -2925,6 +2935,7 @@ void CsoundQt::setKeyboardShortcutsList()
 	m_keyActions.append(showOtherCsdAct);
 	m_keyActions.append(showWidgetEditAct);
 	m_keyActions.append(lineNumbersAct);
+	m_keyActions.append(parameterModeAct);
 }
 
 void CsoundQt::connectActions()
@@ -3030,6 +3041,7 @@ void CsoundQt::createMenus()
 	editMenu->addAction(killLineAct);
 	editMenu->addAction(killToEndAct);
 	editMenu->addAction(lineNumbersAct);
+	editMenu->addAction(parameterModeAct);
 	editMenu->addSeparator();
 	editMenu->addAction(joinAct);
 	editMenu->addAction(inToGetAct);
