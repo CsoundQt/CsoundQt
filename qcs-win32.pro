@@ -28,7 +28,8 @@ include(config.pri)
 # Use results from config step
 RC_FILE = "src/qutecsound.rc"
 LCSOUND = "$${CSOUND_LIBRARY_DIR}/$${CSOUND_LIB}"
-LCSND = "$${CSOUND_LIBRARY_DIR}/csnd6.dll"
+csound6: LCSND = "$${CSOUND_LIBRARY_DIR}/csnd6.dll"
+else: LCSND =  "$${CSOUND_LIBRARY_DIR}/csnd.dll"
 LSNDFILE = "$${LIBSNDFILE_LIBRARY_DIR}/$${LIBSNDFILE_LIB}"
 
 rtmidi {

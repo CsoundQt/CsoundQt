@@ -56,6 +56,7 @@ RESOURCES += "src/quteapp_d.qrc"
 build32:LCSOUND = -lcsound
 build64:LCSOUND = -lcsound64
 
-LCSND = -lcsnd
+csound6: LCSND = -lcsnd6
+else: LCSND = -lcsnd
 LSNDFILE = -lsndfile
 
