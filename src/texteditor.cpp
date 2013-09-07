@@ -59,6 +59,10 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 			return;
 		}
 	}
+	if (event->key() == Qt::Key_Down && m_parameterMode) {
+		emit openParameterSelection();
+		return;
+	}
 	QTextEdit::keyPressEvent(event);
 	if (event->key() == Qt::Key_Escape) {
 		emit escapePressed();

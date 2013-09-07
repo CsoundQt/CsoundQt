@@ -42,7 +42,6 @@ public:
 	MySyntaxMenu(QWidget * parent);
 	~MySyntaxMenu();
 
-	bool insertComplete; // Whether to insert full text or only opcode name
 protected:
 	virtual void keyPressEvent(QKeyEvent * event);
 signals:
@@ -91,12 +90,15 @@ public slots:
 	void getToIn(); // chnget/chnset to invalue/outvalue
 	void inToGet(); // invalue/outvalue to chnget/chnset
 	void insertAutoCompleteText();
+	void insertParameterText();
 	void findString(QString query = QString());
 	void evaluate();
 	void updateContext();
 	void updateOrcContext(QString orc);
 	void nextParameter();
 	void prevParameter();
+	void openParameterSelection();
+	void parameterShowShortcutPressed();
 	void createContextMenu(QPoint pos);
 
 	void showOrc(bool);
@@ -135,6 +137,8 @@ private:
 	//    void createSyntaxMenu();
 
 	MySyntaxMenu *syntaxMenu;
+	MySyntaxMenu *parameterMenu;
+	QPushButton *parameterButton;
 	bool m_isModified;
 	bool m_autoComplete;
 	bool errorMarked;

@@ -67,6 +67,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(nextParameter()));
 	connect(m_mainEditor, SIGNAL(backtabPressed()),
 			this, SLOT(prevParameter()));
+	connect(m_mainEditor, SIGNAL(openParameterSelection()),
+			this, SLOT(openParameterSelection()));
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
@@ -88,6 +90,14 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			m_mainEditor, SLOT(insertPlainText(QString)));
 	//  connect(syntaxMenu,SIGNAL(aboutToHide()),
 	//          this, SLOT(destroySyntaxMenu()));
+
+	parameterMenu = new MySyntaxMenu(m_mainEditor);
+//	connect(parameterMenu,SIGNAL(keyPressed(QString)),
+//			m_mainEditor, SLOT(insertPlainText(QString)));
+	parameterButton = new QPushButton("...",m_mainEditor);
+	parameterButton->setVisible(true);
+	parameterButton->resize(25, 20);
+	connect(parameterButton, SIGNAL(clicked()), this, SLOT(openParameterSelection()));
 
 	setViewMode(1);
 	setViewMode(0);  // To force a change
@@ -179,7 +189,7 @@ void DocumentView::updateOrcContext(QString orc)
 		}
 		cursor.movePosition(QTextCursor::PreviousBlock);
 		cursor.select(QTextCursor::LineUnderCursor);
-		line = cursor.selection().toPlainText();
+		line = cursor.selection().toPlainText().trimmed();
 		cursor.movePosition(QTextCursor::StartOfLine);
 	}
 	cursor.movePosition(QTextCursor::NextBlock);
@@ -193,7 +203,7 @@ void DocumentView::updateOrcContext(QString orc)
 		cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
 		linecursor = cursor;
 		linecursor.select(QTextCursor::LineUnderCursor);
-		line = linecursor.selection().toPlainText();
+		line = linecursor.selection().toPlainText().trimmed();
 		linecursor.movePosition(QTextCursor::EndOfLine);
 	}
 	QString instr = cursor.selection().toPlainText();
@@ -201,6 +211,9 @@ void DocumentView::updateOrcContext(QString orc)
 
 	m_localVariables.clear();
 	foreach(QString line, lines) {
+		if (line.trimmed().startsWith(";")) {
+			continue;
+		}
 		QStringList words = line.split(QRegExp("[\\s,]"), QString::SkipEmptyParts);
 		int opcodeIndex = -1;
 		foreach(QString word, words) {
@@ -210,9 +223,15 @@ void DocumentView::updateOrcContext(QString orc)
 		}
 		if(opcodeIndex > 0) {
 			words = words.mid(0, opcodeIndex);
-			m_localVariables << words;
+			foreach(QString word, words) {
+				if (word.at(0).isLetter()) {
+					m_localVariables << word.remove(QRegExp("[\\(\\)]"));
+				}
+			}
 		}
 	}
+	m_localVariables.removeDuplicates();
+	m_localVariables.sort();
 }
 
 void DocumentView::nextParameter()
@@ -238,6 +257,10 @@ void DocumentView::nextParameter()
 	QTextCursor cursor = m_mainEditor->textCursor();
 	cursor.select(QTextCursor::WordUnderCursor);
 	m_mainEditor->setTextCursor(cursor);
+	QRect r =  m_mainEditor->cursorRect();
+	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+	parameterButton->move(p);
+	parameterButton->setVisible(true);
 }
 
 void DocumentView::prevParameter()
@@ -261,6 +284,45 @@ void DocumentView::prevParameter()
 	QTextCursor cursor = m_mainEditor->textCursor();
 	cursor.select(QTextCursor::WordUnderCursor);
 	m_mainEditor->setTextCursor(cursor);
+	QRect r =  m_mainEditor->cursorRect();
+	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+	parameterButton->move(p);
+	parameterButton->setVisible(true);
+}
+
+void DocumentView::openParameterSelection()
+{
+	parameterButton->setVisible(false);
+	parameterMenu->clear();
+	if (m_opcodeTree->isOpcode(m_mainEditor->textCursor().selectedText())) {
+		// TODO add actions for opcode in parameter list
+		return;
+	} else {
+		if (m_localVariables.size() < 1) {
+			return;
+		}
+
+		foreach (QString var, m_localVariables) {
+			QAction *a = parameterMenu->addAction(var,
+												  this, SLOT(insertParameterText()));
+			a->setData(var);
+		}
+	}
+	QRect r =  m_mainEditor->cursorRect();
+	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+	QPoint globalPoint =  m_mainEditor->mapToGlobal(p);
+	//syntaxMenu->setWindowModality(Qt::NonModal);
+	//syntaxMenu->popup(globalPoint);
+	parameterMenu->move(globalPoint);
+	parameterMenu->show();
+	m_mainEditor->setFocus(Qt::OtherFocusReason);
+}
+
+void DocumentView::parameterShowShortcutPressed()
+{
+	if (parameterButton->isVisible()) {
+		openParameterSelection();
+	}
 }
 
 void DocumentView::setModified(bool mod)
@@ -596,6 +658,8 @@ void DocumentView::textChanged()
 	TextEditor *editor = m_mainEditor;
 	unmarkErrorLines();
 
+	parameterButton->setVisible(false);
+
 	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {  // CSD or ORC mode
 		if (m_autoComplete) {
 			QTextCursor cursor = editor->textCursor();
@@ -660,6 +724,9 @@ void DocumentView::textChanged()
 							QAction *a = syntaxMenu->addAction(text,
 															   this, SLOT(insertAutoCompleteText()));
 							a->setData(syntaxText);
+							if (i == 0) {
+								syntaxMenu->setDefaultAction(a);
+							}
 						}
 						QRect r =  editor->cursorRect();
 						QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
@@ -668,7 +735,7 @@ void DocumentView::textChanged()
 						//syntaxMenu->popup(globalPoint);
 						syntaxMenu->move(globalPoint);
 						syntaxMenu->show();
-						editor->setFocus(Qt::OtherFocusReason);
+//						editor->setFocus(Qt::OtherFocusReason);
 					}
 					else {
 						destroySyntaxMenu();
@@ -690,6 +757,7 @@ void DocumentView::escapePressed()
 		m_mainEditor->moveCursor(QTextCursor::NextCharacter);
 		m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
 		m_mainEditor->setParameterMode(false);
+		parameterButton->setVisible(false);
 	} else {
 		emit closeExtraPanels();
 	}
@@ -777,7 +845,6 @@ void DocumentView::insertAutoCompleteText()
 	if (editor != 0) {
 		internalChange = true;
 		QAction *action = static_cast<QAction *>(QObject::sender());
-		bool insertComplete = static_cast<MySyntaxMenu *>(action->parent())->insertComplete;
 		QTextCursor cursor = editor->textCursor();
 		cursor.select(QTextCursor::WordUnderCursor);
 		cursor.insertText("");
@@ -790,30 +857,42 @@ void DocumentView::insertAutoCompleteText()
 			noOutargs = true;
 		}
 		internalChange = true;
-		if (insertComplete) {
-			if (noOutargs) {
-				QString syntaxText = action->data().toString();
-				int index =syntaxText.indexOf(QRegExp("\\w\\s+\\w"));
-				editor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
-			}
-			else {
-				editor->insertPlainText(action->data().toString());
-			}
+		if (noOutargs) {
+			QString syntaxText = action->data().toString();
+			int index =syntaxText.indexOf(QRegExp("\\w\\s+\\w"));
+			editor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
 		}
 		else {
-			int index = action->text().indexOf(" ");
-			if (index > 0) {
-				editor->insertPlainText(action->text().left(index));
-			}
-			else {
-				editor->insertPlainText(action->text());
-			}
+			editor->insertPlainText(action->data().toString());
 		}
 		m_mainEditor->moveCursor(QTextCursor::StartOfBlock);
 		m_mainEditor->setParameterMode(true);
 		prevParameter();
 	}
 }
+
+
+void DocumentView::insertParameterText()
+{
+	TextEditor *editor;
+	if (m_viewMode < 2) {
+		editor = m_mainEditor;
+	}
+	else { //  Split view
+		editor = (TextEditor *) focusWidget();
+		// TODO check properly for line number also from other editors
+		qDebug() << "DocumentView::insertAutoCompleteText() not implemented for split view.";
+	}
+	if (editor != 0) {
+		internalChange = true;
+		QAction *action = static_cast<QAction *>(QObject::sender());
+		QString parameterName = action->data().toString();
+		editor->insertPlainText(parameterName);
+
+		nextParameter();
+	}
+}
+
 
 void DocumentView::findString(QString query)
 {
@@ -904,7 +983,6 @@ void DocumentView::createContextMenu(QPoint pos)
 		qDebug() << "DocumentView::createContextMenu() not implemented for split view.";
 	}
 }
-
 
 void DocumentView::showOrc(bool show)
 {
@@ -1498,7 +1576,6 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
 		this->hide();
 	}
 	else if (event->key() == Qt::Key_Tab) {
-		insertComplete = false;
 		QAction * a = activeAction();
 		this->hide();
 		if (a != 0) {
@@ -1506,10 +1583,11 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
 			return;
 		}
 		else {
-			emit keyPressed(event->text());
+			Q_ASSERT(defaultAction() != NULL);
+			defaultAction()->trigger();
+			return;
 		}
-	}
-	else if (event->key() != Qt::Key_Up && event->key() != Qt::Key_Down
+	} else if (event->key() != Qt::Key_Up && event->key() != Qt::Key_Down
 			 && event->key() != Qt::Key_Return) {
 		this->close();
 		if (event->key() != Qt::Key_Backspace) {
@@ -1521,6 +1599,5 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
 				par->event(event);
 		}
 	}
-	insertComplete = true;
 	QMenu::keyPressEvent(event);
 }

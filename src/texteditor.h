@@ -52,6 +52,7 @@ signals:
 	void newLine();
 	void requestIndent();
 	void requestUnindent();
+	void openParameterSelection();
 };
 
 class LineNumberArea;

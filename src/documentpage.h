@@ -66,6 +66,7 @@ public:
 	int setTextString(QString &text);
 	void toggleLineArea();
 	void toggleParameterMode();
+	void showParametersInEditor();
 
 	virtual QString getFullText();
 	QString getDotText();
