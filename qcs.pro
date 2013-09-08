@@ -93,7 +93,7 @@ INCLUDEPATH *= $${LIBSNDFILE_INCLUDE_DIR}
 
 
 
-DESTDIR = bin
+DESTDIR = $${_PRO_FILE_PWD_}/bin
 MOC_DIR = build/moc
 UI_DIR = build/ui
 RCC_DIR = build/rc
