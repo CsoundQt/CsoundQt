@@ -20,7 +20,7 @@ configs = 'CONFIG+=release CONFIG+=buildDoubles CONFIG+=rtmidi CONFIG+=x86_64'
 
 qmake_bin = 'qmake -r '
 
-qmake_bin = qt_base_dir + '/' + qmake_bin
+qmake_bin = qt_base_dir + '/clang_64/bin/' + qmake_bin
 
 os.system('git pull origin master')
 if os.path.isdir('../' + build_dir):
@@ -29,7 +29,7 @@ os.mkdir('../' + build_dir)
 os.chdir('../' + build_dir)
 os.system(qmake_bin + configs + ' ../csoundqt/qcs.pro')
 os.system('make -w -j7')
-os.system(qt_base_dir + '/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/')
+os.system(qt_base_dir + '/clang_64/bin/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/')
 shutil.copyfile('/usr/local/lib/libcsnd.6.0.dylib',  'bin/CsoundQt-d-cs6.app/Contents/Frameworks/')
 
 os.chdir('bin')
