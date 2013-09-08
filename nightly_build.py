@@ -15,7 +15,7 @@ qcs_build_prefix='~/src/'
 today = date.today().isoformat()
 build_dir = 'csoundqt-' + today
 
-configs = 'CONFIG+=release CONFIG+=buildDoubles CONFIG+=rtmidi CONFIG+=x86_64'
+configs = 'CONFIG+=release CONFIG+=buildDoubles CONFIG+=rtmidi CONFIG+=csound6 CONFIG+=x86_64'
 #spec = '-spec max-g++ '
 
 qmake_bin = 'qmake -r '
@@ -27,7 +27,7 @@ if os.path.isdir('../' + build_dir):
     shutil.rmtree('../' + build_dir)
 os.mkdir('../' + build_dir)
 os.chdir('../' + build_dir)
-os.system(qmake_bin + configs + ' ../csoundqt/qcs.pro')
+os.system(qmake_bin + onfigs + ' ' + qcs_source_path + '/qcs.pro')
 os.system('make -w -j7')
 os.system(qt_base_dir + '/clang_64/bin/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/')
 shutil.copyfile('/usr/local/lib/libcsnd.6.0.dylib',  'bin/CsoundQt-d-cs6.app/Contents/Frameworks/')
