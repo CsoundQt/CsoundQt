@@ -23,6 +23,8 @@ qmake_bin = 'qmake -r '
 qmake_bin = qt_base_dir + '/' + qmake_bin
 
 os.system('git pull origin master')
+if os.path.isdir('../' + build_dir):
+    shutil.rmtree('../' + build_dir)
 os.mkdir('../' + build_dir)
 os.chdir('../' + build_dir)
 os.system(qmake_bin + spec + configs + ' ../csoundqt/qcs.pro')
