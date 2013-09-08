@@ -24,7 +24,7 @@ qmake_bin = qt_base_dir + '/' + qmake_bin
 
 os.system('git pull origin master')
 os.mkdir('../' + build_dir)
-os.cd('../' + build_dir)
+os.chdir('../' + build_dir)
 os.system(qmake_bin + spec + configs + ' ../csoundqt/qcs.pro')
 os.system('make -w -j7')
 os.system(qt_base_dir + '/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/')
