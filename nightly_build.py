@@ -30,6 +30,7 @@ os.chdir('../' + build_dir)
 os.system(qmake_bin + configs + ' ../csoundqt/qcs.pro')
 os.system('make -w -j7')
 os.system(qt_base_dir + '/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/')
-shutil.copyfile('/usr/local/lib/libcsnd.6.0.dylib',  build_dir + '/bin/CsoundQt-d-cs6.app/Contents/Frameworks/')
+shutil.copyfile('/usr/local/lib/libcsnd.6.0.dylib',  'bin/CsoundQt-d-cs6.app/Contents/Frameworks/')
 
+os.chdir('bin')
 os.system('tar -czvf CsoundQt-nightly-%s.tar.gz CsoundQt-d-cs6.app &>/dev/null'%today)
