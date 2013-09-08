@@ -7,10 +7,15 @@ from datetime import date
 qt_base_dir = '~/Qt/5.1.1'
 qcs_source_path='~/src/qutecsound'
 qcs_build_prefix='~/src/'
+username = 'mantaraya36'
 
 # -------------------------------------------------------------------
 # There should be no need to touch anything from here on to configure
 # -------------------------------------------------------------------
+
+if os.system('git diff --quiet') == 0:
+    print "No changes in git. Not performing nightly build"
+    return
 
 today = date.today().isoformat()
 build_dir = 'csoundqt-' + today
@@ -27,10 +32,12 @@ if os.path.isdir('../' + build_dir):
     shutil.rmtree('../' + build_dir)
 os.mkdir('../' + build_dir)
 os.chdir('../' + build_dir)
-os.system(qmake_bin + onfigs + ' ' + qcs_source_path + '/qcs.pro')
+os.system(qmake_bin + configs + ' ' + qcs_source_path + '/qcs.pro')
 os.system('make -w -j7')
 os.system(qt_base_dir + '/clang_64/bin/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/')
-shutil.copyfile('/usr/local/lib/libcsnd.6.0.dylib',  'bin/CsoundQt-d-cs6.app/Contents/Frameworks/')
+shutil.copyfile('/usr/local/lib/libcsnd.6.0.dylib',  'bin/CsoundQt-d-cs6.app/Contents/Frameworks/libcsnd.6.0.dylib')
 
 os.chdir('bin')
-os.system('tar -czvf CsoundQt-nightly-%s.tar.gz CsoundQt-d-cs6.app &>/dev/null'%today)
+outname = 'CsoundQt-nightly-%s.tar.gz'%today
+os.system('tar -czvf %s CsoundQt-d-cs6.app &>/dev/null'%outname)
+os.system('scp %s %s@frs.sourceforge.net:/home/frs/project/qutecsound/CsoundQt/nightly-osx'%(outname,username))
