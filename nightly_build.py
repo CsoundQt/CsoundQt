@@ -27,7 +27,7 @@ if os.path.isdir('../' + build_dir):
     shutil.rmtree('../' + build_dir)
 os.mkdir('../' + build_dir)
 os.chdir('../' + build_dir)
-os.system(qmake_bin + spec + configs + ' ../csoundqt/qcs.pro')
+os.system(qmake_bin + configs + ' ../csoundqt/qcs.pro')
 os.system('make -w -j7')
 os.system(qt_base_dir + '/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/')
 shutil.copyfile('/usr/local/lib/libcsnd.6.0.dylib',  build_dir + '/bin/CsoundQt-d-cs6.app/Contents/Frameworks/')
