@@ -157,6 +157,7 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 	int commentIndex = text.indexOf(';');
 	if (commentIndex >= 0) {
 		setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
+		return;
 	}
 	else {
 		commentIndex = text.size() + 1;
@@ -239,6 +240,11 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 
 	while (startIndex >= 0) {
 		int endIndex = text.indexOf(commentEndExpression, startIndex);
+		if (format(startIndex) == quotationFormat) {
+			startIndex = text.indexOf(commentStartExpression,
+									  startIndex + 1);
+			continue;
+		}
 		int commentLength;
 		if (endIndex == -1) {
 			setCurrentBlockState(1);
@@ -267,8 +273,14 @@ void Highlighter::highlightPythonBlock(const QString &text)
 			index = text.indexOf(expression, index + length);
 		}
 	}
-	QRegExp strings( QRegExp("[\"'].*[\"']"));
-	//     QString temp = rule.pattern.pattern();
+	QRegExp strings( QRegExp("\"[^\"]*\""));
+	index = text.indexOf(strings);
+	while (index >= 0) {
+		int length = strings.matchedLength();
+		setFormat(index, length, quotationFormat);
+		index = text.indexOf(strings, index + length);
+	}
+	strings = QRegExp("'[^'']*'");
 	index = text.indexOf(strings);
 	while (index >= 0) {
 		int length = strings.matchedLength();
@@ -305,7 +317,8 @@ void Highlighter::setLastRules()
 	lastHighlightingRules.append(rule);
 
 	quotationFormat.setForeground(Qt::red);
-	rule.pattern = QRegExp("\".*\"");
+//	rule.pattern = QRegExp("\".*\"");
+	rule.pattern = QRegExp("\"[^\"]*\"");
 	rule.format = quotationFormat;
 	lastHighlightingRules.append(rule);
 	rule.pattern = QRegExp("\\{\\{.*");

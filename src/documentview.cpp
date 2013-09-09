@@ -1267,13 +1267,14 @@ void DocumentView::indent()
 			indentChar = "    ";
 		}
 		QTextCursor cursor = m_mainEditor->textCursor();
+		QTextCursor::MoveMode moveMode = cursor.selectedText().isEmpty() ? QTextCursor::MoveAnchor : QTextCursor::KeepAnchor;
 		if (cursor.position() > cursor.anchor()) {
 			int temp = cursor.anchor();
 			cursor.setPosition(cursor.position());
 			cursor.setPosition(temp, QTextCursor::KeepAnchor);
 		}
 		if (!cursor.atBlockStart()) {
-			cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+			cursor.movePosition(QTextCursor::StartOfLine, moveMode);
 		}
 		int start = cursor.selectionStart();
 		QString text = cursor.selectedText();
@@ -1284,7 +1285,7 @@ void DocumentView::indent()
 		}
 		cursor.insertText(text);
 		cursor.setPosition(start);
-		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
+		cursor.movePosition(QTextCursor::NextCharacter, moveMode, text.size());
 		m_mainEditor->setTextCursor(cursor);
 	}
 	else {
