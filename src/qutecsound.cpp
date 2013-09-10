@@ -206,7 +206,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	if (!QFile::exists(index)) {
 		index = initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/index.html");
 		if (!QFile::exists(index)) {
-			index = HTML_DEFAULT_HTML_DIR + QString("/index.html");
+			index = "/Library/Frameworks/CsoundLib64.framework/Resources/Manual/index.html";
 		}
 	}
 #endif
