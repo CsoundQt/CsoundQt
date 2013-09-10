@@ -42,6 +42,8 @@ public:
 	MySyntaxMenu(QWidget * parent);
 	~MySyntaxMenu();
 
+	bool insertComplete; // Whether to insert full text or only opcode name
+
 protected:
 	virtual void keyPressEvent(QKeyEvent * event);
 signals:

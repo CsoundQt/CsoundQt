@@ -92,7 +92,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	m_midiin = 0;
 #endif
 //	initialDir = QDir::current().path();
-	intialDir = QCoreApplication::applicationDirPath();
+	initialDir = QCoreApplication::applicationDirPath();
 	setWindowTitle("CsoundQt[*]");
 	resize(780,550);
 	setWindowIcon(QIcon(":/images/qtcs.png"));
@@ -204,8 +204,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	QString index = m_options->csdocdir + QString("/index.html");
 #ifdef Q_OS_MAC
 	if (!QFile::exists(index)) {
-		index = intialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/index.html");
-		index = HTML_DEFAULT_HTML_DIR + QString("/index.html");
+		index = initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/index.html");
 		if (!QFile::exists(index)) {
 			index = HTML_DEFAULT_HTML_DIR + QString("/index.html");
 		}

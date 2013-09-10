@@ -851,6 +851,8 @@ void DocumentView::insertAutoCompleteText()
 	if (editor != 0) {
 		internalChange = true;
 		QAction *action = static_cast<QAction *>(QObject::sender());
+		bool insertComplete = static_cast<MySyntaxMenu *>(action->parent())->insertComplete;
+
 		QTextCursor cursor = editor->textCursor();
 		cursor.select(QTextCursor::WordUnderCursor);
 		cursor.insertText("");
@@ -863,18 +865,28 @@ void DocumentView::insertAutoCompleteText()
 			noOutargs = true;
 		}
 		internalChange = true;
-		if (noOutargs) {
-			QString syntaxText = action->data().toString();
-			int index =syntaxText.indexOf(QRegExp("\\w\\s+\\w"));
-			editor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
-		}
-		else {
-			editor->insertPlainText(action->data().toString());
-		}
-		if (m_autoParameterMode) {
-			m_mainEditor->moveCursor(QTextCursor::StartOfBlock);
-			m_mainEditor->setParameterMode(true);
-			prevParameter();
+		if (insertComplete) {
+			if (noOutargs) {
+				QString syntaxText = action->data().toString();
+				int index =syntaxText.indexOf(QRegExp("\\w\\s+\\w"));
+				editor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
+			}
+			else {
+				editor->insertPlainText(action->data().toString());
+			}
+			if (m_autoParameterMode) {
+				m_mainEditor->moveCursor(QTextCursor::StartOfBlock);
+				m_mainEditor->setParameterMode(true);
+				prevParameter();
+			}
+		} else {
+			int index = action->text().indexOf(" ");
+			if (index > 0) {
+				editor->insertPlainText(action->text().left(index));
+			}
+			else {
+				editor->insertPlainText(action->text());
+			}
 		}
 	}
 }
@@ -1587,6 +1599,7 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
 	}
 	else if (event->key() == Qt::Key_Tab) {
 		QAction * a = activeAction();
+		insertComplete = true;
 		this->hide();
 		if (a != 0) {
 			a->trigger();
@@ -1609,5 +1622,6 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
 				par->event(event);
 		}
 	}
+	insertComplete = false;
 	QMenu::keyPressEvent(event);
 }
