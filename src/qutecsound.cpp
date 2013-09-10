@@ -91,7 +91,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #ifdef QCS_RTMIDI
 	m_midiin = 0;
 #endif
-	initialDir = QDir::current().path();
+//	initialDir = QDir::current().path();
+	intialDir = QCoreApplication::applicationDirPath();
 	setWindowTitle("CsoundQt[*]");
 	resize(780,550);
 	setWindowIcon(QIcon(":/images/qtcs.png"));
@@ -200,8 +201,17 @@ CsoundQt::CsoundQt(QStringList fileNames)
 		newFile();
 	}
 
-	helpPanel->docDir = m_options->csdocdir;
 	QString index = m_options->csdocdir + QString("/index.html");
+#ifdef Q_OS_MAC
+	if (!QFile::exists(index)) {
+		index = intialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/index.html");
+		index = HTML_DEFAULT_HTML_DIR + QString("/index.html");
+		if (!QFile::exists(index)) {
+			index = HTML_DEFAULT_HTML_DIR + QString("/index.html");
+		}
+	}
+#endif
+	helpPanel->docDir = m_options->csdocdir;
 	helpPanel->loadFile(index);
 
 	applySettings();
@@ -4062,7 +4072,11 @@ void CsoundQt::readSettings()
 	m_options->sampleFormat = settings.value("sampleFormat", 0).toInt();
 	settings.endGroup();
 	settings.beginGroup("Environment");
+#ifdef Q_OS_MAC
 	m_options->csdocdir = settings.value("csdocdir", DEFAULT_HTML_DIR).toString();
+#else
+	m_options->csdocdir = settings.value("csdocdir", "").toString();
+#endif
 	m_options->opcodedir = settings.value("opcodedir","").toString();
 	m_options->opcodedirActive = settings.value("opcodedirActive",false).toBool();
 	m_options->opcodedir64 = settings.value("opcodedir64","").toString();

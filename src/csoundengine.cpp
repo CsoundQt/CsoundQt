@@ -1002,9 +1002,9 @@ void CsoundEngine::setupEnvironment()
 #ifdef Q_OS_MAC
 	else { // Set opcode dir for bundled Csound if present
 #ifdef USE_DOUBLE
-		QString opcodedir = m_initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
+		QString opcodedir = m_initialDir + "/../Frameworks/CsoundLib64.framework/Resources/Opcodes";
 #else
-		QString opcodedir = m_initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib.framework/Resources/Opcodes";
+		QString opcodedir = m_initialDir + "/../Frameworks/CsoundLib.framework/Resources/Opcodes";
 #endif
 		if (QFile::exists(opcodedir)) {
 #ifdef USE_DOUBLE
