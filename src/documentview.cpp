@@ -383,6 +383,11 @@ void DocumentView::setAutoComplete(bool autoComplete)
 	m_autoComplete = autoComplete;
 }
 
+void DocumentView::setAutoParameterMode(bool autoParameterMode)
+{
+	m_autoParameterMode = autoParameterMode;
+}
+
 void DocumentView::setViewMode(int mode)
 {
 	if (m_viewMode == mode)
@@ -724,6 +729,7 @@ void DocumentView::textChanged()
 							QAction *a = syntaxMenu->addAction(text,
 															   this, SLOT(insertAutoCompleteText()));
 							a->setData(syntaxText);
+							a->setToolTip(syntaxText);
 							if (i == 0) {
 								syntaxMenu->setDefaultAction(a);
 							}
@@ -865,9 +871,11 @@ void DocumentView::insertAutoCompleteText()
 		else {
 			editor->insertPlainText(action->data().toString());
 		}
-		m_mainEditor->moveCursor(QTextCursor::StartOfBlock);
-		m_mainEditor->setParameterMode(true);
-		prevParameter();
+		if (m_autoParameterMode) {
+			m_mainEditor->moveCursor(QTextCursor::StartOfBlock);
+			m_mainEditor->setParameterMode(true);
+			prevParameter();
+		}
 	}
 }
 
@@ -1142,6 +1150,7 @@ void DocumentView::undo()
 			m_widgetEditor->undo();
 		}
 	}
+	escapePressed();
 }
 
 void DocumentView::redo()

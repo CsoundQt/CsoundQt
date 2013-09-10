@@ -1177,6 +1177,13 @@
              </widget>
             </item>
             <item>
+             <widget class="QCheckBox" name="autoParameterModeCheckBox">
+              <property name="text">
+               <string>Enable Parameter mode after autocomplete</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QCheckBox" name="lineNumbersCheckBox">
               <property name="text">
                <string>Show line numbers</string>

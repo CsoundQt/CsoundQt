@@ -155,6 +155,7 @@ public:
 	void setColorVariables(bool colorVariables);
 	//    void setOpcodeNameList(QStringList opcodeNameList);
 	void setAutoComplete(bool autoComplete);
+	void setAutoParameterMode(bool autoParameterMode);
 	QString getActiveSection();
 	QString getActiveText();
 	void print(QPrinter *printer);

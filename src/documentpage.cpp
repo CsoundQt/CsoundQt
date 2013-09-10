@@ -889,6 +889,11 @@ void DocumentPage::setAutoComplete(bool autoComplete)
 	m_view->setAutoComplete(autoComplete);
 }
 
+void DocumentPage::setAutoParameterMode(bool autoParameterMode)
+{
+	m_view->setAutoParameterMode(autoParameterMode);
+}
+
 QString DocumentPage::getActiveSection()
 {
 	return m_view->getActiveSection();

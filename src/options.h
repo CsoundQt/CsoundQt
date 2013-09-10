@@ -54,6 +54,7 @@ public:
 	bool showToolbar;
 	bool wrapLines;
 	bool autoComplete;
+	bool autoParameterMode;
 
 	bool showWidgetsOnRun;
 	bool showTooltips;

@@ -2022,6 +2022,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
 	p->setTabIndents(m_options->tabIndents);
 	p->setLineWrapMode(m_options->wrapLines ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
 	p->setAutoComplete(m_options->autoComplete);
+	p->setAutoParameterMode(m_options->autoParameterMode);
 	p->setWidgetEnabled(m_options->enableWidgets);
 	p->showWidgetTooltips(m_options->showTooltips);
 	p->setKeyRepeatMode(m_options->keyRepeat);
@@ -3996,6 +3997,7 @@ void CsoundQt::readSettings()
 	m_options->showToolbar = settings.value("showToolbar", true).toBool();
 	m_options->wrapLines = settings.value("wrapLines", true).toBool();
 	m_options->autoComplete = settings.value("autoComplete", true).toBool();
+	m_options->autoParameterMode = settings.value("autoParameterMode", true).toBool();
 	m_options->enableWidgets = settings.value("enableWidgets", true).toBool();
 	m_options->showWidgetsOnRun = settings.value("showWidgetsOnRun", true).toBool();
 	m_options->showTooltips = settings.value("showTooltips", true).toBool();
@@ -4167,6 +4169,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("showToolbar", m_options->showToolbar);
 		settings.setValue("wrapLines", m_options->wrapLines);
 		settings.setValue("autoComplete", m_options->autoComplete);
+		settings.setValue("autoParameterMode", m_options->autoParameterMode);
 		settings.setValue("enableWidgets", m_options->enableWidgets);
 		settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
 		settings.setValue("showTooltips", m_options->showTooltips);

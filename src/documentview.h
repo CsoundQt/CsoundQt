@@ -57,6 +57,7 @@ public:
 
 	void insertText(QString text, int section = -1);
 	void setAutoComplete(bool autoComplete);
+	void setAutoParameterMode(bool autoParameterMode);
 	void setViewMode(int mode);
 
 	// TODO add all text inputs here as below
@@ -141,6 +142,7 @@ private:
 	QPushButton *parameterButton;
 	bool m_isModified;
 	bool m_autoComplete;
+	bool m_autoParameterMode;
 	bool errorMarked;
 	bool internalChange;  // to let popoup opcode completion know if text change was internal
 
