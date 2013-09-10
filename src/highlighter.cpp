@@ -157,7 +157,7 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 	int commentIndex = text.indexOf(';');
 	if (commentIndex >= 0) {
 		setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
-		return;
+//		return;
 	}
 	else {
 		commentIndex = text.size() + 1;
@@ -238,7 +238,7 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 		startIndex = text.indexOf(commentStartExpression);
 	}
 
-	while (startIndex >= 0) {
+	while (startIndex >= 0 && startIndex < commentIndex) {
 		int endIndex = text.indexOf(commentEndExpression, startIndex);
 		if (format(startIndex) == quotationFormat) {
 			startIndex = text.indexOf(commentStartExpression,
