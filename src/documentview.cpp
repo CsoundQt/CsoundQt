@@ -1599,8 +1599,8 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
 	}
 	else if (event->key() == Qt::Key_Tab) {
 		QAction * a = activeAction();
-		insertComplete = true;
-		this->hide();
+		insertComplete = false;
+		this->close();
 		if (a != 0) {
 			a->trigger();
 			return;
@@ -1610,8 +1610,20 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
 			defaultAction()->trigger();
 			return;
 		}
-	} else if (event->key() != Qt::Key_Up && event->key() != Qt::Key_Down
-			 && event->key() != Qt::Key_Return) {
+	} else if (event->key() == Qt::Key_Return) {
+		QAction * a = activeAction();
+		insertComplete = true;
+		this->close();
+		if (a != 0) {
+			a->trigger();
+			return;
+		}
+		else {
+			Q_ASSERT(defaultAction() != NULL);
+			defaultAction()->trigger();
+			return;
+		}
+	} else if (event->key() != Qt::Key_Up && event->key() != Qt::Key_Down) {
 		this->close();
 		if (event->key() != Qt::Key_Backspace) {
 			emit keyPressed(event->text());
