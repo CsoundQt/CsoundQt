@@ -37,7 +37,7 @@ DockHelp::DockHelp(QWidget *parent)
 	setContentsMargins(0,0,0,0);
 	QGroupBox *helpBox = new QGroupBox;
 	QVBoxLayout *helpLayout = new QVBoxLayout;
-	helpLayout->setContentsMargins(0,10,0,0);
+    helpLayout->setContentsMargins(0,25,0,0);
 	helpBox->setLayout(helpLayout);
 
 	QPushButton* toggleFindButton = new QPushButton(QIcon(":/images/gtk-search.png"), "", helpBox);
