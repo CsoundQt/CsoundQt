@@ -552,32 +552,31 @@ QString DocumentView::getActiveSection()
 		} else if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {
 			QTextCursor cursor = m_mainEditor->textCursor();
 			cursor.select(QTextCursor::LineUnderCursor);
-			bool sectionStart = cursor.selectedText().simplified().startsWith("instr");
+			QString text = cursor.selectedText().simplified();
+			bool sectionStart = text.startsWith("instr") || text.startsWith(";;");
 			while (!sectionStart && !cursor.anchor() == 0) {
 				cursor.movePosition(QTextCursor::PreviousBlock);
 				cursor.select(QTextCursor::LineUnderCursor);
-				sectionStart = cursor.selectedText().simplified().startsWith("instr");
+				text = cursor.selectedText().simplified();
+				sectionStart = text.startsWith("instr") || text.startsWith(";;");
 			}
 			int start = cursor.anchor();
 			cursor = m_mainEditor->textCursor();
 			cursor.movePosition(QTextCursor::NextBlock);
 			cursor.select(QTextCursor::LineUnderCursor);
-			bool sectionEnd = cursor.selectedText().simplified().startsWith("endin");
+			text = cursor.selectedText().simplified();
+			bool sectionEnd = text.startsWith("endin") || text.startsWith(";;");
 			while (!sectionEnd && !cursor.atEnd()) {
 				cursor.movePosition(QTextCursor::NextBlock);
 				cursor.select(QTextCursor::LineUnderCursor);
-				sectionEnd = cursor.selectedText().simplified().startsWith("endin");
+				text = cursor.selectedText().simplified();
+				sectionEnd = text.startsWith("endin") || text.startsWith(";;");
 			}
 			cursor.movePosition(QTextCursor::EndOfLine);
 			cursor.setPosition(start, QTextCursor::KeepAnchor);
-            if (sectionStart && sectionEnd) { // do not evaluate when either instr or endin was not found
-                m_mainEditor->setTextCursor(cursor);
-                section = cursor.selectedText();
-                section.replace(QChar(0x2029), QChar('\n'));
-            } else {
-                section = "";
-            }
-
+			m_mainEditor->setTextCursor(cursor);
+			section = cursor.selectedText();
+			section.replace(QChar(0x2029), QChar('\n'));
 		}
 	}
 	else { //  Split view

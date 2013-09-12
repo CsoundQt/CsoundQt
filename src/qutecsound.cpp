@@ -187,6 +187,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	connect(padview, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
 	m_scratchPad->setWidget(padview);
 	m_scratchPad->setFocusProxy(padview);
+	scratchPadCsdModeAct->setChecked(true);
 
 	// Open files saved from last session
 	if (!lastFiles.isEmpty()) {
@@ -658,11 +659,8 @@ void CsoundQt::evaluateSection()
 	else {
 		text = static_cast<DocumentView *>(m_scratchPad->widget())->getActiveSection();
 	}
-	if (text.indexOf("instr") >= 0 && text.indexOf("'''") < 0) {
-		evaluateCsound(text);
-	} else {
-		evaluatePython(text);
-	}
+
+	evaluateString(text);
 }
 
 void CsoundQt::evaluate(QString code)
@@ -682,43 +680,7 @@ void CsoundQt::evaluate(QString code)
 	else {
 		evalCode = code;
 	}	
-
-    // test if the code is valid csound code and can be compiled:
-    // NB! this is csoun6 specific!
-
-#ifdef CSOUND6
-    TREE *testTree = NULL;
-    if  (documentPages[curPage]->isRunning()) { // is it best way to if csound is running?
-        CSOUND *csound = getEngine(curPage)->getCsound();
-        if (csound!=NULL) {
-            testTree = csoundParseOrc(csound,evalCode.toLocal8Bit()); // return not NULL, if the code is valid
-            if (testTree == NULL)
-                qDebug("Not csound code or cannot compile");
-        }
-    }
-#endif
-
-    // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
-    if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
-        sendEvent(evalCode);
-    }
-#ifdef CSOUND6
-    else if (testTree!=NULL) { // the problem is, when the code is csound code, but with errors, it will be sent to python interpreter too
-        evaluateCsound(evalCode);
-    }
-#endif
-    else {
-        evaluatePython(evalCode);
-    }
-
-// orig:
-//    if ((evalCode.indexOf("instr") >= 0 || evalCode.indexOf("event") >=0  || evalCode.indexOf("ftgen") >=0 || evalCode.indexOf("init") >=0 ) && evalCode.indexOf("'''") < 0) { // perhaps better to do a list of keywords, also chn_k, etc can be here?
-//		evaluateCsound(evalCode);
-//	} else if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
-//		sendEvent(evalCode);
-//	} else {
-//		evaluatePython(evalCode);
-//	}
+	evaluateString(evalCode);
 }
 
 
@@ -738,6 +700,34 @@ void CsoundQt::evaluatePython(QString code)
 #else
 	showNoPythonQtWarning();
 #endif
+}
+
+void CsoundQt::evaluateString(QString evalCode)
+{
+#ifdef CSOUND6
+    TREE *testTree = NULL;
+    if  (documentPages[curPage]->isRunning()) { // is it best way to if csound is running?
+        CSOUND *csound = getEngine(curPage)->getCsound();
+        if (csound!=NULL) {
+            testTree = csoundParseOrc(csound,evalCode.toLocal8Bit()); // return not NULL, if the code is valid
+            if (testTree == NULL)
+                qDebug("Not Csound code or cannot compile");
+        }
+    }
+#endif
+
+    // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
+    if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
+        sendEvent(evalCode);
+    }
+#ifdef CSOUND6
+    else if (testTree!=NULL) { // the problem is, when the code is csound code, but with errors, it will be sent to python interpreter too
+        evaluateCsound(evalCode);
+    }
+#endif
+    else {
+        evaluatePython(evalCode);
+    }
 }
 
 void CsoundQt::setScratchPadMode(bool csdMode)
@@ -2502,7 +2492,6 @@ void CsoundQt::createActions()
 	scratchPadCsdModeAct->setStatusTip(tr("Toggle the mode for the scratch pad between python and csound"));
 	scratchPadCsdModeAct->setShortcutContext(Qt::ApplicationShortcut);
 	scratchPadCsdModeAct->setCheckable(true);
-	scratchPadCsdModeAct->setChecked(true);
 	connect(scratchPadCsdModeAct, SIGNAL(toggled(bool)), this, SLOT(setScratchPadMode(bool)));
 
 	inToGetAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Invalue->Chnget"), this);
