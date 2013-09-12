@@ -740,6 +740,17 @@ void CsoundQt::evaluatePython(QString code)
 #endif
 }
 
+void CsoundQt::setScratchPadMode(bool csdMode)
+{
+	DocumentView *view = static_cast<DocumentView *>(m_scratchPad->widget());
+	view->setFileType(csdMode ? EDIT_CSOUND_MODE : EDIT_PYTHON_MODE);
+	if (csdMode) {
+		view->setBackgroundColor(QColor(240, 230, 230));
+	} else {
+		view->setBackgroundColor(QColor(230, 240, 230));
+	}
+}
+
 void CsoundQt::setWidgetEditMode(bool active)
 {
 	for (int i = 0; i < documentPages.size(); i++) {
@@ -2278,6 +2289,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	unindentAct->setShortcut(tr("Shift+Ctrl+I"));
 	evaluateAct->setShortcut(tr("Alt+E"));
 	evaluateSectionAct->setShortcut(tr("Shift+Alt+E"));
+	scratchPadCsdModeAct->setShortcut(tr("Shift+Alt+S"));
 	showPythonConsoleAct->setShortcut(tr("Alt+7"));
 	showScratchPadAct->setShortcut(tr("Alt+8"));
 	killLineAct->setShortcut(tr("Ctrl+K"));
@@ -2485,6 +2497,13 @@ void CsoundQt::createActions()
 	evaluateSectionAct->setStatusTip(tr("Evaluate current section in Python Console"));
 	evaluateSectionAct->setShortcutContext(Qt::ApplicationShortcut);
 	connect(evaluateSectionAct, SIGNAL(triggered()), this, SLOT(evaluateSection()));
+
+	scratchPadCsdModeAct = new QAction(tr("Scratch Pad in Csound Mode"), this);
+	scratchPadCsdModeAct->setStatusTip(tr("Toggle the mode for the scratch pad between python and csound"));
+	scratchPadCsdModeAct->setShortcutContext(Qt::ApplicationShortcut);
+	scratchPadCsdModeAct->setCheckable(true);
+	scratchPadCsdModeAct->setChecked(true);
+	connect(scratchPadCsdModeAct, SIGNAL(toggled(bool)), this, SLOT(setScratchPadMode(bool)));
 
 	inToGetAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Invalue->Chnget"), this);
 	inToGetAct->setStatusTip(tr("Convert invalue/outvalue to chnget/chnset"));
@@ -2945,6 +2964,7 @@ void CsoundQt::setKeyboardShortcutsList()
 	m_keyActions.append(killToEndAct);
 	m_keyActions.append(evaluateAct);
 	m_keyActions.append(evaluateSectionAct);
+	m_keyActions.append(scratchPadCsdModeAct);
 	m_keyActions.append(showOrcAct);
 	m_keyActions.append(showScoreAct);
 	m_keyActions.append(showOptionsAct);
@@ -3049,6 +3069,8 @@ void CsoundQt::createMenus()
 	editMenu->addAction(pasteAct);
 	editMenu->addAction(evaluateAct);
 	editMenu->addAction(evaluateSectionAct);
+	editMenu->addAction(scratchPadCsdModeAct);
+
 	editMenu->addSeparator();
 	editMenu->addAction(findAct);
 	editMenu->addAction(findAgainAct);

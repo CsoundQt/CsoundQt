@@ -196,6 +196,7 @@ private slots:
 	void evaluate(QString code = QString());
 	//void evaluateCsound(QString code = QString()); // moved to public. Is it OK?
 	void evaluatePython(QString code = QString());
+	void setScratchPadMode(bool csdMode);
 	void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
 	//    void setWidgetClipboard(QString text);
 	void duplicate();
@@ -343,6 +344,7 @@ private:
 	QAction *joinAct;
 	QAction *evaluateAct;
 	QAction *evaluateSectionAct;
+	QAction *scratchPadCsdModeAct;
 	QAction *getToInAct;
 	QAction *inToGetAct;
 	QAction *csladspaAct;
