@@ -812,12 +812,20 @@ void DocumentView::escapePressed()
 void DocumentView::indentNewLine()
 {
 	QTextCursor linecursor = m_mainEditor->textCursor();
-	linecursor.movePosition(QTextCursor::PreviousCharacter);
-	linecursor.select(QTextCursor::LineUnderCursor);
-	QString line = linecursor.selectedText();
 	if (m_mode == EDIT_PYTHON_MODE){
+		linecursor.movePosition(QTextCursor::PreviousCharacter);
+		linecursor.select(QTextCursor::LineUnderCursor);
+		QString line = linecursor.selectedText();
 		if (line.endsWith(":")) {
 			m_mainEditor->insertPlainText("    ");
+		}
+	} else if (m_mode == EDIT_CSOUND_MODE) {
+		linecursor.movePosition(QTextCursor::PreviousBlock);
+		linecursor.select(QTextCursor::LineUnderCursor);
+		QString line = linecursor.selectedText();
+		QRegExp regex = QRegExp("\\s+");
+		if (line.indexOf(regex) == 0) {
+			m_mainEditor->insertPlainText(regex.cap());
 		}
 	}
 }
