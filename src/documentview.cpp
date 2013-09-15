@@ -92,8 +92,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	//          this, SLOT(destroySyntaxMenu()));
 
 	parameterMenu = new MySyntaxMenu(m_mainEditor);
-//	connect(parameterMenu,SIGNAL(keyPressed(QString)),
-//			m_mainEditor, SLOT(insertPlainText(QString)));
+	connect(parameterMenu,SIGNAL(keyPressed(QString)),
+			m_mainEditor, SLOT(insertPlainText(QString)));
 	parameterButton = new QPushButton("...",m_mainEditor);
 	parameterButton->setVisible(true);
 	parameterButton->resize(25, 20);
@@ -261,6 +261,9 @@ void DocumentView::nextParameter()
 	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
 	parameterButton->move(p);
 	parameterButton->setVisible(true);
+//	if (m_opcodeTree->isOpcode(cursor.selectedText()) && !cursor.atBlockEnd()) {
+//		nextParameter();
+//	}
 }
 
 void DocumentView::prevParameter()
@@ -288,6 +291,9 @@ void DocumentView::prevParameter()
 	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
 	parameterButton->move(p);
 	parameterButton->setVisible(true);
+//	if (m_opcodeTree->isOpcode(cursor.selectedText()) && !cursor.atBlockStart()) {
+//		prevParameter();
+//	}
 }
 
 void DocumentView::openParameterSelection()
@@ -306,6 +312,9 @@ void DocumentView::openParameterSelection()
 			QAction *a = parameterMenu->addAction(var,
 												  this, SLOT(insertParameterText()));
 			a->setData(var);
+			if(m_localVariables.indexOf(var) == 0) {
+				parameterMenu->setDefaultAction(a);
+			}
 		}
 	}
 	QRect r =  m_mainEditor->cursorRect();
@@ -673,6 +682,38 @@ void DocumentView::textChanged()
 			QTextCursor lineCursor = editor->textCursor();
 			lineCursor.select(QTextCursor::LineUnderCursor);
 			QString line = lineCursor.selectedText();
+			if (m_mainEditor->getParameterMode()) {
+				parameterMenu->clear();
+				QStringList vars;
+				foreach(QString var, m_localVariables) {
+					if (var.endsWith(',')) {
+						var.chop(1);
+					}
+					if (var.startsWith(word) && word != var) {
+						vars << var;
+					}
+				}
+				if (vars.isEmpty()) {
+					return;
+				}
+				foreach(QString var, vars) {
+					QAction *a = parameterMenu->addAction(var,
+														  this, SLOT(insertParameterText()));
+					a->setData(var);
+					if(vars.indexOf(var) == 0) {
+						parameterMenu->setDefaultAction(a);
+					}
+				}
+				QRect r =  m_mainEditor->cursorRect();
+				QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+				QPoint globalPoint =  m_mainEditor->mapToGlobal(p);
+				//syntaxMenu->setWindowModality(Qt::NonModal);
+				//syntaxMenu->popup(globalPoint);
+				parameterMenu->move(globalPoint);
+				parameterMenu->show();
+				m_mainEditor->setFocus(Qt::OtherFocusReason);
+			}
+
 			int commentIndex = -1;
 			if (line.indexOf(";") != -1) {
 				commentIndex = lineCursor.position() - line.length() + line.indexOf(";");
@@ -906,6 +947,9 @@ void DocumentView::insertParameterText()
 		internalChange = true;
 		QAction *action = static_cast<QAction *>(QObject::sender());
 		QString parameterName = action->data().toString();
+		QTextCursor cursor = editor->textCursor();
+		cursor.select(QTextCursor::WordUnderCursor);
+		editor->setTextCursor(cursor);
 		editor->insertPlainText(parameterName);
 
 		nextParameter();
