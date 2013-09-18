@@ -819,7 +819,8 @@ void DocumentView::indentNewLine()
 		if (line.endsWith(":")) {
 			m_mainEditor->insertPlainText("    ");
 		}
-	} else if (m_mode == EDIT_CSOUND_MODE) {
+	} else if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE
+			   || m_mode == EDIT_SCO_MODE || m_mode == EDIT_INC_MODE) {
 		linecursor.movePosition(QTextCursor::PreviousBlock);
 		linecursor.select(QTextCursor::LineUnderCursor);
 		QString line = linecursor.selectedText();
