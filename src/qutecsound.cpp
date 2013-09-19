@@ -990,9 +990,9 @@ void CsoundQt::setupEnvironment()
 #ifdef Q_OS_MAC
 	// Use bundled opcodes if available
 #ifdef USE_DOUBLE
-	QString opcodedir = m_initialDir + "/../Frameworks/CsoundLib64.framework/Resources/Opcodes64";
+	QString opcodedir = initialDir + "/../Frameworks/CsoundLib64.framework/Resources/Opcodes64";
 #else
-	QString opcodedir = m_initialDir + "/../Frameworks/CsoundLib.framework/Resources/Opcodes";
+	QString opcodedir = initialDir + "/../Frameworks/CsoundLib.framework/Resources/Opcodes";
 #endif
 	if (QFile::exists(opcodedir)) {
 #ifdef CSOUND6
