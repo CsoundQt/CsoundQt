@@ -37,6 +37,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 {
 	setupUi(this);
 
+	m_configlists->refreshModules();
 	foreach (QString item, m_configlists->fileTypeLongNames) {
 		FileTypeComboBox->addItem(item);
 	}

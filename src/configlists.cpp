@@ -50,54 +50,7 @@ ConfigLists::ConfigLists()
 	fileFormatNames << "24 Bit" << "16 Bit (short)" << "unsigned 8-bit"
 					<< "signed 8-bit" << "32 bit float"<< "long (32-bit)";
 
-#ifdef CSOUND6
-	CSOUND *csound = csoundCreate(NULL);
-	char *name, *type;
-	int n = 0;
-    while(!csoundGetModule(csound, n++, &name, &type)) {
-		if (strcmp(type, "audio") == 0) {
-			rtAudioNames << name;
-//			printf("Module %d:  %s (%s) \n", n, name, type);
-		}
-	}
-    rtAudioNames << "null"; // add also none (-+rtaudio=null)
-	n = 0;
-	while(!csoundGetModule(csound, n++, &name, &type)) {
-		if (strcmp(type, "midi") == 0) {
-			rtMidiNames << name;
-//			printf("MIDI Module %d:  %s (%s) \n", n, name, type);
-		}
-	}
-    rtMidiNames << "virtual" << "none";
-#else
-#ifdef Q_OS_LINUX
-	rtAudioNames << "portaudio" << "alsa" << "jack" << "pulse" << "none";
-#endif
-#ifdef Q_OS_SOLARIS
-	rtAudioNames << "portaudio" << "pulse" << "none";
-#endif
-#ifdef Q_OS_MAC
-	rtAudioNames << "coreaudio" << "portaudio" << "auhal" << "jack" << "none";
-#endif
-#ifdef Q_OS_WIN32
-	rtAudioNames << "portaudio" << "winmm" << "jack" <<  "none";
-#endif
-#ifdef Q_OS_HAIKU
-  rtAudioNames << "haiku" << "none";
-#endif
-#ifdef Q_OS_LINUX
-	rtMidiNames << "none" << "alsa" << "alsaseq" << "portmidi" << "virtual";
-#endif
-#ifdef Q_OS_SOLARIS
-	rtMidiNames << "none" << "portmidi"<< "virtual";
-#endif
-#ifdef Q_OS_MAC
-	rtMidiNames << "none" << "coremidi" << "portmidi" << "virtual";
-#endif
-#ifdef Q_OS_WIN32
-	rtMidiNames << "none" << "winmm" << "portmidi" << "virtual";
-#endif
-#endif
+	refreshModules();
 	languages << "English" << "Spanish" << "German" << "French" << "Portuguese" << "Italian"  << "Turkish"  << "Finnish" << "Russian";
 	languageCodes << "en" << "es" << "de" << "fr" << "pt" << "it" << "tr" << "fi" << "ru";
 }
@@ -116,7 +69,61 @@ void ConfigLists::msgCallback(CSOUND *csound, int attr, const char *fmt, va_list
 	if (msg.isEmpty()) {
 		return;
 	}
-    ud->append(msg);
+	ud->append(msg);
+}
+
+void ConfigLists::refreshModules()
+{
+	rtMidiNames.clear();
+	rtAudioNames.clear();
+#ifdef CSOUND6
+	CSOUND *csound = csoundCreate(NULL);
+	char *name, *type;
+	int n = 0;
+	while(!csoundGetModule(csound, n++, &name, &type)) {
+		if (strcmp(type, "audio") == 0) {
+			rtAudioNames << name;
+//			printf("Module %d:  %s (%s) \n", n, name, type);
+		}
+	}
+	rtAudioNames << "null"; // add also none (-+rtaudio=null)
+	n = 0;
+	while(!csoundGetModule(csound, n++, &name, &type)) {
+		if (strcmp(type, "midi") == 0) {
+			rtMidiNames << name;
+//			printf("MIDI Module %d:  %s (%s) \n", n, name, type);
+		}
+	}
+	rtMidiNames << "virtual" << "none";
+#else
+#ifdef Q_OS_LINUX
+	rtAudioNames << "portaudio" << "alsa" << "jack" << "pulse" << "none";
+#endif
+#ifdef Q_OS_SOLARIS
+	rtAudioNames << "portaudio" << "pulse" << "none";
+#endif
+#ifdef Q_OS_MAC
+	rtAudioNames << "coreaudio" << "portaudio" << "auhal" << "jack" << "none";
+#endif
+#ifdef Q_OS_WIN32
+	rtAudioNames << "portaudio" << "winmm" << "jack" <<  "none";
+#endif
+#ifdef Q_OS_HAIKU
+	rtAudioNames << "haiku" << "none";
+#endif
+#ifdef Q_OS_LINUX
+	rtMidiNames << "none" << "alsa" << "alsaseq" << "portmidi" << "virtual";
+#endif
+#ifdef Q_OS_SOLARIS
+	rtMidiNames << "none" << "portmidi"<< "virtual";
+#endif
+#ifdef Q_OS_MAC
+	rtMidiNames << "none" << "coremidi" << "portmidi" << "virtual";
+#endif
+#ifdef Q_OS_WIN32
+	rtMidiNames << "none" << "winmm" << "portmidi" << "virtual";
+#endif
+#endif
 }
 
 QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)

@@ -50,6 +50,8 @@ public:
 	QStringList languages;
 	QStringList languageCodes;
 
+	void refreshModules();
+
 	QHash<QString, QString> getMidiInputDevices(QString module);
 	QList<QPair<QString, QString> > getMidiOutputDevices(QString module);
 	QList<QPair<QString, QString> > getAudioInputDevices(QString module);
