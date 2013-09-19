@@ -992,11 +992,6 @@ void DocumentPage::setConsoleColors(QColor fontColor, QColor bgColor)
 	m_console->setColors(fontColor, bgColor);
 }
 
-void DocumentPage::setInitialDir(QString initialDir)
-{
-	m_csEngine->setInitialDir(initialDir);
-}
-
 //DocumentView * DocumentPage::view()
 //{
 //  return m_view;

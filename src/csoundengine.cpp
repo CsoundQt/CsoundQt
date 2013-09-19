@@ -474,11 +474,6 @@ void CsoundEngine::enableWidgets(bool enable)
 	ud->enableWidgets = enable;
 }
 
-void CsoundEngine::setInitialDir(QString initialDir)
-{
-	m_initialDir = initialDir;
-}
-
 void CsoundEngine::registerConsole(ConsoleWidget *c)
 {
 	consoles.append(c);
@@ -714,8 +709,6 @@ int CsoundEngine::runCsound()
 	ud->csound=csoundCreate(0);
 #endif
 
-	setupEnvironment(); // Environment variables must be set before csoundCompile
-
 	ud->msgRefreshTime = m_refreshTime*1000;
 #ifdef CSOUND6
 	csoundCreateMessageBuffer(ud->csound, 0);
@@ -948,80 +941,6 @@ void CsoundEngine::setupChannels()
 		entry++;
 	}
 	csoundDeleteChannelList(ud->csound, channelList);
-}
-
-void CsoundEngine::setupEnvironment()
-{
-	if (m_options.sadirActive){
-		int ret = csoundSetGlobalEnv("SADIR", m_options.sadir.toLocal8Bit().constData());
-		if (ret != 0) {
-			qDebug() << "CsoundEngine::runCsound() Error setting SADIR";
-		}
-	}
-	else {
-		csoundSetGlobalEnv("SADIR", "");
-	}
-	if (m_options.ssdirActive){
-		int ret = csoundSetGlobalEnv("SSDIR", m_options.ssdir.toLocal8Bit().constData());
-		if (ret != 0) {
-			qDebug() << "CsoundEngine::runCsound() Error setting SSDIR";
-		}
-	}
-	else {
-		csoundSetGlobalEnv("SSDIR", "");
-	}
-	if (m_options.sfdirActive){
-		int ret = csoundSetGlobalEnv("SFDIR", m_options.sfdir.toLocal8Bit().constData());
-		if (ret != 0) {
-			qDebug() << "CsoundEngine::runCsound() Error setting SFDIR";
-		}
-	}
-	else {
-		csoundSetGlobalEnv("SFDIR", "");
-	}
-	if (m_options.incdirActive){
-		int ret = csoundSetGlobalEnv("INCDIR", m_options.incdir.toLocal8Bit().constData());
-		if (ret != 0) {
-			qDebug() << "CsoundEngine::runCsound() Error setting INCDIR";
-		}
-	}
-	else {
-		csoundSetGlobalEnv("INCDIR", "");
-	}
-	// csoundGetEnv must be called after Compile or Precompile,
-	// But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
-	if (m_options.opcodedirActive) {
-		csoundSetGlobalEnv("OPCODEDIR", m_options.opcodedir.toLatin1().constData());
-	}
-	if (m_options.opcodedir64Active) {
-		csoundSetGlobalEnv("OPCODEDIR64", m_options.opcodedir64.toLatin1().constData());
-	}
-	if (m_options.opcode6dir64Active) {
-		csoundSetGlobalEnv("OPCODE6DIR64", m_options.opcode6dir64.toLatin1().constData());
-	}
-#ifdef Q_OS_MAC
-	// Use bundled opcodes if available
-#ifdef USE_DOUBLE
-	QString opcodedir = m_initialDir + "/../Frameworks/CsoundLib64.framework/Resources/Opcodes64";
-#else
-	QString opcodedir = m_initialDir + "/../Frameworks/CsoundLib.framework/Resources/Opcodes";
-#endif
-	if (QFile::exists(opcodedir)) {
-#ifdef CSOUND6
-#ifdef USE_DOUBLE
-		csoundSetGlobalEnv("OPCODE6DIR64", opcodedir.toLocal8Bit().constData());
-#else
-		csoundSetGlobalEnv("OPCODE6DIR", opcodedir.toLocal8Bit().constData());
-#endif
-#else
-#ifdef USE_DOUBLE
-		csoundSetGlobalEnv("OPCODEDIR64", opcodedir.toLocal8Bit().constData());
-#else
-		csoundSetGlobalEnv("OPCODEDIR", opcodedir.toLocal8Bit().constData());
-#endif
-#endif
-	}
-#endif
 }
 
 void CsoundEngine::messageListDispatcher(void *data)

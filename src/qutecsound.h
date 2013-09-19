@@ -287,6 +287,7 @@ private:
 	void openMidiPort(int port);
 	void closeMidiPort();
 	void showNewFormatWarning();
+	void setupEnvironment();
 
 
 	ConfigLists m_configlists;

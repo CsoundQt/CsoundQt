@@ -176,9 +176,6 @@ public:
 	void setConsoleFont(QFont font);
 	void setConsoleColors(QColor fontColor, QColor bgColor);
 
-	//Engine Properties
-	void setInitialDir(QString initialDir);
-
 	// Event Sheet Properties
 	void setScriptDirectory(QString dir);
 	void setDebugLiveEvents(bool debug);
