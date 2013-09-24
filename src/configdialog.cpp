@@ -38,6 +38,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	setupUi(this);
 
 	m_configlists->refreshModules();
+	QHash<QString, QString> audioModNames;
+	audioModNames["pa_bl"] = "portaudio (blocking)";
+	audioModNames["pa_cb"] = "portaudio (callback)";
+	audioModNames["auhal"] = "coreaudio (auhal)";
 	foreach (QString item, m_configlists->fileTypeLongNames) {
 		FileTypeComboBox->addItem(item);
 	}
@@ -45,7 +49,11 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		FileFormatComboBox->addItem(item);
 	}
 	foreach (QString item, m_configlists->rtAudioNames) {
-		RtModuleComboBox->addItem(item);
+		if (audioModNames.contains(item)) {
+			RtModuleComboBox->addItem(audioModNames[item], item);
+		} else {
+			RtModuleComboBox->addItem(item, item);
+		}
 	}
 	foreach (QString item, m_configlists->rtMidiNames) {
 		RtMidiModuleComboBox->addItem(item);
@@ -166,11 +174,11 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	OutputFilenameLineEdit->setEnabled(m_options->fileOutputFilenameActive);
 	RtUseOptionsCheckBox->setChecked(m_options->rtUseOptions);
 	RtOverrideCheckBox->setChecked(m_options->rtOverrideOptions);
-	RtModuleComboBox->setCurrentIndex(RtModuleComboBox->findText(m_options->rtAudioModule));
+	RtModuleComboBox->setCurrentIndex(RtModuleComboBox->findData(m_options->rtAudioModule));
 	RtInputLineEdit->setText(m_options->rtInputDevice);
 	RtOutputLineEdit->setText(m_options->rtOutputDevice);
 	JackNameLineEdit->setText(m_options->rtJackName);
-	RtMidiModuleComboBox->setCurrentIndex(RtMidiModuleComboBox->findText(m_options->rtMidiModule));
+	RtMidiModuleComboBox->setCurrentIndex(RtMidiModuleComboBox->findData(m_options->rtMidiModule));
 	RtMidiInputLineEdit->setText(m_options->rtMidiInputDevice);
 	RtMidiOutputLineEdit->setText(m_options->rtMidiOutputDevice);
 	simultaneousCheckBox->setChecked(m_options->simultaneousRun);
@@ -359,7 +367,7 @@ void ConfigDialog::accept()
 	m_options->fileOutputFilename = OutputFilenameLineEdit->text();
 	m_options->rtUseOptions = RtUseOptionsCheckBox->isChecked();
 	m_options->rtOverrideOptions = RtOverrideCheckBox->isChecked();
-	m_options->rtAudioModule = RtModuleComboBox->currentText();
+	m_options->rtAudioModule = RtModuleComboBox->itemData(RtModuleComboBox->currentIndex()).toString();
 	m_options->rtInputDevice = RtInputLineEdit->text();
 	m_options->rtOutputDevice = RtOutputLineEdit->text();
 	m_options->rtJackName = JackNameLineEdit->text();
@@ -541,7 +549,9 @@ void ConfigDialog::browseSdkDir()
 
 void ConfigDialog::selectAudioInput()
 {
-	QList<QPair<QString, QString> > deviceList = m_configlists->getAudioInputDevices(RtModuleComboBox->currentText());
+	QList<QPair<QString, QString> > deviceList
+			= m_configlists->getAudioInputDevices(
+				RtModuleComboBox->itemData(RtModuleComboBox->currentIndex()).toString());
 	QMenu menu(this);
 	QVector<QAction*> actions;
 
@@ -566,7 +576,9 @@ void ConfigDialog::selectAudioInput()
 
 void ConfigDialog::selectAudioOutput()
 {
-	QList<QPair<QString, QString> > deviceList = m_configlists->getAudioOutputDevices(RtModuleComboBox->currentText());
+	QList<QPair<QString, QString> > deviceList
+			= m_configlists->getAudioOutputDevices(
+				RtModuleComboBox->itemData(RtModuleComboBox->currentIndex()).toString());
 	QMenu menu(this);
 	QVector<QAction*> actions;
 
