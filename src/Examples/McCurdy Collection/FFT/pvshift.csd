@@ -63,11 +63,11 @@ instr	1	;SOUND PRODUCING AND TRANSFORMING INSTRUMENT
 	elseif	gkinput=1 	then												;IF 'INPUT' SWITCH IS SET TO 'Voice' THEN IMPLEMENT THE NEXT LINE OF CODE
 		Sfile1	invalue	"_Browse1"
 		;OUTPUT		OPCODE	FILE_PATH       | SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig, asigR	FilePlay2	"AndItsAll.wav",    1,      0,        1				;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		asig, asigR	FilePlay2	Sfile1,    1,      0,        1				;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	else																	;IF 'INPUT' SWITCH IS NOT SET TO 'STORED FILE' THEN IMPLEMENT THE NEXT LINE OF CODE
 		Sfile2	invalue	"_Browse2"
 		;OUTPUT		OPCODE	FILE_PATH       | SPEED | INSKIP | WRAPAROUND (1=ON)
-		asig, asigR	FilePlay2	"loop.wav",         1,      0,        1				;READ A STORED AUDIO FILE FROM THE HARD DRIVE
+		asig, asigR	FilePlay2	Sfile2,         1,      0,        1				;READ A STORED AUDIO FILE FROM THE HARD DRIVE
 	endif																;END OF 'IF'...'THEN' BRANCHING
 
 	kSwitch		changed	gkgain, gkkeepform, gkFFTattributes					;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
@@ -744,7 +744,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/AndItsAll.wav</stringvalue>
+  <stringvalue>AndItsAll.wav</stringvalue>
   <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
@@ -875,7 +875,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/moi/Samples/loop.wav</stringvalue>
+  <stringvalue>loop.wav</stringvalue>
   <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
