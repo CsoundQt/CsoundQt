@@ -47,6 +47,8 @@ protected:
 
 signals:
 	void escapePressed();
+	void enterPressed();
+	void arrowPressed();
 	void tabPressed();
 	void backtabPressed();
 	void newLine();

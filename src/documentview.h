@@ -88,6 +88,7 @@ public slots:
 	void syntaxCheck();
 	void textChanged();
 	void escapePressed();
+	void exitParameterMode();
 	void indentNewLine();
 	void findReplace();
 	void getToIn(); // chnget/chnset to invalue/outvalue

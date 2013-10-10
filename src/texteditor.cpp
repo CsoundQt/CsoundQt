@@ -64,6 +64,14 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 		return;
 	}
 	QTextEdit::keyPressEvent(event);
+	if (event->key() == Qt::Key_Enter) {
+		emit enterPressed();
+	}
+	if (event->key() == Qt::Key_Up || event->key() == Qt::Key_Down
+			|| event->key() == Qt::Key_Left || event->key() == Qt::Key_Right) {
+		emit arrowPressed();
+	}
+
 	if (event->key() == Qt::Key_Escape) {
 		emit escapePressed();
 	} else if(event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {

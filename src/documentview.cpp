@@ -69,6 +69,10 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(prevParameter()));
 	connect(m_mainEditor, SIGNAL(openParameterSelection()),
 			this, SLOT(openParameterSelection()));
+	connect(m_mainEditor, SIGNAL(arrowPressed()),
+			this, SLOT(exitParameterMode()));
+	connect(m_mainEditor, SIGNAL(enterPressed()),
+			this, SLOT(exitParameterMode()));
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
@@ -802,11 +806,16 @@ void DocumentView::escapePressed()
 		// Force unselecting
 		m_mainEditor->moveCursor(QTextCursor::NextCharacter);
 		m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
-		m_mainEditor->setParameterMode(false);
-		parameterButton->setVisible(false);
+		exitParameterMode();
 	} else {
 		emit closeExtraPanels();
 	}
+}
+
+void DocumentView::exitParameterMode()
+{
+	m_mainEditor->setParameterMode(false);
+	parameterButton->setVisible(false);
 }
 
 void DocumentView::indentNewLine()
