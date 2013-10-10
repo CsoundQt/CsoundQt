@@ -95,7 +95,7 @@
 #define DEFAULT_LOG_FILE ""
 #endif
 
-#define QCS_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
+#define QCS_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 128\nnchnls = 2\n0dbfs = 1.0\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
 
 
 enum viewMode {
