@@ -260,6 +260,15 @@ void DocumentView::nextParameter()
 	}
 	QTextCursor cursor = m_mainEditor->textCursor();
 	cursor.select(QTextCursor::WordUnderCursor);
+	if (cursor.selectedText() == "\"") {
+		cursor.movePosition(QTextCursor::NextCharacter);
+		while (!(cursor.selectedText().endsWith("\"") || cursor.atBlockEnd())) {
+			cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+		}
+		if (cursor.selectedText().endsWith("\"")) {
+			cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+		}
+	}
 	m_mainEditor->setTextCursor(cursor);
 	QRect r =  m_mainEditor->cursorRect();
 	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
@@ -290,6 +299,15 @@ void DocumentView::prevParameter()
 	}
 	QTextCursor cursor = m_mainEditor->textCursor();
 	cursor.select(QTextCursor::WordUnderCursor);
+	if (cursor.selectedText().startsWith("\"")) {
+		cursor.movePosition(QTextCursor::PreviousCharacter);
+		while (!(cursor.selectedText().startsWith("\"") || cursor.atBlockEnd())) {
+			cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+		}
+		if (cursor.selectedText().startsWith("\"")) {
+			cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+		}
+	}
 	m_mainEditor->setTextCursor(cursor);
 	QRect r =  m_mainEditor->cursorRect();
 	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
