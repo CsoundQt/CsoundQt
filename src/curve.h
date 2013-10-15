@@ -24,7 +24,7 @@
 #ifndef CURVE_H
 #define CURVE_H
 
-#include <QString>
+//#include <QString>
 #include <QMutex>
 #include "types.h"
 
