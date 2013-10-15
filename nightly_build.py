@@ -2,6 +2,7 @@ import os
 import shutil
 import sys
 from datetime import datetime, date
+import subprocess
 
 # Set these global variables
 qt_base_dir = '~/Qt/5.1.1'
@@ -19,7 +20,7 @@ build_dir = 'csoundqt-' + today
 f = open("log_nightly.txt", "a")
 f.write("\n" + datetime.today().ctime() + "\n")
 
-if os.system('git fetch --dry-run') == 0:
+if not subprocess.check_output('git fetch --dry-run', shell=True):
     print "No changes in git. Not performing nightly build"
     f.write("No changes in git. Not performing nightly build\n")
     f.close()
