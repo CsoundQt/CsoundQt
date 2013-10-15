@@ -40,6 +40,7 @@ csound6: {
     message("Building for Csound 6")
 }
 
+QT += qml quick
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
     QT += printsupport
@@ -108,3 +109,7 @@ pythonqt:TARGET = $${TARGET}-py
 csound6:TARGET = $${TARGET}-cs6
 
 CONFIG(debug, debug|release):TARGET = $${TARGET}-debug
+
+RESOURCES += \
+    qml_res.qrc
+

@@ -36,6 +36,7 @@
 #include "qutegraph.h"
 #include "qutescope.h"
 #include "qutedummy.h"
+#include "quteqmlqidget.h"
 #include "framewidget.h"
 
 #include "qutecsound.h" // For passing the actions from button reserved channels
@@ -163,6 +164,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 	setBackground(false, QColor("white"));
 	updateData(); // Starts updataData timer
 	//  qDebug() << "WidgetLayout::WidgetLayout " << this << " updateTimer " << &updateTimer;
+	QuteQmlQidget * widget = new QuteQmlQidget();
 }
 
 WidgetLayout::~WidgetLayout()
