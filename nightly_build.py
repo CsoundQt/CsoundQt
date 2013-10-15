@@ -13,12 +13,17 @@ username = 'mantaraya36'
 # There should be no need to touch anything from here on to configure
 # -------------------------------------------------------------------
 
-if os.system('git diff --quiet') == 0:
-    print "No changes in git. Not performing nightly build"
-    sys.exit()
-
 today = date.today().isoformat()
 build_dir = 'csoundqt-' + today
+
+f = open("log_nightly.txt", "a")
+f.write("\n" + today + "\n")
+
+if os.system('git diff --quiet') == 0:
+    print "No changes in git. Not performing nightly build"
+    f.write("No changes in git. Not performing nightly build\n")
+    f.close()
+    sys.exit()
 
 configs = 'CONFIG+=release CONFIG+=buildDoubles CONFIG+=rtmidi CONFIG+=csound6 CONFIG+=x86_64'
 #spec = '-spec max-g++ '
@@ -49,3 +54,5 @@ outname = 'CsoundQt-nightly-%s.tar.gz'%today
 os.system('tar -czvf %s CsoundQt-d-cs6.app &>/dev/null'%outname)
 os.system('scp -i ~/.ssh/nightly %s %s@frs.sourceforge.net:/home/frs/project/qutecsound/CsoundQt/nightly-osx'%(outname,username))
 
+f.write("Done.\n")
+f.close()
