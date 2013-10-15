@@ -1,7 +1,7 @@
 import os
 import shutil
 import sys
-from datetime import date
+from datetime import datetime
 
 # Set these global variables
 qt_base_dir = '~/Qt/5.1.1'
@@ -13,7 +13,7 @@ username = 'mantaraya36'
 # There should be no need to touch anything from here on to configure
 # -------------------------------------------------------------------
 
-today = date.today().isoformat()
+today = datetime.today().isoformat()
 build_dir = 'csoundqt-' + today
 
 f = open("log_nightly.txt", "a")
