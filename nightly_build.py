@@ -13,11 +13,11 @@ username = 'mantaraya36'
 # There should be no need to touch anything from here on to configure
 # -------------------------------------------------------------------
 
-today = datetime.today().isoformat()
+today = date.today().isoformat()
 build_dir = 'csoundqt-' + today
 
 f = open("log_nightly.txt", "a")
-f.write("\n" + date.today().ctime() + "\n")
+f.write("\n" + datetime.today().ctime() + "\n")
 
 if os.system('git fetch --dry-run') == 0:
     print "No changes in git. Not performing nightly build"
