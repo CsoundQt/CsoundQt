@@ -14,7 +14,6 @@ username = 'mantaraya36'
 # -------------------------------------------------------------------
 # There should be no need to touch anything from here on to configure
 # -------------------------------------------------------------------
-
 today = date.today().isoformat()
 build_dir = 'csoundqt-' + today
 
