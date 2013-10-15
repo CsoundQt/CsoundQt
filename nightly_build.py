@@ -21,7 +21,7 @@ build_dir = 'csoundqt-' + today
 f = open("log_nightly.txt", "a")
 f.write("\n" + datetime.today().ctime() + "\n")
 
-if not subprocess.check_output('git fetch --dry-run', shell=True):
+if not subprocess.check_output('git fetch --dry-run', shell=True, stderr=subprocess.STDOUT):
     print "No changes in git. Not performing nightly build"
     f.write("No changes in git. Not performing nightly build\n")
     f.close()
