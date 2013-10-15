@@ -4,6 +4,7 @@ import sys
 from datetime import datetime, date
 import subprocess
 
+
 # Set these global variables
 qt_base_dir = '~/Qt/5.1.1'
 qcs_source_path='~/src/qutecsound'
