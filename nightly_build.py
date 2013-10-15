@@ -1,7 +1,7 @@
 import os
 import shutil
 import sys
-from datetime import datetime
+from datetime import datetime, date
 
 # Set these global variables
 qt_base_dir = '~/Qt/5.1.1'
@@ -19,11 +19,13 @@ build_dir = 'csoundqt-' + today
 f = open("log_nightly.txt", "a")
 f.write("\n" + date.today().ctime() + "\n")
 
-if os.system('git diff --quiet') == 0:
+if os.system('git fetch --dry-run') == 0:
     print "No changes in git. Not performing nightly build"
     f.write("No changes in git. Not performing nightly build\n")
     f.close()
     sys.exit()
+else:
+    os.system("git pull")
 
 configs = 'CONFIG+=release CONFIG+=buildDoubles CONFIG+=rtmidi CONFIG+=csound6 CONFIG+=x86_64'
 #spec = '-spec max-g++ '
