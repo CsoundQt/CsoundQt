@@ -5,7 +5,7 @@ from datetime import date
 
 # Set these global variables
 qt_base_dir = '~/Qt/5.1.1'
-qcs_source_path='~/Documents/src/qutecsound'
+qcs_source_path='~/src/qutecsound'
 qcs_build_prefix='~/src/'
 username = 'mantaraya36'
 
@@ -47,5 +47,5 @@ os.system("install_name_tool -change CsoundLib64.framework/Versions/6.0/CsoundLi
 
 outname = 'CsoundQt-nightly-%s.tar.gz'%today
 os.system('tar -czvf %s CsoundQt-d-cs6.app &>/dev/null'%outname)
-os.system('scp %s %s@frs.sourceforge.net:/home/frs/project/qutecsound/CsoundQt/nightly-osx'%(outname,username))
+os.system('scp -i ~/.ssh/nightly %s %s@frs.sourceforge.net:/home/frs/project/qutecsound/CsoundQt/nightly-osx'%(outname,username))
 
