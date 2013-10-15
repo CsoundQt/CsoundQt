@@ -38,6 +38,11 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	setupUi(this);
 
 	m_configlists->refreshModules();
+
+	if(m_configlists->rtAudioNames.size() == 1) {
+		QMessageBox::warning(this, tr("No Audio Modules"),
+							 tr("No real-time audio modules were found.\nMake sure OPCODE6DIR64 is set properly in your system or the configuration dialog."));
+	}
 	QHash<QString, QString> audioModNames;
 	audioModNames["pa_bl"] = "portaudio (blocking)";
 	audioModNames["pa_cb"] = "portaudio (callback)";
