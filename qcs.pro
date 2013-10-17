@@ -30,9 +30,9 @@ csound6: {
     unix {
         macx {}
         else {
-            isEmpty(CSOUND_INCLUDE_DIR) { # Use my paths by default
-                CSOUND_INCLUDE_DIR = /home/andres/Documents/src/csound-csound6-git/include
-                INCLUDEPATH += /home/andres/Documents/src/csound-csound6-git/interfaces
+            isEmpty(CSOUND_SOURCE_TREE) { # Use my paths by default
+                message("Warning: Using Andres' Csound paths!")
+                CSOUND_SOURCE_TREE = /home/andres/Documents/src/csound-csound6-git
                 CSOUND_LIBRARY_DIR = /home/andres/Documents/src/csound-csound6-git-build/
             }
         }

@@ -34,7 +34,10 @@ exists(config.user.pri) {
 }
 isEmpty(CSOUND_API_INCLUDE_DIR) {
     !isEmpty(CSOUND_INCLUDE_DIR):CSOUND_API_INCLUDE_DIR = $${CSOUND_INCLUDE_DIR}
-    isEmpty(CSOUND_API_INCLUDE_DIR):!isEmpty(CSOUND_SOURCE_TREE):CSOUND_API_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/H
+    isEmpty(CSOUND_API_INCLUDE_DIR):!isEmpty(CSOUND_SOURCE_TREE) {
+        CSOUND_API_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/include
+        CSOUND_INTERFACES_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/interfaces
+    }
     isEmpty(CSOUND_API_INCLUDE_DIR) {
         !no_messages:message(Csound API include directory not specified.)
         for(dir, DEFAULT_CSOUND_API_INCLUDE_DIRS) {
