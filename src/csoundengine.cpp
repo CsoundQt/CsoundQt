@@ -46,11 +46,12 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 	QMutexLocker locker(&m_playMutex);
 	ud = new CsoundUserData();
 	ud->csEngine = this;
-	ud->csound = 0;
-	ud->perfThread = 0;
+	ud->csound = NULL;
+	ud->perfThread = NULL;
 	ud->flags = QCS_NO_FLAGS;
 	ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
 	ud->wl = NULL;
+	ud->playMutex = &m_playMutex;
 #ifdef QCS_PYTHONQT
 	ud->m_pythonCallback = "";
 #endif
@@ -575,8 +576,9 @@ void CsoundEngine::processEventQueue()
 	eventMutex.lock();
 	while (eventQueueSize > 0) {
 		eventQueueSize--;
+		m_playMutex.lock();
 #ifdef QCS_DESTROY_CSOUND
-		if (ud->perfThread != 0) {
+		if (ud->perfThread) {
 			//ScoreEvent is not working
 			//      ud->perfThread->ScoreEvent(0, type, eventElements.size(), pFields);
 			//      qDebug() << "CsoundEngine::processEventQueue()" << eventQueue[eventQueueSize];
@@ -587,9 +589,12 @@ void CsoundEngine::processEventQueue()
 			qDebug() << "WARNING: ud->perfThread is NULL";
 		}
 #else
-		ud->perfThread
-				->InputMessage(eventQueue[eventQueueSize].toLatin1());
+		if (ud->perfThread) {
+			ud->perfThread
+					->InputMessage(eventQueue[eventQueueSize].toLatin1());
+		}
 #endif
+		m_playMutex.unlock();
 	}
 	eventMutex.unlock();
 }
@@ -608,13 +613,15 @@ void CsoundEngine::passOutString(QString channelName, QString value)
 int CsoundEngine::play(CsoundOptions *options)
 {
 	//  qDebug() << "CsoundEngine::play";
-	if (!isRunning()) {
-		m_options = *options;
-		return runCsound();
-	}
-	else {
+	QMutexLocker locker(&m_playMutex);
+	if (ud->perfThread && (ud->perfThread->GetStatus() == 0)) {
 		ud->perfThread->TogglePause();
 		return 0;
+	}
+	else {
+		m_options = *options;
+		locker.unlock();
+		return runCsound();
 	}
 }
 
@@ -626,7 +633,8 @@ void CsoundEngine::stop()
 
 void CsoundEngine::pause()
 {
-	if (isRunning() && ud->perfThread->GetStatus() == 0) {
+	QMutexLocker locker(&m_playMutex);
+	if (ud->perfThread && (ud->perfThread->GetStatus() == 0))  {
 		//ud->perfThread->Pause();
 		ud->perfThread->TogglePause();
 	}
@@ -809,8 +817,8 @@ void CsoundEngine::stopCsound()
 {
 	//  qDebug() << "CsoundEngine::stopCsound()";
 	//    perfThread->ScoreEvent(0, 'e', 0, 0);
-    QMutexLocker locker(&m_playMutex);
-	if (ud->perfThread != 0) {
+	m_playMutex.lock();
+	if (ud->perfThread) {
 		CsoundPerformanceThread *pt = ud->perfThread;
 		ud->perfThread = NULL;
 		pt->Stop();
@@ -819,7 +827,10 @@ void CsoundEngine::stopCsound()
 		pt->Join();
 		qDebug() << "CsoundEngine::stopCsound() joined";
 		delete pt;
+		m_playMutex.unlock();
 		cleanupCsound();
+	} else {
+		m_playMutex.unlock();
 	}
 #ifdef MACOSX_PRE_SNOW
 	// Put menu bar back
@@ -949,10 +960,12 @@ void CsoundEngine::messageListDispatcher(void *data)
 	CsoundUserData *ud_local = (CsoundUserData *) data;
 
 	while (ud_local->runDispatcher) {
-		if (ud_local->perfThread) {
-			if (ud_local->perfThread->GetStatus() != 0) { // In case score has ended
-				ud_local->csEngine->stop();
-			}
+		ud_local->playMutex->lock();
+		if (ud_local->perfThread && (ud_local->perfThread->GetStatus() != 0)) { // In case score has ended
+			ud_local->playMutex->unlock();
+			ud_local->csEngine->stop();
+		} else {
+			ud_local->playMutex->unlock();
 		}
 		CSOUND *csound = ud_local->csEngine->getCsound();
 

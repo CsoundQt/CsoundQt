@@ -67,6 +67,7 @@ struct CsoundUserData {
 	CsoundPerformanceThread *perfThread;
 	CsoundEngine *csEngine; // Pass engine
 	WidgetLayout *wl; // Pass widgets
+	QMutex *playMutex; //perfThread access Mutex
 	/* performance */
 	bool runDispatcher;
 	QVector<double> mouseValues;
