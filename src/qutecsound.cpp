@@ -2352,8 +2352,8 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	//  uncommentAct->setShortcut(tr("Shift+Ctrl+/"));
 	indentAct->setShortcut(tr("Ctrl+I"));
 	unindentAct->setShortcut(tr("Shift+Ctrl+I"));
-	evaluateAct->setShortcut(tr("Alt+E"));
-	evaluateSectionAct->setShortcut(tr("Shift+Alt+E"));
+	evaluateAct->setShortcut(tr("Shift+Ctrl+E"));
+	evaluateSectionAct->setShortcut(tr("Shift+Ctrl+W"));
 	scratchPadCsdModeAct->setShortcut(tr("Shift+Alt+S"));
 	showPythonConsoleAct->setShortcut(tr("Alt+7"));
 	showScratchPadAct->setShortcut(tr("Alt+8"));
