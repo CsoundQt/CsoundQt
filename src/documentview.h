@@ -88,6 +88,7 @@ public slots:
 	void syntaxCheck();
 	void textChanged();
 	void escapePressed();
+	void finishParameterMode();
 	void exitParameterMode();
 	void indentNewLine();
 	void findReplace();

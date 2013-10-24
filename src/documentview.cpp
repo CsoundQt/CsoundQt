@@ -72,7 +72,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	connect(m_mainEditor, SIGNAL(arrowPressed()),
 			this, SLOT(exitParameterMode()));
 	connect(m_mainEditor, SIGNAL(enterPressed()),
-			this, SLOT(exitParameterMode()));
+			this, SLOT(finishParameterMode()));
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
@@ -704,15 +704,6 @@ void DocumentView::textChanged()
 			QTextCursor lineCursor = editor->textCursor();
 			lineCursor.select(QTextCursor::LineUnderCursor);
 			QString line = lineCursor.selectedText();
-			QStringList vars;
-//			QRect r =  m_mainEditor->cursorRect();
-//			QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-//			QPoint globalPoint =  m_mainEditor->mapToGlobal(p);
-			//syntaxMenu->setWindowModality(Qt::NonModal);
-			//syntaxMenu->popup(globalPoint);
-//			parameterMenu->move(globalPoint);
-//			parameterMenu->show();
-//			m_mainEditor->setFocus(Qt::OtherFocusReason);
 
 			int commentIndex = -1;
 			if (line.indexOf(";") != -1) {
@@ -723,11 +714,12 @@ void DocumentView::textChanged()
 			if (line.contains("opcode") || line.contains("instr")  || line.contains("=") || line.contains("\"")) { // Don't pop menu in these cases.
 				return;
 			}
-			if (line.indexOf(QRegExp("^\\s*[^kaigSf]\\w+\\s+\\w")) >= 0 || line.indexOf(QRegExp("\\s+\\w+\\s+\\w")) >= 0) {
-				return;
-			}
+//			if (line.indexOf(QRegExp("^\\s*[^kaigSf]\\w+\\s+\\w")) >= 0 || line.indexOf(QRegExp("\\s+\\w+\\s+\\w")) >= 0) {
+//				return;
+//			}
 			if (cursor.position() > cursor.anchor()) { // Only at the end of the word
-				if (word.size() > 2 && !word.startsWith("\"")) {
+				if (word.size() > 0 && !word.startsWith("\"")) {
+					QStringList vars;
 					syntaxMenu->clear();
 					foreach(QString var, m_localVariables) {
 						if (var.endsWith(',')) {
@@ -737,77 +729,76 @@ void DocumentView::textChanged()
 							vars << var;
 						}
 					}
-//					if (vars.isEmpty()) {
-//						return;
-//					}
 					foreach(QString var, vars) {
 						QAction *a = syntaxMenu->addAction(var,
 														   this, SLOT(insertParameterText()));
-										a->setData(var);
-						//				if(vars.indexOf(var) == 0) {
-						//					syntaxMenu->setDefaultAction(a);
-						//				}
-					}
-					syntaxMenu->addSeparator();
-					QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
-					if (syntax.size() > 0) {
-						//          if (syntaxMenu == 0) {
-						//            createSyntaxMenu();
-						//          }
-						bool allEqual = true;
-						for(int i = 0; i < syntax.size(); i++) {
-							if (syntax[i].opcodeName != word) {
-								allEqual = false;
-							}
+						a->setData(var);
+						if(vars.indexOf(var) == 0) {
+							syntaxMenu->setDefaultAction(a);
 						}
-						if (!allEqual && syntax.size() > 0) {
-							//						syntaxMenu->clear();
+					}
+					if (word.size() > 2) {
+						syntaxMenu->addSeparator();
+						QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
+						if (syntax.size() > 0) {
+							syntaxMenu->addSeparator();
+							bool allEqual = true;
 							for(int i = 0; i < syntax.size(); i++) {
-								QString text = syntax[i].opcodeName;
-								if (syntax[i].outArgs.simplified().startsWith("a")) {
-									text += " (audio-rate)";
-								}
-								else if (syntax[i].outArgs.simplified().startsWith("k")) {
-									text += " (control-rate)";
-								}
-								else if (syntax[i].outArgs.simplified().startsWith("x")) {
-									text += " (multi-rate)";
-								}
-								else if (syntax[i].outArgs.simplified().startsWith("S")) {
-									text += " (string output)";
-								}
-								else if (syntax[i].outArgs.simplified().startsWith("f")) {
-									text += " (pvs)";
-								}
-								QString syntaxText = syntax[i].outArgs.simplified();
-								if (!syntax[i].outArgs.isEmpty())
-									syntaxText += " ";
-								syntaxText += syntax[i].opcodeName.simplified();
-								if (!syntax[i].inArgs.isEmpty()) {
-									syntaxText += " " + syntax[i].inArgs.simplified();
-								}
-								QAction *a = syntaxMenu->addAction(text,
-																   this, SLOT(insertAutoCompleteText()));
-								a->setData(syntaxText);
-								a->setToolTip(syntaxText);
-								if (i == 0) {
-									syntaxMenu->setDefaultAction(a);
+								if (syntax[i].opcodeName != word) {
+									allEqual = false;
 								}
 							}
-							QRect r =  editor->cursorRect();
-							QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-							QPoint globalPoint =  editor->mapToGlobal(p);
-							//syntaxMenu->setWindowModality(Qt::NonModal);
-							//syntaxMenu->popup(globalPoint);
-							syntaxMenu->move(globalPoint);
-							syntaxMenu->show();
-							//						editor->setFocus(Qt::OtherFocusReason);
+							if (!allEqual && syntax.size() > 0) {
+								for(int i = 0; i < syntax.size(); i++) {
+									QString text = syntax[i].opcodeName;
+									if (syntax[i].outArgs.simplified().startsWith("a")) {
+										text += " (audio-rate)";
+									}
+									else if (syntax[i].outArgs.simplified().startsWith("k")) {
+										text += " (control-rate)";
+									}
+									else if (syntax[i].outArgs.simplified().startsWith("x")) {
+										text += " (multi-rate)";
+									}
+									else if (syntax[i].outArgs.simplified().startsWith("S")) {
+										text += " (string output)";
+									}
+									else if (syntax[i].outArgs.simplified().startsWith("f")) {
+										text += " (pvs)";
+									}
+									QString syntaxText = syntax[i].outArgs.simplified();
+									if (!syntax[i].outArgs.isEmpty())
+										syntaxText += " ";
+									syntaxText += syntax[i].opcodeName.simplified();
+									if (!syntax[i].inArgs.isEmpty()) {
+										syntaxText += " " + syntax[i].inArgs.simplified();
+									}
+									QAction *a = syntaxMenu->addAction(text,
+																	   this, SLOT(insertAutoCompleteText()));
+									a->setData(syntaxText);
+									a->setToolTip(syntaxText);
+									if (i == 0) {
+										syntaxMenu->setDefaultAction(a);
+									}
+								}
+							}
+
 						}
 
 					}
-					else {
-						destroySyntaxMenu();
+					if (syntaxMenu->defaultAction() != NULL) {
+						QRect r =  editor->cursorRect();
+						QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+						QPoint globalPoint =  editor->mapToGlobal(p);
+						//syntaxMenu->setWindowModality(Qt::NonModal);
+						//syntaxMenu->popup(globalPoint);
+						syntaxMenu->move(globalPoint);
+						syntaxMenu->show();
 					}
+					//						editor->setFocus(Qt::OtherFocusReason);
+				}
+				else {
+					destroySyntaxMenu();
 				}
 			}
 		}
@@ -820,19 +811,43 @@ void DocumentView::textChanged()
 
 void DocumentView::escapePressed()
 {
-	if (m_mainEditor->getParameterMode()) {
-		// Force unselecting
-		m_mainEditor->moveCursor(QTextCursor::NextCharacter);
-		m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
-		exitParameterMode();
+	// TODO implment for multiple views
+	if (m_viewMode < 2) {
+		if (m_mainEditor->getParameterMode()) {
+			// Force unselecting
+			m_mainEditor->moveCursor(QTextCursor::NextCharacter);
+			m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
+			exitParameterMode();
+		} else {
+			emit closeExtraPanels();
+		}
+	}
+	else {
+		qDebug() << "escapePressed() not implemented for split view";
+	}
+}
+
+void DocumentView::finishParameterMode()
+{
+	// TODO implment for multiple views
+	if (m_viewMode < 2) {
+		if (m_mainEditor->getParameterMode()) {
+			killToEnd();
+			exitParameterMode();
+		}
 	} else {
-		emit closeExtraPanels();
+		qDebug() << "finishParameterMode() not implemented for split view";
 	}
 }
 
 void DocumentView::exitParameterMode()
 {
-	m_mainEditor->setParameterMode(false);
+	// TODO implment for multiple views
+	if (m_viewMode < 2) {
+		m_mainEditor->setParameterMode(false);
+	} else {
+		qDebug() << "exitParameterMode() not implemented for split view";
+	}
 //	parameterButton->setVisible(false);
 }
 
@@ -1439,14 +1454,6 @@ void DocumentView::killLine()
 {
 	// TODO implment for multiple views
 	if (m_viewMode < 2) {
-		//  internalChange = true;
-		//    QString indentChar = "";
-		//  if (m_mode == 0) {
-		//    indentChar = "\t";
-		//  }
-		//  else if (m_mode == 1) { // Python Mode
-		//    indentChar = "    ";
-		//  }
 		QTextCursor cursor = m_mainEditor->textCursor();
 		if (!cursor.atBlockStart()) {
 			cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
@@ -1464,13 +1471,6 @@ void DocumentView::killToEnd()
 	// TODO implment for multiple views
 	//  internalChange = true;
 	if (m_viewMode < 2) {
-		QString indentChar = "";
-		//  if (m_mode == 0) {
-		//    indentChar = "\t";
-		//  }
-		//  else if (m_mode == 1) { // Python Mode
-		//    indentChar = "    ";
-		//  }
 		QTextCursor cursor = m_mainEditor->textCursor();
 		if (!cursor.atBlockEnd()) {
 			cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
