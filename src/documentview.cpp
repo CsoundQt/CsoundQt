@@ -95,13 +95,13 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	//  connect(syntaxMenu,SIGNAL(aboutToHide()),
 	//          this, SLOT(destroySyntaxMenu()));
 
-	parameterMenu = new MySyntaxMenu(m_mainEditor);
-	connect(parameterMenu,SIGNAL(keyPressed(QString)),
-			m_mainEditor, SLOT(insertPlainText(QString)));
-	parameterButton = new QPushButton("...",m_mainEditor);
-	parameterButton->setVisible(true);
-	parameterButton->resize(25, 20);
-	connect(parameterButton, SIGNAL(clicked()), this, SLOT(openParameterSelection()));
+//	parameterMenu = new MySyntaxMenu(m_mainEditor);
+//	connect(parameterMenu,SIGNAL(keyPressed(QString)),
+//			m_mainEditor, SLOT(insertPlainText(QString)));
+//	parameterButton = new QPushButton("...",m_mainEditor);
+//	parameterButton->setVisible(true);
+//	parameterButton->resize(25, 20);
+//	connect(parameterButton, SIGNAL(clicked()), this, SLOT(openParameterSelection()));
 
 	setViewMode(1);
 	setViewMode(0);  // To force a change
@@ -270,10 +270,10 @@ void DocumentView::nextParameter()
 		}
 	}
 	m_mainEditor->setTextCursor(cursor);
-	QRect r =  m_mainEditor->cursorRect();
-	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-	parameterButton->move(p);
-	parameterButton->setVisible(true);
+//	QRect r =  m_mainEditor->cursorRect();
+//	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+//	parameterButton->move(p);
+//	parameterButton->setVisible(true);
 //	if (m_opcodeTree->isOpcode(cursor.selectedText()) && !cursor.atBlockEnd()) {
 //		nextParameter();
 //	}
@@ -309,52 +309,52 @@ void DocumentView::prevParameter()
 		}
 	}
 	m_mainEditor->setTextCursor(cursor);
-	QRect r =  m_mainEditor->cursorRect();
-	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-	parameterButton->move(p);
-	parameterButton->setVisible(true);
+//	QRect r =  m_mainEditor->cursorRect();
+//	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+//	parameterButton->move(p);
+//	parameterButton->setVisible(true);
 //	if (m_opcodeTree->isOpcode(cursor.selectedText()) && !cursor.atBlockStart()) {
 //		prevParameter();
 //	}
 }
 
-void DocumentView::openParameterSelection()
-{
-	parameterButton->setVisible(false);
-	parameterMenu->clear();
-	if (m_opcodeTree->isOpcode(m_mainEditor->textCursor().selectedText())) {
-		// TODO add actions for opcode in parameter list
-		return;
-	} else {
-		if (m_localVariables.size() < 1) {
-			return;
-		}
+//void DocumentView::openParameterSelection()
+//{
+//	parameterButton->setVisible(false);
+//	parameterMenu->clear();
+//	if (m_opcodeTree->isOpcode(m_mainEditor->textCursor().selectedText())) {
+//		// TODO add actions for opcode in parameter list
+//		return;
+//	} else {
+//		if (m_localVariables.size() < 1) {
+//			return;
+//		}
 
-		foreach (QString var, m_localVariables) {
-			QAction *a = parameterMenu->addAction(var,
-												  this, SLOT(insertParameterText()));
-			a->setData(var);
-			if(m_localVariables.indexOf(var) == 0) {
-				parameterMenu->setDefaultAction(a);
-			}
-		}
-	}
-	QRect r =  m_mainEditor->cursorRect();
-	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-	QPoint globalPoint =  m_mainEditor->mapToGlobal(p);
-	//syntaxMenu->setWindowModality(Qt::NonModal);
-	//syntaxMenu->popup(globalPoint);
-	parameterMenu->move(globalPoint);
-	parameterMenu->show();
-	m_mainEditor->setFocus(Qt::OtherFocusReason);
-}
+//		foreach (QString var, m_localVariables) {
+//			QAction *a = parameterMenu->addAction(var,
+//												  this, SLOT(insertParameterText()));
+//			a->setData(var);
+//			if(m_localVariables.indexOf(var) == 0) {
+//				parameterMenu->setDefaultAction(a);
+//			}
+//		}
+//	}
+//	QRect r =  m_mainEditor->cursorRect();
+//	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+//	QPoint globalPoint =  m_mainEditor->mapToGlobal(p);
+//	//syntaxMenu->setWindowModality(Qt::NonModal);
+//	//syntaxMenu->popup(globalPoint);
+//	parameterMenu->move(globalPoint);
+//	parameterMenu->show();
+//	m_mainEditor->setFocus(Qt::OtherFocusReason);
+//}
 
-void DocumentView::parameterShowShortcutPressed()
-{
-	if (parameterButton->isVisible()) {
-		openParameterSelection();
-	}
-}
+//void DocumentView::parameterShowShortcutPressed()
+//{
+//	if (parameterButton->isVisible()) {
+//		openParameterSelection();
+//	}
+//}
 
 void DocumentView::setModified(bool mod)
 {
@@ -693,7 +693,7 @@ void DocumentView::textChanged()
 	TextEditor *editor = m_mainEditor;
 	unmarkErrorLines();
 
-	parameterButton->setVisible(false);
+//	parameterButton->setVisible(false);
 
 	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {  // CSD or ORC mode
 		if (m_autoComplete) {
@@ -704,37 +704,15 @@ void DocumentView::textChanged()
 			QTextCursor lineCursor = editor->textCursor();
 			lineCursor.select(QTextCursor::LineUnderCursor);
 			QString line = lineCursor.selectedText();
-			if (m_mainEditor->getParameterMode()) {
-				parameterMenu->clear();
-				QStringList vars;
-				foreach(QString var, m_localVariables) {
-					if (var.endsWith(',')) {
-						var.chop(1);
-					}
-					if (var.startsWith(word) && word != var) {
-						vars << var;
-					}
-				}
-				if (vars.isEmpty()) {
-					return;
-				}
-				foreach(QString var, vars) {
-					QAction *a = parameterMenu->addAction(var,
-														  this, SLOT(insertParameterText()));
-					a->setData(var);
-					if(vars.indexOf(var) == 0) {
-						parameterMenu->setDefaultAction(a);
-					}
-				}
-				QRect r =  m_mainEditor->cursorRect();
-				QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-				QPoint globalPoint =  m_mainEditor->mapToGlobal(p);
-				//syntaxMenu->setWindowModality(Qt::NonModal);
-				//syntaxMenu->popup(globalPoint);
-				parameterMenu->move(globalPoint);
-				parameterMenu->show();
-				m_mainEditor->setFocus(Qt::OtherFocusReason);
-			}
+			QStringList vars;
+//			QRect r =  m_mainEditor->cursorRect();
+//			QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+//			QPoint globalPoint =  m_mainEditor->mapToGlobal(p);
+			//syntaxMenu->setWindowModality(Qt::NonModal);
+			//syntaxMenu->popup(globalPoint);
+//			parameterMenu->move(globalPoint);
+//			parameterMenu->show();
+//			m_mainEditor->setFocus(Qt::OtherFocusReason);
 
 			int commentIndex = -1;
 			if (line.indexOf(";") != -1) {
@@ -748,62 +726,84 @@ void DocumentView::textChanged()
 			if (line.indexOf(QRegExp("^\\s*[^kaigSf]\\w+\\s+\\w")) >= 0 || line.indexOf(QRegExp("\\s+\\w+\\s+\\w")) >= 0) {
 				return;
 			}
-			if (word.size() > 2 && !word.startsWith("\"")
-					&& cursor.position() > cursor.anchor() // Only at the end of the word
-					) {
-				QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
-				if (syntax.size() > 0) {
-					//          if (syntaxMenu == 0) {
-					//            createSyntaxMenu();
-					//          }
-					bool allEqual = true;
-					for(int i = 0; i < syntax.size(); i++) {
-						if (syntax[i].opcodeName != word) {
-							allEqual = false;
+			if (cursor.position() > cursor.anchor()) { // Only at the end of the word
+				if (word.size() > 2 && !word.startsWith("\"")) {
+					syntaxMenu->clear();
+					foreach(QString var, m_localVariables) {
+						if (var.endsWith(',')) {
+							var.chop(1);
+						}
+						if (var.startsWith(word) && word != var) {
+							vars << var;
 						}
 					}
-					if (!allEqual && syntax.size() > 0) {
-						syntaxMenu->clear();
+//					if (vars.isEmpty()) {
+//						return;
+//					}
+					foreach(QString var, vars) {
+						QAction *a = syntaxMenu->addAction(var,
+														   this, SLOT(insertParameterText()));
+										a->setData(var);
+						//				if(vars.indexOf(var) == 0) {
+						//					syntaxMenu->setDefaultAction(a);
+						//				}
+					}
+					syntaxMenu->addSeparator();
+					QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
+					if (syntax.size() > 0) {
+						//          if (syntaxMenu == 0) {
+						//            createSyntaxMenu();
+						//          }
+						bool allEqual = true;
 						for(int i = 0; i < syntax.size(); i++) {
-							QString text = syntax[i].opcodeName;
-							if (syntax[i].outArgs.simplified().startsWith("a")) {
-								text += " (audio-rate)";
-							}
-							else if (syntax[i].outArgs.simplified().startsWith("k")) {
-								text += " (control-rate)";
-							}
-							else if (syntax[i].outArgs.simplified().startsWith("x")) {
-								text += " (multi-rate)";
-							}
-							else if (syntax[i].outArgs.simplified().startsWith("S")) {
-								text += " (string output)";
-							}
-							else if (syntax[i].outArgs.simplified().startsWith("f")) {
-								text += " (pvs)";
-							}
-							QString syntaxText = syntax[i].outArgs.simplified();
-							if (!syntax[i].outArgs.isEmpty())
-								syntaxText += " ";
-							syntaxText += syntax[i].opcodeName.simplified();
-							if (!syntax[i].inArgs.isEmpty()) {
-								syntaxText += " " + syntax[i].inArgs.simplified();
-							}
-							QAction *a = syntaxMenu->addAction(text,
-															   this, SLOT(insertAutoCompleteText()));
-							a->setData(syntaxText);
-							a->setToolTip(syntaxText);
-							if (i == 0) {
-								syntaxMenu->setDefaultAction(a);
+							if (syntax[i].opcodeName != word) {
+								allEqual = false;
 							}
 						}
-						QRect r =  editor->cursorRect();
-						QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-						QPoint globalPoint =  editor->mapToGlobal(p);
-						//syntaxMenu->setWindowModality(Qt::NonModal);
-						//syntaxMenu->popup(globalPoint);
-						syntaxMenu->move(globalPoint);
-						syntaxMenu->show();
-//						editor->setFocus(Qt::OtherFocusReason);
+						if (!allEqual && syntax.size() > 0) {
+							//						syntaxMenu->clear();
+							for(int i = 0; i < syntax.size(); i++) {
+								QString text = syntax[i].opcodeName;
+								if (syntax[i].outArgs.simplified().startsWith("a")) {
+									text += " (audio-rate)";
+								}
+								else if (syntax[i].outArgs.simplified().startsWith("k")) {
+									text += " (control-rate)";
+								}
+								else if (syntax[i].outArgs.simplified().startsWith("x")) {
+									text += " (multi-rate)";
+								}
+								else if (syntax[i].outArgs.simplified().startsWith("S")) {
+									text += " (string output)";
+								}
+								else if (syntax[i].outArgs.simplified().startsWith("f")) {
+									text += " (pvs)";
+								}
+								QString syntaxText = syntax[i].outArgs.simplified();
+								if (!syntax[i].outArgs.isEmpty())
+									syntaxText += " ";
+								syntaxText += syntax[i].opcodeName.simplified();
+								if (!syntax[i].inArgs.isEmpty()) {
+									syntaxText += " " + syntax[i].inArgs.simplified();
+								}
+								QAction *a = syntaxMenu->addAction(text,
+																   this, SLOT(insertAutoCompleteText()));
+								a->setData(syntaxText);
+								a->setToolTip(syntaxText);
+								if (i == 0) {
+									syntaxMenu->setDefaultAction(a);
+								}
+							}
+							QRect r =  editor->cursorRect();
+							QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+							QPoint globalPoint =  editor->mapToGlobal(p);
+							//syntaxMenu->setWindowModality(Qt::NonModal);
+							//syntaxMenu->popup(globalPoint);
+							syntaxMenu->move(globalPoint);
+							syntaxMenu->show();
+							//						editor->setFocus(Qt::OtherFocusReason);
+						}
+
 					}
 					else {
 						destroySyntaxMenu();
@@ -833,7 +833,7 @@ void DocumentView::escapePressed()
 void DocumentView::exitParameterMode()
 {
 	m_mainEditor->setParameterMode(false);
-	parameterButton->setVisible(false);
+//	parameterButton->setVisible(false);
 }
 
 void DocumentView::indentNewLine()

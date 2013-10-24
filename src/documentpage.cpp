@@ -78,10 +78,10 @@ void DocumentPage::toggleParameterMode()
 	m_view->toggleParameterMode();
 }
 
-void DocumentPage::showParametersInEditor()
-{
-	m_view->parameterShowShortcutPressed();
-}
+//void DocumentPage::showParametersInEditor()
+//{
+//	m_view->parameterShowShortcutPressed();
+//}
 
 int DocumentPage::setTextString(QString &text)
 {

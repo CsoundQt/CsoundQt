@@ -249,7 +249,7 @@ private slots:
 	void showWidgetEdit(bool);
 	void toggleLineArea();
 	void toggleParameterMode();
-	void showParametersInEditor();
+//	void showParametersInEditor();
 
 private:
 	void createActions();
@@ -409,7 +409,7 @@ private:
 	QAction *chatAct;
 	QAction *lineNumbersAct;
 	QAction *parameterModeAct;
-	QAction *showParametersAct;
+//	QAction *showParametersAct;
 
 	int curPage;
 	int curCsdPage;  // To recall last csd visited

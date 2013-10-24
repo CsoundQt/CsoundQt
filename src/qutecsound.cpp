@@ -2368,7 +2368,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	showWidgetEditAct->setShortcut(tr("Shift+Alt+7"));
 	lineNumbersAct->setShortcut(tr("Shift+Alt+L"));
 	parameterModeAct->setShortcut(tr("Shift+Alt+P"));
-	showParametersAct->setShortcut(tr("Alt+P"));
+//	showParametersAct->setShortcut(tr("Alt+P"));
 }
 
 void CsoundQt::showNoPythonQtWarning()
@@ -2424,10 +2424,10 @@ void CsoundQt::toggleParameterMode()
 	documentPages[curPage]->toggleParameterMode();
 }
 
-void CsoundQt::showParametersInEditor()
-{
-	documentPages[curPage]->showParametersInEditor();
-}
+//void CsoundQt::showParametersInEditor()
+//{
+//	documentPages[curPage]->showParametersInEditor();
+//}
 
 void CsoundQt::createActions()
 {
@@ -2961,8 +2961,8 @@ void CsoundQt::createActions()
 	parameterModeAct = new QAction(tr("Toggle parameter mode"),this);
 	connect(parameterModeAct,SIGNAL(triggered()), this, SLOT(toggleParameterMode()));
 
-	showParametersAct = new QAction(tr("Show available parameters"),this);
-	connect(showParametersAct,SIGNAL(triggered()), this, SLOT(showParametersInEditor()));
+//	showParametersAct = new QAction(tr("Show available parameters"),this);
+//	connect(showParametersAct,SIGNAL(triggered()), this, SLOT(showParametersInEditor()));
 
 	setKeyboardShortcutsList();
 }
@@ -3038,7 +3038,7 @@ void CsoundQt::setKeyboardShortcutsList()
 	m_keyActions.append(showWidgetEditAct);
 	m_keyActions.append(lineNumbersAct);
 	m_keyActions.append(parameterModeAct);
-	m_keyActions.append(showParametersAct);
+//	m_keyActions.append(showParametersAct);
 }
 
 void CsoundQt::connectActions()

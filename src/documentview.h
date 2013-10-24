@@ -101,8 +101,8 @@ public slots:
 	void updateOrcContext(QString orc);
 	void nextParameter();
 	void prevParameter();
-	void openParameterSelection();
-	void parameterShowShortcutPressed();
+//	void openParameterSelection();
+//	void parameterShowShortcutPressed();
 	void createContextMenu(QPoint pos);
 
 	void showOrc(bool);
@@ -141,8 +141,8 @@ private:
 	//    void createSyntaxMenu();
 
 	MySyntaxMenu *syntaxMenu;
-	MySyntaxMenu *parameterMenu;
-	QPushButton *parameterButton;
+//	MySyntaxMenu *parameterMenu;
+//	QPushButton *parameterButton;
 	bool m_isModified;
 	bool m_autoComplete;
 	bool m_autoParameterMode;
