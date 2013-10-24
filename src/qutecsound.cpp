@@ -3092,6 +3092,20 @@ void CsoundQt::connectActions()
 	connect(doc, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
 	connect(doc, SIGNAL(setHelpSignal()), this, SLOT(setHelpEntry()));
 	connect(doc, SIGNAL(closeExtraPanelsSignal()), this, SLOT(closeExtraPanels()));
+	connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
+
+	connect(doc, SIGNAL(modified()), this, SLOT(documentWasModified()));
+	connect(doc, SIGNAL(currentLineChanged(int)), this, SLOT(displayLineNumber(int)));
+	//  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
+	//          this, SLOT(setWidgetClipboard(QString)));
+	connect(doc, SIGNAL(setCurrentAudioFile(QString)),
+			this, SLOT(setCurrentAudioFile(QString)));
+//	connect(doc->getView(), SIGNAL(lineNumberSignal(int)),
+//			this, SLOT(displayLineNumber(int)));
+	connect(doc, SIGNAL(evaluatePythonSignal(QString)),
+			this, SLOT(evaluatePython(QString)));
+
+
 
 	disconnect(showWidgetsAct, 0,0,0);
 	if (m_options->widgetsIndependent) {
@@ -4614,17 +4628,17 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 #endif
 
 	connectActions();
-	connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
-	connect(documentPages[curPage], SIGNAL(modified()), this, SLOT(documentWasModified()));
-	connect(documentPages[curPage], SIGNAL(currentLineChanged(int)), this, SLOT(displayLineNumber(int)));
-	//  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
-	//          this, SLOT(setWidgetClipboard(QString)));
-	connect(documentPages[curPage], SIGNAL(setCurrentAudioFile(QString)),
-			this, SLOT(setCurrentAudioFile(QString)));
+//	connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
+//	connect(documentPages[curPage], SIGNAL(modified()), this, SLOT(documentWasModified()));
+//	connect(documentPages[curPage], SIGNAL(currentLineChanged(int)), this, SLOT(displayLineNumber(int)));
+//	//  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
+//	//          this, SLOT(setWidgetClipboard(QString)));
+//	connect(documentPages[curPage], SIGNAL(setCurrentAudioFile(QString)),
+//			this, SLOT(setCurrentAudioFile(QString)));
+//	connect(documentPages[curPage], SIGNAL(evaluatePythonSignal(QString)),
+//			this, SLOT(evaluatePython(QString)));
 	connect(documentPages[curPage]->getView(), SIGNAL(lineNumberSignal(int)),
 			this, SLOT(displayLineNumber(int)));
-	connect(documentPages[curPage], SIGNAL(evaluatePythonSignal(QString)),
-			this, SLOT(evaluatePython(QString)));
 	
 	documentPages[curPage]->loadTextString(text);
 	if (m_options->widgetsIndependent) {
