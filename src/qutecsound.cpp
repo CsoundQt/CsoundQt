@@ -706,6 +706,13 @@ void CsoundQt::evaluateString(QString evalCode)
 {
 #ifdef CSOUND6
     TREE *testTree = NULL;
+#endif
+    // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
+    if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
+        sendEvent(evalCode);
+        return;
+    }
+#ifdef CSOUND6
     if  (documentPages[curPage]->isRunning()) { // is it best way to if csound is running?
         CSOUND *csound = getEngine(curPage)->getCsound();
         if (csound!=NULL) {
@@ -713,15 +720,7 @@ void CsoundQt::evaluateString(QString evalCode)
             if (testTree == NULL)
                 qDebug("Not Csound code or cannot compile");
         }
-    }
-#endif
-
-    // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
-    if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
-        sendEvent(evalCode);
-    }
-#ifdef CSOUND6
-    else if (testTree!=NULL) { // the problem is, when the code is csound code, but with errors, it will be sent to python interpreter too
+    } else if (testTree!=NULL) { // the problem is, when the code is csound code, but with errors, it will be sent to python interpreter too
         evaluateCsound(evalCode);
     }
 #endif
@@ -2727,12 +2726,8 @@ void CsoundQt::createActions()
 	showScratchPadAct->setStatusTip(tr("Show Scratch Pad"));
 	showScratchPadAct->setIconText(tr("ScratchPad"));
 	showScratchPadAct->setShortcutContext(Qt::ApplicationShortcut);
-#ifdef QCS_PYTHONQT
 	connect(showScratchPadAct, SIGNAL(triggered(bool)), m_scratchPad, SLOT(setVisible(bool)));
 	connect(m_scratchPad, SIGNAL(visibilityChanged(bool)), showScratchPadAct, SLOT(setChecked(bool)));
-#else
-	connect(showScratchPadAct, SIGNAL(triggered()), this, SLOT(showNoPythonQtWarning()));
-#endif
 
 	showManualAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("Csound Manual"), this);
 	showManualAct->setStatusTip(tr("Show the Csound manual in the help panel"));
@@ -4018,8 +4013,8 @@ void CsoundQt::createToolBars()
 	configureToolBar->addAction(showLiveEventsAct);
 #ifdef QCS_PYTHONQT
 	configureToolBar->addAction(showPythonConsoleAct);
-	configureToolBar->addAction(showScratchPadAct);
 #endif
+	configureToolBar->addAction(showScratchPadAct);
 	configureToolBar->addAction(showUtilitiesAct);
 
 	Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
