@@ -151,10 +151,10 @@ void DocumentView::updateContext()
 				break;
 			}
 		}
-		cursor.movePosition(QTextCursor::PreviousBlock);
-		cursor.select(QTextCursor::LineUnderCursor);
+		cursor.movePosition(QTextCursor::Up);
+		cursor.select(QTextCursor::BlockUnderCursor);
 		line = cursor.selection().toPlainText();
-		cursor.movePosition(QTextCursor::StartOfLine);
+		cursor.movePosition(QTextCursor::StartOfBlock);
 	}
 	if (outerContext == 1) { // Instrument section
 		QString endText = "</CsInstruments>";
@@ -1716,3 +1716,4 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
 	insertComplete = false;
 	QMenu::keyPressEvent(event);
 }
+
