@@ -144,7 +144,7 @@ void DocumentView::updateContext()
 	cursor.select(QTextCursor::LineUnderCursor);
 	QString line = cursor.selection().toPlainText();
 	int outerContext = 0;
-	while (!cursor.atStart() && outerContext == 0) {
+	while (!cursor.atStart()) {
 		foreach(QString startText, contextStart) {
 			if (line.contains(startText)) {
 				outerContext = contextStart.indexOf(startText) + 1;
@@ -184,17 +184,17 @@ void DocumentView::updateOrcContext(QString orc)
 	cursor.select(QTextCursor::LineUnderCursor);
 	QString line = cursor.selection().toPlainText().trimmed();
 	int innerContext = 0;
-	while (!cursor.atStart() && innerContext == 0) {
+	while (!cursor.atStart()) {
 		foreach(QString startText, innerContextStart) {
 			if (line.startsWith(startText)) {
 				innerContext = innerContextStart.indexOf(startText) + 1;
 				break;
 			}
 		}
-		cursor.movePosition(QTextCursor::PreviousBlock);
-		cursor.select(QTextCursor::LineUnderCursor);
+		cursor.movePosition(QTextCursor::Up);
+		cursor.select(QTextCursor::BlockUnderCursor);
 		line = cursor.selection().toPlainText().trimmed();
-		cursor.movePosition(QTextCursor::StartOfLine);
+		cursor.movePosition(QTextCursor::StartOfBlock);
 	}
 	cursor.movePosition(QTextCursor::NextBlock);
 	QString endText = "endin";
@@ -699,8 +699,17 @@ void DocumentView::textChanged()
 		if (m_autoComplete) {
 			QTextCursor cursor = editor->textCursor();
 			int curIndex = cursor.position();
+//			if (cursor) {
+//				word.chop(1);
+//			}
 			cursor.select(QTextCursor::WordUnderCursor);
 			QString word = cursor.selectedText();
+			if (word == ",") {
+				cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
+				cursor.movePosition(QTextCursor::StartOfWord);
+				cursor.select(QTextCursor::WordUnderCursor);
+				word = cursor.selectedText();
+			}
 			QTextCursor lineCursor = editor->textCursor();
 			lineCursor.select(QTextCursor::LineUnderCursor);
 			QString line = lineCursor.selectedText();
@@ -711,7 +720,7 @@ void DocumentView::textChanged()
 				if (commentIndex < curIndex)
 					return;
 			}
-			if (line.contains("opcode") || line.contains("instr")  || line.contains("=") || line.contains("\"")) { // Don't pop menu in these cases.
+			if (line.contains("opcode") || line.contains("instr")) { // Don't pop menu in these cases.
 				return;
 			}
 //			if (line.indexOf(QRegExp("^\\s*[^kaigSf]\\w+\\s+\\w")) >= 0 || line.indexOf(QRegExp("\\s+\\w+\\s+\\w")) >= 0) {
@@ -946,6 +955,10 @@ void DocumentView::insertAutoCompleteText()
 
 		QTextCursor cursor = editor->textCursor();
 		cursor.select(QTextCursor::WordUnderCursor);
+		if (cursor.selectedText() == "" && !cursor.atStart()) {
+			cursor.movePosition(QTextCursor::PreviousCharacter);
+			cursor.select(QTextCursor::WordUnderCursor);
+		}
 		cursor.insertText("");
 		editor->setTextCursor(cursor);
 
