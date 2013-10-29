@@ -44,6 +44,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
     QT += printsupport
     DEFINES += USE_QT5
+    CONFIG += QCS_QT5
 }
 
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")

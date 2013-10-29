@@ -26,11 +26,21 @@ DEFAULT_PYTHONQT_LIBRARY_DIRS += /usr/local/lib \
         ../../../PythonQt2.0.1 \
         ../PythonQt2.0.1 \
         PythonQt2.0.1
+QCS_QT5 {
+DEFAULT_PYTHONQT_SRC_DIRS += ../../../PythonQt \
+        ../PythonQt \
+        PythonQt
+PYTHONQT_LIB_DIR=/usr/local/lib
+#PYTHONQT_LIB += PythonQt5_QtAll$${DEBUG_EXT}
+PYTHONQT_LIB += PythonQt5
+} else {
 DEFAULT_PYTHONQT_SRC_DIRS += ../../../PythonQt2.0.1 \
         ../PythonQt2.0.1 \
         PythonQt2.0.1
 #PYTHONQT_LIB += PythonQt_QtAll$${DEBUG_EXT}
 PYTHONQT_LIB += PythonQt
+
+}
 
 DEFAULT_PORTMIDI_DIR +=  /usr/local/include
 
