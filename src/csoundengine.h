@@ -23,7 +23,11 @@
 #ifndef CSOUNDENGINE_H
 #define CSOUNDENGINE_H
 
+#include <atomic>
+
 #include <QStringList>
+#include <QTimer>
+#include <QFuture>
 
 #include <csound.hpp>
 #include <sndfile.hh>
@@ -36,9 +40,6 @@
 #include "pythonconsole.h"
 #endif
 
-//#include <QtCore>
-#include <QTimer>
-#include <QFuture>
 
 class ConsoleWidget;
 class QuteScope;
@@ -60,6 +61,106 @@ typedef enum {
 	QCS_NO_CONSOLE_MESSAGES = 4,
 	QCS_NO_RT_EVENTS = 8
 } PerfFlags;
+
+
+//class LFRingBuffer {
+//	LFRingBuffer(int size) { m_size = size; buffer = (void *) calloc(0, size);}
+//	~LFRingBuffer() {free(buffer);}
+
+//	int write(void *buf, int len);
+//	int read(void *vals, len);
+
+//	private:
+//	void *buffer;
+//	int m_size;
+//	QAtomicInt nextWritePos;
+//	QAtomicInt readPos;
+//};
+
+
+// From SC 3
+
+//struct FifoMsg
+//{
+//	FifoMsg() : mPerformFunc(0), mFreeFunc(0), mData(0), mWorld(0) {}
+
+//	void Set(struct World *inWorld, FifoMsgFunc inPerform, FifoMsgFunc inFree, void* inData);
+//	void Perform();
+//	void Free();
+
+//	FifoMsgFunc mPerformFunc;
+//	FifoMsgFunc mFreeFunc;
+//	void* mData;
+//	struct World *mWorld;
+//};
+
+//inline void FifoMsg::Set(World *inWorld, FifoMsgFunc inPerform, FifoMsgFunc inFree, void* inData)
+//{
+//	mWorld = inWorld;
+//	mPerformFunc = inPerform;
+//	mFreeFunc = inFree;
+//	mData = inData;
+//}
+
+//inline void FifoMsg::Perform()
+//{
+//	if (mPerformFunc) (mPerformFunc)(this);
+//}
+
+//inline void FifoMsg::Free()
+//{
+//	if (mFreeFunc) (mFreeFunc)(this);
+//}
+
+template <class MsgType, int N>
+class MsgFifoNoFree
+{
+public:
+	MsgFifoNoFree()
+		: mReadHead(0), mWriteHead(0)
+	{}
+
+	void MakeEmpty() { mReadHead.store(mWriteHead.load()); }
+	bool IsEmpty() { return mReadHead.load(std::memory_order_relaxed) == mWriteHead.load(std::memory_order_relaxed); }
+	bool HasData() { return mReadHead.load(std::memory_order_relaxed) != mWriteHead.load(std::memory_order_relaxed); }
+
+	bool Write(MsgType& data)
+	{
+		unsigned int next = NextPos(mWriteHead.load(std::memory_order_relaxed));
+		if (next == mReadHead.load(std::memory_order_relaxed)) return false; // fifo is full
+		mItems[next] = data;
+
+		mWriteHead.store(next, std::memory_order_release);
+
+		return true;
+	}
+
+	void Perform() // get next and advance
+	{
+		while (HasData()) {
+			unsigned int next = NextPos(mReadHead.load(std::memory_order_relaxed));
+			mItems[next].Perform();
+			mReadHead.store(next, std::memory_order_release);
+		}
+	}
+
+	MsgType Next() {
+		MsgType out;
+		if (HasData()) {
+			unsigned int next = NextPos(mReadHead.load(std::memory_order_relaxed));
+			out = mItems[next];
+			mReadHead.store(next, std::memory_order_release);
+		}
+		return out;
+	}
+
+private:
+	int NextPos(int inPos) { return (inPos + 1) & (N - 1); }
+
+	std::atomic<int> mReadHead, mWriteHead;
+	MsgType mItems[N];
+};
+
 
 struct CsoundUserData {
 	int result; //result of csoundCompile()
@@ -91,6 +192,7 @@ struct CsoundUserData {
 	QList<QVariant> previousOutputValues;
 	QList<QVariant> previousStringOutputValues;
 
+	MsgFifoNoFree<unsigned char, 2048> midiBuffer;
 
 #ifdef QCS_PYTHONQT
 	PythonConsole *m_pythonConsole;
@@ -99,6 +201,7 @@ struct CsoundUserData {
 	int m_pythonCallbackSkip;
 #endif
 };
+
 
 class CsoundEngine : public QObject
 {
@@ -116,10 +219,6 @@ public:
 									  int attr,
 									  const char *fmt,
 									  va_list args);
-#endif
-
-
-#ifndef CSOUND6
 	static void outputValueCallback (CSOUND *csound,
 									 const char *channelName,
 									 MYFLT value);
@@ -137,6 +236,15 @@ public:
 									const void *channelType);
 
 #endif
+	static int midiInOpenCb(CSOUND *csound, void **ud, const char *devName);
+	static int midiReadCb(CSOUND *csound, void *ud_, unsigned char *buf, int nBytes);
+	static int midiInCloseCb(CSOUND *csound, void *ud);
+	static int midiOutOpenCb(CSOUND *csound, void **ud, const char *devName);
+	static int midiWriteCb(CSOUND *csound, void *ud, const unsigned char *buf, int nBytes);
+	static int midiOutCloseCb(CSOUND *csound, void *ud);
+	static const char *midiErrorStringCb(int);
+	void queueMidiIn(std::vector<unsigned char> *message);
+	void sendMidiOut(QVector<unsigned char> &message);
 
 	static void makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name);
 	static void drawGraphCallback(CSOUND *csound, WINDAT *windat);

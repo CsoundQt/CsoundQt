@@ -65,6 +65,7 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	rtMidiModule = "";
 	rtMidiInputDevice = "0";
 	rtMidiOutputDevice = "0";
+	useCsoundMidi = false;
 	simultaneousRun = true; // Allow running various instances (tabs) simultaneously.
 
 	csdocdir = "";
@@ -140,14 +141,18 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 				list << "-+jack_client=" + jackName;
 			}
 		}
-		if (m_configlists->rtMidiNames.indexOf(rtMidiModule) >= 0
-				&& rtMidiModule != "none") {
+		if (useCsoundMidi &&
+				m_configlists->rtMidiNames.indexOf(rtMidiModule) >= 0 &&
+				rtMidiModule != "none") {
 			list << "-+rtmidi=" + rtMidiModule;
 			if (rtMidiInputDevice != "")
 				list << "-M" + rtMidiInputDevice;
 			if (rtMidiOutputDevice != "")
 				list << "-Q" + rtMidiOutputDevice;
 		}
+#ifdef QCS_RTMIDI
+		list << "-M0" << "-+rtmidi=hostbased";
+#endif
 	}
 	else {
 		list << "--format=" + m_configlists->fileTypeNames[fileFileType]

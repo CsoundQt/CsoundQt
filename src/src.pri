@@ -64,7 +64,8 @@ HEADERS = "src/about.h" \
     "src/pluginspage.h" \
     "src/additionalfilespage.h" \
     "src/scoreeditor.h" \
-    "src/filebeditor.h"
+    "src/filebeditor.h" \
+    src/midihandler.h
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
     "src/configlists.cpp" \
@@ -116,7 +117,8 @@ SOURCES = "src/about.cpp" \
     "src/pluginspage.cpp" \
     "src/additionalfilespage.cpp" \
     "src/scoreeditor.cpp" \
-    "src/filebeditor.cpp"
+    "src/filebeditor.cpp" \
+    src/midihandler.cpp
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
     "src/qutecsound.rc" \

@@ -63,9 +63,20 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 
 #ifndef QCS_DESTROY_CSOUND
 	// Create only once
-	ud->csound=csoundCreate(0);
-	ud->perfThread = new CsoundPerformanceThread(ud->csound);
-	ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
+	ud->csound=csoundCreate( (void *) ud);
+//	ud->perfThread = new CsoundPerformanceThread(ud->csound);
+//	ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
+#ifdef CSOUND6
+    csoundSetHostImplementedMIDIIO(ud->csound, 1);
+#endif
+    csoundSetExternalMidiInOpenCallback(ud->csound, &midiInOpenCb);
+    csoundSetExternalMidiReadCallback(ud->csound, &midiReadCb);
+    csoundSetExternalMidiInCloseCallback(ud->csound, &midiInCloseCb);
+    csoundSetExternalMidiOutOpenCallback(ud->csound, &midiOutOpenCb);
+    csoundSetExternalMidiWriteCallback(ud->csound, &midiWriteCb);
+    csoundSetExternalMidiOutCloseCallback(ud->csound, &midiOutCloseCb);
+    csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
+    //    csoundSetMIDIDeviceListCallback(ud->csound, midiDevListCb);
 #endif
 
 	eventQueue.resize(QCS_MAX_EVENTS);
@@ -252,6 +263,82 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
 	} else {
 		qDebug() << "inputValueCallback: Unsupported type";
 	}
+}
+
+int CsoundEngine::midiInOpenCb(CSOUND *csound, void **ud, const char *devName)
+{
+	qDebug() << "midiInOpenCb";
+	CsoundUserData *userData = (CsoundUserData *) csoundGetHostData(csound);
+	Q_UNUSED(devName);
+	if (userData) {
+		*ud = userData;
+	} else {
+		qDebug() << "Error! userData not set for midiInOpenCb";
+		return CSOUND_ERROR;
+	}
+	return CSOUND_SUCCESS;
+}
+
+int CsoundEngine::midiReadCb(CSOUND *csound, void *ud_, unsigned char *buf, int nBytes)
+{
+	CsoundUserData *ud = (CsoundUserData *) ud_;
+	Q_UNUSED(csound);
+	MsgFifoNoFree<unsigned char, 2048> &fifo = ud->midiBuffer;
+	int count = 0;
+	while (ud->midiBuffer.HasData() && count < nBytes) {
+		*buf++ = fifo.Next();
+		qDebug() << "midi " << buf[count];
+		count++;
+	}
+	return count;
+}
+
+int CsoundEngine::midiInCloseCb(CSOUND *csound, void *ud)
+{
+	return CSOUND_SUCCESS;
+}
+
+int CsoundEngine::midiOutOpenCb(CSOUND *csound, void **ud, const char *devName)
+{
+	CsoundUserData *userData = (CsoundUserData *) csoundGetHostData(csound);
+	Q_UNUSED(devName);
+	if (userData) {
+		*ud = userData;
+	} else {
+		qDebug() << "Error! userData not set for midiInOpenCb";
+		return CSOUND_ERROR;
+	}
+	return CSOUND_SUCCESS;
+
+}
+
+int CsoundEngine::midiWriteCb(CSOUND *csound, void *ud, const unsigned char *buf, int nBytes)
+{
+	return 0;
+}
+
+int CsoundEngine::midiOutCloseCb(CSOUND *csound, void *ud)
+{
+	return 0;
+}
+
+const char *CsoundEngine::midiErrorStringCb(int)
+{
+
+}
+
+void CsoundEngine::queueMidiIn(std::vector< unsigned char > *message)
+{
+    std::vector<unsigned char >::const_iterator i;
+    for(i = message->begin();i != message->end();i++) {
+        unsigned char c = *i;
+        ud->midiBuffer.Write(c);
+	}
+}
+
+void CsoundEngine::sendMidiOut(QVector<unsigned char> &message)
+{
+
 }
 
 #endif
@@ -707,6 +794,7 @@ int CsoundEngine::runCsound()
 #endif
 	eventQueueSize = 0; //Flush events gathered while idle
 	ud->audioOutputBuffer.allZero();
+	ud->msgRefreshTime = m_refreshTime*1000;
 
 	QDir::setCurrent(m_options.fileName1);
 	for (int i = 0; i < consoles.size(); i++) {
@@ -714,16 +802,22 @@ int CsoundEngine::runCsound()
 	}
 
 #ifdef QCS_DESTROY_CSOUND
-	ud->csound=csoundCreate(0);
+	ud->csound=csoundCreate((void *) ud);
+#ifdef CSOUND6
+	csoundSetHostImplementedMIDIIO(ud->csound, 1);
+#endif
+	csoundSetExternalMidiInOpenCallback(ud->csound, &midiInOpenCb);
+	csoundSetExternalMidiReadCallback(ud->csound, &midiReadCb);
+	csoundSetExternalMidiInCloseCallback(ud->csound, &midiInCloseCb);
+	csoundSetExternalMidiOutOpenCallback(ud->csound, &midiOutOpenCb);
+	csoundSetExternalMidiWriteCallback(ud->csound, &midiWriteCb);
+	csoundSetExternalMidiOutCloseCallback(ud->csound, &midiOutCloseCb);
+	csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
 #endif
 
-	ud->msgRefreshTime = m_refreshTime*1000;
 #ifdef CSOUND6
 	csoundCreateMessageBuffer(ud->csound, 0);
-#endif
-	csoundSetHostData(ud->csound, (void *) ud);
-
-#ifndef CSOUND6
+#else
 	// Message Callbacks must be set before compile, otherwise some information is missed
 	csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
 	csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable

@@ -37,13 +37,10 @@
 #include "about.h"
 #include "eventsheet.h"
 #include "appwizard.h"
+#include "midihandler.h"
 
 #ifdef QCS_PYTHONQT
 #include "pythonconsole.h"
-#endif
-
-#ifdef QCS_RTMIDI
-#include "RtMidi.h"
 #endif
 
 // One day remove these from here for nicer abstraction....
@@ -58,39 +55,15 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 #endif
 
 
-#ifdef QCS_RTMIDI
-static void midiMessageCallback(double deltatime,
-								std::vector< unsigned char > *message,
-								void *userData)
-{
-	WidgetLayout *d = (WidgetLayout *) userData;
-	unsigned int nBytes = message->size();
-	if ( ((d->midiWriteCounter + 1) % QCS_MAX_MIDI_QUEUE) != d->midiReadCounter) {
-		int index = d->midiWriteCounter;
-		d->midiWriteCounter++;
-		d->midiWriteCounter = d->midiWriteCounter % QCS_MAX_MIDI_QUEUE;
-		for (unsigned int i = 0; i < nBytes; i++) {
-			d->midiQueue[index][i] = (int)message->at(i);
-		}
-	}
-	//  if (nBytes > 0) {
-	//    qDebug() << "stamp = " << deltatime;
-	//  }
-}
-#endif
-
 #define MAX_THREAD_COUNT 12 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
 
 CsoundQt::CsoundQt(QStringList fileNames)
 {
 	m_closing = false;
 	m_resetPrefs = false;
-	utilitiesDialog = 0;
+	utilitiesDialog = NULL;
 	curCsdPage = -1;
-    configureTab = 0;
-#ifdef QCS_RTMIDI
-	m_midiin = 0;
-#endif
+	configureTab = 0;
 //	initialDir = QDir::current().path();
 	initialDir = QCoreApplication::applicationDirPath();
 	setWindowTitle("CsoundQt[*]");
@@ -142,6 +115,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	QSettings settings("csound", "qutecsound");
 	settings.beginGroup("GUI");
 	m_options->theme = settings.value("theme", "boring").toString();
+
+	midiHandler = new MidiHandler(this);
 
 	createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
 	readSettings();
@@ -347,12 +322,7 @@ void CsoundQt::changePage(int index)
 		runAct->setChecked(documentPages[curPage]->isRunning());
 		recAct->setChecked(documentPages[curPage]->isRecording());
 		splitViewAct->setChecked(documentPages[curPage]->getViewMode() > 1);
-#ifdef QCS_RTMIDI
-		if (m_midiin != 0) {
-			m_midiin->cancelCallback();
-			m_midiin->setCallback(&midiMessageCallback, documentPages[curPage]->getWidgetLayout());  //TODO enable multiple layouts
-		}
-#endif
+		midiHandler->setListener(documentPages[curPage]);
 		if (documentPages[curPage]->getFileName().endsWith(".csd")) {
 			curCsdPage = curPage;
 		}
@@ -876,55 +846,6 @@ void CsoundQt::openLogFile()
 	else {
 		qDebug() << "CsoundQt::openLogFile() Error. Could not open log file! NO logging. " << logFile.fileName();
 	}
-}
-
-
-void CsoundQt::setMidiInterface(int number)
-{
-	if (number >= 0 && number < 9998) {
-		openMidiPort(number);
-	}
-	else {
-		closeMidiPort();
-	}
-}
-
-void CsoundQt::openMidiPort(int port)
-{
-#ifdef QCS_RTMIDI
-	try {
-		closeMidiPort();
-	}
-	catch ( RtError &error ) {
-		error.printMessage();
-	}
-
-	m_midiin = new RtMidiIn();
-	try {
-		m_midiin->openPort(port, std::string("CsoundQt"));
-	}
-	catch ( RtError &error ) {
-		qDebug() << "WidgetLayout::openMidiPort Error opening port";
-		error.printMessage();
-		m_midiin = 0;
-		return;
-	}
-	//  qDebug() << "CsoundQt::openMidiPort opened port " << port;
-	m_midiin->cancelCallback();
-	m_midiin->setCallback(&midiMessageCallback, documentPages[curPage]->getWidgetLayout());  //TODO enable multiple layouts
-#endif
-	//  m_midiin->ignoreTypes(false, false, false);
-}
-
-void CsoundQt::closeMidiPort()
-{
-#ifdef QCS_RTMIDI
-	if (m_midiin != 0) {
-		m_midiin->closePort();
-		delete m_midiin;
-	}
-	m_midiin = 0;
-#endif
 }
 
 void CsoundQt::showNewFormatWarning()
@@ -2081,7 +2002,8 @@ void CsoundQt::applySettings()
 	renderOptions += currentOptions;
 	runAct->setStatusTip(tr("Play") + playOptions);
 	renderAct->setStatusTip(tr("Render to file") + renderOptions);
-	setMidiInterface(m_options->midiInterface);
+	midiHandler->setMidiInterface(m_options->midiInterface);
+
 	fillFavoriteMenu();
 	fillScriptsMenu();
 #ifdef QCS_PYTHONQT
@@ -4162,6 +4084,7 @@ void CsoundQt::readSettings()
 	if (m_options->rtMidiModule.isEmpty()) { m_options->rtMidiModule = "portmidi"; }
 	m_options->rtMidiInputDevice = settings.value("rtMidiInputDevice", "0").toString();
 	m_options->rtMidiOutputDevice = settings.value("rtMidiOutputDevice", "").toString();
+	m_options->useCsoundMidi = settings.value("useCsoundMidi", false).toBool();
 	m_options->simultaneousRun = settings.value("simultaneousRun", "").toBool();
 	m_options->sampleFormat = settings.value("sampleFormat", 0).toInt();
 	settings.endGroup();
@@ -4335,6 +4258,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("rtMidiModule", m_options->rtMidiModule);
 		settings.setValue("rtMidiInputDevice", m_options->rtMidiInputDevice);
 		settings.setValue("rtMidiOutputDevice", m_options->rtMidiOutputDevice);
+		settings.setValue("useCsoundMidi", m_options->useCsoundMidi);
 		settings.setValue("simultaneousRun", m_options->simultaneousRun);
 		settings.setValue("sampleFormat", m_options->sampleFormat);
 	}

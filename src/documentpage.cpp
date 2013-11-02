@@ -23,6 +23,7 @@
 #include <cwindow.h>
 #include <csound.hpp>  // TODO These two are necessary for the WINDAT struct. Can they be moved?
 
+
 #include "documentpage.h"
 #include "documentview.h"
 #include "csoundengine.h"
@@ -1140,6 +1141,26 @@ void DocumentPage::registerButton(QuteButton *b)
 	connect(b, SIGNAL(render()), static_cast<CsoundQt *>(parent()), SLOT(render()));
 	connect(b, SIGNAL(pause()), static_cast<CsoundQt *>(parent()), SLOT(pause()));
 	connect(b, SIGNAL(stop()), static_cast<CsoundQt *>(parent()), SLOT(stop()));
+}
+
+void DocumentPage::queueMidiIn(std::vector< unsigned char > *message)
+{
+	WidgetLayout *d = m_widgetLayouts[0];
+	unsigned int nBytes = message->size();
+	if ( ((d->midiWriteCounter + 1) % QCS_MAX_MIDI_QUEUE) != d->midiReadCounter) {
+		int index = d->midiWriteCounter;
+		d->midiWriteCounter++;
+		d->midiWriteCounter = d->midiWriteCounter % QCS_MAX_MIDI_QUEUE;
+		for (unsigned int i = 0; i < nBytes; i++) {
+			d->midiQueue[index][i] = (int)message->at(i);
+		}
+	}
+	m_csEngine->queueMidiIn(message);
+}
+
+void DocumentPage::queueMidiOut(std::vector< unsigned char > *message)
+{
+
 }
 
 void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)

@@ -36,7 +36,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -334,47 +334,57 @@
           </item>
           <item row="1" column="1">
            <layout class="QGridLayout" name="midilayout">
-            <item row="1" column="1">
+            <item row="2" column="2">
              <widget class="QLineEdit" name="RtMidiInputLineEdit"/>
             </item>
-            <item row="1" column="2">
+            <item row="2" column="3">
              <widget class="QToolButton" name="midiInputToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item row="3" column="1">
              <widget class="QLabel" name="label_8">
               <property name="text">
                <string>output device (-Q)</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item row="3" column="2">
              <widget class="QLineEdit" name="RtMidiOutputLineEdit"/>
             </item>
-            <item row="2" column="2">
+            <item row="3" column="3">
              <widget class="QToolButton" name="midiOutputToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item row="2" column="1">
              <widget class="QLabel" name="label_12">
               <property name="text">
                <string>Input device (-M)</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="RtMidiModuleComboBox"/>
-            </item>
-            <item row="0" column="0">
+            <item row="1" column="1">
              <widget class="QLabel" name="label_18">
               <property name="text">
                <string>RT MIDI Module</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QComboBox" name="RtMidiModuleComboBox"/>
+            </item>
+            <item row="0" column="1" colspan="3">
+             <widget class="QCheckBox" name="csoundMidiCheckBox">
+              <property name="text">
+               <string>Use Csound MIDI modules (unstable)</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -490,7 +500,7 @@
        <item row="1" column="1">
         <widget class="QGroupBox" name="groupBox_12">
          <property name="title">
-          <string>Internal MIDI interface</string>
+          <string>MIDI I/O interface</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
@@ -1924,8 +1934,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>532</x>
-     <y>621</y>
+     <x>537</x>
+     <y>619</y>
     </hint>
     <hint type="destinationlabel">
      <x>233</x>
@@ -1941,7 +1951,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>623</x>
-     <y>621</y>
+     <y>619</y>
     </hint>
     <hint type="destinationlabel">
      <x>219</x>
@@ -1960,8 +1970,8 @@
      <y>127</y>
     </hint>
     <hint type="destinationlabel">
-     <x>571</x>
-     <y>129</y>
+     <x>566</x>
+     <y>128</y>
     </hint>
    </hints>
   </connection>
@@ -1972,8 +1982,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>120</x>
-     <y>220</y>
+     <x>137</x>
+     <y>214</y>
     </hint>
     <hint type="destinationlabel">
      <x>529</x>
@@ -1992,8 +2002,8 @@
      <y>262</y>
     </hint>
     <hint type="destinationlabel">
-     <x>546</x>
-     <y>284</y>
+     <x>566</x>
+     <y>273</y>
     </hint>
    </hints>
   </connection>
@@ -2004,12 +2014,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>115</x>
-     <y>313</y>
+     <x>132</x>
+     <y>301</y>
     </hint>
     <hint type="destinationlabel">
-     <x>546</x>
-     <y>315</y>
+     <x>566</x>
+     <y>302</y>
     </hint>
    </hints>
   </connection>
@@ -2020,12 +2030,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>120</x>
-     <y>251</y>
+     <x>137</x>
+     <y>243</y>
     </hint>
     <hint type="destinationlabel">
-     <x>546</x>
-     <y>253</y>
+     <x>566</x>
+     <y>244</y>
     </hint>
    </hints>
   </connection>
@@ -2040,8 +2050,8 @@
      <y>58</y>
     </hint>
     <hint type="destinationlabel">
-     <x>112</x>
-     <y>77</y>
+     <x>264</x>
+     <y>70</y>
     </hint>
    </hints>
   </connection>
@@ -2052,12 +2062,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>112</x>
-     <y>77</y>
+     <x>117</x>
+     <y>99</y>
     </hint>
     <hint type="destinationlabel">
-     <x>112</x>
-     <y>77</y>
+     <x>264</x>
+     <y>100</y>
     </hint>
    </hints>
   </connection>
@@ -2068,12 +2078,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>112</x>
-     <y>82</y>
+     <x>117</x>
+     <y>150</y>
     </hint>
     <hint type="destinationlabel">
-     <x>112</x>
-     <y>82</y>
+     <x>331</x>
+     <y>151</y>
     </hint>
    </hints>
   </connection>
@@ -2084,12 +2094,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>112</x>
-     <y>87</y>
+     <x>129</x>
+     <y>315</y>
     </hint>
     <hint type="destinationlabel">
-     <x>112</x>
-     <y>87</y>
+     <x>260</x>
+     <y>316</y>
     </hint>
    </hints>
   </connection>
@@ -2100,12 +2110,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>99</x>
-     <y>87</y>
+     <x>116</x>
+     <y>344</y>
     </hint>
     <hint type="destinationlabel">
-     <x>112</x>
-     <y>87</y>
+     <x>260</x>
+     <y>345</y>
     </hint>
    </hints>
   </connection>
@@ -2116,12 +2126,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>112</x>
-     <y>77</y>
+     <x>524</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
-     <x>112</x>
-     <y>77</y>
+     <x>587</x>
+     <y>101</y>
     </hint>
    </hints>
   </connection>
@@ -2132,12 +2142,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>112</x>
-     <y>77</y>
+     <x>399</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
-     <x>112</x>
-     <y>77</y>
+     <x>524</x>
+     <y>69</y>
     </hint>
    </hints>
   </connection>
@@ -2152,8 +2162,8 @@
      <y>150</y>
     </hint>
     <hint type="destinationlabel">
-     <x>335</x>
-     <y>160</y>
+     <x>479</x>
+     <y>157</y>
     </hint>
    </hints>
   </connection>
@@ -2170,6 +2180,134 @@
     <hint type="destinationlabel">
      <x>242</x>
      <y>179</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>RtMidiModuleComboBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>360</x>
+     <y>434</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>457</x>
+     <y>463</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_18</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>398</x>
+     <y>438</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>332</x>
+     <y>465</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_12</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>415</x>
+     <y>439</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>384</x>
+     <y>489</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>RtMidiInputLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>467</x>
+     <y>433</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>503</x>
+     <y>494</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>midiInputToolButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>564</x>
+     <y>436</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>592</x>
+     <y>493</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_8</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>466</x>
+     <y>439</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>420</x>
+     <y>520</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>RtMidiOutputLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>431</x>
+     <y>438</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>518</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>midiOutputToolButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>546</x>
+     <y>435</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>592</x>
+     <y>521</y>
     </hint>
    </hints>
   </connection>
