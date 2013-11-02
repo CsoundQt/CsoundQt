@@ -53,11 +53,10 @@ buildDoubles: message("Doubles is now built by default, no need to specify build
 
 build32:build64:CONFIG -= build32
 unix {
+    QMAKE_CXXFLAGS += -std=c++11
     macx:include (qcs-macx.pro)
     else:haiku-g++ {include (qcs-haiku.pro) }
-    else {
-         include (qcs-unix.pro)
-         QMAKE_CXXFLAGS += -std=c++11 }
+    else: include (qcs-unix.pro)
 }
 win32-g++:include (qcs-win32.pro)
 
