@@ -43,7 +43,6 @@ class EventSheet;
 class LiveEventControl;
 class SndfileHandle;
 
-
 class DocumentPage : public BaseDocument
 {
 	Q_OBJECT
@@ -188,13 +187,15 @@ public:
 
 	virtual void registerButton(QuteButton *button);
 
+	void queueMidiIn(std::vector<unsigned char> *message);
+	void queueMidiOut(std::vector<unsigned char> *message);
+
 	// Member public variables
 	bool askForFile;
 	bool readOnly; // Used for manual files and internal examples
 
 	QVector<QString> widgetHistory;  // Undo/ Redo history
 	int widgetHistoryIndex; // Current point in history
-
 
 public slots:
 	virtual int play(CsoundOptions *options);

@@ -59,9 +59,7 @@ class KeyboardShortcuts;
 class EventDispatcher;
 class EventSheet;
 class CsoundEngine;
-#ifdef QCS_RTMIDI
-class RtMidiIn;
-#endif
+class MidiHandler;
 
 class CsoundQt:public QMainWindow
 {
@@ -283,9 +281,6 @@ private:
 	void deleteTab(int index = -1);
 	void openLogFile();
 
-	void setMidiInterface(int number);
-	void openMidiPort(int port);
-	void closeMidiPort();
 	void showNewFormatWarning();
 	void setupEnvironment();
 
@@ -305,9 +300,7 @@ private:
 #ifdef QCS_PYTHONQT
 	PythonConsole *m_pythonConsole;
 #endif
-#ifdef QCS_RTMIDI
-	RtMidiIn *m_midiin;
-#endif
+	MidiHandler *midiHandler;
 	QFile logFile;
 
 	QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts
