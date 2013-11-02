@@ -55,7 +55,9 @@ build32:build64:CONFIG -= build32
 unix {
     macx:include (qcs-macx.pro)
     else:haiku-g++ {include (qcs-haiku.pro) }
-    else:include (qcs-unix.pro)
+    else {
+         include (qcs-unix.pro)
+         QMAKE_CXXFLAGS += -std=c++11 }
 }
 win32-g++:include (qcs-win32.pro)
 
@@ -109,3 +111,6 @@ pythonqt:TARGET = $${TARGET}-py
 csound6:TARGET = $${TARGET}-cs6
 
 CONFIG(debug, debug|release):TARGET = $${TARGET}-debug
+
+OTHER_FILES += \
+    CsoundQt-d-cs6-debug.supp
