@@ -624,8 +624,8 @@ QString DocumentView::getActiveText()
 		QTextCursor cursor = m_mainEditor->textCursor();
 		selection = cursor.selectedText();
 		if (selection == "") {
-			cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-			cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+			cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+			cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 			selection = cursor.selectedText();
 		}
 		selection.replace(QChar(0x2029), QChar('\n'));

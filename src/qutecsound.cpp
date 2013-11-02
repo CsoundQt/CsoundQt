@@ -650,7 +650,9 @@ void CsoundQt::evaluate(QString code)
 	else {
 		evalCode = code;
 	}	
-	evaluateString(evalCode);
+	if (evalCode.size() > 1) { // evalCode can be \n and that crashes csound...
+		evaluateString(evalCode);
+	}
 }
 
 
@@ -687,16 +689,18 @@ void CsoundQt::evaluateString(QString evalCode)
         CSOUND *csound = getEngine(curPage)->getCsound();
         if (csound!=NULL) {
             testTree = csoundParseOrc(csound,evalCode.toLocal8Bit()); // return not NULL, if the code is valid
-            if (testTree == NULL)
-                qDebug("Not Csound code or cannot compile");
+            if (testTree == NULL) {
+                qDebug() << "Not Csound code or cannot compile";
+            }
         }
-    } else if (testTree!=NULL) { // the problem is, when the code is csound code, but with errors, it will be sent to python interpreter too
-        evaluateCsound(evalCode);
+        if (testTree) { // the problem is, when the code is csound code, but with errors, it will be sent to python interpreter too
+            evaluateCsound(evalCode);
+            return;
+        }
     }
 #endif
-    else {
-        evaluatePython(evalCode);
-    }
+    // Last resort
+    evaluatePython(evalCode);
 }
 
 void CsoundQt::setScratchPadMode(bool csdMode)
