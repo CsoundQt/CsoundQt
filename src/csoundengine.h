@@ -62,106 +62,6 @@ typedef enum {
 	QCS_NO_RT_EVENTS = 8
 } PerfFlags;
 
-
-//class LFRingBuffer {
-//	LFRingBuffer(int size) { m_size = size; buffer = (void *) calloc(0, size);}
-//	~LFRingBuffer() {free(buffer);}
-
-//	int write(void *buf, int len);
-//	int read(void *vals, len);
-
-//	private:
-//	void *buffer;
-//	int m_size;
-//	QAtomicInt nextWritePos;
-//	QAtomicInt readPos;
-//};
-
-
-// From SC 3
-
-//struct FifoMsg
-//{
-//	FifoMsg() : mPerformFunc(0), mFreeFunc(0), mData(0), mWorld(0) {}
-
-//	void Set(struct World *inWorld, FifoMsgFunc inPerform, FifoMsgFunc inFree, void* inData);
-//	void Perform();
-//	void Free();
-
-//	FifoMsgFunc mPerformFunc;
-//	FifoMsgFunc mFreeFunc;
-//	void* mData;
-//	struct World *mWorld;
-//};
-
-//inline void FifoMsg::Set(World *inWorld, FifoMsgFunc inPerform, FifoMsgFunc inFree, void* inData)
-//{
-//	mWorld = inWorld;
-//	mPerformFunc = inPerform;
-//	mFreeFunc = inFree;
-//	mData = inData;
-//}
-
-//inline void FifoMsg::Perform()
-//{
-//	if (mPerformFunc) (mPerformFunc)(this);
-//}
-
-//inline void FifoMsg::Free()
-//{
-//	if (mFreeFunc) (mFreeFunc)(this);
-//}
-
-template <class MsgType, int N>
-class MsgFifoNoFree
-{
-public:
-	MsgFifoNoFree()
-		: mReadHead(0), mWriteHead(0)
-	{}
-
-	void MakeEmpty() { mReadHead.store(mWriteHead.load()); }
-	bool IsEmpty() { return mReadHead.load(std::memory_order_relaxed) == mWriteHead.load(std::memory_order_relaxed); }
-	bool HasData() { return mReadHead.load(std::memory_order_relaxed) != mWriteHead.load(std::memory_order_relaxed); }
-
-	bool Write(MsgType& data)
-	{
-		unsigned int next = NextPos(mWriteHead.load(std::memory_order_relaxed));
-		if (next == mReadHead.load(std::memory_order_relaxed)) return false; // fifo is full
-		mItems[next] = data;
-
-		mWriteHead.store(next, std::memory_order_release);
-
-		return true;
-	}
-
-	void Perform() // get next and advance
-	{
-		while (HasData()) {
-			unsigned int next = NextPos(mReadHead.load(std::memory_order_relaxed));
-			mItems[next].Perform();
-			mReadHead.store(next, std::memory_order_release);
-		}
-	}
-
-	MsgType Next() {
-		MsgType out;
-		if (HasData()) {
-			unsigned int next = NextPos(mReadHead.load(std::memory_order_relaxed));
-			out = mItems[next];
-			mReadHead.store(next, std::memory_order_release);
-		}
-		return out;
-	}
-
-private:
-	int NextPos(int inPos) { return (inPos + 1) & (N - 1); }
-
-	std::atomic<int> mReadHead, mWriteHead;
-	MsgType mItems[N];
-};
-
-
 struct CsoundUserData {
 	int result; //result of csoundCompile()
 	CSOUND *csound; // instance of csound
@@ -192,7 +92,7 @@ struct CsoundUserData {
 	QList<QVariant> previousOutputValues;
 	QList<QVariant> previousStringOutputValues;
 
-	MsgFifoNoFree<unsigned char, 2048> midiBuffer;
+	void *midiBuffer; //Csound Circular Buffer
 
 #ifdef QCS_PYTHONQT
 	PythonConsole *m_pythonConsole;

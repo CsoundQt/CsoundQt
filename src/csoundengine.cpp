@@ -51,6 +51,7 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 	ud->flags = QCS_NO_FLAGS;
 	ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
 	ud->wl = NULL;
+	ud->midiBuffer = NULL;
 	ud->playMutex = &m_playMutex;
 #ifdef QCS_PYTHONQT
 	ud->m_pythonCallback = "";
@@ -76,6 +77,8 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
     csoundSetExternalMidiWriteCallback(ud->csound, &midiWriteCb);
     csoundSetExternalMidiOutCloseCallback(ud->csound, &midiOutCloseCb);
     csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
+    ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
+    Q_ASSERT(ud->midiBuffer);
     //    csoundSetMIDIDeviceListCallback(ud->csound, midiDevListCb);
 #endif
 
@@ -100,6 +103,7 @@ CsoundEngine::~CsoundEngine()
 	m_msgUpdateThread.waitForFinished(); // Join the message thread
 	stop();
 #ifndef QCS_DESTROY_CSOUND
+	csoundDestroyCircularBuffer(ud->csound, ud->midiBuffer);
 	csoundDestroy(ud->csound);
 #endif
 	delete ud;
@@ -267,9 +271,9 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
 
 int CsoundEngine::midiInOpenCb(CSOUND *csound, void **ud, const char *devName)
 {
-	qDebug() << "midiInOpenCb";
 	CsoundUserData *userData = (CsoundUserData *) csoundGetHostData(csound);
 	Q_UNUSED(devName);
+	Q_ASSERT(userData->midiBuffer);
 	if (userData) {
 		*ud = userData;
 	} else {
@@ -283,13 +287,8 @@ int CsoundEngine::midiReadCb(CSOUND *csound, void *ud_, unsigned char *buf, int 
 {
 	CsoundUserData *ud = (CsoundUserData *) ud_;
 	Q_UNUSED(csound);
-	MsgFifoNoFree<unsigned char, 2048> &fifo = ud->midiBuffer;
-	int count = 0;
-	while (ud->midiBuffer.HasData() && count < nBytes) {
-		*buf++ = fifo.Next();
-		qDebug() << "midi " << buf[count];
-		count++;
-	}
+	int count;
+	count = csoundReadCircularBuffer(ud->csound, ud->midiBuffer, buf, nBytes);
 	return count;
 }
 
@@ -302,6 +301,7 @@ int CsoundEngine::midiOutOpenCb(CSOUND *csound, void **ud, const char *devName)
 {
 	CsoundUserData *userData = (CsoundUserData *) csoundGetHostData(csound);
 	Q_UNUSED(devName);
+	Q_ASSERT(userData->midiBuffer);
 	if (userData) {
 		*ud = userData;
 	} else {
@@ -325,15 +325,12 @@ int CsoundEngine::midiOutCloseCb(CSOUND *csound, void *ud)
 const char *CsoundEngine::midiErrorStringCb(int)
 {
 
+	return NULL;
 }
 
 void CsoundEngine::queueMidiIn(std::vector< unsigned char > *message)
 {
-    std::vector<unsigned char >::const_iterator i;
-    for(i = message->begin();i != message->end();i++) {
-        unsigned char c = *i;
-        ud->midiBuffer.Write(c);
-	}
+	csoundWriteCircularBuffer(ud->csound, ud->midiBuffer, message->data(), message->size()* sizeof(unsigned char));
 }
 
 void CsoundEngine::sendMidiOut(QVector<unsigned char> &message)
@@ -813,6 +810,7 @@ int CsoundEngine::runCsound()
 	csoundSetExternalMidiWriteCallback(ud->csound, &midiWriteCb);
 	csoundSetExternalMidiOutCloseCallback(ud->csound, &midiOutCloseCb);
 	csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
+	ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
 #endif
 
 #ifdef CSOUND6
@@ -957,6 +955,7 @@ void CsoundEngine::cleanupCsound()
 		csoundDestroyMessageBuffer(ud->csound);
 #endif
 #ifdef QCS_DESTROY_CSOUND
+		csoundDestroyCircularBuffer(ud->csound, ud->midiBuffer);
 		csoundDestroy(ud->csound);
 #else
 		csoundReset(ud->csound);

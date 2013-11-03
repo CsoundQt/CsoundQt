@@ -30,13 +30,50 @@
    <property name="bottomMargin">
     <number>2</number>
    </property>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="buttonLayout">
+     <item>
+      <spacer name="buttonSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>131</width>
+         <height>31</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="okButton">
+       <property name="text">
+        <string>OK</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="0" column="0">
     <widget class="QTabWidget" name="editorTabWidget">
      <property name="enabled">
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -267,7 +304,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
-          <string>Realtime Play</string>
+          <string>Realtime Audio</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_16">
           <item row="0" column="0">
@@ -284,112 +321,6 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <layout class="QGridLayout" name="rtadioLayout">
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="RtInputLineEdit"/>
-            </item>
-            <item row="1" column="2">
-             <widget class="QToolButton" name="audioInputToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>output device (-o)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLineEdit" name="RtOutputLineEdit"/>
-            </item>
-            <item row="2" column="2">
-             <widget class="QToolButton" name="audioOutputToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>Input device (-i)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="RtModuleComboBox"/>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>RT Audio Module</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="1">
-           <layout class="QGridLayout" name="midilayout">
-            <item row="2" column="2">
-             <widget class="QLineEdit" name="RtMidiInputLineEdit"/>
-            </item>
-            <item row="2" column="3">
-             <widget class="QToolButton" name="midiInputToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>output device (-Q)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2">
-             <widget class="QLineEdit" name="RtMidiOutputLineEdit"/>
-            </item>
-            <item row="3" column="3">
-             <widget class="QToolButton" name="midiOutputToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLabel" name="label_12">
-              <property name="text">
-               <string>Input device (-M)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="label_18">
-              <property name="text">
-               <string>RT MIDI Module</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QComboBox" name="RtMidiModuleComboBox"/>
-            </item>
-            <item row="0" column="1" colspan="3">
-             <widget class="QCheckBox" name="csoundMidiCheckBox">
-              <property name="text">
-               <string>Use Csound MIDI modules (unstable)</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
           <item row="2" column="0" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
@@ -403,6 +334,131 @@
              <widget class="QLineEdit" name="JackNameLineEdit"/>
             </item>
            </layout>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <layout class="QGridLayout" name="rtadioLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>RT Audio Module</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="RtModuleComboBox"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Input device (-i)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="4">
+             <widget class="QLineEdit" name="RtOutputLineEdit"/>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="RtInputLineEdit"/>
+            </item>
+            <item row="1" column="2">
+             <widget class="QToolButton" name="audioInputToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Output device (-o)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="5">
+             <widget class="QToolButton" name="audioOutputToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_15">
+         <property name="title">
+          <string>Realtime MIDI</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_8">
+          <item row="2" column="0" colspan="2">
+           <layout class="QGridLayout" name="midilayout">
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="RtMidiInputLineEdit"/>
+            </item>
+            <item row="2" column="3">
+             <widget class="QToolButton" name="midiInputToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>Input device (-M)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="4">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>output device (-Q)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="5">
+             <widget class="QLineEdit" name="RtMidiOutputLineEdit"/>
+            </item>
+            <item row="2" column="6">
+             <widget class="QToolButton" name="midiOutputToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="5">
+             <widget class="QComboBox" name="RtMidiModuleComboBox"/>
+            </item>
+            <item row="1" column="4">
+             <widget class="QLabel" name="label_18">
+              <property name="text">
+               <string>RT MIDI Module</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" colspan="3">
+             <widget class="QCheckBox" name="csoundMidiCheckBox">
+              <property name="text">
+               <string>Use Csound MIDI modules (unstable)</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_37">
+            <property name="text">
+             <string>MIDI input interface</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="midiInterfaceComboBox"/>
           </item>
          </layout>
         </widget>
@@ -490,57 +546,6 @@
               <property name="text">
                <string>Disable python callback</string>
               </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QGroupBox" name="groupBox_12">
-         <property name="title">
-          <string>MIDI I/O interface</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_8">
-          <item>
-           <widget class="QComboBox" name="midiInterfaceComboBox"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QGroupBox" name="groupBox_9">
-         <property name="title">
-          <string>Record</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_9">
-          <item>
-           <layout class="QHBoxLayout" name="recordLayout">
-            <item>
-             <widget class="QLabel" name="label_21">
-              <property name="text">
-               <string>Record sample format</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="sampleFormatComboBox">
-              <item>
-               <property name="text">
-                <string>16 Bit Int</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>24 Bit Int</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>32 bit float</string>
-               </property>
-              </item>
              </widget>
             </item>
            </layout>
@@ -802,6 +807,45 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item row="2" column="1">
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="title">
+          <string>Record button</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <layout class="QHBoxLayout" name="recordLayout">
+            <item>
+             <widget class="QLabel" name="label_21">
+              <property name="text">
+               <string>Record sample format</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="sampleFormatComboBox">
+              <item>
+               <property name="text">
+                <string>16 Bit Int</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>24 Bit Int</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>32 bit float</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -1885,43 +1929,6 @@
       </layout>
      </widget>
     </widget>
-   </item>
-   <item row="1" column="0">
-    <layout class="QHBoxLayout" name="buttonLayout">
-     <item>
-      <spacer name="buttonSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>131</width>
-         <height>31</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="okButton">
-       <property name="text">
-        <string>OK</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-       <property name="flat">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelButton">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>
