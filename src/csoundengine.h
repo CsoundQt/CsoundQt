@@ -23,8 +23,6 @@
 #ifndef CSOUNDENGINE_H
 #define CSOUNDENGINE_H
 
-#include <atomic>
-
 #include <QStringList>
 #include <QTimer>
 #include <QFuture>
