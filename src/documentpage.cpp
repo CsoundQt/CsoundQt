@@ -1158,11 +1158,6 @@ void DocumentPage::queueMidiIn(std::vector< unsigned char > *message)
 	m_csEngine->queueMidiIn(message);
 }
 
-void DocumentPage::queueMidiOut(std::vector< unsigned char > *message)
-{
-
-}
-
 void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 {
 	fileName = "";

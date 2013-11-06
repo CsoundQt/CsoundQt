@@ -188,7 +188,6 @@ public:
 	virtual void registerButton(QuteButton *button);
 
 	void queueMidiIn(std::vector<unsigned char> *message);
-	void queueMidiOut(std::vector<unsigned char> *message);
 
 	// Member public variables
 	bool askForFile;

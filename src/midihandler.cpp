@@ -39,7 +39,7 @@ void MidiHandler::addListener(DocumentPage *page)
 void MidiHandler::removeListener(DocumentPage *page)
 {
 	if(!m_listeners.contains(page)) {
-		m_listeners.append(page);
+		m_listeners.remove(m_listeners.indexOf(page));
 	}
 }
 
@@ -54,6 +54,11 @@ void MidiHandler::passMidiMessage(std::vector<unsigned char> *message)
 	foreach(DocumentPage *page, m_listeners) {
 		page->queueMidiIn(message);
 	}
+}
+
+void MidiHandler::sendMidiOut(std::vector<unsigned char> *message)
+{
+	m_midiout->sendMessage(message);
 }
 
 
@@ -90,6 +95,16 @@ void MidiHandler::openMidiInPort(int port)
 	//  m_midiin->ignoreTypes(false, false, false);
 }
 
+void MidiHandler::setMidiOutInterface(int number)
+{
+	if (number >= 0 && number < 9998) {
+		openMidiOutPort(number);
+	}
+	else {
+		closeMidiOutPort();
+	}
+}
+
 void MidiHandler::openMidiOutPort(int port)
 {
 #ifdef QCS_RTMIDI
@@ -102,13 +117,14 @@ void MidiHandler::openMidiOutPort(int port)
 
 	try {
 		m_midiout->openPort(port);
+		m_midiout->openVirtualPort("CsoundQt MIDI Out");
 	}
 	catch ( RtError &error ) {
 		qDebug() << "Error opening MIDI out port " << port;
 		error.printMessage();
 		return;
 	}
-	//  qDebug() << "CsoundQt::openMidiPort opened port " << port;
+	  qDebug() << "CsoundQt::openMidiOutPort opened port " << port;
 #endif
 	//  m_midiin->ignoreTypes(false, false, false);
 

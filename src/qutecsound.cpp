@@ -322,7 +322,6 @@ void CsoundQt::changePage(int index)
 		runAct->setChecked(documentPages[curPage]->isRunning());
 		recAct->setChecked(documentPages[curPage]->isRecording());
 		splitViewAct->setChecked(documentPages[curPage]->getViewMode() > 1);
-		midiHandler->setListener(documentPages[curPage]);
 		if (documentPages[curPage]->getFileName().endsWith(".csd")) {
 			curCsdPage = curPage;
 		}
@@ -811,9 +810,10 @@ void CsoundQt::deleteTab(int index)
 	}
 	//  qDebug() << "CsoundQt::deleteCurrentTab()";
 	disconnect(showLiveEventsAct, 0,0,0);
-	documentPages[index]->stop();
-	documentPages[index]->showLiveEventPanels(false);
 	DocumentPage *d = documentPages[index];
+	d->stop();
+	d->showLiveEventPanels(false);
+	midiHandler->removeListener(d);
 	if (!m_options->widgetsIndependent) {
 		QRect panelGeometry = widgetPanel->geometry();
 		if (!widgetPanel->isFloating()) {
@@ -2007,6 +2007,7 @@ void CsoundQt::applySettings()
 	runAct->setStatusTip(tr("Play") + playOptions);
 	renderAct->setStatusTip(tr("Render to file") + renderOptions);
 	midiHandler->setMidiInterface(m_options->midiInterface);
+	midiHandler->setMidiOutInterface(m_options->midiOutInterface);
 
 	fillFavoriteMenu();
 	fillScriptsMenu();
@@ -4046,6 +4047,7 @@ void CsoundQt::readSettings()
 	m_options->debugLiveEvents = settings.value("debugLiveEvents", false).toBool();
 	m_options->consoleBufferSize = settings.value("consoleBufferSize", 1024).toInt();
 	m_options->midiInterface = settings.value("midiInterface", 9999).toInt();
+	m_options->midiOutInterface = settings.value("midiOutInterface", 9999).toInt();
 	m_options->noBuffer = settings.value("noBuffer", false).toBool();
 	m_options->noPython = settings.value("noPython", false).toBool();
 	m_options->noMessages = settings.value("noMessages", false).toBool();
@@ -4228,6 +4230,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
 		settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
 		settings.setValue("midiInterface", m_options->midiInterface);
+		settings.setValue("midiOutInterface", m_options->midiOutInterface);
 		settings.setValue("noBuffer", m_options->noBuffer);
 		settings.setValue("noPython", m_options->noPython);
 		settings.setValue("noMessages", m_options->noMessages);
@@ -4582,6 +4585,9 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 	}
 	documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");
 	documentTabs->setCurrentIndex(curPage);
+
+	midiHandler->addListener(documentPages[curPage]);
+	documentPages[curPage]->getEngine()->setMidiHandler(midiHandler);
 }
 
 bool CsoundQt::loadCompanionFile(const QString &fileName)

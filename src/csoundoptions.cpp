@@ -151,7 +151,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 				list << "-Q" + rtMidiOutputDevice;
 		}
 #ifdef QCS_RTMIDI
-		list << "-M0" << "-+rtmidi=hostbased";
+		list << "-M0" << "-Q0" << "-+rtmidi=hostbased";
 #endif
 	}
 	else {

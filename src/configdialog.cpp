@@ -67,6 +67,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		languageComboBox->addItem(m_configlists->languages[i], QVariant(m_configlists->languageCodes[i]));
 	}
 	midiInterfaceComboBox->clear();
+	midiOutInterfaceComboBox->clear();
 
 #ifdef QCS_RTMIDI
 	try {
@@ -79,13 +80,26 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		// Handle the exception here
 		error.printMessage();
 	}
+	try {
+		RtMidiOut midiout;
+		for (int i = 0; i < (int) midiout.getPortCount(); i++) {
+			midiOutInterfaceComboBox->addItem(QString::fromStdString(midiout.getPortName(i)), QVariant(i));
+		}
+	}
+	catch (RtError &error) {
+		// Handle the exception here
+		error.printMessage();
+	}
 #else
 	midiInterfaceComboBox->addItem(tr("No RtMidi support"));
 #endif
 
-	midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI internal interface")), QVariant(9999));
+	midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI In interface")), QVariant(9999));
 	int ifIndex = midiInterfaceComboBox->findData(QVariant(m_options->midiInterface));
 	midiInterfaceComboBox->setCurrentIndex(ifIndex);
+	midiOutInterfaceComboBox->addItem(QString(tr("None", "No MIDI Out interface")), QVariant(9999));
+	ifIndex = midiOutInterfaceComboBox->findData(QVariant(m_options->midiOutInterface));
+	midiOutInterfaceComboBox->setCurrentIndex(ifIndex);
 
 	themeComboBox->setCurrentIndex(themeComboBox->findText(m_options->theme));
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
@@ -345,6 +359,7 @@ void ConfigDialog::accept()
 	m_options->debugLiveEvents = debugLiveEventsCheckBox->isChecked();
 	m_options->consoleBufferSize = consoleBufferComboBox->itemText(consoleBufferComboBox->currentIndex()).toInt();
 	m_options->midiInterface = midiInterfaceComboBox->itemData(midiInterfaceComboBox->currentIndex()).toInt();
+	m_options->midiOutInterface = midiOutInterfaceComboBox->itemData(midiOutInterfaceComboBox->currentIndex()).toInt();
 	m_options->noMessages = noMessagesCheckBox->isChecked();
 	m_options->noBuffer = noBufferCheckBox->isChecked();
 	m_options->noPython = noPythonCheckBox->isChecked();

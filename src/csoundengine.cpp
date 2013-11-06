@@ -39,6 +39,7 @@
 #include "console.h"
 #include "qutescope.h"  // Needed for passing the ud to the scope for display data
 #include "qutegraph.h"  // Needed for passing the ud to the graph for display data
+#include "midihandler.h"
 
 CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 	m_options(configlists)
@@ -312,8 +313,23 @@ int CsoundEngine::midiOutOpenCb(CSOUND *csound, void **ud, const char *devName)
 
 }
 
-int CsoundEngine::midiWriteCb(CSOUND *csound, void *ud, const unsigned char *buf, int nBytes)
+int CsoundEngine::midiWriteCb(CSOUND *csound, void *ud_, const unsigned char *buf, int nBytes)
 {
+	CsoundUserData *userData = (CsoundUserData *) ud_;
+	std::vector<unsigned char> message;
+	Q_UNUSED(csound);
+	message.push_back(*buf++);
+	nBytes--;
+	while (nBytes--) {
+		if (*buf & 0x80) {
+			userData->midiHandler->sendMidiOut(&message);
+			message.clear();
+		}
+		message.push_back(*buf++);
+	}
+	if (message.size() > 0) {
+		userData->midiHandler->sendMidiOut(&message);
+	}
 	return 0;
 }
 
@@ -330,7 +346,9 @@ const char *CsoundEngine::midiErrorStringCb(int)
 
 void CsoundEngine::queueMidiIn(std::vector< unsigned char > *message)
 {
-	csoundWriteCircularBuffer(ud->csound, ud->midiBuffer, message->data(), message->size()* sizeof(unsigned char));
+	if (ud->midiBuffer) {
+		csoundWriteCircularBuffer(ud->csound, ud->midiBuffer, message->data(), message->size()* sizeof(unsigned char));
+	}
 }
 
 void CsoundEngine::sendMidiOut(QVector<unsigned char> &message)
@@ -552,6 +570,11 @@ void CsoundEngine::setWidgetLayout(WidgetLayout *wl)
 	connect(wl, SIGNAL(registerGraph(QuteGraph*)),
 			this,SLOT(registerGraph(QuteGraph*)));
 	connect(this, SIGNAL(passMessages(QString)), wl, SLOT(appendMessage(QString)));
+}
+
+void CsoundEngine::setMidiHandler(MidiHandler *mh)
+{
+	ud->midiHandler = mh;
 }
 
 void CsoundEngine::enableWidgets(bool enable)
@@ -811,10 +834,12 @@ int CsoundEngine::runCsound()
 	csoundSetExternalMidiOutCloseCallback(ud->csound, &midiOutCloseCb);
 	csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
 	ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
+	Q_ASSERT(ud->midiBuffer);
 #endif
 
 #ifdef CSOUND6
 	csoundCreateMessageBuffer(ud->csound, 0);
+	csoundFlushCircularBuffer(ud->csound, ud->midiBuffer);
 #else
 	// Message Callbacks must be set before compile, otherwise some information is missed
 	csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);

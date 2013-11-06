@@ -45,6 +45,7 @@ class QuteGraph;
 class Curve;
 class CsoundEngine;
 class WidgetLayout;
+class MidiHandler;
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
 // This still necessary for 5.12 and Csound6
@@ -66,6 +67,7 @@ struct CsoundUserData {
 	CsoundPerformanceThread *perfThread;
 	CsoundEngine *csEngine; // Pass engine
 	WidgetLayout *wl; // Pass widgets
+	MidiHandler *midiHandler; // For MIDI out
 	QMutex *playMutex; //perfThread access Mutex
 	/* performance */
 	bool runDispatcher;
@@ -138,7 +140,7 @@ public:
 	static int midiReadCb(CSOUND *csound, void *ud_, unsigned char *buf, int nBytes);
 	static int midiInCloseCb(CSOUND *csound, void *ud);
 	static int midiOutOpenCb(CSOUND *csound, void **ud, const char *devName);
-	static int midiWriteCb(CSOUND *csound, void *ud, const unsigned char *buf, int nBytes);
+	static int midiWriteCb(CSOUND *csound, void *ud_, const unsigned char *buf, int nBytes);
 	static int midiOutCloseCb(CSOUND *csound, void *ud);
 	static const char *midiErrorStringCb(int);
 	void queueMidiIn(std::vector<unsigned char> *message);
@@ -159,6 +161,7 @@ public:
 	//    void setCsoundOptions(const CsoundOptions &options);
 	// Options unsafe to change while running
 	void setWidgetLayout(WidgetLayout *wl);
+	void setMidiHandler(MidiHandler *mh);
 	// Options safe to change while running
 	void enableWidgets(bool enable);
 

@@ -64,6 +64,7 @@ Options::Options(ConfigLists *configlists) :
 	debugLiveEvents = false;
 	consoleBufferSize = 1024;
 	midiInterface = 0; // For internal CsoundQt MIDI control
+	midiOutInterface = 0; // For internal CsoundQt MIDI control
 
 	csdPath = "./"; //path of active csd needed for setting -o -i paths
 

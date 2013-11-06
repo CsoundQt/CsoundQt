@@ -15,6 +15,7 @@ public:
     explicit MidiHandler(QObject *parent = 0);
     void setMidiInterface(int number);
     void openMidiInPort(int port);
+    void setMidiOutInterface(int number);
     void openMidiOutPort(int port);
     void closeMidiInPort();
     void closeMidiOutPort();
@@ -24,6 +25,7 @@ public:
     void setListener(DocumentPage *page); // Unique listener
 
     void passMidiMessage(std::vector< unsigned char > *message);
+    void sendMidiOut(std::vector< unsigned char > *message);
 
 signals:
 

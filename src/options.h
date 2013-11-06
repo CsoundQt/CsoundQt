@@ -71,7 +71,8 @@ public:
 	bool keyRepeat;
 	bool debugLiveEvents;
 	int consoleBufferSize;
-	int midiInterface; // For internal CsoundQt MIDI control
+	int midiInterface;
+	int midiOutInterface;
 	// Csound engine flags
 	bool noBuffer;
 	bool noPython;
