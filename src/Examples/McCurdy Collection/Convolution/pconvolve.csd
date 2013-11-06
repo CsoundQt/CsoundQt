@@ -45,17 +45,24 @@ instr	10	;GUI
 endin
 
 instr	1	;GENERATE INPUT AUDIO INDEPENDENTLY OF REVERBERATING INSTRUMENT
+	kon invalue "on"
+
 	if	gkinput=0	then								;IF 'Sound File' IS SELECTED...
 		Sfile	invalue	"_Browse1"
 		gaL, gaR	FilePlay2	Sfile, 1, 0, 1				;READ AUDIO FROM SOUND FILE ON HARD DISC
 	elseif	gkinput=1	then							;IF 'Live Input' IS SELECTED
-		gaL	inch	1								;READ AUDIO FROM SOUND CARD'S FIRST (LEFT) INPUT
+		gaL	inch	 1								;READ AUDIO FROM SOUND CARD'S FIRST (LEFT) INPUT
 		gaR	=	gaL								;MONO INPUT THEREFORE ASSIGN RIGHT CHANNEL TO LEFT CHANNEL ALSO 
 	endif
+	gaL = gaL *kon
+	gaR = gaR *kon
 endin
 
 instr	2	;CONVOLUTION REVERB INSTRUMENT
-		kSwitch	changed		gkfile				;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
+			
+			
+		 Sir invalue "_Browse2"
+		 kSwitch = changed(gkfile) + changed(Sir) ;GENERATE A MOMENTARY '1' PULSE IN OUTPUT 'kSwitch' IF ANY OF THE SCANNED INPUT VARIABLES CHANGE. (OUTPUT 'kSwitch' IS NORMALLY ZERO)
 	if	kSwitch=1	then								;IF I-RATE VARIABLE IS CHANGED...
 		reinit	UPDATE							;BEGIN A REINITIALISATION PASS IN ORDER TO EFFECT THIS CHANGE. BEGIN THIS PASS AT LABEL ENTITLED 'UPDATE' AND CONTINUE UNTIL rireturn OPCODE 
 	endif										;END OF CONDITIONAL BRANCHING
@@ -66,6 +73,9 @@ if	gkfile=0	then									;IF 'STAIRWELL' IS CHOSEN AS CONVOLUTION FILE...
 	elseif	gkfile=1	then							;IF 'DISH' IS CHOSEN AS CONVOLUTION FILE...
 		ar1	pconvolve gaL, "dishL.wav"				;PERFORM CONVOLUTION BETWEEN AUDIO INPUT FROM INSTR 1 AND SOUNDFILE STORED ON DISK (LEFT CHANNEL)
 		ar2	pconvolve gaR, "dishR.wav"				;PERFORM CONVOLUTION BETWEEN AUDIO INPUT FROM INSTR 1 AND SOUNDFILE STORED ON DISK (RIGHT CHANNEL)
+	elseif gkfile==2 then
+		ar1	pconvolve gaL, Sir, 0, 1
+		ar2	pconvolve gaR, Sir, 0, 1
 	endif										;END OF CONDITIONAL BRANCHING
 	aL	ntrpol	gaL, ar1*0.1, gkMix					;CREATE DRY/WET MIX (LEFT CHANNEL)  
 	aR	ntrpol	gaR, ar2*0.1, gkMix					;CREATE DRY/WET MIX (RIGHT CHANNEL)
@@ -76,16 +86,17 @@ endin
 </CsInstruments>
 <CsScore>
 i 10 0 3600	;GUI
+i  1 0 3600	;INSTRUMENT 1 (SOURCE INSTRUMENT) RUNS FOR 1
 i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS REAL-TIME PERFORMANCE GOING) 
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>365</x>
- <y>638</y>
- <width>1088</width>
- <height>302</height>
+ <x>0</x>
+ <y>0</y>
+ <width>967</width>
+ <height>327</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -93,12 +104,12 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
   <width>525</width>
-  <height>300</height>
+  <height>325</height>
   <uuid>{aa607456-d368-4d59-8497-d16d608404c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -122,8 +133,8 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
-  <objectName/>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>on</objectName>
   <x>5</x>
   <y>5</y>
   <width>100</width>
@@ -132,16 +143,16 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <type>event</type>
+  <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>   ON / OFF</text>
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Gain</objectName>
   <x>13</x>
   <y>58</y>
@@ -153,13 +164,13 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.64200000</value>
+  <value>0.47200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>75</y>
@@ -188,7 +199,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Gain</objectName>
   <x>432</x>
   <y>75</y>
@@ -198,7 +209,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.642</label>
+  <label>0.472</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -217,12 +228,12 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>528</x>
   <y>2</y>
-  <width>560</width>
-  <height>300</height>
+  <width>439</width>
+  <height>323</height>
   <uuid>{74928ed2-b701-4668-9a11-74763d317e9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -246,12 +257,12 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>528</x>
   <y>16</y>
-  <width>553</width>
-  <height>281</height>
+  <width>433</width>
+  <height>300</height>
   <uuid>{d4bdb5ce-87d8-4c8c-9c64-40ec2eed6f5a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -277,7 +288,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Mix</objectName>
   <x>433</x>
   <y>114</y>
@@ -287,7 +298,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.500</label>
+  <label>1.000</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -306,7 +317,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>12</x>
   <y>113</y>
@@ -335,7 +346,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Mix</objectName>
   <x>12</x>
   <y>96</y>
@@ -347,13 +358,13 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.50000000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Input</objectName>
   <x>93</x>
   <y>166</y>
@@ -378,7 +389,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>File</objectName>
   <x>365</x>
   <y>166</y>
@@ -395,15 +406,20 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name> Dish</name>
+    <name>Dish</name>
     <value>1</value>
     <stringvalue/>
    </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>File</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>12</x>
   <y>166</y>
@@ -432,7 +448,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>264</x>
   <y>166</y>
@@ -461,7 +477,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>6</x>
   <y>218</y>
@@ -480,7 +496,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>177</x>
   <y>219</y>
@@ -501,13 +517,13 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>240</r>
-   <g>235</g>
-   <b>226</b>
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>177</x>
   <y>246</y>
@@ -535,6 +551,52 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>_Browse2</objectName>
+  <x>7</x>
+  <y>278</y>
+  <width>170</width>
+  <height>30</height>
+  <uuid>{181e4355-4514-4f64-90ad-846857e32fc3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue>/home/andres/Desktop/convolution/EMT 244 (A. Bernhard)/4,5s High_2.wav</stringvalue>
+  <text>Browse IR File</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject type="BSBLineEdit" version="2">
+  <objectName>_Browse2</objectName>
+  <x>178</x>
+  <y>279</y>
+  <width>330</width>
+  <height>28</height>
+  <uuid>{c8be82af-1985-49e4-ba13-2927447697c6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>/home/andres/Desktop/convolution/EMT 244 (A. Bernhard)/4,5s High_2.wav</label>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>242</r>
+   <g>241</g>
+   <b>240</b>
+  </bgcolor>
+  <background>nobackground</background>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
