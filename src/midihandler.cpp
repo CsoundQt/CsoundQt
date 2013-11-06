@@ -83,7 +83,7 @@ void MidiHandler::openMidiInPort(int port)
 	}
 
 	try {
-		m_midiin->openPort(port);
+		m_midiin->openPort(port, "MIDI in");
 	}
 	catch ( RtError &error ) {
 		qDebug() << "Error opening MIDI port " << port;
@@ -116,8 +116,7 @@ void MidiHandler::openMidiOutPort(int port)
 	}
 
 	try {
-		m_midiout->openPort(port);
-		m_midiout->openVirtualPort("CsoundQt MIDI Out");
+		m_midiout->openPort(port, "MIDI out");
 	}
 	catch ( RtError &error ) {
 		qDebug() << "Error opening MIDI out port " << port;
