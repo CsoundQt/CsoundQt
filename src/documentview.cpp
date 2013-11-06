@@ -715,6 +715,7 @@ void DocumentView::textChanged()
 			QString line = lineCursor.selectedText();
 
 			int commentIndex = -1;
+			bool useFunction = false;
 			if (line.indexOf(";") != -1) {
 				commentIndex = lineCursor.position() - line.length() + line.indexOf(";");
 				if (commentIndex < curIndex)
@@ -723,9 +724,9 @@ void DocumentView::textChanged()
 			if (line.contains("opcode") || line.contains("instr")) { // Don't pop menu in these cases.
 				return;
 			}
-//			if (line.indexOf(QRegExp("^\\s*[^kaigSf]\\w+\\s+\\w")) >= 0 || line.indexOf(QRegExp("\\s+\\w+\\s+\\w")) >= 0) {
-//				return;
-//			}
+			if (line.indexOf(QRegExp("\\s*\\w+\\s+\\w+\\s+")) >= 0) {
+				useFunction = true;
+			}
 			if (cursor.position() > cursor.anchor()) { // Only at the end of the word
 				if (word.size() > 0 && !word.startsWith("\"")) {
 					QStringList vars;
@@ -775,12 +776,20 @@ void DocumentView::textChanged()
 									else if (syntax[i].outArgs.simplified().startsWith("f")) {
 										text += " (pvs)";
 									}
-									QString syntaxText = syntax[i].outArgs.simplified();
-									if (!syntax[i].outArgs.isEmpty())
-										syntaxText += " ";
-									syntaxText += syntax[i].opcodeName.simplified();
-									if (!syntax[i].inArgs.isEmpty()) {
-										syntaxText += " " + syntax[i].inArgs.simplified();
+									QString syntaxText;
+									if (useFunction) {
+										syntaxText = syntax[i].opcodeName.simplified();
+										syntaxText += "(";
+										syntaxText += syntax[i].inArgs.simplified();
+										syntaxText += ")";
+									} else {
+										syntaxText= syntax[i].outArgs.simplified();
+										if (!syntax[i].outArgs.isEmpty())
+											syntaxText += " ";
+										syntaxText += syntax[i].opcodeName.simplified();
+										if (!syntax[i].inArgs.isEmpty()) {
+											syntaxText += " " + syntax[i].inArgs.simplified();
+										}
 									}
 									QAction *a = syntaxMenu->addAction(text,
 																	   this, SLOT(insertAutoCompleteText()));
@@ -955,8 +964,8 @@ void DocumentView::insertAutoCompleteText()
 
 		QTextCursor cursor = editor->textCursor();
 		cursor.select(QTextCursor::WordUnderCursor);
-		if (cursor.selectedText() == "" && !cursor.atStart()) {
-			cursor.movePosition(QTextCursor::PreviousCharacter);
+		while ((cursor.selectedText() == "" || cursor.selectedText() == ",") && !cursor.atBlockStart()) {
+			cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
 			cursor.select(QTextCursor::WordUnderCursor);
 		}
 		cursor.insertText("");
