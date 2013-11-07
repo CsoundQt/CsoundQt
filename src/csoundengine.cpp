@@ -70,17 +70,9 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 //	ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
 #ifdef CSOUND6
     csoundSetHostImplementedMIDIIO(ud->csound, 1);
-#endif
-    csoundSetExternalMidiInOpenCallback(ud->csound, &midiInOpenCb);
-    csoundSetExternalMidiReadCallback(ud->csound, &midiReadCb);
-    csoundSetExternalMidiInCloseCallback(ud->csound, &midiInCloseCb);
-    csoundSetExternalMidiOutOpenCallback(ud->csound, &midiOutOpenCb);
-    csoundSetExternalMidiWriteCallback(ud->csound, &midiWriteCb);
-    csoundSetExternalMidiOutCloseCallback(ud->csound, &midiOutCloseCb);
-    csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
     ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
     Q_ASSERT(ud->midiBuffer);
-    //    csoundSetMIDIDeviceListCallback(ud->csound, midiDevListCb);
+#endif
 #endif
 
 	eventQueue.resize(QCS_MAX_EVENTS);
@@ -824,18 +816,22 @@ int CsoundEngine::runCsound()
 #ifdef QCS_DESTROY_CSOUND
 	ud->csound=csoundCreate((void *) ud);
 #ifdef CSOUND6
-	csoundSetHostImplementedMIDIIO(ud->csound, 1);
-#endif
-	csoundSetExternalMidiInOpenCallback(ud->csound, &midiInOpenCb);
-	csoundSetExternalMidiReadCallback(ud->csound, &midiReadCb);
-	csoundSetExternalMidiInCloseCallback(ud->csound, &midiInCloseCb);
-	csoundSetExternalMidiOutOpenCallback(ud->csound, &midiOutOpenCb);
-	csoundSetExternalMidiWriteCallback(ud->csound, &midiWriteCb);
-	csoundSetExternalMidiOutCloseCallback(ud->csound, &midiOutCloseCb);
-	csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
 	ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
 	Q_ASSERT(ud->midiBuffer);
 #endif
+#endif
+	if(!m_options.useCsoundMidi) {
+#ifdef CSOUND6
+		csoundSetHostImplementedMIDIIO(ud->csound, 1);
+#endif
+		csoundSetExternalMidiInOpenCallback(ud->csound, &midiInOpenCb);
+		csoundSetExternalMidiReadCallback(ud->csound, &midiReadCb);
+		csoundSetExternalMidiInCloseCallback(ud->csound, &midiInCloseCb);
+		csoundSetExternalMidiOutOpenCallback(ud->csound, &midiOutOpenCb);
+		csoundSetExternalMidiWriteCallback(ud->csound, &midiWriteCb);
+		csoundSetExternalMidiOutCloseCallback(ud->csound, &midiOutCloseCb);
+		csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
+	}
 
 #ifdef CSOUND6
 	csoundCreateMessageBuffer(ud->csound, 0);

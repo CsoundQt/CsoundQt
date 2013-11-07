@@ -149,10 +149,11 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 				list << "-M" + rtMidiInputDevice;
 			if (rtMidiOutputDevice != "")
 				list << "-Q" + rtMidiOutputDevice;
-		}
+		} else {
 #ifdef QCS_RTMIDI
-		list << "-M0" << "-Q0" << "-+rtmidi=hostbased";
+			list << "-M0" << "-Q0";
 #endif
+		}
 	}
 	else {
 		list << "--format=" + m_configlists->fileTypeNames[fileFileType]

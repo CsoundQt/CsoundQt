@@ -73,7 +73,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -399,7 +399,11 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="4">
-           <widget class="QComboBox" name="midiOutInterfaceComboBox"/>
+           <widget class="QComboBox" name="midiOutInterfaceComboBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
           <item row="3" column="0" colspan="5">
            <layout class="QGridLayout" name="midilayout">
@@ -461,6 +465,9 @@
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_37">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set Internal MIDI input interface. Controls widgets and MIDI input for Csound if Csound MIDI module usage is disabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <property name="text">
              <string>MIDI input interface</string>
             </property>
@@ -468,6 +475,9 @@
           </item>
           <item row="0" column="3">
            <widget class="QLabel" name="label_38">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>MIDI Output Interface</string>
             </property>
@@ -2737,6 +2747,38 @@
     <hint type="destinationlabel">
      <x>162</x>
      <y>322</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_38</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>210</x>
+     <y>561</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>444</x>
+     <y>535</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>midiOutInterfaceComboBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>189</x>
+     <y>564</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>554</x>
+     <y>533</y>
     </hint>
    </hints>
   </connection>
