@@ -73,7 +73,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -1444,6 +1444,9 @@
               <property name="text">
                <string>SFDIR</string>
               </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
             <item row="5" column="3">
@@ -1470,6 +1473,16 @@
               </property>
              </widget>
             </item>
+            <item row="1" column="3">
+             <widget class="QToolButton" name="opcodedirToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLineEdit" name="OpcodedirLineEdit"/>
+            </item>
             <item row="1" column="0">
              <widget class="QCheckBox" name="OpcodedirCheckBox">
               <property name="toolTip">
@@ -1478,15 +1491,8 @@
               <property name="text">
                <string>OPCODEDIR</string>
               </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QLineEdit" name="OpcodedirLineEdit"/>
-            </item>
-            <item row="1" column="3">
-             <widget class="QToolButton" name="opcodedirToolButton">
-              <property name="text">
-               <string>...</string>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -1504,6 +1510,9 @@
               </property>
               <property name="text">
                <string>SADIR</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -1536,11 +1545,7 @@
               <property name="text">
                <string>SSDIR</string>
               </property>
-             </widget>
-            </item>
-            <item row="7" column="2">
-             <widget class="QLineEdit" name="IncdirLineEdit">
-              <property name="enabled">
+              <property name="checked">
                <bool>true</bool>
               </property>
              </widget>
@@ -1553,6 +1558,16 @@
               <property name="text">
                <string>INCDIR</string>
               </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="2">
+             <widget class="QLineEdit" name="IncdirLineEdit">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
             <item row="7" column="3">
@@ -1562,7 +1577,7 @@
               </property>
              </widget>
             </item>
-            <item row="8" column="2">
+            <item row="9" column="2">
              <widget class="QLineEdit" name="favoriteLineEdit">
               <property name="enabled">
                <bool>true</bool>
@@ -1579,70 +1594,70 @@
               </property>
              </widget>
             </item>
-            <item row="8" column="3">
+            <item row="9" column="3">
              <widget class="QToolButton" name="favoriteToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="9" column="2">
+            <item row="10" column="2">
              <widget class="QLineEdit" name="pythonDirLineEdit">
               <property name="enabled">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="8" column="0">
+            <item row="9" column="0">
              <widget class="QLabel" name="label_28">
               <property name="text">
                <string>Favorite dir</string>
               </property>
              </widget>
             </item>
-            <item row="12" column="0">
+            <item row="13" column="0">
              <widget class="QLabel" name="label_30">
               <property name="text">
                <string>Log file</string>
               </property>
              </widget>
             </item>
-            <item row="9" column="3">
+            <item row="10" column="3">
              <widget class="QToolButton" name="pythonDirToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="12" column="2">
+            <item row="13" column="2">
              <widget class="QLineEdit" name="logFileLineEdit">
               <property name="enabled">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="12" column="3">
+            <item row="13" column="3">
              <widget class="QToolButton" name="logFileToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="10" column="0">
+            <item row="11" column="0">
              <widget class="QLabel" name="label_29">
               <property name="text">
                <string>Python Executable</string>
               </property>
              </widget>
             </item>
-            <item row="10" column="2">
+            <item row="11" column="2">
              <widget class="QLineEdit" name="pythonExecutableLineEdit">
               <property name="enabled">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="9" column="0">
+            <item row="10" column="0">
              <widget class="QLabel" name="pythonDirlabel">
               <property name="text">
                <string>Python Script Dir </string>
@@ -1656,10 +1671,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="2">
-             <widget class="QLineEdit" name="Opcodedir64LineEdit"/>
-            </item>
-            <item row="13" column="0">
+            <item row="14" column="0">
              <widget class="QLabel" name="label_25">
               <property name="toolTip">
                <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
@@ -1669,10 +1681,13 @@
               </property>
              </widget>
             </item>
-            <item row="13" column="2">
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="Opcodedir64LineEdit"/>
+            </item>
+            <item row="14" column="2">
              <widget class="QLineEdit" name="sdkLineEdit"/>
             </item>
-            <item row="13" column="3">
+            <item row="14" column="3">
              <widget class="QToolButton" name="sdkToolButton">
               <property name="text">
                <string>...</string>
@@ -1687,6 +1702,9 @@
               <property name="text">
                <string>OPCODEDIR64</string>
               </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
             <item row="3" column="0">
@@ -1694,27 +1712,50 @@
               <property name="text">
                <string>OPCODE6DIR64</string>
               </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
             <item row="3" column="2">
              <widget class="QLineEdit" name="Opcode6dir64LineEdit"/>
             </item>
-            <item row="11" column="0">
+            <item row="12" column="0">
              <widget class="QLabel" name="label_36">
               <property name="text">
                <string>Csound Executable</string>
               </property>
              </widget>
             </item>
-            <item row="11" column="2">
+            <item row="12" column="2">
              <widget class="QLineEdit" name="csoundExecutableLineEdit">
               <property name="text">
                <string/>
               </property>
              </widget>
             </item>
-            <item row="11" column="3">
+            <item row="12" column="3">
              <widget class="QToolButton" name="csoundExecutableToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="0">
+             <widget class="QCheckBox" name="rawWaveCheckBox">
+              <property name="text">
+               <string>RAWWAVE_PATH</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="2">
+             <widget class="QLineEdit" name="rawWaveLineEdit"/>
+            </item>
+            <item row="8" column="3">
+             <widget class="QToolButton" name="rawWaveToolButton">
               <property name="text">
                <string>...</string>
               </property>
@@ -2086,7 +2127,7 @@
      <y>58</y>
     </hint>
     <hint type="destinationlabel">
-     <x>264</x>
+     <x>260</x>
      <y>69</y>
     </hint>
    </hints>
@@ -2098,11 +2139,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>122</x>
+     <x>113</x>
      <y>97</y>
     </hint>
     <hint type="destinationlabel">
-     <x>264</x>
+     <x>260</x>
      <y>98</y>
     </hint>
    </hints>
@@ -2114,11 +2155,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>122</x>
+     <x>113</x>
      <y>130</y>
     </hint>
     <hint type="destinationlabel">
-     <x>550</x>
+     <x>327</x>
      <y>131</y>
     </hint>
    </hints>
@@ -2130,11 +2171,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>146</x>
+     <x>125</x>
      <y>279</y>
     </hint>
     <hint type="destinationlabel">
-     <x>408</x>
+     <x>256</x>
      <y>280</y>
     </hint>
    </hints>
@@ -2146,11 +2187,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>133</x>
+     <x>125</x>
      <y>308</y>
     </hint>
     <hint type="destinationlabel">
-     <x>408</x>
+     <x>256</x>
      <y>309</y>
     </hint>
    </hints>
@@ -2162,7 +2203,7 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>534</x>
+     <x>520</x>
      <y>68</y>
     </hint>
     <hint type="destinationlabel">
@@ -2178,11 +2219,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>414</x>
+     <x>395</x>
      <y>68</y>
     </hint>
     <hint type="destinationlabel">
-     <x>534</x>
+     <x>520</x>
      <y>68</y>
     </hint>
    </hints>
@@ -2226,11 +2267,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>306</x>
+     <x>125</x>
      <y>570</y>
     </hint>
     <hint type="destinationlabel">
-     <x>566</x>
+     <x>529</x>
      <y>571</y>
     </hint>
    </hints>
@@ -2242,11 +2283,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>306</x>
+     <x>125</x>
      <y>570</y>
     </hint>
     <hint type="destinationlabel">
-     <x>422</x>
+     <x>411</x>
      <y>571</y>
     </hint>
    </hints>
@@ -2258,11 +2299,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>306</x>
+     <x>125</x>
      <y>570</y>
     </hint>
     <hint type="destinationlabel">
-     <x>128</x>
+     <x>125</x>
      <y>600</y>
     </hint>
    </hints>
@@ -2274,11 +2315,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>306</x>
+     <x>125</x>
      <y>570</y>
     </hint>
     <hint type="destinationlabel">
-     <x>272</x>
+     <x>234</x>
      <y>600</y>
     </hint>
    </hints>
@@ -2290,11 +2331,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>306</x>
+     <x>125</x>
      <y>570</y>
     </hint>
     <hint type="destinationlabel">
-     <x>306</x>
+     <x>305</x>
      <y>599</y>
     </hint>
    </hints>
@@ -2306,11 +2347,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>306</x>
+     <x>125</x>
      <y>570</y>
     </hint>
     <hint type="destinationlabel">
-     <x>422</x>
+     <x>411</x>
      <y>600</y>
     </hint>
    </hints>
@@ -2322,11 +2363,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>306</x>
+     <x>125</x>
      <y>570</y>
     </hint>
     <hint type="destinationlabel">
-     <x>566</x>
+     <x>529</x>
      <y>600</y>
     </hint>
    </hints>
@@ -2338,7 +2379,7 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>306</x>
+     <x>125</x>
      <y>570</y>
     </hint>
     <hint type="destinationlabel">
@@ -2354,12 +2395,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>113</x>
-     <y>176</y>
+     <x>124</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
-     <x>88</x>
-     <y>211</y>
+     <x>105</x>
+     <y>219</y>
     </hint>
    </hints>
   </connection>
@@ -2370,12 +2411,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>268</x>
-     <y>180</y>
+     <x>124</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
-     <x>499</x>
-     <y>208</y>
+     <x>562</x>
+     <y>220</y>
     </hint>
    </hints>
   </connection>
@@ -2386,12 +2427,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>293</x>
-     <y>180</y>
+     <x>124</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
-     <x>341</x>
-     <y>208</y>
+     <x>417</x>
+     <y>220</y>
     </hint>
    </hints>
   </connection>
@@ -2402,12 +2443,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>220</x>
-     <y>184</y>
+     <x>124</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
-     <x>347</x>
-     <y>241</y>
+     <x>417</x>
+     <y>249</y>
     </hint>
    </hints>
   </connection>
@@ -2418,12 +2459,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>178</x>
-     <y>177</y>
+     <x>124</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
-     <x>472</x>
-     <y>235</y>
+     <x>562</x>
+     <y>249</y>
     </hint>
    </hints>
   </connection>
@@ -2434,11 +2475,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>136</x>
-     <y>186</y>
+     <x>124</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
-     <x>58</x>
+     <x>75</x>
      <y>279</y>
     </hint>
    </hints>
@@ -2450,12 +2491,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>152</x>
-     <y>180</y>
+     <x>124</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
-     <x>216</x>
-     <y>263</y>
+     <x>256</x>
+     <y>280</y>
     </hint>
    </hints>
   </connection>
@@ -2466,12 +2507,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>123</x>
-     <y>174</y>
+     <x>124</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
-     <x>116</x>
-     <y>294</y>
+     <x>125</x>
+     <y>308</y>
     </hint>
    </hints>
   </connection>
@@ -2482,12 +2523,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>138</x>
-     <y>180</y>
+     <x>124</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
-     <x>320</x>
-     <y>304</y>
+     <x>256</x>
+     <y>309</y>
     </hint>
    </hints>
   </connection>
@@ -2498,12 +2539,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>197</x>
-     <y>185</y>
+     <x>124</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
-     <x>586</x>
-     <y>264</y>
+     <x>600</x>
+     <y>279</y>
     </hint>
    </hints>
   </connection>
@@ -2514,12 +2555,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>203</x>
-     <y>180</y>
+     <x>124</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
-     <x>597</x>
-     <y>302</y>
+     <x>600</x>
+     <y>308</y>
     </hint>
    </hints>
   </connection>
@@ -2530,12 +2571,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>84</x>
-     <y>374</y>
+     <x>100</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
-     <x>91</x>
-     <y>426</y>
+     <x>108</x>
+     <y>438</y>
     </hint>
    </hints>
   </connection>
@@ -2546,12 +2587,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>265</x>
-     <y>372</y>
+     <x>124</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
-     <x>243</x>
-     <y>425</y>
+     <x>231</x>
+     <y>438</y>
     </hint>
    </hints>
   </connection>
@@ -2562,12 +2603,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>200</x>
-     <y>367</y>
+     <x>124</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
-     <x>296</x>
-     <y>426</y>
+     <x>305</x>
+     <y>437</y>
     </hint>
    </hints>
   </connection>
@@ -2578,12 +2619,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>289</x>
-     <y>368</y>
+     <x>124</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
-     <x>407</x>
-     <y>430</y>
+     <x>411</x>
+     <y>438</y>
     </hint>
    </hints>
   </connection>
@@ -2594,12 +2635,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>189</x>
-     <y>367</y>
+     <x>124</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
-     <x>489</x>
-     <y>420</y>
+     <x>527</x>
+     <y>438</y>
     </hint>
    </hints>
   </connection>
@@ -2610,12 +2651,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>370</y>
+     <x>124</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
-     <x>585</x>
-     <y>420</y>
+     <x>600</x>
+     <y>437</y>
     </hint>
    </hints>
   </connection>
@@ -2626,12 +2667,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>152</x>
-     <y>381</y>
+     <x>94</x>
+     <y>329</y>
     </hint>
     <hint type="destinationlabel">
-     <x>150</x>
-     <y>458</y>
+     <x>125</x>
+     <y>469</y>
     </hint>
    </hints>
   </connection>
@@ -2642,12 +2683,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>179</x>
-     <y>371</y>
+     <x>124</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
-     <x>380</x>
-     <y>460</y>
+     <x>398</x>
+     <y>469</y>
     </hint>
    </hints>
   </connection>
@@ -2658,12 +2699,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>71</x>
-     <y>368</y>
+     <x>87</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
-     <x>70</x>
-     <y>389</y>
+     <x>87</x>
+     <y>409</y>
     </hint>
    </hints>
   </connection>
@@ -2674,12 +2715,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>169</x>
-     <y>371</y>
+     <x>124</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
-     <x>173</x>
-     <y>400</y>
+     <x>231</x>
+     <y>409</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rawWaveCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>rawWaveLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>85</x>
+     <y>319</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>162</x>
+     <y>322</y>
     </hint>
    </hints>
   </connection>

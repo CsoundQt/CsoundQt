@@ -900,6 +900,15 @@ void CsoundQt::setupEnvironment()
 	else {
 		csoundSetGlobalEnv("INCDIR", "");
 	}
+	if (m_options->rawWaveActive){
+		int ret = csoundSetGlobalEnv("RAWWAVE_PATH", m_options->rawWave.toLocal8Bit().constData());
+		if (ret != 0) {
+			qDebug() << "CsoundEngine::runCsound() Error setting RAWWAVE_PATH";
+		}
+	}
+	else {
+		csoundSetGlobalEnv("RAWWAVE_PATH", "");
+	}
 	// csoundGetEnv must be called after Compile or Precompile,
 	// But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
 	if (m_options->opcodedirActive) {
@@ -4114,6 +4123,8 @@ void CsoundQt::readSettings()
 	m_options->sfdirActive = settings.value("sfdirActive","").toBool();
 	m_options->incdir = settings.value("incdir","").toString();
 	m_options->incdirActive = settings.value("incdirActive","").toBool();
+	m_options->rawWave = settings.value("rawWave","").toString();
+	m_options->rawWaveActive = settings.value("rawWaveActive","").toBool();
 	m_options->defaultCsd = settings.value("defaultCsd","").toString();
 	m_options->defaultCsdActive = settings.value("defaultCsdActive","").toBool();
 	m_options->favoriteDir = settings.value("favoriteDir","").toString();
@@ -4290,6 +4301,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("sfdirActive",m_options->sfdirActive);
 		settings.setValue("incdir",m_options->incdir);
 		settings.setValue("incdirActive",m_options->incdirActive);
+		settings.setValue("rawWave",m_options->rawWave);
+		settings.setValue("rawWaveActive",m_options->rawWaveActive);
 		settings.setValue("defaultCsd",m_options->defaultCsd);
 		settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
 		settings.setValue("favoriteDir",m_options->favoriteDir);

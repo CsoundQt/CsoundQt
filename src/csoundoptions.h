@@ -94,6 +94,8 @@ public:
 	bool sfdirActive;
 	QString incdir;
 	bool incdirActive;
+	QString rawWave;
+	bool rawWaveActive;
 
 private:
 	int m_jackNameSize;
