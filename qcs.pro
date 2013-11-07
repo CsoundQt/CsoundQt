@@ -19,13 +19,17 @@
 # BUILD OPTIONS:
 # CONFIG+=build32    To build floats version
 # CONFIG+=pythonqt  # To build with PythonQt support
-# CONFIG+=csound6
+# CONFIG+=csound5 #to attempt build for Csound5 (might not be fully supported)
 # CONFIG+=rtmidi   To build with RtMidi support
 # OS X only OPTIONS:
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
 # ##############################################################################
 
 csound6: {
+message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now default")
+}
+
+!csound5 {
     DEFINES += CSOUND6
     unix {
         macx {}
@@ -38,6 +42,8 @@ csound6: {
         }
     }
     message("Building for Csound 6")
+} else {
+message("Building for Csound 5 (unsupported)")
 }
 
 greaterThan(QT_MAJOR_VERSION, 4) {
