@@ -28,7 +28,7 @@
 #include <QDebug>
 #include <csound.h>
 
-#define QCS_VERSION "0.8.1"
+#define QCS_VERSION "0.8.2-dev"
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_DEFAULT_TIME 50
