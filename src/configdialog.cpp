@@ -61,7 +61,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		}
 	}
 	foreach (QString item, m_configlists->rtMidiNames) {
-		RtMidiModuleComboBox->addItem(item);
+		RtMidiModuleComboBox->addItem(item, item);
 	}
 	for (int i = 0; i < m_configlists->languages.size(); i++) {
 		languageComboBox->addItem(m_configlists->languages[i], QVariant(m_configlists->languageCodes[i]));
