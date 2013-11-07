@@ -193,118 +193,6 @@
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>File (offline render)</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading</set>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_15">
-          <item row="1" column="0">
-           <layout class="QVBoxLayout" name="askLayout">
-            <item>
-             <widget class="QCheckBox" name="AskFilenameCheckBox">
-              <property name="text">
-               <string>Ask for filename every time</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="FilePlayFinishedCheckBox">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Play file when finished</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="1">
-           <layout class="QGridLayout" name="formatLayout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_9">
-              <property name="text">
-               <string>File type</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="FileTypeComboBox"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>Sample format</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QComboBox" name="FileFormatComboBox"/>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <layout class="QGridLayout" name="filenamesLayout">
-            <item row="0" column="0">
-             <widget class="QCheckBox" name="InputFilenameCheckBox">
-              <property name="text">
-               <string>Input Filename</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="InputFilenameLineEdit"/>
-            </item>
-            <item row="0" column="2">
-             <widget class="QToolButton" name="inputFilenameToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="OutputFilenameCheckBox">
-              <property name="text">
-               <string>Output Filename</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="OutputFilenameLineEdit"/>
-            </item>
-            <item row="1" column="2">
-             <widget class="QToolButton" name="outputFilenameToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="FileUseOptionsCheckBox">
-            <property name="text">
-             <string>Use CsoundQt options</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="FileOverrideCheckBox">
-            <property name="text">
-             <string>Ignore CsOptions</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>Realtime Audio</string>
@@ -498,6 +386,118 @@
              </size>
             </property>
            </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>File (offline render)</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading</set>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_15">
+          <item row="1" column="0">
+           <layout class="QVBoxLayout" name="askLayout">
+            <item>
+             <widget class="QCheckBox" name="AskFilenameCheckBox">
+              <property name="text">
+               <string>Ask for filename every time</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="FilePlayFinishedCheckBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Play file when finished</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <layout class="QGridLayout" name="filenamesLayout">
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="InputFilenameCheckBox">
+              <property name="text">
+               <string>Input Filename</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="InputFilenameLineEdit"/>
+            </item>
+            <item row="0" column="2">
+             <widget class="QToolButton" name="inputFilenameToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="OutputFilenameCheckBox">
+              <property name="text">
+               <string>Output Filename</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="OutputFilenameLineEdit"/>
+            </item>
+            <item row="1" column="2">
+             <widget class="QToolButton" name="outputFilenameToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="FileUseOptionsCheckBox">
+            <property name="text">
+             <string>Use CsoundQt options</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="FileOverrideCheckBox">
+            <property name="text">
+             <string>Ignore CsOptions</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <layout class="QGridLayout" name="formatLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>File type</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="FileTypeComboBox"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Sample format</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="FileFormatComboBox"/>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
