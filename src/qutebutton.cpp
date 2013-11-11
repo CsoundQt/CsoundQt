@@ -59,11 +59,10 @@ void QuteButton::setValue(double value)
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif
-	if (value <0) {
+	if (value < 0) {
 		m_currentValue = -value;
 		m_value = -value;
-	}
-	else {
+	} else {
 		m_currentValue = value != 0 ? m_value : 0.0;
 		if (property("QCS_latch").toBool()) {
 			static_cast<QPushButton *>(m_widget)->setChecked(m_currentValue != 0);
@@ -294,6 +293,15 @@ void QuteButton::setText(QString text)
 void QuteButton::popUpMenu(QPoint pos)
 {
 	QuteWidget::popUpMenu(pos);
+}
+
+void QuteButton::setMidiValue(int value)
+{
+	double pressedVal = property("QCS_pressedValue").toDouble();
+	double newval= value == 0 ? 0 : pressedVal;
+	setValue(newval);
+	QPair<QString, double> channelValue(m_channel, newval);
+	emit newValue(channelValue);
 }
 
 void QuteButton::refreshWidget()
