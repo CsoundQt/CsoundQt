@@ -386,20 +386,21 @@ int CsoundEngine::keyEventCallback(void *userData,
 								   void *p,
 								   unsigned int type)
 {
-//	if (type != CSOUND_CALLBACK_KBD_EVENT)
-//		return 1;
+	if (type != CSOUND_CALLBACK_KBD_EVENT && type != CSOUND_CALLBACK_KBD_TEXT) {
+		return 1;
+	}
 	CsoundUserData *ud = (CsoundUserData *) userData;
 	//  WidgetLayout *wl = (WidgetLayout *) ud->wl;
 	int *value = (int *) p;
 	int key = ud->csEngine->popKeyPressEvent();
 	if (key >= 0) {
 		*value = key;
-		//    qDebug() << "Pressed: " << key;
+//			qDebug() << "Pressed: " << key;
 	}
-	else {
+	else if (type & CSOUND_CALLBACK_KBD_EVENT) {
 		key = ud->csEngine->popKeyReleaseEvent();
 		if (key >= 0) {
-			*value = key;
+			*value = key | 0x10000;
 			//       qDebug() << "Released: " << key;
 		}
 	}
@@ -649,23 +650,25 @@ void CsoundEngine::evaluate(QString code)
 
 int CsoundEngine::popKeyPressEvent()
 {
-	keyMutex.lock();
 	int value = -1;
-	if (!keyPressBuffer.isEmpty()) {
-		value = (int) keyPressBuffer.takeFirst()[0].toLatin1();
+	if (keyMutex.tryLock()) {
+		if (!keyPressBuffer.isEmpty()) {
+			value = (int) keyPressBuffer.takeFirst()[0].toLatin1();
+		}
+		keyMutex.unlock();
 	}
-	keyMutex.unlock();
 	return value;
 }
 
 int CsoundEngine::popKeyReleaseEvent()
 {
-	keyMutex.lock();
 	int value = -1;
-	if (!keyReleaseBuffer.isEmpty()) {
-		value = (int) keyReleaseBuffer.takeFirst()[0].toLatin1() + 0x10000;
+	if (keyMutex.tryLock()) {
+		if (!keyReleaseBuffer.isEmpty()) {
+			value = (int) keyReleaseBuffer.takeFirst()[0].toLatin1();
+		}
+		keyMutex.unlock();
 	}
-	keyMutex.unlock();
 	return value;
 }
 
