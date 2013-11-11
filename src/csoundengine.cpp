@@ -886,7 +886,13 @@ int CsoundEngine::runCsound()
 	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
 #endif
 
-
+#ifdef QCS_RTMIDI
+    if (!m_options.useCsoundMidi) {
+        csoundSetOption(ud->csound, "-+rtmidi=hostbased");
+        csoundSetOption(ud->csound, "-M0");
+        csoundSetOption(ud->csound, "-Q0");
+    }
+#endif
 	char **argv;
 	argv = (char **) calloc(33, sizeof(char*));
 	int argc = m_options.generateCmdLine(argv);
