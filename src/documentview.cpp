@@ -1034,7 +1034,7 @@ void DocumentView::findString(QString query)
 {
 	// TODO search across all editors
 	if (m_viewMode < 2) {
-		qDebug() << "DocumentView::findString " << query;
+//		qDebug() << "DocumentView::findString " << query;
 		if (query == "") {
 			query = lastSearch;
 		}

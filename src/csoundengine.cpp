@@ -602,7 +602,7 @@ void CsoundEngine::setConsoleBufferSize(int size)
 
 void CsoundEngine::keyPressForCsound(QString key)
 {
-	//  qDebug() << "CsoundEngine::keyPressForCsound " << key;
+//	  qDebug() << "CsoundEngine::keyPressForCsound " << key;
 	keyMutex.lock();
 	keyPressBuffer << key;
 	keyMutex.unlock();
@@ -610,7 +610,7 @@ void CsoundEngine::keyPressForCsound(QString key)
 
 void CsoundEngine::keyReleaseForCsound(QString key)
 {
-	//   qDebug() << "keyReleaseForCsound " << key;
+//	   qDebug() << "keyReleaseForCsound " << key;
 	keyMutex.lock();
 	keyReleaseBuffer << key;
 	keyMutex.unlock();
