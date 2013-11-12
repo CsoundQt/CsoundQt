@@ -217,6 +217,7 @@ private slots:
 	void splitView(bool split);
 	void openManualExample(QString fileName);
 	void openExternalBrowser(QUrl url = QUrl());
+	void openPdfFile(QString name);
 	void openFLOSSManual();
 	void openQuickRef();
 	void resetPreferences();
@@ -253,6 +254,7 @@ private:
 	void createActions();
 	void setKeyboardShortcutsList();
 	void connectActions();
+	QString getExamplePath(QString dir);
 	void createMenus();
 	void fillFileMenu();
 	void fillFavoriteMenu();

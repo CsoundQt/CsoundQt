@@ -1821,12 +1821,7 @@ void CsoundQt::openExternalBrowser(QUrl url)
 	}
 }
 
-void CsoundQt::openFLOSSManual()
-{
-	openExternalBrowser(QUrl("http://en.flossmanuals.net/csound/"));
-}
-
-void CsoundQt::openQuickRef()
+void CsoundQt::openPdfFile(QString name)
 {
 	if (!m_options->pdfviewer.isEmpty()) {
 #ifndef Q_OS_MAC
@@ -1837,13 +1832,23 @@ void CsoundQt::openQuickRef()
 									 "Please go to Edit->Options->Environment and select directory\n"));
 		}
 #endif
-		QString arg = "\"" + quickRefFileName + "\"";
+		QString arg = "\"" + name + "\"";
 		//    qDebug() << arg;
 		execute(m_options->pdfviewer, arg);
 	}
 	else {
-		QDesktopServices::openUrl(QUrl::fromLocalFile (quickRefFileName));
+		QDesktopServices::openUrl(QUrl::fromLocalFile (name));
 	}
+}
+
+void CsoundQt::openFLOSSManual()
+{
+	openExternalBrowser(QUrl("http://en.flossmanuals.net/csound/"));
+}
+
+void CsoundQt::openQuickRef()
+{
+	openPdfFile(quickRefFileName);
 }
 
 void CsoundQt::resetPreferences()
@@ -3049,6 +3054,43 @@ void CsoundQt::connectActions()
 	}
 }
 
+QString CsoundQt::getExamplePath(QString dir)
+{
+	QString examplePath;
+#ifdef Q_OS_WIN32
+	examplePath = qApp->applicationDirPath() + "/Examples/" + dir;
+#endif
+#ifdef Q_OS_MAC
+	examplePath = qApp->applicationDirPath() + "/../Resources/" + dir;
+	qDebug() << examplePath;
+#endif
+#ifdef Q_OS_LINUX
+	examplePath = qApp->applicationDirPath() + "/Examples/" + dir;
+	if (!QDir(examplePath).exists()) {
+		examplePath = qApp->applicationDirPath() + "/../src/Examples/" + dir;
+	}
+	if (!QDir(examplePath).exists()) { // for out of tree builds
+		examplePath = qApp->applicationDirPath() + "/../../csoundqt/src/Examples/" + dir;
+	}
+	if (!QDir(examplePath).exists()) { // for out of tree builds
+		examplePath = qApp->applicationDirPath() + "/../../qutecsound/src/Examples/" + dir;
+	}
+	if (!QDir(examplePath).exists()) {
+		examplePath = "/usr/share/qutecsound/Examples/" + dir;
+	}
+#endif
+#ifdef Q_OS_SOLARIS
+	examplePath = qApp->applicationDirPath() + "/Examples/" + dir;
+	if (!QDir(examplePath).exists()) {
+		examplePath = "/usr/share/qutecsound/Examples/" + dir;
+	}
+	if (!QDir(examplePath).exists()) {
+		examplePath = qApp->applicationDirPath() + "/../src/Examples/" + dir;
+	}
+#endif
+	return examplePath;
+}
+
 void CsoundQt::createMenus()
 {
 	fileMenu = menuBar()->addMenu(tr("File"));
@@ -3694,39 +3736,7 @@ flossmanScFiles.append(":/examples/FLOSS Manual Examples/Score Methods/Score_met
 	}
 
 
-	QString mcCurdyPath;
-#ifdef Q_OS_WIN32
-	mcCurdyPath = qApp->applicationDirPath() + "/Examples/McCurdy Collection";
-#endif
-#ifdef Q_OS_MAC
-	mcCurdyPath = qApp->applicationDirPath() + "/../Resources/McCurdy Collection";
-	qDebug() << mcCurdyPath;
-#endif
-#ifdef Q_OS_LINUX
-	mcCurdyPath = qApp->applicationDirPath() + "/Examples/McCurdy Collection";
-	if (!QDir(mcCurdyPath).exists()) {
-		mcCurdyPath = "/usr/share/qutecsound/Examples/McCurdy Collection";
-	}
-	if (!QDir(mcCurdyPath).exists()) {
-		mcCurdyPath = qApp->applicationDirPath() + "/../src/Examples/McCurdy Collection";
-	}
-	if (!QDir(mcCurdyPath).exists()) { // for out of tree builds
-		mcCurdyPath = qApp->applicationDirPath() + "/../../csoundqt/src/Examples/McCurdy Collection";
-	}
-	if (!QDir(mcCurdyPath).exists()) { // for out of tree builds
-		mcCurdyPath = qApp->applicationDirPath() + "/../../qutecsound/src/Examples/McCurdy Collection";
-	}
-#endif
-#ifdef Q_OS_SOLARIS
-	mcCurdyPath = qApp->applicationDirPath() + "/Examples/McCurdy Collection";
-	if (!QDir(mcCurdyPath).exists()) {
-		mcCurdyPath = "/usr/share/qutecsound/Examples/McCurdy Collection";
-	}
-	if (!QDir(mcCurdyPath).exists()) {
-		mcCurdyPath = qApp->applicationDirPath() + "/../src/Examples/McCurdy Collection";
-	}
-#endif
-
+	QString mcCurdyPath = getExamplePath("McCurdy Collection");
 	if (QDir(mcCurdyPath).exists()) {
 		QMenu *mccurdyMenu = examplesMenu->addMenu(tr("McCurdy Collection"));
 		QStringList subDirs = QDir(mcCurdyPath).entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
@@ -3743,6 +3753,8 @@ flossmanScFiles.append(":/examples/FLOSS Manual Examples/Score Methods/Score_met
 				connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
 			}
 		}
+	} else {
+		qDebug() << "Warning: Could not find McCurdy Collection.";
 	}
 
 	// Add the rest
@@ -3754,7 +3766,25 @@ flossmanScFiles.append(":/examples/FLOSS Manual Examples/Score Methods/Score_met
 			newAction->setData(fileName);
 			connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
 		}
+		if (subMenuNames[i] == "Synths") {
+			QString striaPath = getExamplePath("Stria Synth");
+			if (QDir(striaPath).exists()) {
+				QMenu *striaMenu = submenu->addMenu(tr("Stria Synth"));
+				QStringList filters;
+				filters << "*.csd" << "*.pdf";
+				QStringList striaFiles = QDir(striaPath).entryList(filters,QDir::Files);
+				foreach (QString fileName, striaFiles) {
+					//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+					newAction = striaMenu->addAction(fileName);
+					newAction->setData(striaPath + QDir::separator() + fileName);
+					connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+				}
+			} else {
+				qDebug() << "Warning: Could not find Stria Synth files.";
+			}
+		}
 	}
+
 
 	favoriteMenu = menuBar()->addMenu(tr("Favorites"));
 #ifdef QCS_PYTHONQT
@@ -4402,6 +4432,10 @@ int CsoundQt::loadFileFromSystem(QString fileName)
 int CsoundQt::loadFile(QString fileName, bool runNow)
 {
 	//  qDebug() << "CsoundQt::loadFile" << fileName;
+	if (fileName.endsWith(".pdf")) {
+		openPdfFile(fileName);
+		return 0;
+	}
 	int index = isOpen(fileName);
 	if (index != -1) {
 		documentTabs->setCurrentIndex(index);
