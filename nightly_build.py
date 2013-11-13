@@ -22,10 +22,15 @@ f = open("log_nightly.txt", "a")
 f.write("\n" + datetime.today().ctime() + "\n")
 
 if not subprocess.check_output('git fetch --dry-run', shell=True, stderr=subprocess.STDOUT):
-    print "No changes in git. Not performing nightly build"
-    f.write("No changes in git. Not performing nightly build\n")
-    f.close()
-    sys.exit()
+    if '-f' in sys.argv:
+        print "No changes in git, but forcing build"
+        os.system("git pull")
+    else:
+        print "No changes in git. Not performing nightly build"
+        f.write("No changes in git. Not performing nightly build\n")
+        f.close()
+        sys.exit()
+
 else:
     os.system("git pull")
 
