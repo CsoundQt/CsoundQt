@@ -64,9 +64,9 @@ os.system('scp -i ~/.ssh/nightly %s %s@frs.sourceforge.net:/home/frs/project/qut
 
 # With McCurdy Collection without CsoundLib (for release)
 outname = 'CsoundQt-forrelease-%s.tar.gz'%today
-os.system('rm -rf CsoundQt-d-cs6.app/Contents/Frameworks/CsoundLib64.framework'
+os.system('rm -rf CsoundQt-d-cs6.app/Contents/Frameworks/CsoundLib64.framework')
 os.system('rm -rf CsoundQt-d-cs6.app/Contents/Frameworks/libcsnd.6.0.dylib')
-os.system('cp -rf ../../qutecsound/src/Examples/ CsoundQt-d-cs6.app/Contents/Re
+os.system('cp -rf ../../qutecsound/src/Examples/ CsoundQt-d-cs6.app/Contents/Resources')
 os.system('tar -czvf %s CsoundQt-d-cs6.app &>/dev/null'%outname)
 
 f.write("Done.\n")
