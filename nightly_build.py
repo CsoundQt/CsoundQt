@@ -3,6 +3,7 @@ import shutil
 import sys
 from datetime import datetime, date
 import subprocess
+from time import sleep
 
 
 # Set these global variables
@@ -42,8 +43,11 @@ os.mkdir('../' + build_dir)
 os.chdir('../' + build_dir)
 os.system(qmake_bin + configs + ' ' + qcs_source_path + '/qcs.pro')
 os.system('make -w -j7')
-os.system(qt_base_dir + '/clang_64/bin/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/')
+sleep(30)
 
+
+os.system(qt_base_dir + '/clang_64/bin/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/')
+sleep(10)
 os.chdir('bin')
 
 shutil.copyfile('/Library/Frameworks/CsoundLib64.framework/Versions/6.0/libcsnd.6.0.dylib',  'CsoundQt-d-cs6.app/Contents/Frameworks/libcsnd.6.0.dylib')
@@ -55,6 +59,7 @@ os.system("install_name_tool -change CsoundLib64.framework/Versions/6.0/CsoundLi
 
 outname = 'CsoundQt-nightly-%s.tar.gz'%today
 os.system('tar -czvf %s CsoundQt-d-cs6.app &>/dev/null'%outname)
+# or: hdiutil create -format UDBZ -quiet -srcfolder YourApp.app YourAppArchive.dmg
 os.system('scp -i ~/.ssh/nightly %s %s@frs.sourceforge.net:/home/frs/project/qutecsound/CsoundQt/nightly-osx'%(outname,username))
 
 f.write("Done.\n")
