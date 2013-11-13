@@ -58,7 +58,9 @@ void MidiHandler::passMidiMessage(std::vector<unsigned char> *message)
 
 void MidiHandler::sendMidiOut(std::vector<unsigned char> *message)
 {
+#ifdef QCS_RTMIDI
 	m_midiout->sendMessage(message);
+#endif
 }
 
 
