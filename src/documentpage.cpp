@@ -37,17 +37,24 @@
 #include "highlighter.h"
 #include "widgetlayout.h"
 #include "console.h"
+#include "midilearndialog.h"
 
 #include "curve.h"
 #include "qutebutton.h"
 
 
 // TODO is is possible to move the editor to a separate child class, to be able to use a cleaner class?
-DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists):
+DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists, MidiLearnDialog *midiLearn):
 	BaseDocument(parent, opcodeTree, configlists)
 {
 	init(parent, opcodeTree);
 	m_view->showLineArea(true);
+	m_midiLearn = midiLearn;
+	foreach(WidgetLayout* wl, m_widgetLayouts) {
+		connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
+		connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)), this, SLOT(passSelectedWidget(QuteWidget*)));
+		connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)), this, SLOT(passUnselectedWidget(QuteWidget*)));
+	}
 }
 
 DocumentPage::~DocumentPage()
@@ -1147,6 +1154,7 @@ void DocumentPage::queueMidiIn(std::vector< unsigned char > *message)
 {
 	WidgetLayout *d = m_widgetLayouts[0];
 	unsigned int nBytes = message->size();
+	Q_ASSERT(nBytes < 4);
 	if ( ((d->midiWriteCounter + 1) % QCS_MAX_MIDI_QUEUE) != d->midiReadCounter) {
 		int index = d->midiWriteCounter;
 		d->midiWriteCounter++;
@@ -1219,6 +1227,8 @@ WidgetLayout* DocumentPage::newWidgetLayout()
 {
 	WidgetLayout* wl = BaseDocument::newWidgetLayout();
 	connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
+	connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)), this, SLOT(passSelectedWidget(QuteWidget*)));
+	connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)), this, SLOT(passUnselectedWidget(QuteWidget*)));
 	//  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
 	//        this, SLOT(setWidgetClipboard(QString)));
 	return wl;
@@ -1325,6 +1335,17 @@ void DocumentPage::hideWidgets()
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
 		wl->setVisible(false);
 	}
+}
+
+void DocumentPage::passSelectedWidget(QuteWidget *widget)
+{
+	m_midiLearn->setCurrentWidget(widget);
+}
+
+void DocumentPage::passUnselectedWidget(QuteWidget *widget)
+{
+	// TODO: Better options for unselecting widgets.
+	m_midiLearn->setCurrentWidget(NULL);
 }
 
 void DocumentPage::applyMacOptions(QStringList options)

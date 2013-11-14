@@ -42,12 +42,15 @@ class LiveEventFrame;
 class EventSheet;
 class LiveEventControl;
 class SndfileHandle;
+class MidiLearnDialog;
+class QuteWidget;
 
 class DocumentPage : public BaseDocument
 {
 	Q_OBJECT
 public:
-	DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists);
+	DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists,
+				 MidiLearnDialog *midiLearn);
 	~DocumentPage();
 
 	void setCompanionFileName(QString name);
@@ -207,6 +210,8 @@ public slots:
 
 	void showWidgets(bool show = true);
 	void hideWidgets();
+	void passSelectedWidget(QuteWidget* widget);
+	void passUnselectedWidget(QuteWidget* widget);
 
 	void applyMacOptions(QStringList options);
 	void setMacOption(QString option, QString newValue);
@@ -271,6 +276,8 @@ private:
 
 	QList<LiveEventFrame *> m_liveFrames;
 	LiveEventControl *m_liveEventControl;
+
+	MidiLearnDialog *m_midiLearn;
 
 	//    DocumentView *m_view;
 

@@ -1,4 +1,5 @@
 #include "midihandler.h"
+#include "midilearndialog.h"
 
 #ifdef QCS_RTMIDI
 #include "RtMidi.h"
@@ -49,10 +50,20 @@ void MidiHandler::setListener(DocumentPage *page)
 	m_listeners.append(page);
 }
 
+void MidiHandler::setMidiLearner(MidiLearnDialog *midiLearn)
+{
+	m_midiLearnDialog = midiLearn;
+}
+
 void MidiHandler::passMidiMessage(std::vector<unsigned char> *message)
 {
 	foreach(DocumentPage *page, m_listeners) {
 		page->queueMidiIn(message);
+	}
+	if (m_midiLearnDialog) {
+		if (message->size() > 2 && ((*message)[0] & 0x90)) {
+			m_midiLearnDialog->setMidiController(((*message)[0] & 0x0F) + 1, (*message)[1] & 0x8F);
+		}
 	}
 }
 

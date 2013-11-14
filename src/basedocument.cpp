@@ -36,7 +36,7 @@ BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree, ConfigLis
 	m_view = 0;
 	m_csEngine = new CsoundEngine(configlists);
 	//FIXME widgetlayout should have the chance of being empty
-	m_widgetLayouts.append(newWidgetLayout());
+	m_widgetLayouts.append(this->newWidgetLayout());
 	m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine
 	//  m_view->setOpcodeNameList(opcodeNameList);
 	//  m_view->setOpcodeTree(m_opcodeTree);

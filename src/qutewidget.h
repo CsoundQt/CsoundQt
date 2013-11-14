@@ -47,6 +47,7 @@ public:
 	virtual void setValue(QString);
 	virtual void setMidiValue(int value);
 	virtual void setMidiValue2(int value);
+	virtual bool acceptsMidi() {return false;}
 	virtual void setLocked(bool locked) {m_locked = locked;}
 
 	virtual void widgetMessage(QString path, QString text);

@@ -47,12 +47,14 @@ void FrameWidget::select()
 {
 	m_selected = true;
 	this->setLineWidth(2);
+	emit widgetSelected(m_widget);
 }
 
 void FrameWidget::deselect()
 {
 	m_selected = false;
 	this->setLineWidth(1);
+	emit widgetUnselected(m_widget);
 }
 
 bool FrameWidget::isSelected()

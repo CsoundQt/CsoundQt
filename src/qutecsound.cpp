@@ -38,6 +38,7 @@
 #include "eventsheet.h"
 #include "appwizard.h"
 #include "midihandler.h"
+#include "midilearndialog.h"
 
 #ifdef QCS_PYTHONQT
 #include "pythonconsole.h"
@@ -117,6 +118,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	m_options->theme = settings.value("theme", "boring").toString();
 
 	midiHandler = new MidiHandler(this);
+	m_midiLearn = new MidiLearnDialog(this);
+	m_midiLearn->setModal(false);
+	midiHandler->setMidiLearner(m_midiLearn);
 
 	createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
 	readSettings();
@@ -1780,6 +1784,11 @@ void CsoundQt::splitView(bool split)
 	}
 }
 
+void CsoundQt::showMidiLearn()
+{
+	m_midiLearn->show();
+}
+
 void CsoundQt::openManualExample(QString fileName)
 {
 	loadFile(fileName);
@@ -2279,6 +2288,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	viewFullScreenAct->setShortcut(tr("F11"));
 #endif
 	splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
+	midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
 	createCodeGraphAct->setShortcut(tr("Alt+4"));
 	showInspectorAct->setShortcut(tr("Alt+5"));
 	showLiveEventsAct->setShortcut(tr("Alt+6"));
@@ -2713,6 +2723,11 @@ void CsoundQt::createActions()
 	splitViewAct->setShortcutContext(Qt::ApplicationShortcut);
 	connect(splitViewAct, SIGNAL(toggled(bool)), this, SLOT(splitView(bool)));
 
+	midiLearnAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("MIDI Learn"), this);
+	midiLearnAct->setStatusTip(tr("Show MIDI Learn Window for widgets"));
+	midiLearnAct->setShortcutContext(Qt::ApplicationShortcut);
+	connect(midiLearnAct, SIGNAL(triggered()), this, SLOT(showMidiLearn()));
+
 	showOrcAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Orchestra"), this);
 	showOrcAct->setCheckable(true);
 	showOrcAct->setChecked(true);
@@ -2960,6 +2975,7 @@ void CsoundQt::setKeyboardShortcutsList()
 	m_keyActions.append(infoAct);
 	m_keyActions.append(viewFullScreenAct);
 	m_keyActions.append(splitViewAct);
+	m_keyActions.append(midiLearnAct);
 	m_keyActions.append(killLineAct);
 	m_keyActions.append(killToEndAct);
 	m_keyActions.append(evaluateAct);
@@ -3171,6 +3187,7 @@ void CsoundQt::createMenus()
 	viewMenu->addAction(showScratchPadAct);
 #endif
 	viewMenu->addAction(showUtilitiesAct);
+	viewMenu->addAction(midiLearnAct);
 	viewMenu->addSeparator();
 	viewMenu->addAction(viewFullScreenAct);
 	viewMenu->addSeparator();
@@ -4583,7 +4600,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 
 void CsoundQt::makeNewPage(QString fileName, QString text)
 {
-	DocumentPage *newPage = new DocumentPage(this, m_opcodeTree, &m_configlists);
+	DocumentPage *newPage = new DocumentPage(this, m_opcodeTree, &m_configlists, m_midiLearn);
 	int insertPoint = curPage + 1;
 	curPage += 1;
 	if (documentPages.size() == 0) {

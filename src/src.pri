@@ -12,7 +12,8 @@ FORMS = "src/about.ui" \
     "src/appdetailspage.ui" \
     "src/pluginspage.ui" \
     "src/additionalfilespage.ui" \
-    "src/filebeditor.ui"
+    "src/filebeditor.ui" \
+    src/midilearndialog.ui
 HEADERS = "src/about.h" \
     "src/configdialog.h" \
     "src/configlists.h" \
@@ -65,7 +66,8 @@ HEADERS = "src/about.h" \
     "src/additionalfilespage.h" \
     "src/scoreeditor.h" \
     "src/filebeditor.h" \
-    src/midihandler.h
+    src/midihandler.h \
+    src/midilearndialog.h
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
     "src/configlists.cpp" \
@@ -118,7 +120,8 @@ SOURCES = "src/about.cpp" \
     "src/additionalfilespage.cpp" \
     "src/scoreeditor.cpp" \
     "src/filebeditor.cpp" \
-    src/midihandler.cpp
+    src/midihandler.cpp \
+    src/midilearndialog.cpp
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
     "src/qutecsound.rc" \

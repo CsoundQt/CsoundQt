@@ -60,6 +60,7 @@ class EventDispatcher;
 class EventSheet;
 class CsoundEngine;
 class MidiHandler;
+class MidiLearnDialog;
 
 class CsoundQt:public QMainWindow
 {
@@ -215,6 +216,7 @@ private slots:
 	void setHelpEntry();
 	void setFullScreen(bool full);
 	void splitView(bool split);
+	void showMidiLearn();
 	void openManualExample(QString fileName);
 	void openExternalBrowser(QUrl url = QUrl());
 	void openPdfFile(QString name);
@@ -303,6 +305,7 @@ private:
 	PythonConsole *m_pythonConsole;
 #endif
 	MidiHandler *midiHandler;
+	MidiLearnDialog *m_midiLearn;
 	QFile logFile;
 
 	QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts
@@ -368,6 +371,7 @@ private:
 	QAction *showOpcodeQuickRefAct;
 	QAction *showConsoleAct;
 	QAction *viewFullScreenAct;
+	QAction *midiLearnAct;
 	QAction *splitViewAct;
 
 	QAction *showOrcAct;

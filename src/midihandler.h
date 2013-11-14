@@ -24,6 +24,8 @@ public:
     void removeListener(DocumentPage *page);
     void setListener(DocumentPage *page); // Unique listener
 
+    void setMidiLearner(MidiLearnDialog *midiLearn);
+
     void passMidiMessage(std::vector< unsigned char > *message);
     void sendMidiOut(std::vector< unsigned char > *message);
 
@@ -32,6 +34,7 @@ signals:
 public slots:
 private:
 	QVector<DocumentPage *> m_listeners;
+	MidiLearnDialog *m_midiLearnDialog;
 
 #ifdef QCS_RTMIDI
 	RtMidiIn *m_midiin;
