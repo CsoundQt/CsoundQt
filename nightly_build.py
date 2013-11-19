@@ -52,7 +52,7 @@ sleep(30)
 
 
 os.system(qt_base_dir + '/clang_64/bin/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/')
-sleep(10)
+sleep(30)
 os.chdir('bin')
 
 os.system("install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../Frameworks/libsndfile.1.dylib CsoundQt-d-cs6.app/Contents/Frameworks/libcsnd.6.0.dylib")
