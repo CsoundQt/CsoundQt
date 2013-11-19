@@ -48,8 +48,6 @@ os.mkdir('../' + build_dir)
 os.chdir('../' + build_dir)
 os.system(qmake_bin + configs + ' ' + qcs_source_path + '/qcs.pro')
 os.system('make -w -j7')
-sleep(60)
-
 
 check_output(qt_base_dir + '/clang_64/bin/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/', shell=True)
 os.chdir('bin')
