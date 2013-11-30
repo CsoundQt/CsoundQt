@@ -999,7 +999,12 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 			}
 		}
 		else {
-			QString text = tr("Channel:") + widget->getChannelName();
+			QString text = tr("Channel:") + widget->getChannelName() + "\n";
+			int midicc = widget->property("QCS_midicc").toInt();
+			int midichan = widget->property("QCS_midichan").toInt();
+			if (midichan > 0) {
+				text += QString(tr("MIDI chan: %1 CC: %2")).arg(midichan).arg(midicc);
+			}
 			widget->setToolTip(text);
 			if (getEditWidget(widget) != 0) {
 				getEditWidget(widget)->setToolTip(text);
