@@ -2,9 +2,9 @@ import os
 import shutil
 import sys
 from datetime import datetime, date
-import subprocess
 from time import sleep
-
+import subprocess
+from subprocess import check_output
 
 # Set these global variables
 qt_base_dir = '~/Qt/5.1.1'
@@ -21,7 +21,7 @@ build_dir = 'csoundqt-' + today
 f = open("log_nightly.txt", "a")
 f.write("\n" + datetime.today().ctime() + "\n")
 
-if not subprocess.check_output('git fetch --dry-run', shell=True, stderr=subprocess.STDOUT):
+if not check_output('git fetch --dry-run', shell=True, stderr=subprocess.STDOUT):
     if '-f' in sys.argv:
         print "No changes in git, but forcing build"
         os.system("git pull")
@@ -48,24 +48,21 @@ os.mkdir('../' + build_dir)
 os.chdir('../' + build_dir)
 os.system(qmake_bin + configs + ' ' + qcs_source_path + '/qcs.pro')
 os.system('make -w -j7')
-sleep(30)
 
-
-os.system(qt_base_dir + '/clang_64/bin/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/')
-sleep(30)
+check_output(qt_base_dir + '/clang_64/bin/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/', shell=True)
 os.chdir('bin')
 
-os.system("install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../Frameworks/libsndfile.1.dylib CsoundQt-d-cs6.app/Contents/Frameworks/libcsnd.6.0.dylib")
+check_output("install_name_tool -change /usr/local/lib/libsndfile.1.dylib @executable_path/../Frameworks/libsndfile.1.dylib CsoundQt-d-cs6.app/Contents/Frameworks/libcsnd.6.0.dylib", shell=True)
 
 shutil.copyfile('/Library/Frameworks/CsoundLib64.framework/Versions/6.0/libcsnd.6.0.dylib',  'CsoundQt-d-cs6.app/Contents/Frameworks/libcsnd.6.0.dylib')
 
-os.system("install_name_tool -change CsoundLib64.framework/Versions/6.0/CsoundLib64 @executable_path/../Frameworks/CsoundLib64.framework/Versions/6.0/CsoundLib64 CsoundQt-d-cs6.app/Contents/Frameworks/libcsnd.6.0.dylib")
+check_output("install_name_tool -change CsoundLib64.framework/Versions/6.0/CsoundLib64 @executable_path/../Frameworks/CsoundLib64.framework/Versions/6.0/CsoundLib64 CsoundQt-d-cs6.app/Contents/Frameworks/libcsnd.6.0.dylib", shell=True)
 
 
 outname = 'CsoundQt-nightly-%s.tar.gz'%today
-os.system('tar -czvf %s CsoundQt-d-cs6.app &>/dev/null'%outname)
+check_output('tar -czvf %s CsoundQt-d-cs6.app &>/dev/null'%outname, shell=True)
 # or: hdiutil create -format UDBZ -quiet -srcfolder YourApp.app YourAppArchive.dmg
-os.system('scp -i ~/.ssh/nightly %s %s@frs.sourceforge.net:/home/frs/project/qutecsound/CsoundQt/nightly-osx'%(outname,username))
+check_output('scp -i ~/.ssh/nightly %s %s@frs.sourceforge.net:/home/frs/project/qutecsound/CsoundQt/nightly-osx'%(outname,username), shell=True)
 
 # With McCurdy Collection without CsoundLib (for release)
 outname = 'CsoundQt-forrelease-%s.tar.gz'%today
