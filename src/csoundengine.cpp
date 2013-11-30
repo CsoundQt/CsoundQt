@@ -230,7 +230,13 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
 		char *string = (char *) channelValuePtr;
 		QString newValue = ud->wl->getStringForChannel(channelName);
 		int maxlen = csoundGetChannelDatasize(csound, channelName);
+		if (maxlen == 0) {
+			return;
+		}
 		strncpy(string, newValue.toLocal8Bit(), maxlen);
+		if (newValue.size() >= maxlen) {
+			string[maxlen - 1] = '\0';
+		}
 	}
 	else if (channelType == &CS_VAR_TYPE_K) {  // Not a string channel
 		//FIXME check if mouse tracking is active, and move this from here
@@ -1026,7 +1032,7 @@ void CsoundEngine::setupChannels()
 		QVector<QuteWidget *> widgets = ud->wl->getWidgets();
 		if (chanType & CSOUND_INPUT_CHANNEL) {
 //			ud->inputChannelNames << QString(entry->name);
-			if (chanType & CSOUND_CONTROL_CHANNEL) {
+			if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_CONTROL_CHANNEL) {
 				ud->wl->valueMutex.lock();
 				foreach (QuteWidget *w, widgets) {
 					if (!w->getChannelName().isEmpty()) {
@@ -1037,7 +1043,7 @@ void CsoundEngine::setupChannels()
 					}
 				}
 				ud->wl->valueMutex.unlock();
-			} else if (chanType & CSOUND_STRING_CHANNEL) {
+			} else if ((chanType & CSOUND_CHANNEL_TYPE_MASK) ==  CSOUND_STRING_CHANNEL) {
 				ud->wl->stringValueMutex.lock();
 				foreach (QuteWidget *w, widgets) {
 					if (!w->getChannelName().isEmpty()) {
@@ -1048,7 +1054,7 @@ void CsoundEngine::setupChannels()
 			}
 		}
 		if (chanType & CSOUND_OUTPUT_CHANNEL) { // Channels can be input and output at the same time
-			if (chanType & CSOUND_CONTROL_CHANNEL) {
+			if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_CONTROL_CHANNEL) {
 				ud->outputChannelNames << QString(entry->name);
 				ud->previousOutputValues << 0;
 				foreach (QuteWidget *w, widgets) {
@@ -1061,7 +1067,7 @@ void CsoundEngine::setupChannels()
 						continue;
 					}
 				}
-			} else if (chanType & CSOUND_STRING_CHANNEL) {
+			} else if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_STRING_CHANNEL) {
 				ud->outputStringChannelNames << QString(entry->name);
 				ud->previousStringOutputValues << "";
 				foreach (QuteWidget *w, widgets) {
