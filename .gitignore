@@ -10,4 +10,5 @@ Makefile
 bin/CsoundQt-d-py
 build/
 
-
+bin/CsoundQt-d-py-cs6
+src/Examples/McCurdy Collection/Modulation/test.wav
