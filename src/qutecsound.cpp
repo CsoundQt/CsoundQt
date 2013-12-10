@@ -250,6 +250,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     //qDebug()<<"Max thread count: "<< QThreadPool::globalInstance()->maxThreadCount();
     QThreadPool::globalInstance()->setMaxThreadCount(MAX_THREAD_COUNT);
 
+    QFile file(":/appstyle.css");
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+    qApp->setStyleSheet(styleSheet);
 }
 
 CsoundQt::~CsoundQt()

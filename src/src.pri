@@ -143,3 +143,6 @@ LIBS += $${LCSOUND} \
     $${LSNDFILE} \
     $${RTMIDI}
 
+OTHER_FILES += \
+    src/appstyle.css
+
