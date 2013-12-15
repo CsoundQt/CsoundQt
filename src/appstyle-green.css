@@ -4,6 +4,12 @@ height: 4px; /* when horizontal */
 /* background: #F6FAD4; */
 }
 
+QFrame {
+/*    border: 0px solid green;
+    border-radius: 4px;
+    padding: 2px; */
+}
+
 QMainWindow::separator:hover  {
     background: #5B7C54;
 }
@@ -13,7 +19,7 @@ QMainWindow::separator:hover  {
     }
 
     QTabWidget::pane  { /* The tab widget frame */
-        background: #5B7C54;
+        /* background: #5B7C54; */
     }
 
     QTabWidget::tab-bar  {
