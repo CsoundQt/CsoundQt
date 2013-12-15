@@ -29,7 +29,8 @@ Inspector::Inspector(QWidget *parent)
 {
 	setWindowTitle(tr("Inspector"));
 	m_treeWidget = new QTreeWidget(this);
-	m_treeWidget->setHeaderLabel(tr("Inspector"));
+//	m_treeWidget->setHeaderLabel(tr("Inspector"));
+	m_treeWidget->setHeaderHidden(true);
 	m_treeWidget->show();
 	setWidget(m_treeWidget);
 	//  connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
