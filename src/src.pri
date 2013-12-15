@@ -14,7 +14,8 @@ FORMS = "src/about.ui" \
     "src/additionalfilespage.ui" \
     "src/filebeditor.ui" \
     src/midilearndialog.ui \
-    src/debugpanel.ui
+    src/debugpanel.ui \
+    src/dockhelp.ui
 HEADERS = "src/about.h" \
     "src/configdialog.h" \
     "src/configlists.h" \

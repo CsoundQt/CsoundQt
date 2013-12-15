@@ -1299,7 +1299,7 @@ void CsoundEngine::stopDebug()
 void CsoundEngine::addInstrumentBreakpoint(double instr)
 {
 	if (isRunning() && m_debugging) {
-		csoundSetInstrumentBreakpoint(ud->csound, instr);
+		csoundSetInstrumentBreakpoint(ud->csound, instr, 0);
 	}
 }
 

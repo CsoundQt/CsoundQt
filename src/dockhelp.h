@@ -27,36 +27,27 @@
 #include <QUrl>
 #include "types.h"
 #include <QTextDocument>
-#include <QToolBar>
-#include <QLineEdit>
-#include <QPushButton>
 
-class QTextBrowser;
+namespace Ui {
+class DockHelp;
+}
 
 class DockHelp : public QDockWidget
 {
 	Q_OBJECT
 public:
-	DockHelp(QWidget *parent);
-
+	explicit DockHelp(QWidget *parent = 0);
 	~DockHelp();
 
 	bool hasFocus();
-
 	void loadFile(QString fileName);
 	bool externalBrowser;
 	QString docDir;
+
 private:
-	QTextBrowser *text;
-	QLineEdit *findLine;
-	QToolBar *findBar;
 	QTextDocument::FindFlags findFlags;
-	QPushButton *backButton, *forwardButton;
 	virtual void closeEvent(QCloseEvent * event);
 	void findText(QString expr); // bool backward = false, bool caseSensitive = false, bool wholeWords = false);
-signals:
-	void Close(bool visible);
-	void openManualExample(QString fileName);
 
 protected:
 	void resizeEvent(QResizeEvent *);
@@ -73,9 +64,15 @@ public slots:
 	void onReturnPressed();
 	void onNextButtonPressed();
 	void onPreviousButtonPressed();
-	void toggleFindBarVisible();
 	void onWholeWordBoxChanged(int value);
 	void onCaseBoxChanged(int value);
+
+private:
+	Ui::DockHelp *ui;
+
+signals:
+	void Close(bool visible);
+	void openManualExample(QString fileName);
 
 };
 
