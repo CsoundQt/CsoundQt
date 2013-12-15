@@ -31,6 +31,8 @@ message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now defa
 
 !csound5 {
     DEFINES += CSOUND6
+    CONFIG += csound6
+    debugger: DEFINES += QCS_DEBUGGER
     unix {
         macx {}
         else {
