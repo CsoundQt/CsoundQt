@@ -48,6 +48,7 @@ class Inspector;
 class PythonConsole;
 #endif
 class DockConsole;
+class DebugPanel;
 class OpEntryParser;
 class Options;
 class ConfigLists;
@@ -166,6 +167,9 @@ public slots:
 	void logMessage(QString msg);
 	//    void registerLiveEvent(QWidget *e);
 	void evaluateCsound(QString code = QString());
+#ifdef QCS_DEBUGGER
+	void breakpointReached();
+#endif
 
 protected:
 	virtual void closeEvent(QCloseEvent *event);
@@ -215,6 +219,7 @@ private slots:
 	void setEditorFocus();
 	void setHelpEntry();
 	void setFullScreen(bool full);
+	void showDebugger(bool show);
 	void splitView(bool split);
 	void showMidiLearn();
 	void openManualExample(QString fileName);
@@ -252,6 +257,16 @@ private slots:
 	void toggleParameterMode();
 //	void showParametersInEditor();
 
+#ifdef QCS_DEBUGGER
+	void runDebugger();
+	void stopDebugger();
+	void pauseDebugger();
+	void continueDebugger();
+	void addBreakpoint(int line);
+	void addInstrumentBreakpoint(double instr);
+	void removeBreakpoint(int line);
+	void removeInstrumentBreakpoint(double instr);
+#endif
 private:
 	void createActions();
 	void setKeyboardShortcutsList();
@@ -301,6 +316,10 @@ private:
 	QDockWidget *m_scratchPad;
 	//    QString m_widgetClipboard;
 	Inspector *m_inspector;
+#ifdef QCS_DEBUGGER
+	DebugPanel *m_debugPanel;
+	CsoundEngine *m_debugEngine;
+#endif
 #ifdef QCS_PYTHONQT
 	PythonConsole *m_pythonConsole;
 #endif
@@ -371,6 +390,9 @@ private:
 	QAction *showOpcodeQuickRefAct;
 	QAction *showConsoleAct;
 	QAction *viewFullScreenAct;
+#ifdef QCS_DEBUGGER
+	QAction *showDebugAct;
+#endif
 	QAction *midiLearnAct;
 	QAction *splitViewAct;
 

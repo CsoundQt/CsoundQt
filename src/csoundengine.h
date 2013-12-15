@@ -32,6 +32,10 @@
 #include <csPerfThread.hpp>
 #include <cwindow.h> // Necessary for WINDAT struct
 
+#ifdef QCS_DEBUGGER
+#include "csdebug.h"
+#endif
+
 #include "types.h"
 #include "csoundoptions.h"
 #ifdef QCS_PYTHONQT
@@ -187,6 +191,20 @@ public:
 	void setPythonConsole(PythonConsole *pc);
 #endif
 
+#ifdef QCS_DEBUGGER
+	bool m_debugging;
+
+	static void breakpointCallback(CSOUND *csound, int line, double instr, void *udata);
+	void setDebug();
+	void pauseDebug();
+	void continueDebug();
+	void stopDebug();
+	void addInstrumentBreakpoint(double instr);
+	void removeInstrumentBreakpoint(double instr);
+	QVector<QVariantList> getVaribleList();
+	QVector<QVariantList> m_varList;
+	QMutex variableMutex;
+#endif
 
 public slots:
 	int play(CsoundOptions *options);
@@ -250,6 +268,7 @@ signals:
 	void errorLines(QList<QPair<int, QString> >);
 	void passMessages(QString msg);
 	void stopSignal(); // Sent when performance has stopped internally to inform others.playFromParent()
+	void breakpointReached();
 };
 
 #endif // CSOUNDENGINE_H

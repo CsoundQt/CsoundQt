@@ -34,12 +34,14 @@
 #include "csound_standard_types.h"
 #endif
 
+
 #include "csoundengine.h"
 #include "widgetlayout.h"
 #include "console.h"
 #include "qutescope.h"  // Needed for passing the ud to the scope for display data
 #include "qutegraph.h"  // Needed for passing the ud to the graph for display data
 #include "midihandler.h"
+
 
 CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 	m_options(configlists)
@@ -84,7 +86,9 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 
 	ud->runDispatcher = true;
 	m_msgUpdateThread = QtConcurrent::run(messageListDispatcher, (void *) ud);
-
+#ifdef QCS_DEBUGGER
+	m_debugging = false;
+#endif
 }
 
 CsoundEngine::~CsoundEngine()
@@ -829,6 +833,13 @@ int CsoundEngine::runCsound()
 	Q_ASSERT(ud->midiBuffer);
 #endif
 #endif
+
+#ifdef QCS_DEBUGGER
+	if(m_debugging) {
+		csoundDebuggerInit(ud->csound);
+		csoundSetBreakpointCallback(ud->csound, &CsoundEngine::breakpointCallback, (void *) this);
+	}
+#endif
 	if(!m_options.useCsoundMidi) {
 #ifdef CSOUND6
 		csoundSetHostImplementedMIDIIO(ud->csound, 1);
@@ -957,6 +968,9 @@ void CsoundEngine::stopCsound()
 		delete pt;
 		m_playMutex.unlock();
 		cleanupCsound();
+#ifdef QCS_DEBUGGER
+		stopDebug();
+#endif
 	} else {
 		m_playMutex.unlock();
 	}
@@ -983,6 +997,11 @@ void CsoundEngine::cleanupCsound()
 		csoundRemoveCallback(ud->csound,
 							 &CsoundEngine::keyEventCallback);
 #endif
+#ifdef QCS_DEBUGGER
+		if(m_debugging) {
+			csoundDebuggerClean(ud->csound);
+		}
+#endif
 		csoundCleanup(ud->csound);
 		flushQueues();
 #ifndef CSOUND6
@@ -991,12 +1010,13 @@ void CsoundEngine::cleanupCsound()
 		csoundDestroyMessageBuffer(ud->csound);
 #endif
 #ifdef QCS_DESTROY_CSOUND
+
 		csoundDestroyCircularBuffer(ud->csound, ud->midiBuffer);
 		csoundDestroy(ud->csound);
+		ud->csound = NULL;
 #else
 		csoundReset(ud->csound);
 #endif
-		ud->csound = NULL;
 	}
 }
 
@@ -1211,6 +1231,92 @@ void CsoundEngine::registerProcessCallback(QString func, int skipPeriods)
 void CsoundEngine::setPythonConsole(PythonConsole *pc)
 {
 	ud->m_pythonConsole = pc;
+}
+#endif
+
+#ifdef QCS_DEBUGGER
+
+void CsoundEngine::breakpointCallback(CSOUND *csound, int line, double instr, void *udata)
+{
+	qDebug() <<"breakpointCallback " << line << instr;
+	INSDS *insds = csoundDebugGetInstrument(csound);
+	CsoundEngine *cs = (CsoundEngine *) udata;
+	CS_VARIABLE *vp = insds->instr->varPool->head;
+	cs->variableMutex.lock();
+	cs->m_varList.clear();
+	while (vp) {
+		if (vp->varName[0] != '#') {
+			QVariantList varDetails;
+			varDetails << vp->varName << vp->varType->varTypeName;
+			if (strcmp(vp->varType->varTypeName, "i") == 0
+					|| strcmp(vp->varType->varTypeName, "k") == 0) {
+				if (vp->memBlock) {
+					varDetails << *((MYFLT *)vp->memBlock);
+				}
+			} else if(strcmp(vp->varType->varTypeName, "S") == 0) {
+				if (vp->memBlock) {
+					varDetails << *((char *)vp->memBlock);
+				}
+			}
+
+			qDebug() << varDetails;
+			cs->m_varList << varDetails;
+		}
+		vp = vp->next;
+	}
+	cs->variableMutex.unlock();
+	emit cs->breakpointReached();
+}
+
+void CsoundEngine::setDebug()
+{
+	m_debugging = true;
+}
+
+void CsoundEngine::pauseDebug()
+{
+	if (isRunning() && m_debugging) {
+		csoundDebugStop(ud->csound);
+	}
+}
+
+void CsoundEngine::continueDebug()
+{
+	if (isRunning() && m_debugging) {
+		qDebug() << "CsoundEngine::continueDebug";
+		csoundDebugContinue(ud->csound);
+	}
+}
+
+void CsoundEngine::stopDebug()
+{
+	if (isRunning() && m_debugging) {
+		stop();
+	}
+	m_debugging = false;
+}
+
+void CsoundEngine::addInstrumentBreakpoint(double instr)
+{
+	if (isRunning() && m_debugging) {
+		csoundSetInstrumentBreakpoint(ud->csound, instr);
+	}
+}
+
+void CsoundEngine::removeInstrumentBreakpoint(double instr)
+{
+	if (isRunning() && m_debugging) {
+		csoundRemoveInstrumentBreakpoint(ud->csound, instr);
+	}
+}
+
+QVector<QVariantList> CsoundEngine::getVaribleList()
+{
+	QVector<QVariantList> outList;
+	variableMutex.lock();
+	outList = m_varList;
+	variableMutex.unlock();
+	return outList;
 }
 
 #endif

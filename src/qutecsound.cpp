@@ -43,6 +43,9 @@
 #ifdef QCS_PYTHONQT
 #include "pythonconsole.h"
 #endif
+#ifdef QCS_DEBUGGER
+#include "debugpanel.h"
+#endif
 
 // One day remove these from here for nicer abstraction....
 #include "csoundengine.h"
@@ -101,6 +104,18 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	m_inspector->show();
 	addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
 
+#ifdef QCS_DEBUGGER
+	m_debugPanel = new DebugPanel(this);
+	m_debugPanel->setObjectName("Debug Panel");
+	m_debugPanel->show();
+	connect(m_debugPanel, SIGNAL(runSignal()), this, SLOT(runDebugger()));
+	connect(m_debugPanel, SIGNAL(pauseSignal()), this, SLOT(pauseDebugger()));
+	connect(m_debugPanel, SIGNAL(continueSignal()), this, SLOT(continueDebugger()));
+	connect(m_debugPanel, SIGNAL(addInstrumentBreakpoint(double)), this, SLOT(addInstrumentBreakpoint(double)));
+	connect(m_debugPanel, SIGNAL(removeInstrumentBreakpoint(double)), this, SLOT(removeInstrumentBreakpoint(double)));
+	addDockWidget(Qt::RightDockWidgetArea, m_debugPanel);
+	m_debugEngine = NULL;
+#endif
 #ifdef QCS_PYTHONQT
 	m_pythonConsole = new PythonConsole(this);
 	addDockWidget(Qt::LeftDockWidgetArea, m_pythonConsole);
@@ -669,6 +684,14 @@ void CsoundQt::evaluateCsound(QString code)
 	documentPages[curPage]->sendCodeToEngine(code);
 #else
 	qDebug() << "evaluateCsound only available in Csound6";
+#endif
+}
+
+void CsoundQt::breakpointReached()
+{
+#ifdef QCS_DEBUGGER
+	Q_ASSERT(m_debugEngine);
+	m_debugPanel->setVariableList(m_debugEngine->getVaribleList());
 #endif
 }
 
@@ -1549,6 +1572,9 @@ void CsoundQt::markStopped()
 {
 	runAct->setChecked(false);
 	recAct->setChecked(false);
+#ifdef QCS_DEBUGGER
+	m_debugPanel->stop();
+#endif
 }
 
 void CsoundQt::perfEnded()
@@ -1766,6 +1792,13 @@ void CsoundQt::setFullScreen(bool full)
 	else {
 		this->showNormal();
 	}
+}
+
+void CsoundQt::showDebugger(bool show)
+{
+#ifdef QCS_DEBUGGER
+	m_debugPanel->setVisible(show);
+#endif
 }
 
 void CsoundQt::splitView(bool split)
@@ -2291,6 +2324,9 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #else
 	viewFullScreenAct->setShortcut(tr("F11"));
 #endif
+#ifdef QCS_DEBUGGER
+	showDebugAct->setShortcut(tr("F5"));
+#endif
 	splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
 	midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
 	createCodeGraphAct->setShortcut(tr("Alt+4"));
@@ -2377,6 +2413,67 @@ void CsoundQt::toggleParameterMode()
 {
 	documentPages[curPage]->toggleParameterMode();
 }
+
+#ifdef QCS_DEBUGGER
+
+void CsoundQt::runDebugger()
+{
+	m_debugEngine = documentPages[curPage]->getEngine();
+	m_debugPanel->setDebugFilename(documentPages[curPage]->getFileName());
+	connect(m_debugEngine, SIGNAL(breakpointReached()),
+			this, SLOT(breakpointReached()));
+	connect(m_debugPanel, SIGNAL(stopSignal()),
+			this, SLOT(markStopped()));
+	m_debugEngine->setDebug();
+	play();
+}
+
+void CsoundQt::stopDebugger()
+{
+	disconnect(m_debugEngine, SIGNAL(breakpointReached()), 0, 0);
+	disconnect(m_debugPanel, SIGNAL(stopSignal()), 0, 0);
+	m_debugEngine->stopDebug();
+	m_debugEngine = 0;
+}
+
+void CsoundQt::pauseDebugger()
+{
+	if(m_debugEngine) {
+		m_debugEngine->pauseDebug();
+	}
+}
+
+void CsoundQt::continueDebugger()
+{
+	if(m_debugEngine) {
+		m_debugEngine->continueDebug();
+	}
+}
+
+void CsoundQt::addBreakpoint(int line)
+{
+
+}
+
+void CsoundQt::addInstrumentBreakpoint(double instr)
+{
+	if(m_debugEngine) {
+		m_debugEngine->addInstrumentBreakpoint(instr);
+	}
+}
+
+void CsoundQt::removeBreakpoint(int line)
+{
+
+}
+
+void CsoundQt::removeInstrumentBreakpoint(double instr)
+{
+	if(m_debugEngine) {
+		m_debugEngine->removeInstrumentBreakpoint(instr);
+	}
+}
+#endif
 
 //void CsoundQt::showParametersInEditor()
 //{
@@ -2720,6 +2817,15 @@ void CsoundQt::createActions()
 	viewFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
 	connect(viewFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setFullScreen(bool)));
 
+#ifdef QCS_DEBUGGER
+	showDebugAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show debugger"), this);
+	showDebugAct->setCheckable(true);
+	showDebugAct->setChecked(false);
+	showDebugAct->setStatusTip(tr("Show the Csound debugger"));
+	showDebugAct->setShortcutContext(Qt::ApplicationShortcut);
+	connect(showDebugAct, SIGNAL(toggled(bool)), this, SLOT(showDebugger(bool)));
+#endif
+
 	splitViewAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Split View"), this);
 	splitViewAct->setCheckable(true);
 	splitViewAct->setChecked(false);
@@ -2978,6 +3084,9 @@ void CsoundQt::setKeyboardShortcutsList()
 	m_keyActions.append(showOpcodeQuickRefAct);
 	m_keyActions.append(infoAct);
 	m_keyActions.append(viewFullScreenAct);
+#ifdef QCS_DEBUGGER
+	m_keyActions.append(showDebugAct);
+#endif
 	m_keyActions.append(splitViewAct);
 	m_keyActions.append(midiLearnAct);
 	m_keyActions.append(killLineAct);
@@ -3191,6 +3300,9 @@ void CsoundQt::createMenus()
 	viewMenu->addAction(showScratchPadAct);
 #endif
 	viewMenu->addAction(showUtilitiesAct);
+#ifdef QCS_DEBUGGER
+	viewMenu->addAction(showDebugAct);
+#endif
 	viewMenu->addAction(midiLearnAct);
 	viewMenu->addSeparator();
 	viewMenu->addAction(viewFullScreenAct);

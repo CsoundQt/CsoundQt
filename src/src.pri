@@ -13,7 +13,8 @@ FORMS = "src/about.ui" \
     "src/pluginspage.ui" \
     "src/additionalfilespage.ui" \
     "src/filebeditor.ui" \
-    src/midilearndialog.ui
+    src/midilearndialog.ui \
+    src/debugpanel.ui
 HEADERS = "src/about.h" \
     "src/configdialog.h" \
     "src/configlists.h" \
@@ -67,7 +68,9 @@ HEADERS = "src/about.h" \
     "src/scoreeditor.h" \
     "src/filebeditor.h" \
     src/midihandler.h \
-    src/midilearndialog.h
+    src/midilearndialog.h \
+    src/debugpanel.h \
+    src/flowlayout.h
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
     "src/configlists.cpp" \
@@ -121,7 +124,9 @@ SOURCES = "src/about.cpp" \
     "src/scoreeditor.cpp" \
     "src/filebeditor.cpp" \
     src/midihandler.cpp \
-    src/midilearndialog.cpp
+    src/midilearndialog.cpp \
+    src/debugpanel.cpp \
+    src/flowlayout.cpp
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
     "src/qutecsound.rc" \
@@ -144,5 +149,6 @@ LIBS += $${LCSOUND} \
     $${RTMIDI}
 
 OTHER_FILES += \
-    src/appstyle.css
+    src/appstyle-dark.css \
+    src/appstyle-green.css
 
