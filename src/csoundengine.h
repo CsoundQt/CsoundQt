@@ -199,11 +199,16 @@ public:
 	void pauseDebug();
 	void continueDebug();
 	void stopDebug();
-	void addInstrumentBreakpoint(double instr);
+	void addInstrumentBreakpoint(double instr, int skip);
 	void removeInstrumentBreakpoint(double instr);
+	void setStartingBreakpoints(QVector<QVariantList> bps);
 	QVector<QVariantList> getVaribleList();
+	QVector<QVariantList> getInstrumentList();
 	QVector<QVariantList> m_varList;
+	QVector<QVariantList> m_instrumentList;
 	QMutex variableMutex;
+	QMutex instrumentMutex;
+	QVector<QVariantList> m_startBreakpoints;
 #endif
 
 public slots:

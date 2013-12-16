@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>550</width>
-    <height>310</height>
+    <height>361</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,72 +30,6 @@
     <property name="bottomMargin">
      <number>1</number>
     </property>
-    <item row="1" column="1" colspan="4">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Current Stack</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1" colspan="7">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QToolButton" name="toolButton">
-        <property name="text">
-         <string>Show</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Breakpoints</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="newBreakpointToolButton">
-        <property name="text">
-         <string>New</string>
-        </property>
-        <property name="icon">
-         <iconset resource="icons.qrc">
-          <normaloff>:/themes/boring/gtk-new.png</normaloff>:/themes/boring/gtk-new.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="deleteBreakpointToolButton">
-        <property name="text">
-         <string>Delete</string>
-        </property>
-        <property name="icon">
-         <iconset resource="icons.qrc">
-          <normaloff>:/themes/boring/gtk-close.png</normaloff>:/themes/boring/gtk-close.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
     <item row="0" column="1" colspan="7">
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
@@ -178,6 +112,132 @@ font: 10pt &quot;Courier New&quot;;</string>
       </item>
      </layout>
     </item>
+    <item row="5" column="1" colspan="7">
+     <widget class="QTableWidget" name="breakpointTableWidget">
+      <property name="cornerButtonEnabled">
+       <bool>false</bool>
+      </property>
+      <property name="columnCount">
+       <number>3</number>
+      </property>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>1</number>
+      </attribute>
+      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Type</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Line/Instrument</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Skip count</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item row="6" column="1" colspan="7">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QToolButton" name="toolButton_3">
+        <property name="text">
+         <string>Active instruments</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item row="4" column="1" colspan="7">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QToolButton" name="toolButton">
+        <property name="text">
+         <string>Breakpoints</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="newBreakpointToolButton">
+        <property name="text">
+         <string>New</string>
+        </property>
+        <property name="icon">
+         <iconset resource="icons.qrc">
+          <normaloff>:/themes/boring/gtk-new.png</normaloff>:/themes/boring/gtk-new.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="deleteBreakpointToolButton">
+        <property name="text">
+         <string>Delete</string>
+        </property>
+        <property name="icon">
+         <iconset resource="icons.qrc">
+          <normaloff>:/themes/boring/gtk-close.png</normaloff>:/themes/boring/gtk-close.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="1" colspan="4">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Current Stack</string>
+      </property>
+     </widget>
+    </item>
     <item row="3" column="1" colspan="7">
      <widget class="QTableWidget" name="stackTableWidget">
       <attribute name="horizontalHeaderHighlightSections">
@@ -187,7 +247,7 @@ font: 10pt &quot;Courier New&quot;;</string>
        <number>1</number>
       </attribute>
       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-       <bool>false</bool>
+       <bool>true</bool>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
@@ -212,20 +272,8 @@ font: 10pt &quot;Courier New&quot;;</string>
       </column>
      </widget>
     </item>
-    <item row="5" column="1" colspan="7">
-     <widget class="QTableWidget" name="breakpointTableWidget">
-      <property name="cornerButtonEnabled">
-       <bool>false</bool>
-      </property>
-      <property name="columnCount">
-       <number>2</number>
-      </property>
-      <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>1</number>
-      </attribute>
-      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-       <bool>false</bool>
-      </attribute>
+    <item row="7" column="1" colspan="7">
+     <widget class="QTableWidget" name="instrumentTableWidget">
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
       </attribute>
@@ -234,12 +282,17 @@ font: 10pt &quot;Courier New&quot;;</string>
       </attribute>
       <column>
        <property name="text">
-        <string>Type</string>
+        <string>Instr</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Line/Instrument</string>
+        <string>p-fields</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>k-count</string>
        </property>
       </column>
      </widget>
@@ -250,7 +303,40 @@ font: 10pt &quot;Courier New&quot;;</string>
  <resources>
   <include location="icons.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>toolButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>breakpointTableWidget</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>175</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>92</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton_3</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>instrumentTableWidget</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>45</x>
+     <y>272</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>74</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
   <slot>pause()</slot>
   <slot>continue()</slot>

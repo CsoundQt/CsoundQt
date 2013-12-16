@@ -837,6 +837,16 @@ int CsoundEngine::runCsound()
 #ifdef QCS_DEBUGGER
 	if(m_debugging) {
 		csoundDebuggerInit(ud->csound);
+		foreach(QVariantList bp, m_startBreakpoints) {
+			Q_ASSERT(bp.size() == 3);
+			if (bp[0].toString() == "instr") {
+				csoundSetInstrumentBreakpoint(ud->csound, bp[1].toDouble(), bp[2].toInt());
+			} else if (bp[0].toString() == "line") {
+				csoundSetBreakpoint(ud->csound, bp[1].toInt(), bp[2].toInt());
+			} else {
+				qDebug() << "CsoundEngine::setStartingBreakpoints wrong breakpoint format";
+			}
+		}
 		csoundSetBreakpointCallback(ud->csound, &CsoundEngine::breakpointCallback, (void *) this);
 	}
 #endif
@@ -1241,30 +1251,62 @@ void CsoundEngine::breakpointCallback(CSOUND *csound, int line, double instr, vo
 	qDebug() <<"breakpointCallback " << line << instr;
 	INSDS *insds = csoundDebugGetInstrument(csound);
 	CsoundEngine *cs = (CsoundEngine *) udata;
+	// Copy variable list
 	CS_VARIABLE *vp = insds->instr->varPool->head;
 	cs->variableMutex.lock();
 	cs->m_varList.clear();
 	while (vp) {
 		if (vp->varName[0] != '#') {
 			QVariantList varDetails;
-			varDetails << vp->varName << vp->varType->varTypeName;
+			varDetails << vp->varName;
 			if (strcmp(vp->varType->varTypeName, "i") == 0
 					|| strcmp(vp->varType->varTypeName, "k") == 0) {
 				if (vp->memBlock) {
 					varDetails << *((MYFLT *)vp->memBlock);
+				} else {
+					varDetails << QVariant();
 				}
 			} else if(strcmp(vp->varType->varTypeName, "S") == 0) {
 				if (vp->memBlock) {
 					varDetails << *((char *)vp->memBlock);
+				} else {
+					varDetails << QVariant();
 				}
+			} else if (strcmp(vp->varType->varTypeName, "a") == 0) {
+				if (vp->memBlock) {
+					varDetails << *((MYFLT *)vp->memBlock) << *((MYFLT *)vp->memBlock + 1)
+							   << *((MYFLT *)vp->memBlock + 2)<< *((MYFLT *)vp->memBlock + 3);
+				} else {
+					varDetails << QVariant();
+				}
+			} else {
+				varDetails << QVariant();
 			}
-
-			qDebug() << varDetails;
+			varDetails << vp->varType->varTypeName;
 			cs->m_varList << varDetails;
 		}
 		vp = vp->next;
 	}
 	cs->variableMutex.unlock();
+
+	//Copy active instrument list
+	cs->instrumentMutex.lock();
+	cs->m_instrumentList.clear();
+	INSDS *in = insds;
+	while (in->prvact) {
+		in = in->prvact;
+	}
+
+	while (in) {
+		QVariantList instance;
+		instance << in->p1;
+		instance << QString("%1 %2").arg(in->p2).arg(in->p3);
+		instance << in->kcounter;
+		cs->m_instrumentList << instance;
+		in = in->nxtact;
+	}
+
+	cs->instrumentMutex.unlock();
 	emit cs->breakpointReached();
 }
 
@@ -1296,10 +1338,10 @@ void CsoundEngine::stopDebug()
 	m_debugging = false;
 }
 
-void CsoundEngine::addInstrumentBreakpoint(double instr)
+void CsoundEngine::addInstrumentBreakpoint(double instr, int skip)
 {
 	if (isRunning() && m_debugging) {
-		csoundSetInstrumentBreakpoint(ud->csound, instr, 0);
+		csoundSetInstrumentBreakpoint(ud->csound, instr, skip);
 	}
 }
 
@@ -1310,12 +1352,26 @@ void CsoundEngine::removeInstrumentBreakpoint(double instr)
 	}
 }
 
+void CsoundEngine::setStartingBreakpoints(QVector<QVariantList> bps)
+{
+	m_startBreakpoints = bps;
+}
+
 QVector<QVariantList> CsoundEngine::getVaribleList()
 {
 	QVector<QVariantList> outList;
 	variableMutex.lock();
 	outList = m_varList;
 	variableMutex.unlock();
+	return outList;
+}
+
+QVector<QVariantList> CsoundEngine::getInstrumentList()
+{
+	QVector<QVariantList> outList;
+	instrumentMutex.lock();
+	outList = m_instrumentList;
+	instrumentMutex.unlock();
 	return outList;
 }
 

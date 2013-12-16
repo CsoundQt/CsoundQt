@@ -35,10 +35,8 @@ DebugPanel::DebugPanel(QWidget *parent) :
 
     ui->breakpointTableWidget->setShowGrid(false);
 
-    connect(ui->runButton, SIGNAL(pressed()),
-            this, SLOT(run()));
-    connect(ui->runButton, SIGNAL(released()),
-            this, SLOT(stop()));
+    connect(ui->runButton, SIGNAL(toggled(bool)),
+            this, SLOT(runToggle(bool)));
     connect(ui->pauseButton, SIGNAL(released()),
             this, SLOT(pause()));
     connect(ui->continueButton, SIGNAL(released()),
@@ -57,8 +55,21 @@ DebugPanel::~DebugPanel()
     delete ui;
 }
 
-QVector<double> DebugPanel::breakpoints()
+QVector<QVariantList> DebugPanel::getBreakpoints()
 {
+    QTableWidget *table = ui->breakpointTableWidget;
+    QVector<QVariantList> breakpoints;
+    for (int row = 0; row < table->rowCount(); row++) {
+        QVariantList bp;
+        QTableWidgetItem *item = table->item(row,0);
+        bp << item->data(Qt::DisplayRole).toString();
+        item = table->item(row,1);
+        bp << item->data(Qt::DisplayRole).toDouble();
+        item = table->item(row,2);
+        bp << item->data(Qt::DisplayRole).toInt();
+        breakpoints.append(bp);
+    }
+    return breakpoints;
 }
 
 void DebugPanel::setDebugFilename(QString filename)
@@ -84,16 +95,49 @@ void DebugPanel::setVariableList(QVector<QVariantList> varList)
     table->setEnabled(true);
 }
 
-void DebugPanel::stop()
+void DebugPanel::setInstrumentList(QVector<QVariantList> instrumentList)
+{
+    QTableWidget *table = ui->instrumentTableWidget;
+    table->setRowCount(0);
+    int row = 0, column = 0;
+    foreach(QVariantList var, instrumentList) {
+        if (var[0].toDouble() == 0) {
+            continue;
+        }
+        table->insertRow(table->rowCount());
+        column = 0;
+        foreach(QVariant part, var) {
+            QTableWidgetItem *item = new QTableWidgetItem(part.toString());
+            table->setItem(row, column, item);
+            column++;
+        }
+        row++;
+    }
+    table->setEnabled(true);
+}
+
+void DebugPanel::stopDebug()
 {
     ui->statusLabel->setText(QString("Debugger stopped"));
     ui->runButton->setChecked(false);
-    QTableWidget *table = ui->stackTableWidget;
-    table->setRowCount(0);
+    ui->stackTableWidget->setRowCount(0);
+    ui->instrumentTableWidget->setRowCount(0);
+    emit stopSignal();
+}
+
+void DebugPanel::runToggle(bool run_)
+{
+    if (run_) {
+        run();
+    } else {
+        stopDebug();
+    }
 }
 
 void DebugPanel::run()
 {
+    ui->stackTableWidget->setEnabled(false);
+    ui->instrumentTableWidget->setEnabled(false);
     emit runSignal();
 }
 
@@ -104,8 +148,8 @@ void DebugPanel::pause()
 
 void DebugPanel::continueDebug()
 {
-    QTableWidget *table = ui->stackTableWidget;
-    table->setEnabled(false);
+    ui->stackTableWidget->setEnabled(false);
+    ui->instrumentTableWidget->setEnabled(false);
     emit continueSignal();
 }
 
@@ -119,6 +163,7 @@ void DebugPanel::newBreakpoint()
     bool ok;
     double d = QInputDialog::getDouble(this, tr("New Instrument Breakpoint"),
                                        tr("Instrument"), 1.0, 1, 9999999, 2, &ok);
+    int skip = 0;
     if (ok) {
         int row = ui->breakpointTableWidget->rowCount();
         ui->breakpointTableWidget->insertRow(row);
@@ -128,10 +173,10 @@ void DebugPanel::newBreakpoint()
         item = new QTableWidgetItem;
         item->setData(Qt::DisplayRole, d);
         ui->breakpointTableWidget->setItem(row, 1, item);
-//        QModelIndex i  = ui->breakpointTableWidget->index(row, 0);
-//        item  = ui->breakpointTableWidget->item(row, 1);
-//        item->setData(Qt::DisplayRole, QVariant(d));
-        emit addInstrumentBreakpoint(d);
+        item = new QTableWidgetItem;
+        item->setData(Qt::DisplayRole, skip);
+        ui->breakpointTableWidget->setItem(row, 2, item);
+        emit addInstrumentBreakpoint(d, skip);
     }
 }
 

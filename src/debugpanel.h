@@ -38,14 +38,17 @@ class DebugPanel : public QDockWidget
 public:
     explicit DebugPanel(QWidget *parent = 0);
     ~DebugPanel();
-    QVector<double> breakpoints();
+    QVector<QVariantList> getBreakpoints();
+    QVector<QVariant> getInstrument();
     void setDebugFilename(QString filename);
-    void stop();
 
 public slots:
     void setVariableList(QVector<QVariantList> varList);
+    void setInstrumentList(QVector<QVariantList> instrumentList);
+    void stopDebug();
 
 private slots:
+    void runToggle(bool run);
     void run();
     void pause();
     void continueDebug();
@@ -62,7 +65,7 @@ signals:
     void continueSignal();
     void nextSignal();
     void stopSignal();
-    void addInstrumentBreakpoint(double instr);
+    void addInstrumentBreakpoint(double instr, int skip);
     void removeInstrumentBreakpoint(double instr);
 };
 

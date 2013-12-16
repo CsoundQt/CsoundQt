@@ -167,9 +167,8 @@ public slots:
 	void logMessage(QString msg);
 	//    void registerLiveEvent(QWidget *e);
 	void evaluateCsound(QString code = QString());
-#ifdef QCS_DEBUGGER
 	void breakpointReached();
-#endif
+
 
 protected:
 	virtual void closeEvent(QCloseEvent *event);
@@ -262,8 +261,8 @@ private slots:
 	void stopDebugger();
 	void pauseDebugger();
 	void continueDebugger();
-	void addBreakpoint(int line);
-	void addInstrumentBreakpoint(double instr);
+	void addBreakpoint(int line, int skip);
+	void addInstrumentBreakpoint(double instr, int skip);
 	void removeBreakpoint(int line);
 	void removeInstrumentBreakpoint(double instr);
 #endif

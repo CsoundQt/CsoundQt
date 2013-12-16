@@ -111,7 +111,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	connect(m_debugPanel, SIGNAL(runSignal()), this, SLOT(runDebugger()));
 	connect(m_debugPanel, SIGNAL(pauseSignal()), this, SLOT(pauseDebugger()));
 	connect(m_debugPanel, SIGNAL(continueSignal()), this, SLOT(continueDebugger()));
-	connect(m_debugPanel, SIGNAL(addInstrumentBreakpoint(double)), this, SLOT(addInstrumentBreakpoint(double)));
+	connect(m_debugPanel, SIGNAL(addInstrumentBreakpoint(double, int)), this, SLOT(addInstrumentBreakpoint(double, int)));
 	connect(m_debugPanel, SIGNAL(removeInstrumentBreakpoint(double)), this, SLOT(removeInstrumentBreakpoint(double)));
 	addDockWidget(Qt::RightDockWidgetArea, m_debugPanel);
 	m_debugEngine = NULL;
@@ -692,6 +692,7 @@ void CsoundQt::breakpointReached()
 #ifdef QCS_DEBUGGER
 	Q_ASSERT(m_debugEngine);
 	m_debugPanel->setVariableList(m_debugEngine->getVaribleList());
+	m_debugPanel->setInstrumentList(m_debugEngine->getInstrumentList());
 #endif
 }
 
@@ -1573,7 +1574,7 @@ void CsoundQt::markStopped()
 	runAct->setChecked(false);
 	recAct->setChecked(false);
 #ifdef QCS_DEBUGGER
-	m_debugPanel->stop();
+	m_debugPanel->stopDebug();
 #endif
 }
 
@@ -2423,8 +2424,9 @@ void CsoundQt::runDebugger()
 	connect(m_debugEngine, SIGNAL(breakpointReached()),
 			this, SLOT(breakpointReached()));
 	connect(m_debugPanel, SIGNAL(stopSignal()),
-			this, SLOT(markStopped()));
+			this, SLOT(stopDebugger()));
 	m_debugEngine->setDebug();
+	m_debugEngine->setStartingBreakpoints(m_debugPanel->getBreakpoints());
 	play();
 }
 
@@ -2434,6 +2436,7 @@ void CsoundQt::stopDebugger()
 	disconnect(m_debugPanel, SIGNAL(stopSignal()), 0, 0);
 	m_debugEngine->stopDebug();
 	m_debugEngine = 0;
+	markStopped();
 }
 
 void CsoundQt::pauseDebugger()
@@ -2450,15 +2453,15 @@ void CsoundQt::continueDebugger()
 	}
 }
 
-void CsoundQt::addBreakpoint(int line)
+void CsoundQt::addBreakpoint(int line, int skip)
 {
 
 }
 
-void CsoundQt::addInstrumentBreakpoint(double instr)
+void CsoundQt::addInstrumentBreakpoint(double instr, int skip)
 {
 	if(m_debugEngine) {
-		m_debugEngine->addInstrumentBreakpoint(instr);
+		m_debugEngine->addInstrumentBreakpoint(instr, skip);
 	}
 }
 
@@ -3746,6 +3749,8 @@ void CsoundQt::fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth)
 	}
 }
 
+//#include "flowlayout.h"
+
 void CsoundQt::createToolBars()
 {
 //	fileToolBar = addToolBar(tr("File"));
@@ -3761,6 +3766,22 @@ void CsoundQt::createToolBars()
 //	editToolBar->addAction(cutAct);
 //	editToolBar->addAction(copyAct);
 //	editToolBar->addAction(pasteAct);
+
+//	QDockWidget *toolWidget = new QDockWidget(tr("Tools"), this);
+//	QWidget *w = new QWidget(toolWidget);
+//	FlowLayout * flowlayout = new FlowLayout(w);
+//	toolWidget->setWidget(w);
+//	w->setLayout(flowlayout);
+//	QVector<QAction *> actions;
+//	actions << runAct << pauseAct << stopAct << recAct << runTermAct << renderAct;
+//	foreach (QAction * act, actions) {
+//		QToolButton *b = new QToolButton(w);
+//		b->setDefaultAction(act);
+//		flowlayout->addWidget(b);
+//	}
+//	addDockWidget(Qt::AllDockWidgetAreas, toolWidget);
+//	toolWidget->show();
+
 
 	controlToolBar = addToolBar(tr("Control"));
 	controlToolBar->setObjectName("controlToolBar");
