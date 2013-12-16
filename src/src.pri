@@ -70,8 +70,7 @@ HEADERS = "src/about.h" \
     "src/filebeditor.h" \
     src/midihandler.h \
     src/midilearndialog.h \
-    src/debugpanel.h \
-    src/flowlayout.h
+    src/debugpanel.h
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
     "src/configlists.cpp" \
@@ -126,8 +125,7 @@ SOURCES = "src/about.cpp" \
     "src/filebeditor.cpp" \
     src/midihandler.cpp \
     src/midilearndialog.cpp \
-    src/debugpanel.cpp \
-    src/flowlayout.cpp
+    src/debugpanel.cpp
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
     "src/qutecsound.rc" \
