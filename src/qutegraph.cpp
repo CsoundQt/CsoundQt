@@ -23,6 +23,7 @@
 #include "qutegraph.h"
 #include "curve.h"
 #include <cmath>
+#include <QPalette>
 
 QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 {
@@ -48,6 +49,12 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 	connect(m_pageComboBox, SIGNAL(currentIndexChanged(int)),
 			this, SLOT(indexChanged(int)));
 	polygons.clear();
+
+	QPalette Pal(this->palette());
+	// set black background
+	Pal.setColor(QPalette::Background, Qt::black);
+	this->setAutoFillBackground(true);
+	this->setPalette(Pal);
 
 	// Default properties
 	setProperty("QCS_zoomx", 1.0);

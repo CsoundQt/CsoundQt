@@ -35,6 +35,7 @@ FrameWidget::FrameWidget(QWidget* parent) : QFrame(parent)
     m_resizeBox->setPalette(palette);
 	m_resizeBox->show();
 	m_resizeBox->setMinimumSize(2,2);
+	this->setStyleSheet(" QFrame, QLabel, QToolTip {border: 2px solid green;}");
 	m_selected = false;
 	m_changed = false;
 }
