@@ -145,5 +145,6 @@
         <file>../doc/QuteCsound Quick Reference (0.4)-it.pdf</file>
         <file>appstyle-dark.css</file>
         <file>appstyle-green.css</file>
+        <file>appstyle-white.css</file>
     </qresource>
 </RCC>

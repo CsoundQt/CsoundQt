@@ -120,6 +120,3 @@ pythonqt:TARGET = $${TARGET}-py
 csound6:TARGET = $${TARGET}-cs6
 
 CONFIG(debug, debug|release):TARGET = $${TARGET}-debug
-
-OTHER_FILES += \
-    CsoundQt-d-cs6-debug.supp

@@ -265,7 +265,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     //qDebug()<<"Max thread count: "<< QThreadPool::globalInstance()->maxThreadCount();
     QThreadPool::globalInstance()->setMaxThreadCount(MAX_THREAD_COUNT);
 
-    QFile file(":/appstyle-green.css");
+    QFile file(":/appstyle-white.css");
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
     qApp->setStyleSheet(styleSheet);
