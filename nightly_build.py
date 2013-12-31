@@ -34,6 +34,7 @@ if not check_output('git fetch --dry-run', shell=True, stderr=subprocess.STDOUT)
 else:
     os.system("git pull")
 
+f.write("\nRunning Qmake\n")
 configs = 'CONFIG+=release CONFIG+=buildDoubles CONFIG+=rtmidi CONFIG+=csound6 CONFIG+=x86_64'
 #spec = '-spec max-g++ '
 
@@ -47,6 +48,7 @@ if os.path.isdir('../' + build_dir):
 os.mkdir('../' + build_dir)
 os.chdir('../' + build_dir)
 os.system(qmake_bin + configs + ' ' + qcs_source_path + '/qcs.pro')
+f.write("\nRunning make\n")
 os.system('make -w -j7')
 
 check_output(qt_base_dir + '/clang_64/bin/' + 'macdeployqt ' + 'bin/CsoundQt-d-cs6.app/', shell=True)
@@ -62,6 +64,8 @@ check_output("install_name_tool -change CsoundLib64.framework/Versions/6.0/Csoun
 outname = 'CsoundQt-nightly-%s.tar.gz'%today
 check_output('tar -czvf %s CsoundQt-d-cs6.app &>/dev/null'%outname, shell=True)
 # or: hdiutil create -format UDBZ -quiet -srcfolder YourApp.app YourAppArchive.dmg
+
+f.write("\nUploading.\n")
 check_output('scp -i ~/.ssh/nightly %s %s@frs.sourceforge.net:/home/frs/project/qutecsound/CsoundQt/nightly-osx'%(outname,username), shell=True)
 
 # With McCurdy Collection without CsoundLib (for release)
