@@ -149,5 +149,6 @@ LIBS += $${LCSOUND} \
 
 OTHER_FILES += \
     src/appstyle-dark.css \
-    src/appstyle-green.css
+    src/appstyle-green.css \
+    src/appstyle-white.css
 
