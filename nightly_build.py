@@ -34,7 +34,9 @@ if not check_output('git fetch --dry-run', shell=True, stderr=subprocess.STDOUT)
 else:
     os.system("git pull")
 
-configs = 'CONFIG+=release CONFIG+=buildDoubles CONFIG+=rtmidi CONFIG+=csound6 CONFIG+=x86_64'
+configs = 'CONFIG+=release CONFIG+=buildDoubles CONFIG+=rtmidi CONFIG+=csound6 CONFIG+=x86_64 '
+#configs += 'CONFIG+=pythonqt '
+#configs += 'PYTHONQT_SRC_DIR=../PythonQt2.1_Qt4.8'
 #spec = '-spec max-g++ '
 
 qmake_bin = 'qmake -r '
