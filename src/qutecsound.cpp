@@ -1979,7 +1979,7 @@ void CsoundQt::about()
 	text += QString("<center><a href=\"http://qutecsound.sourceforge.net\">qutecsound.sourceforge.net</a></center>");
 	text += QString("<center><a href=\"mailto:mantaraya36@gmail.com\">mantaraya36@gmail.com</a></center><br />");
 	text += tr("If you find CsoundQt useful, please consider donating to the project:");
-	text += "<br /><center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\"><img src=\":/images/project-support.jpg\" width=\"88\" height=\"32\" border=\"0\" alt=\"Support This Project\" /></a></center>";
+	text += "<br /><center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\">Support this project!</a></center>";
 
 	text += tr("Please file bug reports and feature suggestions in the ");
 	text += "<a href=\"http://sourceforge.net/tracker/?group_id=227265\">";
