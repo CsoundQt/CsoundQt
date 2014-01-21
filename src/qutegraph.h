@@ -31,6 +31,11 @@ class Curve;
 class QuteGraph : public QuteWidget
 {
 	Q_OBJECT
+
+	Q_PROPERTY(bool QCS_grid MEMBER m_grid)
+	Q_PROPERTY(bool QCS_logx MEMBER m_logx)
+	Q_PROPERTY(bool QCS_logy MEMBER m_logy)
+
 public:
 	QuteGraph(QWidget *parent);
 
@@ -59,6 +64,9 @@ protected:
 	QVector<QVector <QGraphicsLineItem *> > lines;
 	QVector<QGraphicsPolygonItem *> polygons;
 
+	QVector<QVector <QGraphicsLineItem *> > m_gridlines;
+	QVector<QVector <QGraphicsTextItem *> > m_gridtext;
+
 	virtual void refreshWidget();
 	virtual void createPropertiesDialog();
 	virtual void applyProperties();
@@ -75,6 +83,9 @@ private:
 	void setInternalValue(double value);
 
 	//    QMutex curveLock;
+	bool m_grid;
+	bool m_logx;
+	bool m_logy;
 };
 
 class StackedLayoutWidget : public QStackedWidget
