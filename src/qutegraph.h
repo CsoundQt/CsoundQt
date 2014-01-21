@@ -32,9 +32,9 @@ class QuteGraph : public QuteWidget
 {
 	Q_OBJECT
 
-	Q_PROPERTY(bool QCS_grid MEMBER m_grid)
-	Q_PROPERTY(bool QCS_logx MEMBER m_logx)
-	Q_PROPERTY(bool QCS_logy MEMBER m_logy)
+//	Q_PROPERTY(bool QCS_grid MEMBER m_grid)
+//	Q_PROPERTY(bool QCS_logx MEMBER m_logx)
+//	Q_PROPERTY(bool QCS_logy MEMBER m_logy)
 
 public:
 	QuteGraph(QWidget *parent);
