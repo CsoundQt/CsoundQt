@@ -1,88 +1,18 @@
 QMainWindow::separator {
 width: 4px; /* when vertical */
 height: 4px; /* when horizontal */
-/* background: #F6FAD4; */
 }
 
 QFrame {
     border: 0px solid green;
-   /* border-radius: 4px;
-    padding: 2px; */
-}
+    }
 
 QMainWindow::separator:hover  {
     background: #696969;
 }
+QDockWidget::title  {
+    text-align: left;
+    background: #F1F1F1;
+    padding-left: 5px;
+}
 
-
-QDockWidget  {
-      /*
-      border: 3px solid #F6FAD4;
-        titlebar-close-icon: url(close.png);
-        titlebar-normal-icon: url(undock.png); */
-
-/*        color: #F6FAD4;*/
-/*        color: #E9E9E9;*/
-    }
-
-    QDockWidget::title  {
-        text-align: left;
-/*        color: #F6FAD4;*/
-        background: #F1F1F1;
-        padding-left: 5px;
-    }
-
- /*
-   QDockWidget::close-button, QDockWidget::float-button  {
-        border: 1px solid #F6FAD4;
-        color: #F6FAD4;
-        background: #5B7C54;
-        padding: 0px;
-    }
-    QDockWidget::close-button:hover, QDockWidget::float-button:hover  {
-        background: gray;
-    }
-
-    QDockWidget::close-button:pressed, QDockWidget::float-button:pressed  {
-        padding: 1px -1px -1px 1px;
-    }
-*/
-/*
-    QTabWidget  {
-        color: #5B7C54;
-    }
-
-    QTabWidget::pane  { /* The tab widget frame */
-        /* background: #5B7C54; */
-    }
-
-    QTabWidget::tab-bar  {
-        /* left: 5px; */  /* move to the right by 5px */
-    }
-
-    /* Style the tab using the tab sub-control. Note that
-        it reads QTabBar _not_ QTabWidget */
-    QTabBar::tab  {
-        /* background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                    stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
-                                    stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3); */
-        border: 0px solid #5B7C54;
-        border-right: 2px solid #5B7C54;
-        border-top-left-radius: 0px;
-        border-top-right-radius: 0px;
-        min-width: 8ex;
-        padding: 4px;
-    }
-
-     QTabBar::tab:!selected {
-      /*  background:  qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                    stop: 0 #fafafa, stop: 0.4 #f4f4f4,
-                                    stop: 0.5 #e7e7e7, stop: 1.0 #fafafa); */
-          background: #F6FAD4;
-    }
-
-    QTabBar::tab:selected  {
-        /* margin-top: 2px; */ /* make non-selected tabs look smaller */
-        background: #5B7C54;
-        color: #F6FAD4;
-    }*/

@@ -747,10 +747,35 @@ void DocumentView::textChanged()
 							syntaxMenu->setDefaultAction(a);
 						}
 					}
-					if (word.size() > 2) {
-						syntaxMenu->addSeparator();
-						QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
-						if (syntax.size() > 0) {
+                    if (word.size() > 2) {
+                        // check for autcompletion from all words in text editor
+                        QString wholeText = editor->toPlainText();
+                        foreach (QString s, QStringList()<<"+" << "-" << "*" << "/" <<"="<<"#"<<"&"<<","
+                                 << "\""<<"\'"<<"|" << "[" << "]" << "(" << ")" << "<" << ">"
+                                 << "." << ";") // get rid of specific symbols
+                            wholeText.replace(s," "); // TODO:
+                        QStringList allWords = wholeText.simplified().split(" ");
+                        QStringList menuWords;
+                        allWords.removeDuplicates();
+                        allWords.replaceInStrings(QRegExp("^\\d*$"),""); // remove numbers - not good enough regexp, '.' stays
+                        allWords.removeAll("");
+                        foreach(QString theWord, allWords) {
+                            if (theWord.toLower().startsWith(word.toLower()) && word != theWord) {
+                                menuWords << theWord;
+
+                            }
+                        }
+                        foreach(QString theWord, menuWords) {
+                            QAction *a = syntaxMenu->addAction(theWord,
+                                                               this, SLOT(insertAutoCompleteText()));
+                            a->setData(theWord);
+                            if(menuWords.indexOf(theWord) == 0) {
+                                syntaxMenu->setDefaultAction(a); // vaata, et allpool seda ei tühistaks
+                            }
+                        }
+                        // and then for opcodes and parameters
+                        QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
+                        if (syntax.size() > 0) {
 							syntaxMenu->addSeparator();
 							bool allEqual = true;
 							for(int i = 0; i < syntax.size(); i++) {
@@ -795,14 +820,12 @@ void DocumentView::textChanged()
 																	   this, SLOT(insertAutoCompleteText()));
 									a->setData(syntaxText);
 									a->setToolTip(syntaxText);
-									if (i == 0) {
+                                    if (i == 0 ) {
 										syntaxMenu->setDefaultAction(a);
 									}
 								}
 							}
-
 						}
-
 					}
 					if (syntaxMenu->defaultAction() != NULL) {
 						QRect r =  editor->cursorRect();
