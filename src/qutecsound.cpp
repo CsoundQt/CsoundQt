@@ -4460,6 +4460,8 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 
 	midiHandler->addListener(documentPages[curPage]);
 	documentPages[curPage]->getEngine()->setMidiHandler(midiHandler);
+
+	setCurrentOptionsForPage(documentPages[curPage]); // Redundant but does the trick of setting the font properly now that stylesheets are being used...
 }
 
 bool CsoundQt::loadCompanionFile(const QString &fileName)
