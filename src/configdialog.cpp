@@ -193,7 +193,11 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	OutputFilenameLineEdit->setEnabled(m_options->fileOutputFilenameActive);
 	RtUseOptionsCheckBox->setChecked(m_options->rtUseOptions);
 	RtOverrideCheckBox->setChecked(m_options->rtOverrideOptions);
-	RtModuleComboBox->setCurrentIndex(RtModuleComboBox->findData(m_options->rtAudioModule));
+	int index = RtModuleComboBox->findData(m_options->rtAudioModule);
+	if (index < 0 || index >= RtModuleComboBox->count()) {
+		index = 0;
+	}
+	RtModuleComboBox->setCurrentIndex(index);
 	RtInputLineEdit->setText(m_options->rtInputDevice);
 	RtOutputLineEdit->setText(m_options->rtOutputDevice);
 	JackNameLineEdit->setText(m_options->rtJackName);
