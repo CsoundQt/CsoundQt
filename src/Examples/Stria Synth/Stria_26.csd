@@ -1,23 +1,20 @@
-;;======== STRIA 2.5  16/10/2013 ====================
-;Range for Freq. Spread: 0.001  to 100
-;Range for Im1/2 : 4
-;Added 3 control flag for secure start (giGEOMETRIC, giHARMONIC, giFIBO)
-;Added metronome control on Sequencer
-;Add meter linear for morph and percent output
-
 <CsoundSynthesizer>
-<CsOptions>  
-;-odac1
+<CsOptions>
 </CsOptions>
+<CsLicense>
+======== STRIA 2.5  10/11/2013 ====================
+Range for Freq. Spread: 0.001  to 100
+Range for Im1/2 : 4
+Added 3 control flag for secure start (giGEOMETRIC, giHARMONIC, giFIBO)
+Added metronome control on Sequencer
+Add meter linear for morph and percent output
+Revised by Michael Gogins
+</CsLicense>
 <CsInstruments>
-
-
-
-sr = 44100
-ksmps = 1024
-
+prints "Finished parsing and compiling, now running."
+sr = 44100;48000
+ksmps = 1024;1000
 nchnls = 2
-
 
 #define		EPSILON #int(sr/ksmps)#
 #define		MAXFSPREAD #100#			; the same maxvalue of widget "band"
@@ -26,7 +23,7 @@ nchnls = 2
 massign 0,0
 gifreq			init 1
 gipitchspace	init 2048	;frequency lookup table (pitchspace)
-gispace			init 64	
+gispace			init 64
 gind 			init 0		;table index (pitchspace)
 girecompile_G  init 0
 giSEQ 			init 0
@@ -89,7 +86,7 @@ gkMIDIVAR_4 	init 0
 gkMIDIVAR_5 	init 0
 gkMIDIVAR_6 	init 0
 gkMIDIVAR_7 	init 0
-gkM8			init 0 
+gkM8			init 0
 
 gkinv_1			init 0
 gkinv_2			init 0
@@ -108,7 +105,7 @@ gkcc5_lev		init 1
 gkcc6_lev		init 1
 gkcc7_lev		init 1
 gkcc8_lev		init 1
-;
+
 
 giGEOMETRIC		init 0
 giHARMONIC		init 0
@@ -120,12 +117,12 @@ gkstop 			init 0
 giONOFF			init 0
 
 #define DEFAULT # 0 #
-#define SCALEFACTOR1 # 5000 #  
+#define SCALEFACTOR1 # 5000 #
 #define SCALEFACTOR2 # 2000 #
 
-; 48 tables allocation containing 48 snapshots 
+; 48 tables allocation containing 48 snapshots
 gisna0 		ftgen 200, 0, gispace, -2, $DEFAULT		;1st table containing snapshot parameters (Snap01 ->   Get = 0 )
-gisna1 		ftgen 201, 0, gispace, -2, $DEFAULT		;2nd  "  
+gisna1 		ftgen 201, 0, gispace, -2, $DEFAULT		;2nd  "
 gisna2 		ftgen 202, 0, gispace, -2, $DEFAULT		; etc...
 gisna3 		ftgen 203, 0, gispace, -2, $DEFAULT
 gisna4 		ftgen 204, 0, gispace, -2, $DEFAULT
@@ -175,7 +172,7 @@ gisna47 	ftgen 247, 0, gispace, -2, $DEFAULT
 
 
 ;AMPLITUDE RAMP SHAPER FUNCTION
-gifn6	ftgen   20, 0 , 8192, 20 , 2,  1	 
+gifn20	ftgen   20, 0 , 8192, 20 , 2,  1
 
 
 ;BASIC AUDIO WAVEFORMS
@@ -200,198 +197,197 @@ gifn506 ftgen	506,0,8,16, 1,   8, -2, 0.1  			; exp up (1 - 0.1)
 gifn507 ftgen	507,0,8,16, 0.1, 8,  2, 1    			; exp dwn (0.1 - 1)
 gifn508 ftgen	508,0,8,16, 1,   4,  0, 0.1, 4, 0, 1  ; V-shaped ramp (1 - 0.1 - 1)
 gifn509 ftgen	509,0,8,16, 0.1, 4,  0, 1, 4, 0, 0.1  ; TRI-shaped ramp (1 - 0.1 - 1)
-;
-;
+
+
 giLiveBuf	ftgen		0, 0, 16384, 2, 0	; buffer for writing and reading live input (future expansion)
-;
-;
+
+
 ;====================== INPUT VIRTUAL SURFACE CONTROL PARAMETERS ==========
-instr 1;------> INPUT WIDGETS
+instr 1 ;------> INPUT WIDGETS
 
 
-ktrig	metro	10	; widgets scan timing (10 scans/seconds) 
+ktrig	metro	10	; widgets scan timing (10 scans/seconds)
 
-	if (ktrig == 1) then
-		gkxfade_0		chnget "XFADE"
+	if ktrig == 1 then
+		gkxfade_0		invalue "XFADE"
 		gkxfade 		port gkxfade_0, 0.05
 
-chnset  1 - gkxfade, "disp_G1LEV"
-chnset  gkxfade, "disp_G2LEV"
+outvalue "disp_G1LEV", 1 - gkxfade
+outvalue "disp_G2LEV", gkxfade
 
 
 
-gk_outf 		chnget "outf"
-gk_ratio 		chnget "ratio"
-gk_num			chnget "num"
-gk_den			chnget "den"
-gkmode_in		chnget "mode_in"
+gk_outf 		invalue "outf"
+gk_ratio 		invalue "ratio"
+gk_num			invalue "num"
+gk_den			invalue "den"
+gkmode_in		invalue "mode_in"
 
-gk_G_fund		chnget "G_fund"
-gk_G_oct		chnget "G_oct"
-gk_G_key		chnget "G_key"
+gk_G_fund		invalue "G_fund"
+gk_G_oct		invalue "G_oct"
+gk_G_key		invalue "G_key"
 
-gk_H_fund		chnget "H_fund"
-gk_H_oct		chnget "H_oct"
-gk_H_key		chnget "H_key"
+gk_H_fund		invalue "H_fund"
+gk_H_oct		invalue "H_oct"
+gk_H_key		invalue "H_key"
 
-gk_ffund		chnget "ffund"
-gk_exp			chnget "exp"
-gk_maxharm		chnget "maxharm"
+gk_ffund		invalue "ffund"
+gk_exp			invalue "exp"
+gk_maxharm		invalue "maxharm"
 
-gkFIB_Start		chnget "FIB_Start"
-gkFIB_Fund		chnget "FIB_Fund"
+gkFIB_Start		invalue "FIB_Start"
+gkFIB_Fund		invalue "FIB_Fund"
 
 
-gkover_0		chnget "over"
+gkover_0		invalue "over"
 gkover 			port gkover_0, 1
 
-gk_CAR_min		chnget "CAR_min"
-gk_CAR_max		chnget "CAR_max"
-gk_MOD_min		chnget "MOD_min"
-gk_MOD_max		chnget "MOD_max"
-gk_cm			chnget "cm"
-gk_ADSYN		chnget "ADSYN"
+gk_CAR_min		invalue "CAR_min"
+gk_CAR_max		invalue "CAR_max"
+gk_MOD_min		invalue "MOD_min"
+gk_MOD_max		invalue "MOD_max"
+gk_cm			invalue "cm"
+gk_ADSYN		invalue "ADSYN"
 
-gkpad_Y1		chnget "pad_Y1"
-gkpad_X1		chnget "pad_X1"
+gkpad_Y1		invalue "pad_Y1"
+gkpad_X1		invalue "pad_X1"
 gkpad_Y1L 		limit gkpad_Y1, 0,1
 gkpad_X1L 		limit gkpad_X1, 0.0,1.0		;gkpad_X1L 	limit gkpad_X1, 0.001,1
-gkran1_amp		chnget "ran1amp"
-gkran1_vel		chnget "ran1vel"
-gkfun1			chnget "Fun_1"
-gkATK1			chnget "AT1"
-gkREL1			chnget "RE1"
-gkREVSEND1		chnget "REVSEND1"
+gkran1_amp		invalue "ran1amp"
+gkran1_vel		invalue "ran1vel"
+gkfun1			invalue "Fun_1"
+gkATK1			invalue "AT1"
+gkREL1			invalue "RE1"
+gkREVSEND1		invalue "REVSEND1"
 
-gkstep			chnget "knob154"
-gklev_1			chnget "Lev_1"
-gkindx1			chnget "indx1"
-gkSHAPE_0		chnget "SHAPE"
+gkstep			invalue "knob154"
+gklev_1			invalue "Lev_1"
+gkindx1			invalue "indx1"
+gkSHAPE_0		invalue "SHAPE"
 gkSHAPE    =  gkSHAPE_0 + 1
 
-gkvoi			chnget "vox"
+gkvoi			invalue "vox"
 gkvoi_i  = 	int(gkvoi)
 
-gkpad_Y2		chnget "pad_Y2"
-gkpad_X2		chnget "pad_X2"
-gkpad_Y2L 		limit gkpad_Y2, 0,1	
+gkpad_Y2		invalue "pad_Y2"
+gkpad_X2		invalue "pad_X2"
+gkpad_Y2L 		limit gkpad_Y2, 0,1
 gkpad_X2L 		limit gkpad_X2, 0,1
-gkran2_amp		chnget "ran2amp"
-gkran2_vel		chnget "ran2vel"
-gkfun2			chnget "Fun_2"
-gkATK2			chnget "AT2"
-gkREL2			chnget "RE2"
-gkREVSEND2		chnget "REVSEND2"
-gklev_2			chnget "Lev_2"
-gkindx2			chnget "indx2"
+gkran2_amp		invalue "ran2amp"
+gkran2_vel		invalue "ran2vel"
+gkfun2			invalue "Fun_2"
+gkATK2			invalue "AT2"
+gkREL2			invalue "RE2"
+gkREVSEND2		invalue "REVSEND2"
+gklev_2			invalue "Lev_2"
+gkindx2			invalue "indx2"
 
 
-gkband			chnget "band"
-gkdur			chnget "dur"
-gkrate			chnget "rate"
+gkband			invalue "band"
+gkdur			invalue "dur"
+gkrate			invalue "rate"
 
 
-gkREVLEV		chnget "REVLEV"
-gkROOM			chnget	"ROOM"
-gkHF			chnget "HF"
+gkREVLEV		invalue "REVLEV"
+gkROOM			invalue	"ROOM"
+gkHF			invalue "HF"
 
-gkmute1			chnget  "MUTE1"
-gkmute2			chnget  "MUTE2"
+gkmute1			invalue  "MUTE1"
+gkmute2			invalue  "MUTE2"
 
-gkran1_mute		chnget	"RAN1MUTE"
-gkran2_mute		chnget	"RAN2MUTE"
-
-
-gknum_fib		chnget "NUMFIB"
-
-gkGet			chnget "Get"
-
-gkTYPE			chnget "TYPE"
-gkTrans			chnget "read_snap"
-gkTIME			chnget "TIME"
-
-gkBYSTTIME		chnget "BYSTTIME"
-
-gkgrid_morph 	chnget "grid_morph"
-
-gkkeyb_SW		chnget "keyb_SW"
+gkran1_mute		invalue	"RAN1MUTE"
+gkran2_mute		invalue	"RAN2MUTE"
 
 
-gkrectime		chnget "rectime"
+gknum_fib		invalue "NUMFIB"
+
+gkGet			invalue "Get"
+
+gkTYPE			invalue "TYPE"
+gkTrans			invalue "read_snap"
+gkTIME			invalue "TIME"
+
+gkBYSTTIME		invalue "BYSTTIME"
+
+gkgrid_morph 	invalue "grid_morph"
+
+gkkeyb_SW		invalue "keyb_SW"
 
 
-gkin_index		chnget "in_index"
-gkin_readend	chnget "in_readend"
-gkin_readton	chnget "in_readton"
-gkin_readsnap	chnget "in_readsnap"
-gkin_readtran	chnget "in_readtran"
-gkin_readtype	chnget "in_readtype"
+gkrectime		invalue "rectime"
 
-gkmetronome		chnget "metronome" 
+
+gkin_index		invalue "in_index"
+gkin_readend	invalue "in_readend"
+gkin_readton	invalue "in_readton"
+gkin_readsnap	invalue "in_readsnap"
+gkin_readtran	invalue "in_readtran"
+gkin_readtype	invalue "in_readtype"
+
+gkmetronome		invalue "metronome"
 
 
 
 endif
-;
-;
+
 gknum_den = gk_num/gk_den
-chnset  gknum_den, "disp_numdem"
-chnset  gkpad_Y1L, "disppad_Y1"
-chnset  gkpad_X1L, "disppad_X1"
-chnset  gkvoi_i/8, "metervoi"
+outvalue "disp_numdem", gknum_den
+outvalue "disppad_Y1", gkpad_Y1L
+outvalue "disppad_X1", gkpad_X1L
+outvalue "metervoi", gkvoi_i/8
 
 
-chnset  gk_ADSYN, "led_ADSYN"
-chnset  1 - gk_ADSYN, "led_FM"
+outvalue "led_ADSYN", gk_ADSYN
+outvalue "led_FM", 1 - gk_ADSYN
 
-chnset  1 - gk_cm, "led_INT"
-chnset  gk_cm, "led_FLOAT"
+outvalue "led_INT", 1 - gk_cm
+outvalue "led_FLOAT", gk_cm
 
 
 
 ;SHOW ACTIVE INSTR
 kactive active 151					;shows active intr
-chnset  kactive, "active"
-;
+outvalue "active", kactive
+
 endin
 
 
 
 ;=============   BUTTONS STATE MANAGER   ===============
-;
-instr 2;----> Main Buttons State Manager (Old but stable) 
+
+instr 2;----> Main Buttons State Manager (Old but stable)
 ;print giGEOMETRIC, giHARMONIC,  giFIBO
 
-if        (p4 == 1) then	; test on p4  (button On/Off 1)
+if p4 == 1 then	; test on p4  (button On/Off 1)
 
-  if (giGEOMETRIC != 0 || giHARMONIC !=0|| giFIBO !=0 ) then
-	gksw1 = 1 - gksw1		;
+  if giGEOMETRIC != 0 || giHARMONIC !=0 || giFIBO !=0 then
+	gksw1 = 1 - gksw1
 
 	schedule 101,0,36000	; if == 1 call scheduler 1 (instr 101)
 	else
 	turnoff
 	endif
-	
-	 
-elseif (p4 == 2) then 		; test on p4 button On/Off 2
 
 
-	gksw2 = 1 - gksw2	
-	
+elseif p4 == 2 then 		; test on p4 button On/Off 2
+
+
+	gksw2 = 1 - gksw2
+
 	schedule 102,0,36000	; if == 1 call  scheduler 2 (instr 102)
 
 
-elseif  (p4 == 3) then		; test on p4 button Random 1
-	gksw3 = 1 - gksw3		;  
-	schedule 21,0,36000		; if == 1 switch on random gen. 1 (instr 21)	
+elseif p4 == 3 then		; test on p4 button Random 1
+	gksw3 = 1 - gksw3
+	schedule 21,0,36000		; if == 1 switch on random gen. 1 (instr 21)
 
-elseif  (p4 == 4) then		; test on p4 button Random 2
-	gksw4 = 1 - gksw4		; 
-	schedule 22,0,36000		; if == 1 switch on generator random 2 (instr 22)		
+elseif p4 == 4 then		; test on p4 button Random 2
+	gksw4 = 1 - gksw4
+	schedule 22,0,36000		; if == 1 switch on generator random 2 (instr 22)
 
-elseif  (p4 == 5) then		; test on p4  button Timer
-	gksw5 = 1 - gksw5		; 
-	schedule 950,0,36000		; if == 1 switch on Timer (instr 950)		
+elseif p4 == 5 then		; test on p4  button Timer
+	gksw5 = 1 - gksw5
+	schedule 950,0,36000		; if == 1 switch on Timer (instr 950)
 
 
 endif
@@ -400,7 +396,7 @@ turnoff
 endin
 
 ;=======================================
-instr 3  ;----> Gauss Shot  
+instr 3  ;----> Gauss Shot
 
 ;Random parameter extraction (only 7 for now as an exmple)
 ;In progress.....
@@ -414,13 +410,13 @@ ival7 gauss 7
 
 
 
-chnset  abs(ival1), "band"
-chnset  abs(ival2), "pad_X1"
-chnset  abs(ival3), "Fun_1"
-chnset  abs(ival4), "knob154"
-chnset  abs(ival5), "pad_X2"
-chnset  abs(ival6), "vox"
-chnset  abs(ival7), "SHAPE"
+outvalue "band", abs(ival1)
+outvalue "pad_X1", abs(ival2)
+outvalue "Fun_1", abs(ival3)
+outvalue "knob154", abs(ival4)
+outvalue "pad_X2", abs(ival5)
+outvalue "vox", abs(ival6)
+outvalue "SHAPE", abs(ival7)
 
 turnoff
 
@@ -429,14 +425,14 @@ endin
 ;==========================================
 
 instr 5;----> Clear MIDI Association
-chnset  0, "MIDIVAR_1"
-chnset  0, "MIDIVAR_2"
-chnset  0, "MIDIVAR_3"
-chnset  0, "MIDIVAR_4"
-chnset  0, "MIDIVAR_5"
-chnset  0, "MIDIVAR_6"
-chnset  0, "MIDIVAR_7"
-chnset  0, "M8"
+outvalue "MIDIVAR_1", 0
+outvalue "MIDIVAR_2", 0
+outvalue "MIDIVAR_3", 0
+outvalue "MIDIVAR_4", 0
+outvalue "MIDIVAR_5", 0
+outvalue "MIDIVAR_6", 0
+outvalue "MIDIVAR_7", 0
+outvalue "M8", 0
 turnoff
 endin
 
@@ -448,62 +444,62 @@ instr 4;---> MIDI PATCHER
 
 ktrig	metro	10	; widgets scanning at 10 per sec
 
-	if (ktrig == 1) then
+	if ktrig == 1 then
 
-gkcc1			chnget "cc1"
-gkcc2			chnget "cc2"
-gkcc3			chnget "cc3"
-gkcc4			chnget "cc4"
-gkcc5			chnget "cc5"
-gkcc6			chnget "cc6"
-gkcc7			chnget "cc7"
-gkcc8			chnget "cc8"
-
-
-
-gkMIDIVAR_1		chnget "MIDIVAR_1"
-gkMIDIVAR_2		chnget "MIDIVAR_2"
-gkMIDIVAR_3		chnget "MIDIVAR_3"
-gkMIDIVAR_4		chnget "MIDIVAR_4"
-gkMIDIVAR_5		chnget "MIDIVAR_5"
-gkMIDIVAR_6		chnget "MIDIVAR_6"
-gkMIDIVAR_7		chnget "MIDIVAR_7"
-gkM8			chnget "M8"
+gkcc1			invalue "cc1"
+gkcc2			invalue "cc2"
+gkcc3			invalue "cc3"
+gkcc4			invalue "cc4"
+gkcc5			invalue "cc5"
+gkcc6			invalue "cc6"
+gkcc7			invalue "cc7"
+gkcc8			invalue "cc8"
 
 
-gkcc1_lev		chnget "cc1_lev"
-gkcc2_lev		chnget "cc2_lev"
-gkcc3_lev		chnget "cc3_lev"
-gkcc4_lev		chnget "cc4_lev"
-gkcc5_lev		chnget "cc5_lev"
-gkcc6_lev		chnget "cc6_lev"
-gkcc7_lev		chnget "cc7_lev"
-gkcc8_lev		chnget "cc8_lev"
 
-gkinv_1			chnget "inv1"
-gkinv_2			chnget "inv2"
-gkinv_3			chnget "inv3"
-gkinv_4			chnget "inv4"
-gkinv_5			chnget "inv5"
-gkinv_6			chnget "inv6"
-gkinv_7			chnget "inv7"
-gkinv_8			chnget "inv8"
+gkMIDIVAR_1		invalue "MIDIVAR_1"
+gkMIDIVAR_2		invalue "MIDIVAR_2"
+gkMIDIVAR_3		invalue "MIDIVAR_3"
+gkMIDIVAR_4		invalue "MIDIVAR_4"
+gkMIDIVAR_5		invalue "MIDIVAR_5"
+gkMIDIVAR_6		invalue "MIDIVAR_6"
+gkMIDIVAR_7		invalue "MIDIVAR_7"
+gkM8			invalue "M8"
+
+
+gkcc1_lev		invalue "cc1_lev"
+gkcc2_lev		invalue "cc2_lev"
+gkcc3_lev		invalue "cc3_lev"
+gkcc4_lev		invalue "cc4_lev"
+gkcc5_lev		invalue "cc5_lev"
+gkcc6_lev		invalue "cc6_lev"
+gkcc7_lev		invalue "cc7_lev"
+gkcc8_lev		invalue "cc8_lev"
+
+gkinv_1			invalue "inv1"
+gkinv_2			invalue "inv2"
+gkinv_3			invalue "inv3"
+gkinv_4			invalue "inv4"
+gkinv_5			invalue "inv5"
+gkinv_6			invalue "inv6"
+gkinv_7			invalue "inv7"
+gkinv_8			invalue "inv8"
 
 endif
- 
 
-gkMIDIsave	chnget "MIDIsave"
+
+gkMIDIsave	invalue "MIDIsave"
 
 gkstatus, gkchan, gkdata1, gkdata2 midiin  ; read MIDI informations
 
 
-chnset  gkstatus, "status"
-chnset  gkchan, "chan"
-chnset  gkdata1, "data1"
-chnset  gkdata2, "data2"
+outvalue "status", gkstatus
+outvalue "chan", gkchan
+outvalue "data1", gkdata1
+outvalue "data2", gkdata2
 
 
-gkGet		chnget "Get"	; Read the snaphot pointer
+gkGet		invalue "Get"	; Read the snaphot pointer
 
 
 endin
@@ -511,109 +507,109 @@ endin
 ;============== RANDOM GENERATORS ==================
 
 instr 21;----> Random Gen. 1
-	
+
 	if gksw3 == 1 goto on
-	chnset  0, "led3"
+	outvalue "led3",0
 	gkfauto1 = 0
 	turnoff
 	on:
-	chnset  1, "led3"
-	
+	outvalue "led3",1
+
 	gkfauto1 randh (1-gkran1_mute) * gkpad_X1L * gkran1_amp*25000, gkran1_vel
-	
-	
-	chnset  gkfauto1, "disp_rand1"
+
+
+	outvalue "disp_rand1", gkfauto1
 
 endin
 
 instr 22;----> Random Gen. 2
 	if gksw4 == 1 goto on
-	chnset  0, "led4"
+	outvalue "led4",0
 	gkfauto2 = 0
 	turnoff
 	on:
-	chnset  1, "led4"
-	
+	outvalue "led4",1
+
 	gkfauto2 randh (1-gkran2_mute)*gkpad_X2L * gkran2_amp*25000, gkran2_vel
-	chnset  gkfauto2, "disp_rand2"
+	outvalue "disp_rand2", gkfauto2
 endin
 
 
-;
-;==================  Switch off Leds at start 
+
+;==================  Switch off Leds at start
 instr 9; ----> All LEDS OFF
 ;ftload "/Users/eg/Documents/QuteCSEX/data.txt", 1, gisna50
-chnset  0, "L01"
-chnset  0, "L02"
-chnset  0, "L03"
-chnset  0, "L04"
-chnset  0, "L05"
-chnset  0, "L06"
-chnset  0, "L07"
-chnset  0, "L08"
-chnset  0, "L09"
-chnset  0, "L10"
-chnset  0, "L11"
-chnset  0, "L12"
-chnset  0, "L13"
-chnset  0, "L14"
-chnset  0, "L15"
-chnset  0, "L16"
-chnset  0, "L17"
-chnset  0, "L18"
-chnset  0, "L19"
-chnset  0, "L20"
-chnset  0, "L21"
-chnset  0, "L22"
-chnset  0, "L23"
-chnset  0, "L24"
-chnset  0, "L25"
-chnset  0, "L26"
-chnset  0, "L27"
-chnset  0, "L28"
-chnset  0, "L29"
-chnset  0, "L30"
-chnset  0, "L31"
-chnset  0, "L32"
-chnset  0, "L33"
-chnset  0, "L34"
-chnset  0, "L35"
-chnset  0, "L36"
-chnset  0, "L37"
-chnset  0, "L38"
-chnset  0, "L39"
-chnset  0, "L40"
-chnset  0, "L41"
-chnset  0, "L42"
-chnset  0, "L43"
-chnset  0, "L44"
-chnset  0, "L45"
-chnset  0, "L46"
-chnset  0, "L47"
-chnset  0, "L48"
+outvalue "L01",0
+outvalue "L02",0
+outvalue "L03",0
+outvalue "L04",0
+outvalue "L05",0
+outvalue "L06",0
+outvalue "L07",0
+outvalue "L08",0
+outvalue "L09",0
+outvalue "L10",0
+outvalue "L11",0
+outvalue "L12",0
+outvalue "L13",0
+outvalue "L14",0
+outvalue "L15",0
+outvalue "L16",0
+outvalue "L17",0
+outvalue "L18",0
+outvalue "L19",0
+outvalue "L20",0
+outvalue "L21",0
+outvalue "L22",0
+outvalue "L23",0
+outvalue "L24",0
+outvalue "L25",0
+outvalue "L26",0
+outvalue "L27",0
+outvalue "L28",0
+outvalue "L29",0
+outvalue "L30",0
+outvalue "L31",0
+outvalue "L32",0
+outvalue "L33",0
+outvalue "L34",0
+outvalue "L35",0
+outvalue "L36",0
+outvalue "L37",0
+outvalue "L38",0
+outvalue "L39",0
+outvalue "L40",0
+outvalue "L41",0
+outvalue "L42",0
+outvalue "L43",0
+outvalue "L44",0
+outvalue "L45",0
+outvalue "L46",0
+outvalue "L47",0
+outvalue "L48",0
 
-chnset  0, "led1"
-chnset  0, "led2"
-chnset  0, "led3"
-chnset  0, "led4"
-chnset  0, "led_G"
-chnset  0, "led_H"
-chnset  0, "led_F"
+outvalue "led1", 0
+outvalue "led2", 0
+outvalue "led3", 0
+outvalue "led4", 0
+outvalue "led_G", 0
+outvalue "led_H", 0
+outvalue "led_F", 0
 
-chnset  0, "progress"
-chnset  0, "progress_lin"
-chnset  0, "mins"
-chnset  0, "secs"
+outvalue "progress", 0
+outvalue "progress_lin", 0
+outvalue "mins", 0
+outvalue "secs", 0
 
-chnset  "", "warn"
-chnset  0, "LED_WRITE"
-chnset  0, "rectimedisp"
+outvalue "warn", ""
+outvalue "LED_WRITE", 0
+outvalue "rectimedisp",0
 
-chnset  0, "ledseq"
-chnset  0, "ledton"
-chnset  0, "fftONOFF"
-chnset  0, "seqblink"
-chnset  0, "mpercent"
+outvalue "ledseq", 0
+outvalue "ledton", 0
+outvalue "fftONOFF", 0
+outvalue "seqblink",0
+outvalue "mpercent", 0
 turnoff
 endin
 
@@ -624,7 +620,7 @@ giGEOMETRIC init 1
 ind init 0
 iG_fund = i(gk_G_fund)
 
-if (iG_fund == 1)  then
+if iG_fund == 1 then
 	i_int_note = i(gk_G_oct) + 4
 	i_decimal_note = i(gk_G_key) * 0.01
 	inote = i_int_note + i_decimal_note
@@ -661,31 +657,31 @@ if ifreq > sr/2 goto stop
 
 tabw_i	ifreq, ind, 300
 tabw_i	ifreq, ind, 301
-	
+
 
 gifreq = ifreq
 ind = ind + 1
 gind = ind	; copia il valore massimo dell'indice in gind
 
 igoto do
-;
+
 stop:
 ;ifreq = ifreq_old
 
-chnset  ind + 1, "max_index"
-chnset  ifreq, "last_freq"
-chnset  ifreq0, "G_fre"
-chnset  1, "led_G"
-chnset  0, "led_H"
-chnset  0, "led_F"
+outvalue "max_index", ind + 1
+outvalue "last_freq", ifreq
+outvalue "G_fre", ifreq0
+outvalue "led_G", 1
+outvalue "led_H", 0
+outvalue "led_F", 0
 gisw_G = 1
 gisw_H = 0
 gisw_F = 0
-;
+
 ;ftsave "/Users/eg/Documents/QuteCSEX/debug.txt", 1, 300
 turnoff
-;
-;
+
+
 endin
 
 
@@ -694,15 +690,15 @@ endin
 instr 12;----> CREATE HARMONIC
 giHARMONIC init 1
 ind init 0
-;
-;
-iH_fund = i(gk_H_fund)		;
 
-if (iH_fund == 1)  then
+
+iH_fund = i(gk_H_fund)
+
+if iH_fund == 1 then
 	i_int_note = i(gk_H_oct) + 4
 	i_decimal_note = i(gk_H_key) * 0.01
 	inote = i_int_note + i_decimal_note
-	
+
 ifund = cpspch(inote)
 ifreq0 = ifund
 
@@ -722,20 +718,20 @@ do:
 if ind > (imaxharm - 1) igoto stop
 gifreq = icurfreq
 ind = ind + 1
-iexpval pow (ind ), (1+iexp)	;   Harmonic Formula
-icurfreq = ifund * iexpval 
+iexpval pow ind, (1+iexp)	;   Harmonic Formula
+icurfreq = ifund * iexpval
 tabw_i	icurfreq, ind - 1, 300
 tabw_i	icurfreq, ind - 1, 301
 gind = ind
 gifreq = icurfreq
 igoto do
-;
+
 stop:
-;
-chnset  ifreq0, "H_fre"
-chnset  0, "led_G"
-chnset  1, "led_H"
-chnset  0, "led_F"
+
+outvalue "H_fre", ifreq0
+outvalue "led_G", 0
+outvalue "led_H", 1
+outvalue "led_F", 0
 gisw_G = 0
 gisw_H = 1
 gisw_F = 0
@@ -772,13 +768,13 @@ gifreq = ifreq
 index = index + 1
 gind = index	; copia il valore massimo dell'indice in gind
 
-;
+
 igoto do
-;
+
 stop:
-chnset  0, "led_G"
-chnset  0, "led_H"
-chnset  1, "led_F"
+outvalue "led_G", 0
+outvalue "led_H", 0
+outvalue "led_F", 1
 gisw_G = 0
 gisw_H = 0
 gisw_F = 1
@@ -813,14 +809,14 @@ ipar8 = i(gkM8)
 
 
 
-tabw_i icc1, 0, 11 
+tabw_i icc1, 0, 11
 tabw_i icc2, 1, 11
 tabw_i icc3, 2, 11
 tabw_i icc4, 3, 11
 tabw_i icc5, 4, 11
 tabw_i icc6, 5, 11
 tabw_i icc7, 6, 11
-tabw_i icc8, 7, 11 
+tabw_i icc8, 7, 11
 
 
 tabw_i ipar1,8, 11
@@ -848,16 +844,16 @@ instr 60;----> Basic wave morph
 kindex port gkfun1 - 1, 0.2
 ftmorf  kindex, 9,10
 if gkfun1 <= 1  then
-chnset  1, "sine"
-else 
-chnset  0, "sine"
+outvalue "sine", 1
+else
+outvalue "sine", 0
 endif
 
 
 if gkfun2 <= 1  then
-chnset  1, "sine2"
-else 
-chnset  0, "sine2"
+outvalue "sine2", 1
+else
+outvalue "sine2", 0
 endif
 
 endin
@@ -868,107 +864,102 @@ endin
 instr 70  ;  Switch on the corrisponding write led
 inum = i(gkGet) + 1
 
-if inum == 01 then
-	chnset  1, "L01"
-elseif inum == 02 then
-	chnset  1, "L02"
-elseif inum == 03 then
-	chnset  1, "L03"
-elseif inum == 04 then
-	chnset  1, "L04"
-elseif inum == 05 then
-	chnset  1, "L05"
-elseif inum == 06 then
-	chnset  1, "L06"
-elseif inum == 07 then
-	chnset  1, "L07"
-elseif inum == 08 then
-	chnset  1, "L08"
-elseif inum == 09 then
-	chnset  1, "L09"
+if inum == 1 then
+	outvalue "L01", 1
+elseif inum == 2 then
+	outvalue "L02", 1
+elseif inum == 3 then
+	outvalue "L03", 1
+elseif inum == 4 then
+	outvalue "L04", 1
+elseif inum == 5 then
+	outvalue "L05", 1
+elseif inum == 6 then
+	outvalue "L06", 1
+elseif inum == 7 then
+	outvalue "L07", 1
+elseif inum == 8 then
+	outvalue "L08", 1
+elseif inum == 9 then
+	outvalue "L09", 1
 elseif inum == 10 then
-	chnset  1, "L10"
+	outvalue "L10", 1
 elseif inum == 11 then
-	chnset  1, "L11"
+	outvalue "L11", 1
 elseif inum == 12 then
-	chnset  1, "L12"
-
+	outvalue "L12", 1
 elseif inum == 13 then
-	chnset  1, "L13"
+	outvalue "L13", 1
 elseif inum == 14 then
-	chnset  1, "L14"
+	outvalue "L14", 1
 elseif inum == 15 then
-	chnset  1, "L15"
+	outvalue "L15", 1
 elseif inum == 16 then
-	chnset  1, "L16"
+	outvalue "L16", 1
 elseif inum == 17 then
-	chnset  1, "L17"
+	outvalue "L17", 1
 elseif inum == 18 then
-	chnset  1, "L18"
+	outvalue "L18", 1
 elseif inum == 19 then
-	chnset  1, "L19"
+	outvalue "L19", 1
 elseif inum == 20 then
-	chnset  1, "L20"
+	outvalue "L20", 1
 elseif inum == 21 then
-	chnset  1, "L21"
+	outvalue "L21", 1
 elseif inum == 22 then
-	chnset  1, "L22"
+	outvalue "L22", 1
 elseif inum == 23 then
-	chnset  1, "L23"
+	outvalue "L23", 1
 elseif inum == 24 then
-	chnset  1, "L24"
-
+	outvalue "L24", 1
 elseif inum == 25 then
-	chnset  1, "L25"
+	outvalue "L25", 1
 elseif inum == 26 then
-	chnset  1, "L26"
+	outvalue "L26", 1
 elseif inum == 27 then
-	chnset  1, "L27"
+	outvalue "L27", 1
 elseif inum == 28 then
-	chnset  1, "L28"
+	outvalue "L28", 1
 elseif inum == 29 then
-	chnset  1, "L29"
+	outvalue "L29", 1
 elseif inum == 30 then
-	chnset  1, "L30"
+	outvalue "L30", 1
 elseif inum == 31 then
-	chnset  1, "L31"
+	outvalue "L31", 1
 elseif inum == 32 then
-	chnset  1, "L32"
+	outvalue "L32", 1
 elseif inum == 33 then
-	chnset  1, "L33"
+	outvalue "L33", 1
 elseif inum == 34 then
-	chnset  1, "L34"
+	outvalue "L34", 1
 elseif inum == 35 then
-	chnset  1, "L35"
+	outvalue "L35", 1
 elseif inum == 36 then
-	chnset  1, "L36"
-
+	outvalue "L36", 1
 elseif inum == 37 then
-	chnset  1, "L37"
+	outvalue "L37", 1
 elseif inum == 38 then
-	chnset  1, "L38"
+	outvalue "L38", 1
 elseif inum == 39 then
-	chnset  1, "L39"
+	outvalue "L39", 1
 elseif inum == 40 then
-	chnset  1, "L40"
+	outvalue "L40", 1
 elseif inum == 41 then
-	chnset  1, "L41"
+	outvalue "L41", 1
 elseif inum == 42 then
-	chnset  1, "L42"
+	outvalue "L42", 1
 elseif inum == 43 then
-	chnset  1, "L43"
+	outvalue "L43", 1
 elseif inum == 44 then
-	chnset  1, "L44"
+	outvalue "L44", 1
 elseif inum == 45 then
-	chnset  1, "L45"
+	outvalue "L45", 1
 elseif inum == 46 then
-	chnset  1, "L46"
+	outvalue "L46", 1
 elseif inum == 47 then
-	chnset  1, "L47"
+	outvalue "L47", 1
 elseif inum == 48 then
-	chnset  1, "L48"
-
-
+	outvalue "L48", 1
 endif
 
 turnoff
@@ -980,152 +971,150 @@ endin
 instr 71
 inum = i(gkGet) + 1		; Get the snapshop pointer value
 
-if inum == 01 then
-	chnset  0, "L01"
+if     inum == 1 then
+	outvalue "L01", 0
 	vtabwi	0, 200, 0
-elseif inum == 02 then
-	chnset  0, "L02"
+elseif inum == 2 then
+	outvalue "L02", 0
 	vtabwi	0, 201, 0
-elseif inum == 03 then
-	chnset  0, "L03"
+elseif inum == 3 then
+	outvalue "L03", 0
 	vtabwi	0, 202, 0
-elseif inum == 04 then
-	chnset  0, "L04"
+elseif inum == 4 then
+	outvalue "L04", 0
 	vtabwi	0, 203, 0
-elseif inum == 05 then
-	chnset  0, "L05"
+elseif inum == 5 then
+	outvalue "L05", 0
 	vtabwi	0, 204, 0
-elseif inum == 06 then
-	chnset  0, "L06"
+elseif inum == 6 then
+	outvalue "L06", 0
 	vtabwi	0, 205, 0
-elseif inum == 07 then
-	chnset  0, "L07"
+elseif inum == 7 then
+	outvalue "L07", 0
 	vtabwi	0, 206, 0
-elseif inum == 08 then
-	chnset  0, "L08"
+elseif inum == 8 then
+	outvalue "L08", 0
 	vtabwi	0, 207, 0
-elseif inum == 09 then
-	chnset  0, "L09"
+elseif inum == 9 then
+	outvalue "L09", 0
 	vtabwi	0, 208, 0
 elseif inum == 10 then
-	chnset  0, "L10"
+	outvalue "L10", 0
 	vtabwi	0, 209, 0
 elseif inum == 11 then
-	chnset  0, "L11"
+	outvalue "L11", 0
 	vtabwi	0, 210, 0
 elseif inum == 12 then
-	chnset  0, "L12"
+	outvalue "L12", 0
 	vtabwi	0, 211, 0
 
 elseif inum == 13 then
-	chnset  0, "L13"
+	outvalue "L13", 0
 	vtabwi	0, 212, 0
 elseif inum == 14 then
-	chnset  0, "L14"
+	outvalue "L14", 0
 	vtabwi	0, 213, 0
 elseif inum == 15 then
-	chnset  0, "L15"
+	outvalue "L15", 0
 	vtabwi	0, 214, 0
 elseif inum == 16 then
-	chnset  0, "L16"
+	outvalue "L16", 0
 	vtabwi	0, 215, 0
 elseif inum == 17 then
-	chnset  0, "L17"
+	outvalue "L17", 0
 	vtabwi	0, 216, 0
 elseif inum == 18 then
-	chnset  0, "L18"
+	outvalue "L18", 0
 	vtabwi	0, 217, 0
 elseif inum == 19 then
-	chnset  0, "L19"
+	outvalue "L19", 0
 	vtabwi	0, 218, 0
 elseif inum == 20 then
-	chnset  0, "L20"
+	outvalue "L20", 0
 	vtabwi	0, 219, 0
 elseif inum == 21 then
-	chnset  0, "L21"
+	outvalue "L21", 0
 	vtabwi	0, 220, 0
 elseif inum == 22 then
-	chnset  0, "L22"
+	outvalue "L22", 0
 	vtabwi	0, 221, 0
 elseif inum == 23 then
-	chnset  0, "L23"
+	outvalue "L23", 0
 	vtabwi	0, 222, 0
 elseif inum == 24 then
-	chnset  0, "L24"
+	outvalue "L24", 0
 	vtabwi	0, 223, 0
-
 elseif inum == 25 then
-	chnset  0, "L25"
+	outvalue "L25", 0
 	vtabwi	0, 224, 0
 elseif inum == 26 then
-	chnset  0, "L26"
+	outvalue "L26", 0
 	vtabwi	0, 225, 0
 elseif inum == 27 then
-	chnset  0, "L27"
+	outvalue "L27", 0
 	vtabwi	0, 226, 0
 elseif inum == 28 then
-	chnset  0, "L28"
+	outvalue "L28", 0
 	vtabwi	0, 227, 0
 elseif inum == 29 then
-	chnset  0, "L29"
+	outvalue "L29", 0
 	vtabwi	0, 228, 0
 elseif inum == 30 then
-	chnset  0, "L30"
+	outvalue "L30", 0
 	vtabwi	0, 229, 0
 elseif inum == 31 then
-	chnset  0, "L31"
+	outvalue "L31", 0
 	vtabwi	0, 230, 0
 elseif inum == 32 then
-	chnset  0, "L32"
+	outvalue "L32", 0
 	vtabwi	0, 231, 0
 elseif inum == 33 then
-	chnset  0, "L33"
+	outvalue "L33", 0
 	vtabwi	0, 232, 0
 elseif inum == 34 then
-	chnset  0, "L34"
+	outvalue "L34", 0
 	vtabwi	0, 200, 0
 elseif inum == 33 then
-	chnset  0, "L35"
+	outvalue "L35", 0
 	vtabwi	0, 234, 0
 elseif inum == 36 then
-	chnset  0, "L36"
+	outvalue "L36", 0
 	vtabwi	0, 235, 0
-
 elseif inum == 37 then
-	chnset  0, "L37"
+	outvalue "L37", 0
 	vtabwi	0, 236, 0
 elseif inum == 38 then
-	chnset  0, "L38"
+	outvalue "L38", 0
 	vtabwi	0, 237, 0
 elseif inum == 39 then
-	chnset  0, "L39"
+	outvalue "L39", 0
 	vtabwi	0, 238, 0
 elseif inum == 40 then
-	chnset  0, "L40"
+	outvalue "L40", 0
 	vtabwi	0, 239, 0
 elseif inum == 41 then
-	chnset  0, "L41"
+	outvalue "L41", 0
 	vtabwi	0, 240, 0
 elseif inum == 42 then
-	chnset  0, "L42"
+	outvalue "L42", 0
 	vtabwi	0, 241, 0
 elseif inum == 43 then
-	chnset  0, "L43"
+	outvalue "L43", 0
 	vtabwi	0, 242, 0
 elseif inum == 44 then
-	chnset  0, "L44"
+	outvalue "L44", 0
 	vtabwi	0, 243, 0
 elseif inum == 45 then
-	chnset  0, "L45"
+	outvalue "L45", 0
 	vtabwi	0, 244, 0
 elseif inum == 46 then
-	chnset  0, "L46"
+	outvalue "L46", 0
 	vtabwi	0, 245, 0
 elseif inum == 47 then
-	chnset  0, "L47"
+	outvalue "L47", 0
 	vtabwi	0, 246, 0
 elseif inum == 48 then
-	chnset  0, "L48"
+	outvalue "L48", 0
 	vtabwi	0, 247, 0
 
 
@@ -1143,101 +1132,101 @@ endin
 instr 72;----> Clear Snap Leds and first value (table 200)
 
 
-chnset  0, "L01"
+outvalue "L01", 0
 vtabwi	0, 200, 0
-chnset  0, "L02"
+outvalue "L02", 0
 vtabwi	0, 201, 0
-chnset  0, "L03"
+outvalue "L03", 0
 vtabwi	0, 202, 0
-chnset  0, "L04"
+outvalue "L04", 0
 vtabwi	0, 203, 0
-chnset  0, "L05"
+outvalue "L05", 0
 vtabwi	0, 204, 0
-chnset  0, "L06"
+outvalue "L06", 0
 vtabwi	0, 205, 0
-chnset  0, "L07"
+outvalue "L07", 0
 vtabwi	0, 206, 0
-chnset  0, "L08"
+outvalue "L08", 0
 vtabwi	0, 207, 0
-chnset  0, "L09"
+outvalue "L09", 0
 vtabwi	0, 208, 0
-chnset  0, "L10"
+outvalue "L10", 0
 vtabwi	0, 209, 0
-chnset  0, "L11"
+outvalue "L11", 0
 vtabwi	0, 200, 0
-chnset  0, "L12"
+outvalue "L12", 0
 vtabwi	0, 211, 0
-chnset  0, "L13"
+outvalue "L13", 0
 vtabwi	0, 212, 0
-chnset  0, "L14"
+outvalue "L14", 0
 vtabwi	0, 213, 0
-chnset  0, "L15"
+outvalue "L15", 0
 vtabwi	0, 214, 0
-chnset  0, "L16"
+outvalue "L16", 0
 vtabwi	0, 215, 0
-chnset  0, "L17"
+outvalue "L17", 0
 vtabwi	0, 216, 0
-chnset  0, "L18"
+outvalue "L18", 0
 vtabwi	0, 217, 0
-chnset  0, "L19"
+outvalue "L19", 0
 vtabwi	0, 218, 0
-chnset  0, "L20"
+outvalue "L20", 0
 vtabwi	0, 219, 0
-chnset  0, "L21"
+outvalue "L21", 0
 vtabwi	0, 220, 0
-chnset  0, "L22"
+outvalue "L22", 0
 vtabwi	0, 221, 0
-chnset  0, "L23"
+outvalue "L23", 0
 vtabwi	0, 222, 0
-chnset  0, "L24"
+outvalue "L24", 0
 vtabwi	0, 223, 0
-chnset  0, "L25"
+outvalue "L25", 0
 vtabwi	0, 224, 0
-chnset  0, "L26"
+outvalue "L26", 0
 vtabwi	0, 235, 0
-chnset  0, "L27"
+outvalue "L27", 0
 vtabwi	0, 246, 0
-chnset  0, "L28"
+outvalue "L28", 0
 vtabwi	0, 227, 0
-chnset  0, "L29"
+outvalue "L29", 0
 vtabwi	0, 228, 0
-chnset  0, "L30"
+outvalue "L30", 0
 vtabwi	0, 229, 0
-chnset  0, "L31"
+outvalue "L31", 0
 vtabwi	0, 230, 0
-chnset  0, "L32"
+outvalue "L32", 0
 vtabwi	0, 231, 0
-chnset  0, "L33"
+outvalue "L33", 0
 vtabwi	0, 232, 0
-chnset  0, "L34"
+outvalue "L34", 0
 vtabwi	0, 233, 0
-chnset  0, "L35"
+outvalue "L35", 0
 vtabwi	0, 234, 0
-chnset  0, "L36"
+outvalue "L36", 0
 vtabwi	0, 235, 0
-chnset  0, "L37"
+outvalue "L37", 0
 vtabwi	0, 236, 0
-chnset  0, "L38"
+outvalue "L38", 0
 vtabwi	0, 237, 0
-chnset  0, "L39"
+outvalue "L39", 0
 vtabwi	0, 238, 0
-chnset  0, "L40"
+outvalue "L40", 0
 vtabwi	0, 239, 0
-chnset  0, "L41"
+outvalue "L41", 0
 vtabwi	0, 240, 0
-chnset  0, "L42"
+outvalue "L42", 0
 vtabwi	0, 241, 0
-chnset  0, "L43"
+outvalue "L43", 0
 vtabwi	0, 242, 0
-chnset  0, "L44"
+outvalue "L44", 0
 vtabwi	0, 243, 0
-chnset  0, "L45"
+outvalue "L45", 0
 vtabwi	0, 244, 0
-chnset  0, "L46"
+outvalue "L46", 0
 vtabwi	0, 245, 0
-chnset  0, "L47"
+outvalue "L47", 0
 vtabwi	0, 246, 0
-chnset  0, "L48"
+outvalue "L48", 0
 vtabwi	0, 247, 0
 
 turnoff
@@ -1245,11 +1234,12 @@ turnoff
 endin
 
 
-;==================== PREPARE TWO TABLES FOR SNAP TRANSITION			
+;==================== PREPARE TWO TABLES FOR SNAP TRANSITION
 
-instr 91 ; READ SNAP	&  MORPH 
+instr 91 ; READ SNAP	&  MORPH
 
-vtabwi 0,703,\						; Freeze in table 703 the current values of the parameters
+; Freeze in table 703 the current values of the parameters
+vtabwi 0,703,\
 i(gkband),i(gkrate),i(gkdur),\
 i(gk_CAR_min),i(gk_CAR_max), i(gk_MOD_min), i(gk_MOD_max),\
 i(gkindx1),i(gkindx2),\
@@ -1276,7 +1266,7 @@ i(gkFIB_Start), i(gkFIB_Fund),\
 i(gkran1_mute), i(gkran2_mute)
 
 
-if giSEQ == 0 then	; test if SEQUENCER is  active  (0 : inactive  / !=0 : active) 
+if giSEQ == 0 then	; test if SEQUENCER is  active  (0 : inactive  / !=0 : active)
 
 isnap = i(gkGet) ;if yes snapshot got from combobox
 
@@ -1287,7 +1277,7 @@ isnap = giPrn-1   ; if not snapshot got from sequencer descriptor
 endif
 
 
-tableicopy	704, 200 + isnap   ; Make a copy of all the parameters of the current snapshot in table 704 
+tableicopy	704, 200 + isnap   ; Make a copy of all the parameters of the current snapshot in table 704
 schedule 92, 0, 3600  ; call the sequencer
 
 turnoff
@@ -1297,10 +1287,10 @@ endin
 
 ;========================= LOAD SNAP WITH  NO And WITH TRANSITION
 
-instr 92  ;++++>LOAD SNAP - called by instr 91 (readsnap)	
+instr 92  ;++++>LOAD SNAP - called by instr 91 (readsnap)
 
 gkstop init 0
-kTr init 0 
+kTr init 0
 ;iTIME = i(gkTIME)+ 0.01
 ;iTYPE = i(gkTYPE)
 iBYSTTIME = i(gkBYSTTIME)
@@ -1310,7 +1300,7 @@ if giSEQ == 0 then
 iSNAP = i(gkGet)
 iTIME = i(gkTIME)+ 0.01
 iTYPE = i(gkTYPE)
-else 
+else
 iSNAP = giPrn-1
 iTIME = giTtran
 iTYPE = giMode
@@ -1320,39 +1310,39 @@ print iSNAP
 
 ifirst_value 	table 0, 200 + iSNAP ; read first value of table 200
 
-if ifirst_value != 0 goto proceed 
+if ifirst_value != 0 goto proceed
 
 SEmptySnap sprintf "WARNING ! Snap %d is empty", iSNAP + 1
 
-chnset	 SEmptySnap, "warn"
+outvalue	"warn", SEmptySnap
 
 turnoff
 
 proceed:
-chnset  "", "warn"
+outvalue "warn", ""
 
 SLoadingSnap	sprintf	"Loading Snap %d .... ", iSNAP + 1
 
-chnset  SLoadingSnap, "warn"
+outvalue "warn",SLoadingSnap
 
 
-if iBYSTTIME == 1 goto bypass				; IF iBYSTTIE == 1 DON'T USES THE MORPH TIME FROM SNAPSHOT 
-			iTIME table 35, 200 + iSNAP			
- 			chnset  iTIME, "TIME"
+if iBYSTTIME == 1 goto bypass				; IF iBYSTTIE == 1 DON'T USES THE MORPH TIME FROM SNAPSHOT
+			iTIME table 35, 200 + iSNAP
+ 			outvalue "TIME", iTIME
 			iTYPE table 36, 200 + iSNAP
- 			chnset  iTYPE, "TYPE"
+ 			outvalue "TYPE", iTYPE
 			;imute1 table 37, 200 + iSNAP
-bypass: 	
+bypass:
 			imute1 table 37, 200 + iSNAP
-			chnset  imute1, "MUTE1"
+			outvalue "MUTE1", imute1
 			imute2 table 38, 200 + iSNAP
- 			chnset  imute2, "MUTE2"
+ 			outvalue "MUTE2", imute2
 			icm 	table 39, 200 + iSNAP
- 			chnset  icm, "cm"
+ 			outvalue "cm", icm
 			iADSYN table 40, 200 + iSNAP
- 			chnset  iADSYN, "ADSYN"
+ 			outvalue "ADSYN", iADSYN
 
-			 
+
 
 			iGEO 	table 41, 200 + iSNAP
 			iHARM 	table 42, 200 + iSNAP
@@ -1386,11 +1376,11 @@ bypass:
 			iFIBSTART	table 58, 200 + iSNAP
 			iFIBFUND	table 59, 200 + iSNAP
 
-			iRAN1MUTE 	table 60, 200 + iSNAP  
+			iRAN1MUTE 	table 60, 200 + iSNAP
 			iRAN2MUTE 	table 61, 200 + iSNAP
 
-			chnset  iRAN1MUTE, "RAN1MUTE"
-			chnset  iRAN2MUTE, "RAN2MUTE"
+			outvalue 	"RAN1MUTE", iRAN1MUTE
+			outvalue 	"RAN2MUTE", iRAN2MUTE
 
 if iGEO == 1 then
  ;schedule 10, 0, 3600
@@ -1409,7 +1399,7 @@ endif
 tableicopy 301,300
 
 
-gkstop chnget "STOP"					; CHECK TRANSITION MANUAL STOP
+gkstop invalue "STOP"					; CHECK TRANSITION MANUAL STOP
 kTr_LIN line 0,iTIME, 1
 kTr 	transeg 0, iTIME, iTYPE, 1
 
@@ -1418,13 +1408,14 @@ ftmorf kTr, 303, 300
 
 else
 tablecopy 300,302
-endif 
+endif
 ftmorf kTr, 701, 702					; EXECUTING MORPHING BETWEEN TWO SNAPSHOTS
 
 
-vtabk 0,702,\							; READ ALL PARAMETERS
+; READ ALL PARAMETERS
+vtabk 0,702,\
 gkband,gkrate,gkdur,\
-gk_CAR_min,gk_CAR_max,gk_MOD_min,gk_MOD_max,\ 
+gk_CAR_min,gk_CAR_max,gk_MOD_min,gk_MOD_max,\
 gkindx1,gkindx2,\
 gklev_1,gklev_2,\
 gkran1_amp,gkran2_amp,\
@@ -1440,69 +1431,69 @@ gkREL1, gkREL2, \
 gkREVSEND1, gkREVSEND2, \
 gkxfade_0,\
 gkSHAPE_0
-;
-;
+
+
 ; UPDATE PARAMETERS AND WIDGETS
-chnset  kTr, "progress"
-chnset  kTr_LIN, "progress_lin"
-chnset  kTr_LIN * (iTIME - 0.01), "transtime"
+outvalue "progress", kTr
+outvalue "progress_lin", kTr_LIN
+outvalue "transtime", kTr_LIN * (iTIME - 0.01)
 
 kmorph_percent = kTr * 100
-chnset  kmorph_percent, "mpercent"
+outvalue "mpercent", kmorph_percent
 
 ;printk2 kTr
 
-chnset  gkband, "band"
+outvalue "band", gkband
 
-chnset  gkdur, "dur"
-chnset  gkrate, "rate"
+outvalue "dur", gkdur
+outvalue "rate",gkrate
 
 
-chnset  gkvoi, "vox"
-chnset  gkstep, "knob154"
+outvalue "vox", gkvoi
+outvalue "knob154",gkstep
 
-chnset	 gklev_1, "Lev_1"
-chnset  gkpad_X1, "pad_X1"
-chnset  gkpad_Y1, "pad_Y1"
-chnset  gkfun1, "Fun_1"
-chnset  gkindx1, "indx1"
+outvalue	"Lev_1", gklev_1
+outvalue  "pad_X1", gkpad_X1
+outvalue  "pad_Y1", gkpad_Y1
+outvalue  "Fun_1", gkfun1
+outvalue 	"indx1", gkindx1
 
-chnset	 gklev_2, "Lev_2"
-chnset  gkpad_X2, "pad_X2"
-chnset  gkpad_Y2, "pad_Y2"
-chnset  gkfun2, "Fun_2"
-chnset  gkindx2, "indx2"
+outvalue	"Lev_2", gklev_2
+outvalue  	"pad_X2", gkpad_X2
+outvalue  	"pad_Y2", gkpad_Y2
+outvalue  	"Fun_2", gkfun2
+outvalue 	"indx2", gkindx2
 
-chnset  gkran1_amp, "ran1amp"
-chnset  gkran1_vel, "ran1vel"
-chnset  gkran2_amp, "ran2amp"
-chnset  gkran2_vel, "ran2vel"
+outvalue 	"ran1amp", gkran1_amp
+outvalue 	"ran1vel", gkran1_vel
+outvalue 	"ran2amp", gkran2_amp
+outvalue 	"ran2vel", gkran2_vel
 
-chnset  gkREVSEND1, "REVSEND1"
-chnset  gkREVSEND2, "REVSEND2"
+outvalue 	"REVSEND1", gkREVSEND1
+outvalue 	"REVSEND2", gkREVSEND2
 
-chnset	 gkREVLEV, "REVLEV"
-chnset	 gkROOM, "ROOM"
-chnset	 gkHF, "HF"
+outvalue	"REVLEV", gkREVLEV
+outvalue	"ROOM", gkROOM
+outvalue	"HF", gkHF
 
-chnset	 gkATK1, "AT1"
-chnset	 gkATK2, "AT2"
-chnset	 gkREL1, "RE1"
-chnset	 gkREL2, "RE2"
+outvalue	"AT1", gkATK1
+outvalue	"AT2", gkATK2
+outvalue	"RE1", gkREL1
+outvalue	"RE2", gkREL2
 
-chnset  gk_CAR_min, "CAR_min"
-chnset  gk_CAR_max, "CAR_max"
-chnset  gk_MOD_min, "MOD_min"
-chnset  gk_MOD_max, "MOD_max"
+outvalue 	"CAR_min", gk_CAR_min
+outvalue 	"CAR_max", gk_CAR_max
+outvalue 	"MOD_min", gk_MOD_min
+outvalue 	"MOD_max", gk_MOD_max
 
-chnset  gkxfade_0, "XFADE"
-chnset  gkSHAPE_0, "SHAPE"
+outvalue 	"XFADE", gkxfade_0
+outvalue 	"SHAPE", gkSHAPE_0
 
 if kTr < 1 goto go
- chnset  0, "progress"
- chnset  0, "progress_lin"
+ outvalue "progress",0
+ outvalue "progress_lin",0
  SLoadedSnap	sprintf	"Snap %d Loaded ! ", iSNAP + 1
- chnset  SLoadedSnap, "warn"
+ outvalue "warn", SLoadedSnap
  turnoff
 go:
   if gkstop == 1 then
@@ -1514,14 +1505,15 @@ go:
 
 endin
 
-;
 
-;==============================   SAVE PARAMETERS  SNAP USED WITH TRANSITION   
-instr 100 ;++++> WRITE SNAP (schedule i70 and copy all 60 parameters into table 200) 
+
+;==============================   SAVE PARAMETERS  SNAP USED WITH TRANSITION
+instr 100 ;++++> WRITE SNAP (schedule i70 and copy all 60 parameters into table 200)
 
 schedule 70, 0, 3600
 
-vtabwi 0,200 + i(gkGet),\			;saves all parameters into the table of the current snap 
+;saves all parameters into the table of the current snap
+vtabwi 0,200 + i(gkGet),\
 i(gkband),i(gkrate),i(gkdur),\
 i(gk_CAR_min),i(gk_CAR_max), i(gk_MOD_min), i(gk_MOD_max),\
 i(gkindx1),i(gkindx2),\
@@ -1563,17 +1555,17 @@ reset:
 
 itime = 	i(gkrate)		;reads and freeze grain rate
 gidur = 	i(gkdur)		;reads and freeze duration
-iatk = 	i(gkATK1)			;reads and freeze attack time 
-irel = 	i(gkREL1)			;reads and freeze release time 
+iatk = 	i(gkATK1)			;reads and freeze attack time
+irel = 	i(gkREL1)			;reads and freeze release time
 
 istep_0 = i(gkstep)	;reads step value
 istep = int(istep_0)	;cast to integer
 
 if gkkeyb_SW == 0 goto nokeyb	; check if MIDI keyboard is selected
- 
-if1gr = gind *( i(gkdata1)-12)/96	; Maps the MIDI keyboard
+
+if1gr = gind *(i(gkdata1)-12)/96	; Maps the MIDI keyboard
 iXKB = if1gr / gind
-chnset  iXKB, "pad_X1"
+outvalue "pad_X1", iXKB
 goto nxt
 nokeyb:
 
@@ -1589,9 +1581,9 @@ if1gr_int = int(if1gr)
 
 
 
-chnset  if1gr, "grid_index"
+outvalue "grid_index", if1gr
 gif1 tab_i		if1gr,300			; reads 1st partial freq.
-chnset  gif1, "grid_XFREQ"
+outvalue "grid_XFREQ", gif1
 gif2 tab_i		if1gr_int +        istep, 300	;reads 2nst
 gif3 tab_i		if1gr_int +    2 * istep, 300	;..
 gif4 tab_i		if1gr_int +    3 * istep, 300	;..
@@ -1611,17 +1603,17 @@ gifreq_ref8 = gif8 + i(gkfauto1)
 
 irand_dev1 = i(gkpad_Y1L)		;reads  Y PAD1  and set frequency deviation
 ilev_1 tab_i 	i(gklev_1)*0.5,20,1 ; set Lev1 to non linear
-;klev_1 = ilev_1				
+;klev_1 = ilev_1
 
 timout 0,itime,cont	;START TIME scheduler of each grain
 reinit reset
 
 cont:
 if gksw1 == 1 goto go
-chnset  0, "led1"
+outvalue "led1", 0
 turnoff
 go:
-chnset  1, "led1"
+outvalue "led1", 1
 
 
 schedule 151, 0, (4.1-gidur), gifreq_ref1, irand_dev1,ilev_1, gifreq_ref2, gifreq_ref3, gifreq_ref4,\
@@ -1633,36 +1625,36 @@ endin
 ;==============================
 
 instr 102;-=-=-> CALLING INSTRUMENT 2
-;
+
 reset:
 itime = 	i(gkrate)		;reads and freeze grain rate
 gidur = 	i(gkdur)		;reads and freeze duration
 iatk2 = 	i(gkATK2)		;reads and freeze attack time
 irel2 = 	i(gkREL2)		;reads and freeze release time
 ifun2 =		i(gkfun2)
-;
+
 
 
 ifreq_ref2 = i(gkpad_X2L* 2500)+ i(gkfauto2)
-irand_dev2 = i(gkpad_Y2L)	
+irand_dev2 = i(gkpad_Y2L)
 ilev_2 tab_i i(gklev_2)*0.5,20,1
-;
-;
-timout 0,itime,cont		;START TIME schedulator 
-reinit reset		
-;
-;
+
+
+timout 0,itime,cont		;START TIME schedulator
+reinit reset
+
+
 cont:
 
 
 if gksw2 = 1 goto go
-chnset  0, "led2"
+outvalue "led2", 0
 turnoff
 go:
-chnset  1, "led2"
+outvalue "led2", 1
 schedule  152, 0, (4.1-gidur),ifreq_ref2,irand_dev2,ilev_2,iatk2,irel2,ifun2
-;
-;
+
+
 endin
 
 
@@ -1682,9 +1674,9 @@ iright = (ichan > 0 ? 1 : 0)
 icar  random	i(gk_CAR_min), i(gk_CAR_max);extracts random number for	car_min
 imod  random  	i(gk_MOD_min), i(gk_MOD_max) ;extracts random number for car_max
 
- 
-icar = ( i(gk_cm) = 0?  int(icar) : icar)	;select if use integer or float values
-imod = ( i(gk_cm) = 0?  int(imod) : imod) 
+
+icar = (i(gk_cm) = 0 ?  int(icar) : icar)	;select if use integer or float values
+imod = (i(gk_cm) = 0 ?  int(imod) : imod)
 
 iindex random 0,i(gkindx1)					;extracts random number for modulation index
 
@@ -1700,7 +1692,7 @@ iampH8 tab_i 7, 500+i(gkSHAPE)
 iat  = p3 * p14						;set attack time
 irel = p3 * p15						;set release
 ion  = p3 - (iat+irel)					;set duration
-invoices  = i( gkvoi_i)				;set number of simultaneous voices
+invoices  = i(gkvoi_i)				;set number of simultaneous voices
 
 
 							;k1	linen ilev, iat,p3,irel
@@ -1736,14 +1728,14 @@ a5	foscili iampH5*ak1,p10+irandfreq*gkband, icar,imod, kindex, 10
 a6	foscili iampH6*ak1,p11+irandfreq*gkband, icar,imod, kindex, 10
 a7	foscili iampH7*ak1,p12+irandfreq*gkband, icar,imod, kindex, 10
 a8	foscili iampH8*ak1,p13+irandfreq*gkband, icar,imod, kindex, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
-chnset  gif3, "F3"
-chnset  gif4, "F4"
-chnset  gif5, "F5"
-chnset  gif6, "F6"
-chnset  gif7, "F7"
-chnset  gif8, "F8"
+outvalue "F1", gif1
+outvalue "F2", gif2
+outvalue "F3", gif3
+outvalue "F4", gif4
+outvalue "F5", gif5
+outvalue "F6", gif6
+outvalue "F7", gif7
+outvalue "F8", gif8
 
 
 aout sum a1,a2,a3,a4,a5,a6,a7,a8
@@ -1759,13 +1751,13 @@ a4	foscili iampH4*ak1,p9+irandfreq*gkband, icar,imod, kindex, 10
 a5	foscili iampH5*ak1,p10+irandfreq*gkband, icar,imod, kindex, 10
 a6	foscili iampH6*ak1,p11+irandfreq*gkband, icar,imod, kindex, 10
 a7	foscili iampH7*ak1,p12+irandfreq*gkband, icar,imod, kindex, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
-chnset  gif3, "F3"
-chnset  gif4, "F4"
-chnset  gif5, "F5"
-chnset  gif6, "F6"
-chnset  gif7, "F7"
+outvalue "F1", gif1
+outvalue "F2", gif2
+outvalue "F3", gif3
+outvalue "F4", gif4
+outvalue "F5", gif5
+outvalue "F6", gif6
+outvalue "F7", gif7
 
 aout sum a1,a2,a3,a4,a5,a6,a7
 goto outsum
@@ -1779,12 +1771,12 @@ a3	foscili iampH3*ak1,p8+irandfreq*gkband, icar,imod, kindex, 10
 a4	foscili iampH4*ak1,p9+irandfreq*gkband, icar,imod, kindex, 10
 a5	foscili iampH5*ak1,p10+irandfreq*gkband, icar,imod, kindex, 10
 a6	foscili iampH6*ak1,p11+irandfreq*gkband, icar,imod, kindex, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
-chnset  gif3, "F3"
-chnset  gif4, "F4"
-chnset  gif5, "F5"
-chnset  gif6, "F6"
+outvalue "F1", gif1
+outvalue "F2", gif2
+outvalue "F3", gif3
+outvalue "F4", gif4
+outvalue "F5", gif5
+outvalue "F6", gif6
 
 aout sum a1,a2,a3,a4,a5,a6
 goto outsum
@@ -1797,11 +1789,11 @@ a2	foscili iampH2*ak1,p7+irandfreq*gkband, icar,imod, kindex, 10
 a3	foscili iampH3*ak1,p8+irandfreq*gkband, icar,imod, kindex, 10
 a4	foscili iampH4*ak1,p9+irandfreq*gkband, icar,imod, kindex, 10
 a5	foscili iampH5*ak1,p10+irandfreq*gkband, icar,imod, kindex, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
-chnset  gif3, "F3"
-chnset  gif4, "F4"
-chnset  gif5, "F5"
+outvalue "F1", gif1
+outvalue "F2", gif2
+outvalue "F3", gif3
+outvalue "F4", gif4
+outvalue "F5", gif5
 
 aout sum a1,a2,a3,a4,a5
 goto outsum
@@ -1813,10 +1805,10 @@ a1	foscili iampH1*ak1,p4+irandfreq*gkband, icar,imod, kindex, 10
 a2	foscili iampH2*ak1,p7+irandfreq*gkband, icar,imod, kindex, 10
 a3	foscili iampH3*ak1,p8+irandfreq*gkband, icar,imod, kindex, 10
 a4	foscili iampH4*ak1,p9+irandfreq*gkband, icar,imod, kindex, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
-chnset  gif3, "F3"
-chnset  gif4, "F4"
+outvalue "F1", gif1
+outvalue "F2", gif2
+outvalue "F3", gif3
+outvalue "F4", gif4
 
 aout sum a1,a2,a3,a4
 goto outsum
@@ -1827,9 +1819,9 @@ FMvoices3:
 a1	foscili iampH1*ak1,p4+irandfreq*gkband, icar,imod, kindex, 10
 a2	foscili iampH2*ak1,p7+irandfreq*gkband, icar,imod, kindex, 10
 a3	foscili iampH3*ak1,p8+irandfreq*gkband, icar,imod, kindex, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
-chnset  gif3, "F3"
+outvalue "F1", gif1
+outvalue "F2", gif2
+outvalue "F3", gif3
 
 aout sum a1,a2,a3
 goto outsum
@@ -1839,8 +1831,8 @@ FMvoices2:
 ;kindex  linseg 0,p3/2,iindex,p3/2,0
 a1	foscili iampH1*ak1,p4+irandfreq*gkband, icar,imod, kindex, 10
 a2	foscili iampH2*ak1,p7+irandfreq*gkband, icar,imod, kindex, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
+outvalue "F1", gif1
+outvalue "F2", gif2
 
 aout sum a1,a2
 goto outsum
@@ -1849,7 +1841,7 @@ FMvoices1:
 ;ak1	linen ilev, iat,p3,irel
 ;kindex  linseg 0,p3/2,iindex,p3/2,0
 a1	foscili iampH1*ak1,p4+irandfreq*gkband, icar,imod, kindex, 10
-chnset  gif1, "F1"
+outvalue "F1", gif1
 
 aout sum a1
 goto outsum
@@ -1875,14 +1867,14 @@ a5	oscil iampH5*ak1,p10+irandfreq*gkband, 10
 a6	oscil iampH6*ak1,p11+irandfreq*gkband, 10
 a7	oscil iampH7*ak1,p12+irandfreq*gkband, 10
 a8	oscil iampH8*ak1,p13+irandfreq*gkband, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
-chnset  gif3, "F3"
-chnset  gif4, "F4"
-chnset  gif5, "F5"
-chnset  gif6, "F6"
-chnset  gif7, "F7"
-chnset  gif8, "F8"
+outvalue "F1", gif1
+outvalue "F2", gif2
+outvalue "F3", gif3
+outvalue "F4", gif4
+outvalue "F5", gif5
+outvalue "F6", gif6
+outvalue "F7", gif7
+outvalue "F8", gif8
 
 
 aout sum a1,a2,a3,a4,a5,a6,a7,a8
@@ -1897,13 +1889,13 @@ a4	oscil iampH4*ak1,p9+irandfreq*gkband, 10
 a5	oscil iampH5*ak1,p10+irandfreq*gkband, 10
 a6	oscil iampH6*ak1,p11+irandfreq*gkband, 10
 a7	oscil iampH7*ak1,p12+irandfreq*gkband, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
-chnset  gif3, "F3"
-chnset  gif4, "F4"
-chnset  gif5, "F5"
-chnset  gif6, "F6"
-chnset  gif7, "F7"
+outvalue "F1", gif1
+outvalue "F2", gif2
+outvalue "F3", gif3
+outvalue "F4", gif4
+outvalue "F5", gif5
+outvalue "F6", gif6
+outvalue "F7", gif7
 
 aout sum a1,a2,a3,a4,a5,a6,a7
 goto outsum
@@ -1917,12 +1909,12 @@ a3	oscil iampH3*ak1,p8+irandfreq*gkband, 10
 a4	oscil iampH4*ak1,p9+irandfreq*gkband, 10
 a5	oscil iampH5*ak1,p10+irandfreq*gkband, 10
 a6	oscil iampH6*ak1,p11+irandfreq*gkband, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
-chnset  gif3, "F3"
-chnset  gif4, "F4"
-chnset  gif5, "F5"
-chnset  gif6, "F6"
+outvalue "F1", gif1
+outvalue "F2", gif2
+outvalue "F3", gif3
+outvalue "F4", gif4
+outvalue "F5", gif5
+outvalue "F6", gif6
 
 aout sum a1,a2,a3,a4,a5,a6
 goto outsum
@@ -1935,11 +1927,11 @@ a2	oscil iampH2*ak1,p7+irandfreq*gkband, 10
 a3	oscil iampH3*ak1,p8+irandfreq*gkband, 10
 a4	oscil iampH4*ak1,p9+irandfreq*gkband, 10
 a5	oscil iampH5*ak1,p10+irandfreq*gkband, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
-chnset  gif3, "F3"
-chnset  gif4, "F4"
-chnset  gif5, "F5"
+outvalue "F1", gif1
+outvalue "F2", gif2
+outvalue "F3", gif3
+outvalue "F4", gif4
+outvalue "F5", gif5
 
 aout sum a1,a2,a3,a4,a5
 goto outsum
@@ -1950,10 +1942,10 @@ a1	oscil iampH1*ak1,p4+irandfreq*gkband, 10
 a2	oscil iampH2*ak1,p7+irandfreq*gkband, 10
 a3	oscil iampH3*ak1,p8+irandfreq*gkband, 10
 a4	oscil iampH4*ak1,p9+irandfreq*gkband, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
-chnset  gif3, "F3"
-chnset  gif4, "F4"
+outvalue "F1", gif1
+outvalue "F2", gif2
+outvalue "F3", gif3
+outvalue "F4", gif4
 
 aout sum a1,a2,a3,a4
 goto outsum
@@ -1963,9 +1955,9 @@ ADvoices3:
 a1	oscil iampH1*ak1,p4+irandfreq*gkband, 10
 a2	oscil iampH2*ak1,p7+irandfreq*gkband, 10
 a3	oscil iampH3*ak1,p8+irandfreq*gkband, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
-chnset  gif3, "F3"
+outvalue "F1", gif1
+outvalue "F2", gif2
+outvalue "F3", gif3
 
 aout sum a1,a2,a3
 goto outsum
@@ -1974,8 +1966,8 @@ ADvoices2:
 ;ak1	linen ilev, iat,p3,irel
 a1	oscil iampH1*ak1,p4+irandfreq*gkband, 10
 a2	oscil iampH2*ak1,p7+irandfreq*gkband, 10
-chnset  gif1, "F1"
-chnset  gif2, "F2"
+outvalue "F1", gif1
+outvalue "F2", gif2
 
 aout sum a1,a2
 goto outsum
@@ -1983,14 +1975,14 @@ goto outsum
 ADvoices1:
 ;ak1	linen ilev, iat,p3,irel
 a1	oscil iampH1*ak1,p4+irandfreq*gkband, 10
-chnset  gif1, "F1"
+outvalue "F1", gif1
 
 aout sum a1
 
 
 outsum:
 aL = (1-gkmute1) * gkover * aout * $SCALEFACTOR1 * ileft * (1 - gkxfade)
-aR = (1-gkmute1) * gkover * aout * $SCALEFACTOR1 * iright * ( 1 - gkxfade)
+aR = (1-gkmute1) * gkover * aout * $SCALEFACTOR1 * iright * (1 - gkxfade)
 aL dcblock aL
 aR dcblock aR
 	outs	aL, aR
@@ -2013,34 +2005,34 @@ gaCONV_R = gaCONV_R + aR
 
 ;==========================================
 
-instr   152;====> CALLED INSTRUMENT 2 (NO GRID)
- 
+instr   152 ;====> CALLED INSTRUMENT 2 (NO GRID)
+
 ilev = p6
 ifun = p9
-;
-irandfreq   = birnd(p5)			
+
+irandfreq   = birnd(p5)
 ichan = birnd(1)
 ileft = (ichan <= 0 ? 1 : 0)
 iright = (ichan > 0 ? 1 : 0)
-;
+
 icar  random	i(gk_CAR_min), i(gk_CAR_max)			;6,14
 imod  random  	i(gk_MOD_min), i(gk_MOD_max)		 ;5,13
-;
-; 
-icar = ( i(gk_cm) = 0?  int(icar) : icar)
-imod = ( i(gk_cm) = 0?  int(imod) : imod) 
-;
+
+
+icar = (i(gk_cm) = 0 ?  int(icar) : icar)
+imod = (i(gk_cm) = 0 ?  int(imod) : imod)
+
 iindex random 0,i(gkindx2)
 
 
 iat = p3 * p7
 irel = p3 * p8
 ion = p3 - (iat+irel)
-;
+
 ak1		linen ilev, iat,p3,irel
 kindex	linseg 0,p3/2,iindex,p3/2,0
-;
-;
+
+
 
 a1	foscil ak1,p4+irandfreq*gkband, icar,imod, kindex, ifun
 
@@ -2060,7 +2052,7 @@ gaMETER_R = gaMETER_R + aR
 gaWRITE_L = gaWRITE_L + aL
 gaWRITE_R = gaWRITE_R + aR
 
-;
+
 	endin
 
 ;==========================================
@@ -2069,23 +2061,23 @@ instr 200;-----> GEOM. COMPILER AFTER SNAP READ
 ;  p4      p5     p6        p7    p8        p9      p10		p11
 ;iRATIO, iNUM, iDEN,   iMODE_IN, iOUTF, iG_FUND, iG_OCT, iG_KEY
 ;print p4,p5,p6,p7,p8,p9,p10,p11
-chnset  p4, "ratio"
-chnset  p5, "num"
-chnset  p6, "den"
-chnset  p7, "mode_in"
-chnset  p8, "outf"
-chnset  p9, "G_fund"
-chnset  p10, "G_oct"
-chnset  p11, "G_key"
+outvalue "ratio", p4
+outvalue "num",p5
+outvalue "den",p6
+outvalue "mode_in",p7
+outvalue "outf",p8
+outvalue "G_fund",p9
+outvalue "G_oct",p10
+outvalue "G_key",p11
 
 ind init 0
 iG_fund = p9										;iG_fund = i(gk_G_fund)
 
-if (iG_fund == 1)  then
+if iG_fund == 1 then
 i_int_note = p10 + 4								;i_int_note = i(gk_G_oct) + 4
 i_decimal_note = p11 * 0.01						;i_decimal_note = i(gk_G_key) * 0.01
 	inote = i_int_note + i_decimal_note
-	
+
 ifreq = cpspch(inote)
 ;ifreq0 = ifreq
 
@@ -2125,7 +2117,7 @@ do:
 ;print ind, ifreq
 tabw_i	ifreq, ind, 302
 tabw_i	ifreq, ind, 301
-	
+
 
 ;ifreq_old = ifreq
 ;ifreq = ifreq * iratio
@@ -2135,25 +2127,25 @@ gifreq = ifreq
 ind = ind + 1
 gind = ind	; copia il valore massimo dell'indice in gind
 
-;
+
 igoto do
-;
+
 stop:
 ;ifreq = ifreq_old
 
-chnset  ind, "max_index"
-chnset  ifreq, "last_freq"
-chnset  ifreq0, "G_fre"
-chnset  1, "led_G"
-chnset  0, "led_H"
-chnset  0, "led_F"
+outvalue "max_index", ind
+outvalue "last_freq", ifreq
+outvalue "G_fre", ifreq0
+outvalue "led_G", 1
+outvalue "led_H", 0
+outvalue "led_F", 0
 gisw_G = 1
 gisw_H = 0
 gisw_F = 0
-;
+
 turnoff
-;
-;
+
+
 endin
 
 
@@ -2163,16 +2155,16 @@ instr 202;-----> HARM. SPECTRA COMPILER AFTER SNAP READ
 
 ind init 0
 
-;
+
 ;    p4   p5     p6      p7    p8    p9
 ;iFFUND,iEXP,iMAXHARM,iHFUND,iHOCT,iHKEY
 
-chnset  p4, "ffund"
-chnset  p5, "exp"
-chnset  p6, "maxharm"
-chnset  p7, "H_fund"
-chnset  p8, "H_oct"
-chnset  p9, "H_key"
+outvalue "ffund",	p4
+outvalue "exp",		p5
+outvalue "maxharm",	p6
+outvalue "H_fund",	p7
+outvalue "H_oct",	p8
+outvalue "H_key",	p9
 
 
 
@@ -2180,12 +2172,12 @@ chnset  p9, "H_key"
 iH_fund = p7		;legge lo stato dello switch di modo per l'immisione della freq. fond.
 
 
-if (iH_fund == 1)  then
+if iH_fund == 1 then
 	i_int_note = p8 + 4
 	i_decimal_note = p9 * 0.01
 	inote = i_int_note + i_decimal_note
 ;print inote
-	
+
 ifund = cpspch(inote)
 ifreq0 = ifund
 
@@ -2205,21 +2197,21 @@ do:
 if ind > (imaxharm - 1) igoto stop
 gifreq = icurfreq
 ind = ind + 1
-iexpval pow (ind ), (1+iexp)
-icurfreq = ifund * iexpval 
+iexpval pow ind, (1+iexp)
+icurfreq = ifund * iexpval
 tabw_i	icurfreq, ind - 1, 302
 tabw_i	icurfreq, ind - 1, 301
 
 gind = ind
 gifreq = icurfreq
 igoto do
-;
+
 stop:
-;
-chnset  ifreq0, "H_fre"
-chnset  0, "led_G"
-chnset  1, "led_H"
-chnset  0, "led_F"
+
+outvalue "H_fre", ifreq0
+outvalue "led_G", 0
+outvalue "led_H", 1
+outvalue "led_F", 0
 gisw_G = 0
 gisw_H = 1
 gisw_F = 0
@@ -2232,12 +2224,12 @@ endin
 
 instr 203;-----> FIBONACCI COMPILER AFTER SNAP READ
 ;   p4         p5
-;iFIBSTART, iFIBFUND 
+;iFIBSTART, iFIBFUND
 index init 0
 iPHI init (1 + sqrt(5))/2
 
-chnset  p4, "FIB_Start"
-chnset  p5, "FIB_Fund"
+outvalue "FIB_Start",	p4
+outvalue "FIB_Fund",	p5
 
 istart  	= 	p4
 ifund   	= 	p5
@@ -2259,13 +2251,13 @@ gifreq = ifreq
 index = index + 1
 gind = index	; copia il valore massimo dell'indice in gind
 
-;
+
 igoto do
-;
+
 stop:
-chnset  0, "led_G"
-chnset  0, "led_H"
-chnset  1, "led_F"
+outvalue "led_G", 0
+outvalue "led_H", 0
+outvalue "led_F", 1
 gisw_G = 0
 gisw_H = 0
 gisw_F = 1
@@ -2280,10 +2272,10 @@ endin
 instr 300;-----> SAVE BANK ON DISK
 
 
-String_Read	chnget "_Browse1"
+String_Read	invalue "_Browse1"
 String_Read2 strcat String_Read, "-> Saved !"
 
-chnset	 String_Read2, "strout"
+outvalue	"strout", String_Read2
 
 
 
@@ -2298,9 +2290,9 @@ kpos strindexk	String_Read,"."		;Rileva la posizione del punto nella stringa
 SubString	strsubk String_Read, 0, kpos	;Estrae il nome ptima del punto
 
 
-Sfile_MIDISetup  strcat SubString, "_MIDI.txt"   ;Concatena con _MIDI.txt per formare il nome 
+Sfile_MIDISetup  strcat SubString, "_MIDI.txt"   ;Concatena con _MIDI.txt per formare il nome
 ;if gkMIDIsave == 1 then
-;chnset  Sfile_MIDISetup, "dispstring"
+;outvalue "dispstring", Sfile_MIDISetup
 ftsave Sfile_MIDISetup, 1, 11
 ;else
 ;endif
@@ -2311,19 +2303,19 @@ endin
 
 instr 301;-----> LOAD BANK FROM DISK
 
-;String_Read	chnget "string"
-;chnset	 String_Read, "strout"
+;String_Read	invalue "string"
+;outvalue		"strout", String_Read
 
-String_Read  chnget "_Browse1"
+String_Read  invalue "_Browse1"
 
 
 String_Read2 strcat String_Read, "-> Loaded !"
 
 kpos strindexk	String_Read,"."		;Rileva la posizione del punto nella stringa
 SubString	strsubk String_Read, 0, kpos	;Estrae il nome ptima del punto
-Sfile_MIDISetup  strcat SubString, "_MIDI.txt"   ;Concatena con _MIDI.txt per formare il nome 
+Sfile_MIDISetup  strcat SubString, "_MIDI.txt"   ;Concatena con _MIDI.txt per formare il nome
 
-chnset	 String_Read2, "strout"
+outvalue		"strout", String_Read2
 
 if gkMIDIsave == 0 goto noload
 
@@ -2345,29 +2337,29 @@ iMIDI6 tab_i 13, 11
 iMIDI7 tab_i 14, 11
 iMIDI8 tab_i 15, 11
 
-chnset  iCC1, "cc1"
-chnset  iCC2, "cc2"
-chnset  iCC3, "cc3"
-chnset  iCC4, "cc4"
-chnset  iCC5, "cc5"
-chnset  iCC6, "cc6"
-chnset  iCC7, "cc7"
-chnset  iCC8, "cc8"
+outvalue "cc1", iCC1
+outvalue "cc2", iCC2
+outvalue "cc3", iCC3
+outvalue "cc4", iCC4
+outvalue "cc5", iCC5
+outvalue "cc6", iCC6
+outvalue "cc7", iCC7
+outvalue "cc8", iCC8
 
-chnset  iMIDI1, "MIDIVAR_1"
-chnset  iMIDI2, "MIDIVAR_2"
-chnset  iMIDI3, "MIDIVAR_3"
-chnset  iMIDI4, "MIDIVAR_4"
-chnset  iMIDI5, "MIDIVAR_5"
-chnset  iMIDI6, "MIDIVAR_6"
-chnset  iMIDI7, "MIDIVAR_7"
-chnset  iMIDI8, "M8"
+outvalue "MIDIVAR_1", iMIDI1
+outvalue "MIDIVAR_2", iMIDI2
+outvalue "MIDIVAR_3", iMIDI3
+outvalue "MIDIVAR_4", iMIDI4
+outvalue "MIDIVAR_5", iMIDI5
+outvalue "MIDIVAR_6", iMIDI6
+outvalue "MIDIVAR_7", iMIDI7
+outvalue "M8", iMIDI8
 
 
 noload:
 
 
-; Clear location 0 
+; Clear location 0
 tabw_i 0,0,200
 tabw_i 0,0,201
 tabw_i 0,0,202
@@ -2431,9 +2423,9 @@ iP5  	tab_i 0, 204
 iP6  	tab_i 0, 205
 iP7  	tab_i 0, 206
 iP8  	tab_i 0, 207
-iP9		tab_i 0, 208	
-iP10  tab_i 0, 209	
-iP11  tab_i 0, 210	
+iP9		tab_i 0, 208
+iP10  tab_i 0, 209
+iP11  tab_i 0, 210
 iP12  tab_i 0, 211
 iP13  tab_i 0, 212
 iP14  tab_i 0, 213
@@ -2474,309 +2466,309 @@ iP48  tab_i 0, 247
 
 
 if iP1 !=0 then
- 	chnset  1, "L01"
+ 	outvalue  "L01", 1
 else
-	chnset  0, "L01"
+	outvalue "L01", 0
 endif
 if iP2 !=0 then
-	chnset  1, "L02"
+	outvalue  "L02", 1
 else
-chnset  0, "L02"
+outvalue "L02", 0
 endif
 
 if iP3 !=0 then
- 	chnset  1, "L03"
+ 	outvalue  "L03", 1
 else
-chnset  0, "L03"
+outvalue "L03", 0
 endif
 
 if iP4 !=0 then
-	chnset  1, "L04"
+	outvalue  "L04", 1
 else
-chnset  0, "L04"
-endif	
+outvalue  "L04", 0
+endif
 
 if iP5 !=0 then
-	chnset  1, "L05"
+	outvalue  "L05", 1
 else
-chnset  0, "L05"
-endif	
+outvalue  "L05", 0
+endif
 
 if iP6 !=0 then
-	chnset  1, "L06"
+	outvalue  "L06", 1
 else
-chnset  0, "L06"
+outvalue  "L06", 0
 endif
 
 if iP7 !=0 then
-	chnset  1, "L07"
+	outvalue  "L07", 1
 else
-chnset  0, "L07"
-endif	
+outvalue  "L07", 0
+endif
 
 if iP8 !=0 then
-	chnset  1, "L08"
+	outvalue  "L08", 1
 else
-chnset  0, "L08"
-endif	
+outvalue  "L08", 0
+endif
 
 if iP9 !=0 then
-	chnset  1, "L09"
+	outvalue  "L09", 1
 else
-chnset  0, "L09"
-endif	
+outvalue  "L09", 0
+endif
 
 if iP10 !=0 then
-	chnset  1, "L10"
+	outvalue  "L10", 1
 else
-chnset  0, "L010"
+outvalue  "L010", 0
 endif
 
 if iP11 !=0 then
-	chnset  1, "L11"
+	outvalue  "L11", 1
 else
-chnset  0, "L11"
-endif		
+outvalue  "L11", 0
+endif
 
 if iP12 !=0 then
-	chnset  1, "L12"
+	outvalue  "L12", 1
 else
-chnset  0, "L12"
-endif	
+outvalue  "L12", 0
+endif
 
 if iP13 !=0 then
-	chnset  1, "L13"
+	outvalue  "L13", 1
 else
-chnset  0, "L13"
-endif	
+outvalue  "L13", 0
+endif
 
 if iP14 !=0 then
-	chnset  1, "L14"
+	outvalue  "L14", 1
 else
-chnset  0, "L14"
-endif	
+outvalue  "L14", 0
+endif
 
 if iP15 !=0 then
-	chnset  1, "L15"
+	outvalue  "L15", 1
 else
-chnset  0, "L15"
+outvalue  "L15", 0
 endif
 
 if iP16 !=0 then
-	chnset  1, "L16"
+	outvalue  "L16", 1
 else
-chnset  0, "L16"
-endif	
+outvalue  "L16", 0
+endif
 
 if iP17 !=0 then
-	chnset  1, "L17"
+	outvalue  "L17", 1
 else
-chnset  0, "L17"
-endif	
+outvalue  "L17", 0
+endif
 
 if iP18 !=0 then
-	chnset  1, "L18"
+	outvalue  "L18", 1
 else
-chnset  0, "L18"
-endif	
+outvalue  "L18", 0
+endif
 
 if iP19 !=0 then
-	chnset  1, "L19"
+	outvalue  "L19", 1
 else
-chnset  0, "L19"
+outvalue  "L19", 0
 endif
 
 if iP20 !=0 then
-	chnset  1, "L20"
+	outvalue  "L20", 1
 else
-chnset  0, "L20"
-endif	
+outvalue  "L20", 0
+endif
 
 if iP21 !=0 then
-	chnset  1, "L21"
+	outvalue  "L21", 1
 else
-chnset  0, "L21"
+outvalue  "L21", 0
 endif
 
 if iP22 !=0 then
-	chnset  1, "L22"
+	outvalue  "L22", 1
 else
-chnset  0, "L22"
-endif	
+outvalue  "L22", 0
+endif
 
 if iP23 !=0 then
-	chnset  1, "L23"
+	outvalue  "L23", 1
 else
-chnset  0, "L23"
+outvalue  "L23", 0
 endif
 
 if iP24 !=0 then
-	chnset  1, "L24"
+	outvalue  "L24", 1
 else
-chnset  0, "L24"
-endif	
+outvalue  "L24", 0
+endif
 
 if iP25 !=0 then
-	chnset  1, "L25"
+	outvalue  "L25", 1
 else
-chnset  0, "L25"
+outvalue  "L25", 0
 endif
 
 if iP26 !=0 then
-	chnset  1, "L26"
+	outvalue  "L26", 1
 else
-chnset  0, "L26"
-endif	
+outvalue  "L26", 0
+endif
 
 if iP27 !=0 then
-	chnset  1, "L27"
+	outvalue  "L27", 1
 else
-chnset  0, "L27"
+outvalue  "L27", 0
 endif
 
 if iP28 !=0 then
-	chnset  1, "L28"
+	outvalue  "L28", 1
 else
-chnset  0, "L28"
-endif	
+outvalue  "L28", 0
+endif
 
 if iP29 !=0 then
-	chnset  1, "L29"
+	outvalue  "L29", 1
 else
-chnset  0, "L29"
+outvalue  "L29", 0
 endif
 
 if iP30 !=0 then
-	chnset  1, "L30"
+	outvalue  "L30", 1
 else
-chnset  0, "L30"
-endif	
+outvalue  "L30", 0
+endif
 
 if iP31 !=0 then
-	chnset  1, "L31"
+	outvalue  "L31", 1
 else
-chnset  0, "L31"
+outvalue  "L31", 0
 endif
 
 if iP32 !=0 then
-	chnset  1, "L32"
+	outvalue  "L32", 1
 else
-chnset  0, "L32"
-endif	
+outvalue  "L32", 0
+endif
 
 if iP33 !=0 then
-	chnset  1, "L33"
+	outvalue  "L33", 1
 else
-chnset  0, "L33"
+outvalue  "L33", 0
 endif
 
 if iP34 !=0 then
-	chnset  1, "L34"
+	outvalue  "L34", 1
 else
-chnset  0, "L34"
-endif	
+outvalue  "L34", 0
+endif
 
 if iP35 !=0 then
-	chnset  1, "L35"
+	outvalue  "L35", 1
 else
-chnset  0, "L35"
+outvalue  "L35", 0
 endif
 
 if iP36 !=0 then
-	chnset  1, "L36"
+	outvalue  "L36", 1
 else
-chnset  0, "L36"
+outvalue  "L36", 0
 endif
 
 if iP37 !=0 then
-	chnset  1, "L37"
+	outvalue  "L37", 1
 else
-chnset  0, "L37"
+outvalue  "L37", 0
 endif
 
 if iP38 !=0 then
-	chnset  1, "L38"
+	outvalue  "L38", 1
 else
-chnset  0, "L38"
+outvalue  "L38", 0
 endif
 
 if iP39 !=0 then
-	chnset  1, "L39"
+	outvalue  "L39", 1
 else
-chnset  0, "L39"
+outvalue  "L39", 0
 endif
 
 if iP40 !=0 then
-	chnset  1, "L40"
+	outvalue  "L40", 1
 else
-chnset  0, "L40"
+outvalue  "L40", 0
 endif
 
 if iP41 !=0 then
-	chnset  1, "L41"
+	outvalue  "L41", 1
 else
-chnset  0, "L41"
+outvalue  "L41", 0
 endif
 
 if iP42 !=0 then
-	chnset  1, "L42"
+	outvalue  "L42", 1
 else
-chnset  0, "L42"
+outvalue  "L42", 0
 endif
 
 if iP43 !=0 then
-	chnset  1, "L43"
+	outvalue  "L43", 1
 else
-chnset  0, "L43"
+outvalue  "L43", 0
 endif
 
 if iP44 !=0 then
-	chnset  1, "L44"
+	outvalue  "L44", 1
 else
-chnset  0, "L44"
+outvalue  "L44", 0
 endif
 
 if iP45 !=0 then
-	chnset  1, "L45"
+	outvalue  "L45", 1
 else
-chnset  0, "L45"
+outvalue  "L45", 0
 endif
 
 if iP46 !=0 then
-	chnset  1, "L46"
+	outvalue  "L46", 1
 else
-chnset  0, "L46"
+outvalue  "L46", 0
 endif
 
 if iP47 !=0 then
-	chnset  1, "L47"
+	outvalue  "L47", 1
 else
-chnset  0, "L47"
+outvalue  "L47", 0
 endif
 
 if iP48 !=0 then
-	chnset  1, "L48"
+	outvalue  "L48", 1
 else
-chnset  0, "L48"
+outvalue  "L48", 0
 endif
 
-chnset  "", "warn"
+outvalue "warn",""
 turnoff
 endin
-;
+
 
 
 ;==========================================
 
 instr 600  ;-----> Assignable  XY controller
 
-kcontrol_X chnget "control_X"
-kcontrol_Y chnget "control_Y"
+kcontrol_X invalue "control_X"
+kcontrol_Y invalue "control_Y"
 ;printk2 kcontrol_X
-kX0 chnget "X"
-kY0 chnget "Y"
+kX0 invalue "X"
+kY0 invalue "Y"
 gkX limit kX0, 0, 1
-gkY limit kY0, 0, 1 
+gkY limit kY0, 0, 1
 ;printk2 kX
 
 ktr	changed gkX, gkY
@@ -2817,96 +2809,96 @@ endin
 
 instr 601
 
-chnset  gkX * 99.999 + 0.001, "band"
+outvalue "band", gkX * 99.999 + 0.001
 turnoff
-;
+
 endin
-;=============== ONE SHOT CALL BY XY ASSIGNABLE CONTROLLER 
+;=============== ONE SHOT CALL BY XY ASSIGNABLE CONTROLLER
 instr 602
 
-chnset  1 + int(gkX * 7), "vox"
+outvalue "vox", 1 + int(gkX * 7)
 turnoff
-;
+
 endin
 
 instr 603
-chnset  1 + int(gkX * 8), "knob154"
+outvalue "knob154", 1 + int(gkX * 8)
 turnoff
 endin
 
 instr 604
-chnset  4* gkX, "indx1"
+outvalue "indx1", 4* gkX
 turnoff
 endin
 
 instr 605
-chnset  1 + 13* gkX, "CAR_min"
+outvalue "CAR_min", 1 + 13* gkX
 turnoff
 endin
 
 instr 606
-chnset  1 + 12* gkX, "MOD_min"
+outvalue "MOD_min", 1 + 12* gkX
 turnoff
 endin
 
 instr 607
-chnset  1 + 7 * gkX, "Fun_1"
+outvalue "Fun_1",  1 + 7 * gkX
 turnoff
 endin
 
 instr 608
-chnset  gkX, "pad_X1"
+outvalue "pad_X1", gkX
 turnoff
 endin
 
 ;---------- PARAMETERS AFFECTED BY XY CONFIGURABILE CONTROLLER
 
 instr 611
-chnset  gkY, "Lev_1" 							;  Controlla Livello GENERATORE 1
+outvalue "Lev_1", gkY							;  Controlla Livello GENERATORE 1
 turnoff
 endin
 
 instr 612
-chnset  0.001 + 0.199 * gkY, "ran1amp" 		; Controlla parametro amp di RAND 1
+outvalue "ran1amp", 0.001 + 0.199 * gkY		; Controlla parametro amp di RAND 1
 turnoff
 endin
 
 instr 613
-chnset  0.01 + 3.99 * gkY, "ran1vel" 		; Controlla parametro vel ( rate) di RAND 1
+outvalue "ran1vel", 0.01 + 3.99 * gkY		; Controlla parametro vel (rate) di RAND 1
 turnoff
 endin
 
 instr 614
-chnset  gkY, "XFADE" 							; Controlla XFADE
+outvalue "XFADE", gkY							; Controlla XFADE
 turnoff
 endin
 
 instr 615
-chnset  gkY, "pad_Y1" 							; Controlla lo spread frequenziale
+outvalue "pad_Y1", gkY							; Controlla lo spread frequenziale
 turnoff
 endin
 
 
 ;instr 700 ;========= Live input (future expansion)
-;
+
 ;a_STRIA_L = gaCONV_L
 ;a_STRIA_R = gaCONV_R
-;
+
 ;aLiveInPre	inch		1
-;kingaindb	chnget	"ingaindb"
+;kingaindb	invalue	"ingaindb"
 ;kLiveInGain	=		ampdb(kingaindb)
 ;aLiveInPost	=		aLiveInPre * kLiveInGain
 ;iphasfreq	=		1 / (ftlen(giLiveBuf) / sr); phasor frequency
-;kfreeze	chnget	"freeze"; if checked, freeze writing (and reading) of the buffer
+;kfreeze	invalue	"freeze"; if checked, freeze writing (and reading) of the buffer
 ;kphasfreq	=		(kfreeze == 1 ? 0 : iphasfreq)
 ;awritpnt	phasor		kphasfreq
 ;		tablew		aLiveInPost, awritpnt, giLiveBuf, 1, 0, 1
-;
+
 ;a1 oscili 1, sr/ftlen(giLiveBuf), giLiveBuf
-;
-;
-;
-;
+
+
+
+
 ;a_STRIA_L = 0
 ;a_STRIA_R = 0
 ;endin
@@ -2921,7 +2913,7 @@ timout 0, 0.1, cont
 reinit reset
 cont:
 ;                                CHAN		CC num					Min						Max
-gkval_1		chanctrl         	1,       ival,           		0,                  1 	
+gkval_1		chanctrl         	1,       ival,           		0,                  1
 
 kchan changed gkval_1
 
@@ -2938,7 +2930,7 @@ timout 0, 0.1, cont
 reinit reset
 cont:
 ;                                CHAN		CC num					Min						Max
-gkval_2		chanctrl         	1,       ival,           		0,                  1 	
+gkval_2		chanctrl         	1,       ival,           		0,                  1
 
 kchan changed gkval_2
 
@@ -2955,7 +2947,7 @@ timout 0, 0.1, cont
 reinit reset
 cont:
 ;                                CHAN		CC num					Min						Max
-gkval_3		chanctrl         	1,       ival,           			0,                  1 	
+gkval_3		chanctrl         	1,       ival,           			0,                  1
 
 kchan changed gkval_3
 
@@ -2972,7 +2964,7 @@ timout 0, 0.1, cont
 reinit reset
 cont:
 ;                                CHAN		CC num					Min						Max
-gkval_4		chanctrl         	1,       ival,           			0,                  1 	
+gkval_4		chanctrl         	1,       ival,           			0,                  1
 
 kchan changed gkval_4
 
@@ -2989,7 +2981,7 @@ timout 0, 0.1, cont
 reinit reset
 cont:
 ;                                CHAN		CC num					Min						Max
-gkval_5		chanctrl         	1,       ival,           			0,                  1 	
+gkval_5		chanctrl         	1,       ival,           			0,                  1
 
 kchan changed gkval_5
 
@@ -3006,7 +2998,7 @@ timout 0, 0.1, cont
 reinit reset
 cont:
 ;                                CHAN		CC num					Min						Max
-gkval_6		chanctrl         	1,       ival,           			0,                  1 	
+gkval_6		chanctrl         	1,       ival,           			0,                  1
 
 kchan changed gkval_6
 
@@ -3023,7 +3015,7 @@ timout 0, 0.1, cont
 reinit reset
 cont:
 ;                                CHAN		CC num					Min						Max
-gkval_7		chanctrl         	1,       ival,           			0,                  1 	
+gkval_7		chanctrl         	1,       ival,           			0,                  1
 
 kchan changed gkval_7
 
@@ -3040,7 +3032,7 @@ timout 0, 0.1, cont
 reinit reset
 cont:
 ;                                CHAN		CC num					Min						Max
-gkval_8		chanctrl         	1,       ival,           			0,                  1 	
+gkval_8		chanctrl         	1,       ival,           			0,                  1
 
 kchan changed gkval_8
 
@@ -3050,7 +3042,7 @@ endin
 
 ;==========================================
 
-instr 811;-----> Additional switch control (MIDI) 
+instr 811;-----> Additional switch control (MIDI)
 
 reset:
 
@@ -3059,12 +3051,12 @@ timout 0, 0.1, cont
 reinit reset
 cont:
 ;                                CHAN		CC num					Min						Max
-gkval_11		chanctrl         	1,       ival,           			0,                  1 	
+gkval_11		chanctrl         	1,       ival,           			0,                  1
 
 kchan1 changed gkval_11 ; !!!! Il doppio controllo serve per aspettare il ritorno a zero dello switch
 kchan2 changed kchan1	; esterno
-	
-;chnset  gkval_11, "disp"
+
+;outvalue "disp", gkval_11
 
 ; kchan2, 0, 0,911,0, -1
 
@@ -3073,7 +3065,7 @@ endin
 ;==========================================
 
 instr 901  ; Connects ext. MIDI cc to the selected parameter  (1st controller)
-;
+
 if gkinv_1 == 0 then
 kval  =  gkval_1 * gkcc1_lev
 else
@@ -3112,126 +3104,126 @@ if		gkMIDIVAR_1 == 29 goto Modmax
 goto next
 
 Fun1:
-	chnset  1 + 7 * kval, "Fun_1"
+	outvalue "Fun_1", 1 + 7 * kval
 goto next
 
 PadX1:
-	chnset  kval, "pad_X1"
+	outvalue "pad_X1", kval
 goto next
 
 PadY1:
-	chnset  kval, "pad_Y1"
+	outvalue "pad_Y1", kval
 goto next
 
 Lev1:
-	chnset  kval, "Lev_1"
+	outvalue "Lev_1", kval
 goto next
 
 Im1:
-chnset  4 * kval, "indx1"
+outvalue "indx1", 4 * kval
 goto next
 
 Atk1:
-chnset  0.005 + 0.85 * kval, "AT1"
+outvalue "AT1", 0.005 + 0.85 * kval
 goto next
 
 Rel1:
-chnset  0.005 + 0.85 * kval, "RE1"
+outvalue "RE1", 0.005 + 0.85 * kval
 goto next
 
 Rana1:
-chnset  0.001 + 0.199 * kval, "ran1amp"
+outvalue "ran1amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr1:
-chnset  0.001 + 3.99 * kval, "ran1vel"
+outvalue "ran1vel", 0.001 + 3.99 * kval
 goto next
 
 Voi:
-chnset  1.0 + 7.0 * kval, "vox"
+outvalue "vox", 1.0 + 7.0 * kval
 goto next
 
 Rev1:
-chnset  kval, "REVSEND1"
+outvalue "REVSEND1",  kval
 goto next
 
 step:
-chnset  1.0 + 8.0 * kval, "knob154"
+outvalue "knob154", 1.0 + 8.0 * kval
 goto next
 
 Focus:
-chnset  0.001 + 99.999 * kval, "band"
+outvalue "band", 0.001 + 99.999 * kval
 goto next
 
 LongShort:
-chnset  0.2 + 2.8 * kval, "dur"
+outvalue "dur", 0.2 + 2.8 * kval
 goto next
 
 FastSlow:
-chnset  0.1 + 0.4 * kval, "rate"
+outvalue "rate", 0.1 + 0.4 * kval
 goto next
 
 shape:
-chnset  8 * kval, "SHAPE"
+outvalue "SHAPE",  8 * kval
 goto next
 
 Xfade:
-chnset  kval, "XFADE"
+outvalue "XFADE",  kval
 goto next
 
 PadX2:
-chnset  kval, "pad_X2"
+outvalue "pad_X2",  kval
 goto next
 
 Lev2:
-	chnset  kval, "Lev_2"
+	outvalue "Lev_2", kval
 
 Fun2:
-	chnset  1 + 7 * kval, "Fun_2"
+	outvalue "Fun_2", 1 + 7 * kval
 goto next
 
 Im2:
-chnset  4 * kval, "indx2"
+outvalue "indx2", 4 * kval
 goto next
 
 Rana2:
-chnset  0.001 + 0.199 * kval, "ran2amp"
+outvalue "ran2amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr2:
-chnset  0.001 + 3.99 * kval, "ran2vel"
+outvalue "ran2vel", 0.001 + 3.99 * kval
 goto next
 
 Carmin:
-chnset  1 + kval * 13, "CAR_min"
+outvalue "CAR_min", 1 + kval * 13
 goto next
 
 Carmax:
-chnset  1 + kval * 13, "CAR_max"
+outvalue "CAR_max", 1 + kval * 13
 goto next
 
 Modmin:
-chnset  1 + kval * 13, "MOD_min"
+outvalue "MOD_min", 1 + kval * 13
 goto next
 
 Modmax:
-chnset  1 + kval * 13, "MOD_max"
+outvalue "MOD_max", 1 + kval * 13
 goto next
 
-;
+
 Rev2:
-chnset  kval, "REVSEND2"
+outvalue "REVSEND2",  kval
 goto next
 
 Volume:
-chnset  kval, "over"
-;
+outvalue "over",  kval
+
 
 
 next:
-;
+
 turnoff
-;
+
 endin
 
 ;==========================================
@@ -3277,128 +3269,128 @@ if		gkMIDIVAR_2 == 29 goto Modmax
 goto next
 
 Fun1:
-	chnset  1 + 7 * kval, "Fun_1"
+	outvalue "Fun_1", 1 + 7 * kval
 goto next
 
 PadX1:
-	chnset  kval, "pad_X1"
+	outvalue "pad_X1", kval
 goto next
 
 PadY1:
-	chnset  kval, "pad_Y1"
+	outvalue "pad_Y1", kval
 goto next
 
 Lev1:
-	chnset  kval, "Lev_1"
+	outvalue "Lev_1", kval
 goto next
 
 Im1:
-chnset  4 * kval, "indx1"
+outvalue "indx1", 4 * kval
 goto next
 
 Atk1:
-chnset  0.005 + 0.85 * kval, "AT1"
+outvalue "AT1", 0.005 + 0.85 * kval
 goto next
 
 Rel1:
-chnset  0.005 + 0.85 * kval, "RE1"
+outvalue "RE1", 0.005 + 0.85 * kval
 goto next
 
 Rana1:
-chnset  0.001 + 0.199 * kval, "ran1amp"
+outvalue "ran1amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr1:
-chnset  0.001 + 3.99 * kval, "ran1vel"
+outvalue "ran1vel", 0.001 + 3.99 * kval
 goto next
 
 Voi:
-chnset  1.0 + 7.0 * kval, "vox"
+outvalue "vox", 1.0 + 7.0 * kval
 goto next
 
 Rev1:
-chnset  kval, "REVSEND1"
+outvalue "REVSEND1",  kval
 goto next
 
 step:
-chnset  1.0 + 8.0 * kval, "knob154"
+outvalue "knob154", 1.0 + 8.0 * kval
 goto next
 
 Focus:
-chnset  0.001 + 99.999 * kval, "band"
+outvalue "band", 0.001 + 99.999 * kval
 goto next
 
 LongShort:
-chnset  0.2 + 2.8 * kval, "dur"
+outvalue "dur", 0.2 + 2.8 * kval
 goto next
 
 FastSlow:
-chnset  0.1 + 0.4 * kval, "rate"
+outvalue "rate", 0.1 + 0.4 * kval
 goto next
 
 shape:
-chnset  8 * kval, "SHAPE"
+outvalue "SHAPE",  8 * kval
 goto next
 
 Xfade:
-chnset  kval, "XFADE"
+outvalue "XFADE",  kval
 goto next
 
 PadX2:
-	chnset  kval, "pad_X2"
+	outvalue "pad_X2", kval
 goto next
 
 
 Lev2:
-	chnset  kval, "Lev_2"
+	outvalue "Lev_2", kval
 goto next
 
 Fun2:
-	chnset  1 + 7 * kval, "Fun_2"
+	outvalue "Fun_2", 1 + 7 * kval
 goto next
 
 Im2:
-chnset  4 * kval, "indx2"
+outvalue "indx2", 4 * kval
 goto next
 
 Rana2:
-chnset  0.001 + 0.199 * kval, "ran2amp"
+outvalue "ran2amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr2:
-chnset  0.001 + 3.99 * kval, "ran2vel"
+outvalue "ran2vel", 0.001 + 3.99 * kval
 goto next
 
 Carmin:
-chnset  1 + kval * 13, "CAR_min"
+outvalue "CAR_min", 1 + kval * 13
 goto next
 
 Carmax:
-chnset  1 + kval * 13, "CAR_max"
+outvalue "CAR_max", 1 + kval * 13
 goto next
 
 Modmin:
-chnset  1 + kval * 13, "MOD_min"
+outvalue "MOD_min", 1 + kval * 13
 goto next
 
 Modmax:
-chnset  1 + kval * 13, "MOD_max"
+outvalue "MOD_max", 1 + kval * 13
 goto next
 
-;
+
 Rev2:
-chnset  kval, "REVSEND2"
+outvalue "REVSEND2",  kval
 goto next
 
 Volume:
-chnset  kval, "over"
-;
+outvalue "over",  kval
+
 
 
 next:
-;
+
 turnoff
-;
+
 endin
 
 ;==========================================
@@ -3444,127 +3436,127 @@ if		gkMIDIVAR_3 == 29 goto Modmax
 goto next
 
 Fun1:
-	chnset  1 + 7 * kval, "Fun_1"
+	outvalue "Fun_1", 1 + 7 * kval
 goto next
 
 PadX1:
-	chnset  kval, "pad_X1"
+	outvalue "pad_X1", kval
 goto next
 
 PadY1:
-	chnset  kval, "pad_Y1"
+	outvalue "pad_Y1", kval
 goto next
 
 Lev1:
-	chnset  kval, "Lev_1"
+	outvalue "Lev_1", kval
 goto next
 
 Im1:
-chnset  4 * kval, "indx1"
+outvalue "indx1", 4 * kval
 goto next
 
 Atk1:
-chnset  0.005 + 0.85 * kval, "AT1"
+outvalue "AT1", 0.005 + 0.85 * kval
 goto next
 
 Rel1:
-chnset  0.005 + 0.85 * kval, "RE1"
+outvalue "RE1", 0.005 + 0.85 * kval
 goto next
 
 Rana1:
-chnset  0.001 + 0.199 * kval, "ran1amp"
+outvalue "ran1amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr1:
-chnset  0.001 + 3.99 * kval, "ran1vel"
+outvalue "ran1vel", 0.001 + 3.99 * kval
 goto next
 
 Voi:
-chnset  1.0 + 7.0 * kval, "vox"
+outvalue "vox", 1.0 + 7.0 * kval
 goto next
 
 Rev1:
-chnset  kval, "REVSEND1"
+outvalue "REVSEND1",  kval
 goto next
 
 step:
-chnset  1.0 + 8.0 * kval, "knob154"
+outvalue "knob154", 1.0 + 8.0 * kval
 goto next
 
 Focus:
-chnset  0.001 + 99.999 * kval, "band"
+outvalue "band", 0.001 + 99.999 * kval
 goto next
 
 LongShort:
-chnset  0.2 + 2.8 * kval, "dur"
+outvalue "dur", 0.2 + 2.8 * kval
 goto next
 
 FastSlow:
-chnset  0.1 + 0.4 * kval, "rate"
+outvalue "rate", 0.1 + 0.4 * kval
 goto next
 
 shape:
-chnset  8 * kval, "SHAPE"
+outvalue "SHAPE",  8 * kval
 goto next
 
 Xfade:
-chnset  kval, "XFADE"
+outvalue "XFADE",  kval
 goto next
 
 PadX2:
-	chnset  kval, "pad_X2"
+	outvalue "pad_X2", kval
 goto next
 
 Lev2:
-	chnset  kval, "Lev_2"
+	outvalue "Lev_2", kval
 goto next
 
 Fun2:
-	chnset  1 + 7 * kval, "Fun_2"
+	outvalue "Fun_2", 1 + 7 * kval
 goto next
 
 Im2:
-chnset  4 * kval, "indx2"
+outvalue "indx2", 4 * kval
 goto next
 
 Rana2:
-chnset  0.001 + 0.199 * kval, "ran2amp"
+outvalue "ran2amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr2:
-chnset  0.001 + 3.99 * kval, "ran2vel"
+outvalue "ran2vel", 0.001 + 3.99 * kval
 goto next
 
 Carmin:
-chnset  1 + kval * 13, "CAR_min"
+outvalue "CAR_min", 1 + kval * 13
 goto next
 
 Carmax:
-chnset  1 + kval * 13, "CAR_max"
+outvalue "CAR_max", 1 + kval * 13
 goto next
 
 Modmin:
-chnset  1 + kval * 13, "MOD_min"
+outvalue "MOD_min", 1 + kval * 13
 goto next
 
 Modmax:
-chnset  1 + kval * 13, "MOD_max"
+outvalue "MOD_max", 1 + kval * 13
 goto next
 
-;
+
 Rev2:
-chnset  kval, "REVSEND2"
+outvalue "REVSEND2",  kval
 goto next
 
 Volume:
-chnset  kval, "over"
-;
+outvalue "over",  kval
+
 
 
 next:
-;
+
 turnoff
-;
+
 endin
 
 ;==========================================
@@ -3611,127 +3603,127 @@ if		gkMIDIVAR_4 == 29 goto Modmax
 goto next
 
 Fun1:
-	chnset  1 + 7 * kval, "Fun_1"
+	outvalue "Fun_1", 1 + 7 * kval
 goto next
 
 PadX1:
-	chnset  kval, "pad_X1"
+	outvalue "pad_X1", kval
 goto next
 
 PadY1:
-	chnset  kval, "pad_Y1"
+	outvalue "pad_Y1", kval
 goto next
 
 Lev1:
-	chnset  kval, "Lev_1"
+	outvalue "Lev_1", kval
 goto next
 
 Im1:
-chnset  4 * kval, "indx1"
+outvalue "indx1", 4 * kval
 goto next
 
 Atk1:
-chnset  0.005 + 0.85 * kval, "AT1"
+outvalue "AT1", 0.005 + 0.85 * kval
 goto next
 
 Rel1:
-chnset  0.005 + 0.85 * kval, "RE1"
+outvalue "RE1", 0.005 + 0.85 * kval
 goto next
 
 Rana1:
-chnset  0.001 + 0.199 * kval, "ran1amp"
+outvalue "ran1amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr1:
-chnset  0.001 + 3.99 * kval, "ran1vel"
+outvalue "ran1vel", 0.001 + 3.99 * kval
 goto next
 
 Voi:
-chnset  1.0 + 7.0 * kval, "vox"
+outvalue "vox", 1.0 + 7.0 * kval
 goto next
 
 Rev1:
-chnset  kval, "REVSEND1"
+outvalue "REVSEND1",  kval
 goto next
 
 step:
-chnset  1.0 + 8.0 * kval, "knob154"
+outvalue "knob154", 1.0 + 8.0 * kval
 goto next
 
 Focus:
-chnset  0.001 + 99.999 * kval, "band"
+outvalue "band", 0.001 + 99.999 * kval
 goto next
 
 LongShort:
-chnset  0.2 + 2.8 * kval, "dur"
+outvalue "dur", 0.2 + 2.8 * kval
 goto next
 
 FastSlow:
-chnset  0.1 + 0.4 * kval, "rate"
+outvalue "rate", 0.1 + 0.4 * kval
 goto next
 
 shape:
-chnset  8 * kval, "SHAPE"
+outvalue "SHAPE",  8 * kval
 goto next
 
 Xfade:
-chnset  kval, "XFADE"
+outvalue "XFADE",  kval
 goto next
 
 PadX2:
-	chnset  kval, "pad_X2"
+	outvalue "pad_X2", kval
 goto next
 
 Lev2:
-	chnset  kval, "Lev_2"
+	outvalue "Lev_2", kval
 goto next
 
 Fun2:
-	chnset  1 + 7 * kval, "Fun_2"
+	outvalue "Fun_2", 1 + 7 * kval
 goto next
 
 Im2:
-chnset  4 * kval, "indx2"
+outvalue "indx2", 4 * kval
 goto next
 
 Rana2:
-chnset  0.001 + 0.199 * kval, "ran2amp"
+outvalue "ran2amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr2:
-chnset  0.001 + 3.99 * kval, "ran2vel"
+outvalue "ran2vel", 0.001 + 3.99 * kval
 goto next
 
 Carmin:
-chnset  1 + kval * 13, "CAR_min"
+outvalue "CAR_min", 1 + kval * 13
 goto next
 
 Carmax:
-chnset  1 + kval * 13, "CAR_max"
+outvalue "CAR_max", 1 + kval * 13
 goto next
 
 Modmin:
-chnset  1 + kval * 13, "MOD_min"
+outvalue "MOD_min", 1 + kval * 13
 goto next
 
 Modmax:
-chnset  1 + kval * 13, "MOD_max"
+outvalue "MOD_max", 1 + kval * 13
 goto next
 
-;
+
 Rev2:
-chnset  kval, "REVSEND2"
+outvalue "REVSEND2",  kval
 goto next
 
 Volume:
-chnset  kval, "over"
-;
+outvalue "over",  kval
+
 
 
 next:
-;
+
 turnoff
-;
+
 endin
 
 ;==========================================
@@ -3778,133 +3770,133 @@ if		gkMIDIVAR_5 == 29 goto Modmax
 goto next
 
 Fun1:
-	chnset  1 + 7 * kval, "Fun_1"
+	outvalue "Fun_1", 1 + 7 * kval
 goto next
 
 PadX1:
-	chnset  kval, "pad_X1"
+	outvalue "pad_X1", kval
 goto next
 
 PadY1:
-	chnset  kval, "pad_Y1"
+	outvalue "pad_Y1", kval
 goto next
 
 Lev1:
-	chnset  kval, "Lev_1"
+	outvalue "Lev_1", kval
 goto next
 
 Im1:
-chnset  4 * kval, "indx1"
+outvalue "indx1", 4 * kval
 goto next
 
 Atk1:
-chnset  0.005 + 0.85 * kval, "AT1"
+outvalue "AT1", 0.005 + 0.85 * kval
 goto next
 
 Rel1:
-chnset  0.005 + 0.85 * kval, "RE1"
+outvalue "RE1", 0.005 + 0.85 * kval
 goto next
 
 Rana1:
-chnset  0.001 + 0.199 * kval, "ran1amp"
+outvalue "ran1amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr1:
-chnset  0.001 + 3.99 * kval, "ran1vel"
+outvalue "ran1vel", 0.001 + 3.99 * kval
 goto next
 
 Voi:
-chnset  1.0 + 7.0 * kval, "vox"
+outvalue "vox", 1.0 + 7.0 * kval
 goto next
 
 Rev1:
-chnset  kval, "REVSEND1"
+outvalue "REVSEND1",  kval
 goto next
 
 step:
-chnset  1.0 + 8.0 * kval, "knob154"
+outvalue "knob154", 1.0 + 8.0 * kval
 goto next
 
 Focus:
-chnset  0.001 + 99.999 * kval, "band"
+outvalue "band", 0.001 + 99.999 * kval
 goto next
 
 LongShort:
-chnset  0.2 + 2.8 * kval, "dur"
+outvalue "dur", 0.2 + 2.8 * kval
 goto next
 
 FastSlow:
-chnset  0.1 + 0.4 * kval, "rate"
+outvalue "rate", 0.1 + 0.4 * kval
 goto next
 
 shape:
-chnset  8 * kval, "SHAPE"
+outvalue "SHAPE",  8 * kval
 goto next
 
 Xfade:
-chnset  kval, "XFADE"
+outvalue "XFADE",  kval
 goto next
 
 PadX2:
-	chnset  kval, "pad_X2"
+	outvalue "pad_X2", kval
 goto next
 
 Lev2:
-	chnset  kval, "Lev_2"
+	outvalue "Lev_2", kval
 goto next
 
 Fun2:
-	chnset  1 + 7 * kval, "Fun_2"
+	outvalue "Fun_2", 1 + 7 * kval
 goto next
 
 Im2:
-chnset  4 * kval, "indx2"
+outvalue "indx2", 4 * kval
 goto next
 
 Rana2:
-chnset  0.001 + 0.199 * kval, "ran2amp"
+outvalue "ran2amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr2:
-chnset  0.001 + 3.99 * kval, "ran2vel"
+outvalue "ran2vel", 0.001 + 3.99 * kval
 goto next
 
 Carmin:
-chnset  1 + kval * 13, "CAR_min"
+outvalue "CAR_min", 1 + kval * 13
 goto next
 
 Carmax:
-chnset  1 + kval * 13, "CAR_max"
+outvalue "CAR_max", 1 + kval * 13
 goto next
 
 Modmin:
-chnset  1 + kval * 13, "MOD_min"
+outvalue "MOD_min", 1 + kval * 13
 goto next
 
 Modmax:
-chnset  1 + kval * 13, "MOD_max"
+outvalue "MOD_max", 1 + kval * 13
 goto next
 
-;
+
 Rev2:
-chnset  kval, "REVSEND2"
+outvalue "REVSEND2",  kval
 goto next
 
 Volume:
-chnset  kval, "over"
-;
+outvalue "over",  kval
+
 
 
 next:
-;
+
 turnoff
-;
+
 endin
 
 ;==========================================
 
 instr 906
-;
+
 if gkinv_6 == 0 then
 kval  =  gkval_6 * gkcc6_lev
 else
@@ -3944,133 +3936,133 @@ if		gkMIDIVAR_6 == 29 goto Modmax
 goto next
 
 Fun1:
-	chnset  1 + 7 * kval, "Fun_1"
+	outvalue "Fun_1", 1 + 7 * kval
 goto next
 
 PadX1:
-	chnset  kval, "pad_X1"
+	outvalue "pad_X1", kval
 goto next
 
 PadY1:
-	chnset  kval, "pad_Y1"
+	outvalue "pad_Y1", kval
 goto next
 
 Lev1:
-	chnset  kval, "Lev_1"
+	outvalue "Lev_1", kval
 goto next
 
 Im1:
-chnset  4 * kval, "indx1"
+outvalue "indx1", 4 * kval
 goto next
 
 Atk1:
-chnset  0.005 + 0.85 * kval, "AT1"
+outvalue "AT1", 0.005 + 0.85 * kval
 goto next
 
 Rel1:
-chnset  0.005 + 0.85 * kval, "RE1"
+outvalue "RE1", 0.005 + 0.85 * kval
 goto next
 
 Rana1:
-chnset  0.001 + 0.199 * kval, "ran1amp"
+outvalue "ran1amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr1:
-chnset  0.001 + 3.99 * kval, "ran1vel"
+outvalue "ran1vel", 0.001 + 3.99 * kval
 goto next
 
 Voi:
-chnset  1.0 + 7.0 * kval, "vox"
+outvalue "vox", 1.0 + 7.0 * kval
 goto next
 
 Rev1:
-chnset  kval, "REVSEND1"
+outvalue "REVSEND1",  kval
 goto next
 
 step:
-chnset  1.0 + 8.0 * kval, "knob154"
+outvalue "knob154", 1.0 + 8.0 * kval
 goto next
 
 Focus:
-chnset  0.001 + 99.999 * kval, "band"
+outvalue "band", 0.001 + 99.999 * kval
 goto next
 
 LongShort:
-chnset  0.2 + 2.8 * kval, "dur"
+outvalue "dur", 0.2 + 2.8 * kval
 goto next
 
 FastSlow:
-chnset  0.1 + 0.4 * kval, "rate"
+outvalue "rate", 0.1 + 0.4 * kval
 goto next
 
 shape:
-chnset  8 * kval, "SHAPE"
+outvalue "SHAPE",  8 * kval
 goto next
 
 Xfade:
-chnset  kval, "XFADE"
+outvalue "XFADE",  kval
 goto next
 
 PadX2:
-	chnset  kval, "pad_X2"
+	outvalue "pad_X2", kval
 goto next
 
 Lev2:
-	chnset  kval, "Lev_2"
+	outvalue "Lev_2", kval
 goto next
 
 Fun2:
-	chnset  1 + 7 * kval, "Fun_2"
+	outvalue "Fun_2", 1 + 7 * kval
 goto next
 
 Im2:
-chnset  4 * kval, "indx2"
+outvalue "indx2", 4 * kval
 goto next
 
 Rana2:
-chnset  0.001 + 0.199 * kval, "ran2amp"
+outvalue "ran2amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr2:
-chnset  0.001 + 3.99 * kval, "ran2vel"
+outvalue "ran2vel", 0.001 + 3.99 * kval
 goto next
 
 Carmin:
-chnset  1 + kval * 13, "CAR_min"
+outvalue "CAR_min", 1 + kval * 13
 goto next
 
 Carmax:
-chnset  1 + kval * 13, "CAR_max"
+outvalue "CAR_max", 1 + kval * 13
 goto next
 
 Modmin:
-chnset  1 + kval * 13, "MOD_min"
+outvalue "MOD_min", 1 + kval * 13
 goto next
 
 Modmax:
-chnset  1 + kval * 13, "MOD_max"
+outvalue "MOD_max", 1 + kval * 13
 goto next
 
-;
+
 Rev2:
-chnset  kval, "REVSEND2"
+outvalue "REVSEND2",  kval
 goto next
 
 Volume:
-chnset  kval, "over"
-;
+outvalue "over",  kval
+
 
 
 next:
-;
+
 turnoff
-;
+
 endin
 
 ;==========================================
 
 instr 907
-;
+
 if gkinv_7 == 0 then
 kval  =  gkval_7 * gkcc7_lev
 else
@@ -4110,133 +4102,133 @@ if		gkMIDIVAR_7 == 29 goto Modmax
 goto next
 
 Fun1:
-	chnset  1 + 7 * kval, "Fun_1"
+	outvalue "Fun_1", 1 + 7 * kval
 goto next
 
 PadX1:
-	chnset  kval, "pad_X1"
+	outvalue "pad_X1", kval
 goto next
 
 PadY1:
-	chnset  kval, "pad_Y1"
+	outvalue "pad_Y1", kval
 goto next
 
 Lev1:
-	chnset  kval, "Lev_1"
+	outvalue "Lev_1", kval
 goto next
 
 Im1:
-chnset  4 * kval, "indx1"
+outvalue "indx1", 4 * kval
 goto next
 
 Atk1:
-chnset  0.005 + 0.85 * kval, "AT1"
+outvalue "AT1", 0.005 + 0.85 * kval
 goto next
 
 Rel1:
-chnset  0.005 + 0.85 * kval, "RE1"
+outvalue "RE1", 0.005 + 0.85 * kval
 goto next
 
 Rana1:
-chnset  0.001 + 0.199 * kval, "ran1amp"
+outvalue "ran1amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr1:
-chnset  0.001 + 3.99 * kval, "ran1vel"
+outvalue "ran1vel", 0.001 + 3.99 * kval
 goto next
 
 Voi:
-chnset  1.0 + 7.0 * kval, "vox"
+outvalue "vox", 1.0 + 7.0 * kval
 goto next
 
 Rev1:
-chnset  kval, "REVSEND1"
+outvalue "REVSEND1",  kval
 goto next
 
 step:
-chnset  1.0 + 8.0 * kval, "knob154"
+outvalue "knob154", 1.0 + 8.0 * kval
 goto next
 
 Focus:
-chnset  0.001 + 99.999 * kval, "band"
+outvalue "band", 0.001 + 99.999 * kval
 goto next
 
 LongShort:
-chnset  0.2 + 2.8 * kval, "dur"
+outvalue "dur", 0.2 + 2.8 * kval
 goto next
 
 FastSlow:
-chnset  0.1 + 0.4 * kval, "rate"
+outvalue "rate", 0.1 + 0.4 * kval
 goto next
 
 shape:
-chnset  8 * kval, "SHAPE"
+outvalue "SHAPE",  8 * kval
 goto next
 
 Xfade:
-chnset  kval, "XFADE"
+outvalue "XFADE",  kval
 goto next
 
 PadX2:
-	chnset  kval, "pad_X2"
+	outvalue "pad_X2", kval
 goto next
 
 Lev2:
-	chnset  kval, "Lev_2"
+	outvalue "Lev_2", kval
 goto next
 
 Fun2:
-	chnset  1 + 7 * kval, "Fun_2"
+	outvalue "Fun_2", 1 + 7 * kval
 goto next
 
 Im2:
-chnset  4 * kval, "indx2"
+outvalue "indx2", 4 * kval
 goto next
 
 Rana2:
-chnset  0.001 + 0.199 * kval, "ran2amp"
+outvalue "ran2amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr2:
-chnset  0.001 + 3.99 * kval, "ran2vel"
+outvalue "ran2vel", 0.001 + 3.99 * kval
 goto next
 
 Carmin:
-chnset  1 + kval * 13, "CAR_min"
+outvalue "CAR_min", 1 + kval * 13
 goto next
 
 Carmax:
-chnset  1 + kval * 13, "CAR_max"
+outvalue "CAR_max", 1 + kval * 13
 goto next
 
 Modmin:
-chnset  1 + kval * 13, "MOD_min"
+outvalue "MOD_min", 1 + kval * 13
 goto next
 
 Modmax:
-chnset  1 + kval * 13, "MOD_max"
+outvalue "MOD_max", 1 + kval * 13
 goto next
 
-;
+
 Rev2:
-chnset  kval, "REVSEND2"
+outvalue "REVSEND2",  kval
 goto next
 
 Volume:
-chnset  kval, "over"
-;
+outvalue "over",  kval
+
 
 
 next:
-;
+
 turnoff
-;
+
 endin
 
 ;==========================================
 
 instr 908
-;
+
 if gkinv_8 == 0 then
 kval  =  gkval_8 * gkcc8_lev
 else
@@ -4276,138 +4268,138 @@ if		gkM8 == 29 goto Modmax
 goto next
 
 Fun1:
-	chnset  1 + 7 * kval, "Fun_1"
+	outvalue "Fun_1", 1 + 7 * kval
 goto next
 
 PadX1:
-	chnset  kval, "pad_X1"
+	outvalue "pad_X1", kval
 goto next
 
 PadY1:
-	chnset  kval, "pad_Y1"
+	outvalue "pad_Y1", kval
 goto next
 
 Lev1:
-	chnset  kval, "Lev_1"
+	outvalue "Lev_1", kval
 goto next
 
 Im1:
-chnset  4 * kval, "indx1"
+outvalue "indx1", 4 * kval
 goto next
 
 Atk1:
-chnset  0.005 + 0.85 * kval, "AT1"
+outvalue "AT1", 0.005 + 0.85 * kval
 goto next
 
 Rel1:
-chnset  0.005 + 0.85 * kval, "RE1"
+outvalue "RE1", 0.005 + 0.85 * kval
 goto next
 
 Rana1:
-chnset  0.001 + 0.199 * kval, "ran1amp"
+outvalue "ran1amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr1:
-chnset  0.001 + 3.99 * kval, "ran1vel"
+outvalue "ran1vel", 0.001 + 3.99 * kval
 goto next
 
 Voi:
-chnset  1.0 + 7.0 * kval, "vox"
+outvalue "vox", 1.0 + 7.0 * kval
 goto next
 
 Rev1:
-chnset  kval, "REVSEND1"
+outvalue "REVSEND1",  kval
 goto next
 
 step:
-chnset  1.0 + 8.0 * kval, "knob154"
+outvalue "knob154", 1.0 + 8.0 * kval
 goto next
 
 Focus:
-chnset  0.001 + 99.999 * kval, "band"
+outvalue "band", 0.001 + 99.999 * kval
 goto next
 
 LongShort:
-chnset  0.2 + 2.8 * kval, "dur"
+outvalue "dur", 0.2 + 2.8 * kval
 goto next
 
 FastSlow:
-chnset  0.1 + 0.4 * kval, "rate"
+outvalue "rate", 0.1 + 0.4 * kval
 goto next
 
 shape:
-chnset  8 * kval, "SHAPE"
+outvalue "SHAPE",  8 * kval
 goto next
 
 Xfade:
-chnset  kval, "XFADE"
+outvalue "XFADE",  kval
 goto next
 
 PadX2:
-	chnset  kval, "pad_X2"
+	outvalue "pad_X2", kval
 goto next
 
 Lev2:
-	chnset  kval, "Lev_2"
+	outvalue "Lev_2", kval
 goto next
 
 Fun2:
-	chnset  1 + 7 * kval, "Fun_2"
+	outvalue "Fun_2", 1 + 7 * kval
 goto next
 
 Im2:
-chnset  4 * kval, "indx2"
+outvalue "indx2", 4 * kval
 goto next
 
 Rana2:
-chnset  0.001 + 0.199 * kval, "ran2amp"
+outvalue "ran2amp", 0.001 + 0.199 * kval
 goto next
 
 Ranr2:
-chnset  0.001 + 3.99 * kval, "ran2vel"
+outvalue "ran2vel", 0.001 + 3.99 * kval
 goto next
 
 Carmin:
-chnset  1 + kval * 13, "CAR_min"
+outvalue "CAR_min", 1 + kval * 13
 goto next
 
 Carmax:
-chnset  1 + kval * 13, "CAR_max"
+outvalue "CAR_max", 1 + kval * 13
 goto next
 
 Modmin:
-chnset  1 + kval * 13, "MOD_min"
+outvalue "MOD_min", 1 + kval * 13
 goto next
 
 Modmax:
-chnset  1 + kval * 13, "MOD_max"
+outvalue "MOD_max", 1 + kval * 13
 goto next
 
-;
+
 Rev2:
-chnset  kval, "REVSEND2"
+outvalue "REVSEND2",  kval
 goto next
 
 Volume:
-chnset  kval, "over"
-;
+outvalue "over",  kval
+
 
 
 next:
-;
+
 turnoff
-;
+
 endin
 
 ;==========================================
 
-instr 911; Not Used
+; MKG instr 911; Not Used
 
 ;event "i", 12, 0, 1
 
 ;turnoff
 
-endin
+; MKG endin
 
 ;==========================================
 
@@ -4428,9 +4420,9 @@ outs arevL*gkREVLEV, arevR*gkREVLEV
 gaREVL= 0
 gaREVR = 0
 endin
-;
+
 ;========================================
-;
+
 instr 997 ;-----> VU-METER
 
 asigL = gaMETER_L
@@ -4439,11 +4431,11 @@ asigR = gaMETER_R
 krmsL rms asigL
 krmsR rms asigR
 
-krmsL_LOG10  =  log(krmsL) 
-krmsR_LOG10  =  log(krmsR) 
-;chnset  krmsL_LOG10 * 20 * 0.003, "DISPLAY"
-chnset  krmsL_LOG10 * 20 * 0.006, "rms_L"
-chnset  krmsR_LOG10 * 20 * 0.006, "rms_R"
+krmsL_LOG10  =  log(krmsL)
+krmsR_LOG10  =  log(krmsR)
+;outvalue "DISPLAY", krmsL_LOG10 * 20 * 0.003
+outvalue "rms_L", krmsL_LOG10 * 20 * 0.006
+outvalue "rms_R", krmsR_LOG10 * 20 * 0.006
 gaMETER_L = 0
 gaMETER_R = 0
 endin
@@ -4452,13 +4444,17 @@ endin
 
 instr 998 ;-----> FFT
 
-kfft_onoff chnget "fftONOFF"
-if kfft_onoff !=0 then 
- chnset  83, "tabdisp"
- asig = gaFFT
- dispfft asig,0.3,512, 1 
+;kfft_onoff invalue "fftONOFF"
+;if kfft_onoff != 0 then
+; outvalue "disptab", 82
+; asig = gaFFT
+; dispfft asig,0.3,512, 1
+; gaFFT = 0
+;endif
+
+asig = gaFFT
+ dispfft asig,0.3,512, 1
  gaFFT = 0
-endif
 endin
 
 ;========================================
@@ -4468,7 +4464,7 @@ instr 950   ;-----> Timer
 isecs init -1
 imins init 0
 kval_secs init 0
-kval_mins init 0 
+kval_mins init 0
 ;print isecs,imins
 
 reset:
@@ -4486,8 +4482,8 @@ kval_secs = isecs
 kval_mins = imins
 
 
-chnset  kval_secs, "secs"
-chnset  kval_mins, "mins"
+outvalue "secs", kval_secs
+outvalue "mins", kval_mins
 
 if gksw5 != 0 kgoto on
 turnoff
@@ -4498,7 +4494,7 @@ endin
 
 instr 960;-----> RECORD File wav
 
-kdatares chnget "_datares"  ; select bit depth for audio saved data
+kdatares invalue "_datares"  ; select bit depth for audio saved data
 idatares = i(kdatares)
 if idatares == 0 then
  itype = 0						; 16 bit integer  	(code 14)
@@ -4509,9 +4505,9 @@ if idatares == 0 then
 endif
 
 
-Sfile	chnget "_Browse3"		; Browse the file to save in
+Sfile	invalue "_Browse3"		; Browse the file to save in
 
-chnset  1, "LED_WRITE"
+outvalue "LED_WRITE", 1
 irectime = abs(i(gkrectime) * p3)
 p3 = irectime
 
@@ -4519,9 +4515,9 @@ p3 = irectime
 k1 			timeinsts
 
 go:
-    
+
 icurrent_type =  14+itype
-   
+
 fout Sfile, icurrent_type, gaWRITE_L+gaREVREC_L, gaWRITE_R+gaREVREC_R   ; save stereo audio data
 
 gaWRITE_L = 0
@@ -4529,18 +4525,18 @@ gaWRITE_R = 0
 
 gaREVREC_L = 0
 gaREVREC_R = 0
-	
 
-  			chnset  k1, "DisplayTime"
-			chnset  k1/p3, "rectimedisp"
+
+  			outvalue "DisplayTime", k1
+			outvalue "rectimedisp", k1/p3
 
 endin
 
 ;==========================================
 
-instr 961;-----> Manage Led Record File 
+instr 961;-----> Manage Led Record File
 
-chnset  0, "LED_WRITE"
+outvalue "LED_WRITE",0
 turnoff2 960, 0,0
 endin
 
@@ -4551,22 +4547,22 @@ instr 970  ;-----> THE SEQUENCER
 event_i "i", 975, 0, 3600
 
 imetronome = i(gkmetronome)
-giSEQ = 1						; set sequencer flag active ( = 1)
-chnset  1, "ledseq"
-iaddress init -5				; start pointer 4 location before first descriptor element 
+giSEQ = 1						; set sequencer flag active (= 1)
+outvalue "ledseq", 1
+iaddress init -5				; start pointer 4 location before first descriptor element
 seq:
 
 iaddress = iaddress + 5		; increment pointe
 
 iflag 		tab_i iaddress, 900; read 1st element of descriptor iaddress-th  (flag di ultimo elemento)
-if (iflag == 1)then 
+if iflag == 1 then
 giSEQ = 0
-chnset  0, "ledseq"
-chnset  0, "ledton"
+outvalue "ledseq", 0
+outvalue "ledton", 0
 
-giSEQ = 1
+;giSEQ = 1
 turnoff2 975, 0, 0
-chnset  0, "seqblink"
+outvalue "seqblink", 0
 turnoff
 
 ;else
@@ -4578,22 +4574,22 @@ iTon  		tab_i iaddress + 1, 900   ; read 2nd element..(tempo di ON prima della t
 giPrn  		tab_i iaddress + 2, 900	; read 3rd element..(snapshot)
 giTtran		tab_i iaddress + 3, 900	; read 4th element..(tempo  transizione)
 giMode		tab_i iaddress + 4, 900
-chnset  giPrn-1, "Get"
-chnset  giMode, "TYPE"
+outvalue "Get",giPrn-1
+outvalue "TYPE", giMode
 print i(gkmetronome)
 
 iTon = iTon / imetronome
 giTtran = giTtran / imetronome
 ;print iTon, giPrn, giTtran, giMode
 schedule 91, iTon, 3600
-				
+
 
 isumtime = giTtran + 0.001 + iTon
 
 if iTon > 0 then
-chnset  1, "ledton"
+outvalue "ledton", 1
 else
-chnset  0, "ledton"
+outvalue "ledton", 0
 endif
 
 timout 0, isumtime, wait
@@ -4612,30 +4608,30 @@ endin
 instr 971 ;-----> Halt sequencer
 
 giSEQ = 0
-chnset  0, "ledseq"
-chnset  0, "ledon"
+outvalue "ledseq",0
+outvalue "ledon", 0
 turnoff2 970,0,0
 turnoff2 92,0,0
 turnoff2 91,0,0
 turnoff2 975,0,0
-chnset  0, "seqblink"
+outvalue "seqblink", 0
 turnoff
 endin
 
 ;==========================================
 
-instr 972 ;-----> Load Sequence 
+instr 972 ;-----> Load Sequence
 
-Sfile	chnget "_Browse2"
+Sfile	invalue "_Browse2"
 ;ftload "/Users/eg/Documents/QuteCSEX/stria/sequencesave.txt", 1, 900
 ftload Sfile, 1, 900
 schedule 976, 0, 3600
 turnoff
 endin
 
-instr 973 ;-----> Save Sequence 
+instr 973 ;-----> Save Sequence
 
-Sfile	chnget "_Browse2"
+Sfile	invalue "_Browse2"
 
 ;ftsave "/Users/eg/Documents/QuteCSEX/stria/sequencesave.txt", 1, 901
 ftsave Sfile, 1, 900
@@ -4645,13 +4641,13 @@ endin
 instr 975;-----> Blink red led during sequence
 
 kblink oscil 1, 1, 902
-chnset  kblink, "seqblink"
+outvalue "seqblink", kblink
 endin
 
 
 instr 976;----->Read sequencer data (after file load)
 
-kindex	chnget "readindex"
+kindex	invalue "readindex"
 
 
 reset:
@@ -4666,16 +4662,16 @@ itype		tab_i index + 4, 900
 ;print index, iend, iton
 
 if iend == 1 then
-chnset  0, "seqblink"
+outvalue "seqblink", 0
 else
 endif
 
 
-chnset  iend, "readend"
-chnset  iton, "readton"
-chnset  isnap, "readsnap"
-chnset  ittran, "readttran"
-chnset  itype, "readtype"
+outvalue "readend", iend
+outvalue "readton", iton
+outvalue "readsnap", isnap
+outvalue "readttran", ittran
+outvalue "readtype", itype
 
 
 timout 0, 0.2, nop
@@ -4693,7 +4689,7 @@ endin
 
 instr 980 ; ------> PUT ELEMENT (Build sequence)
 
-kindex	chnget "readindex"
+kindex	invalue "readindex"
 in_index 		=	i(kindex) * 5
 
 in_readend 		= 	i(gkin_readend)
@@ -4742,24 +4738,24 @@ f303	0  2   -2  301 302 ;List
 
 f701  	0  2   -2  703 704 ; Contains the list of tables for snap morphing  (2 tables)
 f702  	0  64  10  1		; Morph table (don't care initial content)
-f703  	0  64  -2  0  		; 1st table 
+f703  	0  64  -2  0  		; 1st table
 f704  	0  64  -2  0		; 2nd table
 
 f800 0   32 7 1 15 1 1 -1 15 -1
-;             y/n On  Prn  Tt 
-f900 0 512 -2 0  
+;             y/n On  Prn  Tt
+f900 0 512 -2 0
 f901 0 512 -2 0
-;f902 0 512 -2 0
+;MKG f902 0 512 -2 0
 
 f902 0 512 7 1 128 1 0 0 384 0
 ;-------------------------------------------------
 
-i 1 0 36000 
+i 1 0 36000
 i 4 0 36000
 
 i 9 0 -1
 i 60 0 36000
-				
+
 i 600 0 36000
 
 ;i 700 0 36000
@@ -4778,18 +4774,17 @@ i 808 0 36000
 i 900 0 36000
 
 i 997 0 36000
-i 998 0 36000																																																				
+i 998 0 36000
 e
 </CsScore>
 </CsoundSynthesizer>
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>89</x>
- <y>20</y>
- <width>1476</width>
- <height>879</height>
+ <x>4</x>
+ <y>675</y>
+ <width>1676</width>
+ <height>375</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -4947,7 +4942,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.51466667</xValue>
-  <yValue>0.96093800</yValue>
+  <yValue>1.00000000</yValue>
   <type>point</type>
   <pointsize>10</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -4979,8 +4974,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.25746920</xValue>
-  <yValue>0.90625000</yValue>
+  <xValue>0.54687500</xValue>
+  <yValue>0.85937500</yValue>
   <type>point</type>
   <pointsize>10</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -5014,7 +5009,7 @@ e
   <image>/</image>
   <eventLine>i2 0 1 1</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_RAND1</objectName>
@@ -5083,7 +5078,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>4.00000000</maximum>
-  <value>4.00000000</value>
+  <value>1.27777800</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -5388,7 +5383,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -5571,7 +5566,7 @@ e
   <image>/</image>
   <eventLine>i10 0 -1</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>last_freq</objectName>
@@ -5583,7 +5578,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>34254.114</label>
+  <label>22233.261</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -5641,7 +5636,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>17.000</label>
+  <label>613.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -5802,7 +5797,7 @@ e
   <midicc>0</midicc>
   <minimum>-0.01000000</minimum>
   <maximum>0.01000000</maximum>
-  <value>0.00028200</value>
+  <value>0.00140845</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -5864,7 +5859,7 @@ e
   <minimum>1</minimum>
   <maximum>40</maximum>
   <randomizable group="0">false</randomizable>
-  <value>36</value>
+  <value>22</value>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -6253,7 +6248,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
@@ -6344,7 +6339,7 @@ e
   <midicc>0</midicc>
   <label>/Users/eug/Desktop/StriaEXMP/EXMP_BOSTON.txt</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
   <color>
@@ -6353,9 +6348,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>232</r>
+   <g>232</g>
+   <b>232</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -6637,7 +6632,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>            STRIA 2.5 -Multilevel Interactive Sound Synthesizer with sequencer </label>
+  <label>            STRIA 2.6 -Multilevel Interactive Sound Synthesizer with sequencer - Csound6 tested</label>
   <alignment>left</alignment>
   <font>Papyrus</font>
   <fontsize>20</fontsize>
@@ -6668,7 +6663,7 @@ e
   <midicc>-3</midicc>
   <minimum>1.00000000</minimum>
   <maximum>8.00000000</maximum>
-  <value>1.53756413</value>
+  <value>1.19444400</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -6704,7 +6699,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.01000000</minimum>
   <maximum>0.20000000</maximum>
-  <value>0.06343750</value>
+  <value>0.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -6790,7 +6785,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.961</label>
+  <label>1.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -6864,7 +6859,7 @@ e
   <midicc>0</midicc>
   <minimum>-5.00000000</minimum>
   <maximum>5.00000000</maximum>
-  <value>-2.25000000</value>
+  <value>0.62500000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -6901,8 +6896,8 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>1290</x>
-  <y>692</y>
+  <x>1285</x>
+  <y>693</y>
   <width>89</width>
   <height>22</height>
   <uuid>{c3f46981-3604-40c7-9ad5-c1941ef61fc3}</uuid>
@@ -6938,7 +6933,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>-2.250</label>
+  <label>0.625</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -7270,7 +7265,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.000</label>
+  <label>62.156</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -7357,7 +7352,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.538</label>
+  <label>1.194</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -7386,7 +7381,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>4.000</label>
+  <label>1.278</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -7649,26 +7644,6 @@ e
    <b>0</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
-  <objectName>tabdisp</objectName>
-  <x>1175</x>
-  <y>75</y>
-  <width>246</width>
-  <height>135</height>
-  <uuid>{876eed8d-e13f-425e-9bb3-576a4b09fece}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <value>83</value>
-  <objectName2/>
-  <zoomx>1.00000000</zoomx>
-  <zoomy>1.00000000</zoomy>
-  <dispx>1.00000000</dispx>
-  <dispy>1.00000000</dispy>
-  <modex>lin</modex>
-  <modey>lin</modey>
-  <all>true</all>
- </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>X</objectName>
   <x>388</x>
@@ -7807,7 +7782,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>27.498</label>
+  <label>54.184</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -7836,7 +7811,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>970.520</label>
+  <label>55.991</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -7865,7 +7840,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>5765.786</label>
+  <label>57.859</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -7894,7 +7869,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>935.668</label>
+  <label>59.790</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -7923,7 +7898,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>853.132</label>
+  <label>61.785</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -7952,7 +7927,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1210.953</label>
+  <label>63.846</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -8190,7 +8165,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.43181800</xValue>
-  <yValue>0.12500000</yValue>
+  <yValue>0.75000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -8333,7 +8308,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>Configurable 
+  <label>Configurable
 Controller</label>
   <alignment>left</alignment>
   <font>Helvetica</font>
@@ -9293,7 +9268,7 @@ Controller</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
+  <xValue>1.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -9805,7 +9780,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>1.00000000</minimum>
   <maximum>8.00000000</maximum>
-  <value>1.28197500</value>
+  <value>6.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -9823,7 +9798,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>1.00000000</minimum>
   <maximum>9.00000000</maximum>
-  <value>3.31203236</value>
+  <value>3.92682900</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -9839,7 +9814,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.282</label>
+  <label>6.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -9868,7 +9843,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>3.312</label>
+  <label>3.927</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -10397,7 +10372,7 @@ Controller</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.78481013</value>
+  <value>0.51898700</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -10442,7 +10417,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.785</label>
+  <label>0.519</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -10477,7 +10452,7 @@ Controller</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.80000000</xValue>
-  <yValue>0.78481013</yValue>
+  <yValue>0.51898696</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -10510,7 +10485,7 @@ Controller</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.80000000</xValue>
-  <yValue>0.21518987</yValue>
+  <yValue>0.48101304</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -10770,7 +10745,7 @@ Controller</label>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0</value>
+  <value>20</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>cc2</objectName>
@@ -10799,7 +10774,7 @@ Controller</label>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0</value>
+  <value>21</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>cc3</objectName>
@@ -10828,7 +10803,7 @@ Controller</label>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0</value>
+  <value>22</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>cc4</objectName>
@@ -11045,7 +11020,7 @@ Controller</label>
   <midicc>0</midicc>
   <bsbDropdownItemList>
    <bsbDropdownItem>
-    <name>About   Stria is written by Eugenio Giordani as a tribute to prof. John Chowning - Ver. 2.5 _inch15 - 16/10/2013</name>
+    <name>About   Stria is written by Eugenio Giordani as a tribute to prof. John Chowning - Ver. 2.5  - november 2013</name>
     <value>0</value>
     <stringvalue/>
    </bsbDropdownItem>
@@ -11616,7 +11591,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.063</label>
+  <label>0.200</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -14797,7 +14772,7 @@ Controller</label>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>ROOM</objectName>
@@ -15481,7 +15456,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>27.498</label>
+  <label>54.184</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -15997,7 +15972,7 @@ Controller</label>
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
@@ -16198,7 +16173,7 @@ Controller</label>
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
@@ -16363,7 +16338,7 @@ Controller</label>
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>4</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
@@ -17449,7 +17424,7 @@ Controller</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.94000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -17485,7 +17460,7 @@ Controller</label>
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.82000000</value>
+  <value>0.76000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -17616,7 +17591,7 @@ Controller</label>
    <g>0</g>
    <b>128</b>
   </bgcolor>
-  <value>1.00000000</value>
+  <value>0.94000000</value>
   <resolution>0.00100000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>99999999999999.00000000</maximum>
@@ -17715,7 +17690,7 @@ Controller</label>
    <g>0</g>
    <b>128</b>
   </bgcolor>
-  <value>0.82000000</value>
+  <value>0.76000000</value>
   <resolution>0.00100000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>99999999999999.00000000</maximum>
@@ -19119,7 +19094,7 @@ Controller</label>
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/Users/eug/Desktop/StriaEXMP/SEQ_TEST.txt</stringvalue>
+  <stringvalue>/Users/eug/Desktop/StriaEXMP/SEQ_TESTNEW.txt</stringvalue>
   <text>BROWSE</text>
   <image>/</image>
   <eventLine/>
@@ -19136,7 +19111,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.000</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -19194,7 +19169,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>6.000</label>
+  <label>13.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -19223,7 +19198,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>20.000</label>
+  <label>7.200</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -19269,7 +19244,7 @@ Controller</label>
   <minimum>0</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>4</value>
+  <value>3</value>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>readtype</objectName>
@@ -19281,7 +19256,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>2.000</label>
+  <label>-3.000</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -19679,7 +19654,7 @@ Controller</label>
   <minimum>-0.01</minimum>
   <maximum>0.01</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.000282</value>
+  <value>0.00140845</value>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Browse3</objectName>
@@ -20017,7 +19992,7 @@ Controller</label>
   <minimum>0.1</minimum>
   <maximum>10</maximum>
   <randomizable group="0">false</randomizable>
-  <value>4</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse2</objectName>
@@ -20029,7 +20004,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/Users/eug/Desktop/StriaEXMP/SEQ_TEST.txt</label>
+  <label>/Users/eug/Desktop/StriaEXMP/SEQ_TESTNEW.txt</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -20040,9 +20015,9 @@ Controller</label>
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>232</r>
+   <g>232</g>
+   <b>232</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -20056,7 +20031,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/Users/eug/Desktop/provarec.wav</label>
+  <label>provarec.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -20067,9 +20042,9 @@ Controller</label>
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>232</r>
+   <g>232</g>
+   <b>232</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -20258,8 +20233,8 @@ Controller</label>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>mpercent</objectName>
-  <x>1369</x>
-  <y>690</y>
+  <x>1374</x>
+  <y>691</y>
   <width>33</width>
   <height>23</height>
   <uuid>{786c51b2-b8d3-490b-a051-e23bc85cb6e8}</uuid>
@@ -20287,7 +20262,7 @@ Controller</label>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>1399</x>
+  <x>1402</x>
   <y>691</y>
   <width>31</width>
   <height>22</height>
@@ -20359,7 +20334,7 @@ Controller</label>
   <minimum>0</minimum>
   <maximum>47</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>2</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -20418,6 +20393,26 @@ Controller</label>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBGraph">
+  <objectName/>
+  <x>1174</x>
+  <y>85</y>
+  <width>230</width>
+  <height>119</height>
+  <uuid>{df7371bb-57ed-442d-9cb0-b69bbd6fc3ae}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <value>0</value>
+  <objectName2/>
+  <zoomx>1.00000000</zoomx>
+  <zoomy>1.00000000</zoomy>
+  <dispx>1.00000000</dispx>
+  <dispy>1.00000000</dispy>
+  <modex>lin</modex>
+  <modey>lin</modey>
+  <all>true</all>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
