@@ -1264,20 +1264,23 @@ void CsoundEngine::breakpointCallback(CSOUND *csound, int line, double instr, vo
 				if (vp->memBlock) {
 					varDetails << *((MYFLT *)vp->memBlock);
 				} else {
-					varDetails << QVariant();
+					MYFLT *varmem = insds->lclbas + vp->memBlockIndex;
+					varDetails << QVariant(*varmem);
 				}
 			} else if(strcmp(vp->varType->varTypeName, "S") == 0) {
 				if (vp->memBlock) {
 					varDetails << *((char *)vp->memBlock);
 				} else {
-					varDetails << QVariant();
+					char *varmem = (char *) (insds->lclbas + vp->memBlockIndex);
+					varDetails << QVariant(varmem);
 				}
 			} else if (strcmp(vp->varType->varTypeName, "a") == 0) {
 				if (vp->memBlock) {
 					varDetails << *((MYFLT *)vp->memBlock) << *((MYFLT *)vp->memBlock + 1)
 							   << *((MYFLT *)vp->memBlock + 2)<< *((MYFLT *)vp->memBlock + 3);
 				} else {
-					varDetails << QVariant();
+					MYFLT *varmem = insds->lclbas + vp->memBlockIndex;
+					varDetails << QVariant(*varmem);
 				}
 			} else {
 				varDetails << QVariant();
