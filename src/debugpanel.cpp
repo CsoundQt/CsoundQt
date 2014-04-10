@@ -26,6 +26,9 @@
 #include <QInputDialog>
 #include <QModelIndex>
 #include <QTableWidget>
+#include <QCheckBox>
+
+#include <QDebug>
 
 DebugPanel::DebugPanel(QWidget *parent) :
     QDockWidget(parent),
@@ -47,7 +50,11 @@ DebugPanel::DebugPanel(QWidget *parent) :
             this, SLOT(newBreakpoint()));
     connect(ui->deleteBreakpointToolButton, SIGNAL(released()),
             this, SLOT(deleteBreakpoint()));
-//    connect(ui->)
+
+    connect(ui->breakpointTableWidget, SIGNAL(cellChanged(int,int)),
+            this, SLOT(cellChanged(int,int)));
+    connect(ui->breakpointTableWidget, SIGNAL(currentCellChanged(int,int,int,int)),
+            this, SLOT(currentCellChanged(int,int,int,int)));
 }
 
 DebugPanel::~DebugPanel()
@@ -61,13 +68,16 @@ QVector<QVariantList> DebugPanel::getBreakpoints()
     QVector<QVariantList> breakpoints;
     for (int row = 0; row < table->rowCount(); row++) {
         QVariantList bp;
-        QTableWidgetItem *item = table->item(row,0);
-        bp << item->data(Qt::DisplayRole).toString();
-        item = table->item(row,1);
-        bp << item->data(Qt::DisplayRole).toDouble();
-        item = table->item(row,2);
-        bp << item->data(Qt::DisplayRole).toInt();
-        breakpoints.append(bp);
+        QCheckBox *cb = static_cast<QCheckBox *>(table->cellWidget(row,0));
+        if (cb->isChecked()) {
+            QTableWidgetItem *item = table->item(row,1);
+            bp << item->data(Qt::DisplayRole).toString();
+            item = table->item(row,2);
+            bp << item->data(Qt::DisplayRole).toDouble();
+            item = table->item(row,3);
+            bp << item->data(Qt::DisplayRole).toInt();
+            breakpoints.append(bp);
+        }
     }
     return breakpoints;
 }
@@ -165,17 +175,24 @@ void DebugPanel::newBreakpoint()
                                        tr("Instrument"), 1.0, 1, 9999999, 2, &ok);
     int skip = 0;
     if (ok) {
+        ui->breakpointTableWidget->blockSignals(true); // To avoid triggering the changed slots
         int row = ui->breakpointTableWidget->rowCount();
         ui->breakpointTableWidget->insertRow(row);
+        QCheckBox *checkbox = new QCheckBox;
+        checkbox->setChecked(true);
+        checkbox->setEnabled(false);
+        ui->breakpointTableWidget->setCellWidget(row, 0, checkbox);
         QTableWidgetItem *item = new QTableWidgetItem;
         item->setData(Qt::DisplayRole, "instr");
-        ui->breakpointTableWidget->setItem(row, 0, item);
-        item = new QTableWidgetItem;
-        item->setData(Qt::DisplayRole, d);
+        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable); // not editable
         ui->breakpointTableWidget->setItem(row, 1, item);
         item = new QTableWidgetItem;
-        item->setData(Qt::DisplayRole, skip);
+        item->setData(Qt::DisplayRole, d);
         ui->breakpointTableWidget->setItem(row, 2, item);
+        item = new QTableWidgetItem;
+        item->setData(Qt::DisplayRole, skip);
+        ui->breakpointTableWidget->setItem(row, 3, item);
+        ui->breakpointTableWidget->blockSignals(false);
         emit addInstrumentBreakpoint(d, skip);
     }
 }
@@ -186,10 +203,61 @@ void DebugPanel::deleteBreakpoint()
     if (row < 0) {
         return;
     }
-    if (ui->breakpointTableWidget->item(row, 0)->data(Qt::DisplayRole).toString() == "instr") {
-        double d = ui->breakpointTableWidget->item(row, 1)->data(Qt::DisplayRole).toDouble();
+    if (ui->breakpointTableWidget->item(row, 1)->data(Qt::DisplayRole).toString() == "instr") {
+        double d = ui->breakpointTableWidget->item(row, 2)->data(Qt::DisplayRole).toDouble();
         emit removeInstrumentBreakpoint(d);
-
     }
     ui->breakpointTableWidget->removeRow(row);
 }
+
+void DebugPanel::cellChanged(int row, int column)
+{
+    switch(column) {
+    case 0:
+        // TODO enable/disable toggle
+        break;
+    case 2:
+        if (ui->breakpointTableWidget->item(row, 1)->data(Qt::DisplayRole).toString() == "instr") {
+            double d = ui->breakpointTableWidget->item(row, 2)->data(Qt::DisplayRole).toDouble();
+            double skip = ui->breakpointTableWidget->item(row, 3)->data(Qt::DisplayRole).toDouble();
+            emit removeInstrumentBreakpoint(m_previousCellValue);
+            emit addInstrumentBreakpoint(d, skip);
+        } else {
+            qDebug() << "DebugPanel::cellChanged Other breakpoint types not supported.";
+        }
+        break;
+    case 3:
+        if (ui->breakpointTableWidget->item(row, 1)->data(Qt::DisplayRole).toString() == "instr") {
+            double d = ui->breakpointTableWidget->item(row, 2)->data(Qt::DisplayRole).toDouble();
+            double skip = ui->breakpointTableWidget->item(row, 3)->data(Qt::DisplayRole).toDouble();
+            emit removeInstrumentBreakpoint(d);
+            emit addInstrumentBreakpoint(d, skip);
+        } else {
+            qDebug() << "DebugPanel::cellChanged Other breakpoint types not supported.";
+        }
+        break;
+
+    default:
+    case 1:
+        // Do nothing
+        break;
+    }
+}
+
+void DebugPanel::currentCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn)
+{
+    Q_UNUSED(previousRow);
+    Q_UNUSED(previousColumn);
+    switch(currentColumn) {
+    case 2:
+    case 3:
+        m_previousCellValue = ui->breakpointTableWidget->item(currentRow, currentColumn)->data(Qt::DisplayRole).toDouble();
+        break;
+    default:
+    case 0:
+    case 1:
+        // Do nothing here
+        break;
+    }
+}
+

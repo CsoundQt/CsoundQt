@@ -55,9 +55,13 @@ private slots:
     void next();
     void newBreakpoint();
     void deleteBreakpoint();
+    void cellChanged(int row, int column);
+    void currentCellChanged(int currentRow, int currentColumn, int previousRow, int previousColumn);
 
 private:
     Ui::DebugPanel *ui;
+
+    double m_previousCellValue;
 
 signals:
     void runSignal();
