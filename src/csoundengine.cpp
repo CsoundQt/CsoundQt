@@ -1268,12 +1268,14 @@ void CsoundEngine::breakpointCallback(CSOUND *csound, int line, double instr, vo
 					varDetails << QVariant(*varmem);
 				}
 			} else if(strcmp(vp->varType->varTypeName, "S") == 0) {
+				STRINGDAT *varmem;
 				if (vp->memBlock) {
-					varDetails << *((char *)vp->memBlock);
+					varmem = (STRINGDAT *)vp->memBlock;
 				} else {
-					char *varmem = (char *) (insds->lclbas + vp->memBlockIndex);
-					varDetails << QVariant(varmem);
+					varmem = (STRINGDAT *) (insds->lclbas + vp->memBlockIndex);
+
 				}
+				varDetails << QVariant(QByteArray(varmem->data, varmem->size));
 			} else if (strcmp(vp->varType->varTypeName, "a") == 0) {
 				if (vp->memBlock) {
 					varDetails << *((MYFLT *)vp->memBlock) << *((MYFLT *)vp->memBlock + 1)
