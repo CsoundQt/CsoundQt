@@ -118,7 +118,7 @@ font: 10pt &quot;Courier New&quot;;</string>
        <bool>false</bool>
       </property>
       <property name="columnCount">
-       <number>3</number>
+       <number>4</number>
       </property>
       <attribute name="horizontalHeaderMinimumSectionSize">
        <number>1</number>
@@ -132,6 +132,17 @@ font: 10pt &quot;Courier New&quot;;</string>
       <attribute name="verticalHeaderVisible">
        <bool>false</bool>
       </attribute>
+      <attribute name="verticalHeaderHighlightSections">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+       <bool>true</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Enabled</string>
+       </property>
+      </column>
       <column>
        <property name="text">
         <string>Type</string>
