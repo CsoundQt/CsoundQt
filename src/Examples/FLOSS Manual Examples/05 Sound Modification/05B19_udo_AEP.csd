@@ -1,6 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials </CsOptions>
+--env:INCDIR+=../SourceMaterials 
+</CsOptions>
 <CsInstruments>
 sr      =  44100
 ksmps   =  32
