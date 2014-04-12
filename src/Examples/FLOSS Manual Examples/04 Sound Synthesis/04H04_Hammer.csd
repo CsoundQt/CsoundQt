@@ -31,4 +31,4 @@ f 1 6 128 13 1 1 0 0 0 -.1 0 .3 0 -.5 0 .7 0 -.9 0 1 0 -1 0
 f 1 7 128 21 6 5.745
 </CsScore>
 </CsoundSynthesizer>
-;Example by Christopher Saunders
+;Example by Christopher Saunders</code>

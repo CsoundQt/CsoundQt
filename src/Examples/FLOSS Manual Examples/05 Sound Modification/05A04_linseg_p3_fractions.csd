@@ -5,14 +5,12 @@
 </CsOptions>
 
 <CsInstruments>
-;Example by Iain McCurdy
-
 sr = 44100
 ksmps = 32
 nchnls = 1
 0dbfs = 1
 
-giSine   ftgen    0, 0, 2^12, 10, 1; a sine wave
+giSine   ftgen    0, 0, 2^12, 10, 1 ; a sine wave
 
   instr 1
 aEnv     linseg   0, p3*0.5, 1, p3*0.5, 0 ; rising then falling envelope

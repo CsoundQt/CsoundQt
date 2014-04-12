@@ -61,9 +61,9 @@ aSnd      table3    aindx, giFt, 1
 
 </CsInstruments>
 <CsScore>
-i 1 0 5
-i 2 6 5
-i 3 12 7
-i 4 20 5
+i 1 0 5  ; record 5 seconds of generated audio to a table
+i 2 6 5  ; play back the recording of generated audio
+i 3 12 7 ; record 5 seconds of live audio to a table
+i 4 20 5 ; play back the recording of live audio
 </CsScore>
 </CsoundSynthesizer>

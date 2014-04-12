@@ -27,7 +27,7 @@ endop
 ; kout	random number
 ; in: i_nr number of possible values
 ; i_fn1 function for random values
-; i_fn2 probability function
+; i_fn2 probability functionExponential: Generate a uniformly distributed number between 0 and 1 and take its natural logarithm.
 
 opcode	rand_probability, k, iii		
 
