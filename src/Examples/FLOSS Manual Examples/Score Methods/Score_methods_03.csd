@@ -20,8 +20,6 @@ e
 </CsScore>
 </CsoundSynthesizer>
 
-
-
 # cs_sco_rand.pl
 my ($in, $out) = @ARGV;
 open(EXT, "<", $in);
@@ -32,4 +30,3 @@ while (<EXT>) {
   s/rand\(\d*\)/eval $&/ge;
   print SCO;
 }
- 

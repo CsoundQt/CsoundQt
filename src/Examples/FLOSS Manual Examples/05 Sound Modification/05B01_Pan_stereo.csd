@@ -5,21 +5,19 @@
 </CsOptions>
 
 <CsInstruments>
-; Example by Iain McCurdy
-
 sr = 44100
 ksmps = 10
 nchnls = 2
 0dbfs = 1
 
   instr 1
-imethod  =         p4; read panning method variable from score (p4)
+imethod  =         p4 ; read panning method variable from score (p4)
 
 ;---------------- generate a source sound -------------------
-a1       pinkish   0.3; pink noise
-a1       reson     a1, 500, 30, 1; bandpass filtered
-aPan     lfo       0.5, 1, 1; panning controlled by an lfo
-aPan     =         aPan + 0.5; offset shifted +0.5
+a1       pinkish   0.3            ; pink noise
+a1       reson     a1, 500, 30, 1 ; bandpass filtered
+aPan     lfo       0.5, 1, 1      ; panning controlled by an lfo
+aPan     =         aPan + 0.5     ; offset shifted +0.5
 ;------------------------------------------------------------
 
  if imethod=1 then
@@ -57,11 +55,11 @@ aPanR   =  cos((aPan + 0.5) * $M_PI_2)
 
 <CsScore>
 ; 4 notes one after the other to demonstrate 4 different methods of panning
-;p1 p2  p3   p4(method)
-i 1 0   4.5  1
-i 1 5   4.5  2
-i 1 10  4.5  3
-i 1 15  4.5  4
+; p1 p2  p3   p4(method)
+i 1  0   4.5  1
+i 1  5   4.5  2
+i 1  10  4.5  3
+i 1  15  4.5  4
 e
 </CsScore>
 

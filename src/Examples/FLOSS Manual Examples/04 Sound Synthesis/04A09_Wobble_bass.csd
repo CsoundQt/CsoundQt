@@ -1,4 +1,4 @@
-<CsoundSynthesizer> ; Wobble bass made with additive synthesis
+<CsoundSynthesizer> ; Wobble bass made using additive synthesis
 
 <CsOptions> ; and frequency modulation
 --env:SSDIR+=../SourceMaterials -odac

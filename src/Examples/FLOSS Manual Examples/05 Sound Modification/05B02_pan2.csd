@@ -5,8 +5,6 @@
 </CsOptions>
 
 <CsInstruments>
-; Example by Iain McCurdy
-
 sr = 44100
 ksmps = 10
 nchnls = 2
