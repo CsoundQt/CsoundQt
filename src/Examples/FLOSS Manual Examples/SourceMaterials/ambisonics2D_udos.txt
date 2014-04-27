@@ -1,0 +1,1462 @@
+
+opcode	ambi2D_encode, k, aik		
+
+asnd,iorder,kaz	xin
+
+kaz = $M_PI*kaz/180
+
+kk =	iorder
+c1:
+   	zawm	cos(kk*kaz)*asnd,2*kk-1
+   	zawm	sin(kk*kaz)*asnd,2*kk
+kk =		kk-1
+
+if	kk > 0 goto c1
+	zawm	asnd,0	
+	xout	0
+endop
+
+opcode	ambi2D_enc_dist, k, aikk		
+asnd,iorder,kaz,kdist	xin
+
+kaz = $M_PI*kaz/180
+
+kaz	=			(kdist < 0 ? kaz + $M_PI : kaz)
+kdist =		abs(kdist)+0.0001
+kgainW	=		taninv(kdist*1.5707963) / (kdist*1.5708)		;pi/2
+kgainHO =	(1 - exp(-kdist)) ;*kgainW
+kk =	iorder
+asndW	=	kgainW*asnd
+asndHO	=	kgainHO*asndW
+c1:
+   	zawm	cos(kk*kaz)*asndHO,2*kk-1
+   	zawm	sin(kk*kaz)*asndHO,2*kk
+kk =		kk-1
+
+if	kk > 0 goto c1
+	zawm	asndW,0	
+	xout	0
+endop
+
+;***************
+
+opcode	ambi2D_decode, a, ii		
+iorder,iaz	xin
+
+iaz = $M_PI*iaz/180
+
+igain	=	2/(2*iorder+1)
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz)*zar(2*kk-1)
+a1 +=	sin(kk*iaz)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+		xout			igain*a1
+endop
+
+opcode	ambi2D_decode, aa, iii		
+iorder,iaz1,iaz2	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+
+igain	=	2/(2*iorder+1)
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+		xout			igain*a1,igain*a2
+endop
+
+opcode	ambi2D_decode, aaa, iiii		
+iorder,iaz1,iaz2,iaz3	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+iaz3 = $M_PI*iaz3/180
+
+igain	=	2/(2*iorder+1)
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+kk =	iorder
+a3	=	.5*zar(0)
+c3:
+a3 +=	cos(kk*iaz3)*zar(2*kk-1)
+a3 +=	sin(kk*iaz3)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c3
+		xout			igain*a1,igain*a2,igain*a3
+endop
+
+opcode	ambi2D_decode, aaaa, iiiii		
+iorder,iaz1,iaz2,iaz3,iaz4	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+iaz3 = $M_PI*iaz3/180
+iaz4 = $M_PI*iaz4/180
+
+igain	=	2/(2*iorder+1)
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+kk =	iorder
+a3	=	.5*zar(0)
+c3:
+a3 +=	cos(kk*iaz3)*zar(2*kk-1)
+a3 +=	sin(kk*iaz3)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c3
+kk =	iorder
+a4	=	.5*zar(0)
+c4:
+a4 +=	cos(kk*iaz4)*zar(2*kk-1)
+a4 +=	sin(kk*iaz4)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c4
+		xout			igain*a1,igain*a2,igain*a3,igain*a4
+endop
+
+
+opcode	ambi2D_decode, aaaaa, iiiiii		
+iorder,iaz1,iaz2,iaz3,iaz4,iaz5	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+iaz3 = $M_PI*iaz3/180
+iaz4 = $M_PI*iaz4/180
+iaz5 = $M_PI*iaz5/180
+
+igain	=	2/(2*iorder+1)
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+kk =	iorder
+a3	=	.5*zar(0)
+c3:
+a3 +=	cos(kk*iaz3)*zar(2*kk-1)
+a3 +=	sin(kk*iaz3)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c3
+kk =	iorder
+a4	=	.5*zar(0)
+c4:
+a4 +=	cos(kk*iaz4)*zar(2*kk-1)
+a4 +=	sin(kk*iaz4)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c4
+kk =	iorder
+a5	=	.5*zar(0)
+c5:
+a5 +=	cos(kk*iaz5)*zar(2*kk-1)
+a5 +=	sin(kk*iaz5)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c5
+		xout			igain*a1,igain*a2,igain*a3,igain*a4,igain*a5
+endop
+
+opcode	ambi2D_decode, aaaaaa, iiiiiii		
+iorder,iaz1,iaz2,iaz3,iaz4,iaz5,iaz6	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+iaz3 = $M_PI*iaz3/180
+iaz4 = $M_PI*iaz4/180
+iaz5 = $M_PI*iaz5/180
+iaz6 = $M_PI*iaz6/180
+
+igain	=	2/(2*iorder+1)
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+kk =	iorder
+a3	=	.5*zar(0)
+c3:
+a3 +=	cos(kk*iaz3)*zar(2*kk-1)
+a3 +=	sin(kk*iaz3)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c3
+kk =	iorder
+a4	=	.5*zar(0)
+c4:
+a4 +=	cos(kk*iaz4)*zar(2*kk-1)
+a4 +=	sin(kk*iaz4)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c4
+kk =	iorder
+a5	=	.5*zar(0)
+c5:
+a5 +=	cos(kk*iaz5)*zar(2*kk-1)
+a5 +=	sin(kk*iaz5)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c5
+kk =	iorder
+a6	=	.5*zar(0)
+c6:
+a6 +=	cos(kk*iaz6)*zar(2*kk-1)
+a6 +=	sin(kk*iaz6)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c6
+		xout			igain*a1,igain*a2,igain*a3,igain*a4,igain*a5,igain*a6
+endop
+
+opcode	ambi2D_decode, aaaaaaa, iiiiiiii		
+iorder,iaz1,iaz2,iaz3,iaz4,iaz5,iaz6,iaz7	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+iaz3 = $M_PI*iaz3/180
+iaz4 = $M_PI*iaz4/180
+iaz5 = $M_PI*iaz5/180
+iaz6 = $M_PI*iaz6/180
+iaz7 = $M_PI*iaz7/180
+
+iaz6 = $M_PI*iaz6/180
+igain	=	2/(2*iorder+1)
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+kk =	iorder
+a3	=	.5*zar(0)
+c3:
+a3 +=	cos(kk*iaz3)*zar(2*kk-1)
+a3 +=	sin(kk*iaz3)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c3
+kk =	iorder
+a4	=	.5*zar(0)
+c4:
+a4 +=	cos(kk*iaz4)*zar(2*kk-1)
+a4 +=	sin(kk*iaz4)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c4
+kk =	iorder
+a5	=	.5*zar(0)
+c5:
+a5 +=	cos(kk*iaz5)*zar(2*kk-1)
+a5 +=	sin(kk*iaz5)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c5
+kk =	iorder
+a6	=	.5*zar(0)
+c6:
+a6 +=	cos(kk*iaz6)*zar(2*kk-1)
+a6 +=	sin(kk*iaz6)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c6
+kk =	iorder
+a7	=	.5*zar(0)
+c7:
+a7 +=	cos(kk*iaz7)*zar(2*kk-1)
+a7 +=	sin(kk*iaz7)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c7
+		xout			igain*a1,igain*a2,igain*a3,igain*a4,igain*a5,igain*a6,igain*a7
+endop
+
+opcode	ambi2D_decode, aaaaaaaa, iiiiiiiii		
+iorder,iaz1,iaz2,iaz3,iaz4,iaz5,iaz6,iaz7,iaz8	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+iaz3 = $M_PI*iaz3/180
+iaz4 = $M_PI*iaz4/180
+iaz5 = $M_PI*iaz5/180
+iaz6 = $M_PI*iaz6/180
+iaz7 = $M_PI*iaz7/180
+iaz8 = $M_PI*iaz8/180
+
+igain	=	2/(2*iorder+1)
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+kk =	iorder
+a3	=	.5*zar(0)
+c3:
+a3 +=	cos(kk*iaz3)*zar(2*kk-1)
+a3 +=	sin(kk*iaz3)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c3
+kk =	iorder
+a4	=	.5*zar(0)
+c4:
+a4 +=	cos(kk*iaz4)*zar(2*kk-1)
+a4 +=	sin(kk*iaz4)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c4
+kk =	iorder
+a5	=	.5*zar(0)
+c5:
+a5 +=	cos(kk*iaz5)*zar(2*kk-1)
+a5 +=	sin(kk*iaz5)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c5
+kk =	iorder
+a6	=	.5*zar(0)
+c6:
+a6 +=	cos(kk*iaz6)*zar(2*kk-1)
+a6 +=	sin(kk*iaz6)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c6
+kk =	iorder
+a7	=	.5*zar(0)
+c7:
+a7 +=	cos(kk*iaz7)*zar(2*kk-1)
+a7 +=	sin(kk*iaz7)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c7
+kk =	iorder
+a8	=	.5*zar(0)
+c8:
+a8 +=	cos(kk*iaz8)*zar(2*kk-1)
+a8 +=	sin(kk*iaz8)*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c8
+		xout			igain*a1,igain*a2,igain*a3,igain*a4,igain*a5,igain*a6,igain*a7,igain*a8
+endop
+
+;**************
+opcode	ambi2D_dec_inph, a, ii	
+; weights and norms up to 12th order
+iNorm2D[] array 1,0.75,0.625,0.546875,0.492188,0.451172,0.418945,
+					0.392761,0.370941,0.352394,0.336376,0.322360
+iWeight2D[][] init   12,12
+iWeight2D     array  0.5,0,0,0,0,0,0,0,0,0,0,0,
+	0.666667,0.166667,0,0,0,0,0,0,0,0,0,0,
+	0.75,0.3,0.05,0,0,0,0,0,0,0,0,0,
+	0.8,0.4,0.114286,0.0142857,0,0,0,0,0,0,0,0,
+	0.833333,0.47619,0.178571,0.0396825,0.00396825,0,0,0,0,0,0,0,
+	0.857143,0.535714,0.238095,0.0714286,0.012987,0.00108225,0,0,0,0,0,0,
+	0.875,0.583333,0.291667,0.1060601,0.0265152,0.00407925,0.000291375,0,0,0,0,0,
+	0.888889,0.622222,0.339394,0.141414,0.043512,0.009324,0.0012432,
+	0.0000777,0,0,0,0,
+	0.9,0.654545,0.381818,0.176224,0.0629371,0.0167832,0.00314685,
+	0.000370218,0.0000205677,0,0,0,
+	0.909091,0.681818,0.41958,0.20979,0.0839161,0.0262238,0.0061703, 
+	0.00102838,0.000108251,0.00000541254,0,0,
+	0.916667,0.705128,0.453297,0.241758,0.105769,0.0373303,0.0103695, 
+	0.00218306,0.000327459,0.0000311866,0.00000141757,0,
+	0.923077,0.725275,0.483516,0.271978,0.12799,0.0497738,0.015718,
+	0.00392951,0.000748478,0.000102065,0.00000887523,0.000000369801
+
+iorder,iaz1	xin
+
+iaz1 = $M_PI*iaz1/180
+
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+		xout			iNorm2D[iorder-1]*a1
+endop
+
+opcode	ambi2D_dec_inph, aa, iii	
+; weights and norms up to 12th order
+iNorm2D[] array 1,0.75,0.625,0.546875,0.492188,0.451172,0.418945,
+					0.392761,0.370941,0.352394,0.336376,0.322360
+iWeight2D[][] init   12,12
+iWeight2D     array  0.5,0,0,0,0,0,0,0,0,0,0,0,
+	0.666667,0.166667,0,0,0,0,0,0,0,0,0,0,
+	0.75,0.3,0.05,0,0,0,0,0,0,0,0,0,
+	0.8,0.4,0.114286,0.0142857,0,0,0,0,0,0,0,0,
+	0.833333,0.47619,0.178571,0.0396825,0.00396825,0,0,0,0,0,0,0,
+	0.857143,0.535714,0.238095,0.0714286,0.012987,0.00108225,0,0,0,0,0,0,
+	0.875,0.583333,0.291667,0.1060601,0.0265152,0.00407925,0.000291375,0,0,0,0,0,
+	0.888889,0.622222,0.339394,0.141414,0.043512,0.009324,0.0012432,
+	0.0000777,0,0,0,0,
+	0.9,0.654545,0.381818,0.176224,0.0629371,0.0167832,0.00314685,
+	0.000370218,0.0000205677,0,0,0,
+	0.909091,0.681818,0.41958,0.20979,0.0839161,0.0262238,0.0061703, 
+	0.00102838,0.000108251,0.00000541254,0,0,
+	0.916667,0.705128,0.453297,0.241758,0.105769,0.0373303,0.0103695, 
+	0.00218306,0.000327459,0.0000311866,0.00000141757,0,
+	0.923077,0.725275,0.483516,0.271978,0.12799,0.0497738,0.015718,
+	0.00392951,0.000748478,0.000102065,0.00000887523,0.000000369801
+
+iorder,iaz1,iaz2	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+		xout			iNorm2D[iorder-1]*a1,iNorm2D[iorder-1]*a2
+endop
+
+opcode	ambi2D_dec_inph, aaa, iiii	
+; weights and norms up to 12th order
+iNorm2D[] array 1,0.75,0.625,0.546875,0.492188,0.451172,0.418945,
+					0.392761,0.370941,0.352394,0.336376,0.322360
+iWeight2D[][] init   12,12
+iWeight2D     array  0.5,0,0,0,0,0,0,0,0,0,0,0,
+	0.666667,0.166667,0,0,0,0,0,0,0,0,0,0,
+	0.75,0.3,0.05,0,0,0,0,0,0,0,0,0,
+	0.8,0.4,0.114286,0.0142857,0,0,0,0,0,0,0,0,
+	0.833333,0.47619,0.178571,0.0396825,0.00396825,0,0,0,0,0,0,0,
+	0.857143,0.535714,0.238095,0.0714286,0.012987,0.00108225,0,0,0,0,0,0,
+	0.875,0.583333,0.291667,0.1060601,0.0265152,0.00407925,0.000291375,0,0,0,0,0,
+	0.888889,0.622222,0.339394,0.141414,0.043512,0.009324,0.0012432,
+	0.0000777,0,0,0,0,
+	0.9,0.654545,0.381818,0.176224,0.0629371,0.0167832,0.00314685,
+	0.000370218,0.0000205677,0,0,0,
+	0.909091,0.681818,0.41958,0.20979,0.0839161,0.0262238,0.0061703, 
+	0.00102838,0.000108251,0.00000541254,0,0,
+	0.916667,0.705128,0.453297,0.241758,0.105769,0.0373303,0.0103695, 
+	0.00218306,0.000327459,0.0000311866,0.00000141757,0,
+	0.923077,0.725275,0.483516,0.271978,0.12799,0.0497738,0.015718,
+	0.00392951,0.000748478,0.000102065,0.00000887523,0.000000369801
+
+iorder,iaz1,iaz2,iaz3	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+iaz3 = $M_PI*iaz3/180
+
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+kk =	iorder
+a3	=	.5*zar(0)
+c3:
+a3 +=	cos(kk*iaz3)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a3 +=	sin(kk*iaz3)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c3
+		xout	iNorm2D[iorder-1]*a1,iNorm2D[iorder-1]*a2,iNorm2D[iorder-1]*a3
+endop
+
+opcode	ambi2D_dec_inph, aaaa, iiiii	
+; weights and norms up to 12th order
+iNorm2D[] array 1,0.75,0.625,0.546875,0.492188,0.451172,0.418945,
+					0.392761,0.370941,0.352394,0.336376,0.322360
+iWeight2D[][] init   12,12
+iWeight2D     array  0.5,0,0,0,0,0,0,0,0,0,0,0,
+	0.666667,0.166667,0,0,0,0,0,0,0,0,0,0,
+	0.75,0.3,0.05,0,0,0,0,0,0,0,0,0,
+	0.8,0.4,0.114286,0.0142857,0,0,0,0,0,0,0,0,
+	0.833333,0.47619,0.178571,0.0396825,0.00396825,0,0,0,0,0,0,0,
+	0.857143,0.535714,0.238095,0.0714286,0.012987,0.00108225,0,0,0,0,0,0,
+	0.875,0.583333,0.291667,0.1060601,0.0265152,0.00407925,0.000291375,0,0,0,0,0,
+	0.888889,0.622222,0.339394,0.141414,0.043512,0.009324,0.0012432,
+	0.0000777,0,0,0,0,
+	0.9,0.654545,0.381818,0.176224,0.0629371,0.0167832,0.00314685,
+	0.000370218,0.0000205677,0,0,0,
+	0.909091,0.681818,0.41958,0.20979,0.0839161,0.0262238,0.0061703, 
+	0.00102838,0.000108251,0.00000541254,0,0,
+	0.916667,0.705128,0.453297,0.241758,0.105769,0.0373303,0.0103695, 
+	0.00218306,0.000327459,0.0000311866,0.00000141757,0,
+	0.923077,0.725275,0.483516,0.271978,0.12799,0.0497738,0.015718,
+	0.00392951,0.000748478,0.000102065,0.00000887523,0.000000369801
+
+iorder,iaz1,iaz2,iaz3,iaz4	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+iaz3 = $M_PI*iaz3/180
+iaz4 = $M_PI*iaz4/180
+
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+kk =	iorder
+a3	=	.5*zar(0)
+c3:
+a3 +=	cos(kk*iaz3)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a3 +=	sin(kk*iaz3)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c3
+kk =	iorder
+a4	=	.5*zar(0)
+c4:
+a4 +=	cos(kk*iaz4)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a4 +=	sin(kk*iaz4)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c4
+		xout	iNorm2D[iorder-1]*a1,iNorm2D[iorder-1]*a2,iNorm2D[iorder-1]*a3,
+		iNorm2D[iorder-1]*a4
+endop
+
+opcode	ambi2D_dec_inph, aaaaa, iiiiii	
+; weights and norms up to 12th order
+iNorm2D[] array 1,0.75,0.625,0.546875,0.492188,0.451172,0.418945,
+					0.392761,0.370941,0.352394,0.336376,0.322360
+iWeight2D[][] init   12,12
+iWeight2D     array  0.5,0,0,0,0,0,0,0,0,0,0,0,
+	0.666667,0.166667,0,0,0,0,0,0,0,0,0,0,
+	0.75,0.3,0.05,0,0,0,0,0,0,0,0,0,
+	0.8,0.4,0.114286,0.0142857,0,0,0,0,0,0,0,0,
+	0.833333,0.47619,0.178571,0.0396825,0.00396825,0,0,0,0,0,0,0,
+	0.857143,0.535714,0.238095,0.0714286,0.012987,0.00108225,0,0,0,0,0,0,
+	0.875,0.583333,0.291667,0.1060601,0.0265152,0.00407925,0.000291375,0,0,0,0,0,
+	0.888889,0.622222,0.339394,0.141414,0.043512,0.009324,0.0012432,
+	0.0000777,0,0,0,0,
+	0.9,0.654545,0.381818,0.176224,0.0629371,0.0167832,0.00314685,
+	0.000370218,0.0000205677,0,0,0,
+	0.909091,0.681818,0.41958,0.20979,0.0839161,0.0262238,0.0061703, 
+	0.00102838,0.000108251,0.00000541254,0,0,
+	0.916667,0.705128,0.453297,0.241758,0.105769,0.0373303,0.0103695, 
+	0.00218306,0.000327459,0.0000311866,0.00000141757,0,
+	0.923077,0.725275,0.483516,0.271978,0.12799,0.0497738,0.015718,
+	0.00392951,0.000748478,0.000102065,0.00000887523,0.000000369801
+
+iorder,iaz1,iaz2,iaz3,iaz4,iaz5	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+iaz3 = $M_PI*iaz3/180
+iaz4 = $M_PI*iaz4/180
+iaz5 = $M_PI*iaz5/180
+
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+kk =	iorder
+a3	=	.5*zar(0)
+c3:
+a3 +=	cos(kk*iaz3)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a3 +=	sin(kk*iaz3)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c3
+kk =	iorder
+a4	=	.5*zar(0)
+c4:
+a4 +=	cos(kk*iaz4)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a4 +=	sin(kk*iaz4)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c4
+kk =	iorder
+a5	=	.5*zar(0)
+c5:
+a5 +=	cos(kk*iaz5)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a5 +=	sin(kk*iaz5)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c5
+		xout	iNorm2D[iorder-1]*a1,iNorm2D[iorder-1]*a2,iNorm2D[iorder-1]*a3,
+		iNorm2D[iorder-1]*a4,iNorm2D[iorder-1]*a5
+endop
+
+opcode	ambi2D_dec_inph, aaaaaa, iiiiiii	
+; weights and norms up to 12th order
+iNorm2D[] array 1,0.75,0.625,0.546875,0.492188,0.451172,0.418945,
+					0.392761,0.370941,0.352394,0.336376,0.322360
+iWeight2D[][] init   12,12
+iWeight2D     array  0.5,0,0,0,0,0,0,0,0,0,0,0,
+	0.666667,0.166667,0,0,0,0,0,0,0,0,0,0,
+	0.75,0.3,0.05,0,0,0,0,0,0,0,0,0,
+	0.8,0.4,0.114286,0.0142857,0,0,0,0,0,0,0,0,
+	0.833333,0.47619,0.178571,0.0396825,0.00396825,0,0,0,0,0,0,0,
+	0.857143,0.535714,0.238095,0.0714286,0.012987,0.00108225,0,0,0,0,0,0,
+	0.875,0.583333,0.291667,0.1060601,0.0265152,0.00407925,0.000291375,0,0,0,0,0,
+	0.888889,0.622222,0.339394,0.141414,0.043512,0.009324,0.0012432,
+	0.0000777,0,0,0,0,
+	0.9,0.654545,0.381818,0.176224,0.0629371,0.0167832,0.00314685,
+	0.000370218,0.0000205677,0,0,0,
+	0.909091,0.681818,0.41958,0.20979,0.0839161,0.0262238,0.0061703, 
+	0.00102838,0.000108251,0.00000541254,0,0,
+	0.916667,0.705128,0.453297,0.241758,0.105769,0.0373303,0.0103695, 
+	0.00218306,0.000327459,0.0000311866,0.00000141757,0,
+	0.923077,0.725275,0.483516,0.271978,0.12799,0.0497738,0.015718,
+	0.00392951,0.000748478,0.000102065,0.00000887523,0.000000369801
+
+iorder,iaz1,iaz2,iaz3,iaz4,iaz5,iaz6	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+iaz3 = $M_PI*iaz3/180
+iaz4 = $M_PI*iaz4/180
+iaz5 = $M_PI*iaz5/180
+iaz6 = $M_PI*iaz6/180
+
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+kk =	iorder
+a3	=	.5*zar(0)
+c3:
+a3 +=	cos(kk*iaz3)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a3 +=	sin(kk*iaz3)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c3
+kk =	iorder
+a4	=	.5*zar(0)
+c4:
+a4 +=	cos(kk*iaz4)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a4 +=	sin(kk*iaz4)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c4
+kk =	iorder
+a5	=	.5*zar(0)
+c5:
+a5 +=	cos(kk*iaz5)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a5 +=	sin(kk*iaz5)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c5
+kk =	iorder
+a6	=	.5*zar(0)
+c6:
+a6 +=	cos(kk*iaz6)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a6 +=	sin(kk*iaz6)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c6
+		xout	iNorm2D[iorder-1]*a1,iNorm2D[iorder-1]*a2,iNorm2D[iorder-1]*a3,
+		iNorm2D[iorder-1]*a4,iNorm2D[iorder-1]*a5,iNorm2D[iorder-1]*a6
+endop
+
+opcode	ambi2D_dec_inph, aaaaaaa, iiiiiiii	
+; weights and norms up to 12th order
+iNorm2D[] array 1,0.75,0.625,0.546875,0.492188,0.451172,0.418945,
+					0.392761,0.370941,0.352394,0.336376,0.322360
+iWeight2D[][] init   12,12
+iWeight2D     array  0.5,0,0,0,0,0,0,0,0,0,0,0,
+	0.666667,0.166667,0,0,0,0,0,0,0,0,0,0,
+	0.75,0.3,0.05,0,0,0,0,0,0,0,0,0,
+	0.8,0.4,0.114286,0.0142857,0,0,0,0,0,0,0,0,
+	0.833333,0.47619,0.178571,0.0396825,0.00396825,0,0,0,0,0,0,0,
+	0.857143,0.535714,0.238095,0.0714286,0.012987,0.00108225,0,0,0,0,0,0,
+	0.875,0.583333,0.291667,0.1060601,0.0265152,0.00407925,0.000291375,0,0,0,0,0,
+	0.888889,0.622222,0.339394,0.141414,0.043512,0.009324,0.0012432,
+	0.0000777,0,0,0,0,
+	0.9,0.654545,0.381818,0.176224,0.0629371,0.0167832,0.00314685,
+	0.000370218,0.0000205677,0,0,0,
+	0.909091,0.681818,0.41958,0.20979,0.0839161,0.0262238,0.0061703, 
+	0.00102838,0.000108251,0.00000541254,0,0,
+	0.916667,0.705128,0.453297,0.241758,0.105769,0.0373303,0.0103695, 
+	0.00218306,0.000327459,0.0000311866,0.00000141757,0,
+	0.923077,0.725275,0.483516,0.271978,0.12799,0.0497738,0.015718,
+	0.00392951,0.000748478,0.000102065,0.00000887523,0.000000369801
+
+iorder,iaz1,iaz2,iaz3,iaz4,iaz5,iaz6,iaz7	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+iaz3 = $M_PI*iaz3/180
+iaz4 = $M_PI*iaz4/180
+iaz5 = $M_PI*iaz5/180
+iaz6 = $M_PI*iaz6/180
+iaz7 = $M_PI*iaz7/180
+
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+kk =	iorder
+a3	=	.5*zar(0)
+c3:
+a3 +=	cos(kk*iaz3)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a3 +=	sin(kk*iaz3)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c3
+kk =	iorder
+a4	=	.5*zar(0)
+c4:
+a4 +=	cos(kk*iaz4)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a4 +=	sin(kk*iaz4)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c4
+kk =	iorder
+a5	=	.5*zar(0)
+c5:
+a5 +=	cos(kk*iaz5)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a5 +=	sin(kk*iaz5)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c5
+kk =	iorder
+a6	=	.5*zar(0)
+c6:
+a6 +=	cos(kk*iaz6)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a6 +=	sin(kk*iaz6)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c6
+kk =	iorder
+a7	=	.5*zar(0)
+c7:
+a7 +=	cos(kk*iaz7)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a7 +=	sin(kk*iaz7)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c7
+		xout	iNorm2D[iorder-1]*a1,iNorm2D[iorder-1]*a2,iNorm2D[iorder-1]*a3,
+		iNorm2D[iorder-1]*a4,iNorm2D[iorder-1]*a5,iNorm2D[iorder-1]*a6,
+		iNorm2D[iorder-1]*a7
+endop
+
+opcode	ambi2D_dec_inph, aaaaaaaa, iiiiiiiii	
+; weights and norms up to 12th order
+iNorm2D[] array 1,0.75,0.625,0.546875,0.492188,0.451172,0.418945,
+					0.392761,0.370941,0.352394,0.336376,0.322360
+iWeight2D[][] init   12,12
+iWeight2D     array  0.5,0,0,0,0,0,0,0,0,0,0,0,
+	0.666667,0.166667,0,0,0,0,0,0,0,0,0,0,
+	0.75,0.3,0.05,0,0,0,0,0,0,0,0,0,
+	0.8,0.4,0.114286,0.0142857,0,0,0,0,0,0,0,0,
+	0.833333,0.47619,0.178571,0.0396825,0.00396825,0,0,0,0,0,0,0,
+	0.857143,0.535714,0.238095,0.0714286,0.012987,0.00108225,0,0,0,0,0,0,
+	0.875,0.583333,0.291667,0.1060601,0.0265152,0.00407925,0.000291375,0,0,0,0,0,
+	0.888889,0.622222,0.339394,0.141414,0.043512,0.009324,0.0012432,
+	0.0000777,0,0,0,0,
+	0.9,0.654545,0.381818,0.176224,0.0629371,0.0167832,0.00314685,
+	0.000370218,0.0000205677,0,0,0,
+	0.909091,0.681818,0.41958,0.20979,0.0839161,0.0262238,0.0061703, 
+	0.00102838,0.000108251,0.00000541254,0,0,
+	0.916667,0.705128,0.453297,0.241758,0.105769,0.0373303,0.0103695, 
+	0.00218306,0.000327459,0.0000311866,0.00000141757,0,
+	0.923077,0.725275,0.483516,0.271978,0.12799,0.0497738,0.015718,
+	0.00392951,0.000748478,0.000102065,0.00000887523,0.000000369801
+
+iorder,iaz1,iaz2,iaz3,iaz4,iaz5,iaz6,iaz7,iaz8	xin
+
+iaz1 = $M_PI*iaz1/180
+iaz2 = $M_PI*iaz2/180
+iaz3 = $M_PI*iaz3/180
+iaz4 = $M_PI*iaz4/180
+iaz5 = $M_PI*iaz5/180
+iaz6 = $M_PI*iaz6/180
+iaz7 = $M_PI*iaz7/180
+iaz8 = $M_PI*iaz8/180
+
+kk =	iorder
+a1	=	.5*zar(0)
+c1:
+a1 +=	cos(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a1 +=	sin(kk*iaz1)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c1
+kk =	iorder
+a2	=	.5*zar(0)
+c2:
+a2 +=	cos(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a2 +=	sin(kk*iaz2)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c2
+kk =	iorder
+a3	=	.5*zar(0)
+c3:
+a3 +=	cos(kk*iaz3)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a3 +=	sin(kk*iaz3)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c3
+kk =	iorder
+a4	=	.5*zar(0)
+c4:
+a4 +=	cos(kk*iaz4)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a4 +=	sin(kk*iaz4)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c4
+kk =	iorder
+a5	=	.5*zar(0)
+c5:
+a5 +=	cos(kk*iaz5)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a5 +=	sin(kk*iaz5)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c5
+kk =	iorder
+a6	=	.5*zar(0)
+c6:
+a6 +=	cos(kk*iaz6)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a6 +=	sin(kk*iaz6)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c6
+kk =	iorder
+a7	=	.5*zar(0)
+c7:
+a7 +=	cos(kk*iaz7)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a7 +=	sin(kk*iaz7)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c7
+kk =	iorder
+a8	=	.5*zar(0)
+c8:
+a8 +=	cos(kk*iaz8)*iWeight2D[iorder-1][kk-1]*zar(2*kk-1)
+a8 +=	sin(kk*iaz8)*iWeight2D[iorder-1][kk-1]*zar(2*kk)
+kk =		kk-1
+if	kk > 0 goto c8
+		xout	iNorm2D[iorder-1]*a1,iNorm2D[iorder-1]*a2,iNorm2D[iorder-1]*a3,
+		iNorm2D[iorder-1]*a4,iNorm2D[iorder-1]*a5,iNorm2D[iorder-1]*a6,
+		iNorm2D[iorder-1]*a7,iNorm2D[iorder-1]*a8
+endop
+
+;**************
+opcode	ambi2D_write_B,	k, Sii	
+Sname,iorder,iformat		xin
+	if(iorder == 1) then
+	fout	Sname,iformat,zar(0),zar(1),zar(2)
+	elseif(iorder == 2) then
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4)
+	elseif(iorder == 3) then
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6)
+	elseif(iorder == 4) then
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+	zar(7),zar(8)
+	elseif(iorder == 5) then
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+	zar(7),zar(8),zar(9),zar(10)
+	elseif(iorder == 6) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12)
+	elseif(iorder == 7) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14)
+	elseif(iorder == 8) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16)
+	elseif(iorder == 9) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16),zar(17),zar(18)
+	elseif(iorder == 10) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16),zar(17),zar(18),zar(19),zar(20)
+	elseif(iorder == 11) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16),zar(17),zar(18),zar(19),zar(20),zar(21),zar(22)
+	elseif(iorder == 12) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16),zar(17),zar(18),zar(19),zar(20),zar(21),zar(22),zar(23),zar(24)
+	elseif(iorder == 13) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16),zar(17),zar(18),zar(19),zar(20),zar(21),zar(22),zar(23),zar(24),zar(25),zar(26)
+	elseif(iorder == 14) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16),zar(17),zar(18),zar(19),zar(20),zar(21),zar(22),zar(23),zar(24),zar(25),zar(26),zar(27),zar(28)
+	elseif(iorder == 15) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16),zar(17),zar(18),zar(19),zar(20),zar(21),zar(22),zar(23),zar(24),zar(25),zar(26),zar(27),zar(28),zar(29),zar(30)
+	elseif(iorder == 16) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16),zar(17),zar(18),zar(19),zar(20),zar(21),zar(22),zar(23),zar(24),zar(25),zar(26),zar(27),zar(28),zar(29),zar(30),zar(31),zar(32)
+	elseif(iorder == 17) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16),zar(17),zar(18),zar(19),zar(20),zar(21),zar(22),zar(23),zar(24),zar(25),zar(26),zar(27),zar(28),zar(29),zar(30),zar(31),zar(32),zar(33),zar(34)
+	elseif(iorder == 18) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16),zar(17),zar(18),zar(19),zar(20),zar(21),zar(22),zar(23),zar(24),zar(25),zar(26),zar(27),zar(28),zar(29),zar(30),zar(31),zar(32),zar(33),zar(34),zar(35),zar(36)
+	elseif(iorder == 19) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16),zar(17),zar(18),zar(19),zar(20),zar(21),zar(22),zar(23),zar(24),zar(25),zar(26),zar(27),zar(28),zar(29),zar(30),zar(31),zar(32),zar(33),zar(34),zar(35),zar(36),zar(37),zar(38)
+	elseif(iorder == 20) then				
+	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3),zar(4),zar(5),zar(6),
+zar(7),zar(8),zar(9),zar(10),zar(11),zar(12),zar(13),zar(14),zar(15),zar(16),zar(17),zar(18),zar(19),zar(20),zar(21),zar(22),zar(23),zar(24),zar(25),zar(26),zar(27),zar(28),zar(29),zar(30),zar(31),zar(32),zar(33),zar(34),zar(35),zar(36),zar(37),zar(38),zar(39),zar(40)
+
+	endif
+endop
+
+;;;;;;;;;
+
+
+opcode	ambi2D_read_B, k,	Si		
+Sname,iorder			xin
+if(iorder == 1) then
+
+a1,a2,a3	soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+endif	
+if(iorder == 2) then
+a1,a2,a3,a4,a5	soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4
+endif
+if(iorder == 3) then
+a1,a2,a3,a4,a5,a6,a7	soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4
+	zawm	a6,5
+	zawm	a7,6
+endif
+if(iorder == 4) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9	soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+endif
+if(iorder == 5) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11	soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10
+endif
+if(iorder == 6) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13	soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+endif
+if(iorder == 7) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15 soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+endif
+if(iorder == 8) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17 soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+	zawm	a16,15
+	zawm	a17,16	
+endif
+if(iorder == 9) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19 soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+	zawm	a16,15
+	zawm	a17,16	
+	zawm	a18,17
+	zawm	a19,18
+endif
+if(iorder == 10) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21	soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+	zawm	a16,15
+	zawm	a17,16	
+	zawm	a18,17
+	zawm	a19,18
+	zawm	a20,19
+	zawm	a21,20	
+endif
+if(iorder == 11) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23 soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+	zawm	a16,15
+	zawm	a17,16	
+	zawm	a18,17
+	zawm	a19,18
+	zawm	a20,19
+	zawm	a21,20	
+	zawm	a22,21
+	zawm	a23,22	
+endif
+if(iorder == 12) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25 soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+	zawm	a16,15
+	zawm	a17,16	
+	zawm	a18,17
+	zawm	a19,18
+	zawm	a20,19
+	zawm	a21,20	
+	zawm	a22,21
+	zawm	a23,22	
+	zawm	a24,23
+	zawm	a25,24	
+endif
+if(iorder == 13) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27	soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+	zawm	a16,15
+	zawm	a17,16	
+	zawm	a18,17
+	zawm	a19,18
+	zawm	a20,19
+	zawm	a21,20	
+	zawm	a22,21
+	zawm	a23,22	
+	zawm	a24,23
+	zawm	a25,24	
+	zawm	a26,25
+	zawm	a27,26	
+endif
+if(iorder == 14) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29 soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+	zawm	a16,15
+	zawm	a17,16	
+	zawm	a18,17
+	zawm	a19,18
+	zawm	a20,19
+	zawm	a21,20	
+	zawm	a22,21
+	zawm	a23,22	
+	zawm	a24,23
+	zawm	a25,24	
+	zawm	a26,25
+	zawm	a27,26	
+	zawm	a28,27
+	zawm	a29,28
+endif
+if(iorder == 15) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31	soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+	zawm	a16,15
+	zawm	a17,16	
+	zawm	a18,17
+	zawm	a19,18
+	zawm	a20,19
+	zawm	a21,20	
+	zawm	a22,21
+	zawm	a23,22	
+	zawm	a24,23
+	zawm	a25,24	
+	zawm	a26,25
+	zawm	a27,26	
+	zawm	a28,27
+	zawm	a29,28
+	zawm	a30,29
+	zawm	a31,30	
+endif
+if(iorder == 16) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31,a32,a33 soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+	zawm	a16,15
+	zawm	a17,16	
+	zawm	a18,17
+	zawm	a19,18
+	zawm	a20,19
+	zawm	a21,20	
+	zawm	a22,21
+	zawm	a23,22	
+	zawm	a24,23
+	zawm	a25,24	
+	zawm	a26,25
+	zawm	a27,26	
+	zawm	a28,27
+	zawm	a29,28
+	zawm	a30,29
+	zawm	a31,30	
+	zawm	a32,31
+	zawm	a33,32	
+endif
+if(iorder == 17) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31,a32,a33,a34,a35 soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+	zawm	a16,15
+	zawm	a17,16	
+	zawm	a18,17
+	zawm	a19,18
+	zawm	a20,19
+	zawm	a21,20	
+	zawm	a22,21
+	zawm	a23,22	
+	zawm	a24,23
+	zawm	a25,24	
+	zawm	a26,25
+	zawm	a27,26	
+	zawm	a28,27
+	zawm	a29,28
+	zawm	a30,29
+	zawm	a31,30	
+	zawm	a32,31
+	zawm	a33,32	
+	zawm	a34,33
+	zawm	a35,34	
+endif
+if(iorder == 18) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31,a32,a33,a34,a35,a36,a37	soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+	zawm	a16,15
+	zawm	a17,16	
+	zawm	a18,17
+	zawm	a19,18
+	zawm	a20,19
+	zawm	a21,20	
+	zawm	a22,21
+	zawm	a23,22	
+	zawm	a24,23
+	zawm	a25,24	
+	zawm	a26,25
+	zawm	a27,26	
+	zawm	a28,27
+	zawm	a29,28
+	zawm	a30,29
+	zawm	a31,30	
+	zawm	a32,31
+	zawm	a33,32	
+	zawm	a34,33
+	zawm	a35,34	
+	zawm	a36,35
+	zawm	a37,36	
+endif
+if(iorder == 19) then
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31,a32,a33,a34,a35,a36,a37,a38,a39	soundin Sname
+	zawm	a1,0	
+	zawm	a2,1
+	zawm	a3,2	
+	zawm	a4,3
+	zawm	a5,4	
+	zawm	a6,5
+	zawm	a7,6	
+	zawm	a8,7
+	zawm	a9,8
+	zawm	a10,9
+	zawm	a11,10	
+	zawm	a12,11
+	zawm	a13,12	
+	zawm	a14,13
+	zawm	a15,14	
+	zawm	a16,15
+	zawm	a17,16	
+	zawm	a18,17
+	zawm	a19,18
+	zawm	a20,19
+	zawm	a21,20	
+	zawm	a22,21
+	zawm	a23,22	
+	zawm	a24,23
+	zawm	a25,24	
+	zawm	a26,25
+	zawm	a27,26	
+	zawm	a28,27
+	zawm	a29,28
+	zawm	a30,29
+	zawm	a31,30	
+	zawm	a32,31
+	zawm	a33,32	
+	zawm	a34,33
+	zawm	a35,34	
+	zawm	a36,35
+	zawm	a37,36	
+	zawm	a38,37
+	zawm	a39,38
+endif
+endop
+
+;;;;;;;;;
+
+
+opcode xy_to_ad, kk, kk  
+kx,ky		xin
+kdist =	sqrt(kx*kx+ky*ky)
+kaz 		taninv2	ky,kx
+			xout		180*kaz/$M_PI, kdist
+
+endop

@@ -6,8 +6,6 @@
 </CsOptions>
 
 <CsInstruments>
-;Example by Iain McCurdy
-
 ksmps = 32 ;no audio so sr and nchnls omitted
 
   instr 1

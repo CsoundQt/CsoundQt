@@ -25,4 +25,4 @@ i 1 0 10
 e
 </CsScore>
 </CsoundSynthesizer>
-;Example by Christopher Saunders
+;Example by Christopher Saunders</code>

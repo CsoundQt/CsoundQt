@@ -62,4 +62,3 @@ i "k_global_read" 0 1
 </CsScore>
 </CsoundSynthesizer>
 ;example by joachim heintz
-

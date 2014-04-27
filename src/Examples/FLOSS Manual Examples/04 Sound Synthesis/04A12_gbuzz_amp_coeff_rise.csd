@@ -18,7 +18,6 @@ knh  =     20
 klh  =     1
 kmul line  0, p3, 2
 asig gbuzz 1, 100, knh, klh, kmul, gicos
-fout "gbuzz3.wav",4,asig
  endin
 
 </CsInstruments>

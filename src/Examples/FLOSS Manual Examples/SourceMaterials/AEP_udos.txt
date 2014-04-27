@@ -1,0 +1,702 @@
+opcode	AEP1, a, akiiiikkkkkk	; soundin, order, ixs, iys, izs, idsmax, kx, ky, kz
+ain,korder,ixs,iys,izs,idsmax,kx,ky,kz,kdist,kfade,kgain	xin 
+idists =		sqrt(ixs*ixs+iys*iys+izs*izs)
+kpan =			kgain*((1-kfade+kfade*(kx*ixs+ky*iys+kz*izs)/(kdist*idists))^korder)
+		xout	ain*kpan*idists/idsmax
+endop
+
+opcode AEP_xyz, a, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+
+				xout		a1
+endop
+
+opcode AEP_xyz, aa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+
+				xout		a1,a2
+endop
+
+opcode AEP_xyz, aaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+	
+				xout		a1,a2,a3
+endop
+
+opcode AEP_xyz, aaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+	
+				xout		a1,a2,a3,a4
+endop
+
+opcode AEP_xyz, aaaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,table(13,ifn),table(14,ifn),table(15,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+				xout		a1,a2,a3,a4,a5
+endop
+
+
+opcode AEP_xyz, aaaaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,table(13,ifn),table(14,ifn),table(15,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,table(16,ifn),table(17,ifn),table(18,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+
+
+				xout		a1,a2,a3,a4,a5,a6
+endop
+
+opcode AEP_xyz, aaaaaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,table(13,ifn),table(14,ifn),table(15,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,table(16,ifn),table(17,ifn),table(18,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a7		AEP1 ain,korder,table(19,ifn),table(20,ifn),table(21,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+
+				xout		a1,a2,a3,a4,a5,a6,a7
+endop
+
+opcode AEP_xyz, aaaaaaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,table(13,ifn),table(14,ifn),table(15,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,table(16,ifn),table(17,ifn),table(18,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a7		AEP1 ain,korder,table(19,ifn),table(20,ifn),table(21,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a8		AEP1 ain,korder,table(22,ifn),table(23,ifn),table(24,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+
+				xout		a1,a2,a3,a4,a5,a6,a7,a8
+endop
+
+opcode AEP_xyz, aaaaaaaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,table(13,ifn),table(14,ifn),table(15,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,table(16,ifn),table(17,ifn),table(18,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a7		AEP1 ain,korder,table(19,ifn),table(20,ifn),table(21,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a8		AEP1 ain,korder,table(22,ifn),table(23,ifn),table(24,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a9		AEP1 ain,korder,table(25,ifn),table(26,ifn),table(27,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+								
+		xout		a1,a2,a3,a4,a5,a6,a7,a8,a9
+endop
+
+opcode AEP_xyz, aaaaaaaaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,table(13,ifn),table(14,ifn),table(15,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,table(16,ifn),table(17,ifn),table(18,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a7		AEP1 ain,korder,table(19,ifn),table(20,ifn),table(21,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a8		AEP1 ain,korder,table(22,ifn),table(23,ifn),table(24,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a9		AEP1 ain,korder,table(25,ifn),table(26,ifn),table(27,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a10		AEP1 ain,korder,table(28,ifn),table(29,ifn),table(30,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+								
+		xout		a1,a2,a3,a4,a5,a6,a7,a8,a9,a10
+endop
+
+opcode AEP_xyz, aaaaaaaaaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,table(13,ifn),table(14,ifn),table(15,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,table(16,ifn),table(17,ifn),table(18,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a7		AEP1 ain,korder,table(19,ifn),table(20,ifn),table(21,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a8		AEP1 ain,korder,table(22,ifn),table(23,ifn),table(24,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a9		AEP1 ain,korder,table(25,ifn),table(26,ifn),table(27,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a10		AEP1 ain,korder,table(28,ifn),table(29,ifn),table(30,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a11		AEP1 ain,korder,table(31,ifn),table(32,ifn),table(33,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+								
+		xout		a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11
+endop
+
+opcode AEP_xyz, aaaaaaaaaaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,table(13,ifn),table(14,ifn),table(15,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,table(16,ifn),table(17,ifn),table(18,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a7		AEP1 ain,korder,table(19,ifn),table(20,ifn),table(21,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a8		AEP1 ain,korder,table(22,ifn),table(23,ifn),table(24,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a9		AEP1 ain,korder,table(25,ifn),table(26,ifn),table(27,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a10		AEP1 ain,korder,table(28,ifn),table(29,ifn),table(30,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a11		AEP1 ain,korder,table(31,ifn),table(32,ifn),table(33,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a12		AEP1 ain,korder,table(34,ifn),table(35,ifn),table(36,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain					
+								
+		xout		a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12
+endop
+
+opcode AEP_xyz, aaaaaaaaaaaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,table(13,ifn),table(14,ifn),table(15,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,table(16,ifn),table(17,ifn),table(18,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a7		AEP1 ain,korder,table(19,ifn),table(20,ifn),table(21,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a8		AEP1 ain,korder,table(22,ifn),table(23,ifn),table(24,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a9		AEP1 ain,korder,table(25,ifn),table(26,ifn),table(27,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a10		AEP1 ain,korder,table(28,ifn),table(29,ifn),table(30,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a11		AEP1 ain,korder,table(31,ifn),table(32,ifn),table(33,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a12		AEP1 ain,korder,table(34,ifn),table(35,ifn),table(36,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain					
+a13		AEP1 ain,korder,table(37,ifn),table(38,ifn),table(39,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain					
+								
+		xout		a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13
+endop
+
+opcode AEP_xyz, aaaaaaaaaaaaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,table(13,ifn),table(14,ifn),table(15,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,table(16,ifn),table(17,ifn),table(18,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a7		AEP1 ain,korder,table(19,ifn),table(20,ifn),table(21,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a8		AEP1 ain,korder,table(22,ifn),table(23,ifn),table(24,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a9		AEP1 ain,korder,table(25,ifn),table(26,ifn),table(27,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a10		AEP1 ain,korder,table(28,ifn),table(29,ifn),table(30,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a11		AEP1 ain,korder,table(31,ifn),table(32,ifn),table(33,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a12		AEP1 ain,korder,table(34,ifn),table(35,ifn),table(36,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain					
+a13		AEP1 ain,korder,table(37,ifn),table(38,ifn),table(39,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain			
+a14		AEP1 ain,korder,table(40,ifn),table(41,ifn),table(42,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain		
+								
+		xout		a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14
+endop
+
+opcode AEP_xyz, aaaaaaaaaaaaaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,table(13,ifn),table(14,ifn),table(15,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,table(16,ifn),table(17,ifn),table(18,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a7		AEP1 ain,korder,table(19,ifn),table(20,ifn),table(21,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a8		AEP1 ain,korder,table(22,ifn),table(23,ifn),table(24,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a9		AEP1 ain,korder,table(25,ifn),table(26,ifn),table(27,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a10		AEP1 ain,korder,table(28,ifn),table(29,ifn),table(30,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a11		AEP1 ain,korder,table(31,ifn),table(32,ifn),table(33,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a12		AEP1 ain,korder,table(34,ifn),table(35,ifn),table(36,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain					
+a13		AEP1 ain,korder,table(37,ifn),table(38,ifn),table(39,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain			
+a14		AEP1 ain,korder,table(40,ifn),table(41,ifn),table(42,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a15		AEP1 ain,korder,table(43,ifn),table(44,ifn),table(45,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+								
+		xout		a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15
+endop
+
+opcode AEP_xyz, aaaaaaaaaaaaaaaa, akikkk  
+ain,korder,ifn,kx,ky,kz	xin 
+idsmax	 table 0,ifn
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,table(1,ifn),table(2,ifn),table(3,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,table(4,ifn),table(5,ifn),table(6,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,table(7,ifn),table(8,ifn),table(9,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,table(10,ifn),table(11,ifn),table(12,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,table(13,ifn),table(14,ifn),table(15,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,table(16,ifn),table(17,ifn),table(18,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a7		AEP1 ain,korder,table(19,ifn),table(20,ifn),table(21,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a8		AEP1 ain,korder,table(22,ifn),table(23,ifn),table(24,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a9		AEP1 ain,korder,table(25,ifn),table(26,ifn),table(27,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a10		AEP1 ain,korder,table(28,ifn),table(29,ifn),table(30,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a11		AEP1 ain,korder,table(31,ifn),table(32,ifn),table(33,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a12		AEP1 ain,korder,table(34,ifn),table(35,ifn),table(36,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain					
+a13		AEP1 ain,korder,table(37,ifn),table(38,ifn),table(39,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain			
+a14		AEP1 ain,korder,table(40,ifn),table(41,ifn),table(42,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a15		AEP1 ain,korder,table(43,ifn),table(44,ifn),table(45,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a16		AEP1 ain,korder,table(46,ifn),table(47,ifn),table(48,ifn),
+							idsmax,kx,ky,kz,kdist,kfade,kgain								
+		xout		a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16
+endop
+
+;;;;;;;;;;;
+
+
+opcode AEP, a, akikkk 
+ain,korder,ifn,kaz,kel,kdist	xin 
+kaz = $M_PI*kaz/180
+kel = $M_PI*kel/180
+kx = kdist*cos(kel)*cos(kaz)
+ky = kdist*cos(kel)*sin(kaz)
+kz = kdist*sin(kel)
+ispeaker[] array 0, table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*cos(($M_PI/180)*table(1,ifn)), table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*sin(($M_PI/180)*table(1,ifn)),table(3,ifn)*sin(($M_PI/180)*table(2,ifn))
+idsmax	 table 0,ifn
+kdist =		kdist+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,ispeaker[1],ispeaker[2],ispeaker[3],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+	
+				xout		a1
+endop
+
+
+opcode AEP, aa, akikkk 
+ain,korder,ifn,kaz,kel,kdist	xin 
+kaz = $M_PI*kaz/180
+kel = $M_PI*kel/180
+kx = kdist*cos(kel)*cos(kaz)
+ky = kdist*cos(kel)*sin(kaz)
+kz = kdist*sin(kel)
+ispeaker[] array 0, table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*cos(($M_PI/180)*table(1,ifn)), table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*sin(($M_PI/180)*table(1,ifn)),table(3,ifn)*sin(($M_PI/180)*table(2,ifn)),
+table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*cos(($M_PI/180)*table(4,ifn)), table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*sin(($M_PI/180)*table(4,ifn)),table(6,ifn)*sin(($M_PI/180)*table(5,ifn))
+
+idsmax	 table 0,ifn
+kdist =		kdist+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,ispeaker[1],ispeaker[2],ispeaker[3],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,ispeaker[4],ispeaker[5],ispeaker[6],
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+				xout		a1,a2
+endop
+
+
+opcode AEP, aaa, akikkk 
+ain,korder,ifn,kaz,kel,kdist	xin 
+kaz = $M_PI*kaz/180
+kel = $M_PI*kel/180
+kx = kdist*cos(kel)*cos(kaz)
+ky = kdist*cos(kel)*sin(kaz)
+kz = kdist*sin(kel)
+ispeaker[] array 0, table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*cos(($M_PI/180)*table(1,ifn)), table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*sin(($M_PI/180)*table(1,ifn)),table(3,ifn)*sin(($M_PI/180)*table(2,ifn)),
+table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*cos(($M_PI/180)*table(4,ifn)), table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*sin(($M_PI/180)*table(4,ifn)),table(6,ifn)*sin(($M_PI/180)*table(5,ifn)),
+table(9,ifn)*cos(($M_PI/180)*table(8,ifn))*cos(($M_PI/180)*table(7,ifn)), table(9,ifn)*cos(($M_PI/180)*table(8,ifn))*sin(($M_PI/180)*table(7,ifn)),table(9,ifn)*sin(($M_PI/180)*table(8,ifn))
+
+idsmax	 table 0,ifn
+kdist =		kdist+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,ispeaker[1],ispeaker[2],ispeaker[3],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,ispeaker[4],ispeaker[5],ispeaker[6],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,ispeaker[7],ispeaker[8],ispeaker[9],
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+				xout		a1,a2,a3
+endop
+
+
+opcode AEP, aaaa, akikkk 
+ain,korder,ifn,kaz,kel,kdist	xin 
+kaz = $M_PI*kaz/180
+kel = $M_PI*kel/180
+kx = kdist*cos(kel)*cos(kaz)
+ky = kdist*cos(kel)*sin(kaz)
+kz = kdist*sin(kel)
+ispeaker[] array 0, table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*cos(($M_PI/180)*table(1,ifn)), table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*sin(($M_PI/180)*table(1,ifn)),table(3,ifn)*sin(($M_PI/180)*table(2,ifn)),
+table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*cos(($M_PI/180)*table(4,ifn)), table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*sin(($M_PI/180)*table(4,ifn)),table(6,ifn)*sin(($M_PI/180)*table(5,ifn)),
+table(9,ifn)*cos(($M_PI/180)*table(8,ifn))*cos(($M_PI/180)*table(7,ifn)), table(9,ifn)*cos(($M_PI/180)*table(8,ifn))*sin(($M_PI/180)*table(7,ifn)),table(9,ifn)*sin(($M_PI/180)*table(8,ifn)),
+table(12,ifn)*cos(($M_PI/180)*table(11,ifn))*cos(($M_PI/180)*table(10,ifn)), table(12,ifn)*cos(($M_PI/180)*table(11,ifn))*sin(($M_PI/180)*table(10,ifn)),table(12,ifn)*sin(($M_PI/180)*table(11,ifn))
+
+idsmax	 table 0,ifn
+kdist =		kdist+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,ispeaker[1],ispeaker[2],ispeaker[3],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,ispeaker[4],ispeaker[5],ispeaker[6],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,ispeaker[7],ispeaker[8],ispeaker[9],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,ispeaker[10],ispeaker[11],ispeaker[12],
+							idsmax,kx,ky,kz,kdist,kfade,kgain		
+				xout		a1,a2,a3,a4
+endop
+
+
+opcode AEP, aaaaa, akikkk 
+ain,korder,ifn,kaz,kel,kdist	xin 
+kaz = $M_PI*kaz/180
+kel = $M_PI*kel/180
+kx = kdist*cos(kel)*cos(kaz)
+ky = kdist*cos(kel)*sin(kaz)
+kz = kdist*sin(kel)
+ispeaker[] array 0, table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*cos(($M_PI/180)*table(1,ifn)), table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*sin(($M_PI/180)*table(1,ifn)),table(3,ifn)*sin(($M_PI/180)*table(2,ifn)),
+table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*cos(($M_PI/180)*table(4,ifn)), table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*sin(($M_PI/180)*table(4,ifn)),table(6,ifn)*sin(($M_PI/180)*table(5,ifn)),
+table(9,ifn)*cos(($M_PI/180)*table(8,ifn))*cos(($M_PI/180)*table(7,ifn)), table(9,ifn)*cos(($M_PI/180)*table(8,ifn))*sin(($M_PI/180)*table(7,ifn)),table(9,ifn)*sin(($M_PI/180)*table(8,ifn)),
+table(12,ifn)*cos(($M_PI/180)*table(11,ifn))*cos(($M_PI/180)*table(10,ifn)), table(12,ifn)*cos(($M_PI/180)*table(11,ifn))*sin(($M_PI/180)*table(10,ifn)),table(12,ifn)*sin(($M_PI/180)*table(11,ifn)),
+table(15,ifn)*cos(($M_PI/180)*table(14,ifn))*cos(($M_PI/180)*table(13,ifn)), table(15,ifn)*cos(($M_PI/180)*table(14,ifn))*sin(($M_PI/180)*table(13,ifn)),table(15,ifn)*sin(($M_PI/180)*table(14,ifn))
+
+idsmax	 table 0,ifn
+kdist =		kdist+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,ispeaker[1],ispeaker[2],ispeaker[3],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,ispeaker[4],ispeaker[5],ispeaker[6],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,ispeaker[7],ispeaker[8],ispeaker[9],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,ispeaker[10],ispeaker[11],ispeaker[12],
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,ispeaker[13],ispeaker[14],ispeaker[15],
+							idsmax,kx,ky,kz,kdist,kfade,kgain		
+				xout		a1,a2,a3,a4,a5
+endop
+
+
+opcode AEP, aaaaaa, akikkk 
+ain,korder,ifn,kaz,kel,kdist	xin 
+kaz = $M_PI*kaz/180
+kel = $M_PI*kel/180
+kx = kdist*cos(kel)*cos(kaz)
+ky = kdist*cos(kel)*sin(kaz)
+kz = kdist*sin(kel)
+ispeaker[] array 0, table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*cos(($M_PI/180)*table(1,ifn)), table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*sin(($M_PI/180)*table(1,ifn)),table(3,ifn)*sin(($M_PI/180)*table(2,ifn)),
+table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*cos(($M_PI/180)*table(4,ifn)), table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*sin(($M_PI/180)*table(4,ifn)),table(6,ifn)*sin(($M_PI/180)*table(5,ifn)),
+table(9,ifn)*cos(($M_PI/180)*table(8,ifn))*cos(($M_PI/180)*table(7,ifn)), table(9,ifn)*cos(($M_PI/180)*table(8,ifn))*sin(($M_PI/180)*table(7,ifn)),table(9,ifn)*sin(($M_PI/180)*table(8,ifn)),
+table(12,ifn)*cos(($M_PI/180)*table(11,ifn))*cos(($M_PI/180)*table(10,ifn)), table(12,ifn)*cos(($M_PI/180)*table(11,ifn))*sin(($M_PI/180)*table(10,ifn)),table(12,ifn)*sin(($M_PI/180)*table(11,ifn)),
+table(15,ifn)*cos(($M_PI/180)*table(14,ifn))*cos(($M_PI/180)*table(13,ifn)), table(15,ifn)*cos(($M_PI/180)*table(14,ifn))*sin(($M_PI/180)*table(13,ifn)),table(15,ifn)*sin(($M_PI/180)*table(14,ifn)),
+table(18,ifn)*cos(($M_PI/180)*table(17,ifn))*cos(($M_PI/180)*table(16,ifn)), table(18,ifn)*cos(($M_PI/180)*table(17,ifn))*sin(($M_PI/180)*table(16,ifn)),table(18,ifn)*sin(($M_PI/180)*table(17,ifn))
+
+idsmax	 table 0,ifn
+kdist =		kdist+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,ispeaker[1],ispeaker[2],ispeaker[3],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,ispeaker[4],ispeaker[5],ispeaker[6],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,ispeaker[7],ispeaker[8],ispeaker[9],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,ispeaker[10],ispeaker[11],ispeaker[12],
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,ispeaker[13],ispeaker[14],ispeaker[15],
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,ispeaker[16],ispeaker[17],ispeaker[18],
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+				xout		a1,a2,a3,a4,a5,a6
+endop
+
+
+opcode AEP, aaaaaaa, akikkk 
+ain,korder,ifn,kaz,kel,kdist	xin 
+kaz = $M_PI*kaz/180
+kel = $M_PI*kel/180
+kx = kdist*cos(kel)*cos(kaz)
+ky = kdist*cos(kel)*sin(kaz)
+kz = kdist*sin(kel)
+ispeaker[] array 0, table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*cos(($M_PI/180)*table(1,ifn)), table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*sin(($M_PI/180)*table(1,ifn)),table(3,ifn)*sin(($M_PI/180)*table(2,ifn)),
+table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*cos(($M_PI/180)*table(4,ifn)), table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*sin(($M_PI/180)*table(4,ifn)),table(6,ifn)*sin(($M_PI/180)*table(5,ifn)),
+table(9,ifn)*cos(($M_PI/180)*table(8,ifn))*cos(($M_PI/180)*table(7,ifn)), table(9,ifn)*cos(($M_PI/180)*table(8,ifn))*sin(($M_PI/180)*table(7,ifn)),table(9,ifn)*sin(($M_PI/180)*table(8,ifn)),
+table(12,ifn)*cos(($M_PI/180)*table(11,ifn))*cos(($M_PI/180)*table(10,ifn)), table(12,ifn)*cos(($M_PI/180)*table(11,ifn))*sin(($M_PI/180)*table(10,ifn)),table(12,ifn)*sin(($M_PI/180)*table(11,ifn)),
+table(15,ifn)*cos(($M_PI/180)*table(14,ifn))*cos(($M_PI/180)*table(13,ifn)), table(15,ifn)*cos(($M_PI/180)*table(14,ifn))*sin(($M_PI/180)*table(13,ifn)),table(15,ifn)*sin(($M_PI/180)*table(14,ifn)),
+table(18,ifn)*cos(($M_PI/180)*table(17,ifn))*cos(($M_PI/180)*table(16,ifn)), table(18,ifn)*cos(($M_PI/180)*table(17,ifn))*sin(($M_PI/180)*table(16,ifn)),table(18,ifn)*sin(($M_PI/180)*table(17,ifn)),
+table(21,ifn)*cos(($M_PI/180)*table(20,ifn))*cos(($M_PI/180)*table(19,ifn)), table(21,ifn)*cos(($M_PI/180)*table(20,ifn))*sin(($M_PI/180)*table(19,ifn)),table(21,ifn)*sin(($M_PI/180)*table(20,ifn))
+
+idsmax	 table 0,ifn
+kdist =		kdist+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,ispeaker[1],ispeaker[2],ispeaker[3],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,ispeaker[4],ispeaker[5],ispeaker[6],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,ispeaker[7],ispeaker[8],ispeaker[9],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,ispeaker[10],ispeaker[11],ispeaker[12],
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,ispeaker[13],ispeaker[14],ispeaker[15],
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,ispeaker[16],ispeaker[17],ispeaker[18],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a7		AEP1 ain,korder,ispeaker[19],ispeaker[20],ispeaker[21],
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+				xout		a1,a2,a3,a4,a5,a6,a7
+endop
+
+
+opcode AEP, aaaaaaaa, akikkk 
+ain,korder,ifn,kaz,kel,kdist	xin 
+kaz = $M_PI*kaz/180
+kel = $M_PI*kel/180
+kx = kdist*cos(kel)*cos(kaz)
+ky = kdist*cos(kel)*sin(kaz)
+kz = kdist*sin(kel)
+ispeaker[] array 0, table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*cos(($M_PI/180)*table(1,ifn)), table(3,ifn)*cos(($M_PI/180)*table(2,ifn))*sin(($M_PI/180)*table(1,ifn)),table(3,ifn)*sin(($M_PI/180)*table(2,ifn)),
+table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*cos(($M_PI/180)*table(4,ifn)), table(6,ifn)*cos(($M_PI/180)*table(5,ifn))*sin(($M_PI/180)*table(4,ifn)),table(6,ifn)*sin(($M_PI/180)*table(5,ifn)),
+table(9,ifn)*cos(($M_PI/180)*table(8,ifn))*cos(($M_PI/180)*table(7,ifn)), table(9,ifn)*cos(($M_PI/180)*table(8,ifn))*sin(($M_PI/180)*table(7,ifn)),table(9,ifn)*sin(($M_PI/180)*table(8,ifn)),
+table(12,ifn)*cos(($M_PI/180)*table(11,ifn))*cos(($M_PI/180)*table(10,ifn)), table(12,ifn)*cos(($M_PI/180)*table(11,ifn))*sin(($M_PI/180)*table(10,ifn)),table(12,ifn)*sin(($M_PI/180)*table(11,ifn)),
+table(15,ifn)*cos(($M_PI/180)*table(14,ifn))*cos(($M_PI/180)*table(13,ifn)), table(15,ifn)*cos(($M_PI/180)*table(14,ifn))*sin(($M_PI/180)*table(13,ifn)),table(15,ifn)*sin(($M_PI/180)*table(14,ifn)),
+table(18,ifn)*cos(($M_PI/180)*table(17,ifn))*cos(($M_PI/180)*table(16,ifn)), table(18,ifn)*cos(($M_PI/180)*table(17,ifn))*sin(($M_PI/180)*table(16,ifn)),table(18,ifn)*sin(($M_PI/180)*table(17,ifn)),
+table(21,ifn)*cos(($M_PI/180)*table(20,ifn))*cos(($M_PI/180)*table(19,ifn)), table(21,ifn)*cos(($M_PI/180)*table(20,ifn))*sin(($M_PI/180)*table(19,ifn)),table(21,ifn)*sin(($M_PI/180)*table(20,ifn)),
+table(24,ifn)*cos(($M_PI/180)*table(23,ifn))*cos(($M_PI/180)*table(22,ifn)), table(24,ifn)*cos(($M_PI/180)*table(23,ifn))*sin(($M_PI/180)*table(22,ifn)),table(24,ifn)*sin(($M_PI/180)*table(23,ifn))
+
+idsmax	 table 0,ifn
+kdist =		kdist+0.000001
+kfade	=		.5*(1 - exp(-abs(kdist)))
+kgain	=		taninv(kdist*1.5708)/(kdist*1.5708)
+
+a1		AEP1 ain,korder,ispeaker[1],ispeaker[2],ispeaker[3],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a2		AEP1 ain,korder,ispeaker[4],ispeaker[5],ispeaker[6],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a3		AEP1 ain,korder,ispeaker[7],ispeaker[8],ispeaker[9],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a4		AEP1 ain,korder,ispeaker[10],ispeaker[11],ispeaker[12],
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a5		AEP1 ain,korder,ispeaker[13],ispeaker[14],ispeaker[15],
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+a6		AEP1 ain,korder,ispeaker[16],ispeaker[17],ispeaker[18],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a7		AEP1 ain,korder,ispeaker[19],ispeaker[20],ispeaker[21],
+							idsmax,kx,ky,kz,kdist,kfade,kgain
+a8		AEP1 ain,korder,ispeaker[22],ispeaker[23],ispeaker[24],
+							idsmax,kx,ky,kz,kdist,kfade,kgain	
+				xout		a1,a2,a3,a4,a5,a6,a7,a8
+endop
+
+
