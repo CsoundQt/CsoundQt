@@ -709,14 +709,12 @@ void CsoundQt::evaluateString(QString evalCode)
 {
 #ifdef CSOUND6
     TREE *testTree = NULL;
-#endif
-    // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
-    if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
-        sendEvent(evalCode);
-        return;
-    }
-#ifdef CSOUND6
-    if  (documentPages[curPage]->isRunning()) { // is it best way to if csound is running?
+    if  (scratchPadCsdModeAct->isChecked()) {
+        // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
+        if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
+            sendEvent(evalCode);
+            return;
+        }
         CSOUND *csound = getEngine(curPage)->getCsound();
         if (csound!=NULL) {
             testTree = csoundParseOrc(csound,evalCode.toLocal8Bit()); // return not NULL, if the code is valid
@@ -3171,9 +3169,7 @@ void CsoundQt::connectActions()
 //	connect(doc->getView(), SIGNAL(lineNumberSignal(int)),
 //			this, SLOT(displayLineNumber(int)));
 	connect(doc, SIGNAL(evaluatePythonSignal(QString)),
-			this, SLOT(evaluatePython(QString)));
-
-
+            this, SLOT(evaluateString(QString)));
 
 	disconnect(showWidgetsAct, 0,0,0);
 	if (m_options->widgetsIndependent) {
