@@ -303,6 +303,8 @@ int CsoundEngine::midiReadCb(CSOUND *csound, void *ud_, unsigned char *buf, int 
 
 int CsoundEngine::midiInCloseCb(CSOUND *csound, void *ud)
 {
+    Q_UNUSED(csound);
+    Q_UNUSED(ud);
 	return CSOUND_SUCCESS;
 }
 
@@ -803,7 +805,7 @@ int CsoundEngine::runCsound()
 			if (bp[0].toString() == "instr") {
 				csoundSetInstrumentBreakpoint(ud->csound, bp[1].toDouble(), bp[2].toInt());
 			} else if (bp[0].toString() == "line") {
-				csoundSetBreakpoint(ud->csound, bp[1].toInt(), bp[2].toInt());
+//				csoundSetBreakpoint(ud->csound, bp[1].toInt(), bp[2].toInt());
 			} else {
 				qDebug() << "CsoundEngine::setStartingBreakpoints wrong breakpoint format";
 			}
@@ -1210,69 +1212,51 @@ void CsoundEngine::setPythonConsole(PythonConsole *pc)
 void CsoundEngine::breakpointCallback(CSOUND *csound, int line, double instr, void *udata)
 {
 	qDebug() <<"breakpointCallback " << line << instr;
-	INSDS *insds = csoundDebugGetInstrument(csound);
+    debug_instr_t *debug_instr = csoundDebugGetCurrentInstrInstance(csound);
 	CsoundEngine *cs = (CsoundEngine *) udata;
 	// Copy variable list
-	CS_VARIABLE *vp = insds->instr->varPool->head;
+    debug_variable_t* vp = csoundDebugGetVariables(csound, debug_instr);
 	cs->variableMutex.lock();
 	cs->m_varList.clear();
 	while (vp) {
-		if (vp->varName[0] != '#') {
+        if (vp->name[0] != '#') {
 			QVariantList varDetails;
-			varDetails << vp->varName;
-			if (strcmp(vp->varType->varTypeName, "i") == 0
-					|| strcmp(vp->varType->varTypeName, "k") == 0) {
-				if (vp->memBlock) {
-					varDetails << *((MYFLT *)vp->memBlock);
-				} else {
-					MYFLT *varmem = insds->lclbas + vp->memBlockIndex;
-					varDetails << QVariant(*varmem);
-				}
-			} else if(strcmp(vp->varType->varTypeName, "S") == 0) {
-				STRINGDAT *varmem;
-				if (vp->memBlock) {
-					varmem = (STRINGDAT *)vp->memBlock;
-				} else {
-					varmem = (STRINGDAT *) (insds->lclbas + vp->memBlockIndex);
-
-				}
-				varDetails << QVariant(QByteArray(varmem->data, varmem->size));
-			} else if (strcmp(vp->varType->varTypeName, "a") == 0) {
-				if (vp->memBlock) {
-					varDetails << *((MYFLT *)vp->memBlock) << *((MYFLT *)vp->memBlock + 1)
-							   << *((MYFLT *)vp->memBlock + 2)<< *((MYFLT *)vp->memBlock + 3);
-				} else {
-					MYFLT *varmem = insds->lclbas + vp->memBlockIndex;
-					varDetails << QVariant(*varmem);
-				}
-			} else {
+            varDetails << vp->name;
+            if (strcmp(vp->typeName, "i") == 0
+                    || strcmp(vp->typeName, "k") == 0) {
+                varDetails << *((MYFLT *) vp->data);
+            } else if(strcmp(vp->typeName, "S") == 0) {
+                varDetails << (char *) vp->data;
+            } else if (strcmp(vp->typeName, "a") == 0) {
+                MYFLT *data = (MYFLT *) vp->data;
+                varDetails << *data << *(data + 1)
+                           << *(data + 2)<< *(data + 3);
+            } else {
 				varDetails << QVariant();
 			}
-			varDetails << vp->varType->varTypeName;
+            varDetails << vp->typeName;
 			cs->m_varList << varDetails;
 		}
 		vp = vp->next;
 	}
 	cs->variableMutex.unlock();
+    csoundDebugFreeVariables(csound, vp);
+    csoundDebugFreeInstrInstances(csound, debug_instr);
 
+    debug_instr = csoundDebugGetInstrInstances(csound);
 	//Copy active instrument list
 	cs->instrumentMutex.lock();
-	cs->m_instrumentList.clear();
-	INSDS *in = insds;
-	while (in->prvact) {
-		in = in->prvact;
-	}
-
-	while (in) {
+    cs->m_instrumentList.clear();
+    while (debug_instr) {
 		QVariantList instance;
-		instance << in->p1;
-		instance << QString("%1 %2").arg(in->p2).arg(in->p3);
-		instance << in->kcounter;
+        instance << debug_instr->p1;
+        instance << QString("%1 %2").arg(debug_instr->p2).arg(debug_instr->p3);
+        instance << debug_instr->kcounter;
 		cs->m_instrumentList << instance;
-		in = in->nxtact;
+        debug_instr = debug_instr->next;
 	}
-
-	cs->instrumentMutex.unlock();
+    cs->instrumentMutex.unlock();
+    csoundDebugFreeInstrInstances(csound, debug_instr);
 	emit cs->breakpointReached();
 }
 
