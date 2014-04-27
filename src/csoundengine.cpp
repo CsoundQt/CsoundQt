@@ -212,8 +212,8 @@ void CsoundEngine::outputValueCallback (CSOUND *csound,
 	// Called by the csound running engine when 'outvalue' opcode is used
 	// To pass data from Csound to CsoundQt
 	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-	if (channelType == &CS_VAR_TYPE_S) {
-		ud->csEngine->passOutString(channelName, (const char *) channelValuePtr);
+    if (channelType == &CS_VAR_TYPE_S) {
+        ud->csEngine->passOutString(channelName, (const char *) channelValuePtr);
 	}
 	else if (channelType == &CS_VAR_TYPE_K){
 		ud->csEngine->passOutValue(channelName, *((MYFLT *)channelValuePtr));
@@ -231,16 +231,22 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
 	// To pass data from qutecsound to Csound
 	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
 	if (channelType == &CS_VAR_TYPE_S) { // channel is a string channel
-		char *string = (char *) channelValuePtr;
+        char *string = (char *) channelValuePtr;
 		QString newValue = ud->wl->getStringForChannel(channelName);
-		int maxlen = csoundGetChannelDatasize(csound, channelName);
-		if (maxlen == 0) {
-			return;
-		}
-		strncpy(string, newValue.toLocal8Bit(), maxlen);
-		if (newValue.size() >= maxlen) {
-			string[maxlen - 1] = '\0';
-		}
+//        csoundSetStringChannel(csound, channelName, newValue.toLocal8Bit().data());
+//		int maxlen = csoundGetChannelDatasize(csound, channelName);
+//		if (maxlen == 0) {
+//			return;
+//		}
+        if (newValue.size()) {
+            strncpy(string, newValue.toLocal8Bit(), newValue.size());
+            string[newValue.size() + 1] = '\0';
+        } else {
+            string[0] = '\0';
+        }
+//		if (newValue.size() >= maxlen) {
+//			string[maxlen - 1] = '\0';
+//		}
 	}
 	else if (channelType == &CS_VAR_TYPE_K) {  // Not a string channel
 		//FIXME check if mouse tracking is active, and move this from here
@@ -471,61 +477,16 @@ void CsoundEngine::readWidgetValues(CsoundUserData *ud)
 	if (ud->wl->stringValueMutex.tryLock()) {
 		QHash<QString, QString>::const_iterator i;
 		QHash<QString, QString>::const_iterator end = ud->wl->newStringValues.constEnd();
-		for (i = ud->wl->newStringValues.constBegin(); i != end; ++i) {
-			if(csoundGetChannelPtr(ud->csound, &pvalue, i.key().toLocal8Bit().constData(),
-								   CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-				char *string = (char *) pvalue;
-				strcpy(string, i.value().toLocal8Bit().constData());
-			}
+        for (i = ud->wl->newStringValues.constBegin(); i != end; ++i) {
+            if(csoundGetChannelPtr(ud->csound, &pvalue, i.key().toLocal8Bit().constData(),
+                                   CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
+                char *string = (char *) pvalue;
+                strcpy(string, i.value().toLocal8Bit().constData());
+            }
 		}
 		ud->wl->newStringValues.clear();
 		ud->wl->stringValueMutex.unlock();
-	}
-	//  for (int i = 0; i < ud->inputChannelNames.size(); i++) {
-	//    if(csoundGetChannelPtr(ud->csound, &pvalue, ud->inputChannelNames[i].toLocal8Bit().constData(),
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      double value = ud->wl->getValueForChannel(ud->inputChannelNames[i]);
-	//      *pvalue = (MYFLT) value;
-	////      *pvalue = (MYFLT) (ud->inputValues[i].toDouble());
-	//    }
-	//    else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->inputChannelNames[i].toLocal8Bit().constData(),
-	//       CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-	//      bool modified = false;
-	//      char *string = (char *) pvalue;
-	//      QString value = ud->wl->getStringForChannel(ud->inputChannelNames[i]);
-	//      if (modified) {
-	//        strcpy(string, value.toLocal8Bit().constData());
-	//      }
-	//    }
-	//    else {
-	//      qDebug() << "CsoundEngine::readWidgetValues invalid input channel: " << ud->inputChannelNames[i];
-	//    }
-	//  }
-	//FIXME check if mouse tracking is active
-	//  if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseX",
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      *pvalue = (MYFLT) ud->mouseValues[0];
-	//  }
-	//  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseY",
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      *pvalue = (MYFLT) ud->mouseValues[1];
-	//  }
-	//  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseRelX",
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      *pvalue = (MYFLT) ud->mouseValues[2];
-	//  }
-	//  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseRelY",
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      *pvalue = (MYFLT) ud->mouseValues[3];
-	//  }
-	//  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseBut1",
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      *pvalue = (MYFLT) ud->mouseValues[4];
-	//  }
-	//  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseBut2",
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      *pvalue = (MYFLT) ud->mouseValues[5];
-	//  }
+    }
 }
 
 void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
