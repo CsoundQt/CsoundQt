@@ -1209,13 +1209,12 @@ void CsoundEngine::setPythonConsole(PythonConsole *pc)
 
 #ifdef QCS_DEBUGGER
 
-void CsoundEngine::breakpointCallback(CSOUND *csound, int line, double instr, void *udata)
+void CsoundEngine::breakpointCallback(CSOUND *csound, debug_bkpt_info_t *bkpt_info, void *udata)
 {
-	qDebug() <<"breakpointCallback " << line << instr;
-    debug_instr_t *debug_instr = csoundDebugGetCurrentInstrInstance(csound);
+    debug_instr_t *debug_instr = bkpt_info->breakpointInstr;
 	CsoundEngine *cs = (CsoundEngine *) udata;
 	// Copy variable list
-    debug_variable_t* vp = csoundDebugGetVariables(csound, debug_instr);
+    debug_variable_t* vp = bkpt_info->instrVarList;
 	cs->variableMutex.lock();
 	cs->m_varList.clear();
 	while (vp) {
