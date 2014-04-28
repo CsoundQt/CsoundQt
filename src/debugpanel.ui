@@ -78,6 +78,12 @@
       </item>
       <item>
        <widget class="QLabel" name="statusLabel">
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(0, 255, 127);
 background-color: rgb(0, 0, 0);
@@ -91,6 +97,9 @@ font: 10pt &quot;Courier New&quot;;</string>
         </property>
         <property name="text">
          <string>Debugger stopped</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="margin">
          <number>8</number>

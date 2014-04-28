@@ -194,7 +194,7 @@ public:
 #ifdef QCS_DEBUGGER
 	bool m_debugging;
 
-	static void breakpointCallback(CSOUND *csound, int line, double instr, void *udata);
+	static void breakpointCallback(CSOUND *csound, debug_bkpt_info_t *bkpt_info, void *udata);
 	void setDebug();
 	void pauseDebug();
 	void continueDebug();

@@ -212,8 +212,8 @@ void CsoundEngine::outputValueCallback (CSOUND *csound,
 	// Called by the csound running engine when 'outvalue' opcode is used
 	// To pass data from Csound to CsoundQt
 	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-	if (channelType == &CS_VAR_TYPE_S) {
-		ud->csEngine->passOutString(channelName, (const char *) channelValuePtr);
+    if (channelType == &CS_VAR_TYPE_S) {
+        ud->csEngine->passOutString(channelName, (const char *) channelValuePtr);
 	}
 	else if (channelType == &CS_VAR_TYPE_K){
 		ud->csEngine->passOutValue(channelName, *((MYFLT *)channelValuePtr));
@@ -231,16 +231,22 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
 	// To pass data from qutecsound to Csound
 	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
 	if (channelType == &CS_VAR_TYPE_S) { // channel is a string channel
-		char *string = (char *) channelValuePtr;
+        char *string = (char *) channelValuePtr;
 		QString newValue = ud->wl->getStringForChannel(channelName);
-		int maxlen = csoundGetChannelDatasize(csound, channelName);
-		if (maxlen == 0) {
-			return;
-		}
-		strncpy(string, newValue.toLocal8Bit(), maxlen);
-		if (newValue.size() >= maxlen) {
-			string[maxlen - 1] = '\0';
-		}
+//        csoundSetStringChannel(csound, channelName, newValue.toLocal8Bit().data());
+//		int maxlen = csoundGetChannelDatasize(csound, channelName);
+//		if (maxlen == 0) {
+//			return;
+//		}
+        if (newValue.size()) {
+            strncpy(string, newValue.toLocal8Bit(), newValue.size());
+            string[newValue.size() + 1] = '\0';
+        } else {
+            string[0] = '\0';
+        }
+//		if (newValue.size() >= maxlen) {
+//			string[maxlen - 1] = '\0';
+//		}
 	}
 	else if (channelType == &CS_VAR_TYPE_K) {  // Not a string channel
 		//FIXME check if mouse tracking is active, and move this from here
@@ -297,6 +303,8 @@ int CsoundEngine::midiReadCb(CSOUND *csound, void *ud_, unsigned char *buf, int 
 
 int CsoundEngine::midiInCloseCb(CSOUND *csound, void *ud)
 {
+    Q_UNUSED(csound);
+    Q_UNUSED(ud);
 	return CSOUND_SUCCESS;
 }
 
@@ -471,61 +479,16 @@ void CsoundEngine::readWidgetValues(CsoundUserData *ud)
 	if (ud->wl->stringValueMutex.tryLock()) {
 		QHash<QString, QString>::const_iterator i;
 		QHash<QString, QString>::const_iterator end = ud->wl->newStringValues.constEnd();
-		for (i = ud->wl->newStringValues.constBegin(); i != end; ++i) {
-			if(csoundGetChannelPtr(ud->csound, &pvalue, i.key().toLocal8Bit().constData(),
-								   CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-				char *string = (char *) pvalue;
-				strcpy(string, i.value().toLocal8Bit().constData());
-			}
+        for (i = ud->wl->newStringValues.constBegin(); i != end; ++i) {
+            if(csoundGetChannelPtr(ud->csound, &pvalue, i.key().toLocal8Bit().constData(),
+                                   CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
+                char *string = (char *) pvalue;
+                strcpy(string, i.value().toLocal8Bit().constData());
+            }
 		}
 		ud->wl->newStringValues.clear();
 		ud->wl->stringValueMutex.unlock();
-	}
-	//  for (int i = 0; i < ud->inputChannelNames.size(); i++) {
-	//    if(csoundGetChannelPtr(ud->csound, &pvalue, ud->inputChannelNames[i].toLocal8Bit().constData(),
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      double value = ud->wl->getValueForChannel(ud->inputChannelNames[i]);
-	//      *pvalue = (MYFLT) value;
-	////      *pvalue = (MYFLT) (ud->inputValues[i].toDouble());
-	//    }
-	//    else if(csoundGetChannelPtr(ud->csound, &pvalue, ud->inputChannelNames[i].toLocal8Bit().constData(),
-	//       CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-	//      bool modified = false;
-	//      char *string = (char *) pvalue;
-	//      QString value = ud->wl->getStringForChannel(ud->inputChannelNames[i]);
-	//      if (modified) {
-	//        strcpy(string, value.toLocal8Bit().constData());
-	//      }
-	//    }
-	//    else {
-	//      qDebug() << "CsoundEngine::readWidgetValues invalid input channel: " << ud->inputChannelNames[i];
-	//    }
-	//  }
-	//FIXME check if mouse tracking is active
-	//  if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseX",
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      *pvalue = (MYFLT) ud->mouseValues[0];
-	//  }
-	//  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseY",
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      *pvalue = (MYFLT) ud->mouseValues[1];
-	//  }
-	//  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseRelX",
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      *pvalue = (MYFLT) ud->mouseValues[2];
-	//  }
-	//  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseRelY",
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      *pvalue = (MYFLT) ud->mouseValues[3];
-	//  }
-	//  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseBut1",
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      *pvalue = (MYFLT) ud->mouseValues[4];
-	//  }
-	//  else if(csoundGetChannelPtr(ud->csound, &pvalue, "_MouseBut2",
-	//        CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
-	//      *pvalue = (MYFLT) ud->mouseValues[5];
-	//  }
+    }
 }
 
 void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
@@ -842,7 +805,7 @@ int CsoundEngine::runCsound()
 			if (bp[0].toString() == "instr") {
 				csoundSetInstrumentBreakpoint(ud->csound, bp[1].toDouble(), bp[2].toInt());
 			} else if (bp[0].toString() == "line") {
-				csoundSetBreakpoint(ud->csound, bp[1].toInt(), bp[2].toInt());
+//				csoundSetBreakpoint(ud->csound, bp[1].toInt(), bp[2].toInt());
 			} else {
 				qDebug() << "CsoundEngine::setStartingBreakpoints wrong breakpoint format";
 			}
@@ -1246,72 +1209,53 @@ void CsoundEngine::setPythonConsole(PythonConsole *pc)
 
 #ifdef QCS_DEBUGGER
 
-void CsoundEngine::breakpointCallback(CSOUND *csound, int line, double instr, void *udata)
+void CsoundEngine::breakpointCallback(CSOUND *csound, debug_bkpt_info_t *bkpt_info, void *udata)
 {
-	qDebug() <<"breakpointCallback " << line << instr;
-	INSDS *insds = csoundDebugGetInstrument(csound);
+    debug_instr_t *debug_instr = bkpt_info->breakpointInstr;
 	CsoundEngine *cs = (CsoundEngine *) udata;
 	// Copy variable list
-	CS_VARIABLE *vp = insds->instr->varPool->head;
+    debug_variable_t* vp = bkpt_info->instrVarList;
 	cs->variableMutex.lock();
 	cs->m_varList.clear();
 	while (vp) {
-		if (vp->varName[0] != '#') {
+        if (vp->name[0] != '#') {
 			QVariantList varDetails;
-			varDetails << vp->varName;
-			if (strcmp(vp->varType->varTypeName, "i") == 0
-					|| strcmp(vp->varType->varTypeName, "k") == 0) {
-				if (vp->memBlock) {
-					varDetails << *((MYFLT *)vp->memBlock);
-				} else {
-					MYFLT *varmem = insds->lclbas + vp->memBlockIndex;
-					varDetails << QVariant(*varmem);
-				}
-			} else if(strcmp(vp->varType->varTypeName, "S") == 0) {
-				STRINGDAT *varmem;
-				if (vp->memBlock) {
-					varmem = (STRINGDAT *)vp->memBlock;
-				} else {
-					varmem = (STRINGDAT *) (insds->lclbas + vp->memBlockIndex);
-
-				}
-				varDetails << QVariant(QByteArray(varmem->data, varmem->size));
-			} else if (strcmp(vp->varType->varTypeName, "a") == 0) {
-				if (vp->memBlock) {
-					varDetails << *((MYFLT *)vp->memBlock) << *((MYFLT *)vp->memBlock + 1)
-							   << *((MYFLT *)vp->memBlock + 2)<< *((MYFLT *)vp->memBlock + 3);
-				} else {
-					MYFLT *varmem = insds->lclbas + vp->memBlockIndex;
-					varDetails << QVariant(*varmem);
-				}
-			} else {
+            varDetails << vp->name;
+            if (strcmp(vp->typeName, "i") == 0
+                    || strcmp(vp->typeName, "k") == 0) {
+                varDetails << *((MYFLT *) vp->data);
+            } else if(strcmp(vp->typeName, "S") == 0) {
+                varDetails << (char *) vp->data;
+            } else if (strcmp(vp->typeName, "a") == 0) {
+                MYFLT *data = (MYFLT *) vp->data;
+                varDetails << *data << *(data + 1)
+                           << *(data + 2)<< *(data + 3);
+            } else {
 				varDetails << QVariant();
 			}
-			varDetails << vp->varType->varTypeName;
+            varDetails << vp->typeName;
 			cs->m_varList << varDetails;
 		}
 		vp = vp->next;
 	}
 	cs->variableMutex.unlock();
+    csoundDebugFreeVariables(csound, vp);
+    csoundDebugFreeInstrInstances(csound, debug_instr);
 
+    debug_instr = csoundDebugGetInstrInstances(csound);
 	//Copy active instrument list
 	cs->instrumentMutex.lock();
-	cs->m_instrumentList.clear();
-	INSDS *in = insds;
-	while (in->prvact) {
-		in = in->prvact;
-	}
-
-	while (in) {
+    cs->m_instrumentList.clear();
+    while (debug_instr) {
 		QVariantList instance;
-		instance << in->p1;
-		instance << QString("%1 %2").arg(in->p2).arg(in->p3);
-		instance << in->kcounter;
+        instance << debug_instr->p1;
+        instance << QString("%1 %2").arg(debug_instr->p2).arg(debug_instr->p3);
+        instance << debug_instr->kcounter;
 		cs->m_instrumentList << instance;
-		in = in->nxtact;
+        debug_instr = debug_instr->next;
 	}
-
-	cs->instrumentMutex.unlock();
+    cs->instrumentMutex.unlock();
+    csoundDebugFreeInstrInstances(csound, debug_instr);
 	emit cs->breakpointReached();
 }
 
