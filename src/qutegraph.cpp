@@ -345,6 +345,7 @@ void QuteGraph::clearCurves()
 	lines.clear();
 	polygons.clear();
 	m_gridlines.clear();
+    m_gridtext.clear();
 	//  curveLock.unlock();
 }
 
@@ -384,7 +385,8 @@ void QuteGraph::addCurve(Curve * curve)
 			gridText->setHtml(QString("<div style=\"background:#000000;\"> -%1dBFS</p>").arg((i - 12)* 10));
 		}
 		gridText->setFont(QFont("Sans", 6));
-		scene->addItem(gridText);
+        gridText->setVisible(false);
+        scene->addItem(gridText);
 		gridTextVector.append(gridText);
 	}
 	m_gridlines.append(gridLinesVector);
