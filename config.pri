@@ -5,7 +5,7 @@ QT *= xml
 
 build32:TMPDIR = build/floats
 build64:TMPDIR = build/doubles
-build64:DEFINES += USE_DOUBLE
+#build64:DEFINES += USE_DOUBLE
 OBJECTS_DIR = "$${TMPDIR}/obj"
 
 DEFAULT_RTMIDI_DIRNAME="rtmidi-2.0.1"

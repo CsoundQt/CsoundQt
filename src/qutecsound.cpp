@@ -2417,23 +2417,27 @@ void CsoundQt::toggleParameterMode()
 
 void CsoundQt::runDebugger()
 {
-	m_debugEngine = documentPages[curPage]->getEngine();
-	m_debugPanel->setDebugFilename(documentPages[curPage]->getFileName());
-	connect(m_debugEngine, SIGNAL(breakpointReached()),
-			this, SLOT(breakpointReached()));
-	connect(m_debugPanel, SIGNAL(stopSignal()),
-			this, SLOT(stopDebugger()));
-	m_debugEngine->setDebug();
-	m_debugEngine->setStartingBreakpoints(m_debugPanel->getBreakpoints());
-	play();
+    m_debugEngine = documentPages[curPage]->getEngine();\
+    m_debugEngine->setDebug();
+
+    m_debugPanel->setDebugFilename(documentPages[curPage]->getFileName());
+    connect(m_debugEngine, SIGNAL(breakpointReached()),
+            this, SLOT(breakpointReached()));
+    connect(m_debugPanel, SIGNAL(stopSignal()),
+            this, SLOT(stopDebugger()));
+    m_debugEngine->setStartingBreakpoints(m_debugPanel->getBreakpoints());
+
+    play();
 }
 
 void CsoundQt::stopDebugger()
 {
-	disconnect(m_debugEngine, SIGNAL(breakpointReached()), 0, 0);
-	disconnect(m_debugPanel, SIGNAL(stopSignal()), 0, 0);
-	m_debugEngine->stopDebug();
-	m_debugEngine = 0;
+    if (m_debugEngine) {
+        disconnect(m_debugEngine, SIGNAL(breakpointReached()), 0, 0);
+        disconnect(m_debugPanel, SIGNAL(stopSignal()), 0, 0);
+        m_debugEngine->stopDebug();
+        m_debugEngine = 0;
+    }
 	markStopped();
 }
 

@@ -36,16 +36,16 @@ message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now defa
         DEFINES += QCS_DEBUGGER
         message("Building debugger")
     }
-    unix {
-        macx {}
-        else {
-            isEmpty(CSOUND_SOURCE_TREE) { # Use my paths by default
-                message("Warning: Using Andres' Csound paths!")
-                CSOUND_SOURCE_TREE = /home/andres/Documents/src/csound-csound6-git
-                CSOUND_LIBRARY_DIR = /home/andres/Documents/src/csound-csound6-git-build/
-            }
-        }
-    }
+#    unix {
+#        macx {}
+#        else {
+#            isEmpty(CSOUND_SOURCE_TREE) { # Use my paths by default
+#                message("Warning: Using Andres' Csound paths!")
+#                CSOUND_SOURCE_TREE = /home/andres/Documents/src/csound-csound6-git
+#                CSOUND_LIBRARY_DIR = /home/andres/Documents/src/csound-csound6-git-build/
+#            }
+#        }
+#    }
     message("Building for Csound 6")
 } else {
 message("Building for Csound 5 (unsupported)")

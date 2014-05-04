@@ -71,7 +71,7 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 //	ud->perfThread = new CsoundPerformanceThread(ud->csound);
 //	ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
 #ifdef CSOUND6
-    csoundSetHostImplementedMIDIIO(ud->csound, 1);
+//    csoundSetHostImplementedMIDIIO(ud->csound, 1);
     ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
     Q_ASSERT(ud->midiBuffer);
 #endif
@@ -238,7 +238,7 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
 //		if (maxlen == 0) {
 //			return;
 //		}
-        if (newValue.size()) {
+        if (newValue.size() > 0) {
             strncpy(string, newValue.toLocal8Bit(), newValue.size());
             string[newValue.size() + 1] = '\0';
         } else {
@@ -480,11 +480,8 @@ void CsoundEngine::readWidgetValues(CsoundUserData *ud)
 		QHash<QString, QString>::const_iterator i;
 		QHash<QString, QString>::const_iterator end = ud->wl->newStringValues.constEnd();
         for (i = ud->wl->newStringValues.constBegin(); i != end; ++i) {
-            if(csoundGetChannelPtr(ud->csound, &pvalue, i.key().toLocal8Bit().constData(),
-                                   CSOUND_INPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-                char *string = (char *) pvalue;
-                strcpy(string, i.value().toLocal8Bit().constData());
-            }
+            csoundSetStringChannel(ud->csound, i.key().toLocal8Bit().data(),
+                                   i.value().toLocal8Bit().data());
 		}
 		ud->wl->newStringValues.clear();
 		ud->wl->stringValueMutex.unlock();
@@ -1261,7 +1258,13 @@ void CsoundEngine::breakpointCallback(CSOUND *csound, debug_bkpt_info_t *bkpt_in
 
 void CsoundEngine::setDebug()
 {
-	m_debugging = true;
+    if (isRunning()) {
+        ud->perfThread->Pause();
+        csoundDebuggerInit(ud->csound);
+        csoundSetBreakpointCallback(ud->csound, &CsoundEngine::breakpointCallback, (void *) this);
+//        ud->perfThread->Play();
+    }
+    m_debugging = true;
 }
 
 void CsoundEngine::pauseDebug()
