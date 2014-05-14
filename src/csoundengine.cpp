@@ -508,10 +508,12 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
 				&& csoundGetChannelPtr(ud->csound, &pvalue,
 									   ud->outputStringChannelNames[i].toLocal8Bit().constData(),
 									   CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-			QString value = QString((char *)pvalue);
-			if(ud->previousStringOutputValues[i] != value) {
-				ud->wl->setValue(ud->outputStringChannelNames[i],value);
-				ud->previousStringOutputValues[i] = value;
+            char chanString[128];
+            csoundGetStringChannel(ud->csound, ud->outputStringChannelNames[i].toLocal8Bit().constData(),
+                                                   chanString);
+            if(ud->previousStringOutputValues[i] != QString(chanString)) {
+                ud->wl->setValue(ud->outputStringChannelNames[i],QString(chanString));
+                ud->previousStringOutputValues[i] = QString(chanString);
 			}
 		}
 	}
