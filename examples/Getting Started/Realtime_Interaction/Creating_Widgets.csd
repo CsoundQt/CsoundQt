@@ -20,10 +20,11 @@ instr 1
 endin
 </CsInstruments>
 <CsScore>
-e
+;nothing here as well ...
 </CsScore>
 </CsoundSynthesizer>
 ; written by Andres Cabrera
+
 
 
 
