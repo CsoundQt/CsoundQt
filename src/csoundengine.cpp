@@ -240,7 +240,7 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
 //		}
         if (newValue.size() > 0) {
             strncpy(string, newValue.toLocal8Bit(), newValue.size());
-            string[newValue.size() + 1] = '\0';
+            string[newValue.size()] = '\0';
         } else {
             string[0] = '\0';
         }
@@ -821,7 +821,8 @@ int CsoundEngine::runCsound()
 		csoundSetExternalMidiWriteCallback(ud->csound, &midiWriteCb);
 		csoundSetExternalMidiOutCloseCallback(ud->csound, &midiOutCloseCb);
 		csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
-	}
+    }
+
 
 #ifdef CSOUND6
 	csoundCreateMessageBuffer(ud->csound, 0);
@@ -864,16 +865,11 @@ int CsoundEngine::runCsound()
 #ifdef CSOUND6
 	csoundRegisterKeyboardCallback(ud->csound,
 								   &CsoundEngine::keyEventCallback,
-								   (void *) ud, CSOUND_CALLBACK_KBD_EVENT | CSOUND_CALLBACK_KBD_TEXT);
+                                   (void *) ud, CSOUND_CALLBACK_KBD_EVENT | CSOUND_CALLBACK_KBD_TEXT);
 #else
 	csoundSetCallback(ud->csound,
 					  &CsoundEngine::keyEventCallback,
-					  (void *) ud, CSOUND_CALLBACK_KBD_EVENT | CSOUND_CALLBACK_KBD_TEXT);
-	csoundSetIsGraphable(ud->csound, true);
-	csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
-	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
-	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
-	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
+                      (void *) ud, CSOUND_CALLBACK_KBD_EVENT | CSOUND_CALLBACK_KBD_TEXT);
 #endif
 
 #ifdef QCS_RTMIDI
@@ -883,6 +879,7 @@ int CsoundEngine::runCsound()
         csoundSetOption(ud->csound, "-Q0");
     }
 #endif
+
 	char **argv;
 	argv = (char **) calloc(33, sizeof(char*));
 	int argc = m_options.generateCmdLine(argv);
@@ -899,14 +896,7 @@ int CsoundEngine::runCsound()
         stop();
 		emit (errorLines(getErrorLines()));
 		return -3;
-	}
-#ifdef CSOUND6
-	csoundSetIsGraphable(ud->csound, true);
-	csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
-	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
-	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
-	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
-#endif
+    }
 	ud->zerodBFS = csoundGet0dBFS(ud->csound);
 	ud->sampleRate = csoundGetSr(ud->csound);
 	ud->numChnls = csoundGetNchnls(ud->csound);
@@ -914,7 +904,14 @@ int CsoundEngine::runCsound()
 
 	if (ud->enableWidgets) {
 		setupChannels();
-	}
+    }
+
+
+    csoundSetIsGraphable(ud->csound, true);
+    csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
+    csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
+    csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
+    csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
 
 	ud->perfThread = new CsoundPerformanceThread(ud->csound);
 	ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);

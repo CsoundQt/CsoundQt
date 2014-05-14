@@ -76,7 +76,9 @@ public slots:
 	void indexChanged(int index);
 
 private:
-	void drawCurve(Curve * curve, int index);
+	void drawFtable(Curve * curve, int index);
+    void drawSpectrum(Curve * curve, int index);
+    void drawSignal(Curve * curve, int index);
 	void scaleGraph(int index);
 	int getTableNumForIndex(int index);
 	int getIndexForTableNum(int ftable);

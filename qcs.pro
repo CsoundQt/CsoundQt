@@ -19,7 +19,6 @@
 # BUILD OPTIONS:
 # CONFIG+=build32    To build floats version
 # CONFIG+=pythonqt  # To build with PythonQt support
-# CONFIG+=csound5 #to attempt build for Csound5 (might not be fully supported)
 # CONFIG+=rtmidi   To build with RtMidi support
 # OS X only OPTIONS:
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
@@ -36,16 +35,6 @@ message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now defa
         DEFINES += QCS_DEBUGGER
         message("Building debugger")
     }
-#    unix {
-#        macx {}
-#        else {
-#            isEmpty(CSOUND_SOURCE_TREE) { # Use my paths by default
-#                message("Warning: Using Andres' Csound paths!")
-#                CSOUND_SOURCE_TREE = /home/andres/Documents/src/csound-csound6-git
-#                CSOUND_LIBRARY_DIR = /home/andres/Documents/src/csound-csound6-git-build/
-#            }
-#        }
-#    }
     message("Building for Csound 6")
 } else {
 message("Building for Csound 5 (unsupported)")
