@@ -506,11 +506,9 @@ void QuteGraph::drawFtable(Curve * curve, int index)
             }
         }
     }
-    QGraphicsLineItem *line = static_cast<QGraphicsLineItem *>(lines[index][0]);
-    line->setLine(0, 0, lines[index].size(), 0);
-    for (int i = 1; i < lines[index].size(); i++) { //skip first item, which is base line
+    for (int i = 0; i < lines[index].size(); i++) { //skip first item, which is base line
         QGraphicsLineItem *line = static_cast<QGraphicsLineItem *>(lines[index][i]);
-        MYFLT value = curve->get_data(((i - 1) * decimate));
+        MYFLT value = curve->get_data((i * decimate));
         line->setLine((i * decimate), 0, (i * decimate),  -value );
         int colorValue = (int) (220.0*fabs(value)/max);
         colorValue = colorValue > 220 ? 220 : colorValue;
