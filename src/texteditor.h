@@ -38,6 +38,7 @@ public:
 
 protected:
 	virtual void keyPressEvent (QKeyEvent * event);
+    virtual void mouseReleaseEvent(QMouseEvent * e);
 	//    virtual void dropEvent(QDropEvent *event);  // See note on code
 	//    virtual void dragEnterEvent(QDragEnterEvent *event);
 	//    virtual void dragMoveEvent(QDragMoveEvent *event);
@@ -55,6 +56,7 @@ signals:
 	void requestIndent();
 	void requestUnindent();
 	void openParameterSelection();
+    void mouseReleased();
 };
 
 class LineNumberArea;

@@ -43,7 +43,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	}
 	connect(m_orcEditor, SIGNAL(textChanged()), this, SLOT(textChanged()));
 	connect(m_orcEditor, SIGNAL(cursorPositionChanged()),
-			this, SLOT(syntaxCheck()));
+            this, SLOT(syntaxCheck()));
 	setFocusProxy(m_mainEditor);  // for comment action from main application
 	internalChange = false;
 
@@ -73,6 +73,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(exitParameterMode()));
 	connect(m_mainEditor, SIGNAL(enterPressed()),
 			this, SLOT(finishParameterMode()));
+    connect(m_mainEditor, SIGNAL(mouseReleased()),
+            this, SLOT(exitParameterMode()));
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
@@ -1007,9 +1009,13 @@ void DocumentView::insertAutoCompleteText()
 				editor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
 			}
 			else {
-				editor->insertPlainText(action->data().toString());
+                editor->insertPlainText(action->data().toString());
 			}
-			if (m_autoParameterMode) {
+            QString syntaxText = action->data().toString();
+            QStringList syntaxSections = syntaxText.simplified().split("");
+            QString actionText = action->text();
+            actionText = actionText.split(" ").at(0);
+            if (m_autoParameterMode && m_opcodeTree->isOpcode(actionText) && syntaxSections.size() > 1) {
 				m_mainEditor->moveCursor(QTextCursor::StartOfBlock);
 				m_mainEditor->setParameterMode(true);
 				prevParameter();

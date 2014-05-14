@@ -77,7 +77,13 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 	} else if(event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
 		emit newLine();
 	}
-	return;
+    return;
+}
+
+void TextEditor::mouseReleaseEvent(QMouseEvent *e)
+{
+    Q_UNUSED(e);
+    emit(mouseReleased());
 }
 
 //The following makes the editor almost accept drop events on OS X, but breaks all dragging on the same document on linux
