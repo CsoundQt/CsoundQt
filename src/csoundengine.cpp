@@ -223,30 +223,23 @@ void CsoundEngine::outputValueCallback (CSOUND *csound,
 }
 
 void CsoundEngine::inputValueCallback (CSOUND *csound,
-								const char *channelName,
-								void *channelValuePtr,
-								const void *channelType)
+									   const char *channelName,
+									   void *channelValuePtr,
+									   const void *channelType)
 {
 	// Called by the csound running engine when 'invalue' opcode is used
 	// To pass data from qutecsound to Csound
 	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
 	if (channelType == &CS_VAR_TYPE_S) { // channel is a string channel
-        char *string = (char *) channelValuePtr;
+		char *string = (char *) channelValuePtr;
 		QString newValue = ud->wl->getStringForChannel(channelName);
-//        csoundSetStringChannel(csound, channelName, newValue.toLocal8Bit().data());
-//		int maxlen = csoundGetChannelDatasize(csound, channelName);
-//		if (maxlen == 0) {
-//			return;
-//		}
-        if (newValue.size() > 0) {
-            strncpy(string, newValue.toLocal8Bit(), newValue.size());
-            string[newValue.size()] = '\0';
-        } else {
-            string[0] = '\0';
-        }
-//		if (newValue.size() >= maxlen) {
-//			string[maxlen - 1] = '\0';
-//		}
+		int maxlen = csoundGetChannelDatasize(csound, channelName);
+		if (newValue.size() > 0) {
+			strncpy(string, newValue.toLocal8Bit(), maxlen -1 );
+			string[newValue.size()] = '\0';
+		} else {
+			string[0] = '\0';
+		}
 	}
 	else if (channelType == &CS_VAR_TYPE_K) {  // Not a string channel
 		//FIXME check if mouse tracking is active, and move this from here
@@ -479,13 +472,13 @@ void CsoundEngine::readWidgetValues(CsoundUserData *ud)
 	if (ud->wl->stringValueMutex.tryLock()) {
 		QHash<QString, QString>::const_iterator i;
 		QHash<QString, QString>::const_iterator end = ud->wl->newStringValues.constEnd();
-        for (i = ud->wl->newStringValues.constBegin(); i != end; ++i) {
-            csoundSetStringChannel(ud->csound, i.key().toLocal8Bit().data(),
-                                   i.value().toLocal8Bit().data());
+		for (i = ud->wl->newStringValues.constBegin(); i != end; ++i) {
+			csoundSetStringChannel(ud->csound, i.key().toLocal8Bit().data(),
+								   i.value().toLocal8Bit().data());
 		}
 		ud->wl->newStringValues.clear();
 		ud->wl->stringValueMutex.unlock();
-    }
+	}
 }
 
 void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
@@ -508,10 +501,12 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
 				&& csoundGetChannelPtr(ud->csound, &pvalue,
 									   ud->outputStringChannelNames[i].toLocal8Bit().constData(),
 									   CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-			QString value = QString((char *)pvalue);
-			if(ud->previousStringOutputValues[i] != value) {
-				ud->wl->setValue(ud->outputStringChannelNames[i],value);
-				ud->previousStringOutputValues[i] = value;
+            char chanString[128];
+            csoundGetStringChannel(ud->csound, ud->outputStringChannelNames[i].toLocal8Bit().constData(),
+                                                   chanString);
+            if(ud->previousStringOutputValues[i] != QString(chanString)) {
+                ud->wl->setValue(ud->outputStringChannelNames[i],QString(chanString));
+                ud->previousStringOutputValues[i] = QString(chanString);
 			}
 		}
 	}
@@ -904,8 +899,7 @@ int CsoundEngine::runCsound()
 
 	if (ud->enableWidgets) {
 		setupChannels();
-    }
-
+	}
 
     csoundSetIsGraphable(ud->csound, true);
     csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
@@ -1013,19 +1007,20 @@ void CsoundEngine::setupChannels()
 	controlChannelInfo_t *entry = channelList;
 #endif
 	MYFLT *pvalue;
+	QVector<QuteWidget *> widgets = ud->wl->getWidgets();
+	// Set channels values for existing channels (i.e. those declared with chn_*
+	// in the csound header
 	for (int i = 0; i < numChannels; i++) {
 		int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name,
 										   0);
-		QVector<QuteWidget *> widgets = ud->wl->getWidgets();
 		if (chanType & CSOUND_INPUT_CHANNEL) {
-//			ud->inputChannelNames << QString(entry->name);
 			if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_CONTROL_CHANNEL) {
 				ud->wl->valueMutex.lock();
 				foreach (QuteWidget *w, widgets) {
-					if (!w->getChannelName().isEmpty()) {
+					if (w->getChannelName() == QString(entry->name)) {
 						ud->wl->newValues.insert(w->getChannelName(), w->getValue());
 					}
-					if (!w->getChannel2Name().isEmpty()) {
+					if (w->getChannel2Name() == QString(entry->name)) {
 						ud->wl->newValues.insert(w->getChannel2Name(), w->getValue2());
 					}
 				}
@@ -1033,7 +1028,7 @@ void CsoundEngine::setupChannels()
 			} else if ((chanType & CSOUND_CHANNEL_TYPE_MASK) ==  CSOUND_STRING_CHANNEL) {
 				ud->wl->stringValueMutex.lock();
 				foreach (QuteWidget *w, widgets) {
-					if (!w->getChannelName().isEmpty()) {
+					if (w->getChannelName() == QString(entry->name)) {
 						ud->wl->newStringValues.insert(w->getChannelName(), w->getStringValue());
 					}
 				}
@@ -1068,6 +1063,15 @@ void CsoundEngine::setupChannels()
 		entry++;
 	}
 	csoundDeleteChannelList(ud->csound, channelList);
+
+	// Force creation of string channels for _Browse widgets
+	foreach (QuteWidget *w, widgets) {
+		if (w->getChannelName().startsWith("_Browse")) {
+			csoundGetChannelPtr(ud->csound, &pvalue, w->getChannelName().toLocal8Bit(),
+								CSOUND_INPUT_CHANNEL | CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL);
+			ud->wl->newStringValues.insert(w->getChannelName(), w->getStringValue());
+		}
+	}
 }
 
 void CsoundEngine::messageListDispatcher(void *data)
