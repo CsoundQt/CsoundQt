@@ -15,7 +15,8 @@ FORMS = "src/about.ui" \
     "src/filebeditor.ui" \
     src/midilearndialog.ui \
     src/debugpanel.ui \
-    src/dockhelp.ui
+    src/dockhelp.ui \
+    src/livecodeeditor.ui
 HEADERS = "src/about.h" \
     "src/configdialog.h" \
     "src/configlists.h" \
@@ -70,7 +71,8 @@ HEADERS = "src/about.h" \
     "src/filebeditor.h" \
     src/midihandler.h \
     src/midilearndialog.h \
-    src/debugpanel.h
+    src/debugpanel.h \
+    src/livecodeeditor.h
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
     "src/configlists.cpp" \
@@ -125,7 +127,8 @@ SOURCES = "src/about.cpp" \
     "src/filebeditor.cpp" \
     src/midihandler.cpp \
     src/midilearndialog.cpp \
-    src/debugpanel.cpp
+    src/debugpanel.cpp \
+    src/livecodeeditor.cpp
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
     "src/qutecsound.rc" \
