@@ -39,6 +39,7 @@
 #include "appwizard.h"
 #include "midihandler.h"
 #include "midilearndialog.h"
+#include "livecodeeditor.h"
 
 #ifdef QCS_PYTHONQT
 #include "pythonconsole.h"
@@ -124,8 +125,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
 	m_scratchPad = new QDockWidget(this);
 	addDockWidget(Qt::LeftDockWidgetArea, m_scratchPad);
-	m_scratchPad->setObjectName("Scratch Pad");
-	m_scratchPad->setWindowTitle(tr("Scratch Pad"));
+	m_scratchPad->setObjectName("Interactive Code Pad");
+	m_scratchPad->setWindowTitle(tr("Interactive Code Pad"));
 
 	connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
 	QSettings settings("csound", "qutecsound");
@@ -171,16 +172,16 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	else
 		m_opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "/opcodes.xml"));
 
-	DocumentView *padview = new DocumentView(m_scratchPad, m_opcodeTree);
-	padview->setBackgroundColor(QColor(240, 230, 230));
-	padview->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-	padview->setFileType(EDIT_PYTHON_MODE); // Python type (for highlighting and completion)
-	padview->show();
-	padview->showLineArea(true);
-	padview->setFullText("");
-	connect(padview, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
-	m_scratchPad->setWidget(padview);
-	m_scratchPad->setFocusProxy(padview);
+	LiveCodeEditor *liveeditor = new LiveCodeEditor(m_scratchPad, m_opcodeTree);
+	liveeditor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+	liveeditor->show();
+	connect(liveeditor, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
+	connect(liveeditor, SIGNAL(enableCsdMode(bool)),
+			scratchPadCsdModeAct, SLOT(setChecked(bool)));
+//	connect(scratchPadCsdModeAct, SIGNAL(toggled(bool)),
+//			liveeditor, SLOT(setCsdMode(bool)));
+	m_scratchPad->setWidget(liveeditor);
+	m_scratchPad->setFocusProxy(liveeditor->getDocumentView());
 	scratchPadCsdModeAct->setChecked(true);
 
 	// Open files saved from last session
@@ -645,13 +646,12 @@ void CsoundQt::redo()
 void CsoundQt::evaluateSection()
 {
 	QString text;
-	if (!m_scratchPad->hasFocus()) {
-		text = documentPages[curPage]->getActiveSection();
+	if (static_cast<LiveCodeEditor *>(m_scratchPad->widget())->getDocumentView()->hasFocus()) {
+		text = static_cast<LiveCodeEditor *>(m_scratchPad->widget())->getDocumentView()->getActiveText();
 	}
 	else {
-		text = static_cast<DocumentView *>(m_scratchPad->widget())->getActiveSection();
+		text = documentPages[curPage]->getActiveSection();
 	}
-
 	evaluateString(text);
 }
 
@@ -659,14 +659,14 @@ void CsoundQt::evaluate(QString code)
 {
 	QString evalCode;
 	if (code.isEmpty()) { //evaluate current selection in current document
-		if (!m_scratchPad->hasFocus()) {
+		if (static_cast<LiveCodeEditor *>(m_scratchPad->widget())->getDocumentView()->hasFocus()) {
+			evalCode = static_cast<LiveCodeEditor *>(m_scratchPad->widget())->getDocumentView()->getActiveText();
+		}
+		else {
 			evalCode = documentPages[curPage]->getActiveText();
 			if (evalCode.count("\n") <= 1) {
 				documentPages[curPage]->gotoNextRow();
 			}
-		}
-		else {
-			evalCode = static_cast<DocumentView *>(m_scratchPad->widget())->getActiveText();
 		}
 	}
 	else {
@@ -726,21 +726,15 @@ void CsoundQt::evaluateString(QString evalCode)
             evaluateCsound(evalCode);
             return;
         }
-    }
+	} else {
+		evaluatePython(evalCode);
+	}
 #endif
-    // Last resort
-    evaluatePython(evalCode);
 }
 
 void CsoundQt::setScratchPadMode(bool csdMode)
 {
-	DocumentView *view = static_cast<DocumentView *>(m_scratchPad->widget());
-	view->setFileType(csdMode ? EDIT_CSOUND_MODE : EDIT_PYTHON_MODE);
-	if (csdMode) {
-		view->setBackgroundColor(QColor(240, 230, 230));
-	} else {
-		view->setBackgroundColor(QColor(230, 240, 230));
-	}
+	static_cast<LiveCodeEditor *>(m_scratchPad->widget())->setCsdMode(csdMode);
 }
 
 void CsoundQt::setWidgetEditMode(bool active)
@@ -749,14 +743,6 @@ void CsoundQt::setWidgetEditMode(bool active)
 		documentPages[i]->setWidgetEditMode(active);
 	}
 }
-
-//void CsoundQt::setWidgetClipboard(QString text)
-//{
-//  m_widgetClipboard = text;
-//  for (int i = 0; i < documentPages.size(); i++) {
-//    documentPages[i]->passWidgetClipboard(m_widgetClipboard);
-//  }
-//}
 
 void CsoundQt::duplicate()
 {
@@ -2070,12 +2056,10 @@ void CsoundQt::applySettings()
 
 	fillFavoriteMenu();
 	fillScriptsMenu();
-#ifdef QCS_PYTHONQT
-	DocumentView *pad =  static_cast<DocumentView *>(
-				m_scratchPad->widget());
+	DocumentView *pad =  static_cast<LiveCodeEditor *>(
+				m_scratchPad->widget())->getDocumentView();
 	pad->setFont(QFont(m_options->font,
 					   (int) m_options->fontPointSize));
-#endif
 	if (m_options->logFile != logFile.fileName()) {
 		openLogFile();
 	}
@@ -2619,7 +2603,7 @@ void CsoundQt::createActions()
 	evaluateSectionAct->setShortcutContext(Qt::ApplicationShortcut);
 	connect(evaluateSectionAct, SIGNAL(triggered()), this, SLOT(evaluateSection()));
 
-	scratchPadCsdModeAct = new QAction(tr("Scratch Pad in Csound Mode"), this);
+	scratchPadCsdModeAct = new QAction(tr("Code Pad in Csound Mode"), this);
 	scratchPadCsdModeAct->setStatusTip(tr("Toggle the mode for the scratch pad between python and csound"));
 	scratchPadCsdModeAct->setShortcutContext(Qt::ApplicationShortcut);
 	scratchPadCsdModeAct->setCheckable(true);
@@ -2777,11 +2761,11 @@ void CsoundQt::createActions()
 	connect(showPythonConsoleAct, SIGNAL(triggered()), this, SLOT(showNoPythonQtWarning()));
 #endif
 
-	showScratchPadAct = new QAction(QIcon(prefix + "scratchpad.png"), tr("ScratchPad"), this);
+	showScratchPadAct = new QAction(QIcon(prefix + "scratchpad.png"), tr("CodePad"), this);
 	showScratchPadAct->setCheckable(true);
 	//  showPythonConsoleAct->setChecked(true);  // Unnecessary because it is set by options
-	showScratchPadAct->setStatusTip(tr("Show Scratch Pad"));
-	showScratchPadAct->setIconText(tr("ScratchPad"));
+	showScratchPadAct->setStatusTip(tr("Show Code Pad"));
+	showScratchPadAct->setIconText(tr("CodePad"));
 	showScratchPadAct->setShortcutContext(Qt::ApplicationShortcut);
 	connect(showScratchPadAct, SIGNAL(triggered(bool)), m_scratchPad, SLOT(setVisible(bool)));
 	connect(m_scratchPad, SIGNAL(visibilityChanged(bool)), showScratchPadAct, SLOT(setChecked(bool)));
