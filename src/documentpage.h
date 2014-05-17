@@ -296,17 +296,14 @@ private slots:
 	void setPanelTempo(LiveEventFrame *panel, double tempo);
 	void setPanelLoopEnabled(LiveEventFrame *panel, bool enabled);
 
-	void opcodeSyntax(QString message);
 	void evaluatePython(QString code);
 
 signals:
-	void currentLineChanged(int);
 	void currentTextUpdated();  // To let inspector know it must update
 	void setCurrentAudioFile(QString name);
 	void liveEventsVisible(bool);  // To change the action in the main window
 	void modified();  // Triggered whenever the children change
 	void stopSignal(); // To tell main application that running has stopped
-	void opcodeSyntaxSignal(QString message); // Propagated from view
 	void setHelpSignal(); // Propagated from view
 	void setWidgetClipboardSignal(QString text);
 	void evaluatePythonSignal(QString code);

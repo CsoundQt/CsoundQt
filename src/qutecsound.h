@@ -229,7 +229,6 @@ private slots:
 	void requestFeature();
 	void chat();
 	void openShortcutDialog();
-	void statusBarMessage(QString message);
 	void about();
 	void donate();
 	void documentWasModified();
@@ -238,7 +237,6 @@ private slots:
 	void setCurrentOptionsForPage(DocumentPage *p);
 	void runUtility(QString flags);
 	//     void widgetDockLocationChanged(Qt::DockWidgetArea area);
-	void displayLineNumber(int lineNumber);
 	void updateInspector();
 	void markInspectorUpdate(); // Notification that inspector needs update
 	void setDefaultKeyboardShortcuts();
@@ -277,7 +275,6 @@ private:
 	void fillScriptsSubMenu(QDir dir, QMenu *m, int depth);
 	void fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth);
 	void createToolBars();
-	void createStatusBar();
 	void readSettings();
 	void writeSettings(QStringList openFiles=QStringList(), int lastIndex = 0);
 	void clearSettings();
@@ -447,7 +444,6 @@ private:
 	UtilitiesDialog *utilitiesDialog;
 
 	QIcon modIcon;
-	QLabel *lineNumberLabel;
 
 	QString currentAudioFile;
 	QString initialDir;

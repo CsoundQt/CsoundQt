@@ -80,8 +80,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
 	m_options = new Options(&m_configlists);
 	// Create GUI panels
-	lineNumberLabel = new QLabel("Line 1"); // Line number display
-	statusBar()->addPermanentWidget(lineNumberLabel); // This must be done before a file is loaded
 	m_console = new DockConsole(this);
 	m_console->setObjectName("m_console");
 	//   m_console->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -151,7 +149,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
 	createMenus();
 	createToolBars();
-	createStatusBar();
 
 	documentTabs = new QTabWidget (this);
 	documentTabs->setTabsClosable(true);
@@ -1935,11 +1932,6 @@ void CsoundQt::openShortcutDialog()
 	dialog.exec();
 }
 
-void CsoundQt::statusBarMessage(QString message)
-{
-	statusBar()->showMessage(message);
-}
-
 void CsoundQt::about()
 {
 	About *msgBox = new About(this);
@@ -2224,11 +2216,6 @@ void CsoundQt::runUtility(QString flags)
 #endif
 		execute(m_options->terminal, options);
 	}
-}
-
-void CsoundQt::displayLineNumber(int lineNumber)
-{
-	lineNumberLabel->setText(tr("Line %1").arg(lineNumber));
 }
 
 void CsoundQt::updateInspector()
@@ -3143,19 +3130,15 @@ void CsoundQt::connectActions()
 	disconnect(doc, 0,0,0);
 	connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
 	connect(doc, SIGNAL(stopSignal()), this, SLOT(markStopped()));
-	connect(doc, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
 	connect(doc, SIGNAL(setHelpSignal()), this, SLOT(setHelpEntry()));
 	connect(doc, SIGNAL(closeExtraPanelsSignal()), this, SLOT(closeExtraPanels()));
 	connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
 
 	connect(doc, SIGNAL(modified()), this, SLOT(documentWasModified()));
-	connect(doc, SIGNAL(currentLineChanged(int)), this, SLOT(displayLineNumber(int)));
 	//  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
 	//          this, SLOT(setWidgetClipboard(QString)));
 	connect(doc, SIGNAL(setCurrentAudioFile(QString)),
 			this, SLOT(setCurrentAudioFile(QString)));
-//	connect(doc->getView(), SIGNAL(lineNumberSignal(int)),
-//			this, SLOT(displayLineNumber(int)));
 	connect(doc, SIGNAL(evaluatePythonSignal(QString)),
             this, SLOT(evaluateString(QString)));
 
@@ -3800,11 +3783,6 @@ void CsoundQt::createToolBars()
 	configureToolBar->setToolButtonStyle(toolButtonStyle);
 }
 
-void CsoundQt::createStatusBar()
-{
-	statusBar()->showMessage(tr("Ready"));
-}
-
 void CsoundQt::readSettings()
 {
 	QSettings settings("csound", "qutecsound");
@@ -4249,7 +4227,6 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 	if (index != -1) {
 		documentTabs->setCurrentIndex(index);
 		changePage(index);
-		statusBar()->showMessage(tr("File already open"), 10000);
 		return index;
 	}
 	QFile file(fileName);
@@ -4380,7 +4357,6 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 		documentPages[curPage]->readOnly = true;
 	}
 	QApplication::restoreOverrideCursor();
-	statusBar()->showMessage(tr("File loaded"), 2000);
 
 	// FIXME put back
 	//  widgetPanel->clearHistory();
@@ -4412,15 +4388,12 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 	connectActions();
 //	connect(documentPages[curPage], SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
 //	connect(documentPages[curPage], SIGNAL(modified()), this, SLOT(documentWasModified()));
-//	connect(documentPages[curPage], SIGNAL(currentLineChanged(int)), this, SLOT(displayLineNumber(int)));
 //	//  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
 //	//          this, SLOT(setWidgetClipboard(QString)));
 //	connect(documentPages[curPage], SIGNAL(setCurrentAudioFile(QString)),
 //			this, SLOT(setCurrentAudioFile(QString)));
 //	connect(documentPages[curPage], SIGNAL(evaluatePythonSignal(QString)),
 //			this, SLOT(evaluatePython(QString)));
-	connect(documentPages[curPage]->getView(), SIGNAL(lineNumberSignal(int)),
-			this, SLOT(displayLineNumber(int)));
 	
 	documentPages[curPage]->loadTextString(text);
 	if (m_options->widgetsIndependent) {
@@ -4516,7 +4489,6 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
 	documentPages[curPage]->setModified(false);
 	setWindowModified(false);
 	documentTabs->setTabIcon(curPage, QIcon());
-	statusBar()->showMessage(tr("File saved"), 2000);
 	return true;
 }
 

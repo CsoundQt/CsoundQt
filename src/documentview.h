@@ -102,6 +102,7 @@ public slots:
 	void updateOrcContext(QString orc);
 	void nextParameter();
 	void prevParameter();
+	void updateHoverText(int x, int y, QString text);
 //	void openParameterSelection();
 //	void parameterShowShortcutPressed();
 	void createContextMenu(QPoint pos);
@@ -144,6 +145,11 @@ private:
 	MySyntaxMenu *syntaxMenu;
 //	MySyntaxMenu *parameterMenu;
 //	QPushButton *parameterButton;
+
+	QWidget *m_hoverWidget;
+	QLabel *m_hoverText;
+	QString m_currentOpcodeText;
+
 	bool m_isModified;
 	bool m_autoComplete;
 	bool m_autoParameterMode;
@@ -161,8 +167,6 @@ private slots:
 	void opcodeHelp();
 
 signals:
-	void opcodeSyntaxSignal(QString syntax);  // Report an opcode syntax under cursor
-	void lineNumberSignal(int number); // Sends current line number when cursor is moved
 	void setHelp(); // Request execute open opcode help action
 	void contentsChanged();
 	void closeExtraPanels();
