@@ -83,8 +83,6 @@ public:
 
 public slots:
 	void setModified(bool mod = true);
-	//    void updateDocumentModel();
-	//    void updateFromDocumentModel();
 	void syntaxCheck();
 	void textChanged();
 	void escapePressed();
@@ -103,8 +101,6 @@ public slots:
 	void nextParameter();
 	void prevParameter();
 	void updateHoverText(int x, int y, QString text);
-//	void openParameterSelection();
-//	void parameterShowShortcutPressed();
 	void createContextMenu(QPoint pos);
 
 	void showOrc(bool);
@@ -140,11 +136,8 @@ protected:
 private:
 	QString changeToChnget(QString text);
 	QString changeToInvalue(QString text);
-	//    void createSyntaxMenu();
 
 	MySyntaxMenu *syntaxMenu;
-//	MySyntaxMenu *parameterMenu;
-//	QPushButton *parameterButton;
 
 	QWidget *m_hoverWidget;
 	QLabel *m_hoverText;
