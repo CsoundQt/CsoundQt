@@ -108,6 +108,13 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	setViewMode(1);
 	setViewMode(0);  // To force a change
 	setAcceptDrops(true);
+
+	m_hoverWidget = new QWidget(m_mainEditor);
+	m_hoverWidget->setAutoFillBackground(true);
+	m_hoverText= new QLabel("Hello", m_hoverWidget);
+	m_hoverText->show();
+
+	m_hoverWidget->hide();
 }
 
 DocumentView::~DocumentView()
@@ -272,6 +279,8 @@ void DocumentView::nextParameter()
 		}
 	}
 	m_mainEditor->setTextCursor(cursor);
+	QRect cursorRect = m_mainEditor->cursorRect();
+	updateHoverText(cursorRect.x(), cursorRect.y(), cursor.selectedText());
 //	QRect r =  m_mainEditor->cursorRect();
 //	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
 //	parameterButton->move(p);
@@ -311,6 +320,8 @@ void DocumentView::prevParameter()
 		}
 	}
 	m_mainEditor->setTextCursor(cursor);
+	QRect cursorRect = m_mainEditor->cursorRect();
+	updateHoverText(cursorRect.x(), cursorRect.y(), cursor.selectedText());
 //	QRect r =  m_mainEditor->cursorRect();
 //	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
 //	parameterButton->move(p);
@@ -318,6 +329,22 @@ void DocumentView::prevParameter()
 //	if (m_opcodeTree->isOpcode(cursor.selectedText()) && !cursor.atBlockStart()) {
 //		prevParameter();
 //	}
+}
+
+void DocumentView::updateHoverText(int x, int y, QString text)
+{
+	QString displayText = m_currentOpcodeText;
+	displayText.replace(text, "<b>" + text + "</b>");
+	m_hoverText->setText(displayText);
+	m_hoverText->adjustSize();
+	QRect textRect = m_hoverText->contentsRect();
+	int xoffset = 0;
+	if (m_currentOpcodeText.contains(text)) {
+		xoffset = 10 + textRect.width() * (m_currentOpcodeText.indexOf(text)/(float) (m_currentOpcodeText.indexOf("<br />") + 5));
+	}
+	m_hoverWidget->setGeometry(x - xoffset, y-textRect.height() - 5, textRect.width() + 10, textRect.height());
+
+	m_hoverWidget->show();
 }
 
 //void DocumentView::openParameterSelection()
@@ -660,26 +687,23 @@ void DocumentView::syntaxCheck()
 {
 	// TODO implment for multiple views
 
-	int line = currentLine();
-	emit(lineNumberSignal(line));
-
 	TextEditor *editor;
 	if (m_viewMode < 2) {
+		// TODO rather than check this, store the current active one?
 		editor = m_mainEditor;
 	}
 	else { //  Split view
 		editor = (TextEditor *) sender();
 	}
 	QTextCursor cursor = editor->textCursor();
-	cursor.select(QTextCursor::LineUnderCursor);
+	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
 	QStringList words = cursor.selectedText().split(QRegExp("\\b"));
-	foreach(QString word, words) {
-		// We need to remove all not possibly opcode
-		word.remove(QRegExp("[^\\d\\w]"));
-		if (!word.isEmpty()) {
+	for(int i = 0; i < words.size(); i++) {
+		QString word = words[words.size() - i - 1];
+		if (m_opcodeTree->isOpcode(word)) {
 			QString syntax = m_opcodeTree->getSyntax(word);
 			if(!syntax.isEmpty()) {
-				emit(opcodeSyntaxSignal(syntax));
+				m_currentOpcodeText = syntax;
 				return;
 			}
 		}
@@ -890,6 +914,7 @@ void DocumentView::exitParameterMode()
 	} else {
 		qDebug() << "exitParameterMode() not implemented for split view";
 	}
+	m_hoverWidget->hide();
 //	parameterButton->setVisible(false);
 }
 

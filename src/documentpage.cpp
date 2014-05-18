@@ -1203,7 +1203,6 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 
 	// Connect for clearing marked lines and letting inspector know text has changed
 	connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));
-	connect(m_view, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(opcodeSyntax(QString)));
 	//   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
 
 	connect(m_csEngine, SIGNAL(errorLines(QList<QPair<int, QString> >)),
@@ -1600,11 +1599,6 @@ void DocumentPage::setPanelTempo(LiveEventFrame *panel, double tempo)
 	if (index >= 0) {
 		m_liveEventControl->setPanelTempo(index, tempo);
 	}
-}
-
-void DocumentPage::opcodeSyntax(QString message)
-{
-	emit opcodeSyntaxSignal(message);
 }
 
 void DocumentPage::evaluatePython(QString code)

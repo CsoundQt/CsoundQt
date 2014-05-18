@@ -40,33 +40,33 @@ TextEditor::TextEditor(QWidget *parent) :
 
 void TextEditor::keyPressEvent (QKeyEvent * event)
 {
-	if(event->key() == Qt::Key_Tab) {
+	switch(event->key()) {
+	case Qt::Key_Tab:
 		if (m_parameterMode) {
 			emit tabPressed();
-			return;
 
 		} else if(m_tabIndents) {
 			emit requestIndent();
-			return;
 		}
-	}
-	if(event->key() == Qt::Key_Backtab) {
+		return;
+	case Qt::Key_Backtab:
 		if (m_parameterMode) {
 			emit backtabPressed();
-			return;
 		} else if(m_tabIndents) {
 			emit requestUnindent();
-			return;
 		}
-	}
-	if (event->key() == Qt::Key_Down && m_parameterMode) {
-		emit openParameterSelection();
 		return;
-	}
-	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+	case Qt::Key_Down:
+		if (m_parameterMode) {
+			emit openParameterSelection();
+		}
+		return;
+	case Qt::Key_Return:
+	case Qt::Key_Enter:
 		emit enterPressed();
+		break;
 	}
-	QTextEdit::keyPressEvent(event);
+	QTextEdit::keyPressEvent(event); // Process key events in the rest of the application
 	if (event->key() == Qt::Key_Up || event->key() == Qt::Key_Down
 			|| event->key() == Qt::Key_Left || event->key() == Qt::Key_Right) {
 		emit arrowPressed();

@@ -143,7 +143,7 @@ QString OpEntryParser::getSyntax(QString opcodeName)
 		if (!opcodeList[i].inArgs.isEmpty()) {
 			syntax += " " + opcodeList[i].inArgs.simplified();
 		}
-		out = syntax + "    [ " + opcodeList[i].desc + " ]";
+		out = syntax + "<br />[ " + opcodeList[i].desc + " ]";
 	}
 	return out;
 }

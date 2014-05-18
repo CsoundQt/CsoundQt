@@ -875,6 +875,12 @@ int CsoundEngine::runCsound()
     }
 #endif
 
+	csoundSetIsGraphable(ud->csound, true);
+	csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
+	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
+	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
+	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
+
 	char **argv;
 	argv = (char **) calloc(33, sizeof(char*));
 	int argc = m_options.generateCmdLine(argv);
@@ -900,12 +906,6 @@ int CsoundEngine::runCsound()
 	if (ud->enableWidgets) {
 		setupChannels();
 	}
-
-    csoundSetIsGraphable(ud->csound, true);
-    csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
-    csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
-    csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
-    csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
 
 	ud->perfThread = new CsoundPerformanceThread(ud->csound);
 	ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
