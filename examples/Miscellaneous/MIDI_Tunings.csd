@@ -24,6 +24,9 @@ nchnls =  2
 ;                   SOME GLOBAL VARIABLES AND ASSIGNMENTS                    ;
 ;============================================================================;
 
+
+giScales[][] init   30, 100 ;two-dimensional array to hold the values
+giScaleLens[] init  30 ;how many values in one scale
 giSine    ftgen     0, 0, 8192, 10, 1 
 giSaw     ftgen     0, 0, 8192, 10, 1, 1/2, 1/3, 1/4, 1/5, 1/6, 1/7, 1/8, 1/9 
 giSquare  ftgen     0, 0, 8192, 10, 1, 0, 1/3, 0, 1/5, 0, 1/7, 0, 1/9, 0, 1/11 
@@ -46,68 +49,56 @@ ifreq     =         iref_freq * (iumult ^ (istep / istepspu))
           xout      ifreq 
   endop
 
-  opcode FreqByCentArr, i, i[]iii
+  opcode FreqByCentArr, i, iii
   ;frequency calculation of a step of a scale which is defined by a list of cent values
-;iarrcent:	array with the number of cent values per unit multiplier (usually 2 = octave)
-	;the first value must be 0 and matches iref_freq, if istep == 0
+;refers to the which index of giScales: array with the number of cent values per unit multiplier (usually 2 = octave)
+;its first value is the unit multiplier iumult
+;the second value must be 0 and matches iref_freq, if istep == 0
 ;iref_freq:	reference frequency (= for istep == 0)
-;iumult:	unit multiplier (2 = octave, 3 = duodecime or whatever)
 ;istep:	selected step (0 = reference frequency, 1 = one step higher, -1 = one step lower)
-iarrcent[], iref_freq, iumult, istep xin 
-iarrlen   =         lenarray(iarrcent) 
-ipos      =         floor(istep/iarrlen); "octave" position 
+iwhich, iref_freq, istep xin 
+iumult    =         giScales[iwhich][0]
+iarrlen   =         giScaleLens[iwhich] - 1
+ipos      =         floor(istep/iarrlen) ;"octave" position 
 ibasfreq  =         (iumult ^ ipos) * iref_freq; base freq of istep 
-icentindx =         istep % iarrlen; position of the appropriate centvalue ... 
-icentindx =         (icentindx < 0 ? (iarrlen + icentindx) : icentindx); ... in the array 
-icent     =         iarrcent[icentindx] ; get cent value 
+icentindx =         istep % iarrlen + 1 ;position of the appropriate centvalue ... 
+icentindx =         (icentindx < 1 ? (iarrlen + icentindx) : icentindx); ... in the array 
+icent     =         giScales[iwhich][icentindx] ; get cent value 
 ifreq     =         ibasfreq * cent(icent); get frequency 
           xout      ifreq 
   endop
 
-  opcode FreqByRatioArr, i, i[]iii
+  opcode FreqByRatioArr, i, iii
   ;frequency calculation of a step in a scale which is defined by a list of proportions
-;iarrprops:	array with the number of proportions per unit multiplier (usually 2 = octave)
-	;the first value must be 1 and matches iref_freq, if istep == 0
+;refers to the which index of giScales:	array with the number of proportions per unit multiplier (usually 2 = octave)
+;its first value is the unit multiplier iumult (2 = octave, 3 = duodecime or whatever)
+;the second value must be 1 and matches iref_freq, if istep == 0
 ;iref_freq:	reference frequency (= for istep == 0)
-;iumult:	unit multiplier (2 = octave, 3 = duodecime or whatever)
 ;istep:	selected step (0 = reference frequency, 1 = one step higher, -1 = one step lower)
-iarrprops[], iref_freq, iumult, istep xin 
-iarrlen   =         lenarray(iarrprops) 
+iwhich, iref_freq, istep xin 
+iumult    =         giScales[iwhich][0]
+iarrlen   =         giScaleLens[iwhich] - 1
 ipos      =         floor(istep/iarrlen); "octave" position 
 ibasfreq  =         (iumult ^ ipos) * iref_freq; base freq of istep 
-ipropindx =         istep % iarrlen; position of the appropriate proportion ... 
-ipropindx =         (ipropindx < 0 ? (iarrlen + ipropindx) : ipropindx); ... in the array 
-iprop     =         iarrprops[ipropindx] ; get proportion 
+ipropindx =         istep % iarrlen + 1; position of the appropriate proportion ... 
+ipropindx =         (ipropindx < 1 ? (iarrlen + ipropindx) : ipropindx); ... in the array 
+iprop     =         giScales[iwhich][ipropindx] ; get proportion 
 ifreq     =         ibasfreq * iprop; get frequency 
           xout      ifreq 
   endop
 
-  opcode CpArr1, i[], i[]
-  ;copies iInArr starting from index 1 and returns the copy as iOutArr
-iInArr[] xin 
-iOutArr[] init lenarray(iInArr)-1
-indx = 1
-until indx == lenarray(iInArr) do
-iOutArr[indx-1] = iInArr[indx]
-indx += 1
-enduntil
-          xout      iOutArr
-  endop
-
-  opcode FreqByECRArr, i, i[]ii
-  ;frequency calculation by either equal steps, cent list, or ratio list. the first value in iarr gives the unit multiplier of the scale (e.g. 2 = octave or 3 = perfect 12th). the methods are distinguished by the second value in iarr:
-;if the second value is 0, iarr is considered to be a centlist
-;if the second value is 1, iarr is considered to be a list of proportions
+  opcode FreqByECRArr, i, iii
+  ;frequency calculation by either equal steps, cent list, or ratio list. the first value in the array gives the unit multiplier of the scale (e.g. 2 = octave or 3 = perfect 12th). the methods are distinguished by the second value in iarr:
+;if the second value is 0, the array is considered to be a centlist
+;if the second value is 1, the arry is considered to be a list of proportions
 ;else the second value is read as the number of equal tempered steps in the unit multiplier (e.g. 12 gives the usual keyboard tuning with a ratio of 12th root by 2 for each step when the first table value is 2)
-iarr[], iref_freq, istep xin 
-ifirst    =         iarr[0] ; unit multiplier 
-isecond   =         iarr[1] ; 0=centlist, 1=ratios, else=equal tempered 
+iwhich, iref_freq, istep xin ;iwhich = index in giScales and giScaleLens
+ifirst    =         giScales[iwhich][0] ; unit multiplier 
+isecond   =         giScales[iwhich][1] ; 0=centlist, 1=ratios, else=equal tempered 
 if isecond == 0 then
-iarrin[]  CpArr1    iarr
-ifreq FreqByCentArr iarrin, iref_freq, ifirst, istep 
+ifreq FreqByCentArr iwhich, iref_freq, istep 
 elseif isecond == 1 then
-iarrin[]  CpArr1    iarr
-ifreq FreqByRatioArr iarrin, iref_freq, ifirst, istep 
+ifreq FreqByRatioArr iwhich, iref_freq, istep 
           else 
 ifreq FreqByEqScale iref_freq, ifirst, isecond, istep 
 endif
@@ -293,17 +284,18 @@ iwarsep   =         0; and tell you are ot sep1 nor sep2
 end:      xout      icount
   endop 
 
-  opcode StrayNumToAi, i[], Sjj
-  ;fill a numerical string into an i-array
-Stray, isepA, isepB xin
+  opcode SToScaleArr, 0, Sijj
+  ;fill a numerical string into iwhere first dimension of giScales
+  ;and its length into iwhere of giScaleLens
+Stray, iwhere, isepA, isepB xin
 ;;DEFINE THE SEPERATORS
 isep1     =         (isepA == -1 ? 32 : isepA)
 isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1      sprintf   "%c", isep1
 Sep2      sprintf   "%c", isep2
-;;CREATE ARRAY TO COPY IN
+;;WRITE ARRAY LENGTH
 iarrlen   StrayLen  Stray, isep1, isep2
-iArr[]    init      iarrlen
+giScaleLens[iwhere] = iarrlen
 ;;INITIALIZE SOME PARAMETERS
 ilen      strlen    Stray
 istartsel =         -1; startindex for searched element
@@ -336,12 +328,11 @@ iwarleer  =         1 ;reset info about previous separator
  ;WRITE THE ELEMENT TO THE ARRAY
  if inewel == 1 then
 inum      StrExpr   Sel ;convert expression to number
-iArr[iel]  =        inum
+giScales[iwhere][iel] = inum
  endif
 inewel    =         0
           loop_le   indx, 1, ilen, loop 
 end:
-          xout      iArr
   endop 
   
   opcode ShowLED_a, 0, Sakkk
@@ -512,68 +503,36 @@ Scale27   invalue    "scale27"
 Scale28   invalue    "scale28"
 Scale29   invalue    "scale29"
 Scale30   invalue    "scale30"
-giScale1[] StrayNumToAi Scale1
-giScale2[] StrayNumToAi Scale2
-giScale3[] StrayNumToAi Scale3
-giScale4[] StrayNumToAi Scale4
-giScale5[] StrayNumToAi Scale5
-giScale6[] StrayNumToAi Scale6
-giScale7[] StrayNumToAi Scale7
-giScale8[] StrayNumToAi Scale8
-giScale9[] StrayNumToAi Scale9
-giScale10[] StrayNumToAi Scale10
-giScale11[] StrayNumToAi Scale11
-giScale12[] StrayNumToAi Scale12
-giScale13[] StrayNumToAi Scale13
-giScale14[] StrayNumToAi Scale14
-giScale15[] StrayNumToAi Scale15
-giScale16[] StrayNumToAi Scale16
-giScale17[] StrayNumToAi Scale17
-giScale18[] StrayNumToAi Scale18
-giScale19[] StrayNumToAi Scale19
-giScale20[] StrayNumToAi Scale20
-giScale21[] StrayNumToAi Scale21
-giScale22[] StrayNumToAi Scale22
-giScale23[] StrayNumToAi Scale23
-giScale24[] StrayNumToAi Scale24
-giScale25[] StrayNumToAi Scale25
-giScale26[] StrayNumToAi Scale26
-giScale27[] StrayNumToAi Scale27
-giScale28[] StrayNumToAi Scale28
-giScale29[] StrayNumToAi Scale29
-giScale30[] StrayNumToAi Scale30
-/*
-PrtArr1i giScale1
-PrtArr1i giScale2
-PrtArr1i giScale3
-PrtArr1i giScale4
-PrtArr1i giScale5
-PrtArr1i giScale6
-PrtArr1i giScale7
-PrtArr1i giScale8
-PrtArr1i giScale9
-PrtArr1i giScale10
-PrtArr1i giScale11
-PrtArr1i giScale12
-PrtArr1i giScale13
-PrtArr1i giScale14
-PrtArr1i giScale15
-PrtArr1i giScale16
-PrtArr1i giScale17
-PrtArr1i giScale18
-PrtArr1i giScale19
-PrtArr1i giScale20
-PrtArr1i giScale21
-PrtArr1i giScale22
-PrtArr1i giScale23
-PrtArr1i giScale24
-PrtArr1i giScale25
-PrtArr1i giScale26
-PrtArr1i giScale27
-PrtArr1i giScale28
-PrtArr1i giScale29
-PrtArr1i giScale30
-*/
+SToScaleArr Scale1, 0
+SToScaleArr Scale2, 1
+SToScaleArr Scale3, 2
+SToScaleArr Scale4, 3
+SToScaleArr Scale5, 4
+SToScaleArr Scale6, 5
+SToScaleArr Scale7, 6
+SToScaleArr Scale8, 7
+SToScaleArr Scale9, 8
+SToScaleArr Scale10, 9
+SToScaleArr Scale11, 10
+SToScaleArr Scale12, 11
+SToScaleArr Scale13, 12
+SToScaleArr Scale14, 13
+SToScaleArr Scale15, 14
+SToScaleArr Scale16, 15
+SToScaleArr Scale17, 16
+SToScaleArr Scale18, 17
+SToScaleArr Scale19, 18
+SToScaleArr Scale20, 19
+SToScaleArr Scale21, 20
+SToScaleArr Scale22, 21
+SToScaleArr Scale23, 22
+SToScaleArr Scale24, 23
+SToScaleArr Scale25, 24
+SToScaleArr Scale26, 25
+SToScaleArr Scale27, 26
+SToScaleArr Scale28, 27
+SToScaleArr Scale29, 28
+SToScaleArr Scale30, 29
           turnoff 
   endin
 
@@ -585,126 +544,126 @@ PrtArr1i giScale30
 
   ;EQUAL TEMPERED
  if i(gkscale) == 1 then	;halftone
-;Sinfo     sprintf   "1 Halftone\n12 steps per octave with a ratio of 12th root of 2 = %f...", 2^(1/12) 
-Sinfo = "Scale 1 selected"
+Sinfo     sprintf   "1 Halftone\n12 steps per octave with a ratio of 12th root of 2 = %f...", 2^(1/12) 
+;Sinfo = "Scale 1 selected"
           outvalue  "equal_tmprd", 0 
  elseif i(gkscale) == 2 then	;thirdtone
-;Sinfo     sprintf   "2 Thirdtone\n18 steps per octave with a ratio of 18th root of 2 = %f...", 2^(1/18) 
-Sinfo = "Scale 2 selected"
+Sinfo     sprintf   "2 Thirdtone\n18 steps per octave with a ratio of 18th root of 2 = %f...", 2^(1/18) 
+;Sinfo = "Scale 2 selected"
           outvalue  "equal_tmprd", 1 
  elseif i(gkscale) == 3 then	;quartertone
-Sinfo = "Scale 3 selected"
-;Sinfo     sprintf   "3 Quartertone\n24 steps per octave with a ratio of 24th root of 2 = %f...", 2^(1/24) 
+;Sinfo = "Scale 3 selected"
+Sinfo     sprintf   "3 Quartertone\n24 steps per octave with a ratio of 24th root of 2 = %f...", 2^(1/24) 
           outvalue  "equal_tmprd", 2 
  elseif i(gkscale) == 4 then	;fifthtone
-Sinfo = "Scale 4 selected"
-;Sinfo     sprintf   "4 Fifthtone\n30 steps per octave with a ratio of 30th root of 2 = %f...", 2^(1/30) 
+;Sinfo = "Scale 4 selected"
+Sinfo     sprintf   "4 Fifthtone\n30 steps per octave with a ratio of 30th root of 2 = %f...", 2^(1/30) 
           outvalue  "equal_tmprd", 3 
  elseif i(gkscale) == 5 then	;sixthtone
-Sinfo = "Scale 5 selected"
-;Sinfo     sprintf   "5 Sixthtone\n36 steps per octave with a ratio of 36th root of 2 = %f...", 2^(1/36) 
+;Sinfo = "Scale 5 selected"
+Sinfo     sprintf   "5 Sixthtone\n36 steps per octave with a ratio of 36th root of 2 = %f...", 2^(1/36) 
           outvalue  "equal_tmprd", 4 
  elseif i(gkscale) == 6 then	;eighttone
-Sinfo = "Scale 6 selected"
-;Sinfo     sprintf   "6 Eighttone\n48 steps per octave with a ratio of 48th root of 2 = %f...", 2^(1/48) 
+;Sinfo = "Scale 6 selected"
+Sinfo     sprintf   "6 Eighttone\n48 steps per octave with a ratio of 48th root of 2 = %f...", 2^(1/48) 
           outvalue  "equal_tmprd", 5 
  elseif i(gkscale) == 7 then	;twelfsttone
-Sinfo = "Scale 7 selected"
-;Sinfo     sprintf   "7 Twelfsttone\n72 steps per octave with a ratio of 72th root of 2 = %f...", 2^(1/72) 
+;Sinfo = "Scale 7 selected"
+Sinfo     sprintf   "7 Twelfsttone\n72 steps per octave with a ratio of 72th root of 2 = %f...", 2^(1/72) 
           outvalue  "equal_tmprd", 6 
  elseif i(gkscale) == 8 then	;sixteenthtone
-Sinfo = "Scale 8 selected"
-;Sinfo     sprintf   "8 Sixteenthtone\n96 steps per octave with a ratio of 96th root of 2 = %f...", 2^(1/96) 
+;Sinfo = "Scale 8 selected"
+Sinfo     sprintf   "8 Sixteenthtone\n96 steps per octave with a ratio of 96th root of 2 = %f...", 2^(1/96) 
           outvalue  "equal_tmprd", 7 
  elseif i(gkscale) == 9 then	;stockhausen scale in "studie ii"
-Sinfo = "Scale 9 selected"
-;Sinfo     sprintf   "9 Stockhausen Scale in 'Studie II'\n25 steps per 1:5 with a ratio of 25th root of 5 = %f...", 5^(1/25) 
+;Sinfo = "Scale 9 selected"
+Sinfo     sprintf   "9 Stockhausen Scale in 'Studie II'\n25 steps per 1:5 with a ratio of 25th root of 5 = %f...", 5^(1/25) 
           outvalue  "equal_tmprd", 8 
  elseif i(gkscale) == 10 then	;user defined
-Sinfo = "Scale 10 selected"
-;Sinfo     sprintf   "%s", "10 User defined\nYou can add your own description in the code at instr 4" 
+;Sinfo = "Scale 10 selected"
+Sinfo     sprintf   "%s", "10 User defined\nYou can add your own description in the code at instr 4" 
           outvalue  "equal_tmprd", 9 
  ;VARIOUS TEMPERED
  elseif i(gkscale) == 11 then		;pythagorean
-Sinfo = "Scale 11 selected"
-;Sinfo     sprintf   "%s", "11 Pythagorean chromatic scale (14th century) with ratios\n1, 2187/2048, 9/8, 32/27, 81/64, 4/3, 729/512, 3/2, 6561/4096, 27/16, 16/9, 243/128\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 41)" 
+;Sinfo = "Scale 11 selected"
+Sinfo     sprintf   "%s", "11 Pythagorean chromatic scale (14th century) with ratios\n1, 2187/2048, 9/8, 32/27, 81/64, 4/3, 729/512, 3/2, 6561/4096, 27/16, 16/9, 243/128\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 41)" 
           outvalue  "various", 0 
  elseif i(gkscale) == 12 then	;zarlino / meantone
-Sinfo = "Scale 12 selected"
-;Sinfo     sprintf   "%s", "12 Meantone temperature after Zarlino 1571 with cent values\n0, 76, 193, 310, 386, 503, 579, 697, 773, 890, 1007, 1083\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 68)" 
+;Sinfo = "Scale 12 selected"
+Sinfo     sprintf   "%s", "12 Meantone temperature after Zarlino 1571 with cent values\n0, 76, 193, 310, 386, 503, 579, 697, 773, 890, 1007, 1083\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 68)" 
           outvalue  "various", 1 
  elseif i(gkscale) == 13 then	;werckmeister III
-Sinfo = "Scale 13 selected"
-;Sinfo     sprintf   "%s", "13 Werckmeister III temperature (1691) with cent values\n0, 90, 192, 294, 390, 498, 588, 696, 792, 888, 996, 1092\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 97)" 
+;Sinfo = "Scale 13 selected"
+Sinfo     sprintf   "%s", "13 Werckmeister III temperature (1691) with cent values\n0, 90, 192, 294, 390, 498, 588, 696, 792, 888, 996, 1092\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 97)" 
           outvalue  "various", 2 
  elseif i(gkscale) == 14 then	;kirnberger II
-Sinfo = "Scale 14 selected"
-;Sinfo     sprintf   "%s", "14 Kirnberger II temperature (1771) with cent values\n0, 90, 204, 294, 386, 498, 590, 702, 792, 895, 996, 1088\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 100)" 
+;Sinfo = "Scale 14 selected"
+Sinfo     sprintf   "%s", "14 Kirnberger II temperature (1771) with cent values\n0, 90, 204, 294, 386, 498, 590, 702, 792, 895, 996, 1088\n(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 100)" 
           outvalue  "various", 3 
  elseif i(gkscale) == 15 then	;sruti I
-Sinfo = "Scale 15 selected"
-;Sinfo     sprintf   "%s", "15 Sruti I:\n22 steps per octave in indian classical music with cent values \n0, 90, 112, 182, 204, 294, 316, 386, 408, 498, 520, 590, 610, 702, 792, 814, 884, 906, 996, 1018, 1088, 1110\n(after P. Sambamoorthy, South Indian, Music, Book IV, Second Edition, Madras 1954, pp 95-97)" 
+;Sinfo = "Scale 15 selected"
+Sinfo     sprintf   "%s", "15 Sruti I:\n22 steps per octave in indian classical music with cent values \n0, 90, 112, 182, 204, 294, 316, 386, 408, 498, 520, 590, 610, 702, 792, 814, 884, 906, 996, 1018, 1088, 1110\n(after P. Sambamoorthy, South Indian, Music, Book IV, Second Edition, Madras 1954, pp 95-97)" 
           outvalue  "various", 4 
  elseif i(gkscale) == 16 then	;sruti II
-Sinfo = "Scale 16 selected"
-;Sinfo     sprintf   "%s", "16 Sruti II:\n22 steps per octave in indian clssical music with cent values\n0, 68.6, 135.3, 200.21, 263.46, 325.13, 385.33, 444.13, 501.62, 557.85, 612.91, 666.85, 719.73, 771.6, 822.5, 872.48, 921.59, 969.86, 1017.33, 1064.04, 1110.01, 1155.28\n(after Narsing R. Eswara, Tonal Foundations of Indian Music, 2007, Appendix A.4)" 
+;Sinfo = "Scale 16 selected"
+Sinfo     sprintf   "%s", "16 Sruti II:\n22 steps per octave in indian clssical music with cent values\n0 68, 135, 200, 263, 325, 385, 444, 501, 557, 612, 666, 719, 771, 822, 872, 921, 969, 1017, 1064, 1110, 1155\n(after Narsing R. Eswara, Tonal Foundations of Indian Music, 2007, Appendix A.4)" 
           outvalue  "various", 5 
  elseif i(gkscale) == 17 then	;user defined
-Sinfo = "Scale 17 selected"
-;Sinfo     sprintf   "%s", "17 User defined\nYou can add your own description in the code at instr 4" 
+;Sinfo = "Scale 17 selected"
+Sinfo     sprintf   "%s", "17 User defined\nYou can add your own description in the code at instr 4" 
           outvalue  "various", 6 
  elseif i(gkscale) == 18 then	;user defined
-Sinfo = "Scale 18 selected"
-;Sinfo     sprintf   "%s", "18 User defined\nYou can add your own description in the code at instr 4" 
+;Sinfo = "Scale 18 selected"
+Sinfo     sprintf   "%s", "18 User defined\nYou can add your own description in the code at instr 4" 
           outvalue  "various", 7 
  elseif i(gkscale) == 19 then	;user defined
-Sinfo = "Scale 19 selected"
-;Sinfo     sprintf   "%s", "19 User defined\nYou can add your own description in the code at instr 4" 
+;Sinfo = "Scale 19 selected"
+Sinfo     sprintf   "%s", "19 User defined\nYou can add your own description in the code at instr 4" 
           outvalue  "various", 8 
  elseif i(gkscale) == 20 then	;user defined
-Sinfo = "Scale 20 selected"
-;Sinfo     sprintf   "%s", "20 User defined\nYou can add your own description in the code at instr 4" 
+;Sinfo = "Scale 20 selected"
+Sinfo     sprintf   "%s", "20 User defined\nYou can add your own description in the code at instr 4" 
           outvalue  "various", 9 
  ;BOHLEN-PIERCE
  elseif i(gkscale) == 21 then	;equal tempered (13 steps)
-Sinfo = "Scale 21 selected"
-;Sinfo     sprintf   "21 Bohlen-Pierce Equal Tempered:\n13 steps per 3:1 (duodecima) with a ratio of 13th root of 3 = %f...", 3^(1/13) 
+;Sinfo = "Scale 21 selected"
+Sinfo     sprintf   "21 Bohlen-Pierce Equal Tempered:\n13 steps per 3:1 (duodecima) with a ratio of 13th root of 3 = %f...", 3^(1/13) 
           outvalue  "bohlen-pierce", 0 
  elseif i(gkscale) == 22 then	;ratios (13 steps)
-Sinfo = "Scale 22 selected"
-;Sinfo     sprintf   "%s", "22 Bohlen-Pierce Ratios:\n13 steps per 3:1 (duodecima) with ratios 1, 27/25, 25/21, 9/7, 7/5, 75/49, 5/3, 9/5, 49/25, 15/7, 7/3, 63/25, 25/9" 
+;Sinfo = "Scale 22 selected"
+Sinfo     sprintf   "%s", "22 Bohlen-Pierce Ratios:\n13 steps per 3:1 (duodecima) with ratios 1, 27/25, 25/21, 9/7, 7/5, 75/49, 5/3, 9/5, 49/25, 15/7, 7/3, 63/25, 25/9" 
           outvalue  "bohlen-pierce", 1 
  elseif i(gkscale) == 23 then	;Dur I (9 steps)
-Sinfo = "Scale 23 selected"
-;Sinfo     sprintf   "%s", "23 Bohlen-Pierce Dur I Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 49/25, 7/3, 63/25" 
+;Sinfo = "Scale 23 selected"
+Sinfo     sprintf   "%s", "23 Bohlen-Pierce Dur I Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 49/25, 7/3, 63/25" 
           outvalue  "bohlen-pierce", 2 
  elseif i(gkscale) == 24 then	;Dur II (9 steps)
-Sinfo = "Scale 24 selected"
-;Sinfo     sprintf   "%s", "24 Bohlen-Pierce Dur II Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 25/21, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 63/25" 
+;Sinfo = "Scale 24 selected"
+Sinfo     sprintf   "%s", "24 Bohlen-Pierce Dur II Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 25/21, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 63/25" 
           outvalue  "bohlen-pierce", 3 
  elseif i(gkscale) == 25 then	;Moll I (9 steps)
-Sinfo = "Scale 25 selected"
-;Sinfo     sprintf   "%s", "25 Bohlen-Pierce Moll I Mode (Delta):\n9 steps per 3:1 (duodecima) with ratios 1, 25/21, 9/7, 75/49, 5/3, 9/5, 15/7, 7/3, 25/9" 
+;Sinfo = "Scale 25 selected"
+Sinfo     sprintf   "%s", "25 Bohlen-Pierce Moll I Mode (Delta):\n9 steps per 3:1 (duodecima) with ratios 1, 25/21, 9/7, 75/49, 5/3, 9/5, 15/7, 7/3, 25/9" 
           outvalue  "bohlen-pierce", 4 
  elseif i(gkscale) == 26 then	;Moll II (9 steps)
-Sinfo = "Scale 26 selected"
-;Sinfo     sprintf   "%s", "26 Bohlen-Pierce Moll II Mode (Pierce):\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 25/9" 
+;Sinfo = "Scale 26 selected"
+Sinfo     sprintf   "%s", "26 Bohlen-Pierce Moll II Mode (Pierce):\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 25/9" 
           outvalue  "bohlen-pierce", 5 
  elseif i(gkscale) == 27 then	;Gamma (9 steps)
-Sinfo = "Scale 27 selected"
-;Sinfo     sprintf   "%s", "27 Bohlen-Pierce Gamma Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 49/25, 7/3, 25/9" 
+;Sinfo = "Scale 27 selected"
+Sinfo     sprintf   "%s", "27 Bohlen-Pierce Gamma Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 49/25, 7/3, 25/9" 
           outvalue  "bohlen-pierce", 6 
  elseif i(gkscale) == 28 then	;Harmonic (9 steps)
-Sinfo = "Scale 28 selected"
-;Sinfo     sprintf   "%s", "28 Bohlen-Pierce Harmonic Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 63/25" 
+;Sinfo = "Scale 28 selected"
+Sinfo     sprintf   "%s", "28 Bohlen-Pierce Harmonic Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 27/25, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 63/25" 
           outvalue  "bohlen-pierce", 7 
  elseif i(gkscale) == 29 then	;Lambda (9 steps)
-Sinfo = "Scale 29 selected"
-;Sinfo     sprintf   "%s", "29 Bohlen-Pierce Lambda Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 25/21, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 25/9" 
+;Sinfo = "Scale 29 selected"
+Sinfo     sprintf   "%s", "29 Bohlen-Pierce Lambda Mode:\n9 steps per 3:1 (duodecima) with ratios 1, 25/21, 9/7, 7/5, 5/3, 9/5, 15/7, 7/3, 25/9" 
           outvalue  "bohlen-pierce", 8 
  elseif i(gkscale) == 30 then	;user defined
-Sinfo = "Scale 30 selected"
-;Sinfo     sprintf   "%s", "30 User defined\nYou can add your own description in the code at instr 4" 
+;Sinfo = "Scale 30 selected"
+Sinfo     sprintf   "%s", "30 User defined\nYou can add your own description in the code at instr 4" 
           outvalue  "bohlen-pierce", 9 
  endif
           outvalue  "scsel1", (i(gkscale) < 11 ? 1 : 0) 
@@ -745,7 +704,7 @@ Scentdiff sprintf   "%.1f", icentdiff
   endin 
 
   instr play; playing one note
-  
+
 ;;INPUT
 ikey      notnum 
 ivel      veloc 
@@ -784,70 +743,8 @@ ivel      =         ivel/127
 ireftone  =         i(gkreftone) 
 itunfreq  =         i(gktunfreq) 
 iscale    =         i(gkscale); 1-30 
- ;the following is really ugly -- how to reference arrays by a number?
- if iscale == 1 then
-iArr[]    =         giScale1
- elseif iscale == 2 then
-iArr[]    =         giScale2
- elseif iscale == 3 then
-iArr[]    =         giScale3
- elseif iscale == 4 then
-iArr[]    =         giScale4
- elseif iscale == 5 then
-iArr[]    =         giScale5
- elseif iscale == 6 then
-iArr[]    =         giScale6
- elseif iscale == 7 then
-iArr[]    =         giScale7
- elseif iscale == 8 then
-iArr[]    =         giScale8
- elseif iscale == 9 then
-iArr[]    =         giScale9
- elseif iscale == 10 then
-iArr[]    =         giScale10
- elseif iscale == 11 then
-iArr[]    =         giScale11
- elseif iscale == 12 then
-iArr[]    =         giScale12
- elseif iscale == 13 then
-iArr[]    =         giScale13
- elseif iscale == 14 then
-iArr[]    =         giScale14
- elseif iscale == 15 then
-iArr[]    =         giScale15
- elseif iscale == 16 then
-iArr[]    =         giScale16
- elseif iscale == 17 then
-iArr[]    =         giScale17
- elseif iscale == 18 then
-iArr[]    =         giScale18
- elseif iscale == 19 then
-iArr[]    =         giScale19
- elseif iscale == 20 then
-iArr[]    =         giScale20
- elseif iscale == 21 then
-iArr[]    =         giScale21
- elseif iscale == 22 then
-iArr[]    =         giScale22
- elseif iscale == 23 then
-iArr[]    =         giScale23
- elseif iscale == 24 then
-iArr[]    =         giScale24
- elseif iscale == 25 then
-iArr[]    =         giScale25
- elseif iscale == 26 then
-iArr[]    =         giScale26
- elseif iscale == 27 then
-iArr[]    =         giScale27
- elseif iscale == 28 then
-iArr[]    =         giScale28
- elseif iscale == 29 then
-iArr[]    =         giScale29
- elseif iscale == 30 then
-iArr[]    =         giScale30
- endif
 istep     =         ikey - ireftone; how many steps (keys) higher or lower than the reftone 
-ifreq     FreqByECRArr iArr, itunfreq, istep; calculation of the frequency 
+ifreq     FreqByECRArr iscale-1, itunfreq, istep; calculation of the frequency 
 
 ;;SELECT OUTPUT SOUND
   if gksound == 0 then; sine
@@ -870,6 +767,7 @@ gadry     =         gadry + aout; add to global audio signal
           event_i   "i", "show_output", 0, 1, ikey, ifreq 
           
  endif
+
   endin
 
 
@@ -907,10 +805,10 @@ i "init" 0 1
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>226</x>
- <y>26</y>
- <width>1120</width>
- <height>663</height>
+ <x>49</x>
+ <y>9</y>
+ <width>1290</width>
+ <height>754</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -957,7 +855,7 @@ i "init" 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>72</label>
+  <label>57</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1015,7 +913,7 @@ i "init" 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>600.0</label>
+  <label>-312.0</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1073,7 +971,7 @@ i "init" 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>369.994</label>
+  <label>218.478</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1123,15 +1021,15 @@ i "init" 0 1
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>736</x>
-  <y>44</y>
-  <width>201</width>
-  <height>28</height>
+  <x>753</x>
+  <y>45</y>
+  <width>252</width>
+  <height>26</height>
   <uuid>{0a533a2f-56e9-45c3-b5c5-87962ec7dcf2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>jh &amp;&amp; rb 2010/2012</label>
+  <label>jh &amp;&amp; rb 2010/2012/2014</label>
   <alignment>right</alignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
@@ -1160,7 +1058,7 @@ i "init" 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>523.251</label>
+  <label>220.000</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1218,7 +1116,7 @@ i "init" 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>-600.0</label>
+  <label>-12.0</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1268,15 +1166,17 @@ i "init" 0 1
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>info</objectName>
-  <x>316</x>
+  <x>276</x>
   <y>476</y>
-  <width>639</width>
-  <height>103</height>
+  <width>710</width>
+  <height>109</height>
   <uuid>{b6a1d2d0-6f91-4261-9e77-d46b08bc421c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>Scale 1 selected</label>
+  <label>13 Werckmeister III temperature (1691) with cent values
+0, 90, 192, 294, 390, 498, 588, 696, 792, 888, 996, 1092
+(after Klaus Lang, Auf Wohlklangswellen durch der Toene Meer, Graz 1999, BEM 10, p. 97)</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -1331,7 +1231,7 @@ i "init" 0 1
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>vol</objectName>
@@ -1395,7 +1295,7 @@ i "init" 0 1
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-inf</xValue>
+  <xValue>-4.57804129</xValue>
   <yValue>0.36363600</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1461,7 +1361,7 @@ i "init" 0 1
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-inf</xValue>
+  <xValue>-4.69263388</xValue>
   <yValue>0.52631600</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1815,7 +1715,7 @@ The SECOND VALUE lets you choose between three cases:
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>4</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -1862,7 +1762,7 @@ The SECOND VALUE lets you choose between three cases:
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.43478300</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1895,7 +1795,7 @@ The SECOND VALUE lets you choose between three cases:
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
+  <xValue>1.00000000</xValue>
   <yValue>0.43478300</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -2095,7 +1995,7 @@ The SECOND VALUE lets you choose between three cases:
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>5</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -2306,7 +2206,7 @@ The SECOND VALUE lets you choose between three cases:
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -5221,7 +5121,7 @@ The SECOND VALUE lets you choose between three cases:
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>2 17</label>
+  <label>2 0 76 193 310 386 503 579 697 773 890 1007 1083</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -5556,10 +5456,10 @@ The SECOND VALUE lets you choose between three cases:
   <uuid>{4cea0667-fa01-4b06-9009-34485bfe62a8}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>2 0 68.6 135.3 200.21 263.46 325.13 385.33 444.13 501.62 557.85 612.91 666.85 719.73 771.6 822.5 872.48 921.59 969.86 1017.33 1064.04 1110.01 1155.28</label>
+  <midicc>0</midicc>
+  <label>2 0 68 135 200 263 325 385 444 501 557 612 666 719 771 822 872 921 969 1017 1064 1110 1155</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -6426,9 +6326,9 @@ The SECOND VALUE lets you choose between three cases:
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>Click here if you changed scales while Csound is running</label>
+  <label>Push here if you changed scales while Csound is running</label>
   <alignment>center</alignment>
-  <font>Lucida Grande</font>
+  <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -6532,7 +6432,10 @@ The SECOND VALUE lets you choose between three cases:
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>Key = 57
+Velocity = 101
+Channel = 1
+</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
