@@ -93,7 +93,6 @@ public slots:
 	void getToIn(); // chnget/chnset to invalue/outvalue
 	void inToGet(); // invalue/outvalue to chnget/chnset
 	void insertAutoCompleteText();
-	void insertParameterText();
 	void findString(QString query = QString());
 	void evaluate();
 	void updateContext();

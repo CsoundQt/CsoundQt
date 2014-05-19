@@ -56,11 +56,6 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 			emit requestUnindent();
 		}
 		return;
-	case Qt::Key_Down:
-		if (m_parameterMode) {
-			emit openParameterSelection();
-		}
-		return;
 	case Qt::Key_Return:
 	case Qt::Key_Enter:
 		emit enterPressed();
