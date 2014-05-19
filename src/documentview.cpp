@@ -94,16 +94,6 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	syntaxMenu->setPalette(p);
 	connect(syntaxMenu,SIGNAL(keyPressed(QString)),
 			m_mainEditor, SLOT(insertPlainText(QString)));
-	//  connect(syntaxMenu,SIGNAL(aboutToHide()),
-	//          this, SLOT(destroySyntaxMenu()));
-
-//	parameterMenu = new MySyntaxMenu(m_mainEditor);
-//	connect(parameterMenu,SIGNAL(keyPressed(QString)),
-//			m_mainEditor, SLOT(insertPlainText(QString)));
-//	parameterButton = new QPushButton("...",m_mainEditor);
-//	parameterButton->setVisible(true);
-//	parameterButton->resize(25, 20);
-//	connect(parameterButton, SIGNAL(clicked()), this, SLOT(openParameterSelection()));
 
 	setViewMode(1);
 	setViewMode(0);  // To force a change
@@ -120,7 +110,6 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 DocumentView::~DocumentView()
 {
 	disconnect(this, 0,0,0);
-	//  delete m_highlighter;
 }
 
 bool DocumentView::isModified()
@@ -281,13 +270,6 @@ void DocumentView::nextParameter()
 	m_mainEditor->setTextCursor(cursor);
 	QRect cursorRect = m_mainEditor->cursorRect();
 	updateHoverText(cursorRect.x(), cursorRect.y(), cursor.selectedText());
-//	QRect r =  m_mainEditor->cursorRect();
-//	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-//	parameterButton->move(p);
-//	parameterButton->setVisible(true);
-//	if (m_opcodeTree->isOpcode(cursor.selectedText()) && !cursor.atBlockEnd()) {
-//		nextParameter();
-//	}
 }
 
 void DocumentView::prevParameter()
@@ -322,13 +304,6 @@ void DocumentView::prevParameter()
 	m_mainEditor->setTextCursor(cursor);
 	QRect cursorRect = m_mainEditor->cursorRect();
 	updateHoverText(cursorRect.x(), cursorRect.y(), cursor.selectedText());
-//	QRect r =  m_mainEditor->cursorRect();
-//	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-//	parameterButton->move(p);
-//	parameterButton->setVisible(true);
-//	if (m_opcodeTree->isOpcode(cursor.selectedText()) && !cursor.atBlockStart()) {
-//		prevParameter();
-//	}
 }
 
 void DocumentView::updateHoverText(int x, int y, QString text)
@@ -346,44 +321,6 @@ void DocumentView::updateHoverText(int x, int y, QString text)
 
 	m_hoverWidget->show();
 }
-
-//void DocumentView::openParameterSelection()
-//{
-//	parameterButton->setVisible(false);
-//	parameterMenu->clear();
-//	if (m_opcodeTree->isOpcode(m_mainEditor->textCursor().selectedText())) {
-//		// TODO add actions for opcode in parameter list
-//		return;
-//	} else {
-//		if (m_localVariables.size() < 1) {
-//			return;
-//		}
-
-//		foreach (QString var, m_localVariables) {
-//			QAction *a = parameterMenu->addAction(var,
-//												  this, SLOT(insertParameterText()));
-//			a->setData(var);
-//			if(m_localVariables.indexOf(var) == 0) {
-//				parameterMenu->setDefaultAction(a);
-//			}
-//		}
-//	}
-//	QRect r =  m_mainEditor->cursorRect();
-//	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-//	QPoint globalPoint =  m_mainEditor->mapToGlobal(p);
-//	//syntaxMenu->setWindowModality(Qt::NonModal);
-//	//syntaxMenu->popup(globalPoint);
-//	parameterMenu->move(globalPoint);
-//	parameterMenu->show();
-//	m_mainEditor->setFocus(Qt::OtherFocusReason);
-//}
-
-//void DocumentView::parameterShowShortcutPressed()
-//{
-//	if (parameterButton->isVisible()) {
-//		openParameterSelection();
-//	}
-//}
 
 void DocumentView::setModified(bool mod)
 {
@@ -668,20 +605,6 @@ QString DocumentView::getActiveText()
 	}
 	return selection;
 }
-
-
-//void DocumentView::updateDocumentModel()
-//{
-//  // this should update the document model when needed
-//  // e.g. on run or save or when widgets or presets have been modified in text format
-//  // maybe the document model pointer should be passed and processed here.
-//}
-//
-//void DocumentView::updateFromDocumentModel()
-//{
-//  // this should update from the document model when needed
-//  // e.g. on loading, widget changes from widget layout
-//}
 
 void DocumentView::syntaxCheck()
 {
@@ -1718,11 +1641,6 @@ QString DocumentView::changeToInvalue(QString text)
 	}
 	return newText;
 }
-
-//void DocumentView::createSyntaxMenu()
-//{
-//  syntaxMenu->show();
-//}
 
 void DocumentView::destroySyntaxMenu()
 {
