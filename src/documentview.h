@@ -93,13 +93,14 @@ public slots:
 	void getToIn(); // chnget/chnset to invalue/outvalue
 	void inToGet(); // invalue/outvalue to chnget/chnset
 	void insertAutoCompleteText();
-	void insertParameterText();
 	void findString(QString query = QString());
 	void evaluate();
 	void updateContext();
 	void updateOrcContext(QString orc);
 	void nextParameter();
 	void prevParameter();
+	void showHoverText();
+	void hideHoverText();
 	void updateHoverText(int x, int y, QString text);
 	void createContextMenu(QPoint pos);
 

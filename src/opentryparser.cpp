@@ -129,21 +129,21 @@ void OpEntryParser::addOpcode(Opcode opcode)
 
 QString OpEntryParser::getSyntax(QString opcodeName)
 {
-	int i = 0;
 	QString out = "";
-	int size = opcodeList.size();
-	while (i < size && !opcodeList[i].opcodeName.startsWith(opcodeName)) {
-		i++;
+	if (opcodeName.size() < 2) {
+		return out;
 	}
-	if (i < size) {
-		QString syntax = opcodeList[i].outArgs.simplified();
-		if (!opcodeList[i].outArgs.isEmpty())
-			syntax += " ";
-		syntax += opcodeList[i].opcodeName.simplified();
-		if (!opcodeList[i].inArgs.isEmpty()) {
-			syntax += " " + opcodeList[i].inArgs.simplified();
+	foreach(Opcode existingOp, opcodeList) {
+		if (existingOp.opcodeName == opcodeName) {
+			QString syntax = existingOp.outArgs.simplified();
+			if (!existingOp.outArgs.isEmpty())
+				syntax += " ";
+			syntax += existingOp.opcodeName.simplified();
+			if (!existingOp.inArgs.isEmpty()) {
+				syntax += " " + existingOp.inArgs.simplified();
+			}
+			out = syntax + "<br />[ " + existingOp.desc + " ]";
 		}
-		out = syntax + "<br />[ " + opcodeList[i].desc + " ]";
 	}
 	return out;
 }

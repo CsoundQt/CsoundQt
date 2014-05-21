@@ -35,11 +35,15 @@ TextEditor::TextEditor(QWidget *parent) :
 	setAcceptDrops(true);
 	setAcceptRichText(false);
 	m_parameterMode = false;
+	m_commaTyped = false;
 	//  qDebug() << "TextEditor::TextEditor" << acceptDrops();
 }
 
 void TextEditor::keyPressEvent (QKeyEvent * event)
 {
+	if (m_commaTyped && event->key() != Qt::Key_Space) {
+		m_commaTyped = false;
+	}
 	switch(event->key()) {
 	case Qt::Key_Tab:
 		if (m_parameterMode) {
@@ -56,14 +60,17 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 			emit requestUnindent();
 		}
 		return;
-	case Qt::Key_Down:
-		if (m_parameterMode) {
-			emit openParameterSelection();
-		}
-		return;
 	case Qt::Key_Return:
 	case Qt::Key_Enter:
 		emit enterPressed();
+		break;
+	case Qt::Key_Space:
+		if (m_commaTyped) {
+			emit showParameterInfo();
+		}
+		break;
+	case Qt::Key_Comma:
+		m_commaTyped = true;
 		break;
 	}
 	QTextEdit::keyPressEvent(event); // Process key events in the rest of the application

@@ -1076,7 +1076,7 @@ void CsoundEngine::setupChannels()
 
 void CsoundEngine::messageListDispatcher(void *data)
 {
-	qDebug("CsoundEngine::messageListDispatcher()");
+//	qDebug("CsoundEngine::messageListDispatcher()");
 	CsoundUserData *ud_local = (CsoundUserData *) data;
 
 	while (ud_local->runDispatcher) {
@@ -1125,7 +1125,7 @@ void CsoundEngine::messageListDispatcher(void *data)
 
 		usleep(ud_local->msgRefreshTime);
 	}
-	qDebug() << "messageListDispatcher quit";
+//	qDebug() << "messageListDispatcher quit";
 }
 
 void CsoundEngine::flushQueues()

@@ -3205,10 +3205,10 @@ void CsoundQt::createMenus()
 	fileMenu->addAction(printAct);
 	fileMenu->addAction(infoAct);
 	fileMenu->addSeparator();
-	fileMenu->addAction(exitAct);
-	fileMenu->addSeparator();
-
 	recentMenu = fileMenu->addMenu(tr("Recent files"));
+	fileMenu->addSeparator();
+	fileMenu->addAction(exitAct);
+
 
 	editMenu = menuBar()->addMenu(tr("Edit"));
 	editMenu->addAction(undoAct);
@@ -3267,8 +3267,8 @@ void CsoundQt::createMenus()
 	viewMenu->addAction(showLiveEventsAct);
 #ifdef QCS_PYTHONQT
 	viewMenu->addAction(showPythonConsoleAct);
-	viewMenu->addAction(showScratchPadAct);
 #endif
+	viewMenu->addAction(showScratchPadAct);
 	viewMenu->addAction(showUtilitiesAct);
 #ifdef QCS_DEBUGGER
 	viewMenu->addAction(showDebugAct);

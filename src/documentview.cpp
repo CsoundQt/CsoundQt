@@ -67,14 +67,14 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(nextParameter()));
 	connect(m_mainEditor, SIGNAL(backtabPressed()),
 			this, SLOT(prevParameter()));
-	connect(m_mainEditor, SIGNAL(openParameterSelection()),
-			this, SLOT(openParameterSelection()));
 	connect(m_mainEditor, SIGNAL(arrowPressed()),
 			this, SLOT(exitParameterMode()));
 	connect(m_mainEditor, SIGNAL(enterPressed()),
 			this, SLOT(finishParameterMode()));
     connect(m_mainEditor, SIGNAL(mouseReleased()),
             this, SLOT(exitParameterMode()));
+	connect(m_mainEditor, SIGNAL(showParameterInfo()),
+			this, SLOT(showHoverText()));
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
@@ -100,10 +100,16 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	setAcceptDrops(true);
 
 	m_hoverWidget = new QWidget(m_mainEditor);
-	m_hoverWidget->setAutoFillBackground(true);
 	m_hoverText= new QLabel("Hello", m_hoverWidget);
 	m_hoverText->show();
-
+	m_hoverText->setStyleSheet(
+				"QLabel {"
+				"border: 1px solid black;"
+//				"border-radius: 4px;"
+				"padding: 2px;"
+				"background-color: #ffffcc;"
+				"};");
+	m_hoverText->setWordWrap(true);
 	m_hoverWidget->hide();
 }
 
@@ -268,8 +274,7 @@ void DocumentView::nextParameter()
 		}
 	}
 	m_mainEditor->setTextCursor(cursor);
-	QRect cursorRect = m_mainEditor->cursorRect();
-	updateHoverText(cursorRect.x(), cursorRect.y(), cursor.selectedText());
+	showHoverText();
 }
 
 void DocumentView::prevParameter()
@@ -302,22 +307,45 @@ void DocumentView::prevParameter()
 		}
 	}
 	m_mainEditor->setTextCursor(cursor);
+	showHoverText();
+}
+
+void DocumentView::showHoverText()
+{
+	QTextCursor cursor  = m_mainEditor->textCursor();
 	QRect cursorRect = m_mainEditor->cursorRect();
 	updateHoverText(cursorRect.x(), cursorRect.y(), cursor.selectedText());
+}
+
+void DocumentView::hideHoverText()
+{
+	m_hoverWidget->hide();
 }
 
 void DocumentView::updateHoverText(int x, int y, QString text)
 {
 	QString displayText = m_currentOpcodeText;
-	displayText.replace(text, "<b>" + text + "</b>");
+	if (!text.isEmpty()) {
+		displayText.replace(text, "<b>" + text + "</b>");
+	}
 	m_hoverText->setText(displayText);
 	m_hoverText->adjustSize();
 	QRect textRect = m_hoverText->contentsRect();
+	int textWidth = textRect.width() + 10;
+	if (textRect.width() + 10 > this->width()) {
+		textRect.setWidth(this->width());
+		textWidth = this->width();
+	}
 	int xoffset = 0;
 	if (m_currentOpcodeText.contains(text)) {
 		xoffset = 10 + textRect.width() * (m_currentOpcodeText.indexOf(text)/(float) (m_currentOpcodeText.indexOf("<br />") + 5));
 	}
-	m_hoverWidget->setGeometry(x - xoffset, y-textRect.height() - 5, textRect.width() + 10, textRect.height());
+	if (xoffset > x) {
+		xoffset = x;
+	} else if (textWidth + x - xoffset > this->width()) {
+		xoffset = - (this->width() - (textWidth + x - xoffset));
+	}
+	m_hoverWidget->setGeometry(x - xoffset, y-textRect.height() - 10, textWidth, textRect.height() + 10);
 
 	m_hoverWidget->show();
 }
@@ -807,6 +835,8 @@ void DocumentView::escapePressed()
 			m_mainEditor->moveCursor(QTextCursor::NextCharacter);
 			m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
 			exitParameterMode();
+		} else if (m_hoverText->isVisible()){
+			hideHoverText();
 		} else {
 			emit closeExtraPanels();
 		}
@@ -823,6 +853,8 @@ void DocumentView::finishParameterMode()
 		if (m_mainEditor->getParameterMode()) {
 			killToEnd();
 			exitParameterMode();
+		} else {
+			hideHoverText();
 		}
 	} else {
 		qDebug() << "finishParameterMode() not implemented for split view";
@@ -837,7 +869,7 @@ void DocumentView::exitParameterMode()
 	} else {
 		qDebug() << "exitParameterMode() not implemented for split view";
 	}
-	m_hoverWidget->hide();
+	hideHoverText();
 //	parameterButton->setVisible(false);
 }
 
@@ -979,32 +1011,6 @@ void DocumentView::insertAutoCompleteText()
 		}
 	}
 }
-
-
-void DocumentView::insertParameterText()
-{
-	TextEditor *editor;
-	if (m_viewMode < 2) {
-		editor = m_mainEditor;
-	}
-	else { //  Split view
-		editor = (TextEditor *) focusWidget();
-		// TODO check properly for line number also from other editors
-		qDebug() << "DocumentView::insertAutoCompleteText() not implemented for split view.";
-	}
-	if (editor != 0) {
-		internalChange = true;
-		QAction *action = static_cast<QAction *>(QObject::sender());
-		QString parameterName = action->data().toString();
-		QTextCursor cursor = editor->textCursor();
-		cursor.select(QTextCursor::WordUnderCursor);
-		editor->setTextCursor(cursor);
-		editor->insertPlainText(parameterName);
-
-		nextParameter();
-	}
-}
-
 
 void DocumentView::findString(QString query)
 {

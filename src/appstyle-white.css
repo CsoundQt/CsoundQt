@@ -12,12 +12,7 @@ QMainWindow::separator:hover  {
 }
 QDockWidget::title  {
     text-align: center;
-    background: #F1F1F1;
+    background: #D1D1D1;
     padding-left: 0px;
-}
-QDockWidget::title:hover  {
-text-align: center;
-background: #D1D1D1;
-padding-left: 0px;
 }
 
