@@ -73,6 +73,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(finishParameterMode()));
     connect(m_mainEditor, SIGNAL(mouseReleased()),
             this, SLOT(exitParameterMode()));
+	connect(m_mainEditor, SIGNAL(showParameterInfo()),
+			this, SLOT(showHoverText()));
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
@@ -272,8 +274,7 @@ void DocumentView::nextParameter()
 		}
 	}
 	m_mainEditor->setTextCursor(cursor);
-	QRect cursorRect = m_mainEditor->cursorRect();
-	updateHoverText(cursorRect.x(), cursorRect.y(), cursor.selectedText());
+	showHoverText();
 }
 
 void DocumentView::prevParameter()
@@ -306,17 +307,27 @@ void DocumentView::prevParameter()
 		}
 	}
 	m_mainEditor->setTextCursor(cursor);
+	showHoverText();
+}
+
+void DocumentView::showHoverText()
+{
+	QTextCursor cursor  = m_mainEditor->textCursor();
 	QRect cursorRect = m_mainEditor->cursorRect();
 	updateHoverText(cursorRect.x(), cursorRect.y(), cursor.selectedText());
+}
+
+void DocumentView::hideHoverText()
+{
+	m_hoverWidget->hide();
 }
 
 void DocumentView::updateHoverText(int x, int y, QString text)
 {
 	QString displayText = m_currentOpcodeText;
-	if (text.isEmpty()) {
-		return;
+	if (!text.isEmpty()) {
+		displayText.replace(text, "<b>" + text + "</b>");
 	}
-	displayText.replace(text, "<b>" + text + "</b>");
 	m_hoverText->setText(displayText);
 	m_hoverText->adjustSize();
 	QRect textRect = m_hoverText->contentsRect();
@@ -824,6 +835,8 @@ void DocumentView::escapePressed()
 			m_mainEditor->moveCursor(QTextCursor::NextCharacter);
 			m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
 			exitParameterMode();
+		} else if (m_hoverText->isVisible()){
+			hideHoverText();
 		} else {
 			emit closeExtraPanels();
 		}
@@ -840,6 +853,8 @@ void DocumentView::finishParameterMode()
 		if (m_mainEditor->getParameterMode()) {
 			killToEnd();
 			exitParameterMode();
+		} else {
+			hideHoverText();
 		}
 	} else {
 		qDebug() << "finishParameterMode() not implemented for split view";
@@ -854,7 +869,7 @@ void DocumentView::exitParameterMode()
 	} else {
 		qDebug() << "exitParameterMode() not implemented for split view";
 	}
-	m_hoverWidget->hide();
+	hideHoverText();
 //	parameterButton->setVisible(false);
 }
 

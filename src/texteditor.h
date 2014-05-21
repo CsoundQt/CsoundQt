@@ -45,8 +45,10 @@ protected:
 
 	bool m_tabIndents;
 	bool m_parameterMode;
+	bool m_commaTyped;
 
 signals:
+	void showParameterInfo();
 	void escapePressed();
 	void enterPressed();
 	void arrowPressed();

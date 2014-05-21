@@ -99,6 +99,8 @@ public slots:
 	void updateOrcContext(QString orc);
 	void nextParameter();
 	void prevParameter();
+	void showHoverText();
+	void hideHoverText();
 	void updateHoverText(int x, int y, QString text);
 	void createContextMenu(QPoint pos);
 
