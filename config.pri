@@ -156,6 +156,7 @@ isEmpty(RTMIDI_DIR) {
     for(dir, DEFAULT_RTMIDI_DIRS) {
         !no_messages:message(... searching in $${dir})
         exists($${dir}) {
+            exists($${dir}/RtError.h): DEFINES += QCS_OLD_RTMIDI
             !no_messages {
                 message(RTMIDI_DIR set to $${dir})
                 message()

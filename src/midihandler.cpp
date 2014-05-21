@@ -5,6 +5,10 @@
 #include "RtMidi.h"
 #endif
 
+#ifdef QCS_OLD_RTMIDI
+#define RtMidiError RtError
+#endif
+
 #ifdef QCS_RTMIDI
 static void midiInMessageCallback(double deltatime,
 								std::vector< unsigned char > *message,
@@ -91,14 +95,14 @@ void MidiHandler::openMidiInPort(int port)
 	try {
 		closeMidiInPort();
 	}
-	catch ( RtError &error ) {
+	catch ( RtMidiError &error ) {
 		error.printMessage();
 	}
 
 	try {
 		m_midiin->openPort(port, "MIDI in");
 	}
-	catch ( RtError &error ) {
+	catch ( RtMidiError &error ) {
 		qDebug() << "Error opening MIDI port " << port;
 		error.printMessage();
 		return;
@@ -124,14 +128,14 @@ void MidiHandler::openMidiOutPort(int port)
 	try {
 		closeMidiOutPort();
 	}
-	catch ( RtError &error ) {
+	catch ( RtMidiError &error ) {
 		error.printMessage();
 	}
 
 	try {
 		m_midiout->openPort(port, "MIDI out");
 	}
-	catch ( RtError &error ) {
+	catch ( RtMidiError &error ) {
 		qDebug() << "Error opening MIDI out port " << port;
 		error.printMessage();
 		return;
