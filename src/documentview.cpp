@@ -646,7 +646,112 @@ void DocumentView::syntaxCheck()
 	else { //  Split view
 		editor = (TextEditor *) sender();
 	}
+
+
+	// Clear marked parens
 	QTextCursor cursor = editor->textCursor();
+	if (m_parenspos.first >= 0) {
+		cursor.setPosition(m_parenspos.first);
+		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 2);
+		QTextCharFormat fmt;
+		editor->blockSignals(true);
+		cursor.setCharFormat(fmt);
+		editor->blockSignals(false);
+		m_parenspos.first = -1;
+	}
+	if (m_parenspos.second >= 0) {
+		cursor.setPosition(m_parenspos.second);
+		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 2);
+		QTextCharFormat fmt;
+		editor->blockSignals(true);
+		cursor.setCharFormat(fmt);
+		editor->blockSignals(false);
+		m_parenspos.second = -1;
+	}
+
+	QStringList parenStack;
+	bool rightParenMatch = false;
+	// Check for matching parens
+	cursor = editor->textCursor();
+	cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+	QString chr = cursor.selectedText();
+	if (chr == ")") {
+		m_parenspos.second = cursor.position();
+		m_parenspos.first = m_parenspos.second;
+		parenStack.push_back(")");
+		while (m_parenspos.first-- >= 0) {
+			cursor.clearSelection();
+			cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+			QString chr = cursor.selectedText();
+			if (chr == ")") {
+				parenStack.push_back(")");
+			}
+			if (chr == "(") {
+				parenStack.pop_back();
+				if (parenStack.length() == 0) {
+					rightParenMatch = true;
+					break;
+				}
+			}
+		}
+	}
+
+	cursor = editor->textCursor();
+	cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+	chr = cursor.selectedText();
+	if (chr == "(") {
+		m_parenspos.first = cursor.position() - 1;
+		m_parenspos.second = m_parenspos.first + 1;
+		parenStack.push_back(")");
+		int charCount = editor->document()->characterCount();
+		while (m_parenspos.second < charCount) {
+			cursor.clearSelection();
+			cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+			QString chr = cursor.selectedText();
+			if (chr == "(") {
+				parenStack.push_back("(");
+			}
+			if (chr == ")") {
+				parenStack.pop_back();
+				if (parenStack.length() == 0) {
+					rightParenMatch = true;
+					break;
+				}
+			}
+			m_parenspos.second++;
+		}
+	}
+
+	// Now highlight the parens
+	if(m_parenspos.first >=0) {
+		cursor.setPosition(m_parenspos.first);
+		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+		QTextCharFormat fmt;
+		if (rightParenMatch) {
+			fmt.setBackground(QBrush(Qt::lightGray));
+		} else {
+			fmt.setBackground(QBrush(Qt::darkRed));
+		}
+		editor->blockSignals(true);
+		cursor.setCharFormat(fmt);
+		editor->blockSignals(false);
+	}
+
+	if(m_parenspos.second >=0) {
+		cursor.setPosition(m_parenspos.second);
+		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+		QTextCharFormat fmt;
+		if (rightParenMatch) {
+			fmt.setBackground(QBrush(Qt::lightGray));
+		} else {
+			fmt.setBackground(QBrush(Qt::darkRed));
+		}
+		editor->blockSignals(true);
+		cursor.setCharFormat(fmt);
+		editor->blockSignals(false);
+	}
+
+	cursor = editor->textCursor();
 	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
 	QStringList words = cursor.selectedText().split(QRegExp("\\b"));
 	for(int i = 0; i < words.size(); i++) {
@@ -669,8 +774,6 @@ void DocumentView::textChanged()
 	}
 	TextEditor *editor = m_mainEditor;
 	unmarkErrorLines();
-
-//	parameterButton->setVisible(false);
 
 	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {  // CSD or ORC mode
 		if (m_autoComplete) {

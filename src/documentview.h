@@ -34,6 +34,7 @@
 #include "baseview.h"
 
 #include <QKeyEvent> // For syntax menu class
+#include <QPair>
 
 class MySyntaxMenu: public QMenu
 {
@@ -143,6 +144,7 @@ private:
 	QWidget *m_hoverWidget;
 	QLabel *m_hoverText;
 	QString m_currentOpcodeText;
+	QPair<int, int> m_parenspos;
 
 	bool m_isModified;
 	bool m_autoComplete;

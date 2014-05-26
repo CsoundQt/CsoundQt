@@ -76,7 +76,12 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 			midiInterfaceComboBox->addItem(QString::fromStdString(midiin.getPortName(i)), QVariant(i));
 		}
 	}
+
+#ifdef QCS_OLD_RTMIDI
+	catch (RtError &error) {
+#else
 	catch (RtMidiError &error) {
+#endif
 		// Handle the exception here
 		error.printMessage();
 	}
@@ -86,7 +91,11 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 			midiOutInterfaceComboBox->addItem(QString::fromStdString(midiout.getPortName(i)), QVariant(i));
 		}
 	}
+#ifdef QCS_OLD_RTMIDI
+	catch (RtError &error) {
+#else
 	catch (RtMidiError &error) {
+#endif
 		// Handle the exception here
 		error.printMessage();
 	}

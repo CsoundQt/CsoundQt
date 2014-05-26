@@ -22,6 +22,7 @@
 
 #include "highlighter.h"
 
+#include <QDebug>
 
 Highlighter::Highlighter(QTextDocument *parent)
 	: QSyntaxHighlighter(parent)
@@ -107,7 +108,7 @@ Highlighter::~Highlighter()
 
 void Highlighter::setOpcodeNameList(QStringList list)
 {
-	m_list = list;
+	m_opcodeList = list;
 	//   setFirstRules();
 	setLastRules();
 }
@@ -167,16 +168,15 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 		setFormat(macroIndex, text.size() - macroIndex, macroDefineFormat);
 		commentIndex = macroIndex;
 	}
-	QRegExp expression("\\b+\\w");
+	QRegExp expression("\\b+[\\w:]+\\b");
 	int index = text.indexOf(expression, 0);
 	int length = expression.matchedLength();
 	while (index >= 0 && index < commentIndex) {
-		int wordStart = index + length - 1;
-		QRegExp endExpression("\\W");
-		int wordEnd = text.indexOf(endExpression, wordStart);
+		int wordStart = index;
+		int wordEnd = wordStart + length;
 		wordEnd = (wordEnd > 0 ? wordEnd : text.size());
-		QString word = text.mid(wordStart, wordEnd - wordStart);
-		//    qDebug() << "word: " << word;
+		QString word = text.mid(wordStart, length);
+//		qDebug() << "word: " << word;
 		if (word.indexOf(QRegExp("p[\\d]+\\b")) != -1) {
 			setFormat(wordStart, wordEnd - wordStart, pfieldFormat);
 		}
@@ -189,7 +189,15 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 		else if (headerPatterns.contains(word)) {
 			setFormat(wordStart, wordEnd - wordStart, csdtagFormat);
 		}
-		else if (findOpcode(word, 0, m_list.size() - 1) >= 0) {
+		else if (word.contains(":")) {
+			QStringList parts = word.split(":");
+			if (parts.size() == 2) {
+				if (findOpcode(parts[0]) >= 0) {
+					setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
+				}
+			}
+		}
+		else if (findOpcode(word) >= 0) {
 			setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
 		}
 		else if (word.startsWith('a') && colorVariables) {
@@ -312,7 +320,7 @@ void Highlighter::setLastRules()
 
 	labelFormat.setForeground(QColor(205,92,92));
 	labelFormat.setFontWeight(QFont::Bold);
-	rule.pattern = QRegExp("\\b[\\w]*:[^\\w;]*");
+	rule.pattern = QRegExp("^\\s*\\w+:\\s*");
 	rule.format = labelFormat;
 	lastHighlightingRules.append(rule);
 
@@ -334,15 +342,18 @@ void Highlighter::setLastRules()
 int Highlighter::findOpcode(QString opcodeName, int start, int end)
 {
 	//   fprintf(stderr, "%i - %i\n", start, end);
-	Q_ASSERT(m_list.size() > 0);
+	Q_ASSERT(m_opcodeList.size() > 0);
+	if (end == -1) {
+		end = m_opcodeList.size() -1;
+	}
 	int pos = ((end - start)/2) + start;
-	if (opcodeName == m_list[pos])
+	if (opcodeName == m_opcodeList[pos])
 		return pos;
 	else if (start == end)
 		return -1;
-	else if (opcodeName < m_list[pos])
+	else if (opcodeName < m_opcodeList[pos])
 		return findOpcode(opcodeName, start, pos);
-	else if (opcodeName > m_list[pos])
+	else if (opcodeName > m_opcodeList[pos])
 		return findOpcode(opcodeName, pos + 1, end);
 	return -1;
 }

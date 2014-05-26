@@ -60,7 +60,7 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 #endif
 
 
-#define MAX_THREAD_COUNT 12 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
+#define MAX_THREAD_COUNT 32 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
 
 CsoundQt::CsoundQt(QStringList fileNames)
 {
@@ -4368,6 +4368,10 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 
 void CsoundQt::makeNewPage(QString fileName, QString text)
 {
+	if (documentPages.size() >= 32) {
+		QMessageBox::warning(this, tr("Document number limit"),
+							 tr("Please close a document before opening another."));
+	}
 	DocumentPage *newPage = new DocumentPage(this, m_opcodeTree, &m_configlists, m_midiLearn);
 	int insertPoint = curPage + 1;
 	curPage += 1;
