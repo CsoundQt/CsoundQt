@@ -29,10 +29,25 @@
 #include "highlighter.h"
 #include "texteditor.h"
 
+
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	BaseView(parent,opcodeTree)
 {
 	m_autoComplete = true;
+
+	m_hoverWidget = new HoverWidget(m_mainEditor);
+	m_hoverText= new QLabel("Hello", m_hoverWidget);
+	m_hoverText->show();
+	m_hoverText->setStyleSheet(
+				"QLabel {"
+				"border: 1px solid black;"
+//				"border-radius: 4px;"
+				"padding: 2px;"
+				"background-color: #ffffcc;"
+				"};");
+	m_hoverText->setWordWrap(true);
+	m_hoverWidget->hide();
+
 	for (int i = 0; i < editors.size(); i++) {
 		connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
 		splitter->addWidget(editors[i]);
@@ -47,14 +62,15 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	setFocusProxy(m_mainEditor);  // for comment action from main application
 	internalChange = false;
 
+
 	//  m_highlighter = new Highlighter();
 
 	connect(m_mainEditor, SIGNAL(textChanged()),
 			this, SLOT(textChanged()));
 	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
-			this, SLOT(syntaxCheck()));
-	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
 			this, SLOT(updateContext()));
+	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
+			this, SLOT(syntaxCheck()));
 	connect(m_mainEditor, SIGNAL(escapePressed()),
 			this, SLOT(escapePressed()));
 	connect(m_mainEditor, SIGNAL(newLine()),
@@ -71,8 +87,6 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(exitParameterMode()));
 	connect(m_mainEditor, SIGNAL(enterPressed()),
 			this, SLOT(finishParameterMode()));
-    connect(m_mainEditor, SIGNAL(mouseReleased()),
-            this, SLOT(exitParameterMode()));
 	connect(m_mainEditor, SIGNAL(showParameterInfo()),
 			this, SLOT(showHoverText()));
 
@@ -99,18 +113,6 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	setViewMode(0);  // To force a change
 	setAcceptDrops(true);
 
-	m_hoverWidget = new QWidget(m_mainEditor);
-	m_hoverText= new QLabel("Hello", m_hoverWidget);
-	m_hoverText->show();
-	m_hoverText->setStyleSheet(
-				"QLabel {"
-				"border: 1px solid black;"
-//				"border-radius: 4px;"
-				"padding: 2px;"
-				"background-color: #ffffcc;"
-				"};");
-	m_hoverText->setWordWrap(true);
-	m_hoverWidget->hide();
 }
 
 DocumentView::~DocumentView()
@@ -647,7 +649,6 @@ void DocumentView::syntaxCheck()
 		editor = (TextEditor *) sender();
 	}
 
-
 	// Clear marked parens
 	QTextCursor cursor = editor->textCursor();
 	if (m_parenspos.first >= 0) {
@@ -752,17 +753,31 @@ void DocumentView::syntaxCheck()
 	}
 
 	cursor = editor->textCursor();
+	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
 	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-	QStringList words = cursor.selectedText().split(QRegExp("\\b"));
+	QStringList words = cursor.selectedText().split(QRegExp("\\b"),
+													QString::SkipEmptyParts);
+	bool showHover = false;
 	for(int i = 0; i < words.size(); i++) {
 		QString word = words[words.size() - i - 1];
 		if (m_opcodeTree->isOpcode(word)) {
 			QString syntax = m_opcodeTree->getSyntax(word);
 			if(!syntax.isEmpty()) {
 				m_currentOpcodeText = syntax;
-				return;
+				if (i == 0) {
+					showHover = true;
+				}
+				break;
 			}
 		}
+	}
+	if (showHover) {
+		showHoverText();
+	} else {
+		hideHoverText();
+	}
+	if (editor->getParameterMode()) {
+		exitParameterMode();
 	}
 }
 
@@ -1819,3 +1834,13 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
 	QMenu::keyPressEvent(event);
 }
 
+HoverWidget::HoverWidget(QWidget *parent) :
+	QWidget(parent)
+{
+
+}
+
+void HoverWidget::mousePressEvent(QMouseEvent *ev)
+{
+	this->hide();
+}

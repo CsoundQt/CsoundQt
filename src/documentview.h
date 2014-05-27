@@ -51,6 +51,19 @@ signals:
 	void keyPressed(QString text); // Used to send both pressed keys and full opcode text to be pasted
 };
 
+class HoverWidget :
+		public QWidget
+{
+	Q_OBJECT
+public:
+	HoverWidget(QWidget *parent);
+	~HoverWidget() {}
+
+protected:
+	void mousePressEvent(QMouseEvent *ev);
+
+};
+
 class DocumentView : public BaseView
 {
 	Q_OBJECT
@@ -141,7 +154,7 @@ private:
 
 	MySyntaxMenu *syntaxMenu;
 
-	QWidget *m_hoverWidget;
+	HoverWidget *m_hoverWidget;
 	QLabel *m_hoverText;
 	QString m_currentOpcodeText;
 	QPair<int, int> m_parenspos;
