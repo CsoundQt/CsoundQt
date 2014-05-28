@@ -89,6 +89,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(finishParameterMode()));
 	connect(m_mainEditor, SIGNAL(showParameterInfo()),
 			this, SLOT(showHoverText()));
+	connect(m_mainEditor, SIGNAL(requestParameterModeExit()()),
+			this, SLOT(hideHoverText()));
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
@@ -275,7 +277,9 @@ void DocumentView::nextParameter()
 			cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
 		}
 	}
+	m_mainEditor->blockSignals(true); // To avoid triggering the position changed action which hides the text cursor and disables parameter mode
 	m_mainEditor->setTextCursor(cursor);
+	m_mainEditor->blockSignals(false);
 	showHoverText();
 }
 
@@ -308,7 +312,9 @@ void DocumentView::prevParameter()
 			cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
 		}
 	}
+	m_mainEditor->blockSignals(true); // To avoid triggering the position changed action which hides the text cursor and disables parameter mode
 	m_mainEditor->setTextCursor(cursor);
+	m_mainEditor->blockSignals(false);
 	showHoverText();
 }
 
@@ -775,9 +781,6 @@ void DocumentView::syntaxCheck()
 		showHoverText();
 	} else {
 		hideHoverText();
-	}
-	if (editor->getParameterMode()) {
-		exitParameterMode();
 	}
 }
 

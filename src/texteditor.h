@@ -57,6 +57,7 @@ signals:
 	void newLine();
 	void requestIndent();
 	void requestUnindent();
+	void requestParameterModeExit();
     void mouseReleased();
 };
 
