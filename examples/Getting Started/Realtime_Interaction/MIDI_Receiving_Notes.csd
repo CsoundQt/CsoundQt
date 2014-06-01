@@ -15,6 +15,7 @@ The opcode 'massign' can be used, to make new connections between MIDI-Ch. and C
  --midi-key-cps=4 --midi-velocity-amp=5
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 massign 0, 1								; assign all midi-channels to instr 1
 
 instr 1
@@ -28,11 +29,10 @@ e 3600
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann & Joachim Heintz (Dec. 2009) - Incontri HMT-Hannover 
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>1013</x>
+ <x>803</x>
  <y>279</y>
  <width>563</width>
  <height>397</height>

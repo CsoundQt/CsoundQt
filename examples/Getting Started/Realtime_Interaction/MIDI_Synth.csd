@@ -12,7 +12,7 @@ Instruments 101 (Feedback Delay) and 102 (Reverb) are global effects, which are 
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 32
 nchnls = 2
 0dbfs = 1
 
@@ -72,6 +72,7 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
