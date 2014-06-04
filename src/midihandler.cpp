@@ -28,6 +28,7 @@ MidiHandler::MidiHandler(QObject *parent) :
 	m_midiout = new RtMidiOut(RtMidi::UNSPECIFIED, "CsoundQt");
 	m_midiin->setCallback(&midiInMessageCallback, this);
 #endif
+	m_midiLearnDialog = NULL;
 }
 
 void MidiHandler::addListener(DocumentPage *page)
@@ -57,6 +58,10 @@ void MidiHandler::setMidiLearner(MidiLearnDialog *midiLearn)
 
 void MidiHandler::passMidiMessage(std::vector<unsigned char> *message)
 {
+	if (!message) {
+		qDebug() << "MidiHandler::passMidiMessage Error: message is NULL";
+		return;
+	}
 	foreach(DocumentPage *page, m_listeners) {
 		page->queueMidiIn(message);
 	}
