@@ -20,7 +20,7 @@ By sending MIDI-Control-Data 01 on Channel 1 (CC 01 - with your keyboards modual
 <CsInstruments>
 
 sr = 44100
-ksmps = 256
+ksmps = 32
 nchnls = 2
 0dbfs = 1
 
@@ -83,8 +83,6 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>

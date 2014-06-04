@@ -16,7 +16,7 @@ Instrument 102 adds the global feedback delay and the reverb, and finally zeros 
 <CsInstruments>
 
 sr = 44100
-ksmps = 128
+ksmps = 32
 nchnls = 2
 0dbfs = 1
 
@@ -166,7 +166,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <value>0.37007874</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -213,7 +213,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.05000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.60100000</value>
+  <value>0.51377953</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -231,7 +231,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.05000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.05000000</value>
+  <value>0.69330709</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -597,7 +597,7 @@ e
   <midicc>-3</midicc>
   <minimum>10.00000000</minimum>
   <maximum>5000.00000000</maximum>
-  <value>1454.05144700</value>
+  <value>2799.68503937</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -717,7 +717,7 @@ e
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>21</value>
+  <value>2</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
