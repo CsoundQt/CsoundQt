@@ -1154,7 +1154,10 @@ void DocumentPage::queueMidiIn(std::vector< unsigned char > *message)
 {
 	WidgetLayout *d = m_widgetLayouts[0];
 	unsigned int nBytes = message->size();
-	Q_ASSERT(nBytes < 4);
+	if (nBytes < 4) {
+		qDebug() << "MIDI message ignored.";
+		return;
+	}
 	if ( ((d->midiWriteCounter + 1) % QCS_MAX_MIDI_QUEUE) != d->midiReadCounter) {
 		int index = d->midiWriteCounter;
 		d->midiWriteCounter++;

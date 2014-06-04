@@ -786,6 +786,7 @@ int CsoundEngine::runCsound()
 #ifdef CSOUND6
 	ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
 	Q_ASSERT(ud->midiBuffer);
+//	csoundFlushCircularBuffer(ud->csound, ud->midiBuffer);
 #endif
 #endif
 
@@ -821,7 +822,6 @@ int CsoundEngine::runCsound()
 
 #ifdef CSOUND6
 	csoundCreateMessageBuffer(ud->csound, 0);
-	csoundFlushCircularBuffer(ud->csound, ud->midiBuffer);
 #else
 	// Message Callbacks must be set before compile, otherwise some information is missed
 	csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
@@ -973,6 +973,7 @@ void CsoundEngine::cleanupCsound()
 #ifdef QCS_DESTROY_CSOUND
 
 		csoundDestroyCircularBuffer(ud->csound, ud->midiBuffer);
+		ud->midiBuffer = NULL;
 		csoundDestroy(ud->csound);
 		ud->csound = NULL;
 #else
