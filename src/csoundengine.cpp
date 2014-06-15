@@ -55,6 +55,7 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 	ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
 	ud->wl = NULL;
 	ud->midiBuffer = NULL;
+	ud->virtualMidiBuffer = NULL;
 	ud->playMutex = &m_playMutex;
 #ifdef QCS_PYTHONQT
 	ud->m_pythonCallback = "";
@@ -289,9 +290,10 @@ int CsoundEngine::midiReadCb(CSOUND *csound, void *ud_, unsigned char *buf, int 
 {
 	CsoundUserData *ud = (CsoundUserData *) ud_;
 	Q_UNUSED(csound);
-	int count;
+	int count, countVirtual;
 	count = csoundReadCircularBuffer(ud->csound, ud->midiBuffer, buf, nBytes);
-	return count;
+	countVirtual = csoundReadCircularBuffer(ud->csound, ud->virtualMidiBuffer, buf + count, nBytes - count);
+	return count + countVirtual;
 }
 
 int CsoundEngine::midiInCloseCb(CSOUND *csound, void *ud)
@@ -351,6 +353,13 @@ void CsoundEngine::queueMidiIn(std::vector< unsigned char > *message)
 {
 	if (ud->midiBuffer) {
 		csoundWriteCircularBuffer(ud->csound, ud->midiBuffer, message->data(), message->size()* sizeof(unsigned char));
+	}
+}
+
+void CsoundEngine::queueVirtualMidiIn(std::vector< unsigned char > &message)
+{
+	if (ud->virtualMidiBuffer) {
+		csoundWriteCircularBuffer(ud->csound, ud->virtualMidiBuffer, message.data(), message.size()* sizeof(unsigned char));
 	}
 }
 
@@ -786,6 +795,8 @@ int CsoundEngine::runCsound()
 #ifdef CSOUND6
 	ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
 	Q_ASSERT(ud->midiBuffer);
+	ud->virtualMidiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
+	Q_ASSERT(ud->virtualMidiBuffer);
 //	csoundFlushCircularBuffer(ud->csound, ud->midiBuffer);
 #endif
 #endif
@@ -974,6 +985,8 @@ void CsoundEngine::cleanupCsound()
 
 		csoundDestroyCircularBuffer(ud->csound, ud->midiBuffer);
 		ud->midiBuffer = NULL;
+		csoundDestroyCircularBuffer(ud->csound, ud->virtualMidiBuffer);
+		ud->virtualMidiBuffer = NULL;
 		csoundDestroy(ud->csound);
 		ud->csound = NULL;
 #else

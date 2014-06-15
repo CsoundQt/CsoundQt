@@ -136,6 +136,17 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	m_midiLearn->setModal(false);
 	midiHandler->setMidiLearner(m_midiLearn);
 
+#ifdef USE_QT5
+    m_virtualKeyboard = new QQuickWidget(this);
+    m_virtualKeyboard->setWindowTitle(tr("CsoundQt Virtual Keyboard"));
+    m_virtualKeyboard->setWindowFlags(Qt::Window);
+    m_virtualKeyboard->setSource(QUrl("qrc:/QML/VirtualKeyboard.qml"));
+    //	m_virtualKeyboard->show();
+    QObject *rootObject = m_virtualKeyboard->rootObject();
+    connect(rootObject, SIGNAL(genNote(QVariant, QVariant, QVariant, QVariant)),
+            this, SLOT(virtualMidiIn(QVariant, QVariant, QVariant, QVariant)));
+#endif
+
 	createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
 	readSettings();
 
@@ -1783,6 +1794,13 @@ void CsoundQt::showDebugger(bool show)
 #endif
 }
 
+void CsoundQt::showVirtualKeyboard(bool show)
+{
+#ifdef USE_QT5
+    m_virtualKeyboard->setVisible(show);
+#endif
+}
+
 void CsoundQt::splitView(bool split)
 {
 	if (split) {
@@ -1806,6 +1824,16 @@ void CsoundQt::splitView(bool split)
 void CsoundQt::showMidiLearn()
 {
 	m_midiLearn->show();
+}
+
+void CsoundQt::virtualMidiIn(QVariant on, QVariant note, QVariant channel, QVariant velocity)
+{
+    std::vector<unsigned char> message;
+    unsigned char status = (8 << 4) | on.toInt() << 4 | (channel.toInt() -1);
+    message.push_back(status);
+    message.push_back(note.toInt());
+    message.push_back(velocity.toInt());
+    documentPages[curPage]->queueVirtualMidiIn(message);
 }
 
 void CsoundQt::openManualExample(QString fileName)
@@ -2297,6 +2325,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #ifdef QCS_DEBUGGER
 	showDebugAct->setShortcut(tr("F5"));
 #endif
+    showVirtualKeyboardAct->setShortcut(tr("Ctrl+Shift+V"));
 	splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
 	midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
 	createCodeGraphAct->setShortcut(tr("Alt+4"));
@@ -2802,7 +2831,15 @@ void CsoundQt::createActions()
 	connect(showDebugAct, SIGNAL(toggled(bool)), this, SLOT(showDebugger(bool)));
 #endif
 
-	splitViewAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Split View"), this);
+    showVirtualKeyboardAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Virtual Keyboard"), this);
+    showVirtualKeyboardAct->setCheckable(true);
+    showVirtualKeyboardAct->setChecked(false);
+    showVirtualKeyboardAct->setStatusTip(tr("Show the Virtual MIDI Keyboard"));
+    showVirtualKeyboardAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(showVirtualKeyboardAct, SIGNAL(toggled(bool)), this, SLOT(showVirtualKeyboard(bool)));
+    connect(m_virtualKeyboard, SIGNAL(Close(bool)), showVirtualKeyboardAct, SLOT(setChecked(bool)));
+
+    splitViewAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Split View"), this);
 	splitViewAct->setCheckable(true);
 	splitViewAct->setChecked(false);
 	splitViewAct->setStatusTip(tr("Toggle between full csd and split text display"));
@@ -3052,6 +3089,7 @@ void CsoundQt::setKeyboardShortcutsList()
 	m_keyActions.append(showPythonConsoleAct);
 	m_keyActions.append(showScratchPadAct);
 	m_keyActions.append(showUtilitiesAct);
+    m_keyActions.append(showVirtualKeyboardAct);
 	m_keyActions.append(setHelpEntryAct);
 	m_keyActions.append(browseBackAct);
 	m_keyActions.append(browseForwardAct);
@@ -3274,6 +3312,7 @@ void CsoundQt::createMenus()
 	viewMenu->addAction(showDebugAct);
 #endif
 	viewMenu->addAction(midiLearnAct);
+    viewMenu->addAction(showVirtualKeyboardAct);
 	viewMenu->addSeparator();
 	viewMenu->addAction(viewFullScreenAct);
 	viewMenu->addSeparator();

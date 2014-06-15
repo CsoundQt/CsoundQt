@@ -25,6 +25,8 @@
 
 #ifdef USE_QT5
 #include <QtWidgets>
+#include <QQuickWidget>
+#include <QQuickItem>
 #else
 #include <QtGui>
 #endif
@@ -217,8 +219,10 @@ private slots:
 	void setHelpEntry();
 	void setFullScreen(bool full);
 	void showDebugger(bool show);
+	void showVirtualKeyboard(bool show);
 	void splitView(bool split);
 	void showMidiLearn();
+	void virtualMidiIn(QVariant on, QVariant note, QVariant channel, QVariant velocity);
 	void openManualExample(QString fileName);
 	void openExternalBrowser(QUrl url = QUrl());
 	void openPdfFile(QString name);
@@ -308,6 +312,9 @@ private:
 	DockHelp *helpPanel;
 	WidgetPanel *widgetPanel;  // Dock widget, for containing the widget layout
 	QDockWidget *m_scratchPad;
+#ifdef USE_QT5
+	QQuickWidget *m_virtualKeyboard;
+#endif
 	//    QString m_widgetClipboard;
 	Inspector *m_inspector;
 #ifdef QCS_DEBUGGER
@@ -387,6 +394,7 @@ private:
 #ifdef QCS_DEBUGGER
 	QAction *showDebugAct;
 #endif
+	QAction *showVirtualKeyboardAct;
 	QAction *midiLearnAct;
 	QAction *splitViewAct;
 
