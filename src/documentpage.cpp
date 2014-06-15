@@ -1152,21 +1152,25 @@ void DocumentPage::registerButton(QuteButton *b)
 
 void DocumentPage::queueMidiIn(std::vector< unsigned char > *message)
 {
-	WidgetLayout *d = m_widgetLayouts[0];
-	unsigned int nBytes = message->size();
-	if (nBytes < 4) {
-		qDebug() << "MIDI message ignored.";
-		return;
-	}
-	if ( ((d->midiWriteCounter + 1) % QCS_MAX_MIDI_QUEUE) != d->midiReadCounter) {
-		int index = d->midiWriteCounter;
-		d->midiWriteCounter++;
-		d->midiWriteCounter = d->midiWriteCounter % QCS_MAX_MIDI_QUEUE;
-		for (unsigned int i = 0; i < nBytes; i++) {
-			d->midiQueue[index][i] = (int)message->at(i);
-		}
-	}
-	m_csEngine->queueMidiIn(message);
+    WidgetLayout *d = m_widgetLayouts[0];
+    unsigned int nBytes = message->size();
+    if (nBytes > 3 || nBytes < 1) {
+        qDebug() << "MIDI message ignored. nBytes=" << nBytes << " status =" << (int)message->at(0);
+        return;
+    }
+    if ( ((d->midiWriteCounter + 1) % QCS_MAX_MIDI_QUEUE) != d->midiReadCounter) {
+        int index = d->midiWriteCounter;
+        for (unsigned int i = 0; i < nBytes; i++) {
+            d->midiQueue[index][i] = (int)message->at(i);
+        }
+        d->midiWriteCounter = (d->midiWriteCounter + 1) % QCS_MAX_MIDI_QUEUE;
+    }
+    m_csEngine->queueMidiIn(message);
+}
+
+void DocumentPage::queueVirtualMidiIn(std::vector< unsigned char > &message)
+{
+    m_csEngine->queueVirtualMidiIn(message);
 }
 
 void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)

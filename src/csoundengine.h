@@ -95,6 +95,7 @@ struct CsoundUserData {
 	QList<QVariant> previousStringOutputValues;
 
 	void *midiBuffer; //Csound Circular Buffer
+	void *virtualMidiBuffer; //Csound Circular Buffer
 
 #ifdef QCS_PYTHONQT
 	PythonConsole *m_pythonConsole;
@@ -146,6 +147,7 @@ public:
 	static int midiOutCloseCb(CSOUND *csound, void *ud);
 	static const char *midiErrorStringCb(int);
 	void queueMidiIn(std::vector<unsigned char> *message);
+	void queueVirtualMidiIn(std::vector<unsigned char> &message);
 	void sendMidiOut(QVector<unsigned char> &message);
 
 	static void makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name);

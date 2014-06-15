@@ -1,6 +1,7 @@
 RESOURCES += "src/application.qrc" \
     "src/pythonscripts.qrc" \
-	"src/icons.qrc"
+	"src/icons.qrc" \
+    src/qml_resources.qrc
 FORMS = "src/about.ui" \
     "src/configdialog.ui" \
     "src/findreplace.ui" \
@@ -153,5 +154,9 @@ LIBS += $${LCSOUND} \
 OTHER_FILES += \
     src/appstyle-dark.css \
     src/appstyle-green.css \
-    src/appstyle-white.css
+    src/appstyle-white.css \
+    src/QML/Keyboard.qml \
+    src/QML/Key.qml \
+    src/QML/VirtualKeyboard.qml \
+    src/QML/Controls.qml
 
