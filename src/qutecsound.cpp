@@ -1798,6 +1798,8 @@ void CsoundQt::showVirtualKeyboard(bool show)
 {
 #ifdef USE_QT5
     m_virtualKeyboard->setVisible(show);
+#else
+    QMessageBox::warning(this, tr("Qt5 Required"), tr("Qt version > 5.2 is required for the virtual keyboard."));
 #endif
 }
 
@@ -2837,7 +2839,9 @@ void CsoundQt::createActions()
     showVirtualKeyboardAct->setStatusTip(tr("Show the Virtual MIDI Keyboard"));
     showVirtualKeyboardAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showVirtualKeyboardAct, SIGNAL(toggled(bool)), this, SLOT(showVirtualKeyboard(bool)));
+#ifdef USE_QT5
     connect(m_virtualKeyboard, SIGNAL(Close(bool)), showVirtualKeyboardAct, SLOT(setChecked(bool)));
+#endif
 
     splitViewAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Split View"), this);
 	splitViewAct->setCheckable(true);
@@ -3312,7 +3316,9 @@ void CsoundQt::createMenus()
 	viewMenu->addAction(showDebugAct);
 #endif
 	viewMenu->addAction(midiLearnAct);
+#ifdef USE_QT5
     viewMenu->addAction(showVirtualKeyboardAct);
+#endif
 	viewMenu->addSeparator();
 	viewMenu->addAction(viewFullScreenAct);
 	viewMenu->addSeparator();
