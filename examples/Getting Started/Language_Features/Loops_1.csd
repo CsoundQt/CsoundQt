@@ -39,7 +39,7 @@ endin
 
 
 instr 2
-; There is an other way to do exactly the same by using "loop_lt":
+; There is another way to do exactly the same by using "loop_lt":
 iIndex = 0		 				; Number of T-Shirts in the bag at the beginning
 	loop:	  
 	  prints "Take a  T-Shirt and put it in the bag! \n"
