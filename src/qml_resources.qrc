@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>QML/Key.qml</file>
+        <file>QML/Keyboard.qml</file>
+        <file>QML/VirtualKeyboard.qml</file>
+        <file>QML/Controls.qml</file>
+    </qresource>
+</RCC>
