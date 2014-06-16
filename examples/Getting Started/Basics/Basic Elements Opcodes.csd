@@ -30,7 +30,7 @@ instr 1
 kFreq line 100, 5, 1000 		; 'line' generates a linear ramp, from 100-1000 Hz, taking 5 seconds
 aOut  oscili 0.2, kFreq, 1	; an oscillator whose frequency is taken from the value produced by 'line'
 	outvalue "freqsweep", kFreq   ; show the value from 'line' in a widget
-     outs aOut, aOut			 ; send the oscillator's audio to the audio ouput
+     outs aOut, aOut			 ; send the oscillator's audio to the audio output
 endin
 
 

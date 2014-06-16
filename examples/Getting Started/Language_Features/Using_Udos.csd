@@ -12,7 +12,7 @@ The main advantages are:
 
 The keyword "opcode" opens the part for an user defined opcode, "endop" closes the part. Then you give your opcode it's name and define outputs and inputs.
 
-In the following example, the Feedback-Delay used in Chapter 2 (MIDI Synth), is wrapped into an UDO. When this Echo effect is used in an Instrument, it is necessary to extend the duration by the time of echos. This extention is put into the UDO as well.
+In the following example, the Feedback-Delay used in Chapter 2 (MIDI Synth), is wrapped into an UDO. When this Echo effect is used in an Instrument, it is necessary to extend the duration by the time of echos. This extension is put into the UDO as well.
 
 See: (OrchUDO SHIFT+F1), (opcode SHIFT+F1)
 */
