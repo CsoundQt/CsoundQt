@@ -42,6 +42,7 @@ message("Building for Csound 5 (unsupported)")
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
+    QT += quickwidgets
     QT += printsupport
     DEFINES += USE_QT5
     CONFIG += QCS_QT5
