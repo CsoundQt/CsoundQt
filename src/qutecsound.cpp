@@ -136,7 +136,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	m_midiLearn->setModal(false);
 	midiHandler->setMidiLearner(m_midiLearn);
 
-#ifdef USE_QT5
+#ifdef USE_QT_GT_53
     m_virtualKeyboard = new QQuickWidget(this);
     m_virtualKeyboard->setWindowTitle(tr("CsoundQt Virtual Keyboard"));
     m_virtualKeyboard->setWindowFlags(Qt::Window);
@@ -1796,7 +1796,7 @@ void CsoundQt::showDebugger(bool show)
 
 void CsoundQt::showVirtualKeyboard(bool show)
 {
-#ifdef USE_QT5
+#ifdef USE_QT_GT_53
     m_virtualKeyboard->setVisible(show);
 #else
     QMessageBox::warning(this, tr("Qt5 Required"), tr("Qt version > 5.2 is required for the virtual keyboard."));
@@ -2839,7 +2839,7 @@ void CsoundQt::createActions()
     showVirtualKeyboardAct->setStatusTip(tr("Show the Virtual MIDI Keyboard"));
     showVirtualKeyboardAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showVirtualKeyboardAct, SIGNAL(toggled(bool)), this, SLOT(showVirtualKeyboard(bool)));
-#ifdef USE_QT5
+#ifdef USE_QT_GT_53
     connect(m_virtualKeyboard, SIGNAL(Close(bool)), showVirtualKeyboardAct, SLOT(setChecked(bool)));
 #endif
 
