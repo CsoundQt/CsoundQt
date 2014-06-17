@@ -50,6 +50,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 2) {
     QT += quickwidgets
     DEFINES += USE_QT_GT_53
+    CONFIG += QCS_QT53
 }
 
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")
@@ -91,6 +92,9 @@ pythonqt {
     INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/src
     INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/extensions/PythonQt_QtAll
     QT += svg sql webkit xmlpatterns opengl
+    QCS_QT53 {
+        QT += webkitwidgets multimedia multimediawidgets positioning sensors
+    }
 }
 
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
