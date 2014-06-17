@@ -397,7 +397,7 @@ void CsoundQt::logMessage(QString msg)
 
 void CsoundQt::statusBarMessage(QString message)
 {
-    statusBar()->showMessage(message);
+    statusBar()->showMessage(message.replace("<br />", " "));
 }
 
 void CsoundQt::closeEvent(QCloseEvent *event)
