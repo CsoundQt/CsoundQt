@@ -159,7 +159,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
 		m_scratchPad->hide();  // Hide until CsoundQt has finished loading
 
 	createMenus();
-	createToolBars();
+    createToolBars();
+    createStatusBar();
 
 	documentTabs = new QTabWidget (this);
 	documentTabs->setTabsClosable(true);
@@ -391,7 +392,12 @@ void CsoundQt::logMessage(QString msg)
 {
 	if (logFile.isOpen()) {
 		logFile.write(msg.toLatin1());
-	}
+    }
+}
+
+void CsoundQt::statusBarMessage(QString message)
+{
+    statusBar()->showMessage(message.replace("<br />", " "));
 }
 
 void CsoundQt::closeEvent(QCloseEvent *event)
@@ -3176,6 +3182,8 @@ void CsoundQt::connectActions()
 	connect(doc, SIGNAL(closeExtraPanelsSignal()), this, SLOT(closeExtraPanels()));
 	connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
 
+    connect(doc->getView(), SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
+
 	connect(doc, SIGNAL(modified()), this, SLOT(documentWasModified()));
 	//  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
 	//          this, SLOT(setWidgetClipboard(QString)));
@@ -3825,7 +3833,12 @@ void CsoundQt::createToolBars()
 //	fileToolBar->setToolButtonStyle(toolButtonStyle);
 //	editToolBar->setToolButtonStyle(toolButtonStyle);
 	controlToolBar->setToolButtonStyle(toolButtonStyle);
-	configureToolBar->setToolButtonStyle(toolButtonStyle);
+    configureToolBar->setToolButtonStyle(toolButtonStyle);
+}
+
+void CsoundQt::createStatusBar()
+{
+    statusBar()->showMessage(tr("Ready"));
 }
 
 void CsoundQt::readSettings()

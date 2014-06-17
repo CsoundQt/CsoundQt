@@ -169,6 +169,7 @@ public slots:
 	//    void updateWidgets();
 	void openExample();
 	void logMessage(QString msg);
+    void statusBarMessage(QString message);
 	//    void registerLiveEvent(QWidget *e);
 	void evaluateCsound(QString code = QString());
 	void breakpointReached();
@@ -281,6 +282,7 @@ private:
 	void fillScriptsSubMenu(QDir dir, QMenu *m, int depth);
 	void fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth);
 	void createToolBars();
+    void createStatusBar();
 	void readSettings();
 	void writeSettings(QStringList openFiles=QStringList(), int lastIndex = 0);
 	void clearSettings();

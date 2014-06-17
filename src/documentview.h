@@ -176,6 +176,7 @@ private slots:
 	void opcodeHelp();
 
 signals:
+    void opcodeSyntaxSignal(QString syntax);  // Report syntax of opcode under cursor
 	void setHelp(); // Request execute open opcode help action
 	void contentsChanged();
 	void closeExtraPanels();
