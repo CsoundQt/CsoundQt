@@ -769,6 +769,7 @@ void DocumentView::syntaxCheck()
 		if (m_opcodeTree->isOpcode(word)) {
 			QString syntax = m_opcodeTree->getSyntax(word);
 			if(!syntax.isEmpty()) {
+                emit(opcodeSyntaxSignal(syntax));
 				m_currentOpcodeText = syntax;
 				if (i == 0) {
 					showHover = true;
