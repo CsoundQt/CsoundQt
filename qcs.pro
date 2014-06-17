@@ -42,10 +42,14 @@ message("Building for Csound 5 (unsupported)")
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
-    QT += quickwidgets
     QT += printsupport
     DEFINES += USE_QT5
     CONFIG += QCS_QT5
+}
+
+greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 2) {
+    QT += quickwidgets
+    DEFINES += USE_QT_GT_53
 }
 
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")

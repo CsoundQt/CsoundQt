@@ -25,8 +25,10 @@
 
 #ifdef USE_QT5
 #include <QtWidgets>
+#ifdef USE_QT_GT_53
 #include <QQuickWidget>
 #include <QQuickItem>
+#endif
 #else
 #include <QtGui>
 #endif
@@ -312,7 +314,7 @@ private:
 	DockHelp *helpPanel;
 	WidgetPanel *widgetPanel;  // Dock widget, for containing the widget layout
 	QDockWidget *m_scratchPad;
-#ifdef USE_QT5
+#ifdef USE_QT_GT_53
 	QQuickWidget *m_virtualKeyboard;
 #endif
 	//    QString m_widgetClipboard;
