@@ -244,6 +244,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
 	logFileLineEdit->setText(m_options->logFile);
 	sdkLineEdit->setText(m_options->sdkDir);
+	templateLineEdit->setText(m_options->templateDir);
 
 	TerminalLineEdit->setText(m_options->terminal);
 	browserLineEdit->setText(m_options->browser);
@@ -276,6 +277,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(pythonDirToolButton, SIGNAL(clicked()), this, SLOT(browsePythonDir()));
 	connect(logFileToolButton, SIGNAL(clicked()), this, SLOT(browseLogFile()));
 	connect(sdkToolButton, SIGNAL(clicked()), this, SLOT(browseSdkDir()));
+	connect(templateToolButton, SIGNAL(clicked()), this, SLOT(browseTemplateDir()));
 
 	//  connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
 	connect(audioInputToolButton, SIGNAL(released()), this, SLOT(selectAudioInput()));
@@ -431,6 +433,7 @@ void ConfigDialog::accept()
 	m_options->csoundExecutable = csoundExecutableLineEdit->text();
 	m_options->logFile = logFileLineEdit->text();
 	m_options->sdkDir = sdkLineEdit->text();
+	m_options->templateDir = templateLineEdit->text();
 
 	m_options->terminal = TerminalLineEdit->text();
 	m_options->browser = browserLineEdit->text();
@@ -575,6 +578,12 @@ void ConfigDialog::browseSdkDir()
 {
 	browseDir(m_options->sdkDir);
 	sdkLineEdit->setText(m_options->sdkDir);
+}
+
+void ConfigDialog::browseTemplateDir()
+{
+	browseDir(m_options->templateDir);
+	templateLineEdit->setText(m_options->templateDir);
 }
 
 void ConfigDialog::selectAudioInput()

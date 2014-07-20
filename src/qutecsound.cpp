@@ -388,6 +388,16 @@ void CsoundQt::openExample()
 	//   saveAs();
 }
 
+void CsoundQt::openTemplate()
+{
+	QObject *sender = QObject::sender();
+	if (sender == 0)
+		return;
+	QAction *action = static_cast<QAction *>(sender);
+	loadFile(action->data().toString());
+	saveAs();
+}
+
 void CsoundQt::logMessage(QString msg)
 {
 	if (logFile.isOpen()) {
@@ -3256,6 +3266,7 @@ void CsoundQt::createMenus()
 	fileMenu->addAction(infoAct);
 	fileMenu->addSeparator();
 	recentMenu = fileMenu->addMenu(tr("Recent files"));
+	templateMenu = fileMenu->addMenu(tr("Templates"));
 	fileMenu->addSeparator();
 	fileMenu->addAction(exitAct);
 
@@ -3655,6 +3666,49 @@ void CsoundQt::fillFileMenu()
 			a->setData(recentFiles[i]);
 		}
 	}
+	templateMenu->clear();
+	QString templatePath = m_options->templateDir;
+	if (templatePath.isEmpty() || !QDir(templatePath).exists()) {
+#ifdef Q_OS_WIN32
+		templatePath = qApp->applicationDirPath() + "/templates/";
+#endif
+#ifdef Q_OS_MAC
+		templatePath = qApp->applicationDirPath() + "/../templates/";
+		qDebug() << templatePath;
+#endif
+#ifdef Q_OS_LINUX
+		templatePath = qApp->applicationDirPath() + "/templates/";
+		if (!QDir(templatePath).exists()) {
+			templatePath = qApp->applicationDirPath() + "/../templates/";
+		}
+		if (!QDir(templatePath).exists()) { // for out of tree builds
+			templatePath = qApp->applicationDirPath() + "/../../csoundqt/templates/";
+		}
+		if (!QDir(templatePath).exists()) { // for out of tree builds
+			templatePath = qApp->applicationDirPath() + "/../../qutecsound/templates/";
+		}
+		if (!QDir(templatePath).exists()) {
+			templatePath = "/usr/share/qutecsound/templates/";
+		}
+#endif
+#ifdef Q_OS_SOLARIS
+		templatePath = qApp->applicationDirPath() + "/templates/";
+		if (!QDir(templatePath).exists()) {
+			templatePath = "/usr/share/qutecsound/templates/";
+		}
+		if (!QDir(templatePath).exists()) {
+			templatePath = qApp->applicationDirPath() + "/../src/templates/";
+		}
+#endif
+	}
+	QStringList filters;
+	filters << "*.csd";
+	QStringList templateFiles = QDir(templatePath).entryList(filters,QDir::Files);
+	foreach (QString fileName, templateFiles) {
+		QAction *newAction = templateMenu->addAction(fileName, this,
+													 SLOT(openTemplate()));
+		newAction->setData(templatePath + QDir::separator() + fileName);
+	}
 }
 
 void CsoundQt::fillFavoriteMenu()
@@ -4008,6 +4062,7 @@ void CsoundQt::readSettings()
 	m_options->csoundExecutable = settings.value("csoundExecutable","csound").toString();
 	m_options->logFile = settings.value("logFile",DEFAULT_LOG_FILE).toString();
 	m_options->sdkDir = settings.value("sdkDir","").toString();
+	m_options->templateDir = settings.value("templateDir","").toString();
 	m_options->opcodexmldir = settings.value("opcodexmldir", "").toString();
 	m_options->opcodexmldirActive = settings.value("opcodexmldirActive","").toBool();
 	settings.endGroup();
@@ -4186,6 +4241,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 		settings.setValue("csoundExecutable", m_options->csoundExecutable);
 		settings.setValue("logFile",m_options->logFile);
 		settings.setValue("sdkDir",m_options->sdkDir);
+		settings.setValue("templateDir",m_options->templateDir);
 		settings.setValue("opcodexmldir", m_options->opcodexmldir);
 		settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
 	}

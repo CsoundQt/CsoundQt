@@ -168,6 +168,7 @@ public slots:
 	void closeExtraPanels(); // to close help and console panels when esc is pressed in the editor
 	//    void updateWidgets();
 	void openExample();
+	void openTemplate();
 	void logMessage(QString msg);
     void statusBarMessage(QString message);
 	//    void registerLiveEvent(QWidget *e);
@@ -336,6 +337,7 @@ private:
 
 	QMenu *fileMenu;
 	QMenu *recentMenu;
+	QMenu *templateMenu;
 	QMenu *editMenu;
 	QMenu *controlMenu;
 	QMenu *viewMenu;

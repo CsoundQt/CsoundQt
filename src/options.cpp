@@ -83,6 +83,7 @@ Options::Options(ConfigLists *configlists) :
 #endif
 	logFile = "log.txt";
 	sdkDir = "";
+	templateDir = "";
 	evalLanguage = CS_ORC;
 
 	// External applications
