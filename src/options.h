@@ -92,6 +92,7 @@ public:
 	QString csoundExecutable;
 	QString logFile;
 	QString sdkDir;
+	QString templateDir;
 
 	typedef enum {
 		CS_ORC = 0x01,

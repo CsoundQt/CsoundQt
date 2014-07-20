@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>627</width>
-    <height>666</height>
+    <width>655</width>
+    <height>704</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,7 +73,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -1446,117 +1446,177 @@
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
            <layout class="QGridLayout" name="environLayout">
-            <item row="6" column="0">
-             <widget class="QCheckBox" name="SfdirCheckBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
+            <item row="8" column="2">
+             <widget class="QLineEdit" name="rawWaveLineEdit"/>
+            </item>
+            <item row="8" column="0">
+             <widget class="QCheckBox" name="rawWaveCheckBox">
               <property name="text">
-               <string>SFDIR</string>
+               <string>RAWWAVE_PATH</string>
               </property>
               <property name="checked">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="5" column="3">
-             <widget class="QToolButton" name="ssdirToolButton">
+            <item row="12" column="2">
+             <widget class="QLineEdit" name="csoundExecutableLineEdit">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="3">
+             <widget class="QToolButton" name="rawWaveToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="2">
-             <widget class="QLineEdit" name="SfdirLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QLineEdit" name="CsdocdirLineEdit"/>
-            </item>
-            <item row="0" column="3">
-             <widget class="QToolButton" name="csdocdirToolButton">
+            <item row="12" column="3">
+             <widget class="QToolButton" name="csoundExecutableToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="3">
-             <widget class="QToolButton" name="opcodedirToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
+            <item row="3" column="2">
+             <widget class="QLineEdit" name="Opcode6dir64LineEdit"/>
             </item>
-            <item row="1" column="2">
-             <widget class="QLineEdit" name="OpcodedirLineEdit"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="OpcodedirCheckBox">
+            <item row="2" column="0">
+             <widget class="QCheckBox" name="Opcodedir64CheckBox">
               <property name="toolTip">
                <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
               </property>
               <property name="text">
-               <string>OPCODEDIR</string>
+               <string>OPCODEDIR64</string>
               </property>
               <property name="checked">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="4" column="2">
-             <widget class="QLineEdit" name="SadirLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
+            <item row="15" column="2">
+             <widget class="QLineEdit" name="templateLineEdit"/>
             </item>
-            <item row="4" column="0">
-             <widget class="QCheckBox" name="SadirCheckBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="Opcodedir64LineEdit"/>
+            </item>
+            <item row="12" column="0">
+             <widget class="QLabel" name="label_36">
               <property name="text">
-               <string>SADIR</string>
+               <string>Csound Executable</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QCheckBox" name="Opcode6dir64CheckBox">
+              <property name="text">
+               <string>OPCODE6DIR64</string>
               </property>
               <property name="checked">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="5" column="2">
-             <widget class="QLineEdit" name="SsdirLineEdit">
+            <item row="11" column="2">
+             <widget class="QLineEdit" name="pythonExecutableLineEdit">
               <property name="enabled">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="4" column="3">
-             <widget class="QToolButton" name="sadirToolButton">
+            <item row="10" column="0">
+             <widget class="QLabel" name="pythonDirlabel">
+              <property name="text">
+               <string>Python Script Dir </string>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="0">
+             <widget class="QLabel" name="label_29">
+              <property name="text">
+               <string>Python Executable</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QToolButton" name="opcodedir64ToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="3">
-             <widget class="QToolButton" name="sfdirToolButton">
+            <item row="13" column="3">
+             <widget class="QToolButton" name="logFileToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
-             <widget class="QCheckBox" name="SsdirCheckBox">
+            <item row="13" column="0">
+             <widget class="QLabel" name="label_30">
+              <property name="text">
+               <string>Log file</string>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="2">
+             <widget class="QLineEdit" name="logFileLineEdit">
               <property name="enabled">
                <bool>true</bool>
               </property>
+             </widget>
+            </item>
+            <item row="10" column="3">
+             <widget class="QToolButton" name="pythonDirToolButton">
               <property name="text">
-               <string>SSDIR</string>
+               <string>...</string>
               </property>
-              <property name="checked">
+             </widget>
+            </item>
+            <item row="10" column="2">
+             <widget class="QLineEdit" name="pythonDirLineEdit">
+              <property name="enabled">
                <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_7">
+              <property name="toolTip">
+               <string>Selects the location of the html documentation</string>
+              </property>
+              <property name="text">
+               <string>Html Doc Directory</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="3">
+             <widget class="QToolButton" name="favoriteToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="2">
+             <widget class="QLineEdit" name="favoriteLineEdit">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="0">
+             <widget class="QLabel" name="label_28">
+              <property name="text">
+               <string>Favorite dir</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="3">
+             <widget class="QToolButton" name="incdirToolButton">
+              <property name="text">
+               <string>...</string>
               </property>
              </widget>
             </item>
@@ -1580,106 +1640,119 @@
               </property>
              </widget>
             </item>
-            <item row="7" column="3">
-             <widget class="QToolButton" name="incdirToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="2">
-             <widget class="QLineEdit" name="favoriteLineEdit">
+            <item row="5" column="2">
+             <widget class="QLineEdit" name="SsdirLineEdit">
               <property name="enabled">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_7">
+            <item row="6" column="3">
+             <widget class="QToolButton" name="sfdirToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QLineEdit" name="SadirLineEdit">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QCheckBox" name="SadirCheckBox">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="text">
+               <string>SADIR</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="OpcodedirCheckBox">
               <property name="toolTip">
-               <string>Selects the location of the html documentation</string>
+               <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
               </property>
               <property name="text">
-               <string>Html Doc Directory</string>
+               <string>OPCODEDIR</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="9" column="3">
-             <widget class="QToolButton" name="favoriteToolButton">
+            <item row="4" column="3">
+             <widget class="QToolButton" name="sadirToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="10" column="2">
-             <widget class="QLineEdit" name="pythonDirLineEdit">
+            <item row="5" column="0">
+             <widget class="QCheckBox" name="SsdirCheckBox">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="text">
+               <string>SSDIR</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLineEdit" name="OpcodedirLineEdit"/>
+            </item>
+            <item row="1" column="3">
+             <widget class="QToolButton" name="opcodedirToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="2">
+             <widget class="QLineEdit" name="SfdirLineEdit">
               <property name="enabled">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="9" column="0">
-             <widget class="QLabel" name="label_28">
-              <property name="text">
-               <string>Favorite dir</string>
-              </property>
-             </widget>
-            </item>
-            <item row="13" column="0">
-             <widget class="QLabel" name="label_30">
-              <property name="text">
-               <string>Log file</string>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="3">
-             <widget class="QToolButton" name="pythonDirToolButton">
+            <item row="5" column="3">
+             <widget class="QToolButton" name="ssdirToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="13" column="2">
-             <widget class="QLineEdit" name="logFileLineEdit">
+            <item row="6" column="0">
+             <widget class="QCheckBox" name="SfdirCheckBox">
               <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="text">
+               <string>SFDIR</string>
+              </property>
+              <property name="checked">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="13" column="3">
-             <widget class="QToolButton" name="logFileToolButton">
+            <item row="0" column="3">
+             <widget class="QToolButton" name="csdocdirToolButton">
               <property name="text">
                <string>...</string>
               </property>
              </widget>
             </item>
-            <item row="11" column="0">
-             <widget class="QLabel" name="label_29">
-              <property name="text">
-               <string>Python Executable</string>
-              </property>
-             </widget>
-            </item>
-            <item row="11" column="2">
-             <widget class="QLineEdit" name="pythonExecutableLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="0">
-             <widget class="QLabel" name="pythonDirlabel">
-              <property name="text">
-               <string>Python Script Dir </string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QToolButton" name="opcodedir64ToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
+            <item row="0" column="2">
+             <widget class="QLineEdit" name="CsdocdirLineEdit"/>
             </item>
             <item row="14" column="0">
              <widget class="QLabel" name="label_25">
@@ -1691,8 +1764,15 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="2">
-             <widget class="QLineEdit" name="Opcodedir64LineEdit"/>
+            <item row="15" column="0">
+             <widget class="QLabel" name="label_39">
+              <property name="toolTip">
+               <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
+              </property>
+              <property name="text">
+               <string>Template directory</string>
+              </property>
+             </widget>
             </item>
             <item row="14" column="2">
              <widget class="QLineEdit" name="sdkLineEdit"/>
@@ -1704,68 +1784,8 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QCheckBox" name="Opcodedir64CheckBox">
-              <property name="toolTip">
-               <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
-              </property>
-              <property name="text">
-               <string>OPCODEDIR64</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QCheckBox" name="Opcode6dir64CheckBox">
-              <property name="text">
-               <string>OPCODE6DIR64</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2">
-             <widget class="QLineEdit" name="Opcode6dir64LineEdit"/>
-            </item>
-            <item row="12" column="0">
-             <widget class="QLabel" name="label_36">
-              <property name="text">
-               <string>Csound Executable</string>
-              </property>
-             </widget>
-            </item>
-            <item row="12" column="2">
-             <widget class="QLineEdit" name="csoundExecutableLineEdit">
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item row="12" column="3">
-             <widget class="QToolButton" name="csoundExecutableToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="0">
-             <widget class="QCheckBox" name="rawWaveCheckBox">
-              <property name="text">
-               <string>RAWWAVE_PATH</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="2">
-             <widget class="QLineEdit" name="rawWaveLineEdit"/>
-            </item>
-            <item row="8" column="3">
-             <widget class="QToolButton" name="rawWaveToolButton">
+            <item row="15" column="3">
+             <widget class="QToolButton" name="templateToolButton">
               <property name="text">
                <string>...</string>
               </property>
