@@ -61,8 +61,6 @@ private slots:
 private:
     Ui::DebugPanel *ui;
 
-    double m_previousCellValue;
-
 signals:
     void runSignal();
     void pauseSignal();
@@ -71,6 +69,8 @@ signals:
     void stopSignal();
     void addInstrumentBreakpoint(double instr, int skip);
     void removeInstrumentBreakpoint(double instr);
+	void addBreakpoint(int line, int instr, int skip);
+	void removeBreakpoint(int line, int instr);
 };
 
 #endif // DEBUGPANEL_H

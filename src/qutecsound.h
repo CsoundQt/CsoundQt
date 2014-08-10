@@ -265,9 +265,9 @@ private slots:
 	void stopDebugger();
 	void pauseDebugger();
 	void continueDebugger();
-	void addBreakpoint(int line, int skip);
+	void addBreakpoint(int line, int instr, int skip);
 	void addInstrumentBreakpoint(double instr, int skip);
-	void removeBreakpoint(int line);
+	void removeBreakpoint(int line, int instr);
 	void removeInstrumentBreakpoint(double instr);
 #endif
 private:

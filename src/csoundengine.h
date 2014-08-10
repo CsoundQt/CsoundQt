@@ -26,6 +26,7 @@
 #include <QStringList>
 #include <QTimer>
 #include <QFuture>
+#include <QAtomicInt>
 
 #include <csound.hpp>
 #include <sndfile.hh>
@@ -201,11 +202,15 @@ public:
 	void stopDebug();
 	void addInstrumentBreakpoint(double instr, int skip);
 	void removeInstrumentBreakpoint(double instr);
+	void addBreakpoint(int line, int instr, int skip);
+	void removeBreakpoint(int line, int instr);
 	void setStartingBreakpoints(QVector<QVariantList> bps);
 	QVector<QVariantList> getVaribleList();
 	QVector<QVariantList> getInstrumentList();
+	int getCurrentLine();
 	QVector<QVariantList> m_varList;
 	QVector<QVariantList> m_instrumentList;
+	QAtomicInt m_currentLine;
 	QMutex variableMutex;
 	QMutex instrumentMutex;
 	QVector<QVariantList> m_startBreakpoints;

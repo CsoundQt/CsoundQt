@@ -112,6 +112,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	connect(m_debugPanel, SIGNAL(continueSignal()), this, SLOT(continueDebugger()));
 	connect(m_debugPanel, SIGNAL(addInstrumentBreakpoint(double, int)), this, SLOT(addInstrumentBreakpoint(double, int)));
 	connect(m_debugPanel, SIGNAL(removeInstrumentBreakpoint(double)), this, SLOT(removeInstrumentBreakpoint(double)));
+	connect(m_debugPanel, SIGNAL(addBreakpoint(int, int, int)), this, SLOT(addBreakpoint(int, int, int)));
+	connect(m_debugPanel, SIGNAL(removeBreakpoint(int, int)), this, SLOT(removeBreakpoint(int, int)));
 	addDockWidget(Qt::RightDockWidgetArea, m_debugPanel);
 	m_debugEngine = NULL;
 #endif
@@ -717,6 +719,7 @@ void CsoundQt::breakpointReached()
 	Q_ASSERT(m_debugEngine);
 	m_debugPanel->setVariableList(m_debugEngine->getVaribleList());
 	m_debugPanel->setInstrumentList(m_debugEngine->getInstrumentList());
+	documentPages[curPage]->getView()->m_mainEditor->setCurrentDebugLine(m_debugEngine->getCurrentLine());
 #endif
 }
 
@@ -2445,6 +2448,7 @@ void CsoundQt::runDebugger()
             this, SLOT(stopDebugger()));
     m_debugEngine->setStartingBreakpoints(m_debugPanel->getBreakpoints());
 
+	documentPages[curPage]->getView()->m_mainEditor->setCurrentDebugLine(-1);
     play();
 }
 
@@ -2455,6 +2459,7 @@ void CsoundQt::stopDebugger()
         disconnect(m_debugPanel, SIGNAL(stopSignal()), 0, 0);
         m_debugEngine->stopDebug();
         m_debugEngine = 0;
+		documentPages[curPage]->getView()->m_mainEditor->setCurrentDebugLine(-1);
     }
 	markStopped();
 }
@@ -2470,12 +2475,18 @@ void CsoundQt::continueDebugger()
 {
 	if(m_debugEngine) {
 		m_debugEngine->continueDebug();
+		documentPages[curPage]->getView()->m_mainEditor->setCurrentDebugLine(-1);
 	}
 }
 
-void CsoundQt::addBreakpoint(int line, int skip)
+void CsoundQt::addBreakpoint(int line, int instr, int skip)
 {
-
+	if (instr == 0) {
+		documentPages[curPage]->getView()->m_mainEditor->markDebugLine(line);
+	}
+	if(m_debugEngine) {
+		m_debugEngine->addBreakpoint(line, instr, skip);
+	}
 }
 
 void CsoundQt::addInstrumentBreakpoint(double instr, int skip)
@@ -2485,9 +2496,14 @@ void CsoundQt::addInstrumentBreakpoint(double instr, int skip)
 	}
 }
 
-void CsoundQt::removeBreakpoint(int line)
+void CsoundQt::removeBreakpoint(int line, int instr)
 {
-
+	if (instr == 0) {
+		documentPages[curPage]->getView()->m_mainEditor->unmarkDebugLine(line);
+	}
+	if(m_debugEngine) {
+		m_debugEngine->removeBreakpoint(line, instr);
+	}
 }
 
 void CsoundQt::removeInstrumentBreakpoint(double instr)
@@ -2496,6 +2512,7 @@ void CsoundQt::removeInstrumentBreakpoint(double instr)
 		m_debugEngine->removeInstrumentBreakpoint(instr);
 	}
 }
+
 #endif
 
 //void CsoundQt::showParametersInEditor()

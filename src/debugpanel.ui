@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>550</width>
-    <height>361</height>
+    <height>398</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -159,7 +159,7 @@ font: 10pt &quot;Courier New&quot;;</string>
       </column>
       <column>
        <property name="text">
-        <string>Line/Instrument</string>
+        <string>Instr/Line</string>
        </property>
       </column>
       <column>

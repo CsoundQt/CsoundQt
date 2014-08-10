@@ -155,6 +155,30 @@ void TextEditLineNumbers::setLineAreaVisble(bool visible)
 	}
 }
 
+void TextEditLineNumbers::markDebugLine(int line)
+{
+	m_debugLines.append(line);
+	lineNumberArea->setDebugLines(m_debugLines);
+}
+
+void TextEditLineNumbers::unmarkDebugLine(int line)
+{
+	int index = m_debugLines.indexOf(line);
+	if (index >= 0) {
+		m_debugLines.remove(index);
+	} else {
+		qDebug() << "TextEditLineNumbers::unmarkDebugLine no marker at line " << line;
+	}
+	lineNumberArea->setDebugLines(m_debugLines);
+	updateLineArea();
+}
+
+void TextEditLineNumbers::setCurrentDebugLine(int line)
+{
+	lineNumberArea->setCurrentDebugLine(line);
+	updateLineArea();
+}
+
 void TextEditLineNumbers::updateLineArea(int)
 {
 	lineNumberArea->update();
@@ -164,7 +188,6 @@ void TextEditLineNumbers::updateLineArea()
 {
 	lineNumberArea->update();
 }
-
 
 void LineNumberArea::paintEvent(QPaintEvent *)
 {
@@ -197,9 +220,22 @@ void LineNumberArea::paintEvent(QPaintEvent *)
 			}
 			painter.drawText(codeEditor->getAreaWidth() - codeEditor->fontMetrics().width(number) - 3, y, number); // 3 - add some padding
 
+
 			if (bold) {
 				font.setBold(false);
 				painter.setFont(font);
+			}
+			if (m_debugLines.indexOf(line_count) >= 0) {
+				painter.setPen(QColor(Qt::red));
+				painter.setBrush(QColor(Qt::red));
+				int height = codeEditor->fontMetrics().ascent() ;
+				painter.drawEllipse(position.x(), y - height, height, height);
+				painter.setBrush(QBrush());
+				painter.setPen(QColor(Qt::darkGray).darker()); // not exactly black
+			}
+			if (m_currentDebugLine >= 0 && line_count == m_currentDebugLine) {
+				QImage image("://themes/boring/gtk-media-play-ltr.png");
+				painter.drawImage(position.x(), y, image);
 			}
 		}
 		block = block.next();

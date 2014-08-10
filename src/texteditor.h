@@ -73,12 +73,18 @@ public:
 	bool lineAreaVisble() {return m_lineAreaVisble;}
 	QAction *toggleAction;
 
+public slots:
+	void markDebugLine(int line);
+	void unmarkDebugLine(int line);
+	void setCurrentDebugLine(int line);
+
 protected:
 	void resizeEvent(QResizeEvent *e);
 
 private:
 	LineNumberArea *lineNumberArea;
 	bool m_lineAreaVisble;
+	QVector<int> m_debugLines;
 
 private slots:
 	void updateLineArea(int);
@@ -92,12 +98,17 @@ class LineNumberArea : public QWidget
 public:
 	LineNumberArea(TextEditLineNumbers *editor) : QWidget(editor) {
 		codeEditor = editor;
+		m_currentDebugLine = -1;
 	}
+	void setDebugLines(QVector<int> debugLines) {m_debugLines = debugLines;}
+	void setCurrentDebugLine(int line) {m_currentDebugLine = line;}
 
 protected:
 	void paintEvent(QPaintEvent *event);
 
 private:
+	QVector<int> m_debugLines;
+	int m_currentDebugLine;
 	TextEditLineNumbers *codeEditor;
 };
 
