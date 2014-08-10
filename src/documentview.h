@@ -171,6 +171,15 @@ private:
 	QStringList m_localVariables;
 	QStringList m_globalVariables;
 
+	enum {
+		ORC_CONTEXT = 0,
+		SCO_CONTEXT,
+		OPTIONS_CONTEXT,
+		PYTHON_CONTEXT,
+		NO_CONTEXT
+	};
+	int m_currentContext;
+
 private slots:
 	void destroySyntaxMenu();
 	void opcodeHelp();

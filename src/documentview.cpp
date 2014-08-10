@@ -150,12 +150,11 @@ void DocumentView::updateContext()
 	contextStart << "<CsInstruments>" << "<CsScore" << "<CsOptions>";
 	QTextCursor cursor = m_mainEditor->textCursor();
 	cursor.select(QTextCursor::LineUnderCursor);
-	QString line = cursor.selection().toPlainText();
-	int outerContext = 0;
+	QString line = cursor.selection().toPlainText().simplified();
 	while (!cursor.atStart()) {
 		foreach(QString startText, contextStart) {
-			if (line.contains(startText)) {
-				outerContext = contextStart.indexOf(startText) + 1;
+			if (line.startsWith(startText)) {
+				m_currentContext = contextStart.indexOf(startText) + 1;
 				break;
 			}
 		}
@@ -164,7 +163,7 @@ void DocumentView::updateContext()
 		line = cursor.selection().toPlainText();
 		cursor.movePosition(QTextCursor::StartOfBlock);
 	}
-	if (outerContext == 1) { // Instrument section
+	if (m_currentContext == DocumentView::ORC_CONTEXT) { // Instrument section
 		QString endText = "</CsInstruments>";
 		QTextCursor linecursor = cursor;
 		linecursor.select(QTextCursor::LineUnderCursor);
