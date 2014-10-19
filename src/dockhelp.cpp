@@ -40,6 +40,8 @@ DockHelp::DockHelp(QWidget *parent)
 //	connect(ui->toggleFindButton, SIGNAL(released()), this, SLOT(toggleFindBarVisible()));
 	connect(ui->backButton, SIGNAL(released()), this, SLOT(browseBack()));
 	connect(ui->forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
+	connect(ui->opcodesToolButton, SIGNAL(released()), this, SLOT(showOverview()));
+	connect(ui->homeToolButton, SIGNAL(released()), this, SLOT(showManual()));
 	connect(ui->findLine,SIGNAL(returnPressed()),this,SLOT(onReturnPressed()));
 	ui->findPreviousAct->setShortcut(QKeySequence::FindPrevious);
 	ui->nextFindAct->setShortcut(QKeySequence::FindNext);
