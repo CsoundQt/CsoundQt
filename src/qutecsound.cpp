@@ -4484,7 +4484,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 			documentTabs->setTabIcon(curPage, QIcon());
 		}
 	}
-	if (fileName.startsWith(m_options->csdocdir)) {
+	if (fileName.startsWith(m_options->csdocdir) && !m_options->csdocdir.isEmpty()) {
 		documentPages[curPage]->readOnly = true;
 	}
 	QApplication::restoreOverrideCursor();
