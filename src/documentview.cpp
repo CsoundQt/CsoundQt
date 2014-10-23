@@ -758,8 +758,8 @@ void DocumentView::syntaxCheck()
 	}
 
 	cursor = editor->textCursor();
-	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
-	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+//	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
+//	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
 	QStringList words = cursor.selectedText().split(QRegExp("\\b"),
 													QString::SkipEmptyParts);
 	bool showHover = false;
