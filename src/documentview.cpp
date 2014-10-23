@@ -736,7 +736,7 @@ void DocumentView::syntaxCheck()
 		if (rightParenMatch) {
 			fmt.setBackground(QBrush(Qt::lightGray));
 		} else {
-			fmt.setBackground(QBrush(Qt::darkRed));
+			fmt.setBackground(QBrush(Qt::magenta));
 		}
 		editor->blockSignals(true);
 		cursor.setCharFormat(fmt);
@@ -750,7 +750,7 @@ void DocumentView::syntaxCheck()
 		if (rightParenMatch) {
 			fmt.setBackground(QBrush(Qt::lightGray));
 		} else {
-			fmt.setBackground(QBrush(Qt::darkRed));
+			fmt.setBackground(QBrush(Qt::magenta));
 		}
 		editor->blockSignals(true);
 		cursor.setCharFormat(fmt);
