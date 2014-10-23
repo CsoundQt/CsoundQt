@@ -199,6 +199,10 @@ void DockHelp::findText(QString expr)
 		if (!ui->text->find(ui->findLine->text(),findFlags)) {
 			ui->text->setTextCursor(tmpCursor); // if not found at all, restore position
 		}
+	} else {
+		int cursorY = ui->text->cursorRect().top();
+		QScrollBar *vbar = ui->text->verticalScrollBar();
+		vbar->setValue(vbar->value() + cursorY);
 	}
 }
 
