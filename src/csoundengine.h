@@ -29,7 +29,6 @@
 #include <QAtomicInt>
 
 #include <csound.hpp>
-#include <sndfile.hh>
 #include <csPerfThread.hpp>
 #include <cwindow.h> // Necessary for WINDAT struct
 
@@ -245,13 +244,6 @@ private:
 
 	CsoundUserData *ud;
 
-	SndfileHandle *m_outfile;
-	long samplesWritten;
-	bool m_recording;
-	MYFLT *m_recBuffer; // for temporary copy of Csound output buffer when recording to file
-	int m_recBufferSize; // size of the record buffer
-	QTimer recordTimer;
-
 	CsoundOptions m_options;
 
 	QVector<ConsoleWidget *> consoles;  // Consoles registered for message printing
@@ -262,7 +254,7 @@ private:
 	QStringList keyPressBuffer; // protected by keyMutex
 	QStringList keyReleaseBuffer; // protected by keyMutex
 
-
+	bool m_recording;
 	QMutex m_playMutex; // To prevent from starting a Csound instance while another is starting or closing
 	QMutex eventMutex;
 	QVector<QString> eventQueue;
@@ -271,8 +263,6 @@ private:
 	int eventQueueSize;
 
 private slots:
-	void recordBuffer();
-	//    void widgetLayoutDestroyed();
 
 signals:
 	void errorLines(QList<QPair<int, QString> >);

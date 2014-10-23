@@ -4,8 +4,6 @@
 # qmake qutecsound.pro "CSOUND_INCLUDE_DIR = <path to csound.h>"
 # CSOUND_INCLUDE_DIR
 # CSOUND_LIBRARY_DIR
-# LIBSNDFILE_INCLUDE_DIR
-# LIBSNDFILE_LIBRARY_DIR
 # RTMIDI_DIR
 # PYTHONQT_SRC_DIR
 # If the Csound headers and libraries you are using were built from source but
@@ -99,9 +97,6 @@ pythonqt {
 
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
 INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
-INCLUDEPATH *= $${LIBSNDFILE_INCLUDE_DIR}
-
-
 
 #DESTDIR = $${_PRO_FILE_PWD_}/bin
 DESTDIR = bin
@@ -118,3 +113,4 @@ pythonqt:TARGET = $${TARGET}-py
 csound6:TARGET = $${TARGET}-cs6
 
 CONFIG(debug, debug|release):TARGET = $${TARGET}-debug
+

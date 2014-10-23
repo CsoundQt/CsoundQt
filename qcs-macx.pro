@@ -25,13 +25,8 @@ DEFAULT_CSOUND_API_INCLUDE_DIRS =  ~$${CSOUND_FRAMEWORK_DIR}/Headers \
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
 DEFAULT_CSOUND_LIBRARY_DIRS = ~$${CSOUND_FRAMEWORK_DIR} \
 	$${CSOUND_FRAMEWORK_DIR}
-DEFAULT_LIBSNDFILE_INCLUDE_DIRS = /usr/local/include \
-	/usr/include
-DEFAULT_LIBSNDFILE_LIBRARY_DIRS = /usr/local/lib \
-		/usr/lib
 build32:DEFAULT_CSOUND_LIBS = CsoundLib
 build64:DEFAULT_CSOUND_LIBS = CsoundLib64
-LIBSNDFILE_LIB = libsndfile.dylib
 
 # For OS X, the PythonQt.1.0.0.dylib and the libPythonQt.1.dylib must be on /usr/local/lib or other lib path
 DEFAULT_PYTHON_INCLUDE_DIR = /usr/local/include \
@@ -48,7 +43,6 @@ include(config.pri)
 
 # Use results from config step
 LIBS *= -L$${CSOUND_LIBRARY_DIR}
-LIBS *= -L$${LIBSNDFILE_LIBRARY_DIR}
 rtmidi {
 DEFINES += __MACOSX_CORE__
 LIBS += -framework CoreFoundation
@@ -66,8 +60,6 @@ RESOURCES += "src/quteapp_d_osx.qrc"
 LCSOUND = -F/Library/Frameworks -framework $${MAC_LIB}
 csound6: LCSND = -lcsnd.6.0
 else: LCSND = -l_csnd
-
-LSNDFILE = -lsndfile
 
 QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
 ICON = $${PWD}/images/qtcs.icns

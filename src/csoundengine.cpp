@@ -61,10 +61,9 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 	ud->m_pythonCallback = "";
 #endif
 
-	m_recording = false;
 	m_consoleBufferSize = 0;
-	m_recBufferSize = 4096;
-	m_recBuffer = (MYFLT *) calloc(m_recBufferSize, sizeof(MYFLT));
+
+	m_recording = false;
 
 #ifndef QCS_DESTROY_CSOUND
 	// Create only once
@@ -105,7 +104,6 @@ CsoundEngine::~CsoundEngine()
 	csoundDestroy(ud->csound);
 #endif
 	delete ud;
-	free(m_recBuffer);
 }
 
 #ifndef CSOUND6
@@ -718,34 +716,26 @@ void CsoundEngine::pause()
 
 int CsoundEngine::startRecording(int sampleformat, QString fileName)
 {
-	const int channels=ud->numChnls;
-	const int sampleRate=ud->sampleRate;
-	int format = SF_FORMAT_WAV;
-	switch (sampleformat) {
-	case 0:
-		format |= SF_FORMAT_PCM_16;
-		break;
-	case 1:
-		format |= SF_FORMAT_PCM_24;
-		break;
-	case 2:
-		format |= SF_FORMAT_FLOAT;
-		break;
-	}
-	qDebug("start recording: %s", fileName.toLocal8Bit().constData());
-	m_outfile = new SndfileHandle(fileName.toLocal8Bit(), SFM_WRITE, format, channels, sampleRate);
+	qDebug("start recording (%i-bit samples): %s",
+		   (sampleformat + 2) * 8,
+		   fileName.toLocal8Bit().constData());
 	// clip instead of wrap when converting floats to ints
-	m_outfile->command(SFC_SET_CLIPPING, NULL, SF_TRUE);
-	samplesWritten = 0;
-	m_recording = true;
 
-	recordTimer.singleShot(20, this, SLOT(recordBuffer()));
+	if (ud->perfThread) {
+		m_recording = true;
+		ud->perfThread->Record(fileName.toLocal8Bit().constData(),
+							   (sampleformat + 2) * 8);
+	}
 	return 0;
 }
 
 void CsoundEngine::stopRecording()
 {
-	m_recording = false;  // Will be processed on next record buffer
+	m_recording = false;
+	if (ud->perfThread) {
+		ud->perfThread->StopRecord();
+	}
+	qDebug("Recording stopped.");
 }
 
 void CsoundEngine::queueEvent(QString eventLine, int delay)
@@ -1172,24 +1162,6 @@ void CsoundEngine::queueMessage(QString message)
 	m_messageMutex.lock();
 	messageQueue << message;
 	m_messageMutex.unlock();
-}
-
-void CsoundEngine::recordBuffer()
-{
-	if (m_recording) {
-		if (ud->audioOutputBuffer.copyAvailableBuffer(m_recBuffer, m_recBufferSize)) {
-			int samps = m_outfile->write(m_recBuffer, m_recBufferSize);
-			samplesWritten += samps;
-		}
-		else {
-			//       qDebug("CsoundQt::recordBuffer() : Empty Buffer!");
-		}
-		recordTimer.singleShot(20, this, SLOT(recordBuffer()));
-	}
-	else { //Stop recording
-		delete m_outfile;
-		qDebug("Recording stopped. Written %li samples", samplesWritten);
-	}
 }
 
 bool CsoundEngine::isRunning()
