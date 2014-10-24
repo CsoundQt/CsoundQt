@@ -289,7 +289,7 @@ private:
 	void clearSettings();
 	int execute(QString executable, QString options);
 	//    bool saveCurrent();
-	void makeNewPage(QString fileName, QString text);
+	bool makeNewPage(QString fileName, QString text);
 	bool loadCompanionFile(const QString &fileName);
 	void setCurrentFile(const QString &fileName);
 	QString strippedName(const QString &fullFileName);

@@ -464,7 +464,9 @@ void CsoundQt::closeEvent(QCloseEvent *event)
 
 void CsoundQt::newFile()
 {
-	loadFile(":/default.csd");
+	if (loadFile(":/default.csd") < 0) {
+		return;
+	}
 	documentPages[curPage]->loadTextString(m_options->csdTemplate);
 	documentPages[curPage]->setFileName("");
 	setWindowModified(false);
@@ -4457,10 +4459,14 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     //    loadCompanionFile(fileName); // If here and autojoin unchecked and you open an sco or orc, it falls to endless loop loadFile<->loadCompanionFile
     //}
 
-	if (fileName == ":/default.csd")
+	if (fileName == ":/default.csd") {
 		fileName = QString("");
+	}
 
-	makeNewPage(fileName, text);
+	if (!makeNewPage(fileName, text)) {
+		QApplication::restoreOverrideCursor();
+		return -1;
+	}
     if (!m_options->autoJoin && (fileName.endsWith(".sco") || fileName.endsWith(".orc")) ) { // load companion, when the new page is made, otherwise isOpen works uncorrect
         loadCompanionFile(fileName);
     }
@@ -4501,11 +4507,12 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 	return curPage;
 }
 
-void CsoundQt::makeNewPage(QString fileName, QString text)
+bool CsoundQt::makeNewPage(QString fileName, QString text)
 {
-	if (documentPages.size() >= 32) {
+	if (documentPages.size() >= MAX_THREAD_COUNT) {
 		QMessageBox::warning(this, tr("Document number limit"),
 							 tr("Please close a document before opening another."));
+		return false;
 	}
 	DocumentPage *newPage = new DocumentPage(this, m_opcodeTree, &m_configlists, m_midiLearn);
 	int insertPoint = curPage + 1;
@@ -4558,6 +4565,7 @@ void CsoundQt::makeNewPage(QString fileName, QString text)
 	documentPages[curPage]->getEngine()->setMidiHandler(midiHandler);
 
 	setCurrentOptionsForPage(documentPages[curPage]); // Redundant but does the trick of setting the font properly now that stylesheets are being used...
+	return true;
 }
 
 bool CsoundQt::loadCompanionFile(const QString &fileName)
