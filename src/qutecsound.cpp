@@ -1463,13 +1463,17 @@ void CsoundQt::play(bool realtime, int index)
 		runAct->setChecked(false);
 	} else if (ret == 0) { // No problem
 		if (m_options->enableWidgets and m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
-			showWidgetsAct->setChecked(true);
+
 			if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
 				if (!m_options->widgetsIndependent) {
-					widgetPanel->setVisible(true);
+					if (widgetPanel->isFloating()) {
+						widgetPanel->setVisible(true);
+						showWidgetsAct->setChecked(true);
+					}
 				}
 				else {
 					documentPages[curPage]->widgetsVisible(true);
+					showWidgetsAct->setChecked(true);
 				}
 				widgetPanel->setFocus(Qt::OtherFocusReason);
 				documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
