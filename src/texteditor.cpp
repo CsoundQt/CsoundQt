@@ -48,9 +48,10 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 	case Qt::Key_Tab:
 		if (m_parameterMode) {
 			emit tabPressed();
-
 		} else if(m_tabIndents) {
 			emit requestIndent();
+		} else {
+			QTextEdit::keyPressEvent(event);
 		}
 		return;
 	case Qt::Key_Backtab:
@@ -68,6 +69,7 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 		if (m_commaTyped) {
 			emit showParameterInfo();
 		}
+		m_commaTyped = false;
 		break;
 	case Qt::Key_Comma:
 		m_commaTyped = true;
