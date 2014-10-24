@@ -61,10 +61,9 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 	ud->m_pythonCallback = "";
 #endif
 
-	m_recording = false;
 	m_consoleBufferSize = 0;
-	m_recBufferSize = 4096;
-	m_recBuffer = (MYFLT *) calloc(m_recBufferSize, sizeof(MYFLT));
+
+	m_recording = false;
 
 #ifndef QCS_DESTROY_CSOUND
 	// Create only once
@@ -105,7 +104,6 @@ CsoundEngine::~CsoundEngine()
 	csoundDestroy(ud->csound);
 #endif
 	delete ud;
-	free(m_recBuffer);
 }
 
 #ifndef CSOUND6
@@ -718,34 +716,26 @@ void CsoundEngine::pause()
 
 int CsoundEngine::startRecording(int sampleformat, QString fileName)
 {
-	const int channels=ud->numChnls;
-	const int sampleRate=ud->sampleRate;
-	int format = SF_FORMAT_WAV;
-	switch (sampleformat) {
-	case 0:
-		format |= SF_FORMAT_PCM_16;
-		break;
-	case 1:
-		format |= SF_FORMAT_PCM_24;
-		break;
-	case 2:
-		format |= SF_FORMAT_FLOAT;
-		break;
-	}
-	qDebug("start recording: %s", fileName.toLocal8Bit().constData());
-	m_outfile = new SndfileHandle(fileName.toLocal8Bit(), SFM_WRITE, format, channels, sampleRate);
+	qDebug("start recording (%i-bit samples): %s",
+		   (sampleformat + 2) * 8,
+		   fileName.toLocal8Bit().constData());
 	// clip instead of wrap when converting floats to ints
-	m_outfile->command(SFC_SET_CLIPPING, NULL, SF_TRUE);
-	samplesWritten = 0;
-	m_recording = true;
 
-	recordTimer.singleShot(20, this, SLOT(recordBuffer()));
+	if (ud->perfThread) {
+		m_recording = true;
+		ud->perfThread->Record(fileName.toLocal8Bit().constData(),
+							   (sampleformat + 2) * 8);
+	}
 	return 0;
 }
 
 void CsoundEngine::stopRecording()
 {
-	m_recording = false;  // Will be processed on next record buffer
+	m_recording = false;
+	if (ud->perfThread) {
+		ud->perfThread->StopRecord();
+	}
+	qDebug("Recording stopped.");
 }
 
 void CsoundEngine::queueEvent(QString eventLine, int delay)
@@ -805,11 +795,13 @@ int CsoundEngine::runCsound()
 	if(m_debugging) {
 		csoundDebuggerInit(ud->csound);
 		foreach(QVariantList bp, m_startBreakpoints) {
-			Q_ASSERT(bp.size() == 3);
+			Q_ASSERT(bp.size() > 1);
 			if (bp[0].toString() == "instr") {
+				Q_ASSERT(bp.size() == 3);
 				csoundSetInstrumentBreakpoint(ud->csound, bp[1].toDouble(), bp[2].toInt());
 			} else if (bp[0].toString() == "line") {
-//				csoundSetBreakpoint(ud->csound, bp[1].toInt(), bp[2].toInt());
+				Q_ASSERT(bp.size() == 4);
+				csoundSetBreakpoint(ud->csound, bp[2].toInt(), bp[1].toInt(), bp[3].toInt());
 			} else {
 				qDebug() << "CsoundEngine::setStartingBreakpoints wrong breakpoint format";
 			}
@@ -1172,24 +1164,6 @@ void CsoundEngine::queueMessage(QString message)
 	m_messageMutex.unlock();
 }
 
-void CsoundEngine::recordBuffer()
-{
-	if (m_recording) {
-		if (ud->audioOutputBuffer.copyAvailableBuffer(m_recBuffer, m_recBufferSize)) {
-			int samps = m_outfile->write(m_recBuffer, m_recBufferSize);
-			samplesWritten += samps;
-		}
-		else {
-			//       qDebug("CsoundQt::recordBuffer() : Empty Buffer!");
-		}
-		recordTimer.singleShot(20, this, SLOT(recordBuffer()));
-	}
-	else { //Stop recording
-		delete m_outfile;
-		qDebug("Recording stopped. Written %li samples", samplesWritten);
-	}
-}
-
 bool CsoundEngine::isRunning()
 {
 	QMutexLocker locker(&m_playMutex);
@@ -1251,23 +1225,26 @@ void CsoundEngine::breakpointCallback(CSOUND *csound, debug_bkpt_info_t *bkpt_in
 		vp = vp->next;
 	}
 	cs->variableMutex.unlock();
-    csoundDebugFreeVariables(csound, vp);
-    csoundDebugFreeInstrInstances(csound, debug_instr);
+	if (bkpt_info->currentOpcode) {
+		cs->m_currentLine.store(bkpt_info->currentOpcode->line);
+	} else {
+		cs->m_currentLine.store(debug_instr->line);
+	}
 
-    debug_instr = csoundDebugGetInstrInstances(csound);
+	debug_instr_t *debug_instr_list = bkpt_info->instrListHead;
 	//Copy active instrument list
 	cs->instrumentMutex.lock();
     cs->m_instrumentList.clear();
-    while (debug_instr) {
+	while (debug_instr_list) {
 		QVariantList instance;
-        instance << debug_instr->p1;
-        instance << QString("%1 %2").arg(debug_instr->p2).arg(debug_instr->p3);
-        instance << debug_instr->kcounter;
+		instance << debug_instr_list->p1;
+		instance << QString("%1 %2").arg(debug_instr_list->p2).arg(debug_instr_list->p3);
+		instance << debug_instr_list->kcounter;
 		cs->m_instrumentList << instance;
-        debug_instr = debug_instr->next;
+		debug_instr_list = debug_instr_list->next;
 	}
-    cs->instrumentMutex.unlock();
-    csoundDebugFreeInstrInstances(csound, debug_instr);
+	cs->instrumentMutex.unlock();
+
 	emit cs->breakpointReached();
 }
 
@@ -1319,6 +1296,20 @@ void CsoundEngine::removeInstrumentBreakpoint(double instr)
 	}
 }
 
+void CsoundEngine::addBreakpoint(int line, int instr, int skip)
+{
+	if (isRunning() && m_debugging) {
+		csoundSetBreakpoint(ud->csound, line, instr, skip);
+	}
+}
+
+void CsoundEngine::removeBreakpoint(int line, int instr)
+{
+	if (isRunning() && m_debugging) {
+		csoundRemoveBreakpoint(ud->csound, line, instr);
+	}
+}
+
 void CsoundEngine::setStartingBreakpoints(QVector<QVariantList> bps)
 {
 	m_startBreakpoints = bps;
@@ -1340,6 +1331,11 @@ QVector<QVariantList> CsoundEngine::getInstrumentList()
 	outList = m_instrumentList;
 	instrumentMutex.unlock();
 	return outList;
+}
+
+int CsoundEngine::getCurrentLine()
+{
+	return m_currentLine.load();
 }
 
 #endif

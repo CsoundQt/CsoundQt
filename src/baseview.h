@@ -71,6 +71,7 @@ public:
 
 class BaseView : public QScrollArea
 {
+	friend class CsoundQt; // FIXME now that it's a friend class some things can be simplified in the code
 	Q_OBJECT
 public:
 	explicit BaseView(QWidget *parent, OpEntryParser *opcodeTree);

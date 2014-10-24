@@ -17,7 +17,9 @@ FORMS = "src/about.ui" \
     src/midilearndialog.ui \
     src/debugpanel.ui \
     src/dockhelp.ui \
-    src/livecodeeditor.ui
+    src/livecodeeditor.ui \
+    src/newbreakpointdialog.ui
+
 HEADERS = "src/about.h" \
     "src/configdialog.h" \
     "src/configlists.h" \
@@ -62,7 +64,7 @@ HEADERS = "src/about.h" \
     "src/widgetpanel.h" \
     "src/widgetpreset.h" \
     "src/qutesheet.h" \
-	"src/basedocument.h" \
+    "src/basedocument.h" \
     "src/baseview.h" \
     "src/appwizard.h" \
     "src/appdetailspage.h" \
@@ -73,7 +75,9 @@ HEADERS = "src/about.h" \
     src/midihandler.h \
     src/midilearndialog.h \
     src/debugpanel.h \
-    src/livecodeeditor.h
+    src/livecodeeditor.h \
+    src/newbreakpointdialog.h
+
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
     "src/configlists.cpp" \
@@ -129,7 +133,9 @@ SOURCES = "src/about.cpp" \
     src/midihandler.cpp \
     src/midilearndialog.cpp \
     src/debugpanel.cpp \
-    src/livecodeeditor.cpp
+    src/livecodeeditor.cpp \
+    src/newbreakpointdialog.cpp
+
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
     "src/qutecsound.rc" \

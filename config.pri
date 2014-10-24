@@ -83,36 +83,6 @@ isEmpty(CSOUND_LIB) {
     }
     isEmpty(CSOUND_LIB):error(A valid csound library was not found.)
 }
-isEmpty(LIBSNDFILE_INCLUDE_DIR) {
-    !no_messages:message(libsndfile include directory not specified.)
-    for(dir, DEFAULT_LIBSNDFILE_INCLUDE_DIRS) {
-        !no_messages:message(... searching in $${dir})
-        exists($${dir}):exists($${dir}/sndfile.h) {
-            !no_messages {
-                message(LIBSNDFILE_INCLUDE_DIR set to $${dir})
-                message()
-            }
-            LIBSNDFILE_INCLUDE_DIR = $${dir}
-            break()
-        }
-    }
-    isEmpty(LIBSNDFILE_INCLUDE_DIR):error(A valid libsndfile include directory was not found.)
-}
-isEmpty(LIBSNDFILE_LIBRARY_DIR) {
-    !no_messages:message(libsndfile library directory not specified.)
-    for(dir, DEFAULT_LIBSNDFILE_LIBRARY_DIRS) {
-        !no_messages:message(... searching in $${dir})
-        exists($${dir}):exists($${dir}/$${LIBSNDFILE_LIB}) {
-            !no_messages {
-                message(LIBSNDFILE_LIBRARY_DIR set to $${dir})
-                message()
-            }
-            LIBSNDFILE_LIBRARY_DIR = $${dir}
-            break()
-        }
-    }
-    isEmpty(LIBSNDFILE_LIBRARY_DIR):error(A valid libsndfile library directory was not found.)
-}
 pythonqt {
     DEFINES += QCS_PYTHONQT
     win32:isEmpty(PYTHON_INCLUDE_DIR) {
@@ -170,15 +140,11 @@ isEmpty(RTMIDI_DIR) {
 win32 {
     CSOUND_INCLUDE_DIR = $$replace(CSOUND_INCLUDE_DIR, \\\\, /)
     CSOUND_LIBRARY_DIR = $$replace(CSOUND_LIBRARY_DIR, \\\\, /)
-    LIBSNDFILE_INCLUDE_DIR = $$replace(LIBSNDFILE_INCLUDE_DIR, \\\\, /)
-    LIBSNDFILE_LIBRARY_DIR = $$replace(LIBSNDFILE_LIBRARY_DIR, \\\\, /)
 }
 !no_messages {
     message(Csound API include directory is $${CSOUND_API_INCLUDE_DIR})
     message(Csound interfaces include directory is $${CSOUND_INTERFACES_INCLUDE_DIR})
     message(Csound library directory is $${CSOUND_LIBRARY_DIR})
-    message(libsndfile include directory is $${LIBSNDFILE_INCLUDE_DIR})
-    message(libsndfile library directory is $${LIBSNDFILE_LIBRARY_DIR})
     pythonqt {
         win32:message(Python include directory is $${PYTHON_INCLUDE_DIR})
         message(PythonQt source tree directory is $${PYTHONQT_SRC_DIR})
@@ -211,18 +177,8 @@ win32 {
         exists($${CSOUND_LIBRARY_DIR}/$${1}):return(true)
         return(false)
     }
-    defineTest(libsndfileHeaderExists) {
-        exists($${LIBSNDFILE_INCLUDE_DIR}/$${1}):return(true)
-        return(false)
-    }
-    defineTest(libsndfileLibraryExists) {
-        exists($${LIBSNDFILE_LIBRARY_DIR}/$${1}):return(true)
-        return(false)
-    }
     !directoryExists($${CSOUND_API_INCLUDE_DIR}):error(Csound API include directory not found)
     !directoryExists($${CSOUND_LIBRARY_DIR}):error(Csound library directory not found)
-    !directoryExists($${LIBSNDFILE_INCLUDE_DIR}):error(libsndfile include directory not found)
-    !directoryExists($${LIBSNDFILE_LIBRARY_DIR}):error(libsndfile library directory not found)
     pythonqt {
         win32:!directoryExists($${PYTHON_INCLUDE_DIR}):error(Python include directory not found)
 		!directoryExists($${PYTHONQT_SRC_DIR}):error(PythonQt include directory not found)
@@ -232,8 +188,6 @@ win32 {
     !csoundApiHeaderExists(csound.hpp):error(csound.hpp not found)
     !csoundApiHeaderExists(cwindow.h):error(cwindow.h not found)
     !csoundLibraryExists($${CSOUND_LIB}):error(Csound API library not found)
-    !libsndfileHeaderExists(sndfile.h):error(sndfile.h not found)
-    !libsndfileLibraryExists($${LIBSNDFILE_LIB}):error(libsndfile library not found: $${LIBSNDFILE_LIB})
 }
 !is_quteapp {
 win32-g++ {
