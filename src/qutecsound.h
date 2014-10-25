@@ -157,6 +157,7 @@ public slots:
 	void pause(int index = -1);
 	void stop(int index = -1);
 	void stopAll();
+	void stopAllOthers();
 	void markStopped();
 	void perfEnded();
 	void render();
@@ -289,7 +290,7 @@ private:
 	void clearSettings();
 	int execute(QString executable, QString options);
 	//    bool saveCurrent();
-	void makeNewPage(QString fileName, QString text);
+	bool makeNewPage(QString fileName, QString text);
 	bool loadCompanionFile(const QString &fileName);
 	void setCurrentFile(const QString &fileName);
 	QString strippedName(const QString &fullFileName);
