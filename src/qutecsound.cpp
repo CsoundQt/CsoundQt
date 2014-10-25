@@ -305,6 +305,9 @@ void CsoundQt::changePage(int index)
 {
 	// Previous page has already been destroyed here (if it was closed)
 	// Remember this is called when opening, closing or switching tabs (including loading)
+	if (documentPages[curPage]->getEngine()->m_debugging) {
+		stop(); // TODO How to better handle this rather than forcing stop?
+	}
 	if (documentPages.size() > curPage && documentPages.size() > 0 && documentPages[curPage]) {
 		disconnect(showLiveEventsAct, 0,0,0);
 		disconnect(documentPages[curPage], SIGNAL(stopSignal()),0,0);
@@ -1442,7 +1445,7 @@ void CsoundQt::play(bool realtime, int index)
 	m_options->fileName2 = runFileName2;
 	m_options->rt = realtime;
 	if (!m_options->simultaneousRun) {
-		stopAll();
+		stopAllOthers();
 	}
 	if (curPage == oldPage) {
 		runAct->setChecked(true);  // In case the call comes from a button
@@ -1584,6 +1587,16 @@ void CsoundQt::stopAll()
 		documentPages[i]->stop();
 	}
 	markStopped();
+}
+
+void CsoundQt::stopAllOthers()
+{
+	for (int i = 0; i < documentPages.size(); i++) {
+		if (i != curPage) {
+			documentPages[i]->stop();
+		}
+	}
+//	markStopped();
 }
 
 void CsoundQt::markStopped()
@@ -2444,7 +2457,7 @@ void CsoundQt::toggleParameterMode()
 
 void CsoundQt::runDebugger()
 {
-    m_debugEngine = documentPages[curPage]->getEngine();\
+	m_debugEngine = documentPages[curPage]->getEngine();
     m_debugEngine->setDebug();
 
     m_debugPanel->setDebugFilename(documentPages[curPage]->getFileName());

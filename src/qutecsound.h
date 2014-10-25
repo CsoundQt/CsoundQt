@@ -157,6 +157,7 @@ public slots:
 	void pause(int index = -1);
 	void stop(int index = -1);
 	void stopAll();
+	void stopAllOthers();
 	void markStopped();
 	void perfEnded();
 	void render();
