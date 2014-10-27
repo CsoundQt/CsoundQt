@@ -252,7 +252,12 @@ void BaseDocument::stop()
 
 int BaseDocument::record(int format)
 {
+#ifdef	PERFTHREAD_RECORD
 	return m_csEngine->startRecording(format, "output.wav");
+#else
+	QMessageBox::warning(NULL, tr("Recording not possible"), tr("This version of CsoundQt was not built with recording support."));
+	return 0;
+#endif
 }
 
 void BaseDocument::stopRecording()

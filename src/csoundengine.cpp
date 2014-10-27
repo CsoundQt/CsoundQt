@@ -720,12 +720,14 @@ int CsoundEngine::startRecording(int sampleformat, QString fileName)
 		   (sampleformat + 2) * 8,
 		   fileName.toLocal8Bit().constData());
 	// clip instead of wrap when converting floats to ints
-
+#ifdef PERFTHREAD_RECORD
+	// perfthread record API is only available with csound >= 6.04
 	if (ud->perfThread) {
 		m_recording = true;
 		ud->perfThread->Record(fileName.toLocal8Bit().constData(),
 							   (sampleformat + 2) * 8);
 	}
+#endif
 	return 0;
 }
 

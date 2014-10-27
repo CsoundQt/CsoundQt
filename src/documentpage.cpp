@@ -1262,6 +1262,7 @@ void DocumentPage::stop()
 
 int DocumentPage::record(int format)
 {
+#ifdef	PERFTHREAD_RECORD
 	if (fileName.startsWith(":/")) {
 		QMessageBox::critical(static_cast<QWidget *>(parent()),
 							  tr("CsoundQt"),
@@ -1282,6 +1283,10 @@ int DocumentPage::record(int format)
 	}
 	emit setCurrentAudioFile(recName);
 	return m_csEngine->startRecording(format, recName);
+#else
+	QMessageBox::warning(NULL, tr("Recording not possible"), tr("This version of CsoundQt was not built with recording support."));
+	return 0;
+#endif
 }
 
 void DocumentPage::perfEnded()
