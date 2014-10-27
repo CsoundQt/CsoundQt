@@ -305,6 +305,11 @@ void CsoundQt::changePage(int index)
 {
 	// Previous page has already been destroyed here (if it was closed)
 	// Remember this is called when opening, closing or switching tabs (including loading)
+
+	if (index < 0) { // No tabs left
+		qDebug() << "CsoundQt::changePage index < 0";
+		return;
+	}
 	if (documentPages[curPage]->getEngine()->m_debugging) {
 		stop(); // TODO How to better handle this rather than forcing stop?
 	}
@@ -323,10 +328,6 @@ void CsoundQt::changePage(int index)
 		} else {
 			documentPages[curPage]->setWidgetLayoutOuterGeometry(QRect());
 		}
-	}
-	if (index < 0) { // No tabs left
-		qDebug() << "CsoundQt::changePage index < 0";
-		return;
 	}
 	curPage = index;
 	if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
