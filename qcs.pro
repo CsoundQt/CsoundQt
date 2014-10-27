@@ -18,10 +18,14 @@
 # CONFIG+=build32    To build floats version
 # CONFIG+=pythonqt  # To build with PythonQt support
 # CONFIG+=rtmidi   To build with RtMidi support
+# CONFIG+=record_support
 # OS X only OPTIONS:
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
 # ##############################################################################
 
+record_support {
+DEFINES += PERFTHREAD_RECORD # Requires Csound >= 6.04
+}
 csound6: {
 message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now default")
 }

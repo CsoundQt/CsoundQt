@@ -201,8 +201,8 @@ unix {
     else {
 exists (src/res/linux/QuteApp_f) :CONFIG += quteapp_f
 exists (src/res/linux/QuteApp_d) :CONFIG += quteapp_d
-!quteapp_f: message(Not bundling QuteApp_f. Please put QuteApp_f in the res/ folder)
-!quteapp_d: message(Not bundling QuteApp_d. Please put QuteApp_d in the res/ folder)
+#!quteapp_f: message(Not bundling QuteApp_f. Please put QuteApp_f in the res/ folder)
+#!quteapp_d: message(Not bundling QuteApp_d. Please put QuteApp_d in the res/ folder)
 }
 }
 
