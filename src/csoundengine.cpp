@@ -734,10 +734,13 @@ int CsoundEngine::startRecording(int sampleformat, QString fileName)
 void CsoundEngine::stopRecording()
 {
 	m_recording = false;
+
+#ifdef	PERFTHREAD_RECORD
 	if (ud->perfThread) {
 		ud->perfThread->StopRecord();
 	}
 	qDebug("Recording stopped.");
+#endif
 }
 
 void CsoundEngine::queueEvent(QString eventLine, int delay)
