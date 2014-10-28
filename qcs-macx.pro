@@ -21,10 +21,12 @@ build64: MAC_LIB = CsoundLib64
 # Set default paths
 CSOUND_FRAMEWORK_DIR = /Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
 DEFAULT_CSOUND_API_INCLUDE_DIRS =  ~$${CSOUND_FRAMEWORK_DIR}/Headers \
-	$${CSOUND_FRAMEWORK_DIR}/Headers
+        $${CSOUND_FRAMEWORK_DIR}/Headers \
+        /usr/local/include
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
 DEFAULT_CSOUND_LIBRARY_DIRS = ~$${CSOUND_FRAMEWORK_DIR} \
-	$${CSOUND_FRAMEWORK_DIR}
+        $${CSOUND_FRAMEWORK_DIR} \
+        /usr/local/lib
 build32:DEFAULT_CSOUND_LIBS = CsoundLib
 build64:DEFAULT_CSOUND_LIBS = CsoundLib64
 
