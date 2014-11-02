@@ -310,9 +310,11 @@ void CsoundQt::changePage(int index)
 		qDebug() << "CsoundQt::changePage index < 0";
 		return;
 	}
+#ifdef QCS_DEBUGGER
 	if (documentPages[curPage]->getEngine()->m_debugging) {
 		stop(); // TODO How to better handle this rather than forcing stop?
 	}
+#endif
 	if (documentPages.size() > curPage && documentPages.size() > 0 && documentPages[curPage]) {
 		disconnect(showLiveEventsAct, 0,0,0);
 		disconnect(documentPages[curPage], SIGNAL(stopSignal()),0,0);
