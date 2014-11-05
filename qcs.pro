@@ -19,6 +19,7 @@
 # CONFIG+=pythonqt  # To build with PythonQt support
 # CONFIG+=rtmidi   To build with RtMidi support
 # CONFIG+=record_support
+# CONFIG+=debugger
 # OS X only OPTIONS:
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
 # ##############################################################################
