@@ -1213,7 +1213,8 @@ void CsoundEngine::breakpointCallback(CSOUND *csound, debug_bkpt_info_t *bkpt_in
 			QVariantList varDetails;
             varDetails << vp->name;
             if (strcmp(vp->typeName, "i") == 0
-                    || strcmp(vp->typeName, "k") == 0) {
+					|| strcmp(vp->typeName, "k") == 0
+					|| strcmp(vp->typeName, "r") == 0) {
                 varDetails << *((MYFLT *) vp->data);
             } else if(strcmp(vp->typeName, "S") == 0) {
                 varDetails << (char *) vp->data;
