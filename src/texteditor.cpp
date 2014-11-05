@@ -91,8 +91,7 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 
 void TextEditor::mouseReleaseEvent(QMouseEvent *e)
 {
-    Q_UNUSED(e);
-	emit(mouseReleased());
+	Q_UNUSED(e);
 	if (m_parameterMode) {
 		emit requestParameterModeExit();
 	}
