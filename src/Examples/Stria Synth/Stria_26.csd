@@ -2400,35 +2400,38 @@ endin
 
 ;==========================================
 
-instr 300;-----> SAVE BANK ON DISK
-
-
-String_Read	invalue "_Browse1"
-String_Read2 strcat String_Read, "-> Saved !"
-
-outvalue	"strout", String_Read2
+instr 300;-----> SAVE A BANK OF 48 SNAPSHOTS ON DISK
 
 
 
+String_Read	  invalue "_Browse1"  ; browse the filename
+
+String_Read2 strcat String_Read, "-> Saved !"	; concatenate the name with "-> Saved !"
+;
+outvalue	"strout", String_Read2		; output the concatenated string
+;
+;
+;SAVE THE 48 TABLES : 
 ftsave String_Read	,1,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,\
 			216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,\
 			232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247
+;
+;
+;
+kpos strindexk	String_Read,"."		;finds the point position
+;
+SubString	strsubk String_Read, 0, kpos	;extracts the name before point
+;
+;
+Sfile_MIDISetup  strcat SubString, "_MIDI.txt"   ;concatenates the root name with string "_MIDI.txt" to create the MIDI config. file name
+;
+ftsave Sfile_MIDISetup, 1, 11  ; saves the MIDI confoguration data on file
 
-
-
-kpos strindexk	String_Read,"."		;Rileva la posizione del punto nella stringa
-
-SubString	strsubk String_Read, 0, kpos	;Estrae il nome ptima del punto
-
-
-Sfile_MIDISetup  strcat SubString, "_MIDI.txt"   ;Concatena con _MIDI.txt per formare il nome
-;if gkMIDIsave == 1 then
-;outvalue "dispstring", Sfile_MIDISetup
-ftsave Sfile_MIDISetup, 1, 11
-;else
-;endif
-turnoff
+;
+turnoff  ; switch off the instument
 endin
+
+
 
 ;==========================================
 
@@ -4910,8 +4913,8 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>122</x>
- <y>141</y>
+ <x>113</x>
+ <y>396</y>
  <width>1558</width>
  <height>909</height>
  <visible>true</visible>
@@ -5049,7 +5052,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.33070900</value>
+  <value>0.78469859</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -5070,8 +5073,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.49218750</xValue>
-  <yValue>0.80468750</yValue>
+  <xValue>0.00000000</xValue>
+  <yValue>0.98226978</yValue>
   <type>point</type>
   <pointsize>10</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -5103,7 +5106,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.54687500</xValue>
+  <xValue>0.33820630</xValue>
   <yValue>0.85937500</yValue>
   <type>point</type>
   <pointsize>10</pointsize>
@@ -5138,7 +5141,7 @@ e
   <image>/</image>
   <eventLine>i2 0 1 1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_RAND1</objectName>
@@ -5189,7 +5192,7 @@ e
   <midicc>-3</midicc>
   <minimum>0.00100000</minimum>
   <maximum>0.20000000</maximum>
-  <value>0.19056100</value>
+  <value>0.14914675</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -5207,7 +5210,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>4.00000000</maximum>
-  <value>4.00000000</value>
+  <value>2.43294352</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -5331,7 +5334,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.331</label>
+  <label>0.785</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -5420,7 +5423,7 @@ e
   <midicc>0</midicc>
   <minimum>0.17000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.37396170</value>
+  <value>0.25648581</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -5512,7 +5515,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>4</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -5695,7 +5698,7 @@ e
   <image>/</image>
   <eventLine>i10 0 -1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>last_freq</objectName>
@@ -5707,7 +5710,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>22233.261</label>
+  <label>34254.114</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -5765,7 +5768,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>613.000</label>
+  <label>16.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -6377,7 +6380,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>46</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -6420,25 +6423,6 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
-  <x>1104</x>
-  <y>799</y>
-  <width>102</width>
-  <height>23</height>
-  <uuid>{7294b8dd-f8db-48ad-ae45-8fa3aebd4a70}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <type>event</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>SAVE BANK</text>
-  <image>/</image>
-  <eventLine>i300 0 10</eventLine>
-  <latch>false</latch>
-  <latched>false</latched>
- </bsbObject>
- <bsbObject type="BSBButton" version="2">
-  <objectName>button1</objectName>
   <x>1310</x>
   <y>796</y>
   <width>101</width>
@@ -6466,7 +6450,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/Users/eug/Desktop/StriaEXMP/EXMP_BOSTON.txt</label>
+  <label>/Users/eug/Documents/StriaAndres/EXMP_BANK.txt</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -6551,7 +6535,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.000</label>
+  <label>2.652</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -6687,7 +6671,7 @@ e
   <midicc>-3</midicc>
   <minimum>1.00000000</minimum>
   <maximum>13.00000000</maximum>
-  <value>1.00000000</value>
+  <value>2.96084603</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -6703,7 +6687,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.000</label>
+  <label>2.961</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -6761,7 +6745,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>            STRIA 2.6 -Multilevel Interactive Sound Synthesizer with sequencer - Csound6 tested</label>
+  <label>            StriaCSO 2.6 -Multilevel Interactive Sound Synthesizer</label>
   <alignment>left</alignment>
   <font>Papyrus</font>
   <fontsize>20</fontsize>
@@ -6772,9 +6756,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>153</b>
+   <r>244</r>
+   <g>225</g>
+   <b>181</b>
   </bgcolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
@@ -6792,7 +6776,7 @@ e
   <midicc>0</midicc>
   <minimum>1.00000000</minimum>
   <maximum>8.00000000</maximum>
-  <value>1.00000000</value>
+  <value>1.83845322</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -6914,7 +6898,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.805</label>
+  <label>0.982</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -6970,7 +6954,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>240.00000000</maximum>
-  <value>3.00000000</value>
+  <value>21.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -7093,7 +7077,7 @@ e
   <midicc>0</midicc>
   <minimum>0.20000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>1.88119835</value>
+  <value>0.72815592</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -7132,7 +7116,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.70000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -7365,7 +7349,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.492</label>
+  <label>0.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -7394,7 +7378,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>301.219</label>
+  <label>0.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -7481,7 +7465,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.000</label>
+  <label>1.838</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -7510,7 +7494,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>4.000</label>
+  <label>2.433</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -7822,7 +7806,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.71895217</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -7855,7 +7839,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.68123173</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -7911,7 +7895,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>740.276</label>
+  <label>27.498</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -7940,7 +7924,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>756.652</label>
+  <label>67.023</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -7969,7 +7953,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>773.390</label>
+  <label>163.362</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -7998,7 +7982,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>790.498</label>
+  <label>398.178</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -8027,7 +8011,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>807.984</label>
+  <label>734.762</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -8056,7 +8040,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>220.354</label>
+  <label>1175.775</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -8085,7 +8069,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.000</label>
+  <label>41.218</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -8294,7 +8278,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.43181800</xValue>
-  <yValue>0.62500000</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -8469,7 +8453,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>0.98000000</maximum>
-  <value>0.98000000</value>
+  <value>0.94187244</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -8733,7 +8717,7 @@ Controller</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -9397,7 +9381,7 @@ Controller</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -9621,7 +9605,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>6.000</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -9710,7 +9694,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>0.05000000</minimum>
   <maximum>0.90000000</maximum>
-  <value>0.90000000</value>
+  <value>0.76252830</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -9728,7 +9712,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>0.05000000</minimum>
   <maximum>0.90000000</maximum>
-  <value>0.83780500</value>
+  <value>0.59755999</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -9746,7 +9730,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.89024400</value>
+  <value>0.44567748</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -9909,7 +9893,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>1.00000000</minimum>
   <maximum>8.00000000</maximum>
-  <value>5.50000000</value>
+  <value>4.68233594</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -9927,7 +9911,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>1.00000000</minimum>
   <maximum>9.00000000</maximum>
-  <value>2.36585366</value>
+  <value>2.68776363</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -9943,7 +9927,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>5.500</label>
+  <label>4.682</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -9972,7 +9956,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>2.366</label>
+  <label>2.688</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -10003,7 +9987,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>0.05000000</minimum>
   <maximum>0.90000000</maximum>
-  <value>0.65121951</value>
+  <value>0.76769070</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -10021,7 +10005,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>0.05000000</minimum>
   <maximum>0.90000000</maximum>
-  <value>0.58902439</value>
+  <value>0.70313534</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -10039,7 +10023,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.67990269</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -10086,7 +10070,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.81944400</value>
+  <value>0.64802705</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -10104,7 +10088,7 @@ Controller</label>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.00000000</value>
+  <value>1.09220091</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -10120,7 +10104,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.819</label>
+  <label>0.648</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -10149,7 +10133,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.000</label>
+  <label>1.092</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -10238,7 +10222,7 @@ Controller</label>
   <midicc>-3</midicc>
   <minimum>1.00000000</minimum>
   <maximum>8.00000000</maximum>
-  <value>4.59722200</value>
+  <value>3.55194782</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -10254,7 +10238,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>4.597</label>
+  <label>3.552</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -10581,7 +10565,7 @@ Controller</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.80000000</xValue>
-  <yValue>0.51898695</yValue>
+  <yValue>0.51898700</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -10614,7 +10598,7 @@ Controller</label>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.80000000</xValue>
-  <yValue>0.48101305</yValue>
+  <yValue>0.48101300</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -10809,7 +10793,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>3.009</label>
+  <label>11.187</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -11459,7 +11443,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.651</label>
+  <label>0.768</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -11488,7 +11472,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.589</label>
+  <label>0.703</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -11517,7 +11501,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.000</label>
+  <label>0.680</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -11546,7 +11530,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.900</label>
+  <label>0.763</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -11575,7 +11559,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.838</label>
+  <label>0.598</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -11604,7 +11588,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.890</label>
+  <label>0.446</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -11633,7 +11617,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.191</label>
+  <label>0.149</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -14913,7 +14897,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.980</label>
+  <label>0.942</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -15146,7 +15130,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/Users/eug/Desktop/StriaEXMP/EXMP_BOSTON.txt-> Loaded !</label>
+  <label>/Users/eug/Documents/StriaAndres/EXMP_BANK.txt-> Loaded !</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -15164,25 +15148,6 @@ Controller</label>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject type="BSBButton" version="2">
-  <objectName>_Browse1</objectName>
-  <x>1219</x>
-  <y>796</y>
-  <width>83</width>
-  <height>30</height>
-  <uuid>{3b5447a2-6344-40f1-a2f1-b8fe284ede89}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <type>value</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/Users/eug/Desktop/StriaEXMP/EXMP_BOSTON.txt</stringvalue>
-  <text>BROWSE</text>
-  <image>/</image>
-  <eventLine/>
-  <latch>false</latch>
-  <latched>false</latched>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>clear_snap</objectName>
@@ -15299,7 +15264,7 @@ Controller</label>
    <g>0</g>
    <b>128</b>
   </bgcolor>
-  <value>3.00000000</value>
+  <value>48.00000000</value>
   <resolution>0.01000000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>999999999999.00000000</maximum>
@@ -15585,7 +15550,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>740.276</label>
+  <label>27.498</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -15891,7 +15856,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>27.428</label>
+  <label>0.728</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -15920,7 +15885,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.087</label>
+  <label>0.256</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
@@ -16134,7 +16099,7 @@ Controller</label>
   <midicc>-3</midicc>
   <minimum>1.00000000</minimum>
   <maximum>14.00000000</maximum>
-  <value>1.00000000</value>
+  <value>2.65219434</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -16632,7 +16597,7 @@ Controller</label>
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>6</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
@@ -18906,7 +18871,7 @@ Controller</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>40.008</label>
+  <label>24</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -20463,7 +20428,7 @@ Controller</label>
   <minimum>0</minimum>
   <maximum>47</maximum>
   <randomizable group="0">false</randomizable>
-  <value>46</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -20921,6 +20886,44 @@ Controller</label>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>button1</objectName>
+  <x>1104</x>
+  <y>798</y>
+  <width>101</width>
+  <height>29</height>
+  <uuid>{74464c2e-cf32-404c-8221-9cf0d01738a3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>SAVE BANK</text>
+  <image>/</image>
+  <eventLine>i300 0 10</eventLine>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>_Browse1</objectName>
+  <x>1223</x>
+  <y>798</y>
+  <width>72</width>
+  <height>30</height>
+  <uuid>{3ab356d1-68c0-41eb-a2ed-66ee02cc20bb}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue>/Users/eug/Documents/StriaAndres/EXMP_BANK.txt</stringvalue>
+  <text>BROWSE</text>
+  <image>/</image>
+  <eventLine/>
+  <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
 </bsbPanel>

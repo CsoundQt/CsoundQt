@@ -89,8 +89,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(finishParameterMode()));
 	connect(m_mainEditor, SIGNAL(showParameterInfo()),
 			this, SLOT(showHoverText()));
-	connect(m_mainEditor, SIGNAL(requestParameterModeExit()()),
-			this, SLOT(hideHoverText()));
+	connect(m_mainEditor, SIGNAL(requestParameterModeExit()),
+			this, SLOT(exitParameterMode()));
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
@@ -758,8 +758,9 @@ void DocumentView::syntaxCheck()
 	}
 
 	cursor = editor->textCursor();
-//	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
-//	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+
+	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
+	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
 	QStringList words = cursor.selectedText().split(QRegExp("\\b"),
 													QString::SkipEmptyParts);
 	bool showHover = false;
@@ -768,9 +769,9 @@ void DocumentView::syntaxCheck()
 		if (m_opcodeTree->isOpcode(word)) {
 			QString syntax = m_opcodeTree->getSyntax(word);
 			if(!syntax.isEmpty()) {
-                emit(opcodeSyntaxSignal(syntax));
+				emit(opcodeSyntaxSignal(syntax));
 				m_currentOpcodeText = syntax;
-				if (i == 0) {
+				if (i == 0 && editor->textCursor().hasSelection()) {
 					showHover = true;
 				}
 				break;
