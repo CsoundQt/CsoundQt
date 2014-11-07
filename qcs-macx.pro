@@ -18,13 +18,15 @@ CONFIG += ppc
 build32: MAC_LIB = CsoundLib
 build64: MAC_LIB = CsoundLib64
 
+HOME_DIRECTORY = /Users/admin
+
 # Set default paths
 CSOUND_FRAMEWORK_DIR = /Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
-DEFAULT_CSOUND_API_INCLUDE_DIRS =  ~$${CSOUND_FRAMEWORK_DIR}/Headers \
+DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${HOME_DIRECTORY}/$${CSOUND_FRAMEWORK_DIR}/Headers \
         $${CSOUND_FRAMEWORK_DIR}/Headers \
-        /usr/local/include
+        /usr/local/include/csound
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
-DEFAULT_CSOUND_LIBRARY_DIRS = ~$${CSOUND_FRAMEWORK_DIR} \
+DEFAULT_CSOUND_LIBRARY_DIRS = $${HOME_DIRECTORY}/$${CSOUND_FRAMEWORK_DIR} \
         $${CSOUND_FRAMEWORK_DIR} \
         /usr/local/lib
 build32:DEFAULT_CSOUND_LIBS = CsoundLib
@@ -59,8 +61,8 @@ message(Bundling QuteApp_d)
 RESOURCES += "src/quteapp_d_osx.qrc"
 }
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
-LCSOUND = -F/Library/Frameworks -framework $${MAC_LIB}
-csound6: LCSND = -lcsnd.6.0
+LCSOUND = -F$${HOME_DIRECTORY}/Library/Frameworks -F/Library/Frameworks -framework $${MAC_LIB}
+csound6: LCSND = -L/usr/local/lib -lcsnd6
 else: LCSND = -l_csnd
 
 QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
