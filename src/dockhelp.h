@@ -61,6 +61,7 @@ public slots:
 	void browseForward();
 	void followLink(QUrl url);
 	void copy();
+	void onTextChanged();
 	void onReturnPressed();
 	void onNextButtonPressed();
 	void onPreviousButtonPressed();

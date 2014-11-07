@@ -43,6 +43,7 @@ DockHelp::DockHelp(QWidget *parent)
 	connect(ui->opcodesToolButton, SIGNAL(released()), this, SLOT(showOverview()));
 	connect(ui->homeToolButton, SIGNAL(released()), this, SLOT(showManual()));
 	connect(ui->findLine,SIGNAL(returnPressed()),this,SLOT(onReturnPressed()));
+	connect(ui->findLine,SIGNAL(textEdited(QString)),this,SLOT(onTextChanged()));
 	ui->findPreviousAct->setShortcut(QKeySequence::FindPrevious);
 	ui->nextFindAct->setShortcut(QKeySequence::FindNext);
 	connect(ui->findPreviousAct,SIGNAL(triggered()),this,SLOT(onPreviousButtonPressed()));
@@ -154,6 +155,15 @@ void DockHelp::followLink(QUrl url)
 void DockHelp::copy()
 {
 	ui->text->copy();
+}
+
+void DockHelp::onTextChanged()
+{
+	QTextCursor tmpCursor = ui->text->textCursor();
+	tmpCursor.setPosition(ui->text->textCursor().selectionStart());
+	ui->text->setTextCursor(tmpCursor);
+	findFlags &= 6; // first bit (FindBackward) to zero
+	findText(ui->findLine->text());
 }
 
 void DockHelp::onReturnPressed()
