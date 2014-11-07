@@ -277,10 +277,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     //qDebug()<<"Max thread count: "<< QThreadPool::globalInstance()->maxThreadCount();
     QThreadPool::globalInstance()->setMaxThreadCount(MAX_THREAD_COUNT);
 
-    QFile file(":/appstyle-white.css");
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QLatin1String(file.readAll());
-    qApp->setStyleSheet(styleSheet);
+//    QFile file(":/appstyle-white.css");
+//    file.open(QFile::ReadOnly);
+//    QString styleSheet = QLatin1String(file.readAll());
+//    qApp->setStyleSheet(styleSheet);
 }
 
 CsoundQt::~CsoundQt()
@@ -3906,10 +3906,10 @@ void CsoundQt::createToolBars()
 	controlToolBar->addAction(renderAct);
 	controlToolBar->addAction(externalEditorAct);
 	controlToolBar->addAction(externalPlayerAct);
+	controlToolBar->addAction(configureAct);
 
-	configureToolBar = addToolBar(tr("Configure"));
-	configureToolBar->setObjectName("configureToolBar");
-	configureToolBar->addAction(configureAct);
+	configureToolBar = addToolBar(tr("Panels"));
+	configureToolBar->setObjectName("panelToolBar");
 	configureToolBar->addAction(showWidgetsAct);
 	configureToolBar->addAction(showHelpAct);
 	configureToolBar->addAction(showConsoleAct);
