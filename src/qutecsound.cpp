@@ -106,7 +106,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #ifdef QCS_DEBUGGER
 	m_debugPanel = new DebugPanel(this);
 	m_debugPanel->setObjectName("Debug Panel");
-	m_debugPanel->show();
+	m_debugPanel->hide();
 	connect(m_debugPanel, SIGNAL(runSignal()), this, SLOT(runDebugger()));
 	connect(m_debugPanel, SIGNAL(pauseSignal()), this, SLOT(pauseDebugger()));
 	connect(m_debugPanel, SIGNAL(continueSignal()), this, SLOT(continueDebugger()));
@@ -2087,7 +2087,7 @@ void CsoundQt::applySettings()
 	Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
 											   Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
 	
-	setUnifiedTitleAndToolBarOnMac(m_options->iconText);
+//	setUnifiedTitleAndToolBarOnMac(m_options->iconText);
 //	fileToolBar->setToolButtonStyle(toolButtonStyle);
 //	editToolBar->setToolButtonStyle(toolButtonStyle);
 	controlToolBar->setToolButtonStyle(toolButtonStyle);
