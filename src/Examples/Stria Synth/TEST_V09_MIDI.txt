@@ -1,8 +1,8 @@
 ======= TABLE 11 size: 16 values ======
 flen: 16
 lenmask: 15
-lobits: 20
-lomask: 1048575
+lobits: 26
+lomask: 67108863
 lodiv: 0.000000
 cvtbas: 0.000000
 cpscvt: 0.000000
