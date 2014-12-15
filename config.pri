@@ -190,7 +190,7 @@ win32 {
     !csoundLibraryExists($${CSOUND_LIB}):error(Csound API library not found)
 }
 !is_quteapp {
-win32-g++ {
+win32 {
 exists (src/res/windows/QuteApp_f.exe) :CONFIG += quteapp_f
 exists (src/res/windows/QuteApp_d.exe) :CONFIG += quteapp_d
 }

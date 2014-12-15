@@ -1,9 +1,10 @@
 
-!win32-g++: error(This project file is only for Windows builds using MinGW/g++.)
 !no_messages {
-    message()
-    message(Building CsoundQt for Windows using MinGW/g++.)
+    message(Building CsoundQt for Windows.)
+    win32-g++: message(Building with gcc)
+    else: message(Building with Visual Studio)
 }
+
 
 CONFIG -= debug_and_release debug_and_release_target \
     copy_dir_files precompile_header shared
