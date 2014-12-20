@@ -40,6 +40,7 @@
 #include "midihandler.h"
 #include "midilearndialog.h"
 #include "livecodeeditor.h"
+#include "html5guidisplay.h"
 
 #ifdef QCS_PYTHONQT
 #include "pythonconsole.h"
@@ -148,6 +149,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
     connect(rootObject, SIGNAL(genNote(QVariant, QVariant, QVariant, QVariant)),
             this, SLOT(virtualMidiIn(QVariant, QVariant, QVariant, QVariant)));
 #endif
+
+	m_html5Display = new Html5GuiDisplay(this);
+	addDockWidget(Qt::LeftDockWidgetArea, m_html5Display);
+	m_html5Display->setObjectName("HTML5 Gui");
+	m_html5Display->setWindowTitle(tr("HTML5 Gui"));
 
 	createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
 	readSettings();
@@ -1844,6 +1850,15 @@ void CsoundQt::showVirtualKeyboard(bool show)
 #endif
 }
 
+void CsoundQt::showHtml5Gui(bool show)
+{
+#ifdef USE_QT_GT_54
+	m_html5Display->setVisible(show);
+#else
+	QMessageBox::warning(this, tr("Qt5 Required"), tr("Qt version > 5.2 is required for the virtual keyboard."));
+#endif
+}
+
 void CsoundQt::splitView(bool split)
 {
 	if (split) {
@@ -2369,6 +2384,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	showDebugAct->setShortcut(tr("F5"));
 #endif
     showVirtualKeyboardAct->setShortcut(tr("Ctrl+Shift+V"));
+	showHtml5Act->setShortcut(tr("Ctrl+Shift+H"));
 	splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
 	midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
 	createCodeGraphAct->setShortcut(tr("Alt+4"));
@@ -2898,6 +2914,16 @@ void CsoundQt::createActions()
     connect(m_virtualKeyboard, SIGNAL(Close(bool)), showVirtualKeyboardAct, SLOT(setChecked(bool)));
 #endif
 
+	showHtml5Act = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show HTML5 Interface"), this);
+	showHtml5Act->setCheckable(true);
+	showHtml5Act->setChecked(true);
+	showHtml5Act->setStatusTip(tr("Show HTML5 Interface"));
+	showHtml5Act->setShortcutContext(Qt::ApplicationShortcut);
+	connect(showHtml5Act, SIGNAL(toggled(bool)), this, SLOT(showHtml5Gui(bool)));
+#ifdef USE_QT_GT_53
+	connect(m_html5Display, SIGNAL(Close(bool)), showHtml5Act, SLOT(setChecked(bool)));
+#endif
+
     splitViewAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Split View"), this);
 	splitViewAct->setCheckable(true);
 	splitViewAct->setChecked(false);
@@ -3149,6 +3175,7 @@ void CsoundQt::setKeyboardShortcutsList()
 	m_keyActions.append(showScratchPadAct);
 	m_keyActions.append(showUtilitiesAct);
     m_keyActions.append(showVirtualKeyboardAct);
+	m_keyActions.append(showHtml5Act);
 	m_keyActions.append(setHelpEntryAct);
 	m_keyActions.append(browseBackAct);
 	m_keyActions.append(browseForwardAct);
@@ -3376,6 +3403,7 @@ void CsoundQt::createMenus()
 	viewMenu->addAction(midiLearnAct);
 #ifdef USE_QT5
     viewMenu->addAction(showVirtualKeyboardAct);
+	viewMenu->addAction(showHtml5Act);
 #endif
 	viewMenu->addSeparator();
 	viewMenu->addAction(viewFullScreenAct);

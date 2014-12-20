@@ -66,6 +66,7 @@ class EventSheet;
 class CsoundEngine;
 class MidiHandler;
 class MidiLearnDialog;
+class Html5GuiDisplay;
 
 class CsoundQt:public QMainWindow
 {
@@ -225,6 +226,7 @@ private slots:
 	void setFullScreen(bool full);
 	void showDebugger(bool show);
 	void showVirtualKeyboard(bool show);
+	void showHtml5Gui(bool show);
 	void splitView(bool split);
 	void showMidiLearn();
 	void virtualMidiIn(QVariant on, QVariant note, QVariant channel, QVariant velocity);
@@ -321,6 +323,7 @@ private:
 #ifdef USE_QT_GT_53
 	QQuickWidget *m_virtualKeyboard;
 #endif
+	Html5GuiDisplay *m_html5Display;
 	//    QString m_widgetClipboard;
 	Inspector *m_inspector;
 #ifdef QCS_DEBUGGER
@@ -402,6 +405,8 @@ private:
 	QAction *showDebugAct;
 #endif
 	QAction *showVirtualKeyboardAct;
+	QAction *showHtml5Act;
+
 	QAction *midiLearnAct;
 	QAction *splitViewAct;
 

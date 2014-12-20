@@ -18,7 +18,8 @@ FORMS = "src/about.ui" \
     src/debugpanel.ui \
     src/dockhelp.ui \
     src/livecodeeditor.ui \
-    src/newbreakpointdialog.ui
+    src/newbreakpointdialog.ui \
+    $$PWD/html5guidisplay.ui
 
 HEADERS = "src/about.h" \
     "src/configdialog.h" \
@@ -76,7 +77,8 @@ HEADERS = "src/about.h" \
     src/midilearndialog.h \
     src/debugpanel.h \
     src/livecodeeditor.h \
-    src/newbreakpointdialog.h
+    src/newbreakpointdialog.h \
+    $$PWD/html5guidisplay.h
 
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
@@ -134,7 +136,8 @@ SOURCES = "src/about.cpp" \
     src/midilearndialog.cpp \
     src/debugpanel.cpp \
     src/livecodeeditor.cpp \
-    src/newbreakpointdialog.cpp
+    src/newbreakpointdialog.cpp \
+    $$PWD/html5guidisplay.cpp
 
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
@@ -166,3 +169,4 @@ OTHER_FILES += \
     src/QML/VirtualKeyboard.qml \
     src/QML/Controls.qml
 
+QML_IMPORT_PATH =src/QML

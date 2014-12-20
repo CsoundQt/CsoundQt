@@ -56,6 +56,12 @@ greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 2) {
     CONFIG += QCS_QT53
 }
 
+greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 3) {
+    QT += webenginewidgets
+    DEFINES += USE_QT_GT_54
+    CONFIG += QCS_QT54
+}
+
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")
 
 !build32: CONFIG += build64
@@ -66,7 +72,7 @@ unix {
     else:haiku-g++ {include (qcs-haiku.pro) }
     else: include (qcs-unix.pro)
 }
-win32-g++:include (qcs-win32.pro)
+win32:include (qcs-win32.pro)
 
 include(src/src.pri)
 TRANSLATIONS = "src/translations/qutecsound_en.ts" \
