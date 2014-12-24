@@ -41,7 +41,9 @@
 #include "qutecsound.h" // For passing the actions from button reserved channels
 
 #ifdef Q_OS_WIN32
+#if !defined(_MSC_VER)
 #include <unistd.h> // for usleep()
+#endif
 #endif
 
 
@@ -173,7 +175,7 @@ WidgetLayout::~WidgetLayout()
 	layoutMutex.unlock();
 	while (closing == 1) {
 		qApp->processEvents();
-		usleep(10000);
+        QThread::usleep(10000);
 	}
 	clearGraphs();  // To free memory from curves.
 }
@@ -577,25 +579,25 @@ void WidgetLayout::getMouseValues(QVector<double> *values)
 
 int WidgetLayout::getMouseX()
 {
-	Q_ASSERT(mouseX >= 0 and mouseX < 4096);
+    Q_ASSERT(mouseX >= 0 && mouseX < 4096);
 	return mouseX;
 }
 
 int WidgetLayout::getMouseY()
 {
-	Q_ASSERT(mouseY >= 0 and mouseY < 4096);
+    Q_ASSERT(mouseY >= 0 && mouseY < 4096);
 	return mouseY;
 }
 int WidgetLayout::getMouseRelX()
 {
-	if (mouseRelX >= 0 and mouseRelX < 4096)
+    if (mouseRelX >= 0 && mouseRelX < 4096)
 		return mouseRelX;
 	else return 0;
 }
 
 int WidgetLayout::getMouseRelY()
 {
-	if (mouseRelY >= 0 and mouseRelY < 4096)
+    if (mouseRelY >= 0 && mouseRelY < 4096)
 		return mouseRelY;
 	else return 0;
 }
@@ -891,7 +893,7 @@ QString WidgetLayout::newMacWidget(QString widgetLine, bool offset)
 			return createSlider(x,y,width,height, widgetLine);
 		}
 		else if (parts[0]=="ioText") {
-			if (parts[5]=="label" or parts[5]=="display") {
+            if (parts[5]=="label" || parts[5]=="display") {
 				return createText(x,y,width,height, widgetLine);
 			}
 			else if (parts[5]=="edit") {
@@ -923,9 +925,9 @@ QString WidgetLayout::newMacWidget(QString widgetLine, bool offset)
 			return createMeter(x,y,width, height, widgetLine);
 		}
 		else if (parts[0]=="ioGraph") {
-			if (parts.size() < 6 or parts[5]=="table")
+            if (parts.size() < 6 || parts[5]=="table")
 				return createGraph(x,y,width, height, widgetLine);
-			else if (parts[5]=="fft" or parts[5]=="scope" or parts[5]=="lissajou" or parts[5]=="poincare")
+            else if (parts[5]=="fft" || parts[5]=="scope" || parts[5]=="lissajou" || parts[5]=="poincare")
 				return createScope(x,y,width, height, widgetLine);
 		}
 		else {
@@ -2265,7 +2267,7 @@ void WidgetLayout::alignCenterHorizontal()
 void WidgetLayout::keyPressEvent(QKeyEvent *event)
 {
 	//  qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
-	if (!event->isAutoRepeat() or m_repeatKeys) {
+    if (!event->isAutoRepeat() || m_repeatKeys) {
 		QString key = event->text();
 		if (event->key() == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) { // TODO why is this necessary? The shortcut from the duplicate action in the main app is not working!
 			this->duplicate();
@@ -2311,7 +2313,7 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
 
 void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
 {
-	if (!event->isAutoRepeat() or m_repeatKeys) {
+    if (!event->isAutoRepeat() || m_repeatKeys) {
 		QString key = event->text();
 		if (key != "") {
 			//           appendMessage("rel:" + key);
@@ -2326,7 +2328,7 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
 	if (widget != 0) {
 		//    widgetsMutex.lock();
 		int index = m_widgets.indexOf(widget);
-		if (index >= 0 and editWidgets.size() > index) {
+        if (index >= 0 && editWidgets.size() > index) {
 			int newx = widget->x();
 			int newy = widget->y();
 			int neww = widget->width();
@@ -2517,7 +2519,7 @@ QString WidgetLayout::createText(int x, int y, int width, int height, QString wi
 {
 	QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	QStringList quoteParts = widgetLine.split('"');
-	if (parts.size()<20 or quoteParts.size()<5)
+    if (parts.size()<20 || quoteParts.size()<5)
 		return "";
 	QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	if (lastParts.size() < 9)
@@ -2561,7 +2563,7 @@ QString WidgetLayout::createScrollNumber(int x, int y, int width, int height, QS
 {
 	QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	QStringList quoteParts = widgetLine.split('"');
-	if (parts.size()<20 or quoteParts.size()<5)
+    if (parts.size()<20 || quoteParts.size()<5)
 		return "";
 	QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	if (lastParts.size() < 9)
@@ -2608,7 +2610,7 @@ QString WidgetLayout::createLineEdit(int x, int y, int width, int height, QStrin
 {
 	QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	QStringList quoteParts = widgetLine.split('"');
-	if (parts.size()<20 or quoteParts.size()<5)
+    if (parts.size()<20 || quoteParts.size()<5)
 		return "";
 	QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	if (lastParts.size() < 9)
@@ -2646,7 +2648,7 @@ QString WidgetLayout::createSpinBox(int x, int y, int width, int height, QString
 {
 	QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	QStringList quoteParts = widgetLine.split('"');
-	if (parts.size()<20 or quoteParts.size()<5)
+    if (parts.size()<20 || quoteParts.size()<5)
 		return "";
 	QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	if (lastParts.size() < 9)
@@ -2691,7 +2693,7 @@ QString WidgetLayout::createButton(int x, int y, int width, int height, QString 
 	//   qDebug("WidgetPanel::createButton");
 	QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	QStringList quoteParts = widgetLine.split('"');
-	//   if (parts.size()<20 or quoteParts.size()>5)
+    //   if (parts.size()<20 || quoteParts.size()>5)
 	//     return -1;
 	QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	//   if (lastParts.size() < 9)

@@ -145,6 +145,7 @@ win32 {
     message(Csound API include directory is $${CSOUND_API_INCLUDE_DIR})
     message(Csound interfaces include directory is $${CSOUND_INTERFACES_INCLUDE_DIR})
     message(Csound library directory is $${CSOUND_LIBRARY_DIR})
+    message(Csound library is $${DEFAULT_CSOUND_LIBS})
     pythonqt {
         win32:message(Python include directory is $${PYTHON_INCLUDE_DIR})
         message(PythonQt source tree directory is $${PYTHONQT_SRC_DIR})

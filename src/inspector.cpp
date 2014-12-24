@@ -141,7 +141,7 @@ void Inspector::parseText(const QString &text)
 			currentInstrument = newItem;
 			newItem->setBackground(0, QColor(240, 240, 240));
 		}
-		else if (lines[i].trimmed().startsWith("#define") or lines[i].trimmed().startsWith("# define")) {
+        else if (lines[i].trimmed().startsWith("#define") || lines[i].trimmed().startsWith("# define")) {
 			QString text = lines[i].trimmed();
 			QStringList columnslist(text.simplified());
 			if (treeItem2->childCount() == 0) { // set line for element to the first one found

@@ -1634,12 +1634,12 @@ void EventSheet::cellDoubleClickedSlot(int /*row*/, int /*column*/)
 
 void EventSheet::cellChangedSlot(int row, int column)
 {
-	if (this->item(row, column) != 0 and this->item(row, column)->data(Qt::DisplayRole).toString() != 0) {
+    if (this->item(row, column) != 0 && this->item(row, column)->data(Qt::DisplayRole).toString() != 0) {
 		while (column > 0) {
 			column--;
 			QTableWidgetItem * item = this->item(row, column);
 			//      qDebug() << "EventSheet::cellChangedSlot " << column;
-			if (item == 0 or item->data(Qt::DisplayRole).toString() == "") {
+            if (item == 0 || item->data(Qt::DisplayRole).toString() == "") {
 				this->setItem(row, column, this->takeItem(row, column + 1));
 			}
 			else {

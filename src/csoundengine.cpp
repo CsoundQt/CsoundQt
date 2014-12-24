@@ -27,6 +27,7 @@
 
 #ifdef Q_OS_WIN
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
+#else
 #include <unistd.h> // for usleep()
 #endif
 
@@ -1133,8 +1134,7 @@ void CsoundEngine::messageListDispatcher(void *data)
 			ud_local->csEngine->messageQueue << "\nCsoundQt: Message buffer overflow. Messages discarded!\n";
 		}
 		ud_local->csEngine->m_messageMutex.unlock();
-
-		usleep(ud_local->msgRefreshTime);
+        QThread::usleep(ud_local->msgRefreshTime);
 	}
 //	qDebug() << "messageListDispatcher quit";
 }

@@ -200,7 +200,7 @@ void QuteButton::applyProperties()
 	widgetLock.lockForWrite();
 #endif
 	QString eventLine = line->text();
-	while (eventLine.size() > 0 and eventLine[0] == ' ') {
+    while (eventLine.size() > 0 && eventLine[0] == ' ') {
 		eventLine.remove(0,1); //remove all spaces at the beginning. This is needed for event queue lines
 	}
 	setProperty("QCS_eventLine", eventLine);
@@ -338,11 +338,11 @@ void QuteButton::applyInternalProperties()
 	else {
 		static_cast<QPushButton *>(m_widget)->setIcon(QIcon());
 	}
-	if (type == "event" or type == "value") {
+    if (type == "event" || type == "value") {
 		icon = QIcon();
 		static_cast<QPushButton *>(m_widget)->setIcon(icon);
 	}
-	else if (type == "pictevent" or type == "pictvalue" or type == "pict") {
+    else if (type == "pictevent" || type == "pictvalue" || type == "pict") {
 		icon = QIcon(QPixmap(property("QCS_image").toString()));
 		static_cast<QPushButton *>(m_widget)->setIcon(icon);
 		static_cast<QPushButton *>(m_widget)->setIconSize(QSize(width(),height()));
@@ -407,7 +407,7 @@ void QuteButton::buttonReleased()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	if (type == "event" or type == "pictevent") {
+    if (type == "event" || type == "pictevent") {
 		if (property("QCS_latch").toBool() && eventLine.size() > 0) {
 			QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
 			if (lineElements.size() > 0 && lineElements[0] == "i") {
@@ -436,7 +436,7 @@ void QuteButton::buttonReleased()
 			emit(queueEventSignal(eventLine));
 		}
 	}
-	else if (type == "value" or type == "pictvalue") {
+    else if (type == "value" || type == "pictvalue") {
 		if (name == "_Play" &&  value == 1)
 			emit play();
 		else if (name == "_Play" && value == 0)

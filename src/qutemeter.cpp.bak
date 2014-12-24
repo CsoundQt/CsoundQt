@@ -167,7 +167,7 @@ QString QuteMeter::getWidgetXmlText()
 QString QuteMeter::getWidgetType()
 {
 	QString type = static_cast<MeterWidget *>(m_widget)->getType();
-    if (type == "fill" || type == "line" || type == "llif") {
+	if (type == "fill" or type == "line" or type == "llif") {
 		return QString("BSBController");
 	}
 	//  else if (type == "crosshair" or type == "point") {
@@ -479,13 +479,13 @@ void MeterWidget::setValue(double value)
 
 	double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
 	double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
-    if (m_type == "fill" && !m_vertical) {
+	if (m_type == "fill" and !m_vertical) {
 		m_block->setRect(0, 0, portionx*width(), height());
 	}
-    else if (m_type == "llif" && !m_vertical) {
+	else if (m_type == "llif" and !m_vertical) {
 		m_block->setRect(portionx*width(),0, width(), height());
 	}
-    else if (m_type == "line" && !m_vertical) {
+	else if (m_type == "line" and !m_vertical) {
 		m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
 	}
 	else {
@@ -512,13 +512,13 @@ void MeterWidget::setValue2(double value)
 	m_value2 = value;
 	double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
 	double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
-    if (m_type == "fill" && m_vertical) {
+	if (m_type == "fill" and m_vertical) {
 		m_block->setRect(0, (1-portiony)*height(), width(), height());
 	}
-    else if (m_type == "llif" && m_vertical) {
+	else if (m_type == "llif" and m_vertical) {
 		m_block->setRect(0, 0, width(), (1-portiony)*height());
 	}
-    else if (m_type == "line" && m_vertical) {
+	else if (m_type == "line" and m_vertical) {
 		m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
 		//    m_hline->setLine(portiony*width(), 0 ,portiony*width(), height());
 	}

@@ -499,7 +499,7 @@ void QuteGraph::drawFtable(Curve * curve, int index)
         }
         lines[index].clear();
         for (int i = 0; i < size; i++) {
-            if (decimate == 0 or i%decimate == 0) {
+            if (decimate == 0 || i%decimate == 0) {
                 QGraphicsLineItem *line = new QGraphicsLineItem(i, 0, i, 0);
                 lines[index].append(line);
                 scene->addItem(line);

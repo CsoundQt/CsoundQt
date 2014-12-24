@@ -498,6 +498,7 @@ QString DocumentView::getMacWidgetsText()
 	// With tags including presets. For text that is being edited in the text editor
 	// Includes presets text
 	qDebug() << "DocumentView::getMacWidgetsText() not implemented and will crash!";
+    return "Not implemented.";
 }
 
 QString DocumentView::getWidgetsText()
@@ -505,6 +506,7 @@ QString DocumentView::getWidgetsText()
 	// With tags including presets, in new xml format. For text that is being edited in the text editor
 	// Includes presets text
 	qDebug() << "DocumentView::getWidgetsText() not implemented and will crash!";
+    return "Not implemeneted.";
 }
 
 int DocumentView::getViewMode()

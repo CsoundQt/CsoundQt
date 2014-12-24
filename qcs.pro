@@ -72,7 +72,8 @@ unix {
     else:haiku-g++ {include (qcs-haiku.pro) }
     else: include (qcs-unix.pro)
 }
-win32:include (qcs-win32.pro)
+win32-g++:include (qcs-win32.pro)
+win32-msvc2013:include (qcs-win32.pro)
 
 include(src/src.pri)
 TRANSLATIONS = "src/translations/qutecsound_en.ts" \

@@ -156,7 +156,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 				+ ":" + m_configlists->fileFormatFlags[fileSampleFormat];
 		if (fileInputFilenameActive)
 			list << "-i" + fileInputFilename + "";
-		if (fileOutputFilenameActive or fileAskFilename) {
+        if (fileOutputFilenameActive || fileAskFilename) {
 			list << "-o" + fileOutputFilename + "";
 		}
 	}

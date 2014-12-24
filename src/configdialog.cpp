@@ -688,21 +688,21 @@ void ConfigDialog::selectMidiOutput()
 
 void ConfigDialog::browseFile(QString &destination)
 {
-	QString file =  QFileDialog::QFileDialog::getOpenFileName(this,tr("Select File"),destination);
+    QString file =  QFileDialog::getOpenFileName(this,tr("Select File"),destination);
 	if (file!="")
 		destination = file;
 }
 
 void ConfigDialog::browseSaveFile(QString &destination)
 {
-	QString file =  QFileDialog::QFileDialog::getSaveFileName(this,tr("Select File"),destination);
+    QString file =  QFileDialog::getSaveFileName(this,tr("Select File"),destination);
 	if (file!="")
 		destination = file;
 }
 
 void ConfigDialog::browseDir(QString &destination)
 {
-	QString dir =  QFileDialog::QFileDialog::getExistingDirectory(this,tr("Select Directory"),destination);
+    QString dir =  QFileDialog::getExistingDirectory(this,tr("Select Directory"),destination);
 	if (dir!="")
 		destination = dir;
 }

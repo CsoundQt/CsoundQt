@@ -94,7 +94,7 @@ void AppDetailsPage::changeEvent(QEvent *e)
 void AppDetailsPage::browseTarget()
 {
 	QString destination = field("targetDir").toString();
-	QString dir =  QFileDialog::QFileDialog::getExistingDirectory(this,tr("Select Target Directory"),destination);
+    QString dir =  QFileDialog::getExistingDirectory(this,tr("Select Target Directory"),destination);
 	if (dir!="") {
 		setField("targetDir", dir);
 	}
@@ -103,7 +103,7 @@ void AppDetailsPage::browseTarget()
 void AppDetailsPage::browseLibrary()
 {
 	QString destination = field("libDir").toString();
-	QString dir =  QFileDialog::QFileDialog::getExistingDirectory(this,tr("Select Csound Library Directory"),destination);
+    QString dir =  QFileDialog::getExistingDirectory(this,tr("Select Csound Library Directory"),destination);
 	if (dir!="") {
 		setField("libDir", dir);
 	}
@@ -112,7 +112,7 @@ void AppDetailsPage::browseLibrary()
 void AppDetailsPage::browseOpcodes()
 {
 	QString destination = field("opcodeDir").toString();
-	QString dir =  QFileDialog::QFileDialog::getExistingDirectory(this,tr("Select Csound Opcodes Directory"),destination);
+    QString dir =  QFileDialog::getExistingDirectory(this,tr("Select Csound Opcodes Directory"),destination);
 	if (dir!="") {
 		setField("opcodeDir", dir);
 	}
@@ -121,7 +121,7 @@ void AppDetailsPage::browseOpcodes()
 void AppDetailsPage::browseQtLibs()
 {
 	QString destination = field("qtLibsDir").toString();
-	QString dir =  QFileDialog::QFileDialog::getExistingDirectory(this,tr("Select Qt Libraries Directory"),destination);
+    QString dir =  QFileDialog::getExistingDirectory(this,tr("Select Qt Libraries Directory"),destination);
 	if (dir!="") {
 		setField("qtLibsDir", dir);
 	}
@@ -130,7 +130,7 @@ void AppDetailsPage::browseQtLibs()
 void AppDetailsPage::browseSdk()
 {
 	QString destination = field("sdkDir").toString();
-	QString dir =  QFileDialog::QFileDialog::getExistingDirectory(this,tr("Select CsoundQt SDK Directory"),destination);
+    QString dir =  QFileDialog::getExistingDirectory(this,tr("Select CsoundQt SDK Directory"),destination);
 	if (dir!="") {
 		setField("sdkDir", dir);
 	}

@@ -204,7 +204,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	// Open files saved from last session
 	if (!lastFiles.isEmpty()) {
 		foreach (QString lastFile, lastFiles) {
-			if (lastFile!="" and !lastFile.startsWith("untitled")) {
+            if (lastFile!="" && !lastFile.startsWith("untitled")) {
 				loadFile(lastFile);
 			}
 		}
@@ -632,7 +632,7 @@ void CsoundQt::closeGraph()
 bool CsoundQt::save()
 {
 	QString fileName = documentPages[curPage]->getFileName();
-	if (fileName.isEmpty() or fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
+    if (fileName.isEmpty() || fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
 		return saveAs();
 	}
 	else if (documentPages[curPage]->readOnly){
@@ -1284,7 +1284,7 @@ bool CsoundQt::join(bool ask)
 	}
 	if (itemList2.size() > 0)
 		list2->setCurrentItem(itemList2[0]);
-	if (itemList.size() == 0 or itemList.size() == 0) {
+    if (itemList.size() == 0 || itemList.size() == 0) {
 		if (!ask) {
 			QMessageBox::warning(this, tr("Join"),
 								 tr("Please open the orc and sco files in CsoundQt first!"));
@@ -1426,7 +1426,7 @@ void CsoundQt::play(bool realtime, int index)
 	QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
 	if (fileName.startsWith(":/examples/", Qt::CaseInsensitive) || !m_options->saveChanges) {
 		QString tmpFileName = QDir::tempPath();
-		if (!tmpFileName.endsWith("/") and !tmpFileName.endsWith("\\")) {
+        if (!tmpFileName.endsWith("/") && !tmpFileName.endsWith("\\")) {
 			tmpFileName += QDir::separator();
 		}
 		if (fileName.endsWith(".csd",Qt::CaseInsensitive)) {
@@ -1476,7 +1476,7 @@ void CsoundQt::play(bool realtime, int index)
 	} else if (ret == -3) { // Csound compilation failed
 		runAct->setChecked(false);
 	} else if (ret == 0) { // No problem
-		if (m_options->enableWidgets and m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
+        if (m_options->enableWidgets && m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
 
 			if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
 				if (!m_options->widgetsIndependent) {
@@ -4737,8 +4737,8 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
 //#else
 //		cmdLine = "csound ";
 //#endif
-		m_options->rt = (realtime and m_options->rtUseOptions)
-				or (!realtime and m_options->fileUseOptions);
+        m_options->rt = (realtime && m_options->rtUseOptions)
+                || (!realtime && m_options->fileUseOptions);
 		cmdLine += m_options->generateCmdLineFlags() + " ";
 	}
 	else {

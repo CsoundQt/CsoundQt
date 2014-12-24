@@ -29,7 +29,7 @@
 #include <QAtomicInt>
 
 #include <csound.hpp>
-#include <csPerfThread.hpp>
+#include "csPerfThread.hpp"
 #include <cwindow.h> // Necessary for WINDAT struct
 
 #ifdef QCS_DEBUGGER

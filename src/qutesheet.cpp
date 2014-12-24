@@ -46,6 +46,7 @@ bool QuteSheet::testConsistency()
 	//    if ( total_cols != len(transpose(data))) {
 	//        raise InconsistentData(d.num_cols, "Inconsistent number of columns.")
 	//    }
+    return true;
 }
 
 void QuteSheet::setSheetCellValue(int row, int column, QVariant data)
@@ -88,6 +89,7 @@ bool QuteSheet::setRows(QList<QList <QVariant > > new_data,
 	//      out_text += ' ' + str(new_numRows) + ' ' + str(new_numCols) + '\n'
 	//      out_text += self._rowsToText(new_data)
 	//      self._write_out_file(out_text)
+    return true;
 }
 
 
@@ -115,6 +117,7 @@ bool QuteSheet::setValues(QList <QVariant > new_data,
 	//              if len(new_data) > 0:
 	//                  out_data[i].append(new_data.pop(0))
 	//      set_rows(out_data, new_startRow, new_startCol, new_numRows, new_numCols)
+    return true;
 }
 
 bool QuteSheet::setText(QString new_data,
@@ -138,6 +141,7 @@ bool QuteSheet::setText(QString new_data,
 	//      out_text += ' ' + str(new_numRows) + str(new_numCols) + '\n'
 	//      out_text += text
 	//      _write_out_file(out_text)
+    return true;
 }
 
 QList<QList <QVariant> > QuteSheet::sort(QList<QList <QVariant> > vectors, int p_field)

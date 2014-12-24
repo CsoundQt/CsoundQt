@@ -78,7 +78,7 @@ void FrameWidget::mousePressEvent ( QMouseEvent * event )
 		starty = event->y();
 		oldx = event->x();
 		oldy = event->y();
-		if (startx > (width()-7) and starty > (height()-7))
+        if (startx > (width()-7) && starty > (height()-7))
 			m_resize = true;
 		else
 			m_resize = false;

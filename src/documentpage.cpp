@@ -101,24 +101,24 @@ int DocumentPage::setTextString(QString &text)
 		return ret;
 	}
 	int baseRet = parseAndRemoveWidgetText(text);
-	if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
+    if (text.contains("<MacOptions>") && text.contains("</MacOptions>")) {
 		QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
 		options.resize(options.indexOf("</MacOptions>") + 13);
 		//     qDebug("<MacOptions> present. \n%s", options.toStdString().c_str());
-		if (text.indexOf("</MacOptions>") + 13 < text.size() and text[text.indexOf("</MacOptions>") + 13] == '\n')
+        if (text.indexOf("</MacOptions>") + 13 < text.size() && text[text.indexOf("</MacOptions>") + 13] == '\n')
 			text.remove(text.indexOf("</MacOptions>") + 13, 1); //remove final line break
-		if (text.indexOf("<MacOptions>") > 0 and text[text.indexOf("<MacOptions>") - 1] == '\n')
+        if (text.indexOf("<MacOptions>") > 0 && text[text.indexOf("<MacOptions>") - 1] == '\n')
 			text.remove(text.indexOf("<MacOptions>") - 1, 1); //remove initial line break
 		text.remove(text.indexOf("<MacOptions>"), options.size());
 		//     qDebug("<MacOptions> present. %s", getMacOptions("WindowBounds").toStdString().c_str());
 		m_macOptions = options.split('\n');
 	}
-	if (text.contains("<MacPresets>") and text.contains("</MacPresets>")) {
+    if (text.contains("<MacPresets>") && text.contains("</MacPresets>")) {
 		m_macPresets = text.right(text.size()-text.indexOf("<MacPresets>"));
 		m_macPresets.resize(m_macPresets.indexOf("</MacPresets>") + 12);
-		if (text.indexOf("</MacPresets>") + 12 < text.size() and text[text.indexOf("</MacPresets>") + 12] == '\n')
+        if (text.indexOf("</MacPresets>") + 12 < text.size() && text[text.indexOf("</MacPresets>") + 12] == '\n')
 			text.remove(text.indexOf("</MacPresets>") + 12, 1); //remove final line break
-		if (text.indexOf("<MacPresets>") > 0 and text[text.indexOf("<MacPresets>") - 1] == '\n')
+        if (text.indexOf("<MacPresets>") > 0 && text[text.indexOf("<MacPresets>") - 1] == '\n')
 			text.remove(text.indexOf("<MacPresets>") - 1, 1); //remove initial line break
 		text.remove(text.indexOf("<MacPresets>"), m_macPresets.size());
 		//    qDebug("<MacPresets> present.");
@@ -126,12 +126,12 @@ int DocumentPage::setTextString(QString &text)
 	else {
 		m_macPresets = "";
 	}
-	if (text.contains("<MacGUI>") and text.contains("</MacGUI>")) {
+    if (text.contains("<MacGUI>") && text.contains("</MacGUI>")) {
 		QString m_macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
 		m_macGUI.resize(m_macGUI.indexOf("</MacGUI>") + 9);
-		if (text.indexOf("</MacGUI>") + 9 < text.size() and text[text.indexOf("</MacGUI>") + 9] == '\n')
+        if (text.indexOf("</MacGUI>") + 9 < text.size() && text[text.indexOf("</MacGUI>") + 9] == '\n')
 			text.remove(text.indexOf("</MacGUI>") + 9, 1); //remove final line break
-		if (text.indexOf("<MacGUI>") > 0 and text[text.indexOf("<MacGUI>") - 1] == '\n')
+        if (text.indexOf("<MacGUI>") > 0 && text[text.indexOf("<MacGUI>") - 1] == '\n')
 			text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
 		text.remove(m_macGUI);
 		if (baseRet < 1) {
@@ -156,7 +156,7 @@ int DocumentPage::setTextString(QString &text)
 			setMacOption("Options:", optionsText);
 			index = text.indexOf("<CsOptions>");
 			int endindex = text.indexOf("</CsOptions>");
-			if (index >= 0 and endindex > index) {
+            if (index >= 0 && endindex > index) {
 				text.remove(index, endindex - index);
 				text.insert(index, "<CsOptions>\n" + outFile);
 			}
