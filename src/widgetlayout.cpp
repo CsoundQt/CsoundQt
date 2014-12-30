@@ -40,13 +40,6 @@
 
 #include "qutecsound.h" // For passing the actions from button reserved channels
 
-#ifdef Q_OS_WIN32
-#if !defined(_MSC_VER)
-#include <unistd.h> // for usleep()
-#endif
-#endif
-
-
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
 	selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
@@ -175,7 +168,7 @@ WidgetLayout::~WidgetLayout()
 	layoutMutex.unlock();
 	while (closing == 1) {
 		qApp->processEvents();
-        QThread::usleep(10000);
+		QThread::usleep(10000);
 	}
 	clearGraphs();  // To free memory from curves.
 }

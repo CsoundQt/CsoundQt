@@ -78,7 +78,6 @@ HEADERS = "src/about.h" \
     src/debugpanel.h \
     src/livecodeeditor.h \
     src/newbreakpointdialog.h \
-	src/csPerfThread.hpp \
     $$PWD/html5guidisplay.h
 
 SOURCES = "src/about.cpp" \
@@ -125,7 +124,7 @@ SOURCES = "src/about.cpp" \
     "src/widgetpanel.cpp" \
     "src/widgetpreset.cpp" \
     "src/qutesheet.cpp" \
-	"src/basedocument.cpp" \
+    "src/basedocument.cpp" \
     "src/baseview.cpp" \
     "src/appwizard.cpp" \
     "src/appdetailspage.cpp" \
@@ -138,7 +137,6 @@ SOURCES = "src/about.cpp" \
     src/debugpanel.cpp \
     src/livecodeeditor.cpp \
     src/newbreakpointdialog.cpp \
-	src/csPerfThread.cpp \
     $$PWD/html5guidisplay.cpp
 
 DISTFILES += "src/default.csd" \
@@ -155,6 +153,11 @@ rtmidi {
     HEADERS += "src/../$${RTMIDI_DIR}/RtMidi.h"
     SOURCES += "src/../$${RTMIDI_DIR}/RtMidi.cpp"
     INCLUDEPATH += src/../$${RTMIDI_DIR}
+}
+
+perfThread_build {
+    HEADERS += src/csPerfThread.hpp
+    SOURCES += src/csPerfThread.cpp
 }
 
 LIBS += $${LCSOUND} \
