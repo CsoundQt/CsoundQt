@@ -12,11 +12,11 @@
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
-
+--env:SSDIR+=../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 32	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
 
@@ -95,13 +95,14 @@ i  1 0	3600		;GUI
 </CsScore>
 </CsoundSynthesizer>
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>72</x>
  <y>179</y>
- <width>400</width>
- <height>200</height>
+ <width>1027</width>
+ <height>397</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -392,9 +393,9 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>240</r>
-   <g>235</g>
-   <b>226</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -455,7 +456,7 @@ Note that tuning inaccuracies are increasingly exhibited as 'Frequency' is incre
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>682.578</label>
+  <label>0.000</label>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>

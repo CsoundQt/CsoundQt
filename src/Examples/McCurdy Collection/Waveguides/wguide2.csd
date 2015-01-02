@@ -30,11 +30,11 @@
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
-
+--env:SSDIR+=../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 32	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
 
@@ -139,6 +139,7 @@ i 1 0 3600	;GUI
 i 3 0 0.01	;INIT 
 </CsScore>
 </CsoundSynthesizer>
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -445,9 +446,9 @@ To prevent out of control resonance, the sum of both feedback parameters should 
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>240</r>
-   <g>235</g>
-   <b>226</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
