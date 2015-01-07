@@ -15,7 +15,7 @@
 </CsOptions>
 <CsInstruments>
 sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps 	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
 
 
@@ -99,6 +99,7 @@ f 102 0 1024 7  0 256 1 512 -1 256 0		;TRIANGLE WAVE
 i  1      0       3600					;INSTRUMENT 1 PLAYS FOR 1 HOUR
 </CsScore>
 </CsoundSynthesizer>
+
 
 <bsbPanel>
  <label>Widgets</label>
@@ -337,9 +338,9 @@ pvadd performs FFT resynthesis on a analysis data file that has been created usi
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -1120,4 +1121,4 @@ Limit</label>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
