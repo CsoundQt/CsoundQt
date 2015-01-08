@@ -22,6 +22,8 @@
 
 #include <cstdlib>
 
+#include <QThread>
+
 #include "widgetlayout.h"
 #include "qutewidget.h"
 #include "quteslider.h"

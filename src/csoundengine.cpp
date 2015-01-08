@@ -21,8 +21,10 @@
 */
 
 #ifdef USE_QT5
-#include <QtConcurrent/QtConcurrent>
+#include <QtConcurrent>
 #endif
+
+#include <QThread>
 
 #ifdef Q_OS_WIN
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
