@@ -12,11 +12,11 @@
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
-
+--env:SSDIR+=../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr		= 44100	;SAMPLE RATE
-ksmps	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 32	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
 
@@ -100,10 +100,11 @@ endin
 i  1 0	3600		;GUI
 </CsScore>
 </CsoundSynthesizer>
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>583</x>
+ <x>270</x>
  <y>239</y>
  <width>1096</width>
  <height>376</height>
@@ -397,9 +398,9 @@ Delay time is not directly addressed as delay time are expected to be small thus
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>240</r>
-   <g>235</g>
-   <b>226</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -460,7 +461,7 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>399.984</label>
+  <label>0.000</label>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
@@ -536,7 +537,7 @@ Delay time is not directly addressed as delay time are expected to be small thus
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>9753.604</label>
+  <label>0.000</label>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
