@@ -48,7 +48,7 @@ if do_build:
         configs += 'CONFIG+=pythonqt '
         configs += 'PYTHONQT_SRC_DIR=' + pythonqt_dir + ' '
 
-    spec = '-spec max-g++ '
+    spec = '-spec macx-g++ '
     qmake_bin = 'qmake -r '
     configs += spec
 
