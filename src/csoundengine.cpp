@@ -20,21 +20,19 @@
 	02111-1307 USA
 */
 
-
 #ifdef USE_QT5
-#include <QtConcurrent/QtConcurrent>
+#include <QtConcurrent>
 #endif
+
+#include <QThread>
 
 #ifdef Q_OS_WIN
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
-#else
-#include <unistd.h> // for usleep()
 #endif
 
 #ifdef CSOUND6
 #include "csound_standard_types.h"
 #endif
-
 
 #include "csoundengine.h"
 #include "widgetlayout.h"
@@ -42,7 +40,6 @@
 #include "qutescope.h"  // Needed for passing the ud to the scope for display data
 #include "qutegraph.h"  // Needed for passing the ud to the graph for display data
 #include "midihandler.h"
-
 
 CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 	m_options(configlists)
@@ -1136,7 +1133,7 @@ void CsoundEngine::messageListDispatcher(void *data)
 			ud_local->csEngine->messageQueue << "\nCsoundQt: Message buffer overflow. Messages discarded!\n";
 		}
 		ud_local->csEngine->m_messageMutex.unlock();
-        QThread::usleep(ud_local->msgRefreshTime);
+		QThread::usleep(ud_local->msgRefreshTime);
 	}
 //	qDebug() << "messageListDispatcher quit";
 }

@@ -5,7 +5,6 @@
     win32-msvc2013: message(Building with Visual C++ 2013)
 }
 
-
 CONFIG -= debug_and_release debug_and_release_target \
     copy_dir_files precompile_header shared
 

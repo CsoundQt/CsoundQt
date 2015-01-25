@@ -43,6 +43,8 @@ message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now defa
 message("Building for Csound 5 (unsupported)")
 }
 
+QT += concurrent
+
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
     QT += printsupport

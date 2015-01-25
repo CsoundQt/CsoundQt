@@ -16,7 +16,7 @@
 </CsOptions>
 <CsInstruments>
 sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps 	= 32	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1
 
@@ -123,6 +123,7 @@ i 10		0	   3600	;GUI
 i 11		0		0	;INIT
 </CsScore>
 </CsoundSynthesizer>
+
 
 <bsbPanel>
  <label>Widgets</label>
@@ -366,9 +367,9 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
