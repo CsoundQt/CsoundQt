@@ -79,7 +79,8 @@ HEADERS = "src/about.h" \
     src/livecodeeditor.h \
     src/newbreakpointdialog.h \
 	src/csPerfThread.hpp \
-    $$PWD/html5guidisplay.h
+    $$PWD/html5guidisplay.h \
+    $$PWD/jscsound.h
 
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
@@ -139,7 +140,8 @@ SOURCES = "src/about.cpp" \
     src/livecodeeditor.cpp \
     src/newbreakpointdialog.cpp \
 	src/csPerfThread.cpp \
-    $$PWD/html5guidisplay.cpp
+    $$PWD/html5guidisplay.cpp \
+    $$PWD/jscsound.cpp
 
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \

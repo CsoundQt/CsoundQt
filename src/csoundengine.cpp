@@ -694,7 +694,9 @@ int CsoundEngine::play(CsoundOptions *options)
 		return 0;
 	}
 	else {
-		m_options = *options;
+        if (options) {
+            m_options = *options;
+        }
 		locker.unlock();
 		return runCsound();
 	}
@@ -1345,3 +1347,14 @@ int CsoundEngine::getCurrentLine()
 }
 
 #endif
+
+CsoundUserData *CsoundEngine::getUserData()
+{
+    return ud;
+}
+
+void CsoundEngine::clearConsoles(void) {
+    for (int i = 1, n = consoles.size(); i < n; ++i) {
+        consoles[i]->reset();
+    }
+}
