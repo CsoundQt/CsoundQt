@@ -1133,7 +1133,11 @@ void CsoundEngine::messageListDispatcher(void *data)
 			ud_local->csEngine->messageQueue << "\nCsoundQt: Message buffer overflow. Messages discarded!\n";
 		}
 		ud_local->csEngine->m_messageMutex.unlock();
-		QThread::usleep(ud_local->msgRefreshTime);
+		#ifdef USE_QT5
+		  QThread::usleep(ud_local->msgRefreshTime);
+		#else
+		  usleep(ud_local->msgRefreshTime);
+		#endif
 	}
 //	qDebug() << "messageListDispatcher quit";
 }
