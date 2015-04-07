@@ -1,3 +1,5 @@
+#ifdef QCS_HTML5
+
 #include "html5guidisplay.h"
 #include "ui_html5guidisplay.h"
 
@@ -22,3 +24,5 @@ Html5GuiDisplay::~Html5GuiDisplay()
 {
 	delete ui;
 }
+
+#endif
