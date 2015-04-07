@@ -150,10 +150,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
             this, SLOT(virtualMidiIn(QVariant, QVariant, QVariant, QVariant)));
 #endif
 
+#ifdef QCS_HTML5
 	m_html5Display = new Html5GuiDisplay(this);
 	addDockWidget(Qt::LeftDockWidgetArea, m_html5Display);
 	m_html5Display->setObjectName("HTML5 Gui");
-	m_html5Display->setWindowTitle(tr("HTML5 Gui"));
+    m_html5Display->setWindowTitle(tr("HTML5 Gui"));
+#endif
 
 	createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
 	readSettings();
@@ -1852,10 +1854,8 @@ void CsoundQt::showVirtualKeyboard(bool show)
 
 void CsoundQt::showHtml5Gui(bool show)
 {
-#ifdef USE_QT_GT_54
-	m_html5Display->setVisible(show);
-#else
-	QMessageBox::warning(this, tr("Qt5 Required"), tr("Qt version > 5.2 is required for the virtual keyboard."));
+#ifdef QCS_HTML5
+    m_html5Display->setVisible(show);
 #endif
 }
 
@@ -2914,13 +2914,13 @@ void CsoundQt::createActions()
     connect(m_virtualKeyboard, SIGNAL(Close(bool)), showVirtualKeyboardAct, SLOT(setChecked(bool)));
 #endif
 
-	showHtml5Act = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show HTML5 Interface"), this);
+#ifdef QCS_HTML5
+    showHtml5Act = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show HTML5 Interface"), this);
 	showHtml5Act->setCheckable(true);
 	showHtml5Act->setChecked(true);
 	showHtml5Act->setStatusTip(tr("Show HTML5 Interface"));
 	showHtml5Act->setShortcutContext(Qt::ApplicationShortcut);
-	connect(showHtml5Act, SIGNAL(toggled(bool)), this, SLOT(showHtml5Gui(bool)));
-#ifdef USE_QT_GT_53
+    connect(showHtml5Act, SIGNAL(toggled(bool)), this, SLOT(showHtml5Gui(bool)));
 	connect(m_html5Display, SIGNAL(Close(bool)), showHtml5Act, SLOT(setChecked(bool)));
 #endif
 
@@ -3175,8 +3175,10 @@ void CsoundQt::setKeyboardShortcutsList()
 	m_keyActions.append(showScratchPadAct);
 	m_keyActions.append(showUtilitiesAct);
     m_keyActions.append(showVirtualKeyboardAct);
+#ifdef QCS_HTML5
 	m_keyActions.append(showHtml5Act);
-	m_keyActions.append(setHelpEntryAct);
+#endif
+    m_keyActions.append(setHelpEntryAct);
 	m_keyActions.append(browseBackAct);
 	m_keyActions.append(browseForwardAct);
 	m_keyActions.append(externalBrowserAct);
@@ -3403,9 +3405,11 @@ void CsoundQt::createMenus()
 	viewMenu->addAction(midiLearnAct);
 #ifdef USE_QT5
     viewMenu->addAction(showVirtualKeyboardAct);
-	viewMenu->addAction(showHtml5Act);
 #endif
-	viewMenu->addSeparator();
+#ifdef QCS_HTML5
+    viewMenu->addAction(showHtml5Act);
+#endif
+    viewMenu->addSeparator();
 	viewMenu->addAction(viewFullScreenAct);
 	viewMenu->addSeparator();
 	viewMenu->addAction(splitViewAct);

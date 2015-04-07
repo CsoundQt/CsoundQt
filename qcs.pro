@@ -20,6 +20,7 @@
 # CONFIG+=rtmidi   To build with RtMidi support
 # CONFIG+=record_support
 # CONFIG+=debugger
+# CONFIG-=html5
 # OS X only OPTIONS:
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
 # ##############################################################################
@@ -59,11 +60,18 @@ greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 2) {
 }
 
 greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 3) {
-    QT += webenginewidgets
     DEFINES += USE_QT_GT_54
     CONFIG += QCS_QT54
 }
 
+html5: {
+    message("Configuring with HTML5 features.")
+    QT += webenginewidgets
+} else {
+    message("Configuring without HTML5 features.")
+    QT += webkit
+    DEFINES -= QCS_HTML5
+}
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")
 
 !build32: CONFIG += build64

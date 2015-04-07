@@ -1,10 +1,10 @@
 #ifndef HTML5GUIDISPLAY_H
 #define HTML5GUIDISPLAY_H
 
+#ifdef QCS_HTML5
+
 #include <QDockWidget>
-#ifdef USE_QT_GT_54
 #include <QWebEngineView>
-#endif
 
 namespace Ui {
 class Html5GuiDisplay;
@@ -20,9 +20,8 @@ public:
 
 private:
 	Ui::Html5GuiDisplay *ui;
-#ifdef USE_QT_GT_54
 	QWebEngineView *m_webView;
-#endif
 };
 
+#endif
 #endif // HTML5GUIDISPLAY_H
