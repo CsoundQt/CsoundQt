@@ -186,6 +186,8 @@ public:
 
 	// To pass to parent document for access from python scripting
 	CSOUND * getCsound();
+    CsoundUserData *getUserData();
+    void clearConsoles(void);
 #ifdef QCS_PYTHONQT
 	void registerProcessCallback(QString func, int skipPeriods);
 	void setPythonConsole(PythonConsole *pc);
@@ -231,7 +233,6 @@ public slots:
 	void setFlags(PerfFlags flags) {ud->flags = flags;}
 
 	void evaluate(QString code);
-
 private:
 	int runCsound();
 	void stopCsound();
