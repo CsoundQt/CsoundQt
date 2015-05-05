@@ -15,6 +15,12 @@ build32:DEFAULT_CSOUND_LIBS = libcsound.so \
 build64:DEFAULT_CSOUND_LIBS = libcsound64.so \
         libcsound64.a
 
+DEFAULT_LIBSNDFILE_LIBRARY_DIRS = /usr/local/lib \
+        /usr/lib
+build32:DEFAULT_LIBSNDFILE_LIBRARY_DIRS = /usr/lib/i386-linux-gnu \
+	/usr/local/lib \
+        /usr/lib
+
 DEFAULT_PYTHON_INCLUDE_DIR += /usr/local/include \
     /usr/include
 DEFAULT_PYTHONQT_LIBRARY_DIRS += /usr/local/lib \
