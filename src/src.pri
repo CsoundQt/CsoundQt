@@ -1,7 +1,8 @@
 RESOURCES += "src/application.qrc" \
     "src/pythonscripts.qrc" \
-	"src/icons.qrc" \
+    "src/icons.qrc" \
     src/qml_resources.qrc
+
 FORMS = "src/about.ui" \
     "src/configdialog.ui" \
     "src/findreplace.ui" \
@@ -78,9 +79,7 @@ HEADERS = "src/about.h" \
     src/debugpanel.h \
     src/livecodeeditor.h \
     src/newbreakpointdialog.h \
-	src/csPerfThread.hpp \
-    $$PWD/html5guidisplay.h \
-    $$PWD/jscsound.h
+    $$PWD/html5guidisplay.h
 
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
@@ -126,7 +125,7 @@ SOURCES = "src/about.cpp" \
     "src/widgetpanel.cpp" \
     "src/widgetpreset.cpp" \
     "src/qutesheet.cpp" \
-	"src/basedocument.cpp" \
+    "src/basedocument.cpp" \
     "src/baseview.cpp" \
     "src/appwizard.cpp" \
     "src/appdetailspage.cpp" \
@@ -138,10 +137,7 @@ SOURCES = "src/about.cpp" \
     src/midilearndialog.cpp \
     src/debugpanel.cpp \
     src/livecodeeditor.cpp \
-    src/newbreakpointdialog.cpp \
-	src/csPerfThread.cpp \
-    $$PWD/html5guidisplay.cpp \
-    $$PWD/jscsound.cpp
+    src/newbreakpointdialog.cpp
 
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
@@ -157,6 +153,37 @@ rtmidi {
     HEADERS += "src/../$${RTMIDI_DIR}/RtMidi.h"
     SOURCES += "src/../$${RTMIDI_DIR}/RtMidi.cpp"
     INCLUDEPATH += src/../$${RTMIDI_DIR}
+}
+
+perfThread_build {
+    HEADERS += src/csPerfThread.hpp
+    SOURCES += src/csPerfThread.cpp
+    message("Including csPerfThread files for perfThread_build.")
+}
+
+html5 {
+    HEADERS += src/cefclient.h
+    HEADERS += src/cefclient_qt.h
+    HEADERS += src/client_app.h
+    HEADERS += src/client_binding.h
+    HEADERS += src/client_handler.h
+    HEADERS += src/client_handler_qt.h
+    HEADERS += src/client_renderer.h
+    HEADERS += src/client_transfer.h
+    HEADERS += src/html5guidisplay.h
+    HEADERS += src/message_event.h
+    SOURCES += src/cefclient.cpp
+    SOURCES += src/cefclient_qt.cpp
+    SOURCES += src/client_app.cpp
+    SOURCES += src/client_app_delegates.cpp
+    SOURCES += src/client_binding.cpp
+    SOURCES += src/client_handler.cpp
+    SOURCES += src/client_handler_qt.cpp
+    SOURCES += src/client_renderer.cpp
+    SOURCES += src/client_transfer.cpp
+    SOURCES += src/html5guidisplay.cpp
+    SOURCES += src/message_event.cpp
+    message("Including CEF related files for html5 build.")
 }
 
 LIBS += $${LCSOUND} \
