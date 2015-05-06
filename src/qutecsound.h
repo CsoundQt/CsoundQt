@@ -176,12 +176,9 @@ public slots:
 	//    void registerLiveEvent(QWidget *e);
 	void evaluateCsound(QString code = QString());
 	void breakpointReached();
-
-
 protected:
 	virtual void closeEvent(QCloseEvent *event);
 	//    virtual void keyPressEvent(QKeyEvent *event);
-
 private slots:
 	void open();
 	void reload();
@@ -262,7 +259,6 @@ private slots:
 	void toggleLineArea();
 	void toggleParameterMode();
 //	void showParametersInEditor();
-
 #ifdef QCS_DEBUGGER
 	void runDebugger();
 	void stopDebugger();
@@ -305,13 +301,9 @@ private:
 	void createQuickRefPdf();
 	void deleteTab(int index = -1);
 	void openLogFile();
-
 	void showNewFormatWarning();
 	void setupEnvironment();
-
-
 	ConfigLists m_configlists;
-
 	QTabWidget *documentTabs;
 	GraphicWindow *m_graphic;  // To display the code graph images
 	QVector<DocumentPage *> documentPages;
@@ -323,7 +315,9 @@ private:
 #ifdef USE_QT_GT_53
 	QQuickWidget *m_virtualKeyboard;
 #endif
+#ifdef QCS_HTML5
 	Html5GuiDisplay *m_html5Display;
+#endif
 	//    QString m_widgetClipboard;
 	Inspector *m_inspector;
 #ifdef QCS_DEBUGGER
@@ -336,9 +330,7 @@ private:
 	MidiHandler *midiHandler;
 	MidiLearnDialog *m_midiLearn;
 	QFile logFile;
-
 	QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts
-
 	QMenu *fileMenu;
 	QMenu *recentMenu;
 	QMenu *templateMenu;
@@ -405,11 +397,11 @@ private:
 	QAction *showDebugAct;
 #endif
 	QAction *showVirtualKeyboardAct;
+#ifdef QCS_HTML5
 	QAction *showHtml5Act;
-
+#endif
 	QAction *midiLearnAct;
 	QAction *splitViewAct;
-
 	QAction *showOrcAct;
 	QAction *showScoreAct;
 	QAction *showOptionsAct;
@@ -417,7 +409,6 @@ private:
 	QAction *showOtherAct;
 	QAction *showOtherCsdAct;
 	QAction *showWidgetEditAct;
-
 	QAction *setHelpEntryAct;
 	QAction *browseBackAct;
 	QAction *browseForwardAct;
@@ -445,7 +436,6 @@ private:
 	QAction *lineNumbersAct;
 	QAction *parameterModeAct;
 //	QAction *showParametersAct;
-
 	int curPage;
 	int curCsdPage;  // To recall last csd visited
 	int configureTab; // Tab in last configure dialog accepted
@@ -454,20 +444,15 @@ private:
 	QString quickRefFileName;
 	QStringList recentFiles;
 	QStringList lastFiles;
-
 	QStringList tempScriptFiles; //Remember temp files to delete them later
 	int lastTabIndex;
 	bool m_resetPrefs; // Flag to reset preferences to default when closing
 	bool m_inspectorNeedsUpdate;
 	bool m_closing; // CsoundQt is closing (to inform timer threads)
-
 	UtilitiesDialog *utilitiesDialog;
-
 	QIcon modIcon;
-
 	QString currentAudioFile;
 	QString initialDir;
-
 #ifdef MACOSX_PRE_SNOW
 	MenuBarHandle menuBarHandle;
 #endif

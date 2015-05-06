@@ -10,9 +10,7 @@ Html5GuiDisplay::Html5GuiDisplay(QWidget *parent) :
     ui(new Ui::Html5GuiDisplay)
 {
 	ui->setupUi(this);
-#ifdef USE_QT_GT_54
-	m_webView = new QWebEngineView(ui->dockWidgetContents);
-	m_webView->show();
+#ifdef QCS_HTML5
 #else
 	QLabel *label = new QLabel(tr("This version of CsoundQt does not support HTML5 display."));
 	this->setWidget(label);

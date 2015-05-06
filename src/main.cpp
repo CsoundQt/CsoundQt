@@ -23,41 +23,86 @@
 #include <QApplication>
 #include <QSplashScreen>
 #include "qutecsound.h"
+#include "include/cef_base.h"
+#include "cefclient.h"
+#include "client_app.h"
+#include "client_handler.h"
+#include <windows.h>
+#include <tchar.h>
+
+
+namespace {
+
+typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
+LPFN_ISWOW64PROCESS fnIsWow64Process;
+
+}  // namespace
+
+// Detect whether the operating system is a 64-bit.
+// http://msdn.microsoft.com/en-us/library/windows/desktop/ms684139%28v=vs.85%29.aspx
+BOOL IsWow64() {
+  BOOL bIsWow64 = FALSE;
+  fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
+      GetModuleHandle(TEXT("kernel32")),
+      "IsWow64Process");
+  if (NULL != fnIsWow64Process) {
+    if (!fnIsWow64Process(GetCurrentProcess(), &bIsWow64)) {
+      // handle error
+    }
+  }
+  return bIsWow64;
+}
 
 int main(int argc, char *argv[])
 {
-	QStringList fileNames;
-	QApplication app(argc, argv);
-	QStringList args = app.arguments();
+    HINSTANCE hInstance = (HINSTANCE) GetModuleHandle(NULL);
+    CefMainArgs main_args(hInstance);
+    CefRefPtr<ClientApp> app(new ClientApp);
+    int result = CefExecuteProcess(main_args, app.get(), 0);
+    if (result >= 0) {
+        return result;
+    }
+    CefSettings settings;
+    settings.multi_threaded_message_loop = true;
+    // Don't change this while developing, there will be trouble with multiple
+    // inconsistent executables otherwise.
+    settings.single_process = true;
+    // TODO: Make this configurable.
+    CefString(&settings.cache_path).FromASCII("c:\\temp\\cache");
+    CefInitialize(main_args, settings, app.get(), 0);
+    CefRefPtr<ClientHandler> g_handler(new ClientHandler());
+    // Load flash system plug-in on Windows.
+    CefLoadPlugins(IsWow64());
+    QStringList fileNames;
+    QApplication qapp(argc, argv);
+    QStringList args = qapp.arguments();
 	args.removeAt(0); // Remove program name
 	foreach (QString arg, args) {
 		if (!arg.startsWith("-p")) {// avoid OS X arguments
 			fileNames.append(arg);
 		}
 	}
-
 	FileOpenEater filterObj;
-	app.installEventFilter(&filterObj);
+    qapp.installEventFilter(&filterObj);
 	QPixmap pixmap(":/images/splashscreen.png");
 	QSplashScreen *splash = new QSplashScreen(pixmap);
 	splash->showMessage(QString("Version %1").arg(QCS_VERSION), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
 	splash->show();
 	splash->raise();
-	app.processEvents();
-
-	QSettings settings("csound", "qutecsound");
-	settings.beginGroup("GUI");
-	QString language = settings.value("language", QLocale::system().name()).toString();
-	settings.endGroup();
-
+    qapp.processEvents();
+    QSettings qsettings("csound", "qutecsound");
+    qsettings.beginGroup("GUI");
+    QString language = qsettings.value("language", QLocale::system().name()).toString();
+    qsettings.endGroup();
 	QTranslator translator;
 	translator.load(QString(":/translations/qutecsound_") + language);
-	app.installTranslator(&translator);
-
+    qapp.installTranslator(&translator);
 	CsoundQt * mw = new CsoundQt(fileNames);
 	splash->finish(mw);
 	delete splash;
 	mw->show();
 	filterObj.setMainWindow(mw);
-	return app.exec();
+    result = qapp.exec();
+    CefQuit();
+    return result;
 }

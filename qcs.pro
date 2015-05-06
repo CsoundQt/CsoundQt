@@ -20,10 +20,11 @@
 # CONFIG+=rtmidi   To build with RtMidi support
 # CONFIG+=record_support
 # CONFIG+=debugger
-# CONFIG-=html5
+# CONFIG-= html5
 # OS X only OPTIONS:
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
 # ##############################################################################
+
 
 record_support {
 DEFINES += PERFTHREAD_RECORD # Requires Csound >= 6.04
@@ -64,14 +65,6 @@ greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 3) {
     CONFIG += QCS_QT54
 }
 
-html5: {
-    message("Configuring with HTML5 features.")
-    QT += webenginewidgets
-} else {
-    message("Configuring without HTML5 features.")
-    QT += webkit
-    DEFINES -= QCS_HTML5
-}
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")
 
 !build32: CONFIG += build64
@@ -108,7 +101,6 @@ pythonqt {
 
 # Note, this is Python, not PythonQt include dir!
     win32:INCLUDEPATH *= $${PYTHON_INCLUDE_DIR}
-
     INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/src
     INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/extensions/PythonQt_QtAll
     QT += svg sql webkit xmlpatterns opengl
@@ -136,3 +128,7 @@ csound6:TARGET = $${TARGET}-cs6
 
 CONFIG(debug, debug|release):TARGET = $${TARGET}-debug
 
+message(DEFINES are:    $${DEFINES})
+message(INCLUDEPATH is: $${INCLUDEPATH})
+message(LIBS are:       $${LIBS})
+message(TARGET is:      $${TARGET})

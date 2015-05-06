@@ -4,7 +4,6 @@
 #ifdef QCS_HTML5
 
 #include <QDockWidget>
-#include <QWebEngineView>
 
 namespace Ui {
 class Html5GuiDisplay;
@@ -20,7 +19,6 @@ public:
 
 private:
 	Ui::Html5GuiDisplay *ui;
-	QWebEngineView *m_webView;
 };
 
 #endif
