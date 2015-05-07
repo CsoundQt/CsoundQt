@@ -1,4 +1,4 @@
-# ##############################################################################
+################################################################################
 # The following variables can be set in the qmake argument list if they are not
 # found in the default locations.  Don't forget to use quotes.  For example ...
 # qmake qutecsound.pro "CSOUND_INCLUDE_DIR = <path to csound.h>"
@@ -12,18 +12,36 @@
 # variables do not need to be set explicitly.
 # These variables can also be set in a file named config.user.pri, which is
 # used if it is found in the same directory as this file (config.pri).
-# ##############################################################################
-# ##############################################################################
+################################################################################
+# For HTML5, download the Chromium Embedded Framework from:
+# https://bitbucket.org/chromiumembedded/cef. Use the pre-built 32 bit binaries
+# from: http://www.magpcss.net/cef_downloads/index.php?query=label%3A~Deprecated+label%3ACEF3+label%3Abinary#list.
+# SHOULD work for all the listed platforms and architectures!
+# On Windows, HTML5 requires that CsoundQt be built with Microsoft Visual C++.
+# Copy csPerfThread.hpp and csPerfThread from Csound into the CsoundQt src
+# directory. Use Microsoft Visual Studio to build CEF using cefclient2010.sln,
+# and run the client to make sure it works.
+# Then follow instructions to REBUILD the wrapper library for multithreaded
+# DLLs (used by the Qt SDK and thus by CsoundQt, compiler flag /MD) here:
+# https://bitbucket.org/chromiumembedded/cef/wiki/LinkingDifferentRunTimeLibraries.md.
+# Then, define a Windows environment variahle CEF_HOME to point to the root
+# directory of your CEF binaries, and configure the CsoundQt build with
+# CONFIG += html5. Finally, you must copy all the stuff required by CEF
+# (paks, dlls, the wrapper dll) to the Csound bin directory as specified in the
+# CEF WIKI, and CsoundQt has to run from there. And don't forget to copy any
+# cascading style sheets, included HTML files, JavaScript libraries, etc., etc.
+# to the directory of your piece!
+################################################################################
 # BUILD OPTIONS:
 # CONFIG+=build32    To build floats version
-# CONFIG+=pythonqt  # To build with PythonQt support
-# CONFIG+=rtmidi   To build with RtMidi support
+# CONFIG+=pythonqt   To build with PythonQt support
+# CONFIG+=rtmidi     To build with RtMidi support
 # CONFIG+=record_support
 # CONFIG+=debugger
-# CONFIG-= html5
+# CONFIG-= html5     To support HTML5 via the <CsHtml5> element in the csd file.
 # OS X only OPTIONS:
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
-# ##############################################################################
+################################################################################
 
 DEFINES += NOMINMAX
 
