@@ -25,7 +25,6 @@
 
 #include "types.h"
 #include "csoundoptions.h"
-
 #include <QWidget>
 
 class WidgetLayout;
@@ -42,7 +41,6 @@ class BaseDocument : public QObject
 public:
 	BaseDocument(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists);
 	~BaseDocument();
-
 	virtual int setTextString(QString &text) = 0;
 	virtual void loadTextString(QString &text);
 	virtual void setFileName(QString name);
@@ -51,7 +49,6 @@ public:
 	void widgetsVisible(bool visible);
 	void setFlags(int flags);
 	void setAppProperties(AppProperties properties);
-
 	virtual QString getFullText();
 	QString getBasicText();
 	QString getOrc();
@@ -61,12 +58,10 @@ public:
 	QString getPresetsText();
 	AppProperties getAppProperties();
 	//    void setOpcodeNameList(QStringList opcodeNameList);
-
 	// Get internal components
 	WidgetLayout *getWidgetLayout();  // Needed to pass for placing in widget dock panel
 	ConsoleWidget *getConsole();  // Needed to pass for placing in console dock panel
 	CsoundEngine *getEngine(); // Needed to pass to python interpreter
-
 public slots:
 	virtual int play(CsoundOptions *options);
 	void pause();
@@ -76,21 +71,16 @@ public slots:
 	//    void playParent(); // Triggered from button, ask parent for options
 	//    void renderParent();
 	void queueEvent(QString line, int delay = 0);
-
 	virtual void registerButton(QuteButton *button) = 0;
-
 protected:
 	virtual void init(QWidget *parent, OpEntryParser *opcodeTree) = 0;
 	//    virtual BaseView *createView(QWidget *parent, O8pEntryParser *opcodeTree);
-
 	QString fileName;
 	QList<WidgetLayout *> m_widgetLayouts;
 	OpEntryParser *m_opcodeTree;
 	DocumentView *m_view;
 	ConsoleWidget *m_console;
 	CsoundEngine *m_csEngine;
-
-private:
 };
 
 #endif // BASEDOCUMENT_H

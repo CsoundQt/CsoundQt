@@ -2,7 +2,6 @@
 
 #include <QString>
 #include <string>
-#include <windows.h>
 #include <shlobj.h> 
 #include <include/wrapper/cef_helpers.h>
 #include "include/cef_browser.h"

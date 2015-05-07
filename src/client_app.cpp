@@ -7,9 +7,10 @@
 #include "include/cef_task.h"
 #include "include/cef_v8.h"
 #include "client_handler.h"
-#include "util.h"  // NOLINT(build/include)
+#include "csoundengine.h"
 #include "client_transfer.h"
 #include "client_app_js.h"
+#include "util.h"  // NOLINT(build/include)
 
 namespace {
 
@@ -57,9 +58,10 @@ ClientApp::ClientApp()
     //cookieable_schemes_.push_back("https");
 }
 
-void ClientApp::setMainWindow(Html5GuiDisplay *mainWindow_)
+void ClientApp::setMainWindow(CsoundQt *mainWindow_)
 {
     mainWindow = mainWindow_;
+    csound = mainWindow->getEngine()->getCsound();
     //csound = mainWindow->getCsound();
 }
 
@@ -285,6 +287,10 @@ bool ClientApp::Execute(const CefString& name,
     // One hopes these are arranged in the most performant order.
     bool handled = false;
     int result = 0;
+    csound = mainWindow->getEngine()->getCsound();
+    if (csound == nullptr) {
+        return handled;
+    }
     if (name == "setControlChannel" && arguments.size() == 2) {
         std::string name = arguments.at(0)->GetStringValue().ToString();
         double value = arguments.at(1)->GetDoubleValue();
@@ -344,7 +350,7 @@ bool ClientApp::Execute(const CefString& name,
         handled = true;
     }
     if (name == "isPlaying" && arguments.size() == 0) {
-        ///retval = CefV8Value::CreateBool(mainWindow->isPlaying());
+        retval = CefV8Value::CreateBool(mainWindow->getEngine()->isRunning());
         handled = true;
     }
     if (!handled) {
@@ -352,4 +358,5 @@ bool ClientApp::Execute(const CefString& name,
     }
     return true;
 }
+
 

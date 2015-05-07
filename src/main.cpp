@@ -27,9 +27,8 @@
 #include "cefclient.h"
 #include "client_app.h"
 #include "client_handler.h"
-#include <windows.h>
 #include <tchar.h>
-
+#include <windows.h>
 
 namespace {
 
@@ -55,6 +54,7 @@ BOOL IsWow64() {
 
 int main(int argc, char *argv[])
 {
+#ifdef QCS_HTML5
     HINSTANCE hInstance = (HINSTANCE) GetModuleHandle(NULL);
     CefMainArgs main_args(hInstance);
     CefRefPtr<ClientApp> app(new ClientApp);
@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
     CefRefPtr<ClientHandler> g_handler(new ClientHandler());
     // Load flash system plug-in on Windows.
     CefLoadPlugins(IsWow64());
+#endif
     QStringList fileNames;
     QApplication qapp(argc, argv);
     QStringList args = qapp.arguments();
@@ -97,12 +98,17 @@ int main(int argc, char *argv[])
 	QTranslator translator;
 	translator.load(QString(":/translations/qutecsound_") + language);
     qapp.installTranslator(&translator);
-	CsoundQt * mw = new CsoundQt(fileNames);
-	splash->finish(mw);
+    CsoundQt *csoundQt = new CsoundQt(fileNames);
+    splash->finish(csoundQt);
 	delete splash;
-	mw->show();
-	filterObj.setMainWindow(mw);
+#ifdef QCS_HTML5
+    app->setMainWindow(csoundQt);
+#endif
+    csoundQt->show();
+    filterObj.setMainWindow(csoundQt);
     result = qapp.exec();
+#ifdef QCS_HTML5
     CefQuit();
+#endif
     return result;
 }

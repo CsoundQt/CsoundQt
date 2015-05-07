@@ -25,6 +25,7 @@
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
 # ##############################################################################
 
+DEFINES += NOMINMAX
 
 record_support {
 DEFINES += PERFTHREAD_RECORD # Requires Csound >= 6.04

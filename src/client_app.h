@@ -10,8 +10,7 @@
 #include "include/cef_base.h"
 #include "include/cef_app.h"
 #include "include/cef_v8.h"
-#include "client_app.h"
-#include "html5guidisplay.h"
+#include "qutecsound.h"
 #include <csound.h>
 
 class ClientApp : public CefApp,
@@ -114,10 +113,10 @@ public:
     };
     typedef std::set<CefRefPtr<RenderDelegate> > RenderDelegateSet;
     ClientApp();
-    virtual void setMainWindow(Html5GuiDisplay *csound);
+    virtual void setMainWindow(CsoundQt *csound);
 private:
     CSOUND *csound;
-    Html5GuiDisplay *mainWindow;
+    CsoundQt *mainWindow;
     // Creates all of the BrowserDelegate objects. Implemented in
     // client_app_delegates.
     static void CreateBrowserDelegates(BrowserDelegateSet& delegates);
@@ -199,7 +198,7 @@ private:
 
     // Schemes that will be registered with the global cookie manager.
     std::vector<CefString> cookieable_schemes_;
-    IMPLEMENT_REFCOUNTING(ClientApp);
+    IMPLEMENT_REFCOUNTING(ClientApp)
 };
 
 #endif  // CEFCLIENT_CLIENT_APP_H_
