@@ -92,7 +92,6 @@ public:
 	void setWidgetsText(QString text, int index = -1);
 	void setPresetsText(QString text, int index = -1);
 	void setOptionsText(QString text, int index = -1);
-
 	int getDocument(QString name = ""); // Returns document index. -1 if not current open
 	QString getSelectedText(int index = -1, int section = 0);
 	QString getCsd(int index);
@@ -105,7 +104,6 @@ public:
 	QString getOptionsText(int index);
 	QString getFileName(int index);
 	QString getFilePath(int index);
-
 	// Widgets
 	void setChannelValue(QString channel, double value, int index = -1);
 	double getChannelValue(QString channel, int index = -1);
@@ -113,7 +111,6 @@ public:
 	QString getChannelString(QString channel, int index = -1);
 	void setWidgetProperty(QString widgetid, QString property, QVariant value, int index= -1);
 	QVariant getWidgetProperty(QString widgetid, QString property, int index= -1);
-
 	QString createNewLabel(int x = -1, int y = -1, QString channel = QString(), int index = -1);
 	QString createNewDisplay(int x = -1, int y = -1, QString channel = QString(), int index = -1);
 	QString createNewScrollNumber(int x = -1, int y = -1, QString channel = QString(), int index = -1);
@@ -130,23 +127,16 @@ public:
 	QString createNewScope(int x = -1, int y = -1, QString channel = QString(), int index = -1);
 	//    int popKeyPressEvent(); // return ASCII code of key press event for Csound or -1 if no event
 	//    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no
-
-
 	QStringList getWidgetUuids(int index = -1);
 	QStringList listWidgetProperties(QString widgetid, int index = -1); // widgetid can be eihter uuid (prefered) or channel
 	bool destroyWidget(QString widgetid, int  index = -1);
 	void loadPreset(int preSetIndex, int index);
-
 	//Live Event Sheets
 	EventSheet* getSheet(int index = -1, int sheetIndex = -1);
 	EventSheet* getSheet(int index = -1, QString sheetName = QString());
-
 	// Engine
 	CsoundEngine *getEngine(int index = -1);
-
 	OpEntryParser *m_opcodeTree;
-
-
 public slots:
 	int loadFile(QString fileName, bool runNow = false);
 	int loadFileFromSystem(QString fileName); // checks for m_options->autoPlay, if the function is called from other class

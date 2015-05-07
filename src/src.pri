@@ -172,6 +172,7 @@ html5 {
     HEADERS += src/client_transfer.h
     HEADERS += src/html5guidisplay.h
     HEADERS += src/message_event.h
+    HEADERS += src/qcefwebview.h
     SOURCES += src/cefclient.cpp
     SOURCES += src/cefclient_qt.cpp
     SOURCES += src/client_app.cpp
@@ -183,6 +184,7 @@ html5 {
     SOURCES += src/client_transfer.cpp
     SOURCES += src/html5guidisplay.cpp
     SOURCES += src/message_event.cpp
+    SOURCES += src/qcefwebview.cpp
     message("Including CEF related files for html5 build.")
 }
 
