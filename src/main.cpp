@@ -67,8 +67,8 @@ int main(int argc, char *argv[])
     }
     CefSettings settings;
     settings.multi_threaded_message_loop = true;
-    // Don't change this while developing, there will be trouble with multiple
-    // inconsistent executables otherwise.
+    // Currently we run in a single process, otherwise Csound is not
+    // available to the ClientApp class. This will have to be changed.
     settings.single_process = true;
     // TODO: Make this configurable.
     CefString(&settings.cache_path).FromASCII("c:\\temp\\cache");

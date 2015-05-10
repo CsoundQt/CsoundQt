@@ -72,16 +72,7 @@ public:
                                       CefRefPtr<CefFrame> frame,
                                       CefRefPtr<CefV8Context> context)
         {
-            CefRefPtr<CefV8Value> global = context->GetGlobal();
-            CefRefPtr<CefV8Value> jcsound = CefV8Value::CreateObject(0);
-            global->SetValue("csound", jcsound, V8_PROPERTY_ATTRIBUTE_NONE);
-            jcsound->SetValue("setControlValue",
-                              CefV8Value::CreateFunction("setControlValue", app),
-                              V8_PROPERTY_ATTRIBUTE_NONE);
-            jcsound->SetValue("getVersion",
-                              CefV8Value::CreateFunction("getVersion", app),
-                              V8_PROPERTY_ATTRIBUTE_NONE);
-            std::cout << "app:" << &app << std::endl;
+            qDebug() << "RenderDelegate::OnContextCreated:" << &app;
         }
         virtual void OnContextReleased(CefRefPtr<ClientApp> app,
                                        CefRefPtr<CefBrowser> browser,
@@ -142,8 +133,6 @@ public:
         } else {
             return 0;
         }
-
-
     }
 private:
     CsoundQt *mainWindow;
