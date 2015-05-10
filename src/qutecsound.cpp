@@ -40,7 +40,7 @@
 #include "midihandler.h"
 #include "midilearndialog.h"
 #include "livecodeeditor.h"
-#include "html5guidisplay.h"
+#include "csoundhtmlview.h"
 
 #ifdef QCS_PYTHONQT
 #include "pythonconsole.h"
@@ -147,7 +147,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
             this, SLOT(virtualMidiIn(QVariant, QVariant, QVariant, QVariant)));
 #endif
 #ifdef QCS_HTML5
-    m_html5Display = new Html5GuiDisplay(this);
+    m_html5Display = new CsoundHtmlView(this);
     addDockWidget(Qt::LeftDockWidgetArea, m_html5Display);
     m_html5Display->setObjectName("HTML5 Gui");
     m_html5Display->setWindowTitle(tr("HTML5 Gui"));
@@ -307,9 +307,12 @@ void CsoundQt::utilitiesMessageCallback(CSOUND *csound,
 
 void CsoundQt::changePage(int index)
 {
-    // Previous page has already been destroyed here (if it was closed)
-    // Remember this is called when opening, closing or switching tabs (including loading)
-
+    // Previous page has already been destroyed here (if it was closed).
+    // Remember this is called when opening, closing or switching tabs (including loading).
+    // First thing to do is blank the HTML page to prevent misfired API calls.
+#ifdef QCS_HTML5
+    //m_html5Display->stop();
+#endif
     if (index < 0) { // No tabs left
         qDebug() << "CsoundQt::changePage index < 0";
         return;
@@ -371,6 +374,9 @@ void CsoundQt::changePage(int index)
             curCsdPage = curPage;
         }
     }
+#ifdef QCS_HTML5
+    //m_html5Display->play(documentPages[curPage]);
+#endif
     m_inspectorNeedsUpdate = true;
 }
 
@@ -1358,6 +1364,10 @@ void CsoundQt::setCurrentAudioFile(const QString fileName)
 
 void CsoundQt::play(bool realtime, int index)
 {
+    qDebug() << "CsoundQt::play()...";
+#ifdef QCS_HTML5
+    m_html5Display->stop();
+#endif
     // TODO make csound pause if it is already running
     int oldPage = curPage;
     if (index == -1) {
@@ -1447,9 +1457,6 @@ void CsoundQt::play(bool realtime, int index)
     else {
         runFileName1 = fileName;
     }
-#ifdef QCS_HTML5
-    m_html5Display->play(documentPages[curPage]);
-#endif
     runFileName2 = documentPages[curPage]->getCompanionFileName();
     m_options->fileName1 = runFileName1;
     m_options->fileName2 = runFileName2;
@@ -1496,6 +1503,9 @@ void CsoundQt::play(bool realtime, int index)
             }
         }
     }
+#ifdef QCS_HTML5
+    m_html5Display->play(documentPages[curPage]);
+#endif
     curPage = oldPage;
 }
 
@@ -1575,6 +1585,9 @@ void CsoundQt::stop(int index)
 {
     // Must guarantee that csound has stopped when it returns
     qDebug() <<"CsoundQt::stop() " <<  index;
+#ifdef QCS_HTML5
+    m_html5Display->stop();
+#endif
     int docIndex = index;
     if (docIndex == -1) {
         docIndex = curPage;
@@ -2383,7 +2396,9 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showDebugAct->setShortcut(tr("F5"));
 #endif
     showVirtualKeyboardAct->setShortcut(tr("Ctrl+Shift+V"));
+#ifdef QCS_HTML5
     showHtml5Act->setShortcut(tr("Ctrl+Shift+H"));
+#endif
     splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
     midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
     createCodeGraphAct->setShortcut(tr("Alt+4"));
