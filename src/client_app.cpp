@@ -14,6 +14,120 @@
 
 namespace {
 
+class CsoundV8Handler : public CefV8Handler
+{
+    CsoundQt *csoundQt;
+public:
+    CsoundV8Handler(CsoundQt *csoundQt_) : csoundQt(csoundQt_){};
+    CSOUND* csoundApiEnabled()
+    {
+        CefRefPtr<CefV8Context> currentContext = CefV8Context::GetCurrentContext();
+        if (!currentContext) {
+            return 0;
+        }
+        if (csoundQt == 0) {
+            return 0;
+        }
+        CefRefPtr<CefV8Value> global = currentContext->GetGlobal();
+        auto jcsound = global->GetValue("csound");
+        if (!jcsound) {
+            return 0;
+        }
+        auto csoundEngine = csoundQt->getEngine();
+        if (csoundEngine == 0){
+            return 0;
+        }
+        CSOUND *csound = csoundEngine->getCsound();
+        if (csound == 0) {
+            return 0;
+        }
+        if (csoundEngine->isRunning()) {
+            return csound;
+        } else {
+            return 0;
+        }
+    }
+    virtual bool Execute(const CefString& name,
+                         CefRefPtr<CefV8Value> object,
+                         const CefV8ValueList& arguments,
+                         CefRefPtr<CefV8Value>& retval,
+                         CefString& exception) OVERRIDE
+    {
+        CSOUND *csound = csoundApiEnabled();
+        if (name == "isPlaying" && arguments.size() == 0) {
+            retval = CefV8Value::CreateBool(csound != 0);
+            return true;
+        }
+        if (csound == 0) {
+            return false;
+        }
+        if (name == "setControlChannel" && arguments.size() == 2) {
+            std::string name = arguments.at(0)->GetStringValue().ToString();
+            double value = arguments.at(1)->GetDoubleValue();
+            csoundSetControlChannel(csound, name.c_str(), value);
+            return true;
+        }
+        if (name == "inputMessage" && arguments.size() == 1) {
+            std::string lines = arguments.at(0)->GetStringValue().ToString();
+            csoundInputMessage(csound, lines.c_str());
+            return true;
+        }
+        if (name == "getControlChannel" && arguments.size() == 1) {
+            std::string name = arguments.at(0)->GetStringValue().ToString();
+            int result = 0;
+            double value = csoundGetControlChannel(csound, name.c_str(), &result);
+            retval = CefV8Value::CreateDouble(value);
+            return true;
+        }
+        if (name == "message" && arguments.size() == 1) {
+            std::string text = arguments.at(0)->GetStringValue().ToString();
+            csoundMessage(csound, text.c_str());
+            return true;
+        }
+        if (name == "readScore" && arguments.size() == 1) {
+            std::string code = arguments.at(0)->GetStringValue().ToString();
+            csoundReadScore(csound, code.c_str());
+            return true;
+        }
+        if (name == "getVersion" && arguments.size() == 0) {
+            auto version = csoundGetVersion();
+            retval = CefV8Value::CreateInt(version);
+            return true;
+        }
+        if (name == "compileOrc" && arguments.size() == 1) {
+            std::string code = arguments.at(0)->GetStringValue().ToString();
+            int result = csoundCompileOrc(csound, code.c_str());
+            retval = CefV8Value::CreateInt(result);
+            return true;
+        }
+        if (name == "evalCode" && arguments.size() == 1) {
+            std::string code = arguments.at(0)->GetStringValue().ToString();
+            double value = csoundEvalCode(csound, code.c_str());
+            retval = CefV8Value::CreateDouble(value);
+            return true;
+        }
+        if (name == "getSr" && arguments.size() == 0) {
+            double sr = csoundGetSr(csound);
+            retval = CefV8Value::CreateDouble(sr);
+            return true;
+        }
+        if (name == "getKsmps" && arguments.size() == 0) {
+            uint32_t ksmps = csoundGetKsmps(csound);
+            retval = CefV8Value::CreateInt(ksmps);
+            return true;
+        }
+        if (name == "getNchnls" && arguments.size() == 0) {
+            uint32_t nchnls = csoundGetNchnls(csound);
+            retval = CefV8Value::CreateInt(nchnls);
+            return true;
+        }
+        //exception = "Invalid method arguments.";
+        return false;
+    }
+    // Provide the reference counting implementation for this class.
+    IMPLEMENT_REFCOUNTING(CsoundV8Handler);
+};
+
 // Handles the native implementation for the client_app extension.
 class ClientAppExtensionHandler : public CefV8Handler {
 public:
@@ -182,6 +296,7 @@ void ClientApp::OnContextCreated(CefRefPtr<CefBrowser> browser,
     qDebug() << "CreateObject jcsound:" << jcsound;
     global->SetValue("csound", jcsound, V8_PROPERTY_ATTRIBUTE_NONE);
     jcsound->SetRethrowExceptions(true);
+    CefRefPtr<CsoundV8Handler> csoundV8Handler = new CsoundV8Handler(mainWindow);
     jcsound->SetValue("getVersion",
                       CefV8Value::CreateFunction("getVersion", this),
                       V8_PROPERTY_ATTRIBUTE_NONE);
