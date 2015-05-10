@@ -66,7 +66,9 @@ class EventSheet;
 class CsoundEngine;
 class MidiHandler;
 class MidiLearnDialog;
-class Html5GuiDisplay;
+#ifdef QCS_HTML5
+class CsoundHtmlView;
+#endif
 
 class CsoundQt:public QMainWindow
 {
@@ -306,7 +308,7 @@ private:
 	QQuickWidget *m_virtualKeyboard;
 #endif
 #ifdef QCS_HTML5
-	Html5GuiDisplay *m_html5Display;
+	CsoundHtmlView *m_html5Display;
 #endif
 	//    QString m_widgetClipboard;
 	Inspector *m_inspector;

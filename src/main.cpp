@@ -23,10 +23,12 @@
 #include <QApplication>
 #include <QSplashScreen>
 #include "qutecsound.h"
+#ifdef QCS_HTML5
 #include "include/cef_base.h"
 #include "cefclient.h"
 #include "client_app.h"
 #include "client_handler.h"
+#endif
 #include <tchar.h>
 #include <windows.h>
 
@@ -54,11 +56,12 @@ BOOL IsWow64() {
 
 int main(int argc, char *argv[])
 {
+    int result = 0;
 #ifdef QCS_HTML5
     HINSTANCE hInstance = (HINSTANCE) GetModuleHandle(NULL);
     CefMainArgs main_args(hInstance);
     CefRefPtr<ClientApp> app(new ClientApp);
-    int result = CefExecuteProcess(main_args, app.get(), 0);
+    result = CefExecuteProcess(main_args, app.get(), 0);
     if (result >= 0) {
         return result;
     }

@@ -79,7 +79,8 @@ HEADERS = "src/about.h" \
     src/debugpanel.h \
     src/livecodeeditor.h \
     src/newbreakpointdialog.h \
-    $$PWD/html5guidisplay.h
+    $$PWD/html5guidisplay.h \
+    $$PWD/csoundhtmlview.h
 
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
@@ -137,7 +138,8 @@ SOURCES = "src/about.cpp" \
     src/midilearndialog.cpp \
     src/debugpanel.cpp \
     src/livecodeeditor.cpp \
-    src/newbreakpointdialog.cpp
+    src/newbreakpointdialog.cpp \
+    $$PWD/csoundhtmlview.cpp
 
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
@@ -170,7 +172,6 @@ html5 {
     HEADERS += src/client_handler_qt.h
     HEADERS += src/client_renderer.h
     HEADERS += src/client_transfer.h
-    HEADERS += src/html5guidisplay.h
     HEADERS += src/message_event.h
     HEADERS += src/qcefwebview.h
     SOURCES += src/cefclient.cpp
@@ -182,10 +183,33 @@ html5 {
     SOURCES += src/client_handler_qt.cpp
     SOURCES += src/client_renderer.cpp
     SOURCES += src/client_transfer.cpp
-    SOURCES += src/html5guidisplay.cpp
     SOURCES += src/message_event.cpp
     SOURCES += src/qcefwebview.cpp
     message("Including CEF related files for html5 build.")
+}
+!html5 {
+    HEADERS -= src/cefclient.h
+    HEADERS -= src/cefclient_qt.h
+    HEADERS -= src/client_app.h
+    HEADERS -= src/client_binding.h
+    HEADERS -= src/client_handler.h
+    HEADERS -= src/client_handler_qt.h
+    HEADERS -= src/client_renderer.h
+    HEADERS -= src/client_transfer.h
+    HEADERS -= src/message_event.h
+    HEADERS -= src/qcefwebview.h
+    SOURCES -= src/cefclient.cpp
+    SOURCES -= src/cefclient_qt.cpp
+    SOURCES -= src/client_app.cpp
+    SOURCES -= src/client_app_delegates.cpp
+    SOURCES -= src/client_binding.cpp
+    SOURCES -= src/client_handler.cpp
+    SOURCES -= src/client_handler_qt.cpp
+    SOURCES -= src/client_renderer.cpp
+    SOURCES -= src/client_transfer.cpp
+    SOURCES -= src/message_event.cpp
+    SOURCES -= src/qcefwebview.cpp
+    message("Removing CEF related files for non-html5 build.")
 }
 
 LIBS += $${LCSOUND} \

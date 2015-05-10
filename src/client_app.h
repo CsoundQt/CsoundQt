@@ -12,6 +12,7 @@
 #include "include/cef_v8.h"
 #include "qutecsound.h"
 #include <csound.h>
+#include "csoundengine.h"
 
 class ClientApp : public CefApp,
         public CefResourceBundleHandler,
@@ -114,8 +115,37 @@ public:
     typedef std::set<CefRefPtr<RenderDelegate> > RenderDelegateSet;
     ClientApp();
     virtual void setMainWindow(CsoundQt *csound);
+    CSOUND* csoundApiEnabled()
+    {
+        CefRefPtr<CefV8Context> currentContext = CefV8Context::GetCurrentContext();
+        if (!currentContext) {
+            return 0;
+        }
+        if (mainWindow == 0) {
+            return 0;
+        }
+        CefRefPtr<CefV8Value> global = currentContext->GetGlobal();
+        auto jcsound = global->GetValue("csound");
+        if (!jcsound) {
+            return 0;
+        }
+        auto csoundEngine = mainWindow->getEngine();
+        if (csoundEngine == 0){
+            return 0;
+        }
+        CSOUND *csound = csoundEngine->getCsound();
+        if (csound == 0) {
+            return 0;
+        }
+        if (csoundEngine->isRunning()) {
+            return csound;
+        } else {
+            return 0;
+        }
+
+
+    }
 private:
-    CSOUND *csound;
     CsoundQt *mainWindow;
     // Creates all of the BrowserDelegate objects. Implemented in
     // client_app_delegates.
