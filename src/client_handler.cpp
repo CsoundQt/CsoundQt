@@ -188,11 +188,8 @@ bool ClientHandler::OnBeforePopup(CefRefPtr<CefBrowser> browser,
   }
   return false;
 }
-// Handler is global and has only one browser that is a child window;
-// This seems wrong and may be my problem.
-// I gave each QCefWebView its own "g_handler" and that definitely helps,
-// but the html5 browser is painting itself offset from its parent frame
-// until resized.
+// Whichever browser is first created is the "main" one.
+
 void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
   REQUIRE_UI_THREAD();
   base::AutoLock lock_scope(lock_);
@@ -207,7 +204,6 @@ void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
     // Add to the list of popup browsers.
     m_PopupBrowsers.push_back(browser);
   }
-
   m_BrowserCount++;
 }
 
@@ -219,12 +215,10 @@ bool ClientHandler::DoClose(CefRefPtr<CefBrowser> browser) {
   // process.
   if (m_BrowserId == browser->GetIdentifier()) {
     // Notify the browser that the parent window is about to close.
-    //browser->GetHost()->ParentWindowWillClose();
-
+    ///browser->ParentWindowWillClose();
     // Set a flag to indicate that the window close should be allowed.
     m_bIsClosing = true;
   }
-
   // Allow the close. For windowed browsers this will result in the OS close
   // event being sent.
   return false;
