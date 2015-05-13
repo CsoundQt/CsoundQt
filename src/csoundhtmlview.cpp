@@ -28,8 +28,9 @@ CsoundHtmlView::~CsoundHtmlView()
 
 QString getElement(const QString &text, const QString &tag)
 {
-    QString element = text.section("<" + tag + ">", 1, 1);
-    element = element.section("</" + tag + ">", 0, 0);
+    QString::SectionFlags sectionflags = QString::SectionIncludeLeadingSep | QString::SectionIncludeTrailingSep | QString::SectionCaseInsensitiveSeps;
+    QString element = text.section("<" + tag, 1, 1, sectionflags);
+    element = element.section("</" + tag + ">", 0, 0, sectionflags);
     return element;
 }
 
@@ -37,13 +38,13 @@ QString getElement(const QString &text, const QString &tag)
  * @brief Html5GuiDisplay.play
  * @param documentPage
  *
- * Save the <CsHtml5> element, if it exists,
+ * Save the <html> element, if it exists,
  * to filename xxx.csd.html, and load it into the CEF web view.
  */
 void CsoundHtmlView::play(DocumentPage *documentPage_)
 {
     documentPage = documentPage_;
-    qDebug() << "Html5GuiDisplay::play()...";
+    qDebug() << "CsoundHtmlView::play()...";
     auto text = documentPage.load()->getFullText();
     auto filename = documentPage.load()->getFileName();
     QFile csdfile(filename);
@@ -51,7 +52,7 @@ void CsoundHtmlView::play(DocumentPage *documentPage_)
     QTextStream out(&csdfile);
     out << text;
     csdfile.close();
-    auto html = getElement(text, "CsHtml5");
+    auto html = getElement(text, "html");
     if (html.size() > 0) {
         QString htmlfilename = filename + ".html";
         QFile htmlfile(htmlfilename);
