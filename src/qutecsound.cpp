@@ -147,10 +147,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
             this, SLOT(virtualMidiIn(QVariant, QVariant, QVariant, QVariant)));
 #endif
 #ifdef QCS_HTML5
-    m_html5Display = new CsoundHtmlView(this);
-    addDockWidget(Qt::LeftDockWidgetArea, m_html5Display);
-    m_html5Display->setObjectName("HTML5 Gui");
-    m_html5Display->setWindowTitle(tr("HTML5 Gui"));
+    csoundHtmlView = new CsoundHtmlView(this);
+    addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
+    csoundHtmlView->setObjectName("HTML5 Gui");
+    csoundHtmlView->setWindowTitle(tr("HTML5 Gui"));
 #endif
 
     createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
@@ -1366,7 +1366,7 @@ void CsoundQt::play(bool realtime, int index)
 {
     qDebug() << "CsoundQt::play()...";
 #ifdef QCS_HTML5
-    m_html5Display->stop();
+    csoundHtmlView->stop();
 #endif
     // TODO make csound pause if it is already running
     int oldPage = curPage;
@@ -1504,7 +1504,7 @@ void CsoundQt::play(bool realtime, int index)
         }
     }
 #ifdef QCS_HTML5
-    m_html5Display->play(documentPages[curPage]);
+    csoundHtmlView->play(documentPages[curPage]);
 #endif
     curPage = oldPage;
 }
@@ -1586,7 +1586,7 @@ void CsoundQt::stop(int index)
     // Must guarantee that csound has stopped when it returns
     qDebug() <<"CsoundQt::stop() " <<  index;
 #ifdef QCS_HTML5
-    m_html5Display->stop();
+    csoundHtmlView->stop();
 #endif
     int docIndex = index;
     if (docIndex == -1) {
@@ -1867,7 +1867,7 @@ void CsoundQt::showVirtualKeyboard(bool show)
 void CsoundQt::showHtml5Gui(bool show)
 {
 #ifdef QCS_HTML5
-    m_html5Display->setVisible(show);
+    csoundHtmlView->setVisible(show);
 #endif
 }
 
@@ -2933,7 +2933,7 @@ void CsoundQt::createActions()
     showHtml5Act->setStatusTip(tr("Show HTML5 Interface"));
     showHtml5Act->setShortcutContext(Qt::ApplicationShortcut);
     connect(showHtml5Act, SIGNAL(toggled(bool)), this, SLOT(showHtml5Gui(bool)));
-    connect(m_html5Display, SIGNAL(Close(bool)), showHtml5Act, SLOT(setChecked(bool)));
+    connect(csoundHtmlView, SIGNAL(Close(bool)), showHtml5Act, SLOT(setChecked(bool)));
 #endif
     splitViewAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Split View"), this);
     splitViewAct->setCheckable(true);
