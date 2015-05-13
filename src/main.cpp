@@ -28,6 +28,7 @@
 #include "cefclient.h"
 #include "client_app.h"
 #include "client_handler.h"
+#include "csoundhtmlview.h"
 #endif
 
 #ifdef WIN32

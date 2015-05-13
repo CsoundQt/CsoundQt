@@ -308,8 +308,9 @@ private:
 	QQuickWidget *m_virtualKeyboard;
 #endif
 #ifdef QCS_HTML5
-	CsoundHtmlView *m_html5Display;
+public: CsoundHtmlView *csoundHtmlView;
 #endif
+private:
 	//    QString m_widgetClipboard;
 	Inspector *m_inspector;
 #ifdef QCS_DEBUGGER

@@ -34,8 +34,12 @@ CefRefPtr<ClientHandler> g_handler;
 
 int CefInit(int &argc, char **argv) {
     qDebug() << __FUNCTION__;
+#ifdef WIN32
     HINSTANCE hInstance = (HINSTANCE) GetModuleHandle(NULL);
     CefMainArgs main_args(hInstance);
+#else
+    CefMainArgs main_args(argc, argv);
+#endif
     CefRefPtr<ClientApp> app(new ClientApp);
     //int exit_code = CefExecuteProcess(main_args, app.get(), 0);
     int exit_code = CefExecuteProcess(main_args, app.get(), 0);
@@ -49,6 +53,7 @@ int CefInit(int &argc, char **argv) {
     return -1;
 }
 
+#ifdef WIN32
 void CefLoadPlugins(bool isWow64) {
     // Adobe Flash Player plug-in:
     // https://support.google.com/chrome/answer/108086
@@ -60,6 +65,7 @@ void CefLoadPlugins(bool isWow64) {
     CefAddWebPluginDirectory(flash_plugin_dir);
     CefRefreshWebPlugins();
 }
+#endif
 
 void CefQuit() {
     qDebug() << __FUNCTION__;
