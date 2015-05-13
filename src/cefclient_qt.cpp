@@ -7,10 +7,10 @@ extern CefRefPtr<ClientHandler> g_handler;
 
 void CefQuitUntilAllBrowserClosed() {
   qDebug() << __FUNCTION__ << __LINE__;
-  ///if (ClientHandler::m_BrowserCount > 0 && g_handler.get()) {
-  ///  g_handler->CloseAllBrowsers(false);
-  ///  // TODO Wait until all browser windows have closed.
-  ///}
+  if (ClientHandler::m_BrowserCount > 0 && g_handler.get()) {
+    g_handler->CloseAllBrowsers(false);
+    // TODO Wait until all browser windows have closed.
+  }
   qDebug() << __FUNCTION__ << __LINE__;
   CefQuit();
 }

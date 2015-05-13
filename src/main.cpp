@@ -61,8 +61,12 @@ int main(int argc, char *argv[])
 {
     int result = 0;
 #ifdef QCS_HTML5
-    HINSTANCE hInstance = (HINSTANCE) GetModuleHandle(NULL);
-    CefMainArgs main_args(hInstance);
+#ifdef WIN32
+    HINSTANCE moduleHandle = (HINSTANCE) GetModuleHandle(NULL);
+    CefMainArgs main_args(moduleHandle);
+#else
+    CefMainArgs main_args(argc, argv);
+#endif
     CefRefPtr<ClientApp> app(new ClientApp);
     result = CefExecuteProcess(main_args, app.get(), 0);
     if (result >= 0) {
@@ -71,10 +75,9 @@ int main(int argc, char *argv[])
     CefSettings settings;
     settings.multi_threaded_message_loop = true;
     // Currently we run in a single process, otherwise Csound is not
-    // available to the ClientApp class. This will have to be changed.
+    // available to the ClientApp class. This may have to be changed.
     settings.single_process = true;
-    // TODO: Make this configurable.
-    CefString(&settings.cache_path).FromASCII("c:\\temp\\cache");
+    CefString(&settings.cache_path).FromASCII(QDir::tempPath().toLocal8Bit());
     CefInitialize(main_args, settings, app.get(), 0);
     CefRefPtr<ClientHandler> g_handler(new ClientHandler());
     // Load flash system plug-in on Windows.
