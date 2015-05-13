@@ -29,6 +29,8 @@
 #include "client_app.h"
 #include "client_handler.h"
 #endif
+
+#ifdef WIN32
 #include <tchar.h>
 #include <windows.h>
 
@@ -53,6 +55,7 @@ BOOL IsWow64() {
   }
   return bIsWow64;
 }
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -75,7 +78,9 @@ int main(int argc, char *argv[])
     CefInitialize(main_args, settings, app.get(), 0);
     CefRefPtr<ClientHandler> g_handler(new ClientHandler());
     // Load flash system plug-in on Windows.
+#ifdef WIN32
     CefLoadPlugins(IsWow64());
+#endif
 #endif
     QStringList fileNames;
     QApplication qapp(argc, argv);
