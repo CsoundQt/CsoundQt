@@ -3,7 +3,7 @@
 #include "message_event.h"
 #include "client_app_js.h"
 
-extern CefRefPtr<ClientHandler> g_handler;
+extern CefRefPtr<ClientHandler> global_client_handler;
 
 namespace client_binding {
 
@@ -22,23 +22,17 @@ class ProcessMessageDelegate : public ClientHandler::ProcessMessageDelegate {
       CefProcessId source_process,
       CefRefPtr<CefProcessMessage> message) OVERRIDE {
     CefString name = message->GetName();
-
     if (name == JS_FUNC_SENDMESSAGE) {
-
-      if (g_handler.get() && g_handler->listener()) {
-        CefRefPtr<CefListValue> args = message->GetArgumentList();
-        QVariantList message_args;
-        cefclient::SetList(args, message_args);
-
-        QString message_name = QString::fromStdWString(name.ToWString());
-        MessageEvent* e = new MessageEvent(message_name, message_args);
-        g_handler->listener()->OnMessageEvent(e);
-
-        return true;
-      }
-
+//      if (global_client_handler.get() && global_client_handler->listener()) {
+//        CefRefPtr<CefListValue> args = message->GetArgumentList();
+//        QVariantList message_args;
+//        cefclient::SetList(args, message_args);
+//        QString message_name = QString::fromStdWString(name.ToWString());
+//        MessageEvent* e = new MessageEvent(message_name, message_args);
+//        global_client_handler->listener()->OnMessageEvent(e);
+//        return true;
+//      }
     }
-
     return false;
   }
 
