@@ -30,7 +30,7 @@ void CefInitSettings(CefSettings& settings) {
 
 }  // namespace
 
-CefRefPtr<ClientHandler> g_handler;
+//CefRefPtr<ClientHandler> global_client_handler;
 
 int CefInit(int &argc, char **argv) {
     qDebug() << __FUNCTION__;
@@ -49,7 +49,7 @@ int CefInit(int &argc, char **argv) {
     CefSettings settings;
     CefInitSettings(settings);
     CefInitialize(main_args, settings, app.get(), 0);
-    g_handler = new ClientHandler();
+    //global_client_handler = new ClientHandler();
     return -1;
 }
 
