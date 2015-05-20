@@ -25,6 +25,9 @@
 #include "qutecsound.h"
 #ifdef QCS_HTML5
 #include "include/cef_base.h"
+#ifdef WIN32
+#include "include/cef_sandbox_win.h"
+#endif
 #include "cefclient.h"
 #include "client_app.h"
 #include "client_handler.h"
@@ -66,24 +69,34 @@ int main(int argc, char *argv[])
 {
     int result = 0;
 #ifdef QCS_HTML5
+    void* sandbox_info = 0;
 #ifdef WIN32
+#if defined(CEF_USE_SANDBOX)
+    // Manage the life span of the sandbox information object. This is necessary
+    // for sandbox support on Windows. See cef_sandbox_win.h for complete details.
+    CefScopedSandboxInfo scoped_sandbox;
+    sandbox_info = scoped_sandbox.sandbox_info();
+#endif
     HINSTANCE moduleHandle = (HINSTANCE) GetModuleHandle(NULL);
     CefMainArgs main_args(moduleHandle);
 #else
     CefMainArgs main_args(argc, argv);
 #endif
     CefRefPtr<ClientApp> app(new ClientApp);
-    result = CefExecuteProcess(main_args, app.get(), 0);
+    result = CefExecuteProcess(main_args, app.get(), sandbox_info);
     if (result >= 0) {
         return result;
     }
     CefSettings settings;
+#if !defined(CEF_USE_SANDBOX)
+    settings.no_sandbox = true;
+#endif
     settings.multi_threaded_message_loop = true;
     // Currently we run in a single process, otherwise Csound is not
     // available to the ClientApp class. This may have to be changed.
     settings.single_process = true;
     CefString(&settings.cache_path).FromASCII(QDir::tempPath().toLocal8Bit());
-    CefInitialize(main_args, settings, app.get(), 0);
+    CefInitialize(main_args, settings, app.get(), sandbox_info);
     // Load flash system plug-in on Windows.
 #ifdef WIN32
     CefLoadPlugins(IsWow64());
@@ -127,8 +140,8 @@ int main(int argc, char *argv[])
     qDebug() << "CsoundQt main will now return.";
     // At this point, I have done all I can to shut down cleanly, and the
     // sequence of CEF closing steps appears to be correct. But the only
-    // way to avoid a crash is still to force an exit. I could try running
-    // with the sandbox.
+    // way to avoid a crash is still to force an exit, and even that doesn't
+    // always work.
     exit(result);
 #endif
     return result;
