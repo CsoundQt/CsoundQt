@@ -32,6 +32,7 @@
 #include "client_app.h"
 #include "client_handler.h"
 #include "csoundhtmlview.h"
+#include <cstdlib>
 #include <QWaitCondition>
 
 QMutex mutex;
@@ -137,12 +138,12 @@ int main(int argc, char *argv[])
     result = qapp.exec();
 #ifdef QCS_HTML5
     CefQuit();
-    qDebug() << "CsoundQt main will now return.";
+    qDebug() << "CsoundQt main will now return:" << result;
     // At this point, I have done all I can to shut down cleanly, and the
     // sequence of CEF closing steps appears to be correct. But the only
     // way to avoid a crash is still to force an exit, and even that doesn't
     // always work.
-    exit(result);
+    _exit(result);
 #endif
     return result;
 }
