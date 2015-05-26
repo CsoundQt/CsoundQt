@@ -446,6 +446,9 @@ private:
 	QIcon modIcon;
 	QString currentAudioFile;
 	QString initialDir;
+
+	QMutex closemutex;
+
 #ifdef MACOSX_PRE_SNOW
 	MenuBarHandle menuBarHandle;
 #endif
