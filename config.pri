@@ -77,9 +77,12 @@ isEmpty(CSOUND_LIBRARY_DIR) {
     isEmpty(CSOUND_LIBRARY_DIR):error(A valid Csound library directory was not found.)
 }
 isEmpty(CSOUND_LIB) {
-    for(csound_lib, DEFAULT_CSOUND_LIBS):exists($${CSOUND_LIBRARY_DIR}/$${csound_lib}) {
-        CSOUND_LIB = $${csound_lib}
-        break()
+    for(csound_lib, DEFAULT_CSOUND_LIBS) {
+    	message(Searching $${CSOUND_LIBRARY_DIR}/$${csound_lib})
+	exists($${CSOUND_LIBRARY_DIR}/$${csound_lib}) {
+	    CSOUND_LIB = $${csound_lib}
+            break()
+	}
     }
     isEmpty(CSOUND_LIB):error(A valid csound library was not found.)
 }
