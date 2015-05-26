@@ -227,4 +227,6 @@ OTHER_FILES += \
     src/QML/VirtualKeyboard.qml \
     src/QML/Controls.qml
 
+# Needed for correct deployment on OS X
 QML_IMPORT_PATH =src/QML
+QML2_IMPORT_PATH =src/QML
