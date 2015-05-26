@@ -170,7 +170,11 @@ WidgetLayout::~WidgetLayout()
 	layoutMutex.unlock();
 	while (closing == 1) {
 		qApp->processEvents();
-		QThread::usleep(10000);
+		#ifdef USE_QT5
+		  QThread::usleep(10000);
+		#else
+		  usleep(10000);
+		#endif
 	}
 	clearGraphs();  // To free memory from curves.
 }

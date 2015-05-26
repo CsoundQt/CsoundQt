@@ -19,7 +19,7 @@ DEFAULT_RTMIDI_DIRS += $${DEFAULT_RTMIDI_DIRNAME} \
 
 exists(config.user.pri) {
     include(config.user.pri)
-    !no_messages:message(... config.user.pri found)
+    message(... config.user.pri found)
 }
 !no_messages {
 	message()
@@ -214,3 +214,32 @@ exists (src/res/linux/QuteApp_d) :CONFIG += quteapp_d
 }
 
 }
+
+html5 {
+message ("Configuring for HTML5 build.")
+message("All HTML5 configuration is via environment variable CEF_HOME.")
+message("This points to the installation directory, not the source directory.")
+
+CEF_INCLUDE_DIR = $(CEF_HOME)
+debug {
+CEF_LIB = $$(CEF_HOME)\\Debug\\libcef.lib
+#CEF_LIB += $$(CEF_HOME)\\Debug\\cef_sandbox.lib
+CEF_WRAPPER_LIB = $$(CEF_HOME)\\out\\Debug\\lib\\libcef_dll_wrapper.lib
+}
+release {
+CEF_LIB = $$(CEF_HOME)\\Release\\libcef.lib
+#CEF_LIB += $$(CEF_HOME)\\Release\\cef_sandbox.lib
+CEF_WRAPPER_LIB = $$(CEF_HOME)\\out\\Release\\lib\\libcef_dll_wrapper.lib
+}
+INCLUDEPATH += $${CEF_INCLUDE_DIR}
+LIBS += $${CEF_LIB}
+LIBS += $${CEF_WRAPPER_LIB}
+DEFINES += QCS_HTML5
+#DEFINES += CEF_USE_SANDBOX
+LIBS += user32.lib
+
+win32-msvc2013:QMAKE_CXXFLAGS += -ID:\\msys\\local\\include -DSUB_PROCESS_DISABLED=1 /Zi
+win32-msvc2013:QMAKE_LFLAGS += /DEBUG /OPT:REF /OPT:ICF /INCREMENTAL:NO
+
+}
+
