@@ -26,7 +26,6 @@
 #include "documentpage.h"
 #include "highlighter.h"
 #include "inspector.h"
-#include <mutex>
 #include "opentryparser.h"
 #include "options.h"
 #include "qutecsound.h"
@@ -435,8 +434,6 @@ void CsoundQt::statusBarMessage(QString message)
     statusBar()->showMessage(message.replace("<br />", " "));
 }
 
-std::mutex closemutex;
-
 void CsoundQt::closeEvent(QCloseEvent *event)
 {
     qDebug() << __FUNCTION__;
@@ -484,7 +481,7 @@ void CsoundQt::closeEvent(QCloseEvent *event)
 #ifdef QCS_HTML5
     {
         /// This call is crashing, we don't see step 2 b. Need critical section?
-        std::lock_guard<std::mutex> critical_section(closemutex);
+		QMutexLocker locker(&closemutex);
         csoundHtmlView->close();
         if (!csoundHtmlView->webView->qcef_client_handler->IsClosing()) {
             event->ignore();
