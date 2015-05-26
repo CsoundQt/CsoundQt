@@ -21,6 +21,16 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     layout()->setMargin(0);
 }
 
+void CsoundHtmlView::closeEvent(QCloseEvent *event)
+{
+    qDebug() << __FUNCTION__;
+    if (webView) {
+        webView->close();
+    }
+}
+
+
+
 CsoundHtmlView::~CsoundHtmlView()
 {
     delete ui;
@@ -70,12 +80,12 @@ void CsoundHtmlView::play(DocumentPage *documentPage_)
 void CsoundHtmlView::stop()
 {
     documentPage = 0;
-    qDebug() << "Html5GuiDisplay::stop()...";
+    qDebug() << "CsoundHtmlView::stop()...";
 }
 
 void CsoundHtmlView::loadFromUrl(const QUrl &url)
 {
-    qDebug() << "Html5GuiDisplay::loadFromUrl()...";
+    qDebug() << "CsoundHtmlView::loadFromUrl()...";
     if(webView != 0) {
         //webView->evaluateJavaScript("debugger;");
         webView->loadFromUrl(url);

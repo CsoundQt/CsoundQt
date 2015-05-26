@@ -26,6 +26,7 @@
 #include "documentpage.h"
 #include "highlighter.h"
 #include "inspector.h"
+#include <mutex>
 #include "opentryparser.h"
 #include "options.h"
 #include "qutecsound.h"
@@ -58,6 +59,12 @@
 static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.bat";
 #else
 static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
+#endif
+
+#ifdef QCS_HTML5
+extern QMutex mutex;
+extern QWaitCondition wait_for_browsers_to_close;
+//extern CefRefPtr<ClientHandler> global_client_handler;
 #endif
 
 
@@ -428,8 +435,11 @@ void CsoundQt::statusBarMessage(QString message)
     statusBar()->showMessage(message.replace("<br />", " "));
 }
 
+std::mutex closemutex;
+
 void CsoundQt::closeEvent(QCloseEvent *event)
 {
+    qDebug() << __FUNCTION__;
     m_closing = true;
     this->showNormal();  // Don't store full screen size in preferences
     qApp->processEvents();
@@ -443,7 +453,6 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     writeSettings(files, lastIndex);
     showWidgetsAct->setChecked(false);
     showLiveEventsAct->setChecked(false); // These two give faster shutdown times as the panels don't have to be called up as the tabs close
-
     while (!documentPages.isEmpty()) {
         //    if (!saveCurrent()) {
         //      event->ignore();
@@ -466,16 +475,30 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     delete helpPanel;
     //  delete closeTabButton;
     delete m_options;
-
     m_closing = true;
     widgetPanel->close();
     m_inspector->close();
     m_console->close();
     documentTabs->close();
     m_console->close();
+#ifdef QCS_HTML5
+    {
+        /// This call is crashing, we don't see step 2 b. Need critical section?
+        std::lock_guard<std::mutex> critical_section(closemutex);
+        csoundHtmlView->close();
+        if (!csoundHtmlView->webView->qcef_client_handler->IsClosing()) {
+            event->ignore();
+            qDebug() << "CEF closing step 2 b 1: is closing:" << csoundHtmlView->webView->qcef_client_handler->IsClosing();
+            return;
+        }
+    }
+    qDebug() << "CEF closing step 8: is closing:" << csoundHtmlView->webView->qcef_client_handler->IsClosing();
+#endif
     delete m_opcodeTree;
-    event->accept();
+    m_opcodeTree = 0;
     close();
+    event->accept();
+    qDebug() << "CEF closing step 9.";
 }
 
 void CsoundQt::newFile()

@@ -79,7 +79,6 @@ HEADERS = "src/about.h" \
     src/debugpanel.h \
     src/livecodeeditor.h \
     src/newbreakpointdialog.h \
-    $$PWD/html5guidisplay.h \
     $$PWD/csoundhtmlview.h
 
 SOURCES = "src/about.cpp" \
@@ -139,7 +138,7 @@ SOURCES = "src/about.cpp" \
     src/debugpanel.cpp \
     src/livecodeeditor.cpp \
     src/newbreakpointdialog.cpp \
-    $$PWD/csoundhtmlview.cpp
+    src/csoundhtmlview.cpp
 
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \

@@ -2,24 +2,28 @@
 #include <QApplication>
 
 #include <QDebug>
+#include <QThread>
+#include <QWaitCondition>
 
-extern CefRefPtr<ClientHandler> g_handler;
+//extern CefRefPtr<ClientHandler> global_client_handler;
+extern QMutex mutex;
+extern QWaitCondition wait_for_browsers_to_close;
 
-void CefQuitUntilAllBrowserClosed() {
-  qDebug() << __FUNCTION__ << __LINE__;
-  if (ClientHandler::m_BrowserCount > 0 && g_handler.get()) {
-    g_handler->CloseAllBrowsers(false);
-    // TODO Wait until all browser windows have closed.
-  }
-  qDebug() << __FUNCTION__ << __LINE__;
-  CefQuit();
-}
+//void CefQuitUntilAllBrowserClosed() {
+//    qDebug() << __FUNCTION__ << __LINE__ << QThread::currentThreadId() << QCoreApplication::applicationPid ();
+//    if (ClientHandler::m_BrowserCount > 0 && global_client_handler.get()) {
+//        global_client_handler->CloseAllBrowsers(false);
+//    }
+//    qDebug() << __FUNCTION__ << __LINE__ << QThread::currentThreadId() << QCoreApplication::applicationPid ();
+//    CefQuit();
+//}
 
 QString AppGetWorkingDirectory() {
-  return qApp->applicationDirPath();
+    return qApp->applicationDirPath();
 }
 
-void NotifyAllBrowserClosed() {
-  qDebug() << __FUNCTION__;
-  // Notify all browser windows have closed.
-}
+//void NotifyAllBrowserClosed() {
+//    qDebug() << __FUNCTION__ << __LINE__  << QCoreApplication::applicationPid () << QThread::currentThreadId();
+//    // Notify all browser windows have closed.
+//    wait_for_browsers_to_close.wakeAll();
+//}

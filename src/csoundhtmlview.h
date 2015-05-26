@@ -4,6 +4,7 @@
 #ifdef QCS_HTML5
 
 #include <atomic>
+#include <QDebug>
 #include <QDockWidget>
 #include "qcefwebview.h"
 
@@ -22,9 +23,11 @@ public:
     void loadFromUrl(const QUrl &url);
     void play(DocumentPage *documentPage);
     void stop();
+    QCefWebView *webView;
+protected:
+    virtual void closeEvent(QCloseEvent *event);
 private:
 	Ui::Html5GuiDisplay *ui;
-    QCefWebView *webView;
     std::atomic<DocumentPage *> documentPage;
 };
 
