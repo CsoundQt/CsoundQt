@@ -2426,7 +2426,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showInspectorAct->setShortcut(tr("Alt+5"));
     showLiveEventsAct->setShortcut(tr("Alt+6"));
 #ifdef QCS_HTML5
-    showHtml5Act->setShortcut(tr("Alt+H"));
+    showHtml5Act->setShortcut(tr("Shift+Alt+H"));
 #endif
     showUtilitiesAct->setShortcut(tr("Alt+9"));
     setHelpEntryAct->setShortcut(tr("Shift+F1"));
