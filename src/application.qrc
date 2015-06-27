@@ -145,5 +145,6 @@
         <file>appstyle-dark.css</file>
         <file>appstyle-green.css</file>
         <file>appstyle-white.css</file>
+        <file>../images/html5.png</file>
     </qresource>
 </RCC>
