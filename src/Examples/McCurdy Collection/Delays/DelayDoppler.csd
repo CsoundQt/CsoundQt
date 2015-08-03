@@ -12,8 +12,8 @@
 --env:SSDIR+=../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 48000		;SAMPLE RATE
-ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+sr		= 44100		;SAMPLE RATE
+ksmps	= 32			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -70,8 +70,8 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  <objectName/>
  <x>72</x>
  <y>179</y>
- <width>400</width>
- <height>200</height>
+ <width>1255</width>
+ <height>491</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">

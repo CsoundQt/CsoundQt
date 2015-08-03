@@ -51,7 +51,7 @@
 </CsOptions>
 <CsInstruments>
 sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps 	= 64	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
 
@@ -203,6 +203,7 @@ i 10		0		3600		;GUI
 i 2	     0.1		 0		;INIT
 </CsScore>
 </CsoundSynthesizer>
+
 
 
 
@@ -442,9 +443,9 @@ i 2	     0.1		 0		;INIT
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -2036,4 +2037,4 @@ Overlaps</label>
 <value id="{43b6bfc8-a3ea-46d5-87bb-c487380b9a79}" mode="1" >0.00000000</value>
 </preset>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

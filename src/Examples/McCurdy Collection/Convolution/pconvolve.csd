@@ -13,7 +13,7 @@
 </CsOptions>
 <CsInstruments>
 sr		= 44100		;SAMPLE RATE
-ksmps	= 512		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 128		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -93,8 +93,8 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>0</x>
- <y>0</y>
+ <x>235</x>
+ <y>68</y>
  <width>967</width>
  <height>327</height>
  <visible>true</visible>
@@ -104,7 +104,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -133,7 +133,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>on</objectName>
   <x>5</x>
   <y>5</y>
@@ -150,9 +150,9 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
- <bsbObject type="BSBHSlider" version="2">
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>Gain</objectName>
   <x>13</x>
   <y>58</y>
@@ -170,7 +170,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>13</x>
   <y>75</y>
@@ -199,7 +199,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBDisplay" version="2">
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>Gain</objectName>
   <x>432</x>
   <y>75</y>
@@ -228,7 +228,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>528</x>
   <y>2</y>
@@ -257,7 +257,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>528</x>
   <y>16</y>
@@ -288,7 +288,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBDisplay" version="2">
+ <bsbObject version="2" type="BSBDisplay">
   <objectName>Mix</objectName>
   <x>433</x>
   <y>114</y>
@@ -317,7 +317,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>12</x>
   <y>113</y>
@@ -346,7 +346,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBHSlider" version="2">
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>Mix</objectName>
   <x>12</x>
   <y>96</y>
@@ -364,7 +364,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBDropdown" version="2">
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>Input</objectName>
   <x>93</x>
   <y>166</y>
@@ -389,7 +389,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBDropdown" version="2">
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>File</objectName>
   <x>365</x>
   <y>166</y>
@@ -419,7 +419,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>12</x>
   <y>166</y>
@@ -448,7 +448,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>264</x>
   <y>166</y>
@@ -477,7 +477,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Browse1</objectName>
   <x>6</x>
   <y>218</y>
@@ -496,7 +496,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject type="BSBLineEdit" version="2">
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
   <x>177</x>
   <y>219</y>
@@ -517,13 +517,13 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>177</x>
   <y>246</y>
@@ -552,7 +552,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Browse2</objectName>
   <x>7</x>
   <y>278</y>
@@ -571,7 +571,7 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject type="BSBLineEdit" version="2">
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse2</objectName>
   <x>178</x>
   <y>279</y>
@@ -592,9 +592,9 @@ The sounds used in these recordings is often a starting pistol or a balloon burs
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>242</r>
-   <g>241</g>
-   <b>240</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>

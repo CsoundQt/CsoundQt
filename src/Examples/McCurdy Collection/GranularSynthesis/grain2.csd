@@ -17,7 +17,7 @@
 </CsOptions>
 <CsInstruments>
 sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps 	= 64	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1		;MAXIMUM AMPLITUDE REGARDLESS OF BIT DEPTH
 
@@ -171,13 +171,14 @@ i 2	     0.1		 0.01	;INIT
 </CsScore>
 </CsoundSynthesizer>
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>72</x>
  <y>179</y>
- <width>400</width>
- <height>200</height>
+ <width>1054</width>
+ <height>564</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -349,9 +350,9 @@ i 2	     0.1		 0.01	;INIT
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
