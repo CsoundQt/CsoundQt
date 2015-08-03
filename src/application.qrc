@@ -67,6 +67,7 @@
         <file>../examples/Getting Started/Realtime_Interaction/MIDI_Synth.csd</file>
         <file>../examples/Getting Started/Realtime_Interaction/MIDI_Control_Data.csd</file>
         <file>../examples/Getting Started/Realtime_Interaction/MIDI_Assign_Controllers.csd</file>
+	<file>../examples/Getting Started/Realtime_Interaction/Keyboard_Input.csd</file>
         <file>../examples/Getting Started/Realtime_Interaction/OpenSoundControl.csd</file>
         <file>../examples/Getting Started/Language_Features/Function_Tables_1.csd</file>
         <file>../examples/Getting Started/Language_Features/Function_Tables_2.csd</file>

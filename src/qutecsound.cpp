@@ -3609,6 +3609,7 @@ void CsoundQt::createMenus()
     realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Synth.csd");
     realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Control_Data.csd");
     realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Assign_Controllers.csd");
+	realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Keyboard_Input.csd");
     realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/OpenSoundControl.csd");
 
     submenu = tutorialMenu->addMenu(tr("Realtime Interaction"));
