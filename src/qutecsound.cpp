@@ -154,9 +154,13 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
 #ifdef QCS_HTML5
     csoundHtmlView = new CsoundHtmlView(this);
+
+    csoundHtmlView->setFocusPolicy(Qt::NoFocus);
+    csoundHtmlView->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
+    csoundHtmlView->setObjectName("csoundHtmlView");
+    csoundHtmlView->setWindowTitle(tr("HTML View"));
+    csoundHtmlView->show();
     addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
-    csoundHtmlView->setObjectName("HTML5 Gui");
-    csoundHtmlView->setWindowTitle(tr("HTML5 Gui"));
 #endif
 
     createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
@@ -2416,14 +2420,14 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showDebugAct->setShortcut(tr("F5"));
 #endif
     showVirtualKeyboardAct->setShortcut(tr("Ctrl+Shift+V"));
-#ifdef QCS_HTML5
-    showHtml5Act->setShortcut(tr("Ctrl+Shift+H"));
-#endif
     splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
     midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
     createCodeGraphAct->setShortcut(tr("Alt+4"));
     showInspectorAct->setShortcut(tr("Alt+5"));
     showLiveEventsAct->setShortcut(tr("Alt+6"));
+#ifdef QCS_HTML5
+    showHtml5Act->setShortcut(tr("Shift+Alt+H"));
+#endif
     showUtilitiesAct->setShortcut(tr("Alt+9"));
     setHelpEntryAct->setShortcut(tr("Shift+F1"));
     browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
@@ -2937,7 +2941,7 @@ void CsoundQt::createActions()
     showDebugAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showDebugAct, SIGNAL(toggled(bool)), this, SLOT(showDebugger(bool)));
 #endif
-    showVirtualKeyboardAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Virtual Keyboard"), this);
+    showVirtualKeyboardAct = new QAction(/* QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Virtual Keyboard"), this);
     showVirtualKeyboardAct->setCheckable(true);
     showVirtualKeyboardAct->setChecked(false);
     showVirtualKeyboardAct->setStatusTip(tr("Show the Virtual MIDI Keyboard"));
@@ -2947,10 +2951,11 @@ void CsoundQt::createActions()
     connect(m_virtualKeyboard, SIGNAL(Close(bool)), showVirtualKeyboardAct, SLOT(setChecked(bool)));
 #endif
 #ifdef QCS_HTML5
-    showHtml5Act = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show HTML5 Interface"), this);
+    showHtml5Act = new QAction(QIcon(":/images/html5.png"), tr("HTML View"), this);
+    showHtml5Act->setIconText(tr("HTML"));
     showHtml5Act->setCheckable(true);
     showHtml5Act->setChecked(true);
-    showHtml5Act->setStatusTip(tr("Show HTML5 Interface"));
+    showHtml5Act->setStatusTip(tr("Show the HTML view"));
     showHtml5Act->setShortcutContext(Qt::ApplicationShortcut);
     connect(showHtml5Act, SIGNAL(toggled(bool)), this, SLOT(showHtml5Gui(bool)));
     connect(csoundHtmlView, SIGNAL(Close(bool)), showHtml5Act, SLOT(setChecked(bool)));
@@ -3428,6 +3433,9 @@ void CsoundQt::createMenus()
     viewMenu->addAction(showPythonConsoleAct);
 #endif
     viewMenu->addAction(showScratchPadAct);
+#ifdef QCS_HTML5
+    viewMenu->addAction(showHtml5Act);
+#endif
     viewMenu->addAction(showUtilitiesAct);
 #ifdef QCS_DEBUGGER
     viewMenu->addAction(showDebugAct);
@@ -3435,9 +3443,6 @@ void CsoundQt::createMenus()
     viewMenu->addAction(midiLearnAct);
 #ifdef USE_QT5
     viewMenu->addAction(showVirtualKeyboardAct);
-#endif
-#ifdef QCS_HTML5
-    viewMenu->addAction(showHtml5Act);
 #endif
     viewMenu->addSeparator();
     viewMenu->addAction(viewFullScreenAct);
@@ -3609,7 +3614,6 @@ void CsoundQt::createMenus()
     realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Synth.csd");
     realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Control_Data.csd");
     realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Assign_Controllers.csd");
-	realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Keyboard_Input.csd");
     realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/OpenSoundControl.csd");
 
     submenu = tutorialMenu->addMenu(tr("Realtime Interaction"));
@@ -3973,6 +3977,9 @@ void CsoundQt::createToolBars()
 
     configureToolBar = addToolBar(tr("Panels"));
     configureToolBar->setObjectName("panelToolBar");
+#ifdef QCS_HTML5
+    configureToolBar->addAction(showHtml5Act);
+#endif
     configureToolBar->addAction(showWidgetsAct);
     configureToolBar->addAction(showHelpAct);
     configureToolBar->addAction(showConsoleAct);

@@ -216,7 +216,6 @@ LIBS += $${LCSOUND} \
     $${LSNDFILE} \
     $${RTMIDI} \
     $${LPTHREAD}
-message(LIBS are: $${LIBS})
 
 OTHER_FILES += \
     src/appstyle-dark.css \
