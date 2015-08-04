@@ -23,7 +23,7 @@ idur      random    .5, 3; recalculate instrument duration
 p3        =         idur; reset instrument duration
 ioct      random    8, 11; random values between 8th and 11th octave
 idb       random    -18, -6; random values between -6 and -18 dB
-aSig      oscils    ampdb(idb), cpsoct(ioct), 0
+aSig      poscil    ampdb(idb), cpsoct(ioct)
 aEnv      transeg   1, p3, -10, 0
           outs      aSig*aEnv, aSig*aEnv
   endin

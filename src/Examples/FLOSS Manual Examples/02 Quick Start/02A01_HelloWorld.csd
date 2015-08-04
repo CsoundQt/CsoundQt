@@ -5,7 +5,7 @@
 <CsInstruments>
 ;Example by Alex Hofmann
 instr 1
-aSin      oscils    0dbfs/4, 440, 0
+aSin      poscil    0dbfs/4, 440
           out       aSin
 endin
 </CsInstruments>

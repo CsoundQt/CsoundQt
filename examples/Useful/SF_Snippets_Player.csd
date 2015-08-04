@@ -1,6 +1,5 @@
 <CsoundSynthesizer>
 <CsOptions>
--+max_str_len=10000
 </CsOptions>
 <CsInstruments>
 
@@ -17,6 +16,9 @@ nchnls = 2
 gikeynxt  =         32 ;next sound
 gikeyls   =         112 ;next sound one less
 gikeymr   =         110 ;next sound one in advance 
+
+;declare string channel
+chn_S     "_MBrowse", 1
 
   opcode StrayGetEl, ii, Sijj
 ;returns the startindex and the endindex (= the first space after the element) for ielindex in String. if startindex returns -1, the element has not been found
@@ -91,7 +93,6 @@ iwarsep   =         0; and tell you are ot sep1 nor sep2
           loop_lt   indx, 1, ilen, loop 
 end:      xout      icount
   endop 
-
 
   opcode	ShowLED_a, 0, Sakkk
 ;shows an audiosignal in an outvalue channel, in dB or raw amplitudes
@@ -172,10 +173,10 @@ kup       =         (key == kascii && knew == 1 && kd == 0 ? 1 : 0)
 
 instr 1
           turnon    99
-Sfiles    invalue   "_MBrowse" ;selection of sound files
-gkgaindb  invalue   "gaindb"
-knext     invalue   "next"
-knextfil  invalue   "nextfil" ;number of soundfile
+Sfiles    chnget    "_MBrowse" ;selection of sound files
+gkgaindb  chnget    "gaindb"
+knext     chnget    "next"
+knextfil  chnget    "nextfil" ;number of soundfile
 knextfil  =         (knextfil == 0 ? 1 : knextfil)
 
 ;;connecting the soundfiles with strset numbers
@@ -189,76 +190,77 @@ Sfil      strsub     Sfiles, ist, ien
           
 ;;set value for next file with keys one up or down
 key, kd   sensekey   
-keyls,k0  KeyOnce    key, kd, gikeyls
-keymr,k0  KeyOnce    key, kd, gikeymr
- if keyls == 1 then
-knextfil  =          knextfil-1
-          outvalue   "nextfil", knextfil
- elseif keymr == 1 then
-knextfil  =          knextfil+1
-          outvalue   "nextfil", knextfil
- endif
+;keyls,k0  KeyOnce    key, kd, gikeyls
+;keymr,k0  KeyOnce    key, kd, gikeymr
+; if keyls == 1 then
+;knextfil  =          knextfil-1
+;          outvalue   "nextfil", knextfil
+; elseif keymr == 1 then
+;knextfil  =          knextfil+1
+;          outvalue   "nextfil", knextfil
+; endif
 
 ;;triggering next sound
  ;with the button widget
-kplnxt    Once       knext
- ;or with key 
-keynxt,k0 KeyOnce    key, kd, gikeynxt
- 
- if kplnxt == 1 || keynxt == 1 then 
-  if knextfil <= inumfils then 
-          outvalue   "nextfil", knextfil+1
-          event      "i", 10, 0, 1, knextfil
-  else ;file is not valid
-          event      "i", 9, 0, 1, knextfil, inumfils
-  endif
- endif
+;kplnxt    Once       knext
+; ;or with key 
+;keynxt,k0 KeyOnce    key, kd, gikeynxt
+; 
+; if kplnxt == 1 || keynxt == 1 then 
+;  if knextfil <= inumfils then 
+;          outvalue   "nextfil", knextfil+1
+;          event      "i", 10, 0, 1, knextfil
+;  else ;file is not valid
+;          event      "i", 9, 0, 1, knextfil, inumfils
+;  endif
+; endif
 
 endin
 
 instr 9 ;error because required strset number is larger than number of files
-ifil      =          p4
-inumfils  =          p5
-Smess     sprintf    "Can't play file number %d!\nJust %d files are in the pool.", ifil, inumfils
-          outvalue   "messages", Smess
+;ifil      =          p4
+;inumfils  =          p5
+;Smess     sprintf    "Can't play file number %d!\nJust %d files are in the pool.", ifil, inumfils
+;          outvalue   "messages", Smess
 endin
 
 instr 10
-ifilnr    =          p4
-Sfil      strget     ifilnr
-ifilen    filelen    Sfil
-p3        =          ifilen
-aL, aR    FilePlay2  Sfil, 1
-          outs       aL*ampdb(gkgaindb), aR*ampdb(gkgaindb)
+;ifilnr    =          p4
+;Sfil      strget     ifilnr
+;ifilen    filelen    Sfil
+;p3        =          ifilen
+;aL, aR    FilePlay2  Sfil, 1
+          ;outs       aL*ampdb(gkgaindb), aR*ampdb(gkgaindb)
 ;;show messages
-ilslash   strrindex  Sfil, "/"
-Sname     strsub     Sfil, ilslash+1
-Smess     sprintf    "Playing file number %d:\n'%s'.", ifilnr, Sname
-ktim      timeinstk
- if ktim == 1 then
-          outvalue   "messages", Smess
- endif
+;ilslash   strrindex  Sfil, "/"
+;Sname     strsub     Sfil, ilslash+1
+;Smess     sprintf    "Playing file number %d:\n'%s'.", ifilnr, Sname
+;ktim      timeinstk
+; if ktim == 1 then
+;          outvalue   "messages", Smess
+; endif
 endin
 
 instr 99; show output
-aL, aR    monitor
-kTrigDisp metro    10
-          ShowLED_a "outL", aL, kTrigDisp, 1, 50
-          ShowLED_a "outR", aR, kTrigDisp, 1, 50
-          ShowOver_a "outLover", aL/0dbfs, kTrigDisp, 1
-          ShowOver_a "outRover", aR/0dbfs, kTrigDisp, 1
+;aL, aR    monitor
+;kTrigDisp metro    10
+;          ShowLED_a "outL", aL, kTrigDisp, 1, 50
+;          ShowLED_a "outR", aR, kTrigDisp, 1, 50
+;          ShowOver_a "outLover", aL/0dbfs, kTrigDisp, 1
+;          ShowOver_a "outRover", aR/0dbfs, kTrigDisp, 1
 endin
 </CsInstruments>
 <CsScore>
 i 1 0 10000
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>73</x>
- <y>206</y>
- <width>444</width>
- <height>287</height>
+ <x>356</x>
+ <y>192</y>
+ <width>497</width>
+ <height>351</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="nobackground">
@@ -276,7 +278,7 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label/>
+  <label>/home/jh/Joachim/Stuecke/30AB/samples/I.wav|/home/jh/Joachim/Stuecke/30AB/samples/II_a1.wav|/home/jh/Joachim/Stuecke/30AB/samples/II_a2.wav|/home/jh/Joachim/Stuecke/30AB/samples/II_b.wav|/home/jh/Joachim/Stuecke/30AB/samples/II_c1.wav|/home/jh/Joachim/Stuecke/30AB/samples/II_c2.wav|/home/jh/Joachim/Stuecke/30AB/samples/II_d.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_a1.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_a2.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_a3.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_a4.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_a5.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_a6.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_b.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_c1.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_c2.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_d1.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_d2.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_e.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_f.wav|/home/jh/Joachim/Stuecke/30AB/samples/IV_1.wav|/home/jh/Joachim/Stuecke/30AB/samples/IV_2.wav|/home/jh/Joachim/Stuecke/30AB/samples/IV_3.wav|/home/jh/Joachim/Stuecke/30AB/samples/IX_a.wav|/home/jh/Joachim/Stuecke/30AB/samples/IX_b.wav|/home/jh/Joachim/Stuecke/30AB/samples/IX_c.wav|/home/jh/Joachim/Stuecke/30AB/samples/IX_d.wav|/home/jh/Joachim/Stuecke/30AB/samples/V.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_a1.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_a2.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_a3.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_a4.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_b.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_c1.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_c2.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_c3.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_d1.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_d2.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_a.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_b.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_c.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_d.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_e.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_f.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_g.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_h.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_i.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_a.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_b.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_c.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_d.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_e.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_f.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_g.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_h.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_i.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_k.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_k.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_l.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_m.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_n.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_o.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_p.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_q.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_r.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_s.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_t.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_u.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_v.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_w.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -287,9 +289,9 @@ i 1 0 10000
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -305,7 +307,7 @@ i 1 0 10000
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>/home/jh/Joachim/Stuecke/30AB/samples/I.wav|/home/jh/Joachim/Stuecke/30AB/samples/II_a1.wav|/home/jh/Joachim/Stuecke/30AB/samples/II_a2.wav|/home/jh/Joachim/Stuecke/30AB/samples/II_b.wav|/home/jh/Joachim/Stuecke/30AB/samples/II_c1.wav|/home/jh/Joachim/Stuecke/30AB/samples/II_c2.wav|/home/jh/Joachim/Stuecke/30AB/samples/II_d.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_a1.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_a2.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_a3.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_a4.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_a5.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_a6.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_b.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_c1.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_c2.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_d1.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_d2.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_e.wav|/home/jh/Joachim/Stuecke/30AB/samples/III_f.wav|/home/jh/Joachim/Stuecke/30AB/samples/IV_1.wav|/home/jh/Joachim/Stuecke/30AB/samples/IV_2.wav|/home/jh/Joachim/Stuecke/30AB/samples/IV_3.wav|/home/jh/Joachim/Stuecke/30AB/samples/IX_a.wav|/home/jh/Joachim/Stuecke/30AB/samples/IX_b.wav|/home/jh/Joachim/Stuecke/30AB/samples/IX_c.wav|/home/jh/Joachim/Stuecke/30AB/samples/IX_d.wav|/home/jh/Joachim/Stuecke/30AB/samples/V.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_a1.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_a2.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_a3.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_a4.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_b.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_c1.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_c2.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_c3.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_d1.wav|/home/jh/Joachim/Stuecke/30AB/samples/VI_d2.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_a.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_b.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_c.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_d.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_e.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_f.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_g.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_h.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_i.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_a.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_b.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_c.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_d.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_e.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_f.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_g.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_h.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_i.wav|/home/jh/Joachim/Stuecke/30AB/samples/VIII_k.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_k.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_l.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_m.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_n.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_o.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_p.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_q.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_r.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_s.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_t.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_u.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_v.wav|/home/jh/Joachim/Stuecke/30AB/samples/VII_w.wav</stringvalue>
   <text>Select Files</text>
   <image>/</image>
   <eventLine/>
@@ -654,7 +656,7 @@ i 1 0 10000
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Stop</objectName>

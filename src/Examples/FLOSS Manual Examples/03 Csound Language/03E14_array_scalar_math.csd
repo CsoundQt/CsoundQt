@@ -3,12 +3,12 @@
 --env:SSDIR+=../SourceMaterials -n -m128
 </CsOptions>
 <CsInstruments>
-
+ksmps = 32
 
   instr 1
 
 ;create array and fill with numbers 1..10
-kArr1[] fillarray 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+kArr1[] genarray_i 1, 10
 
 ;print content
         printf  "%s", 1, "\nInitial content:\n"

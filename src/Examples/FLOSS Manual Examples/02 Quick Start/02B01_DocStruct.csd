@@ -21,4 +21,4 @@ i 1 0 1
 </CsScore>
 
 </CsoundSynthesizer> ; END OF THE CSOUND FILE
-; Anything after is ignored by Csound
+; Anything after a semicolon is ignored by Csound

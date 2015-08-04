@@ -27,7 +27,7 @@ aSig           pinkish     kEnv                             ; noise pulses
 kAz            linseg      0, 8, 360
 ; elevation (held horizontal for 8 seconds then up, then down, then horizontal
 kElev          linseg      0, 8,   0, 4, 90, 8, -40, 4, 0
-; apply hrtfmove2 opcode to audio source - create stereo output
+; apply hrtfmove2 opcode to audio source - create stereo ouput
 aLeft, aRight  hrtfmove2   aSig, kAz, kElev, \
                                "hrtf-44100-left.dat","hrtf-44100-right.dat"
                outs        aLeft, aRight                 ; audio to outputs

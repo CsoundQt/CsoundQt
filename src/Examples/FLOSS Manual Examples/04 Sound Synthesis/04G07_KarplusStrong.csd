@@ -27,8 +27,9 @@ iVal      tab_i     indx, iTab
 
   opcode PrintTab, 0, iiS
   ;prints table content, with a starting string
-iTab, iTbSiz, Sout xin
+iTab, iTbSiz, Sin xin
 indx      =         0
+Sout      strcpy    Sin
 loop:
 iVal      tab_i     indx, iTab
 Snew      sprintf   "%8.3f", iVal
@@ -59,3 +60,4 @@ endin
 i "ShowBuffer" 0 1
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

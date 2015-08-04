@@ -1,7 +1,4 @@
 <CsoundSynthesizer>
-<CsOptions>
---env:INCDIR+=../SourceMaterials -odac -d
-</CsOptions>
 <CsInstruments>
 
 sr      =  44100
@@ -14,7 +11,7 @@ nchnls  =  8
 ; distance encoding
 ; with any distance (includes zero and negative distance)
 
-opcode	ambi2D_enc_dist_n, k, aikk		
+opcode	ambi2D_enc_dist_n, 0, aikk		
 asnd,iorder,kaz,kdist	xin
 kaz = $M_PI*kaz/180
 kaz	=			(kdist < 0 ? kaz + $M_PI : kaz)
@@ -31,7 +28,7 @@ kk =		kk-1
 
 if	kk > 0 goto c1
 	zawm	asndW,0	
-	xout	0
+	
 endop
 
 zakinit 17, 1		
@@ -41,7 +38,7 @@ asnd	rand		p4
 ;asnd	soundin	"/Users/user/csound/ambisonic/violine.aiff"
 kaz   	line		0,p3,p5*360		;turns around p5 times in p3 seconds
 kdist	line		p6,p3,p7			
-k0		ambi2D_enc_dist_n		asnd,8,kaz,kdist
+        ambi2D_enc_dist_n asnd,8,kaz,kdist
 endin
 
 instr 10		
@@ -61,3 +58,4 @@ i10 0 4
 </CsScore>
 </CsoundSynthesizer>
 ;example by martin neukom
+

@@ -1,7 +1,4 @@
 <CsoundSynthesizer>
-<CsOptions>
---env:INCDIR+=../SourceMaterials -odac -d
-</CsOptions>
 <CsInstruments>
 sr      =  44100
 ksmps   =  32
@@ -33,10 +30,9 @@ adop		deltapi	interp(kdist)*0.0029137529 + .01 ; 1/343.2
 			xout		adop
 endop
 */
-opcode	write_ambi2D_2, k,	S		
+opcode	write_ambi2D_2, 0,	S		
 Sname			xin
 fout 	Sname,12,zar(0),zar(1),zar(2),zar(3),zar(4)
-				xout	0
 endop
 
 zakinit 17, 1		; zak space with the 17 channels of the B-format
@@ -49,7 +45,7 @@ ky      line     p9,p3,p10
 kaz,kdist xy_to_ad kx,ky
 aabs    absorb   asnd,kdist
 adop    Doppler  .2*aabs,kdist
-k0      ambi2D_enc_dist adop,5,kaz,kdist
+        ambi2D_enc_dist adop,5,kaz,kdist
 endin
 
 instr 10		;decode all insruments
@@ -58,7 +54,7 @@ a5,a6,a7,a8     ambi2D_dec_inph 5,0,45,90,135,180,225,270,315
                 outc            a1,a2,a3,a4,a5,a6,a7,a8
 ;               fout "B_format2D.wav",12,zar(0),zar(1),zar(2),zar(3),zar(4),
 ;                                zar(5),zar(6),zar(7),zar(8),zar(9),zar(10)
-k0              write_ambi2D_2  "ambi_ex5.wav"	
+                write_ambi2D_2  "ambi_ex5.wav"	
                 zacl            0,16 ; clear the za variables
 endin
 
@@ -71,3 +67,4 @@ i10 0 5
 </CsScore>
 </CsoundSynthesizer>
 ;example by martin neukom
+

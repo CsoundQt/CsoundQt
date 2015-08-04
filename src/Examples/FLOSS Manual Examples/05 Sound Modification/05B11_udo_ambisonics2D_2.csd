@@ -1,7 +1,4 @@
 <CsoundSynthesizer>
-<CsOptions>
---env:INCDIR+=../SourceMaterials -odac -d
-</CsOptions>
 <CsInstruments>
 
 sr      =  44100
@@ -18,7 +15,7 @@ nchnls  =  4
 zakinit 21, 1	
 
 ;explicit encoding third order
-opcode	ambi2D_encode_3, k, ak	
+opcode	ambi2D_encode_3, 0, ak	
 asnd,kaz	xin	
 
 kaz = $M_PI*kaz/180
@@ -30,11 +27,11 @@ kaz = $M_PI*kaz/180
 		zawm		sin(2*kaz)*asnd,4	;a22
 		zawm		cos(3*kaz)*asnd,5	;a31
 		zawm		sin(3*kaz)*asnd,6	;a32
-		xout		0
+		
 endop
 
 ; encoding arbitrary order n(zakinit 2*n+1, 1)
-opcode	ambi2D_encode_n, k, aik		
+opcode	ambi2D_encode_n, 0, aik		
 asnd,iorder,kaz	xin
 kaz = $M_PI*kaz/180
 kk =	iorder
@@ -45,7 +42,6 @@ kk =		kk-1
 
 if	kk > 0 goto c1
 	zawm	asnd,0	
-	xout	0
 endop
 
 ; basic decoding for arbitrary order n for 1 speaker
@@ -91,13 +87,13 @@ instr 1
 asnd	rand		p4
 ares 	reson		asnd,p5,p6,1
 kaz   	line		0,p3,p7*360		;turns around p7 times in p3 seconds
-k0 		ambi2D_encode_n	asnd,10,kaz
+ 		ambi2D_encode_n	asnd,10,kaz
 endin
 
 instr 2
 asnd	oscil		p4,p5,1
 kaz   	line		0,p3,p7*360		;turns around p7 times in p3 seconds
-k0 		ambi2D_encode_n	asnd,10,kaz
+		ambi2D_encode_n	asnd,10,kaz
 endin
 
 instr 10	;decode all insruments (the first 4 speakers of a 18 speaker setup)
@@ -120,3 +116,4 @@ i10 0 3
 </CsScore>
 </CsoundSynthesizer>
 ;example by martin neukom
+

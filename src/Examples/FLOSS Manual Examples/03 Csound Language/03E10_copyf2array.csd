@@ -3,6 +3,7 @@
 --env:SSDIR+=../SourceMaterials -nm0
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
 ;8 points sine wave function table
 giSine  ftgen   0, 0, 8, 10, 1
@@ -20,7 +21,7 @@ kndx    =       0
   until kndx == lenarray(kArr) do
         printf  "kArr[%d] = %f\n", kndx+1, kndx, kArr[kndx]
 kndx    +=      1
-  od
+  enduntil
 
 ;turn instrument off
         turnoff

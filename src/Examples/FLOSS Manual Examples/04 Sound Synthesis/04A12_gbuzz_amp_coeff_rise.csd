@@ -18,6 +18,7 @@ knh  =     20
 klh  =     1
 kmul line  0, p3, 2
 asig gbuzz 1, 100, knh, klh, kmul, gicos
+     outs  asig, asig
  endin
 
 </CsInstruments>

@@ -3,6 +3,7 @@
 --env:SSDIR+=../SourceMaterials -nm128 ;no sound and reduced messages
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
 instr i_local
 iArr[] array  1, 2, 3

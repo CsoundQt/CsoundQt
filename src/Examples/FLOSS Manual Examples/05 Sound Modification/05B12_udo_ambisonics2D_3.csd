@@ -1,7 +1,4 @@
 <CsoundSynthesizer>
-<CsOptions>
---env:INCDIR+=../SourceMaterials -odac -d
-</CsOptions>
 <CsInstruments>
 
 sr      =  44100
@@ -9,7 +6,7 @@ ksmps   =  32
 nchnls  =  4
 0dbfs 	 = 1
 
-opcode	ambi2D_encode_n, k, aik		
+opcode	ambi2D_encode_n, 0, aik		
 asnd,iorder,kaz	xin
 kaz = $M_PI*kaz/180
 kk =	iorder
@@ -20,7 +17,7 @@ kk =		kk-1
 
 if	kk > 0 goto c1
 	zawm	asnd,0	
-	xout	0
+
 endop
 
 ;in-phase-decoding
@@ -65,7 +62,7 @@ instr 1
 asnd	rand		p4
 ares 	reson		asnd,p5,p6,1
 kaz   	line		0,p3,p7*360		;turns around p7 times in p3 seconds
-k0		ambi2D_encode_n		asnd,3,kaz
+ 		ambi2D_encode_n		asnd,3,kaz
 endin
 
 instr 11		
@@ -86,3 +83,4 @@ i11 0 3
 </CsScore>
 </CsoundSynthesizer>
 ;example by martin neukom
+

@@ -3,6 +3,7 @@
 --env:SSDIR+=../SourceMaterials -nm128 ;no sound and reduced messages
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
 instr 1
 String   =       "onetwothree"

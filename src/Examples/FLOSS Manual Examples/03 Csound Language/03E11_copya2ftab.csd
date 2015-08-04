@@ -3,6 +3,7 @@
 --env:SSDIR+=../SourceMaterials -nm0
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
 ;an 'empty' function table with 10 points
 giTable ftgen   0, 0, -10, 2, 0

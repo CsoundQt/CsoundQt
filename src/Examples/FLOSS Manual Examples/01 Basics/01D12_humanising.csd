@@ -61,3 +61,4 @@ $SCORE(2)  ; play melody with humanising
 e
 </CsScore>
 </CsoundSynthesizer>
+;example by Iain McCurdy

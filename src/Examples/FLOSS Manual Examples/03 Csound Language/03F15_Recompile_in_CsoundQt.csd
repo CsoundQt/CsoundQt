@@ -6,7 +6,7 @@ ksmps = 32
 0dbfs = 1
 
 instr 1
-a1 oscils .2, 500, 0
+a1 poscil .2, 500
 out a1
 endin
 

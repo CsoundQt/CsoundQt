@@ -9,7 +9,6 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-giSine    ftgen     0, 0, 2^10, 10, 1
           seed      0
 
   instr 1; time loop with timout. events are triggered by event_i (i-rate)
@@ -61,7 +60,7 @@ iamp      =   imaxamp * ampdb(idbdev-ipartnum); higher partials are softer
 ipandev   random    -.1, .1; panning deviation
 ipan      =         ipan + ipandev
 aEnv      transeg   0, .005, 0, iamp, p3-.005, -10, 0
-aSine     poscil    aEnv, ifreq, giSine
+aSine     poscil    aEnv, ifreq
 aL, aR    pan2      aSine, ipan
           outs      aL, aR
           prints    "ibasfreq = %d, ipartial = %d, ifreq = %d%n",\
