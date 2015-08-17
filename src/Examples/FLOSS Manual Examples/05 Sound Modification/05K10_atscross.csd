@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -o dac
+--env:SADIR+=../SourceMaterials -o dac
 </CsOptions>
 <CsInstruments>
 
@@ -10,8 +10,8 @@ nchnls = 1
 0dbfs = 1
 
 ;ATS files
-#define ats1 #"../ats-files/flute-A5.ats"#
-#define ats2 #"../ats-files/oboe-A5.ats"#
+#define ats1 #"flute-A5.ats"#
+#define ats2 #"oboe-A5.ats"#
 
 
 instr 1	
@@ -58,3 +58,20 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ;example by Oscar Pablo Di Liscia  
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

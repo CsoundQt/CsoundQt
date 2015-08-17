@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -o dac
+--env:SADIR+=../SourceMaterials -o dac
 </CsOptions>
 <CsInstruments>
 
@@ -52,7 +52,7 @@ endin
 <CsScore>
 
 ;change to put any ATS file you like
-#define ats_file #"../ats-files/basoon-C4.ats"#
+#define ats_file #"basoon-C4.ats"#
 
 ;audio table (sine)
 f1      0       16384   10      1
@@ -73,3 +73,20 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ;example by Oscar Pablo Di Liscia
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

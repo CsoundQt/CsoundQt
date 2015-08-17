@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -n -m0
+--env:SADIR+=../SourceMaterials -n -m0
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -48,10 +48,27 @@ endin
 </CsInstruments>
 <CsScore>
 ;change to put any ATS file you like
-#define ats_file #"../ats-files/basoon-C4.ats"#
+#define ats_file #"basoon-C4.ats"#
 ;	st	dur	atsfile
 i1 	0	0 	$ats_file
 e
 </CsScore>
 </CsoundSynthesizer>
 ;Example by Oscar Pablo Di Liscia
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
