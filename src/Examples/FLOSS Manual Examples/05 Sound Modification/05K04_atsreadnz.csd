@@ -40,7 +40,7 @@ f2 0 32 -2 0 100 200 300 400 510 630 770 920 1080 1270 1480 1720 2000 2320 \
            2700 3150 3700 4400 5300 6400 7700 9500 12000 15500 20000
 
 ;an ats file name
-#define atsfile #"../ats-files/female-speech.ats"#
+#define atsfile #"female-speech.ats"#
 
 ;a macro that synthesize the noise data along all the 25 critical bands
 #define all_bands(start'dur'amp'bw'file)
@@ -80,3 +80,20 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ;example by Oscar Pablo Di Liscia
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
