@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+=../SourceMaterials -o dac
+--env:SADIR+=../SourceMaterials --env:SSDIR+=../SourceMaterials -o dac
 </CsOptions>
 <CsInstruments>
 
