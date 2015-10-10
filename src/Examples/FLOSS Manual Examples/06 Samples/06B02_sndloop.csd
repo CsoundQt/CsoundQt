@@ -28,7 +28,7 @@ kTrig      =       1             ; set trigger to begin record-playback
 kTrig      =       0             ; set trigger to turn off record-playback
  elseif kKey = 43 then           ; if '+' has been pressed...
 kPitch     =       kPitch + 0.02 ; increment pitch parameter
- elseif kKey = 95 then           ; if '-' has been pressed
+ elseif kKey = 45 then           ; if '-' has been pressed
 kPitch     =       kPitch - 0.02 ; decrement pitch parameter
  endif                           ; end of conditional branches
 ; CREATE SNDLOOP INSTANCE

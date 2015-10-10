@@ -3,6 +3,7 @@
 --env:SSDIR+=../SourceMaterials -nm128
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
   opcode FirstEl, k, k[]
   ;returns the first element of vector kArr

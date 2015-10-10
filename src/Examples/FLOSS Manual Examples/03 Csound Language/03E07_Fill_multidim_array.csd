@@ -3,6 +3,7 @@
 --env:SSDIR+=../SourceMaterials -nm0
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
 instr 1
 iArr[][] init   2,3
@@ -13,7 +14,7 @@ iColumn  =      0
   until iColumn == 3 do
   prints "iArr[%d][%d] = %d\n", iRow, iColumn, iArr[iRow][iColumn]
   iColumn +=    1
-  od
+enduntil
 iRow      +=    1
 od
 endin

@@ -3,6 +3,7 @@
 --env:SSDIR+=../SourceMaterials -dnm0
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
 giArrLen  =        5
 gSArr[]   init     giArrLen

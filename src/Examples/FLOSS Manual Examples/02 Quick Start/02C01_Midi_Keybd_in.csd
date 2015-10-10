@@ -11,12 +11,11 @@ nchnls = 2
 0dbfs = 1
 
         massign   0, 1 ;assign all MIDI channels to instrument 1
-giSine  ftgen     0,0,2^10,10,1 ;a function table with a sine wave
 
 instr 1
 iCps    cpsmidi   ;get the frequency from the key pressed
 iAmp    ampmidi   0dbfs * 0.3 ;get the amplitude
-aOut    poscil    iAmp, iCps, giSine ;generate a sine tone
+aOut    poscil    iAmp, iCps ;generate a sine tone
         outs      aOut, aOut ;write it to the output
 endin
 

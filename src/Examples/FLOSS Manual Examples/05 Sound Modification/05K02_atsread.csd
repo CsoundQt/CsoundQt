@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -o dac
+--env:SADIR+=../SourceMaterials -o dac
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -31,7 +31,7 @@ endin
 <CsScore>
 ; sine wave table
 f 1 0 16384 10 1
-#define atsfile #"../ats-files/flute-A5.ats"#
+#define atsfile #"flute-A5.ats"#
 
 ;	start	dur	amp	freq	par	tab	atsfile
 i1 	0 	3 	1	1	1	1	$atsfile	
@@ -48,3 +48,20 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ;example by Oscar Pablo Di Liscia
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

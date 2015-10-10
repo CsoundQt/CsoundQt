@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -o dac
+--env:SADIR+=../SourceMaterials -o dac
 </CsOptions>
 <CsInstruments>
 sr      = 44100
@@ -8,7 +8,7 @@ ksmps   = 32
 nchnls  = 1
 0dbfs   = 1
 
-gS_ATS_file =         "../ats-files/flute-A5.ats" ;ats file
+gS_ATS_file =         "flute-A5.ats" ;ats file
 giSine     ftgen      0, 0, 16384, 10, 1 ; sine wave table
 
 
@@ -53,3 +53,20 @@ i .         +    .   10
 </CsScore>
 </CsoundSynthesizer>
 ;example by Oscar Pablo Di Liscia and Joachim Heintz
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

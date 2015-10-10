@@ -32,11 +32,28 @@ fsigB     pvstanal  2, 5, gipitch, gifilB, gidet, giwrap, giskip,\
 ffilt     pvsfilter fsigA, fsigB, 1	
 aout      pvsynth   ffilt
 aenv      linen     aout, .1, p3, .5
-          out       aout
+          out       aenv
 endin
 
 </CsInstruments>
 <CsScore>
 i 1 0 11
 </CsScore>
-</CsoundSynthesizer> </p>
+</CsoundSynthesizer>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

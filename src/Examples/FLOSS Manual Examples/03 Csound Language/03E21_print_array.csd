@@ -3,6 +3,7 @@
 --env:SSDIR+=../SourceMaterials -n -m0
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
            seed       0
 
@@ -32,7 +33,7 @@ Slast      strsubk    Sdump, 0, klen-2
            printf     "%s]\n", kprint+1, Slast
 endif
   endop
-
+  
 
   instr SimplePrinting
 kArr[]     fillarray  1, 2, 3, 4, 5, 6, 7
@@ -92,3 +93,4 @@ i "PrintFormatted" 18 1
 </CsScore>
 </CsoundSynthesizer>
 ;example by joachim heintz
+

@@ -12,7 +12,7 @@ gipos      ftgen      1, 0, 128, 10, 1                  ;Initial Shape, sine wav
 gimass     ftgen      2, 0, 128, -7, 1, 128, 1          ;Masses(adj.), constant value 1
 gistiff    ftgen      3, 0, 128, -7, 50, 64, 100, 64, 0 ;Stiffness; unipolar triangle range 0 to 100
 gidamp     ftgen      4, 0, 128, -7, 1, 128, 1          ;Damping; constant value 1
-givel      ftgen      5, 0, 128, -7, 0, 128, 0          ;Initial Velocity; constant value 1
+givel      ftgen      5, 0, 128, -7, 0, 128, 0          ;Initial Velocity; constant value 0
 gisin      ftgen      6, 0,8192, 10, 1                  ;Sine wave for buzz opcode
 
 instr 1

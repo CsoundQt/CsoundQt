@@ -37,13 +37,13 @@ kstat     =         1; change status to "down"
   endin
 
   instr 2; triggered if threshold has been crossed from down to up
-asig      oscils    .2, 500, 0
+asig      poscil    .2, 500
 aenv      transeg   1, p3, -10, 0
           outs      asig*aenv, asig*aenv
   endin
 
   instr 3; triggered if threshold has been crossed from up to down
-asig      oscils    .2, 400, 0
+asig      poscil    .2, 400
 aenv      transeg   1, p3, -10, 0
           outs      asig*aenv, asig*aenv
   endin

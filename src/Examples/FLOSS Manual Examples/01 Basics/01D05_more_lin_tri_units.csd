@@ -90,7 +90,7 @@ iPrint     =          1
   ;calculate iMidiPch and iDur depending on type
   if iDistrib == 0 then
            printf_i   "%s", iPrint, "... uniform distribution:\n"
-           printf_i   "%s", iPrint, "EQUAL LIKELINESS OF ALL PITCHES AND DURATIONS\n"
+           printf_i   "%s", iPrint, "EQUAL LIKELIHOOD OF ALL PITCHES AND DURATIONS\n"
 iMidiPch   random     iMinPch, iMaxPch ;midi note
 iDur       random     iMinDur, iMaxDur ;duration
   elseif iDistrib == 1 then

@@ -36,3 +36,4 @@ i 1 0.02 300
 e
 </CsScore>
 </CsoundSynthesizer>
+;example by Iain McCurdy

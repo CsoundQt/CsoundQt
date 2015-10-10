@@ -3,6 +3,7 @@
 --env:SSDIR+=../SourceMaterials -n
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
 instr 1
 

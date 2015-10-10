@@ -1,7 +1,4 @@
 <CsoundSynthesizer>
-<CsOptions>
---env:INCDIR+=../SourceMaterials -odac -d
-</CsOptions>
 <CsInstruments>
 sr      =  44100
 ksmps   =  32
@@ -18,7 +15,7 @@ asnd    buzz    p4,p5,p6,1
 kt      line    0,p3,p3
 kaz,kel,kdist xyz_to_aed 10*sin(kt),10*sin(.78*kt),10*sin(.43*kt)
 adop Doppler asnd,kdist
-k0 ambi_enc_dist adop,3,kaz,kel,kdist
+        ambi_enc_dist adop,3,kaz,kel,kdist
 a1,a2,a3,a4,a5,a6,a7,a8 ambi_decode 3,17
 ;k0		ambi_write_B	"B_form.wav",8,14
         outc    a1,a2,a3,a4,a5,a6,a7,a8
@@ -33,3 +30,4 @@ i1 0 40 .5 300 40
 </CsScore>
 </CsoundSynthesizer>
 ;example by martin neukom
+

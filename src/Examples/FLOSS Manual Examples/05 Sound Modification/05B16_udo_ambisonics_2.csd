@@ -1,7 +1,4 @@
 <CsoundSynthesizer>
-<CsOptions>
---env:INCDIR+=../SourceMaterials -odac -d
-</CsOptions>
 <CsInstruments>
 sr      =  44100
 ksmps   =  32
@@ -47,7 +44,7 @@ i3	=	icos_el*icos_az			; X	 = Y(1,1)
 	if iorder > 1 goto c1
 aout	=	(3/4)*(a0 + i1*a1 + i2*a2 + i3*a3)
 	goto end
-c1: 
+c1:
 a4=iWeight3D[iorder-1][1]*zar(4)
 a5=iWeight3D[iorder-1][1]*zar(5)
 a6=iWeight3D[iorder-1][1]*zar(6)
@@ -75,7 +72,7 @@ end:
 		xout			aout
 endop
 
-; overloaded opcode for decoding for 1 or 2 speakers 
+; overloaded opcode for decoding for 1 or 2 speakers
 ; speaker positions in function table ifn
 opcode	ambi_dec2_inph,	a,ii
 iorder,ifn xin
@@ -99,7 +96,7 @@ kdist   init       1
 kaz     invalue    "az"
 kel     invalue    "el"
 
-k0      ambi_encode asnd,8,kaz,kel
+        ambi_encode asnd,8,kaz,kel
 ao1,ao2,ao3 ambi_dec_inph 8,17
         outvalue   "sp1", downsamp(ao1)
         outvalue   "sp2", downsamp(ao2)
@@ -110,330 +107,9 @@ endin
 </CsInstruments>
 <CsScore>
 f1 0 1024 10 1
-f17 0 64 -2 0  0 0   90 0   0 90  0 0  0 0  0 0  0 0  0 0 
+f17 0 64 -2 0  0 0   90 0   0 90  0 0  0 0  0 0  0 0  0 0
 i1 0 100
 </CsScore>
 </CsoundSynthesizer>
 ;example by martin neukom
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>41</x>
- <y>26</y>
- <width>230</width>
- <height>357</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="background">
-  <r>234</r>
-  <g>255</g>
-  <b>246</b>
- </bgcolor>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>sp1</objectName>
-  <x>38</x>
-  <y>190</y>
-  <width>80</width>
-  <height>25</height>
-  <uuid>{0c3f6178-d1bd-41dc-9f51-57c883f6f8c7}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0.004</label>
-  <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>sp2</objectName>
-  <x>38</x>
-  <y>222</y>
-  <width>80</width>
-  <height>25</height>
-  <uuid>{dd2be361-4337-46cd-973f-53c4608caddb}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0.004</label>
-  <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>sp3</objectName>
-  <x>39</x>
-  <y>256</y>
-  <width>80</width>
-  <height>25</height>
-  <uuid>{fde91979-2a53-4cbc-a522-aad0371b14d0}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>1.000</label>
-  <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>7</x>
-  <y>60</y>
-  <width>59</width>
-  <height>40</height>
-  <uuid>{ca1f8ec9-e2bc-4fce-ba9f-5888198ae7c6}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>azimuth
-(degrees)
-</label>
-  <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>69</x>
-  <y>60</y>
-  <width>66</width>
-  <height>39</height>
-  <uuid>{00aa4ac1-ca24-4116-92fe-e6874ed00a1e}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>eleveation
-(degrees)</label>
-  <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
-  <objectName>el</objectName>
-  <x>72</x>
-  <y>29</y>
-  <width>55</width>
-  <height>25</height>
-  <uuid>{182d2782-037b-4554-9b6e-fad3e78d9206}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>10</fontsize>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <value>90.00000000</value>
-  <resolution>1.00000000</resolution>
-  <minimum>-999999999999.00000000</minimum>
-  <maximum>999999999999.00000000</maximum>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
-  <randomizable group="0">false</randomizable>
-  <mouseControl act=""/>
- </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
-  <objectName>az</objectName>
-  <x>7</x>
-  <y>29</y>
-  <width>58</width>
-  <height>25</height>
-  <uuid>{8498bd06-e16c-4c75-a493-4a1c3fc7dad0}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>10</fontsize>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <value>90.00000000</value>
-  <resolution>1.00000000</resolution>
-  <minimum>-999999999999.00000000</minimum>
-  <maximum>999999999999.00000000</maximum>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
-  <randomizable group="0">false</randomizable>
-  <mouseControl act=""/>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>147</x>
-  <y>189</y>
-  <width>43</width>
-  <height>26</height>
-  <uuid>{890f3a9f-08e0-4788-a9ef-d282a9147880}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0    0
-</label>
-  <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>148</x>
-  <y>222</y>
-  <width>42</width>
-  <height>24</height>
-  <uuid>{9ec34ef9-e3b7-4c77-8cf2-da2d74654317}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>90    0
-</label>
-  <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>149</x>
-  <y>257</y>
-  <width>42</width>
-  <height>24</height>
-  <uuid>{e62e2575-3cff-4d4b-976b-d11f52ef3859}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0    90
-</label>
-  <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="420" y="293" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+
