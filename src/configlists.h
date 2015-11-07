@@ -25,6 +25,7 @@
 
 #include <QStringList>
 #include <QPair>
+#include <QHash>
 
 typedef struct CSOUND_ CSOUND;
 
