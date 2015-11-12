@@ -27,6 +27,7 @@
 #include <QPair>
 #include <QStringList>
 
+
 typedef struct CSOUND_ CSOUND;
 
 class ConfigLists

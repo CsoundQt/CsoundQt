@@ -3568,6 +3568,7 @@ void CsoundQt::createMenus()
     exampleFiles.append(":/examples/Miscellaneous/Oscillator_Aliasing.csd");
     exampleFiles.append(":/examples/Miscellaneous/Filter_lab.csd");
     exampleFiles.append(":/examples/Miscellaneous/Pvstencil.csd");
+	exampleFiles.append(":/examples/Miscellaneous/Matrix.csd");
     exampleFiles.append(":/examples/Miscellaneous/Rms.csd");
     exampleFiles.append(":/examples/Miscellaneous/Reinit_Example.csd");
     exampleFiles.append(":/examples/Miscellaneous/No_Reinit.csd");
