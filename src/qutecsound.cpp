@@ -2119,7 +2119,7 @@ void CsoundQt::documentWasModified()
 
 void CsoundQt::configure()
 {
-    ConfigDialog dialog(this, m_options, &m_configlists);
+    ConfigDialog dialog(this,  m_options, &m_configlists);
     dialog.setCurrentTab(configureTab);
     dialog.newParserCheckBox->setEnabled(csoundGetVersion() > 5125);
     dialog.multicoreCheckBox->setEnabled(csoundGetVersion() > 5125);

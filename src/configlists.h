@@ -23,8 +23,9 @@
 #ifndef CONFIGLISTS_H
 #define CONFIGLISTS_H
 
-#include <QStringList>
+#include <QHash>
 #include <QPair>
+#include <QStringList>
 
 typedef struct CSOUND_ CSOUND;
 

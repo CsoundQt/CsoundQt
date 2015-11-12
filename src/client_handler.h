@@ -7,8 +7,16 @@
 #include <set>
 #include <string>
 #include <QString>
+#include "client_app.h"
+#include "client_handler.h"
+#include "client_renderer.h"
 #include "include/base/cef_lock.h"
 #include "include/cef_client.h"
+#include "include/cef_life_span_handler.h"
+#include "include/cef_render_handler.h"
+#include "include/cef_request_context_handler.h"
+#include "include/cef_web_plugin.h"
+#include "include/internal/cef_types.h"
 #include "util.h"
 #include "message_event.h"
 
@@ -151,6 +159,8 @@ public:
                                CefRefPtr<CefFrame> frame,
                                const CefString& target_url,
                                const CefString& target_frame_name,
+                               CefLifeSpanHandler::WindowOpenDisposition target_disposition,
+                               bool user_gesture,
                                const CefPopupFeatures& popupFeatures,
                                CefWindowInfo& windowInfo,
                                CefRefPtr<CefClient>& client,
@@ -181,22 +191,24 @@ public:
             CefRefPtr<CefBrowser> browser,
             CefRefPtr<CefFrame> frame,
             CefRefPtr<CefRequest> request) OVERRIDE;
+//    virtual bool OnQuotaRequest(CefRefPtr<CefBrowser> browser,
+//                                const CefString& origin_url,
+//                                int64 new_size,
+//                                CefRefPtr<CefQuotaCallback> callback) OVERRIDE;
+
     virtual bool OnQuotaRequest(CefRefPtr<CefBrowser> browser,
-                                const CefString& origin_url,
-                                int64 new_size,
-                                CefRefPtr<CefQuotaCallback> callback) OVERRIDE;
+                        const CefString& origin_url,
+                        int64 new_size,
+                        CefRefPtr<CefRequestCallback> callback) OVERRIDE
+    {
+        return false;
+    }
+
     virtual void OnProtocolExecution(CefRefPtr<CefBrowser> browser,
                                      const CefString& url,
                                      bool& allow_os_execution) OVERRIDE;
     virtual void OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser,
                                            TerminationStatus status) OVERRIDE;
-    virtual bool OnBeforePluginLoad(CefRefPtr<CefBrowser> browser,
-                                    const CefString& url,
-                                    const CefString& policy_url,
-                                    CefRefPtr<CefWebPluginInfo> info) OVERRIDE {
-        return false;  // Return true to block loading of the plugin.
-    }
-
     CefRefPtr<CefBrowser> GetBrowser() { return m_Browser; }
     int GetBrowserId() { return m_BrowserId; }
 

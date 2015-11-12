@@ -1,5 +1,5 @@
-#include "cefclient/client_renderer.h"
-
+#include "client_renderer.h"
+#include "client_app.h"
 #include <sstream>
 #include <string>
 
@@ -35,7 +35,7 @@ class ClientRenderDelegate : public ClientApp::RenderDelegate {
  private:
   bool last_node_is_editable_;
 
-  IMPLEMENT_REFCOUNTING(ClientRenderDelegate);
+  IMPLEMENT_REFCOUNTING(ClientRenderDelegate)
 };
 
 }  // namespace

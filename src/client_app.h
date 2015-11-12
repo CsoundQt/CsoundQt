@@ -21,6 +21,14 @@ class ClientApp : public CefApp,
         public CefV8Handler
 {
 public:
+    virtual bool GetDataResourceForScale(int resource_id,
+                                         ScaleFactor scale_factor,
+                                         void*& data,
+                                         size_t& data_size)
+    {
+        return false;
+    }
+
     virtual bool Execute(const CefString& name,
                          CefRefPtr<CefV8Value> object,
                          const CefV8ValueList& arguments,

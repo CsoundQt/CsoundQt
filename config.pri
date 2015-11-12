@@ -227,12 +227,12 @@ CEF_INCLUDE_DIR = $(CEF_HOME)
 debug {
 CEF_LIB = $$(CEF_HOME)\\Debug\\libcef.lib
 #CEF_LIB += $$(CEF_HOME)\\Debug\\cef_sandbox.lib
-CEF_WRAPPER_LIB = $$(CEF_HOME)\\out\\Debug\\lib\\libcef_dll_wrapper.lib
+CEF_WRAPPER_LIB = $$(CEF_HOME)\\libcef_dll\\Debug\\libcef_dll_wrapper.lib
 }
 release {
 CEF_LIB = $$(CEF_HOME)\\Release\\libcef.lib
 #CEF_LIB += $$(CEF_HOME)\\Release\\cef_sandbox.lib
-CEF_WRAPPER_LIB = $$(CEF_HOME)\\out\\Release\\lib\\libcef_dll_wrapper.lib
+CEF_WRAPPER_LIB = $$(CEF_HOME)\\libcef_dll\\Release\\libcef_dll_wrapper.lib
 }
 INCLUDEPATH += $${CEF_INCLUDE_DIR}
 LIBS += $${CEF_LIB}
