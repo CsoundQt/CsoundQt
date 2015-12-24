@@ -11,8 +11,15 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     QDockWidget(parent),
     ui(new Ui::Html5GuiDisplay),
     documentPage(0),
-    webView(0)
+    webView(0),
+    pid(0)
 {
+#ifdef WIN32
+    pid = GetCurrentProcessId();
+    qDebug("CsoundHtmlView::CsoundHtmlView: pid: %d\n", pid);
+#else
+    pid = getpid();
+#endif
     ui->setupUi(this);
     webView = new QCefWebView(this);
     setWidget(webView);
@@ -51,7 +58,7 @@ QString getElement(const QString &text, const QString &tag)
  * Save the <html> element, if it exists,
  * to filename xxx.csd.html, and load it into the CEF web view.
  */
-void CsoundHtmlView::play(DocumentPage *documentPage_)
+void CsoundHtmlView::load(DocumentPage *documentPage_)
 {
     documentPage = documentPage_;
     qDebug() << "CsoundHtmlView::play()...";
@@ -71,8 +78,6 @@ void CsoundHtmlView::play(DocumentPage *documentPage_)
         out << html;
         htmlfile.close();
         webView->loadFromUrl(QUrl::fromLocalFile(htmlfilename));
-    } else {
-        webView->loadFromUrl(QUrl("about:blank"));
     }
     repaint();
 }

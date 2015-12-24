@@ -13,24 +13,9 @@ namespace {
 
 void CefInitSettings(CefSettings& settings) {
     settings.multi_threaded_message_loop = true;
-    //settings.windowless_rendering_enabled = true;
-    ///std::string cache_path = AppGetWorkingDirectory().toStdString() + "/.cache";
-    ///CefString(&settings.cache_path) = CefString(cache_path);
-    ///settings.log_severity = LOGSEVERITY_DISABLE;
-    ///// settings.single_process = true;
-    ///// The resources(cef.pak and/or devtools_resources.pak) directory.
-    ///CefString(&settings.resources_dir_path) = CefString();
-    ///// The locales directory.
-    ///CefString(&settings.locales_dir_path) = CefString();
-    ///// Enable remote debugging on the specified port.
-    ///settings.remote_debugging_port = 8088;
-    ///// Ignore errors related to invalid SSL certificates.
-    /////settings.ignore_certificate_errors = true;
 }
 
 }  // namespace
-
-//CefRefPtr<ClientHandler> global_client_handler;
 
 int CefInit(int &argc, char **argv) {
     qDebug() << __FUNCTION__;
@@ -41,7 +26,6 @@ int CefInit(int &argc, char **argv) {
     CefMainArgs main_args(argc, argv);
 #endif
     CefRefPtr<ClientApp> app(new ClientApp);
-    //int exit_code = CefExecuteProcess(main_args, app.get(), 0);
     int exit_code = CefExecuteProcess(main_args, app.get(), 0);
     if (exit_code >= 0) {
         return exit_code;

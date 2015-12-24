@@ -291,6 +291,10 @@ void ClientHandler::OnLoadingStateChange(CefRefPtr<CefBrowser> browser,
 void ClientHandler::OnLoadStart(CefRefPtr<CefBrowser> browser,
                                 CefRefPtr<CefFrame> frame) {
     REQUIRE_UI_THREAD();
+#ifdef WIN32
+    auto pid = GetCurrentProcessId();
+    qDebug("ClientHandler::OnLoadStart: pid: %d\n", pid);
+#endif
     if (m_BrowserId == browser->GetIdentifier() && frame->IsMain()) {
         SetLoading(true);
     }

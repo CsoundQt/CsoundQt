@@ -385,7 +385,8 @@ void CsoundQt::changePage(int index)
         }
     }
 #ifdef QCS_HTML5
-    //m_html5Display->play(documentPages[curPage]);
+    //csoundHtmlView->stop();
+    csoundHtmlView->load(documentPages[curPage]);
 #endif
     m_inspectorNeedsUpdate = true;
 }
@@ -1390,7 +1391,7 @@ void CsoundQt::play(bool realtime, int index)
 {
     qDebug() << "CsoundQt::play()...";
 #ifdef QCS_HTML5
-    csoundHtmlView->stop();
+    // csoundHtmlView->stop();
 #endif
     // TODO make csound pause if it is already running
     int oldPage = curPage;
@@ -1528,7 +1529,7 @@ void CsoundQt::play(bool realtime, int index)
         }
     }
 #ifdef QCS_HTML5
-    csoundHtmlView->play(documentPages[curPage]);
+    csoundHtmlView->load(documentPages[curPage]);
 #endif
     curPage = oldPage;
 }
