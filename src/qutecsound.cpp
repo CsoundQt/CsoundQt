@@ -385,7 +385,6 @@ void CsoundQt::changePage(int index)
         }
     }
 #ifdef QCS_HTML5
-    //csoundHtmlView->stop();
     csoundHtmlView->load(documentPages[curPage]);
 #endif
     m_inspectorNeedsUpdate = true;
@@ -455,18 +454,16 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     writeSettings(files, lastIndex);
     showWidgetsAct->setChecked(false);
     showLiveEventsAct->setChecked(false); // These two give faster shutdown times as the panels don't have to be called up as the tabs close
+#if defined(QCS_HTML5)
+    // This would crash by loading an invalid Web page. Not doing this doesn't
+    // seem to have harmful side effects.
     while (!documentPages.isEmpty()) {
-        //    if (!saveCurrent()) {
-        //      event->ignore();
-        //      return; // Action canceled
-        //    }
         if (!closeTab(true)) { // Don't ask for closing app
             event->ignore();
             return;
         }
     }
-    //delete quickRefFile;quickRefFile = 0;
-    // Delete all temporary files.
+#endif
     foreach (QString tempFile, tempScriptFiles) {
         QDir().remove(tempFile);
     }
