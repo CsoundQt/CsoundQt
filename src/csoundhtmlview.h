@@ -21,7 +21,7 @@ public:
 	explicit CsoundHtmlView(QWidget *parent = 0);
 	~CsoundHtmlView();
     void loadFromUrl(const QUrl &url);
-    void play(DocumentPage *documentPage);
+    void load(DocumentPage *documentPage);
     void stop();
     QCefWebView *webView;
 protected:
@@ -29,6 +29,7 @@ protected:
 private:
 	Ui::Html5GuiDisplay *ui;
     std::atomic<DocumentPage *> documentPage;
+    pid_t pid;
 };
 
 #endif
