@@ -67,7 +67,7 @@ void MidiHandler::passMidiMessage(std::vector<unsigned char> *message)
 	}
 	if (m_midiLearnDialog) {
 		if (message->size() > 2 && ((*message)[0] & 0x90)) {
-			m_midiLearnDialog->setMidiController(((*message)[0] & 0x0F) + 1, (*message)[1] & 0x8F);
+			m_midiLearnDialog->setMidiController(((*message)[0] & 0x0F) + 1, (*message)[1] & 0x7F); // was & 8F, that exludes most controller numbers above 0xf
 		}
 	}
 }
