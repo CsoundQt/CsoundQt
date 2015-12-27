@@ -300,6 +300,28 @@ void QuteButton::setMidiValue(int value)
 	double pressedVal = property("QCS_pressedValue").toDouble();
 	double newval= value == 0 ? 0 : pressedVal;
 	setValue(newval);
+	QString type = property("QCS_type").toString();
+	if (m_valueChanged && (type == "event" || type == "pictevent") ) { // if event type, start/stop event on MIDI button press/release
+		QString eventLine = property("QCS_eventLine").toString();
+		if (newval==1) {
+			emit(queueEventSignal(eventLine));
+		}
+		// on release check if event was with indefinite duration, then turn it off
+		if (newval==0 && eventLine.size() > 0) {
+			QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+			if (lineElements.size() > 0 && lineElements[0] == "i") {
+				lineElements.removeAt(0); // Remove first element if it is "i"
+			}
+			else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
+				lineElements[0] = lineElements[0].mid(1); // Remove "i" character
+			}
+			if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) { // If duration is negative, turn it off
+				lineElements[0].prepend("-");
+				lineElements.prepend("i");
+				emit(queueEventSignal(lineElements.join(" ")));
+			}
+		}
+	}
 	QPair<QString, double> channelValue(m_channel, newval);
 	emit newValue(channelValue);
 }
