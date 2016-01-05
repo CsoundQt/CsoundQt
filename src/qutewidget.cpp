@@ -264,6 +264,15 @@ void QuteWidget::canFocus(bool can)
 	}
 }
 
+void QuteWidget::updateDialogWindow(int cc, int channel) // to update values from midi Learn window to widget properties' dialog
+{
+	if (dialog->isVisible()) {
+		midiccSpinBox->setValue(cc);
+		midichanSpinBox->setValue(channel);
+		//qDebug()<<"Updated MIDI values in properties dialog"<<cc<<channel;
+	}
+}
+
 void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
 {
 	popUpMenu(event->globalPos());
@@ -332,6 +341,7 @@ void QuteWidget::openProperties()
 	connect(dialog, SIGNAL(accepted()), this, SLOT(apply()));
 	connect(applyButton, SIGNAL(released()), this, SLOT(apply()));
 	connect(cancelButton, SIGNAL(released()), dialog, SLOT(close()));
+	connect(midiLearnButton, SIGNAL(released()),this, SLOT(openMidiDialog()));
 	dialog->exec();
 	if (dialog->result() != QDialog::Accepted) {
 		qDebug() << "QuteWidget::openProperties() dialog not accepted";
@@ -340,10 +350,16 @@ void QuteWidget::openProperties()
 	parentWidget()->setFocus(Qt::OtherFocusReason); // For some reason focus is grabbed away from the layout, but this doesn't solve the problem...
 }
 
+
 void QuteWidget::deleteWidget()
 {
 	//   qDebug("QuteWidget::deleteWidget()");
 	emit(deleteThisWidget(this));
+}
+
+void QuteWidget::openMidiDialog()
+{
+	emit showMidiLearn(this);
 }
 
 void QuteWidget::createPropertiesDialog()
@@ -397,6 +413,8 @@ void QuteWidget::createPropertiesDialog()
 	midichanSpinBox = new QSpinBox(dialog);
 	midichanSpinBox->setRange(0,127);
 	layout->addWidget(midichanSpinBox, 14,3, Qt::AlignLeft|Qt::AlignVCenter);
+	midiLearnButton = new QPushButton(tr("Midi learn"));
+	layout->addWidget(midiLearnButton,14,4, Qt::AlignLeft|Qt::AlignVCenter);
 	acceptButton = new QPushButton(tr("Ok"));
 	layout->addWidget(acceptButton, 15, 3, Qt::AlignCenter|Qt::AlignVCenter);
 	applyButton = new QPushButton(tr("Apply"));

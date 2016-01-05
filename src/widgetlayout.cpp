@@ -944,6 +944,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
 	connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
 	connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
 	connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
+	connect(widget, SIGNAL(showMidiLearn(QuteWidget *)), this, SIGNAL(showMidiLearn(QuteWidget *)));
 	m_widgets.append(widget);
 	//  qDebug() << "WidgetLayout::registerWidget " << m_widgets.size() << widget;
 	if (m_editMode) {
@@ -965,6 +966,7 @@ void WidgetLayout::appendMessage(QString message)
 		consoleWidgets[i]->scrollToEnd();
 	}
 }
+
 
 void WidgetLayout::flush()
 {

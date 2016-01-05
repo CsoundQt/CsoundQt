@@ -57,6 +57,7 @@ void MidiLearnDialog::setMidiController(int channel, int cc)
             m_widget->setProperty("QCS_midichan", channel);
             m_widget->applyInternalProperties();
             m_widget->markChanged();
+			m_widget->updateDialogWindow(cc,channel); // if widgets' properties dialog is open, update the values there too
         }
     }
 }

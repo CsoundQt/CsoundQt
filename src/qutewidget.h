@@ -72,6 +72,7 @@ public:
 	void createXmlWriter(QXmlStreamWriter &s);
 	void markChanged();
 	void canFocus(bool can);
+	void updateDialogWindow(int cc, int channel);
 
 	bool m_valueChanged;
 	bool m_value2Changed;
@@ -89,6 +90,7 @@ protected:
 	QLineEdit *nameLineEdit;
 	QSpinBox *midiccSpinBox;
 	QSpinBox *midichanSpinBox;
+	QPushButton *midiLearnButton;
 	QWidget *m_widget;
 	QDialog *dialog;
 	QGridLayout *layout;  // For preference dialog
@@ -114,6 +116,7 @@ protected:
 protected slots:
 	void apply();
 	void deleteWidget();
+	void openMidiDialog();
 
 private:
 
@@ -129,6 +132,8 @@ signals:
 	void widgetChanged(QuteWidget* widget);
 	void deleteThisWidget(QuteWidget *thisWidget);
 	void propertiesAccepted();
+	void showMidiLearn(QuteWidget* widget);
+
 };
 
 #endif

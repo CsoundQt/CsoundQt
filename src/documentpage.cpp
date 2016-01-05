@@ -54,6 +54,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLis
 		connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
 		connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)), this, SLOT(passSelectedWidget(QuteWidget*)));
 		connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)), this, SLOT(passUnselectedWidget(QuteWidget*)));
+		connect(wl,SIGNAL(showMidiLearn(QuteWidget*)),this, SLOT(showMidiLearn(QuteWidget*)));
 	}
 }
 
@@ -1237,6 +1238,7 @@ WidgetLayout* DocumentPage::newWidgetLayout()
 	connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)), this, SLOT(passUnselectedWidget(QuteWidget*)));
 	//  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
 	//        this, SLOT(setWidgetClipboard(QString)));
+	connect(wl,SIGNAL(showMidiLearn(QuteWidget *)),this, SLOT(showMidiLearn(QuteWidget *)));
 	return wl;
 }
 
@@ -1348,15 +1350,23 @@ void DocumentPage::hideWidgets()
 	}
 }
 
-void DocumentPage::passSelectedWidget(QuteWidget *widget)
+void DocumentPage::passSelectedWidget(QuteWidget *widget) // necessary only when ML is opened from edit menu and a widget is selected.
 {
 	m_midiLearn->setCurrentWidget(widget);
 }
 
-void DocumentPage::passUnselectedWidget(QuteWidget *widget)
+void DocumentPage::passUnselectedWidget(QuteWidget *widget) // necessary only when ML is opened from edit menu and a widget is selected.
 {
 	// TODO: Better options for unselecting widgets.
 	m_midiLearn->setCurrentWidget(NULL);
+}
+
+void DocumentPage::showMidiLearn(QuteWidget *widget)
+{
+	//qDebug()<<"DocumentPage::showMidiLearn";
+	m_midiLearn->setCurrentWidget(widget);
+	m_midiLearn->setModal(true); // not to leave the dialog floating around
+	m_midiLearn->show();
 }
 
 void DocumentPage::applyMacOptions(QStringList options)

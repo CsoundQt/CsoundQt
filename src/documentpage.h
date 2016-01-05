@@ -187,6 +187,7 @@ public slots:
 	void hideWidgets();
 	void passSelectedWidget(QuteWidget* widget);
 	void passUnselectedWidget(QuteWidget* widget);
+	void showMidiLearn(QuteWidget *widget);
 	void applyMacOptions(QStringList options);
 	void setMacOption(QString option, QString newValue);
 	void setModified(bool mod = true);
