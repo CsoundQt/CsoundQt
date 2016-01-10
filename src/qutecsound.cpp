@@ -166,9 +166,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
     createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
     readSettings();
 
-    bool widgetsVisible = widgetPanel->isVisible(); // Must be after readSettings() to save last state
+	bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state // was: isVisible() - in some reason reported always false
     showWidgetsAct->setChecked(false); // To avoid showing and reshowing panels during initial load
-    widgetPanel->hide();  // Hide until CsoundQt has finished loading
+	widgetPanel->hide();  // Hide until CsoundQt has finished loading
 
     bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
     if (scratchPadVisible)
@@ -270,7 +270,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_closing = false;
     updateInspector(); //Starts update inspector thread
 
-    showWidgetsAct->setChecked(widgetsVisible);
+	showWidgetsAct->setChecked(widgetsVisible);
     if (!m_options->widgetsIndependent) {
         // FIXME: for some reason this produces a move event for widgetlayout with pos (0,0)
         widgetPanel->setVisible(widgetsVisible);
@@ -3310,7 +3310,7 @@ void CsoundQt::connectActions()
     }
     else {
         connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
-        connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
+		connect(widgetPanel, SIGNAL( Close(bool)), showWidgetsAct, SLOT(setChecked(bool))); // uppercase?? Close also in  2949
     }
 }
 
@@ -4194,7 +4194,7 @@ void CsoundQt::readSettings()
     if (settingsVersion < 3 && settingsVersion > 0) {
         showNewFormatWarning();
         m_options->csdTemplate = QCS_DEFAULT_TEMPLATE;
-    }
+	}
 }
 
 void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
