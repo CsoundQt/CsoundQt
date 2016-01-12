@@ -95,6 +95,11 @@ public:
 	bool childHasFocus();
 	void print(QPrinter *printer);
 
+
+	bool matchLeftParenthesis(QTextBlock currentBlock, int i, int numLeftParentheses);
+	bool matchRightParenthesis(QTextBlock currentBlock, int index, int numRightParentheses);
+	void createParenthesisSelection(int pos, bool paired=true);
+
 public slots:
 	void setModified(bool mod = true);
 	void syntaxCheck();
@@ -157,13 +162,14 @@ private:
 	HoverWidget *m_hoverWidget;
 	QLabel *m_hoverText;
 	QString m_currentOpcodeText;
-	QPair<int, int> m_parenspos;
+	//QPair<int, int> m_parenspos;
 
 	bool m_isModified;
 	bool m_autoComplete;
 	bool m_autoParameterMode;
 	bool errorMarked;
 	bool internalChange;  // to let popoup opcode completion know if text change was internal
+	QTextEdit * m_currentEditor;
 
 	bool lastCaseSensitive; // These last three are for search and replace
 	QString lastSearch;

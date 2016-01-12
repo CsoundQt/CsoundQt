@@ -24,6 +24,27 @@
 
 #include <QDebug>
 
+TextBlockData::TextBlockData()
+{
+	// Nothing to do
+}
+
+QVector<ParenthesisInfo *> TextBlockData::parentheses()
+{
+	return m_parentheses;
+}
+
+
+void TextBlockData::insert(ParenthesisInfo *info)
+{
+	int i = 0;
+	while (i < m_parentheses.size() &&
+		info->position > m_parentheses.at(i)->position)
+		++i;
+
+	m_parentheses.insert(i, info);
+}
+
 Highlighter::Highlighter(QTextDocument *parent)
 	: QSyntaxHighlighter(parent)
 {
@@ -148,6 +169,31 @@ void Highlighter::highlightBlock(const QString &text)
         highlightCsoundBlock(text); // maybe anything not python or xml should be higlighter as csound?
         break;
 	}
+	// for parenthesis
+	TextBlockData *data = new TextBlockData;
+
+	int leftPos = text.indexOf('(');
+	while (leftPos != -1) {
+		ParenthesisInfo *info = new ParenthesisInfo;
+		info->character = '(';
+		info->position = leftPos;
+
+		data->insert(info);
+		leftPos = text.indexOf('(', leftPos + 1);
+	}
+
+	int rightPos = text.indexOf(')');
+	while (rightPos != -1) {
+		ParenthesisInfo *info = new ParenthesisInfo;
+		info->character = ')';
+		info->position = rightPos;
+
+		data->insert(info);
+
+		rightPos = text.indexOf(')', rightPos +1);
+	}
+
+	setCurrentBlockUserData(data);
 }
 
 void Highlighter::highlightCsoundBlock(const QString &text)

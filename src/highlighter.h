@@ -31,9 +31,30 @@
 
 #include <QTextDocument>
 
+struct ParenthesisInfo
+{
+	char character;
+	int position;
+};
+
+class TextBlockData : public QTextBlockUserData
+{
+public:
+	TextBlockData();
+
+	QVector<ParenthesisInfo *> parentheses();
+	void insert(ParenthesisInfo *info);
+
+private:
+	QVector<ParenthesisInfo *> m_parentheses;
+};
+
 class Highlighter : public QSyntaxHighlighter
 {
 	Q_OBJECT
+
+//for parentheses matching:
+
 
 public:
 	Highlighter(QTextDocument *parent = 0);

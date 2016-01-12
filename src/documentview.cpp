@@ -30,6 +30,7 @@
 #include "texteditor.h"
 
 
+
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	BaseView(parent,opcodeTree)
 {
@@ -656,111 +657,41 @@ void DocumentView::syntaxCheck()
 		editor = (TextEditor *) sender();
 	}
 
-	// Clear marked parens
+	m_currentEditor = editor ; // for parenthesis functions
+
 	QTextCursor cursor = editor->textCursor();
-	if (m_parenspos.first >= 0) {
-		cursor.setPosition(m_parenspos.first);
-		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 2);
-		QTextCharFormat fmt;
-		editor->blockSignals(true);
-		cursor.setCharFormat(fmt);
-		editor->blockSignals(false);
-		m_parenspos.first = -1;
-	}
-	if (m_parenspos.second >= 0) {
-		cursor.setPosition(m_parenspos.second);
-		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 2);
-		QTextCharFormat fmt;
-		editor->blockSignals(true);
-		cursor.setCharFormat(fmt);
-		editor->blockSignals(false);
-		m_parenspos.second = -1;
-	}
 
-	QStringList parenStack;
-	bool rightParenMatch = false;
-	// Check for matching parens
-	cursor = editor->textCursor();
-	cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-	QString chr = cursor.selectedText();
-	if (chr == ")") {
-		m_parenspos.second = cursor.position();
-		m_parenspos.first = m_parenspos.second;
-		parenStack.push_back(")");
-		while (m_parenspos.first-- >= 0) {
-			cursor.clearSelection();
-			cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-			QString chr = cursor.selectedText();
-			if (chr == ")") {
-				parenStack.push_back(")");
-			}
-			if (chr == "(") {
-				parenStack.pop_back();
-				if (parenStack.length() == 0) {
-					rightParenMatch = true;
-					break;
-				}
+	// matchparenthesis. Code by Geir Vatterkar see https://doc.qt.io/archives/qq/QtQuarterly31.pdf
+	// some corrections by Heinz van Saanen http://qt-apps.org/content/show.php/CLedit?content=125532 ; comments: http://www.qtcentre.org/archive/index.php/t-31084.html
+
+	QList<QTextEdit::ExtraSelection> selections;
+	editor->setExtraSelections(selections);
+
+	TextBlockData *data = static_cast<TextBlockData *>(editor->textCursor().block().userData());
+
+	if (data) {
+		QVector<ParenthesisInfo *> infos = data->parentheses();
+
+		int pos = editor->textCursor().block().position();
+		for (int i = 0; i < infos.size(); ++i) {
+			ParenthesisInfo *info = infos.at(i);
+
+			int curPos = editor->textCursor().position() - editor->textCursor().block().position();
+			if (info->position == curPos - 1 && info->character == '(') {
+				if (matchLeftParenthesis(editor->textCursor().block(), i + 1, 0))
+					createParenthesisSelection(pos + info->position, true); // found, mark as pair
+				else
+					createParenthesisSelection(pos + info->position, false); // no pair, mark as single
+			} else if (info->position == curPos - 1 && info->character == ')') {
+				if (matchRightParenthesis(editor->textCursor().block(), i - 1, 0))
+					createParenthesisSelection(pos + info->position, true);
+				else
+					createParenthesisSelection(pos + info->position, false);
 			}
 		}
 	}
 
-	cursor = editor->textCursor();
-	cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-	chr = cursor.selectedText();
-	if (chr == "(") {
-		m_parenspos.first = cursor.position() - 1;
-		m_parenspos.second = m_parenspos.first + 1;
-		parenStack.push_back(")");
-		int charCount = editor->document()->characterCount();
-		while (m_parenspos.second < charCount) {
-			cursor.clearSelection();
-			cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-			QString chr = cursor.selectedText();
-			if (chr == "(") {
-				parenStack.push_back("(");
-			}
-			if (chr == ")") {
-				parenStack.pop_back();
-				if (parenStack.length() == 0) {
-					rightParenMatch = true;
-					break;
-				}
-			}
-			m_parenspos.second++;
-		}
-	}
-
-	// Now highlight the parens
-	if(m_parenspos.first >=0) {
-		cursor.setPosition(m_parenspos.first);
-		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-		QTextCharFormat fmt;
-		if (rightParenMatch) {
-			fmt.setBackground(QBrush(Qt::lightGray));
-		} else {
-			fmt.setBackground(QBrush(Qt::magenta));
-		}
-		editor->blockSignals(true);
-		cursor.setCharFormat(fmt);
-		editor->blockSignals(false);
-	}
-
-	if(m_parenspos.second >=0) {
-		cursor.setPosition(m_parenspos.second);
-		cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-		QTextCharFormat fmt;
-		if (rightParenMatch) {
-			fmt.setBackground(QBrush(Qt::lightGray));
-		} else {
-			fmt.setBackground(QBrush(Qt::magenta));
-		}
-		editor->blockSignals(true);
-		cursor.setCharFormat(fmt);
-		editor->blockSignals(false);
-	}
-
-	cursor = editor->textCursor();
-
+	// syntax check
 	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
 	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
 	QStringList words = cursor.selectedText().split(QRegExp("\\b"),
@@ -786,6 +717,94 @@ void DocumentView::syntaxCheck()
 		hideHoverText();
 	}
 }
+
+// parentheses matching functions -------------
+
+bool DocumentView::matchLeftParenthesis(QTextBlock currentBlock, int i, int numLeftParentheses)
+{
+	TextBlockData *data = static_cast<TextBlockData *>(currentBlock.userData());
+	QVector<ParenthesisInfo *> infos = data->parentheses();
+
+	int docPos = currentBlock.position();
+	for (; i < infos.size(); ++i) {
+		ParenthesisInfo *info = infos.at(i);
+
+		if (info->character == '(') {
+			++numLeftParentheses;
+			continue;
+		}
+
+		if (info->character == ')' && numLeftParentheses == 0) {
+			createParenthesisSelection(docPos + info->position);
+			return true;
+		} else
+			--numLeftParentheses;
+	}
+
+	currentBlock = currentBlock.next();
+	if (currentBlock.isValid())
+		return matchLeftParenthesis(currentBlock, 0, numLeftParentheses);
+
+	return false;
+}
+
+
+bool DocumentView::matchRightParenthesis(QTextBlock currentBlock, int index, int numRightParentheses)
+{
+	TextBlockData *data = static_cast<TextBlockData *>(currentBlock.userData());
+	QVector<ParenthesisInfo *> parentheses = data->parentheses();
+
+	// Match in same line?
+	int docPos = currentBlock.position();
+	for (int j=index; j>=0; --j ) {
+		ParenthesisInfo *info = parentheses.at(j);
+		if (info->character == ')') {
+			++numRightParentheses;
+			continue;
+		}
+		if (info->character == '(' && numRightParentheses == 0) {
+			createParenthesisSelection(docPos + info->position);
+			return true;
+		} else
+			--numRightParentheses;
+	}
+
+	// No match yet? Then try previous block
+	currentBlock = currentBlock.previous();
+	if (currentBlock.isValid()) {
+		// Recalculate correct index first
+		TextBlockData *data = static_cast<TextBlockData *>( currentBlock.userData() );
+		QVector<ParenthesisInfo *> infos = data->parentheses();
+
+		return matchRightParenthesis(currentBlock, infos.size()-1, numRightParentheses);
+	}
+
+	// No match at all
+	return false;
+}
+
+void DocumentView::createParenthesisSelection(int pos, bool paired)
+{
+	//TODO: get editor from parameters
+	QTextEdit * editor = (!m_currentEditor) ? m_mainEditor : m_currentEditor ; // if currentEditor not set, use mainEditor
+
+	QList<QTextEdit::ExtraSelection> selections = editor->extraSelections();
+
+	QTextEdit::ExtraSelection selection;
+	QTextCharFormat format = selection.format;
+	format.setBackground( (paired) ? Qt::lightGray: Qt::magenta); // if single parenthesis, mark with magenta
+	selection.format = format;
+
+	QTextCursor cursor = editor->textCursor();
+	cursor.setPosition(pos);
+	cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+	selection.cursor = cursor;
+
+	selections.append(selection);
+
+	editor->setExtraSelections(selections);
+}
+
 
 void DocumentView::textChanged()
 {
