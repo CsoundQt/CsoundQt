@@ -266,7 +266,7 @@ void QuteWidget::canFocus(bool can)
 
 void QuteWidget::updateDialogWindow(int cc, int channel) // to update values from midi Learn window to widget properties' dialog
 {
-	if (dialog->isVisible()) {
+	if (dialog->isVisible() && acceptsMidi()) {
 		midiccSpinBox->setValue(cc);
 		midichanSpinBox->setValue(channel);
 		//qDebug()<<"Updated MIDI values in properties dialog"<<cc<<channel;
@@ -341,7 +341,9 @@ void QuteWidget::openProperties()
 	connect(dialog, SIGNAL(accepted()), this, SLOT(apply()));
 	connect(applyButton, SIGNAL(released()), this, SLOT(apply()));
 	connect(cancelButton, SIGNAL(released()), dialog, SLOT(close()));
-	connect(midiLearnButton, SIGNAL(released()),this, SLOT(openMidiDialog()));
+	if (acceptsMidi()) {
+		connect(midiLearnButton, SIGNAL(released()),this, SLOT(openMidiDialog()));
+	}
 	dialog->exec();
 	if (dialog->result() != QDialog::Accepted) {
 		qDebug() << "QuteWidget::openProperties() dialog not accepted";
@@ -401,20 +403,23 @@ void QuteWidget::createPropertiesDialog()
 	nameLineEdit->setFocus(Qt::OtherFocusReason);
 	nameLineEdit->selectAll();
 	layout->addWidget(nameLineEdit, 3, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
-	label->setText("MIDI CC =");
-	layout->addWidget(label, 14, 0, Qt::AlignRight|Qt::AlignVCenter);
-	midiccSpinBox = new QSpinBox(dialog);
-	midiccSpinBox->setRange(0,119);
-	layout->addWidget(midiccSpinBox, 14,1, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
-	label->setText("MIDI Channel =");
-	layout->addWidget(label, 14, 2, Qt::AlignRight|Qt::AlignVCenter);
-	midichanSpinBox = new QSpinBox(dialog);
-	midichanSpinBox->setRange(0,127);
-	layout->addWidget(midichanSpinBox, 14,3, Qt::AlignLeft|Qt::AlignVCenter);
-	midiLearnButton = new QPushButton(tr("Midi learn"));
-	layout->addWidget(midiLearnButton,14,4, Qt::AlignLeft|Qt::AlignVCenter);
+	if (acceptsMidi()) { // only when MIDI-enabled widgets
+		label = new QLabel(dialog);
+		label->setText("MIDI CC =");
+		layout->addWidget(label, 14, 0, Qt::AlignRight|Qt::AlignVCenter);
+		midiccSpinBox = new QSpinBox(dialog);
+		midiccSpinBox->setRange(0,119);
+		layout->addWidget(midiccSpinBox, 14,1, Qt::AlignLeft|Qt::AlignVCenter);
+		label = new QLabel(dialog);
+		label->setText("MIDI Channel =");
+		layout->addWidget(label, 14, 2, Qt::AlignRight|Qt::AlignVCenter);
+		midichanSpinBox = new QSpinBox(dialog);
+		midichanSpinBox->setRange(0,127);
+		layout->addWidget(midichanSpinBox, 14,3, Qt::AlignLeft|Qt::AlignVCenter);
+
+		midiLearnButton = new QPushButton(tr("Midi learn"));
+		layout->addWidget(midiLearnButton,14,4, Qt::AlignLeft|Qt::AlignVCenter);
+	}
 	acceptButton = new QPushButton(tr("Ok"));
 	layout->addWidget(acceptButton, 15, 3, Qt::AlignCenter|Qt::AlignVCenter);
 	applyButton = new QPushButton(tr("Apply"));
@@ -429,8 +434,10 @@ void QuteWidget::createPropertiesDialog()
 	wSpinBox->setValue(this->width());
 	hSpinBox->setValue(this->height());
 	nameLineEdit->setText(getChannelName());
-	midiccSpinBox->setValue(this->m_midicc);
-	midichanSpinBox->setValue(this->m_midichan);
+	if (acceptsMidi()) {
+		midiccSpinBox->setValue(this->m_midicc);
+		midichanSpinBox->setValue(this->m_midichan);
+	}
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -447,8 +454,10 @@ void QuteWidget::applyProperties()
 	setProperty("QCS_y",ySpinBox->value());
 	setProperty("QCS_width", wSpinBox->value());
 	setProperty("QCS_height", hSpinBox->value());
-	setProperty("QCS_midicc", midiccSpinBox->value());
-	setProperty("QCS_midichan", midichanSpinBox->value());
+	if (acceptsMidi()) {
+		setProperty("QCS_midicc", midiccSpinBox->value());
+		setProperty("QCS_midichan", midichanSpinBox->value());
+	}
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
