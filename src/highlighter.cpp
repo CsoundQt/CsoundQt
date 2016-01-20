@@ -65,7 +65,8 @@ Highlighter::Highlighter(QTextDocument *parent)
 				<< "<CsVersion>" << "</CsVersion>"
 				<< "<MacOptions>" << "</MacOptions>"
 				<< "<MacGUI>" << "</MacGUI>"
-				<< "<csLADSPA>" << "</csLADSPA>";
+				<< "<csLADSPA>" << "</csLADSPA>"
+				<< "<Cabbage>" << "</Cabbage>";
 	instFormat.setForeground(QColor("purple"));
 	instFormat.setFontWeight(QFont::Bold);
 	instPatterns << "instr" << "endin" << "opcode" << "endop";

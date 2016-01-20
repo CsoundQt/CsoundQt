@@ -677,7 +677,7 @@ void DocumentView::syntaxCheck()
 			ParenthesisInfo *info = infos.at(i);
 
 			int curPos = editor->textCursor().position() - editor->textCursor().block().position();
-			if (info->position == curPos - 1 && info->character == '(') {
+			if (info->position == curPos && info->character == '(') {
 				if (matchLeftParenthesis(editor->textCursor().block(), i + 1, 0))
 					createParenthesisSelection(pos + info->position, true); // found, mark as pair
 				else
