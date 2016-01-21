@@ -71,7 +71,8 @@ public:
 	bool keyRepeat;
 	bool debugLiveEvents;
 	int consoleBufferSize;
-	int midiInterface; // For internal CsoundQt MIDI control
+	int midiInterface;
+	int midiOutInterface;
 	// Csound engine flags
 	bool noBuffer;
 	bool noPython;
@@ -91,6 +92,7 @@ public:
 	QString csoundExecutable;
 	QString logFile;
 	QString sdkDir;
+	QString templateDir;
 
 	typedef enum {
 		CS_ORC = 0x01,

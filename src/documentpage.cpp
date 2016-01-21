@@ -23,6 +23,7 @@
 #include <cwindow.h>
 #include <csound.hpp>  // TODO These two are necessary for the WINDAT struct. Can they be moved?
 
+
 #include "documentpage.h"
 #include "documentview.h"
 #include "csoundengine.h"
@@ -36,17 +37,25 @@
 #include "highlighter.h"
 #include "widgetlayout.h"
 #include "console.h"
+#include "midilearndialog.h"
 
 #include "curve.h"
 #include "qutebutton.h"
 
 
 // TODO is is possible to move the editor to a separate child class, to be able to use a cleaner class?
-DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists):
+DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists, MidiLearnDialog *midiLearn):
 	BaseDocument(parent, opcodeTree, configlists)
 {
 	init(parent, opcodeTree);
 	m_view->showLineArea(true);
+	m_midiLearn = midiLearn;
+	foreach(WidgetLayout* wl, m_widgetLayouts) {
+		connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
+		connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)), this, SLOT(passSelectedWidget(QuteWidget*)));
+		connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)), this, SLOT(passUnselectedWidget(QuteWidget*)));
+		connect(wl,SIGNAL(showMidiLearn(QuteWidget*)),this, SLOT(showMidiLearn(QuteWidget*)));
+	}
 }
 
 DocumentPage::~DocumentPage()
@@ -78,10 +87,10 @@ void DocumentPage::toggleParameterMode()
 	m_view->toggleParameterMode();
 }
 
-void DocumentPage::showParametersInEditor()
-{
-	m_view->parameterShowShortcutPressed();
-}
+//void DocumentPage::showParametersInEditor()
+//{
+//	m_view->parameterShowShortcutPressed();
+//}
 
 int DocumentPage::setTextString(QString &text)
 {
@@ -93,24 +102,24 @@ int DocumentPage::setTextString(QString &text)
 		return ret;
 	}
 	int baseRet = parseAndRemoveWidgetText(text);
-	if (text.contains("<MacOptions>") and text.contains("</MacOptions>")) {
+    if (text.contains("<MacOptions>") && text.contains("</MacOptions>")) {
 		QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
 		options.resize(options.indexOf("</MacOptions>") + 13);
 		//     qDebug("<MacOptions> present. \n%s", options.toStdString().c_str());
-		if (text.indexOf("</MacOptions>") + 13 < text.size() and text[text.indexOf("</MacOptions>") + 13] == '\n')
+        if (text.indexOf("</MacOptions>") + 13 < text.size() && text[text.indexOf("</MacOptions>") + 13] == '\n')
 			text.remove(text.indexOf("</MacOptions>") + 13, 1); //remove final line break
-		if (text.indexOf("<MacOptions>") > 0 and text[text.indexOf("<MacOptions>") - 1] == '\n')
+        if (text.indexOf("<MacOptions>") > 0 && text[text.indexOf("<MacOptions>") - 1] == '\n')
 			text.remove(text.indexOf("<MacOptions>") - 1, 1); //remove initial line break
 		text.remove(text.indexOf("<MacOptions>"), options.size());
 		//     qDebug("<MacOptions> present. %s", getMacOptions("WindowBounds").toStdString().c_str());
 		m_macOptions = options.split('\n');
 	}
-	if (text.contains("<MacPresets>") and text.contains("</MacPresets>")) {
+    if (text.contains("<MacPresets>") && text.contains("</MacPresets>")) {
 		m_macPresets = text.right(text.size()-text.indexOf("<MacPresets>"));
 		m_macPresets.resize(m_macPresets.indexOf("</MacPresets>") + 12);
-		if (text.indexOf("</MacPresets>") + 12 < text.size() and text[text.indexOf("</MacPresets>") + 12] == '\n')
+        if (text.indexOf("</MacPresets>") + 12 < text.size() && text[text.indexOf("</MacPresets>") + 12] == '\n')
 			text.remove(text.indexOf("</MacPresets>") + 12, 1); //remove final line break
-		if (text.indexOf("<MacPresets>") > 0 and text[text.indexOf("<MacPresets>") - 1] == '\n')
+        if (text.indexOf("<MacPresets>") > 0 && text[text.indexOf("<MacPresets>") - 1] == '\n')
 			text.remove(text.indexOf("<MacPresets>") - 1, 1); //remove initial line break
 		text.remove(text.indexOf("<MacPresets>"), m_macPresets.size());
 		//    qDebug("<MacPresets> present.");
@@ -118,12 +127,12 @@ int DocumentPage::setTextString(QString &text)
 	else {
 		m_macPresets = "";
 	}
-	if (text.contains("<MacGUI>") and text.contains("</MacGUI>")) {
+    if (text.contains("<MacGUI>") && text.contains("</MacGUI>")) {
 		QString m_macGUI = text.right(text.size()-text.indexOf("<MacGUI>"));
 		m_macGUI.resize(m_macGUI.indexOf("</MacGUI>") + 9);
-		if (text.indexOf("</MacGUI>") + 9 < text.size() and text[text.indexOf("</MacGUI>") + 9] == '\n')
+        if (text.indexOf("</MacGUI>") + 9 < text.size() && text[text.indexOf("</MacGUI>") + 9] == '\n')
 			text.remove(text.indexOf("</MacGUI>") + 9, 1); //remove final line break
-		if (text.indexOf("<MacGUI>") > 0 and text[text.indexOf("<MacGUI>") - 1] == '\n')
+        if (text.indexOf("<MacGUI>") > 0 && text[text.indexOf("<MacGUI>") - 1] == '\n')
 			text.remove(text.indexOf("<MacGUI>") - 1, 1); //remove initial line break
 		text.remove(m_macGUI);
 		if (baseRet < 1) {
@@ -148,7 +157,7 @@ int DocumentPage::setTextString(QString &text)
 			setMacOption("Options:", optionsText);
 			index = text.indexOf("<CsOptions>");
 			int endindex = text.indexOf("</CsOptions>");
-			if (index >= 0 and endindex > index) {
+            if (index >= 0 && endindex > index) {
 				text.remove(index, endindex - index);
 				text.insert(index, "<CsOptions>\n" + outFile);
 			}
@@ -1142,6 +1151,29 @@ void DocumentPage::registerButton(QuteButton *b)
 	connect(b, SIGNAL(stop()), static_cast<CsoundQt *>(parent()), SLOT(stop()));
 }
 
+void DocumentPage::queueMidiIn(std::vector< unsigned char > *message)
+{
+    WidgetLayout *d = m_widgetLayouts[0];
+    unsigned int nBytes = message->size();
+    if (nBytes > 3 || nBytes < 1) {
+        qDebug() << "MIDI message ignored. nBytes=" << nBytes << " status =" << (int)message->at(0);
+        return;
+    }
+    if ( ((d->midiWriteCounter + 1) % QCS_MAX_MIDI_QUEUE) != d->midiReadCounter) {
+        int index = d->midiWriteCounter;
+        for (unsigned int i = 0; i < nBytes; i++) {
+            d->midiQueue[index][i] = (int)message->at(i);
+        }
+        d->midiWriteCounter = (d->midiWriteCounter + 1) % QCS_MAX_MIDI_QUEUE;
+    }
+    m_csEngine->queueMidiIn(message);
+}
+
+void DocumentPage::queueVirtualMidiIn(std::vector< unsigned char > &message)
+{
+    m_csEngine->queueVirtualMidiIn(message);
+}
+
 void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 {
 	fileName = "";
@@ -1179,7 +1211,6 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 
 	// Connect for clearing marked lines and letting inspector know text has changed
 	connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));
-	connect(m_view, SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(opcodeSyntax(QString)));
 	//   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
 
 	connect(m_csEngine, SIGNAL(errorLines(QList<QPair<int, QString> >)),
@@ -1203,8 +1234,11 @@ WidgetLayout* DocumentPage::newWidgetLayout()
 {
 	WidgetLayout* wl = BaseDocument::newWidgetLayout();
 	connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
+	connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)), this, SLOT(passSelectedWidget(QuteWidget*)));
+	connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)), this, SLOT(passUnselectedWidget(QuteWidget*)));
 	//  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
 	//        this, SLOT(setWidgetClipboard(QString)));
+	connect(wl,SIGNAL(showMidiLearn(QuteWidget *)),this, SLOT(showMidiLearn(QuteWidget *)));
 	return wl;
 }
 
@@ -1230,6 +1264,7 @@ void DocumentPage::stop()
 
 int DocumentPage::record(int format)
 {
+#ifdef	PERFTHREAD_RECORD
 	if (fileName.startsWith(":/")) {
 		QMessageBox::critical(static_cast<QWidget *>(parent()),
 							  tr("CsoundQt"),
@@ -1250,6 +1285,10 @@ int DocumentPage::record(int format)
 	}
 	emit setCurrentAudioFile(recName);
 	return m_csEngine->startRecording(format, recName);
+#else
+	QMessageBox::warning(NULL, tr("Recording not possible"), tr("This version of CsoundQt was not built with recording support."));
+	return 0;
+#endif
 }
 
 void DocumentPage::perfEnded()
@@ -1309,6 +1348,25 @@ void DocumentPage::hideWidgets()
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
 		wl->setVisible(false);
 	}
+}
+
+void DocumentPage::passSelectedWidget(QuteWidget *widget) // necessary only when ML is opened from edit menu and a widget is selected.
+{
+	m_midiLearn->setCurrentWidget(widget);
+}
+
+void DocumentPage::passUnselectedWidget(QuteWidget *widget) // necessary only when ML is opened from edit menu and a widget is selected.
+{
+	// TODO: Better options for unselecting widgets.
+	m_midiLearn->setCurrentWidget(NULL);
+}
+
+void DocumentPage::showMidiLearn(QuteWidget *widget)
+{
+	//qDebug()<<"DocumentPage::showMidiLearn";
+	m_midiLearn->setCurrentWidget(widget);
+	m_midiLearn->setModal(true); // not to leave the dialog floating around
+	m_midiLearn->show();
 }
 
 void DocumentPage::applyMacOptions(QStringList options)
@@ -1563,11 +1621,6 @@ void DocumentPage::setPanelTempo(LiveEventFrame *panel, double tempo)
 	if (index >= 0) {
 		m_liveEventControl->setPanelTempo(index, tempo);
 	}
-}
-
-void DocumentPage::opcodeSyntax(QString message)
-{
-	emit opcodeSyntaxSignal(message);
 }
 
 void DocumentPage::evaluatePython(QString code)

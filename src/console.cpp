@@ -93,14 +93,14 @@ void Console::appendMessage(QString msg)
             qDebug() << "error line appended --- " << lnr.toInt();
         }
 
-        if (messageLine.startsWith("B ") or messageLine.contains("rtevent", Qt::CaseInsensitive) or  messageLine.contains("evaluated", Qt::CaseInsensitive)) {
+        if (messageLine.startsWith("B ") || messageLine.contains("rtevent", Qt::CaseInsensitive) ||  messageLine.contains("evaluated", Qt::CaseInsensitive)) {
 			setTextColor(QColor("blue"));
 		}
 		if (messageLine.contains("overall samples out of range")
-				or messageLine.contains("disabled")
-                or messageLine.contains("error", Qt::CaseInsensitive)
-                or messageLine.contains("Found:")
-                or messageLine.contains("Line:")) { // any error
+                || messageLine.contains("disabled")
+                || messageLine.contains("error", Qt::CaseInsensitive)
+                || messageLine.contains("Found:")
+                || messageLine.contains("Line:")) { // any error
 			setTextColor(QColor("red"));
 		}
 		if (messageLine.contains("warning", Qt::CaseInsensitive)) {
@@ -169,7 +169,7 @@ void Console::contextMenuEvent(QContextMenuEvent *event)
 
 void Console::keyPressEvent(QKeyEvent *event)
 {
-	if (!event->isAutoRepeat() or m_repeatKeys) {
+    if (!event->isAutoRepeat() || m_repeatKeys) {
 		QString key = event->text();
 		if (key != "") {
 			appendMessage(key);
@@ -180,7 +180,7 @@ void Console::keyPressEvent(QKeyEvent *event)
 
 void Console::keyReleaseEvent(QKeyEvent *event)
 {
-	if (!event->isAutoRepeat() or m_repeatKeys) {
+    if (!event->isAutoRepeat() || m_repeatKeys) {
 		QString key = event->text();
 		if (key != "") {
 			//           appendMessage("rel:" + key);

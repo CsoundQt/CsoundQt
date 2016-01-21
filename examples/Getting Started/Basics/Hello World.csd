@@ -12,7 +12,7 @@ To start it, press the RUN Button in the CsoundQt-toolbar, or choose "Control->R
 <CsOptions>
 </CsOptions>
 <CsInstruments>
-
+ksmps=32
 ; This is a comment!
 ; Comments describe how things are done, and help to explain the code.
 ; They are shown in green in CsoundQt.

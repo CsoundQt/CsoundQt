@@ -21,6 +21,7 @@
 */
 
 #include "dockhelp.h"
+#include "ui_dockhelp.h"
 
 #ifdef USE_QT5
 #include <QtWidgets>
@@ -29,62 +30,30 @@
 #endif
 
 DockHelp::DockHelp(QWidget *parent)
-	: QDockWidget(parent)
+	: QDockWidget(parent), ui(new Ui::DockHelp)
 {
+	ui->setupUi(this);
 	findFlags = 0;
 	setWindowTitle("Opcode Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
-	setContentsMargins(0,0,0,0);
-	QGroupBox *helpBox = new QGroupBox;
-	QVBoxLayout *helpLayout = new QVBoxLayout;
-    helpLayout->setContentsMargins(0,25,0,0);
-	helpBox->setLayout(helpLayout);
 
-	QPushButton* toggleFindButton = new QPushButton(QIcon(":/images/gtk-search.png"), "", helpBox);
-	toggleFindButton->resize(25,25);
-	toggleFindButton->move(fontMetrics().width("Opcode help")+10 ,0);
-	toggleFindButton->setFlat(true);
-	connect(toggleFindButton, SIGNAL(released()), this, SLOT(toggleFindBarVisible()));
-	backButton = new QPushButton(QIcon(":/images/br_prev.png"), "", helpBox);
-	backButton->move(frameGeometry().width()/2-25, 0);
-	backButton->resize(25, 25);
-	backButton->setFlat(true); // no border
-	connect(backButton, SIGNAL(released()), this, SLOT(browseBack()));
-	forwardButton = new QPushButton(QIcon(":/images/br_next.png"), "", helpBox);
-	forwardButton->move(this->width()/2, 0);
-	forwardButton->resize(25, 25);
-	forwardButton->setFlat(true);
-	connect(forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
+//	connect(ui->toggleFindButton, SIGNAL(released()), this, SLOT(toggleFindBarVisible()));
+	connect(ui->backButton, SIGNAL(released()), this, SLOT(browseBack()));
+	connect(ui->forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
+	connect(ui->opcodesToolButton, SIGNAL(released()), this, SLOT(showOverview()));
+	connect(ui->homeToolButton, SIGNAL(released()), this, SLOT(showManual()));
+	connect(ui->findLine,SIGNAL(returnPressed()),this,SLOT(onReturnPressed()));
+	connect(ui->findLine,SIGNAL(textEdited(QString)),this,SLOT(onTextChanged()));
+	ui->findPreviousAct->setShortcut(QKeySequence::FindPrevious);
+	ui->nextFindAct->setShortcut(QKeySequence::FindNext);
+	connect(ui->findPreviousAct,SIGNAL(triggered()),this,SLOT(onPreviousButtonPressed()));
+	connect(ui->nextFindAct,SIGNAL(triggered()),this,SLOT(onNextButtonPressed()));
+	ui->previousFindButton->setDefaultAction(ui->findPreviousAct);
+	ui->nextFindButton->setDefaultAction(ui->nextFindAct);
 
-	findBar = new QToolBar("findBar");   // search bar, hidden by default
-	findBar->setIconSize(QSize(10,10));
-	QLabel *findLabel = new QLabel(tr("Find:"));
-	findBar->addWidget(findLabel);
-	findLine = new QLineEdit();
-	//findLine->setMaximumWidth(120);
-	connect(findLine,SIGNAL(returnPressed()),this,SLOT(onReturnPressed()));
-	findBar->addWidget(findLine);
-	QAction *previousAction = findBar->addAction(QIcon(":/images/br_prev.png"), "Previous");
-	previousAction->setShortcut(QKeySequence::FindPrevious);
-	QAction *nextAction = findBar->addAction(QIcon(":/images/br_next.png"), "Next");
-	nextAction->setShortcut(QKeySequence::FindNext);
-	connect(previousAction,SIGNAL(triggered()),this,SLOT(onPreviousButtonPressed()));
-	connect(nextAction,SIGNAL(triggered()),this,SLOT(onNextButtonPressed()));
-	QCheckBox *caseBox = new QCheckBox("&Match case");
-	connect(caseBox,SIGNAL(stateChanged(int)),this,SLOT(onCaseBoxChanged(int)));
-	findBar->addWidget(caseBox);
-	QCheckBox *wholeWordBox = new QCheckBox("&Whole words");
-	connect(wholeWordBox,SIGNAL(stateChanged(int)),this,SLOT(onWholeWordBoxChanged(int)));
-	findBar->addWidget(wholeWordBox);
-	findBar->setVisible(false);
-	helpLayout->addWidget(findBar);
-
-	text = new QTextBrowser();  // text area
-	text->setAcceptRichText(true);
-	text->setOpenLinks(false);
-	connect(text, SIGNAL(anchorClicked(QUrl)), this, SLOT(followLink(QUrl)));
-	helpLayout->addWidget(text);
-	setWidget(helpBox);
+	connect(ui->caseBox,SIGNAL(stateChanged(int)),this,SLOT(onCaseBoxChanged(int)));
+	connect(ui->wholeWordBox,SIGNAL(stateChanged(int)),this,SLOT(onWholeWordBoxChanged(int)));
+	connect(ui->text, SIGNAL(anchorClicked(QUrl)), this, SLOT(followLink(QUrl)));
 }
 
 DockHelp::~DockHelp()
@@ -93,7 +62,7 @@ DockHelp::~DockHelp()
 
 bool DockHelp::hasFocus()
 {
-	return QDockWidget::hasFocus() || text->hasFocus();
+	return QDockWidget::hasFocus() || ui->text->hasFocus();
 }
 
 void DockHelp::loadFile(QString fileName)
@@ -104,18 +73,18 @@ void DockHelp::loadFile(QString fileName)
 		//                          tr("Cannot read file %1:\n%2.")
 		//                              .arg(fileName)
 		//                              .arg(file.errorString()));
-		text->setText(tr("Not Found! Make sure the documentation path is set in the Configuration Dialog."));
+		ui->text->setText(tr("Not Found! Make sure the documentation path is set in the Configuration Dialog."));
 		return;
 	}
 #ifdef Q_OS_WIN32
 	QStringList searchPaths;
 	searchPaths << docDir;
-	text->setSearchPaths(searchPaths);
+	ui->text->setSearchPaths(searchPaths);
 	QTextStream in(&file);
 	in.setAutoDetectUnicode(true);
-	text->setHtml(in.readAll());
+	ui->text->setHtml(in.readAll());
 #else
-	text->setSource(QUrl::fromLocalFile(fileName));
+	ui->text->setSource(QUrl::fromLocalFile(fileName));
 #endif
 
 }
@@ -151,12 +120,12 @@ void DockHelp::showOpcodeQuickRef()
 
 void DockHelp::browseBack()
 {
-	text->backward();
+	ui->text->backward();
 }
 
 void DockHelp::browseForward()
 {
-	text->forward();
+	ui->text->forward();
 }
 
 void DockHelp::followLink(QUrl url)
@@ -168,7 +137,7 @@ void DockHelp::followLink(QUrl url)
 		}
 		else {
 			if (!url.toString().endsWith("indexframes.html") ) {
-				text->setSource(url);
+				ui->text->setSource(url);
 			}
 			else { // Don't do anything with frames version...
 				// This could be fixed using the WebKit rendering engine
@@ -185,34 +154,36 @@ void DockHelp::followLink(QUrl url)
 
 void DockHelp::copy()
 {
-	text->copy();
+	ui->text->copy();
+}
+
+void DockHelp::onTextChanged()
+{
+	QTextCursor tmpCursor = ui->text->textCursor();
+	tmpCursor.setPosition(ui->text->textCursor().selectionStart());
+	ui->text->setTextCursor(tmpCursor);
+	findFlags &= 6; // first bit (FindBackward) to zero
+	findText(ui->findLine->text());
 }
 
 void DockHelp::onReturnPressed()
 {
 	findFlags &= 6; // first bit (FindBackward) to zero
-	findText(findLine->text());
+	findText(ui->findLine->text());
 }
 
 void DockHelp::onNextButtonPressed()
 {
 	findFlags &= 6; // first bit to zero
-	findText(findLine->text());
+	findText(ui->findLine->text());
 }
 
 void DockHelp::onPreviousButtonPressed()
 {
 	findFlags |= QTextDocument::FindBackward;
-	findText(findLine->text());
+	findText(ui->findLine->text());
 }
 
-void DockHelp::toggleFindBarVisible()
-{
-	findBar->setVisible(!findBar->isVisible());
-	if (findBar->isVisible()) {
-		findLine->setFocus();
-	}
-}
 
 void DockHelp::onCaseBoxChanged(int value)
 {
@@ -232,18 +203,22 @@ void DockHelp::onWholeWordBoxChanged(int value)
 
 void DockHelp::findText(QString expr)
 {
-	QTextCursor tmpCursor = text->textCursor();
-	if (!text->find(expr,findFlags)) { // if not found, try from start
-		text->moveCursor(QTextCursor::Start);
-		if (!text->find(findLine->text(),findFlags)) {
-			text->setTextCursor(tmpCursor); // if not found at all, restore position
+	QTextCursor tmpCursor = ui->text->textCursor();
+	if (!ui->text->find(expr,findFlags)) { // if not found, try from start
+		ui->text->moveCursor(QTextCursor::Start);
+		if (!ui->text->find(ui->findLine->text(),findFlags)) {
+			ui->text->setTextCursor(tmpCursor); // if not found at all, restore position
 		}
+	} else {
+		int cursorY = ui->text->cursorRect().top();
+		QScrollBar *vbar = ui->text->verticalScrollBar();
+		vbar->setValue(vbar->value() + cursorY);
 	}
 }
 
 void DockHelp::resizeEvent(QResizeEvent *e)
 {
 	QDockWidget::resizeEvent(e);
-	backButton->move(frameGeometry().width()/2-25, 0);
-	forwardButton->move(frameGeometry().width()/2, 0);
+	ui->backButton->move(frameGeometry().width()/2-25, 0);
+	ui->forwardButton->move(frameGeometry().width()/2, 0);
 }

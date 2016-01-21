@@ -29,10 +29,26 @@
 #include "highlighter.h"
 #include "texteditor.h"
 
+
+
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	BaseView(parent,opcodeTree)
 {
 	m_autoComplete = true;
+
+	m_hoverWidget = new HoverWidget(m_mainEditor);
+	m_hoverText= new QLabel("Hello", m_hoverWidget);
+	m_hoverText->show();
+	m_hoverText->setStyleSheet(
+				"QLabel {"
+				"border: 1px solid black;"
+//				"border-radius: 4px;"
+				"padding: 2px;"
+				"background-color: #ffffcc;"
+				"};");
+	m_hoverText->setWordWrap(true);
+	m_hoverWidget->hide();
+
 	for (int i = 0; i < editors.size(); i++) {
 		connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
 		splitter->addWidget(editors[i]);
@@ -43,18 +59,19 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	}
 	connect(m_orcEditor, SIGNAL(textChanged()), this, SLOT(textChanged()));
 	connect(m_orcEditor, SIGNAL(cursorPositionChanged()),
-			this, SLOT(syntaxCheck()));
+            this, SLOT(syntaxCheck()));
 	setFocusProxy(m_mainEditor);  // for comment action from main application
 	internalChange = false;
+
 
 	//  m_highlighter = new Highlighter();
 
 	connect(m_mainEditor, SIGNAL(textChanged()),
 			this, SLOT(textChanged()));
 	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
-			this, SLOT(syntaxCheck()));
-	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
 			this, SLOT(updateContext()));
+	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
+			this, SLOT(syntaxCheck()));
 	connect(m_mainEditor, SIGNAL(escapePressed()),
 			this, SLOT(escapePressed()));
 	connect(m_mainEditor, SIGNAL(newLine()),
@@ -67,11 +84,13 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(nextParameter()));
 	connect(m_mainEditor, SIGNAL(backtabPressed()),
 			this, SLOT(prevParameter()));
-	connect(m_mainEditor, SIGNAL(openParameterSelection()),
-			this, SLOT(openParameterSelection()));
 	connect(m_mainEditor, SIGNAL(arrowPressed()),
 			this, SLOT(exitParameterMode()));
 	connect(m_mainEditor, SIGNAL(enterPressed()),
+			this, SLOT(finishParameterMode()));
+	connect(m_mainEditor, SIGNAL(showParameterInfo()),
+			this, SLOT(showHoverText()));
+	connect(m_mainEditor, SIGNAL(requestParameterModeExit()),
 			this, SLOT(exitParameterMode()));
 
 	//TODO put this for line reporting for score editor
@@ -92,26 +111,16 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	syntaxMenu->setPalette(p);
 	connect(syntaxMenu,SIGNAL(keyPressed(QString)),
 			m_mainEditor, SLOT(insertPlainText(QString)));
-	//  connect(syntaxMenu,SIGNAL(aboutToHide()),
-	//          this, SLOT(destroySyntaxMenu()));
-
-	parameterMenu = new MySyntaxMenu(m_mainEditor);
-	connect(parameterMenu,SIGNAL(keyPressed(QString)),
-			m_mainEditor, SLOT(insertPlainText(QString)));
-	parameterButton = new QPushButton("...",m_mainEditor);
-	parameterButton->setVisible(true);
-	parameterButton->resize(25, 20);
-	connect(parameterButton, SIGNAL(clicked()), this, SLOT(openParameterSelection()));
 
 	setViewMode(1);
 	setViewMode(0);  // To force a change
 	setAcceptDrops(true);
+
 }
 
 DocumentView::~DocumentView()
 {
 	disconnect(this, 0,0,0);
-	//  delete m_highlighter;
 }
 
 bool DocumentView::isModified()
@@ -142,21 +151,20 @@ void DocumentView::updateContext()
 	contextStart << "<CsInstruments>" << "<CsScore" << "<CsOptions>";
 	QTextCursor cursor = m_mainEditor->textCursor();
 	cursor.select(QTextCursor::LineUnderCursor);
-	QString line = cursor.selection().toPlainText();
-	int outerContext = 0;
-	while (!cursor.atStart() && outerContext == 0) {
+	QString line = cursor.selection().toPlainText().simplified();
+	while (!cursor.atStart()) {
 		foreach(QString startText, contextStart) {
-			if (line.contains(startText)) {
-				outerContext = contextStart.indexOf(startText) + 1;
+			if (line.startsWith(startText)) {
+				m_currentContext = contextStart.indexOf(startText) + 1;
 				break;
 			}
 		}
-		cursor.movePosition(QTextCursor::PreviousBlock);
-		cursor.select(QTextCursor::LineUnderCursor);
+		cursor.movePosition(QTextCursor::Up);
+		cursor.select(QTextCursor::BlockUnderCursor);
 		line = cursor.selection().toPlainText();
-		cursor.movePosition(QTextCursor::StartOfLine);
+		cursor.movePosition(QTextCursor::StartOfBlock);
 	}
-	if (outerContext == 1) { // Instrument section
+	if (m_currentContext == DocumentView::ORC_CONTEXT) { // Instrument section
 		QString endText = "</CsInstruments>";
 		QTextCursor linecursor = cursor;
 		linecursor.select(QTextCursor::LineUnderCursor);
@@ -184,17 +192,17 @@ void DocumentView::updateOrcContext(QString orc)
 	cursor.select(QTextCursor::LineUnderCursor);
 	QString line = cursor.selection().toPlainText().trimmed();
 	int innerContext = 0;
-	while (!cursor.atStart() && innerContext == 0) {
+	while (!cursor.atStart()) {
 		foreach(QString startText, innerContextStart) {
 			if (line.startsWith(startText)) {
 				innerContext = innerContextStart.indexOf(startText) + 1;
 				break;
 			}
 		}
-		cursor.movePosition(QTextCursor::PreviousBlock);
-		cursor.select(QTextCursor::LineUnderCursor);
+		cursor.movePosition(QTextCursor::Up);
+		cursor.select(QTextCursor::BlockUnderCursor);
 		line = cursor.selection().toPlainText().trimmed();
-		cursor.movePosition(QTextCursor::StartOfLine);
+		cursor.movePosition(QTextCursor::StartOfBlock);
 	}
 	cursor.movePosition(QTextCursor::NextBlock);
 	QString endText = "endin";
@@ -269,14 +277,10 @@ void DocumentView::nextParameter()
 			cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
 		}
 	}
+	m_mainEditor->blockSignals(true); // To avoid triggering the position changed action which hides the text cursor and disables parameter mode
 	m_mainEditor->setTextCursor(cursor);
-	QRect r =  m_mainEditor->cursorRect();
-	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-	parameterButton->move(p);
-	parameterButton->setVisible(true);
-//	if (m_opcodeTree->isOpcode(cursor.selectedText()) && !cursor.atBlockEnd()) {
-//		nextParameter();
-//	}
+	m_mainEditor->blockSignals(false);
+	showHoverText();
 }
 
 void DocumentView::prevParameter()
@@ -308,52 +312,50 @@ void DocumentView::prevParameter()
 			cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
 		}
 	}
+	m_mainEditor->blockSignals(true); // To avoid triggering the position changed action which hides the text cursor and disables parameter mode
 	m_mainEditor->setTextCursor(cursor);
-	QRect r =  m_mainEditor->cursorRect();
-	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-	parameterButton->move(p);
-	parameterButton->setVisible(true);
-//	if (m_opcodeTree->isOpcode(cursor.selectedText()) && !cursor.atBlockStart()) {
-//		prevParameter();
-//	}
+	m_mainEditor->blockSignals(false);
+	showHoverText();
 }
 
-void DocumentView::openParameterSelection()
+void DocumentView::showHoverText()
 {
-	parameterButton->setVisible(false);
-	parameterMenu->clear();
-	if (m_opcodeTree->isOpcode(m_mainEditor->textCursor().selectedText())) {
-		// TODO add actions for opcode in parameter list
-		return;
-	} else {
-		if (m_localVariables.size() < 1) {
-			return;
-		}
-
-		foreach (QString var, m_localVariables) {
-			QAction *a = parameterMenu->addAction(var,
-												  this, SLOT(insertParameterText()));
-			a->setData(var);
-			if(m_localVariables.indexOf(var) == 0) {
-				parameterMenu->setDefaultAction(a);
-			}
-		}
-	}
-	QRect r =  m_mainEditor->cursorRect();
-	QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-	QPoint globalPoint =  m_mainEditor->mapToGlobal(p);
-	//syntaxMenu->setWindowModality(Qt::NonModal);
-	//syntaxMenu->popup(globalPoint);
-	parameterMenu->move(globalPoint);
-	parameterMenu->show();
-	m_mainEditor->setFocus(Qt::OtherFocusReason);
+	QTextCursor cursor  = m_mainEditor->textCursor();
+	QRect cursorRect = m_mainEditor->cursorRect();
+	updateHoverText(cursorRect.x(), cursorRect.y(), cursor.selectedText());
 }
 
-void DocumentView::parameterShowShortcutPressed()
+void DocumentView::hideHoverText()
 {
-	if (parameterButton->isVisible()) {
-		openParameterSelection();
+	m_hoverWidget->hide();
+}
+
+void DocumentView::updateHoverText(int x, int y, QString text)
+{
+	QString displayText = m_currentOpcodeText;
+	if (!text.isEmpty()) {
+		displayText.replace(text, "<b>" + text + "</b>");
 	}
+	m_hoverText->setText(displayText);
+	m_hoverText->adjustSize();
+	QRect textRect = m_hoverText->contentsRect();
+	int textWidth = textRect.width() + 10;
+	if (textRect.width() + 10 > this->width()) {
+		textRect.setWidth(this->width());
+		textWidth = this->width();
+	}
+	int xoffset = 0;
+	if (m_currentOpcodeText.contains(text)) {
+		xoffset = 10 + textRect.width() * (m_currentOpcodeText.indexOf(text)/(float) (m_currentOpcodeText.indexOf("<br />") + 5));
+	}
+	if (xoffset > x) {
+		xoffset = x;
+	} else if (textWidth + x - xoffset > this->width()) {
+		xoffset = - (this->width() - (textWidth + x - xoffset));
+	}
+	m_hoverWidget->setGeometry(x - xoffset, y-textRect.height() - 10, textWidth, textRect.height() + 10);
+
+	m_hoverWidget->show();
 }
 
 void DocumentView::setModified(bool mod)
@@ -497,6 +499,7 @@ QString DocumentView::getMacWidgetsText()
 	// With tags including presets. For text that is being edited in the text editor
 	// Includes presets text
 	qDebug() << "DocumentView::getMacWidgetsText() not implemented and will crash!";
+    return "Not implemented.";
 }
 
 QString DocumentView::getWidgetsText()
@@ -504,6 +507,7 @@ QString DocumentView::getWidgetsText()
 	// With tags including presets, in new xml format. For text that is being edited in the text editor
 	// Includes presets text
 	qDebug() << "DocumentView::getWidgetsText() not implemented and will crash!";
+    return "Not implemeneted.";
 }
 
 int DocumentView::getViewMode()
@@ -624,8 +628,8 @@ QString DocumentView::getActiveText()
 		QTextCursor cursor = m_mainEditor->textCursor();
 		selection = cursor.selectedText();
 		if (selection == "") {
-			cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-			cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+			cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+			cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 			selection = cursor.selectedText();
 		}
 		selection.replace(QChar(0x2029), QChar('\n'));
@@ -640,49 +644,167 @@ QString DocumentView::getActiveText()
 	return selection;
 }
 
-
-//void DocumentView::updateDocumentModel()
-//{
-//  // this should update the document model when needed
-//  // e.g. on run or save or when widgets or presets have been modified in text format
-//  // maybe the document model pointer should be passed and processed here.
-//}
-//
-//void DocumentView::updateFromDocumentModel()
-//{
-//  // this should update from the document model when needed
-//  // e.g. on loading, widget changes from widget layout
-//}
-
 void DocumentView::syntaxCheck()
 {
 	// TODO implment for multiple views
 
-	int line = currentLine();
-	emit(lineNumberSignal(line));
-
 	TextEditor *editor;
 	if (m_viewMode < 2) {
+		// TODO rather than check this, store the current active one?
 		editor = m_mainEditor;
 	}
 	else { //  Split view
 		editor = (TextEditor *) sender();
 	}
+
+	m_currentEditor = editor ; // for parenthesis functions
+
 	QTextCursor cursor = editor->textCursor();
-	cursor.select(QTextCursor::LineUnderCursor);
-	QStringList words = cursor.selectedText().split(QRegExp("\\b"));
-	foreach(QString word, words) {
-		// We need to remove all not possibly opcode
-		word.remove(QRegExp("[^\\d\\w]"));
-		if (!word.isEmpty()) {
-			QString syntax = m_opcodeTree->getSyntax(word);
-			if(!syntax.isEmpty()) {
-				emit(opcodeSyntaxSignal(syntax));
-				return;
+
+	// matchparenthesis. Code by Geir Vatterkar see https://doc.qt.io/archives/qq/QtQuarterly31.pdf
+	// some corrections by Heinz van Saanen http://qt-apps.org/content/show.php/CLedit?content=125532 ; comments: http://www.qtcentre.org/archive/index.php/t-31084.html
+
+	QList<QTextEdit::ExtraSelection> selections;
+	editor->setExtraSelections(selections);
+
+	TextBlockData *data = static_cast<TextBlockData *>(editor->textCursor().block().userData());
+
+	if (data) {
+		QVector<ParenthesisInfo *> infos = data->parentheses();
+
+		int pos = editor->textCursor().block().position();
+		for (int i = 0; i < infos.size(); ++i) {
+			ParenthesisInfo *info = infos.at(i);
+
+			int curPos = editor->textCursor().position() - editor->textCursor().block().position();
+			if (info->position == curPos && info->character == '(') {
+				if (matchLeftParenthesis(editor->textCursor().block(), i + 1, 0))
+					createParenthesisSelection(pos + info->position, true); // found, mark as pair
+				else
+					createParenthesisSelection(pos + info->position, false); // no pair, mark as single
+			} else if (info->position == curPos - 1 && info->character == ')') {
+				if (matchRightParenthesis(editor->textCursor().block(), i - 1, 0))
+					createParenthesisSelection(pos + info->position, true);
+				else
+					createParenthesisSelection(pos + info->position, false);
 			}
 		}
 	}
+
+	// syntax check
+	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
+	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+	QStringList words = cursor.selectedText().split(QRegExp("\\b"),
+													QString::SkipEmptyParts);
+	bool showHover = false;
+	for(int i = 0; i < words.size(); i++) {
+		QString word = words[words.size() - i - 1];
+		if (m_opcodeTree->isOpcode(word)) {
+			QString syntax = m_opcodeTree->getSyntax(word);
+			if(!syntax.isEmpty()) {
+				emit(opcodeSyntaxSignal(syntax));
+				m_currentOpcodeText = syntax;
+				if (i == 0 && editor->textCursor().hasSelection()) {
+					showHover = true;
+				}
+				break;
+			}
+		}
+	}
+	if (showHover) {
+		showHoverText();
+	} else {
+		hideHoverText();
+	}
 }
+
+// parentheses matching functions -------------
+
+bool DocumentView::matchLeftParenthesis(QTextBlock currentBlock, int i, int numLeftParentheses)
+{
+	TextBlockData *data = static_cast<TextBlockData *>(currentBlock.userData());
+	QVector<ParenthesisInfo *> infos = data->parentheses();
+
+	int docPos = currentBlock.position();
+	for (; i < infos.size(); ++i) {
+		ParenthesisInfo *info = infos.at(i);
+
+		if (info->character == '(') {
+			++numLeftParentheses;
+			continue;
+		}
+
+		if (info->character == ')' && numLeftParentheses == 0) {
+			createParenthesisSelection(docPos + info->position);
+			return true;
+		} else
+			--numLeftParentheses;
+	}
+
+	currentBlock = currentBlock.next();
+	if (currentBlock.isValid())
+		return matchLeftParenthesis(currentBlock, 0, numLeftParentheses);
+
+	return false;
+}
+
+
+bool DocumentView::matchRightParenthesis(QTextBlock currentBlock, int index, int numRightParentheses)
+{
+	TextBlockData *data = static_cast<TextBlockData *>(currentBlock.userData());
+	QVector<ParenthesisInfo *> parentheses = data->parentheses();
+
+	// Match in same line?
+	int docPos = currentBlock.position();
+	for (int j=index; j>=0; --j ) {
+		ParenthesisInfo *info = parentheses.at(j);
+		if (info->character == ')') {
+			++numRightParentheses;
+			continue;
+		}
+		if (info->character == '(' && numRightParentheses == 0) {
+			createParenthesisSelection(docPos + info->position);
+			return true;
+		} else
+			--numRightParentheses;
+	}
+
+	// No match yet? Then try previous block
+	currentBlock = currentBlock.previous();
+	if (currentBlock.isValid()) {
+		// Recalculate correct index first
+		TextBlockData *data = static_cast<TextBlockData *>( currentBlock.userData() );
+		QVector<ParenthesisInfo *> infos = data->parentheses();
+
+		return matchRightParenthesis(currentBlock, infos.size()-1, numRightParentheses);
+	}
+
+	// No match at all
+	return false;
+}
+
+void DocumentView::createParenthesisSelection(int pos, bool paired)
+{
+	//TODO: get editor from parameters
+	QTextEdit * editor = (!m_currentEditor) ? m_mainEditor : m_currentEditor ; // if currentEditor not set, use mainEditor
+
+	QList<QTextEdit::ExtraSelection> selections = editor->extraSelections();
+
+	QTextEdit::ExtraSelection selection;
+	QTextCharFormat format = selection.format;
+	format.setBackground( (paired) ? Qt::lightGray: Qt::magenta); // if single parenthesis, mark with magenta
+	selection.format = format;
+
+	QTextCursor cursor = editor->textCursor();
+	cursor.setPosition(pos);
+	cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+	selection.cursor = cursor;
+
+	selections.append(selection);
+
+	editor->setExtraSelections(selections);
+}
+
 
 void DocumentView::textChanged()
 {
@@ -693,109 +815,138 @@ void DocumentView::textChanged()
 	TextEditor *editor = m_mainEditor;
 	unmarkErrorLines();
 
-	parameterButton->setVisible(false);
-
 	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {  // CSD or ORC mode
 		if (m_autoComplete) {
 			QTextCursor cursor = editor->textCursor();
 			int curIndex = cursor.position();
+//			if (cursor) {
+//				word.chop(1);
+//			}
 			cursor.select(QTextCursor::WordUnderCursor);
 			QString word = cursor.selectedText();
+			if (word == ",") {
+				cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
+				cursor.movePosition(QTextCursor::StartOfWord);
+				cursor.select(QTextCursor::WordUnderCursor);
+				word = cursor.selectedText();
+			}
 			QTextCursor lineCursor = editor->textCursor();
 			lineCursor.select(QTextCursor::LineUnderCursor);
 			QString line = lineCursor.selectedText();
-			if (m_mainEditor->getParameterMode()) {
-				parameterMenu->clear();
-				QStringList vars;
-				foreach(QString var, m_localVariables) {
-					if (var.endsWith(',')) {
-						var.chop(1);
-					}
-					if (var.startsWith(word) && word != var) {
-						vars << var;
-					}
-				}
-				if (vars.isEmpty()) {
-					return;
-				}
-				foreach(QString var, vars) {
-					QAction *a = parameterMenu->addAction(var,
-														  this, SLOT(insertParameterText()));
-					a->setData(var);
-					if(vars.indexOf(var) == 0) {
-						parameterMenu->setDefaultAction(a);
-					}
-				}
-				QRect r =  m_mainEditor->cursorRect();
-				QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-				QPoint globalPoint =  m_mainEditor->mapToGlobal(p);
-				//syntaxMenu->setWindowModality(Qt::NonModal);
-				//syntaxMenu->popup(globalPoint);
-				parameterMenu->move(globalPoint);
-				parameterMenu->show();
-				m_mainEditor->setFocus(Qt::OtherFocusReason);
-			}
 
 			int commentIndex = -1;
+			bool useFunction = false;
 			if (line.indexOf(";") != -1) {
 				commentIndex = lineCursor.position() - line.length() + line.indexOf(";");
 				if (commentIndex < curIndex)
 					return;
 			}
-			if (line.contains("opcode") || line.contains("instr")  || line.contains("=") || line.contains("\"")) { // Don't pop menu in these cases.
+			if (line.contains("opcode") || line.contains("instr")) { // Don't pop menu in these cases.
 				return;
 			}
-			if (line.indexOf(QRegExp("^\\s*[^kaigSf]\\w+\\s+\\w")) >= 0 || line.indexOf(QRegExp("\\s+\\w+\\s+\\w")) >= 0) {
-				return;
+			if (line.indexOf(QRegExp("\\s*\\w+\\s+\\w+\\s+")) >= 0) {
+				useFunction = true;
 			}
-			if (word.size() > 2 && !word.startsWith("\"")
-					&& cursor.position() > cursor.anchor() // Only at the end of the word
-					) {
-				QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
-				if (syntax.size() > 0) {
-					//          if (syntaxMenu == 0) {
-					//            createSyntaxMenu();
-					//          }
-					bool allEqual = true;
-					for(int i = 0; i < syntax.size(); i++) {
-						if (syntax[i].opcodeName != word) {
-							allEqual = false;
+			if (cursor.position() > cursor.anchor()) { // Only at the end of the word
+				if (word.size() > 0 && !word.startsWith("\"")) {
+					QStringList vars;
+					syntaxMenu->clear();
+					foreach(QString var, m_localVariables) {
+						if (var.endsWith(',')) {
+							var.chop(1);
+						}
+						if (var.startsWith(word) && word != var) {
+							vars << var;
 						}
 					}
-					if (!allEqual && syntax.size() > 0) {
-						syntaxMenu->clear();
-						for(int i = 0; i < syntax.size(); i++) {
-							QString text = syntax[i].opcodeName;
-							if (syntax[i].outArgs.simplified().startsWith("a")) {
-								text += " (audio-rate)";
-							}
-							else if (syntax[i].outArgs.simplified().startsWith("k")) {
-								text += " (control-rate)";
-							}
-							else if (syntax[i].outArgs.simplified().startsWith("x")) {
-								text += " (multi-rate)";
-							}
-							else if (syntax[i].outArgs.simplified().startsWith("S")) {
-								text += " (string output)";
-							}
-							else if (syntax[i].outArgs.simplified().startsWith("f")) {
-								text += " (pvs)";
-							}
-							QString syntaxText = syntax[i].outArgs.simplified();
-							if (!syntax[i].outArgs.isEmpty())
-								syntaxText += " ";
-							syntaxText += syntax[i].opcodeName.simplified();
-							if (!syntax[i].inArgs.isEmpty()) {
-								syntaxText += " " + syntax[i].inArgs.simplified();
-							}
-							QAction *a = syntaxMenu->addAction(text,
-															   this, SLOT(insertAutoCompleteText()));
-							a->setData(syntaxText);
-							a->setToolTip(syntaxText);
-							if (i == 0) {
-								syntaxMenu->setDefaultAction(a);
+					foreach(QString var, vars) {
+						QAction *a = syntaxMenu->addAction(var,
+														   this, SLOT(insertParameterText()));
+						a->setData(var);
+						if(vars.indexOf(var) == 0) {
+							syntaxMenu->setDefaultAction(a);
+						}
+					}
+					if (word.size() > 2) {
+						// check for autcompletion from all words in text editor
+						QString wholeText = editor->toPlainText();
+						foreach (QString s, QStringList()<<"+" << "-" << "*" << "/" <<"="<<"#"<<"&"<<","
+								 << "\""<<"\'"<<"|" << "[" << "]" << "(" << ")" << "<" << ">"
+								 << "." << ";") // get rid of specific symbols
+							wholeText.replace(s," ");
+						QStringList allWords = wholeText.simplified().split(" ");
+						QStringList menuWords;
+						allWords.removeDuplicates();
+						allWords.replaceInStrings(QRegExp("^\\d*$"),""); // remove numbers - not good enough regexp, '.' stays
+						allWords.removeAll("");
+						foreach(QString theWord, allWords) {
+							if (theWord.toLower().startsWith(word.toLower()) && word != theWord) {
+								menuWords << theWord;
 							}
 						}
+						foreach(QString theWord, menuWords) {
+							QAction *a = syntaxMenu->addAction(theWord,
+															   this, SLOT(insertAutoCompleteText()));
+							a->setData(theWord);
+							if(menuWords.indexOf(theWord) == 0) {
+								syntaxMenu->setDefaultAction(a); // vaata, et allpool seda ei tühistaks
+							}
+						}
+						// and then for opcodes and parameters
+						QVector<Opcode> syntax = m_opcodeTree->getPossibleSyntax(word);
+						if (syntax.size() > 0) {
+							syntaxMenu->addSeparator();
+							bool allEqual = true;
+							for(int i = 0; i < syntax.size(); i++) {
+								if (syntax[i].opcodeName != word) {
+									allEqual = false;
+								}
+							}
+							if (!allEqual && syntax.size() > 0) {
+								for(int i = 0; i < syntax.size(); i++) {
+									QString text = syntax[i].opcodeName;
+									if (syntax[i].outArgs.simplified().startsWith("a")) {
+										text += " (audio-rate)";
+									}
+									else if (syntax[i].outArgs.simplified().startsWith("k")) {
+										text += " (control-rate)";
+									}
+									else if (syntax[i].outArgs.simplified().startsWith("x")) {
+										text += " (multi-rate)";
+									}
+									else if (syntax[i].outArgs.simplified().startsWith("S")) {
+										text += " (string output)";
+									}
+									else if (syntax[i].outArgs.simplified().startsWith("f")) {
+										text += " (pvs)";
+									}
+									QString syntaxText;
+									if (useFunction) {
+										syntaxText = syntax[i].opcodeName.simplified();
+										syntaxText += "(";
+										syntaxText += syntax[i].inArgs.simplified();
+										syntaxText += ")";
+									} else {
+										syntaxText= syntax[i].outArgs.simplified();
+										if (!syntax[i].outArgs.isEmpty())
+											syntaxText += " ";
+										syntaxText += syntax[i].opcodeName.simplified();
+										if (!syntax[i].inArgs.isEmpty()) {
+											syntaxText += " " + syntax[i].inArgs.simplified();
+										}
+									}
+									QAction *a = syntaxMenu->addAction(text,
+																	   this, SLOT(insertAutoCompleteText()));
+									a->setData(syntaxText);
+									a->setToolTip(syntaxText);
+									if (i == 0) {
+										syntaxMenu->setDefaultAction(a);
+									}
+								}
+							}
+						}
+					}
+					if (syntaxMenu->defaultAction() != NULL) {
 						QRect r =  editor->cursorRect();
 						QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
 						QPoint globalPoint =  editor->mapToGlobal(p);
@@ -803,11 +954,11 @@ void DocumentView::textChanged()
 						//syntaxMenu->popup(globalPoint);
 						syntaxMenu->move(globalPoint);
 						syntaxMenu->show();
-//						editor->setFocus(Qt::OtherFocusReason);
 					}
-					else {
-						destroySyntaxMenu();
-					}
+					//						editor->setFocus(Qt::OtherFocusReason);
+				}
+				else {
+					destroySyntaxMenu();
 				}
 			}
 		}
@@ -820,20 +971,49 @@ void DocumentView::textChanged()
 
 void DocumentView::escapePressed()
 {
-	if (m_mainEditor->getParameterMode()) {
-		// Force unselecting
-		m_mainEditor->moveCursor(QTextCursor::NextCharacter);
-		m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
-		exitParameterMode();
+	// TODO implment for multiple views
+	if (m_viewMode < 2) {
+		if (m_mainEditor->getParameterMode()) {
+			// Force unselecting
+			m_mainEditor->moveCursor(QTextCursor::NextCharacter);
+			m_mainEditor->moveCursor(QTextCursor::PreviousCharacter);
+			exitParameterMode();
+		} else if (m_hoverText->isVisible()){
+			hideHoverText();
+		} else {
+			emit closeExtraPanels();
+		}
+	}
+	else {
+		qDebug() << "escapePressed() not implemented for split view";
+	}
+}
+
+void DocumentView::finishParameterMode()
+{
+	// TODO implment for multiple views
+	if (m_viewMode < 2) {
+		if (m_mainEditor->getParameterMode()) {
+			killToEnd();
+			exitParameterMode();
+		} else {
+			hideHoverText();
+		}
 	} else {
-		emit closeExtraPanels();
+		qDebug() << "finishParameterMode() not implemented for split view";
 	}
 }
 
 void DocumentView::exitParameterMode()
 {
-	m_mainEditor->setParameterMode(false);
-	parameterButton->setVisible(false);
+	// TODO implment for multiple views
+	if (m_viewMode < 2) {
+		m_mainEditor->setParameterMode(false);
+	} else {
+		qDebug() << "exitParameterMode() not implemented for split view";
+	}
+	hideHoverText();
+//	parameterButton->setVisible(false);
 }
 
 void DocumentView::indentNewLine()
@@ -931,6 +1111,10 @@ void DocumentView::insertAutoCompleteText()
 
 		QTextCursor cursor = editor->textCursor();
 		cursor.select(QTextCursor::WordUnderCursor);
+		while ((cursor.selectedText() == "" || cursor.selectedText() == ",") && !cursor.atBlockStart()) {
+			cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
+			cursor.select(QTextCursor::WordUnderCursor);
+		}
 		cursor.insertText("");
 		editor->setTextCursor(cursor);
 
@@ -948,9 +1132,13 @@ void DocumentView::insertAutoCompleteText()
 				editor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
 			}
 			else {
-				editor->insertPlainText(action->data().toString());
+                editor->insertPlainText(action->data().toString());
 			}
-			if (m_autoParameterMode) {
+            QString syntaxText = action->data().toString();
+            QStringList syntaxSections = syntaxText.simplified().split("");
+            QString actionText = action->text();
+            actionText = actionText.split(" ").at(0);
+            if (m_autoParameterMode && m_opcodeTree->isOpcode(actionText) && syntaxSections.size() > 1) {
 				m_mainEditor->moveCursor(QTextCursor::StartOfBlock);
 				m_mainEditor->setParameterMode(true);
 				prevParameter();
@@ -967,37 +1155,11 @@ void DocumentView::insertAutoCompleteText()
 	}
 }
 
-
-void DocumentView::insertParameterText()
-{
-	TextEditor *editor;
-	if (m_viewMode < 2) {
-		editor = m_mainEditor;
-	}
-	else { //  Split view
-		editor = (TextEditor *) focusWidget();
-		// TODO check properly for line number also from other editors
-		qDebug() << "DocumentView::insertAutoCompleteText() not implemented for split view.";
-	}
-	if (editor != 0) {
-		internalChange = true;
-		QAction *action = static_cast<QAction *>(QObject::sender());
-		QString parameterName = action->data().toString();
-		QTextCursor cursor = editor->textCursor();
-		cursor.select(QTextCursor::WordUnderCursor);
-		editor->setTextCursor(cursor);
-		editor->insertPlainText(parameterName);
-
-		nextParameter();
-	}
-}
-
-
 void DocumentView::findString(QString query)
 {
 	// TODO search across all editors
 	if (m_viewMode < 2) {
-		qDebug() << "DocumentView::findString " << query;
+//		qDebug() << "DocumentView::findString " << query;
 		if (query == "") {
 			query = lastSearch;
 		}
@@ -1439,14 +1601,6 @@ void DocumentView::killLine()
 {
 	// TODO implment for multiple views
 	if (m_viewMode < 2) {
-		//  internalChange = true;
-		//    QString indentChar = "";
-		//  if (m_mode == 0) {
-		//    indentChar = "\t";
-		//  }
-		//  else if (m_mode == 1) { // Python Mode
-		//    indentChar = "    ";
-		//  }
 		QTextCursor cursor = m_mainEditor->textCursor();
 		if (!cursor.atBlockStart()) {
 			cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
@@ -1464,13 +1618,6 @@ void DocumentView::killToEnd()
 	// TODO implment for multiple views
 	//  internalChange = true;
 	if (m_viewMode < 2) {
-		QString indentChar = "";
-		//  if (m_mode == 0) {
-		//    indentChar = "\t";
-		//  }
-		//  else if (m_mode == 1) { // Python Mode
-		//    indentChar = "    ";
-		//  }
 		QTextCursor cursor = m_mainEditor->textCursor();
 		if (!cursor.atBlockEnd()) {
 			cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -1644,11 +1791,6 @@ QString DocumentView::changeToInvalue(QString text)
 	return newText;
 }
 
-//void DocumentView::createSyntaxMenu()
-//{
-//  syntaxMenu->show();
-//}
-
 void DocumentView::destroySyntaxMenu()
 {
 	syntaxMenu->hide();
@@ -1715,4 +1857,15 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
 	}
 	insertComplete = false;
 	QMenu::keyPressEvent(event);
+}
+
+HoverWidget::HoverWidget(QWidget *parent) :
+	QWidget(parent)
+{
+
+}
+
+void HoverWidget::mousePressEvent(QMouseEvent *ev)
+{
+	this->hide();
 }

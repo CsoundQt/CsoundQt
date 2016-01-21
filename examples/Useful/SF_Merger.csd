@@ -99,7 +99,7 @@ asig		soundin	Sel
 
 instr 1
 ;user input
-Stray		invalue	"_MBrowse"; filenames, seperated by '|'
+Stray		invalue	"_MBrowse"; filenames, separated by '|'
 ;get length from first element
 ist, ien	StrayGetEl	Stray, 0, 124; get first element
 Sfirst		strsub		Stray, ist, ien

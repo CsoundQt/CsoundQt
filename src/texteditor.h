@@ -38,14 +38,17 @@ public:
 
 protected:
 	virtual void keyPressEvent (QKeyEvent * event);
+    virtual void mouseReleaseEvent(QMouseEvent * e);
 	//    virtual void dropEvent(QDropEvent *event);  // See note on code
 	//    virtual void dragEnterEvent(QDragEnterEvent *event);
 	//    virtual void dragMoveEvent(QDragMoveEvent *event);
 
 	bool m_tabIndents;
 	bool m_parameterMode;
+	bool m_commaTyped;
 
 signals:
+	void showParameterInfo();
 	void escapePressed();
 	void enterPressed();
 	void arrowPressed();
@@ -54,7 +57,8 @@ signals:
 	void newLine();
 	void requestIndent();
 	void requestUnindent();
-	void openParameterSelection();
+	void requestParameterModeExit();
+    void mouseReleased();
 };
 
 class LineNumberArea;
@@ -69,12 +73,18 @@ public:
 	bool lineAreaVisble() {return m_lineAreaVisble;}
 	QAction *toggleAction;
 
+public slots:
+	void markDebugLine(int line);
+	void unmarkDebugLine(int line);
+	void setCurrentDebugLine(int line);
+
 protected:
 	void resizeEvent(QResizeEvent *e);
 
 private:
 	LineNumberArea *lineNumberArea;
 	bool m_lineAreaVisble;
+	QVector<int> m_debugLines;
 
 private slots:
 	void updateLineArea(int);
@@ -88,12 +98,17 @@ class LineNumberArea : public QWidget
 public:
 	LineNumberArea(TextEditLineNumbers *editor) : QWidget(editor) {
 		codeEditor = editor;
+		m_currentDebugLine = -1;
 	}
+	void setDebugLines(QVector<int> debugLines) {m_debugLines = debugLines;}
+	void setCurrentDebugLine(int line) {m_currentDebugLine = line;}
 
 protected:
 	void paintEvent(QPaintEvent *event);
 
 private:
+	QVector<int> m_debugLines;
+	int m_currentDebugLine;
 	TextEditLineNumbers *codeEditor;
 };
 

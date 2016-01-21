@@ -23,6 +23,7 @@
 #include "qutegraph.h"
 #include "curve.h"
 #include <cmath>
+#include <QPalette>
 
 QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 {
@@ -48,6 +49,12 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 	connect(m_pageComboBox, SIGNAL(currentIndexChanged(int)),
 			this, SLOT(indexChanged(int)));
 	polygons.clear();
+
+	QPalette Pal(this->palette());
+    // set black background
+    Pal.setColor(QPalette::Background, Qt::black);
+    this->setAutoFillBackground(true);
+    this->setPalette(Pal);
 
 	// Default properties
 	setProperty("QCS_zoomx", 1.0);
@@ -254,9 +261,9 @@ void QuteGraph::changeCurve(int index)
 			index = (int) m_value;
 		}
 	}
-//	else if (stacked->currentIndex() == index) {
-//		return;
-//	} // This check causes a single graph to be scaled incorrectly...
+    else if (stacked->currentIndex() == index) {
+        return;
+    }
 	if (index < 0  || index >= curves.size()
 			|| curves.size() <= 0 || curves[index]->get_caption().isEmpty()) { // Invalid index
 		return;
@@ -267,11 +274,17 @@ void QuteGraph::changeCurve(int index)
 	m_pageComboBox->blockSignals(true);
 	m_pageComboBox->setCurrentIndex(index);
 	m_pageComboBox->blockSignals(false);
-	drawCurve(curves[index], index);
+//    if (curves[index]->get_caption().contains("ftable")) {
+//        drawFtable(curves[index], index);
+//    } else if (curves[index]->get_caption().contains("fft")) {
+//        drawSpectrum(curves[index], index);
+//    } else {
+//        drawSignal(curves[index], index);
+//    }
 	m_value = index;
 
-	double max = - curves[index]->get_min();
-	double min = - curves[index]->get_max();
+    double max = curves[index]->get_max();
+    double min = curves[index]->get_min();
 	//  double span = max - min;
 	//  FIXME implement dispx, dispy and modex, modey
 	int size = curves[index]->get_size();
@@ -293,7 +306,7 @@ void QuteGraph::changeCurve(int index)
 			m_value2 = -1;
 		}
 	}
-	scaleGraph(index);
+    scaleGraph(index);
 	QString text = QString::number(size) + " pts Max=";
 	text += QString::number(max) + " Min =" + QString::number(min);
 	m_label->setText(text);
@@ -336,6 +349,8 @@ void QuteGraph::clearCurves()
 	curves.clear();
 	lines.clear();
 	polygons.clear();
+	m_gridlines.clear();
+    m_gridtext.clear();
 	//  curveLock.unlock();
 }
 
@@ -345,42 +360,56 @@ void QuteGraph::addCurve(Curve * curve)
 	QGraphicsView *view = new QGraphicsView(m_widget);
 	QGraphicsScene *scene = new QGraphicsScene(view);
 	view->setContextMenuPolicy(Qt::NoContextMenu);
-	scene->setBackgroundBrush(QBrush(Qt::black));
-	int size = curve->get_size();
-	QGraphicsLineItem* line = new QGraphicsLineItem(0, 0, size, 0);
-	line->setPen(QPen(QColor(Qt::white)));
-	line->show();
-	scene->addItem(line);
-	QVector<QGraphicsLineItem *> linesVector;
-	linesVector.append(line);
-	lines.append(linesVector);
+	view->setRenderHint(QPainter::Antialiasing);
+    view->setScene(scene);
+    view->setObjectName(curve->get_caption());
+    view->show();
+    scene->setBackgroundBrush(QBrush(Qt::black));
+    lines.append(QVector<QGraphicsLineItem *>());
+	QVector<QGraphicsLineItem *> gridLinesVector;
+	QVector<QGraphicsTextItem *> gridTextVector;
+	for (int i = 0 ; i < 24; i++) {
+		QGraphicsLineItem *gridLine = new QGraphicsLineItem();
+		QPen pen(Qt::gray, 0.6, Qt::SolidLine);
+		gridLine->setPen(pen);
+//		gridLine->setFlags(QGraphicsItem::ItemIgnoresTransformations);
+		scene->addItem(gridLine);
+		gridLinesVector.append(gridLine);
+		QGraphicsTextItem *gridText = new QGraphicsTextItem();
+		gridText->setDefaultTextColor(Qt::gray);
+		gridText->setFlags(QGraphicsItem::ItemIgnoresTransformations);
+		if (i < 12) {
+			if (i != 0) {
+				gridText->setHtml(QString("<div style=\"background:#000000;\">%1kHz</p>").arg((i * 11.0/12.0) * 2.0, 2, 'f', 1));
+			}
+		} else {
+			gridText->setHtml(QString("<div style=\"background:#000000;\"> -%1dBFS</p>").arg((i - 12)* 10));
+		}
+		gridText->setFont(QFont("Sans", 6));
+        gridText->setVisible(false);
+        scene->addItem(gridText);
+		gridTextVector.append(gridText);
+	}
+	m_gridlines.append(gridLinesVector);
+	m_gridtext.append(gridTextVector);
 	//  qDebug() << "QuteGraph::addCurve()" << curve << curve->get_caption() ;
 	//  if (curve->get_caption().contains("ftable")) {
 	//    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	//  }
 	// Add dummy polygon for all graphs when they are created
-	QGraphicsPolygonItem * item = new QGraphicsPolygonItem(/*polygon*/);
-	item->setPen(QPen(Qt::yellow));
-	item->show();
-	polygons.append(item);
-	scene->addItem(item);
-	view->setScene(scene);
-	//   view->setObjectName(curve->get_caption());
-	view->show();
-	view->setResizeAnchor (QGraphicsView::NoAnchor);
-	view->setFocusPolicy(Qt::NoFocus);
+    QGraphicsPolygonItem * item = new QGraphicsPolygonItem(/*polygon*/);
+    item->setPen(QPen(Qt::yellow));
+    item->show();
+    polygons.append(item);
+    scene->addItem(item);
+    view->setResizeAnchor (QGraphicsView::NoAnchor);
+//	view->setFocusPolicy(Qt::NoFocus);
 	m_pageComboBox->blockSignals(true);
 	m_pageComboBox->addItem(curve->get_caption());
 	m_pageComboBox->blockSignals(false);
 	//  curveLock.lock();
 	static_cast<StackedLayoutWidget *>(m_widget)->addWidget(view);
-	curves.append(curve);
-	//  curveLock.unlock();
-	//  double max = - curves.last()->get_min();
-	//  double min = - curves.last()->get_max();
-	//  double zoomx = property("QCS_zoomx").toDouble();
-	//  double zoomy = property("QCS_zoomy").toDouble();
-	//  view->fitInView(0, min - ((max - min)*0.17/zoomy) , (double) size/zoomx, (max - min)*1.17/zoomy);
+    curves.append(curve);
 	if (m_value == curves.size() - 1) { // If new curve created corresponds to current stored value
 		changeCurve(m_value);
 	}
@@ -411,49 +440,27 @@ void QuteGraph::setCurveData(Curve * curve)
 	curves[index] = curve;
 	StackedLayoutWidget *widget_ = static_cast<StackedLayoutWidget *>(m_widget);
 	QGraphicsView *view = static_cast<QGraphicsView *>(widget_->widget(index));
-	QString modex = property("QCS_modex").toString();
-	QString modey = property("QCS_modey").toString();
+//	QString modex = property("QCS_modex").toString();
+//	QString modey = property("QCS_modey").toString();
 	// Refitting curves in view resets the scrollbar so we need the previous value
 	int viewPosx = view->horizontalScrollBar()->value();
 	int viewPosy = view->verticalScrollBar()->value();
-	if (curve->get_caption().contains("ftable")) {
-		drawCurve(curve, index);
-	}
-	else {  // in case its not an ftable
-		QPolygonF polygon;
-		if (curve->get_caption().contains("fft")) { // from dispfft opcode
-			polygon.append(QPointF(0,110));
-		}
-		else { //from display opcode
-			polygon.append(QPointF(0,0));
-		}
-		for (int i = 0; i < (int) curve->get_size(); i++) { //skip first item, which is base line
-			double value;
-			if (curve->get_caption().contains("fft")) {
-				value =  20.0*log10(fabs(curve->get_data(i))/m_ud->zerodBFS);
-			}
-			else {
-				value = curve->get_data(i)/m_ud->zerodBFS;
-			}
-			polygon.append(QPointF(i, -value));
-		}
-		if (curve->get_caption().contains("fft")) {
-			polygon.append(QPointF(curve->get_size() - 1,110));
-		}
-		else { //from display opcode
-			polygon.append(QPointF(curve->get_size() - 1,0));
-		}
-		polygons[index]->setPolygon(polygon);
-	}
-	m_pageComboBox->setItemText(index, curve->get_caption());
+    QString caption = curve->get_caption();
+    if (caption.contains("ftable")) {
+        drawFtable(curve, index);
+    } else if (caption.contains("fft")) {
+        drawSpectrum(curve, index);
+    } else {
+        drawSignal(curve, index);
+    }
 	//  qDebug() << "QuteGraph::setCurveData " << index << m_pageComboBox->currentIndex();
 	if (index == m_pageComboBox->currentIndex()) {
 		changeCurve(-2); //update curve
 	}
-	view->horizontalScrollBar()->setValue(viewPosx);
-	view->verticalScrollBar()->setValue(viewPosy);
+    view->horizontalScrollBar()->setValue(viewPosx);
+    view->verticalScrollBar()->setValue(viewPosy);
 
-//	changeCurve(-2);
+//    changeCurve(-2);
 }
 
 void QuteGraph::setUd(CsoundUserData *ud)
@@ -468,86 +475,119 @@ void QuteGraph::applyInternalProperties()
 	//  qDebug() << "QuteSlider::applyInternalProperties()";
 }
 
-void QuteGraph::drawCurve(Curve * curve, int index)
+void QuteGraph::drawFtable(Curve * curve, int index)
 {
 	//  bool live = curve->getOriginal() != 0;
 	Q_ASSERT(index >= 0);
-	QString caption = curve->get_caption();
-	//  qDebug() << "QuteGraph::drawCurve" << caption << curve->getOriginal() << curve->get_size() << curve->getOriginal()->npts << curve->get_max() << curve->get_min();
-	if (caption.isEmpty()) {
-		return;
-	}
-	QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
-	double max = curve->get_max();
-	max = max == 0 ? 1: max;
-	int size = (int) curve->get_size();
-	int decimate = (int) size /1024;
-	if (lines[index].size() != size) {
-		foreach (QGraphicsLineItem *line, lines[index]) {
-			delete line;
-		}
-		lines[index].clear();
-		MYFLT decValue = 0.0;
-		for (int i = 0; i < (int) curve->get_size(); i++) {
-			//      float value = live ? (curve->getOriginal()->windid != 0 ? (float) curve->getOriginal()->fdata[i]: curve->get_data(i))
-			//                    : curve->get_data(i);
-			float value = curve->get_data(i);
-			decValue = (fabs(decValue) < fabs(value) ? value : decValue);
-			if (decimate == 0 or i%decimate == 0) {
-				QGraphicsLineItem *line = new QGraphicsLineItem(i, 0, i, - decValue);
-				int colorValue = (int) (220.0*fabs(decValue)/max);
-				colorValue = colorValue > 220 ? 220 : colorValue;
-				line->setPen(QPen(QColor(30 + colorValue,
-										 220,
-										 colorValue )));
-				line->show();
-				lines[index].append(line);
-				scene->addItem(line);
-				decValue = 0;
-			}
-		}
-	}
-	else {
-		for (int i = 1; i < lines[index].size(); i++) { //skip first item, which is base line
-			QGraphicsLineItem *line = static_cast<QGraphicsLineItem *>(lines[index][i]);
-			//      float prevvalue = live ? (float) curve->getOriginal()->fdata[i - 1] : curve->get_data(i - 1);
-			float prevvalue = curve->get_data(i - 1);
-			//      float value = live ? (float) curve->getOriginal()->fdata[i] : curve->get_data(i);
-			float value = curve->get_data(i);
-			line->setLine(i - 1, 0, i - 1, - prevvalue);
-			int colorValue = (int) (220.0*fabs(value)/max);
-			colorValue = colorValue > 220 ? 220 : colorValue;
-			line->setPen(QPen(QColor(30 + colorValue,
-									 220,
-									 colorValue)));
-			line->show();
-		}
-	}
-	scaleGraph(index);
+    QString caption = curve->get_caption();
+    //  qDebug() << "QuteGraph::drawCurve" << caption << curve->getOriginal() << curve->get_size() << curve->getOriginal()->npts << curve->get_max() << curve->get_min();
+    if (caption.isEmpty()) {
+        return;
+    }
+    QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
+    double max = curve->get_max();
+    max = max == 0 ? 1: max;
+    int size = (int) curve->get_size();
+    int decimate = size /1024;
+    if (decimate == 0) {
+        decimate = 1;
+    }
+    if (lines[index].size() != size) {
+        foreach (QGraphicsLineItem *line, lines[index]) {
+            scene->removeItem(line);
+            delete line;
+        }
+        lines[index].clear();
+        for (int i = 0; i < size; i++) {
+            if (decimate == 0 || i%decimate == 0) {
+                QGraphicsLineItem *line = new QGraphicsLineItem(i, 0, i, 0);
+                lines[index].append(line);
+                scene->addItem(line);
+            }
+        }
+    }
+    for (int i = 0; i < lines[index].size(); i++) { //skip first item, which is base line
+        QGraphicsLineItem *line = static_cast<QGraphicsLineItem *>(lines[index][i]);
+        MYFLT value = curve->get_data((i * decimate));
+        line->setLine((i * decimate), 0, (i * decimate),  -value );
+        int colorValue = (int) (220.0*fabs(value)/max);
+        colorValue = colorValue > 220 ? 220 : colorValue;
+        QPen pen(QColor(30 + colorValue,
+                        220,
+                        colorValue));
+        pen.setWidth(0);
+        line->setPen(pen);
+        line->show();
+    }
+    scaleGraph(index);
+}
+
+void QuteGraph::drawSpectrum(Curve *curve, int index)
+{
+    int curveSize = curve->get_size();
+    QVector<QPointF> polygonPoints;
+    polygonPoints.resize(curveSize + 2);
+    polygonPoints[0] = QPointF(0,110);
+    for (int i = 0; i < (int) curveSize; i++) {
+        double value;
+        value =  20.0*log10(fabs(curve->get_data(i))/m_ud->zerodBFS);
+        //				if (m_)
+        polygonPoints[i + 1] = QPointF(i, -value); //skip first item, which is base line
+    }
+    polygonPoints.back() =  QPointF(curveSize - 1,110);
+    polygons[index]->setPolygon(QPolygonF(polygonPoints));
+    m_pageComboBox->setItemText(index, curve->get_caption());
+    for (int i = 0; i < 12; i++) {
+        m_gridlines[index][i]->setLine(i * float(curveSize)/12.0, 0,
+                                       i * float(curveSize)/12.0, 110);
+        m_gridlines[index][i]->setVisible(true);
+        m_gridlines[index][i + 12]->setLine(0, int(i * 110.0/12.0),
+                                            curveSize, int(i * 110.0/12.0));
+        m_gridlines[index][i + 12]->setVisible(true);
+        m_gridtext[index][i]->setPos(-25 +(i * float(curveSize)/12.0), 83);
+        m_gridtext[index][i]->setVisible(true);
+        m_gridtext[index][i + 12]->setPos(-5, -4 + int(i * 110.0/12.0));
+        m_gridtext[index][i + 12]->setVisible(true);
+    }
+}
+
+void QuteGraph::drawSignal(Curve *curve, int index)
+{
+    int curveSize = curve->get_size();
+    QVector<QPointF> polygonPoints;
+    polygonPoints.resize(curveSize + 2);
+    polygonPoints[0] = QPointF(0,0);
+    for (int i = 0; i < (int) curveSize; i++) {
+        double value = curve->get_data(i)/m_ud->zerodBFS;
+        polygonPoints[i + 1] = QPointF(i, -value); //skip first item, which is base line
+    }
+    polygonPoints.back() = QPointF(curveSize - 1,0);
+    polygons[index]->setPolygon(QPolygonF(polygonPoints));
+    m_pageComboBox->setItemText(index, curve->get_caption());
 }
 
 void QuteGraph::scaleGraph(int index)
 {
-	double max = - curves[index]->get_min();
-	double min = - curves[index]->get_max();
+    double max = curves[index]->get_max();
+    double min = curves[index]->get_min();
 	double zoomx = property("QCS_zoomx").toDouble();
 	double zoomy = property("QCS_zoomy").toDouble();
 	//  double span = max - min;
-	//  FIXME implement dispx, dispy and modex, modey
+    //  FIXME implement dispx, dispy and modex, modey
 	int size = curves[index]->get_size();
 	QString caption = curves[index]->get_caption();
 	QGraphicsView *view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
 //	qDebug() << "QuteGraph::scaleGraph"<< curves[index]->get_caption() << index <<max<< min<< zoomx<< zoomy << size;
 	//  view->setResizeAnchor(QGraphicsView::NoAnchor);
-	if (caption.contains("ftable")) {
-		view->setSceneRect (0, min - (max - min)*0.17, (double) size, (max - min)*1.17);
-//		qDebug() << view->sceneRect();
-		view->fitInView(0, min, (double) size/zoomx, (max - min)*1.17/zoomy);
-	}
+    if (caption.contains("ftable") && max != min) {
+        view->setSceneRect(0, -max*1.17, (double) size, (max - min)*1.17);
+        qDebug() << view->sceneRect();
+        view->fitInView(0, -max*1.17/zoomy, (double) size/zoomx, (max - min)*1.17/zoomy);
+    }
 	else {
 		if (caption.contains("fft")) {
 			view->setSceneRect (0, 0, size, 90.);
-			view->fitInView(0, -30. , (double) size/zoomx, 100./zoomy);
+			view->fitInView(0, 0, (double) size/zoomx, 90./zoomy);
 		}
 		else { //from display opcode
 			view->setSceneRect (0, -1, size, 2);

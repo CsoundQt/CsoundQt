@@ -4,7 +4,6 @@
         <file>../images/modIcon.png</file>
         <file>../images/modIcon2.png</file>
         <file>../images/qtcs.png</file>
-        <file>../images/project-support.jpg</file>
         <file>../images/br_next.png</file>
         <file>../images/br_prev.png</file>
         <file>../images/gtk-search.png</file>
@@ -29,6 +28,7 @@
         <file>../examples/Miscellaneous/Rms.csd</file>
         <file>../examples/Miscellaneous/Reinit_Example.csd</file>
         <file>../examples/Miscellaneous/No_Reinit.csd</file>
+	<file>../examples/Miscellaneous/Matrix.csd</file>
         <file>../examples/Miscellaneous/Mincer_Loop.csd</file>
         <file>../examples/Miscellaneous/Circle_Map.csd</file>
         <file>../examples/Miscellaneous/Binaural_Panning.csd</file>
@@ -68,6 +68,7 @@
         <file>../examples/Getting Started/Realtime_Interaction/MIDI_Synth.csd</file>
         <file>../examples/Getting Started/Realtime_Interaction/MIDI_Control_Data.csd</file>
         <file>../examples/Getting Started/Realtime_Interaction/MIDI_Assign_Controllers.csd</file>
+        <file>../examples/Getting Started/Realtime_Interaction/Keyboard_Input.csd</file>
         <file>../examples/Getting Started/Realtime_Interaction/OpenSoundControl.csd</file>
         <file>../examples/Getting Started/Language_Features/Function_Tables_1.csd</file>
         <file>../examples/Getting Started/Language_Features/Function_Tables_2.csd</file>
@@ -81,240 +82,6 @@
         <file>../examples/Getting Started/Toots/Toot3.csd</file>
         <file>../examples/Getting Started/Toots/Toot4.csd</file>
         <file>../examples/Getting Started/Toots/Toot5.csd</file>
-        <file>../examples/FLOSS Manual Examples/01 Basics/01B01_BordersForHearing.csd</file>
-        <file>../examples/FLOSS Manual Examples/01 Basics/01C01_db_vs_linear.csd</file>
-        <file>../examples/FLOSS Manual Examples/01 Basics/01A01_Aliasing.csd</file>
-        <file>../examples/FLOSS Manual Examples/01 Basics/01C02_rms_feedback_system.csd</file>
-        <file>../examples/FLOSS Manual Examples/01 Basics/01B02_Adding_vs_ratio.csd</file>
-        <file>../examples/FLOSS Manual Examples/01 Basics/01C03_FletcherMunson.csd</file>
-        <file>../examples/FLOSS Manual Examples/02 Quick Start/02D01_GetDeviceList.csd</file>
-        <file>../examples/FLOSS Manual Examples/02 Quick Start/02B01_DocStruct.csd</file>
-        <file>../examples/FLOSS Manual Examples/02 Quick Start/02A01_HelloWorld.csd</file>
-        <file>../examples/FLOSS Manual Examples/02 Quick Start/02C02_Midi_Ctl_in.csd</file>
-        <file>../examples/FLOSS Manual Examples/02 Quick Start/02D02_LiveInput.csd</file>
-        <file>../examples/FLOSS Manual Examples/02 Quick Start/02E02_RecordRT.csd</file>
-        <file>../examples/FLOSS Manual Examples/02 Quick Start/02E01_Render.csd</file>
-        <file>../examples/FLOSS Manual Examples/02 Quick Start/02C01_Midi_Keybd_in.csd</file>
-        <file>../examples/FLOSS Manual Examples/02 Quick Start/02C03_Midi_all_in.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B02_Local_scope.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F03_Score_tricks.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03G08_Recursive_UDO.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C11_Table_random_dev.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E03_FFT_peaks_arpegg.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C19_Timeloop_metro.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F02_OrderOfExc_event_k.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A07_Init-values_of_k-variables.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F01_OrderOfExc_event_i.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A06_Init_perf_audio.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D06_Record_ksig_to_table.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E01_Array_to_table.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03H03_Score_macro.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D04_Standard_waveforms_with_GEN10.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A12_Random_at_ika.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D05_Write_Fibo_to_table.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A13_Zipper.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03G10_UDO_rand_dev.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03G03_UDO_more_flex.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C17_Timout_trigger_events.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B07_Global_control_added.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B04_Global_audio_intro.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C07_Loops_with_if.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03G09_UDO_FilePlay.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B09_Global_audio_add.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C04_IfGoto_i.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D02_Table_ftgen.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C01_IfThen_i.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F06_Commandline_rt_events.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C09_Random_string.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D10_Table_to_soundfile.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03G06_UDO_setksmps.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F09_Events_sprintf.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03G12_TableDumpSimp.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A04_Perf-pass_no_incr.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C18_Timout_random_envelope.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C14_Timeloop_and_not.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B06_Global_audio_added.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03G04_UDO_calls_UDO.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C03_IfThen_short_form.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F10_Events_collected.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03H01_Macros_basic.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B01_Variable_types.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C16_Timout_random_durations.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A14_Time_Impossible.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B05_Global_audio_overwritten.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D03_Sample_to_table.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C05_IfGoto_ik.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A09_Re-init.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C15_Timout_different_durations.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D07_Record_audio_to_table.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C13_Timout_basics.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B11_Chn_demo.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C02_IfThen_k.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B10_Global_with_clear.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03G02_All_to_UDO.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D08_RecPlay_ak_signals.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A11_Order_of_calc_named.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F05_FLTK_triggered_events.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03G13_UDO_Recursive_AddSynth.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D01_Table_norm_notNorm.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C08_Loop_opcodes_i.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A05_Audio_vector.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F11_Events_time_loop.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F04_Midi_triggered_events.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C10_Random_ftable_fill.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A03_Perf-pass_incr_listen.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F08_Generate_event_pool.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C12_Timout_pre.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A01_Init-pass.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C20_Metro_trigger_events.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A10_Order_of_calc.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03D09_ftsave.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03H02_Macro_6partials.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03E02_norm_to_max.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B08_Local_audio_add.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03F07_Event_by_condition.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A02_Perf-pass_incr.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03G11_TabPermRnd.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03C06_IfGoto_k.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03G01_Pre_UDO.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03B03_Global_scope.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03G07_UDO_default_args.csd</file>
-        <file>../examples/FLOSS Manual Examples/03 Csound Language/03A08_Init_no_incr.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04H07_Scan_matrices.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04G02_MS_sine_audible.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04G07_wgbow_enhanced.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F01_GranSynth_basic.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A09_Wobble_bass.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A10_gbuzz.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A04_Standard_waveforms.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A08_Risset_played_by_Midi.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04B02_Subtractive_timbres.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A05_Flexible_number_of_partials.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04G07_barmodel.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A11_gbuzz_partials_rise.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04H09_Scan_extreme_amplitude.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F02_Fof_vowels.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A07_Risset_variations.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04H02_Dynamic_tables.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04G04_KarplusStrong.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04B01_Subtractive_Midi.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04G08_PhiSEM.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04H01_scantable.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04H08_Scan_tablesize.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04E01_Simple_waveshaping.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04G05_Plucked.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A12_gbuzz_amp_coeff_rise.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04H05_Scan_trajectories.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A01_AddSynth_simple.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04G01_Mass_spring_sine.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F03_Asynchronous_GS.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A02_AddSynth_score.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F04_grain3.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04G06_wgbow.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04G03_MS_variable_constant.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04F05_grain3_random.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04B03_Subtractive_vowels.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04H04_Hammer.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04H03_Scantable_pvsmaska.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04H10_Scan_balanced_amplitudes.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04H06_Scan_trajectories2.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A06_Play_it_with_Midi.csd</file>
-        <file>../examples/FLOSS Manual Examples/04 Sound Synthesis/04A03_AddSynth_GEN.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D04_multi-tap_delay.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05F02_Wvshp_bit_crunch.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05I05_pvscross.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D03_deltapi.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05G03_granule.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05G04_grain_delay.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05H01_pconvolve.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D02_delay_feedback.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05C04_comb.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A04_linseg_p3_fractions.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B03_Different_pan_layers.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B08_Ambi_circle.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A01_line.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05C02_atone_buthp_bqrez.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05E04_schroeder_reverb.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05I02_pvscale.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A08_linsegr.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05E03_reverb_with_chn.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A09_sine_env.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B02_pan2.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A02_line_p3.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A07_expon_pings.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05E01_freeverb.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05C01_tone_butlp_moogladder.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B06_VBAP_spread.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A06_line_vs_expon.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05I01_pvsanal.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05F03_Wvshp_different_transfer_funs.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05C03_reson_butbp.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05G01_sndwarp.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B05_VBAP_circle.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05I06_pvsfilter.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05G05_grain.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05E02_reverbsc.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A05_line_vs_linseg.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A03_linseg.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05I04_phase_vocoder.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05F04_distort.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D05_flanger.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05G02_selfmade_grain.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B01_Pan_stereo.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B09_Ambi_orders.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B04_hrtfmove.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05A10_lpshold_loopseg.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05D01_delay.csd</file>
-        <file>../examples/FLOSS Manual Examples/05 Sound Modification/05B07_VBAP_new.csd</file>
-        <file>../examples/FLOSS Manual Examples/06 Samples/06B02_sndloop.csd</file>
-        <file>../examples/FLOSS Manual Examples/06 Samples/06B03_RecPlayToTable.csd</file>
-        <file>../examples/FLOSS Manual Examples/06 Samples/06A06_pdcs_tabset_tabget.csd</file>
-        <file>../examples/FLOSS Manual Examples/06 Samples/06B01_flooper2.csd</file>
-        <file>../examples/FLOSS Manual Examples/06 Samples/06A02_Write_soundfile.csd</file>
-        <file>../examples/FLOSS Manual Examples/06 Samples/06A01_Play_soundfile.csd</file>
-        <file>../examples/FLOSS Manual Examples/06 Samples/06B04_BufRecPlay_UDO.csd</file>
-        <file>../examples/FLOSS Manual Examples/06 Samples/06B05_BufRecPlay_complex.csd</file>
-        <file>../examples/FLOSS Manual Examples/07 MIDI/07A01_midiin_print.csd</file>
-        <file>../examples/FLOSS Manual Examples/07 MIDI/07E02_score_to_midiout.csd</file>
-        <file>../examples/FLOSS Manual Examples/07 MIDI/07E05_midion2.csd</file>
-        <file>../examples/FLOSS Manual Examples/07 MIDI/07E03_midiout_cc.csd</file>
-        <file>../examples/FLOSS Manual Examples/07 MIDI/07B01_MidiInstrTrigger.csd</file>
-        <file>../examples/FLOSS Manual Examples/07 MIDI/07E06_moscil.csd</file>
-        <file>../examples/FLOSS Manual Examples/07 MIDI/07E04_midion.csd</file>
-        <file>../examples/FLOSS Manual Examples/07 MIDI/07E01_midiout.csd</file>
-        <file>../examples/FLOSS Manual Examples/07 MIDI/07B04_MidiMultiTrigg.csd</file>
-        <file>../examples/FLOSS Manual Examples/07 MIDI/07D01_ReadMidiFile.csd</file>
-        <file>../examples/FLOSS Manual Examples/08 Other Communication/08B02_Processing_to_Csound.csd</file>
-        <file>../examples/FLOSS Manual Examples/08 Other Communication/08A01_osc.csd</file>
-        <file>../examples/FLOSS Manual Examples/08 Other Communication/08B03_Serial_Read.csd</file>
-        <file>../examples/FLOSS Manual Examples/08 Other Communication/08B01_Pd_to_Csound.csd</file>
-        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B05_maxcs_events.csd</file>
-        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A04_pdcs_events.csd</file>
-        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A01_pdcs_control_in.csd</file>
-        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B04_maxcs_midi.csd</file>
-        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A03_pdcs_midi.csd</file>
-        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B03_maxcs_control_in.csd</file>
-        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B02_maxcs_audio_io.csd</file>
-        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A05_pdcs_control_out.csd</file>
-        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09A02_pdcs_live_in.csd</file>
-        <file>../examples/FLOSS Manual Examples/09 Csound in other Applications/09B01_maxcs_helloworld.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12C04_dialog.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12C06_color_controller.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12C01_run_pause_stop.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12B02_python_global.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12B06_pycall.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12B03_pyrun.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12B07_local_vs_global.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12B01_pyinit.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12B04_pyevali.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12C03_presets.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12B08_markov.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12C02_score_generated.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12C05_string_sound.csd</file>
-        <file>../examples/FLOSS Manual Examples/12 Csound and other Languages/12B05_pyassigni.csd</file>
-        <file>../examples/FLOSS Manual Examples/Score Methods/Score_methods_03.csd</file>
-        <file>../examples/FLOSS Manual Examples/Score Methods/Score_methods_01.csd</file>
-        <file>../examples/FLOSS Manual Examples/Score Methods/Score_methods_02.csd</file>
         <file>../examples/Synths/Additive_Synth.csd</file>
         <file>../examples/Synths/Imitative_Additive.csd</file>
         <file>../examples/Synths/Simple_Subtractive.csd</file>
@@ -335,7 +102,6 @@
         <file>../examples/Useful/SF_Play_from_HD_2.csd</file>
         <file>../examples/Useful/SF_Snippets_Player.csd</file>
         <file>../examples/Useful/Multichannel_Player.csd</file>
-        <file>../examples/Useful/Jukebox.csd</file>
         <file>../examples/Useful/SF_Record.csd</file>
         <file>../examples/Useful/Monome_basic.csd</file>
         <file>../examples/Useful/Audio_Input_Test.csd</file>
@@ -377,5 +143,9 @@
         <file>../doc/QuteCsound Quick Reference (0.4)-fr.pdf</file>
         <file>../doc/QuteCsound Quick Reference (0.4)-de.pdf</file>
         <file>../doc/QuteCsound Quick Reference (0.4)-it.pdf</file>
+        <file>appstyle-dark.css</file>
+        <file>appstyle-green.css</file>
+        <file>appstyle-white.css</file>
+        <file>../images/html5.png</file>
     </qresource>
 </RCC>

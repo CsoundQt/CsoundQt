@@ -388,6 +388,8 @@ private:
 
 private slots:
 	void updateData();
+	void widgetSelected(QuteWidget *widget);
+	void widgetUnselected(QuteWidget *widget);
 
 signals:
 	void selection(QRect area);
@@ -398,6 +400,9 @@ signals:
 	void registerGraph(QuteGraph *graph);
 	void registerButton(QuteButton *button);
 	void queueEventSignal(QString eventLine);
+	void widgetSelectedSignal(QuteWidget *widget);
+	void widgetUnselectedSignal(QuteWidget *widget);
+	void showMidiLearn(QuteWidget *);
 	//    void setWidgetClipboardSignal(QString text);  // To propagate clipboard for sharing between pages
 };
 

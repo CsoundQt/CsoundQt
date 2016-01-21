@@ -17,7 +17,7 @@
 </CsOptions>
 <CsInstruments>
 sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps 	= 32	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -90,11 +90,12 @@ i 3	0	0		;INIT
 </CsoundSynthesizer>
 
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>73</x>
- <y>206</y>
+ <x>251</x>
+ <y>157</y>
  <width>903</width>
  <height>512</height>
  <visible>true</visible>
@@ -486,9 +487,9 @@ Increment</label>
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>

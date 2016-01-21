@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
--+max_str_len=10000 --midi-key=4 --midi-velocity-amp=5 -m128
+--midi-key=4 --midi-velocity-amp=5 -m128
 </CsOptions>
 <CsInstruments>
 /***Imitative Additive Synthesis***/
@@ -29,6 +29,8 @@ gifreqs	ftgen		0, 0, gifftsiz/2+1, 2, 0  ;table for bin freqs
 gimaxindc	ftgen		0, 0, gifftsiz/2+1, 2, 0  ;indices for temporal maxima of giamps
 gisine		ftgen		0, 0, 2^10, 10, 1
 		massign	0, 10 ;send all midi key events to instr 10
+		
+		chn_S "_MBrowse", 1 ;declare string channel
 				
 ;============================================================================;
 ;============================================================================;
@@ -252,7 +254,7 @@ kon       =         0
 ;============================================================================;
 
  ;INPUT TO BE ANALYZED
-Sfiles    invalue   "_MBrowse" ;selection of sound files
+Sfiles    chnget   "_MBrowse" ;selection of sound files
 kinch     invalue   "inch" ;number of live input channel
 kgain     invalue   "gain" ;live input gain (dB)
 kselsamp  invalue   "sample" ;1 = select sample input
@@ -821,7 +823,8 @@ aout      monitor
 <CsScore>
 i 1 0 36000
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>15</x>
@@ -1134,39 +1137,39 @@ When the "Print current values" button is activated, the analyzed partials are s
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>File 'AkkordeonMono.aiff' at position 3.777237 seconds:
-01) amp = 0.174754, freq = 353.958893, bin = 8
-02) amp = 0.165817, freq = 289.728760, bin = 7
-03) amp = 0.156386, freq = 262.290771, bin = 6
-04) amp = 0.151346, freq = 372.361145, bin = 9
-05) amp = 0.134450, freq = 680.678650, bin = 16
-06) amp = 0.133342, freq = 733.723511, bin = 17
-07) amp = 0.125723, freq = 658.944336, bin = 15
-08) amp = 0.091831, freq = 995.071167, bin = 23
-09) amp = 0.085318, freq = 734.638000, bin = 18
-10) amp = 0.065743, freq = 264.655701, bin = 5
-11) amp = 0.065233, freq = 995.902466, bin = 24
-12) amp = 0.061697, freq = 399.723450, bin = 10
-13) amp = 0.047782, freq = 657.122070, bin = 14
-14) amp = 0.042844, freq = 120.794846, bin = 3
-15) amp = 0.040800, freq = 493.393005, bin = 12
-16) amp = 0.039331, freq = 489.382324, bin = 11
-17) amp = 0.038134, freq = 1986.118530, bin = 46
-18) amp = 0.036955, freq = 997.605591, bin = 22
-19) amp = 0.032988, freq = 1333.921509, bin = 31
-20) amp = 0.032404, freq = 117.310944, bin = 2
-21) amp = 0.029931, freq = 848.655701, bin = 20
-22) amp = 0.028129, freq = 1086.631226, bin = 25
-23) amp = 0.025767, freq = 1109.252075, bin = 26
-24) amp = 0.025415, freq = 2232.084229, bin = 52
-25) amp = 0.024350, freq = 892.828003, bin = 19
-26) amp = 0.024150, freq = 1986.061768, bin = 47
-27) amp = 0.022119, freq = 565.395020, bin = 13
-28) amp = 0.021073, freq = 1585.824097, bin = 37
-29) amp = 0.020997, freq = 1491.676758, bin = 35
-30) amp = 0.020303, freq = 1239.727295, bin = 29
-31) amp = 0.020095, freq = 2116.871338, bin = 49
-32) amp = 0.019902, freq = 1338.452515, bin = 32
+  <label>File 'AkkordeonMono.aiff' at position 3.869760 seconds:
+01) amp = 0.201054, freq = 353.815704, bin = 8
+02) amp = 0.167349, freq = 375.565918, bin = 9
+03) amp = 0.145980, freq = 263.803345, bin = 6
+04) amp = 0.138418, freq = 750.416138, bin = 17
+05) amp = 0.132345, freq = 746.453491, bin = 18
+06) amp = 0.130291, freq = 661.426147, bin = 15
+07) amp = 0.104767, freq = 297.529205, bin = 7
+08) amp = 0.098296, freq = 996.457703, bin = 23
+09) amp = 0.094052, freq = 127.866997, bin = 3
+10) amp = 0.078126, freq = 645.441589, bin = 16
+11) amp = 0.064262, freq = 259.581818, bin = 5
+12) amp = 0.057785, freq = 1000.420349, bin = 24
+13) amp = 0.049922, freq = 391.110840, bin = 10
+14) amp = 0.049305, freq = 122.518654, bin = 2
+15) amp = 0.046323, freq = 129.231964, bin = 4
+16) amp = 0.044392, freq = 652.065308, bin = 14
+17) amp = 0.042691, freq = 2235.219971, bin = 52
+18) amp = 0.040154, freq = 994.840271, bin = 22
+19) amp = 0.038057, freq = 1110.487305, bin = 26
+20) amp = 0.035998, freq = 1328.607178, bin = 31
+21) amp = 0.035739, freq = 888.275269, bin = 19
+22) amp = 0.030104, freq = 1246.978638, bin = 29
+23) amp = 0.028209, freq = 1996.460327, bin = 46
+24) amp = 0.027992, freq = 1495.683960, bin = 35
+25) amp = 0.027586, freq = 1850.747681, bin = 43
+26) amp = 0.027172, freq = 496.493713, bin = 12
+27) amp = 0.025627, freq = 2232.075684, bin = 51
+28) amp = 0.025251, freq = 1490.341797, bin = 34
+29) amp = 0.024329, freq = 2000.207153, bin = 47
+30) amp = 0.022566, freq = 2124.844727, bin = 49
+31) amp = 0.021643, freq = 837.938721, bin = 20
+32) amp = 0.020550, freq = 2229.399658, bin = 53
 </label>
   <alignment>left</alignment>
   <font>Arial</font>
@@ -1230,8 +1233,8 @@ When the "Print current values" button is activated, the analyzed partials are s
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-inf</xValue>
-  <yValue>-inf</yValue>
+  <xValue>0.17537738</xValue>
+  <yValue>0.17537738</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1631,7 +1634,7 @@ L = Live Input,
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Bratsche2Mono.wav|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Bratsche2Stereo.wav|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMonoOneCycle.wav</label>
+  <label>/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonMono.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonStereo.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/Bratsche2Mono.wav|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/Bratsche2Stereo.wav|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleStereo.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -1642,9 +1645,9 @@ L = Live Input,
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -1660,7 +1663,7 @@ L = Live Input,
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Bratsche2Mono.wav|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Bratsche2Stereo.wav|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMonoOneCycle.wav</stringvalue>
+  <stringvalue>/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonMono.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/AkkordeonStereo.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/Bratsche2Mono.wav|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/Bratsche2Stereo.wav|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleStereo.aiff|/home/jh/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff</stringvalue>
   <text>Select Files</text>
   <image>/</image>
   <eventLine/>
@@ -1739,7 +1742,7 @@ L = Live Input,
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>3.777</label>
+  <label>3.870</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>

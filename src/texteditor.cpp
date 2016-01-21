@@ -35,38 +35,47 @@ TextEditor::TextEditor(QWidget *parent) :
 	setAcceptDrops(true);
 	setAcceptRichText(false);
 	m_parameterMode = false;
+	m_commaTyped = false;
 	//  qDebug() << "TextEditor::TextEditor" << acceptDrops();
 }
 
 void TextEditor::keyPressEvent (QKeyEvent * event)
 {
-	if(event->key() == Qt::Key_Tab) {
+	if (m_commaTyped && event->key() != Qt::Key_Space) {
+		m_commaTyped = false;
+	}
+	switch(event->key()) {
+	case Qt::Key_Tab:
 		if (m_parameterMode) {
 			emit tabPressed();
-			return;
-
-		} else if(m_tabIndents) {
+		} /* else if(m_tabIndents) { // this blocks default behaviour and only tab does not move any further
 			emit requestIndent();
-			return;
+		} */ else {
+			QTextEdit::keyPressEvent(event);
 		}
-	}
-	if(event->key() == Qt::Key_Backtab) {
+		return;
+	case Qt::Key_Backtab:
 		if (m_parameterMode) {
 			emit backtabPressed();
-			return;
 		} else if(m_tabIndents) {
 			emit requestUnindent();
-			return;
 		}
-	}
-	if (event->key() == Qt::Key_Down && m_parameterMode) {
-		emit openParameterSelection();
 		return;
-	}
-	QTextEdit::keyPressEvent(event);
-	if (event->key() == Qt::Key_Enter) {
+	case Qt::Key_Return:
+	case Qt::Key_Enter:
 		emit enterPressed();
+		break;
+	case Qt::Key_Space:
+		if (m_commaTyped) {
+			emit showParameterInfo();
+		}
+		m_commaTyped = false;
+		break;
+	case Qt::Key_Comma:
+		m_commaTyped = true;
+		break;
 	}
+	QTextEdit::keyPressEvent(event); // Process key events in the rest of the application
 	if (event->key() == Qt::Key_Up || event->key() == Qt::Key_Down
 			|| event->key() == Qt::Key_Left || event->key() == Qt::Key_Right) {
 		emit arrowPressed();
@@ -77,7 +86,16 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 	} else if(event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
 		emit newLine();
 	}
-	return;
+    return;
+}
+
+void TextEditor::mouseReleaseEvent(QMouseEvent *e)
+{
+	QTextEdit::mouseReleaseEvent(e); // and do all the necessary qt job
+	if (m_parameterMode) {
+		emit requestParameterModeExit();
+	}
+
 }
 
 //The following makes the editor almost accept drop events on OS X, but breaks all dragging on the same document on linux
@@ -139,6 +157,30 @@ void TextEditLineNumbers::setLineAreaVisble(bool visible)
 	}
 }
 
+void TextEditLineNumbers::markDebugLine(int line)
+{
+	m_debugLines.append(line);
+	lineNumberArea->setDebugLines(m_debugLines);
+}
+
+void TextEditLineNumbers::unmarkDebugLine(int line)
+{
+	int index = m_debugLines.indexOf(line);
+	if (index >= 0) {
+		m_debugLines.remove(index);
+	} else {
+		qDebug() << "TextEditLineNumbers::unmarkDebugLine no marker at line " << line;
+	}
+	lineNumberArea->setDebugLines(m_debugLines);
+	updateLineArea();
+}
+
+void TextEditLineNumbers::setCurrentDebugLine(int line)
+{
+	lineNumberArea->setCurrentDebugLine(line);
+	updateLineArea();
+}
+
 void TextEditLineNumbers::updateLineArea(int)
 {
 	lineNumberArea->update();
@@ -148,7 +190,6 @@ void TextEditLineNumbers::updateLineArea()
 {
 	lineNumberArea->update();
 }
-
 
 void LineNumberArea::paintEvent(QPaintEvent *)
 {
@@ -181,9 +222,22 @@ void LineNumberArea::paintEvent(QPaintEvent *)
 			}
 			painter.drawText(codeEditor->getAreaWidth() - codeEditor->fontMetrics().width(number) - 3, y, number); // 3 - add some padding
 
+
 			if (bold) {
 				font.setBold(false);
 				painter.setFont(font);
+			}
+			if (m_debugLines.indexOf(line_count) >= 0) {
+				painter.setPen(QColor(Qt::red));
+				painter.setBrush(QColor(Qt::red));
+				int height = codeEditor->fontMetrics().ascent() ;
+				painter.drawEllipse(position.x(), y - height, height, height);
+				painter.setBrush(QBrush());
+				painter.setPen(QColor(Qt::darkGray).darker()); // not exactly black
+			}
+			if (m_currentDebugLine >= 0 && line_count == m_currentDebugLine) {
+				QImage image("://themes/boring/gtk-media-play-ltr.png");
+				painter.drawImage(position.x(), y, image);
 			}
 		}
 		block = block.next();

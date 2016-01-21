@@ -68,6 +68,7 @@ private slots:
 	void browseCsoundExecutable();
 	void browseLogFile();
 	void browseSdkDir();
+	void browseTemplateDir();
 	void browseTerminal();
 	void browseBrowser();
 	void browseDot();

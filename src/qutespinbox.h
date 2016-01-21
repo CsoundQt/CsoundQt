@@ -34,6 +34,7 @@ public:
 
 	virtual void setText(QString text);
 	virtual void setMidiValue(int value);
+	virtual bool acceptsMidi() {return true;}
 	//    virtual void setResolution(double resolution);
 	virtual QString getWidgetLine();
 	virtual QString getCsladspaLine();

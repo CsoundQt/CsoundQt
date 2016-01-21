@@ -36,7 +36,7 @@ BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree, ConfigLis
 	m_view = 0;
 	m_csEngine = new CsoundEngine(configlists);
 	//FIXME widgetlayout should have the chance of being empty
-	m_widgetLayouts.append(newWidgetLayout());
+	m_widgetLayouts.append(this->newWidgetLayout());
 	m_csEngine->setWidgetLayout(m_widgetLayouts[0]);  // Pass first widget layout to engine
 	//  m_view->setOpcodeNameList(opcodeNameList);
 	//  m_view->setOpcodeTree(m_opcodeTree);
@@ -78,12 +78,12 @@ BaseDocument::~BaseDocument()
 int BaseDocument::parseAndRemoveWidgetText(QString &text)
 {
 	QStringList xmlPanels;
-	while (text.contains("<bsbPanel") and text.contains("</bsbPanel>")) {
+    while (text.contains("<bsbPanel") && text.contains("</bsbPanel>")) {
 		QString panel = text.right(text.size()-text.indexOf("<bsbPanel"));
 		panel.resize(panel.indexOf("</bsbPanel>") + 11);
-		if (text.indexOf("</bsbPanel>") + 11 < text.size() and text[text.indexOf("</bsbPanel>") + 13] == '\n')
+        if (text.indexOf("</bsbPanel>") + 11 < text.size() && text[text.indexOf("</bsbPanel>") + 13] == '\n')
 			text.remove(text.indexOf("</bsbPanel>") + 13, 1); //remove final line break
-		if (text.indexOf("<bsbPanel") > 0 and text[text.indexOf("<bsbPanel") - 1] == '\n')
+        if (text.indexOf("<bsbPanel") > 0 && text[text.indexOf("<bsbPanel") - 1] == '\n')
 			text.remove(text.indexOf("<bsbPanel") - 1, 1); //remove initial line break
 		text.remove(text.indexOf("<bsbPanel"), panel.size());
 		xmlPanels << panel;
@@ -93,12 +93,12 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
 		//FIXME allow multiple layouts
 		m_widgetLayouts[0]->loadXmlWidgets(xmlPanels[0]);
 		m_widgetLayouts[0]->markHistory();
-		if (text.contains("<bsbPresets>") and text.contains("</bsbPresets>")) {
+        if (text.contains("<bsbPresets>") && text.contains("</bsbPresets>")) {
 			QString presets = text.right(text.size()-text.indexOf("<bsbPresets>"));
 			presets.resize(presets.indexOf("</bsbPresets>") + 13);
-			if (text.indexOf("</bsbPresets>") + 13 < text.size() and text[text.indexOf("</bsbPresets>") + 15] == '\n')
+            if (text.indexOf("</bsbPresets>") + 13 < text.size() && text[text.indexOf("</bsbPresets>") + 15] == '\n')
 				text.remove(text.indexOf("</bsbPresets>") + 15, 1); //remove final line break
-			if (text.indexOf("<bsbPresets>") > 0 and text[text.indexOf("<bsbPresets>") - 1] == '\n')
+            if (text.indexOf("<bsbPresets>") > 0 && text[text.indexOf("<bsbPresets>") - 1] == '\n')
 				text.remove(text.indexOf("<bsbPresets>") - 1, 1); //remove initial line break
 			text.remove(text.indexOf("<bsbPresets>"), presets.size());
 			//FIXME allow multiple
@@ -147,7 +147,7 @@ QString BaseDocument::getFullText()
 	fullText = m_view->getFullText();
 	//  if (!fullText.endsWith("\n"))
 	//    fullText += "\n";
-	if (fileName.endsWith(".csd",Qt::CaseInsensitive) or fileName == "") {
+    if (fileName.endsWith(".csd",Qt::CaseInsensitive) || fileName == "") {
 		fullText += getWidgetsText() ;
 		fullText += getPresetsText() + "\n";
 	}
@@ -252,7 +252,12 @@ void BaseDocument::stop()
 
 int BaseDocument::record(int format)
 {
+#ifdef	PERFTHREAD_RECORD
 	return m_csEngine->startRecording(format, "output.wav");
+#else
+	QMessageBox::warning(NULL, tr("Recording not possible"), tr("This version of CsoundQt was not built with recording support."));
+	return 0;
+#endif
 }
 
 void BaseDocument::stopRecording()

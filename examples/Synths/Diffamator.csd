@@ -304,26 +304,26 @@ endin
 
 instr	4		;Rand more harm
 	irat		=		i(gkrat1)
-	inewrat	=		((irat*4) + (int ((irat*2)+0.5) /2))/5
+	inewrat	=		((irat*4) + (int((irat*2)+0.5) /2))/5
 	
 	print irat
 	print inewrat
 	
 			outvalue 	"OP1_Ratio", inewrat
 	irat		=		i(gkrat2)
-	inewrat	=		((irat*4) + (int ((irat*2)+0.5) /2))/5
+	inewrat	=		((irat*4) + (int((irat*2)+0.5) /2))/5
 			outvalue	"OP2_Ratio", inewrat
 	irat		=		i(gkrat3)
-	inewrat	=		((irat*4) + (int ((irat*2)+0.5) /2))/5
+	inewrat	=		((irat*4) + (int((irat*2)+0.5) /2))/5
 			outvalue	"OP3_Ratio", inewrat
 	irat		=		i(gkrat4)
-	inewrat	=		((irat*4) + (int ((irat*2)+0.5) /2))/5
+	inewrat	=		((irat*4) + (int((irat*2)+0.5) /2))/5
 			outvalue	"OP4_Ratio", inewrat
 	irat		=		i(gkrat5)
-	inewrat	=		((irat*4) + (int ((irat*2)+0.5) /2))/5
+	inewrat	=		((irat*4) + (int((irat*2)+0.5) /2))/5
 			outvalue	"OP5_Ratio", inewrat
 	irat		=		i(gkrat6)
-	inewrat	=		((irat*4) + (int ((irat*2)+0.5) /2))/5
+	inewrat	=		((irat*4) + (int((irat*2)+0.5) /2))/5
 			outvalue	"OP6_Ratio", inewrat
 endin
 
@@ -1123,6 +1123,8 @@ i 1 0 3600		;GUI controls
 i 12 0 3600		;Keyboard input
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 <bsbPanel>
  <label>Widgets</label>
@@ -2765,7 +2767,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2813,7 +2815,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3158,7 +3160,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3282,7 +3284,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3406,7 +3408,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3530,7 +3532,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3578,7 +3580,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i3 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3597,7 +3599,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i2 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3616,7 +3618,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i6 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3635,7 +3637,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i7 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3654,7 +3656,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i4 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3673,7 +3675,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i5 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3692,7 +3694,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i8 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3711,7 +3713,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i9 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -4157,7 +4159,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -4176,7 +4178,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i17 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBScrollNumber">
   <objectName>midinote</objectName>
@@ -4319,7 +4321,7 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i18 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBScrollNumber">
   <objectName>mididur</objectName>
@@ -6785,136 +6787,7 @@ i 12 0 3600		;Keyboard input
 <value id="{77612985-9528-4347-a5ab-f7302ad4f5fc}" mode="2" >0.00000000</value>
 </preset>
 </bsbPresets>
-<MacGUI>
-ioView background {63736, 62194, 53970}
-ioText {44, 2} {91, 132} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioText {0, 41} {44, 27} label 0.000000 0.00100 "" left "Arial Black" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder OP 1
-ioSlider {49, 8} {17, 100} 0.000001 1.000000 0.267940 OP1_A
-ioText {49, 107} {21, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder A
-ioText {71, 108} {21, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder D
-ioSlider {71, 9} {17, 100} 0.000000 0.500000 0.007846 OP1_D
-ioText {93, 108} {21, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder S
-ioSlider {93, 9} {17, 100} 0.000000 1.000000 0.007817 OP1_S
-ioText {114, 108} {21, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder R
-ioSlider {114, 9} {17, 100} 0.000000 3.000000 1.418342 OP1_R
-ioText {44, 137} {91, 132} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioText {0, 174} {44, 27} label 0.000000 0.00100 "" left "Arial Black" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder OP 2
-ioSlider {49, 141} {17, 100} 0.000001 1.000000 0.154064 OP2_A
-ioText {49, 240} {21, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder A
-ioText {71, 241} {21, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder D
-ioSlider {71, 142} {17, 100} 0.000000 0.500000 0.008255 OP2_D
-ioText {93, 241} {21, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder S
-ioSlider {93, 142} {17, 100} 0.000000 1.000000 0.001340 OP2_S
-ioText {114, 241} {21, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder R
-ioSlider {114, 142} {17, 100} 0.000000 3.000000 0.689426 OP2_R
-ioText {303, 6} {91, 132} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioText {44, 271} {91, 132} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioText {0, 310} {44, 27} label 0.000000 0.00100 "" left "Arial Black" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder OP 3
-ioSlider {49, 277} {17, 100} 0.000001 1.000000 0.119525 OP3_A
-ioText {49, 376} {21, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder A
-ioText {71, 377} {21, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder D
-ioSlider {71, 278} {17, 100} 0.000000 0.500000 0.004283 OP3_D
-ioText {93, 377} {21, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder S
-ioSlider {93, 278} {17, 100} 0.000000 1.000000 0.009114 OP3_S
-ioText {114, 377} {21, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder R
-ioSlider {114, 278} {17, 100} 0.000000 3.000000 0.213562 OP3_R
-ioText {259, 44} {44, 27} label 0.000000 0.00100 "" left "Arial Black" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder OP 4
-ioSlider {308, 11} {17, 100} 0.000001 1.000000 0.000304 OP4_A
-ioText {308, 110} {21, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder A
-ioText {330, 111} {21, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder D
-ioSlider {330, 12} {17, 100} 0.000000 0.500000 0.001774 OP4_D
-ioText {352, 111} {21, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder S
-ioSlider {352, 12} {17, 100} 0.000000 1.000000 0.360831 OP4_S
-ioText {373, 111} {21, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder R
-ioSlider {373, 12} {17, 100} 0.000000 3.000000 0.118492 OP4_R
-ioText {303, 141} {91, 132} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioText {303, 275} {91, 132} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioText {259, 180} {44, 27} label 0.000000 0.00100 "" left "Arial Black" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder OP 5
-ioSlider {308, 147} {17, 100} 0.000001 1.000000 0.000486 OP5_A
-ioText {308, 246} {21, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder A
-ioText {330, 247} {21, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder D
-ioSlider {330, 148} {17, 100} 0.000000 0.500000 0.005566 OP5_D
-ioText {352, 247} {21, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder S
-ioSlider {352, 148} {17, 100} 0.000000 1.000000 0.030360 OP5_S
-ioText {373, 247} {21, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder R
-ioSlider {373, 148} {17, 100} 0.000000 3.000000 2.753186 OP5_R
-ioText {259, 313} {44, 27} label 0.000000 0.00100 "" left "Arial Black" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder OP 6
-ioSlider {308, 280} {17, 100} 0.000001 1.000000 0.340344 OP6_A
-ioText {308, 379} {21, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder A
-ioText {330, 380} {21, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder D
-ioSlider {330, 281} {17, 100} 0.000000 0.500000 0.001442 OP6_D
-ioText {352, 380} {21, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder S
-ioSlider {352, 281} {17, 100} 0.000000 1.000000 0.008354 OP6_S
-ioText {373, 380} {21, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder R
-ioSlider {373, 281} {17, 100} 0.000000 3.000000 2.706171 OP6_R
-ioText {137, 2} {110, 132} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioText {138, 108} {30, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Lev
-ioSlider {143, 9} {17, 100} 0.000000 1.000000 0.691006 OP1_Lev
-ioText {170, 26} {62, 25} editnum 3.000000 0.001000 "OP1_Ratio" left "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 3.000000
-ioText {180, 48} {52, 28} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Ratio
-ioButton {184, 79} {46, 20} value 1.000000 "OP1_Inv" "Inv" "/" 
-ioText {137, 137} {110, 132} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioButton {184, 213} {46, 20} value 1.000000 "OP2_Inv" "Inv" "/" 
-ioText {180, 182} {52, 28} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Ratio
-ioText {170, 160} {62, 25} editnum 2.500000 0.001000 "OP2_Ratio" left "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 2.500000
-ioSlider {143, 143} {17, 100} 0.000000 1.000000 0.352060 OP2_Lev
-ioText {138, 241} {30, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Lev
-ioText {137, 271} {110, 132} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioText {396, 6} {110, 132} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioText {396, 141} {110, 132} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioText {396, 275} {110, 132} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioText {138, 377} {30, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Lev
-ioSlider {143, 279} {17, 100} 0.000000 1.000000 0.487417 OP3_Lev
-ioText {170, 296} {62, 25} editnum 5.000000 0.001000 "OP3_Ratio" left "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 5.000000
-ioText {180, 318} {52, 28} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Ratio
-ioButton {184, 349} {46, 20} value 1.000000 "OP3_Inv" "Inv" "/" 
-ioText {397, 111} {30, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Lev
-ioSlider {402, 12} {17, 100} 0.000000 1.000000 0.600547 OP4_Lev
-ioText {429, 32} {62, 25} editnum 5.500000 0.001000 "OP4_Ratio" left "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 5.500000
-ioText {439, 54} {52, 28} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Ratio
-ioButton {443, 85} {46, 20} value 1.000000 "OP4_Inv" "Inv" "/" 
-ioText {398, 247} {30, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Lev
-ioSlider {403, 148} {17, 100} 0.000000 1.000000 0.829290 OP5_Lev
-ioText {429, 165} {62, 25} editnum 3.500000 0.001000 "OP5_Ratio" left "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 3.500000
-ioText {440, 187} {52, 28} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Ratio
-ioButton {444, 218} {46, 20} value 1.000000 "OP5_Inv" "Inv" "/" 
-ioText {398, 380} {30, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Lev
-ioSlider {403, 281} {17, 100} 0.000000 1.000000 0.811467 OP6_Lev
-ioText {429, 298} {62, 25} editnum 2.500000 0.001000 "OP6_Ratio" left "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 2.500000
-ioText {440, 320} {52, 28} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Ratio
-ioButton {443, 350} {46, 20} value 1.000000 "OP6_Inv" "Inv" "/" 
-ioText {567, 150} {124, 256} label 0.000000 0.00100 "" center "Arial Black" 22 {0, 0, 0} {56064, 51968, 41216} nobackground noborder Transform
-ioButton {579, 180} {100, 20} event 1.000000 "" "Rand Mus" "/" i3 0 0
-ioButton {579, 208} {100, 20} event 1.000000 "" "Rand FX" "/" i2 0 0
-ioButton {579, 236} {100, 20} event 1.000000 "" "Attackify" "/" i6 0 0
-ioButton {579, 264} {100, 20} event 1.000000 "" "Padify" "/" i7 0 0
-ioButton {579, 292} {100, 20} event 1.000000 "" "+ Harm" "/" i4 0 0
-ioButton {579, 321} {100, 20} event 1.000000 "" "- Harm" "/" i5 0 0
-ioButton {579, 350} {100, 20} event 1.000000 "" "Switch +" "/" i8 0 0
-ioButton {579, 379} {100, 20} event 1.000000 "" "Switch -" "/" i9 0 0
-ioText {567, 5} {124, 143} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {56064, 51968, 41216} nobackground noborder 
-ioText {697, 5} {124, 132} label 0.000000 0.00100 "" center "Arial Black" 24 {0, 0, 0} {56064, 51968, 41216} nobackground noborder Algorithm
-ioText {570, 9} {118, 43} label 0.000000 0.00100 "" center "Arial Black" 24 {65280, 65280, 32512} {65280, 0, 0} nobackground noborder DiffamatorÂ¬
-ioText {697, 219} {126, 185} label 0.000000 0.00100 "" center "Arial Black" 24 {0, 0, 0} {56064, 51968, 41216} nobackground noborder Notes
-ioText {697, 140} {125, 76} label 0.000000 0.00100 "" center "Arial Black" 24 {0, 0, 0} {56064, 51968, 41216} nobackground noborder Presets
-ioSlider {701, 43} {115, 21} 0.000000 1.000000 0.043757 Feedback
-ioText {706, 77} {48, 28} editnum 30.000000 1.000000 "Algorithm" right "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 30.000000
-ioText {752, 81} {67, 26} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Algo Nb
-ioText {753, 59} {69, 25} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Feedback
-ioMenu {700, 178} {119, 25} 28 303 "P00 - Algo 13,P01 - Algo 07,P02 - Algo 26,P03 - Algo 14,P04 - Algo 15,P05 - Algo 15,P06 - Algo 08,P07 - Algo 24,P08 - Algo 07,P09 - Algo 23,P10 - Algo 21,P11 - Algo 24,P12 - Algo 17,P13 - Algo 19,P14 - Algo 24,P15 - Algo 26,P16 - Algo 12,P17 - Algo 30,P18 - Algo 11,P19 - Algo 07,P20 - Algo 14,P21 - Algo 16,P22 - Algo 05,P23 - Algo 21,P24 - Algo 10,P25 - Algo 10,P26 - Algo 25,P27 - Algo 09,P28 - Algo 26,P29 - Algo 11,P30 - Free,P31 - Free
-" _SetPresetIndex
-ioButton {708, 113} {65, 21} value 1.000000 "Lock" "Lock" "/" 
-ioButton {711, 366} {100, 20} event 1.000000 "" "Print i line" "/" i17 0 0
-ioText {776, 260} {30, 20} scroll 60.000000 1.000000 "midinote" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {776, 281} {30, 20} scroll 83.000000 1.000000 "midiveloc" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {699, 258} {80, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder MIDI note
-ioText {699, 280} {80, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder MIDI velocity
-ioButton {711, 340} {100, 20} event 1.000000 "" "Play note" "/" i18 0 0
-ioText {776, 302} {30, 20} scroll 1.180000 0.010000 "mididur" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {698, 303} {80, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder Duration
-ioText {573, 56} {111, 82} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {63232, 62720, 61952} nobackground noborder An FM synthesizer emulating the DX7's operator algorithm chains
-</MacGUI>
-<EventPanel name="Tests" tempo="60.00000000" loop="8.00000000" x="453" y="425" width="802" height="346" visible="true" loopStart="0" loopEnd="0">i 10  0  3.000000  440.000000 100 24 0.090938 0.550575 0.281511 0.570137 0.336029 0.364754 0.089972 0.179480 0.407763 0.717619 1.507408 2.038276 0.259735 0.076355 0.069394 0.898999 2.856621 2.614967 0.622085 0.951219 0.190021 0.489482 2.067318 2.033791 0.309037 0.131384 0.456526 0.545857 1.865052 2.758606 0.009423 0.922956 0.062012 0.448193 1.317877 1.606367 0.624784 1 0 1 0 0 1 
+<EventPanel name="Tests" tempo="60.00000000" loop="8.00000000" x="453" y="425" width="802" height="346" visible="false" loopStart="0" loopEnd="0">i 10  0  3.000000  440.000000 100 24 0.090938 0.550575 0.281511 0.570137 0.336029 0.364754 0.089972 0.179480 0.407763 0.717619 1.507408 2.038276 0.259735 0.076355 0.069394 0.898999 2.856621 2.614967 0.622085 0.951219 0.190021 0.489482 2.067318 2.033791 0.309037 0.131384 0.456526 0.545857 1.865052 2.758606 0.009423 0.922956 0.062012 0.448193 1.317877 1.606367 0.624784 1 0 1 0 0 1 
     
 i 10  1  3.000000  440.000000 100 1 0.478926 0.599167 0.028437 0.206165 2.547630 3.000000 0.154535 0.435037 0.410224 0.935346 2.917274 1.000000 0.507214 0.527054 0.351074 0.123741 1.529569 3.500000 0.299779 0.483123 0.321528 0.215652 2.631786 5.000000 0.584880 0.575536 0.251249 0.363890 1.449478 2.000000 0.847388 0.195493 0.153552 0.211472 1.048423 2.000000 0.137826 0 0 0 0 0 0 
     

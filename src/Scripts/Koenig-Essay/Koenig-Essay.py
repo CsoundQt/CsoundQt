@@ -46,7 +46,7 @@ def renderFiles():
         counter += 1
         statusLabel.setText("Rendering:" + csdFile)
         print "Rendering (" + str(counter) + "/" + str(number) + "):" + csdFile
-        renderFile("../" + csdFile)
+        renderFile(csdFile)
         pqtc.QCoreApplication.instance().processEvents() # Needed to avoid blocking the application
         if running == 0:
             break

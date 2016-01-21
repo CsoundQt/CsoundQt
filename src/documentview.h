@@ -34,6 +34,7 @@
 #include "baseview.h"
 
 #include <QKeyEvent> // For syntax menu class
+#include <QPair>
 
 class MySyntaxMenu: public QMenu
 {
@@ -48,6 +49,19 @@ protected:
 	virtual void keyPressEvent(QKeyEvent * event);
 signals:
 	void keyPressed(QString text); // Used to send both pressed keys and full opcode text to be pasted
+};
+
+class HoverWidget :
+		public QWidget
+{
+	Q_OBJECT
+public:
+	HoverWidget(QWidget *parent);
+	~HoverWidget() {}
+
+protected:
+	void mousePressEvent(QMouseEvent *ev);
+
 };
 
 class DocumentView : public BaseView
@@ -81,28 +95,32 @@ public:
 	bool childHasFocus();
 	void print(QPrinter *printer);
 
+
+	bool matchLeftParenthesis(QTextBlock currentBlock, int i, int numLeftParentheses);
+	bool matchRightParenthesis(QTextBlock currentBlock, int index, int numRightParentheses);
+	void createParenthesisSelection(int pos, bool paired=true);
+
 public slots:
 	void setModified(bool mod = true);
-	//    void updateDocumentModel();
-	//    void updateFromDocumentModel();
 	void syntaxCheck();
 	void textChanged();
 	void escapePressed();
+	void finishParameterMode();
 	void exitParameterMode();
 	void indentNewLine();
 	void findReplace();
 	void getToIn(); // chnget/chnset to invalue/outvalue
 	void inToGet(); // invalue/outvalue to chnget/chnset
 	void insertAutoCompleteText();
-	void insertParameterText();
 	void findString(QString query = QString());
 	void evaluate();
 	void updateContext();
 	void updateOrcContext(QString orc);
 	void nextParameter();
 	void prevParameter();
-	void openParameterSelection();
-	void parameterShowShortcutPressed();
+	void showHoverText();
+	void hideHoverText();
+	void updateHoverText(int x, int y, QString text);
 	void createContextMenu(QPoint pos);
 
 	void showOrc(bool);
@@ -138,16 +156,20 @@ protected:
 private:
 	QString changeToChnget(QString text);
 	QString changeToInvalue(QString text);
-	//    void createSyntaxMenu();
 
 	MySyntaxMenu *syntaxMenu;
-	MySyntaxMenu *parameterMenu;
-	QPushButton *parameterButton;
+
+	HoverWidget *m_hoverWidget;
+	QLabel *m_hoverText;
+	QString m_currentOpcodeText;
+	//QPair<int, int> m_parenspos;
+
 	bool m_isModified;
 	bool m_autoComplete;
 	bool m_autoParameterMode;
 	bool errorMarked;
 	bool internalChange;  // to let popoup opcode completion know if text change was internal
+	QTextEdit * m_currentEditor;
 
 	bool lastCaseSensitive; // These last three are for search and replace
 	QString lastSearch;
@@ -155,13 +177,21 @@ private:
 	QStringList m_localVariables;
 	QStringList m_globalVariables;
 
+	enum {
+		ORC_CONTEXT = 0,
+		SCO_CONTEXT,
+		OPTIONS_CONTEXT,
+		PYTHON_CONTEXT,
+		NO_CONTEXT
+	};
+	int m_currentContext;
+
 private slots:
 	void destroySyntaxMenu();
 	void opcodeHelp();
 
 signals:
-	void opcodeSyntaxSignal(QString syntax);  // Report an opcode syntax under cursor
-	void lineNumberSignal(int number); // Sends current line number when cursor is moved
+    void opcodeSyntaxSignal(QString syntax);  // Report syntax of opcode under cursor
 	void setHelp(); // Request execute open opcode help action
 	void contentsChanged();
 	void closeExtraPanels();

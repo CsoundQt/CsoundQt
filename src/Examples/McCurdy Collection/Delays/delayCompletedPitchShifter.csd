@@ -13,8 +13,8 @@
 --env:SSDIR+=../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 48000		;SAMPLE RATE
-ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+sr		= 44100		;SAMPLE RATE
+ksmps	= 32			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -117,8 +117,8 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
  <objectName/>
  <x>72</x>
  <y>179</y>
- <width>400</width>
- <height>200</height>
+ <width>1134</width>
+ <height>413</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -321,7 +321,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>2.688</label>
+  <label>2.304</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -381,7 +381,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <midicc>0</midicc>
   <minimum>-24.00000000</minimum>
   <maximum>24.00000000</maximum>
-  <value>2.68800000</value>
+  <value>2.30400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -397,7 +397,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.061</label>
+  <label>0.101</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -428,7 +428,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <midicc>0</midicc>
   <minimum>0.00100000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.06097000</value>
+  <value>0.10095000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -514,7 +514,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
@@ -529,7 +529,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
+  <value>0.18200000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -545,7 +545,7 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.000</label>
+  <label>0.182</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -633,9 +633,9 @@ Some experimentation with the setting for 'Delay Time' can enhance the resultant
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>

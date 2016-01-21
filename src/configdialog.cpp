@@ -38,6 +38,11 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	setupUi(this);
 
 	m_configlists->refreshModules();
+
+	if(m_configlists->rtAudioNames.size() == 1) {
+		QMessageBox::warning(this, tr("No Audio Modules"),
+							 tr("No real-time audio modules were found.\nMake sure OPCODE6DIR64 is set properly in your system or the configuration dialog."));
+	}
 	QHash<QString, QString> audioModNames;
 	audioModNames["pa_bl"] = "portaudio (blocking)";
 	audioModNames["pa_cb"] = "portaudio (callback)";
@@ -56,12 +61,13 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		}
 	}
 	foreach (QString item, m_configlists->rtMidiNames) {
-		RtMidiModuleComboBox->addItem(item);
+		RtMidiModuleComboBox->addItem(item, item);
 	}
 	for (int i = 0; i < m_configlists->languages.size(); i++) {
 		languageComboBox->addItem(m_configlists->languages[i], QVariant(m_configlists->languageCodes[i]));
 	}
 	midiInterfaceComboBox->clear();
+	midiOutInterfaceComboBox->clear();
 
 #ifdef QCS_RTMIDI
 	try {
@@ -70,7 +76,26 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 			midiInterfaceComboBox->addItem(QString::fromStdString(midiin.getPortName(i)), QVariant(i));
 		}
 	}
+
+#ifdef QCS_OLD_RTMIDI
 	catch (RtError &error) {
+#else
+	catch (RtMidiError &error) {
+#endif
+		// Handle the exception here
+		error.printMessage();
+	}
+	try {
+		RtMidiOut midiout;
+		for (int i = 0; i < (int) midiout.getPortCount(); i++) {
+			midiOutInterfaceComboBox->addItem(QString::fromStdString(midiout.getPortName(i)), QVariant(i));
+		}
+	}
+#ifdef QCS_OLD_RTMIDI
+	catch (RtError &error) {
+#else
+	catch (RtMidiError &error) {
+#endif
 		// Handle the exception here
 		error.printMessage();
 	}
@@ -78,9 +103,12 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	midiInterfaceComboBox->addItem(tr("No RtMidi support"));
 #endif
 
-	midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI internal interface")), QVariant(9999));
+	midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI In interface")), QVariant(9999));
 	int ifIndex = midiInterfaceComboBox->findData(QVariant(m_options->midiInterface));
 	midiInterfaceComboBox->setCurrentIndex(ifIndex);
+	midiOutInterfaceComboBox->addItem(QString(tr("None", "No MIDI Out interface")), QVariant(9999));
+	ifIndex = midiOutInterfaceComboBox->findData(QVariant(m_options->midiOutInterface));
+	midiOutInterfaceComboBox->setCurrentIndex(ifIndex);
 
 	themeComboBox->setCurrentIndex(themeComboBox->findText(m_options->theme));
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
@@ -174,13 +202,18 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	OutputFilenameLineEdit->setEnabled(m_options->fileOutputFilenameActive);
 	RtUseOptionsCheckBox->setChecked(m_options->rtUseOptions);
 	RtOverrideCheckBox->setChecked(m_options->rtOverrideOptions);
-	RtModuleComboBox->setCurrentIndex(RtModuleComboBox->findData(m_options->rtAudioModule));
+	int index = RtModuleComboBox->findData(m_options->rtAudioModule);
+	if (index < 0 || index >= RtModuleComboBox->count()) {
+		index = 0;
+	}
+	RtModuleComboBox->setCurrentIndex(index);
 	RtInputLineEdit->setText(m_options->rtInputDevice);
 	RtOutputLineEdit->setText(m_options->rtOutputDevice);
 	JackNameLineEdit->setText(m_options->rtJackName);
 	RtMidiModuleComboBox->setCurrentIndex(RtMidiModuleComboBox->findData(m_options->rtMidiModule));
 	RtMidiInputLineEdit->setText(m_options->rtMidiInputDevice);
 	RtMidiOutputLineEdit->setText(m_options->rtMidiOutputDevice);
+	csoundMidiCheckBox->setChecked(m_options->useCsoundMidi);
 	simultaneousCheckBox->setChecked(m_options->simultaneousRun);
 
 	sampleFormatComboBox->setCurrentIndex(m_options->sampleFormat);
@@ -188,25 +221,20 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	CsdocdirLineEdit->setText(m_options->csdocdir);
 	OpcodedirCheckBox->setChecked(m_options->opcodedirActive);
 	OpcodedirLineEdit->setText(m_options->opcodedir);
-	OpcodedirLineEdit->setEnabled(m_options->opcodedirActive);
 	Opcodedir64CheckBox->setChecked(m_options->opcodedir64Active);
 	Opcodedir64LineEdit->setText(m_options->opcodedir64);
-	Opcodedir64LineEdit->setEnabled(m_options->opcodedir64Active);
 	Opcode6dir64CheckBox->setChecked(m_options->opcode6dir64Active);
 	Opcode6dir64LineEdit->setText(m_options->opcode6dir64);
-	Opcode6dir64LineEdit->setEnabled(m_options->opcode6dir64Active);
 	SadirCheckBox->setChecked(m_options->sadirActive);
 	SadirLineEdit->setText(m_options->sadir);
-	SadirLineEdit->setEnabled(m_options->sadirActive);
 	SsdirCheckBox->setChecked(m_options->ssdirActive);
 	SsdirLineEdit->setText(m_options->ssdir);
-	SsdirLineEdit->setEnabled(m_options->ssdirActive);
 	SfdirCheckBox->setChecked(m_options->sfdirActive);
 	SfdirLineEdit->setText(m_options->sfdir);
-	SfdirLineEdit->setEnabled(m_options->sfdirActive);
+	rawWaveCheckBox->setChecked(m_options->rawWaveActive);
+	rawWaveLineEdit->setText(m_options->rawWave);
 	IncdirCheckBox->setChecked(m_options->incdirActive);
 	IncdirLineEdit->setText(m_options->incdir);
-	IncdirLineEdit->setEnabled(m_options->incdirActive);
 	//  defaultCsdCheckBox->setChecked(m_options->defaultCsdActive);
 	//  defaultCsdLineEdit->setText(m_options->defaultCsd);
 	//  defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
@@ -216,6 +244,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
 	logFileLineEdit->setText(m_options->logFile);
 	sdkLineEdit->setText(m_options->sdkDir);
+	templateLineEdit->setText(m_options->templateDir);
 
 	TerminalLineEdit->setText(m_options->terminal);
 	browserLineEdit->setText(m_options->browser);
@@ -248,6 +277,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(pythonDirToolButton, SIGNAL(clicked()), this, SLOT(browsePythonDir()));
 	connect(logFileToolButton, SIGNAL(clicked()), this, SLOT(browseLogFile()));
 	connect(sdkToolButton, SIGNAL(clicked()), this, SLOT(browseSdkDir()));
+	connect(templateToolButton, SIGNAL(clicked()), this, SLOT(browseTemplateDir()));
 
 	//  connect(this, SIGNAL(changeFont()), parent, SLOT(changeFont()));
 	connect(audioInputToolButton, SIGNAL(released()), this, SLOT(selectAudioInput()));
@@ -339,6 +369,7 @@ void ConfigDialog::accept()
 	m_options->debugLiveEvents = debugLiveEventsCheckBox->isChecked();
 	m_options->consoleBufferSize = consoleBufferComboBox->itemText(consoleBufferComboBox->currentIndex()).toInt();
 	m_options->midiInterface = midiInterfaceComboBox->itemData(midiInterfaceComboBox->currentIndex()).toInt();
+	m_options->midiOutInterface = midiOutInterfaceComboBox->itemData(midiOutInterfaceComboBox->currentIndex()).toInt();
 	m_options->noMessages = noMessagesCheckBox->isChecked();
 	m_options->noBuffer = noBufferCheckBox->isChecked();
 	m_options->noPython = noPythonCheckBox->isChecked();
@@ -374,6 +405,7 @@ void ConfigDialog::accept()
 	m_options->rtMidiModule = RtMidiModuleComboBox->currentText();
 	m_options->rtMidiInputDevice = RtMidiInputLineEdit->text();
 	m_options->rtMidiOutputDevice = RtMidiOutputLineEdit->text();
+	m_options->useCsoundMidi = csoundMidiCheckBox->isChecked();
 	m_options->simultaneousRun = simultaneousCheckBox->isChecked();
 
 	m_options->sampleFormat = sampleFormatComboBox->currentIndex();
@@ -401,6 +433,7 @@ void ConfigDialog::accept()
 	m_options->csoundExecutable = csoundExecutableLineEdit->text();
 	m_options->logFile = logFileLineEdit->text();
 	m_options->sdkDir = sdkLineEdit->text();
+	m_options->templateDir = templateLineEdit->text();
 
 	m_options->terminal = TerminalLineEdit->text();
 	m_options->browser = browserLineEdit->text();
@@ -547,6 +580,12 @@ void ConfigDialog::browseSdkDir()
 	sdkLineEdit->setText(m_options->sdkDir);
 }
 
+void ConfigDialog::browseTemplateDir()
+{
+	browseDir(m_options->templateDir);
+	templateLineEdit->setText(m_options->templateDir);
+}
+
 void ConfigDialog::selectAudioInput()
 {
 	QList<QPair<QString, QString> > deviceList
@@ -649,21 +688,21 @@ void ConfigDialog::selectMidiOutput()
 
 void ConfigDialog::browseFile(QString &destination)
 {
-	QString file =  QFileDialog::QFileDialog::getOpenFileName(this,tr("Select File"),destination);
+    QString file =  QFileDialog::getOpenFileName(this,tr("Select File"),destination);
 	if (file!="")
 		destination = file;
 }
 
 void ConfigDialog::browseSaveFile(QString &destination)
 {
-	QString file =  QFileDialog::QFileDialog::getSaveFileName(this,tr("Select File"),destination);
+    QString file =  QFileDialog::getSaveFileName(this,tr("Select File"),destination);
 	if (file!="")
 		destination = file;
 }
 
 void ConfigDialog::browseDir(QString &destination)
 {
-	QString dir =  QFileDialog::QFileDialog::getExistingDirectory(this,tr("Select Directory"),destination);
+    QString dir =  QFileDialog::getExistingDirectory(this,tr("Select Directory"),destination);
 	if (dir!="")
 		destination = dir;
 }

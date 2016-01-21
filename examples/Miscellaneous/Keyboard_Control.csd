@@ -34,6 +34,12 @@ giascii ftgen 0, 0, 256, -17, 0,0, \
 instr 1 ;always on, sensing key events
 kres,kkeydown sensekey
 
+ktrig changed  kres, kkeydown
+
+if ktrig == 1 then 
+	printks "kres %i. kkeydown %i\n", 0, kres, kkeydown
+endif
+
 kpch table kres, giascii
 if kkeydown == 1 then
 	Smessage sprintfk "Key pressed. Code = %i", kres
@@ -68,21 +74,107 @@ f 1 0 1024 10 1
 i 1 0 3600
 </CsScore>
 </CsoundSynthesizer>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 638 369 322 293
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {21845, 43690, 32639}
-ioText {5, 52} {289, 104} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground border The sensekey opcode can be used to receive keyboard action. It is VERY  IMPORTANT to click on the Dock Console or the Widget Panel to give it focus, otherwise key events will NOT be passed to Csound.
-ioText {6, 11} {287, 37} label 0.000000 0.00100 "" center "DejaVu Sans" 20 {0, 0, 0} {24832, 49664, 36864} background noborder Keyboard control
-ioText {46, 163} {198, 26} display 0.000000 0.00100 "data" left "DejaVu Sans" 8 {0, 0, 0} {65280, 65280, 65280} background border Key released. Code = 113
-</MacGUI>
-
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>0</x>
+ <y>0</y>
+ <width>294</width>
+ <height>189</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>85</r>
+  <g>170</g>
+  <b>127</b>
+ </bgcolor>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>5</x>
+  <y>52</y>
+  <width>289</width>
+  <height>104</height>
+  <uuid>{b7cc6e90-2fe6-429e-a4c2-59bece5d87ce}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>The sensekey opcode can be used to receive keyboard action. It is VERY  IMPORTANT to click on the Dock Console or the Widget Panel to give it focus, otherwise key events will NOT be passed to Csound.</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>6</x>
+  <y>11</y>
+  <width>287</width>
+  <height>37</height>
+  <uuid>{4cd046a0-3748-49fd-b4da-b1fe395b72dd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Keyboard control</label>
+  <alignment>center</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>22</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>97</r>
+   <g>194</g>
+   <b>144</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>data</objectName>
+  <x>46</x>
+  <y>163</y>
+  <width>198</width>
+  <height>26</height>
+  <uuid>{9a382452-2e20-4ccd-8eb3-28a5bf34dee1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label>Key released. Code = 115</label>
+  <alignment>left</alignment>
+  <font>DejaVu Sans</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

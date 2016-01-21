@@ -1,6 +1,8 @@
 RESOURCES += "src/application.qrc" \
     "src/pythonscripts.qrc" \
-	"src/icons.qrc"
+    "src/icons.qrc" \
+    src/qml_resources.qrc
+
 FORMS = "src/about.ui" \
     "src/configdialog.ui" \
     "src/findreplace.ui" \
@@ -12,7 +14,14 @@ FORMS = "src/about.ui" \
     "src/appdetailspage.ui" \
     "src/pluginspage.ui" \
     "src/additionalfilespage.ui" \
-    "src/filebeditor.ui"
+    "src/filebeditor.ui" \
+    src/midilearndialog.ui \
+    src/debugpanel.ui \
+    src/dockhelp.ui \
+    src/livecodeeditor.ui \
+    src/newbreakpointdialog.ui \
+    $$PWD/html5guidisplay.ui
+
 HEADERS = "src/about.h" \
     "src/configdialog.h" \
     "src/configlists.h" \
@@ -57,7 +66,7 @@ HEADERS = "src/about.h" \
     "src/widgetpanel.h" \
     "src/widgetpreset.h" \
     "src/qutesheet.h" \
-	"src/basedocument.h" \
+    "src/basedocument.h" \
     "src/baseview.h" \
     "src/appwizard.h" \
     "src/appdetailspage.h" \
@@ -65,7 +74,14 @@ HEADERS = "src/about.h" \
     "src/additionalfilespage.h" \
     "src/scoreeditor.h" \
     "src/filebeditor.h" \
+    src/midihandler.h \
+    src/midilearndialog.h \
+    src/debugpanel.h \
+    src/livecodeeditor.h \
+    src/newbreakpointdialog.h \
+    src/csoundhtmlview.h \
     src/quteqmlqidget.h
+
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
     "src/configlists.cpp" \
@@ -110,7 +126,7 @@ SOURCES = "src/about.cpp" \
     "src/widgetpanel.cpp" \
     "src/widgetpreset.cpp" \
     "src/qutesheet.cpp" \
-	"src/basedocument.cpp" \
+    "src/basedocument.cpp" \
     "src/baseview.cpp" \
     "src/appwizard.cpp" \
     "src/appdetailspage.cpp" \
@@ -118,7 +134,14 @@ SOURCES = "src/about.cpp" \
     "src/additionalfilespage.cpp" \
     "src/scoreeditor.cpp" \
     "src/filebeditor.cpp" \
+    src/midihandler.cpp \
+    src/midilearndialog.cpp \
+    src/debugpanel.cpp \
+    src/livecodeeditor.cpp \
+    src/newbreakpointdialog.cpp \
+    src/csoundhtmlview.cpp \
     src/quteqmlqidget.cpp
+
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
     "src/qutecsound.rc" \
@@ -135,8 +158,76 @@ rtmidi {
     INCLUDEPATH += src/../$${RTMIDI_DIR}
 }
 
+perfThread_build {
+    HEADERS += src/csPerfThread.hpp
+    SOURCES += src/csPerfThread.cpp
+    message("Including csPerfThread files for perfThread_build.")
+}
+
+html5 {
+    HEADERS += src/cefclient.h
+    HEADERS += src/cefclient_qt.h
+    HEADERS += src/client_app.h
+    HEADERS += src/client_binding.h
+    HEADERS += src/client_handler.h
+    HEADERS += src/client_handler_qt.h
+    HEADERS += src/client_renderer.h
+    HEADERS += src/client_transfer.h
+    HEADERS += src/message_event.h
+    HEADERS += src/qcefwebview.h
+    SOURCES += src/cefclient.cpp
+    SOURCES += src/cefclient_qt.cpp
+    SOURCES += src/client_app.cpp
+    SOURCES += src/client_app_delegates.cpp
+    SOURCES += src/client_binding.cpp
+    SOURCES += src/client_handler.cpp
+    SOURCES += src/client_handler_qt.cpp
+    SOURCES += src/client_renderer.cpp
+    SOURCES += src/client_transfer.cpp
+    SOURCES += src/message_event.cpp
+    SOURCES += src/qcefwebview.cpp
+    message("Including CEF related files for html5 build.")
+}
+!html5 {
+    HEADERS -= src/cefclient.h
+    HEADERS -= src/cefclient_qt.h
+    HEADERS -= src/client_app.h
+    HEADERS -= src/client_binding.h
+    HEADERS -= src/client_handler.h
+    HEADERS -= src/client_handler_qt.h
+    HEADERS -= src/client_renderer.h
+    HEADERS -= src/client_transfer.h
+    HEADERS -= src/message_event.h
+    HEADERS -= src/qcefwebview.h
+    SOURCES -= src/cefclient.cpp
+    SOURCES -= src/cefclient_qt.cpp
+    SOURCES -= src/client_app.cpp
+    SOURCES -= src/client_app_delegates.cpp
+    SOURCES -= src/client_binding.cpp
+    SOURCES -= src/client_handler.cpp
+    SOURCES -= src/client_handler_qt.cpp
+    SOURCES -= src/client_renderer.cpp
+    SOURCES -= src/client_transfer.cpp
+    SOURCES -= src/message_event.cpp
+    SOURCES -= src/qcefwebview.cpp
+    message("Removing CEF related files for non-html5 build.")
+}
+
 LIBS += $${LCSOUND} \
 	$${LCSND} \
     $${LSNDFILE} \
-    $${RTMIDI}
+    $${RTMIDI} \
+    $${LPTHREAD}
 
+OTHER_FILES += \
+    src/appstyle-dark.css \
+    src/appstyle-green.css \
+    src/appstyle-white.css \
+    src/QML/Keyboard.qml \
+    src/QML/Key.qml \
+    src/QML/VirtualKeyboard.qml \
+    src/QML/Controls.qml
+
+# Needed for correct deployment on OS X
+QML_IMPORT_PATH =src/QML
+QML2_IMPORT_PATH =src/QML

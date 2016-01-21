@@ -41,6 +41,7 @@ public:
 	//    virtual void setResolution(double resolution);
 	void setRange(double min, double max);
 	virtual void setMidiValue(int value);
+	virtual bool acceptsMidi() {return true;}
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();

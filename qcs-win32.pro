@@ -1,8 +1,8 @@
 
-!win32-g++: error(This project file is only for Windows builds using MinGW/g++.)
 !no_messages {
-    message()
-    message(Building CsoundQt for Windows using MinGW/g++.)
+    message(Building CsoundQt for Windows.)
+    win32-g++: message(Building with gcc)
+    win32-msvc2013: message(Building with Visual C++ 2013)
 }
 
 CONFIG -= debug_and_release debug_and_release_target \
@@ -12,11 +12,13 @@ CONFIG -= debug_and_release debug_and_release_target \
 DEFAULT_CSOUND_API_INCLUDE_DIRS = "$$(PROGRAMFILES)\\Csound\\include"
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
 DEFAULT_CSOUND_LIBRARY_DIRS = "$$(PROGRAMFILES)\\Csound\\bin"
-DEFAULT_LIBSNDFILE_INCLUDE_DIRS = "$$(PROGRAMFILES)\\Mega-Nerd\\libsndfile\\include"
-DEFAULT_LIBSNDFILE_LIBRARY_DIRS = $${DEFAULT_CSOUND_LIBRARY_DIRS}
-build32: DEFAULT_CSOUND_LIBS = csound32.dll.5.2
-build64: DEFAULT_CSOUND_LIBS = csound64.dll.5.2
-LIBSNDFILE_LIB = libsndfile-1.dll
+
+win32-g++:build32: DEFAULT_CSOUND_LIBS = csound32.dll
+win32-g++:build64: DEFAULT_CSOUND_LIBS = csound64.dll
+
+# Need a Visual Studio import library for these...
+win32-msvc2013:build32: DEFAULT_CSOUND_LIBS = csound32.lib
+win32-msvc2013:build64: DEFAULT_CSOUND_LIBS = csound64.lib
 
 DEFAULT_PYTHON_INCLUDE_DIRS = "$$(HOMEDRIVE)\\Python26\\include"
 DEFAULT_PYTHONQT_SRC_DIRS = "$$(PROGRAMFILES)\\PythonQt"
@@ -26,15 +28,15 @@ DEFAULT_PYTHONQT_SRC_DIRS = "$$(PROGRAMFILES)\\PythonQt"
 include(config.pri)
 
 # Use results from config step
+win32-msvc2013: INCLUDEPATH += $${PTHREAD_INCLUDE_DIR} $${DEFAULT_LIBSNDFILE_INCLUDE_DIRS}
 RC_FILE = "src/qutecsound.rc"
 LCSOUND = "$${CSOUND_LIBRARY_DIR}/$${CSOUND_LIB}"
-csound6: LCSND = "$${CSOUND_LIBRARY_DIR}/csnd6.dll"
-else: LCSND =  "$${CSOUND_LIBRARY_DIR}/csnd.dll"
-LSNDFILE = "$${LIBSNDFILE_LIBRARY_DIR}/$${LIBSNDFILE_LIB}"
+win32-g++:csound6: LCSND = "$${CSOUND_LIBRARY_DIR}/csnd6.dll"
 
 rtmidi {
 DEFINES += __WINDOWS_MM__
-LIBS += -lwinmm
+win32-g++:LIBS += -lwinmm
+win32-msvc2013:LIBS += winmm.lib
 }
 
 quteapp_f {
@@ -47,4 +49,5 @@ RESOURCES += "src/quteapp_d_win.qrc"
 }
 
 # For OleInitialize() FLTK bug workaround
-LIBS *= -lole32
+win32-g++:LIBS *= -lole32
+win32-msvc2013:LIBS *= ole32.lib

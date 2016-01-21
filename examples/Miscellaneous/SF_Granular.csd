@@ -16,21 +16,21 @@ nchnls = 2
 ksmps = 32
 0dbfs = 1
 
-giWin1		ftgen		1, 0, 4096, 20, 1, 1		; Hamming
-giWin2		ftgen		2, 0, 4096, 20, 2, 1		; von Hann
-giWin3		ftgen		3, 0, 4096, 20, 3, 1		; Triangle (Bartlett)
-giWin4		ftgen		4, 0, 4096, 20, 4, 1		; Blackman (3-term)
-giWin5		ftgen		5, 0, 4096, 20, 5, 1		; Blackman-Harris (4-term)
-giWin6		ftgen		6, 0, 4096, 20, 6, 1		; Gauss
-giWin7		ftgen		7, 0, 4096, 20, 7, 1, 6	; Kaiser
-giWin8		ftgen		8, 0, 4096, 20, 8, 1		; Rectangle
-giWin9		ftgen		9, 0, 4096, 20, 9, 1		; Sync
-giSigmoRise 	ftgen		0, 0, 8193, 19, 0.5, 1, 270, 1 ; rising sigmoid
-giSigmoFall 	ftgen		0, 0, 8193, 19, 0.5, 1, 90, 1 ; falling sigmoid
-giExpFall	ftgen		0, 0, 8193, 5, 1, 8193, 0.00001 ; exponential decay
-giDisttab	ftgen		0, 0, 32768, 7, 0, 32768, 1	; for kdistribution
-giCosine	ftgen		0, 0, 8193, 9, 1, 1, 90 ; cosine
-giPan		ftgen		0, 0, 32768, -21, 1 ; for panning (random values between 0 and 1)
+giWin1     ftgen      1, 0, 4096, 20, 1, 1 ; Hamming
+giWin2     ftgen      2, 0, 4096, 20, 2, 1 ; von Hann
+giWin3     ftgen      3, 0, 4096, 20, 3, 1 ; Triangle (Bartlett)
+giWin4     ftgen      4, 0, 4096, 20, 4, 1 ; Blackman (3-term)
+giWin5     ftgen      5, 0, 4096, 20, 5, 1 ; Blackman-Harris (4-term)
+giWin6     ftgen      6, 0, 4096, 20, 6, 1 ; Gauss
+giWin7     ftgen      7, 0, 4096, 20, 7, 1, 6 ; Kaiser
+giWin8     ftgen      8, 0, 4096, 20, 8, 1 ; Rectangle
+giWin9     ftgen      9, 0, 4096, 20, 9, 1 ; Sync
+giSigmoRise ftgen     0, 0, 8193, 19, 0.5, 1, 270, 1 ; rising sigmoid
+giSigmoFall ftgen     0, 0, 8193, 19, 0.5, 1, 90, 1 ; falling sigmoid
+giExpFall  ftgen      0, 0, 8193, 5, 1, 8193, 0.00001 ; exponential decay
+giDisttab  ftgen      0, 0, 32768, 7, 0, 32768, 1 ; for kdistribution
+giCosine   ftgen      0, 0, 8193, 9, 1, 1, 90 ; cosine
+giPan      ftgen      0, 0, 32768, -21, 1 ; for panning (random values between 0 and 1)
 
 
   opcode	ShowLED_a, 0, Sakkk
@@ -40,16 +40,16 @@ giPan		ftgen		0, 0, 32768, -21, 1 ; for panning (random values between 0 and 1)
 ;kdispfreq: refresh frequency of the display (Hz)
 ;kdb: 1 = show as db, 0 = show as raw amplitudes (both in the range 0-1)
 ;kdbrange: if idb=1: which dB range is shown
-Soutchan, asig, ktrig, kdb, kdbrange	xin
-kdispval	max_k	asig, ktrig, 1
+Soutchan, asig, ktrig, kdb, kdbrange xin
+kdispval   max_k      asig, ktrig, 1
 	if kdb != 0 then
-kdb 		= 		dbfsamp(kdispval)
-kval 		= 		(kdbrange + kdb) / kdbrange
-	else
-kval		=		kdispval
+kdb        =          dbfsamp(kdispval)
+kval       =          (kdbrange + kdb) / kdbrange
+           else
+kval       =          kdispval
 	endif
 	if ktrig == 1 then
-		outvalue	Soutchan, kval
+           outvalue   Soutchan, kval
 	endif
   endop
 
@@ -57,163 +57,161 @@ kval		=		kdispval
 ;shows if asig has been larger than 1 and stays khold seconds
 ;Soutchan: string as name of the outvalue channel
 ;kdispfreq: refresh frequency of the display (Hz)
-Soutchan, asig, ktrig, khold	xin
-kon		init		0
-ktim		times
-kstart		init		0
-kend		init		0
-khold		=		(khold < .01 ? .01 : khold); avoiding too short hold times
-kmax		max_k		asig, ktrig, 1
+Soutchan, asig, ktrig, khold xin
+kon        init       0
+ktim       times
+kstart     init       0
+kend       init       0
+khold      =          (khold < .01 ? .01 : khold); avoiding too short hold times
+kmax       max_k      asig, ktrig, 1
 	if kon == 0 && kmax > 1 && ktrig == 1 then
-kstart		=		ktim
-kend		=		kstart + khold
-		outvalue	Soutchan, kmax
-kon		=		1
+kstart     =          ktim
+kend       =          kstart + khold
+           outvalue   Soutchan, kmax
+kon        =          1
 	endif
 	if kon == 1 && ktim > kend && ktrig == 1 then
-		outvalue	Soutchan, 0
-kon		=		0
+           outvalue   Soutchan, 0
+kon        =          0
 	endif
   endop
 
 
 instr 1; master instrument
 ;;write the soundfile to the buffer (ftable) giSound
-Sfile		invalue	"_Browse1"
-giFile		ftgen		0, 0, 0, -1, Sfile, 0, 0, 1
+Sfile      invalue    "_Browse1"
+giFile     ftgen      0, 0, 0, -1, Sfile, 0, 0, 1
 
 ;;select shape of the grain envelope and show it
-kwinshape	invalue	"winshape"; 0=Hamming, 1=von Hann, 2=Bartlett, 3=Triangle, 4=Blackman-Harris,
+kwinshape  invalue    "winshape"; 0=Hamming, 1=von Hann, 2=Bartlett, 3=Triangle, 4=Blackman-Harris,
 						;5=Gauss, 6=Kaiser, 7=Rectangle, 8=Sync
-kwinshape	=		kwinshape+1; correct numbers according to the ftables
-		event_i	"i", 10, 0, -1, i(kwinshape)
-		outvalue	"ftab", -kwinshape; graph widget shows selected window shape
+kwinshape  =          kwinshape+1; correct numbers according to the ftables
+           event_i    "i", 10, 0, -1, i(kwinshape)
+           outvalue   "ftab", -kwinshape; graph widget shows selected window shape
 
 ;;triggers i 10 at the beginning and whenever the grain envelope has changed
-gksamplepos	init		0; position of the pointer through the sample
-kchanged	changed	kwinshape; sends 1 if the windowshape has changed
+gksamplepos init      0; position of the pointer through the sample
+kchanged   changed    kwinshape; sends 1 if the windowshape has changed
  if kchanged == 1 then
-		event		"i", -10, 0, -1; turn off previous instance of i10
-		event		"i", 10, 0, -1, kwinshape, gksamplepos; turn on new instance
+           event      "i", -10, 0, -1; turn off previous instance of i10
+           event      "i", 10, 0, -1, kwinshape, gksamplepos; turn on new instance
  endif
 endin
 
 instr 10; performs granular synthesis
 ;;used parameters for the partikkel opcode
-iwin		=		p4; shape of the grain window 
-igksamplepos	=		p5; pointer position at the beginning
-ifiltab	=		giFile; buffer to read
-kspeed		invalue	"speed"; speed of reading the buffer (1=normal)
-kspeed0	invalue	"speed0"; set playback speed to 0
-kspeed1	invalue	"speed1"; set playback speed to 1
-kgrainrate	invalue	"grainrate"; grains per second
-kgrainsize	invalue	"grainsize"; length of the grains in ms
-ksizrandev	invalue	"sizrandev" ;addition random deviation in ms
-kcent		invalue	"transp"; pitch transposition in cent
-kgraindb	invalue	"db"; volume
-kgrainamp	=		ampdb(kgraindb)	
-kdist		invalue	"dist"; distribution (0=periodic, 1=scattered)
-kposrand	invalue	"posrand"; time position randomness (offset) of the read pointer in ms
-kcentrand	invalue	"centrand"; transposition randomness in cents (up and down)
-kpan		invalue	"pan"; panning narrow (0) to wide (1)
-icosintab	=		giCosine; ftable with a cosine waveform
-idisttab	=		giDisttab; ftable with values for scattered distribution 
-kwaveform	= 		giFile; source waveform
-imax_grains	=		200; maximum number of grains per k-period
+iwin       =          p4; shape of the grain window
+igksamplepos =        p5; pointer position at the beginning
+ifiltab    =          giFile; buffer to read
+kspeed     invalue    "speed"; speed of reading the buffer (1=normal)
+kspeed0    invalue    "speed0"; set playback speed to 0
+kspeed1    invalue    "speed1"; set playback speed to 1
+kgrainrate invalue    "grainrate"; grains per second
+kgrainsize invalue    "grainsize"; length of the grains in ms
+ksizrandev invalue    "sizrandev" ;addition random deviation in ms
+kcent      invalue    "transp"; pitch transposition in cent
+kgraindb   invalue    "db"; volume
+kgrainamp  =          ampdb(kgraindb)
+kdist      invalue    "dist"; distribution (0=periodic, 1=scattered)
+kposrand   invalue    "posrand"; time position randomness (offset) of the read pointer in ms
+kcentrand  invalue    "centrand"; transposition randomness in cents (up and down)
+kpan       invalue    "pan"; panning narrow (0) to wide (1)
+icosintab  =          giCosine; ftable with a cosine waveform
+idisttab   =          giDisttab; ftable with values for scattered distribution
+kwaveform  =          giFile; source waveform
+imax_grains =         200; maximum number of grains per k-period
 
 ;;speed either by slider value or by checkbox
-kspeed		=		(kspeed0==1 && kspeed1==1 ? 1 : (kspeed0==1 ? 0 : (kspeed1==1 ? 1 : kspeed)))
+kspeed     =          (kspeed0==1 && kspeed1==1 ? 1 : (kspeed0==1 ? 0 : (kspeed1==1 ? 1 : kspeed)))
 
 ;;unused parameters for the partikkel opcode
-async		= 		0; sync input (disabled)	
-kenv2amt	= 		1; use only secondary envelope
-ienv2tab 	= 		iwin; grain (secondary) envelope
+async      =          0; sync input (disabled)
+kenv2amt   =          1; use only secondary envelope
+ienv2tab   =          iwin; grain (secondary) envelope
 ;ienv_attack	= 		-1; default attack envelope (flat)
 ;ienv_decay	= 		-1; default decay envelope (flat)
-ienv_attack	= 		giSigmoRise; grain attack shape (from table)
-ienv_decay	= 		giSigmoFall; grain decay shape (from table)
+ienv_attack =         giSigmoRise; grain attack shape (from table)
+ienv_decay =          giSigmoFall; grain decay shape (from table)
 
-ksustain_amount = 		0.5; no meaning in this case (use only secondary envelope, ienv2tab)
-ka_d_ratio	= 		0.5; no meaning in this case (use only secondary envelope, ienv2tab)
-igainmasks	= 		-1; (default) no gain masking
-ksweepshape	= 		0; no frequency sweep
-iwavfreqstarttab = 		-1; default frequency sweep start
-iwavfreqendtab = 		-1; default frequency sweep end
-awavfm		= 		0; no FM input
-ifmamptab	= 		-1; default FM scaling (=1)
-kfmenv		= 		-1; default FM envelope (flat)
-icosine	= 		giCosine; cosine ftable
-kTrainCps	= 		kgrainrate; set trainlet cps equal to grain rate
-knumpartials	= 		1; number of partials in trainlet
-kchroma	= 		1; balance of partials in trainlet
-krandommask	= 		0; random gain masking (disabled)
-iwaveamptab	=		-1; (default) equal mix of source waveforms and no amplitude for trainlets
-kwavekey	= 		1; original key for each source waveform
+ksustain_amount =     0.5; no meaning in this case (use only secondary envelope, ienv2tab)
+ka_d_ratio =          0.5; no meaning in this case (use only secondary envelope, ienv2tab)
+igainmasks =          -1; (default) no gain masking
+ksweepshape =         0; no frequency sweep
+iwavfreqstarttab =    -1; default frequency sweep start
+iwavfreqendtab =      -1; default frequency sweep end
+awavfm     =          0; no FM input
+ifmamptab  =          -1; default FM scaling (=1)
+kfmenv     =          -1; default FM envelope (flat)
+icosine    =          giCosine; cosine ftable
+kTrainCps  =          kgrainrate; set trainlet cps equal to grain rate
+knumpartials =        1; number of partials in trainlet
+kchroma    =          1; balance of partials in trainlet
+krandommask =         0; random gain masking (disabled)
+iwaveamptab =         -1; (default) equal mix of source waveforms and no amplitude for trainlets
+kwavekey   =          1; original key for each source waveform
 
 ;get length of source wave file, needed for both transposition and time pointer
-ifilen		tableng	giFile
-ifildur	= 		ifilen / sr
+ifilen     tableng    giFile
+ifildur    =          ifilen / sr
 ;grainsize
-ksizrandev	random		0, ksizrandev
-kgrainsize	=		kgrainsize + ksizrandev
+ksizrandev random     0, ksizrandev
+kgrainsize =          kgrainsize + ksizrandev
 ;amplitude
-kamp		= 		kgrainamp * 0dbfs; grain amplitude
+kamp       =          kgrainamp * 0dbfs; grain amplitude
 ;transposition
-kcentrand	rand 		kcentrand; random transposition
-iorig		= 		1 / ifildur; original pitch
-kwavfreq	= 		iorig * cent(kcent + kcentrand)
+kcentrand  rand       kcentrand; random transposition
+iorig      =          1 / ifildur; original pitch
+kwavfreq   =          iorig * cent(kcent + kcentrand)
 ;panning, using channel masks
-		tableiw	0, 0, giPan; change index 0 ...
-		tableiw	32766, 1, giPan; ... and 1 for ichannelmasks
-ichannelmasks = 		giPan; ftable for panning
+           tableiw    0, 0, giPan; change index 0 ...
+           tableiw    32766, 1, giPan; ... and 1 for ichannelmasks
+ichannelmasks =       giPan; ftable for panning
 
 ;;time pointer
-afilposphas		phasor kspeed / ifildur, igksamplepos; in general
+afilposphas phasor    kspeed / ifildur, igksamplepos; in general
 ;generate random deviation of the time pointer
-kposrandsec		= kposrand / 1000	; ms -> sec
-kposrand		= kposrandsec / ifildur	; phase values (0-1)
-arndpos1		random	 0, kposrand ; random offset in phase values
-arndpos2		random	 0, kposrand
-arndpos3		random	 0, kposrand
-arndpos4		random	 0, kposrand
+kposrandsec =         kposrand / 1000 ; ms -> sec
+kposrand   =          kposrandsec / ifildur ; phase values (0-1)
+arndpos1   random     0, kposrand ; random offset in phase values
+arndpos2   random     0, kposrand
+arndpos3   random     0, kposrand
+arndpos4   random     0, kposrand
 ;add random deviation to the time pointer and make sure not to wrap around
-asamplepos1	mirror 	afilposphas+arndpos1, 0, 1
-asamplepos2	mirror 	afilposphas+arndpos2, 0, 1
-asamplepos3	mirror 	afilposphas+arndpos3, 0, 1 
-asamplepos4	mirror 	afilposphas+arndpos4, 0, 1 
+asamplepos1 mirror    afilposphas+arndpos1, 0, 1
+asamplepos2 mirror    afilposphas+arndpos2, 0, 1
+asamplepos3 mirror    afilposphas+arndpos3, 0, 1
+asamplepos4 mirror    afilposphas+arndpos4, 0, 1
 
 
-gksamplepos		downsamp	asamplepos1; export pointer position 
-		outvalue	"posdisp", gksamplepos
+gksamplepos downsamp  asamplepos1; export pointer position
+           outvalue   "posdisp", gksamplepos
 
-agrL, agrR	partikkel kgrainrate, kdist, giDisttab, async, kenv2amt, ienv2tab, \
-		ienv_attack, ienv_decay, ksustain_amount, ka_d_ratio, kgrainsize, kamp, igainmasks, \
-		kwavfreq, ksweepshape, iwavfreqstarttab, iwavfreqendtab, awavfm, \
-		ifmamptab, kfmenv, icosine, kTrainCps, knumpartials, \
-		kchroma, ichannelmasks, krandommask, kwaveform, kwaveform, kwaveform, kwaveform, \
-		iwaveamptab, asamplepos1, asamplepos2, asamplepos3, asamplepos4, \
-		kwavekey, kwavekey, kwavekey, kwavekey, imax_grains
+agrL, agrR partikkel  kgrainrate, kdist, giDisttab, async, kenv2amt, ienv2tab, \
+ienv_attack, ienv_decay, ksustain_amount, ka_d_ratio, kgrainsize, kamp, igainmasks, \
+kwavfreq, ksweepshape, iwavfreqstarttab, iwavfreqendtab, awavfm, \
+ifmamptab, kfmenv, icosine, kTrainCps, knumpartials, \
+kchroma, ichannelmasks, krandommask, kwaveform, kwaveform, kwaveform, kwaveform, \
+iwaveamptab, asamplepos1, asamplepos2, asamplepos3, asamplepos4, \
+kwavekey, kwavekey, kwavekey, kwavekey, imax_grains
 
 ;panning, modifying the values of ichannelmasks
-imid		= 		.5; center
-kleft		= 		imid - kpan/2
-kright		=		imid + kpan/2
-apL1, apR1	pan2		agrL, kleft
-apL2, apR2	pan2		agrR, kright
-aL		=		apL1 + apL2
-aR		=		apR1 + apR2
-		outs		aL, aR
+imid       =          .5; center
+kleft      =          imid - kpan/2
+kright     =          imid + kpan/2
+apL1, apR1 pan2       agrL, kleft
+apL2, apR2 pan2       agrR, kright
+aL         =          apL1 + apL2
+aR         =          apR1 + apR2
+           outs       aL, aR
 
 ;;show output
-kdbrange	invalue	"dbrange"  ;dB range for the meters
-kpeakhold	invalue	"peakhold"  ;Duration of clip indicator hold in seconds
-kTrigDisp	metro		10
-		ShowLED_a	"outL", aL, kTrigDisp, 1, kdbrange
-		ShowLED_a	"outR", aR, kTrigDisp, 1, kdbrange
-		ShowOver_a	"outLover", aL, kTrigDisp, kpeakhold
-		ShowOver_a	"outRover", aR, kTrigDisp, kpeakhold
+kdbrange   invalue    "dbrange" ;dB range for the meters
+kTrigDisp  metro      10
+           ShowLED_a  "outL", aL, kTrigDisp, 1, kdbrange
+           ShowLED_a  "outR", aR, kTrigDisp, 1, kdbrange
+           ShowOver_a "outLover", aL, kTrigDisp, 2
+           ShowOver_a "outRover", aR, kTrigDisp, 2
 endin
-
 </CsInstruments>
 <CsScore>
 i 1 0 3600
@@ -223,10 +221,10 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
+ <x>64</x>
+ <y>2</y>
+ <width>912</width>
+ <height>757</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -591,7 +589,7 @@ e
   <midicc>-3</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</stringvalue>
+  <stringvalue>fox.wav</stringvalue>
   <text>Open File</text>
   <image>/</image>
   <eventLine/>
@@ -608,7 +606,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff</label>
+  <label>fox.wav</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -619,9 +617,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -692,15 +690,15 @@ e
   <uuid>{ae60ca04-b53e-4a5a-b226-358ed138c70f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <value>0</value>
+  <midicc>0</midicc>
+  <value>-9</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
-  <modex>auto</modex>
-  <modey>auto</modey>
+  <modex>lin</modex>
+  <modey>lin</modey>
   <all>true</all>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
@@ -1509,7 +1507,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.74160630</xValue>
+  <xValue>0.58392580</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1599,7 +1597,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <minimum>-30.00000000</minimum>
+  <minimum>-60.00000000</minimum>
   <maximum>12.00000000</maximum>
   <value>-20.16585350</value>
   <mode>lin</mode>
@@ -1651,7 +1649,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.74160630</xValue>
+  <xValue>0.58392580</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1717,7 +1715,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.10693227</xValue>
+  <xValue>0.06342077</xValue>
   <yValue>0.00000000</yValue>
   <type>line</type>
   <pointsize>1</pointsize>
@@ -1858,7 +1856,7 @@ e
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2631,90 +2629,4 @@ http://joachimheintz.de/soft/softsamps/BratscheMono.wav</label>
 <value id="{a04e2aaa-8c72-49e4-ac27-a48d1b4d19dc}" mode="1" >300.00000000</value>
 </preset>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioText {9, 314} {873, 399} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder GRANULAR
-ioText {9, 91} {483, 72} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder  INPUT
-ioText {466, 349} {20, 25} label 1.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 1
-ioText {279, 349} {20, 25} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0
-ioCheckbox {487, 351} {20, 20} on speed1
-ioCheckbox {259, 351} {20, 20} off speed0
-ioText {294, 402} {172, 29} display 0.139000 0.00100 "speed" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.139
-ioSlider {260, 378} {245, 28} -2.000000 2.000000 0.138776 speed
-ioText {325, 349} {119, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Playback Speed
-ioText {140, 646} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder wide
-ioText {18, 646} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder narrow
-ioSlider {12, 625} {200, 25} 0.000000 1.000000 0.000000 pan
-ioText {42, 600} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Panning
-ioGraph {692, 216} {190, 82} scope 2.000000 2 
-ioButton {383, 121} {100, 30} value 1.000000 "_Browse1" "Open File" "/" 
-ioText {20, 124} {360, 25} edit 0.000000 0.00100 "_Browse1"  "Lucida Grande" 12 {0, 0, 0} {58624, 58624, 58624} falsenoborder /home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff
-ioText {625, 355} {217, 28} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Select window function ...
-ioText {639, 405} {168, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder ... and see its shape
-ioGraph {598, 433} {264, 176} table 0.000000 1.000000 ftab
-ioMenu {655, 380} {144, 24} 8 303 "Hamming,von Hann,Triangle,Blackman,Blackman-Harris,Gauss,Kaiser,Rectangle,Sync" winshape
-ioText {667, 329} {115, 28} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Window Shape
-ioText {134, 481} {89, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder scattered
-ioText {12, 481} {71, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder periodic
-ioText {262, 601} {234, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Transposition Randomness (Cent)
-ioText {342, 651} {81, 26} display 0.000000 0.00100 "centrand" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000
-ioSlider {262, 624} {242, 26} 0.000000 600.000000 0.000000 centrand
-ioText {259, 485} {65, 25} display 0.000000 0.00100 "posrand" left "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000
-ioSlider {260, 463} {248, 26} 0.000000 10.000000 0.000000 posrand
-ioText {255, 438} {258, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Position Randomness (ms)
-ioSlider {14, 459} {200, 25} 0.000000 1.000000 0.000000 dist
-ioText {36, 435} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Distribution
-ioText {14, 401} {81, 26} display 100.000000 0.00100 "grainrate" left "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 100.000
-ioSlider {14, 378} {200, 25} 1.000000 200.000000 100.000000 grainrate
-ioText {24, 570} {81, 26} display 100.000000 0.00100 "grainsize" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 100.000
-ioSlider {12, 545} {128, 27} 1.000000 200.000000 100.000000 grainsize
-ioText {10, 520} {128, 26} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Grainsize (ms)
-ioText {298, 566} {169, 26} display 0.000000 0.00100 "transp" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000
-ioSlider {260, 542} {242, 25} -1200.000000 1200.000000 0.000000 transp
-ioText {270, 518} {235, 25} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Transposition (Cent)
-ioText {38, 352} {143, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Grains per Second
-ioGraph {498, 216} {190, 82} scope 2.000000 1 
-ioMenu {280, 170} {75, 26} 1 303 "Amplitudes,dB" showdb
-ioText {175, 170} {106, 26} label 0.000000 0.00100 "" right "Helvetica" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Show LED's as
-ioText {355, 170} {76, 28} label 0.000000 0.00100 "" right "Helvetica" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder dB-Range
-ioText {430, 170} {61, 28} editnum 50.000000 1.000000 "dbrange" left "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 50.000000
-ioText {9, 58} {872, 29} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Granulates a stored sound. You can use either a mono or stereo soundfile (from the latter just channel 1 is used).
-ioText {9, 9} {872, 43} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {58624, 58624, 58624} nobackground noborder GRANULAR SYNTHESIS OF A SOUNDFILE
-ioText {499, 90} {383, 119} label 0.000000 0.00100 "" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder  OUTPUT
-ioMeter {511, 158} {335, 18} {0, 59904, 0} "outL" 0.741606 "out2_post" 0.000000 fill 1 0 mouse
-ioMeter {844, 158} {26, 18} {50176, 3584, 3072} "outLover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioText {510, 125} {95, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Output Gain
-ioSlider {606, 126} {205, 24} -30.000000 12.000000 -20.165854 db
-ioText {812, 125} {42, 25} display -20.166000 0.00100 "db" left "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder -20.166
-ioMeter {511, 183} {335, 18} {0, 59904, 0} "outR" 0.741606 "out2_post" 0.000000 fill 1 0 mouse
-ioMeter {844, 183} {26, 18} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioMeter {599, 669} {260, 31} {65280, 65280, 65280} "posdisp" 0.106932 "vert55" 0.000000 line 1 0 mouse
-ioText {625, 632} {215, 30} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Position in the soundfile
-ioText {137, 518} {112, 49} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder plus random deviation
-ioText {158, 567} {63, 26} editnum 0.000000 0.100000 "sizrandev" left "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000000
-ioButton {9, 169} {58, 29} value 1.000000 "_Play" "Start" "/" 
-ioButton {73, 169} {58, 29} value 1.000000 "_Stop" "Stop" "/" 
-ioText {852, 124} {30, 27} label 0.000000 0.00100 "" left "DejaVu Sans" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder dB
-ioText {8, 204} {486, 105} label 0.000000 0.00100 "" left "DejaVu Sans" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder PRESETS
-ioText {15, 233} {47, 26} editnum 0.000000 1.000000 "_SetPresetIndex" left "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000000
-ioText {12, 259} {121, 49} display 0.000000 0.00100 "_GetPresetName" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder natural
-ioText {134, 205} {362, 102} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Combination of the Parameters depend both on your ideas and on the qualities of the sound you are using. The presets here show some possibilities for a sound which can be downloaded here: Â¬http://joachimheintz.de/soft/softsamps/BratscheMono.wav
-ioText {321, 485} {159, 25} label 0.000000 0.00100 "" right "DejaVu Sans" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder set larger values here
-ioText {478, 485} {63, 26} editnum 0.000000 1.000000 "posrand" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 0.000000
-ioText {73, 404} {97, 24} label 0.000000 0.00100 "" right "DejaVu Sans" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder or set here
-ioText {169, 404} {63, 26} editnum 100.000000 1.000000 "grainrate" right "" 0 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 100.000000
-ioText {12, 676} {570, 34} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Note that the actual grain size is smaller than the value above because of multiple enveloping.
-</MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

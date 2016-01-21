@@ -65,6 +65,8 @@ signals:
 	void resized(QPair<int, int>);
 	void editWidget();
 	void mouseReleased();  // When mouse released, send to set undo history
+	void widgetSelected(QuteWidget *widget);
+	void widgetUnselected(QuteWidget *widget);
 };
 
 #endif

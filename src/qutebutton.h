@@ -46,6 +46,8 @@ public:
 	//    void setFilename(QString filename);
 	//    void setEventLine(QString eventLine);
 	void popUpMenu(QPoint pos);
+	virtual void setMidiValue(int value);
+	virtual bool acceptsMidi() {return true;}
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();

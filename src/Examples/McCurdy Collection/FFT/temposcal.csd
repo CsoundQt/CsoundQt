@@ -16,7 +16,7 @@
 </CsOptions>
 <CsInstruments>
 sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps 	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1
 
@@ -109,6 +109,7 @@ i 10		0	   3600	;GUI
 i  4      0.1       0	;INIT
 </CsScore>
 </CsoundSynthesizer>
+
 
 <bsbPanel>
  <label>Widgets</label>
@@ -229,7 +230,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -374,9 +375,9 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -397,7 +398,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -687,4 +688,4 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

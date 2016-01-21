@@ -59,11 +59,10 @@ void QuteButton::setValue(double value)
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif
-	if (value <0) {
+	if (value < 0) {
 		m_currentValue = -value;
 		m_value = -value;
-	}
-	else {
+	} else {
 		m_currentValue = value != 0 ? m_value : 0.0;
 		if (property("QCS_latch").toBool()) {
 			static_cast<QPushButton *>(m_widget)->setChecked(m_currentValue != 0);
@@ -201,7 +200,7 @@ void QuteButton::applyProperties()
 	widgetLock.lockForWrite();
 #endif
 	QString eventLine = line->text();
-	while (eventLine.size() > 0 and eventLine[0] == ' ') {
+    while (eventLine.size() > 0 && eventLine[0] == ' ') {
 		eventLine.remove(0,1); //remove all spaces at the beginning. This is needed for event queue lines
 	}
 	setProperty("QCS_eventLine", eventLine);
@@ -296,6 +295,37 @@ void QuteButton::popUpMenu(QPoint pos)
 	QuteWidget::popUpMenu(pos);
 }
 
+void QuteButton::setMidiValue(int value)
+{
+	double pressedVal = property("QCS_pressedValue").toDouble();
+	double newval= value == 0 ? 0 : pressedVal;
+	setValue(newval);
+	QString type = property("QCS_type").toString();
+	if (m_valueChanged && (type == "event" || type == "pictevent") ) { // if event type, start/stop event on MIDI button press/release
+		QString eventLine = property("QCS_eventLine").toString();
+		if (newval==1) {
+			emit(queueEventSignal(eventLine));
+		}
+		// on release check if event was with indefinite duration, then turn it off
+		if (newval==0 && eventLine.size() > 0) {
+			QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+			if (lineElements.size() > 0 && lineElements[0] == "i") {
+				lineElements.removeAt(0); // Remove first element if it is "i"
+			}
+			else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
+				lineElements[0] = lineElements[0].mid(1); // Remove "i" character
+			}
+			if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) { // If duration is negative, turn it off
+				lineElements[0].prepend("-");
+				lineElements.prepend("i");
+				emit(queueEventSignal(lineElements.join(" ")));
+			}
+		}
+	}
+	QPair<QString, double> channelValue(m_channel, newval);
+	emit newValue(channelValue);
+}
+
 void QuteButton::refreshWidget()
 {
 	// setValue sets the value the widget outputs while it is pressed
@@ -330,11 +360,11 @@ void QuteButton::applyInternalProperties()
 	else {
 		static_cast<QPushButton *>(m_widget)->setIcon(QIcon());
 	}
-	if (type == "event" or type == "value") {
+    if (type == "event" || type == "value") {
 		icon = QIcon();
 		static_cast<QPushButton *>(m_widget)->setIcon(icon);
 	}
-	else if (type == "pictevent" or type == "pictvalue" or type == "pict") {
+    else if (type == "pictevent" || type == "pictvalue" || type == "pict") {
 		icon = QIcon(QPixmap(property("QCS_image").toString()));
 		static_cast<QPushButton *>(m_widget)->setIcon(icon);
 		static_cast<QPushButton *>(m_widget)->setIconSize(QSize(width(),height()));
@@ -399,7 +429,7 @@ void QuteButton::buttonReleased()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	if (type == "event" or type == "pictevent") {
+    if (type == "event" || type == "pictevent") {
 		if (property("QCS_latch").toBool() && eventLine.size() > 0) {
 			QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
 			if (lineElements.size() > 0 && lineElements[0] == "i") {
@@ -428,7 +458,7 @@ void QuteButton::buttonReleased()
 			emit(queueEventSignal(eventLine));
 		}
 	}
-	else if (type == "value" or type == "pictvalue") {
+    else if (type == "value" || type == "pictvalue") {
 		if (name == "_Play" &&  value == 1)
 			emit play();
 		else if (name == "_Play" && value == 0)

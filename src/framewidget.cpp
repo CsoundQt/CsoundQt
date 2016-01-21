@@ -37,6 +37,7 @@ FrameWidget::FrameWidget(QWidget* parent) : QFrame(parent)
 	m_resizeBox->setMinimumSize(2,2);
 	m_selected = false;
 	m_changed = false;
+	this->setStyleSheet(" QFrame, QLabel, QToolTip {border: 2px solid green;}");
 }
 
 FrameWidget::~FrameWidget()
@@ -46,13 +47,16 @@ FrameWidget::~FrameWidget()
 void FrameWidget::select()
 {
 	m_selected = true;
-	this->setLineWidth(2);
+	this->setStyleSheet(" QFrame, QLabel, QToolTip {border: 4px solid green;}");
+
+	emit widgetSelected(m_widget);
 }
 
 void FrameWidget::deselect()
 {
 	m_selected = false;
-	this->setLineWidth(1);
+	this->setStyleSheet(" QFrame, QLabel, QToolTip {border: 2px solid green;}");
+	emit widgetUnselected(m_widget);
 }
 
 bool FrameWidget::isSelected()
@@ -74,7 +78,7 @@ void FrameWidget::mousePressEvent ( QMouseEvent * event )
 		starty = event->y();
 		oldx = event->x();
 		oldy = event->y();
-		if (startx > (width()-7) and starty > (height()-7))
+        if (startx > (width()-7) && starty > (height()-7))
 			m_resize = true;
 		else
 			m_resize = false;

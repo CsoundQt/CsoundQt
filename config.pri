@@ -5,7 +5,7 @@ QT *= xml
 
 build32:TMPDIR = build/floats
 build64:TMPDIR = build/doubles
-build64:DEFINES += USE_DOUBLE
+#build64:DEFINES += USE_DOUBLE
 OBJECTS_DIR = "$${TMPDIR}/obj"
 
 DEFAULT_RTMIDI_DIRNAME="rtmidi-2.0.1"
@@ -19,7 +19,7 @@ DEFAULT_RTMIDI_DIRS += $${DEFAULT_RTMIDI_DIRNAME} \
 
 exists(config.user.pri) {
     include(config.user.pri)
-    !no_messages:message(... config.user.pri found)
+    message(... config.user.pri found)
 }
 !no_messages {
 	message()
@@ -34,7 +34,10 @@ exists(config.user.pri) {
 }
 isEmpty(CSOUND_API_INCLUDE_DIR) {
     !isEmpty(CSOUND_INCLUDE_DIR):CSOUND_API_INCLUDE_DIR = $${CSOUND_INCLUDE_DIR}
-    isEmpty(CSOUND_API_INCLUDE_DIR):!isEmpty(CSOUND_SOURCE_TREE):CSOUND_API_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/H
+    isEmpty(CSOUND_API_INCLUDE_DIR):!isEmpty(CSOUND_SOURCE_TREE) {
+        CSOUND_API_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/include
+        CSOUND_INTERFACES_INCLUDE_DIR = $${CSOUND_SOURCE_TREE}/interfaces
+    }
     isEmpty(CSOUND_API_INCLUDE_DIR) {
         !no_messages:message(Csound API include directory not specified.)
         for(dir, DEFAULT_CSOUND_API_INCLUDE_DIRS) {
@@ -74,41 +77,14 @@ isEmpty(CSOUND_LIBRARY_DIR) {
     isEmpty(CSOUND_LIBRARY_DIR):error(A valid Csound library directory was not found.)
 }
 isEmpty(CSOUND_LIB) {
-    for(csound_lib, DEFAULT_CSOUND_LIBS):exists($${CSOUND_LIBRARY_DIR}/$${csound_lib}) {
-        CSOUND_LIB = $${csound_lib}
-        break()
+    for(csound_lib, DEFAULT_CSOUND_LIBS) {
+    	message(Searching $${CSOUND_LIBRARY_DIR}/$${csound_lib})
+	exists($${CSOUND_LIBRARY_DIR}/$${csound_lib}) {
+	    CSOUND_LIB = $${csound_lib}
+            break()
+	}
     }
     isEmpty(CSOUND_LIB):error(A valid csound library was not found.)
-}
-isEmpty(LIBSNDFILE_INCLUDE_DIR) {
-    !no_messages:message(libsndfile include directory not specified.)
-    for(dir, DEFAULT_LIBSNDFILE_INCLUDE_DIRS) {
-        !no_messages:message(... searching in $${dir})
-        exists($${dir}):exists($${dir}/sndfile.h) {
-            !no_messages {
-                message(LIBSNDFILE_INCLUDE_DIR set to $${dir})
-                message()
-            }
-            LIBSNDFILE_INCLUDE_DIR = $${dir}
-            break()
-        }
-    }
-    isEmpty(LIBSNDFILE_INCLUDE_DIR):error(A valid libsndfile include directory was not found.)
-}
-isEmpty(LIBSNDFILE_LIBRARY_DIR) {
-    !no_messages:message(libsndfile library directory not specified.)
-    for(dir, DEFAULT_LIBSNDFILE_LIBRARY_DIRS) {
-        !no_messages:message(... searching in $${dir})
-        exists($${dir}):exists($${dir}/$${LIBSNDFILE_LIB}) {
-            !no_messages {
-                message(LIBSNDFILE_LIBRARY_DIR set to $${dir})
-                message()
-            }
-            LIBSNDFILE_LIBRARY_DIR = $${dir}
-            break()
-        }
-    }
-    isEmpty(LIBSNDFILE_LIBRARY_DIR):error(A valid libsndfile library directory was not found.)
 }
 pythonqt {
     DEFINES += QCS_PYTHONQT
@@ -167,15 +143,12 @@ isEmpty(RTMIDI_DIR) {
 win32 {
     CSOUND_INCLUDE_DIR = $$replace(CSOUND_INCLUDE_DIR, \\\\, /)
     CSOUND_LIBRARY_DIR = $$replace(CSOUND_LIBRARY_DIR, \\\\, /)
-    LIBSNDFILE_INCLUDE_DIR = $$replace(LIBSNDFILE_INCLUDE_DIR, \\\\, /)
-    LIBSNDFILE_LIBRARY_DIR = $$replace(LIBSNDFILE_LIBRARY_DIR, \\\\, /)
 }
 !no_messages {
     message(Csound API include directory is $${CSOUND_API_INCLUDE_DIR})
     message(Csound interfaces include directory is $${CSOUND_INTERFACES_INCLUDE_DIR})
     message(Csound library directory is $${CSOUND_LIBRARY_DIR})
-    message(libsndfile include directory is $${LIBSNDFILE_INCLUDE_DIR})
-    message(libsndfile library directory is $${LIBSNDFILE_LIBRARY_DIR})
+    message(Csound library is $${DEFAULT_CSOUND_LIBS})
     pythonqt {
         win32:message(Python include directory is $${PYTHON_INCLUDE_DIR})
         message(PythonQt source tree directory is $${PYTHONQT_SRC_DIR})
@@ -184,6 +157,10 @@ win32 {
     rtmidi {
         message(RtMidi directory is $${RTMIDI_DIR})
 		DEFINES += QCS_RTMIDI
+            exists($${RTMIDI_DIR}/RtError.h): {
+                DEFINES += QCS_OLD_RTMIDI
+                message("Using RtMidi < 2.1")
+            }
     }
     message()
 }
@@ -204,18 +181,8 @@ win32 {
         exists($${CSOUND_LIBRARY_DIR}/$${1}):return(true)
         return(false)
     }
-    defineTest(libsndfileHeaderExists) {
-        exists($${LIBSNDFILE_INCLUDE_DIR}/$${1}):return(true)
-        return(false)
-    }
-    defineTest(libsndfileLibraryExists) {
-        exists($${LIBSNDFILE_LIBRARY_DIR}/$${1}):return(true)
-        return(false)
-    }
     !directoryExists($${CSOUND_API_INCLUDE_DIR}):error(Csound API include directory not found)
     !directoryExists($${CSOUND_LIBRARY_DIR}):error(Csound library directory not found)
-    !directoryExists($${LIBSNDFILE_INCLUDE_DIR}):error(libsndfile include directory not found)
-    !directoryExists($${LIBSNDFILE_LIBRARY_DIR}):error(libsndfile library directory not found)
     pythonqt {
         win32:!directoryExists($${PYTHON_INCLUDE_DIR}):error(Python include directory not found)
 		!directoryExists($${PYTHONQT_SRC_DIR}):error(PythonQt include directory not found)
@@ -225,24 +192,57 @@ win32 {
     !csoundApiHeaderExists(csound.hpp):error(csound.hpp not found)
     !csoundApiHeaderExists(cwindow.h):error(cwindow.h not found)
     !csoundLibraryExists($${CSOUND_LIB}):error(Csound API library not found)
-    !libsndfileHeaderExists(sndfile.h):error(sndfile.h not found)
-    !libsndfileLibraryExists($${LIBSNDFILE_LIB}):error(libsndfile library not found: $${LIBSNDFILE_LIB})
 }
+
+exists (src/csPerfThread.hpp) {
+   CONFIG += perfThread_build
+   message(Building csPerfThread sources.)
+}
+
 !is_quteapp {
-win32-g++ {
+win32 {
 exists (src/res/windows/QuteApp_f.exe) :CONFIG += quteapp_f
 exists (src/res/windows/QuteApp_d.exe) :CONFIG += quteapp_d
 }
 unix {
     macx {
 # Nothing here as it's not saved in the qrc in OS X but inside the app bundle
-}
+    }
     else {
 exists (src/res/linux/QuteApp_f) :CONFIG += quteapp_f
 exists (src/res/linux/QuteApp_d) :CONFIG += quteapp_d
-!quteapp_f: message(Not bundling QuteApp_f. Please put QuteApp_f in the res/ folder)
-!quteapp_d: message(Not bundling QuteApp_d. Please put QuteApp_d in the res/ folder)
-}
+#!quteapp_f: message(Not bundling QuteApp_f. Please put QuteApp_f in the res/ folder)
+#!quteapp_d: message(Not bundling QuteApp_d. Please put QuteApp_d in the res/ folder)
+    }
 }
 
 }
+
+html5 {
+message ("Configuring for HTML5 build.")
+message("All HTML5 configuration is via environment variable CEF_HOME.")
+message("This points to the installation directory, not the source directory.")
+
+CEF_INCLUDE_DIR = $(CEF_HOME)
+debug {
+CEF_LIB = $$(CEF_HOME)\\Debug\\libcef.lib
+#CEF_LIB += $$(CEF_HOME)\\Debug\\cef_sandbox.lib
+CEF_WRAPPER_LIB = $$(CEF_HOME)\\libcef_dll\\Debug\\libcef_dll_wrapper.lib
+}
+release {
+CEF_LIB = $$(CEF_HOME)\\Release\\libcef.lib
+#CEF_LIB += $$(CEF_HOME)\\Release\\cef_sandbox.lib
+CEF_WRAPPER_LIB = $$(CEF_HOME)\\libcef_dll\\Release\\libcef_dll_wrapper.lib
+}
+INCLUDEPATH += $${CEF_INCLUDE_DIR}
+LIBS += $${CEF_LIB}
+LIBS += $${CEF_WRAPPER_LIB}
+DEFINES += QCS_HTML5
+#DEFINES += CEF_USE_SANDBOX
+LIBS += user32.lib
+
+win32-msvc2013:QMAKE_CXXFLAGS += -ID:\\msys\\local\\include -DSUB_PROCESS_DISABLED=1 /Zi
+win32-msvc2013:QMAKE_LFLAGS += /DEBUG /OPT:REF /OPT:ICF /INCREMENTAL:NO
+
+}
+

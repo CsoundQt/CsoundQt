@@ -303,14 +303,14 @@ void ScopeData::updateData(int channel, double zoomx, double zoomy, bool freeze)
 	CsoundUserData *ud = m_params->ud;
 	int width = m_params->width;
 	int height = m_params->height;
-	if (ud == 0 or !ud->csEngine->isRunning() )
+    if (ud == 0 || !ud->csEngine->isRunning() )
 		return;
 	if (freeze)
 		return;
 	double value;
 	int numChnls = ud->numChnls;
 	MYFLT newValue;
-	if (channel == 0 or channel > numChnls ) {
+    if (channel == 0 || channel > numChnls ) {
 		//     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
 		return;
 	}
@@ -389,7 +389,7 @@ void LissajouData::updateData(int channel, double zoomx, double zoomy, bool free
 	CsoundUserData *ud = m_params->ud;
 	int width = m_params->width;
 	int height = m_params->height;
-	if (ud == 0 or !ud->csEngine->isRunning() )
+    if (ud == 0 || !ud->csEngine->isRunning() )
 		return;
 	if (freeze)
 		return;
@@ -397,7 +397,7 @@ void LissajouData::updateData(int channel, double zoomx, double zoomy, bool free
 	int numChnls = ud->numChnls;
 	// We take two consecutives channels, the first one for abscissas and
 	// the second one for ordinates
-	if (channel == 0 or channel >= numChnls or numChnls < 2) {
+    if (channel == 0 || channel >= numChnls || numChnls < 2) {
 		//     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
 		return;
 	}
@@ -459,13 +459,13 @@ void PoincareData::updateData(int channel, double zoomx, double zoomy, bool free
 	CsoundUserData *ud = m_params->ud;
 	int width = m_params->width;
 	int height = m_params->height;
-	if (ud == 0 or !ud->csEngine->isRunning() )
+    if (ud == 0 || !ud->csEngine->isRunning() )
 		return;
 	if (freeze)
 		return;
 	double value;
 	int numChnls = ud->numChnls;
-	if (channel == 0 or channel > numChnls) {
+    if (channel == 0 || channel > numChnls) {
 		//     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
 		return;
 	}

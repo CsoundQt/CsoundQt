@@ -75,7 +75,7 @@ void BaseView::setFullText(QString text, bool goToTop)
 	// Load Embedded Files ------------------------
 	// Must be done initially to remove the files for both view modes
 	clearFileBText();
-	while (text.contains("<CsFileB ") and text.contains("</CsFileB>")) {
+    while (text.contains("<CsFileB ") && text.contains("</CsFileB>")) {
 		bool endsWithBreak = false;
 		if (text.indexOf("</CsFileB>") < text.indexOf("<CsFileB ")) {
 			qDebug() << "BaseView::setFullText: File corrupt, not loading remaining CsFileB sections.";
@@ -329,7 +329,7 @@ void BaseView::setOrc(QString text)
 			return;
 		}
 		QString csdText = getBasicText();
-		if (csdText.contains("<CsInstruments>") and csdText.contains("</CsInstruments>")) {
+        if (csdText.contains("<CsInstruments>") && csdText.contains("</CsInstruments>")) {
 			QString preText = csdText.mid(0, csdText.indexOf("<CsInstruments>") + 15);
 			QString postText = csdText.mid(csdText.lastIndexOf("</CsInstruments>"));
 			if (!text.startsWith("\n")) {
@@ -358,7 +358,7 @@ void BaseView::setSco(QString text)
 			return;
 		}
 		QString csdText = getBasicText();
-		if (csdText.contains("<CsScore") and csdText.contains("</CsScore>")) {
+        if (csdText.contains("<CsScore") && csdText.contains("</CsScore>")) {
 			int scoreTag = csdText.indexOf("<CsScore");
 			QString preText = csdText.mid(0, csdText.indexOf(">",scoreTag) + 1);
 			QString postText = csdText.mid(csdText.lastIndexOf("</CsScore>"));
@@ -399,7 +399,7 @@ void BaseView::setOptionsText(QString text)
 		}
 		// It would be better just to select the CsOptions portion and change that but this should do the trick too.
 		QString csdText = getBasicText();
-		if (csdText.contains("<CsOptions>") and csdText.contains("</CsOptions>")) {
+        if (csdText.contains("<CsOptions>") && csdText.contains("</CsOptions>")) {
 			QString preText = csdText.mid(0, csdText.indexOf("<CsOptions>") + 11);
 			QString postText = csdText.mid(csdText.lastIndexOf("</CsOptions>"));
 			if (!text.startsWith("\n")) {

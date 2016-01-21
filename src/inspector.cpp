@@ -29,7 +29,8 @@ Inspector::Inspector(QWidget *parent)
 {
 	setWindowTitle(tr("Inspector"));
 	m_treeWidget = new QTreeWidget(this);
-	m_treeWidget->setHeaderLabel(tr("Inspector"));
+//	m_treeWidget->setHeaderLabel(tr("Inspector"));
+	m_treeWidget->setHeaderHidden(true);
 	m_treeWidget->show();
 	setWidget(m_treeWidget);
 	//  connect(m_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
@@ -83,14 +84,17 @@ void Inspector::parseText(const QString &text)
 	m_treeWidget->clear();
 	treeItem1 = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
 	treeItem1->setLine(-1);
+	treeItem1->setBackground(0, Qt::lightGray);
 	treeItem2 = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
 	treeItem2->setLine(-1);
 	treeItem3 = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
 	treeItem3->setLine(-1);
+	treeItem3->setBackground(0, Qt::lightGray);
 	treeItem4 = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
 	treeItem4->setLine(-1);
 	treeItem5 = new TreeItem(m_treeWidget, QStringList(tr("Score")));
 	treeItem5->setLine(-1);  // This might be overridden below
+	treeItem5->setBackground(0, Qt::lightGray);
 	TreeItem *currentInstrument = treeItem3;
 	int commentIndex = 0;
 	bool partOfComment = false;
@@ -114,6 +118,7 @@ void Inspector::parseText(const QString &text)
 			TreeItem *newItem = new TreeItem(treeItem3, columnslist);
 			newItem->setLine(i + 1);
 			newItem->setForeground (0, QBrush(Qt::darkMagenta) );
+			newItem->setBackground(0, QColor(240, 240, 240));
 			currentInstrument = newItem;
 		}
 		if (lines[i].trimmed().startsWith(";;")) {
@@ -134,8 +139,9 @@ void Inspector::parseText(const QString &text)
 			TreeItem *newItem = new TreeItem(treeItem1, columnslist);
 			newItem->setLine(i + 1);
 			currentInstrument = newItem;
+			newItem->setBackground(0, QColor(240, 240, 240));
 		}
-		else if (lines[i].trimmed().startsWith("#define") or lines[i].trimmed().startsWith("# define")) {
+        else if (lines[i].trimmed().startsWith("#define") || lines[i].trimmed().startsWith("# define")) {
 			QString text = lines[i].trimmed();
 			QStringList columnslist(text.simplified());
 			if (treeItem2->childCount() == 0) { // set line for element to the first one found

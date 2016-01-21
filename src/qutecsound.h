@@ -25,6 +25,10 @@
 
 #ifdef USE_QT5
 #include <QtWidgets>
+#ifdef USE_QT_GT_53
+#include <QQuickWidget>
+#include <QQuickItem>
+#endif
 #else
 #include <QtGui>
 #endif
@@ -48,6 +52,7 @@ class Inspector;
 class PythonConsole;
 #endif
 class DockConsole;
+class DebugPanel;
 class OpEntryParser;
 class Options;
 class ConfigLists;
@@ -59,8 +64,10 @@ class KeyboardShortcuts;
 class EventDispatcher;
 class EventSheet;
 class CsoundEngine;
-#ifdef QCS_RTMIDI
-class RtMidiIn;
+class MidiHandler;
+class MidiLearnDialog;
+#ifdef QCS_HTML5
+class CsoundHtmlView;
 #endif
 
 class CsoundQt:public QMainWindow
@@ -87,7 +94,6 @@ public:
 	void setWidgetsText(QString text, int index = -1);
 	void setPresetsText(QString text, int index = -1);
 	void setOptionsText(QString text, int index = -1);
-
 	int getDocument(QString name = ""); // Returns document index. -1 if not current open
 	QString getSelectedText(int index = -1, int section = 0);
 	QString getCsd(int index);
@@ -100,7 +106,6 @@ public:
 	QString getOptionsText(int index);
 	QString getFileName(int index);
 	QString getFilePath(int index);
-
 	// Widgets
 	void setChannelValue(QString channel, double value, int index = -1);
 	double getChannelValue(QString channel, int index = -1);
@@ -108,7 +113,6 @@ public:
 	QString getChannelString(QString channel, int index = -1);
 	void setWidgetProperty(QString widgetid, QString property, QVariant value, int index= -1);
 	QVariant getWidgetProperty(QString widgetid, QString property, int index= -1);
-
 	QString createNewLabel(int x = -1, int y = -1, QString channel = QString(), int index = -1);
 	QString createNewDisplay(int x = -1, int y = -1, QString channel = QString(), int index = -1);
 	QString createNewScrollNumber(int x = -1, int y = -1, QString channel = QString(), int index = -1);
@@ -125,23 +129,16 @@ public:
 	QString createNewScope(int x = -1, int y = -1, QString channel = QString(), int index = -1);
 	//    int popKeyPressEvent(); // return ASCII code of key press event for Csound or -1 if no event
 	//    int popKeyReleaseEvent(); // return ASCII code of key release event for Csound -1 if no
-
-
 	QStringList getWidgetUuids(int index = -1);
 	QStringList listWidgetProperties(QString widgetid, int index = -1); // widgetid can be eihter uuid (prefered) or channel
 	bool destroyWidget(QString widgetid, int  index = -1);
 	void loadPreset(int preSetIndex, int index);
-
 	//Live Event Sheets
 	EventSheet* getSheet(int index = -1, int sheetIndex = -1);
 	EventSheet* getSheet(int index = -1, QString sheetName = QString());
-
 	// Engine
 	CsoundEngine *getEngine(int index = -1);
-
 	OpEntryParser *m_opcodeTree;
-
-
 public slots:
 	int loadFile(QString fileName, bool runNow = false);
 	int loadFileFromSystem(QString fileName); // checks for m_options->autoPlay, if the function is called from other class
@@ -153,6 +150,7 @@ public slots:
 	void pause(int index = -1);
 	void stop(int index = -1);
 	void stopAll();
+	void stopAllOthers();
 	void markStopped();
 	void perfEnded();
 	void render();
@@ -164,14 +162,15 @@ public slots:
 	void closeExtraPanels(); // to close help and console panels when esc is pressed in the editor
 	//    void updateWidgets();
 	void openExample();
+	void openTemplate();
 	void logMessage(QString msg);
+    void statusBarMessage(QString message);
 	//    void registerLiveEvent(QWidget *e);
 	void evaluateCsound(QString code = QString());
-
+	void breakpointReached();
 protected:
 	virtual void closeEvent(QCloseEvent *event);
 	//    virtual void keyPressEvent(QKeyEvent *event);
-
 private slots:
 	void open();
 	void reload();
@@ -194,12 +193,10 @@ private slots:
 	void redo();
 	void evaluateSection();
 	void evaluate(QString code = QString());
-	//void evaluateCsound(QString code = QString()); // moved to public. Is it OK?
 	void evaluatePython(QString code = QString());
 	void evaluateString(QString evalCode);
 	void setScratchPadMode(bool csdMode);
 	void setWidgetEditMode(bool);  // This is not necessary as the action is passed and connected in the widget layout
-	//    void setWidgetClipboard(QString text);
 	void duplicate();
 	void print();
 	void findReplace();  // Direct to current Page
@@ -216,9 +213,15 @@ private slots:
 	void setEditorFocus();
 	void setHelpEntry();
 	void setFullScreen(bool full);
+	void showDebugger(bool show);
+	void showVirtualKeyboard(bool show);
+	void showHtml5Gui(bool show);
 	void splitView(bool split);
+	void showMidiLearn();
+	void virtualMidiIn(QVariant on, QVariant note, QVariant channel, QVariant velocity);
 	void openManualExample(QString fileName);
 	void openExternalBrowser(QUrl url = QUrl());
+	void openPdfFile(QString name);
 	void openFLOSSManual();
 	void openQuickRef();
 	void resetPreferences();
@@ -226,7 +229,6 @@ private slots:
 	void requestFeature();
 	void chat();
 	void openShortcutDialog();
-	void statusBarMessage(QString message);
 	void about();
 	void donate();
 	void documentWasModified();
@@ -235,7 +237,6 @@ private slots:
 	void setCurrentOptionsForPage(DocumentPage *p);
 	void runUtility(QString flags);
 	//     void widgetDockLocationChanged(Qt::DockWidgetArea area);
-	void displayLineNumber(int lineNumber);
 	void updateInspector();
 	void markInspectorUpdate(); // Notification that inspector needs update
 	void setDefaultKeyboardShortcuts();
@@ -249,12 +250,22 @@ private slots:
 	void showWidgetEdit(bool);
 	void toggleLineArea();
 	void toggleParameterMode();
-	void showParametersInEditor();
-
+//	void showParametersInEditor();
+#ifdef QCS_DEBUGGER
+	void runDebugger();
+	void stopDebugger();
+	void pauseDebugger();
+	void continueDebugger();
+	void addBreakpoint(int line, int instr, int skip);
+	void addInstrumentBreakpoint(double instr, int skip);
+	void removeBreakpoint(int line, int instr);
+	void removeInstrumentBreakpoint(double instr);
+#endif
 private:
 	void createActions();
 	void setKeyboardShortcutsList();
 	void connectActions();
+	QString getExamplePath(QString dir);
 	void createMenus();
 	void fillFileMenu();
 	void fillFavoriteMenu();
@@ -263,13 +274,13 @@ private:
 	void fillScriptsSubMenu(QDir dir, QMenu *m, int depth);
 	void fillEditScriptsSubMenu(QDir dir, QMenu *m, int depth);
 	void createToolBars();
-	void createStatusBar();
+    void createStatusBar();
 	void readSettings();
 	void writeSettings(QStringList openFiles=QStringList(), int lastIndex = 0);
 	void clearSettings();
 	int execute(QString executable, QString options);
 	//    bool saveCurrent();
-	void makeNewPage(QString fileName, QString text);
+	bool makeNewPage(QString fileName, QString text);
 	bool loadCompanionFile(const QString &fileName);
 	void setCurrentFile(const QString &fileName);
 	QString strippedName(const QString &fullFileName);
@@ -282,16 +293,9 @@ private:
 	void createQuickRefPdf();
 	void deleteTab(int index = -1);
 	void openLogFile();
-
-	void setMidiInterface(int number);
-	void openMidiPort(int port);
-	void closeMidiPort();
 	void showNewFormatWarning();
 	void setupEnvironment();
-
-
 	ConfigLists m_configlists;
-
 	QTabWidget *documentTabs;
 	GraphicWindow *m_graphic;  // To display the code graph images
 	QVector<DocumentPage *> documentPages;
@@ -300,20 +304,29 @@ private:
 	DockHelp *helpPanel;
 	WidgetPanel *widgetPanel;  // Dock widget, for containing the widget layout
 	QDockWidget *m_scratchPad;
+#ifdef USE_QT_GT_53
+	QQuickWidget *m_virtualKeyboard;
+#endif
+#ifdef QCS_HTML5
+public: CsoundHtmlView *csoundHtmlView;
+#endif
+private:
 	//    QString m_widgetClipboard;
 	Inspector *m_inspector;
+#ifdef QCS_DEBUGGER
+	DebugPanel *m_debugPanel;
+	CsoundEngine *m_debugEngine;
+#endif
 #ifdef QCS_PYTHONQT
 	PythonConsole *m_pythonConsole;
 #endif
-#ifdef QCS_RTMIDI
-	RtMidiIn *m_midiin;
-#endif
+	MidiHandler *midiHandler;
+	MidiLearnDialog *m_midiLearn;
 	QFile logFile;
-
 	QVector<QAction *> m_keyActions; //Actions which have keyboard shortcuts
-
 	QMenu *fileMenu;
 	QMenu *recentMenu;
+	QMenu *templateMenu;
 	QMenu *editMenu;
 	QMenu *controlMenu;
 	QMenu *viewMenu;
@@ -373,8 +386,15 @@ private:
 	QAction *showOpcodeQuickRefAct;
 	QAction *showConsoleAct;
 	QAction *viewFullScreenAct;
+#ifdef QCS_DEBUGGER
+	QAction *showDebugAct;
+#endif
+	QAction *showVirtualKeyboardAct;
+#ifdef QCS_HTML5
+	QAction *showHtml5Act;
+#endif
+	QAction *midiLearnAct;
 	QAction *splitViewAct;
-
 	QAction *showOrcAct;
 	QAction *showScoreAct;
 	QAction *showOptionsAct;
@@ -382,7 +402,6 @@ private:
 	QAction *showOtherAct;
 	QAction *showOtherCsdAct;
 	QAction *showWidgetEditAct;
-
 	QAction *setHelpEntryAct;
 	QAction *browseBackAct;
 	QAction *browseForwardAct;
@@ -409,8 +428,7 @@ private:
 	QAction *chatAct;
 	QAction *lineNumbersAct;
 	QAction *parameterModeAct;
-	QAction *showParametersAct;
-
+//	QAction *showParametersAct;
 	int curPage;
 	int curCsdPage;  // To recall last csd visited
 	int configureTab; // Tab in last configure dialog accepted
@@ -419,20 +437,17 @@ private:
 	QString quickRefFileName;
 	QStringList recentFiles;
 	QStringList lastFiles;
-
 	QStringList tempScriptFiles; //Remember temp files to delete them later
 	int lastTabIndex;
 	bool m_resetPrefs; // Flag to reset preferences to default when closing
 	bool m_inspectorNeedsUpdate;
 	bool m_closing; // CsoundQt is closing (to inform timer threads)
-
 	UtilitiesDialog *utilitiesDialog;
-
 	QIcon modIcon;
-	QLabel *lineNumberLabel;
-
 	QString currentAudioFile;
 	QString initialDir;
+
+	QMutex closemutex;
 
 #ifdef MACOSX_PRE_SNOW
 	MenuBarHandle menuBarHandle;

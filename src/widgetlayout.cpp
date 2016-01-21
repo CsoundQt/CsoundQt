@@ -22,6 +22,8 @@
 
 #include <cstdlib>
 
+#include <QThread>
+
 #include "widgetlayout.h"
 #include "qutewidget.h"
 #include "quteslider.h"
@@ -40,11 +42,6 @@
 #include "framewidget.h"
 
 #include "qutecsound.h" // For passing the actions from button reserved channels
-
-#ifdef Q_OS_WIN32
-#include <unistd.h> // for usleep()
-#endif
-
 
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
@@ -175,7 +172,11 @@ WidgetLayout::~WidgetLayout()
 	layoutMutex.unlock();
 	while (closing == 1) {
 		qApp->processEvents();
-		usleep(10000);
+		#ifdef USE_QT5
+		  QThread::usleep(10000);
+		#else
+		  usleep(10000);
+		#endif
 	}
 	clearGraphs();  // To free memory from curves.
 }
@@ -579,25 +580,25 @@ void WidgetLayout::getMouseValues(QVector<double> *values)
 
 int WidgetLayout::getMouseX()
 {
-	Q_ASSERT(mouseX >= 0 and mouseX < 4096);
+    Q_ASSERT(mouseX >= 0 && mouseX < 4096);
 	return mouseX;
 }
 
 int WidgetLayout::getMouseY()
 {
-	Q_ASSERT(mouseY >= 0 and mouseY < 4096);
+    Q_ASSERT(mouseY >= 0 && mouseY < 4096);
 	return mouseY;
 }
 int WidgetLayout::getMouseRelX()
 {
-	if (mouseRelX >= 0 and mouseRelX < 4096)
+    if (mouseRelX >= 0 && mouseRelX < 4096)
 		return mouseRelX;
 	else return 0;
 }
 
 int WidgetLayout::getMouseRelY()
 {
-	if (mouseRelY >= 0 and mouseRelY < 4096)
+    if (mouseRelY >= 0 && mouseRelY < 4096)
 		return mouseRelY;
 	else return 0;
 }
@@ -893,7 +894,7 @@ QString WidgetLayout::newMacWidget(QString widgetLine, bool offset)
 			return createSlider(x,y,width,height, widgetLine);
 		}
 		else if (parts[0]=="ioText") {
-			if (parts[5]=="label" or parts[5]=="display") {
+            if (parts[5]=="label" || parts[5]=="display") {
 				return createText(x,y,width,height, widgetLine);
 			}
 			else if (parts[5]=="edit") {
@@ -925,9 +926,9 @@ QString WidgetLayout::newMacWidget(QString widgetLine, bool offset)
 			return createMeter(x,y,width, height, widgetLine);
 		}
 		else if (parts[0]=="ioGraph") {
-			if (parts.size() < 6 or parts[5]=="table")
+            if (parts.size() < 6 || parts[5]=="table")
 				return createGraph(x,y,width, height, widgetLine);
-			else if (parts[5]=="fft" or parts[5]=="scope" or parts[5]=="lissajou" or parts[5]=="poincare")
+            else if (parts[5]=="fft" || parts[5]=="scope" || parts[5]=="lissajou" || parts[5]=="poincare")
 				return createScope(x,y,width, height, widgetLine);
 		}
 		else {
@@ -945,6 +946,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
 	connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
 	connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
 	connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
+	connect(widget, SIGNAL(showMidiLearn(QuteWidget *)), this, SIGNAL(showMidiLearn(QuteWidget *)));
 	m_widgets.append(widget);
 	//  qDebug() << "WidgetLayout::registerWidget " << m_widgets.size() << widget;
 	if (m_editMode) {
@@ -966,6 +968,7 @@ void WidgetLayout::appendMessage(QString message)
 		consoleWidgets[i]->scrollToEnd();
 	}
 }
+
 
 void WidgetLayout::flush()
 {
@@ -1001,7 +1004,12 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 			}
 		}
 		else {
-			QString text = tr("Channel:") + widget->getChannelName();
+			QString text = tr("Channel:") + widget->getChannelName() + "\n";
+			int midicc = widget->property("QCS_midicc").toInt();
+			int midichan = widget->property("QCS_midichan").toInt();
+			if (midichan > 0) {
+				text += QString(tr("MIDI chan: %1 CC: %2")).arg(midichan).arg(midicc);
+			}
 			widget->setToolTip(text);
 			if (getEditWidget(widget) != 0) {
 				getEditWidget(widget)->setToolTip(text);
@@ -1086,13 +1094,12 @@ void WidgetLayout::appendCurve(WINDAT *windat)
 	//      return;
 	//    }
 	//  }
-	//  Unfortunately Csound sets the caption AFTER calling the makeGraph callback...
-	//  for (int i = 0; i < curves.size(); i++) {  // Check if caption is already present to replace curve rather than create a new one.
-	//    if (curves[i]->get_caption() == windat->caption) {
-	//      windat->windid = (uintptr_t) curves[i];
-	//      return;
-	//    }
-	//  }
+    for (int i = 0; i < curves.size(); i++) {  // Check if caption is already present to replace curve rather than create a new one.
+        if (curves[i]->get_caption() == windat->caption) {
+            windat->windid = (uintptr_t) curves[i];
+            return;
+        }
+    }
 	if (curves.size() > QCS_CURVE_BUFFER_MAX) {
 		qDebug() << "WidgetLayout::appendCurve curve size exceeded. Curve discarded!";
 		return;
@@ -2263,7 +2270,7 @@ void WidgetLayout::alignCenterHorizontal()
 void WidgetLayout::keyPressEvent(QKeyEvent *event)
 {
 	//  qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
-	if (!event->isAutoRepeat() or m_repeatKeys) {
+    if (!event->isAutoRepeat() || m_repeatKeys) {
 		QString key = event->text();
 		if (event->key() == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) { // TODO why is this necessary? The shortcut from the duplicate action in the main app is not working!
 			this->duplicate();
@@ -2309,7 +2316,7 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
 
 void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
 {
-	if (!event->isAutoRepeat() or m_repeatKeys) {
+    if (!event->isAutoRepeat() || m_repeatKeys) {
 		QString key = event->text();
 		if (key != "") {
 			//           appendMessage("rel:" + key);
@@ -2324,7 +2331,7 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
 	if (widget != 0) {
 		//    widgetsMutex.lock();
 		int index = m_widgets.indexOf(widget);
-		if (index >= 0 and editWidgets.size() > index) {
+        if (index >= 0 && editWidgets.size() > index) {
 			int newx = widget->x();
 			int newy = widget->y();
 			int neww = widget->width();
@@ -2515,7 +2522,7 @@ QString WidgetLayout::createText(int x, int y, int width, int height, QString wi
 {
 	QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	QStringList quoteParts = widgetLine.split('"');
-	if (parts.size()<20 or quoteParts.size()<5)
+    if (parts.size()<20 || quoteParts.size()<5)
 		return "";
 	QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	if (lastParts.size() < 9)
@@ -2559,7 +2566,7 @@ QString WidgetLayout::createScrollNumber(int x, int y, int width, int height, QS
 {
 	QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	QStringList quoteParts = widgetLine.split('"');
-	if (parts.size()<20 or quoteParts.size()<5)
+    if (parts.size()<20 || quoteParts.size()<5)
 		return "";
 	QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	if (lastParts.size() < 9)
@@ -2606,7 +2613,7 @@ QString WidgetLayout::createLineEdit(int x, int y, int width, int height, QStrin
 {
 	QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	QStringList quoteParts = widgetLine.split('"');
-	if (parts.size()<20 or quoteParts.size()<5)
+    if (parts.size()<20 || quoteParts.size()<5)
 		return "";
 	QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	if (lastParts.size() < 9)
@@ -2644,7 +2651,7 @@ QString WidgetLayout::createSpinBox(int x, int y, int width, int height, QString
 {
 	QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	QStringList quoteParts = widgetLine.split('"');
-	if (parts.size()<20 or quoteParts.size()<5)
+    if (parts.size()<20 || quoteParts.size()<5)
 		return "";
 	QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	if (lastParts.size() < 9)
@@ -2689,7 +2696,7 @@ QString WidgetLayout::createButton(int x, int y, int width, int height, QString 
 	//   qDebug("WidgetPanel::createButton");
 	QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	QStringList quoteParts = widgetLine.split('"');
-	//   if (parts.size()<20 or quoteParts.size()>5)
+    //   if (parts.size()<20 || quoteParts.size()>5)
 	//     return -1;
 	QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	//   if (lastParts.size() < 9)
@@ -3500,6 +3507,9 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
 	connect(frame, SIGNAL(resized( QPair<int, int> )), this, SLOT(widgetResized( QPair<int, int> )));
 	connect(frame, SIGNAL(mouseReleased()), this, SLOT(markHistory()));
 	connect(frame, SIGNAL(editWidget()), widget, SLOT(openProperties()));
+	connect(frame, SIGNAL(widgetSelected(QuteWidget*)), this, SLOT(widgetSelected(QuteWidget*)));
+	connect(frame, SIGNAL(widgetUnselected(QuteWidget*)), this, SLOT(widgetUnselected(QuteWidget*)));
+
 }
 
 void WidgetLayout::markHistory()
@@ -3845,4 +3855,14 @@ void WidgetLayout::updateData()
 	layoutMutex.unlock();
 	closing = 0;
 	updateTimer.singleShot(30, this, SLOT(updateData()));
+}
+
+void WidgetLayout::widgetSelected(QuteWidget *widget)
+{
+	emit widgetSelectedSignal(widget);
+}
+
+void WidgetLayout::widgetUnselected(QuteWidget *widget)
+{
+	emit widgetUnselectedSignal(widget);
 }

@@ -43,6 +43,7 @@ public:
 	//    void setInternalValue(double value);
 	virtual void setValue(double value);
 	virtual void setMidiValue(int value);
+	virtual bool acceptsMidi() {return true;}
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();

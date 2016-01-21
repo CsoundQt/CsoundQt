@@ -17,7 +17,7 @@
 </CsOptions>
 <CsInstruments>
 sr		= 44100		;SAMPLE RATE
-ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 32			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -69,7 +69,7 @@ i 10		0.0	   3600	;GUI
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>654</x>
+ <x>425</x>
  <y>433</y>
  <width>941</width>
  <height>258</height>

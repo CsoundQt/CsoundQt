@@ -24,11 +24,17 @@
 #define CSOUNDENGINE_H
 
 #include <QStringList>
+#include <QTimer>
+#include <QFuture>
+#include <QAtomicInt>
 
 #include <csound.hpp>
-#include <sndfile.hh>
 #include <csPerfThread.hpp>
 #include <cwindow.h> // Necessary for WINDAT struct
+
+#ifdef QCS_DEBUGGER
+#include "csdebug.h"
+#endif
 
 #include "types.h"
 #include "csoundoptions.h"
@@ -36,9 +42,6 @@
 #include "pythonconsole.h"
 #endif
 
-//#include <QtCore>
-#include <QTimer>
-#include <QFuture>
 
 class ConsoleWidget;
 class QuteScope;
@@ -46,12 +49,11 @@ class QuteGraph;
 class Curve;
 class CsoundEngine;
 class WidgetLayout;
+class MidiHandler;
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
 // This still necessary for 5.12 and Csound6
-#ifdef CSOUND6
 #define QCS_DESTROY_CSOUND
-#endif
 
 typedef enum {
 	QCS_NO_FLAGS = 0,
@@ -67,6 +69,8 @@ struct CsoundUserData {
 	CsoundPerformanceThread *perfThread;
 	CsoundEngine *csEngine; // Pass engine
 	WidgetLayout *wl; // Pass widgets
+	MidiHandler *midiHandler; // For MIDI out
+	QMutex *playMutex; //perfThread access Mutex
 	/* performance */
 	bool runDispatcher;
 	QVector<double> mouseValues;
@@ -90,6 +94,8 @@ struct CsoundUserData {
 	QList<QVariant> previousOutputValues;
 	QList<QVariant> previousStringOutputValues;
 
+	void *midiBuffer; //Csound Circular Buffer
+	void *virtualMidiBuffer; //Csound Circular Buffer
 
 #ifdef QCS_PYTHONQT
 	PythonConsole *m_pythonConsole;
@@ -98,6 +104,7 @@ struct CsoundUserData {
 	int m_pythonCallbackSkip;
 #endif
 };
+
 
 class CsoundEngine : public QObject
 {
@@ -115,10 +122,6 @@ public:
 									  int attr,
 									  const char *fmt,
 									  va_list args);
-#endif
-
-
-#ifndef CSOUND6
 	static void outputValueCallback (CSOUND *csound,
 									 const char *channelName,
 									 MYFLT value);
@@ -136,6 +139,16 @@ public:
 									const void *channelType);
 
 #endif
+	static int midiInOpenCb(CSOUND *csound, void **ud, const char *devName);
+	static int midiReadCb(CSOUND *csound, void *ud_, unsigned char *buf, int nBytes);
+	static int midiInCloseCb(CSOUND *csound, void *ud);
+	static int midiOutOpenCb(CSOUND *csound, void **ud, const char *devName);
+	static int midiWriteCb(CSOUND *csound, void *ud_, const unsigned char *buf, int nBytes);
+	static int midiOutCloseCb(CSOUND *csound, void *ud);
+	static const char *midiErrorStringCb(int);
+	void queueMidiIn(std::vector<unsigned char> *message);
+	void queueVirtualMidiIn(std::vector<unsigned char> &message);
+	void sendMidiOut(QVector<unsigned char> &message);
 
 	static void makeGraphCallback(CSOUND *csound, WINDAT *windat, const char *name);
 	static void drawGraphCallback(CSOUND *csound, WINDAT *windat);
@@ -152,6 +165,7 @@ public:
 	//    void setCsoundOptions(const CsoundOptions &options);
 	// Options unsafe to change while running
 	void setWidgetLayout(WidgetLayout *wl);
+	void setMidiHandler(MidiHandler *mh);
 	// Options safe to change while running
 	void enableWidgets(bool enable);
 
@@ -172,11 +186,36 @@ public:
 
 	// To pass to parent document for access from python scripting
 	CSOUND * getCsound();
+    CsoundUserData *getUserData();
+    void clearConsoles(void);
 #ifdef QCS_PYTHONQT
 	void registerProcessCallback(QString func, int skipPeriods);
 	void setPythonConsole(PythonConsole *pc);
 #endif
 
+#ifdef QCS_DEBUGGER
+	bool m_debugging;
+
+	static void breakpointCallback(CSOUND *csound, debug_bkpt_info_t *bkpt_info, void *udata);
+	void setDebug();
+	void pauseDebug();
+	void continueDebug();
+	void stopDebug();
+	void addInstrumentBreakpoint(double instr, int skip);
+	void removeInstrumentBreakpoint(double instr);
+	void addBreakpoint(int line, int instr, int skip);
+	void removeBreakpoint(int line, int instr);
+	void setStartingBreakpoints(QVector<QVariantList> bps);
+	QVector<QVariantList> getVaribleList();
+	QVector<QVariantList> getInstrumentList();
+	int getCurrentLine();
+	QVector<QVariantList> m_varList;
+	QVector<QVariantList> m_instrumentList;
+	QAtomicInt m_currentLine;
+	QMutex variableMutex;
+	QMutex instrumentMutex;
+	QVector<QVariantList> m_startBreakpoints;
+#endif
 
 public slots:
 	int play(CsoundOptions *options);
@@ -194,7 +233,6 @@ public slots:
 	void setFlags(PerfFlags flags) {ud->flags = flags;}
 
 	void evaluate(QString code);
-
 private:
 	int runCsound();
 	void stopCsound();
@@ -207,13 +245,6 @@ private:
 
 	CsoundUserData *ud;
 
-	SndfileHandle *m_outfile;
-	long samplesWritten;
-	bool m_recording;
-	MYFLT *m_recBuffer; // for temporary copy of Csound output buffer when recording to file
-	int m_recBufferSize; // size of the record buffer
-	QTimer recordTimer;
-
 	CsoundOptions m_options;
 
 	QVector<ConsoleWidget *> consoles;  // Consoles registered for message printing
@@ -224,7 +255,7 @@ private:
 	QStringList keyPressBuffer; // protected by keyMutex
 	QStringList keyReleaseBuffer; // protected by keyMutex
 
-
+	bool m_recording;
 	QMutex m_playMutex; // To prevent from starting a Csound instance while another is starting or closing
 	QMutex eventMutex;
 	QVector<QString> eventQueue;
@@ -233,13 +264,12 @@ private:
 	int eventQueueSize;
 
 private slots:
-	void recordBuffer();
-	//    void widgetLayoutDestroyed();
 
 signals:
 	void errorLines(QList<QPair<int, QString> >);
 	void passMessages(QString msg);
 	void stopSignal(); // Sent when performance has stopped internally to inform others.playFromParent()
+	void breakpointReached();
 };
 
 #endif // CSOUNDENGINE_H

@@ -17,7 +17,7 @@
 </CsOptions>
 <CsInstruments>
 sr 		= 44100	;SAMPLE RATE
-ksmps 	= 10		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps 	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -139,6 +139,7 @@ i 10		0		3600		;GUI
 i  3		0 		3600		;ACTIVATE INSTRUMENT 3 FOR 1 HOUR - ALSO SUSTAINS REALTIME PERFORMANCE
 </CsScore>
 </CsoundSynthesizer>
+
 
 <bsbPanel>
  <label>Widgets</label>
@@ -1026,9 +1027,9 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -1111,9 +1112,9 @@ The 'Depth of Cross Synthesis' slider allows the user to vary the amount of cros
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>206</r>
+   <g>206</g>
+   <b>206</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>

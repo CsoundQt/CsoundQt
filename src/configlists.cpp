@@ -124,6 +124,7 @@ void ConfigLists::refreshModules()
 	rtMidiNames << "none" << "winmm" << "portmidi" << "virtual";
 #endif
 #endif
+    csoundDestroy(csound);
 }
 
 QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
@@ -146,6 +147,7 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 		deviceList.insert(displayName, QString(devs[i].device_id));
 	}
 	free(devs);
+    csoundDestroy(cs);
 #else
 	if (module == "none") {
 		return deviceList;
@@ -260,6 +262,7 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(QString module
 		deviceList.append(QPair<QString,QString>(displayName, QString(devs[i].device_id)));
 	}
 	free(devs);
+    csoundDestroy(cs);
 #else
 	if (module == "none") {
 		return deviceList;
@@ -362,6 +365,7 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(QString module
 		deviceList.append(QPair<QString,QString>(devs[i].device_name,  QString(devs[i].device_id)));
 	}
 	free(devs);
+    csoundDestroy(cs);
 #else
 	if (module == "none") {
 		return deviceList;
@@ -533,6 +537,7 @@ QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(QString modul
 		deviceList.append(QPair<QString,QString>(devs[i].device_name,  QString(devs[i].device_id)));
 	}
 	free(devs);
+    csoundDestroy(cs);
 #else
 	if (module == "none") {
 		return deviceList;
@@ -717,7 +722,7 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
     }
 
     // FIXME This crashes on Linux for portmidi! And messes up devices on OS X
-//	csoundDestroy(csoundD);
+    csoundDestroy(csoundD);
 
 #ifdef MACOSX_PRE_SNOW
 	// Put menu bar back
