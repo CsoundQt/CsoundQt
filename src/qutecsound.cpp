@@ -2014,7 +2014,7 @@ void CsoundQt::resetPreferences()
 
 void CsoundQt::reportBug()
 {
-    QUrl url("http://sourceforge.net/tracker/?group_id=227265&atid=1070588");
+	QUrl url("https://github.com/mantaraya36/CsoundQt/issues/new");
     if (!m_options->browser.isEmpty()) {
         execute(m_options->browser,"\"" + url.toString() + "\"");
     }
@@ -2025,7 +2025,7 @@ void CsoundQt::reportBug()
 
 void CsoundQt::requestFeature()
 {
-    QUrl url("http://sourceforge.net/tracker/?atid=1070591&group_id=227265&func=browse");
+	QUrl url("https://github.com/mantaraya36/CsoundQt/issues/new");
     if (!m_options->browser.isEmpty()) {
         execute(m_options->browser,"\"" + url.toString() + "\"");
     }
@@ -2073,23 +2073,23 @@ void CsoundQt::about()
     text += tr("Finnish translation: Niko Humalam&auml;ki") + "<br />";
     text += tr("Russian translation: Gleb Rogozinsky") + "<br />";
     text += QString("<center><a href=\"http://qutecsound.sourceforge.net\">qutecsound.sourceforge.net</a></center>");
-    text += QString("<center><a href=\"mailto:mantaraya36@gmail.com\">mantaraya36@gmail.com</a></center><br />");
+	text += QString("<center><a href=\"mailto:mantaraya36@gmail.com\">mantaraya36@gmail.com</a><br /> <a href=\"mailto:trmjhnns@gmail.com\">trmjhnns@gmail.com</a> </center><br />");
     text += tr("If you find CsoundQt useful, please consider donating to the project:");
-    text += "<br /><center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\">Support this project!</a></center>";
+	text += "<center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\">Support this project!</a></center><br \>";
 
     text += tr("Please file bug reports and feature suggestions in the ");
-    text += "<a href=\"http://sourceforge.net/tracker/?group_id=227265\">";
-    text += tr("CsoundQt tracker") + "</a>.<br />";
+	text += "<a href=\"https://github.com/mantaraya36/CsoundQt/issues\">";
+	text += tr("CsoundQt tracker") + "</a>.<br><br />";
 
     text +=tr("Mailing Lists:");
     text += "<br /><a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-users\">Join/Read CsoundQt Mailing List</a><br />";
-    text += "<a href=\"http://old.nabble.com/Csound-f480.html\">Join/Read Csound Mailing List</a><br />";
-    text += "<a href=\"https://lists.sourceforge.net/lists/listinfo/csound-devel\"> Join/Read Csound Developer List</a><br />";
+	text += "<a href=\"https://listserv.heanet.ie/cgi-bin/wa?A0=CSOUND\">Join/Read Csound Mailing List</a><br />";
+	text += "<a href=\"https://listserv.heanet.ie/cgi-bin/wa?A0=CSOUND-DEV\"> Join/Read Csound Developer List</a><br />";
 
     text += "<br />"+ tr("Other Resources:") + "<br />";
-    text += "<a href=\"http://www.csounds.com\">cSounds.com</a><br />";
-    text += "<a href=\"http://csound.sourceforge.net\">Csound Page at SourceForge</a><br />";
-    text += "<a href=\"http://csound.sourceforge.net\">Csound Journal</a><br />";
+	text += "<a href=\"http://csound.github.io\">Csound official homepage</a><br />";
+	text += "<a href=\"http://www.csounds.com\">cSounds.com</a><br />";
+	text += "<a href=\"http://www.csoundjournal.com/\">Csound Journal</a><br />";
     text += "<a href=\"http://csound.noisepages.com/\">The Csound Blog</a><br />";
     text +=  "<br />" + tr("Supported by:") +"<br />";
     text +=  "<a href=\"http://www.incontri.hmt-hannover.de/\">Incontri - HMT Hannover</a><br />";
@@ -3132,7 +3132,7 @@ void CsoundQt::createActions()
     reportBugAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(reportBugAct, SIGNAL(triggered()), this, SLOT(reportBug()));
 
-    requestFeatureAct = new QAction(tr("Request a Feature"), this);
+	requestFeatureAct = new QAction(tr("Request a Feature (please add label \'Enhancement\')"), this);
     requestFeatureAct->setStatusTip(tr("Request a feature in CsoundQt's Feature Tracker"));
     requestFeatureAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(requestFeatureAct, SIGNAL(triggered()), this, SLOT(requestFeature()));
