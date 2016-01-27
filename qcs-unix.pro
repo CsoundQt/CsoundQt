@@ -23,25 +23,19 @@ build32:DEFAULT_LIBSNDFILE_LIBRARY_DIRS = /usr/lib/i386-linux-gnu \
 
 DEFAULT_PYTHON_INCLUDE_DIR += /usr/local/include \
     /usr/include
-DEFAULT_PYTHONQT_LIBRARY_DIRS += /usr/local/lib \
-        /usr/lib\
-        ../../../PythonQt2.0.1 \
-        ../PythonQt2.0.1 \
-        PythonQt2.0.1
+#no need to define PYTHONQT_LIB_DIR since set by PythonQt.prf and PythonQt_QtAll
+
 QCS_QT5 {
 DEFAULT_PYTHONQT_SRC_DIRS += ../../../PythonQt \
-        ../PythonQt \
-        PythonQt
-PYTHONQT_LIB_DIR=/usr/local/lib
-#PYTHONQT_LIB += PythonQt5_QtAll$${DEBUG_EXT}
-PYTHONQT_LIB += PythonQt5
+		../PythonQt \
+		PythonQt \
+		../../../PythonQt3.0 \
+		../PythonQt3.0 \
+		PythonQt3.0
 } else {
 DEFAULT_PYTHONQT_SRC_DIRS += ../../../PythonQt2.0.1 \
-        ../PythonQt2.0.1 \
-        PythonQt2.0.1
-#PYTHONQT_LIB += PythonQt_QtAll$${DEBUG_EXT}
-PYTHONQT_LIB += PythonQt
-
+		../PythonQt2.0.1 \
+		PythonQt2.0.1
 }
 
 DEFAULT_PORTMIDI_DIR +=  /usr/local/include

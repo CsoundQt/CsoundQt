@@ -8,18 +8,20 @@ build64:TMPDIR = build/doubles
 #build64:DEFINES += USE_DOUBLE
 OBJECTS_DIR = "$${TMPDIR}/obj"
 
-DEFAULT_RTMIDI_DIRNAME="rtmidi-2.0.1"
+DEFAULT_RTMIDI_DIRNAME="rtmidi-2.1.0"
 DEFAULT_RTMIDI_DIRS = $${DEFAULT_RTMIDI_DIRNAME} \
   ../$${DEFAULT_RTMIDI_DIRNAME} \
+  ../../$${DEFAULT_RTMIDI_DIRNAME} \
   ../../../$${DEFAULT_RTMIDI_DIRNAME}
-DEFAULT_RTMIDI_DIRNAME="rtmidi-1.0.15"
+DEFAULT_RTMIDI_DIRNAME="rtmidi-2.0.1" #depercated looking for 1.0.15 by default
 DEFAULT_RTMIDI_DIRS += $${DEFAULT_RTMIDI_DIRNAME} \
   ../$${DEFAULT_RTMIDI_DIRNAME} \
+  ../../$${DEFAULT_RTMIDI_DIRNAME} \
   ../../../$${DEFAULT_RTMIDI_DIRNAME}
 
 exists(config.user.pri) {
     include(config.user.pri)
-    message(... config.user.pri found)
+	message(... config.user.pri found)s
 }
 !no_messages {
 	message()
