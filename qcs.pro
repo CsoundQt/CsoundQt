@@ -34,11 +34,11 @@
 ################################################################################
 # BUILD OPTIONS:
 # CONFIG+=build32    To build floats version
-CONFIG+=pythonqt   To build with PythonQt support
-CONFIG+=rtmidi     To build with RtMidi support
+# CONFIG+=pythonqt   To build with PythonQt support
+# CONFIG+=rtmidi     To build with RtMidi support
 # CONFIG+=record_support
 # CONFIG+=debugger
-# CONFIG += html5  #   To support HTML5 via the <CsHtml5> element in the csd file.
+# CONFIG-= html5     To support HTML5 via the <CsHtml5> element in the csd file.
 # OS X only OPTIONS:
 # CONFIG+=universal   To build i386/ppc version. Default is platform default
 ################################################################################
@@ -115,8 +115,8 @@ pythonqt {
     include ( $${PYTHONQT_SRC_DIR}/build/PythonQt.prf )
     include ( $${PYTHONQT_SRC_DIR}/build/PythonQt_QtAll.prf )
 
-#    LIBS *= -L$${PYTHONQT_LIB_DIR} -l$${PYTHONQT_LIB} -l$${PYTHONQT_LIB}_QtAll
-#    LIBS -= -l$${PYTHONQT_LIB}_d -l$${PYTHONQT_LIB}_QtAll_d
+	#LIBS *= -L$${PYTHONQT_LIB_DIR} -l$${PYTHONQT_LIB} -l$${PYTHONQT_LIB}_QtAll
+	#LIBS -= -l$${PYTHONQT_LIB}_d -l$${PYTHONQT_LIB}_QtAll_d
 
 # Note, this is Python, not PythonQt include dir!
     win32:INCLUDEPATH *= $${PYTHON_INCLUDE_DIR}
@@ -124,7 +124,7 @@ pythonqt {
     INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/extensions/PythonQt_QtAll
     QT += svg sql webkit xmlpatterns opengl
     QCS_QT53 {
-		QT += webkitwidgets multimedia multimediawidgets # positioning sensors
+        QT += webkitwidgets multimedia multimediawidgets positioning sensors
     }
 }
 
@@ -151,6 +151,3 @@ message(DEFINES are:    $${DEFINES})
 message(INCLUDEPATH is: $${INCLUDEPATH})
 message(LIBS are:       $${LIBS})
 message(TARGET is:      $${TARGET})
-
-DISTFILES += \
-    TODO
