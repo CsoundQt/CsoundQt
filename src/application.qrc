@@ -33,6 +33,7 @@
         <file>../examples/Miscellaneous/Circle_Map.csd</file>
         <file>../examples/Miscellaneous/Binaural_Panning.csd</file>
         <file>../examples/Miscellaneous/Spatialization.csd</file>
+        <file>../examples/Miscellaneous/Spatialization_5.1.csd</file>
         <file>../examples/Miscellaneous/Pseudostereo.csd</file>
         <file>../examples/Widgets/Widget_Panel.csd</file>
         <file>../examples/Widgets/Label_Widget.csd</file>

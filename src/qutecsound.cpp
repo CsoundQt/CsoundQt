@@ -3574,6 +3574,7 @@ void CsoundQt::createMenus()
     exampleFiles.append(":/examples/Miscellaneous/Circle_Map.csd");
     exampleFiles.append(":/examples/Miscellaneous/Binaural_Panning.csd");
     exampleFiles.append(":/examples/Miscellaneous/Spatialization.csd");
+    exampleFiles.append(":/examples/Miscellaneous/Spatialization_5.1.csd");
     exampleFiles.append(":/examples/Miscellaneous/Pseudostereo.csd");
     exampleFiles.append(":/examples/Miscellaneous/Noise_Reduction.csd");
 
