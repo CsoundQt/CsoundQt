@@ -142,16 +142,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_midiLearn = new MidiLearnDialog(this);
     m_midiLearn->setModal(false);
     midiHandler->setMidiLearner(m_midiLearn);
-#ifdef USE_QT_GT_53
-    m_virtualKeyboard = new QQuickWidget(this);
-    m_virtualKeyboard->setWindowTitle(tr("CsoundQt Virtual Keyboard"));
-    m_virtualKeyboard->setWindowFlags(Qt::Window);
-    m_virtualKeyboard->setSource(QUrl("qrc:/QML/VirtualKeyboard.qml"));
-    //	m_virtualKeyboard->show();
-    QObject *rootObject = m_virtualKeyboard->rootObject();
-    connect(rootObject, SIGNAL(genNote(QVariant, QVariant, QVariant, QVariant)),
-            this, SLOT(virtualMidiIn(QVariant, QVariant, QVariant, QVariant)));
-#endif
 #ifdef QCS_HTML5
     csoundHtmlView = new CsoundHtmlView(this);
 
@@ -452,6 +442,9 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     }
     int lastIndex = documentTabs->currentIndex();
     writeSettings(files, lastIndex);
+	if (m_virtualKeyboard && m_virtualKeyboard->isVisible()) {
+		showVirtualKeyboard(false);
+	}
     showWidgetsAct->setChecked(false);
     showLiveEventsAct->setChecked(false); // These two give faster shutdown times as the panels don't have to be called up as the tabs close
 #if defined(QCS_HTML5)
@@ -1880,11 +1873,35 @@ void CsoundQt::showDebugger(bool show)
 void CsoundQt::showVirtualKeyboard(bool show)
 {
 #ifdef USE_QT_GT_53
-    m_virtualKeyboard->setVisible(show);
+	if (show) {
+		m_virtualKeyboard = new QQuickWidget(this); // create here to be able to
+		m_virtualKeyboard->setAttribute(Qt::WA_DeleteOnClose); // ... be able to delete in on close and catch destroyed() to uncheck action button
+		m_virtualKeyboard->setWindowTitle(tr("CsoundQt Virtual Keyboard"));
+		m_virtualKeyboard->setWindowFlags(Qt::Window);
+		m_virtualKeyboard->setSource(QUrl("qrc:/QML/VirtualKeyboard.qml"));
+		//	m_virtualKeyboard->show();
+		QObject *rootObject = m_virtualKeyboard->rootObject();
+		connect(rootObject, SIGNAL(genNote(QVariant, QVariant, QVariant, QVariant)),
+				this, SLOT(virtualMidiIn(QVariant, QVariant, QVariant, QVariant))); // ilmselt ei toimi siin skoobis
+		m_virtualKeyboard->setVisible(true);
+		connect(m_virtualKeyboard, SIGNAL(destroyed(QObject*)), this, SLOT(virtualKeyboardActOff(QObject*)));
+	} else {
+		m_virtualKeyboard->setVisible(false);
+		m_virtualKeyboard->close();
+	}
 #else
     QMessageBox::warning(this, tr("Qt5 Required"), tr("Qt version > 5.2 is required for the virtual keyboard."));
 #endif
 }
+
+void CsoundQt::virtualKeyboardActOff(QObject *parent)
+{
+	//qDebug()<<"VirtualKeyboard destroyed";
+	if (showVirtualKeyboardAct->isChecked()) {
+		showVirtualKeyboardAct->setChecked(false);
+	}
+}
+
 
 void CsoundQt::showHtml5Gui(bool show)
 {
@@ -2939,15 +2956,13 @@ void CsoundQt::createActions()
     showDebugAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showDebugAct, SIGNAL(toggled(bool)), this, SLOT(showDebugger(bool)));
 #endif
-    showVirtualKeyboardAct = new QAction(/* QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show Virtual Keyboard"), this);
+	showVirtualKeyboardAct = new QAction(QIcon(prefix + "midi_keyboard.png"), tr("Show Virtual Keyboard"), this);
     showVirtualKeyboardAct->setCheckable(true);
     showVirtualKeyboardAct->setChecked(false);
     showVirtualKeyboardAct->setStatusTip(tr("Show the Virtual MIDI Keyboard"));
+	showVirtualKeyboardAct->setIconText(tr("Keyboard"));
     showVirtualKeyboardAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showVirtualKeyboardAct, SIGNAL(toggled(bool)), this, SLOT(showVirtualKeyboard(bool)));
-#ifdef USE_QT_GT_53
-    connect(m_virtualKeyboard, SIGNAL(Close(bool)), showVirtualKeyboardAct, SLOT(setChecked(bool)));
-#endif
 #ifdef QCS_HTML5
     showHtml5Act = new QAction(QIcon(":/images/html5.png"), tr("HTML View"), this);
     showHtml5Act->setIconText(tr("HTML"));
@@ -3983,11 +3998,15 @@ void CsoundQt::createToolBars()
     configureToolBar->addAction(showConsoleAct);
     configureToolBar->addAction(showInspectorAct);
     configureToolBar->addAction(showLiveEventsAct);
+#ifdef USE_QT5
+	configureToolBar->addAction(showVirtualKeyboardAct);
+#endif
 #ifdef QCS_PYTHONQT
     configureToolBar->addAction(showPythonConsoleAct);
 #endif
     configureToolBar->addAction(showScratchPadAct);
     configureToolBar->addAction(showUtilitiesAct);
+
 
     Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
                                                Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
