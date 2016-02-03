@@ -65,7 +65,6 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 
 
 	//  m_highlighter = new Highlighter();
-
 	connect(m_mainEditor, SIGNAL(textChanged()),
 			this, SLOT(textChanged()));
 	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
@@ -92,6 +91,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 			this, SLOT(showHoverText()));
 	connect(m_mainEditor, SIGNAL(requestParameterModeExit()),
 			this, SLOT(exitParameterMode()));
+	connect(m_mainEditor,SIGNAL(arrowPressed()), this, SLOT(restoreCursorPosition()) );
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
@@ -115,6 +115,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	setViewMode(1);
 	setViewMode(0);  // To force a change
 	setAcceptDrops(true);
+
+	m_oldCursorPosition = -1; // 0 or positive, if cursor needs to be moved there
 
 }
 
@@ -562,6 +564,7 @@ QString DocumentView::getActiveSection()
 	if (m_viewMode < 2) {
 		if (m_mode == EDIT_PYTHON_MODE) {
 			QTextCursor cursor = m_mainEditor->textCursor();
+			m_oldCursorPosition = cursor.position(); // to move back there on next keypress
 			cursor.select(QTextCursor::LineUnderCursor);
 			bool sectionStart = cursor.selectedText().simplified().startsWith("##");
 			while (!sectionStart && !cursor.anchor() == 0) {
@@ -586,6 +589,7 @@ QString DocumentView::getActiveSection()
 			section.replace(QChar(0x2029), QChar('\n'));
 		} else if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {
 			QTextCursor cursor = m_mainEditor->textCursor();
+			m_oldCursorPosition = cursor.position(); // to move back there on next keypress
 			cursor.select(QTextCursor::LineUnderCursor);
 			QString text = cursor.selectedText().simplified();
 			bool sectionStart = text.startsWith("instr") || text.startsWith(";;");
@@ -1800,6 +1804,18 @@ void DocumentView::destroySyntaxMenu()
 void DocumentView::opcodeHelp()
 {
 	emit setHelp();
+}
+
+void DocumentView::restoreCursorPosition()
+{
+	// check if cursor must be moved to old position (after evaluateSection)
+	if (m_oldCursorPosition>=0) {
+		qDebug()<<"Restoring cursor position to "<<m_oldCursorPosition;
+		QTextCursor cursor = m_mainEditor->textCursor();
+		cursor.setPosition(m_oldCursorPosition); // TODO: check also for pyuthonEditor
+		m_mainEditor->setTextCursor(cursor);
+		m_oldCursorPosition = -1;
+	}
 }
 
 MySyntaxMenu::MySyntaxMenu(QWidget * parent) :

@@ -185,10 +185,12 @@ private:
 		NO_CONTEXT
 	};
 	int m_currentContext;
+	int m_oldCursorPosition; // if necessary to move back, like after evaluateSection
 
 private slots:
 	void destroySyntaxMenu();
 	void opcodeHelp();
+	void restoreCursorPosition();
 
 signals:
     void opcodeSyntaxSignal(QString syntax);  // Report syntax of opcode under cursor
