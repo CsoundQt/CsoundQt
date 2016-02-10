@@ -124,7 +124,7 @@ pythonqt {
     INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/extensions/PythonQt_QtAll
     QT += svg sql webkit xmlpatterns opengl
     QCS_QT53 {
-        QT += webkitwidgets multimedia multimediawidgets positioning sensors
+		QT += webkitwidgets multimedia multimediawidgets #positioning sensors
     }
 }
 
@@ -151,3 +151,27 @@ message(DEFINES are:    $${DEFINES})
 message(INCLUDEPATH is: $${INCLUDEPATH})
 message(LIBS are:       $${LIBS})
 message(TARGET is:      $${TARGET})
+
+# experimental install commands for linux (for make install),
+unix {
+	INSTALL_DIR=~ # HOME, later use /usr/local and others for icosns, dekstop file etc
+	SHARE_DIR=~/.local/share # /usr/share for system install
+	target.path = $$INSTALL_DIR/bin
+	target.commands = ln -sf $$INSTALL_DIR/bin/$$TARGET $$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
+	target.files = $$DESTDIR/$$TARGET
+
+
+	desktop.path=$$SHARE_DIR/applications
+	desktop.files=CsoundQt.desktop
+
+	icon.path=$$SHARE_DIR/icons # not sure in fact, if /usr/share/icons is enough or better to put into hicolor...
+	icon.files=images/qtcs.svg
+
+	mimetypes.path=$$PWD # in some reason path must be set to create install target in Makefile
+	mimetypes.extra = $$PWD/mime-types/add_csound_mimetypes.sh
+
+
+	#TODO: mime types
+	INSTALLS += target desktop icon mimetypes
+}
+
