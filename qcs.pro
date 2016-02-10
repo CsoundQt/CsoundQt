@@ -34,8 +34,8 @@
 ################################################################################
 # BUILD OPTIONS:
 # CONFIG+=build32    To build floats version
-# CONFIG+=pythonqt   To build with PythonQt support
-# CONFIG+=rtmidi     To build with RtMidi support
+ CONFIG+=pythonqt   To build with PythonQt support
+ CONFIG+=rtmidi     To build with RtMidi support
 # CONFIG+=record_support
 # CONFIG+=debugger
 # CONFIG-= html5     To support HTML5 via the <CsHtml5> element in the csd file.
@@ -124,7 +124,7 @@ pythonqt {
     INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/extensions/PythonQt_QtAll
     QT += svg sql webkit xmlpatterns opengl
     QCS_QT53 {
-        QT += webkitwidgets multimedia multimediawidgets positioning sensors
+		QT += webkitwidgets multimedia multimediawidgets #positioning sensors
     }
 }
 
