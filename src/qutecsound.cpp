@@ -450,7 +450,7 @@ void CsoundQt::closeEvent(QCloseEvent *event)
 #endif
     showWidgetsAct->setChecked(false);
     showLiveEventsAct->setChecked(false); // These two give faster shutdown times as the panels don't have to be called up as the tabs close
-#if defined(QCS_HTML5)
+//#if defined(QCS_HTML5) // this causes non-html5 build not to exit cleanly completely. Commanted out for now
     // This would crash by loading an invalid Web page. Not doing this doesn't
     // seem to have harmful side effects.
     while (!documentPages.isEmpty()) {
@@ -459,7 +459,7 @@ void CsoundQt::closeEvent(QCloseEvent *event)
             return;
         }
     }
-#endif
+//#endif
     foreach (QString tempFile, tempScriptFiles) {
         QDir().remove(tempFile);
     }
@@ -2036,7 +2036,7 @@ void CsoundQt::resetPreferences()
 
 void CsoundQt::reportBug()
 {
-	QUrl url("https://github.com/mantaraya36/CsoundQt/issues/new");
+	QUrl url("https://github.com/CsoundQt/CsoundQt/issues/new");
     if (!m_options->browser.isEmpty()) {
         execute(m_options->browser,"\"" + url.toString() + "\"");
     }
@@ -2047,7 +2047,7 @@ void CsoundQt::reportBug()
 
 void CsoundQt::requestFeature()
 {
-	QUrl url("https://github.com/mantaraya36/CsoundQt/issues/new");
+	QUrl url("https://github.com/CsoundQt/CsoundQt/issues/new");
     if (!m_options->browser.isEmpty()) {
         execute(m_options->browser,"\"" + url.toString() + "\"");
     }
@@ -2094,13 +2094,13 @@ void CsoundQt::about()
     text += tr("Turkish translation: Ali Isciler") + "<br />";
     text += tr("Finnish translation: Niko Humalam&auml;ki") + "<br />";
     text += tr("Russian translation: Gleb Rogozinsky") + "<br />";
-    text += QString("<center><a href=\"http://qutecsound.sourceforge.net\">qutecsound.sourceforge.net</a></center>");
+	text += QString("<center><a href=\"http://csoundqt.github.io\">csoundqt.github.io</a></center>");
 	text += QString("<center><a href=\"mailto:mantaraya36@gmail.com\">mantaraya36@gmail.com</a><br /> <a href=\"mailto:trmjhnns@gmail.com\">trmjhnns@gmail.com</a> </center><br />");
     text += tr("If you find CsoundQt useful, please consider donating to the project:");
 	text += "<center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\">Support this project!</a></center><br \>";
 
     text += tr("Please file bug reports and feature suggestions in the ");
-	text += "<a href=\"https://github.com/mantaraya36/CsoundQt/issues\">";
+	text += "<a href=\"https://github.com/CsoundQt/CsoundQt/issues\">";
 	text += tr("CsoundQt tracker") + "</a>.<br><br />";
 
     text +=tr("Mailing Lists:");
