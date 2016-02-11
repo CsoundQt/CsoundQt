@@ -443,7 +443,7 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     }
     int lastIndex = documentTabs->currentIndex();
     writeSettings(files, lastIndex);
-#ifdef USE_QT5
+#ifdef USE_QT_GT_53
 	if (!m_virtualKeyboardPointer.isNull() && m_virtualKeyboard->isVisible()) {
 		showVirtualKeyboard(false);
 	}
