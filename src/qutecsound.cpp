@@ -143,6 +143,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_midiLearn->setModal(false);
     midiHandler->setMidiLearner(m_midiLearn);
 
+	m_server = new QLocalServer();
+	connect(m_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
+
 #ifdef QCS_HTML5
     csoundHtmlView = new CsoundHtmlView(this);
 
@@ -1022,6 +1025,35 @@ void CsoundQt::setupEnvironment()
 #endif
     }
 #endif
+}
+
+void CsoundQt::onNewConnection()
+{
+	qDebug()<<"NEW connection";
+	QLocalSocket *client = m_server->nextPendingConnection();
+	connect(client, SIGNAL(disconnected()), client, SLOT(deleteLater()));
+	connect(client, SIGNAL(readyRead()), this, SLOT(onReadyRead()) );
+}
+
+void CsoundQt::onReadyRead()
+{
+	QLocalSocket *socket = qobject_cast<QLocalSocket *>(sender());
+	if (!socket || !socket->bytesAvailable())
+		return;
+
+	QByteArray ba = socket->readAll();
+	if (ba.isEmpty())
+		return;
+	else {
+		QStringList messageParts = QString(ba).split("***");
+		if (messageParts[0].contains("open")) {
+			messageParts.removeAt(0); // other parts should be filenames
+			foreach (QString fileName, messageParts) {
+				qDebug() << "Call from other instance. Opening "<<fileName;
+				loadFile(fileName);
+			}
+		}
+	}
 }
 
 bool CsoundQt::saveAs()
@@ -5467,7 +5499,13 @@ CsoundEngine *CsoundQt::getEngine(int index)
     }
     else {
         return NULL;
-    }
+	}
+}
+
+bool CsoundQt::startServer()
+{
+	m_server->removeServer("csoundqt"); // for any case, if socet was not cleard due crash before
+	return m_server->listen("csoundqt");
 }
 
 EventSheet* CsoundQt::getSheet(int index, QString sheetName)

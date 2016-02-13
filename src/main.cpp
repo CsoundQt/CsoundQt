@@ -23,6 +23,7 @@
 #include <QApplication>
 #include <QSplashScreen>
 #include "qutecsound.h"
+#include <QLocalSocket>
 #ifdef QCS_HTML5
 #include "include/cef_base.h"
 #ifdef WIN32
@@ -69,6 +70,38 @@ BOOL IsWow64() {
 int main(int argc, char *argv[])
 {
     int result = 0;
+
+	QStringList fileNames;
+	QApplication qapp(argc, argv);
+	QStringList args = qapp.arguments();
+	args.removeAt(0); // Remove program name
+	foreach (QString arg, args) {
+		if (!arg.startsWith("-p")) {// avoid OS X arguments
+			fileNames.append(arg);
+		}
+	}
+	// check if another instance is already running. If yes, ask it to open the file in new tab and quit
+	QLocalSocket * socket = new QLocalSocket();
+	socket->connectToServer("csoundqt");
+	if (socket->waitForConnected(500)) { // wait for max 0.5 seconds, returns true if the server in other instance is listening
+		if (!fileNames.isEmpty()) {
+			qDebug()<<"Opening file(s) in already running instance";
+			QString message = "open ***" + fileNames.join("***"); // use a separator that is probably not in the file name
+			socket->write(message.toLocal8Bit());
+			socket->waitForBytesWritten(1000);
+			socket->close();
+			return 0; // exit and leave the other instance open the file
+		} else {
+			socket->close();
+			//qDebug()<<"Another instance already running.";
+			int answer = QMessageBox::warning(NULL, QObject::tr("CsoundQt"), QObject::tr("Another instance is already running. Are you sure you want to open a new window?"),  QMessageBox::Open|QMessageBox::Cancel, QMessageBox::Cancel);
+			if (answer==QMessageBox::Cancel) {
+				return 0;
+			}
+		}
+	}
+
+
 #ifdef QCS_HTML5
     void* sandbox_info = 0;
 #ifdef WIN32
@@ -103,15 +136,7 @@ int main(int argc, char *argv[])
     CefLoadPlugins(IsWow64());
 #endif
 #endif
-    QStringList fileNames;
-    QApplication qapp(argc, argv);
-    QStringList args = qapp.arguments();
-    args.removeAt(0); // Remove program name
-    foreach (QString arg, args) {
-        if (!arg.startsWith("-p")) {// avoid OS X arguments
-            fileNames.append(arg);
-        }
-    }
+	// forming filenames was here before. now before localSocket
     FileOpenEater filterObj;
     qapp.installEventFilter(&filterObj);
     QPixmap pixmap(":/images/splashscreen.png");
@@ -128,6 +153,8 @@ int main(int argc, char *argv[])
     translator.load(QString(":/translations/qutecsound_") + language);
     qapp.installTranslator(&translator);
     CsoundQt *csoundQt = new CsoundQt(fileNames);
+	if (!csoundQt->startServer())
+		qDebug()<<"Could not start local server.";
     splash->finish(csoundQt);
     delete splash;
 #ifdef QCS_HTML5

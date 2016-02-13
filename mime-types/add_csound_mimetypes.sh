@@ -1,9 +1,9 @@
 #!/bin/sh 
 
 #copy icon for csound mimetypes
-ICONDIR=~/.local/share/icons/hicolor/48x48/mimetypes
+ICONDIR=~/.local/share/icons/hicolor/128x128/mimetypes
 mkdir -v -p $ICONDIR
-cp -v csound.png $ICONDIR/csound.png
+cp -v csound-light-128.png $ICONDIR/csound.png
 
 #create and register mimetype
 MIMEDIR=~/.local/share/mime # or /usr/share/mime 

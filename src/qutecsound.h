@@ -32,6 +32,8 @@
 #else
 #include <QtGui>
 #endif
+#include <QLocalServer>
+#include <QLocalSocket>
 
 #include "types.h"
 #include "configlists.h"
@@ -139,6 +141,8 @@ public:
 	// Engine
 	CsoundEngine *getEngine(int index = -1);
 	OpEntryParser *m_opcodeTree;
+	// localServer
+	bool startServer();
 public slots:
 	int loadFile(QString fileName, bool runNow = false);
 	int loadFileFromSystem(QString fileName); // checks for m_options->autoPlay, if the function is called from other class
@@ -252,6 +256,8 @@ private slots:
 	void toggleLineArea();
 	void toggleParameterMode();
 //	void showParametersInEditor();
+	void onNewConnection(); // when new client is connecting to localServer
+	void onReadyRead(); // when message comes in
 #ifdef QCS_DEBUGGER
 	void runDebugger();
 	void stopDebugger();
@@ -450,6 +456,7 @@ private:
 	QString initialDir;
 
 	QMutex closemutex;
+	QLocalServer * m_server; // for receiving 'open file' messages from other instances
 
 #ifdef MACOSX_PRE_SNOW
 	MenuBarHandle menuBarHandle;
