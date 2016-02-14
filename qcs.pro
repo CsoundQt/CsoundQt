@@ -64,7 +64,7 @@ message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now defa
 message("Building for Csound 5 (unsupported)")
 }
 
-QT += concurrent
+QT += concurrent network
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
@@ -168,7 +168,7 @@ unix {
 	icon.files=images/qtcs.svg
 
 	mimetypes.path=$$PWD # in some reason path must be set to create install target in Makefile
-	mimetypes.extra = $$PWD/mime-types/add_csound_mimetypes.sh
+	mimetypes.commands = cd $$PWD/mime-types/; ./add_csound_mimetypes.sh
 
 
 	#TODO: mime types
