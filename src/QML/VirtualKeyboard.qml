@@ -11,6 +11,22 @@ ColumnLayout {
     property int velocity: controls.velocity
 
     signal genNote(variant on, variant note, variant channel, variant velocity);
+    signal newCCvalue(int channel, int cc, int value)
+
+    Row {
+        spacing: 5
+        Repeater {
+            model: 3
+            ControlSlider {
+                width: layout.width/3 //model-2*spacing
+                ccNumber: index+1
+                onCcValueChanged: {
+                    //console.log("CC:", channel, ccNumber, value)
+                    newCCvalue(channel, ccNumber, value )
+                }
+            }
+        }
+    }
 
     Controls {
         id: controls

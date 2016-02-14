@@ -1918,6 +1918,7 @@ void CsoundQt::showVirtualKeyboard(bool show)
 		QObject *rootObject = m_virtualKeyboard->rootObject();
 		connect(rootObject, SIGNAL(genNote(QVariant, QVariant, QVariant, QVariant)),
 				this, SLOT(virtualMidiIn(QVariant, QVariant, QVariant, QVariant)));
+		//connect(rootObject, SIGNAL(newCCvalue(int,int,int)), this, SLOT(virtualCCIn(int, int, int)));
 		m_virtualKeyboard->setVisible(true);
 		connect(m_virtualKeyboard, SIGNAL(destroyed(QObject*)), this, SLOT(virtualKeyboardActOff(QObject*)));
 	} else if (!m_virtualKeyboardPointer.isNull()) { // check if object still existing (i.e not on exit)
@@ -1979,7 +1980,18 @@ void CsoundQt::virtualMidiIn(QVariant on, QVariant note, QVariant channel, QVari
     message.push_back(status);
     message.push_back(note.toInt());
     message.push_back(velocity.toInt());
-    documentPages[curPage]->queueVirtualMidiIn(message);
+	documentPages[curPage]->queueVirtualMidiIn(message);
+}
+
+void CsoundQt::virtualCCIn(int channel, int cc, int value)
+{
+	qDebug()<<"CC event: "<<channel<< cc<<value;
+//	std::vector<unsigned char> message;
+//	unsigned char status = (11 << 4 | channel-1);
+//	message.push_back(status);
+//	message.push_back(cc);
+//	message.push_back(value);
+//	documentPages[curPage]->queueVirtualMidiIn(message);
 }
 
 void CsoundQt::openManualExample(QString fileName)
