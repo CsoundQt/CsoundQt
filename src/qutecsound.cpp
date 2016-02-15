@@ -1932,12 +1932,14 @@ void CsoundQt::showVirtualKeyboard(bool show)
 
 void CsoundQt::virtualKeyboardActOff(QObject *parent)
 {
+#ifdef USE_QT_GT_53
 	//qDebug()<<"VirtualKeyboard destroyed";
 	if (!m_virtualKeyboardPointer.isNull()) { // check if object still existing (i.e application not exiting)
 		if (showVirtualKeyboardAct->isChecked()) {
 			showVirtualKeyboardAct->setChecked(false);
 		}
 	}
+#endif
 }
 
 
