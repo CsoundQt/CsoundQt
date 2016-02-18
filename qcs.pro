@@ -33,14 +33,14 @@
 # to the directory of your piece!
 ################################################################################
 # BUILD OPTIONS:
-# CONFIG+=build32    To build floats version
-# CONFIG+=pythonqt   To build with PythonQt support
-# CONFIG+=rtmidi     To build with RtMidi support
+# CONFIG+=build32   # To build floats version
+# CONFIG+=pythonqt   # To build with PythonQt support
+# CONFIG+=rtmidi    # To build with RtMidi support
 # CONFIG+=record_support
 # CONFIG+=debugger
-# CONFIG-= html5     To support HTML5 via the <CsHtml5> element in the csd file.
+# CONFIG+= html5     # To support HTML5 via the <CsHtml5> element in the csd file.
 # OS X only OPTIONS:
-# CONFIG+=universal   To build i386/ppc version. Default is platform default
+# CONFIG+=universal  #  To build i386/ppc version. Default is platform default
 ################################################################################
 
 DEFINES += NOMINMAX
