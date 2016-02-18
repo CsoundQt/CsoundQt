@@ -38,9 +38,17 @@ DEFAULT_PYTHON_INCLUDE_DIR = /usr/local/include \
         /usr/include
 DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
         /usr/lib
+
 DEFAULT_PYTHONQT_SRC_DIRS = ../../../PythonQt2.0.1 \
         ../PythonQt2.0.1 \
-        PythonQt2.0.1
+        PythonQt2.0.1 \
+        ../../../PythonQt \
+        ../PythonQt \
+        PythonQt \
+        ../../../PythonQt3.0 \
+        ../PythonQt3.0 \
+        PythonQt3.0
+
 #PYTHONQT_LIB = PythonQt_QtAll$${DEBUG_EXT}
 PYTHONQT_LIB = PythonQt
 # Do configuration step
