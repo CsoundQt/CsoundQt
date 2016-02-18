@@ -18,11 +18,12 @@ CONFIG += ppc
 build32: MAC_LIB = CsoundLib
 build64: MAC_LIB = CsoundLib64
 
-HOME_DIRECTORY = /Users/admin
+#paths set up for using the csound from installed package
+HOME_DIRECTORY =
 
 # Set default paths
 CSOUND_FRAMEWORK_DIR = /Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
-DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${HOME_DIRECTORY}/$${CSOUND_FRAMEWORK_DIR}/Headers \
+DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${CSOUND_FRAMEWORK_DIR}/Headers \
         $${CSOUND_FRAMEWORK_DIR}/Headers \
         /usr/local/include/csound
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
