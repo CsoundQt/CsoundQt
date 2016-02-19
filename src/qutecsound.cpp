@@ -1051,6 +1051,10 @@ void CsoundQt::onReadyRead()
 			foreach (QString fileName, messageParts) {
 				qDebug() << "Call from other instance. Opening "<<fileName;
 				loadFile(fileName);
+				//to bring window to front:
+				this->raise();
+				this->activateWindow();
+				this->showNormal();
 			}
 		}
 	}
