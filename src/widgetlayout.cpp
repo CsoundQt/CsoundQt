@@ -2959,12 +2959,15 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
 	QWidget *w;
 	layoutMutex.lock();
 	w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget
-	w->setPalette(QPalette(bgColor));
+	if (bg) // to get rid of pink backgrounds
+		w->setPalette(QPalette(bgColor));
+	else
+		w->setPalette(QPalette());
 	w->setBackgroundRole(QPalette::Window);
 	w->setAutoFillBackground(bg);
-	if (!m_contained && !bg) {
-		w->setPalette(QPalette());
-	}
+//	if (!m_contained && !bg) { // not necessary any more. CHECK if somethimes bg=true but m_contained=false. I think no...
+//		w->setPalette(QPalette());
+//	}
 	layoutMutex.unlock();
 	this->setProperty("QCS_bg", QVariant(bg));
 	this->setProperty("QCS_bgcolor", QVariant(bgColor));
