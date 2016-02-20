@@ -23,7 +23,9 @@ Rectangle {
             value: ccNumber;
             width: 55 // to be wide enough for 2 numbers
             onValueChanged: ccNumber = value;
+            Keys.forwardTo: ccRect
         }
+
         Slider {
             id: valueSlider;
             width: ccRect.width - ccLabel.width - cc.width - 25;
