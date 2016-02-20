@@ -17,6 +17,7 @@ ColumnLayout {
         spacing: 5
         Repeater {
             model: 3
+
             ControlSlider {
                 width: layout.width/3 //model-2*spacing
                 ccNumber: index+1
@@ -24,6 +25,7 @@ ColumnLayout {
                     //console.log("CC:", channel, ccNumber, value)
                     newCCvalue(channel, ccNumber, value )
                 }
+                Keys.forwardTo: keyboard
             }
         }
     }
@@ -32,12 +34,14 @@ ColumnLayout {
         id: controls
         Layout.fillWidth: true
         anchors.topMargin: 10
+        Keys.forwardTo: keyboard;
     }
 
     Keyboard {
         Layout.fillWidth: true
         Layout.fillHeight: true
         numOctaves: controls.numOctaves
+        id: keyboard
         onGenNote: {
             layout.genNote(on, note + (12*layout.octave), layout.channel, layout.velocity)
         }
