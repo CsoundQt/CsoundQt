@@ -10,8 +10,8 @@ CONFIG += i386
 QMAKE_CXXFLAGS += -arch i386
 }
 universal: {
-QMAKE_CXXFLAGS += -arch i386
-CONFIG += i386
+QMAKE_CXXFLAGS += -arch x86_64
+CONFIG += x86_64
 CONFIG += ppc
 }
 

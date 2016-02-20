@@ -17,6 +17,7 @@ for (rtdir, RTMIDI_VERSIONS) {
 	  ../../../$${DEFAULT_RTMIDI_DIRNAME}
 }
 
+
 exists(config.user.pri) {
     include(config.user.pri)
 	message(... config.user.pri found)
