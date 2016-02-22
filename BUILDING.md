@@ -28,9 +28,9 @@ in qcs.pro and build again. You should now get a working version of CsoundQt wit
 *  Build the PythonQt.pro project in QtCreator.
 *  After success, look whether in your CsoundQt project src>python>python.prf matches the Python version on your computer. If not, change it, for instance:
   `unix:PYTHON_VERSION=2.7`  
-*  Copy all dylibs from the lib folder in your PythonQt build directory to /usr/local/lib, for instance:
-  `cd /Users/fmsbw/src/PythonQt3.0/lib` 
-  `sudo cp libPythonQt* /usr/local/lib/`  
+*  Copy all dylibs from the lib folder in your PythonQt build directory to /usr/local/lib, for instance:  
+  `cd /Users/fmsbw/src/PythonQt3.0/lib`  
+  `sudo cp libPythonQt* /usr/local/lib/`   
 *  Now uncomment the line  
   `CONFIG+=pythonqt`  
 in qcs.pro and build again. You should now get a working version of CsoundQt with PythonQt support (to check, see if the Python Scratchpad is there when you launch CsoundQt).
