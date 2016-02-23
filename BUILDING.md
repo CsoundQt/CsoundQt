@@ -133,6 +133,7 @@ and save the file as *pythonqt.conf*. Then run:
 
     $ sudo /sbin/ldconfig
 
+A step-by-step instruction for building CsoundQt on Debian with QtCreator can be found in the CsoundQt [Wiki](https://github.com/CsoundQt/CsoundQt/wiki/Building-CsoundQt-for-Debian-with-QtCreator).
 
 <a name="windows">
 
