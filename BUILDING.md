@@ -82,7 +82,7 @@ For making the libraries available, see platform specific notes below.
 
 <a name="osx">
 
-Notes for OSX build (see also [here](https://github.com/CsoundQt/CsoundQt/wiki/Building-CsoundQt-for-OSX-with-QtCreator))
+Notes for OSX build
 ---------------------
 
 The paths in *qcs-macx.pro* are set up for using **Csound from the OSX installer** (not Homebrew).
@@ -99,6 +99,8 @@ If PythonQt build was successful, copy or link all *dylibs* from the *lib* folde
     $ sudo cp libPythonQt* /usr/local/lib/
 
 When you start CsoundQt first time and  if the menu is without the **Scripts** item, set the *Python Script directory* in *Configure > Environment* to the *src/Scripts* dir of your CsoundQt sources. Close CsoundQt, and reopen.
+
+A step-by-step instruction for building CsoundQt on Debian with QtCreator can be found in the CsoundQt [Wiki](https://github.com/CsoundQt/CsoundQt/wiki/Building-CsoundQt-for-OSX-with-QtCreator).
 
 _NB! There is a bug in Qt 5.5 that does not allow to resize floating panel on OSX (i.e Widgets panel). As a workaround you can check **Configuration->Widgets->Widgets are an independent window**  or use Qt 5.4._ 
 
