@@ -40,7 +40,7 @@ CsoundQt uses qmake to build, so you can build on the **command line** with:
 	$ qmake qcs.pro
 	$ make
 	
-On UNIX systems you can install CsoundQt system wide, including desktop file, icon and mimetypes for Csound files (from version 0.9.2 on) with the command
+On UNIX systems you can install CsoundQt system wide, including desktop file, icon and mimetypes for Csound files (from version 0.9.2 on) after that with the command
 
     $ sudo make install
      
