@@ -129,7 +129,7 @@ Instead of copying or linking PythonQt libraries to /usr/local/lib you can add t
 
 Then simply type or copy the path of your PythonQt/lib folder, e.g. 
     
-    /home/jh/src/PythonQt3.0/lib/ 
+    ~/src/PythonQt3.0/lib/ 
     
 and save the file as *pythonqt.conf*. Then run: 
 
