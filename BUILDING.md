@@ -95,7 +95,7 @@ If you use Csound from the OSX installer and *libcsnd6* is not found, you need t
 
 If PythonQt build was successful, copy or link all *dylibs* from the *lib* folder in your build directory to */usr/local/lib*, for instance: 
 
-    $ cd /Users/fmsbw/src/PythonQt3.0/lib
+    $ cd ~/src/PythonQt3.0/lib
     $ sudo cp libPythonQt* /usr/local/lib/
 
 When you start CsoundQt first time and  if the menu is without the **Scripts** item, set the *Python Script directory* in *Configure > Environment* to the *src/Scripts* dir of your CsoundQt sources. Close CsoundQt, and reopen.
@@ -129,7 +129,7 @@ Instead of copying or linking PythonQt libraries to /usr/local/lib you can add t
 
 Then simply type or copy the path of your PythonQt/lib folder, e.g. 
     
-    /home/jh/src/PythonQt3.0/lib/ 
+    ~/src/PythonQt3.0/lib/ 
     
 and save the file as *pythonqt.conf*. Then run: 
 
