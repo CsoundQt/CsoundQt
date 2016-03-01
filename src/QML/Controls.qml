@@ -7,7 +7,7 @@ Rectangle {
     property int velocity: velocitySpinBox.value
     property int octave: octaveSpinBox.value
     property int numOctaves: numOctavesSpinBox.value
-
+    id: controls
     Layout.minimumHeight: channelSpinBox.height
     RowLayout {
         spacing: 10
@@ -22,6 +22,7 @@ Rectangle {
             maximumValue: 16
             minimumValue: 1
             value: 1
+            Keys.forwardTo: controls // to forward them further to keyboard to be able to play wrom computer keys
         }
         Text {
             text: qsTr("Velocity")
@@ -33,6 +34,7 @@ Rectangle {
             maximumValue: 127
             minimumValue: 1
             value: 64
+            Keys.forwardTo: controls
         }
         Text {
             text: qsTr("Octave")
@@ -44,6 +46,7 @@ Rectangle {
             maximumValue: 12
             minimumValue: 0
             value: 5
+            Keys.forwardTo: controls
         }
         Text {
             text: qsTr("Num Octaves")
@@ -55,6 +58,7 @@ Rectangle {
             maximumValue: 8
             minimumValue: 1
             value: 3
+            Keys.forwardTo: controls
         }
     }
 }

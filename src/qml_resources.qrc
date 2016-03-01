@@ -4,5 +4,6 @@
         <file>QML/Keyboard.qml</file>
         <file>QML/VirtualKeyboard.qml</file>
         <file>QML/Controls.qml</file>
+        <file>QML/ControlSlider.qml</file>
     </qresource>
 </RCC>

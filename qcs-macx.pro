@@ -10,19 +10,20 @@ CONFIG += i386
 QMAKE_CXXFLAGS += -arch i386
 }
 universal: {
-QMAKE_CXXFLAGS += -arch i386
-CONFIG += i386
+QMAKE_CXXFLAGS += -arch x86_64
+CONFIG += x86_64
 CONFIG += ppc
 }
 
 build32: MAC_LIB = CsoundLib
 build64: MAC_LIB = CsoundLib64
 
-HOME_DIRECTORY = /Users/admin
+#paths set up for using the csound from installed package
+HOME_DIRECTORY =
 
 # Set default paths
 CSOUND_FRAMEWORK_DIR = /Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
-DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${HOME_DIRECTORY}/$${CSOUND_FRAMEWORK_DIR}/Headers \
+DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${CSOUND_FRAMEWORK_DIR}/Headers \
         $${CSOUND_FRAMEWORK_DIR}/Headers \
         /usr/local/include/csound
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
@@ -37,9 +38,14 @@ DEFAULT_PYTHON_INCLUDE_DIR = /usr/local/include \
         /usr/include
 DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
         /usr/lib
-DEFAULT_PYTHONQT_SRC_DIRS = ../../../PythonQt2.0.1 \
-        ../PythonQt2.0.1 \
-        PythonQt2.0.1
+
+PYTHONQT_VARIANTS = "PythonQt3.0" "PythonQt" "PythonQt2.0.1"
+for (pyqtdir, PYTHONQT_VARIANTS) {
+	DEFAULT_PYTHONQT_SRC_DIRS += ../../../$$pyqtdir \
+		../$$pyqtdir \
+		$$pyqtdir
+}
+
 #PYTHONQT_LIB = PythonQt_QtAll$${DEBUG_EXT}
 PYTHONQT_LIB = PythonQt
 # Do configuration step

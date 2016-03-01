@@ -869,6 +869,7 @@ int CsoundEngine::runCsound()
 	csoundRegisterKeyboardCallback(ud->csound,
 								   &CsoundEngine::keyEventCallback,
                                    (void *) ud, CSOUND_CALLBACK_KBD_EVENT | CSOUND_CALLBACK_KBD_TEXT);
+	csoundKeyPress(getCsound(),'\0'); // necessary to put something into the buffer, otherwise sensekey complains when not started from terminal
 #else
 	csoundSetCallback(ud->csound,
 					  &CsoundEngine::keyEventCallback,

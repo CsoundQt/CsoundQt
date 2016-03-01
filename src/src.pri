@@ -143,7 +143,8 @@ SOURCES = "src/about.cpp" \
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
     "src/qutecsound.rc" \
-    "src/test.csd"
+    "src/test.csd" \
+    $$PWD/QML/ControlSlider.qml
 pythonqt {
     HEADERS += "src/pythonconsole.h" \
         "src/pyqcsobject.h"

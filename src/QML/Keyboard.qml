@@ -21,10 +21,42 @@ Rectangle {
     onTurnon: {
         var midinum = indextomidi(notenum)
         genNote(1, midinum)
+        //console.log("TURNON: ", notenum);
     }
     onTurnoff: {
         var midinum = indextomidi(notenum)
         genNote(0, midinum)
+    }
+
+    // Set keyboard mapping to play from computer Keyboard
+    property var whiteKeys : [Qt.Key_Z, Qt.Key_X,Qt.Key_C,Qt.Key_V,Qt.Key_B,Qt.Key_N,Qt.Key_M, // first octava
+        Qt.Key_Q,Qt.Key_W,Qt.Key_E,Qt.Key_R,Qt.Key_T,Qt.Key_Y,Qt.Key_U, Qt.Key_I,Qt.Key_O,Qt.Key_P]; // second and third until E
+    property var blackKeys : [ Qt.Key_S,Qt.Key_D,'none',Qt.Key_G,Qt.Key_H,Qt.Key_J,'none', //first
+        Qt.Key_2,Qt.Key_3,'none',Qt.Key_5,Qt.Key_6,Qt.Key_7,'none',Qt.Key_9,Qt.Key_0 ]; // sedond and third cis, dis
+
+    function handleKeyEvent(pressed, key) {
+        var whiteIndex = whiteKeys.indexOf(key); // -1 if not found;
+        var blackIndex = blackKeys.indexOf(key);
+        if (whiteIndex>=0) {
+            keyDrawer.itemAt(whiteIndex).checked =  pressed;
+        }
+        if (blackIndex>=0) {
+            blackkeyDrawer.itemAt(blackIndex).checked =  pressed;
+        }
+    }
+
+    focus:true
+    Keys.onPressed: {
+        if (!event.isAutoRepeat) {
+            //console.log("KEYBOARD key down: ", event.key);
+            handleKeyEvent(true, event.key);
+        }
+    }
+    Keys.onReleased: {
+        if (!event.isAutoRepeat) {
+            //console.log("KEYBOARD key up: ", event.key);
+            handleKeyEvent(false, event.key);
+        }
     }
 
     Row {

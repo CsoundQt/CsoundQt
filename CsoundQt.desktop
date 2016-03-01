@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=$HOME/bin/csoundqt %F
+Exec=csoundqt %F
 Icon=qtcs
 MimeType=text/x-csound-csd;text/x-csound-orc;text/x-csound-sco;
 Name=CsoundQt

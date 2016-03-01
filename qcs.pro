@@ -38,9 +38,9 @@
  CONFIG+=rtmidi     To build with RtMidi support
 # CONFIG+=record_support
 # CONFIG+=debugger
-# CONFIG-= html5     To support HTML5 via the <CsHtml5> element in the csd file.
+# CONFIG+= html5     # To support HTML5 via the <CsHtml5> element in the csd file.
 # OS X only OPTIONS:
-# CONFIG+=universal   To build i386/ppc version. Default is platform default
+# CONFIG+=universal  #  To build i386/ppc version. Default is platform default
 ################################################################################
 
 DEFINES += NOMINMAX
@@ -152,10 +152,11 @@ message(INCLUDEPATH is: $${INCLUDEPATH})
 message(LIBS are:       $${LIBS})
 message(TARGET is:      $${TARGET})
 
-# experimental install commands for linux (for make install),
+# install commands for linux (for make install)
+# use 'sudo make install' for system wide installation
 unix {
-	INSTALL_DIR=~ # HOME, later use /usr/local and others for icosns, dekstop file etc
-	SHARE_DIR=~/.local/share # /usr/share for system install
+	INSTALL_DIR=/usr/local  # ~  #for HOME
+	SHARE_DIR=/usr/share # ~/.local for HOME install
 	target.path = $$INSTALL_DIR/bin
 	target.commands = ln -sf $$INSTALL_DIR/bin/$$TARGET $$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
 	target.files = $$DESTDIR/$$TARGET

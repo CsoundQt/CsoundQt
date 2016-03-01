@@ -73,7 +73,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -332,7 +332,7 @@
             <item row="1" column="4">
              <widget class="QLabel" name="label_18">
               <property name="text">
-               <string>RT MIDI Module</string>
+               <string>Csound MIDI Module</string>
               </property>
              </widget>
             </item>

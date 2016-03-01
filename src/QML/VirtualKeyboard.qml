@@ -11,17 +11,37 @@ ColumnLayout {
     property int velocity: controls.velocity
 
     signal genNote(variant on, variant note, variant channel, variant velocity);
+    signal newCCvalue(int channel, int cc, int value)
+
+    Row {
+        spacing: 5
+        Repeater {
+            model: 3
+
+            ControlSlider {
+                width: layout.width/3 //model-2*spacing
+                ccNumber: index+1
+                onCcValueChanged: {
+                    //console.log("CC:", channel, ccNumber, value)
+                    newCCvalue(channel, ccNumber, value )
+                }
+                Keys.forwardTo: keyboard
+            }
+        }
+    }
 
     Controls {
         id: controls
         Layout.fillWidth: true
         anchors.topMargin: 10
+        Keys.forwardTo: keyboard;
     }
 
     Keyboard {
         Layout.fillWidth: true
         Layout.fillHeight: true
         numOctaves: controls.numOctaves
+        id: keyboard
         onGenNote: {
             layout.genNote(on, note + (12*layout.octave), layout.channel, layout.velocity)
         }

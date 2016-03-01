@@ -25,17 +25,11 @@ DEFAULT_PYTHON_INCLUDE_DIR += /usr/local/include \
     /usr/include
 #no need to define PYTHONQT_LIB_DIR since set by PythonQt.prf and PythonQt_QtAll
 
-QCS_QT5 {
-DEFAULT_PYTHONQT_SRC_DIRS += ../../../PythonQt \
-		../PythonQt \
-		PythonQt \
-		../../../PythonQt3.0 \
-		../PythonQt3.0 \
-		PythonQt3.0
-} else {
-DEFAULT_PYTHONQT_SRC_DIRS += ../../../PythonQt2.0.1 \
-		../PythonQt2.0.1 \
-		PythonQt2.0.1
+PYTHONQT_VARIANTS = "PythonQt3.0" "PythonQt" "PythonQt2.0.1"
+for (pyqtdir, PYTHONQT_VARIANTS) {
+	DEFAULT_PYTHONQT_SRC_DIRS += ../../../$$pyqtdir \
+		../$$pyqtdir \
+		$$pyqtdir
 }
 
 DEFAULT_PORTMIDI_DIR +=  /usr/local/include
