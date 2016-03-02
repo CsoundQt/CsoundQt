@@ -21,7 +21,23 @@ Getting the sources <a name="sources">
 The source files for CsoundQt can be browsed and downloaded from Github:
 [https://github.com/CsoundQt/CsoundQt](https://github.com/CsoundQt/CsoundQt)
 
-You can also find source releases in the Files section of [SourceForge](http://sourceforge.net/projects/qutecsound/files/CsoundQt/).    
+
+You can also find source releases in Github Releases section <https://github.com/CsoundQt/CsoundQt/releases>.     
+
+
+Since version 0.9.2 the latest stable release is kept in ***master*** branch in Github repository, the newest modifications and fixes in ***develop*** branch. For building yourself, it makes mostly more sence to check out *develop* branch. 
+
+You need [git](https://git-scm.com/) software. To clone the github repository in your computer:
+    
+    $  git clone https://github.com/CsoundQt/CsoundQt.git 
+    
+Then activate also the develop branch (first time you use it):
+
+    $ git checkout -b develop origin/develop
+    
+To change between the branches use command *git checkout <branchname \>*
+
+    $ git checkout develop # or: git checkout master
 
 
 <a name="building"> 
