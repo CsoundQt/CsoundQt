@@ -103,6 +103,8 @@ Notes for OSX build
 
 The paths in *qcs-macx.pro* are set up for using **Csound from the OSX installer** (not Homebrew).
 
+If you use QtCreator, disable "Shadow Build" in *Projects > Build Settings > General*.
+
 If you use Csound from the OSX installer and *libcsnd6* is not found, you need to create a link in floder */usr/local/lib* pointing to the existing csnd6 library,  i.e: 
 
     $ cd /usr/local/lib
