@@ -21,7 +21,23 @@ Getting the sources <a name="sources">
 The source files for CsoundQt can be browsed and downloaded from Github:
 [https://github.com/CsoundQt/CsoundQt](https://github.com/CsoundQt/CsoundQt)
 
-You can also find source releases in the Files section of [SourceForge](http://sourceforge.net/projects/qutecsound/files/CsoundQt/).    
+
+You can also find source releases in Github Releases section <https://github.com/CsoundQt/CsoundQt/releases>.     
+
+
+Since version 0.9.2 the latest stable release is kept in ***master*** branch in Github repository, the newest modifications and fixes in ***develop*** branch. For building yourself, it makes mostly more sence to check out *develop* branch. 
+
+You need [git](https://git-scm.com/) software. To clone the github repository in your computer:
+    
+    $  git clone https://github.com/CsoundQt/CsoundQt.git 
+    
+Then activate also the develop branch (first time you use it):
+
+    $ git checkout -b develop origin/develop
+    
+To change between the branches use command *git checkout <branchname \>*
+
+    $ git checkout develop # or: git checkout master
 
 
 <a name="building"> 
@@ -33,7 +49,7 @@ To build **CsoundQt**, you must have installed [**Csound**](csound.github.io) fi
 
 To build **CsoundQt** you need [**Qt**](http://qt-project.org/) (version 4.8 or 5.0+). The [**libsndfile**](http://www.mega-nerd.com/libsndfile/) library will allow recording the realtime output of Csound to a file. From version 0.7 onwards, CsoundQt can be built with [PythonQt](http://pythonqt.sourceforge.net/) support. Global MIDI I/O and control of the CsoundQt widgets can also be enabled through the [RtMidi](http://www.music.mcgill.ca/~gary/rtmidi/) library.
 
-The easiest way to build CsoundQt is to open its qcs.pro file in **QtCreator** and build it there. You can download and install Qt development kit (including QtCreator and all necessary libraries) from [QT page](http://www.qt.io/download-open-source/). It is recommended to use **Qt 5.3 or newer**, to be able to use CsoundQt's **Virtual Midi Keyboard**.
+The easiest way to build CsoundQt is to open its qcs.pro file in **QtCreator** and build it there (A step-by-step instruction [**here**](https://github.com/CsoundQt/CsoundQt/wiki)). You can download and install Qt development kit (including QtCreator and all necessary libraries) from [QT page](http://www.qt.io/download-open-source/). It is recommended to use **Qt 5.3 or newer**, to be able to use CsoundQt's **Virtual Midi Keyboard**.
 
 CsoundQt uses qmake to build, so you can build on the **command line** with:
 
@@ -86,6 +102,8 @@ Notes for OSX build
 ---------------------
 
 The paths in *qcs-macx.pro* are set up for using **Csound from the OSX installer** (not Homebrew).
+
+If you use QtCreator, disable "Shadow Build" in *Projects > Build Settings > General*.
 
 If you use Csound from the OSX installer and *libcsnd6* is not found, you need to create a link in floder */usr/local/lib* pointing to the existing csnd6 library,  i.e: 
 
