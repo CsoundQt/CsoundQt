@@ -28,7 +28,7 @@ strset		28, "is an enourmously irrational"
 
 seed			0
 gicount	=	0
-gimodel	ftgen	0, 0, -21, -2, 1,1,0, .7,2,0, .5,3,0, .3,4,0, .1,5,0, .05,6,0, .02,7,0; partial model
+gimodel	ftgen	0, 0, 32, -2, 1,1,0, .7,2,0, .5,3,0, .3,4,0, .1,5,0, .05,6,0, .02,7,0; partial model
 
 
   opcode TypeIn, 0, k
@@ -298,7 +298,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>104</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -327,7 +327,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>h</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
@@ -414,7 +414,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label/>
+  <label>Thank you!</label>
   <alignment>center</alignment>
   <font>DejaVu Sans</font>
   <fontsize>18</fontsize>
@@ -443,7 +443,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>You typed the character</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -472,7 +472,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>As you will certainly have heard by the unique tone which is presented here for the first time as the result of long research from all times and cultures at least on earth</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -501,7 +501,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>The ASCII code of this character is</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -675,7 +675,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>.</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -704,7 +704,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <label>!</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -906,46 +906,9 @@ Then, press the Start button.</label>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioText {359, 326} {49, 33} display 0.000000 0.00100 "showascii1" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {359, 288} {31, 30} display 0.000000 0.00100 "showchar1" left "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {119, 184} {102, 49} display 0.000000 0.00100 "typein1" right "Lucida Grande" 30 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {223, 183} {103, 49} display 0.000000 0.00100 "typein2" left "Lucida Grande" 30 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {62, 242} {394, 33} display 0.000000 0.00100 "thanks" center "DejaVu Sans" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {79, 290} {275, 30} display 0.000000 0.00100 "youtyped" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {65, 374} {391, 76} display 0.000000 0.00100 "asyouwill" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {82, 328} {275, 30} display 0.000000 0.00100 "ascii1" right "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {96, 451} {38, 30} display 0.000000 0.00100 "showchar2" right "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {137, 453} {275, 30} display 0.000000 0.00100 "isavery" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {139, 546} {275, 30} display 0.000000 0.00100 "isatotally" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {66, 492} {382, 47} display 0.000000 0.00100 "theby" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {78, 544} {59, 33} display 0.000000 0.00100 "showascii2" right "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {375, 290} {41, 30} display 0.000000 0.00100 "." left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {393, 328} {41, 30} display 0.000000 0.00100 "!" left "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder 
-ioText {49, 16} {721, 41} label 0.000000 0.00100 "" center "Lucida Grande" 22 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Get the ASCII Code of a Character
-ioText {48, 55} {722, 58} label 0.000000 0.00100 "" center "Lucida Grande" 18 {0, 0, 0} {58624, 58624, 58624} nobackground noborder And learn a lot more about the symbolic function of characters and numbers.Â¬This can be very important for your future life.
-ioText {47, 112} {724, 48} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder First, select your personal speed at the slider on the right.Â¬Then, press the Start button.
-ioSlider {514, 222} {259, 27} 0.100000 2.000000 0.745560 speed
-ioText {513, 192} {260, 25} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Select Your Personal Speed of Messages
-ioText {514, 277} {259, 97} display 0.000000 0.00100 "age" center "Lucida Grande" 14 {0, 0, 0} {58624, 58624, 58624} nobackground noborder Age estimated from your speed selection:Â¬23 years, 6 months, 6 days.
-ioButton {513, 373} {261, 28} value 1.000000 "_Play" "Start" "/" i1 0 10
-</MacGUI>
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="596" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
