@@ -235,6 +235,7 @@ private slots:
 	void requestFeature();
 	void chat();
 	void openShortcutDialog();
+	void downloadManual();
 	void about();
 	void donate();
 	void documentWasModified();
@@ -390,6 +391,7 @@ private:
 	QAction *focusEditorAct;
 	QAction *showHelpAct;
 	QAction *showManualAct;
+	QAction *downloadManualAct;
 	QAction *showGenAct;
 	QAction *showOverviewAct;
 	QAction *showOpcodeQuickRefAct;
