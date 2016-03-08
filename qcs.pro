@@ -155,10 +155,14 @@ message(TARGET is:      $${TARGET})
 # install commands for linux (for make install)
 # use 'sudo make install' for system wide installation
 unix {
-	INSTALL_DIR=/usr/local  # ~  #for HOME
-	SHARE_DIR=/usr/share # ~/.local for HOME install
+	isEmpty(INSTALL_DIR) {
+		INSTALL_DIR=/usr/local  # ~  #for HOME
+	}
+	isEmpty(SHARE_DIR) {
+		SHARE_DIR=/usr/share # ~/.local for HOME install
+	}
 	target.path = $$INSTALL_DIR/bin
-	target.commands = ln -sf $$INSTALL_DIR/bin/$$TARGET $$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
+	target.commands = ln -sf $$TARGET $(INSTALL_ROOT)/$$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
 	target.files = $$DESTDIR/$$TARGET
 
 
@@ -168,8 +172,8 @@ unix {
 	icon.path=$$SHARE_DIR/icons # not sure in fact, if /usr/share/icons is enough or better to put into hicolor...
 	icon.files=images/qtcs.svg
 
-	mimetypes.path=$$PWD # in some reason path must be set to create install target in Makefile
-	mimetypes.commands = cd $$PWD/mime-types/; ./add_csound_mimetypes.sh
+	mimetypes.path=$$INSTALL_DIR # in some reason path must be set to create install target in Makefile
+	mimetypes.commands = cd $$PWD/mime-types/; ./add_csound_mimetypes.sh $(INSTALL_ROOT)/$$INSTALL_DIR no-update
 
 
 	#TODO: mime types
