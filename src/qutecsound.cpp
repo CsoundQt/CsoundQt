@@ -1902,6 +1902,7 @@ void CsoundQt::setFullScreen(bool full)
     }
 }
 
+
 void CsoundQt::showDebugger(bool show)
 {
 #ifdef QCS_DEBUGGER
@@ -2122,7 +2123,13 @@ void CsoundQt::openShortcutDialog()
 {
     KeyboardShortcuts dialog(this, m_keyActions);
     connect(&dialog, SIGNAL(restoreDefaultShortcuts()), this, SLOT(setDefaultKeyboardShortcuts()));
-    dialog.exec();
+	dialog.exec();
+}
+
+void CsoundQt::downloadManual()
+{
+	QMessageBox::information(this, tr("Set manual path"), tr("Don't forget to set the path to manual in Configure -> Enviromnent -> Html doc directory"));
+	openExternalBrowser(QUrl("https://sourceforge.net/projects/csound/files/csound6/Csound6.06/manual/")); // NB! must be updated when new manual comes out!
 }
 
 void CsoundQt::about()
@@ -2973,6 +2980,12 @@ void CsoundQt::createActions()
     showManualAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showManualAct, SIGNAL(triggered()), helpPanel, SLOT(showManual()));
 
+	downloadManualAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("Download Csound Manual"), this);
+	downloadManualAct->setStatusTip(tr("Download latest Csound manual"));
+	downloadManualAct->setShortcutContext(Qt::ApplicationShortcut);
+	connect(downloadManualAct, SIGNAL(triggered()), this, SLOT(downloadManual()));
+
+
     showGenAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("GEN Routines"), this);
     showGenAct->setStatusTip(tr("Show the GEN Routines Manual page"));
     showGenAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -3816,6 +3829,7 @@ void CsoundQt::createMenus()
     helpMenu->addAction(browseForwardAct);
     helpMenu->addSeparator();
     helpMenu->addAction(showManualAct);
+	helpMenu->addAction(downloadManualAct);
     helpMenu->addAction(showOverviewAct);
     helpMenu->addAction(showOpcodeQuickRefAct);
     helpMenu->addAction(showGenAct);
