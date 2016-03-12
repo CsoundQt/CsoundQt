@@ -23,6 +23,7 @@
 #include "csoundoptions.h"
 #include "configlists.h"
 #include <QDir> // for static QDir::separator()
+#include <cstdlib> // for calloc
 
 CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	m_configlists(configlists)

@@ -154,7 +154,7 @@ message(TARGET is:      $${TARGET})
 
 # install commands for linux (for make install)
 # use 'sudo make install' for system wide installation
-unix {
+unix:!macx {
 	isEmpty(INSTALL_DIR) {
 		INSTALL_DIR=/usr/local  # ~  #for HOME
 	}
