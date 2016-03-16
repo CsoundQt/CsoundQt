@@ -5,17 +5,14 @@
 	message(Building CsoundQt for Macintosh OS X.)
 }
 
-!ppc: !x86_64:  {
+i386:  {
 CONFIG += i386
 QMAKE_CXXFLAGS += -arch i386
-}
-universal: {
+} else:universal {
 QMAKE_CXXFLAGS += -arch i386
 CONFIG += i386
 CONFIG += ppc
-}
-
-x86_64: {
+} else {
 CONFIG += x86_64
 QMAKE_CXXFLAGS += -arch x86_64
 }

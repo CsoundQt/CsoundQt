@@ -40,7 +40,8 @@
 # CONFIG+=debugger
 # CONFIG+= html5     # To support HTML5 via the <CsHtml5> element in the csd file.
 # OS X only OPTIONS:
-# CONFIG+=universal  #  To build i386/ppc version. Default is platform default
+# CONFIG+=universal  #  To build i386/ppc version. Default is x86_64
+# CONFIG+=i386  #  To build i386 version. Default is x86_64
 ################################################################################
 
 DEFINES += NOMINMAX
