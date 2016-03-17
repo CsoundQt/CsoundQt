@@ -176,9 +176,10 @@ unix:!macx {
 	mimetypes.path=$$INSTALL_DIR # in some reason path must be set to create install target in Makefile
 	mimetypes.commands = cd $$PWD/mime-types/; ./add_csound_mimetypes.sh $(INSTALL_ROOT)/$$INSTALL_DIR
 
+	examples.path = $$SHARE_DIR/qutecsound/
+	examples.files = src/Examples
 
-	#TODO: mime types
-	INSTALLS += target desktop icon mimetypes
+	INSTALLS += target desktop icon mimetypes examples
 }
 
 # for OSX add Scripts and Examples to be bundle in Contents->Resources

@@ -3419,7 +3419,10 @@ QString CsoundQt::getExamplePath(QString dir)
     if (!QDir(examplePath).exists()) { // for out of tree builds
         examplePath = qApp->applicationDirPath() + "/../../qutecsound/src/Examples/" + dir;
     }
-    if (!QDir(examplePath).exists()) {
+	if (!QDir(examplePath).exists()) {
+		examplePath = "~/.local/share/qutecsound/Examples/" + dir; // UNTESTED! if installed to HOME dir
+	}
+	if (!QDir(examplePath).exists()) {
         examplePath = "/usr/share/qutecsound/Examples/" + dir;
     }
 #endif
