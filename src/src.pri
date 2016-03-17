@@ -20,7 +20,7 @@ FORMS = "src/about.ui" \
     src/dockhelp.ui \
     src/livecodeeditor.ui \
     src/newbreakpointdialog.ui \
-    $$PWD/html5guidisplay.ui
+    src/html5guidisplay.ui
 
 HEADERS = "src/about.h" \
     "src/configdialog.h" \
@@ -79,7 +79,6 @@ HEADERS = "src/about.h" \
     src/debugpanel.h \
     src/livecodeeditor.h \
     src/newbreakpointdialog.h \
-    $$PWD/csoundhtmlview.h
 
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
@@ -138,7 +137,7 @@ SOURCES = "src/about.cpp" \
     src/debugpanel.cpp \
     src/livecodeeditor.cpp \
     src/newbreakpointdialog.cpp \
-    src/csoundhtmlview.cpp
+    #src/csoundhtmlview.cpp
 
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
@@ -174,6 +173,7 @@ html5 {
     HEADERS += src/client_transfer.h
     HEADERS += src/message_event.h
     HEADERS += src/qcefwebview.h
+    HEADERS += src/csoundhtmlview.h
     SOURCES += src/cefclient.cpp
     SOURCES += src/cefclient_qt.cpp
     SOURCES += src/client_app.cpp
@@ -185,6 +185,7 @@ html5 {
     SOURCES += src/client_transfer.cpp
     SOURCES += src/message_event.cpp
     SOURCES += src/qcefwebview.cpp
+    SOURCES += src/csoundhtmlview.cpp
     message("Including CEF related files for html5 build.")
 }
 !html5 {
@@ -198,6 +199,7 @@ html5 {
     HEADERS -= src/client_transfer.h
     HEADERS -= src/message_event.h
     HEADERS -= src/qcefwebview.h
+    HEADERS -= src/csoundhtmlview.h
     SOURCES -= src/cefclient.cpp
     SOURCES -= src/cefclient_qt.cpp
     SOURCES -= src/client_app.cpp
@@ -209,6 +211,7 @@ html5 {
     SOURCES -= src/client_transfer.cpp
     SOURCES -= src/message_event.cpp
     SOURCES -= src/qcefwebview.cpp
+    SOURCES -= src/csoundhtmlview.cpp
     message("Removing CEF related files for non-html5 build.")
 }
 
