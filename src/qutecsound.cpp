@@ -216,7 +216,28 @@ CsoundQt::CsoundQt(QStringList fileNames)
         newFile();
     }
 
+
+
     QString index = m_options->csdocdir + QString("/index.html");
+
+	if (m_options->csdocdir.isEmpty() || !QFile::exists(index) ) { // try to find valid location of manual, if installed
+#ifdef Q_OS_LINUX
+		index = "/usr/share/doc/csound-manual/index.html";
+		if (!QFile::exists(index)) {
+			index = "/usr/share/doc/csound-doc/index.html";
+		}
+#elif Q_WS_WIN
+		QString programFilesPath(getenv("PROGRAMFILES"));
+		index = programFilesPath + "Csound6/doc/manual/index.html";
+		if (!QFile::exists(index)) {
+			programFilesPath(getenv("PROGRAMFILES(X86)"));
+			index = programFilesPath + "Csound6/doc/manual/index.html";
+		}
+		if (!QFile::exists(index)) {
+			qDebug()<<"Manual not found: " << index;
+		}
+#endif
+	}
 #ifdef Q_OS_MAC
     if (!QFile::exists(index)) {
         index = initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/index.html");
