@@ -181,3 +181,17 @@ unix:!macx {
 	INSTALLS += target desktop icon mimetypes
 }
 
+# for OSX add Scripts and Examples to be bundle in Contents->Resources
+macx {
+    message("Mac install section")
+    pythonqt {
+        scripts.path = Contents/Resources
+        scripts.files = src/Scripts
+        QMAKE_BUNDLE_DATA += scripts
+    }
+    examples.path = Contents/Resources
+    examples.files = "src/Examples/FLOSS Manual Examples"
+    examples.files += "src/Examples/McCurdy Collection"
+    examples.files += "src/Examples/Stria Synth"
+    QMAKE_BUNDLE_DATA += examples
+}
