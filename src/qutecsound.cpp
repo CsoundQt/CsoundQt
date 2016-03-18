@@ -216,38 +216,34 @@ CsoundQt::CsoundQt(QStringList fileNames)
         newFile();
     }
 
-
-    QString docDir = m_options->csdocdir;
+    // try to find directory for manual, if not set
+    QString docDir = QString(); //m_options->csdocdir;
     QString index = docDir + QString("/index.html");
-
-	if (m_options->csdocdir.isEmpty() || !QFile::exists(index) ) { // try to find valid location of manual, if installed
+    QStringList possibleDirectories;
 #ifdef Q_OS_LINUX
-		index = "/usr/share/doc/csound-manual/index.html";
-		if (!QFile::exists(index)) {
-            index = "/usr/share/doc/csound-doc/index.html";
-		}
+        possibleDirectories << "/usr/share/doc/csound-manual/html/" << "/usr/share/doc/csound-doc/html/";
 #endif
-//TODO: all operating systems in simlarl way - docDir, index. Rewrite this section!
 #ifdef Q_OS_WIN
-        QString programFilesPath= QDir::fromNativeSeparators(getenv("PROGRAMFILES"));
-        docDir = programFilesPath + "/Csound6/doc/manual/";
-        index = docDir + "index.html";
-        qDebug()<<"Index1: "<<index;
-		if (!QFile::exists(index)) {
-			qDebug()<<"Manual not found: " << index;
-		}
+        QString programFilesPath = QDir::fromNativeSeparators(getenv("PROGRAMFILES"));
+        QString programFilesPathx86 = QDir::fromNativeSeparators(getenv("PROGRAMFILES(X86)"));
+        possibleDirectories << programFilesPath + "/Csound6/doc/manual/" << programFilesPathx86 + "/Csound6/doc/manual/";
 #endif
-	}
 #ifdef Q_OS_MAC
-    if (!QFile::exists(index)) {
-        index = initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/index.html");
-        if (!QFile::exists(index)) {
-            index = "/Library/Frameworks/CsoundLib64.framework/Resources/Manual/index.html";
-        }
-    }
+     possibleDirectories <<  initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/") <<  "/Library/Frameworks/CsoundLib64.framework/Resources/Manual/";
 #endif
-    helpPanel->docDir = docDir;//m_options->csdocdir;
-    helpPanel->loadFile(index);
+    if (m_options->csdocdir.isEmpty() || !QFile::exists(m_options->csdocdir+"/index.html") ) {
+        foreach (QString dir, possibleDirectories) {
+            if (QFile::exists(dir+"/index.html")) {
+                docDir = dir;
+                qDebug()<<"Found manual in: "<<docDir;
+                break;
+            }
+        }
+    } else {
+        docDir = m_options->csdocdir;
+    }
+    helpPanel->docDir = docDir;
+    helpPanel->loadFile(docDir + "/index.html");
 
     applySettings();
     createQuickRefPdf();
