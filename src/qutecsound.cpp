@@ -217,22 +217,22 @@ CsoundQt::CsoundQt(QStringList fileNames)
     }
 
 
-
-    QString index = m_options->csdocdir + QString("/index.html");
+    QString docDir = m_options->csdocdir;
+    QString index = docDir + QString("/index.html");
 
 	if (m_options->csdocdir.isEmpty() || !QFile::exists(index) ) { // try to find valid location of manual, if installed
 #ifdef Q_OS_LINUX
 		index = "/usr/share/doc/csound-manual/index.html";
 		if (!QFile::exists(index)) {
-			index = "/usr/share/doc/csound-doc/index.html";
+            index = "/usr/share/doc/csound-doc/index.html";
 		}
-#elif Q_WS_WIN
-		QString programFilesPath(getenv("PROGRAMFILES"));
-		index = programFilesPath + "Csound6/doc/manual/index.html";
-		if (!QFile::exists(index)) {
-			programFilesPath(getenv("PROGRAMFILES(X86)"));
-			index = programFilesPath + "Csound6/doc/manual/index.html";
-		}
+#endif
+//TODO: all operating systems in simlarl way - docDir, index. Rewrite this section!
+#ifdef Q_OS_WIN
+        QString programFilesPath= QDir::fromNativeSeparators(getenv("PROGRAMFILES"));
+        docDir = programFilesPath + "/Csound6/doc/manual/";
+        index = docDir + "index.html";
+        qDebug()<<"Index1: "<<index;
 		if (!QFile::exists(index)) {
 			qDebug()<<"Manual not found: " << index;
 		}
@@ -246,7 +246,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
         }
     }
 #endif
-    helpPanel->docDir = m_options->csdocdir;
+    helpPanel->docDir = docDir;//m_options->csdocdir;
     helpPanel->loadFile(index);
 
     applySettings();
@@ -3424,6 +3424,11 @@ QString CsoundQt::getExamplePath(QString dir)
     QString examplePath;
 #ifdef Q_OS_WIN32
     examplePath = qApp->applicationDirPath() + "/Examples/" + dir;
+    if (!QDir(examplePath).exists()) {
+        QString programFilesPath= QDir::fromNativeSeparators(getenv("PROGRAMFILES"));
+        examplePath =  programFilesPath + "/Csound6/bin/Examples/" + dir; // NB! with csound6.0.6 no Floss/mCcurdy/Stria examples there. Copy manually
+        //qDebug()<<"Windows examplepath: "<<examplePath;
+    }
 #endif
 #ifdef Q_OS_MAC
     examplePath = qApp->applicationDirPath() + "/../Resources/" + dir;
