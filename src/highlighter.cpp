@@ -71,6 +71,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 	instFormat.setFontWeight(QFont::Bold);
 	instPatterns << "instr" << "endin" << "opcode" << "endop";
 	headerPatterns << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs";
+	keywordPatterns << "do" << "od";
 	csdtagFormat.setForeground(QColor("brown"));
 	csdtagFormat.setFontWeight(QFont::Bold);
 	opcodeFormat.setForeground(QColor("blue"));
@@ -235,6 +236,9 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 		}
 		else if (headerPatterns.contains(word)) {
 			setFormat(wordStart, wordEnd - wordStart, csdtagFormat);
+		}
+		else if (keywordPatterns.contains(word)) {
+			setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
 		}
 		else if (word.contains(":")) {
 			QStringList parts = word.split(":");

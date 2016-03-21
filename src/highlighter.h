@@ -94,7 +94,7 @@ private:
 	QTextCharFormat functionFormat;
 	QTextCharFormat labelFormat;
 
-	QStringList tagPatterns, headerPatterns, instPatterns; //Csound
+	QStringList tagPatterns, headerPatterns, instPatterns, keywordPatterns; //Csound
 
 	QStringList keywords;  //Python
 	QTextCharFormat keywordFormat;
