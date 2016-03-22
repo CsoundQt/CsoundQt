@@ -230,6 +230,7 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 		}
 		if (instPatterns.contains(word)) {
 			setFormat(wordStart, wordEnd - wordStart, instFormat);
+			return;
 		}
 		else if (tagPatterns.contains("<" + word + ">") && wordStart > 0) {
 			setFormat(wordStart - (text[wordStart - 1] == '/' ?  2 : 1), wordEnd - wordStart + (text[wordStart - 1] == '/' ?  3 : 2), csdtagFormat);
