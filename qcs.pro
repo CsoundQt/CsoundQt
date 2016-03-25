@@ -19,12 +19,12 @@
 # SHOULD work for all the listed platforms and architectures!
 # On Windows, HTML5 requires that CsoundQt be built with Microsoft Visual C++.
 # Copy csPerfThread.hpp and csPerfThread from Csound into the CsoundQt src
-# directory. Use Microsoft Visual Studio to build CEF using cefclient2010.sln,
+# directory. Use Microsoft Visual Studio to build CEF,
 # and run the client to make sure it works.
 # Then follow instructions to REBUILD the wrapper library for multithreaded
 # DLLs (used by the Qt SDK and thus by CsoundQt, compiler flag /MD) here:
 # https://bitbucket.org/chromiumembedded/cef/wiki/LinkingDifferentRunTimeLibraries.md.
-# Then, define a Windows environment variahle CEF_HOME to point to the root
+# Then, define a QMake variahle CEF_HOME to point to the root
 # directory of your CEF binaries, and configure the CsoundQt build with
 # CONFIG += html5. Finally, you must copy all the stuff required by CEF
 # (paks, dlls, the wrapper dll) to the Csound bin directory as specified in the
