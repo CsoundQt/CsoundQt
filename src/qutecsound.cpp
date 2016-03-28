@@ -2154,7 +2154,7 @@ void CsoundQt::about()
     About *msgBox = new About(this);
     msgBox->setWindowFlags(msgBox->windowFlags() | Qt::FramelessWindowHint);
     QString text ="<h1>";
-    text += tr("by: Andres Cabrera and others") +"</h1><h2>",
+    text += tr("by: Andres Cabrera, Tarmo Johannes and others") +"</h1><h2>",
             text += tr("Version %1").arg(QCS_VERSION) + "</h2><h2>";
     text += tr("Released under the LGPLv2 or GPLv3") + "</h2>";
     text += tr("Using Csound version:") + QString::number(csoundGetVersion()) + " ";
@@ -2185,11 +2185,10 @@ void CsoundQt::about()
 
     text += "<br />"+ tr("Other Resources:") + "<br />";
 	text += "<a href=\"http://csound.github.io\">Csound official homepage</a><br />";
-	text += "<a href=\"http://www.csounds.com\">cSounds.com</a><br />";
 	text += "<a href=\"http://www.csoundjournal.com/\">Csound Journal</a><br />";
     text += "<a href=\"http://csound.noisepages.com/\">The Csound Blog</a><br />";
     text +=  "<br />" + tr("Supported by:") +"<br />";
-    text +=  "<a href=\"http://www.incontri.hmt-hannover.de/\">Incontri - HMT Hannover</a><br />";
+    text +=  "<a href=\"http://www.incontri.hmtm-hannover.de/\">Incontri - HMTM Hannover</a><br />";
     text += "<a href=\"http://sourceforge.net/project/project_donations.php?group_id=227265\">";
     text +=  tr("And other generous users.") + "</a><br />";
 
