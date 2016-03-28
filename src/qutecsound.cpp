@@ -3469,7 +3469,6 @@ void CsoundQt::createMenus()
     fileMenu->addAction(saveNoWidgetsAct);
     //  fileMenu->addAction(createAppAct);
     fileMenu->addAction(reloadAct);
-    fileMenu->addAction(cabbageAct);
     fileMenu->addAction(closeTabAct);
     fileMenu->addAction(printAct);
     fileMenu->addAction(infoAct);
