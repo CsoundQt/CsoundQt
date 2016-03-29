@@ -157,8 +157,8 @@ rtmidi {
 }
 
 perfThread_build {
-    HEADERS += src/csPerfThread.hpp
-    SOURCES += src/csPerfThread.cpp
+    HEADERS += "$${CSOUND_INTERFACES_INCLUDE_DIR}/csPerfThread.hpp"
+    SOURCES += "$${CSOUND_INTERFACES_INCLUDE_DIR}/csPerfThread.cpp"
     message("Including csPerfThread files for perfThread_build.")
 }
 
