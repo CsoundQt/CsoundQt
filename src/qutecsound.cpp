@@ -2155,7 +2155,7 @@ void CsoundQt::about()
     About *msgBox = new About(this);
     msgBox->setWindowFlags(msgBox->windowFlags() | Qt::FramelessWindowHint);
     QString text ="<h1>";
-    text += tr("by: Andres Cabrera and others") +"</h1><h2>",
+    text += tr("by: Andres Cabrera, Tarmo Johannes and others") +"</h1><h2>",
             text += tr("Version %1").arg(QCS_VERSION) + "</h2><h2>";
     text += tr("Released under the LGPLv2 or GPLv3") + "</h2>";
     text += tr("Using Csound version:") + QString::number(csoundGetVersion()) + " ";
@@ -2181,16 +2181,16 @@ void CsoundQt::about()
 
     text +=tr("Mailing Lists:");
     text += "<br /><a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-users\">Join/Read CsoundQt Mailing List</a><br />";
+    	text += "<a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-devel\">Join/Read CsoundQt Developer List</a><br />";
 	text += "<a href=\"https://listserv.heanet.ie/cgi-bin/wa?A0=CSOUND\">Join/Read Csound Mailing List</a><br />";
 	text += "<a href=\"https://listserv.heanet.ie/cgi-bin/wa?A0=CSOUND-DEV\"> Join/Read Csound Developer List</a><br />";
 
     text += "<br />"+ tr("Other Resources:") + "<br />";
 	text += "<a href=\"http://csound.github.io\">Csound official homepage</a><br />";
-	text += "<a href=\"http://www.csounds.com\">cSounds.com</a><br />";
 	text += "<a href=\"http://www.csoundjournal.com/\">Csound Journal</a><br />";
     text += "<a href=\"http://csound.noisepages.com/\">The Csound Blog</a><br />";
     text +=  "<br />" + tr("Supported by:") +"<br />";
-    text +=  "<a href=\"http://www.incontri.hmt-hannover.de/\">Incontri - HMT Hannover</a><br />";
+    text +=  "<a href=\"http://www.incontri.hmtm-hannover.de/\">Incontri - HMTM Hannover</a><br />";
     text += "<a href=\"http://sourceforge.net/project/project_donations.php?group_id=227265\">";
     text +=  tr("And other generous users.") + "</a><br />";
 
@@ -3471,7 +3471,6 @@ void CsoundQt::createMenus()
     fileMenu->addAction(saveNoWidgetsAct);
     //  fileMenu->addAction(createAppAct);
     fileMenu->addAction(reloadAct);
-    fileMenu->addAction(cabbageAct);
     fileMenu->addAction(closeTabAct);
     fileMenu->addAction(printAct);
     fileMenu->addAction(infoAct);
