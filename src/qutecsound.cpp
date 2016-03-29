@@ -2180,7 +2180,7 @@ void CsoundQt::about()
 
     text +=tr("Mailing Lists:");
     text += "<br /><a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-users\">Join/Read CsoundQt Mailing List</a><br />";
-    	text += "<br /><a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-devel\">Join/Read CsoundQt Developer List</a><br />";
+    	text += "<a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-devel\">Join/Read CsoundQt Developer List</a><br />";
 	text += "<a href=\"https://listserv.heanet.ie/cgi-bin/wa?A0=CSOUND\">Join/Read Csound Mailing List</a><br />";
 	text += "<a href=\"https://listserv.heanet.ie/cgi-bin/wa?A0=CSOUND-DEV\"> Join/Read Csound Developer List</a><br />";
 
