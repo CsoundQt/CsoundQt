@@ -229,22 +229,18 @@ bool ClientHandler::DoClose(CefRefPtr<CefBrowser> browser) {
     /// TODO probably too late already, onbeforeunload has probably already been called.
     qDebug() << "browser->GetIdentifier():" << browser->GetIdentifier();
     if (m_BrowserId == browser->GetIdentifier() && !m_bIsClosing) {
-        /// Notify the browser that the parent window is about to close.
-        /// NOTE: ParentWindowWillClose appears to have been removed because it was never
-        /// actually implemented.
-        /// browser->ParentWindowWillClose();
+        // Notify the browser that the parent window is about to close.
+        // NOTE: ParentWindowWillClose appears to have been removed because it was never
+        // actually implemented.
+        // browser->ParentWindowWillClose();
         // Set a flag to indicate that the window close should be allowed.
-        m_bIsClosing = true;
         qDebug() << "CEF closing step 6 a: is closing: " << IsClosing();
-#ifdef WIN32
-        // Maybe to CsoundQt?
-        //::DestroyWindow(browser->GetHost()->GetWindowHandle());
-#endif
+        m_bIsClosing = true;
     }
     // Allow the close. For windowed browsers this will result in the OS close
     // event being sent.
     qDebug() << "CEF closing step 6 b: is closing: " << IsClosing();
-    return true;
+    return false;
 }
 
 void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
@@ -252,7 +248,7 @@ void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
     REQUIRE_UI_THREAD();
     qDebug() << "browser->GetIdentifier():" << browser->GetIdentifier();
     if (m_BrowserId == browser->GetIdentifier()) {
-        // Free the browser pointer so that the browser can be destroyed
+        // Free the browser pointer so that the browser can be destroyed.
         m_Browser = NULL;
         qDebug() << "CEF closing step 10.";
     } else if (browser->IsPopup()) {
@@ -273,7 +269,10 @@ void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
     if (--m_BrowserCount == 0) {
         m_bIsClosing = true;
         qDebug() << __FUNCTION__ << "m_BrowserCount:" << m_BrowserCount;
-        //NotifyAllBrowserClosed();
+        //::DestroyWindow(browser->GetHost()->GetWindowHandle());
+        CefQuitMessageLoop();
+        CefShutdown();
+        qDebug() << "CEF closing step 11.";
         //wait_for_browsers_to_close.wakeAll();
 
     }

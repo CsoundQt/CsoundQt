@@ -332,7 +332,8 @@ void CsoundQt::changePage(int index)
     // Remember this is called when opening, closing or switching tabs (including loading).
     // First thing to do is blank the HTML page to prevent misfired API calls.
 #ifdef QCS_HTML5
-    //m_html5Display->stop();
+    /// MKG uncommented next line.
+    csoundHtmlView->stop();
 #endif
     if (index < 0) { // No tabs left
         qDebug() << "CsoundQt::changePage index < 0";
@@ -452,6 +453,19 @@ void CsoundQt::statusBarMessage(QString message)
 void CsoundQt::closeEvent(QCloseEvent *event)
 {
     qDebug() << __FUNCTION__;
+#ifdef QCS_HTML5
+    {
+        QMutexLocker locker(&closemutex);
+        if (!csoundHtmlView->webView->CloseBrowser()) {
+            event->ignore();
+            qDebug() << "CEF closing step 2 b: is closing:" << csoundHtmlView->webView->qcef_client_handler->IsClosing();
+            return;
+        }
+    }
+    event->accept();
+    qDebug() << "CEF closing step 8: is closing:" << csoundHtmlView->webView->qcef_client_handler->IsClosing();
+    //csoundHtmlView->close();
+#endif
     m_closing = true;
     this->showNormal();  // Don't store full screen size in preferences
     qApp->processEvents();
@@ -468,18 +482,18 @@ void CsoundQt::closeEvent(QCloseEvent *event)
 		showVirtualKeyboard(false);
 	}
 #endif
+    // These two give faster shutdown times as the panels don't have to be called up as the tabs close
     showWidgetsAct->setChecked(false);
-    showLiveEventsAct->setChecked(false); // These two give faster shutdown times as the panels don't have to be called up as the tabs close
-//#if defined(QCS_HTML5) // this causes non-html5 build not to exit cleanly completely. Commanted out for now
-    // This would crash by loading an invalid Web page. Not doing this doesn't
-    // seem to have harmful side effects.
+    showLiveEventsAct->setChecked(false);
+// Using this block this causes HTML5 performance to leave a zombie, not using it causes a crash on exit.
+#if !defined(QCS_HTML5)
     while (!documentPages.isEmpty()) {
         if (!closeTab(true)) { // Don't ask for closing app
             event->ignore();
             return;
         }
     }
-//#endif
+#endif
     foreach (QString tempFile, tempScriptFiles) {
         QDir().remove(tempFile);
     }
@@ -496,23 +510,9 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     m_console->close();
     documentTabs->close();
     m_console->close();
-#ifdef QCS_HTML5
-    {
-        /// This call is crashing, we don't see step 2 b. Need critical section?
-		QMutexLocker locker(&closemutex);
-        csoundHtmlView->close();
-        if (!csoundHtmlView->webView->qcef_client_handler->IsClosing()) {
-            event->ignore();
-            qDebug() << "CEF closing step 2 b 1: is closing:" << csoundHtmlView->webView->qcef_client_handler->IsClosing();
-            return;
-        }
-    }
-    qDebug() << "CEF closing step 8: is closing:" << csoundHtmlView->webView->qcef_client_handler->IsClosing();
-#endif
     delete m_opcodeTree;
     m_opcodeTree = 0;
     close();
-    event->accept();
     qDebug() << "CEF closing step 9.";
 }
 
@@ -1437,7 +1437,8 @@ void CsoundQt::play(bool realtime, int index)
 {
     qDebug() << "CsoundQt::play()...";
 #ifdef QCS_HTML5
-    // csoundHtmlView->stop();
+    /// MKG uncommented next line:
+    csoundHtmlView->stop();
 #endif
     // TODO make csound pause if it is already running
     int oldPage = curPage;

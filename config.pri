@@ -222,7 +222,7 @@ exists (src/res/linux/QuteApp_d) :CONFIG += quteapp_d
 html5 {
 message ("Configuring for HTML5 build.")
 message("All HTML5 configuration is via QMake variable CEF_HOME.")
-message("This points to the installation directory, not the source directory.")
+message("This points to the installation directory of CEF, not the source directory.")
 
 CEF_INCLUDE_DIR = $${CEF_HOME}
 debug {
@@ -239,7 +239,6 @@ INCLUDEPATH += $${CEF_INCLUDE_DIR}
 LIBS += $${CEF_LIB}
 LIBS += $${CEF_WRAPPER_LIB}
 DEFINES += QCS_HTML5
-#DEFINES += CEF_USE_SANDBOX
 LIBS += user32.lib
 
 win32-msvc2013:QMAKE_CXXFLAGS += -ID:\\msys\\local\\include -DSUB_PROCESS_DISABLED=1 /Zi
