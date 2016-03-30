@@ -221,12 +221,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QString index = docDir + QString("/index.html");
     QStringList possibleDirectories;
 #ifdef Q_OS_LINUX
-        possibleDirectories << "/usr/share/doc/csound-manual/html/" << "/usr/share/doc/csound-doc/html/";
+        possibleDirectories  << "/usr/share/doc/csound-manual/html/" << "/usr/share/doc/csound-doc/html/";
 #endif
 #ifdef Q_OS_WIN
         QString programFilesPath = QDir::fromNativeSeparators(getenv("PROGRAMFILES"));
         QString programFilesPathx86 = QDir::fromNativeSeparators(getenv("PROGRAMFILES(X86)"));
-        possibleDirectories << programFilesPath + "/Csound6/doc/manual/" << programFilesPathx86 + "/Csound6/doc/manual/";
+        possibleDirectories << initialDir +"/doc/manual/" << programFilesPath + "/Csound6/doc/manual/" << programFilesPathx86 + "/Csound6/doc/manual/" <<  programFilesPath + "/Csound6_x64/doc/manual/";
 #endif
 #ifdef Q_OS_MAC
      possibleDirectories <<  initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/") <<  "/Library/Frameworks/CsoundLib64.framework/Resources/Manual/";
