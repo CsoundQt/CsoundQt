@@ -138,8 +138,9 @@ isEmpty(RTMIDI_DIR) {
             break()
         }
     }
+    message(Building with RtMidi support.)
 }
-!rtmidi: message(Not building RtMidi support)
+!rtmidi: message(Not building with RtMidi support.)
 }
 win32 {
     CSOUND_INCLUDE_DIR = $$replace(CSOUND_INCLUDE_DIR, \\\\, /)
@@ -206,7 +207,7 @@ exists (src/res/windows/QuteApp_f.exe) :CONFIG += quteapp_f
 exists (src/res/windows/QuteApp_d.exe) :CONFIG += quteapp_d
 }
 unix {
-    macx {
+    macx  {
 # Nothing here as it's not saved in the qrc in OS X but inside the app bundle
     }
     else {
