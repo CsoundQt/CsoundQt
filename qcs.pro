@@ -19,12 +19,12 @@
 # SHOULD work for all the listed platforms and architectures!
 # On Windows, HTML5 requires that CsoundQt be built with Microsoft Visual C++.
 # Copy csPerfThread.hpp and csPerfThread from Csound into the CsoundQt src
-# directory. Use Microsoft Visual Studio to build CEF using cefclient2010.sln,
+# directory. Use Microsoft Visual Studio to build CEF,
 # and run the client to make sure it works.
 # Then follow instructions to REBUILD the wrapper library for multithreaded
 # DLLs (used by the Qt SDK and thus by CsoundQt, compiler flag /MD) here:
 # https://bitbucket.org/chromiumembedded/cef/wiki/LinkingDifferentRunTimeLibraries.md.
-# Then, define a Windows environment variahle CEF_HOME to point to the root
+# Then, define a QMake variahle CEF_HOME to point to the root
 # directory of your CEF binaries, and configure the CsoundQt build with
 # CONFIG += html5. Finally, you must copy all the stuff required by CEF
 # (paks, dlls, the wrapper dll) to the Csound bin directory as specified in the
@@ -184,7 +184,6 @@ unix:!macx {
 
 # for OSX add Scripts and Examples to be bundle in Contents->Resources
 macx {
-    message("Mac install section")
     pythonqt {
         scripts.path = Contents/Resources
         scripts.files = src/Scripts
@@ -195,4 +194,26 @@ macx {
     examples.files += "src/Examples/McCurdy Collection"
     examples.files += "src/Examples/Stria Synth"
     QMAKE_BUNDLE_DATA += examples
+
+    # EXPERIMENTAL INSTALL instructions for making bundle (ie make install)
+    first.path = $$PWD
+    first.commands = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML # first deployment
+    INSTALLS += first
+
+    cocoa.path = $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/PlugIns/platforms # fix missing plugins (with qt 5.4.2 at least)
+    cocoa.files =  $$[QT_INSTALL_PREFIX]/plugins/platforms/libqcocoa.dylib
+
+    printsupport.path =  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/PlugIns/printsupport
+    printsupport.files =  $$[QT_INSTALL_PREFIX]/plugins/printsupport/libcocoaprintersupport.dylib
+
+    pythonqt {
+        pythonqt.path = $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks
+        pythonqt.files = $${PYTHONQT_LIB_DIR}/libPythonQt_QtAll.1.dylib $${PYTHONQT_LIB_DIR}/libPythonQt.1.dylib #TODO: use pythonqt/lib dir
+        INSTALLS += pythonqt
+    }
+    final.commands = rm -rf  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework ;
+    final.commands += $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML -dmg
+    final.path = $$PWD
+    INSTALLS += cocoa printsupport final
+
 }
