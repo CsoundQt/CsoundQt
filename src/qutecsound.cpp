@@ -1448,12 +1448,24 @@ void CsoundQt::play(bool realtime, int index)
     if (index < 0 && index >= documentPages.size()) {
         qDebug() << "CsoundQt::play index out of range " << index;
         return;
-    }
+	}
     curPage = index;
-    if (documentPages[curPage]->getFileName().isEmpty()) {
-        QMessageBox::warning(this, tr("CsoundQt"),
-                             tr("This file has not been saved.\nPlease select name and location."));
-        if (!saveAs()) {
+	if (documentPages[curPage]->getFileName().isEmpty()) { // ask for if temporary file or serious work:
+		int answer = QMessageBox::question(this, tr("Run as temporary file?"),
+							  tr("press <b>OK</b>, if you don't care about this file in future.\n Press <b>Save</b>, if you want to save it with given name.\n You can always save the file with <b>Save As</b> also later, if you use the temporary file."), QMessageBox::Ok|QMessageBox::Save|QMessageBox::Cancel );
+		bool saved = false;
+		if (answer==QMessageBox::Save) {
+			saved = saveAs();
+		} else if (answer==QMessageBox::Ok) {
+			QString temporaryPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+			if (!temporaryPath.isEmpty() && saveFile(temporaryPath + "/csoundqt-temp.csd")) {
+				saved = true;
+			} else {
+				QMessageBox::critical(this,tr("Save error"), tr("Could not save temporary file"));
+			}
+
+		}
+		if (!saved) {
             if (curPage == oldPage) {
                 runAct->setChecked(false);
             }
