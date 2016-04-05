@@ -261,7 +261,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(csdocdirToolButton, SIGNAL(clicked()), this, SLOT(browseCsdocdir()));
 	connect(opcodedirToolButton, SIGNAL(clicked()), this, SLOT(browseOpcodedir()));
 	connect(opcodedir64ToolButton, SIGNAL(clicked()), this, SLOT(browseOpcodedir64()));
-//	connect(Opcode6dir64ToolButton, SIGNAL(clicked()), this, SLOT(browseOpcode6dir64()));
+	connect(opcode6dir64ToolButton, SIGNAL(clicked()), this, SLOT(browseOpcode6dir64())); // was commented out - why?
 	connect(sadirToolButton, SIGNAL(clicked()), this, SLOT(browseSadir()));
 	connect(ssdirToolButton, SIGNAL(clicked()), this, SLOT(browseSsdir()));
 	connect(sfdirToolButton, SIGNAL(clicked()), this, SLOT(browseSfdir()));
@@ -477,6 +477,12 @@ void ConfigDialog::browseOpcodedir64()
 {
 	browseDir(m_options->opcodedir64);
 	Opcodedir64LineEdit->setText(m_options->opcodedir64);
+}
+
+void ConfigDialog::browseOpcode6dir64()
+{
+	browseDir(m_options->opcode6dir64);
+	Opcode6dir64LineEdit->setText(m_options->opcode6dir64);
 }
 
 void ConfigDialog::browseSadir()
