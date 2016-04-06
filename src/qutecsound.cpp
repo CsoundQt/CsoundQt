@@ -1883,21 +1883,11 @@ void CsoundQt::setHelpEntry()
     if (text.startsWith('#')) { // For #define and friends
         text.remove(0,1);
     }
-    QString dir = m_options->csdocdir;
-    // For self contained app on OS X
-#ifdef Q_OS_MAC
-    if (dir == "") {
-#ifdef USE_DOUBLE
-        dir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Manual";
-#else
-        dir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Manual";
-#endif
-    }
-#endif
+    QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
     if (text.startsWith("http://")) {
         openExternalBrowser(QUrl(text));
     }
-    else if (dir != "") {
+    else if (!dir.isEmpty()) {
         if (text == "0dbfs")
             text = "Zerodbfs";
         else if (text.contains("CsOptions"))
@@ -2054,8 +2044,9 @@ void CsoundQt::openExternalBrowser(QUrl url)
         }
     }
     else {
-        if (m_options->csdocdir != "") {
-            url = QUrl ("file://" + m_options->csdocdir + "/"
+        QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
+        if (!dir.isEmpty()) {
+            url = QUrl ("file://" + dir + "/"
                         + documentPages[curPage]->wordUnderCursor() + ".html");
             if (!m_options->browser.isEmpty()) {
                 execute(m_options->browser, "\"" + url.toString() + "\"");
