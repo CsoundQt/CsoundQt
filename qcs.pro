@@ -38,7 +38,7 @@
 # CONFIG+=rtmidi    # To build with RtMidi support
 # CONFIG+=record_support
 # CONFIG+=debugger
-# CONFIG+= html5     # To support HTML5 via the <CsHtml5> element in the csd file.
+# CONFIG+=html5     # To support HTML5 via the <CsHtml5> element in the csd file.
 # OS X only OPTIONS:
 # CONFIG+=universal  #  To build i386/ppc version. Default is x86_64
 # CONFIG+=i386  #  To build i386 version. Default is x86_64
@@ -211,9 +211,17 @@ macx {
         pythonqt.files = $${PYTHONQT_LIB_DIR}/libPythonQt_QtAll.1.dylib $${PYTHONQT_LIB_DIR}/libPythonQt.1.dylib #TODO: use pythonqt/lib dir
         INSTALLS += pythonqt
     }
+
+    pythonlinks.path= a$$PWD
+    pythonlinks.commands = install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+    pythonqt {
+        pythonlinks.commands += install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/libPythonQt.1.dylib ;
+        pythonlinks.commands += install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/libPythonQt_QtAll.1.dylib
+    }
+
     final.commands = rm -rf  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework ;
-    final.commands += $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML -dmg
+    final.commands += $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML
     final.path = $$PWD
-    INSTALLS += cocoa printsupport final
+    INSTALLS += cocoa printsupport pythonlinks final
 
 }
