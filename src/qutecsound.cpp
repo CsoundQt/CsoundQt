@@ -3624,7 +3624,7 @@ void CsoundQt::createMenus()
     synthFiles.append(":/examples/Synths/Piano_phase.csd");
     synthFiles.append(":/examples/Synths/String_Phaser.csd");
     synthFiles.append(":/examples/Synths/Waveform_Mix.csd");
-	synthFiles.append(":/examples/Synths/Scanned_Syntehesis_Sandbox.csd");
+	synthFiles.append(":/examples/Synths/Scanned_Synthesis_Sandbox.csd");
     subMenus << synthFiles;
     subMenuNames << "Synths";
 
