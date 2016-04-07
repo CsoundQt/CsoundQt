@@ -20,6 +20,8 @@ nchnls = 2
 
 chn_k "preset",3
 
+giTest filelen "circularstring-128"; to check if it is found, otherwise it will crash scanu in runtime
+
 ; presets: every preset consist  of 5 parameters: fninit, scanning rate,  fnmass,   fncentr,   fn_scanning_trajectory (all of then are table numbers, expect scanning rate)
  
 giPresets ftgen 0,0,256,-2, \
@@ -83,6 +85,7 @@ endin
 
 	
 instr preset_call, 1 ; instrument to read data from presets and start sounding instrument. Can be played also from MIDI keyboard
+
 	iamp = (p4<0) ? p4 :  dbfsamp( ampmidi(0.6)) ; in dbFS (NB!if given by parameter, should be <0, otherwise MIDI velocity does not work)
 	ifreq =  (p5>0) ? cpspch(p5) : cpsmidi() ; given as 8.05 etc. Or from Midi
 	inr = (p6==0) ? chnget:i("preset")-1 : p6-1 ; preset numbers -> index 
@@ -101,7 +104,6 @@ instr preset_call, 1 ; instrument to read data from presets and start sounding i
 endin
 
 instr sound
-		
 	iamp= ampdbfs(p4)	
 	; see manual for scanu about the parameters	 
 	; see below by the table deifinitions for comments
@@ -854,12 +856,18 @@ MA0wDTANMA0wDTANMA0wDTANMA0wDTANMA0wDTANMA0wDTANMA0wDTENMA0
 
 
 
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>0</x>
  <y>0</y>
- <width>469</width>
+ <width>493</width>
  <height>594</height>
  <visible>true</visible>
  <uuid/>
@@ -868,7 +876,7 @@ MA0wDTANMA0wDTANMA0wDTANMA0wDTANMA0wDTANMA0wDTANMA0wDTENMA0
   <g>46</g>
   <b>255</b>
  </bgcolor>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>6</x>
   <y>11</y>
@@ -909,7 +917,7 @@ Have fun!
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBSpinBox" version="2">
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>preset</objectName>
   <x>78</x>
   <y>368</y>
@@ -938,7 +946,7 @@ Have fun!
   <randomizable group="0">false</randomizable>
   <value>30</value>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>13</x>
   <y>368</y>
@@ -967,7 +975,7 @@ Have fun!
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>button3</objectName>
   <x>146</x>
   <y>366</y>
@@ -986,7 +994,7 @@ Have fun!
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject type="BSBGraph" version="2">
+ <bsbObject version="2" type="BSBGraph">
   <objectName/>
   <x>14</x>
   <y>401</y>
@@ -996,7 +1004,7 @@ Have fun!
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>31</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -1006,7 +1014,7 @@ Have fun!
   <modey>lin</modey>
   <all>true</all>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>8</x>
   <y>271</y>
@@ -1037,7 +1045,7 @@ New presets apply to new notes, no infulence during playing time.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>394</x>
   <y>398</y>
@@ -1069,13 +1077,13 @@ New presets apply to new notes, no infulence during playing time.</label>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="tweak parameters of isntr sound" tempo="60.00000000" loop="8.00000000" x="442" y="697" width="655" height="346" visible="false" loopStart="0" loopEnd="0">;          ;           ;           ;           ;amp dbFS          ;init          ;irate          ;massed          ;centering          ;scanning trajectory          ;freq 
+<EventPanel name="tweak parameters of isntr sound" tempo="60.00000000" loop="8.00000000" x="442" y="697" width="655" height="346" visible="false" loopStart="0" loopEnd="0">;             ;              ;              ;              ;amp dbFS             ;init             ;irate             ;massed             ;centering             ;scanning trajectory             ;freq 
 i "sound" 0 5 -10 18 0.43 20 40 72 261 
 i . 1 . . . . . . . 100 
 i . 2 . . . . . . . 200 
 i . 3 . . . . . . . 400 
 i . 4 . . . . . . . 800 
 i . 5 . . . . . . . 2000 </EventPanel>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="120" y="455" width="655" height="346" visible="true" loopStart="0" loopEnd="0">;          ;           ;           ;           ;amp          ;freq          ;preset        ;save file 
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="120" y="455" width="655" height="346" visible="true" loopStart="0" loopEnd="0">;             ;              ;              ;              ;amp             ;freq             ;preset           ;save file 
 i "preset_call" 0 4 -10 8.07 3 0 
 ; viimane oli preset 8    </EventPanel>
