@@ -1532,10 +1532,25 @@ void CsoundQt::play(bool realtime, int index)
                                       QMessageBox::Ok);
                 return;
             }
-            QString csdText = documentPages[curPage]->getBasicText();
-            runFileName1 = csdFile.fileName();
-            csdFile.write(csdText.toLatin1());
-            csdFile.flush();
+			// if example, just copy, since readonly anyway, otherwise get contents from editor. Necessary since examples may contain <CsFileB> section with data
+			if (fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
+				QFile file(fileName);
+				if (file.open(QFile::ReadOnly)) {
+					int result = csdFile.write(file.readAll());
+					file.close();
+					if (result<=0) {
+						qDebug()<< "Failed to copy to example to temporary location";
+						return;
+					}
+				} else {
+					qDebug()<<"Could not open file " << fileName;
+				}
+			} else {
+				QString csdText = documentPages[curPage]->getBasicText();
+				csdFile.write(csdText.toLatin1());
+			}
+			csdFile.flush();
+			runFileName1 = csdFile.fileName();
         }
     }
     else {
