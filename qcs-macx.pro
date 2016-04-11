@@ -5,14 +5,16 @@
 	message(Building CsoundQt for Macintosh OS X.)
 }
 
-!ppc: !x86_64:  {
+i386:  {
 CONFIG += i386
 QMAKE_CXXFLAGS += -arch i386
-}
-universal: {
-QMAKE_CXXFLAGS += -arch x86_64
-CONFIG += x86_64
+} else:universal {
+QMAKE_CXXFLAGS += -arch i386
+CONFIG += i386
 CONFIG += ppc
+} else {
+CONFIG += x86_64
+QMAKE_CXXFLAGS += -arch x86_64
 }
 
 build32: MAC_LIB = CsoundLib

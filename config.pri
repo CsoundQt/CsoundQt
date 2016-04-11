@@ -138,8 +138,9 @@ isEmpty(RTMIDI_DIR) {
             break()
         }
     }
+    message(Building with RtMidi support.)
 }
-!rtmidi: message(Not building RtMidi support)
+!rtmidi: message(Not building with RtMidi support.)
 }
 win32 {
     CSOUND_INCLUDE_DIR = $$replace(CSOUND_INCLUDE_DIR, \\\\, /)
@@ -206,7 +207,7 @@ exists (src/res/windows/QuteApp_f.exe) :CONFIG += quteapp_f
 exists (src/res/windows/QuteApp_d.exe) :CONFIG += quteapp_d
 }
 unix {
-    macx {
+    macx  {
 # Nothing here as it's not saved in the qrc in OS X but inside the app bundle
     }
     else {
@@ -221,25 +222,24 @@ exists (src/res/linux/QuteApp_d) :CONFIG += quteapp_d
 
 html5 {
 message ("Configuring for HTML5 build.")
-message("All HTML5 configuration is via environment variable CEF_HOME.")
-message("This points to the installation directory, not the source directory.")
+message("All HTML5 configuration is via QMake variable CEF_HOME.")
+message("This points to the installation directory of CEF, not the source directory.")
 
-CEF_INCLUDE_DIR = $(CEF_HOME)
+CEF_INCLUDE_DIR = $${CEF_HOME}
 debug {
-CEF_LIB = $$(CEF_HOME)\\Debug\\libcef.lib
-#CEF_LIB += $$(CEF_HOME)\\Debug\\cef_sandbox.lib
-CEF_WRAPPER_LIB = $$(CEF_HOME)\\libcef_dll\\Debug\\libcef_dll_wrapper.lib
+CEF_LIB = $${CEF_HOME}\\Debug\\libcef.lib
+#CEF_LIB += $${CEF_HOME}\\Debug\\cef_sandbox.lib
+CEF_WRAPPER_LIB = $${CEF_HOME}\\libcef_dll\\Debug\\libcef_dll_wrapper.lib
 }
 release {
-CEF_LIB = $$(CEF_HOME)\\Release\\libcef.lib
-#CEF_LIB += $$(CEF_HOME)\\Release\\cef_sandbox.lib
-CEF_WRAPPER_LIB = $$(CEF_HOME)\\libcef_dll\\Release\\libcef_dll_wrapper.lib
+CEF_LIB = $${CEF_HOME}\\Release\\libcef.lib
+#CEF_LIB += $${CEF_HOME}\\Release\\cef_sandbox.lib
+CEF_WRAPPER_LIB = $${CEF_HOME}\\libcef_dll\\Release\\libcef_dll_wrapper.lib
 }
 INCLUDEPATH += $${CEF_INCLUDE_DIR}
 LIBS += $${CEF_LIB}
 LIBS += $${CEF_WRAPPER_LIB}
 DEFINES += QCS_HTML5
-#DEFINES += CEF_USE_SANDBOX
 LIBS += user32.lib
 
 win32-msvc2013:QMAKE_CXXFLAGS += -ID:\\msys\\local\\include -DSUB_PROCESS_DISABLED=1 /Zi

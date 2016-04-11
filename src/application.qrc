@@ -97,7 +97,8 @@
         <file>../examples/Synths/Piano_phase.csd</file>
         <file>../examples/Synths/String_Phaser.csd</file>
         <file>../examples/Synths/Waveform_Mix.csd</file>
-        <file>../examples/Useful/SF_Play_from_buffer.csd</file>
+		<file>../examples/Synths/Scanned_Synthesis_Sandbox.csd</file>
+		<file>../examples/Useful/SF_Play_from_buffer.csd</file>
         <file>../examples/Useful/SF_Play_from_buffer_2.csd</file>
         <file>../examples/Useful/SF_Play_from_HD.csd</file>
         <file>../examples/Useful/SF_Play_from_HD_2.csd</file>

@@ -9,9 +9,9 @@ CONFIG -= debug_and_release debug_and_release_target \
     copy_dir_files precompile_header shared
 
 # Set default paths
-DEFAULT_CSOUND_API_INCLUDE_DIRS = "$$(PROGRAMFILES)\\Csound\\include"
+DEFAULT_CSOUND_API_INCLUDE_DIRS = "$$(PROGRAMFILES)\\Csound6\\include\\csound"
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
-DEFAULT_CSOUND_LIBRARY_DIRS = "$$(PROGRAMFILES)\\Csound\\bin"
+DEFAULT_CSOUND_LIBRARY_DIRS = "$$(PROGRAMFILES)\\Csound6\\bin"
 
 win32-g++:build32: DEFAULT_CSOUND_LIBS = csound32.dll
 win32-g++:build64: DEFAULT_CSOUND_LIBS = csound64.dll

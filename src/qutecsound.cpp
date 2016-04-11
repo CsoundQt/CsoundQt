@@ -216,17 +216,34 @@ CsoundQt::CsoundQt(QStringList fileNames)
         newFile();
     }
 
-    QString index = m_options->csdocdir + QString("/index.html");
-#ifdef Q_OS_MAC
-    if (!QFile::exists(index)) {
-        index = initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/index.html");
-        if (!QFile::exists(index)) {
-            index = "/Library/Frameworks/CsoundLib64.framework/Resources/Manual/index.html";
-        }
-    }
+    // try to find directory for manual, if not set
+    QString docDir = QString(); //m_options->csdocdir;
+    QString index = docDir + QString("/index.html");
+    QStringList possibleDirectories;
+#ifdef Q_OS_LINUX
+        possibleDirectories  << "/usr/share/doc/csound-manual/html/" << "/usr/share/doc/csound-doc/html/";
 #endif
-    helpPanel->docDir = m_options->csdocdir;
-    helpPanel->loadFile(index);
+#ifdef Q_OS_WIN
+        QString programFilesPath = QDir::fromNativeSeparators(getenv("PROGRAMFILES"));
+        QString programFilesPathx86 = QDir::fromNativeSeparators(getenv("PROGRAMFILES(X86)"));
+        possibleDirectories << initialDir +"/doc/manual/" << programFilesPath + "/Csound6/doc/manual/" << programFilesPathx86 + "/Csound6/doc/manual/" <<  programFilesPath + "/Csound6_x64/doc/manual/";
+#endif
+#ifdef Q_OS_MAC
+     possibleDirectories <<  initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/") <<  "/Library/Frameworks/CsoundLib64.framework/Resources/Manual/";
+#endif
+    if (m_options->csdocdir.isEmpty() || !QFile::exists(m_options->csdocdir+"/index.html") ) {
+        foreach (QString dir, possibleDirectories) {
+            if (QFile::exists(dir+"/index.html")) {
+                docDir = dir;
+                qDebug()<<"Found manual in: "<<docDir;
+                break;
+            }
+        }
+    } else {
+        docDir = m_options->csdocdir;
+    }
+    helpPanel->docDir = docDir;
+    helpPanel->loadFile(docDir + "/index.html");
 
     applySettings();
     createQuickRefPdf();
@@ -315,7 +332,8 @@ void CsoundQt::changePage(int index)
     // Remember this is called when opening, closing or switching tabs (including loading).
     // First thing to do is blank the HTML page to prevent misfired API calls.
 #ifdef QCS_HTML5
-    //m_html5Display->stop();
+    /// MKG uncommented next line.
+    csoundHtmlView->stop();
 #endif
     if (index < 0) { // No tabs left
         qDebug() << "CsoundQt::changePage index < 0";
@@ -435,6 +453,19 @@ void CsoundQt::statusBarMessage(QString message)
 void CsoundQt::closeEvent(QCloseEvent *event)
 {
     qDebug() << __FUNCTION__;
+#ifdef QCS_HTML5
+    {
+        QMutexLocker locker(&closemutex);
+        if (!csoundHtmlView->webView->CloseBrowser()) {
+            event->ignore();
+            qDebug() << "CEF closing step 2 b: is closing:" << csoundHtmlView->webView->qcef_client_handler->IsClosing();
+            return;
+        }
+    }
+    event->accept();
+    qDebug() << "CEF closing step 8: is closing:" << csoundHtmlView->webView->qcef_client_handler->IsClosing();
+    //csoundHtmlView->close();
+#endif
     m_closing = true;
     this->showNormal();  // Don't store full screen size in preferences
     qApp->processEvents();
@@ -451,18 +482,18 @@ void CsoundQt::closeEvent(QCloseEvent *event)
 		showVirtualKeyboard(false);
 	}
 #endif
+    // These two give faster shutdown times as the panels don't have to be called up as the tabs close
     showWidgetsAct->setChecked(false);
-    showLiveEventsAct->setChecked(false); // These two give faster shutdown times as the panels don't have to be called up as the tabs close
-//#if defined(QCS_HTML5) // this causes non-html5 build not to exit cleanly completely. Commanted out for now
-    // This would crash by loading an invalid Web page. Not doing this doesn't
-    // seem to have harmful side effects.
+    showLiveEventsAct->setChecked(false);
+// Using this block this causes HTML5 performance to leave a zombie, not using it causes a crash on exit.
+#if !defined(QCS_HTML5)
     while (!documentPages.isEmpty()) {
         if (!closeTab(true)) { // Don't ask for closing app
             event->ignore();
             return;
         }
     }
-//#endif
+#endif
     foreach (QString tempFile, tempScriptFiles) {
         QDir().remove(tempFile);
     }
@@ -479,23 +510,9 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     m_console->close();
     documentTabs->close();
     m_console->close();
-#ifdef QCS_HTML5
-    {
-        /// This call is crashing, we don't see step 2 b. Need critical section?
-		QMutexLocker locker(&closemutex);
-        csoundHtmlView->close();
-        if (!csoundHtmlView->webView->qcef_client_handler->IsClosing()) {
-            event->ignore();
-            qDebug() << "CEF closing step 2 b 1: is closing:" << csoundHtmlView->webView->qcef_client_handler->IsClosing();
-            return;
-        }
-    }
-    qDebug() << "CEF closing step 8: is closing:" << csoundHtmlView->webView->qcef_client_handler->IsClosing();
-#endif
     delete m_opcodeTree;
     m_opcodeTree = 0;
     close();
-    event->accept();
     qDebug() << "CEF closing step 9.";
 }
 
@@ -1420,7 +1437,8 @@ void CsoundQt::play(bool realtime, int index)
 {
     qDebug() << "CsoundQt::play()...";
 #ifdef QCS_HTML5
-    // csoundHtmlView->stop();
+    /// MKG uncommented next line:
+    csoundHtmlView->stop();
 #endif
     // TODO make csound pause if it is already running
     int oldPage = curPage;
@@ -1430,12 +1448,24 @@ void CsoundQt::play(bool realtime, int index)
     if (index < 0 && index >= documentPages.size()) {
         qDebug() << "CsoundQt::play index out of range " << index;
         return;
-    }
+	}
     curPage = index;
-    if (documentPages[curPage]->getFileName().isEmpty()) {
-        QMessageBox::warning(this, tr("CsoundQt"),
-                             tr("This file has not been saved.\nPlease select name and location."));
-        if (!saveAs()) {
+	if (documentPages[curPage]->getFileName().isEmpty()) { // ask for if temporary file or serious work:
+		int answer = QMessageBox::question(this, tr("Run as temporary file?"),
+							  tr("press <b>OK</b>, if you don't care about this file in future.\n Press <b>Save</b>, if you want to save it with given name.\n You can always save the file with <b>Save As</b> also later, if you use the temporary file."), QMessageBox::Ok|QMessageBox::Save|QMessageBox::Cancel );
+		bool saved = false;
+		if (answer==QMessageBox::Save) {
+			saved = saveAs();
+		} else if (answer==QMessageBox::Ok) {
+			QString temporaryPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+			if (!temporaryPath.isEmpty() && saveFile(temporaryPath + "/csoundqt-temp.csd")) {
+				saved = true;
+			} else {
+				QMessageBox::critical(this,tr("Save error"), tr("Could not save temporary file"));
+			}
+
+		}
+		if (!saved) {
             if (curPage == oldPage) {
                 runAct->setChecked(false);
             }
@@ -1502,10 +1532,25 @@ void CsoundQt::play(bool realtime, int index)
                                       QMessageBox::Ok);
                 return;
             }
-            QString csdText = documentPages[curPage]->getBasicText();
-            runFileName1 = csdFile.fileName();
-            csdFile.write(csdText.toLatin1());
-            csdFile.flush();
+			// if example, just copy, since readonly anyway, otherwise get contents from editor. Necessary since examples may contain <CsFileB> section with data
+			if (fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
+				QFile file(fileName);
+				if (file.open(QFile::ReadOnly)) {
+					int result = csdFile.write(file.readAll());
+					file.close();
+					if (result<=0) {
+						qDebug()<< "Failed to copy to example to temporary location";
+						return;
+					}
+				} else {
+					qDebug()<<"Could not open file " << fileName;
+				}
+			} else {
+				QString csdText = documentPages[curPage]->getBasicText();
+				csdFile.write(csdText.toLatin1());
+			}
+			csdFile.flush();
+			runFileName1 = csdFile.fileName();
         }
     }
     else {
@@ -1853,21 +1898,11 @@ void CsoundQt::setHelpEntry()
     if (text.startsWith('#')) { // For #define and friends
         text.remove(0,1);
     }
-    QString dir = m_options->csdocdir;
-    // For self contained app on OS X
-#ifdef Q_OS_MAC
-    if (dir == "") {
-#ifdef USE_DOUBLE
-        dir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Versions/5.2/Resources/Manual";
-#else
-        dir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib.framework/Versions/5.2/Resources/Manual";
-#endif
-    }
-#endif
+    QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
     if (text.startsWith("http://")) {
         openExternalBrowser(QUrl(text));
     }
-    else if (dir != "") {
+    else if (!dir.isEmpty()) {
         if (text == "0dbfs")
             text = "Zerodbfs";
         else if (text.contains("CsOptions"))
@@ -2024,8 +2059,9 @@ void CsoundQt::openExternalBrowser(QUrl url)
         }
     }
     else {
-        if (m_options->csdocdir != "") {
-            url = QUrl ("file://" + m_options->csdocdir + "/"
+        QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
+        if (!dir.isEmpty()) {
+            url = QUrl ("file://" + dir + "/"
                         + documentPages[curPage]->wordUnderCursor() + ".html");
             if (!m_options->browser.isEmpty()) {
                 execute(m_options->browser, "\"" + url.toString() + "\"");
@@ -2137,7 +2173,7 @@ void CsoundQt::about()
     About *msgBox = new About(this);
     msgBox->setWindowFlags(msgBox->windowFlags() | Qt::FramelessWindowHint);
     QString text ="<h1>";
-    text += tr("by: Andres Cabrera and others") +"</h1><h2>",
+    text += tr("by: Andres Cabrera, Tarmo Johannes and others") +"</h1><h2>",
             text += tr("Version %1").arg(QCS_VERSION) + "</h2><h2>";
     text += tr("Released under the LGPLv2 or GPLv3") + "</h2>";
     text += tr("Using Csound version:") + QString::number(csoundGetVersion()) + " ";
@@ -2163,16 +2199,16 @@ void CsoundQt::about()
 
     text +=tr("Mailing Lists:");
     text += "<br /><a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-users\">Join/Read CsoundQt Mailing List</a><br />";
+    	text += "<a href=\"http://lists.sourceforge.net/lists/listinfo/qutecsound-devel\">Join/Read CsoundQt Developer List</a><br />";
 	text += "<a href=\"https://listserv.heanet.ie/cgi-bin/wa?A0=CSOUND\">Join/Read Csound Mailing List</a><br />";
 	text += "<a href=\"https://listserv.heanet.ie/cgi-bin/wa?A0=CSOUND-DEV\"> Join/Read Csound Developer List</a><br />";
 
     text += "<br />"+ tr("Other Resources:") + "<br />";
 	text += "<a href=\"http://csound.github.io\">Csound official homepage</a><br />";
-	text += "<a href=\"http://www.csounds.com\">cSounds.com</a><br />";
 	text += "<a href=\"http://www.csoundjournal.com/\">Csound Journal</a><br />";
     text += "<a href=\"http://csound.noisepages.com/\">The Csound Blog</a><br />";
     text +=  "<br />" + tr("Supported by:") +"<br />";
-    text +=  "<a href=\"http://www.incontri.hmt-hannover.de/\">Incontri - HMT Hannover</a><br />";
+    text +=  "<a href=\"http://www.incontri.hmtm-hannover.de/\">Incontri - HMTM Hannover</a><br />";
     text += "<a href=\"http://sourceforge.net/project/project_donations.php?group_id=227265\">";
     text +=  tr("And other generous users.") + "</a><br />";
 
@@ -3403,6 +3439,11 @@ QString CsoundQt::getExamplePath(QString dir)
     QString examplePath;
 #ifdef Q_OS_WIN32
     examplePath = qApp->applicationDirPath() + "/Examples/" + dir;
+    if (!QDir(examplePath).exists()) {
+        QString programFilesPath= QDir::fromNativeSeparators(getenv("PROGRAMFILES"));
+        examplePath =  programFilesPath + "/Csound6/bin/Examples/" + dir; // NB! with csound6.0.6 no Floss/mCcurdy/Stria examples there. Copy manually
+        //qDebug()<<"Windows examplepath: "<<examplePath;
+    }
 #endif
 #ifdef Q_OS_MAC
     examplePath = qApp->applicationDirPath() + "/../Resources/" + dir;
@@ -3419,7 +3460,10 @@ QString CsoundQt::getExamplePath(QString dir)
     if (!QDir(examplePath).exists()) { // for out of tree builds
         examplePath = qApp->applicationDirPath() + "/../../qutecsound/src/Examples/" + dir;
     }
-    if (!QDir(examplePath).exists()) {
+	if (!QDir(examplePath).exists()) {
+		examplePath = "~/.local/share/qutecsound/Examples/" + dir; // UNTESTED! if installed to HOME dir
+	}
+	if (!QDir(examplePath).exists()) {
         examplePath = "/usr/share/qutecsound/Examples/" + dir;
     }
 #endif
@@ -3445,7 +3489,6 @@ void CsoundQt::createMenus()
     fileMenu->addAction(saveNoWidgetsAct);
     //  fileMenu->addAction(createAppAct);
     fileMenu->addAction(reloadAct);
-    fileMenu->addAction(cabbageAct);
     fileMenu->addAction(closeTabAct);
     fileMenu->addAction(printAct);
     fileMenu->addAction(infoAct);
@@ -3596,6 +3639,7 @@ void CsoundQt::createMenus()
     synthFiles.append(":/examples/Synths/Piano_phase.csd");
     synthFiles.append(":/examples/Synths/String_Phaser.csd");
     synthFiles.append(":/examples/Synths/Waveform_Mix.csd");
+	synthFiles.append(":/examples/Synths/Scanned_Synthesis_Sandbox.csd");
     subMenus << synthFiles;
     subMenuNames << "Synths";
 

@@ -30,6 +30,7 @@ public:
     // otherwise different browsers fight for the display and
     // mess up the layout. Does this cause problems on exit?
     CefRefPtr<ClientHandler> qcef_client_handler;
+    virtual bool CloseBrowser();
 public slots:
     void back();
     void forward();
@@ -44,7 +45,6 @@ signals:
     void jsMessage(const QString& name, const QVariantList& args);
 protected:
     virtual void resizeEvent(QResizeEvent*);
-    virtual void closeEvent(QCloseEvent*);
     virtual void showEvent(QShowEvent*);
     virtual void customEvent(QEvent*);
     virtual void OnAddressChange(const QString& url);

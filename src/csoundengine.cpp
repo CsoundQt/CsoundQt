@@ -878,9 +878,9 @@ int CsoundEngine::runCsound()
 
 #ifdef QCS_RTMIDI
     if (!m_options.useCsoundMidi) {
-        csoundSetOption(ud->csound, "-+rtmidi=hostbased");
-        csoundSetOption(ud->csound, "-M0");
-        csoundSetOption(ud->csound, "-Q0");
+        csoundSetOption(ud->csound, const_cast<char *>("-+rtmidi=hostbased"));
+        csoundSetOption(ud->csound, const_cast<char *>("-M0"));
+        csoundSetOption(ud->csound, const_cast<char *>("-Q0"));
     }
 #endif
 

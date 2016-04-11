@@ -66,11 +66,14 @@ Highlighter::Highlighter(QTextDocument *parent)
 				<< "<MacOptions>" << "</MacOptions>"
 				<< "<MacGUI>" << "</MacGUI>"
 				<< "<csLADSPA>" << "</csLADSPA>"
-				<< "<Cabbage>" << "</Cabbage>";
+                << "<Cabbage>" << "</Cabbage>"
+				<< "<CsHtml5>" << "</CsHtml5>"
+				<< "<CsFileB>" << "</CsFileB>"    ;
 	instFormat.setForeground(QColor("purple"));
 	instFormat.setFontWeight(QFont::Bold);
 	instPatterns << "instr" << "endin" << "opcode" << "endop";
 	headerPatterns << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs";
+	keywordPatterns << "do" << "od";
 	csdtagFormat.setForeground(QColor("brown"));
 	csdtagFormat.setFontWeight(QFont::Bold);
 	opcodeFormat.setForeground(QColor("blue"));
@@ -215,12 +218,19 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 		setFormat(macroIndex, text.size() - macroIndex, macroDefineFormat);
 		commentIndex = macroIndex;
 	}
-	QRegExp expression("\\b+[\\w:]+\\b");
+	QRegExp expression("\\b+[\\w:]+\\b"); // how to find, if macro name, starts with '$'?
 	int index = text.indexOf(expression, 0);
 	int length = expression.matchedLength();
+
 	while (index >= 0 && index < commentIndex) {
 		int wordStart = index;
 		int wordEnd = wordStart + length;
+		if (index>0 && text.at(index-1)=='$') { // check if macro name - replacement for regexp solution which I could not find
+			wordStart--;
+			length++;
+			//qDebug()<<"Found macro ";
+			setFormat(wordStart, wordEnd - wordStart, macroDefineFormat);
+		}
 		wordEnd = (wordEnd > 0 ? wordEnd : text.size());
 		QString word = text.mid(wordStart, length);
 //		qDebug() << "word: " << word;
@@ -229,12 +239,16 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 		}
 		if (instPatterns.contains(word)) {
 			setFormat(wordStart, wordEnd - wordStart, instFormat);
+			break; // was: return. FOr any case, to go through lines after while loop
 		}
 		else if (tagPatterns.contains("<" + word + ">") && wordStart > 0) {
 			setFormat(wordStart - (text[wordStart - 1] == '/' ?  2 : 1), wordEnd - wordStart + (text[wordStart - 1] == '/' ?  3 : 2), csdtagFormat);
 		}
 		else if (headerPatterns.contains(word)) {
 			setFormat(wordStart, wordEnd - wordStart, csdtagFormat);
+		}
+		else if (keywordPatterns.contains(word)) {
+			setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
 		}
 		else if (word.contains(":")) {
 			QStringList parts = word.split(":");

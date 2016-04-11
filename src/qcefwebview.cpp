@@ -113,20 +113,39 @@ void QCefWebView::resizeEvent(QResizeEvent* e) {
     }
 }
 
-void QCefWebView::closeEvent(QCloseEvent* e) {
+/* CEF CLOSING STEPS
+ * See also: https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage#markdown-header-browser-life-span
+ *
+ * I'm not sure if these steps really apply here.
+ * 1. User clicks the window close button which sends an OS close notification (e.g. WM_CLOSE on Windows,
+ *    performClose: on OS-X and "delete_event" on Linux).
+ * 2. Application's top-level window receives the close notification:
+ *    A. Calls CefBrowserHost::CloseBrowser(false).
+ *    B. Cancels the window close.
+ * 3. JavaScript 'onbeforeunload' handler executes and shows the close confirmation dialog (which can be
+ *    overridden via CefJSDialogHandler::OnBeforeUnloadDialog()).
+ * 4. User approves the close.
+ * 5. JavaScript 'onunload' handler executes.
+ * 6. Application's DoClose() handler is called. Application will:
+ *    A. Set a flag to indicate that the next close attempt will be allowed.
+ *    B. Return false.
+ * 7. CEF sends an OS close notification.
+ * 8. Application's top-level window receives the OS close notification and allows the window to close based
+ *    on the flag from #6B.
+ * 9. Browser OS window is destroyed.
+ * 10. Application's CefLifeSpanHandler::OnBeforeClose() handler is called and the browser object is destroyed.
+ * 11. Application exits by calling CefQuitMessageLoop() if no other browsers exist (does not apply here).
+ */
+bool QCefWebView::CloseBrowser() {
     qDebug() << __FUNCTION__ << __LINE__;
     if (qcef_client_handler.get() && !qcef_client_handler->IsClosing()) {
         CefRefPtr<CefBrowser> browser = qcef_client_handler->GetBrowser();
-        if (browser.get()) {
             browser->GetHost()->CloseBrowser(false);
             qDebug() << "CEF closing step 2 a: is closing:" << qcef_client_handler->IsClosing();
-            e->ignore();
-            qDebug() << "CEF closing step 2 b: is closing:" << qcef_client_handler->IsClosing();
-            return;
-        }
+            return false;
     }
     qDebug() << "CEF closing step 8: is closing:" << qcef_client_handler->IsClosing();
-    e->accept();
+    return true;
 }
 
 void QCefWebView::showEvent(QShowEvent* e) {

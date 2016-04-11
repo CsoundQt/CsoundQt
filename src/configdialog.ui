@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>655</width>
-    <height>704</height>
+    <width>713</width>
+    <height>868</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,7 +73,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -1446,6 +1446,16 @@
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
            <layout class="QGridLayout" name="environLayout">
+            <item row="12" column="2">
+             <widget class="QLineEdit" name="csoundExecutableLineEdit">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="14" column="2">
+             <widget class="QLineEdit" name="sdkLineEdit"/>
+            </item>
             <item row="8" column="2">
              <widget class="QLineEdit" name="rawWaveLineEdit"/>
             </item>
@@ -1456,13 +1466,6 @@
               </property>
               <property name="checked">
                <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="12" column="2">
-             <widget class="QLineEdit" name="csoundExecutableLineEdit">
-              <property name="text">
-               <string/>
               </property>
              </widget>
             </item>
@@ -1480,8 +1483,8 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="2">
-             <widget class="QLineEdit" name="Opcode6dir64LineEdit"/>
+            <item row="15" column="2">
+             <widget class="QLineEdit" name="templateLineEdit"/>
             </item>
             <item row="2" column="0">
              <widget class="QCheckBox" name="Opcodedir64CheckBox">
@@ -1496,18 +1499,11 @@
               </property>
              </widget>
             </item>
-            <item row="15" column="2">
-             <widget class="QLineEdit" name="templateLineEdit"/>
+            <item row="3" column="2">
+             <widget class="QLineEdit" name="Opcode6dir64LineEdit"/>
             </item>
             <item row="2" column="2">
              <widget class="QLineEdit" name="Opcodedir64LineEdit"/>
-            </item>
-            <item row="12" column="0">
-             <widget class="QLabel" name="label_36">
-              <property name="text">
-               <string>Csound Executable</string>
-              </property>
-             </widget>
             </item>
             <item row="3" column="0">
              <widget class="QCheckBox" name="Opcode6dir64CheckBox">
@@ -1526,10 +1522,10 @@
               </property>
              </widget>
             </item>
-            <item row="10" column="0">
-             <widget class="QLabel" name="pythonDirlabel">
+            <item row="12" column="0">
+             <widget class="QLabel" name="label_36">
               <property name="text">
-               <string>Python Script Dir </string>
+               <string>Csound Executable</string>
               </property>
              </widget>
             </item>
@@ -1540,10 +1536,10 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="3">
-             <widget class="QToolButton" name="opcodedir64ToolButton">
+            <item row="10" column="0">
+             <widget class="QLabel" name="pythonDirlabel">
               <property name="text">
-               <string>...</string>
+               <string>Python Script Dir </string>
               </property>
              </widget>
             </item>
@@ -1582,16 +1578,6 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_7">
-              <property name="toolTip">
-               <string>Selects the location of the html documentation</string>
-              </property>
-              <property name="text">
-               <string>Html Doc Directory</string>
-              </property>
-             </widget>
-            </item>
             <item row="9" column="3">
              <widget class="QToolButton" name="favoriteToolButton">
               <property name="text">
@@ -1603,6 +1589,16 @@
              <widget class="QLineEdit" name="favoriteLineEdit">
               <property name="enabled">
                <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_7">
+              <property name="toolTip">
+               <string>Selects the location of the html documentation</string>
+              </property>
+              <property name="text">
+               <string>Html Doc Directory</string>
               </property>
              </widget>
             </item>
@@ -1661,19 +1657,6 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="0">
-             <widget class="QCheckBox" name="SadirCheckBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>SADIR</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="0">
              <widget class="QCheckBox" name="OpcodedirCheckBox">
               <property name="toolTip">
@@ -1681,6 +1664,19 @@
               </property>
               <property name="text">
                <string>OPCODEDIR</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QCheckBox" name="SadirCheckBox">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="text">
+               <string>SADIR</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -1774,9 +1770,6 @@
               </property>
              </widget>
             </item>
-            <item row="14" column="2">
-             <widget class="QLineEdit" name="sdkLineEdit"/>
-            </item>
             <item row="14" column="3">
              <widget class="QToolButton" name="sdkToolButton">
               <property name="text">
@@ -1786,6 +1779,20 @@
             </item>
             <item row="15" column="3">
              <widget class="QToolButton" name="templateToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QToolButton" name="opcodedir64ToolButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="3">
+             <widget class="QToolButton" name="opcode6dir64ToolButton">
               <property name="text">
                <string>...</string>
               </property>
