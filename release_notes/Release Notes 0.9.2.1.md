@@ -13,7 +13,10 @@ The source and upcoming binaries can be downloaded from: <https://github.com/Cso
 
 >	`$ make install`
 
+
 *NB! Csound framework is not included in the bundle (to avoid conflicts with system installation) -  Csound must be installed separately!*
+
+* Johannes Schütt has prepared also a script that will make a nice installation bundle on OSX ( *bin/build-deploy-csoundqt-osx.sh* )
 
 * **Scanned Synthesis Sandbox** - a demo and tool to learn and try out scanned synthesis using *scanu* opcode. Placed in menu Examples -> Synths.
 
