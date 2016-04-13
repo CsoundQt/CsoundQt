@@ -31,6 +31,7 @@
 #endif
 #else
 #include <QtGui>
+#include <QDesktopServices>
 #endif
 #include <QLocalServer>
 #include <QLocalSocket>

@@ -1457,7 +1457,11 @@ void CsoundQt::play(bool realtime, int index)
 		if (answer==QMessageBox::Save) {
 			saved = saveAs();
 		} else if (answer==QMessageBox::Ok) {
+#ifdef USE_QT5
 			QString temporaryPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+#else
+			QString temporaryPath = QDesktopServices::storageLocation(QDesktopServices::TempLocation);
+#endif
 			if (!temporaryPath.isEmpty() && saveFile(temporaryPath + "/csoundqt-temp.csd")) {
 				saved = true;
 			} else {
