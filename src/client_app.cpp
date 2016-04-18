@@ -121,6 +121,22 @@ public:
             retval = CefV8Value::CreateInt(nchnls);
             return true;
         }
+        if (name == "scoreEvent" && arguments.size() == 1) {
+            int result = 0;
+            std::string opcode_ = arguments.at(0)->GetStringValue().ToString();
+            char opcode = opcode_[0];
+            CefRefPtr<CefV8Value> javascript_pfields = arguments.at(1);
+            int javascript_pfields_count = javascript_pfields->GetArrayLength();
+            std::vector<MYFLT> pfields;
+            for(int i = 0; i < javascript_pfields_count; i++)
+            {
+                CefRefPtr<CefV8Value> element = javascript_pfields->GetValue(i);
+                pfields.push_back(element->GetDoubleValue());
+            }
+            csoundScoreEvent(csound, opcode, pfields.data(), pfields.size());
+            retval = CefV8Value::CreateInt(0);
+            return true;
+        }
         //exception = "Invalid method arguments.";
         return false;
     }
@@ -341,6 +357,9 @@ void ClientApp::OnContextCreated(CefRefPtr<CefBrowser> browser,
                       V8_PROPERTY_ATTRIBUTE_NONE);
     jcsound->SetValue("isPlaying",
                       CefV8Value::CreateFunction("isPlaying", this),
+                      V8_PROPERTY_ATTRIBUTE_NONE);
+    jcsound->SetValue("scoreEvent",
+                      CefV8Value::CreateFunction("scoreEvent", this),
                       V8_PROPERTY_ATTRIBUTE_NONE);
     std::cout << "app:" << this << std::endl;
     RenderDelegateSet::iterator it = render_delegates_.begin();
