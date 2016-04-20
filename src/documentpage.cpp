@@ -298,7 +298,11 @@ QString DocumentPage::getFullText()
 	}
 	if (m_lineEnding == 1) { // Windows line ending mode
 		fullText.replace("\n", "\r\n");
-	}
+        fullText.replace("\r\r\n", "\r\n");
+    } else {
+        fullText.replace("\r\r\n", "\r\n");
+        fullText.replace("\r\n", "\n");
+    }
 	return fullText;
 }
 

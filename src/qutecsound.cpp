@@ -2432,7 +2432,7 @@ void CsoundQt::runUtility(QString flags)
         script += "rm $0\n";
 #endif
         QFile file(SCRIPT_NAME);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        if (!file.open(QIODevice::WriteOnly))
             return;
 
         QTextStream out(&file);
@@ -4845,7 +4845,7 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
         fillFileMenu();
     }
     QFile file(fileName);
-    if (!file.open(QFile::WriteOnly | QFile::Text)) {
+    if (!file.open(QFile::WriteOnly)) {
         QMessageBox::warning(this, tr("Application"),
                              tr("Cannot write file %1:\n%2.")
                              .arg(fileName)
