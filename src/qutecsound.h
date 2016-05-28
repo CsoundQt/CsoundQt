@@ -142,6 +142,7 @@ public:
 	// Engine
 	CsoundEngine *getEngine(int index = -1);
 	OpEntryParser *m_opcodeTree;
+	void stkCheck();
 	// localServer
 	bool startServer();
 public slots:

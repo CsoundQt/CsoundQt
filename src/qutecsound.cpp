@@ -308,6 +308,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     qApp->setStyleSheet(styleSheet);
 }
 
+
 CsoundQt::~CsoundQt()
 {
     qDebug() << "CsoundQt::~CsoundQt()";
@@ -5581,6 +5582,38 @@ CsoundEngine *CsoundQt::getEngine(int index)
     else {
         return NULL;
 	}
+}
+
+void CsoundQt::stkCheck()
+{
+	// temporary workaround to warn about crashes when rawwave path is not set but libstkops.so is installed. only for linux now as win and osx seem not to have this problem
+#ifdef Q_OS_LINUX
+	QString opcode6dir64 =  m_options->opcode6dir64.isEmpty() ? QString(getenv("OPCODE6DIR64")) :  m_options->opcode6dir64; // take either from csound options or environment varaiable.
+	if ( !QFile::exists(opcode6dir64+"/libstkops.so") ) {
+		return; // no stk opcodes, no problem
+	}
+
+	QString rawWavePath = QString(getenv("RAWWAVE_PATH")); // wha if set in CsoundQt options?
+	bool rawWavesNotSet = rawWavePath.isEmpty() || !QFile::exists(rawWavePath+"/ahh.raw");
+	if (rawWavesNotSet ) { // try to find rawwave files from standard installation and set the enivornment variable
+		QStringList rawWaveDirs = QStringList() << "/usr/share/stk/rawwaves/"; // use list if necessary to add other possible directories
+		foreach (QString dir, rawWaveDirs) {
+			if (QFile::exists(dir+"/ahh.raw")) {// let's hope this file will not be changed or deleted from distribution
+				qDebug()<<"RawWave files found in: " << dir;
+				rawWavePath = dir;
+				rawWavesNotSet = false;
+				m_options->rawWave = rawWavePath;
+				setenv("RAWWAVE_PATH",rawWavePath.toLocal8Bit(),0); // is it necessary?
+			}
+		}
+	}
+
+
+	if (rawWavesNotSet ) {
+		QMessageBox::warning(this, tr("Possible STK problem"), tr("You have libstk.so in your plugins but RAWWAVE_PATH is not set. This will lead CsoundQt probably to crash.\n Remove libstkops.so from ") + opcode6dir64 + tr(" or set RAWWAVE_PATH enivironment variable.\n"));
+	}
+#endif
+
 }
 
 bool CsoundQt::startServer()
