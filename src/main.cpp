@@ -175,9 +175,9 @@ int main(int argc, char *argv[])
 #endif
         csoundQt->show();
 		filterObj.setMainWindow(csoundQt);
-#ifdef Q_OS_LINUX
-		csoundQt->stkCheck(); // necessary since if libstkops.so is intalled but RAWWAVE_PATH not set, it crashes
-#endif
+//#ifdef Q_OS_LINUX
+//		csoundQt->stkCheck(); // necessary since if libstkops.so is intalled but RAWWAVE_PATH not set, it crashes
+//#endif
         result = qapp.exec();
 #ifdef QCS_HTML5
         CefShutdown();

@@ -63,6 +63,7 @@ private slots:
 	void browseSsdir();
 	void browseSfdir();
 	void browseIncdir();
+	void browseRawWaveDir();
 	//    void browseDefaultCsd();
 	void browseFavorite();
 	void browsePythonDir();

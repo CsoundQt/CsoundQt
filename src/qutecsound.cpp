@@ -1001,13 +1001,19 @@ void CsoundQt::setupEnvironment()
         csoundSetGlobalEnv("INCDIR", "");
     }
     if (m_options->rawWaveActive){
+		//test:
+		QString ts = m_options->rawWave;
         int ret = csoundSetGlobalEnv("RAWWAVE_PATH", m_options->rawWave.toLocal8Bit().constData());
-        if (ret != 0) {
+		if (!ret) {
+			setenv("RAWWAVE_PATH",m_options->rawWave.toLocal8Bit(),1); // must set also the environment variable for stk opcodes
+		} else {
             qDebug() << "CsoundEngine::runCsound() Error setting RAWWAVE_PATH";
         }
     }
     else {
-        csoundSetGlobalEnv("RAWWAVE_PATH", "");
+		QString pathInEnvironment =  QString(getenv("RAWWAVE_PATH")); // should be obly linux?
+		csoundSetGlobalEnv("RAWWAVE_PATH", pathInEnvironment.toLocal8Bit().data()); // was ""
+		setenv("RAWWAVE_PATH",pathInEnvironment.toLocal8Bit(),1); // must set also the environment variable for stk opcodes
     }
     // csoundGetEnv must be called after Compile or Precompile,
     // But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
@@ -5593,16 +5599,17 @@ void CsoundQt::stkCheck()
 		return; // no stk opcodes, no problem
 	}
 
-	QString rawWavePath = QString(getenv("RAWWAVE_PATH")); // wha if set in CsoundQt options?
+	QString rawWavePath = m_options->rawWaveActive ? m_options->rawWave : QString(getenv("RAWWAVE_PATH")); // use from CsoundQt options or if not set, try to load from environment variable
 	bool rawWavesNotSet = rawWavePath.isEmpty() || !QFile::exists(rawWavePath+"/ahh.raw");
 	if (rawWavesNotSet ) { // try to find rawwave files from standard installation and set the enivornment variable
 		QStringList rawWaveDirs = QStringList() << "/usr/share/stk/rawwaves/"; // use list if necessary to add other possible directories
+		rawWavePath = QString("");
 		foreach (QString dir, rawWaveDirs) {
 			if (QFile::exists(dir+"/ahh.raw")) {// let's hope this file will not be changed or deleted from distribution
 				qDebug()<<"RawWave files found in: " << dir;
 				rawWavePath = dir;
 				rawWavesNotSet = false;
-				m_options->rawWave = rawWavePath;
+				//m_options->rawWave = rawWavePath;
 				setenv("RAWWAVE_PATH",rawWavePath.toLocal8Bit(),0); // is it necessary?
 			}
 		}
