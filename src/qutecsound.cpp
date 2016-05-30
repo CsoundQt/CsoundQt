@@ -1008,8 +1008,13 @@ void CsoundQt::setupEnvironment()
 	if ( csoundSetGlobalEnv("RAWWAVE_PATH", rawWavePath.toLocal8Bit().constData()) ) {
 		qDebug() << "CsoundEngine::runCsound() Error setting RAWWAVE_PATH";
 	}
+#ifdef Q_OS_UNIX
 	setenv("RAWWAVE_PATH",rawWavePath.toLocal8Bit(),1); // make sure the the environment variable is set for stk opcodes
-
+#endif
+#ifdef Q_OS_WIN
+    QString envString = "RAWWAVE_PATH="+rawWavePath;
+    _putenv(envString.toLocal8Bit());
+#endif
     // csoundGetEnv must be called after Compile or Precompile,
     // But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
     if (m_options->opcodedirActive) {
