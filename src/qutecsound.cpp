@@ -1000,21 +1000,16 @@ void CsoundQt::setupEnvironment()
     else {
         csoundSetGlobalEnv("INCDIR", "");
     }
-    if (m_options->rawWaveActive){
-		//test:
-		QString ts = m_options->rawWave;
-        int ret = csoundSetGlobalEnv("RAWWAVE_PATH", m_options->rawWave.toLocal8Bit().constData());
-		if (!ret) {
-			setenv("RAWWAVE_PATH",m_options->rawWave.toLocal8Bit(),1); // must set also the environment variable for stk opcodes
-		} else {
-            qDebug() << "CsoundEngine::runCsound() Error setting RAWWAVE_PATH";
-        }
-    }
-    else {
-		QString pathInEnvironment =  QString(getenv("RAWWAVE_PATH")); // should be obly linux?
-		csoundSetGlobalEnv("RAWWAVE_PATH", pathInEnvironment.toLocal8Bit().data()); // was ""
-		setenv("RAWWAVE_PATH",pathInEnvironment.toLocal8Bit(),1); // must set also the environment variable for stk opcodes
-    }
+	// set rawWavePath for stk opcodes
+	QString rawWavePath = m_options->rawWaveActive ? m_options->rawWave : QString(getenv("RAWWAVE_PATH"));
+	if (rawWavePath.isNull()) {
+		rawWavePath=QString(""); // NULL string may crash csoundInitilaize
+	}
+	if ( csoundSetGlobalEnv("RAWWAVE_PATH", rawWavePath.toLocal8Bit().constData()) ) {
+		qDebug() << "CsoundEngine::runCsound() Error setting RAWWAVE_PATH";
+	}
+	setenv("RAWWAVE_PATH",rawWavePath.toLocal8Bit(),1); // make sure the the environment variable is set for stk opcodes
+
     // csoundGetEnv must be called after Compile or Precompile,
     // But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
     if (m_options->opcodedirActive) {
@@ -5590,42 +5585,9 @@ CsoundEngine *CsoundQt::getEngine(int index)
 	}
 }
 
-void CsoundQt::stkCheck()
-{
-	// temporary workaround to warn about crashes when rawwave path is not set but libstkops.so is installed. only for linux now as win and osx seem not to have this problem
-#ifdef Q_OS_LINUX
-	QString opcode6dir64 =  m_options->opcode6dir64.isEmpty() ? QString(getenv("OPCODE6DIR64")) :  m_options->opcode6dir64; // take either from csound options or environment varaiable.
-	if ( !QFile::exists(opcode6dir64+"/libstkops.so") ) {
-		return; // no stk opcodes, no problem
-	}
-
-	QString rawWavePath = m_options->rawWaveActive ? m_options->rawWave : QString(getenv("RAWWAVE_PATH")); // use from CsoundQt options or if not set, try to load from environment variable
-	bool rawWavesNotSet = rawWavePath.isEmpty() || !QFile::exists(rawWavePath+"/ahh.raw");
-	if (rawWavesNotSet ) { // try to find rawwave files from standard installation and set the enivornment variable
-		QStringList rawWaveDirs = QStringList() << "/usr/share/stk/rawwaves/"; // use list if necessary to add other possible directories
-		rawWavePath = QString("");
-		foreach (QString dir, rawWaveDirs) {
-			if (QFile::exists(dir+"/ahh.raw")) {// let's hope this file will not be changed or deleted from distribution
-				qDebug()<<"RawWave files found in: " << dir;
-				rawWavePath = dir;
-				rawWavesNotSet = false;
-				//m_options->rawWave = rawWavePath;
-				setenv("RAWWAVE_PATH",rawWavePath.toLocal8Bit(),0); // is it necessary?
-			}
-		}
-	}
-
-
-	if (rawWavesNotSet ) {
-		QMessageBox::warning(this, tr("Possible STK problem"), tr("You have libstk.so in your plugins but RAWWAVE_PATH is not set. This will lead CsoundQt probably to crash.\n Remove libstkops.so from ") + opcode6dir64 + tr(" or set RAWWAVE_PATH enivironment variable.\n"));
-	}
-#endif
-
-}
-
 bool CsoundQt::startServer()
 {
-	m_server->removeServer("csoundqt"); // for any case, if socet was not cleard due crash before
+	m_server->removeServer("csoundqt"); // for any case, if socket was not cleard due crash before
 	return m_server->listen("csoundqt");
 }
 
