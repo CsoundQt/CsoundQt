@@ -220,6 +220,8 @@ exists (src/res/linux/QuteApp_d) :CONFIG += quteapp_d
 
 }
 
+unix:QMAKE_CXXFLAGS += -Wunused-parameter
+
 html5 {
 message ("Configuring for HTML5 build.")
 message("All HTML5 configuration is via QMake variable CEF_HOME.")
@@ -227,20 +229,22 @@ message("This points to the installation directory of CEF, not the source direct
 
 CEF_INCLUDE_DIR = $${CEF_HOME}
 debug {
-CEF_LIB = $${CEF_HOME}\\Debug\\libcef.lib
-#CEF_LIB += $${CEF_HOME}\\Debug\\cef_sandbox.lib
-CEF_WRAPPER_LIB = $${CEF_HOME}\\libcef_dll\\Debug\\libcef_dll_wrapper.lib
+unix:CEF_LIB = $${CEF_HOME}/Debug/libcef.so
+win32-msvc2013:CEF_LIB = $${CEF_HOME}\\Debug\\libcef.lib
+unix:CEF_WRAPPER_LIB = $${CEF_HOME}/libcef_dll_wrapper/libcef_dll_wrapper.a
+win32-msvc2013:CEF_WRAPPER_LIB = $${CEF_HOME}\\libcef_dll\\Debug\\libcef_dll_wrapper.lib
 }
 release {
-CEF_LIB = $${CEF_HOME}\\Release\\libcef.lib
-#CEF_LIB += $${CEF_HOME}\\Release\\cef_sandbox.lib
-CEF_WRAPPER_LIB = $${CEF_HOME}\\libcef_dll\\Release\\libcef_dll_wrapper.lib
+unix:CEF_LIB = $${CEF_HOME}/Release/libcef.so
+win32-msvc2013:CEF_LIB = $${CEF_HOME}\\Release\\libcef.lib
+unix:CEF_WRAPPER_LIB = $${CEF_HOME}/libcef_dll_wrapper/libcef_dll_wrapper.a
+win32-msvc2013:CEF_WRAPPER_LIB = $${CEF_HOME}\\libcef_dll\\Release\\libcef_dll_wrapper.lib
 }
 INCLUDEPATH += $${CEF_INCLUDE_DIR}
-LIBS += $${CEF_LIB}
 LIBS += $${CEF_WRAPPER_LIB}
+LIBS += $${CEF_LIB}
 DEFINES += QCS_HTML5
-LIBS += user32.lib
+win32-msvc2013:LIBS += user32.lib
 
 win32-msvc2013:QMAKE_CXXFLAGS += -ID:\\msys\\local\\include -DSUB_PROCESS_DISABLED=1 /Zi
 win32-msvc2013:QMAKE_LFLAGS += /DEBUG /OPT:REF /OPT:ICF /INCREMENTAL:NO

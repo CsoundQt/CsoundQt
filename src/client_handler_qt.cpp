@@ -2,7 +2,9 @@
 
 #include <QString>
 #include <string>
+#if defined(WIN32)
 #include <shlobj.h> 
+#endif
 #include <include/wrapper/cef_helpers.h>
 #include "include/cef_browser.h"
 #include "include/cef_frame.h"

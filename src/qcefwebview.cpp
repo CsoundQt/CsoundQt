@@ -222,14 +222,10 @@ bool QCefWebView::CreateBrowser(const QSize& size) {
         return false;
     }
     //qDebug() << __FUNCTION__ << __LINE__;
-    RECT rect;
-    rect.left = 0;
-    rect.top = 0;
-    rect.right = size.width();
-    rect.bottom = size.height();
+    CefRect rect(0, 0, size.width(), size.height());
     CefWindowInfo info;
     CefBrowserSettings settings;
-    info.SetAsChild((HWND) this->winId(), rect);
+    info.SetAsChild(this->winId(), rect);
     qcef_client_handler->set_listener(this);
     QString url = url_.isEmpty() ? kUrlBlank : url_.toString();
     CefBrowserHost::CreateBrowser(info,
@@ -252,15 +248,17 @@ CefRefPtr<CefBrowser> QCefWebView::GetBrowser() const {
 
 void QCefWebView::ResizeBrowser(const QSize& size) {
     if (qcef_client_handler.get() && qcef_client_handler->GetBrowser()) {
+#if defined(WIN32)
         CefWindowHandle hwnd =
                 qcef_client_handler->GetBrowser()->GetHost()->GetWindowHandle();
         if (hwnd) {
-            HDWP hdwp = BeginDeferWindowPos(1);
+            auto hdwp = BeginDeferWindowPos(1);
             hdwp = DeferWindowPos(hdwp, hwnd, NULL,
                                   0, 0, size.width(), size.height(),
                                   SWP_NOZORDER);
             EndDeferWindowPos(hdwp);
         }
+#endif
     }
 }
 
