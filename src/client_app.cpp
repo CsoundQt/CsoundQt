@@ -54,44 +54,12 @@ public:
                          CefString& exception) OVERRIDE
     {
         CSOUND *csound = csoundApiEnabled();
-        if (name == "isPlaying" && arguments.size() == 0) {
-            retval = CefV8Value::CreateBool(csound != 0);
-            return true;
-        }
         if (csound == 0) {
             return false;
         }
-        if (name == "setControlChannel" && arguments.size() == 2) {
-            std::string name = arguments.at(0)->GetStringValue().ToString();
-            double value = arguments.at(1)->GetDoubleValue();
-            csoundSetControlChannel(csound, name.c_str(), value);
-            return true;
-        }
-        if (name == "inputMessage" && arguments.size() == 1) {
-            std::string lines = arguments.at(0)->GetStringValue().ToString();
-            csoundInputMessage(csound, lines.c_str());
-            return true;
-        }
-        if (name == "getControlChannel" && arguments.size() == 1) {
-            std::string name = arguments.at(0)->GetStringValue().ToString();
-            int result = 0;
-            double value = csoundGetControlChannel(csound, name.c_str(), &result);
-            retval = CefV8Value::CreateDouble(value);
-            return true;
-        }
-        if (name == "message" && arguments.size() == 1) {
-            std::string text = arguments.at(0)->GetStringValue().ToString();
-            csoundMessage(csound, text.c_str());
-            return true;
-        }
-        if (name == "readScore" && arguments.size() == 1) {
-            std::string code = arguments.at(0)->GetStringValue().ToString();
-            csoundReadScore(csound, code.c_str());
-            return true;
-        }
-        if (name == "getVersion" && arguments.size() == 0) {
-            auto version = csoundGetVersion();
-            retval = CefV8Value::CreateInt(version);
+        // Keep method names in alphabetical order.
+        if (name == "isPlaying" && arguments.size() == 0) {
+            retval = CefV8Value::CreateBool(csound != 0);
             return true;
         }
         if (name == "compileOrc" && arguments.size() == 1) {
@@ -106,9 +74,11 @@ public:
             retval = CefV8Value::CreateDouble(value);
             return true;
         }
-        if (name == "getSr" && arguments.size() == 0) {
-            double sr = csoundGetSr(csound);
-            retval = CefV8Value::CreateDouble(sr);
+        if (name == "getControlChannel" && arguments.size() == 1) {
+            std::string name = arguments.at(0)->GetStringValue().ToString();
+            int result = 0;
+            double value = csoundGetControlChannel(csound, name.c_str(), &result);
+            retval = CefV8Value::CreateDouble(value);
             return true;
         }
         if (name == "getKsmps" && arguments.size() == 0) {
@@ -119,6 +89,36 @@ public:
         if (name == "getNchnls" && arguments.size() == 0) {
             uint32_t nchnls = csoundGetNchnls(csound);
             retval = CefV8Value::CreateInt(nchnls);
+            return true;
+        }
+        if (name == "getScoreTime" && arguments.size() == 0) {
+            double sr = csoundGetScoreTime(csound);
+            retval = CefV8Value::CreateDouble(sr);
+            return true;
+        }
+        if (name == "getSr" && arguments.size() == 0) {
+            double sr = csoundGetSr(csound);
+            retval = CefV8Value::CreateDouble(sr);
+            return true;
+        }
+        if (name == "getVersion" && arguments.size() == 0) {
+            auto version = csoundGetVersion();
+            retval = CefV8Value::CreateInt(version);
+            return true;
+        }
+        if (name == "inputMessage" && arguments.size() == 1) {
+            std::string lines = arguments.at(0)->GetStringValue().ToString();
+            csoundInputMessage(csound, lines.c_str());
+            return true;
+        }
+        if (name == "message" && arguments.size() == 1) {
+            std::string text = arguments.at(0)->GetStringValue().ToString();
+            csoundMessage(csound, text.c_str());
+            return true;
+        }
+        if (name == "readScore" && arguments.size() == 1) {
+            std::string code = arguments.at(0)->GetStringValue().ToString();
+            csoundReadScore(csound, code.c_str());
             return true;
         }
         if (name == "scoreEvent" && arguments.size() == 1) {
@@ -135,6 +135,12 @@ public:
             }
             csoundScoreEvent(csound, opcode, pfields.data(), pfields.size());
             retval = CefV8Value::CreateInt(0);
+            return true;
+        }
+        if (name == "setControlChannel" && arguments.size() == 2) {
+            std::string name = arguments.at(0)->GetStringValue().ToString();
+            double value = arguments.at(1)->GetDoubleValue();
+            csoundSetControlChannel(csound, name.c_str(), value);
             return true;
         }
         //exception = "Invalid method arguments.";
