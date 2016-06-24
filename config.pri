@@ -221,6 +221,7 @@ exists (src/res/linux/QuteApp_d) :CONFIG += quteapp_d
 }
 
 unix:QMAKE_CXXFLAGS += -Wunused-parameter
+unix:QMAKE_LFLAGS += -Wl,--no-as-needed
 
 html5 {
 message ("Configuring for HTML5 build.")
@@ -235,6 +236,7 @@ unix:CEF_WRAPPER_LIB = $${CEF_HOME}/libcef_dll_wrapper/libcef_dll_wrapper.a
 win32-msvc2013:CEF_WRAPPER_LIB = $${CEF_HOME}\\libcef_dll\\Debug\\libcef_dll_wrapper.lib
 }
 release {
+DEFINES += NDEBUG
 unix:CEF_LIB = $${CEF_HOME}/Release/libcef.so
 win32-msvc2013:CEF_LIB = $${CEF_HOME}\\Release\\libcef.lib
 unix:CEF_WRAPPER_LIB = $${CEF_HOME}/libcef_dll_wrapper/libcef_dll_wrapper.a

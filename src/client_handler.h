@@ -2,10 +2,6 @@
 #define CEFCLIENT_CLIENT_HANDLER_H_
 #pragma once
 
-#include "include/base/cef_macros.h"
-#include "include/base/cef_platform_thread.h"
-#include "include/base/internal/cef_lock_impl.h"
-
 #include <list>
 #include <map>
 #include <set>
