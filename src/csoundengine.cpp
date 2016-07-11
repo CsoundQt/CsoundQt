@@ -1249,7 +1249,7 @@ void CsoundEngine::breakpointCallback(CSOUND *csound, debug_bkpt_info_t *bkpt_in
 		QVariantList instance;
 		instance << debug_instr_list->p1;
 		instance << QString("%1 %2").arg(debug_instr_list->p2).arg(debug_instr_list->p3);
-		instance << debug_instr_list->kcounter;
+		instance << (qulonglong)debug_instr_list->kcounter;
 		cs->m_instrumentList << instance;
 		debug_instr_list = debug_instr_list->next;
 	}
