@@ -31,7 +31,7 @@ WidgetPanel::WidgetPanel(QWidget *parent)
 	setWindowTitle("Widgets");
 	setMinimumSize(200, 140);
 	//   connect(this,SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
-	connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
+	//connect(this,SIGNAL(topLevelChanged(bool)), this, SLOT(dockStateChanged(bool)));
 
 	m_stack = new QStackedWidget(this);
 	m_stack->show();
