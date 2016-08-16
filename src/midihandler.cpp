@@ -40,7 +40,7 @@ void MidiHandler::addListener(DocumentPage *page)
 
 void MidiHandler::removeListener(DocumentPage *page)
 {
-	if(!m_listeners.contains(page)) {
+	if(m_listeners.contains(page)) {
 		m_listeners.remove(m_listeners.indexOf(page));
 	}
 }
