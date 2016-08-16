@@ -50,7 +50,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	m_hoverWidget->hide();
 
 	for (int i = 0; i < editors.size(); i++) {
-		//connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
+		connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
 		splitter->addWidget(editors[i]);
 		editors[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 		editors[i]->setContextMenuPolicy(Qt::CustomContextMenu);
