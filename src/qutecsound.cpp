@@ -2112,12 +2112,17 @@ void CsoundQt::openPdfFile(QString name)
 
 void CsoundQt::openFLOSSManual()
 {
-    openExternalBrowser(QUrl("http://en.flossmanuals.net/csound/"));
+	openExternalBrowser(QUrl("http://en.flossmanuals.net/csound/"));
 }
 
 void CsoundQt::openQuickRef()
 {
-    openPdfFile(quickRefFileName);
+	openPdfFile(quickRefFileName);
+}
+
+void CsoundQt::openOnlineDocumentation()
+{
+	 openExternalBrowser(QUrl("http://csoundqt.github.io/pages/documentation.html"));
 }
 
 void CsoundQt::resetPreferences()
@@ -2553,6 +2558,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #ifdef QCS_HTML5
     showHtml5Act->setShortcut(tr("Shift+Alt+H"));
 #endif
+	openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Alt+9"));
     setHelpEntryAct->setShortcut(tr("Shift+F1"));
     browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
@@ -3184,6 +3190,11 @@ void CsoundQt::createActions()
     externalBrowserAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(externalBrowserAct, SIGNAL(triggered()), this, SLOT(openExternalBrowser()));
 
+	openDocumentationAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Open online documentation"), this);
+	openDocumentationAct->setStatusTip(tr("Open online documentation"));
+	openDocumentationAct->setShortcutContext(Qt::ApplicationShortcut);
+	connect(openDocumentationAct, SIGNAL(triggered()), this, SLOT(openOnlineDocumentation()));
+
     openQuickRefAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Open Quick Reference Guide"), this);
     openQuickRefAct->setStatusTip(tr("Open Quick Reference Guide in PDF viewer"));
     openQuickRefAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -3347,6 +3358,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(browseForwardAct);
     m_keyActions.append(externalBrowserAct);
     m_keyActions.append(openQuickRefAct);
+	m_keyActions.append(openDocumentationAct);
     m_keyActions.append(showOpcodeQuickRefAct);
     m_keyActions.append(infoAct);
     m_keyActions.append(viewFullScreenAct);
@@ -3877,6 +3889,7 @@ void CsoundQt::createMenus()
     menuBar()->addSeparator();
 
     helpMenu = menuBar()->addMenu(tr("Help"));
+	helpMenu->addAction(openDocumentationAct);
     helpMenu->addAction(setHelpEntryAct);
     helpMenu->addAction(externalBrowserAct);
     helpMenu->addSeparator();
