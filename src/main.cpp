@@ -138,7 +138,9 @@ int main(int argc, char *argv[])
 #if !defined(CEF_USE_SANDBOX)
         settings.no_sandbox = true;
 #endif
+#if defined(WIN32)
         settings.multi_threaded_message_loop = true;
+#endif
         // Currently we run in a single process, otherwise Csound is not
         // available to the ClientApp class. This may have to be changed.
         settings.single_process = true;
