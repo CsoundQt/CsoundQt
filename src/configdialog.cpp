@@ -36,6 +36,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	: QDialog(parent), m_parent(parent), m_options(options), m_configlists(configlists)
 {
 	setupUi(this);
+	setMaximumSize(QApplication::desktop()->width(),QApplication::desktop()->height()); // don't expand over screen
 
 	m_configlists->refreshModules();
 

@@ -85,6 +85,11 @@ greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 3) {
     CONFIG += QCS_QT54
 }
 
+greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 5) {
+	DEFINES += USE_QT_GT_55
+	CONFIG += QCS_QT55
+}
+
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")
 
 !build32: CONFIG += build64
@@ -127,6 +132,10 @@ pythonqt {
     QCS_QT53 {
 		QT += webkitwidgets multimedia multimediawidgets #positioning sensors
     }
+	QCS_QT55 {
+		QT -= webkit webkitwidgets
+		#QT += webengine # maybe we need to add that for some functionality
+	}
 }
 
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}

@@ -232,6 +232,7 @@ private slots:
 	void openPdfFile(QString name);
 	void openFLOSSManual();
 	void openQuickRef();
+	void openOnlineDocumentation();
 	void resetPreferences();
 	void reportBug();
 	void requestFeature();
@@ -420,6 +421,7 @@ private:
 	QAction *browseForwardAct;
 	QAction *externalBrowserAct;
 	QAction *openQuickRefAct;
+	QAction *openDocumentationAct;
 	QAction *showUtilitiesAct;
 	QAction *showWidgetsAct;
 	QAction *showInspectorAct;
