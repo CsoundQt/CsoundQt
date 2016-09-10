@@ -1,3 +1,4 @@
+
 CONFIG *= thread \
     warn_on
 CONFIG -= stl
@@ -241,7 +242,7 @@ DEFINES += NDEBUG
 unix:CEF_LIB = $${CEF_HOME}/Release/libcef.so
 win32-msvc2013:CEF_LIB = $${CEF_HOME}\\Release\\libcef.lib
 unix:CEF_WRAPPER_LIB = $${CEF_HOME}/libcef_dll_wrapper/libcef_dll_wrapper.a
-win32-msvc2013:CEF_WRAPPER_LIB = $${CEF_HOME}\\libcef_dll\\Release\\libcef_dll_wrapper.lib
+win32-msvc2013:CEF_WRAPPER_LIB = $${CEF_HOME}\\libcef_dll_wrapper\\Release\\libcef_dll_wrapper.lib
 }
 INCLUDEPATH += $${CEF_INCLUDE_DIR}
 LIBS += $${CEF_WRAPPER_LIB}

@@ -1,4 +1,3 @@
-
 !no_messages {
     message(Building CsoundQt for Windows.)
     win32-g++: message(Building with gcc)

@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
         CefString(&settings.cache_path).FromASCII(QDir::tempPath().toLocal8Bit());
         CefInitialize(main_args, settings, app.get(), sandbox_info);
         // Load flash system plug-in on Windows.
-#ifdef WIN32
+#ifdef WIN32_XXX
         CefLoadPlugins(IsWow64());
 #endif
 #endif
