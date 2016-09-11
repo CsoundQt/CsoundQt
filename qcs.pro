@@ -46,11 +46,8 @@
 
 DEFINES += NOMINMAX
 
-record_support {
-DEFINES += PERFTHREAD_RECORD # Requires Csound >= 6.04
-}
-csound6: {
-message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now default")
+csound6 {
+    message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now default.")
 }
 
 !csound5 {
@@ -58,11 +55,11 @@ message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now defa
     CONFIG += csound6
     debugger {
         DEFINES += QCS_DEBUGGER
-        message("Building debugger")
+        message("Building debugger.")
     }
-    message("Building for Csound 6")
+    message("Building for Csound 6.")
 } else {
-message("Building for Csound 5 (unsupported)")
+    message("Building for Csound 5 (unsupported).")
 }
 
 QT += concurrent network
@@ -103,6 +100,19 @@ unix {
 win32-g++:include (qcs-win32.pro)
 win32-msvc2013:include (qcs-win32.pro)
 
+# Requires Csound >= 6.04
+record_support {
+    DEFINES += PERFTHREAD_RECORD
+    message("Building recording support.")
+}
+
+!csound5 {
+    debugger {
+        DEFINES += QCS_DEBUGGER
+        message("Building debugger.")
+    }
+}
+
 include(src/src.pri)
 TRANSLATIONS = "src/translations/qutecsound_en.ts" \
     "src/translations/qutecsound_es.ts" \
@@ -120,11 +130,7 @@ TRANSLATIONS = "src/translations/qutecsound_en.ts" \
 pythonqt {
     include ( $${PYTHONQT_SRC_DIR}/build/PythonQt.prf )
     include ( $${PYTHONQT_SRC_DIR}/build/PythonQt_QtAll.prf )
-
-	#LIBS *= -L$${PYTHONQT_LIB_DIR} -l$${PYTHONQT_LIB} -l$${PYTHONQT_LIB}_QtAll
-	#LIBS -= -l$${PYTHONQT_LIB}_d -l$${PYTHONQT_LIB}_QtAll_d
-
-# Note, this is Python, not PythonQt include dir!
+    # Note, this is Python, not PythonQt include dir!
     win32:INCLUDEPATH *= $${PYTHON_INCLUDE_DIR}
     INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/src
     INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/extensions/PythonQt_QtAll
@@ -156,11 +162,6 @@ pythonqt:TARGET = $${TARGET}-py
 csound6:TARGET = $${TARGET}-cs6
 
 CONFIG(debug, debug|release):TARGET = $${TARGET}-debug
-
-message(DEFINES are:    $${DEFINES})
-message(INCLUDEPATH is: $${INCLUDEPATH})
-message(LIBS are:       $${LIBS})
-message(TARGET is:      $${TARGET})
 
 # install commands for linux (for make install)
 # use 'sudo make install' for system wide installation
@@ -234,3 +235,10 @@ macx {
     INSTALLS += cocoa printsupport pythonlinks final
 
 }
+
+message(CONFIGs are:    $${CONFIG})
+message(DEFINES are:    $${DEFINES})
+message(INCLUDEPATH is: $${INCLUDEPATH})
+message(LIBS are:       $${LIBS})
+message(TARGET is:      $${TARGET})
+

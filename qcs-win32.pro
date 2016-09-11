@@ -22,7 +22,6 @@ win32-msvc2013:build64: DEFAULT_CSOUND_LIBS = csound64.lib
 DEFAULT_PYTHON_INCLUDE_DIRS = "$$(HOMEDRIVE)\\Python26\\include"
 DEFAULT_PYTHONQT_SRC_DIRS = "$$(PROGRAMFILES)\\PythonQt"
 
-
 # Do configuration step
 include(config.pri)
 
