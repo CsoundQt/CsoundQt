@@ -4881,7 +4881,7 @@ Ya está en uso por otra acción.</translation>
     <message>
         <location filename="../widgetlayout.cpp" line="213"/>
         <source>The csd file contains more than one widget panel!
-This is not suported by the current version,
+This is not supported by the current version,
 Addtional widget panels will be lost if the file is saved!</source>
         <translation>El archivo csd contiene más de un panel de widgets
 Esto no está soportado en la versión actual

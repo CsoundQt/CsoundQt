@@ -3769,7 +3769,7 @@ CanallH:</translation>
     </message>
     <message>
         <source>The csd file contains more than one widget panel!
-This is not suported by the current version,
+This is not supported by the current version,
 Addtional widget panels will be lost if the file is saved!</source>
         <translation>Este CSD contain mais que um painel de widgets, Isto nao e&apos; suportado nesta versao. Paineis adicionais serao perdidos se o arquivo for salvo</translation>
     </message>

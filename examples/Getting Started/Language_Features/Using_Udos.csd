@@ -1,7 +1,7 @@
 /* Getting started.. Writing User Defined Opcodes (UDO)
 
 As described before, opcodes can be seen as little programs. So their usefulness can be exploited in a different way.
-If you've build a structure which you like to use often, it may be convenient to pack it into an "User Defined Opcode". This way you can use your own contructions later by just one keyword.
+If you've build a structure which you like to use often, it may be convenient to pack it into an "User Defined Opcode". This way you can use your own constructions later by just one keyword.
 
 The main advantages are:
 - the project has a better structure
