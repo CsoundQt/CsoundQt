@@ -296,6 +296,30 @@ QString QuteText::getWidgetType()
 	return type;
 }
 
+QString QuteText::getCabbageLine()
+{
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.lockForWrite();
+#endif
+	QString line = "label ";
+	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
+	line += "text(\"" + property("QCS_label").toString() + "\"), " ;
+	QString alignment = property("QCS_alignment").toString();
+	alignment.replace("center","centre");
+	line += "align(\"" + alignment + "\"), ";
+	QColor color = property("QCS_color").value<QColor>();
+	line += "fontcolour(" + QString::number(color.red()) + "," +  QString::number(color.green()) + "," +  QString::number(color.blue()) + "), ";
+	 color = property("QCS_bgcolor").value<QColor>();
+	 line += "colour(" + QString::number(color.red()) + "," +  QString::number(color.green()) + "," +  QString::number(color.blue()) + ")";
+	 // Cabbage does not set font or fontsize. Text is scaled according to heigth. Maybe set heigth - fontsize + something?
+
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.unlock();
+#endif
+	return line;
+}
+
+
 QString QuteText::getWidgetXmlText()
 {
 	xmlText = "";

@@ -489,6 +489,39 @@ void BaseView::setCabbageText(QString text)
 }
 
 
+
+QString BaseView::getCabbageText()
+{
+	QString cabbageText = QString();
+	if (m_viewMode < 2) { // View is not split
+		if (m_mode != 0) {
+			qDebug() << "DocumentView::getLadspaText Current file is not a csd file.";
+			return cabbageText;
+		}
+		QTextCursor cursor;
+		//cursor = m_mainEditor->textCursor();
+		//m_mainEditor->moveCursor(QTextCursor::Start); // is it necessary?
+		if (m_mainEditor->find("<Cabbage>") && m_mainEditor->find("</Cabbage>")) {
+			QString curText = getBasicText();
+
+			int startIndex = curText.indexOf("<Cabbage>");
+			int endIndex = curText.indexOf("</Cabbage>") + 10;
+			cabbageText = curText.mid(startIndex, endIndex-startIndex);
+			m_mainEditor->moveCursor(QTextCursor::Start);
+		}
+		else { //Cabbage section not present, or incomplete
+			qDebug()<<"BaseView::getCabbageText() - no <Cabbage> section found.";
+		}
+
+	}
+	else {
+		qDebug() << "BaseView::getCabbageText() not implemented for split view";
+	}
+	return cabbageText;
+}
+
+
+
 void BaseView::setOtherCsdText(QString text)
 {
 	if (m_viewMode < 2) { // View is not split

@@ -51,6 +51,7 @@ public:
 	virtual void setText(QString text);
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
+	virtual QString getCabbageLine();
 
 	// Configuraion (Not saved)
 	void setFontScaling(double scaling);

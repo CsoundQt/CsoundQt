@@ -1348,8 +1348,9 @@ QString WidgetLayout::getCabbageWidgets()
 {
 	QString title = windowTitle();
 	QString text = "form caption(\"" + title  + "\"),";
-	text += "pos(" + QString::number(m_posx) + "," + QString::number(m_posy) + "),";
-	text += "size(" + QString::number(m_w) + "," + QString::number(m_h) +")\n";
+	//text += "pos(" + QString::number(m_posx) + "," + QString::number(m_posy) + "),"; // not necessary any more
+	text += "size(" + QString::number(m_w) + "," + QString::number(m_h) +")\n"; // TODO: find correct and necessary size, maybe problem in CsoundQt::setWidgetPanelGeometry()  ?
+
 	int unsupported = 0;
 	widgetsMutex.lock();
 	foreach(QuteWidget *widget, m_widgets) {
@@ -1362,7 +1363,7 @@ QString WidgetLayout::getCabbageWidgets()
 		}
 	}
 	widgetsMutex.unlock();
-	qDebug() << "WidgetPanel:getCabbageWidgets() " << unsupported << " Unsupported widgets";
+	qDebug() << "WidgetPanel:getCabbageWidgets() " << unsupported << " Unsupported widgets"; // TODO: dialog saying which widgets could not be converted
 	return text;
 }
 

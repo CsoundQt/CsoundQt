@@ -97,6 +97,7 @@ public:
 	void setOptionsText(QString text);
 	void setLadspaText(QString text);
 	void setCabbageText(QString text);
+	QString getCabbageText();
 	void setOtherCsdText(QString text);
 	void setOtherText(QString text);
 	void setAppText(QString text);

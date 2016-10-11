@@ -157,14 +157,12 @@ QString QuteSlider::getCabbageLine()
 	else {
 		line += "vslider ";
 	}
-	line += "chan(\"" + m_channel + "\"),  ";
-	line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
-	line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
-	line += "min("+ QString::number(property("QCS_minimum").toDouble(), 'f', 8) +"), ";
-	line += "max("+ QString::number(property("QCS_maximum").toDouble(), 'f', 8) +"), ";
-	line += "value(" + QString::number(m_value, 'f', 8) + "), ";
-	if (property("QCS_midicc").toInt() >= 0) {
-		line += "midiCtrl(\"" + QString::number(property("QCS_midichan").toInt()) + ",";
+	line += "channel(\"" + m_channel + "\"),  ";
+	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
+	line += "range(" + QString::number(property("QCS_minimum").toDouble(), 'f', 8) + ", " + QString::number(property("QCS_maximum").toDouble(), 'f', 8) +", " + QString::number(m_value, 'f', 8) + ")";
+	if (property("QCS_midicc").toInt() >= 0 && property("QCS_midichan").toInt()>0) { // insert only if midi channel is above 0
+		line += ", midiCtrl(\"" + QString::number(property("QCS_midichan").toInt()) + ",";
+
 		line +=  QString::number(property("QCS_midicc").toInt()) + "\")";
 
 	}
