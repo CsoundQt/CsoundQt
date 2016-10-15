@@ -377,8 +377,10 @@ void ClientApp::OnContextReleased(CefRefPtr<CefBrowser> browser,
                                   CefRefPtr<CefFrame> frame,
                                   CefRefPtr<CefV8Context> context) {
     auto global = context->GetGlobal();
-    auto result = global->DeleteValue("csound");
-    qDebug() << "DeleteValue jcsound:" << result;
+    if (global) {
+        auto result = global->DeleteValue("csound");
+        qDebug() << "DeleteValue jcsound:" << result;
+    }
     RenderDelegateSet::iterator it = render_delegates_.begin();
     for (; it != render_delegates_.end(); ++it)
         (*it)->OnContextReleased(this, browser, frame, context);

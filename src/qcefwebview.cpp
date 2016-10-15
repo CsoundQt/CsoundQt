@@ -222,10 +222,15 @@ bool QCefWebView::CreateBrowser(const QSize& size) {
         return false;
     }
     //qDebug() << __FUNCTION__ << __LINE__;
-    CefRect rect(0, 0, size.width(), size.height());
     CefWindowInfo info;
     CefBrowserSettings settings;
+#if defined(WIN32)
+    RECT rect = {0, 0, size.width(), size.height()};
+    info.SetAsChild((HWND) this->winId(), rect);
+#else
+    CefRect rect(0, 0, size.width(), size.height());
     info.SetAsChild(this->winId(), rect);
+#endif
     qcef_client_handler->set_listener(this);
     QString url = url_.isEmpty() ? kUrlBlank : url_.toString();
     CefBrowserHost::CreateBrowser(info,

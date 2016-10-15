@@ -1,3 +1,4 @@
+
 CONFIG *= thread \
     warn_on
 CONFIG -= stl
@@ -220,8 +221,8 @@ exists (src/res/linux/QuteApp_d) :CONFIG += quteapp_d
 
 }
 
-unix:QMAKE_CXXFLAGS += -Wunused-parameter
-unix:QMAKE_LFLAGS += -Wl,--no-as-needed
+unix:QMAKE_CXXFLAGS += -g -Wunused-parameter
+unix:QMAKE_LFLAGS += -g -Wl,--no-as-needed
 
 html5 {
 message ("Configuring for HTML5 build.")
@@ -235,12 +236,13 @@ win32-msvc2013:CEF_LIB = $${CEF_HOME}\\Debug\\libcef.lib
 unix:CEF_WRAPPER_LIB = $${CEF_HOME}/libcef_dll_wrapper/libcef_dll_wrapper.a
 win32-msvc2013:CEF_WRAPPER_LIB = $${CEF_HOME}\\libcef_dll\\Debug\\libcef_dll_wrapper.lib
 }
+unix:DEFINES += CEF_USE_SANDBOX
 release {
 DEFINES += NDEBUG
 unix:CEF_LIB = $${CEF_HOME}/Release/libcef.so
 win32-msvc2013:CEF_LIB = $${CEF_HOME}\\Release\\libcef.lib
 unix:CEF_WRAPPER_LIB = $${CEF_HOME}/libcef_dll_wrapper/libcef_dll_wrapper.a
-win32-msvc2013:CEF_WRAPPER_LIB = $${CEF_HOME}\\libcef_dll\\Release\\libcef_dll_wrapper.lib
+win32-msvc2013:CEF_WRAPPER_LIB = $${CEF_HOME}\\libcef_dll_wrapper\\Release\\libcef_dll_wrapper.lib
 }
 INCLUDEPATH += $${CEF_INCLUDE_DIR}
 LIBS += $${CEF_WRAPPER_LIB}

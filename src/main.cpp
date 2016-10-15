@@ -138,14 +138,16 @@ int main(int argc, char *argv[])
 #if !defined(CEF_USE_SANDBOX)
         settings.no_sandbox = true;
 #endif
+#if defined(WIN32)
         settings.multi_threaded_message_loop = true;
+#endif
         // Currently we run in a single process, otherwise Csound is not
         // available to the ClientApp class. This may have to be changed.
         settings.single_process = true;
         CefString(&settings.cache_path).FromASCII(QDir::tempPath().toLocal8Bit());
         CefInitialize(main_args, settings, app.get(), sandbox_info);
         // Load flash system plug-in on Windows.
-#ifdef WIN32
+#ifdef WIN32_XXX
         CefLoadPlugins(IsWow64());
 #endif
 #endif

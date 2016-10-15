@@ -47,7 +47,7 @@ iIndex = 0		 				; Number of T-Shirts in the bag at the beginning
 	loop_lt iIndex, 1, 5, loop 		; goes back to the label "loop", if there are less then 5 T-Shirts
 endin 
 /*
-The advantage of this method is, that you save typing one line, because loop_lt  is increasing the counter for you. But you can't see so easily which condition is checked. Is it x<5 or x>5 or x=5 ? Here is a list of different loop-types, and their behavoir:
+The advantage of this method is, that you save typing one line, because loop_lt  is increasing the counter for you. But you can't see so easily which condition is checked. Is it x<5 or x>5 or x=5 ? Here is a list of different loop-types, and their behavior:
 
 loop_lt:  x < y
 loop_gt: x > y

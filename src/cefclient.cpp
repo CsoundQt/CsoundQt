@@ -37,7 +37,7 @@ int CefInit(int &argc, char **argv) {
     return -1;
 }
 
-#ifdef WIN32
+#ifdef WIN32_XXX
 void CefLoadPlugins(bool isWow64) {
     // Adobe Flash Player plug-in:
     // https://support.google.com/chrome/answer/108086

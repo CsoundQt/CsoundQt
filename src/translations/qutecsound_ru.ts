@@ -4726,7 +4726,7 @@ It is already used.</source>
     <message>
         <location filename="../widgetlayout.cpp" line="213"/>
         <source>The csd file contains more than one widget panel!
-This is not suported by the current version,
+This is not supported by the current version,
 Addtional widget panels will be lost if the file is saved!</source>
         <translation>Файл csd содержи более одной панели виджетов!
 Это не поддерживается в данной версии,

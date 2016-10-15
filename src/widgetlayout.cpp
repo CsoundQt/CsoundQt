@@ -212,8 +212,8 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 	if (panel.size() > 1) {
 		QMessageBox::warning(this, tr("More than one panel"),
 							 tr("The csd file contains more than one widget panel!\n"
-								"This is not suported by the current version,\n"
-								"Addtional widget panels will be lost if the file is saved!"));
+								"This is not supported by the current version,\n"
+								"Additional widget panels will be lost if the file is saved!"));
 	}
 	QDomNode p = panel.item(0);
 	if (p.isNull()) {
@@ -3337,7 +3337,7 @@ void WidgetLayout::setPresetName(int num, QString name)
 			presets[getPresetIndex(num)].setName(name);
 		}
 		else {
-			qDebug() << "WidgetLayout::setPresetName invalud number.";
+			qDebug() << "WidgetLayout::setPresetName invalid number.";
 		}
 	}
 }
@@ -3359,7 +3359,7 @@ QString WidgetLayout::getPresetName(int num)
 	}
 	else {
 		return QString();
-		qDebug() << "WidgetLayout::getPresetName invalud number.";
+		qDebug() << "WidgetLayout::getPresetName invalid number.";
 	}
 }
 
