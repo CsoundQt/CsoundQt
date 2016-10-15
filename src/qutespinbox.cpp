@@ -124,6 +124,18 @@ QString QuteSpinBox::getCsladspaLine()
 	return line;
 }
 
+QString QuteSpinBox::getCabbageLine()
+{
+	QString line = "numberbox channel(\"" + m_channel + "\"),  ";
+	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
+	line += QString("text(%1), ").arg(m_channel); // Is it good idea to put channel as name?
+	line += QString( "range(%1,%2,%3,1,%4), ").arg(property("QCS_minimum").toDouble()).arg(property("QCS_maximum").toDouble()).arg(m_value).arg(property("QCS_resolution").toDouble());
+	line += "value(" + QString::number(m_value) + "), ";
+	//color is not used in CsoundQt, why? Leave it out now... line += QString("colour(\"%1\")").arg( property("QCS_color").toString());
+
+	return line;
+}
+
 QString QuteSpinBox::getWidgetXmlText()
 {
 	xmlText = "";

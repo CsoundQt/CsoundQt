@@ -153,8 +153,10 @@ QString QuteButton::getCabbageLine()
 	widgetLock.lockForRead();
 #endif
 	QString line = "button channel(\"" + m_channel + "\"),  ";
-	line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
-	line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
+	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
+	line += "text(\"" + property("QCS_text").toString()+ " \"), ";
+	line += QString("latched(%1)").arg((int)property("QCS_latch").toBool());
+	qDebug()<< line;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
