@@ -38,6 +38,7 @@ public:
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
 	virtual void setWidgetGeometry(int x,int y,int width,int height);
+	virtual QString getCabbageLine();
 
 	void appendMessage(QString message);
 	void scrollToEnd();

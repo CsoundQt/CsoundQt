@@ -103,12 +103,21 @@ QString QuteCheckBox::getWidgetLine()
 
 QString QuteCheckBox::getCabbageLine()
 {
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.lockForRead();
+#endif
 	QString line = "checkbox channel(\"" + m_channel + "\"),  ";
-	line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
-	line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
+	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
 	line += "value(" + (static_cast<QCheckBox *>(m_widget)->isChecked()?
-							QString("1!"):QString("0")) + "), ";
-	line += "caption(\"" +  property("QCS_label").toString() + "\")";
+							QString("1"):QString("0")) + ")";
+	line += QString(", caption(%1)").arg(m_channel);
+	if (property("QCS_midicc").toInt() >= 0 && property("QCS_midichan").toInt()>0) { // insert only if midi channel is above 0
+		line += ", midiCtrl(\"" + QString::number(property("QCS_midichan").toInt()) + ",";
+		line +=  QString::number(property("QCS_midicc").toInt()) + "\")";
+	}
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.unlock();
+#endif
 	return line;
 }
 

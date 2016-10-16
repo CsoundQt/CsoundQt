@@ -159,12 +159,11 @@ QString QuteSlider::getCabbageLine()
 	}
 	line += "channel(\"" + m_channel + "\"),  ";
 	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
-	line += "range(" + QString::number(property("QCS_minimum").toDouble(), 'f', 8) + ", " + QString::number(property("QCS_maximum").toDouble(), 'f', 8) +", " + QString::number(m_value, 'f', 8) + ")";
+	line += QString("range(%1,%2,%3), ").arg(property("QCS_minimum").toDouble()).arg(property("QCS_maximum").toDouble()).arg(m_value);
+	//line += QString("text(%1), ").arg(m_channel); // Is it good idea to put channel as name - not really since geometry probably does not allow it
 	if (property("QCS_midicc").toInt() >= 0 && property("QCS_midichan").toInt()>0) { // insert only if midi channel is above 0
 		line += ", midiCtrl(\"" + QString::number(property("QCS_midichan").toInt()) + ",";
-
 		line +=  QString::number(property("QCS_midicc").toInt()) + "\")";
-
 	}
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();

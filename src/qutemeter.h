@@ -42,6 +42,7 @@ public:
 	virtual QString getWidgetLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
+	virtual QString getCabbageLine();
 
 	//    void setChannel2Name(QString name);
 	//    void setColor(QColor color);

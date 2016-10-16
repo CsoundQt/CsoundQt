@@ -126,13 +126,21 @@ QString QuteSpinBox::getCsladspaLine()
 
 QString QuteSpinBox::getCabbageLine()
 {
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.lockForRead();
+#endif
 	QString line = "numberbox channel(\"" + m_channel + "\"),  ";
 	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
-	line += QString("text(%1), ").arg(m_channel); // Is it good idea to put channel as name?
-	line += QString( "range(%1,%2,%3,1,%4), ").arg(property("QCS_minimum").toDouble()).arg(property("QCS_maximum").toDouble()).arg(m_value).arg(property("QCS_resolution").toDouble());
-	line += "value(" + QString::number(m_value) + "), ";
-	//color is not used in CsoundQt, why? Leave it out now... line += QString("colour(\"%1\")").arg( property("QCS_color").toString());
-
+	//line += QString("text(%1), ").arg(m_channel); // Is it good idea to put channel as name?
+	line += QString( "range(%1,%2,%3,1,%4) ").arg(property("QCS_minimum").toDouble()).arg(property("QCS_maximum").toDouble()).arg(m_value).arg(property("QCS_resolution").toDouble());
+	//color does not work CsoundQt, why? Leave it out now... line += QString("colour(\"%1\")").arg( property("QCS_color").toString());
+	if (property("QCS_midicc").toInt() >= 0 && property("QCS_midichan").toInt()>0) { // insert only if midi channel is above 0
+			line += ", midiCtrl(\"" + QString::number(property("QCS_midichan").toInt()) + ",";
+			line +=  QString::number(property("QCS_midicc").toInt()) + "\")";
+	}
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.unlock();
+#endif
 	return line;
 }
 
