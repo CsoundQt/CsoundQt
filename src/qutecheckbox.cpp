@@ -110,7 +110,7 @@ QString QuteCheckBox::getCabbageLine()
 	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
 	line += "value(" + (static_cast<QCheckBox *>(m_widget)->isChecked()?
 							QString("1"):QString("0")) + ")";
-	line += QString(", caption(%1)").arg(m_channel);
+	//line += QString(", caption(%1)").arg(m_channel);
 	if (property("QCS_midicc").toInt() >= 0 && property("QCS_midichan").toInt()>0) { // insert only if midi channel is above 0
 		line += ", midiCtrl(\"" + QString::number(property("QCS_midichan").toInt()) + ",";
 		line +=  QString::number(property("QCS_midicc").toInt()) + "\")";

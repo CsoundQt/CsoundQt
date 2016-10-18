@@ -353,8 +353,8 @@ void CsoundQt::changePage(int index)
         if (!m_options->widgetsIndependent) {
             QRect panelGeometry = widgetPanel->geometry();
             if (!widgetPanel->isFloating()) {
-                panelGeometry.setX(-1);
-                panelGeometry.setY(-1);
+				panelGeometry.setX(-1);
+				panelGeometry.setY(-1);
             }
             widgetPanel->takeWidgetLayout(panelGeometry);
         } else {

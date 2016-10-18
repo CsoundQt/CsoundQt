@@ -452,7 +452,6 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
 
 void WidgetLayout::setOuterGeometry(QRect r)
 {
-//	qDebug() << "WidgetLayout::setOuterGeometry" << newx << newy << neww << newh;
 	if (!r.isValid()) {
 		r = this->geometry();
 		m_posx = r.x();
@@ -1348,8 +1347,11 @@ QString WidgetLayout::getCabbageWidgets()
 {
 	QString title = windowTitle();
 	QString text = "form caption(\"" + title  + "\"),";
-	//text += "pos(" + QString::number(m_posx) + "," + QString::number(m_posy) + "),"; // not necessary any more
-	text += "size(" + QString::number(m_w) + "," + QString::number(m_h) +")\n"; // TODO: find correct and necessary size, maybe problem in CsoundQt::setWidgetPanelGeometry()  ?
+	//text += "size(" + QString::number(m_w+20) + "," + QString::number(m_h+20) +")\n"; // m_w and m_h not returning correct results always
+	int w = this->geometry().width();
+	int h = this->geometry().height();
+	qDebug() << "W & H in getCabbageWidgets: "<< w << " " << h;
+	text += QString(" size(%1,%2)\n").arg(w+20).arg(h+20);
 
 	int unsupported = 0;
 	widgetsMutex.lock();
@@ -1364,6 +1366,9 @@ QString WidgetLayout::getCabbageWidgets()
 	}
 	widgetsMutex.unlock();
 	qDebug() << "WidgetPanel:getCabbageWidgets() " << unsupported << " Unsupported widgets"; // TODO: dialog saying which widgets could not be converted
+	if (unsupported) {
+		QMessageBox::warning(this, tr("CsoundQt"), tr("Could not convert %1 widgets.").arg(unsupported));
+	}
 	return text;
 }
 

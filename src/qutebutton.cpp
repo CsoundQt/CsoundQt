@@ -155,7 +155,7 @@ QString QuteButton::getCabbageLine()
 	QString line = "button channel(\"" + m_channel + "\"),  ";
 	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
 	if (property("QCS_latch").toBool()) {
-		line += QString("text(\"%1\", \"%2\"), ").arg(property("QCS_text").toString() + " OFF, ").arg(property("QCS_text").toString() + " ON"); // set different texts for ON/OFF if latced
+		line += QString("text(\"%1\", \"%2\"), ").arg(property("QCS_text").toString() + " OFF").arg(property("QCS_text").toString() + " ON"); // set different texts for ON/OFF if latced
 	} 	else  {
 		line += "text(\"" + property("QCS_text").toString()+ " \"), "; // otherwise just the button text
 	}
