@@ -107,7 +107,7 @@ QString QuteCheckBox::getCabbageLine()
 	widgetLock.lockForRead();
 #endif
 	QString line = "checkbox channel(\"" + m_channel + "\"),  ";
-	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
+	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
 	line += "value(" + (static_cast<QCheckBox *>(m_widget)->isChecked()?
 							QString("1"):QString("0")) + ")";
 	//line += QString(", caption(%1)").arg(m_channel);

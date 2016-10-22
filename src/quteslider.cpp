@@ -158,7 +158,7 @@ QString QuteSlider::getCabbageLine()
 		line += "vslider ";
 	}
 	line += "channel(\"" + m_channel + "\"),  ";
-	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
+	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
 	line += QString("range(%1,%2,%3) " ).arg(property("QCS_minimum").toDouble()).arg(property("QCS_maximum").toDouble()).arg(m_value);
 	//line += QString(", text(%1), ").arg(m_channel); // Is it good idea to put channel as name - not really since geometry probably does not allow it
 	if (property("QCS_midicc").toInt() >= 0 && property("QCS_midichan").toInt()>0) { // insert only if midi channel is above 0

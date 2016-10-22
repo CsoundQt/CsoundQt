@@ -716,6 +716,24 @@ void QuteLineEdit::applyInternalProperties()
 	//  qDebug() << "QuteLineEdit::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
 }
 
+QString QuteLineEdit::getCabbageLine()
+{
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.lockForWrite();
+#endif
+	QString line = "texteditor channel(\"" + m_channel + "\"),  ";
+	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
+	line += QString("text(\"%1\"), ").arg(property("QCS_label").toString());
+	QColor color = property("QCS_color").value<QColor>();
+	line += "fontcolour(" + QString::number(color.red()) + "," +  QString::number(color.green()) + "," +  QString::number(color.blue()) + "), ";
+	color = property("QCS_bgcolor").value<QColor>();
+	line += "colour(" + QString::number(color.red()) + "," +  QString::number(color.green()) + "," +  QString::number(color.blue()) + ") ";
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.unlock();
+#endif
+	return line;
+}
+
 void QuteLineEdit::dropEvent(QDropEvent *event)
 {
 	qDebug("QuteLineEdit::dropEvent");
@@ -1083,6 +1101,28 @@ void QuteScrollNumber::applyInternalProperties()
 	//  qDebug() << property("QCS_bgcolormode").toBool();
 	//  qDebug() << "QuteScrollNumber::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
 	m_valueChanged = true;
+}
+
+QString QuteScrollNumber::getCabbageLine()
+{
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.lockForWrite();
+#endif
+	QString line = "numberbox channel(\"" + m_channel + "\"),  ";
+	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
+	QString alignment = property("QCS_alignment").toString();
+	alignment.replace("center","centre");
+	line += "align(\"" + alignment + "\"), ";
+	QColor color = property("QCS_color").value<QColor>();
+	line += "fontcolour(" + QString::number(color.red()) + "," +  QString::number(color.green()) + "," +  QString::number(color.blue()) + "), ";
+	color = property("QCS_bgcolor").value<QColor>();
+	line += "colour(" + QString::number(color.red()) + "," +  QString::number(color.green()) + "," +  QString::number(color.blue()) + "), ";
+	line += QString("range(-1000000000000,1000000000000,%1), ").arg(m_value); // set redicolously large min and max value and hope the user will use larger numbers...
+	line += "active(0)";
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.unlock();
+#endif
+	return line;
 }
 
 void QuteScrollNumber::addValue(double delta)

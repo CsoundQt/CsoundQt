@@ -62,7 +62,7 @@ QString QuteComboBox::getCabbageLine()
 	widgetLock.lockForRead();
 #endif
 	QString line = "combobox channel(\"" + m_channel + "\"),  ";
-	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
+	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
 	line += "value(" + QString::number(m_value) + "), ";
 	line += "items(\"" + itemList() + "\")";
 	if (property("QCS_midicc").toInt() >= 0 && property("QCS_midichan").toInt()>0) { // insert only if midi channel is above 0

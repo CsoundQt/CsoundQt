@@ -115,7 +115,7 @@ QString QuteConsole::getCabbageLine()
 	widgetLock.lockForWrite();
 #endif
 	QString line = "csoundoutput ";
-	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
+	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
 	line += "text(\"Csound output\")";
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();

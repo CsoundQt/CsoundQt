@@ -1335,6 +1335,7 @@ QString WidgetLayout::getCsladspaLines()
 			text += line + "\n";
 		}
 		else {
+
 			unsupported++;
 		}
 	}
@@ -1350,11 +1351,11 @@ QString WidgetLayout::getCabbageWidgets()
 	//text += "size(" + QString::number(m_w+20) + "," + QString::number(m_h+20) +")\n"; // m_w and m_h not returning correct results always
 	int w = this->geometry().width();
 	int h = this->geometry().height();
-	qDebug() << "W & H in getCabbageWidgets: "<< w << " " << h;
 	text += QString(" size(%1,%2)\n").arg(w+20).arg(h+20);
 
 	int unsupported = 0;
 	widgetsMutex.lock();
+	QString unsupportedWidgets;
 	foreach(QuteWidget *widget, m_widgets) {
 		QString line = widget->getCabbageLine();
 		if (line != "") {
@@ -1362,12 +1363,13 @@ QString WidgetLayout::getCabbageWidgets()
 		}
 		else {
 			unsupported++;
+			unsupportedWidgets += widget->getWidgetType() + " ";
 		}
 	}
 	widgetsMutex.unlock();
-	qDebug() << "WidgetPanel:getCabbageWidgets() " << unsupported << " Unsupported widgets"; // TODO: dialog saying which widgets could not be converted
+	qDebug() << "WidgetPanel:getCabbageWidgets() " << unsupported << " Unsupported widgets";
 	if (unsupported) {
-		QMessageBox::warning(this, tr("CsoundQt"), tr("Could not convert %1 widgets.").arg(unsupported));
+		QMessageBox::warning(this, tr("CsoundQt"), tr("Could not convert %1 widget(s):\n%2").arg(unsupported).arg(unsupportedWidgets));
 	}
 	return text;
 }

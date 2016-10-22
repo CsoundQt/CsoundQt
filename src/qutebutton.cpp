@@ -153,7 +153,7 @@ QString QuteButton::getCabbageLine()
 	widgetLock.lockForRead();
 #endif
 	QString line = "button channel(\"" + m_channel + "\"),  ";
-	line += "bounds(" + QString::number(x()) + ", " + QString::number(y()) + ","  + QString::number(width()) +", "+ QString::number(height()) + "), ";
+	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
 	if (property("QCS_latch").toBool()) {
 		line += QString("text(\"%1\", \"%2\"), ").arg(property("QCS_text").toString() + " OFF").arg(property("QCS_text").toString() + " ON"); // set different texts for ON/OFF if latced
 	} 	else  {

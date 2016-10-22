@@ -2585,6 +2585,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showWidgetEditAct->setShortcut(tr("Shift+Alt+7"));
     lineNumbersAct->setShortcut(tr("Shift+Alt+L"));
     parameterModeAct->setShortcut(tr("Shift+Alt+P"));
+	cabbageAct->setShortcut(tr("Shift+Ctrl+C"));
     //	showParametersAct->setShortcut(tr("Alt+P"));
 }
 
@@ -3323,6 +3324,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(inToGetAct);
     m_keyActions.append(getToInAct);
     m_keyActions.append(csladspaAct);
+	m_keyActions.append(cabbageAct);
     m_keyActions.append(findAct);
     m_keyActions.append(configureAct);
     m_keyActions.append(editAct);

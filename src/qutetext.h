@@ -98,6 +98,7 @@ public:
 	virtual QString getWidgetType();
 	virtual void dropEvent(QDropEvent *event);
 	virtual void applyInternalProperties();
+	virtual QString getCabbageLine();
 
 protected:
 	virtual void createPropertiesDialog();
@@ -123,6 +124,7 @@ public:
 	virtual void setMidiValue(int value);
 
 	virtual void applyInternalProperties();
+	virtual QString getCabbageLine();
 
 protected:
 	virtual void refreshWidget();
