@@ -889,14 +889,18 @@ int CsoundEngine::runCsound()
 	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
 	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
 	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
-
+#if CS_APIVERSION>=4
+	char const **argv;// since there was change in Csound API
+	argv = (const char **) calloc(33, sizeof(char*));
+#else
 	char **argv;
 	argv = (char **) calloc(33, sizeof(char*));
-	int argc = m_options.generateCmdLine(argv);
+#endif
+	int argc = m_options.generateCmdLine((char **)argv);
 	ud->result=csoundCompile(ud->csound,argc,argv);
 	for (int i = 0; i < argc; i++) {
 		qDebug() << argv[i];
-		free(argv[i]);
+		free((char *) argv[i]);
 	}
 	free(argv);
 	if (ud->result!=CSOUND_SUCCESS) {

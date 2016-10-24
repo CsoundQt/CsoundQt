@@ -691,15 +691,19 @@ QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(QString modul
 
 QStringList ConfigLists::runCsoundInternally(QStringList flags)
 {
-    char *argv[33];
+#if CS_APIVERSION>=4
+	const char *argv[33];
+#else
+	char *argv[33];
+#endif
     int index = 1;
     Q_ASSERT(flags.size() < 32);
-    argv[0]  = (char *) calloc(7, sizeof(char));
-    strncpy(argv[0], "csound", 6);
+	argv[0]  = (char *) calloc(7, sizeof(char));
+	strncpy((char *) argv[0], "csound", 6);
 
 	foreach (QString flag, flags) {
 		argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
-		strncpy(argv[index], flag.toLatin1(), flag.size());
+		strncpy((char *) argv[index], flag.toLatin1(), flag.size());
 		index++;
 	}
     int argc = flags.size() + 1;
