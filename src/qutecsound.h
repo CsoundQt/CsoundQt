@@ -221,7 +221,9 @@ private slots:
 	void setFullScreen(bool full);
 	void showDebugger(bool show);
 	void showVirtualKeyboard(bool show);
+	void showTableEditor(bool show);
 	void virtualKeyboardActOff(QObject *parent=0);
+	void tableEditorActOff(QObject *parent=0);
 	void showHtml5Gui(bool show);
 	void splitView(bool split);
 	void showMidiLearn();
@@ -317,8 +319,8 @@ private:
 	WidgetPanel *widgetPanel;  // Dock widget, for containing the widget layout
 	QDockWidget *m_scratchPad;
 #ifdef USE_QT_GT_53
-	QQuickWidget *m_virtualKeyboard;
-	QPointer <QQuickWidget> m_virtualKeyboardPointer; // to control, if virtualKeyboard is deleted
+	QQuickWidget *m_virtualKeyboard, *m_tableEditor;
+	QPointer <QQuickWidget> m_virtualKeyboardPointer, m_tableEditorPointer; // to control, if the object is deleted
 #endif
 #ifdef QCS_HTML5
 public: CsoundHtmlView *csoundHtmlView;
@@ -404,6 +406,7 @@ private:
 	QAction *showDebugAct;
 #endif
 	QAction *showVirtualKeyboardAct;
+	QAction *showTableEditorAct;
 #ifdef QCS_HTML5
 	QAction *showHtml5Act;
 #endif

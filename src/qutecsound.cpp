@@ -482,6 +482,9 @@ void CsoundQt::closeEvent(QCloseEvent *event)
 	if (!m_virtualKeyboardPointer.isNull() && m_virtualKeyboard->isVisible()) {
 		showVirtualKeyboard(false);
 	}
+	if (!m_tableEditorPointer.isNull() && m_tableEditor->isVisible()) {
+		showTableEditor(false);
+	}
 #endif
     // These two give faster shutdown times as the panels don't have to be called up as the tabs close
     showWidgetsAct->setChecked(false);
@@ -1982,6 +1985,32 @@ void CsoundQt::showVirtualKeyboard(bool show)
 #endif
 }
 
+void CsoundQt::showTableEditor(bool show)
+{
+#ifdef USE_QT_GT_53
+	if (show) {
+		m_tableEditor = new QQuickWidget(this); // create here to be able to
+		m_tableEditor->setAttribute(Qt::WA_DeleteOnClose); // ... be able to delete in on close and catch destroyed() to uncheck action button
+		m_tableEditorPointer = m_tableEditor;  // guarded pointer to check if object is  alive
+		m_tableEditor->setWindowTitle(tr("CsoundQt table editor"));
+		m_tableEditor->setWindowFlags(Qt::Window);
+		m_tableEditor->setSource(QUrl("qrc:/QML/TableEditor.qml"));
+		QObject *rootObject = m_tableEditor->rootObject();
+		m_tableEditor->setFocus();
+		//connect(rootObject, SIGNAL(genNote(QVariant, QVariant, QVariant, QVariant)), this, SLOT(virtualMidiIn(QVariant, QVariant, QVariant, QVariant)));
+		// connect(rootObject, SIGNAL(newCCvalue(int,int,int)), this, SLOT(virtualCCIn(int, int, int)));
+		m_tableEditor->setVisible(true);
+		connect(m_tableEditor, SIGNAL(destroyed(QObject*)), this, SLOT(virtualKeyboardActOff(QObject*)));
+	} else if (!m_tableEditorPointer.isNull()) { // check if object still existing (i.e not on exit)
+		m_tableEditor->setVisible(false);
+		m_tableEditor->close();
+	}
+#else
+	QMessageBox::warning(this, tr("Qt5 Required"), tr("Qt version > 5.2 is required for the virtual keyboard."));
+#endif
+
+}
+
 void CsoundQt::virtualKeyboardActOff(QObject *parent)
 {
 #ifdef USE_QT_GT_53
@@ -1989,6 +2018,18 @@ void CsoundQt::virtualKeyboardActOff(QObject *parent)
 	if (!m_virtualKeyboardPointer.isNull()) { // check if object still existing (i.e application not exiting)
 		if (showVirtualKeyboardAct->isChecked()) {
 			showVirtualKeyboardAct->setChecked(false);
+		}
+	}
+#endif
+}
+
+void CsoundQt::tableEditorActOff(QObject *parent)
+{
+#ifdef USE_QT_GT_53
+	//qDebug()<<"VirtualKeyboard destroyed";
+	if (!m_tableEditorPointer.isNull()) { // check if object still existing (i.e application not exiting)
+		if (showTableEditorAct ->isChecked()) {
+			showTableEditorAct->setChecked(false);
 		}
 	}
 #endif
@@ -3086,6 +3127,16 @@ void CsoundQt::createActions()
 	showVirtualKeyboardAct->setIconText(tr("Keyboard"));
     showVirtualKeyboardAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showVirtualKeyboardAct, SIGNAL(toggled(bool)), this, SLOT(showVirtualKeyboard(bool)));
+
+	showTableEditorAct = new QAction(QIcon(prefix + "midi_keyboard.png"), tr("Show Table editor"), this);
+	showTableEditorAct->setCheckable(true);
+	showTableEditorAct->setChecked(false);
+	showTableEditorAct->setStatusTip(tr("Show Table editor"));
+	showTableEditorAct->setIconText(tr("Table editor"));
+	showTableEditorAct->setShortcutContext(Qt::ApplicationShortcut);
+	connect(showTableEditorAct, SIGNAL(toggled(bool)), this, SLOT(showTableEditor(bool)));
+
+
 #ifdef QCS_HTML5
     showHtml5Act = new QAction(QIcon(":/images/html5.png"), tr("HTML View"), this);
     showHtml5Act->setIconText(tr("HTML"));
@@ -3352,6 +3403,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(showScratchPadAct);
     m_keyActions.append(showUtilitiesAct);
     m_keyActions.append(showVirtualKeyboardAct);
+	m_keyActions.append(showTableEditorAct);
 #ifdef QCS_HTML5
     m_keyActions.append(showHtml5Act);
 #endif
@@ -3593,6 +3645,7 @@ void CsoundQt::createMenus()
     viewMenu->addAction(midiLearnAct);
 #ifdef USE_QT5
     viewMenu->addAction(showVirtualKeyboardAct);
+	viewMenu->addAction(showTableEditorAct);
 #endif
     viewMenu->addSeparator();
     viewMenu->addAction(viewFullScreenAct);
@@ -4141,6 +4194,7 @@ void CsoundQt::createToolBars()
     configureToolBar->addAction(showLiveEventsAct);
 #ifdef USE_QT5
 	configureToolBar->addAction(showVirtualKeyboardAct);
+	configureToolBar->addAction(showTableEditorAct);
 #endif
 #ifdef QCS_PYTHONQT
     configureToolBar->addAction(showPythonConsoleAct);
