@@ -5271,7 +5271,7 @@ i 1000	0.0     3600	;REVERB
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>20000.000</label>
+  <label>18949.271</label>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
