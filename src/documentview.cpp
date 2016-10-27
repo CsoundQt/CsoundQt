@@ -44,7 +44,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 				"border: 1px solid black;"
 //				"border-radius: 4px;"
 				"padding: 2px;"
-				"background-color: #ffffcc;"
+                "background-color: #eaeac5;"
 				"};");
 	m_hoverText->setWordWrap(true);
 	m_hoverWidget->hide();
@@ -109,7 +109,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	syntaxMenu->setAutoFillBackground(true);
 	QPalette p =syntaxMenu-> palette();
 	p.setColor(QPalette::WindowText, Qt::blue);
-	p.setColor(static_cast<QPalette::ColorRole>(9), Qt::yellow);
+    p.setColor(static_cast<QPalette::ColorRole>(9), Qt::yellow);
 	syntaxMenu->setPalette(p);
 	connect(syntaxMenu,SIGNAL(keyPressed(QString)),
 			m_mainEditor, SLOT(insertPlainText(QString)));
