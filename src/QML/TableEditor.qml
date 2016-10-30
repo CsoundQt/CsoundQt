@@ -11,15 +11,14 @@ Rectangle {
     id: mainWindow
     width: 720
     height: 500
-    // TODO: resize to parent window
-    //minimumWidth: 640 // TODO - find good values
-    //minimumHeight: 440
     property var points: []; // array of endpoints of the segments
     property int pointWidth: 10; // set constant
     property real currentIndex: 0
     property real currentValue: 0
 
     Item {id: mainArea; anchors.fill: parent}
+
+    signal newSyntax(string syntax)
 
     function insertPoint(x,y) { // finds right place in the array (sorted by x), insert into array and creates the object
         var index = -1;
@@ -106,6 +105,7 @@ Rectangle {
         console.log("Checksum: ", checksum);
         console.log("New table definition: ", syntax);
         syntaxField.text = syntax;
+        //mainWindow.newSyntax(syntax);
         return syntax;
     }
 
@@ -473,20 +473,20 @@ Rectangle {
 
     Button {
         id: graph2syntaxButton
-        text: qsTr("&Graph2syntax")
+        text: qsTr("&Insert to CsoundQt")
         anchors.left: drawRect.left
         anchors.top: syntaxRadioButtons.bottom
         anchors.topMargin: 6
 
         onClicked:  {
-            graph2syntax();
+            mainWindow.newSyntax(graph2syntax()); // send signal to host
         }
     }
 
 
     Button {
         id: syntax2graphButton
-        text: qsTr("&Synatx2Graph")
+        text: qsTr("&Update graph")
         anchors.left: drawRect.left
         anchors.top: graph2syntaxButton.bottom
         anchors.topMargin: 6
@@ -550,8 +550,6 @@ Rectangle {
 
 
     Row {
-
-
         id: syntaxRadioButtons
         ExclusiveGroup { id: syntaxTypeGroup }
 
@@ -609,10 +607,6 @@ Rectangle {
         visible: false
         text: qsTr("Double-click to add a new point.\nDrag to move, right-click to remove\nYou can edit the table definition in textarea. \nThe changes in definition are displayed when you press ENTER or click on button Syntax2Table\n");
         onAccepted: visible=false;
-
-
-
     }
-
 
 }

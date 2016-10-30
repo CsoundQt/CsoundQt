@@ -1995,12 +1995,21 @@ void CsoundQt::showTableEditor(bool show)
 		m_tableEditor->setWindowTitle(tr("CsoundQt table editor"));
 		m_tableEditor->setWindowFlags(Qt::Window);
 		m_tableEditor->setSource(QUrl("qrc:/QML/TableEditor.qml"));
+		m_tableEditor->setResizeMode(QQuickWidget::ResizeMode::SizeRootObjectToView);
 		QObject *rootObject = m_tableEditor->rootObject();
 		m_tableEditor->setFocus();
-		//connect(rootObject, SIGNAL(genNote(QVariant, QVariant, QVariant, QVariant)), this, SLOT(virtualMidiIn(QVariant, QVariant, QVariant, QVariant)));
-		// connect(rootObject, SIGNAL(newCCvalue(int,int,int)), this, SLOT(virtualCCIn(int, int, int)));
+		connect(rootObject, SIGNAL(newSyntax(QString)), this, SLOT(handleTableSyntax(QString)));
+		// see if selected text contains a ftgen definition, then set in the editor
+		QString selectedText = getSelectedText();
+		if (selectedText.contains("ftgen") && selectedText.split(",")[3].simplified()=="7") {
+			qDebug()<<"This is a ftgen 7 definition: " << selectedText;
+			QMetaObject::invokeMethod(rootObject, "syntax2graph",
+					Q_ARG(QVariant, selectedText.simplified() ),
+					Q_ARG(QVariant, 0)); // if 0, finds max from the table parameters
+		}
+
 		m_tableEditor->setVisible(true);
-		connect(m_tableEditor, SIGNAL(destroyed(QObject*)), this, SLOT(virtualKeyboardActOff(QObject*)));
+		connect(m_tableEditor, SIGNAL(destroyed(QObject*)), this, SLOT(tableEditorActOff(QObject*)));
 	} else if (!m_tableEditorPointer.isNull()) { // check if object still existing (i.e not on exit)
 		m_tableEditor->setVisible(false);
 		m_tableEditor->close();
@@ -2087,6 +2096,12 @@ void CsoundQt::virtualCCIn(int channel, int cc, int value)
 	message.push_back(cc);
 	message.push_back(value);
 	documentPages[curPage]->queueVirtualMidiIn(message);
+}
+
+void CsoundQt::handleTableSyntax(QString syntax)
+{
+	qDebug()<<Q_FUNC_INFO<<syntax;
+	insertText(syntax);
 }
 
 void CsoundQt::openManualExample(QString fileName)
@@ -2591,7 +2606,8 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showDebugAct->setShortcut(tr("F5"));
 #endif
     showVirtualKeyboardAct->setShortcut(tr("Ctrl+Shift+V"));
-    splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
+	showTableEditorAct->setShortcut(tr("Ctrl+Shift+T"));
+	splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
     midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
     createCodeGraphAct->setShortcut(tr("Alt+4"));
     showInspectorAct->setShortcut(tr("Alt+5"));
@@ -3128,8 +3144,8 @@ void CsoundQt::createActions()
     showVirtualKeyboardAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showVirtualKeyboardAct, SIGNAL(toggled(bool)), this, SLOT(showVirtualKeyboard(bool)));
 
-	showTableEditorAct = new QAction(QIcon(prefix + "midi_keyboard.png"), tr("Show Table editor"), this);
-	showTableEditorAct->setCheckable(true);
+	showTableEditorAct = new QAction(/*QIcon(prefix + "midi_keyboard.png"), */tr("Show Table editor"), this);
+	showTableEditorAct->setCheckable(true); // TODO: make it clickable, ie not checkable
 	showTableEditorAct->setChecked(false);
 	showTableEditorAct->setStatusTip(tr("Show Table editor"));
 	showTableEditorAct->setIconText(tr("Table editor"));
@@ -4194,7 +4210,7 @@ void CsoundQt::createToolBars()
     configureToolBar->addAction(showLiveEventsAct);
 #ifdef USE_QT5
 	configureToolBar->addAction(showVirtualKeyboardAct);
-	configureToolBar->addAction(showTableEditorAct);
+	//configureToolBar->addAction(showTableEditorAct);
 #endif
 #ifdef QCS_PYTHONQT
     configureToolBar->addAction(showPythonConsoleAct);

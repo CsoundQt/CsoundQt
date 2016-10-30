@@ -229,6 +229,7 @@ private slots:
 	void showMidiLearn();
 	void virtualMidiIn(QVariant on, QVariant note, QVariant channel, QVariant velocity);
 	void virtualCCIn(int channel, int cc, int value);
+	void handleTableSyntax(QString syntax);
 	void openManualExample(QString fileName);
 	void openExternalBrowser(QUrl url = QUrl());
 	void openPdfFile(QString name);
