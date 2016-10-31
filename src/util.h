@@ -6,8 +6,9 @@
 #define CEFCLIENT_UTIL_H_
 #pragma once
 
+#ifdef QCS_HTML5
 #include "include/cef_task.h"
-
+#endif
 #if defined(OS_WIN)
 
 #include <windows.h>  // NOLINT(build/include_order)

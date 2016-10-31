@@ -1,17 +1,17 @@
-#ifdef QCS_HTML5
-
+#ifdef QCS_QTHTML
 #include "documentpage.h"
 #include "csoundhtmlview.h"
 #include "ui_html5guidisplay.h"
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QWaitCondition>
+#include <QFile>
 
 CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     QDockWidget(parent),
     ui(new Ui::Html5GuiDisplay),
     documentPage(0),
-    webView(0),
+	webView(0),
     pid(0)
 {
 #ifdef WIN32
@@ -21,10 +21,12 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     pid = getpid();
 #endif
     ui->setupUi(this);
-    webView = new QCefWebView(this);
+#ifdef QCS_HTML5
+	webView = new QCefWebView(this);
     setWidget(webView);
     //webView->loadFromUrl(QUrl("http://csound.github.io/docs/manual/indexframes.html"));
     webView->sizePolicy().setVerticalPolicy(QSizePolicy::Policy::Expanding);
+#endif
     layout()->setMargin(0);
 }
 
@@ -77,7 +79,7 @@ void CsoundHtmlView::load(DocumentPage *documentPage_)
         QTextStream out(&htmlfile);
         out << html;
         htmlfile.close();
-        webView->loadFromUrl(QUrl::fromLocalFile(htmlfilename));
+		//webView->loadFromUrl(QUrl::fromLocalFile(htmlfilename)); // TODO: uncomment!
     }
     repaint();
 }
@@ -93,7 +95,7 @@ void CsoundHtmlView::loadFromUrl(const QUrl &url)
     qDebug() << "CsoundHtmlView::loadFromUrl()...";
     if(webView != 0) {
         //webView->evaluateJavaScript("debugger;");
-        webView->loadFromUrl(url);
+		//webView->loadFromUrl(url);
     }
 }
 

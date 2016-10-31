@@ -44,6 +44,28 @@
 # CONFIG+=i386  #  To build i386 version. Default is x86_64
 ################################################################################
 
+#testing for qt based html support
+CONFIG += html_webkit # OR: html_webengine
+
+html_webkit: {
+message("Building html support using QtWebkit")
+DEFINES += QCS_QTHTML
+DEFINES += USE_WEBKIT
+QT += network webkit webkitwidgets
+CONFIG += c++11
+}
+
+html_webengine: {
+message("Building html support using QtWebengine")
+DEFINES += QCS_QTHTML
+DEFINES += USE_WEBENGINE
+QT += network webenginewidgets webchannel
+CONFIG += c++11
+}
+
+
+
+
 DEFINES += NOMINMAX
 
 csound6 {

@@ -7,9 +7,11 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "include/cef_base.h"
-#include "include/cef_app.h"
-#include "include/cef_v8.h"
+#ifdef QCS_HTML5
+	#include "include/cef_base.h"
+	#include "include/cef_app.h"
+	#include "include/cef_v8.h"
+#endif
 #include "qutecsound.h"
 #include <csound.h>
 #include "csoundengine.h"

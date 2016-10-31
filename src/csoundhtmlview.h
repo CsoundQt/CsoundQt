@@ -1,13 +1,14 @@
 #ifndef HTML5GUIDISPLAY_H
 #define HTML5GUIDISPLAY_H
 
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
 
 #include <atomic>
 #include <QDebug>
 #include <QDockWidget>
+#ifdef QCS_HTML5
 #include "qcefwebview.h"
-
+#endif
 namespace Ui {
 class Html5GuiDisplay;
 }
@@ -23,7 +24,12 @@ public:
     void loadFromUrl(const QUrl &url);
     void load(DocumentPage *documentPage);
     void stop();
-    QCefWebView *webView;
+#ifdef QCS_HTML5
+	QCefWebView *webView;
+#else
+	QWidget *webView;
+#endif
+
 protected:
     virtual void closeEvent(QCloseEvent *event);
 private:

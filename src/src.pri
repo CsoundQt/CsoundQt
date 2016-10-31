@@ -215,6 +215,11 @@ html5 {
     message("Removing CEF related files for non-html5 build.")
 }
 
+html_webkit|html_webengine: {
+	HEADERS += src/csoundhtmlview.h
+	SOURCES += src/csoundhtmlview.cpp
+}
+
 LIBS += $${LCSOUND} \
 	$${LCSND} \
     $${LSNDFILE} \

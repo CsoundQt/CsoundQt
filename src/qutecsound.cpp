@@ -146,7 +146,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	m_server = new QLocalServer();
 	connect(m_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     csoundHtmlView = new CsoundHtmlView(this);
 
     csoundHtmlView->setFocusPolicy(Qt::NoFocus);
@@ -156,6 +156,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     csoundHtmlView->show();
     addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
 #endif
+//TODO: #ifdef QCS_WEBKIT
+
 
     createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
     readSettings();
@@ -332,7 +334,7 @@ void CsoundQt::changePage(int index)
     // Previous page has already been destroyed here (if it was closed).
     // Remember this is called when opening, closing or switching tabs (including loading).
     // First thing to do is blank the HTML page to prevent misfired API calls.
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     /// MKG uncommented next line.
     csoundHtmlView->stop();
 #endif
@@ -397,7 +399,7 @@ void CsoundQt::changePage(int index)
             curCsdPage = curPage;
         }
     }
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     csoundHtmlView->load(documentPages[curPage]);
 #endif
     m_inspectorNeedsUpdate = true;
@@ -1446,7 +1448,7 @@ void CsoundQt::setCurrentAudioFile(const QString fileName)
 void CsoundQt::play(bool realtime, int index)
 {
     qDebug() << "CsoundQt::play()...";
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     /// MKG uncommented next line:
     csoundHtmlView->stop();
 #endif
@@ -1616,7 +1618,7 @@ void CsoundQt::play(bool realtime, int index)
             }
         }
     }
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     csoundHtmlView->load(documentPages[curPage]);
 #endif
     curPage = oldPage;
@@ -1698,7 +1700,7 @@ void CsoundQt::stop(int index)
 {
     // Must guarantee that csound has stopped when it returns
     qDebug() <<"CsoundQt::stop() " <<  index;
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     csoundHtmlView->stop();
 #endif
     int docIndex = index;
@@ -2047,7 +2049,7 @@ void CsoundQt::tableEditorActOff(QObject *parent)
 
 void CsoundQt::showHtml5Gui(bool show)
 {
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     csoundHtmlView->setVisible(show);
 #endif
 }
@@ -2612,7 +2614,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     createCodeGraphAct->setShortcut(tr("Alt+4"));
     showInspectorAct->setShortcut(tr("Alt+5"));
     showLiveEventsAct->setShortcut(tr("Alt+6"));
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     showHtml5Act->setShortcut(tr("Shift+Alt+H"));
 #endif
 	openDocumentationAct->setShortcut(tr("F1"));
@@ -3153,7 +3155,7 @@ void CsoundQt::createActions()
 	connect(showTableEditorAct, SIGNAL(toggled(bool)), this, SLOT(showTableEditor(bool)));
 
 
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     showHtml5Act = new QAction(QIcon(":/images/html5.png"), tr("HTML View"), this);
     showHtml5Act->setIconText(tr("HTML"));
     showHtml5Act->setCheckable(true);
@@ -3420,7 +3422,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(showUtilitiesAct);
     m_keyActions.append(showVirtualKeyboardAct);
 	m_keyActions.append(showTableEditorAct);
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     m_keyActions.append(showHtml5Act);
 #endif
     m_keyActions.append(setHelpEntryAct);
@@ -3651,7 +3653,7 @@ void CsoundQt::createMenus()
     viewMenu->addAction(showPythonConsoleAct);
 #endif
     viewMenu->addAction(showScratchPadAct);
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     viewMenu->addAction(showHtml5Act);
 #endif
     viewMenu->addAction(showUtilitiesAct);
@@ -4200,7 +4202,7 @@ void CsoundQt::createToolBars()
 
     configureToolBar = addToolBar(tr("Panels"));
     configureToolBar->setObjectName("panelToolBar");
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     configureToolBar->addAction(showHtml5Act);
 #endif
     configureToolBar->addAction(showWidgetsAct);

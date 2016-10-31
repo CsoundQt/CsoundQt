@@ -69,7 +69,7 @@ class EventSheet;
 class CsoundEngine;
 class MidiHandler;
 class MidiLearnDialog;
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
 class CsoundHtmlView;
 #endif
 
@@ -323,7 +323,7 @@ private:
 	QQuickWidget *m_virtualKeyboard, *m_tableEditor;
 	QPointer <QQuickWidget> m_virtualKeyboardPointer, m_tableEditorPointer; // to control, if the object is deleted
 #endif
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
 public: CsoundHtmlView *csoundHtmlView;
 #endif
 private:
@@ -408,7 +408,7 @@ private:
 #endif
 	QAction *showVirtualKeyboardAct;
 	QAction *showTableEditorAct;
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
 	QAction *showHtml5Act;
 #endif
 	QAction *midiLearnAct;

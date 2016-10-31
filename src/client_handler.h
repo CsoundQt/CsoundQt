@@ -10,6 +10,7 @@
 #include "client_app.h"
 #include "client_handler.h"
 #include "client_renderer.h"
+#ifdef QCS_HTML5
 #include "include/base/cef_lock.h"
 #include "include/cef_client.h"
 #include "include/cef_life_span_handler.h"
@@ -17,6 +18,7 @@
 #include "include/cef_request_context_handler.h"
 #include "include/cef_web_plugin.h"
 #include "include/internal/cef_types.h"
+#endif
 #include "util.h"
 #include "message_event.h"
 
