@@ -1995,7 +1995,7 @@ void CsoundQt::showTableEditor(bool show)
 		m_tableEditor->setWindowTitle(tr("CsoundQt table editor"));
 		m_tableEditor->setWindowFlags(Qt::Window);
 		m_tableEditor->setSource(QUrl("qrc:/QML/TableEditor.qml"));
-		m_tableEditor->setResizeMode(QQuickWidget::ResizeMode::SizeRootObjectToView);
+		m_tableEditor->setResizeMode(QQuickWidget::SizeRootObjectToView);
 		QObject *rootObject = m_tableEditor->rootObject();
 		m_tableEditor->setFocus();
 		connect(rootObject, SIGNAL(newSyntax(QString)), this, SLOT(handleTableSyntax(QString)));
