@@ -334,9 +334,9 @@ void CsoundQt::changePage(int index)
     // Previous page has already been destroyed here (if it was closed).
     // Remember this is called when opening, closing or switching tabs (including loading).
     // First thing to do is blank the HTML page to prevent misfired API calls.
-#ifdef QCS_QTHTML
+#ifdef QCS_HTML5 // või QCS_QTHTML ?
     /// MKG uncommented next line.
-    csoundHtmlView->stop();
+	csoundHtmlView->stop(); // miks seda vaja on? miks peatada? Kas CEF pärast
 #endif
     if (index < 0) { // No tabs left
         qDebug() << "CsoundQt::changePage index < 0";
@@ -400,7 +400,9 @@ void CsoundQt::changePage(int index)
         }
     }
 #ifdef QCS_QTHTML
-    csoundHtmlView->load(documentPages[curPage]);
+	if (!documentPages.isEmpty()) { //NB! this may have caused the crash on exit on windows!
+		csoundHtmlView->load(documentPages[curPage]);
+	}
 #endif
     m_inspectorNeedsUpdate = true;
 }
@@ -1448,7 +1450,7 @@ void CsoundQt::setCurrentAudioFile(const QString fileName)
 void CsoundQt::play(bool realtime, int index)
 {
     qDebug() << "CsoundQt::play()...";
-#ifdef QCS_QTHTML
+#ifdef QCS_HTML5//? QCS_QTHTML
     /// MKG uncommented next line:
     csoundHtmlView->stop();
 #endif
@@ -1619,7 +1621,9 @@ void CsoundQt::play(bool realtime, int index)
         }
     }
 #ifdef QCS_QTHTML
-    csoundHtmlView->load(documentPages[curPage]);
+	if (!documentPages.isEmpty()) {
+		csoundHtmlView->load(documentPages[curPage]);
+	}
 #endif
     curPage = oldPage;
 }
@@ -1700,7 +1704,7 @@ void CsoundQt::stop(int index)
 {
     // Must guarantee that csound has stopped when it returns
     qDebug() <<"CsoundQt::stop() " <<  index;
-#ifdef QCS_QTHTML
+#ifdef QCS_HTML5//? QCS_QTHTML
     csoundHtmlView->stop();
 #endif
     int docIndex = index;
@@ -3163,7 +3167,7 @@ void CsoundQt::createActions()
     showHtml5Act->setStatusTip(tr("Show the HTML view"));
     showHtml5Act->setShortcutContext(Qt::ApplicationShortcut);
     connect(showHtml5Act, SIGNAL(toggled(bool)), this, SLOT(showHtml5Gui(bool)));
-    connect(csoundHtmlView, SIGNAL(Close(bool)), showHtml5Act, SLOT(setChecked(bool)));
+	connect(csoundHtmlView, SIGNAL(Close(bool)), showHtml5Act, SLOT(setChecked(bool)));
 #endif
     splitViewAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Split View"), this);
     splitViewAct->setCheckable(true);

@@ -46,24 +46,21 @@
 
 #testing for qt based html support
 CONFIG += html_webkit # OR: html_webengine
+#CONFIG += html_webengine
 
 html_webkit: {
-message("Building html support using QtWebkit")
-DEFINES += QCS_QTHTML
-DEFINES += USE_WEBKIT
+message("Building html support with QtWebkit")
+DEFINES += QCS_QTHTML USE_WEBKIT
 QT += network webkit webkitwidgets
 CONFIG += c++11
 }
 
 html_webengine: {
-message("Building html support using QtWebengine")
-DEFINES += QCS_QTHTML
-DEFINES += USE_WEBENGINE
+message("Building html support with QtWebengine")
+DEFINES += QCS_QTHTML USE_WEBENGINE
 QT += network webenginewidgets webchannel
 CONFIG += c++11
 }
-
-
 
 
 DEFINES += NOMINMAX

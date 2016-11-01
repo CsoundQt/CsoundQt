@@ -15,7 +15,7 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     pid(0)
 {
 #ifdef WIN32
-    pid = GetCurrentProcessId();
+	pid = GetCurrentProcessId();
     qDebug("CsoundHtmlView::CsoundHtmlView: pid: %d\n", pid);
 #else
     pid = getpid();
@@ -23,18 +23,41 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     ui->setupUi(this);
 #ifdef QCS_HTML5
 	webView = new QCefWebView(this);
-    setWidget(webView);
-    //webView->loadFromUrl(QUrl("http://csound.github.io/docs/manual/indexframes.html"));
-    webView->sizePolicy().setVerticalPolicy(QSizePolicy::Policy::Expanding);
+	//setWidget(webView);
+	webView->loadFromUrl(QUrl("http://csound.github.io/docs/manual/indexframes.html"));
+	//webView->sizePolicy().setVerticalPolicy(QSizePolicy::Policy::Expanding);
 #endif
+#ifdef USE_WEBKIT
+	webView = new QWebView(this);
+	//webView->setUrl(QUrl("file:///home/tarmo/tarmo/programm/webchannel-test/test.csd.html"));
+#else
+	webView = new QWebEngineView(this);
+#endif
+	setWidget(webView);
+	webView->sizePolicy().setVerticalPolicy(QSizePolicy::Policy::Expanding);
+
     layout()->setMargin(0);
+
+#ifdef USE_WEBKIT
+	// webView->page()->mainFrame()->addToJavaScriptWindowObject("csound", &cs);
+
+	// add javascript inspector -  open with right click on htmlview
+	webView->page()->settings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+
+	QWebInspector inspector;
+	inspector.setPage(webView->page());
+	inspector.setVisible(true);
+#else
+	webView->page()->setWebChannel(&channel);
+	// channel.registerObject("csound", &cs) ;
+#endif
 }
 
 void CsoundHtmlView::closeEvent(QCloseEvent *event)
 {
     qDebug() << __FUNCTION__;
     if (webView) {
-        webView->close();
+		webView->close(); // is it necessary?
     }
 }
 
@@ -60,10 +83,10 @@ QString getElement(const QString &text, const QString &tag)
  * Save the <html> element, if it exists,
  * to filename xxx.csd.html, and load it into the CEF web view.
  */
-void CsoundHtmlView::load(DocumentPage *documentPage_)
+void CsoundHtmlView::load(DocumentPage *documentPage_) //TODO: call this whenever document is saved, not only on run. Usually always saved when run but there is also option not to save... Think.
 {
-    documentPage = documentPage_;
-    qDebug() << "CsoundHtmlView::play()...";
+	documentPage = documentPage_; // consider rewrite...
+	qDebug() << "CsoundHtmlView::load()...";
     auto text = documentPage.load()->getFullText();
     auto filename = documentPage.load()->getFileName();
     QFile csdfile(filename);
@@ -80,11 +103,12 @@ void CsoundHtmlView::load(DocumentPage *documentPage_)
         out << html;
         htmlfile.close();
 		//webView->loadFromUrl(QUrl::fromLocalFile(htmlfilename)); // TODO: uncomment!
+		loadFromUrl(QUrl::fromLocalFile(htmlfilename));
     }
     repaint();
 }
 
-void CsoundHtmlView::stop()
+void CsoundHtmlView::stop() // why this function necessary?
 {
     documentPage = 0;
     qDebug() << "CsoundHtmlView::stop()...";
@@ -94,8 +118,12 @@ void CsoundHtmlView::loadFromUrl(const QUrl &url)
 {
     qDebug() << "CsoundHtmlView::loadFromUrl()...";
     if(webView != 0) {
+#ifdef QCS_HTML5
         //webView->evaluateJavaScript("debugger;");
-		//webView->loadFromUrl(url);
+		webView->loadFromUrl(url);
+#else
+		webView->setUrl(url);
+#endif
     }
 }
 
