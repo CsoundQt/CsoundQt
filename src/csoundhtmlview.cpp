@@ -12,7 +12,8 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     ui(new Ui::Html5GuiDisplay),
     documentPage(0),
 	webView(0),
-    pid(0)
+	pid(0),
+	m_csoundEngine(NULL)
 {
 #ifdef WIN32
 	pid = GetCurrentProcessId();
@@ -21,11 +22,10 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     pid = getpid();
 #endif
     ui->setupUi(this);
+	// set csound to csoundwrapper here? setCsoundPointer(CSOUND *cs) {csoundWrapper.setCsoundPointer(cs){ csound = cs; } }
 #ifdef QCS_HTML5
 	webView = new QCefWebView(this);
-	//setWidget(webView);
 	webView->loadFromUrl(QUrl("http://csound.github.io/docs/manual/indexframes.html"));
-	//webView->sizePolicy().setVerticalPolicy(QSizePolicy::Policy::Expanding);
 #endif
 #ifdef USE_WEBKIT
 	webView = new QWebView(this);
@@ -39,8 +39,8 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     layout()->setMargin(0);
 
 #ifdef USE_WEBKIT
-	// webView->page()->mainFrame()->addToJavaScriptWindowObject("csound", &cs);
-
+	QObject::connect(webView->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),
+						this, SLOT(addJSObject()));  // to enable adding the object after reload
 	// add javascript inspector -  open with right click on htmlview
 	webView->page()->settings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
 
@@ -49,7 +49,7 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 	inspector.setVisible(true);
 #else
 	webView->page()->setWebChannel(&channel);
-	// channel.registerObject("csound", &cs) ;
+	channel.registerObject("csound", &csoundWrapper) ;
 #endif
 }
 
@@ -111,8 +111,21 @@ void CsoundHtmlView::load(DocumentPage *documentPage_) //TODO: call this wheneve
 void CsoundHtmlView::stop() // why this function necessary?
 {
     documentPage = 0;
-    qDebug() << "CsoundHtmlView::stop()...";
+	qDebug() << "CsoundHtmlView::stop()...";
 }
+
+
+#ifdef USE_WEBKIT
+void CsoundHtmlView::addJSObject()
+{
+	if (webView) {
+		qDebug()<<"Adding Csound as javascript object";
+		webView->page()->mainFrame()->addToJavaScriptWindowObject("csound", &csoundWrapper);
+	}
+}
+#endif
+
+
 
 void CsoundHtmlView::loadFromUrl(const QUrl &url)
 {

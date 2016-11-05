@@ -217,7 +217,10 @@ html5 {
 
 html_webkit|html_webengine: {
 	HEADERS += src/csoundhtmlview.h
+	HEADERS += src/csoundhtmlwrapper.h
+
 	SOURCES += src/csoundhtmlview.cpp
+	SOURCES += src/csoundhtmlwrapper.cpp
 }
 
 LIBS += $${LCSOUND} \

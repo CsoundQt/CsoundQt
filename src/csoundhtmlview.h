@@ -6,6 +6,7 @@
 #include <atomic>
 #include <QDebug>
 #include <QDockWidget>
+#include "csoundhtmlwrapper.h"
 #ifdef QCS_HTML5
 	#include "qcefwebview.h"
 #endif
@@ -25,7 +26,6 @@
 
 #include <QTemporaryFile>
 
-//#include "csoundwrapper.h"
 
 namespace Ui {
 class Html5GuiDisplay;
@@ -42,6 +42,8 @@ public:
     void loadFromUrl(const QUrl &url);
     void load(DocumentPage *documentPage);
     void stop();
+	void setCsoundEngine(CsoundEngine *csEngine) {csoundWrapper.setCsoundEngine(csEngine); }
+	void setCsound(CSOUND *cs) {csoundWrapper.setCsound(cs);}
 #ifdef QCS_HTML5
 	QCefWebView *webView;
 #endif
@@ -54,6 +56,11 @@ public:
 
 #endif
 
+public slots:
+#ifdef USE_WEBKIT
+	void addJSObject();
+#endif
+
 protected:
     virtual void closeEvent(QCloseEvent *event);
 private:
@@ -61,7 +68,8 @@ private:
 	std::atomic<DocumentPage *> documentPage; // ?? why and what is std::atomic
     pid_t pid;
 
-	QString csd; // kas vajalik?
+	CsoundHtmlWrapper csoundWrapper;
+	CsoundEngine * m_csoundEngine;
 	QTemporaryFile  tempHtml;
 
 };

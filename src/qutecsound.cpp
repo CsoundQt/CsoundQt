@@ -1622,6 +1622,8 @@ void CsoundQt::play(bool realtime, int index)
     }
 #ifdef QCS_QTHTML
 	if (!documentPages.isEmpty()) {
+		//csoundHtmlView->setCsoundEngine(getEngine(curPage));
+		csoundHtmlView->setCsound(getEngine(curPage)->getCsound());
 		csoundHtmlView->load(documentPages[curPage]);
 	}
 #endif
