@@ -48,8 +48,13 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 	inspector.setPage(webView->page());
 	inspector.setVisible(true);
 #else
-	webView->page()->setWebChannel(&channel);
-	channel.registerObject("csound", &csoundWrapper) ;
+    // Enable dev tools by default for the test browser
+    if (qgetenv("QTWEBENGINE_REMOTE_DEBUGGING").isNull()) {
+        qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "34711");  // should be somewhere in options
+    }
+    webView->page()->setWebChannel(&channel);
+    //qDebug()<<"setting JS object on init";
+    channel.registerObject("csound", &csoundWrapper) ;
 #endif
 }
 
@@ -96,14 +101,45 @@ void CsoundHtmlView::load(DocumentPage *documentPage_) //TODO: call this wheneve
     csdfile.close();
     auto html = getElement(text, "html");
     if (html.size() > 0) {
+#ifdef USE_WEBENGINE
+
+        // Inject necessary code to load qtwebchannel/qwebchannel.js.
+        QString injection = R"(<head>
+        <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
+        <script>
+        "use strict";
+        document.addEventListener("DOMContentLoaded", function () {
+                try {
+                    console.log("Initializing Csound...");
+                    window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {
+                    window.csound = channel.objects.csound;
+                    csound.message("Initialized csound.");
+                    });
+                } catch (e) {
+                    alert("initialize_csound error: " + e.message);
+                    console.log(e.message);
+                }
+            });
+        </script>)";
+        html = html.replace("<head>", injection);
+
+
+#endif
+
+
         QString htmlfilename = filename + ".html";
         QFile htmlfile(htmlfilename);
         htmlfile.open(QIODevice::WriteOnly);
         QTextStream out(&htmlfile);
         out << html;
         htmlfile.close();
-		//webView->loadFromUrl(QUrl::fromLocalFile(htmlfilename)); // TODO: uncomment!
 		loadFromUrl(QUrl::fromLocalFile(htmlfilename));
+        // kas aitab, kui on siin:
+#ifdef USE_WEBENGINE
+//        webView->page()->setWebChannel(&channel); // not sure, if it necessary
+//        channel.registerObject("csound", &csoundWrapper) ;
+//        qDebug()<<"Setting javascript object on load";
+#endif
     }
     repaint();
 }
