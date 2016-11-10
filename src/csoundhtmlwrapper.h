@@ -34,8 +34,7 @@ class CsoundHtmlWrapper : public QObject
 public:
 	explicit CsoundHtmlWrapper(QObject *parent = 0);
 
-	void setCsoundEngine(CsoundEngine *csEngine);
-	void setCsound(CSOUND *cs);
+	void setCsoundEngine(CsoundEngine *csEngine); // necessay to get CsoundEngine::isPlaying()
 
 	Q_INVOKABLE int compileCsd(const QString &filename);
 	Q_INVOKABLE int compileCsdText(const QString &text);

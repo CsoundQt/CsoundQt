@@ -20,6 +20,9 @@
     02111-1307 USA
 */
 
+
+// code based partly on CHSound by Michael Gogins https://github.com/gogins/gogins.github.io/tree/master/csound_html5
+
 #include "csoundhtmlwrapper.h"
 #include <QApplication>
 #include <QDebug>
@@ -35,16 +38,10 @@ CsoundHtmlWrapper::CsoundHtmlWrapper(QObject *parent) : QObject(parent)
 void CsoundHtmlWrapper::setCsoundEngine(CsoundEngine *csEngine)
 {
     m_csoundEngine = csEngine;
-    if (!m_csoundEngine) {
+	if (m_csoundEngine) {
         csound = m_csoundEngine->getCsound();
     }
 }
-
-void CsoundHtmlWrapper::setCsound(CSOUND *cs)
-{
-    csound=cs;
-}
-
 
 int CsoundHtmlWrapper::compileCsd(const QString &filename) {
     if (!csound) {
