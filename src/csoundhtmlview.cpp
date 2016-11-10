@@ -173,7 +173,7 @@ void CsoundHtmlView::viewHtml(QString htmlText)
 				}
 			});
 		</script>)";
-		html = html.replace("<head>", injection);
+        htmlText = htmlText.replace("<head>", injection);
 #endif
 		tempHtml.write(htmlText.toLocal8Bit());
 		tempHtml.resize(tempHtml.pos()); // otherwise may keep contents from previous write if that was bigger
