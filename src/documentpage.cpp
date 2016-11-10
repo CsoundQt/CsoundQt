@@ -367,6 +367,18 @@ QString DocumentPage::getMacOptions(QString option)
 	return m_macOptions[index].mid(option.size());
 }
 
+QString DocumentPage::getHtmlText()
+{
+	QString fullText = BaseDocument::getFullText(); // does windows need /r/n replacemant? then probably this.getFullText();
+	// get the <html> </html> element:
+	QString::SectionFlags sectionflags = QString::SectionIncludeLeadingSep |
+					QString::SectionIncludeTrailingSep | QString::SectionCaseInsensitiveSeps;
+	QString element = fullText.section("<html", 1, 1, sectionflags);
+	element = element.section("</html>", 0, 0, sectionflags);
+	return element;
+
+}
+
 int DocumentPage::getViewMode()
 {
 	return m_view->getViewMode();

@@ -1,7 +1,7 @@
 #ifndef HTML5GUIDISPLAY_H
 #define HTML5GUIDISPLAY_H
 
-#ifdef QCS_QTHTML
+#if defined(QCS_HTML5) || defined(QCS_QTHTML)
 
 #include <atomic>
 #include <QDebug>
@@ -43,7 +43,8 @@ public:
     void load(DocumentPage *documentPage);
     void stop();
 	void setCsoundEngine(CsoundEngine *csEngine) {csoundWrapper.setCsoundEngine(csEngine); }
-	void setCsound(CSOUND *cs) {csoundWrapper.setCsound(cs);}
+	void viewHtml(QString htmlText);
+	void clear();
 #ifdef QCS_HTML5
 	QCefWebView *webView;
 #endif
@@ -62,7 +63,7 @@ public slots:
 #endif
 
 protected:
-    virtual void closeEvent(QCloseEvent *event);
+	//virtual void closeEvent(QCloseEvent *event);
 private:
 	Ui::Html5GuiDisplay *ui;
 	std::atomic<DocumentPage *> documentPage; // ?? why and what is std::atomic

@@ -1,4 +1,4 @@
-#ifdef QCS_QTHTML
+#if defined(QCS_HTML5) || defined(QCS_QTHTML)
 #include "documentpage.h"
 #include "csoundhtmlview.h"
 #include "ui_html5guidisplay.h"
@@ -43,23 +43,22 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 						this, SLOT(addJSObject()));  // to enable adding the object after reload
 	// add javascript inspector -  open with right click on htmlview
 	webView->page()->settings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-
 	QWebInspector inspector;
 	inspector.setPage(webView->page());
 	inspector.setVisible(true);
 #else
 	webView->page()->setWebChannel(&channel);
-	channel.registerObject("csound", &csoundWrapper) ;
+	channel.registerObject("csound", &csoundWrapper) ; // is it still present after reload?
 #endif
 }
 
-void CsoundHtmlView::closeEvent(QCloseEvent *event)
-{
-    qDebug() << __FUNCTION__;
-    if (webView) {
-		webView->close(); // is it necessary?
-    }
-}
+//void CsoundHtmlView::closeEvent(QCloseEvent *event)
+//{
+//    qDebug() << __FUNCTION__;
+//    if (webView) {
+//		webView->close(); // is it necessary?
+//    }
+//}
 
 
 
@@ -83,19 +82,20 @@ QString getElement(const QString &text, const QString &tag)
  * Save the <html> element, if it exists,
  * to filename xxx.csd.html, and load it into the CEF web view.
  */
+// keep load() for CEF HTML5 for now; otherwise use viewHtml()
 void CsoundHtmlView::load(DocumentPage *documentPage_) //TODO: call this whenever document is saved, not only on run. Usually always saved when run but there is also option not to save... Think.
 {
 	documentPage = documentPage_; // consider rewrite...
 	qDebug() << "CsoundHtmlView::load()...";
-    auto text = documentPage.load()->getFullText();
-    auto filename = documentPage.load()->getFileName();
-    QFile csdfile(filename);
-    csdfile.open(QIODevice::WriteOnly);
-    QTextStream out(&csdfile);
-    out << text;
-    csdfile.close();
-    auto html = getElement(text, "html");
-    if (html.size() > 0) {
+	auto text = documentPage.load()->getFullText();
+	auto filename = documentPage.load()->getFileName();
+	QFile csdfile(filename);
+	csdfile.open(QIODevice::WriteOnly);
+	QTextStream out(&csdfile);
+	out << text;
+	csdfile.close();
+	auto html = getElement(text, "html");
+	if (html.size() > 0) {
         QString htmlfilename = filename + ".html";
         QFile htmlfile(htmlfilename);
         htmlfile.open(QIODevice::WriteOnly);
@@ -108,11 +108,37 @@ void CsoundHtmlView::load(DocumentPage *documentPage_) //TODO: call this wheneve
     repaint();
 }
 
-void CsoundHtmlView::stop() // why this function necessary?
+void CsoundHtmlView::stop() // why is this function necessary?
 {
     documentPage = 0;
 	qDebug() << "CsoundHtmlView::stop()...";
 }
+
+void CsoundHtmlView::viewHtml(QString htmlText)
+{
+	qDebug()<<Q_FUNC_INFO;
+	tempHtml.setFileTemplate( QDir::tempPath()+"/csoundqt-html-XXXXXX.html" ); // must have html ending for webkit
+	if (tempHtml.open()) {
+		// add necessary lines to load qtwebchannel/qwebchannel.js and qtcsound.js
+		// TODO: take care if html includes <head ...something...>
+#ifdef USE_WEBENGINE //TODO: have a look at MKG QHSound
+		QString replaceString = "<head> \
+					<script type=\"text/javascript\" src=\"qrc:///qtwebchannel/qwebchannel.js\"> </script> \
+					<script type=\"text/javascript\" src=\"qrc:///qtcsound.js\"></script> ";
+
+
+		htmlText = htmlText.replace("<head>", replaceString);
+		qDebug()<<"Replaced html: " <<htmlText;
+#endif
+		tempHtml.write(htmlText.toLocal8Bit());
+		tempHtml.resize(tempHtml.pos()); // otherwise may keep contents from previous write if that was bigger
+		tempHtml.close();
+		loadFromUrl(QUrl::fromLocalFile(tempHtml.fileName()));
+	}
+
+}
+
+
 
 
 #ifdef USE_WEBKIT
@@ -138,6 +164,11 @@ void CsoundHtmlView::loadFromUrl(const QUrl &url)
 		webView->setUrl(url);
 #endif
     }
+}
+
+void CsoundHtmlView::clear()
+{
+	loadFromUrl(QUrl()); // empty URL to clear
 }
 
 #endif
