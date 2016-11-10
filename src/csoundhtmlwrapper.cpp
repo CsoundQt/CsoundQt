@@ -20,6 +20,9 @@
     02111-1307 USA
 */
 
+
+// code based partly on CHSound by Michael Gogins https://github.com/gogins/gogins.github.io/tree/master/csound_html5
+
 #include "csoundhtmlwrapper.h"
 #include <QApplication>
 #include <QDebug>

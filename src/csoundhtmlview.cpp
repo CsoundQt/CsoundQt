@@ -47,8 +47,13 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 	inspector.setPage(webView->page());
 	inspector.setVisible(true);
 #else
-	webView->page()->setWebChannel(&channel);
-	channel.registerObject("csound", &csoundWrapper) ; // is it still present after reload?
+    // Enable dev tools by default for the test browser
+    if (qgetenv("QTWEBENGINE_REMOTE_DEBUGGING").isNull()) {
+        qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "34711");  // should be somewhere in options
+    }
+    webView->page()->setWebChannel(&channel);
+    //qDebug()<<"setting JS object on init";
+    channel.registerObject("csound", &csoundWrapper) ;
 #endif
 }
 
@@ -87,23 +92,51 @@ void CsoundHtmlView::load(DocumentPage *documentPage_) //TODO: call this wheneve
 {
 	documentPage = documentPage_; // consider rewrite...
 	qDebug() << "CsoundHtmlView::load()...";
-	auto text = documentPage.load()->getFullText();
-	auto filename = documentPage.load()->getFileName();
-	QFile csdfile(filename);
-	csdfile.open(QIODevice::WriteOnly);
-	QTextStream out(&csdfile);
-	out << text;
-	csdfile.close();
-	auto html = getElement(text, "html");
-	if (html.size() > 0) {
+    auto text = documentPage.load()->getFullText();
+    auto filename = documentPage.load()->getFileName();
+    QFile csdfile(filename);
+    csdfile.open(QIODevice::WriteOnly);
+    QTextStream out(&csdfile);
+    out << text;
+    csdfile.close();
+    auto html = getElement(text, "html");
+    if (html.size() > 0) {
+#ifdef USE_WEBENGINE
+
+        // Inject necessary code to load qtwebchannel/qwebchannel.js.
+        QString injection = R"(<head>
+        <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
+        <script>
+        "use strict";
+        document.addEventListener("DOMContentLoaded", function () {
+                try {
+                    console.log("Initializing Csound...");
+                    window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {
+                    window.csound = channel.objects.csound;
+                    csound.message("Initialized csound.");
+                    });
+                } catch (e) {
+                    alert("initialize_csound error: " + e.message);
+                    console.log(e.message);
+                }
+            });
+        </script>)";
+        html = html.replace("<head>", injection);
+#endif
+
         QString htmlfilename = filename + ".html";
         QFile htmlfile(htmlfilename);
         htmlfile.open(QIODevice::WriteOnly);
         QTextStream out(&htmlfile);
         out << html;
         htmlfile.close();
-		//webView->loadFromUrl(QUrl::fromLocalFile(htmlfilename)); // TODO: uncomment!
 		loadFromUrl(QUrl::fromLocalFile(htmlfilename));
+        // kas aitab, kui on siin:
+#ifdef USE_WEBENGINE
+//        webView->page()->setWebChannel(&channel); // not sure, if it necessary
+//        channel.registerObject("csound", &csoundWrapper) ;
+//        qDebug()<<"Setting javascript object on load";
+#endif
     }
     repaint();
 }
@@ -122,13 +155,25 @@ void CsoundHtmlView::viewHtml(QString htmlText)
 		// add necessary lines to load qtwebchannel/qwebchannel.js and qtcsound.js
 		// TODO: take care if html includes <head ...something...>
 #ifdef USE_WEBENGINE //TODO: have a look at MKG QHSound
-		QString replaceString = "<head> \
-					<script type=\"text/javascript\" src=\"qrc:///qtwebchannel/qwebchannel.js\"> </script> \
-					<script type=\"text/javascript\" src=\"qrc:///qtcsound.js\"></script> ";
-
-
-		htmlText = htmlText.replace("<head>", replaceString);
-		qDebug()<<"Replaced html: " <<htmlText;
+		// Inject necessary code to load qtwebchannel/qwebchannel.js.
+		QString injection = R"(<head>
+		<script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
+		<script>
+		"use strict";
+		document.addEventListener("DOMContentLoaded", function () {
+				try {
+					console.log("Initializing Csound...");
+					window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {
+					window.csound = channel.objects.csound;
+					csound.message("Initialized csound.");
+					});
+				} catch (e) {
+					alert("initialize_csound error: " + e.message);
+					console.log(e.message);
+				}
+			});
+		</script>)";
+		html = html.replace("<head>", injection);
 #endif
 		tempHtml.write(htmlText.toLocal8Bit());
 		tempHtml.resize(tempHtml.pos()); // otherwise may keep contents from previous write if that was bigger
