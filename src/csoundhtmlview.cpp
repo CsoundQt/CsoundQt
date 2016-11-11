@@ -102,28 +102,38 @@ void CsoundHtmlView::load(DocumentPage *documentPage_) //TODO: call this wheneve
     auto html = getElement(text, "html");
     if (html.size() > 0) {
 #ifdef USE_WEBENGINE
-
         // Inject necessary code to load qtwebchannel/qwebchannel.js.
-        QString injection = R"(<head>
-        <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
-        <script>
-        "use strict";
-        document.addEventListener("DOMContentLoaded", function () {
-                try {
-                    console.log("Initializing Csound...");
-                    window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {
-                    window.csound = channel.objects.csound;
-                    csound.message("Initialized csound.");
-                    });
-                } catch (e) {
-                    alert("initialize_csound error: " + e.message);
-                    console.log(e.message);
-                }
-            });
-        </script>)";
-        html = html.replace("<head>", injection);
+        QString injection = R"(
+<script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<script>
+"use strict";
+document.addEventListener("DOMContentLoaded", function () {
+    try {
+        console.log("Initializing Csound...");
+        window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {
+        window.csound = channel.objects.csound;
+        csound.message("Initialized csound.");
+        });
+    } catch (e) {
+        alert("initialize_csound error: " + e.message);
+        console.log(e.message);
+    }
+});
+</script>
+)";
+        // Tricky because now HTML doesn't have to have a <head> element,
+        // and both <html> and <head> can have attributes. So we need to find an
+        // injection point that is the very first place allowed to put a <script>
+        // element.
+        int injection_index = html.indexOf("</head>", 0, Qt::CaseInsensitive);
+        if (injection_index != -1) {
+            injection_index = injection_index + 1;
+        } else {
+            injection_index = html.indexOf("<html ", 0, Qt::CaseInsensitive);
+            injection_index = html.indexOf(">", injection_index) + 1;
+        }
+        html = html.insert(injection_index, injection);
 #endif
-
         QString htmlfilename = filename + ".html";
         QFile htmlfile(htmlfilename);
         htmlfile.open(QIODevice::WriteOnly);
@@ -133,9 +143,9 @@ void CsoundHtmlView::load(DocumentPage *documentPage_) //TODO: call this wheneve
 		loadFromUrl(QUrl::fromLocalFile(htmlfilename));
         // kas aitab, kui on siin:
 #ifdef USE_WEBENGINE
-//        webView->page()->setWebChannel(&channel); // not sure, if it necessary
-//        channel.registerObject("csound", &csoundWrapper) ;
-//        qDebug()<<"Setting javascript object on load";
+        webView->page()->setWebChannel(&channel); // not sure, if it necessary
+        channel.registerObject("csound", &csoundWrapper) ;
+        qDebug()<<"Setting javascript object on load.";
 #endif
     }
     repaint();
@@ -152,39 +162,50 @@ void CsoundHtmlView::viewHtml(QString htmlText)
 	qDebug()<<Q_FUNC_INFO;
 	tempHtml.setFileTemplate( QDir::tempPath()+"/csoundqt-html-XXXXXX.html" ); // must have html ending for webkit
 	if (tempHtml.open()) {
-		// add necessary lines to load qtwebchannel/qwebchannel.js and qtcsound.js
-		// TODO: take care if html includes <head ...something...>
-#ifdef USE_WEBENGINE //TODO: have a look at MKG QHSound
-		// Inject necessary code to load qtwebchannel/qwebchannel.js.
-		QString injection = R"(<head>
-		<script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
-		<script>
-		"use strict";
-		document.addEventListener("DOMContentLoaded", function () {
-				try {
-					console.log("Initializing Csound...");
-					window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {
-					window.csound = channel.objects.csound;
-					csound.message("Initialized csound.");
-					});
-				} catch (e) {
-					alert("initialize_csound error: " + e.message);
-					console.log(e.message);
-				}
-			});
-		</script>)";
-        htmlText = htmlText.replace("<head>", injection);
+#ifdef USE_WEBENGINE
+        // Inject necessary code to load qtwebchannel/qwebchannel.js.
+        QString injection = R"(
+<script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<script>
+"use strict";
+document.addEventListener("DOMContentLoaded", function () {
+    try {
+        console.log("Initializing Csound...");
+        window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {
+        window.csound = channel.objects.csound;
+        csound.message("Initialized csound.");
+        });
+    } catch (e) {
+        alert("initialize_csound error: " + e.message);
+        console.log(e.message);
+    }
+});
+</script>
+)";
+        // Tricky because now HTML doesn't have to have a <head> element,
+        // and both <html> and <head> can have attributes. So we need to find an
+        // injection point that is the very first place allowed to put a <script>
+        // element.
+        int injection_index = htmlText.indexOf("</head>", 0, Qt::CaseInsensitive);
+        if (injection_index != -1) {
+            injection_index = injection_index + 1;
+        } else {
+            injection_index = htmlText.indexOf("<html", 0, Qt::CaseInsensitive);
+            injection_index = htmlText.indexOf(">", injection_index) + 1;
+        }
+        htmlText = htmlText.insert(injection_index, injection);
 #endif
 		tempHtml.write(htmlText.toLocal8Bit());
 		tempHtml.resize(tempHtml.pos()); // otherwise may keep contents from previous write if that was bigger
 		tempHtml.close();
 		loadFromUrl(QUrl::fromLocalFile(tempHtml.fileName()));
+#ifdef USE_WEBENGINE
+        webView->page()->setWebChannel(&channel);
+        channel.registerObject("csound", &csoundWrapper) ;
+        qDebug()<<"Setting javascript object on load.";
+#endif
 	}
-
 }
-
-
-
 
 #ifdef USE_WEBKIT
 void CsoundHtmlView::addJSObject()

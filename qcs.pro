@@ -45,8 +45,8 @@
 ################################################################################
 
 #testing for qt based html support
-CONFIG += html_webkit # OR: html_webengine
-#CONFIG += html_webengine
+#CONFIG += html_webkit # OR: html_webengine
+CONFIG += html_webengine
 
 html_webkit: {
 message("Building html support with QtWebkit")
