@@ -72,8 +72,7 @@ CsoundHtmlView::~CsoundHtmlView()
     delete ui;
 }
 
-QString getElement(const QString &text, const QString &tag)	if(!Detector.webgl){
-    Detector.addGetWebGLMessage();
+QString getElement(const QString &text, const QString &tag)
 {
     QString::SectionFlags sectionflags = QString::SectionIncludeLeadingSep | QString::SectionIncludeTrailingSep | QString::SectionCaseInsensitiveSeps;
     QString element = text.section("<" + tag, 1, 1, sectionflags);
@@ -113,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Initializing Csound...");
         window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {
         window.csound = channel.objects.csound;
-        csound.message("Initialized csound.");
+        csound.message("Initialized csound.\n");
         });
     } catch (e) {
         alert("initialize_csound error: " + e.message);
@@ -144,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		loadFromUrl(QUrl::fromLocalFile(htmlfilename));
         // kas aitab, kui on siin:
 #ifdef USE_WEBENGINE
-        webView->page()->setWebChannel(&channel); // not sure, if it necessary
+        webView->page()->setWebChannel(&channel);
         channel.registerObject("csound", &csoundWrapper) ;
         qDebug()<<"Setting javascript object on load.";
 #endif
@@ -174,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Initializing Csound...");
         window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {
         window.csound = channel.objects.csound;
-        csound.message("Initialized csound.");
+        csound.message("Initialized csound.\n");
         });
     } catch (e) {
         alert("initialize_csound error: " + e.message);
