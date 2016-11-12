@@ -72,7 +72,8 @@ CsoundHtmlView::~CsoundHtmlView()
     delete ui;
 }
 
-QString getElement(const QString &text, const QString &tag)
+QString getElement(const QString &text, const QString &tag)	if(!Detector.webgl){
+    Detector.addGetWebGLMessage();
 {
     QString::SectionFlags sectionflags = QString::SectionIncludeLeadingSep | QString::SectionIncludeTrailingSep | QString::SectionCaseInsensitiveSeps;
     QString element = text.section("<" + tag, 1, 1, sectionflags);
@@ -125,11 +126,11 @@ document.addEventListener("DOMContentLoaded", function () {
         // and both <html> and <head> can have attributes. So we need to find an
         // injection point that is the very first place allowed to put a <script>
         // element.
-        int injection_index = html.indexOf("</head>", 0, Qt::CaseInsensitive);
+        int injection_index = html.indexOf("<head", 0, Qt::CaseInsensitive);
         if (injection_index != -1) {
-            injection_index = injection_index + 1;
+            injection_index = html.indexOf(">", injection_index) + 1;
         } else {
-            injection_index = html.indexOf("<html ", 0, Qt::CaseInsensitive);
+            injection_index = html.indexOf("<html", 0, Qt::CaseInsensitive);
             injection_index = html.indexOf(">", injection_index) + 1;
         }
         html = html.insert(injection_index, injection);
@@ -186,9 +187,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // and both <html> and <head> can have attributes. So we need to find an
         // injection point that is the very first place allowed to put a <script>
         // element.
-        int injection_index = htmlText.indexOf("</head>", 0, Qt::CaseInsensitive);
+        int injection_index = htmlText.indexOf("<head", 0, Qt::CaseInsensitive);
         if (injection_index != -1) {
-            injection_index = injection_index + 1;
+            injection_index = htmlText.indexOf(">", injection_index) + 1;
         } else {
             injection_index = htmlText.indexOf("<html", 0, Qt::CaseInsensitive);
             injection_index = htmlText.indexOf(">", injection_index) + 1;
