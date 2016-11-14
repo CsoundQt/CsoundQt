@@ -57,16 +57,6 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 #endif
 }
 
-//void CsoundHtmlView::closeEvent(QCloseEvent *event)
-//{
-//    qDebug() << __FUNCTION__;
-//    if (webView) {
-//		webView->close(); // is it necessary?
-//    }
-//}
-
-
-
 CsoundHtmlView::~CsoundHtmlView()
 {
     delete ui;
@@ -87,10 +77,10 @@ QString getElement(const QString &text, const QString &tag)
  * Save the <html> element, if it exists,
  * to filename xxx.csd.html, and load it into the CEF web view.
  */
-// keep load() for CEF HTML5 for now; otherwise use viewHtml()
-void CsoundHtmlView::load(DocumentPage *documentPage_) //TODO: call this whenever document is saved, not only on run. Usually always saved when run but there is also option not to save... Think.
+void CsoundHtmlView::load(DocumentPage *documentPage_)
 {
-	documentPage = documentPage_; // consider rewrite...
+    //TODO: call this whenever document is saved, not only on run. Usually always saved when run but there is also option not to save... Think.
+    documentPage = documentPage_; // consider rewrite...
 	qDebug() << "CsoundHtmlView::load()...";
     auto text = documentPage.load()->getFullText();
     auto filename = documentPage.load()->getFileName();
@@ -105,7 +95,7 @@ void CsoundHtmlView::load(DocumentPage *documentPage_) //TODO: call this wheneve
         // Inject necessary code to load qtwebchannel/qwebchannel.js.
         QString injection = R"(
 <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
-<script>
+<script type="text/javascript">
 "use strict";
 document.addEventListener("DOMContentLoaded", function () {
     try {
@@ -159,16 +149,26 @@ void CsoundHtmlView::stop() // why is this function necessary?
 
 void CsoundHtmlView::viewHtml(QString htmlText)
 {
-	qDebug()<<Q_FUNC_INFO;
-	tempHtml.setFileTemplate( QDir::tempPath()+"/csoundqt-html-XXXXXX.html" ); // must have html ending for webkit
-	if (tempHtml.open()) {
+    qDebug()<<Q_FUNC_INFO;
+    tempHtml.setFileTemplate( QDir::tempPath()+"/csoundqt-html-XXXXXX.html" ); // must have html ending for webkit
+    if (tempHtml.open()) {
 #ifdef USE_WEBENGINE
         // Inject necessary code to load qtwebchannel/qwebchannel.js.
         QString injection = R"(
 <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
 <script>
 "use strict";
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {//void CsoundHtmlView::closeEvent(QCloseEvent *event)
+                            //{
+                            //    qDebug() << __FUNCTION__;
+                            //    if (webView) {
+                            //		webView->close(); // is it necessary?
+                            //    }
+                            //}
+
+
+
+
     try {
         console.log("Initializing Csound...");
         window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {

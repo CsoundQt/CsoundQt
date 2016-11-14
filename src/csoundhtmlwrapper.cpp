@@ -200,6 +200,7 @@ int CsoundHtmlWrapper::perform() {
         return -1;
     }
     return csoundPerform(csound);
+
 }
 
 int CsoundHtmlWrapper::readScore(const QString &text) {
@@ -255,6 +256,11 @@ void CsoundHtmlWrapper::setInput(const QString &name){
 #endif
 }
 
+void CsoundHtmlWrapper::setMessageCallback(QObject *callback){
+    qDebug()<<"QCsound::setMessageCallback";
+    callback->dumpObjectInfo();
+}
+
 int CsoundHtmlWrapper::setOption(const QString &name){
     if (!csound) {
         return -1;
@@ -296,6 +302,13 @@ void CsoundHtmlWrapper::setStringChannel(const QString &name, const QString &val
         return;
     }
     csoundSetStringChannel(csound,  name.toLocal8Bit(), value.toLocal8Bit().data());
+}
+
+void CsoundHtmlWrapper::stop(){
+    if (!csound) {
+        return;
+    }
+    csoundStop(csound);
 }
 
 double CsoundHtmlWrapper::tableGet(int table_number, int index){

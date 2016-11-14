@@ -5709,7 +5709,11 @@ void CsoundQt::updateHtmlView()
 #ifdef QCS_HTML5
 		csoundHtmlView->load(documentPages[curPage]); // for CEF
 #else
-		csoundHtmlView->viewHtml(htmlText); // for new implementation
+        // The following line doesn't work, as the temporary file
+        // can't load resources from relative paths, and indeed is not even
+        // in the same HTML domain.
+        // csoundHtmlView->viewHtml(htmlText); // for new implementation
+        csoundHtmlView->load(documentPages[curPage]);
 #endif
 	} else {
 		csoundHtmlView->clear();

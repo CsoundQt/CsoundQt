@@ -233,11 +233,12 @@ public slots:
 	void setFlags(PerfFlags flags) {ud->flags = flags;}
 
 	void evaluate(QString code);
-private:
+public:
 	int runCsound();
 	void stopCsound();
 
 	void cleanupCsound();
+private:
 	void setupChannels();
 
 	QFuture<void> m_msgUpdateThread;

@@ -66,12 +66,15 @@ public:
 	Q_INVOKABLE void setControlChannel(const QString &name, double value);
 	Q_INVOKABLE int setGlobalEnv(const QString &name, const QString &value);
 	Q_INVOKABLE void setInput(const QString &name);
-	Q_INVOKABLE int setOption(const QString &name);
+    // Dummy for now.
+    Q_INVOKABLE void setMessageCallback(QObject *callback);
+    Q_INVOKABLE int setOption(const QString &name);
 	Q_INVOKABLE void setOutput(const QString &name, const QString &type, const QString &format);
 	Q_INVOKABLE void setScoreOffsetSeconds(double value);
 	Q_INVOKABLE void setScorePending(bool value);
 	Q_INVOKABLE void setStringChannel(const QString &name, const QString &value);
-	Q_INVOKABLE double tableGet(int table_number, int index);
+    Q_INVOKABLE void stop();
+    Q_INVOKABLE double tableGet(int table_number, int index);
 	Q_INVOKABLE int tableLength(int table_number);
 	Q_INVOKABLE void tableSet(int table_number, int index, double value);
 

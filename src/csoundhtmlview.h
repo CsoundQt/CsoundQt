@@ -43,7 +43,7 @@ public:
     void load(DocumentPage *documentPage);
     void stop();
 	void setCsoundEngine(CsoundEngine *csEngine) {csoundWrapper.setCsoundEngine(csEngine); }
-	void viewHtml(QString htmlText);
+    void viewHtml(QString htmlText);
 	void clear();
 #ifdef QCS_HTML5
 	QCefWebView *webView;
