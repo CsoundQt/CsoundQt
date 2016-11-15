@@ -21,7 +21,7 @@
 */
 
 
-// code based partly on CHSound by Michael Gogins https://github.com/gogins/gogins.github.io/tree/master/csound_html5
+// code based partly on CsoundHtmlWrapper by Michael Gogins https://github.com/gogins/gogins.github.io/tree/master/csound_html5
 
 #include "csoundhtmlwrapper.h"
 #include <QApplication>
@@ -29,10 +29,15 @@
 
 
 
-CsoundHtmlWrapper::CsoundHtmlWrapper(QObject *parent) : QObject(parent)
+CsoundHtmlWrapper::CsoundHtmlWrapper(QObject *parent) :
+    QObject(parent),
+    csound_stop(true),
+    csound_finished(true),
+    csound_thread(nullptr),
+    csound(nullptr),
+    m_csoundEngine(nullptr),
+    message_callback(nullptr)
 {
-    csound = NULL;
-    m_csoundEngine = NULL;
 }
 
 void CsoundHtmlWrapper::setCsoundEngine(CsoundEngine *csEngine)
@@ -128,7 +133,7 @@ int CsoundHtmlWrapper::getNchnls() {
 
 int CsoundHtmlWrapper::getNchnlsInput() {
     if (!csound) {
-        return -1;
+        return -1;Q_INVOKABLE
     }
     return csoundGetNchnlsInput(csound);
 }
@@ -199,9 +204,36 @@ int CsoundHtmlWrapper::perform() {
     if (!csound) {
         return -1;
     }
-    return csoundPerform(csound);
-
+    stop();
+    csound_thread = new std::thread(&CsoundHtmlWrapper::perform_thread_routine, this);
+    if (csound_thread) {
+        return 0;
+    } else {
+        return 1;
+    }
 }
+
+int CsoundHtmlWrapper::perform_thread_routine() {
+    qDebug() << "CsoundHtmlWrapper: " << __FUNCTION__;
+    int result = 0;
+    result = csoundStart(csound);
+    message("Csound is running...");
+    for (csound_stop = false, csound_finished = false;
+         ((csound_stop == false) && (csound_finished == false)); )
+    {
+        csound_finished = csoundPerformKsmps(csound);
+    }
+    message("Csound has stopped.");
+    // Although the thread has been started by the CsoundHtmlWrapper,
+    // the cleanup should be done by the CsoundEngine.
+    // result = csoundCleanup(csound);
+    // if (result) {
+    //     message("Failed to clean up Csound performance.");
+    // }
+    // csoundReset(csound);
+    return result;
+}
+
 
 int CsoundHtmlWrapper::readScore(const QString &text) {
     if (!csound) {
@@ -224,7 +256,7 @@ int CsoundHtmlWrapper::runUtility(const QString &command, int argc, char **argv)
     return csoundRunUtility(csound, command.toLocal8Bit(), argc, argv); // probably does not work from JS due char **
 }
 
-int CsoundHtmlWrapper::scoreEvent(char type, const double *pFields, long numFields) { // does not work... - unknown type const double *'
+int CsoundHtmlWrapper::scoreEvent(char type, const double *pFields, long numFields) {
     if (!csound) {
         return -1;
     }
@@ -257,7 +289,7 @@ void CsoundHtmlWrapper::setInput(const QString &name){
 }
 
 void CsoundHtmlWrapper::setMessageCallback(QObject *callback){
-    qDebug()<<"QCsound::setMessageCallback";
+    qDebug() << "CsoundHtmlWrapper::setMessageCallback";
     callback->dumpObjectInfo();
 }
 
@@ -308,7 +340,14 @@ void CsoundHtmlWrapper::stop(){
     if (!csound) {
         return;
     }
-    csoundStop(csound);
+    csound_stop = true;
+    if (csound_thread) {
+        csound_thread->join();
+        csound_thread = nullptr;
+    }
+    // Although the thread has been started in the CsoundHtmlWrapper,
+    // the actual cleanup should be done by the CsoundEngine.
+    // csoundStop(csound);
 }
 
 double CsoundHtmlWrapper::tableGet(int table_number, int index){

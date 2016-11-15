@@ -767,7 +767,7 @@ int CsoundEngine::runCsound()
 {
 	QMutexLocker locker(&m_playMutex);
 #ifdef MACOSX_PRE_SNOW
-	//Remember menu bar to set it after FLTK grabs it
+    // Remember menu bar to set it after FLTK grabs it
 	menuBarHandle = GetMenuBar();
 #endif
 #ifdef Q_OS_WIN
@@ -776,15 +776,14 @@ int CsoundEngine::runCsound()
 	OleInitialize(NULL);
 	OleInitialize(NULL);
 #endif
-	eventQueueSize = 0; //Flush events gathered while idle
+    eventQueueSize = 0;
+    // Flush events gathered while idle.
 	ud->audioOutputBuffer.allZero();
 	ud->msgRefreshTime = m_refreshTime*1000;
-
 	QDir::setCurrent(m_options.fileName1);
 	for (int i = 0; i < consoles.size(); i++) {
 		consoles[0]->reset();
 	}
-
 #ifdef QCS_DESTROY_CSOUND
 	ud->csound=csoundCreate((void *) ud);
 #ifdef CSOUND6
@@ -792,10 +791,9 @@ int CsoundEngine::runCsound()
 	Q_ASSERT(ud->midiBuffer);
 	ud->virtualMidiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
 	Q_ASSERT(ud->virtualMidiBuffer);
-//	csoundFlushCircularBuffer(ud->csound, ud->midiBuffer);
+    // csoundFlushCircularBuffer(ud->csound, ud->midiBuffer);
 #endif
 #endif
-
 #ifdef QCS_DEBUGGER
 	if(m_debugging) {
 		csoundDebuggerInit(ud->csound);
@@ -826,8 +824,6 @@ int CsoundEngine::runCsound()
 		csoundSetExternalMidiOutCloseCallback(ud->csound, &midiOutCloseCb);
 		csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
     }
-
-
 #ifdef CSOUND6
 	csoundCreateMessageBuffer(ud->csound, 0);
 #else
@@ -835,9 +831,8 @@ int CsoundEngine::runCsound()
 	csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
 	csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
 #endif
-
 	if (m_options.enableFLTK) {
-		// disable FLTK graphs, but allow FLTK widgets
+        // Disable FLTK graphs, but allow FLTK widgets.
 		int *var = (int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags");
 		if (var) {
 			*var = 4;
@@ -864,7 +859,6 @@ int CsoundEngine::runCsound()
 			qDebug() << "Error reading the FTLK_Flags variable";
 		}
 	}
-
 #ifdef CSOUND6
 	csoundRegisterKeyboardCallback(ud->csound,
 								   &CsoundEngine::keyEventCallback,
@@ -875,7 +869,6 @@ int CsoundEngine::runCsound()
 					  &CsoundEngine::keyEventCallback,
                       (void *) ud, CSOUND_CALLBACK_KBD_EVENT | CSOUND_CALLBACK_KBD_TEXT);
 #endif
-
 #ifdef QCS_RTMIDI
     if (!m_options.useCsoundMidi) {
         csoundSetOption(ud->csound, const_cast<char *>("-+rtmidi=hostbased"));
@@ -883,7 +876,6 @@ int CsoundEngine::runCsound()
         csoundSetOption(ud->csound, const_cast<char *>("-Q0"));
     }
 #endif
-
 	csoundSetIsGraphable(ud->csound, true);
 	csoundSetMakeGraphCallback(ud->csound, &CsoundEngine::makeGraphCallback);
 	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
@@ -915,11 +907,14 @@ int CsoundEngine::runCsound()
 	ud->sampleRate = csoundGetSr(ud->csound);
 	ud->numChnls = csoundGetNchnls(ud->csound);
 	ud->outputBufferSize = csoundGetKsmps(ud->csound);
-
+    // Do not run the performance thread if the piece is an HTML file,
+    // the HTML code must do that.
+    if (m_options.fileName1.endsWith(".html", Qt::CaseInsensitive)) {
+        return 0;
+    }
 	if (ud->enableWidgets) {
 		setupChannels();
 	}
-
 	ud->perfThread = new CsoundPerformanceThread(ud->csound);
 	ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
 	ud->perfThread->Play();

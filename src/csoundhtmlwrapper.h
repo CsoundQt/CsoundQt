@@ -25,6 +25,7 @@
 
 #include <QObject>
 #include <QDebug>
+#include <thread>
 #include "csoundengine.h"
 
 
@@ -33,9 +34,7 @@ class CsoundHtmlWrapper : public QObject
     Q_OBJECT
 public:
 	explicit CsoundHtmlWrapper(QObject *parent = 0);
-
 	void setCsoundEngine(CsoundEngine *csEngine); // necessay to get CsoundEngine::isPlaying()
-
 	Q_INVOKABLE int compileCsd(const QString &filename);
 	Q_INVOKABLE int compileCsdText(const QString &text);
 	Q_INVOKABLE int compileOrc(const QString &text);
@@ -58,9 +57,9 @@ public:
 	Q_INVOKABLE int isScorePending();
 	Q_INVOKABLE void message(const QString &text);
 	Q_INVOKABLE int perform();
-	Q_INVOKABLE int readScore(const QString &text);
+    Q_INVOKABLE int perform_thread_routine();
+    Q_INVOKABLE int readScore(const QString &text);
 	Q_INVOKABLE void rewindScore();
-
 	Q_INVOKABLE int runUtility(const QString &command, int argc, char **argv);
 	Q_INVOKABLE int scoreEvent(char type, const double *pFields, long numFields);
 	Q_INVOKABLE void setControlChannel(const QString &name, double value);
@@ -77,14 +76,15 @@ public:
     Q_INVOKABLE double tableGet(int table_number, int index);
 	Q_INVOKABLE int tableLength(int table_number);
 	Q_INVOKABLE void tableSet(int table_number, int index, double value);
-
-
+private:
+    bool csound_stop;
+    bool csound_finished;
+    CSOUND *csound;
+    CsoundEngine *m_csoundEngine;
+    std::thread *csound_thread;
+    QObject *message_callback;
 signals:
 	//void stateChanged(int state);
-private:
-	CsoundEngine * m_csoundEngine;
-	CSOUND * csound;
-
 };
 
 #endif // CsoundHtmlWrapper_H
