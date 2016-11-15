@@ -2003,6 +2003,8 @@ void CsoundQt::showTableEditor(bool show)
 		QString selectedText = getSelectedText();
 		if (selectedText.contains("ftgen") && selectedText.split(",")[3].simplified()=="7") {
 			qDebug()<<"This is a ftgen 7 definition: " << selectedText;
+			QObject *syntaxField = rootObject->findChild<QObject*>("syntaxField");
+			syntaxField->setProperty("text",QVariant(selectedText.simplified())); // display teh text in QML window
 			QMetaObject::invokeMethod(rootObject, "syntax2graph",
 					Q_ARG(QVariant, selectedText.simplified() ),
 					Q_ARG(QVariant, 0)); // if 0, finds max from the table parameters
@@ -2089,7 +2091,7 @@ void CsoundQt::virtualMidiIn(QVariant on, QVariant note, QVariant channel, QVari
 
 void CsoundQt::virtualCCIn(int channel, int cc, int value)
 {
-	qDebug()<<"CC event: "<<channel<< cc<<value;
+	//qDebug()<<"CC event: "<<channel<< cc<<value;
 	std::vector<unsigned char> message;
 	unsigned char status = (11 << 4 | channel-1);
 	message.push_back(status);
@@ -2101,7 +2103,7 @@ void CsoundQt::virtualCCIn(int channel, int cc, int value)
 void CsoundQt::handleTableSyntax(QString syntax)
 {
 	qDebug()<<Q_FUNC_INFO<<syntax;
-	insertText(syntax);
+	insertText(syntax+"\n");
 }
 
 void CsoundQt::openManualExample(QString fileName)
