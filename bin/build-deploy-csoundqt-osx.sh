@@ -18,14 +18,13 @@ rm -rf ~/src/CsoundQt/bin/CsoundQt-d-py-cs6-0.9.2-${DATE}.dmg
 rm -rf ~/src/CsoundQt/bin/CsoundQt-d-py-cs6.app
 git pull
 make clean
-# I delete the "-dmg" in the qcs.pro
 ~/Qt5.4.2/5.4/clang_64/bin/qmake /Users/jschuet1/src/CsoundQt/qcs.pro -r -spec macx-clang CONFIG+=x86_64CONFIG+=rtmidi CONFIG+=pythonqt CONFIG+=release CONFIG+=record_support CONFIG+=debugger
 make
 make install
-#How we can automate this part in the qcs.pro???
-install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python ~/src/CsoundQt/bin/CsoundQt-d-py-cs6.app/Contents/MacOS/CsoundQt-d-py-cs6 
-install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python ~/src/CsoundQt/bin/CsoundQt-d-py-cs6.app/Contents/Frameworks/libPythonQt.1.dylib 
-install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python ~/src/CsoundQt/bin/CsoundQt-d-py-cs6.app/Contents/Frameworks/libPythonQt_QtAll.1.dylib
+# written into qcs.pro
+#install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python ~/src/CsoundQt/bin/CsoundQt-d-py-cs6.app/Contents/MacOS/CsoundQt-d-py-cs6
+#install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python ~/src/CsoundQt/bin/CsoundQt-d-py-cs6.app/Contents/Frameworks/libPythonQt.1.dylib
+#install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python ~/src/CsoundQt/bin/CsoundQt-d-py-cs6.app/Contents/Frameworks/libPythonQt_QtAll.1.dylib
 echo "-------> DONE!"
 sleep 2
 echo "---> now I create the DMG"
@@ -45,7 +44,7 @@ fi
 
 # set up your app name, version number, and background image file name
 APP_NAME="CsoundQt-d-py-cs6"
-VERSION="0.9.2"
+VERSION="0.9.2.1"
 DMG_BACKGROUND_IMG="Background.png"
 
 

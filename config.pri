@@ -222,7 +222,8 @@ exists (src/res/linux/QuteApp_d) :CONFIG += quteapp_d
 }
 
 unix:QMAKE_CXXFLAGS += -g -Wunused-parameter
-unix:QMAKE_LFLAGS += -g -Wl,--no-as-needed
+unix:QMAKE_LFLAGS += -g -Wl #,--no-as-needed # NB! OSX Clang <version> has not --no-as-needed
+linux: QMAKE_LFLAGS += --no-as-needed
 
 html5 {
 message ("Configuring for HTML5 build.")
