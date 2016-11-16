@@ -133,7 +133,7 @@ int CsoundHtmlWrapper::getNchnls() {
 
 int CsoundHtmlWrapper::getNchnlsInput() {
     if (!csound) {
-        return -1;Q_INVOKABLE
+        return -1;
     }
     return csoundGetNchnlsInput(csound);
 }
