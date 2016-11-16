@@ -881,6 +881,11 @@ int CsoundEngine::runCsound()
 	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
 	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
 	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
+    // Do not run the performance thread if the piece is an HTML file,
+    // the HTML code must do that.
+    if (m_options.fileName1.endsWith(".html", Qt::CaseInsensitive)) {
+        return 0;
+    }
 #if CS_APIVERSION>=4
 	char const **argv;// since there was change in Csound API
 	argv = (const char **) calloc(33, sizeof(char*));
@@ -907,11 +912,6 @@ int CsoundEngine::runCsound()
 	ud->sampleRate = csoundGetSr(ud->csound);
 	ud->numChnls = csoundGetNchnls(ud->csound);
 	ud->outputBufferSize = csoundGetKsmps(ud->csound);
-    // Do not run the performance thread if the piece is an HTML file,
-    // the HTML code must do that.
-    if (m_options.fileName1.endsWith(".html", Qt::CaseInsensitive)) {
-        return 0;
-    }
 	if (ud->enableWidgets) {
 		setupChannels();
 	}
