@@ -261,3 +261,6 @@ message(INCLUDEPATH is: $${INCLUDEPATH})
 message(LIBS are:       $${LIBS})
 message(TARGET is:      $${TARGET})
 
+DISTFILES += \
+    config.user.pri
+

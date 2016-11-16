@@ -10,7 +10,7 @@ import QtQuick.Dialogs 1.1
 Rectangle {
     id: mainWindow
     width: 720
-    height: 500
+    height: 550
     property var points: []; // array of endpoints of the segments
     property int pointWidth: 10; // set constant
     property real currentIndex: 0
@@ -70,12 +70,9 @@ Rectangle {
     }
 
     function y2value(y) { // converts the y-coordinate to 0..1
-
         //first 0..maxvalue
         var value =  (1 - (y) / (drawRect.height)) //* maxSpinbox.value ; // store as 0..1
         return value;
-
-
     }
 
     function scaleValue(value) { // converts value 0..1 into 0..max or -max..max if bipolar graph
@@ -95,15 +92,19 @@ Rectangle {
         for (var i=0;i<points.length-1;i++) {
 
             var value = scaleValue(points[i].value);
-            var sectionLength = Math.round((points[i+1].index - points[i].index)*tableSizeSpinbox.value);
+            var sectionLength = (points[i+1].index - points[i].index)*tableSizeSpinbox.value; // if the tableLength is set to 1, leave decimal values, don't round
+            if (tableSizeSpinbox.value>=2) {
+                sectionLength = Math.round(sectionLength); // otherwise round to integer values;
+            }
+
             checksum += sectionLength;
-            console.log("value, sectionLength",value, sectionLength)
+            //console.log("value, sectionLength",value, sectionLength)
             syntax += value.toFixed(6) + ", "+ sectionLength.toString() + ", "; // TODO function  scaleValue () - returns stored value in 0..1 into 0..max or -max..max
         }
         syntax +=  (scaleValue( points[points.length-1].value)).toFixed(6); // add the last value
-        console.log("Last point index, value: ",points[points.length-1].value, points[points.length-1].index)
-        console.log("Checksum: ", checksum);
-        console.log("New table definition: ", syntax);
+        //console.log("Last point index, value: ",points[points.length-1].value, points[points.length-1].index)
+        //console.log("Checksum: ", checksum);
+        //console.log("New table definition: ", syntax);
         syntaxField.text = syntax;
         //mainWindow.newSyntax(syntax);
         return syntax;
@@ -122,7 +123,7 @@ Rectangle {
         var containsNegative = false;
         var max = 0;
         for (var i=4;i<parameters.length;i++) {
-            console.log("i, value",i,parameters[i])
+            //console.log("i, value",i,parameters[i])
             var val = parseFloat(parameters[i]);
             if (val<0) {
                 containsNegative = true ; // to be able to scale correctly later
@@ -138,10 +139,10 @@ Rectangle {
         }
 
         maxValue = Math.max(max, maxValue)
-        console.log("MAX: ",maxValue);
+        //console.log("MAX: ",maxValue);
         for (var i=0; i<values.length;i++) {
             values[i] /= maxValue; // to scale 0..1
-            console.log("SCALED VALUE , i, value", i, values[i] )
+            //console.log("SCALED VALUE , i, value", i, values[i] )
         }
 
 
@@ -152,7 +153,7 @@ Rectangle {
             }
 
 
-        console.log("Values: ",values, "segments: ", segments );
+        //console.log("Values: ",values, "segments: ", segments );
         maxSpinbox.value = maxValue;
 
         // create points
@@ -167,7 +168,7 @@ Rectangle {
                 index = 1
             else
                 index = (sum+0.0) / (size+0.0);
-            console.log("j,index, sum, value: ",j,index, sum ,values[j])
+            //console.log("j,index, sum, value: ",j,index, sum ,values[j])
             if (j<values.length-1) // the array of segments is shorter that the one with values
                 sum += segments[j];
 
@@ -227,7 +228,7 @@ Rectangle {
                 onPressed:
                     if (pressedButtons & Qt.RightButton) {
                         var index = points.indexOf(parent);
-                        console.log("Deleting point with index: ", index)
+                        //console.log("Deleting point with index: ", index)
 
                         points.splice(index,1) // remove from array
                         parent.destroy() // remove pointRect
@@ -310,7 +311,7 @@ Rectangle {
                 var helper = 1-(points[i].value+maxSpinbox.value)/2; // to 0..1 inversed
                 //onsole.log("HElper 0..1",helper);
                 points[i].y= (1-points[i].value)*drawRect.height-pointWidth/2;
-                console.log("point, inedx,value,newX, newY",i,points[i].index,points[i].value, points[i].x, points[i].y);
+                //console.log("point, inedx,value,newX, newY",i,points[i].index,points[i].value, points[i].x, points[i].y);
 
 
             }
@@ -348,7 +349,9 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 4
                 Label {text: qsTr("Value: ")+(scaleValue(currentValue)).toFixed(3)}
-                Label {text: qsTr("Index: ")+(Math.round(currentIndex*tableSizeSpinbox.value)).toString()} // was: toString
+                Label {
+                    text: qsTr("Index: ")+  ( (tableSizeSpinbox.value>=2) ? (Math.round(currentIndex*tableSizeSpinbox.value)).toString() : currentIndex.toFixed(6) )   // if table lenght set to 1, so also decimal values, don't scale
+                }
             }
 
         }
@@ -500,6 +503,7 @@ Rectangle {
 
     TextArea {
         id: syntaxField
+        objectName: "syntaxField" // to reach it fro C++
         anchors.left: graph2syntaxButton.right
         anchors.leftMargin: 6
         anchors.right: drawRect.right
@@ -524,7 +528,7 @@ Rectangle {
         id: tableSizeSpinbox
         y: 362
         value: 1024
-        minimumValue: 8
+        minimumValue: 1
         maximumValue: 99999
         anchors.left: drawRect.right
         anchors.leftMargin: 6
@@ -605,7 +609,7 @@ Rectangle {
         id: helpDialog
         title: qsTr("Help")
         visible: false
-        text: qsTr("Double-click to add a new point.\nDrag to move, right-click to remove\nYou can edit the table definition in textarea. \nThe changes in definition are displayed when you press ENTER or click on button Syntax2Table\n");
+        text: qsTr("Double-click to add a new point.\nDrag to move, right-click to remove\nYou can edit the table definition in textarea. \nThe changes in definition are displayed when you press ENTER or click on button Update Graph\n");
         onAccepted: visible=false;
     }
 
