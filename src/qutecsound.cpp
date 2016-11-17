@@ -1435,7 +1435,28 @@ void CsoundQt::updateCsladspaText()
 
 void CsoundQt::updateCabbageText()
 {
-    documentPages[curPage]->updateCabbageText();
+	documentPages[curPage]->updateCabbageText();
+	// check if necessary options for Cabbage
+	QString optionsText=documentPages[curPage]->getOptionsText().trimmed();
+	if (!(optionsText.contains("-d") && optionsText.contains("-n"))) {
+		int answer = QMessageBox::question(this, tr("Insert Cabbage options?"),
+							  tr("There seems to be no Cabbage specific options in <CsOptions>.\n Do you want to insert it?\nNB! Comment your old options out, if necessary!"), QMessageBox::Yes|QMessageBox::No );
+		if (answer==QMessageBox::Yes) {
+			if (!optionsText.simplified().isEmpty()) {
+				optionsText += "\n"; // add newline if there is some text
+			}
+			optionsText += "-n -d -+rtmidi=NULL -M0 --midi-key-cps=4 --midi-velocity-amp=5";
+			documentPages[curPage]->setOptionsText(optionsText);
+		}
+	}
+	QString scoreText = documentPages[curPage]->getSco();
+	if (scoreText.simplified().isEmpty()) {
+		int answer = QMessageBox::question(this, tr("Insert scorelines for Cabbage?"),
+										   tr("The score is empty. Cabbage needs some lines to work.\n Do you want to insert it?"), QMessageBox::Yes|QMessageBox::No );
+		if (answer==QMessageBox::Yes) {
+			documentPages[curPage]->setSco("f 0 3600\n;i 1 0 3600 ; don't forget to start your instrument if you are using it as an effect!");
+		}
+	}
 }
 
 void CsoundQt::setCurrentAudioFile(const QString fileName)
@@ -2102,7 +2123,7 @@ void CsoundQt::virtualCCIn(int channel, int cc, int value)
 
 void CsoundQt::handleTableSyntax(QString syntax)
 {
-	qDebug()<<Q_FUNC_INFO<<syntax;
+	//qDebug()<<Q_FUNC_INFO<<syntax;
 	insertText(syntax+"\n");
 }
 

@@ -42,6 +42,7 @@
 #include "curve.h"
 #include "qutebutton.h"
 
+#include <QMessageBox>
 
 // TODO is is possible to move the editor to a separate child class, to be able to use a cleaner class?
 DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists, MidiLearnDialog *midiLearn):
@@ -709,6 +710,10 @@ void DocumentPage::updateCsLadspaText()
 
 void DocumentPage::updateCabbageText()
 {
+	if (widgetCount()==0) {
+		QMessageBox::warning(Q_NULLPTR, tr("No widgets"), tr("There are no widgets to convert!"));
+		return;
+	}
 	QString text = "<Cabbage>\n";
 	text += m_widgetLayouts[0]->getCabbageWidgets();
 	text += "</Cabbage>";
