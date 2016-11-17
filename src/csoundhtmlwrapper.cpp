@@ -219,7 +219,7 @@ int CsoundHtmlWrapper::perform_thread_routine() {
     result = csoundStart(csound);
     message("Csound is running...");
     for (csound_stop = false, csound_finished = false;
-         ((csound_stop == false) && (csound_finished == false)); )
+         ((csound_stop == false) && (csound_finished == false) && (csound != nullptr)); )
     {
         csound_finished = csoundPerformKsmps(csound);
     }
