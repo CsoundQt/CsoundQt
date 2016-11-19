@@ -226,11 +226,12 @@ endin
 i 1 0 36000
 e
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>966</x>
- <y>203</y>
+ <x>548</x>
+ <y>112</y>
  <width>440</width>
  <height>609</height>
  <visible>true</visible>
@@ -290,9 +291,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>35</r>
+   <g>35</g>
+   <b>35</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -425,7 +426,7 @@ SOUNDFILE PLAYER</label>
   <label>Here you can play 3- to 8-channel (intervleaved) files.
 For mono files, see the Mixdown_Player example.</label>
   <alignment>center</alignment>
-  <font>Helvetica</font>
+  <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1725,67 +1726,3 @@ Channels</label>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 966 203 440 609
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioText {92, 209} {80, 25} editnum 0.000000 0.001000 "skiptime" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.000000
-ioText {13, 137} {297, 27} edit 0.000000 0.00100 "_Browse1"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
-ioText {2, 206} {92, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Skiptime (sec)
-ioButton {309, 135} {100, 30} value 1.000000 "_Browse1" "Open File" "/" 
-ioButton {49, 168} {96, 30} value 1.000000 "_Play" "Play" "/" 
-ioButton {265, 168} {100, 30} value 1.000000 "_Stop" "Stop" "/" 
-ioText {7, 8} {403, 67} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {65280, 65280, 65280} nobackground noborder MULTI CHANNELÂ¬SOUNDFILE PLAYER
-ioText {6, 76} {403, 55} label 0.000000 0.00100 "" center "Helvetica" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Here you can play 3- to 8-channel (intervleaved) files.Â¬For mono files, see the Mixdown_Player example.
-ioMeter {260, 395} {25, 25} {39680, 768, 0} "over8" 0.000000 "over8" 0.000000 fill 1 0 mouse
-ioMeter {260, 419} {25, 100} {0, 59904, 0} "out8" -inf "out8" -inf fill 1 0 mouse
-ioMeter {228, 395} {25, 25} {39680, 768, 0} "over7" 0.000000 "over7" 0.000000 fill 1 0 mouse
-ioMeter {228, 419} {25, 100} {0, 59904, 0} "out7" 0.000000 "out7" 0.000000 fill 1 0 mouse
-ioMeter {195, 395} {25, 25} {39680, 768, 0} "over6" 0.000000 "over6" 0.000000 fill 1 0 mouse
-ioMeter {195, 419} {25, 100} {0, 59904, 0} "out6" 0.000000 "out6" 0.000000 fill 1 0 mouse
-ioMeter {163, 395} {25, 25} {39680, 768, 0} "over5" 0.000000 "over5" 0.000000 fill 1 0 mouse
-ioMeter {163, 419} {25, 100} {0, 59904, 0} "out5" 0.000000 "out5" 0.000000 fill 1 0 mouse
-ioMeter {129, 395} {25, 25} {39680, 768, 0} "over4" 0.000000 "over4" 0.000000 fill 1 0 mouse
-ioMeter {129, 419} {25, 100} {0, 59904, 0} "out4" 0.000000 "out4" 0.000000 fill 1 0 mouse
-ioMeter {97, 395} {25, 25} {39680, 768, 0} "over3" 0.000000 "over3" 0.000000 fill 1 0 mouse
-ioMeter {97, 419} {25, 100} {0, 59904, 0} "out3" 0.000000 "out3" 0.000000 fill 1 0 mouse
-ioMeter {64, 395} {25, 25} {39680, 768, 0} "over2" 0.000000 "over2" 0.000000 fill 1 0 mouse
-ioMeter {64, 419} {25, 100} {0, 59904, 0} "out2" 0.000000 "out2" 0.000000 fill 1 0 mouse
-ioMeter {32, 395} {25, 25} {39680, 768, 0} "over1" 0.000000 "over1" 0.000000 fill 1 0 mouse
-ioMeter {32, 419} {25, 100} {0, 59904, 0} "out1" 0.000000 "out1" 0.000000 fill 1 0 mouse
-ioSlider {63, 242} {237, 28} -12.000000 12.000000 0.000000 db
-ioText {299, 242} {52, 28} display 0.000000 0.00100 "db" left "Arial" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.000
-ioText {349, 242} {47, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB
-ioText {13, 242} {51, 28} label 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Gain
-ioText {302, 440} {94, 26} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Time
-ioText {311, 463} {33, 26} display 0.000000 0.00100 "min" right "Arial" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
-ioText {357, 463} {33, 26} display 0.000000 0.00100 "sec" left "Arial" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 00
-ioText {342, 463} {17, 27} label 0.000000 0.00100 "" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder :
-ioText {311, 486} {37, 28} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder min
-ioText {353, 486} {37, 28} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder sec
-ioText {302, 439} {96, 76} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {296, 517} {109, 50} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Route OutputÂ¬Channels
-ioText {31, 525} {25, 27} scroll 1.000000 1.000000 "chn1" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {63, 525} {25, 27} scroll 2.000000 1.000000 "chn2" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {97, 525} {25, 27} scroll 3.000000 1.000000 "chn3" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {129, 525} {25, 27} scroll 4.000000 1.000000 "chn4" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {162, 525} {25, 27} scroll 5.000000 1.000000 "chn5" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {194, 525} {25, 27} scroll 6.000000 1.000000 "chn6" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {228, 525} {25, 27} scroll 7.000000 1.000000 "chn7" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {260, 525} {25, 27} scroll 8.000000 1.000000 "chn8" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
-ioText {24, 280} {377, 112} display 0.000000 0.00100 "msg" left "Arial" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder No messages yet ...
-ioCheckbox {307, 215} {20, 20} off loop
-ioText {329, 209} {68, 32} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Loop
-ioText {301, 412} {96, 25} display 0.000000 0.00100 "len" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {301, 390} {97, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder File Length
-ioButton {157, 168} {100, 30} value 1.000000 "_Pause" "Pause" "/" 
-</MacGUI>

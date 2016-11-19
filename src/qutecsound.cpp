@@ -308,6 +308,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     qApp->setStyleSheet(styleSheet);
 }
 
+
 CsoundQt::~CsoundQt()
 {
     qDebug() << "CsoundQt::~CsoundQt()";
@@ -352,8 +353,8 @@ void CsoundQt::changePage(int index)
         if (!m_options->widgetsIndependent) {
             QRect panelGeometry = widgetPanel->geometry();
             if (!widgetPanel->isFloating()) {
-                panelGeometry.setX(-1);
-                panelGeometry.setY(-1);
+				panelGeometry.setX(-1);
+				panelGeometry.setY(-1);
             }
             widgetPanel->takeWidgetLayout(panelGeometry);
         } else {
@@ -480,6 +481,9 @@ void CsoundQt::closeEvent(QCloseEvent *event)
 #ifdef USE_QT_GT_53
 	if (!m_virtualKeyboardPointer.isNull() && m_virtualKeyboard->isVisible()) {
 		showVirtualKeyboard(false);
+	}
+	if (!m_tableEditorPointer.isNull() && m_tableEditor->isVisible()) {
+		showTableEditor(false);
 	}
 #endif
     // These two give faster shutdown times as the panels don't have to be called up as the tabs close
@@ -999,15 +1003,21 @@ void CsoundQt::setupEnvironment()
     else {
         csoundSetGlobalEnv("INCDIR", "");
     }
-    if (m_options->rawWaveActive){
-        int ret = csoundSetGlobalEnv("RAWWAVE_PATH", m_options->rawWave.toLocal8Bit().constData());
-        if (ret != 0) {
-            qDebug() << "CsoundEngine::runCsound() Error setting RAWWAVE_PATH";
-        }
-    }
-    else {
-        csoundSetGlobalEnv("RAWWAVE_PATH", "");
-    }
+	// set rawWavePath for stk opcodes
+	QString rawWavePath = m_options->rawWaveActive ? m_options->rawWave : QString(getenv("RAWWAVE_PATH"));
+	if (rawWavePath.isNull()) {
+		rawWavePath=QString(""); // NULL string may crash csoundInitilaize
+	}
+	if ( csoundSetGlobalEnv("RAWWAVE_PATH", rawWavePath.toLocal8Bit().constData()) ) {
+		qDebug() << "CsoundEngine::runCsound() Error setting RAWWAVE_PATH";
+	}
+#ifdef Q_OS_UNIX
+	setenv("RAWWAVE_PATH",rawWavePath.toLocal8Bit(),1); // make sure the the environment variable is set for stk opcodes
+#endif
+#ifdef Q_OS_WIN
+    QString envString = "RAWWAVE_PATH="+rawWavePath;
+    _putenv(envString.toLocal8Bit());
+#endif
     // csoundGetEnv must be called after Compile or Precompile,
     // But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
     if (m_options->opcodedirActive) {
@@ -1425,7 +1435,28 @@ void CsoundQt::updateCsladspaText()
 
 void CsoundQt::updateCabbageText()
 {
-    documentPages[curPage]->updateCabbageText();
+	documentPages[curPage]->updateCabbageText();
+	// check if necessary options for Cabbage
+	QString optionsText=documentPages[curPage]->getOptionsText().trimmed();
+	if (!(optionsText.contains("-d") && optionsText.contains("-n"))) {
+		int answer = QMessageBox::question(this, tr("Insert Cabbage options?"),
+							  tr("There seems to be no Cabbage specific options in <CsOptions>.\n Do you want to insert it?\nNB! Comment your old options out, if necessary!"), QMessageBox::Yes|QMessageBox::No );
+		if (answer==QMessageBox::Yes) {
+			if (!optionsText.simplified().isEmpty()) {
+				optionsText += "\n"; // add newline if there is some text
+			}
+			optionsText += "-n -d -+rtmidi=NULL -M0 --midi-key-cps=4 --midi-velocity-amp=5";
+			documentPages[curPage]->setOptionsText(optionsText);
+		}
+	}
+	QString scoreText = documentPages[curPage]->getSco();
+	if (scoreText.simplified().isEmpty()) {
+		int answer = QMessageBox::question(this, tr("Insert scorelines for Cabbage?"),
+										   tr("The score is empty. Cabbage needs some lines to work.\n Do you want to insert it?"), QMessageBox::Yes|QMessageBox::No );
+		if (answer==QMessageBox::Yes) {
+			documentPages[curPage]->setSco("f 0 3600\n;i 1 0 3600 ; don't forget to start your instrument if you are using it as an effect!");
+		}
+	}
 }
 
 void CsoundQt::setCurrentAudioFile(const QString fileName)
@@ -1975,6 +2006,43 @@ void CsoundQt::showVirtualKeyboard(bool show)
 #endif
 }
 
+void CsoundQt::showTableEditor(bool show)
+{
+#ifdef USE_QT_GT_53
+	if (show) {
+		m_tableEditor = new QQuickWidget(this); // create here to be able to
+		m_tableEditor->setAttribute(Qt::WA_DeleteOnClose); // ... be able to delete in on close and catch destroyed() to uncheck action button
+		m_tableEditorPointer = m_tableEditor;  // guarded pointer to check if object is  alive
+		m_tableEditor->setWindowTitle(tr("CsoundQt table editor"));
+		m_tableEditor->setWindowFlags(Qt::Window);
+		m_tableEditor->setSource(QUrl("qrc:/QML/TableEditor.qml"));
+		m_tableEditor->setResizeMode(QQuickWidget::SizeRootObjectToView);
+		QObject *rootObject = m_tableEditor->rootObject();
+		m_tableEditor->setFocus();
+		connect(rootObject, SIGNAL(newSyntax(QString)), this, SLOT(handleTableSyntax(QString)));
+		// see if selected text contains a ftgen definition, then set in the editor
+		QString selectedText = getSelectedText();
+		if (selectedText.contains("ftgen") && selectedText.split(",")[3].simplified()=="7") {
+			qDebug()<<"This is a ftgen 7 definition: " << selectedText;
+			QObject *syntaxField = rootObject->findChild<QObject*>("syntaxField");
+			syntaxField->setProperty("text",QVariant(selectedText.simplified())); // display teh text in QML window
+			QMetaObject::invokeMethod(rootObject, "syntax2graph",
+					Q_ARG(QVariant, selectedText.simplified() ),
+					Q_ARG(QVariant, 0)); // if 0, finds max from the table parameters
+		}
+
+		m_tableEditor->setVisible(true);
+		connect(m_tableEditor, SIGNAL(destroyed(QObject*)), this, SLOT(tableEditorActOff(QObject*)));
+	} else if (!m_tableEditorPointer.isNull()) { // check if object still existing (i.e not on exit)
+		m_tableEditor->setVisible(false);
+		m_tableEditor->close();
+	}
+#else
+	QMessageBox::warning(this, tr("Qt5 Required"), tr("Qt version > 5.2 is required for the virtual keyboard."));
+#endif
+
+}
+
 void CsoundQt::virtualKeyboardActOff(QObject *parent)
 {
 #ifdef USE_QT_GT_53
@@ -1982,6 +2050,18 @@ void CsoundQt::virtualKeyboardActOff(QObject *parent)
 	if (!m_virtualKeyboardPointer.isNull()) { // check if object still existing (i.e application not exiting)
 		if (showVirtualKeyboardAct->isChecked()) {
 			showVirtualKeyboardAct->setChecked(false);
+		}
+	}
+#endif
+}
+
+void CsoundQt::tableEditorActOff(QObject *parent)
+{
+#ifdef USE_QT_GT_53
+	//qDebug()<<"VirtualKeyboard destroyed";
+	if (!m_tableEditorPointer.isNull()) { // check if object still existing (i.e application not exiting)
+		if (showTableEditorAct ->isChecked()) {
+			showTableEditorAct->setChecked(false);
 		}
 	}
 #endif
@@ -2032,13 +2112,19 @@ void CsoundQt::virtualMidiIn(QVariant on, QVariant note, QVariant channel, QVari
 
 void CsoundQt::virtualCCIn(int channel, int cc, int value)
 {
-	qDebug()<<"CC event: "<<channel<< cc<<value;
+	//qDebug()<<"CC event: "<<channel<< cc<<value;
 	std::vector<unsigned char> message;
 	unsigned char status = (11 << 4 | channel-1);
 	message.push_back(status);
 	message.push_back(cc);
 	message.push_back(value);
 	documentPages[curPage]->queueVirtualMidiIn(message);
+}
+
+void CsoundQt::handleTableSyntax(QString syntax)
+{
+	//qDebug()<<Q_FUNC_INFO<<syntax;
+	insertText(syntax+"\n");
 }
 
 void CsoundQt::openManualExample(QString fileName)
@@ -2105,12 +2191,17 @@ void CsoundQt::openPdfFile(QString name)
 
 void CsoundQt::openFLOSSManual()
 {
-    openExternalBrowser(QUrl("http://en.flossmanuals.net/csound/"));
+	openExternalBrowser(QUrl("http://en.flossmanuals.net/csound/"));
 }
 
 void CsoundQt::openQuickRef()
 {
-    openPdfFile(quickRefFileName);
+	openPdfFile(quickRefFileName);
+}
+
+void CsoundQt::openOnlineDocumentation()
+{
+	 openExternalBrowser(QUrl("http://csoundqt.github.io/pages/documentation.html"));
 }
 
 void CsoundQt::resetPreferences()
@@ -2432,7 +2523,7 @@ void CsoundQt::runUtility(QString flags)
         script += "rm $0\n";
 #endif
         QFile file(SCRIPT_NAME);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        if (!file.open(QIODevice::WriteOnly))
             return;
 
         QTextStream out(&file);
@@ -2538,7 +2629,8 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showDebugAct->setShortcut(tr("F5"));
 #endif
     showVirtualKeyboardAct->setShortcut(tr("Ctrl+Shift+V"));
-    splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
+	showTableEditorAct->setShortcut(tr("Ctrl+Shift+T"));
+	splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
     midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
     createCodeGraphAct->setShortcut(tr("Alt+4"));
     showInspectorAct->setShortcut(tr("Alt+5"));
@@ -2546,6 +2638,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #ifdef QCS_HTML5
     showHtml5Act->setShortcut(tr("Shift+Alt+H"));
 #endif
+	openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Alt+9"));
     setHelpEntryAct->setShortcut(tr("Shift+F1"));
     browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
@@ -2572,6 +2665,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showWidgetEditAct->setShortcut(tr("Shift+Alt+7"));
     lineNumbersAct->setShortcut(tr("Shift+Alt+L"));
     parameterModeAct->setShortcut(tr("Shift+Alt+P"));
+	cabbageAct->setShortcut(tr("Shift+Ctrl+C"));
     //	showParametersAct->setShortcut(tr("Alt+P"));
 }
 
@@ -3072,6 +3166,16 @@ void CsoundQt::createActions()
 	showVirtualKeyboardAct->setIconText(tr("Keyboard"));
     showVirtualKeyboardAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showVirtualKeyboardAct, SIGNAL(toggled(bool)), this, SLOT(showVirtualKeyboard(bool)));
+
+	showTableEditorAct = new QAction(/*QIcon(prefix + "midi_keyboard.png"), */tr("Show Table editor"), this);
+	showTableEditorAct->setCheckable(true); // TODO: make it clickable, ie not checkable
+	showTableEditorAct->setChecked(false);
+	showTableEditorAct->setStatusTip(tr("Show Table editor"));
+	showTableEditorAct->setIconText(tr("Table editor"));
+	showTableEditorAct->setShortcutContext(Qt::ApplicationShortcut);
+	connect(showTableEditorAct, SIGNAL(toggled(bool)), this, SLOT(showTableEditor(bool)));
+
+
 #ifdef QCS_HTML5
     showHtml5Act = new QAction(QIcon(":/images/html5.png"), tr("HTML View"), this);
     showHtml5Act->setIconText(tr("HTML"));
@@ -3176,6 +3280,11 @@ void CsoundQt::createActions()
     externalBrowserAct->setStatusTip(tr("Show Opcode Entry in external browser"));
     externalBrowserAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(externalBrowserAct, SIGNAL(triggered()), this, SLOT(openExternalBrowser()));
+
+	openDocumentationAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Open online documentation"), this);
+	openDocumentationAct->setStatusTip(tr("Open online documentation"));
+	openDocumentationAct->setShortcutContext(Qt::ApplicationShortcut);
+	connect(openDocumentationAct, SIGNAL(triggered()), this, SLOT(openOnlineDocumentation()));
 
     openQuickRefAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Open Quick Reference Guide"), this);
     openQuickRefAct->setStatusTip(tr("Open Quick Reference Guide in PDF viewer"));
@@ -3305,6 +3414,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(inToGetAct);
     m_keyActions.append(getToInAct);
     m_keyActions.append(csladspaAct);
+	m_keyActions.append(cabbageAct);
     m_keyActions.append(findAct);
     m_keyActions.append(configureAct);
     m_keyActions.append(editAct);
@@ -3332,6 +3442,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(showScratchPadAct);
     m_keyActions.append(showUtilitiesAct);
     m_keyActions.append(showVirtualKeyboardAct);
+	m_keyActions.append(showTableEditorAct);
 #ifdef QCS_HTML5
     m_keyActions.append(showHtml5Act);
 #endif
@@ -3340,6 +3451,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(browseForwardAct);
     m_keyActions.append(externalBrowserAct);
     m_keyActions.append(openQuickRefAct);
+	m_keyActions.append(openDocumentationAct);
     m_keyActions.append(showOpcodeQuickRefAct);
     m_keyActions.append(infoAct);
     m_keyActions.append(viewFullScreenAct);
@@ -3572,6 +3684,7 @@ void CsoundQt::createMenus()
     viewMenu->addAction(midiLearnAct);
 #ifdef USE_QT5
     viewMenu->addAction(showVirtualKeyboardAct);
+	viewMenu->addAction(showTableEditorAct);
 #endif
     viewMenu->addSeparator();
     viewMenu->addAction(viewFullScreenAct);
@@ -3870,6 +3983,7 @@ void CsoundQt::createMenus()
     menuBar()->addSeparator();
 
     helpMenu = menuBar()->addMenu(tr("Help"));
+	helpMenu->addAction(openDocumentationAct);
     helpMenu->addAction(setHelpEntryAct);
     helpMenu->addAction(externalBrowserAct);
     helpMenu->addSeparator();
@@ -4119,6 +4233,7 @@ void CsoundQt::createToolBars()
     configureToolBar->addAction(showLiveEventsAct);
 #ifdef USE_QT5
 	configureToolBar->addAction(showVirtualKeyboardAct);
+	//configureToolBar->addAction(showTableEditorAct);
 #endif
 #ifdef QCS_PYTHONQT
     configureToolBar->addAction(showPythonConsoleAct);
@@ -4845,7 +4960,7 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
         fillFileMenu();
     }
     QFile file(fileName);
-    if (!file.open(QFile::WriteOnly | QFile::Text)) {
+    if (!file.open(QFile::WriteOnly)) {
         QMessageBox::warning(this, tr("Application"),
                              tr("Cannot write file %1:\n%2.")
                              .arg(fileName)
@@ -5585,7 +5700,7 @@ CsoundEngine *CsoundQt::getEngine(int index)
 
 bool CsoundQt::startServer()
 {
-	m_server->removeServer("csoundqt"); // for any case, if socet was not cleard due crash before
+	m_server->removeServer("csoundqt"); // for any case, if socket was not cleard due crash before
 	return m_server->listen("csoundqt");
 }
 

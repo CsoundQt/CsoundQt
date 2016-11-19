@@ -65,7 +65,7 @@ void CsoundHtmlView::load(DocumentPage *documentPage_)
     auto text = documentPage.load()->getFullText();
     auto filename = documentPage.load()->getFileName();
     QFile csdfile(filename);
-    csdfile.open(QIODevice::WriteOnly | QIODevice::Text);
+    csdfile.open(QIODevice::WriteOnly);
     QTextStream out(&csdfile);
     out << text;
     csdfile.close();
@@ -73,7 +73,7 @@ void CsoundHtmlView::load(DocumentPage *documentPage_)
     if (html.size() > 0) {
         QString htmlfilename = filename + ".html";
         QFile htmlfile(htmlfilename);
-        htmlfile.open(QIODevice::WriteOnly | QIODevice::Text);
+        htmlfile.open(QIODevice::WriteOnly);
         QTextStream out(&htmlfile);
         out << html;
         htmlfile.close();

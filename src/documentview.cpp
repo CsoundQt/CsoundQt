@@ -44,13 +44,15 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 				"border: 1px solid black;"
 //				"border-radius: 4px;"
 				"padding: 2px;"
-				"background-color: #ffffcc;"
+				"background-color: #eaeac5;"
 				"};");
 	m_hoverText->setWordWrap(true);
 	m_hoverWidget->hide();
 
 	for (int i = 0; i < editors.size(); i++) {
-		connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
+		if (editors[i]!=m_filebEditor) { // FilebEditor does not have this slot
+			connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
+		}
 		splitter->addWidget(editors[i]);
 		editors[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 		editors[i]->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -107,7 +109,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	syntaxMenu->setAutoFillBackground(true);
 	QPalette p =syntaxMenu-> palette();
 	p.setColor(QPalette::WindowText, Qt::blue);
-	p.setColor(static_cast<QPalette::ColorRole>(9), Qt::yellow);
+	p.setColor(static_cast<QPalette::ColorRole>(9), QColor("#eaeac5")); // was: Qt::yellow
 	syntaxMenu->setPalette(p);
 	connect(syntaxMenu,SIGNAL(keyPressed(QString)),
 			m_mainEditor, SLOT(insertPlainText(QString)));
@@ -865,7 +867,7 @@ void DocumentView::textChanged()
 					}
 					foreach(QString var, vars) {
 						QAction *a = syntaxMenu->addAction(var,
-														   this, SLOT(insertParameterText()));
+														   this, SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
 						a->setData(var);
 						if(vars.indexOf(var) == 0) {
 							syntaxMenu->setDefaultAction(a);
@@ -936,7 +938,11 @@ void DocumentView::textChanged()
 											syntaxText += " ";
 										syntaxText += syntax[i].opcodeName.simplified();
 										if (!syntax[i].inArgs.isEmpty()) {
-											syntaxText += " " + syntax[i].inArgs.simplified();
+											if (syntax[i].inArgs.contains("(x)") ) {
+												syntaxText += "(x)"; // avoid other text like (with no rate restriction)
+											} else {
+												syntaxText += " " + syntax[i].inArgs.simplified();
+											}
 										}
 									}
 									QAction *a = syntaxMenu->addAction(text,
@@ -1136,10 +1142,10 @@ void DocumentView::insertAutoCompleteText()
 				editor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
 			}
 			else {
-                editor->insertPlainText(action->data().toString());
+				editor->insertPlainText(action->data().toString());
 			}
             QString syntaxText = action->data().toString();
-            QStringList syntaxSections = syntaxText.simplified().split("");
+			QStringList syntaxSections = syntaxText.simplified().split(" "); // was split("")
             QString actionText = action->text();
             actionText = actionText.split(" ").at(0);
             if (m_autoParameterMode && m_opcodeTree->isOpcode(actionText) && syntaxSections.size() > 1) {

@@ -42,6 +42,7 @@
 #include "curve.h"
 #include "qutebutton.h"
 
+#include <QMessageBox>
 
 // TODO is is possible to move the editor to a separate child class, to be able to use a cleaner class?
 DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists, MidiLearnDialog *midiLearn):
@@ -298,7 +299,11 @@ QString DocumentPage::getFullText()
 	}
 	if (m_lineEnding == 1) { // Windows line ending mode
 		fullText.replace("\n", "\r\n");
-	}
+        fullText.replace("\r\r\n", "\r\n");
+    } else {
+        fullText.replace("\r\r\n", "\r\n");
+        fullText.replace("\r\n", "\n");
+    }
 	return fullText;
 }
 
@@ -705,6 +710,10 @@ void DocumentPage::updateCsLadspaText()
 
 void DocumentPage::updateCabbageText()
 {
+	if (widgetCount()==0) {
+		QMessageBox::warning(Q_NULLPTR, tr("No widgets"), tr("There are no widgets to convert!"));
+		return;
+	}
 	QString text = "<Cabbage>\n";
 	text += m_widgetLayouts[0]->getCabbageWidgets();
 	text += "</Cabbage>";
@@ -1185,7 +1194,7 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 	saveLiveEvents = true;
 
 	m_view = new DocumentView(parent, opcodeTree);
-	connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
+	//connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
 	connect(m_view,SIGNAL(setHelp()), this, SLOT(setHelp()));
 	connect(m_view, SIGNAL(closeExtraPanels()), this, SLOT(closeExtraPanels()));
 

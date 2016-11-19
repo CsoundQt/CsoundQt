@@ -153,8 +153,17 @@ QString QuteButton::getCabbageLine()
 	widgetLock.lockForRead();
 #endif
 	QString line = "button channel(\"" + m_channel + "\"),  ";
-	line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
-	line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
+	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
+	if (property("QCS_latch").toBool()) {
+		line += QString("text(\"%1\", \"%2\"), ").arg(property("QCS_text").toString() + " OFF").arg(property("QCS_text").toString() + " ON"); // set different texts for ON/OFF if latced
+	} 	else  {
+		line += "text(\"" + property("QCS_text").toString()+ " \"), "; // otherwise just the button text
+	}
+	line += QString("latched(%1)").arg((int)property("QCS_latch").toBool());
+	if (property("QCS_midicc").toInt() >= 0 && property("QCS_midichan").toInt()>0) { // insert only if midi channel is above 0
+		line += ", midiCtrl(\"" + QString::number(property("QCS_midichan").toInt()) + ",";
+		line +=  QString::number(property("QCS_midicc").toInt()) + "\")";
+	}
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif

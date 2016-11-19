@@ -3775,7 +3775,7 @@ CanaleH:</translation>
     </message>
     <message>
         <source>The csd file contains more than one widget panel!
-This is not suported by the current version,
+This is not supported by the current version,
 Addtional widget panels will be lost if the file is saved!</source>
         <translation type="unfinished"></translation>
     </message>

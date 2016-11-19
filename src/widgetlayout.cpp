@@ -212,8 +212,8 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 	if (panel.size() > 1) {
 		QMessageBox::warning(this, tr("More than one panel"),
 							 tr("The csd file contains more than one widget panel!\n"
-								"This is not suported by the current version,\n"
-								"Addtional widget panels will be lost if the file is saved!"));
+								"This is not supported by the current version,\n"
+								"Additional widget panels will be lost if the file is saved!"));
 	}
 	QDomNode p = panel.item(0);
 	if (p.isNull()) {
@@ -452,7 +452,6 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
 
 void WidgetLayout::setOuterGeometry(QRect r)
 {
-//	qDebug() << "WidgetLayout::setOuterGeometry" << newx << newy << neww << newh;
 	if (!r.isValid()) {
 		r = this->geometry();
 		m_posx = r.x();
@@ -1262,7 +1261,7 @@ void WidgetLayout::refreshWidgets()
 			int channel = (status ^ 176) + 1;
 			for (int i = 0; i < registeredControllers.size(); i++) {
 				if (registeredControllers[i].cc == midiQueue[index][1]) {
-					if (registeredControllers[i].chan == 0 || channel == registeredControllers[i].chan) {
+					if (/*registeredControllers[i].chan == 0 || */ channel == registeredControllers[i].chan) { // not sure if this comment-out will not break anything but likely not. tarmo.
 						registeredControllers[i].widget->setMidiValue(midiQueue[index][2]);
 					}
 				}
@@ -1336,6 +1335,7 @@ QString WidgetLayout::getCsladspaLines()
 			text += line + "\n";
 		}
 		else {
+
 			unsupported++;
 		}
 	}
@@ -1348,10 +1348,14 @@ QString WidgetLayout::getCabbageWidgets()
 {
 	QString title = windowTitle();
 	QString text = "form caption(\"" + title  + "\"),";
-	text += "pos(" + QString::number(m_posx) + "," + QString::number(m_posy) + "),";
-	text += "size(" + QString::number(m_w) + "," + QString::number(m_h) +")\n";
+	//text += "size(" + QString::number(m_w+20) + "," + QString::number(m_h+20) +")\n"; // m_w and m_h not returning correct results always
+	int w = this->geometry().width();
+	int h = this->geometry().height();
+	text += QString(" size(%1,%2)\n").arg(w+20).arg(h+20);
+
 	int unsupported = 0;
 	widgetsMutex.lock();
+	QString unsupportedWidgets;
 	foreach(QuteWidget *widget, m_widgets) {
 		QString line = widget->getCabbageLine();
 		if (line != "") {
@@ -1359,10 +1363,14 @@ QString WidgetLayout::getCabbageWidgets()
 		}
 		else {
 			unsupported++;
+			unsupportedWidgets += widget->getWidgetType() + " ";
 		}
 	}
 	widgetsMutex.unlock();
 	qDebug() << "WidgetPanel:getCabbageWidgets() " << unsupported << " Unsupported widgets";
+	if (unsupported) {
+		QMessageBox::warning(this, tr("CsoundQt"), tr("Could not convert %1 widget(s):\n%2").arg(unsupported).arg(unsupportedWidgets));
+	}
 	return text;
 }
 
@@ -2997,7 +3005,7 @@ void WidgetLayout::registerWidgetController(QuteWidget *widget, int cc)
 			return;
 		}
 	}
-	registeredControllers << RegisteredController(widget, cc, 0);
+	registeredControllers << RegisteredController(widget, 0, cc); // right orfer of parameters: RegisteredController(QuteWidget * _widget, int _chan,int  _cc)
 }
 
 void WidgetLayout::registerWidgetChannel(QuteWidget *widget, int chan)
@@ -3011,7 +3019,7 @@ void WidgetLayout::registerWidgetChannel(QuteWidget *widget, int chan)
 			return;
 		}
 	}
-	registeredControllers << RegisteredController(widget, 1, chan);
+	registeredControllers << RegisteredController(widget, chan, 1); // correct order of parameters: RegisteredController(QuteWidget * _widget, int _chan,int  _cc)
 }
 
 void WidgetLayout::unregisterWidgetController(QuteWidget *widget)
@@ -3336,7 +3344,7 @@ void WidgetLayout::setPresetName(int num, QString name)
 			presets[getPresetIndex(num)].setName(name);
 		}
 		else {
-			qDebug() << "WidgetLayout::setPresetName invalud number.";
+			qDebug() << "WidgetLayout::setPresetName invalid number.";
 		}
 	}
 }
@@ -3358,7 +3366,7 @@ QString WidgetLayout::getPresetName(int num)
 	}
 	else {
 		return QString();
-		qDebug() << "WidgetLayout::getPresetName invalud number.";
+		qDebug() << "WidgetLayout::getPresetName invalid number.";
 	}
 }
 

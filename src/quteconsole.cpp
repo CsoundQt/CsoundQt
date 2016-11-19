@@ -109,3 +109,17 @@ void QuteConsole::setWidgetGeometry(int x,int y,int width,int height)
 	static_cast<ConsoleWidget *>(m_widget)->setWidgetGeometry(x,y,width, height);
 }
 
+QString QuteConsole::getCabbageLine()
+{
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.lockForWrite();
+#endif
+	QString line = "csoundoutput ";
+	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
+	line += "text(\"Csound output\")";
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.unlock();
+#endif
+	return line;
+}
+

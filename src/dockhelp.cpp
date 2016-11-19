@@ -69,10 +69,6 @@ void DockHelp::loadFile(QString fileName)
 {
 	QFile file(fileName);
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
-		//     QMessageBox::warning(this, tr("CsoundQt"),
-		//                          tr("Cannot read file %1:\n%2.")
-		//                              .arg(fileName)
-		//                              .arg(file.errorString()));
 		ui->text->setText(tr("Not Found! Make sure the documentation path is set in the Configuration Dialog."));
 		return;
 	}

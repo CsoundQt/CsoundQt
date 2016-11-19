@@ -19,6 +19,7 @@ Macros are used, to define the send and receive ports, so you can change them at
 <CsOptions>
 </CsOptions>
 <CsInstruments>
+ksmps=32
 
 #define IPADDRESS	# "localhost" #
 #define S_PORT 		# 47120 #
@@ -57,11 +58,12 @@ e 3600
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>1013</x>
- <y>279</y>
+ <x>456</x>
+ <y>204</y>
  <width>563</width>
  <height>397</height>
  <visible>true</visible>
@@ -71,7 +73,7 @@ e 3600
   <g>162</g>
   <b>160</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>320</x>
   <y>9</y>
@@ -100,7 +102,7 @@ e 3600
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>8</y>
@@ -129,7 +131,7 @@ e 3600
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>sendNumber</objectName>
   <x>16</x>
   <y>154</y>
@@ -162,7 +164,7 @@ e 3600
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>sendSlider</objectName>
   <x>22</x>
   <y>245</y>
@@ -180,7 +182,7 @@ e 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>16</x>
   <y>128</y>
@@ -209,7 +211,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>rcvNumber</objectName>
   <x>329</x>
   <y>143</y>
@@ -242,7 +244,7 @@ e 3600
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>325</x>
   <y>113</y>
@@ -271,7 +273,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>17</x>
   <y>217</y>
@@ -300,7 +302,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>329</x>
   <y>225</y>
@@ -329,7 +331,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>sndPortNum</objectName>
   <x>219</x>
   <y>10</y>
@@ -358,7 +360,7 @@ e 3600
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>rcvPortNum</objectName>
   <x>548</x>
   <y>11</y>
@@ -387,7 +389,7 @@ e 3600
   <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>16</x>
   <y>32</y>
@@ -416,7 +418,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>321</x>
   <y>33</y>
@@ -445,7 +447,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>sendSlider</objectName>
   <x>17</x>
   <y>350</y>
@@ -474,7 +476,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>rcvSlider</objectName>
   <x>325</x>
   <y>359</y>
@@ -503,7 +505,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>rcvSlider</objectName>
   <x>332</x>
   <y>253</y>
@@ -521,7 +523,7 @@ e 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>95</x>
   <y>155</y>
@@ -550,7 +552,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>92</x>
   <y>278</y>
@@ -579,7 +581,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>413</x>
   <y>296</y>
@@ -608,7 +610,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>415</x>
   <y>144</y>
@@ -640,4 +642,4 @@ e 3600
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

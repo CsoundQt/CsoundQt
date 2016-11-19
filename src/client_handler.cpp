@@ -1,14 +1,15 @@
-#include "client_handler.h"
 #include <sstream>
 #include <stdio.h>
 #include <string>
+#include "include/base/cef_bind.h"
 #include "include/base/cef_lock.h"
 #include "include/cef_browser.h"
 #include "include/cef_frame.h"
-#include "include/cef_runnable.h"
+#include "include/wrapper/cef_closure_task.h"
 #include "cefclient.h"
 #include "client_renderer.h"
 #include "client_binding.h"
+#include "client_handler.h"
 
 #include <QDebug>
 
@@ -213,7 +214,7 @@ void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
         }
     } else if (browser->IsPopup()) {
         // Add to the list of popup browsers.
-        qDebug() << __FUNCTION__ "is popup.";
+        qDebug() << __FUNCTION__ << "is popup.";
         m_PopupBrowsers.push_back(browser);
     }
     m_BrowserCount++;
@@ -288,7 +289,8 @@ void ClientHandler::OnLoadingStateChange(CefRefPtr<CefBrowser> browser,
 }
 
 void ClientHandler::OnLoadStart(CefRefPtr<CefBrowser> browser,
-                                CefRefPtr<CefFrame> frame) {
+                                CefRefPtr<CefFrame> frame,
+                                TransitionType transition_type) {
     REQUIRE_UI_THREAD();
 #ifdef WIN32
     auto pid = GetCurrentProcessId();
@@ -385,9 +387,10 @@ void ClientHandler::CloseAllBrowsers(bool force_close) {
     qDebug() << __FUNCTION__ << __LINE__ << QThread::currentThreadId() << QCoreApplication::applicationPid ();
     if (!CefCurrentlyOn(TID_UI)) {
         // Execute on the UI thread.
-        CefPostTask(TID_UI,
-                    NewCefRunnableMethod(this, &ClientHandler::CloseAllBrowsers,
-                                         force_close));
+        // Was: CefPostTask(TID_UI, NewCefRunnableMethod(this, &ClientHandler::CloseAllBrowsers,force_close));
+        CefRefPtr<ClientHandler> instance = this;
+        base::Closure closure = base::Bind(&ClientHandler::CloseAllBrowsers, instance, force_close);
+        CefPostTask(TID_UI, CefCreateClosureTask(closure));
         return;
     }
     if (!m_PopupBrowsers.empty()) {

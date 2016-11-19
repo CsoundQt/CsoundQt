@@ -40,6 +40,7 @@ public:
 	virtual QString getCsladspaLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
+	virtual QString getCabbageLine();
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();

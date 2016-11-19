@@ -142,6 +142,7 @@ public:
 	// Engine
 	CsoundEngine *getEngine(int index = -1);
 	OpEntryParser *m_opcodeTree;
+	void stkCheck();
 	// localServer
 	bool startServer();
 public slots:
@@ -220,17 +221,21 @@ private slots:
 	void setFullScreen(bool full);
 	void showDebugger(bool show);
 	void showVirtualKeyboard(bool show);
+	void showTableEditor(bool show);
 	void virtualKeyboardActOff(QObject *parent=0);
+	void tableEditorActOff(QObject *parent=0);
 	void showHtml5Gui(bool show);
 	void splitView(bool split);
 	void showMidiLearn();
 	void virtualMidiIn(QVariant on, QVariant note, QVariant channel, QVariant velocity);
 	void virtualCCIn(int channel, int cc, int value);
+	void handleTableSyntax(QString syntax);
 	void openManualExample(QString fileName);
 	void openExternalBrowser(QUrl url = QUrl());
 	void openPdfFile(QString name);
 	void openFLOSSManual();
 	void openQuickRef();
+	void openOnlineDocumentation();
 	void resetPreferences();
 	void reportBug();
 	void requestFeature();
@@ -315,8 +320,8 @@ private:
 	WidgetPanel *widgetPanel;  // Dock widget, for containing the widget layout
 	QDockWidget *m_scratchPad;
 #ifdef USE_QT_GT_53
-	QQuickWidget *m_virtualKeyboard;
-	QPointer <QQuickWidget> m_virtualKeyboardPointer; // to control, if virtualKeyboard is deleted
+	QQuickWidget *m_virtualKeyboard, *m_tableEditor;
+	QPointer <QQuickWidget> m_virtualKeyboardPointer, m_tableEditorPointer; // to control, if the object is deleted
 #endif
 #ifdef QCS_HTML5
 public: CsoundHtmlView *csoundHtmlView;
@@ -402,6 +407,7 @@ private:
 	QAction *showDebugAct;
 #endif
 	QAction *showVirtualKeyboardAct;
+	QAction *showTableEditorAct;
 #ifdef QCS_HTML5
 	QAction *showHtml5Act;
 #endif
@@ -419,6 +425,7 @@ private:
 	QAction *browseForwardAct;
 	QAction *externalBrowserAct;
 	QAction *openQuickRefAct;
+	QAction *openDocumentationAct;
 	QAction *showUtilitiesAct;
 	QAction *showWidgetsAct;
 	QAction *showInspectorAct;

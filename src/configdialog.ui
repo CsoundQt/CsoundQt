@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>713</width>
-    <height>868</height>
+    <width>740</width>
+    <height>900</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,19 +18,2014 @@
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout_5">
-   <property name="leftMargin">
-    <number>2</number>
-   </property>
    <property name="topMargin">
-    <number>10</number>
+    <number>6</number>
    </property>
    <property name="rightMargin">
+    <number>6</number>
+   </property>
+   <property name="verticalSpacing">
     <number>2</number>
    </property>
-   <property name="bottomMargin">
-    <number>2</number>
-   </property>
-   <item row="2" column="0">
+   <item row="0" column="0">
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>724</width>
+        <height>842</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_18">
+       <property name="topMargin">
+        <number>2</number>
+       </property>
+       <property name="rightMargin">
+        <number>6</number>
+       </property>
+       <property name="verticalSpacing">
+        <number>2</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QTabWidget" name="editorTabWidget">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="tab_2">
+          <attribute name="title">
+           <string>Run</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_10">
+           <item>
+            <layout class="QGridLayout" name="gridLayout10">
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="BufferSizeCheckBox">
+               <property name="text">
+                <string>Buffer Size (-b)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="BufferSizeLineEdit"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="HwBufferSizeCheckBox">
+               <property name="text">
+                <string>HW Buffer Size (-B)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="HwBufferSizeLineEdit"/>
+             </item>
+             <item row="1" column="3">
+              <widget class="QCheckBox" name="DitherCheckBox">
+               <property name="text">
+                <string>Dither</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QCheckBox" name="newParserCheckBox">
+               <property name="text">
+                <string>Use new parser</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="4">
+              <widget class="QLabel" name="label_13">
+               <property name="text">
+                <string>Number of threads</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="4">
+              <widget class="QCheckBox" name="multicoreCheckBox">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Use multicore</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="6">
+              <spacer name="horizontalSpacer_9">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="5">
+              <widget class="QSpinBox" name="numThreadsSpinBox">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>12</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <spacer name="horizontalSpacer_10">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QCheckBox" name="AdditionalFlagsCheckBox">
+               <property name="text">
+                <string>Additional command line flags</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="AdditionalFlagsLineEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="title">
+              <string>Realtime Audio</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_16">
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="RtUseOptionsCheckBox">
+                <property name="text">
+                 <string>Use CsoundQt options</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QCheckBox" name="RtOverrideCheckBox">
+                <property name="text">
+                 <string>Ignore CsOptions</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" colspan="2">
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <widget class="QLabel" name="label_6">
+                  <property name="text">
+                   <string>Jack client name (use * for current filename)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="JackNameLineEdit"/>
+                </item>
+               </layout>
+              </item>
+              <item row="1" column="0" colspan="2">
+               <layout class="QGridLayout" name="rtadioLayout">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
+                   <string>RT Audio Module</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="RtModuleComboBox"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_4">
+                  <property name="text">
+                   <string>Input device (-i)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="4">
+                 <widget class="QLineEdit" name="RtOutputLineEdit"/>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="RtInputLineEdit"/>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QToolButton" name="audioInputToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QLabel" name="label_5">
+                  <property name="text">
+                   <string>Output device (-o)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="5">
+                 <widget class="QToolButton" name="audioOutputToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_15">
+             <property name="title">
+              <string>Realtime MIDI</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_8">
+              <item row="0" column="4">
+               <widget class="QComboBox" name="midiOutInterfaceComboBox">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0" colspan="5">
+               <layout class="QGridLayout" name="midilayout">
+                <item row="2" column="2">
+                 <widget class="QLineEdit" name="RtMidiInputLineEdit"/>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QToolButton" name="midiInputToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="label_12">
+                  <property name="text">
+                   <string>Input device (-M)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="4">
+                 <widget class="QLabel" name="label_8">
+                  <property name="text">
+                   <string>Output device (-Q)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="5">
+                 <widget class="QLineEdit" name="RtMidiOutputLineEdit"/>
+                </item>
+                <item row="2" column="6">
+                 <widget class="QToolButton" name="midiOutputToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="4">
+                 <widget class="QLabel" name="label_18">
+                  <property name="text">
+                   <string>Csound MIDI Module</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1" colspan="3">
+                 <widget class="QCheckBox" name="csoundMidiCheckBox">
+                  <property name="text">
+                   <string>Use Csound MIDI modules (unstable)</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="5" colspan="2">
+                 <widget class="QComboBox" name="RtMidiModuleComboBox"/>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_37">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set Internal MIDI input interface. Controls widgets and MIDI input for Csound if Csound MIDI module usage is disabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>MIDI input interface</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLabel" name="label_38">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>MIDI Output Interface</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="midiInterfaceComboBox"/>
+              </item>
+              <item row="0" column="2">
+               <spacer name="horizontalSpacer_8">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox">
+             <property name="title">
+              <string>File (offline render)</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading</set>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_15">
+              <item row="1" column="0">
+               <layout class="QVBoxLayout" name="askLayout">
+                <item>
+                 <widget class="QCheckBox" name="AskFilenameCheckBox">
+                  <property name="text">
+                   <string>Ask for filename every time</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="FilePlayFinishedCheckBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Play file when finished</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="2" column="0" colspan="2">
+               <layout class="QGridLayout" name="filenamesLayout">
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="InputFilenameCheckBox">
+                  <property name="text">
+                   <string>Input Filename</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="InputFilenameLineEdit"/>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QToolButton" name="inputFilenameToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="OutputFilenameCheckBox">
+                  <property name="text">
+                   <string>Output Filename</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="OutputFilenameLineEdit"/>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QToolButton" name="outputFilenameToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="FileUseOptionsCheckBox">
+                <property name="text">
+                 <string>Use CsoundQt options</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QCheckBox" name="FileOverrideCheckBox">
+                <property name="text">
+                 <string>Ignore CsOptions</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <layout class="QGridLayout" name="formatLayout">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_9">
+                  <property name="text">
+                   <string>File type</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="FileTypeComboBox"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_10">
+                  <property name="text">
+                   <string>Sample format</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QComboBox" name="FileFormatComboBox"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab">
+          <attribute name="title">
+           <string>General</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_8">
+             <property name="title">
+              <string>Run Utilities using:</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_6">
+              <item>
+               <layout class="QVBoxLayout" name="layout14">
+                <item>
+                 <widget class="QRadioButton" name="ApiRadioButton">
+                  <property name="text">
+                   <string>Csound API</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="ExternalRadioButton">
+                  <property name="text">
+                   <string>External shell</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QGroupBox" name="groupBox_13">
+             <property name="title">
+              <string>Interface language (Requires restart)</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <widget class="QComboBox" name="languageComboBox"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0" rowspan="2">
+            <widget class="QGroupBox" name="groupBox_14">
+             <property name="title">
+              <string>Performance tweaks</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_5">
+                <item>
+                 <widget class="QCheckBox" name="noMessagesCheckBox">
+                  <property name="text">
+                   <string>No messages to consoles</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="noBufferCheckBox">
+                  <property name="text">
+                   <string>Disable recording and scopes</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="noEventsCheckBox">
+                  <property name="text">
+                   <string>Disable realtime score events</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="noPythonCheckBox">
+                  <property name="text">
+                   <string>Disable python callback</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="3" column="0" colspan="2">
+            <widget class="QGroupBox" name="groupBox_6">
+             <property name="title">
+              <string>Console</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="consoleFontLayout">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_11">
+                  <property name="text">
+                   <string>Font</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QFontComboBox" name="consoleFontComboBox"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_15">
+                  <property name="text">
+                   <string>Size</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QComboBox" name="consoleFontSizeComboBox">
+                  <property name="currentIndex">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>6</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>8</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>9</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>10</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>11</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>12</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>14</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>18</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>20</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>24</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>30</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>36</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>48</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="1">
+               <layout class="QVBoxLayout" name="fontLayout2">
+                <item>
+                 <widget class="QLabel" name="label_23">
+                  <property name="text">
+                   <string>Font Color</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_24">
+                  <property name="text">
+                   <string>Background Color</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="2">
+               <layout class="QVBoxLayout" name="fontLayout">
+                <item>
+                 <widget class="QPushButton" name="consoleFontColorPushButton">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="consoleBgColorPushButton">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="1" column="0" colspan="2">
+               <layout class="QHBoxLayout" name="horizontalLayout_4">
+                <item>
+                 <widget class="QLabel" name="label_27">
+                  <property name="text">
+                   <string>Console Message buffer size</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="consoleBufferComboBox">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>256</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1024</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>No limit</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="4" column="0" colspan="2">
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QCheckBox" name="keyRepeatCheckBox">
+               <property name="text">
+                <string>Allow key repeats for sensekey</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="debugLiveEventsCheckBox">
+               <property name="text">
+                <string>Debug mode for Live Event Sheet</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="simultaneousCheckBox">
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="text">
+                <string>Allow simultaneous play (May have problems with portmidi,coreaudio, and alsa audio) </string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="10" column="0">
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="6" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <item>
+              <widget class="QLabel" name="label_31">
+               <property name="text">
+                <string>Theme (requires restart)</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="themeComboBox">
+               <item>
+                <property name="text">
+                 <string>boring</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>fun</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="1">
+            <widget class="QGroupBox" name="groupBox_9">
+             <property name="title">
+              <string>Record button</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_9">
+              <item>
+               <layout class="QHBoxLayout" name="recordLayout">
+                <item>
+                 <widget class="QLabel" name="label_21">
+                  <property name="text">
+                   <string>Record sample format</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="sampleFormatComboBox">
+                  <item>
+                   <property name="text">
+                    <string>16 Bit Int</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>24 Bit Int</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>32 bit float</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_6">
+          <attribute name="title">
+           <string>Widgets</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_6">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_7">
+             <property name="title">
+              <string>Widgets</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_7">
+              <item row="0" column="0">
+               <layout class="QVBoxLayout" name="verticalLayout_2">
+                <item>
+                 <widget class="QCheckBox" name="widgetsCheckBox">
+                  <property name="text">
+                   <string>Enable Widgets</string>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="saveWidgetsCheckBox">
+                  <property name="text">
+                   <string>Save widgets in csd file</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="showWidgetsOnRunCheckBox">
+                  <property name="toolTip">
+                   <string>Make the widget panel visible when a csd is played</string>
+                  </property>
+                  <property name="text">
+                   <string>Show Widgets on Play</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="showTooltipsCheckBox">
+                  <property name="text">
+                   <string>Show Tooltips for widgets</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_5">
+                  <item>
+                   <spacer name="horizontalSpacer_2">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="enableFLTKCheckBox">
+                    <property name="toolTip">
+                     <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
+                    </property>
+                    <property name="text">
+                     <string>Enable FLTK</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_3">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_5">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_7">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="terminalFLTKCheckBox">
+                  <property name="toolTip">
+                   <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
+                  </property>
+                  <property name="text">
+                   <string>Run FLTK csds in Terminal</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="oldFormatCheckBox">
+                  <property name="toolTip">
+                   <string>Store old widget format section in csd file, to allow older versions of CsoundQt to load most of the widget characteristics from the file</string>
+                  </property>
+                  <property name="text">
+                   <string>Store Old Widget Format</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="openPropertiesCheckBox">
+                  <property name="toolTip">
+                   <string>Automatically open properties dialog when a new widget is created</string>
+                  </property>
+                  <property name="text">
+                   <string>Open Properties when creating widget</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="widgetsIndependentCheckBox">
+                  <property name="text">
+                   <string>Widgets are an independent window (requires restart)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_7">
+                  <item>
+                   <widget class="QLabel" name="label_32">
+                    <property name="text">
+                     <string>Font scaling</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QDoubleSpinBox" name="fontScalingSpinBox"/>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_33">
+                    <property name="text">
+                     <string>Font offset</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QDoubleSpinBox" name="fontOffsetSpinBox"/>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_4">
+          <attribute name="title">
+           <string>Editor</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_9">
+           <item row="1" column="0">
+            <widget class="QGroupBox" name="groupBox_10">
+             <property name="title">
+              <string>Behavior</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout">
+              <item>
+               <widget class="QCheckBox" name="autoplayCheckBox">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>Autoplay files when launched from file</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="saveChangesCheckBox">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>Save changes automatically on run</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="rememberFileCheckBox">
+                <property name="text">
+                 <string>Remember open files from previous session</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="iconTextCheckBox">
+                <property name="text">
+                 <string>Show text for toolbar icons</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="toolbarCheckBox">
+                <property name="text">
+                 <string>Show Toolbars</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="autoJoinCheckBox">
+                <property name="text">
+                 <string>Automatically Join orc/sco files</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_8">
+                <item>
+                 <widget class="QLabel" name="label_35">
+                  <property name="text">
+                   <string>Favorites/Scripts menus maximum depth</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="menusDepthSpinBox"/>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <spacer name="verticalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_5">
+             <property name="title">
+              <string>Editor</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_17">
+              <item row="0" column="2" rowspan="3">
+               <layout class="QGridLayout" name="gridLayout_10">
+                <item row="0" column="1">
+                 <widget class="QSpinBox" name="tabWidthSpinBox">
+                  <property name="minimum">
+                   <number>10</number>
+                  </property>
+                  <property name="maximum">
+                   <number>120</number>
+                  </property>
+                  <property name="singleStep">
+                   <number>10</number>
+                  </property>
+                  <property name="value">
+                   <number>80</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <spacer name="verticalSpacer_6">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_19">
+                  <property name="text">
+                   <string>Tab Width</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0" colspan="2">
+                 <widget class="QCheckBox" name="tabIndentCheckBox">
+                  <property name="text">
+                   <string>Tab key always indents</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="2" column="0">
+               <layout class="QVBoxLayout" name="_3">
+                <item>
+                 <widget class="QCheckBox" name="colorVariablesCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>Color Variables</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="wrapLinesCheckBox">
+                  <property name="text">
+                   <string>Wrap Lines</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="autoCompleteCheckBox">
+                  <property name="text">
+                   <string>Autocomplete menu while typing</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="autoParameterModeCheckBox">
+                  <property name="text">
+                   <string>Enable Parameter mode after autocomplete</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="lineNumbersCheckBox">
+                  <property name="text">
+                   <string>Show line numbers</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="1">
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="0" column="0" rowspan="2">
+               <layout class="QGridLayout" name="_2">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>Font</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_2">
+                  <property name="text">
+                   <string>Size</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QComboBox" name="fontSizeComboBox">
+                  <property name="currentIndex">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>6</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>8</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>9</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>10</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>11</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>12</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>14</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>18</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>20</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>24</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>30</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>36</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>48</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_34">
+                  <property name="text">
+                   <string>Line Ending Mode</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QComboBox" name="lineEndingComboBox">
+                  <property name="currentIndex">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Unix (LF)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Windows (CR+LF)</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="3">
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_3">
+          <attribute name="title">
+           <string>Environment</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="title">
+              <string>Environment</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="environLayout">
+                <item row="12" column="2">
+                 <widget class="QLineEdit" name="csoundExecutableLineEdit">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="14" column="2">
+                 <widget class="QLineEdit" name="sdkLineEdit"/>
+                </item>
+                <item row="8" column="2">
+                 <widget class="QLineEdit" name="rawWaveLineEdit"/>
+                </item>
+                <item row="8" column="0">
+                 <widget class="QCheckBox" name="rawWaveCheckBox">
+                  <property name="text">
+                   <string>RAWWAVE_PATH</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="3">
+                 <widget class="QToolButton" name="rawWaveToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="12" column="3">
+                 <widget class="QToolButton" name="csoundExecutableToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="15" column="2">
+                 <widget class="QLineEdit" name="templateLineEdit"/>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QCheckBox" name="Opcodedir64CheckBox">
+                  <property name="toolTip">
+                   <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
+                  </property>
+                  <property name="text">
+                   <string>OPCODEDIR64</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QLineEdit" name="Opcode6dir64LineEdit"/>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QLineEdit" name="Opcodedir64LineEdit"/>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QCheckBox" name="Opcode6dir64CheckBox">
+                  <property name="text">
+                   <string>OPCODE6DIR64</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="11" column="2">
+                 <widget class="QLineEdit" name="pythonExecutableLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="12" column="0">
+                 <widget class="QLabel" name="label_36">
+                  <property name="text">
+                   <string>Csound Executable</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="11" column="0">
+                 <widget class="QLabel" name="label_29">
+                  <property name="text">
+                   <string>Python Executable</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="0">
+                 <widget class="QLabel" name="pythonDirlabel">
+                  <property name="text">
+                   <string>Python Script Dir </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="13" column="3">
+                 <widget class="QToolButton" name="logFileToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="13" column="0">
+                 <widget class="QLabel" name="label_30">
+                  <property name="text">
+                   <string>Log file</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="13" column="2">
+                 <widget class="QLineEdit" name="logFileLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="3">
+                 <widget class="QToolButton" name="pythonDirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="2">
+                 <widget class="QLineEdit" name="pythonDirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="3">
+                 <widget class="QToolButton" name="favoriteToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="2">
+                 <widget class="QLineEdit" name="favoriteLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_7">
+                  <property name="toolTip">
+                   <string>Selects the location of the html documentation</string>
+                  </property>
+                  <property name="text">
+                   <string>Html Doc Directory</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="0">
+                 <widget class="QLabel" name="label_28">
+                  <property name="text">
+                   <string>Favorite dir</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="3">
+                 <widget class="QToolButton" name="incdirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QCheckBox" name="IncdirCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>INCDIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="2">
+                 <widget class="QLineEdit" name="IncdirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="2">
+                 <widget class="QLineEdit" name="SsdirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="3">
+                 <widget class="QToolButton" name="sfdirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="2">
+                 <widget class="QLineEdit" name="SadirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="OpcodedirCheckBox">
+                  <property name="toolTip">
+                   <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
+                  </property>
+                  <property name="text">
+                   <string>OPCODEDIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QCheckBox" name="SadirCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>SADIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="3">
+                 <widget class="QToolButton" name="sadirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QCheckBox" name="SsdirCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>SSDIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QLineEdit" name="OpcodedirLineEdit"/>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QToolButton" name="opcodedirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="2">
+                 <widget class="QLineEdit" name="SfdirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="3">
+                 <widget class="QToolButton" name="ssdirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QCheckBox" name="SfdirCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>SFDIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QToolButton" name="csdocdirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QLineEdit" name="CsdocdirLineEdit"/>
+                </item>
+                <item row="14" column="0">
+                 <widget class="QLabel" name="label_25">
+                  <property name="toolTip">
+                   <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
+                  </property>
+                  <property name="text">
+                   <string>QuteApp SDK Dir</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="15" column="0">
+                 <widget class="QLabel" name="label_39">
+                  <property name="toolTip">
+                   <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
+                  </property>
+                  <property name="text">
+                   <string>Template directory</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="14" column="3">
+                 <widget class="QToolButton" name="sdkToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="15" column="3">
+                 <widget class="QToolButton" name="templateToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QToolButton" name="opcodedir64ToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="3">
+                 <widget class="QToolButton" name="opcode6dir64ToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_5">
+          <attribute name="title">
+           <string>External programs</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_11">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_4">
+             <property name="title">
+              <string>External programs</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_12">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="_4">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_14">
+                  <property name="text">
+                   <string>Terminal</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QLineEdit" name="TerminalLineEdit"/>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QToolButton" name="terminalToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_16">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>Wave Editor</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QLineEdit" name="WaveEditorLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QToolButton" name="waveEditorToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_17">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>Wave Player</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QLineEdit" name="WavePlayerLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QToolButton" name="wavePlayerToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QLineEdit" name="browserLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_20">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>Browser</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="3">
+                 <widget class="QToolButton" name="browserToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="label_22">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>Dot</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="2">
+                 <widget class="QLineEdit" name="dotLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="3">
+                 <widget class="QToolButton" name="dotToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="label_26">
+                  <property name="text">
+                   <string>PDF viewer</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="3">
+                 <widget class="QToolButton" name="pdfViewerToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="2">
+                 <widget class="QLineEdit" name="pdfViewerLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_7">
+          <attribute name="title">
+           <string>Template</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_13">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_11">
+             <property name="title">
+              <string>csd Template</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_14">
+              <item row="0" column="0">
+               <widget class="QPlainTextEdit" name="templateTextEdit"/>
+              </item>
+              <item row="1" column="0">
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <spacer name="horizontalSpacer_11">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="clearTemplatePushButton">
+                  <property name="text">
+                   <string>Clear</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="defaultTemplatePushButton">
+                  <property name="text">
+                   <string>Default</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
     <layout class="QHBoxLayout" name="buttonLayout">
      <item>
       <spacer name="buttonSpacer">
@@ -66,1976 +2061,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="0" column="0">
-    <widget class="QTabWidget" name="editorTabWidget">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="currentIndex">
-      <number>4</number>
-     </property>
-     <widget class="QWidget" name="tab_2">
-      <attribute name="title">
-       <string>Run</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_10">
-       <item>
-        <layout class="QGridLayout" name="gridLayout10">
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="BufferSizeCheckBox">
-           <property name="text">
-            <string>Buffer Size (-b)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="BufferSizeLineEdit"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QCheckBox" name="HwBufferSizeCheckBox">
-           <property name="text">
-            <string>HW Buffer Size (-B)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="HwBufferSizeLineEdit"/>
-         </item>
-         <item row="1" column="3">
-          <widget class="QCheckBox" name="DitherCheckBox">
-           <property name="text">
-            <string>Dither</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3">
-          <widget class="QCheckBox" name="newParserCheckBox">
-           <property name="text">
-            <string>Use new parser</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="4">
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>Number of threads</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="4">
-          <widget class="QCheckBox" name="multicoreCheckBox">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Use multicore</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="6">
-          <spacer name="horizontalSpacer_9">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="5">
-          <widget class="QSpinBox" name="numThreadsSpinBox">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>12</number>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <spacer name="horizontalSpacer_10">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QCheckBox" name="AdditionalFlagsCheckBox">
-           <property name="text">
-            <string>Additional command line flags</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="AdditionalFlagsLineEdit">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_2">
-         <property name="title">
-          <string>Realtime Audio</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_16">
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="RtUseOptionsCheckBox">
-            <property name="text">
-             <string>Use CsoundQt options</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="RtOverrideCheckBox">
-            <property name="text">
-             <string>Ignore CsOptions</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>Jack client name (use * for current filename)</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="JackNameLineEdit"/>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0" colspan="2">
-           <layout class="QGridLayout" name="rtadioLayout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>RT Audio Module</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="RtModuleComboBox"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>Input device (-i)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="4">
-             <widget class="QLineEdit" name="RtOutputLineEdit"/>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="RtInputLineEdit"/>
-            </item>
-            <item row="1" column="2">
-             <widget class="QToolButton" name="audioInputToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="3">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>Output device (-o)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="5">
-             <widget class="QToolButton" name="audioOutputToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_15">
-         <property name="title">
-          <string>Realtime MIDI</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_8">
-          <item row="0" column="4">
-           <widget class="QComboBox" name="midiOutInterfaceComboBox">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="5">
-           <layout class="QGridLayout" name="midilayout">
-            <item row="2" column="2">
-             <widget class="QLineEdit" name="RtMidiInputLineEdit"/>
-            </item>
-            <item row="2" column="3">
-             <widget class="QToolButton" name="midiInputToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLabel" name="label_12">
-              <property name="text">
-               <string>Input device (-M)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="4">
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>Output device (-Q)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="5">
-             <widget class="QLineEdit" name="RtMidiOutputLineEdit"/>
-            </item>
-            <item row="2" column="6">
-             <widget class="QToolButton" name="midiOutputToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="4">
-             <widget class="QLabel" name="label_18">
-              <property name="text">
-               <string>Csound MIDI Module</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1" colspan="3">
-             <widget class="QCheckBox" name="csoundMidiCheckBox">
-              <property name="text">
-               <string>Use Csound MIDI modules (unstable)</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="5" colspan="2">
-             <widget class="QComboBox" name="RtMidiModuleComboBox"/>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_37">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set Internal MIDI input interface. Controls widgets and MIDI input for Csound if Csound MIDI module usage is disabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>MIDI input interface</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_38">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>MIDI Output Interface</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="midiInterfaceComboBox"/>
-          </item>
-          <item row="0" column="2">
-           <spacer name="horizontalSpacer_8">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>File (offline render)</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading</set>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_15">
-          <item row="1" column="0">
-           <layout class="QVBoxLayout" name="askLayout">
-            <item>
-             <widget class="QCheckBox" name="AskFilenameCheckBox">
-              <property name="text">
-               <string>Ask for filename every time</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="FilePlayFinishedCheckBox">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>Play file when finished</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <layout class="QGridLayout" name="filenamesLayout">
-            <item row="0" column="0">
-             <widget class="QCheckBox" name="InputFilenameCheckBox">
-              <property name="text">
-               <string>Input Filename</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="InputFilenameLineEdit"/>
-            </item>
-            <item row="0" column="2">
-             <widget class="QToolButton" name="inputFilenameToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="OutputFilenameCheckBox">
-              <property name="text">
-               <string>Output Filename</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="OutputFilenameLineEdit"/>
-            </item>
-            <item row="1" column="2">
-             <widget class="QToolButton" name="outputFilenameToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="FileUseOptionsCheckBox">
-            <property name="text">
-             <string>Use CsoundQt options</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="FileOverrideCheckBox">
-            <property name="text">
-             <string>Ignore CsOptions</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <layout class="QGridLayout" name="formatLayout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_9">
-              <property name="text">
-               <string>File type</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="FileTypeComboBox"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>Sample format</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QComboBox" name="FileFormatComboBox"/>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab">
-      <attribute name="title">
-       <string>General</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_8">
-         <property name="title">
-          <string>Run Utilities using:</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <item>
-           <layout class="QVBoxLayout" name="layout14">
-            <item>
-             <widget class="QRadioButton" name="ApiRadioButton">
-              <property name="text">
-               <string>Csound API</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="ExternalRadioButton">
-              <property name="text">
-               <string>External shell</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QGroupBox" name="groupBox_13">
-         <property name="title">
-          <string>Interface language (Requires restart)</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_7">
-          <item>
-           <widget class="QComboBox" name="languageComboBox"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0" rowspan="2">
-        <widget class="QGroupBox" name="groupBox_14">
-         <property name="title">
-          <string>Performance tweaks</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_5">
-            <item>
-             <widget class="QCheckBox" name="noMessagesCheckBox">
-              <property name="text">
-               <string>No messages to consoles</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="noBufferCheckBox">
-              <property name="text">
-               <string>Disable recording and scopes</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="noEventsCheckBox">
-              <property name="text">
-               <string>Disable realtime score events</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="noPythonCheckBox">
-              <property name="text">
-               <string>Disable python callback</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="0" colspan="2">
-        <widget class="QGroupBox" name="groupBox_6">
-         <property name="title">
-          <string>Console</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
-           <layout class="QGridLayout" name="consoleFontLayout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_11">
-              <property name="text">
-               <string>Font</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QFontComboBox" name="consoleFontComboBox"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_15">
-              <property name="text">
-               <string>Size</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QComboBox" name="consoleFontSizeComboBox">
-              <property name="currentIndex">
-               <number>0</number>
-              </property>
-              <item>
-               <property name="text">
-                <string>6</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>8</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>9</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>10</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>11</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>12</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>14</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>18</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>20</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>24</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>30</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>36</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>48</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="1">
-           <layout class="QVBoxLayout" name="fontLayout2">
-            <item>
-             <widget class="QLabel" name="label_23">
-              <property name="text">
-               <string>Font Color</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_24">
-              <property name="text">
-               <string>Background Color</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="2">
-           <layout class="QVBoxLayout" name="fontLayout">
-            <item>
-             <widget class="QPushButton" name="consoleFontColorPushButton">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="consoleBgColorPushButton">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0" colspan="2">
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QLabel" name="label_27">
-              <property name="text">
-               <string>Console Message buffer size</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="consoleBufferComboBox">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <item>
-               <property name="text">
-                <string>256</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>1024</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>No limit</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="2">
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <item>
-          <widget class="QCheckBox" name="keyRepeatCheckBox">
-           <property name="text">
-            <string>Allow key repeats for sensekey</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="debugLiveEventsCheckBox">
-           <property name="text">
-            <string>Debug mode for Live Event Sheet</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="simultaneousCheckBox">
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string>Allow simultaneous play (May have problems with portmidi,coreaudio, and alsa audio) </string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="10" column="0">
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="6" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QLabel" name="label_31">
-           <property name="text">
-            <string>Theme (requires restart)</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="themeComboBox">
-           <item>
-            <property name="text">
-             <string>boring</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>fun</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="1">
-        <widget class="QGroupBox" name="groupBox_9">
-         <property name="title">
-          <string>Record button</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_9">
-          <item>
-           <layout class="QHBoxLayout" name="recordLayout">
-            <item>
-             <widget class="QLabel" name="label_21">
-              <property name="text">
-               <string>Record sample format</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="sampleFormatComboBox">
-              <item>
-               <property name="text">
-                <string>16 Bit Int</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>24 Bit Int</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>32 bit float</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_6">
-      <attribute name="title">
-       <string>Widgets</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_6">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_7">
-         <property name="title">
-          <string>Widgets</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="0">
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <widget class="QCheckBox" name="widgetsCheckBox">
-              <property name="text">
-               <string>Enable Widgets</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="saveWidgetsCheckBox">
-              <property name="text">
-               <string>Save widgets in csd file</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="showWidgetsOnRunCheckBox">
-              <property name="toolTip">
-               <string>Make the widget panel visible when a csd is played</string>
-              </property>
-              <property name="text">
-               <string>Show Widgets on Play</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="showTooltipsCheckBox">
-              <property name="text">
-               <string>Show Tooltips for widgets</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_5">
-              <item>
-               <spacer name="horizontalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="enableFLTKCheckBox">
-                <property name="toolTip">
-                 <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
-                </property>
-                <property name="text">
-                 <string>Enable FLTK</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_3">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_5">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_7">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="terminalFLTKCheckBox">
-              <property name="toolTip">
-               <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
-              </property>
-              <property name="text">
-               <string>Run FLTK csds in Terminal</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="oldFormatCheckBox">
-              <property name="toolTip">
-               <string>Store old widget format section in csd file, to allow older versions of CsoundQt to load most of the widget characteristics from the file</string>
-              </property>
-              <property name="text">
-               <string>Store Old Widget Format</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="openPropertiesCheckBox">
-              <property name="toolTip">
-               <string>Automatically open properties dialog when a new widget is created</string>
-              </property>
-              <property name="text">
-               <string>Open Properties when creating widget</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="widgetsIndependentCheckBox">
-              <property name="text">
-               <string>Widgets are an independent window (requires restart)</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_7">
-              <item>
-               <widget class="QLabel" name="label_32">
-                <property name="text">
-                 <string>Font scaling</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QDoubleSpinBox" name="fontScalingSpinBox"/>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_33">
-                <property name="text">
-                 <string>Font offset</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QDoubleSpinBox" name="fontOffsetSpinBox"/>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_4">
-      <attribute name="title">
-       <string>Editor</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_9">
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_10">
-         <property name="title">
-          <string>Behavior</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QCheckBox" name="autoplayCheckBox">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>Autoplay files when launched from file</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="saveChangesCheckBox">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>Save changes automatically on run</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="rememberFileCheckBox">
-            <property name="text">
-             <string>Remember open files from previous session</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="iconTextCheckBox">
-            <property name="text">
-             <string>Show text for toolbar icons</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="toolbarCheckBox">
-            <property name="text">
-             <string>Show Toolbars</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="autoJoinCheckBox">
-            <property name="text">
-             <string>Automatically Join orc/sco files</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_8">
-            <item>
-             <widget class="QLabel" name="label_35">
-              <property name="text">
-               <string>Favorites/Scripts menus maximum depth</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="menusDepthSpinBox"/>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_4">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_5">
-         <property name="title">
-          <string>Editor</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_17">
-          <item row="0" column="2" rowspan="3">
-           <layout class="QGridLayout" name="gridLayout_10">
-            <item row="0" column="1">
-             <widget class="QSpinBox" name="tabWidthSpinBox">
-              <property name="minimum">
-               <number>10</number>
-              </property>
-              <property name="maximum">
-               <number>120</number>
-              </property>
-              <property name="singleStep">
-               <number>10</number>
-              </property>
-              <property name="value">
-               <number>80</number>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <spacer name="verticalSpacer_6">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_19">
-              <property name="text">
-               <string>Tab Width</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0" colspan="2">
-             <widget class="QCheckBox" name="tabIndentCheckBox">
-              <property name="text">
-               <string>Tab key always indents</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="0">
-           <layout class="QVBoxLayout" name="_3">
-            <item>
-             <widget class="QCheckBox" name="colorVariablesCheckBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>Color Variables</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="wrapLinesCheckBox">
-              <property name="text">
-               <string>Wrap Lines</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="autoCompleteCheckBox">
-              <property name="text">
-               <string>Autocomplete menu while typing</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="autoParameterModeCheckBox">
-              <property name="text">
-               <string>Enable Parameter mode after autocomplete</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="lineNumbersCheckBox">
-              <property name="text">
-               <string>Show line numbers</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="1">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="0" rowspan="2">
-           <layout class="QGridLayout" name="_2">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Font</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QFontComboBox" name="fontComboBox"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Size</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QComboBox" name="fontSizeComboBox">
-              <property name="currentIndex">
-               <number>0</number>
-              </property>
-              <item>
-               <property name="text">
-                <string>6</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>8</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>9</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>10</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>11</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>12</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>14</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>18</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>20</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>24</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>30</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>36</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>48</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_34">
-              <property name="text">
-               <string>Line Ending Mode</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QComboBox" name="lineEndingComboBox">
-              <property name="currentIndex">
-               <number>0</number>
-              </property>
-              <item>
-               <property name="text">
-                <string>Unix (LF)</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Windows (CR+LF)</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="3">
-           <spacer name="horizontalSpacer_6">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_3">
-      <attribute name="title">
-       <string>Environment</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_3">
-         <property name="title">
-          <string>Environment</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
-           <layout class="QGridLayout" name="environLayout">
-            <item row="12" column="2">
-             <widget class="QLineEdit" name="csoundExecutableLineEdit">
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item row="14" column="2">
-             <widget class="QLineEdit" name="sdkLineEdit"/>
-            </item>
-            <item row="8" column="2">
-             <widget class="QLineEdit" name="rawWaveLineEdit"/>
-            </item>
-            <item row="8" column="0">
-             <widget class="QCheckBox" name="rawWaveCheckBox">
-              <property name="text">
-               <string>RAWWAVE_PATH</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="3">
-             <widget class="QToolButton" name="rawWaveToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="12" column="3">
-             <widget class="QToolButton" name="csoundExecutableToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="15" column="2">
-             <widget class="QLineEdit" name="templateLineEdit"/>
-            </item>
-            <item row="2" column="0">
-             <widget class="QCheckBox" name="Opcodedir64CheckBox">
-              <property name="toolTip">
-               <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
-              </property>
-              <property name="text">
-               <string>OPCODEDIR64</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2">
-             <widget class="QLineEdit" name="Opcode6dir64LineEdit"/>
-            </item>
-            <item row="2" column="2">
-             <widget class="QLineEdit" name="Opcodedir64LineEdit"/>
-            </item>
-            <item row="3" column="0">
-             <widget class="QCheckBox" name="Opcode6dir64CheckBox">
-              <property name="text">
-               <string>OPCODE6DIR64</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="11" column="2">
-             <widget class="QLineEdit" name="pythonExecutableLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="12" column="0">
-             <widget class="QLabel" name="label_36">
-              <property name="text">
-               <string>Csound Executable</string>
-              </property>
-             </widget>
-            </item>
-            <item row="11" column="0">
-             <widget class="QLabel" name="label_29">
-              <property name="text">
-               <string>Python Executable</string>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="0">
-             <widget class="QLabel" name="pythonDirlabel">
-              <property name="text">
-               <string>Python Script Dir </string>
-              </property>
-             </widget>
-            </item>
-            <item row="13" column="3">
-             <widget class="QToolButton" name="logFileToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="13" column="0">
-             <widget class="QLabel" name="label_30">
-              <property name="text">
-               <string>Log file</string>
-              </property>
-             </widget>
-            </item>
-            <item row="13" column="2">
-             <widget class="QLineEdit" name="logFileLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="3">
-             <widget class="QToolButton" name="pythonDirToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="2">
-             <widget class="QLineEdit" name="pythonDirLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="3">
-             <widget class="QToolButton" name="favoriteToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="2">
-             <widget class="QLineEdit" name="favoriteLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_7">
-              <property name="toolTip">
-               <string>Selects the location of the html documentation</string>
-              </property>
-              <property name="text">
-               <string>Html Doc Directory</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="0">
-             <widget class="QLabel" name="label_28">
-              <property name="text">
-               <string>Favorite dir</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="3">
-             <widget class="QToolButton" name="incdirToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <widget class="QCheckBox" name="IncdirCheckBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>INCDIR</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="2">
-             <widget class="QLineEdit" name="IncdirLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="2">
-             <widget class="QLineEdit" name="SsdirLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="3">
-             <widget class="QToolButton" name="sfdirToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="2">
-             <widget class="QLineEdit" name="SadirLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="OpcodedirCheckBox">
-              <property name="toolTip">
-               <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
-              </property>
-              <property name="text">
-               <string>OPCODEDIR</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QCheckBox" name="SadirCheckBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>SADIR</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="3">
-             <widget class="QToolButton" name="sadirToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QCheckBox" name="SsdirCheckBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>SSDIR</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QLineEdit" name="OpcodedirLineEdit"/>
-            </item>
-            <item row="1" column="3">
-             <widget class="QToolButton" name="opcodedirToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="2">
-             <widget class="QLineEdit" name="SfdirLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="3">
-             <widget class="QToolButton" name="ssdirToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
-             <widget class="QCheckBox" name="SfdirCheckBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>SFDIR</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="3">
-             <widget class="QToolButton" name="csdocdirToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QLineEdit" name="CsdocdirLineEdit"/>
-            </item>
-            <item row="14" column="0">
-             <widget class="QLabel" name="label_25">
-              <property name="toolTip">
-               <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
-              </property>
-              <property name="text">
-               <string>QuteApp SDK Dir</string>
-              </property>
-             </widget>
-            </item>
-            <item row="15" column="0">
-             <widget class="QLabel" name="label_39">
-              <property name="toolTip">
-               <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
-              </property>
-              <property name="text">
-               <string>Template directory</string>
-              </property>
-             </widget>
-            </item>
-            <item row="14" column="3">
-             <widget class="QToolButton" name="sdkToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="15" column="3">
-             <widget class="QToolButton" name="templateToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QToolButton" name="opcodedir64ToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="3">
-             <widget class="QToolButton" name="opcode6dir64ToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_5">
-      <attribute name="title">
-       <string>External programs</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_11">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_4">
-         <property name="title">
-          <string>External programs</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_12">
-          <item row="0" column="0">
-           <layout class="QGridLayout" name="_4">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_14">
-              <property name="text">
-               <string>Terminal</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QLineEdit" name="TerminalLineEdit"/>
-            </item>
-            <item row="0" column="3">
-             <widget class="QToolButton" name="terminalToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_16">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>Wave Editor</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QLineEdit" name="WaveEditorLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="3">
-             <widget class="QToolButton" name="waveEditorToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_17">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>Wave Player</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QLineEdit" name="WavePlayerLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QToolButton" name="wavePlayerToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2">
-             <widget class="QLineEdit" name="browserLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_20">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>Browser</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="3">
-             <widget class="QToolButton" name="browserToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="label_22">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>Dot</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="2">
-             <widget class="QLineEdit" name="dotLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="3">
-             <widget class="QToolButton" name="dotToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_26">
-              <property name="text">
-               <string>PDF viewer</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="3">
-             <widget class="QToolButton" name="pdfViewerToolButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="2">
-             <widget class="QLineEdit" name="pdfViewerLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_7">
-      <attribute name="title">
-       <string>Template</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_13">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_11">
-         <property name="title">
-          <string>csd Template</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_14">
-          <item row="0" column="0">
-           <widget class="QPlainTextEdit" name="templateTextEdit"/>
-          </item>
-          <item row="1" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <spacer name="horizontalSpacer_11">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="clearTemplatePushButton">
-              <property name="text">
-               <string>Clear</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="defaultTemplatePushButton">
-              <property name="text">
-               <string>Default</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
    </item>
   </layout>
  </widget>
@@ -2073,70 +2098,7 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>OpcodedirCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>OpcodedirLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>127</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>252</x>
-     <y>128</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>SadirCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>SadirLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>214</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>252</x>
-     <y>215</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>SfdirCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>SfdirLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>115</x>
-     <y>272</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>252</x>
-     <y>273</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>IncdirCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>IncdirLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>301</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>252</x>
-     <y>302</y>
-    </hint>
-   </hints>
-  </connection>
+  
   <connection>
    <sender>SsdirCheckBox</sender>
    <signal>toggled(bool)</signal>
@@ -2809,5 +2771,6 @@
     </hint>
    </hints>
   </connection>
+  
  </connections>
 </ui>

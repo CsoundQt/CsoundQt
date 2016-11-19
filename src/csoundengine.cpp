@@ -506,7 +506,7 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
 				&& csoundGetChannelPtr(ud->csound, &pvalue,
 									   ud->outputStringChannelNames[i].toLocal8Bit().constData(),
 									   CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-            char chanString[128];
+			char chanString[2048]; // large enough for long strings in displays
             csoundGetStringChannel(ud->csound, ud->outputStringChannelNames[i].toLocal8Bit().constData(),
                                                    chanString);
             if(ud->previousStringOutputValues[i] != QString(chanString)) {
@@ -889,14 +889,18 @@ int CsoundEngine::runCsound()
 	csoundSetDrawGraphCallback(ud->csound, &CsoundEngine::drawGraphCallback);
 	csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
 	csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
-
+#if CS_APIVERSION>=4
+	char const **argv;// since there was change in Csound API
+	argv = (const char **) calloc(33, sizeof(char*));
+#else
 	char **argv;
 	argv = (char **) calloc(33, sizeof(char*));
-	int argc = m_options.generateCmdLine(argv);
+#endif
+	int argc = m_options.generateCmdLine((char **)argv);
 	ud->result=csoundCompile(ud->csound,argc,argv);
 	for (int i = 0; i < argc; i++) {
 		qDebug() << argv[i];
-		free(argv[i]);
+		free((char *) argv[i]);
 	}
 	free(argv);
 	if (ud->result!=CSOUND_SUCCESS) {
@@ -1249,7 +1253,7 @@ void CsoundEngine::breakpointCallback(CSOUND *csound, debug_bkpt_info_t *bkpt_in
 		QVariantList instance;
 		instance << debug_instr_list->p1;
 		instance << QString("%1 %2").arg(debug_instr_list->p2).arg(debug_instr_list->p3);
-		instance << debug_instr_list->kcounter;
+		instance << (qulonglong)debug_instr_list->kcounter;
 		cs->m_instrumentList << instance;
 		debug_instr_list = debug_instr_list->next;
 	}

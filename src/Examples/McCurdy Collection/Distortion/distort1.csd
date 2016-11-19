@@ -15,7 +15,7 @@
 </CsOptions>
 <CsInstruments>
 sr		= 44100		;SAMPLE RATE
-ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 32			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 
 
@@ -66,13 +66,14 @@ i 1		0	   3600	;GUI
 
 
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>72</x>
  <y>179</y>
- <width>400</width>
- <height>200</height>
+ <width>890</width>
+ <height>356</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -80,7 +81,7 @@ i 1		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -109,7 +110,7 @@ i 1		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Pregain</objectName>
   <x>10</x>
   <y>69</y>
@@ -127,7 +128,7 @@ i 1		0	   3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>86</y>
@@ -156,7 +157,7 @@ i 1		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Pregain</objectName>
   <x>450</x>
   <y>86</y>
@@ -185,7 +186,7 @@ i 1		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>2</y>
@@ -214,7 +215,7 @@ i 1		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>20</y>
@@ -244,7 +245,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>126</y>
@@ -273,7 +274,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Postgain</objectName>
   <x>10</x>
   <y>109</y>
@@ -291,7 +292,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Postgain_Value</objectName>
   <x>450</x>
   <y>126</y>
@@ -320,7 +321,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>8</x>
   <y>8</y>
@@ -339,7 +340,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Shape2</objectName>
   <x>450</x>
   <y>208</y>
@@ -368,7 +369,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>208</y>
@@ -397,7 +398,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Shape2</objectName>
   <x>10</x>
   <y>191</y>
@@ -415,7 +416,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Shape1</objectName>
   <x>10</x>
   <y>150</y>
@@ -433,7 +434,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>167</y>
@@ -462,7 +463,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Shape1</objectName>
   <x>451</x>
   <y>167</y>
@@ -491,7 +492,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>10</x>
   <y>242</y>
@@ -503,14 +504,14 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>808loop.wav</stringvalue>
+  <stringvalue>/media/jh/61b896a3-f371-4f01-8429-8ab6a56dd7a2/home/jh/Joachim/Stuecke/40scp/samples/edge.aif</stringvalue>
   <text>Browse Audio File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>181</x>
   <y>243</y>
@@ -520,7 +521,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>808loop.wav</label>
+  <label>/media/jh/61b896a3-f371-4f01-8429-8ab6a56dd7a2/home/jh/Joachim/Stuecke/40scp/samples/edge.aif</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -531,13 +532,13 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>35</r>
+   <g>35</g>
+   <b>35</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>181</x>
   <y>271</y>
@@ -569,4 +570,4 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

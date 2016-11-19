@@ -36,6 +36,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	: QDialog(parent), m_parent(parent), m_options(options), m_configlists(configlists)
 {
 	setupUi(this);
+	setMaximumSize(QApplication::desktop()->width(),QApplication::desktop()->height()); // don't expand over screen
 
 	m_configlists->refreshModules();
 
@@ -266,6 +267,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(ssdirToolButton, SIGNAL(clicked()), this, SLOT(browseSsdir()));
 	connect(sfdirToolButton, SIGNAL(clicked()), this, SLOT(browseSfdir()));
 	connect(incdirToolButton, SIGNAL(clicked()), this, SLOT(browseIncdir()));
+	connect(rawWaveToolButton, SIGNAL(clicked()), this, SLOT(browseRawWaveDir()));
 	//  connect(defaultCsdToolButton, SIGNAL(clicked()), this, SLOT(browseDefaultCsd()));
 	connect(favoriteToolButton, SIGNAL(clicked()), this, SLOT(browseFavorite()));
 	connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
@@ -425,6 +427,8 @@ void ConfigDialog::accept()
 	m_options->sfdir = SfdirLineEdit->text();
 	m_options->incdirActive = IncdirCheckBox->isChecked();
 	m_options->incdir = IncdirLineEdit->text();
+	m_options->rawWaveActive = rawWaveCheckBox->isChecked();
+	m_options->rawWave = rawWaveLineEdit->text();
 	//  m_options->defaultCsdActive = defaultCsdCheckBox->isChecked();
 	//  m_options->defaultCsd = defaultCsdLineEdit->text();
 	m_options->favoriteDir = favoriteLineEdit->text();
@@ -507,6 +511,12 @@ void ConfigDialog::browseIncdir()
 {
 	browseDir(m_options->incdir);
 	IncdirLineEdit->setText(m_options->incdir);
+}
+
+void ConfigDialog::browseRawWaveDir()
+{
+	browseDir(m_options->rawWave);
+	rawWaveLineEdit->setText(m_options->rawWave);
 }
 
 void ConfigDialog::browseCsoundExecutable()

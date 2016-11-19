@@ -163,16 +163,12 @@ QString QuteKnob::getCabbageLine()
 	widgetLock.lockForWrite();
 #endif
 	QString line = "rslider ";
-	line += "chan(\"" + m_channel + "\"),  ";
-	line += "pos(" + QString::number(x()) + ", " + QString::number(y()) + "), ";
-	line += "size("+ QString::number(width()) +", "+ QString::number(height()) +"), ";
-	line += "min("+ QString::number(property("QCS_minimum").toDouble(), 'f', 8) +"), ";
-	line += "max("+ QString::number(property("QCS_maximum").toDouble(), 'f', 8) +"), ";
-	line += "value(" + QString::number(m_value, 'f', 8) + "), ";
-	if (property("QCS_midicc").toInt() >= 0) {
-		line += "midiCtrl(\"" + QString::number(property("QCS_midichan").toInt()) + ",";
+	line += "channel(\"" + m_channel + "\"),  ";
+	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
+	line += QString("range(%1,%2,%3), ").arg(property("QCS_minimum").toDouble()).arg(property("QCS_maximum").toDouble()).arg(m_value);
+	if (property("QCS_midicc").toInt() >= 0 && property("QCS_midichan").toInt()>0) { // insert only if midi channel is above 0
+		line += ", midiCtrl(\"" + QString::number(property("QCS_midichan").toInt()) + ",";
 		line +=  QString::number(property("QCS_midicc").toInt()) + "\")";
-
 	}
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();

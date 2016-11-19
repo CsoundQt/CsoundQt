@@ -15,7 +15,7 @@
 </CsOptions>
 <CsInstruments>
 sr		= 44100		;SAMPLE RATE
-ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 32			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -72,13 +72,14 @@ i 1		0	   3600	;GUI
 </CsoundSynthesizer>
 
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
+ <x>457</x>
+ <y>115</y>
+ <width>814</width>
+ <height>334</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -86,7 +87,7 @@ i 1		0	   3600	;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -115,7 +116,7 @@ i 1		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Limit</objectName>
   <x>8</x>
   <y>48</y>
@@ -133,7 +134,7 @@ i 1		0	   3600	;GUI
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>65</y>
@@ -162,7 +163,7 @@ i 1		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Limit_Value</objectName>
   <x>448</x>
   <y>65</y>
@@ -191,7 +192,7 @@ i 1		0	   3600	;GUI
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>517</x>
   <y>2</y>
@@ -220,7 +221,7 @@ i 1		0	   3600	;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>521</x>
   <y>19</y>
@@ -253,7 +254,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>105</y>
@@ -282,7 +283,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Clipping_Point</objectName>
   <x>8</x>
   <y>88</y>
@@ -300,7 +301,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Clipping_Point</objectName>
   <x>448</x>
   <y>105</y>
@@ -329,7 +330,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>8</x>
   <y>8</y>
@@ -348,7 +349,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>Method</objectName>
   <x>100</x>
   <y>148</y>
@@ -378,7 +379,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>18</x>
   <y>148</y>
@@ -407,7 +408,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Post_Gain_Value</objectName>
   <x>448</x>
   <y>204</y>
@@ -436,7 +437,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>204</y>
@@ -465,7 +466,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Post_Gain</objectName>
   <x>8</x>
   <y>187</y>
@@ -483,7 +484,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>8</x>
   <y>234</y>
@@ -502,7 +503,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>179</x>
   <y>235</y>
@@ -523,13 +524,13 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>35</r>
+   <g>35</g>
+   <b>35</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>179</x>
   <y>262</y>
@@ -561,4 +562,4 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="913" y="162" width="655" height="346" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

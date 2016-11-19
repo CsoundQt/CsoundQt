@@ -175,6 +175,33 @@ QString QuteMeter::getWidgetType()
 	return QString("BSBController");
 }
 
+QString QuteMeter::getCabbageLine()
+{
+	QString type = static_cast<MeterWidget *>(m_widget)->getType();
+	if (!(type == "crosshair" or type == "point")) {
+		qDebug()<<"Meter can be converted to XYpad only if the type is crosshair or point";
+		return QString();
+	}
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.lockForWrite();
+#endif
+	QString line = "xypad ";
+	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
+	line += QString("channel(\"%1\",\"%2\"), ").arg(m_channel).arg(m_channel2);
+	line += QString("rangex(%1, %2, %3), ").arg(property("QCS_xMin").toDouble()).arg(property("QCS_xMax").toDouble()).arg(m_value);
+	line += QString("rangey(%1, %2, %3)").arg(property("QCS_yMin").toDouble()).arg(property("QCS_yMax").toDouble()).arg(m_value2);
+
+	//NB! meter does not have midi2 yet!
+	if (property("QCS_midicc").toInt() >= 0 && property("QCS_midichan").toInt()>0) { // insert only if midi channel is above 0
+		line += ", midiCtrl(\"" + QString::number(property("QCS_midichan").toInt()) + ",";
+		line +=  QString::number(property("QCS_midicc").toInt()) + "\")";
+	}
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.unlock();
+#endif
+	return line;
+}
+
 void QuteMeter::createPropertiesDialog()
 {
 	QuteWidget::createPropertiesDialog();
