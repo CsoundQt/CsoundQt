@@ -2267,6 +2267,13 @@ void CsoundQt::about()
 #ifdef QCS_PYTHONQT
     text += tr("Built with PythonQt support.")+ "<br />";
 #endif
+#ifdef USE_WEBENGINE
+    text += tr("Html5 support based on QtWebEngine")+"<br />";
+#endif
+#ifdef USE_WEBKIT
+    text += tr("Html5 support based on QtWebkit")+"<br />";
+#endif
+    text += "<br />";
     text += tr("French translation: Fran&ccedil;ois Pinot") + "<br />";
     text += tr("German translation: Joachim Heintz") + "<br />";
     text += tr("Portuguese translation: Victor Lazzarini") + "<br />";
@@ -3701,6 +3708,7 @@ void CsoundQt::createMenus()
     QStringList musicFiles;
     QStringList usefulFiles;
     QStringList exampleFiles;
+    QStringList htmlFiles;
     QList<QStringList> subMenus;
     QStringList subMenuNames;
 
@@ -3816,6 +3824,12 @@ void CsoundQt::createMenus()
 
     subMenus << exampleFiles;
     subMenuNames << tr("Miscellaneous");
+
+    htmlFiles.append(":/examples/Html5 Support/Minimal_Html_Example.csd");
+    htmlFiles.append(":/examples/Html5 Support/Styled_Sliders.csd");
+    htmlFiles.append(":/examples/Html5 Support/Html_file_in_CsoundQt.html");
+    subMenus << htmlFiles;
+    subMenuNames << tr("Html5 support");
 
     QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
     QAction *newAction;

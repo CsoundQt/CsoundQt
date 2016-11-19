@@ -124,7 +124,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         html = html.insert(injection_index, injection);
 #endif
-        QString htmlfilename = filename + ".html";
+        QString htmlfilename;
+        if (filename.startsWith(":/") ) { // an example file
+            htmlfilename = QDir::tempPath()+"/html-example.html"; // TODO: take name from filename
+        } else {
+            htmlfilename = filename + ".html";
+        }
         QFile htmlfile(htmlfilename);
         htmlfile.open(QIODevice::WriteOnly);
         QTextStream out(&htmlfile);

@@ -130,7 +130,10 @@
         <file>../examples/Live Collection/Live_Delay_Feedback.csd</file>
         <file>../examples/Live Collection/Live_Granular.csd</file>
         <file>../examples/Live Collection/Live_RM_AM.csd</file>
-        <file>translations/qutecsound_en.qm</file>
+		<file>../examples/Html5 Support/Minimal_Html_Example.csd</file>
+		<file>../examples/Html5 Support/Styled_Sliders.csd</file>
+		<file>../examples/Html5 Support/Html_file_in_CsoundQt.html</file>
+		<file>translations/qutecsound_en.qm</file>
         <file>translations/qutecsound_es.qm</file>
         <file>translations/qutecsound_de.qm</file>
         <file>translations/qutecsound_fr.qm</file>
