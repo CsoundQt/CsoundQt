@@ -1261,7 +1261,7 @@ void WidgetLayout::refreshWidgets()
 			int channel = (status ^ 176) + 1;
 			for (int i = 0; i < registeredControllers.size(); i++) {
 				if (registeredControllers[i].cc == midiQueue[index][1]) {
-					if (registeredControllers[i].chan == 0 || channel == registeredControllers[i].chan) {
+					if (/*registeredControllers[i].chan == 0 || */ channel == registeredControllers[i].chan) { // not sure if this comment-out will not break anything but likely not. tarmo.
 						registeredControllers[i].widget->setMidiValue(midiQueue[index][2]);
 					}
 				}
@@ -3005,7 +3005,7 @@ void WidgetLayout::registerWidgetController(QuteWidget *widget, int cc)
 			return;
 		}
 	}
-	registeredControllers << RegisteredController(widget, cc, 0);
+	registeredControllers << RegisteredController(widget, 0, cc); // right orfer of parameters: RegisteredController(QuteWidget * _widget, int _chan,int  _cc)
 }
 
 void WidgetLayout::registerWidgetChannel(QuteWidget *widget, int chan)
@@ -3019,7 +3019,7 @@ void WidgetLayout::registerWidgetChannel(QuteWidget *widget, int chan)
 			return;
 		}
 	}
-	registeredControllers << RegisteredController(widget, 1, chan);
+	registeredControllers << RegisteredController(widget, chan, 1); // correct order of parameters: RegisteredController(QuteWidget * _widget, int _chan,int  _cc)
 }
 
 void WidgetLayout::unregisterWidgetController(QuteWidget *widget)

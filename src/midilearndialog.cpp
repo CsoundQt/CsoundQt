@@ -34,7 +34,7 @@ void MidiLearnDialog::setCurrentWidget(QuteWidget *widget)
             ui->channelLabel->setText(tr("(No MIDI)"));
             ui->ccLabel->setText(tr("(No MIDI)"));
         }
-        qDebug() << "MidiLearnDialog::setCurrentWidget";
+		//qDebug() << "MidiLearnDialog::setCurrentWidget";
     } else {
             ui->channelLabel->setText(tr("(None)"));
             ui->ccLabel->setText(tr("(None)"));
