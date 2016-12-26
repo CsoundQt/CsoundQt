@@ -83,6 +83,9 @@ BOOL IsWow64() {
 int main(int argc, char *argv[])
 {
     int result = 0;
+    // Set a global template for ALL qDebug messages.
+    qSetMessagePattern("[%{time yyyy-MM-dd h:mm:ss.zzz} %{if-debug}D%{endif}%{if-info}I%{endif}%{if-warning}W%{endif}%{if-critical}C%{endif}%{if-fatal}F%{endif}][%{file}:%{line} %{function}] %{message}");
+    qDebug();
 #ifdef QCS_HTML5
     try {
 #endif

@@ -17,7 +17,7 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 {
 #ifdef WIN32
 	pid = GetCurrentProcessId();
-    qDebug("CsoundHtmlView::CsoundHtmlView: pid: %d\n", pid);
+    qDebug("pid: %d\n", pid);
 #else
     pid = getpid();
 #endif
@@ -35,9 +35,7 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 #endif
 	setWidget(webView);
 	webView->sizePolicy().setVerticalPolicy(QSizePolicy::Policy::Expanding);
-
     layout()->setMargin(0);
-
 #ifdef USE_WEBKIT
 	QObject::connect(webView->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),
 						this, SLOT(addJSObject()));  // to enable adding the object after reload
@@ -52,8 +50,8 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
         qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "34711");  // should be somewhere in options
     }
     webView->page()->setWebChannel(&channel);
-    //qDebug()<<"setting JS object on init";
-    channel.registerObject("csound", &csoundWrapper) ;
+    //qDebug() << "Setting JavaScript object on init.";
+    channel.registerObject("csound", &csoundWrapper);
 #endif
 }
 
@@ -81,7 +79,7 @@ void CsoundHtmlView::load(DocumentPage *documentPage_)
 {
     //TODO: call this whenever document is saved, not only on run. Usually always saved when run but there is also option not to save... Think.
     documentPage = documentPage_; // consider rewrite...
-	qDebug() << "CsoundHtmlView::load()...";
+    qDebug() ;
     auto text = documentPage.load()->getFullText();
     auto filename = documentPage.load()->getFileName();
     QFile csdfile(filename);
@@ -99,9 +97,17 @@ void CsoundHtmlView::load(DocumentPage *documentPage_)
 "use strict";
 document.addEventListener("DOMContentLoaded", function () {
     try {
-        console.log("Initializing Csound...");
+        console.log("Initializing window.csound...");
         window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {
         window.csound = channel.objects.csound;
+        if (typeof window.csound === 'undefined') {
+            alert('window.csound is undefined.');
+            return;
+        }
+        if (window.csound === null) {
+            alert('window.csound is null.');
+            return;
+        }
         csound.message("Initialized csound.\n");
         });
     } catch (e) {
@@ -140,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
 #ifdef USE_WEBENGINE
         webView->page()->setWebChannel(&channel);
         channel.registerObject("csound", &csoundWrapper) ;
-        qDebug()<<"Setting javascript object on load.";
+        qDebug()  << "Setting JavaScript object on load.";
 #endif
     }
     repaint();
@@ -149,12 +155,12 @@ document.addEventListener("DOMContentLoaded", function () {
 void CsoundHtmlView::stop() // why is this function necessary?
 {
     documentPage = 0;
-	qDebug() << "CsoundHtmlView::stop()...";
+    qDebug() ;
 }
 
 void CsoundHtmlView::viewHtml(QString htmlText)
 {
-    qDebug()<<Q_FUNC_INFO;
+    qDebug();
     tempHtml.setFileTemplate( QDir::tempPath()+"/csoundqt-html-XXXXXX.html" ); // must have html ending for webkit
     if (tempHtml.open()) {
 #ifdef USE_WEBENGINE
@@ -165,7 +171,7 @@ void CsoundHtmlView::viewHtml(QString htmlText)
 "use strict";
 document.addEventListener("DOMContentLoaded", function () {//void CsoundHtmlView::closeEvent(QCloseEvent *event)
                             //{
-                            //    qDebug() << __FUNCTION__;
+                            //    qDebug() ;
                             //    if (webView) {
                             //		webView->close(); // is it necessary?
                             //    }
@@ -207,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {//void CsoundHtmlView
 #ifdef USE_WEBENGINE
         webView->page()->setWebChannel(&channel);
         channel.registerObject("csound", &csoundWrapper) ;
-        qDebug()<<"Setting javascript object on load.";
+        qDebug() << "Setting JavaScript object on load.";
 #endif
 	}
 }
@@ -216,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {//void CsoundHtmlView
 void CsoundHtmlView::addJSObject()
 {
 	if (webView) {
-		qDebug()<<"Adding Csound as javascript object";
+        qDebug()<<"Adding Csound as JavaScript object";
 		webView->page()->mainFrame()->addToJavaScriptWindowObject("csound", &csoundWrapper);
 	}
 }
@@ -226,7 +232,7 @@ void CsoundHtmlView::addJSObject()
 
 void CsoundHtmlView::loadFromUrl(const QUrl &url)
 {
-    qDebug() << "CsoundHtmlView::loadFromUrl()...";
+    qDebug();
     if(webView != 0) {
 #ifdef QCS_HTML5
         //webView->evaluateJavaScript("debugger;");

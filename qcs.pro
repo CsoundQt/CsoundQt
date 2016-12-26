@@ -38,7 +38,7 @@
 # CONFIG+=rtmidi     To build with RtMidi support
 # CONFIG+=record_support
 # CONFIG+=debugger
-# CONFIG+=html5     # To support HTML5 via the <CsHtml5> element in the csd file.
+CONFIG+=html_webengine     # To support HTML5 via the <CsHtml5> element in the csd file.
 # OS X only OPTIONS:
 # CONFIG+=universal  #  To build i386/ppc version. Default is x86_64
 # CONFIG+=i386  #  To build i386 version. Default is x86_64
@@ -46,7 +46,7 @@
 
 #testing for qt based html support
 #CONFIG += html_webkit # OR: html_webengine
-CONFIG += html_webengine
+#CONFIG += html_webengine
 
 html_webkit: {
 message("Building html support with QtWebkit")
@@ -106,6 +106,11 @@ greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 5) {
 	CONFIG += QCS_QT55
 }
 
+greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 7) {
+        DEFINES += USE_QT_GT_58
+        CONFIG += QCS_QT58
+}
+
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")
 
 !build32: CONFIG += build64
@@ -118,6 +123,7 @@ unix {
 }
 win32-g++:include (qcs-win32.pro)
 win32-msvc2013:include (qcs-win32.pro)
+win32-msvc2015:include (qcs-win32.pro)
 
 # Requires Csound >= 6.04
 record_support {

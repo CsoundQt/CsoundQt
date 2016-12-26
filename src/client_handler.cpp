@@ -31,7 +31,7 @@ ClientHandler::ClientHandler()
     : m_BrowserId(0),
       m_bIsClosing(false),
       m_bFocusOnEditableField(false) {
-    qDebug() << __FUNCTION__;
+    qDebug() ;
     CreateProcessMessageDelegates(process_message_delegates_);
     if (m_StartupURL.empty())
         m_StartupURL = "about:blank";
@@ -201,7 +201,7 @@ bool ClientHandler::OnBeforePopup(
 // Whichever browser is first created is the "main" one.
 
 void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
-    qDebug() << __FUNCTION__;
+    qDebug() ;
     REQUIRE_UI_THREAD();
     base::AutoLock lock_scope(lock_OnAfterCreated);
     if (!m_Browser.get())   {
@@ -214,44 +214,44 @@ void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
         }
     } else if (browser->IsPopup()) {
         // Add to the list of popup browsers.
-        qDebug() << __FUNCTION__ << "is popup.";
+        qDebug()  << "is popup.";
         m_PopupBrowsers.push_back(browser);
     }
     m_BrowserCount++;
 }
 
 bool ClientHandler::DoClose(CefRefPtr<CefBrowser> browser) {
-    qDebug() << __FUNCTION__;
+    qDebug() ;
     REQUIRE_UI_THREAD();
     base::AutoLock lock_scope(lock_DoClose);
     // Closing the main window requires special handling. See the DoClose()
     // documentation in the CEF header for a detailed destription of this
     // process.
     /// TODO probably too late already, onbeforeunload has probably already been called.
-    qDebug() << "browser->GetIdentifier():" << browser->GetIdentifier();
+    qDebug()  << "browser->GetIdentifier():" << browser->GetIdentifier();
     if (m_BrowserId == browser->GetIdentifier() && !m_bIsClosing) {
         // Notify the browser that the parent window is about to close.
         // NOTE: ParentWindowWillClose appears to have been removed because it was never
         // actually implemented.
         // browser->ParentWindowWillClose();
         // Set a flag to indicate that the window close should be allowed.
-        qDebug() << "CEF closing step 6 a: is closing: " << IsClosing();
+        qDebug()  << "CEF closing step 6 a: is closing: " << IsClosing();
         m_bIsClosing = true;
     }
     // Allow the close. For windowed browsers this will result in the OS close
     // event being sent.
-    qDebug() << "CEF closing step 6 b: is closing: " << IsClosing();
+    qDebug()  << "CEF closing step 6 b: is closing: " << IsClosing();
     return false;
 }
 
 void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
-    qDebug() << __FUNCTION__;
+    qDebug() ;
     REQUIRE_UI_THREAD();
-    qDebug() << "browser->GetIdentifier():" << browser->GetIdentifier();
+    qDebug()  << "browser->GetIdentifier():" << browser->GetIdentifier();
     if (m_BrowserId == browser->GetIdentifier()) {
         // Free the browser pointer so that the browser can be destroyed.
         m_Browser = NULL;
-        qDebug() << "CEF closing step 10.";
+        qDebug()  << "CEF closing step 10.";
     } else if (browser->IsPopup()) {
         // Remove the record for DevTools popup windows.
         std::set<std::string>::iterator it =
@@ -269,11 +269,11 @@ void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
     }
     if (--m_BrowserCount == 0) {
         m_bIsClosing = true;
-        qDebug() << __FUNCTION__ << "m_BrowserCount:" << m_BrowserCount;
+        qDebug()  << "m_BrowserCount:" << m_BrowserCount;
         //::DestroyWindow(browser->GetHost()->GetWindowHandle());
         CefQuitMessageLoop();
         CefShutdown();
-        qDebug() << "CEF closing step 11.";
+        qDebug()  << "CEF closing step 11.";
         //wait_for_browsers_to_close.wakeAll();
 
     }
@@ -294,7 +294,7 @@ void ClientHandler::OnLoadStart(CefRefPtr<CefBrowser> browser,
     REQUIRE_UI_THREAD();
 #ifdef WIN32
     auto pid = GetCurrentProcessId();
-    qDebug("ClientHandler::OnLoadStart: pid: %d\n", pid);
+    qDebug("pid: %d\n", pid);
 #endif
     if (m_BrowserId == browser->GetIdentifier() && frame->IsMain()) {
         SetLoading(true);
@@ -346,7 +346,7 @@ void ClientHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
 
     ss << "Failed to load URL " << std::string(failedUrl) <<
           " with error " << std::string(errorText) << " (" << errorCode << ").";
-    qDebug() << __FUNCTION__ << QString::fromStdString(ss.str());
+    qDebug()  << QString::fromStdString(ss.str());
 }
 
 CefRefPtr<CefResourceHandler> ClientHandler::GetResourceHandler(
@@ -384,7 +384,7 @@ void ClientHandler::OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser,
 }
 
 void ClientHandler::CloseAllBrowsers(bool force_close) {
-    qDebug() << __FUNCTION__ << __LINE__ << QThread::currentThreadId() << QCoreApplication::applicationPid ();
+    qDebug()  << QThread::currentThreadId() << QCoreApplication::applicationPid ();
     if (!CefCurrentlyOn(TID_UI)) {
         // Execute on the UI thread.
         // Was: CefPostTask(TID_UI, NewCefRunnableMethod(this, &ClientHandler::CloseAllBrowsers,force_close));

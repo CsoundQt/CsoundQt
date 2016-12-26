@@ -42,9 +42,11 @@ QuteWidget::QuteWidget(QWidget *parent):
 
 	setProperty("QCS_x", 0);
 	setProperty("QCS_y", 0);
-	setProperty("width", 20);
-	setProperty("height", 20);
-	setProperty("QCS_uuid", QUuid::createUuid().toString());
+    //setProperty("width", 20);
+    //setProperty("height", 20);
+    setProperty("QCS_width", 20);
+    setProperty("QCS_height", 20);
+    setProperty("QCS_uuid", QUuid::createUuid().toString());
 	setProperty("QCS_visible", true);
 	setProperty("QCS_midichan", 0);
 	setProperty("QCS_midicc", -3);
@@ -104,17 +106,17 @@ void QuteWidget::setValue(QString value)
 
 void QuteWidget::setMidiValue(int /* value */)
 {
-	qDebug() << "QuteWidget::setMidiValue not available for this widget." << this;
+    qDebug() << "Not available for this widget." << this;
 }
 
 void QuteWidget::setMidiValue2(int /* value */)
 {
-	qDebug() << "QuteWidget::setMidiValue2 not available for this widget." << this;
+    qDebug() << "Not available for this widget." << this;
 }
 
 void QuteWidget::widgetMessage(QString path, QString text)
 {
-	qDebug() << "QuteWidget::widgetMessage" << text;
+    qDebug() << text;
 	if (property(path.toLocal8Bit()).isValid()) {
 		setProperty(path.toLocal8Bit(), text);
 		//    applyInternalProperties();
@@ -123,7 +125,7 @@ void QuteWidget::widgetMessage(QString path, QString text)
 
 void QuteWidget::widgetMessage(QString path, double value)
 {
-	qDebug() << "QuteWidget::widgetMessage" << value;
+    qDebug() << value;
 	if (property(path.toLocal8Bit()).isValid()) {
 		setProperty(path.toLocal8Bit(), value);
 		//    applyInternalProperties();
@@ -445,7 +447,7 @@ void QuteWidget::createPropertiesDialog()
 
 void QuteWidget::applyProperties()
 {
-//	qDebug() << "QuteWidget::applyProperties()";
+//	qDebug();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif

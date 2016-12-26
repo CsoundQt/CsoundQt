@@ -34,59 +34,59 @@ class QuteSheet:
         self.num_cols = qutesheet_data.num_cols
         self.total_rows = qutesheet_data.total_rows
         self.total_cols = qutesheet_data.total_cols
-        
+
     def text(self):
         return self._rows_to_text(self.data.data_all);
-    
+
     def selection_text(self):
         return self._rows_to_text(self.selection_by_rows());
-    
-    # By rows  
+
+    # By rows
     def selection_by_rows(self):
         return self._some_cols(self.data.data_all, self.first_row, self.num_rows,
             self.first_col, self.num_cols)
-    
+
     def selection_full_rows(self):
         return self._all_cols(self.data.data_all, self.first_row, self.num_rows)
-    
+
     def selection_full_rows_sorted(self):
-        return self.sort_by_start(self._all_cols(self.data.data_all, 
+        return self.sort_by_start(self._all_cols(self.data.data_all,
             self.first_row, self.num_rows))
-    
+
     def all_rows(self):
         return self.data.data_all
-    
+
     def all_rows_sorted(self):
         return self.sort_by_start(self.data.data_all)
-    
-    # By Columns   
+
+    # By Columns
     def selection_by_cols(self):
         return self._transpose(self._some_cols(self.data.data_all, self.first_row, self.num_rows,
             self.first_col, self.num_cols))
-    
+
     def selection_full_cols(self):
         return self._transpose(self._some_cols(self.data.data_all, 0, self.total_rows,
             self.first_col, self.num_cols))
-    
+
     def all_cols(self):
         return self._transpose(self.data.data_all);
-    
+
     # By Cells
     def cells_selection_by_row(self):
         return self._get_cells_by_row(self.selection_by_rows());
-    
+
     def cells_all_by_row(self):
         return self._get_cells_by_row(self.data.data_all);
-    
+
     def cells_selection_by_col(self):
         return self._get_cells_by_row(self._transpose(self.selection_by_rows()));
-    
+
     def cells_all_by_col(self):
         return self._get_cells_by_row(self._transpose(self.data.data_all));
 
     # ----------------
     # Data setting functions (for data output from script)
-    
+
     def set_rows(self, new_data, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
         """Set the data for the text output organized by rows"""
         if new_first_row == -1:
@@ -97,16 +97,16 @@ class QuteSheet:
             new_num_rows = self.num_rows
         if new_num_cols == -1:
             new_num_cols = self.num_cols
-        out_text = '__@ ' + str(new_first_row) + ' ' + str(new_first_col) 
+        out_text = '__@ ' + str(new_first_row) + ' ' + str(new_first_col)
         out_text += ' ' + str(new_num_rows) + ' ' + str(new_num_cols) + '\n'
         out_text += self._rows_to_text(new_data)
         self._write_out_file(out_text)
         sys.exit()
-    
+
     def set_cols(self, new_data, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
         """Set the data for the text output organized by columns"""
         self.set_rows(self._transpose(new_data), new_first_row, new_first_col, new_num_rows, new_num_cols)
-    
+
     def set_cells_by_row(self, new_data, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
         """Set the data for the text output as a list of individual cells organized by rows"""
         if new_first_row == -1:
@@ -124,11 +124,11 @@ class QuteSheet:
                 if len(new_data) > 0:
                     out_data[i].append(new_data.pop(0))
         set_rows(out_data, new_first_row, new_first_col, new_num_rows, new_num_cols)
-    
+
     def set_cells_by_col(self, new_data, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
         """Set the data for the text output as a list of individual cells organized by columns"""
-        print "Warning! set_cells_by_col() not implemented yet!"
-        
+U        print "Warning! set_cells_by_col() not implemented yet!"
+
     def set_text(self, text, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
         """Set data from a text string, each line is interpreted as a row and each cell must be separated by a space."""
         if new_first_row == -1:
@@ -139,11 +139,11 @@ class QuteSheet:
             new_num_rows = self.num_rows
         if new_num_cols == -1:
             new_num_cols = self.num_cols
-        out_text = '__@ ' + str(new_first_row) + ' ' + str(new_first_col) 
+        out_text = '__@ ' + str(new_first_row) + ' ' + str(new_first_col)
         out_text += ' ' + str(new_num_rows) + str(new_num_cols) + '\n'
         out_text += text
         _write_out_file(out_text)
-    
+
     # ----------------
     # Utility functions
 
@@ -164,7 +164,7 @@ class QuteSheet:
 
     # ----------------
     # internal functions
-    
+
     def _test_consistency(self):
         d = self.data
         if (d.total_rows != len(d.data_all)):
@@ -178,10 +178,10 @@ class QuteSheet:
             for c in r:
                 cells.append(c)
         return cells
-    
+
     def _transpose(self, mtx):
         return zip(*mtx)
-    
+
     def _some_cols(self, data, row, num_rows, col, num_cols):
         rows = []
         for r in range(row, row + num_rows):
@@ -190,13 +190,13 @@ class QuteSheet:
                 new_row.append(data[r][c])
             rows.append(new_row)
         return rows
-    
+
     def _all_cols(self, data, row, num_rows):
         rows = []
         for r in range(row, row + num_rows):
             rows.append(data[r])
         return rows
-    
+
     def _rows_to_text(self, rows):
         out_text = ""
         for row in rows:
@@ -207,7 +207,7 @@ class QuteSheet:
                     out_text += str(cell) + " "
             out_text += '\n'
         return out_text
-    
+
     def _write_out_file(self, text):
         f = open(self.out_filename, "w")
         f.write(text);
@@ -268,7 +268,7 @@ def all_rows_sorted():
     """Get all the data grouped in rows, sorted according to the third element (p2)"""
     return _defObj.all_rows_sorted()
 
-# By Columns   
+# By Columns
 def selection_by_cols():
     """Get the selected data grouped in columns"""
     return _defObj.selection_by_cols()
@@ -297,30 +297,30 @@ def cells_selection_by_col():
 def cells_all_by_col():
     """Get all the data as separate elements, read column by column"""
     return _defObj.cells_all_by_col()
-    
+
 # ----------------
 # Data setting functions (for data output from script)
-    
+
 def set_rows(new_data, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
     """Set the data for the text output organized by rows"""
     _defObj.set_rows(new_data, new_first_row, new_first_col, new_num_rows, new_num_cols)
-    
+
 def set_cols(new_data, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
     """Set the data for the text output organized by columns"""
     _defObj.set_cols(new_data, new_first_row, new_first_col, new_num_rows, new_num_cols)
-    
+
 def set_cells_by_row(new_data, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
     """Set the data for the text output as a list of individual cells organized by rows"""
     _defObj.set_cells_by_row(new_data, new_first_row, new_first_col, new_num_rows, new_num_cols)
-    
+
 def set_cells_by_col(new_data, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
     """Set the data for the text output as a list of individual cells organized by columns"""
     _defObj.set_cells_by_col(new_data, new_first_row, new_first_col, new_num_rows, new_num_cols)
-        
+
 def set_text(text, new_first_row = -1, new_first_col = -1, new_num_rows = -1, new_num_cols = -1):
     """Set data from a text string, each line is interpreted as a row and each cell must be separated by a space."""
     _defObj.set_text(text, new_first_row, new_first_col, new_num_rows, new_num_cols)
-    
+
 # ----------------
 # Utility functions
 

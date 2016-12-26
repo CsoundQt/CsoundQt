@@ -59,7 +59,8 @@ public:
 	Q_INVOKABLE int perform();
     Q_INVOKABLE int perform_thread_routine();
     Q_INVOKABLE int readScore(const QString &text);
-	Q_INVOKABLE void rewindScore();
+    Q_INVOKABLE void reset();
+    Q_INVOKABLE void rewindScore();
 	Q_INVOKABLE int runUtility(const QString &command, int argc, char **argv);
 	Q_INVOKABLE int scoreEvent(char type, const double *pFields, long numFields);
 	Q_INVOKABLE void setControlChannel(const QString &name, double value);

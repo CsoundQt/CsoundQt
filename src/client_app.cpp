@@ -220,7 +220,7 @@ void ClientApp::OnRenderProcessThreadCreated(
         CefRefPtr<CefListValue> extra_info) {
 #ifdef WIN32
     auto pid = GetCurrentProcessId();
-    qDebug("ClientApp::OnRenderProcessThreadCreated: pid: %d\n", pid);
+    qDebug("pid: %d\n", pid);
 #endif
     BrowserDelegateSet::iterator it = browser_delegates_.begin();
     for (; it != browser_delegates_.end(); ++it)
@@ -231,7 +231,7 @@ void ClientApp::OnRenderThreadCreated(CefRefPtr<CefListValue> extra_info) {
     RenderDelegateSet::iterator it = render_delegates_.begin();
 #ifdef WIN32
     auto pid = GetCurrentProcessId();
-    qDebug("ClientApp::OnRenderThreadCreated: pid: %d\n", pid);
+    qDebug("pid: %d\n", pid);
 #endif
     for (; it != render_delegates_.end(); ++it)
         (*it)->OnRenderThreadCreated(this, extra_info);
@@ -323,11 +323,11 @@ void ClientApp::OnContextCreated(CefRefPtr<CefBrowser> browser,
                                  CefRefPtr<CefV8Context> context) {
 #ifdef WIN32
     auto pid = GetCurrentProcessId();
-    qDebug("ClientApp::OnContextCreated: pid: %d\n", pid);
+    qDebug("pid: %d\n", pid);
 #endif
     CefRefPtr<CefV8Value> global = context->GetGlobal();
     CefRefPtr<CefV8Value> jcsound = CefV8Value::CreateObject(0);
-    qDebug() << "CreateObject jcsound:" << jcsound;
+    qDebug()  << "jcsound:" << jcsound;
     global->SetValue("csound", jcsound, V8_PROPERTY_ATTRIBUTE_NONE);
     jcsound->SetRethrowExceptions(true);
     CefRefPtr<CsoundV8Handler> csoundV8Handler = new CsoundV8Handler(mainWindow);
@@ -379,7 +379,7 @@ void ClientApp::OnContextReleased(CefRefPtr<CefBrowser> browser,
     auto global = context->GetGlobal();
     if (global) {
         auto result = global->DeleteValue("csound");
-        qDebug() << "DeleteValue jcsound:" << result;
+        qDebug()  << "jcsound:" << result;
     }
     RenderDelegateSet::iterator it = render_delegates_.begin();
     for (; it != render_delegates_.end(); ++it)

@@ -259,7 +259,7 @@ void  LiveEventControl::cellClickedSlot(int row, int column)
 		emit playPanel(row);
 	}
 	else if (column == 3) { // Sync
-		qDebug() << "LiveEventControl::cellChangedSlot sync not implemented yet.";
+		qDebug() << "Sync not implemented yet.";
 	}
 	else if (column == 6) { // Loop Range
 		openLoopRangeDialog(row);
@@ -269,5 +269,5 @@ void  LiveEventControl::cellClickedSlot(int row, int column)
 void LiveEventControl::frameClosed(LiveEventFrame *e)
 {
 
-	qDebug() << "LiveEventControl::frameClosed not implemented...";
+	qDebug() << "Not implemented.";
 }

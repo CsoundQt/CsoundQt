@@ -85,8 +85,8 @@ void QuteApp::setRunPath(QString path)
 	QDir::setCurrent(QDir::current().absolutePath() + QDir::separator() + "data");
 	QString opcodeDir = QDir::currentPath();
 #endif
-	qDebug() << "QuteApp::QuteApp " << QDir::current() << qApp->applicationFilePath();
-	qDebug() << "...." << opcodeDir;
+	qDebug() << QDir::current() << qApp->applicationFilePath();
+	qDebug() << "opcodeDir" << opcodeDir;
 	csoundSetGlobalEnv("OPCODEDIR", opcodeDir.toLocal8Bit().data());
 	csoundSetGlobalEnv("OPCODEDIR64", opcodeDir.toLocal8Bit().data());
 
@@ -137,7 +137,7 @@ void QuteApp::stop()
 
 void QuteApp::save()
 {
-	qDebug() << "QuteApp::save() not implemented yet.";
+	qDebug() << "Not implemented yet.";
 }
 
 void QuteApp::showConsole()

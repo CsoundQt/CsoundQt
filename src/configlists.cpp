@@ -138,11 +138,11 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 	CS_MIDIDEVICE *devs = (CS_MIDIDEVICE *) malloc(n*sizeof(CS_MIDIDEVICE));
 	newn = csoundGetMIDIDevList(cs,devs,0);
 	if (newn != n) {
-		qDebug() << "ConfigLists::getMidiInputDevices Device number changed";
+		qDebug()  << "Device number changed";
 		return deviceList;
 	}
 	for (i = 0; i < n; i++) {
-//		qDebug() << devs[i].device_name;
+//		qDebug()  << devs[i].device_name;
 		QString displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
 		deviceList.insert(displayName, QString(devs[i].device_id));
 	}
@@ -227,7 +227,7 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 				}
 				else {
 					if (line.indexOf(":") >= 0) {
-//						qDebug() << "getMidiInputDevices " << line;
+//						qDebug()  << line;
 						QString fullname = line.mid(line.indexOf(":") + 1).trimmed();
 						QString devname = line.mid(0,line.indexOf(":")).trimmed();
 						deviceList.insert(fullname, devname);
@@ -253,11 +253,11 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(QString module
 	CS_MIDIDEVICE *devs = (CS_MIDIDEVICE *) malloc(n*sizeof(CS_MIDIDEVICE));
 	newn = csoundGetMIDIDevList(cs,devs,1);
 	if (newn != n) {
-		qDebug() << "ConfigLists::getMidiOutputDevices Device number changed";
+		qDebug()  << "Device number changed";
 		return deviceList;
 	}
 	for (i = 0; i < n; i++) {
-//		qDebug() << devs[i].device_name;
+//		qDebug()  << devs[i].device_name;
 		QString displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
 		deviceList.append(QPair<QString,QString>(displayName, QString(devs[i].device_id)));
 	}
@@ -348,7 +348,7 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(QString module
 
 QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(QString module)
 {
-	//  qDebug("CsoundQt::getAudioInputDevices()");
+	//  qDebug()  ;
 	QList<QPair<QString, QString> > deviceList;
 #ifdef CSOUND6
 	CSOUND *cs = csoundCreate(NULL);
@@ -357,11 +357,11 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(QString module
 	CS_AUDIODEVICE *devs = (CS_AUDIODEVICE *) malloc(n*sizeof(CS_AUDIODEVICE));
 	newn = csoundGetAudioDevList(cs,devs,0);
 	if (newn != n) {
-		qDebug() << "ConfigLists::getAudioInputDevices Device number changed";
+		qDebug()  << "Device number changed";
 		return deviceList;
 	}
 	for (i = 0; i < n; i++) {
-//		qDebug() << devs[i].device_name;
+//		qDebug()  << "evs[i].device_name;
 		deviceList.append(QPair<QString,QString>(devs[i].device_name,  QString(devs[i].device_id)));
 	}
 	free(devs);
@@ -520,7 +520,7 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(QString module
 
 QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(QString module)
 {
-	//  qDebug("CsoundQt::getAudioOutputDevices()");
+	//  qDebug() ;
 	QList<QPair<QString, QString> > deviceList;
 #ifdef CSOUND6
 	CSOUND *cs = csoundCreate(NULL);
@@ -529,11 +529,11 @@ QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(QString modul
 	CS_AUDIODEVICE *devs = (CS_AUDIODEVICE *) malloc(n*sizeof(CS_AUDIODEVICE));
 	newn = csoundGetAudioDevList(cs,devs,1);
 	if (newn != n) {
-		qDebug() << "ConfigLists::getAudio OutputDevices Device number changed";
+		qDebug()  << "OutputDevices Device number changed";
 		return deviceList;
 	}
 	for (i = 0; i < n; i++) {
-		//		qDebug() << devs[i].device_name;
+		//		qDebug()  << devs[i].device_name;
 		deviceList.append(QPair<QString,QString>(devs[i].device_name,  QString(devs[i].device_id)));
 	}
 	free(devs);
@@ -721,7 +721,7 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
 	if(!result) {
 		csoundPerform(csoundD);
     } else {
-        qDebug() << "ConfigLists::runCsoundInternally: Error compiling.";
+        qDebug()  << "Error compiling.";
         qDebug() << m_messages;
     }
 

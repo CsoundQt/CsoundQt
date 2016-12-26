@@ -60,7 +60,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLis
 
 DocumentPage::~DocumentPage()
 {
-	//  qDebug() << "DocumentPage::~DocumentPage()";
+	//  qDebug();
 	disconnect(m_console, 0,0,0);
 	disconnect(m_view, 0,0,0);
 	//  deleteAllLiveEvents(); // FIXME This is also crashing...
@@ -181,7 +181,7 @@ int DocumentPage::setTextString(QString &text)
 		doc.setContent(liveEventsText);
 		QDomElement panelElement = doc.firstChildElement("EventPanel");
 		QString liveText = panelElement.text();
-		//    qDebug() << "BaseDocument::setTextString   " << liveText;
+		//    qDebug() << liveText;
 		QString panelName = panelElement.attribute("name","");
 		double tempo = panelElement.attribute("tempo","60.0").toDouble();
 		double loop = panelElement.attribute("loop","8.0").toDouble();
@@ -292,7 +292,7 @@ QString DocumentPage::getFullText()
 	if (saveLiveEvents) { // Only add live events sections if file is a csd file
 		for (int i = 0; i < m_liveFrames.size(); i++) {
 			liveEventsText += m_liveFrames[i]->getPlainText();
-			//        qDebug() << "DocumentPage::getFullText() " <<panel;
+			//        qDebug() << panel;
 		}
 		fullText += liveEventsText;
 	}
@@ -309,7 +309,7 @@ QString DocumentPage::getFullText()
 QString DocumentPage::getDotText()
 {
 	if (fileName.endsWith("sco")) {
-		qDebug() << "DocumentPage::getDotText(): No dot for sco files";
+		qDebug() << "No dot for sco files";
 		return QString();
 	}
 	QString orcText = getFullText();
@@ -361,7 +361,7 @@ QString DocumentPage::getMacOptions(QString option)
 		option += " ";
 	int index = m_macOptions.indexOf(QRegExp(option + ".*"));
 	if (index < 0) {
-		qDebug("DocumentPage::getMacOptions() Option %s not found!", option.toLocal8Bit().constData());
+        qDebug("Option %s not found!", option.toLocal8Bit().constData());
 		return QString("");
 	}
 	return m_macOptions[index].mid(option.size());
@@ -751,7 +751,7 @@ void DocumentPage::setLineEnding(int lineEndingMode)
 
 void DocumentPage::copy()
 {
-	qDebug() << "DocumentPage::copy() " << m_widgetLayouts[0]->hasFocus();
+	qDebug() << m_widgetLayouts[0]->hasFocus();
 	bool liveeventfocus = false;
 	for (int i = 0; i < m_liveFrames.size(); i++) {
 		if (m_liveFrames[i]->getSheet()->hasFocus()) {
@@ -809,7 +809,7 @@ void DocumentPage::paste()
 
 void DocumentPage::undo()
 {
-	//  qDebug() << "DocumentPage::undo()";
+	//  qDebug()";
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
 		if (wl->hasFocus()) {
 			wl->undo();
@@ -880,7 +880,7 @@ DocumentView *DocumentPage::getView()
 //    m_widgetLayout = w;
 //  }
 //  else {
-//    qDebug() << "DocumentPage::setWidgetLayout()  NULL widget.";
+//    qDebug() << "NULL widget.";
 //  }
 //}
 
@@ -1060,7 +1060,7 @@ void DocumentPage::setWidgetEnabled(bool enabled)
 
 void DocumentPage::useOldFormat(bool use)
 {
-	//  qDebug() << "DocumentPage::useXmlFormat " << use;
+	//  qDebug() << use;
 	saveOldFormat = use;
 }
 
@@ -1075,7 +1075,7 @@ void DocumentPage::showLiveEventPanels(bool visible)
 		m_liveEventControl->setVisible(visible);
 		for (int i = 0; i < m_liveFrames.size(); i++) {
 			if (visible) {
-				//        qDebug() << "DocumentPage::showLiveEventPanels  " << visible << (int) this;
+				//        qDebug() << visible << (int) this;
 				if (m_liveFrames[i]->isVisible())
 					m_liveFrames[i]->raise();
 				else {
@@ -1118,7 +1118,7 @@ void DocumentPage::loopPanelSlot(int index, bool loop)
 
 void DocumentPage::stopPanelSlot(int index)
 {
-	qDebug() << "DocumentPage::stopPanelSlot not implemented";
+	qDebug() << "Not implemented.";
 }
 
 void DocumentPage::setPanelVisibleSlot(int index, bool visible)
@@ -1135,7 +1135,7 @@ void DocumentPage::setPanelVisibleSlot(int index, bool visible)
 
 void DocumentPage::setPanelSyncSlot(int index, int mode)
 {
-	qDebug() << "DocumentPage::setPanelSyncSlot not implemented";
+	qDebug() << "Not implemented.";
 }
 
 void DocumentPage::setPanelNameSlot(int index, QString name)
@@ -1160,7 +1160,7 @@ void DocumentPage::setPanelLoopRangeSlot(int index, double start, double end)
 
 void DocumentPage::registerButton(QuteButton *b)
 {
-	//  qDebug() << " DocumentPage::registerButton";
+	//  qDebug();
 	connect(b, SIGNAL(play()), static_cast<CsoundQt *>(parent()), SLOT(play()));
 	connect(b, SIGNAL(render()), static_cast<CsoundQt *>(parent()), SLOT(render()));
 	connect(b, SIGNAL(pause()), static_cast<CsoundQt *>(parent()), SLOT(pause()));
@@ -1346,7 +1346,7 @@ void DocumentPage::closeExtraPanels()
 
 void DocumentPage::showWidgets(bool show)
 {
-	//  qDebug() << "DocumentPage::showWidgets" << show;
+	//  qDebug() << show;
 	if (!show || (!fileName.endsWith(".csd") && !fileName.isEmpty())) {
 		hideWidgets();
 		return;
@@ -1360,7 +1360,7 @@ void DocumentPage::showWidgets(bool show)
 
 void DocumentPage::hideWidgets()
 {
-	//  qDebug() << " DocumentPage::hideWidgets()";
+	//  qDebug();
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
 		wl->setVisible(false);
 	}
@@ -1379,7 +1379,7 @@ void DocumentPage::passUnselectedWidget(QuteWidget *widget) // necessary only wh
 
 void DocumentPage::showMidiLearn(QuteWidget *widget)
 {
-	//qDebug()<<"DocumentPage::showMidiLearn";
+	//qDebug();
 	m_midiLearn->setCurrentWidget(widget);
 	m_midiLearn->setModal(true); // not to leave the dialog floating around
 	m_midiLearn->show();
@@ -1400,7 +1400,7 @@ void DocumentPage::applyMacOptions(QStringList options)
 		}
 	}
 	else {
-		qDebug ("DocumentPage::applyMacOptions() no Geometry!");
+		qDebug("no Geometry!");
 	}
 }
 
@@ -1412,16 +1412,16 @@ void DocumentPage::setMacOption(QString option, QString newValue)
 		option += " ";
 	int index = m_macOptions.indexOf(QRegExp(option + ".*"));
 	if (index < 0) {
-		qDebug("DocumentPage::setMacOption() Option not found!");
+		qDebug("Option not found!");
 		return;
 	}
 	m_macOptions[index] = option + newValue;
-	qDebug("DocumentPage::setMacOption() %s", m_macOptions[index].toLocal8Bit().constData());
+	qDebug("%s", m_macOptions[index].toLocal8Bit().constData());
 }
 
 void DocumentPage::setWidgetEditMode(bool active)
 {
-	//  qDebug() << "DocumentPage::setWidgetEditMode";
+	//  qDebug();
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
 		wl->setEditMode(active);
 	}
@@ -1429,7 +1429,7 @@ void DocumentPage::setWidgetEditMode(bool active)
 
 //void DocumentPage::toggleWidgetEditMode()
 //{
-//  qDebug() << "DocumentPage::toggleWidgetEditMode";
+//  qDebug() <<;
 //  m_widgetLayout->toggleEditMode();
 //}
 
@@ -1444,13 +1444,13 @@ void DocumentPage::duplicateWidgets()
 
 void DocumentPage::jumpToLine(int line)
 {
-	//  qDebug() << "DocumentPage::jumpToLine " << line;
+	//  qDebug() << line;
 	m_view->jumpToLine(line);
 }
 
 void DocumentPage::comment()
 {
-	//  qDebug() << "DocumentPage::comment()";
+	//  qDebug();
 	m_view->comment();
 }
 
@@ -1531,7 +1531,7 @@ void DocumentPage::newLiveEventPanel(QString text)
 
 LiveEventFrame * DocumentPage::createLiveEventPanel(QString text)
 {
-	//  qDebug() << "DocumentPage::newLiveEventPanel()";
+	//  qDebug()";
 	LiveEventFrame *e = new LiveEventFrame("Live Event", m_liveEventControl, Qt::Window);
 	//  e->setVisible(false);
 	//  e->setAttribute(Qt::WA_DeleteOnClose, false);

@@ -69,7 +69,7 @@ BaseDocument::~BaseDocument()
 
 //void BaseDocument::init(QWidget *parent, OpEntryParser *opcodeTree)
 //{
-//  qDebug() << "BaseDocument::init";
+//  qDebug() ;
 ////  m_view = createView(parent, opcodeTree);
 //  m_view = new BaseView(parent, opcodeTree);
 //  m_view->setFileType(0);
@@ -115,7 +115,7 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
 WidgetLayout* BaseDocument::newWidgetLayout()
 {
 	WidgetLayout* wl = new WidgetLayout(0);
-	//  qDebug() << "BaseDocument::newWidgetLayout()" << wl->windowFlags();
+	//  qDebug() " << wl->windowFlags();
 	wl->setWindowFlags(Qt::Window | wl->windowFlags());
 	connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
 	connect(wl, SIGNAL(registerButton(QuteButton*)),
@@ -241,7 +241,7 @@ void BaseDocument::pause()
 
 void BaseDocument::stop()
 {
-	//  qDebug() << "BaseDocument::stop()";
+	//  qDebug() ;
 	if (m_csEngine->isRunning()) {
 		m_csEngine->stop();
 		foreach (WidgetLayout *wl, m_widgetLayouts) {
@@ -267,7 +267,7 @@ void BaseDocument::stopRecording()
 
 void BaseDocument::queueEvent(QString eventLine, int delay)
 {
-	//   qDebug("WidgetPanel::queueEvent %s", eventLine.toStdString().c_str());
+	//   qDebug("%s", eventLine.toStdString().c_str());
 	m_csEngine->queueEvent(eventLine, delay);  //TODO  implement passing of timestamp
 }
 

@@ -148,7 +148,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
 #if defined(QCS_HTML5) || defined(QCS_QTHTML)
     csoundHtmlView = new CsoundHtmlView(this);
-
     csoundHtmlView->setFocusPolicy(Qt::NoFocus);
     csoundHtmlView->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
     csoundHtmlView->setObjectName("csoundHtmlView");
@@ -157,23 +156,17 @@ CsoundQt::CsoundQt(QStringList fileNames)
     addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
 #endif
 //TODO: #ifdef QCS_WEBKIT
-
-
     createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
     readSettings();
-
 	bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state // was: isVisible() - in some reason reported always false
     showWidgetsAct->setChecked(false); // To avoid showing and reshowing panels during initial load
 	widgetPanel->hide();  // Hide until CsoundQt has finished loading
-
     bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
     if (scratchPadVisible)
         m_scratchPad->hide();  // Hide until CsoundQt has finished loading
-
     createMenus();
     createToolBars();
     createStatusBar();
-
     documentTabs = new QTabWidget (this);
     documentTabs->setTabsClosable(true);
     connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
@@ -183,7 +176,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     documentTabs->setDocumentMode(true);
     modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
     modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
-
     fillFileMenu(); // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
     fillScriptsMenu(); // Must be placed after readSettings to know directory
@@ -400,7 +392,8 @@ void CsoundQt::changePage(int index)
         }
     }
 #if defined(QCS_HTML5) || defined(QCS_QTHTML)
-	if (!documentPages.isEmpty()) { //NB! this may have caused the crash on exit on windows!
+    // NB! this may have caused the crash on exit on windows!
+    if (!documentPages.isEmpty()) {
 		updateHtmlView();
 	}
 #endif
@@ -457,7 +450,7 @@ void CsoundQt::statusBarMessage(QString message)
 
 void CsoundQt::closeEvent(QCloseEvent *event)
 {
-    qDebug() << __FUNCTION__;
+    qDebug() ;
 #ifdef QCS_HTML5
     {
         QMutexLocker locker(&closemutex);
@@ -521,7 +514,9 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     delete m_opcodeTree;
     m_opcodeTree = 0;
     close();
+#if defined(QCS_HTML5)
     qDebug() << "CEF closing step 9.";
+#endif
 }
 
 void CsoundQt::newFile()
@@ -662,7 +657,6 @@ void CsoundQt::createCodeGraph()
     command.prepend("\"");
     command.append("\"");
 #endif
-
     //   qDebug() << command;
     ret = system(command.toLatin1());
     if (ret != 0) {
@@ -1071,7 +1065,6 @@ void CsoundQt::onReadyRead()
 	QLocalSocket *socket = qobject_cast<QLocalSocket *>(sender());
 	if (!socket || !socket->bytesAvailable())
 		return;
-
 	QByteArray ba = socket->readAll();
 	if (ba.isEmpty())
 		return;
@@ -1449,7 +1442,7 @@ void CsoundQt::setCurrentAudioFile(const QString fileName)
 
 void CsoundQt::play(bool realtime, int index)
 {
-    qDebug() << "CsoundQt::play()...";
+    qDebug()  << "...";
 #ifdef QCS_HTML5//? QCS_QTHTML
     /// MKG uncommented next line:
     csoundHtmlView->stop();
@@ -1550,7 +1543,8 @@ void CsoundQt::play(bool realtime, int index)
                                       QMessageBox::Ok);
                 return;
             }
-			// if example, just copy, since readonly anyway, otherwise get contents from editor. Necessary since examples may contain <CsFileB> section with data
+            // If example, just copy, since readonly anyway, otherwise get contents from editor.
+            // Necessary since examples may contain <CsFileB> section with data.
 			if (fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
 				QFile file(fileName);
 				if (file.open(QFile::ReadOnly)) {
@@ -2114,7 +2108,7 @@ void CsoundQt::virtualCCIn(int channel, int cc, int value)
 
 void CsoundQt::handleTableSyntax(QString syntax)
 {
-	qDebug()<<Q_FUNC_INFO<<syntax;
+    qDebug() << syntax;
 	insertText(syntax+"\n");
 }
 
@@ -4938,7 +4932,6 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
 		updateHtmlView();
 	}
 #endif
-
     QString text;
     QApplication::setOverrideCursor(Qt::WaitCursor);
     if (!m_options->widgetsIndependent) { // Update outer geometry information for writing
@@ -5148,19 +5141,19 @@ void CsoundQt::setWidgetPanelGeometry()
     //	qDebug() << "CsoundQt::setWidgetPanelGeometry() " << geometry;
     if (geometry.width() <= 0 || geometry.width() > 4096) {
         geometry.setWidth(400);
-        qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: width invalid.";
+        qDebug() << "Warning: width invalid.";
     }
     if (geometry.height() <= 0 || geometry.height() > 4096) {
         geometry.setHeight(300);
-        qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: height invalid.";
+        qDebug() << "Warning: height invalid.";
     }
     if (geometry.x() < 0 || geometry.x() > 4096) {
         geometry.setX(20);
-        qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: X position invalid.";
+        qDebug() << "Warning: X position invalid.";
     }
     if (geometry.y() < 0 || geometry.y() > 4096) {
         geometry.setY(0);
-        qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: Y position invalid.";
+        qDebug() << "Warning: Y position invalid.";
     }
     //	qDebug() << "geom " << widgetPanel->geometry() << " frame " << widgetPanel->frameGeometry();
     widgetPanel->setGeometry(geometry);
@@ -5205,7 +5198,7 @@ void CsoundQt::insertText(QString text, int index, int section)
         }
     }
     else {
-        qDebug() << "CsoundQt::insertText not implemented for sections";
+        qDebug() << "Not implemented for sections";
     }
 }
 

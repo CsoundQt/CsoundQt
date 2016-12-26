@@ -13,18 +13,18 @@ QCefWebView::QCefWebView(QWidget* parent)
       browser_state_(kNone),
       need_resize_(false),
       need_load_(false) {
-    qDebug() << __FUNCTION__ << QThread::currentThreadId();
+    qDebug()  << QThread::currentThreadId();
     //setAttribute(Qt::WA_NativeWindow);
     //setAttribute(Qt::WA_DontCreateNativeAncestors);
     qcef_client_handler = new ClientHandler;
 }
 
 QCefWebView::~QCefWebView() {
-    qDebug() << __FUNCTION__;
+    qDebug() ;
 }
 
 void QCefWebView::loadFromUrl(const QUrl& url) {
-    //qDebug() << __FUNCTION__ << url;
+    //qDebug()  << url;
     url_ = url;
     switch (browser_state_) {
     case kNone:
@@ -94,7 +94,7 @@ QVariant QCefWebView::evaluateJavaScript(const QString& scriptSource) {
 }
 
 void QCefWebView::resizeEvent(QResizeEvent* e) {
-    //qDebug() << __FUNCTION__ << e->size();
+    //qDebug()  << e->size();
     // On WinXP, if you load a url immediately after constructed, you will
     // CreateBrowser() with the wrong Size(). At the same time, it calls
     // resizeEvent() to resize. However the browser has not been created now,
@@ -137,7 +137,7 @@ void QCefWebView::resizeEvent(QResizeEvent* e) {
  * 11. Application exits by calling CefQuitMessageLoop() if no other browsers exist (does not apply here).
  */
 bool QCefWebView::CloseBrowser() {
-    qDebug() << __FUNCTION__ << __LINE__;
+    qDebug()  << __LINE__;
     if (qcef_client_handler.get() && !qcef_client_handler->IsClosing()) {
         CefRefPtr<CefBrowser> browser = qcef_client_handler->GetBrowser();
             browser->GetHost()->CloseBrowser(false);
@@ -149,39 +149,39 @@ bool QCefWebView::CloseBrowser() {
 }
 
 void QCefWebView::showEvent(QShowEvent* e) {
-    //qDebug() << __FUNCTION__;
+    //qDebug() ;
     CreateBrowser(size());
 }
 
 void QCefWebView::customEvent(QEvent* e) {
-    //qDebug() << __FUNCTION__ << QThread::currentThreadId();
+    //qDebug()  << QThread::currentThreadId();
     if (e->type() == MessageEvent::MessageEventType) {
         MessageEvent* event = static_cast<MessageEvent*>(e);
         QString name = event->name();
         QVariantList args = event->args();
-        //qDebug() << __FUNCTION__ << name << args;
+        //qDebug()  << name << args;
         emit jsMessage(name, args);
     }
 }
 
 void QCefWebView::OnAddressChange(const QString& url) {
-    //qDebug() << __FUNCTION__ << url;
+    //qDebug()  << url;
     emit urlChanged(QUrl(url));
 }
 
 void QCefWebView::OnTitleChange(const QString& title) {
-    //qDebug() << __FUNCTION__ << title;
+    //qDebug()  << title;
     emit titleChanged(title);
 }
 
 void QCefWebView::SetLoading(bool isLoading) {
-    //qDebug() << __FUNCTION__ << isLoading << url();
+    //qDebug()  << isLoading << url();
     if (isLoading) {
         if (!need_load_ && !url_.isEmpty())
             emit loadStarted();
     } else {
         if (need_load_) {
-            //qDebug() << __FUNCTION__ << "need_load_" << url_;
+            //qDebug()  << "need_load_" << url_;
             BrowserLoadUrl(url_);
             need_load_ = false;
         } else if (/*!need_load_ && */!url_.isEmpty()) {
@@ -191,28 +191,28 @@ void QCefWebView::SetLoading(bool isLoading) {
 }
 
 void QCefWebView::SetNavState(bool canGoBack, bool canGoForward) {
-    //qDebug() << __FUNCTION__ << canGoBack << canGoForward;
+    //qDebug()  << canGoBack << canGoForward;
     emit navStateChanged(canGoBack, canGoForward);
 }
 
 void QCefWebView::OnAfterCreated() {
-    //qDebug() << __FUNCTION__;
+    //qDebug() ;
     browser_state_ = kCreated;
     if (need_resize_) {
-        //qDebug() << __FUNCTION__ << "need_resize_";
+        //qDebug()  << "need_resize_";
         ResizeBrowser(size());
         need_resize_ = false;
     }
 }
 
 void QCefWebView::OnMessageEvent(MessageEvent* e) {
-    //qDebug() << __FUNCTION__ << QThread::currentThreadId();
+    //qDebug()  << QThread::currentThreadId();
     // Cross thread. Not in ui thread here.
     QCoreApplication::postEvent(this, e, Qt::HighEventPriority);
 }
 
 bool QCefWebView::CreateBrowser(const QSize& size) {
-    //qDebug() << __FUNCTION__ << __LINE__;
+    //qDebug()  << __LINE__;
     if (browser_state_ != kNone || size.isEmpty()) {
         return false;
     }
@@ -221,7 +221,7 @@ bool QCefWebView::CreateBrowser(const QSize& size) {
         mutex_.unlock();
         return false;
     }
-    //qDebug() << __FUNCTION__ << __LINE__;
+    //qDebug()  << __LINE__;
     CefWindowInfo info;
     CefBrowserSettings settings;
 #if defined(WIN32)

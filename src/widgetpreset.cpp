@@ -205,7 +205,7 @@ void WidgetPreset::clear()
 //void WidgetPreset::purge()
 //{
 //  // Discard repeated entries. Is this really necessary?
-//  qDebug() << "WidgetPreset::purge() not implemented yet.";
+//  qDebug() << "Not implemented yet.";
 //}
 
 int WidgetPreset::idIndex(QString id)

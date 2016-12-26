@@ -228,13 +228,13 @@ QString PyQcsObject::getFilePath(int index)
 }
 
 void PyQcsObject::setChannelValue(QString channel, double value, int index)
-{ 
+{
 	return m_qcs->setChannelValue(channel, value, index);
 }
 
 
 double PyQcsObject::getChannelValue(QString channel, int index)
-{   
+{
 	return m_qcs->getChannelValue(channel, index);
 }
 
@@ -607,12 +607,12 @@ void PyQcsObject::evaluateCsound(QString code)
 
 //void PyQcsObject::writeArrayToTable(int ftable, QVariantList values, int offset, int count)
 //{
-//  qDebug() << "PyQcsObject::writeArrayToTable not implemented";
+//  qDebug() << "Not implemented";
 //}
 //
 //QVariantList PyQcsObject::readArrayToList(int ftable, int offset, int count)
 //{
-//  qDebug() << "PyQcsObject::readArrayToList not implemented";
+//  qDebug() << "Not implemented";
 //  return QVariantList();
 //}
 

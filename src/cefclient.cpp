@@ -18,7 +18,7 @@ void CefInitSettings(CefSettings& settings) {
 }  // namespace
 
 int CefInit(int &argc, char **argv) {
-    qDebug() << __FUNCTION__;
+    qDebug() ;
 #ifdef WIN32
     HINSTANCE hInstance = (HINSTANCE) GetModuleHandle(NULL);
     CefMainArgs main_args(hInstance);
@@ -52,7 +52,7 @@ void CefLoadPlugins(bool isWow64) {
 #endif
 
 void CefQuit() {
-    qDebug() << __FUNCTION__;
+    qDebug() ;
     CefShutdown();
 }
 

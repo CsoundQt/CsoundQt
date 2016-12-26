@@ -282,7 +282,7 @@ void DebugPanel::cellChanged(int row, int column)
 			int skip = item->data(Qt::DisplayRole).toInt();
 			emit addBreakpoint(line, instr, skip);
 		} else {
-            qDebug() << "DebugPanel::cellChanged Other breakpoint types not supported.";
+            qDebug() << "Other breakpoint types not supported.";
         }
 		break;
 

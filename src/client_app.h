@@ -82,7 +82,7 @@ public:
                                       CefRefPtr<CefFrame> frame,
                                       CefRefPtr<CefV8Context> context)
         {
-            qDebug() << "RenderDelegate::OnContextCreated:" << &app;
+            qDebug()  << &app;
         }
         virtual void OnContextReleased(CefRefPtr<ClientApp> app,
                                        CefRefPtr<CefBrowser> browser,
