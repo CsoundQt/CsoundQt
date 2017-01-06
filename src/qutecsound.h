@@ -218,8 +218,12 @@ private slots:
 	void openExternalPlayer();
 	void setEditorFocus();
 	void setHelpEntry();
-	void setFullScreen(bool full);
-	void showDebugger(bool show);
+    void setFullScreen(bool full);
+    void setEditorFullScreen(bool full);
+    void setHtmlFullScreen(bool full);
+    void setHelpFullScreen(bool full);
+    void setWidgetsFullScreen(bool full);
+    void showDebugger(bool show);
 	void showVirtualKeyboard(bool show);
 	void showTableEditor(bool show);
 	void virtualKeyboardActOff(QObject *parent=0);
@@ -402,7 +406,11 @@ private:
 	QAction *showOverviewAct;
 	QAction *showOpcodeQuickRefAct;
 	QAction *showConsoleAct;
-	QAction *viewFullScreenAct;
+    QAction *viewFullScreenAct;
+    QAction *viewEditorFullScreenAct;
+    QAction *viewHtmlFullScreenAct;
+    QAction *viewHelpFullScreenAct;
+    QAction *viewWidgetsFullScreenAct;
 #ifdef QCS_DEBUGGER
 	QAction *showDebugAct;
 #endif
@@ -465,13 +473,12 @@ private:
 	QIcon modIcon;
 	QString currentAudioFile;
 	QString initialDir;
-
 	QMutex closemutex;
 	QLocalServer * m_server; // for receiving 'open file' messages from other instances
-
 #ifdef MACOSX_PRE_SNOW
 	MenuBarHandle menuBarHandle;
 #endif
+    QByteArray pre_fullscreen_state;
 };
 
 class FileOpenEater : public QObject

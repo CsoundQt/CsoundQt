@@ -1974,6 +1974,60 @@ void CsoundQt::setFullScreen(bool full)
     }
 }
 
+void CsoundQt::setEditorFullScreen(bool full)
+{
+    if (full) {
+        pre_fullscreen_state = this->saveState();
+        QList<QDockWidget *> dockWidgets = findChildren<QDockWidget *>();
+        for(QDockWidget *dockWidget : dockWidgets) {
+            dockWidget->hide();
+        }
+        this->showFullScreen();
+    }
+    else {
+        this->restoreState(pre_fullscreen_state);
+    }
+}
+
+void CsoundQt::setHtmlFullScreen(bool full)
+{
+    if (full) {
+        pre_fullscreen_state = this->saveState();
+        this->csoundHtmlView->setFloating(true);
+        this->csoundHtmlView->showFullScreen();
+    }
+    else {
+        this->restoreState(pre_fullscreen_state);
+        this->showNormal();
+    }
+}
+
+void CsoundQt::setHelpFullScreen(bool full)
+{
+    if (full) {
+        pre_fullscreen_state = this->saveState();
+        this->helpPanel->setFloating(true);
+        this->helpPanel->showFullScreen();
+    }
+    else {
+        this->restoreState(pre_fullscreen_state);
+        this->showNormal();
+    }
+}
+
+void CsoundQt::setWidgetsFullScreen(bool full)
+{
+    if (full) {
+        pre_fullscreen_state = this->saveState();
+        this->widgetPanel->setFloating(true);
+        this->widgetPanel->showFullScreen();
+    }
+    else {
+        this->restoreState(pre_fullscreen_state);
+        this->showNormal();
+    }
+}
+
 
 void CsoundQt::showDebugger(bool show)
 {
@@ -2650,6 +2704,12 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #else
     viewFullScreenAct->setShortcut(tr("F11"));
 #endif
+    viewEditorFullScreenAct->setShortcut(tr("Alt+Ctrl+0"));
+#if defined(QCS_HTML5) || defined(QCS_QTHTML)
+    viewHtmlFullScreenAct->setShortcut(tr("Alt+Ctrl+H"));
+#endif
+    viewHelpFullScreenAct->setShortcut(tr("Alt+Ctrl+1"));
+    viewWidgetsFullScreenAct->setShortcut(tr("Alt+Ctrl+2"));
 #ifdef QCS_DEBUGGER
     showDebugAct->setShortcut(tr("F5"));
 #endif
@@ -2660,8 +2720,9 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     createCodeGraphAct->setShortcut(tr("Alt+4"));
     showInspectorAct->setShortcut(tr("Alt+5"));
     showLiveEventsAct->setShortcut(tr("Alt+6"));
+
 #ifdef QCS_HTML5
-    showHtml5Act->setShortcut(tr("Shift+Alt+H"));
+	showHtml5Act->setShortcut(tr("Alt+H"));
 #endif
 	openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Alt+9"));
@@ -3169,12 +3230,40 @@ void CsoundQt::createActions()
     connect(showConsoleAct, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
     connect(m_console, SIGNAL(Close(bool)), showConsoleAct, SLOT(setChecked(bool)));
 
-    viewFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View Full Screen"), this);
+    viewFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View Fullscreen"), this);
     viewFullScreenAct->setCheckable(true);
     viewFullScreenAct->setChecked(false);
-    viewFullScreenAct->setStatusTip(tr("Have CsoundQt occupy all the available screen space"));
+    viewFullScreenAct->setStatusTip(tr("Have CsoundQt occupy all available screen space"));
     viewFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(viewFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setFullScreen(bool)));
+
+    viewEditorFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View Editor Fullscreen"), this);
+    viewEditorFullScreenAct->setCheckable(true);
+    viewEditorFullScreenAct->setChecked(false);
+    viewEditorFullScreenAct->setStatusTip(tr("Have the editor occupy all available screen space"));
+    viewEditorFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(viewEditorFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setEditorFullScreen(bool)));
+#if defined(QCS_HTML5) || defined(QCS_QTHTML)
+    viewHtmlFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View HTML Fullscreen"), this);
+    viewHtmlFullScreenAct->setCheckable(true);
+    viewHtmlFullScreenAct->setChecked(false);
+    viewHtmlFullScreenAct->setStatusTip(tr("Have the HTML page occupy all available screen space"));
+    viewHtmlFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(viewHtmlFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setHtmlFullScreen(bool)));
+#endif
+    viewHelpFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View Help Fullscreen"), this);
+    viewHelpFullScreenAct->setCheckable(true);
+    viewHelpFullScreenAct->setChecked(false);
+    viewHelpFullScreenAct->setStatusTip(tr("Have the help page occupy all available screen space"));
+    viewHelpFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(viewHelpFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setHelpFullScreen(bool)));
+
+    viewWidgetsFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View Widgets Fullscreen"), this);
+    viewWidgetsFullScreenAct->setCheckable(true);
+    viewWidgetsFullScreenAct->setChecked(false);
+    viewWidgetsFullScreenAct->setStatusTip(tr("Have the widgets panel occupy all available screen space"));
+    viewWidgetsFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(viewWidgetsFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setWidgetsFullScreen(bool)));
 
 #ifdef QCS_DEBUGGER
     showDebugAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Show debugger"), this);
@@ -3480,6 +3569,12 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(showOpcodeQuickRefAct);
     m_keyActions.append(infoAct);
     m_keyActions.append(viewFullScreenAct);
+    m_keyActions.append(viewEditorFullScreenAct);
+#if defined(QCS_HTML5) || defined(QCS_QTHTML)
+    m_keyActions.append(viewHtmlFullScreenAct);
+#endif
+    m_keyActions.append(viewHelpFullScreenAct);
+    m_keyActions.append(viewWidgetsFullScreenAct);
 #ifdef QCS_DEBUGGER
     m_keyActions.append(showDebugAct);
 #endif
@@ -3713,6 +3808,12 @@ void CsoundQt::createMenus()
 #endif
     viewMenu->addSeparator();
     viewMenu->addAction(viewFullScreenAct);
+    viewMenu->addAction(viewEditorFullScreenAct);
+#if defined(QCS_HTML5) || defined(QCS_QTHTML)
+    viewMenu->addAction(viewHtmlFullScreenAct);
+#endif
+    viewMenu->addAction(viewHelpFullScreenAct);
+    viewMenu->addAction(viewWidgetsFullScreenAct);
     viewMenu->addSeparator();
     viewMenu->addAction(splitViewAct);
     viewMenu->addSeparator();
