@@ -31,9 +31,9 @@ CsoundHtmlWrapper::CsoundHtmlWrapper(QObject *parent) :
     QObject(parent),
     csound_stop(true),
     csound_finished(true),
-    csound_thread(nullptr),
     csound(nullptr),
     m_csoundEngine(nullptr),
+    csound_thread(nullptr),
     message_callback(nullptr)
 {
 }
@@ -195,7 +195,7 @@ void CsoundHtmlWrapper::message(const QString &text) {
     if (!csound) {
         return;
     }
-    csoundMessage(csound, text.toLocal8Bit());
+    csoundMessage(csound, "%s", text.toLocal8Bit().constData());
 }
 
 int CsoundHtmlWrapper::perform() {

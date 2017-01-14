@@ -336,6 +336,8 @@ int CsoundEngine::midiWriteCb(CSOUND *csound, void *ud_, const unsigned char *bu
 
 int CsoundEngine::midiOutCloseCb(CSOUND *csound, void *ud)
 {
+    (void) csound;
+    (void) ud;
 	return 0;
 }
 
@@ -361,7 +363,7 @@ void CsoundEngine::queueVirtualMidiIn(std::vector< unsigned char > &message)
 
 void CsoundEngine::sendMidiOut(QVector<unsigned char> &message)
 {
-
+    (void) message;
 }
 
 #endif
@@ -746,6 +748,7 @@ void CsoundEngine::stopRecording()
 void CsoundEngine::queueEvent(QString eventLine, int delay)
 {
 	// TODO: implement delayed events
+    (void) delay;
 	//   qDebug("CsoundEngine::queueEvent %s", eventLine.toStdString().c_str());
 	if (!isRunning()) {
 		QMutexLocker lock(&m_messageMutex);

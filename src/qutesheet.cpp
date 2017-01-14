@@ -71,7 +71,9 @@ QList<QVariant> QuteSheet::getValuesByRow(QList<QList <QVariant > > data)
 
 bool QuteSheet::setRows(QList<QList <QVariant > > new_data,
 						int new_startRow, int new_startCol,
-						int new_numRows, int new_numCols) {
+                        int new_numRows, int new_numCols)
+{
+    (void) new_data;
 	//! Set the data for the text output organized by row
 	if (new_startRow == -1) {
 		new_startRow = startRow;
@@ -97,7 +99,8 @@ bool QuteSheet::setValues(QList <QVariant > new_data,
 						  int new_startRow, int new_startCol,
 						  int new_numRows, int new_numCols)
 {
-	//!  """Set the data for the text output as a list of individual cells organized by rows"""
+    (void) new_data;
+    //!  """Set the data for the text output as a list of individual cells organized by rows"""
 	if (new_startRow == -1) {
 		new_startRow = startRow;
 	}
@@ -124,7 +127,8 @@ bool QuteSheet::setText(QString new_data,
 						int new_startRow, int new_startCol,
 						int new_numRows, int new_numCols)
 {
-	//! """Set data from a text string, each line is interpreted as a row and each cell must be separated by a space."""
+    (void) new_data;
+    //! """Set data from a text string, each line is interpreted as a row and each cell must be separated by a space."""
 	if (new_startRow == -1) {
 		new_startRow = startRow;
 	}
@@ -146,7 +150,9 @@ bool QuteSheet::setText(QString new_data,
 
 QList<QList <QVariant> > QuteSheet::sort(QList<QList <QVariant> > vectors, int p_field)
 {
-	//! Sort vectors by elements in a certain index (third (p2) by default)
+    (void) p_field;
+    (void) vectors;
+    //! Sort vectors by elements in a certain index (third (p2) by default)
 	//  qDebug() << "QuteSheet::sort not implemented yet.";
 	QList<QList <QVariant> > new_data;
 	//      for r in rows:
@@ -186,7 +192,13 @@ QList<QList <QVariant > > QuteSheet::someCols(QList<QList <QVariant > > data,
 											  int col,
 											  int num_cols)
 {
-	QList<QList <QVariant > >rows;
+    (void) data;
+    (void) num_rows;
+    (void) row;
+    (void) num_rows;
+    (void) col;
+    (void) num_cols;
+    QList<QList <QVariant > >rows;
 	//          for r in range(row, row + num_rows):
 	//              new_row = []
 	//              for c in range(col, col + num_cols):
@@ -199,7 +211,10 @@ QList<QList <QVariant > > QuteSheet::allCols(QList<QList <QVariant > > data,
 											 int row,
 											 int num_rows)
 {
-	QList<QList <QVariant > > rows;
+    (void) data;
+    (void) row;
+    (void) num_rows;
+    QList<QList <QVariant > > rows;
 	//          for r in range(row, row + num_rows):
 	//              rows.append(data[r])
 	return rows;

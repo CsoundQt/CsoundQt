@@ -518,6 +518,7 @@ void WidgetLayout::setValue(int index, QString value)
 
 QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
 {
+    (void) modified;
 	//  widgetsMutex.lock();
 	for (int i = 0; i < m_activeWidgets ; i++) {
 		if (m_widgets[i]->getChannelName() == channelName) {
@@ -539,6 +540,7 @@ QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
 
 double WidgetLayout::getValueForChannel(QString channelName, bool *modified)
 {
+    (void) modified;
 	//  widgetsMutex.lock();
 	for (int i = 0; i < m_activeWidgets ; i++) {
 		//    qDebug() << "WidgetLayout::getValueForChannel " << i << "  " << m_widgets[i]->getChannelName();
@@ -2943,6 +2945,7 @@ QString WidgetLayout::createScope(int x, int y, int width, int height, QString w
 
 QString WidgetLayout::createDummy(int x, int y, int width, int height, QString widgetLine)
 {
+    (void) widgetLine;
 	QuteWidget *widget= new QuteDummy(this);
 	widget->setProperty("QCS_x",x);
 	widget->setProperty("QCS_y",y);

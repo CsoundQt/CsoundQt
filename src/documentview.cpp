@@ -189,17 +189,16 @@ void DocumentView::updateContext()
 
 void DocumentView::updateOrcContext(QString orc)
 {
+    (void) orc;
 	// TODO: add string as context
 	QStringList innerContextStart;
 	innerContextStart << "instr" << "opcode";
 	QTextCursor cursor = m_mainEditor->textCursor();
 	cursor.select(QTextCursor::LineUnderCursor);
 	QString line = cursor.selection().toPlainText().trimmed();
-	int innerContext = 0;
-	while (!cursor.atStart()) {
+    while (!cursor.atStart()) {
 		foreach(QString startText, innerContextStart) {
 			if (line.startsWith(startText)) {
-				innerContext = innerContextStart.indexOf(startText) + 1;
 				break;
 			}
 		}
@@ -1889,5 +1888,6 @@ HoverWidget::HoverWidget(QWidget *parent) :
 
 void HoverWidget::mousePressEvent(QMouseEvent *ev)
 {
+    (void) ev;
 	this->hide();
 }

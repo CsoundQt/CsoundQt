@@ -190,7 +190,7 @@ int DocumentPage::setTextString(QString &text)
 		int width = panelElement.attribute("width","-1").toDouble();
 		int height = panelElement.attribute("height","-1").toDouble();
 		// TODO recall live event panel visibility
-		int visibleEnabled = panelElement.attribute("visible","true") == "true";
+        //int visibleEnabled = panelElement.attribute("visible","true") == "true";
 		int loopStart = panelElement.attribute("loopStart","0.0").toDouble();
 		int loopEnd = panelElement.attribute("loopEnd","0.0").toDouble();
 
@@ -574,6 +574,7 @@ EventSheet* DocumentPage::getSheet(int sheetIndex)
 
 EventSheet* DocumentPage::getSheet(QString sheetName)
 {
+    (void) sheetName;
 	return 0;
 }
 //
@@ -1118,6 +1119,7 @@ void DocumentPage::loopPanelSlot(int index, bool loop)
 
 void DocumentPage::stopPanelSlot(int index)
 {
+    (void) index;
 	qDebug() << "Not implemented.";
 }
 
@@ -1135,6 +1137,8 @@ void DocumentPage::setPanelVisibleSlot(int index, bool visible)
 
 void DocumentPage::setPanelSyncSlot(int index, int mode)
 {
+    (void) index;
+    (void) mode;
 	qDebug() << "Not implemented.";
 }
 
@@ -1302,6 +1306,7 @@ int DocumentPage::record(int format)
 	emit setCurrentAudioFile(recName);
 	return m_csEngine->startRecording(format, recName);
 #else
+    (void) format;
 	QMessageBox::warning(NULL, tr("Recording not possible"), tr("This version of CsoundQt was not built with recording support."));
 	return 0;
 #endif
@@ -1374,6 +1379,7 @@ void DocumentPage::passSelectedWidget(QuteWidget *widget) // necessary only when
 void DocumentPage::passUnselectedWidget(QuteWidget *widget) // necessary only when ML is opened from edit menu and a widget is selected.
 {
 	// TODO: Better options for unselecting widgets.
+    (void) widget;
 	m_midiLearn->setCurrentWidget(NULL);
 }
 

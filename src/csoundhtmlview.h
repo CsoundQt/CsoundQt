@@ -1,15 +1,12 @@
 #ifndef HTML5GUIDISPLAY_H
 #define HTML5GUIDISPLAY_H
 
-#if defined(QCS_HTML5) || defined(QCS_QTHTML)
+#if defined(QCS_QTHTML)
 
 #include <atomic>
 #include <QDebug>
 #include <QDockWidget>
 #include "csoundhtmlwrapper.h"
-#ifdef QCS_HTML5
-	#include "qcefwebview.h"
-#endif
 
 #ifdef USE_WEBKIT
 	#include <QtWebKit>
@@ -45,9 +42,6 @@ public:
 	void setCsoundEngine(CsoundEngine *csEngine) {csoundWrapper.setCsoundEngine(csEngine); }
     void viewHtml(QString htmlText);
 	void clear();
-#ifdef QCS_HTML5
-	QCefWebView *webView;
-#endif
 #ifdef USE_WEBKIT
 	QWebView *webView;
 #endif

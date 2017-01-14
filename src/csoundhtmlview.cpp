@@ -1,4 +1,4 @@
-#if defined(QCS_HTML5) || defined(QCS_QTHTML)
+#if defined(QCS_QTHTML)
 #include "documentpage.h"
 #include "csoundhtmlview.h"
 #include "ui_html5guidisplay.h"
@@ -9,11 +9,12 @@
 
 CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     QDockWidget(parent),
+    webView(nullptr),
     ui(new Ui::Html5GuiDisplay),
     documentPage(0),
-	webView(0),
-	pid(0),
-	m_csoundEngine(NULL)
+    pid(0),
+    csoundWrapper(nullptr),
+    m_csoundEngine(nullptr)
 {
 #ifdef WIN32
 	pid = GetCurrentProcessId();
@@ -23,10 +24,6 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 #endif
     ui->setupUi(this);
 	// set csound to csoundwrapper here? setCsoundPointer(CSOUND *cs) {csoundWrapper.setCsoundPointer(cs){ csound = cs; } }
-#ifdef QCS_HTML5
-	webView = new QCefWebView(this);
-	webView->loadFromUrl(QUrl("http://csound.github.io/docs/manual/indexframes.html"));
-#endif
 #ifdef USE_WEBKIT
 	webView = new QWebView(this);
 	//webView->setUrl(QUrl("file:///home/tarmo/tarmo/programm/webchannel-test/test.csd.html"));
@@ -234,12 +231,7 @@ void CsoundHtmlView::loadFromUrl(const QUrl &url)
 {
     qDebug();
     if(webView != 0) {
-#ifdef QCS_HTML5
-        //webView->evaluateJavaScript("debugger;");
-		webView->loadFromUrl(url);
-#else
 		webView->setUrl(url);
-#endif
     }
 }
 

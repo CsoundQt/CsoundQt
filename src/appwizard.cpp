@@ -73,10 +73,10 @@ void AppWizard::makeApp()
 	QString targetDir =  field("targetDir").toString();
 	bool useSdk = field("useSdk").toInt() == 1;
 
-	bool autorun =  field("autorun").toBool();
-	int runMode = field("runMode").toInt();
-	bool saveState = field("saveState").toBool();
-	bool newParser = field("newParser").toBool();
+    // bool autorun =  field("autorun").toBool();
+    // int runMode = field("runMode").toInt();
+    // bool saveState = field("saveState").toBool();
+    // bool newParser = field("newParser").toBool();
 
 	QString author = field("author").toString();
 	QString version = field("version").toString();
@@ -230,6 +230,14 @@ void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFi
 							 QStringList plugins, QString sdkDir,  QString libDir,
 							 QString opcodeDir, QString qtLibsDir)
 {
+    (void) appName;
+    (void) appDir;
+    (void) dataFiles;
+    (void) plugins;
+    (void) sdkDir;
+    (void) libDir;
+    (void) opcodeDir;
+    (void) qtLibsDir;
 	//  QDir dir(appDir);
 	//    if (dir.mkdir(appName)) {
 	//      dir.cd(appName);
@@ -261,6 +269,14 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
 							 QStringList plugins, QString sdkDir,  QString libDir,
 							 QString opcodeDir, QString qtLibsDir)
 {
+    (void) appName;
+    (void) appDir;
+    (void) dataFiles;
+    (void) plugins;
+    (void) sdkDir;
+    (void) libDir;
+    (void) opcodeDir;
+    (void) qtLibsDir;
     qDebug() ;
 	QDir dir(appDir);
 	QList<QPair<QString, QString> > copyList;
@@ -476,16 +492,14 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
 
 void AppWizard::getLinuxLibDeps(QString libname)
 {
+    (void) libname;
 	QProcess ldd;
 	//    ldd.start("ldd", QStringList() << "-c");
 	//    if (!ldd.waitForStarted())
 	//        return false;
-
 	//    ldd.write("Qt rocks!");
 	//    ldd.closeWriteChannel();
-
 	//    if (!ldd.waitForFinished())
 	//        return false;
-
 	//    QByteArray result = ldd.readAll();
 }

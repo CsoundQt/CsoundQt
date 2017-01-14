@@ -100,7 +100,7 @@ void LiveEventControl::appendPanel(LiveEventFrame *e)
 	//  playItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
 	QTableWidgetItem *loopItem = getItem(newRow, 2);
 	loopItem->setCheckState(Qt::Unchecked);
-	QTableWidgetItem *syncItem = getItem(newRow, 3);
+    //  QTableWidgetItem *syncItem = getItem(newRow, 3);
 	//  loopItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
 	QTableWidgetItem *nameItem = getItem(newRow, 4);
 	nameItem->setData(Qt::DisplayRole, QVariant(e->getName()));
@@ -268,6 +268,6 @@ void  LiveEventControl::cellClickedSlot(int row, int column)
 
 void LiveEventControl::frameClosed(LiveEventFrame *e)
 {
-
+    (void) e;
 	qDebug() << "Not implemented.";
 }
