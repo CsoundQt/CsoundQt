@@ -711,7 +711,7 @@ void DocumentPage::updateCsLadspaText()
 void DocumentPage::updateCabbageText()
 {
 	if (widgetCount()==0) {
-		QMessageBox::warning(Q_NULLPTR, tr("No widgets"), tr("There are no widgets to convert!"));
+		QMessageBox::warning(NULL, tr("No widgets"), tr("There are no widgets to convert!"));
 		return;
 	}
 	QString text = "<Cabbage>\n";
