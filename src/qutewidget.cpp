@@ -421,6 +421,7 @@ void QuteWidget::createPropertiesDialog()
 		layout->addWidget(midiLearnButton,14,4, Qt::AlignLeft|Qt::AlignVCenter);
 	}
 	acceptButton = new QPushButton(tr("Ok"));
+	acceptButton->setDefault(true);
 	layout->addWidget(acceptButton, 15, 3, Qt::AlignCenter|Qt::AlignVCenter);
 	applyButton = new QPushButton(tr("Apply"));
 	layout->addWidget(applyButton, 15, 1, Qt::AlignCenter|Qt::AlignVCenter);
