@@ -1062,27 +1062,40 @@ void DocumentPage::setPythonExecutable(QString pythonExec)
 	m_pythonExecutable = pythonExec;
 }
 
-void DocumentPage::showLiveEventPanels(bool visible)
+
+void DocumentPage::showLiveEventPanels()
 {
 	if (fileName.endsWith(".csd")) {
-		m_liveEventControl->setVisible(visible);
 		for (int i = 0; i < m_liveFrames.size(); i++) {
-			if (visible) {
-				//        qDebug() << "DocumentPage::showLiveEventPanels  " << visible << (int) this;
-				if (m_liveFrames[i]->isVisible())
+			//   qDebug() << "DocumentPage::showLiveEventPanels  " << visible << (int) this;
+			if (m_liveFrames[i]->isVisible())
+				m_liveFrames[i]->raise();
+			else {
+				if (m_liveFrames[i]->getVisibleEnabled()) {
+					m_liveFrames[i]->setWindowFlags(Qt::Window);
+					m_liveFrames[i]->show();
 					m_liveFrames[i]->raise();
-				else {
-					if (m_liveFrames[i]->getVisibleEnabled()) {
-						m_liveFrames[i]->setWindowFlags(Qt::Window);
-						m_liveFrames[i]->show();
-						m_liveFrames[i]->raise();
-					}
 				}
 			}
-			else {
-				m_liveFrames[i]->setWindowFlags(Qt::Widget);
-				m_liveFrames[i]->hide();
-			}
+		}
+	}
+
+}
+
+void DocumentPage::hideLiveEventPanels() {
+	if (fileName.endsWith(".csd")) {
+		for (int i = 0; i < m_liveFrames.size(); i++) {
+			m_liveFrames[i]->setWindowFlags(Qt::Widget); // don't hide
+			m_liveFrames[i]->hide();
+		}
+	}
+}
+
+void DocumentPage::showLiveEventControl(bool visible) {
+	if (fileName.endsWith(".csd")) {
+		m_liveEventControl->setVisible(visible);
+		if (visible) {
+			showLiveEventPanels();
 		}
 	}
 }
@@ -1217,6 +1230,7 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 	connect(m_liveEventControl, SIGNAL(setPanelTempoSignal(int,double)), this, SLOT(setPanelTempoSlot(int,double)));
 	connect(m_liveEventControl, SIGNAL(setPanelLoopLengthSignal(int,double)), this, SLOT(setPanelLoopLengthSlot(int,double)));
 	connect(m_liveEventControl, SIGNAL(setPanelLoopRangeSignal(int,double,double)), this, SLOT(setPanelLoopRangeSlot(int,double,double)));
+	connect(m_liveEventControl, SIGNAL(hidePanels()), this, SLOT(hideLiveEventPanels())  );
 
 	// Connect for clearing marked lines and letting inspector know text has changed
 	connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));
@@ -1570,6 +1584,7 @@ void DocumentPage::deleteLiveEventPanel(LiveEventFrame *frame)
 	}
 }
 
+
 void DocumentPage::textChanged()
 {
 	//  qDebug() << "DocumentPage::textChanged()";
@@ -1595,8 +1610,7 @@ void DocumentPage::textChanged()
 void DocumentPage::liveEventControlClosed()
 {
 	qDebug()<< "DocumentPage::liveEventControlClosed()";
-	showLiveEventPanels(false);
-	emit liveEventsVisible(false);
+	showLiveEventControl(false);
 }
 
 void DocumentPage::renamePanel(LiveEventFrame *panel,QString newName)

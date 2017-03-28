@@ -348,8 +348,9 @@ void CsoundQt::changePage(int index)
 #endif
         disconnect(showLiveEventsAct, 0,0,0);
         disconnect(documentPages[curPage], SIGNAL(stopSignal()),0,0);
-        documentPages[curPage]->showLiveEventPanels(false);
-        documentPages[curPage]->hideWidgets();
+		documentPages[curPage]->hideLiveEventPanels();
+		documentPages[curPage]->showLiveEventControl(false);
+		documentPages[curPage]->hideWidgets();
         if (!m_options->widgetsIndependent) {
             QRect panelGeometry = widgetPanel->geometry();
             if (!widgetPanel->isFloating()) {
@@ -365,8 +366,8 @@ void CsoundQt::changePage(int index)
     if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
         setCurrentFile(documentPages[curPage]->getFileName());
         connectActions();
-        documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
-        //    documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
+		documentPages[curPage]->showLiveEventControl(showLiveEventsAct->isChecked());
+		//    documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
         if (!m_options->widgetsIndependent) {
             WidgetLayout *w = documentPages[curPage]->getWidgetLayout();
             widgetPanel->addWidgetLayout(w);
@@ -915,8 +916,9 @@ void CsoundQt::deleteTab(int index)
     disconnect(showLiveEventsAct, 0,0,0);
     DocumentPage *d = documentPages[index];
     d->stop();
-    d->showLiveEventPanels(false);
-    midiHandler->removeListener(d);
+	d->showLiveEventControl(false);
+	d->hideLiveEventPanels();
+	midiHandler->removeListener(d);
     if (!m_options->widgetsIndependent) {
         QRect panelGeometry = widgetPanel->geometry();
         if (!widgetPanel->isFloating()) {
@@ -1632,8 +1634,8 @@ void CsoundQt::play(bool realtime, int index)
                     showWidgetsAct->setChecked(true);
                 }
                 widgetPanel->setFocus(Qt::OtherFocusReason);
-                documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
-                documentPages[curPage]->focusWidgets();
+				documentPages[curPage]->showLiveEventControl(showLiveEventsAct->isChecked());
+				documentPages[curPage]->focusWidgets();
             }
         }
     }
@@ -3521,7 +3523,7 @@ void CsoundQt::connectActions()
     connect(m_inspector, SIGNAL(Close(bool)), showInspectorAct, SLOT(setChecked(bool)));
 
     disconnect(showLiveEventsAct, 0,0,0);
-    connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventPanels(bool)));
+	connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventControl(bool)));
     disconnect(doc, 0,0,0);
     connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
     connect(doc, SIGNAL(stopSignal()), this, SLOT(markStopped()));
@@ -4860,7 +4862,7 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
     }
     documentPages.insert(insertPoint, newPage);
     //  documentPages[curPage]->setOpcodeNameList(m_opcodeTree->opcodeNameList());
-    documentPages[curPage]->showLiveEventPanels(false);
+	documentPages[curPage]->showLiveEventControl(false);
     setCurrentOptionsForPage(documentPages[curPage]);
 
     documentPages[curPage]->setFileName(fileName);  // Must set before sending text to set highlighting mode

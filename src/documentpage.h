@@ -216,7 +216,10 @@ public slots:
 	void newLiveEventPanel(QString text = QString());
 	LiveEventFrame * createLiveEventPanel(QString text = QString());
 	void deleteLiveEventPanel(LiveEventFrame *frame);
-	void showLiveEventPanels(bool visible);
+	void showLiveEventControl(bool visible);
+	void showLiveEventPanels();
+	void hideLiveEventPanels();
+
 	void stopAllSlot();
 	void newPanelSlot();
 	void playPanelSlot(int index);
