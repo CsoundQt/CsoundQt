@@ -94,6 +94,9 @@ void ConfigLists::refreshModules()
 //			printf("MIDI Module %d:  %s (%s) \n", n, name, type);
 		}
 	}
+	if (rtAudioNames.contains("jack")) { // if jack audio is present, also jack midi can be used
+		rtMidiNames <<  "jack";
+	}
 	rtMidiNames << "virtual" << "none";
 #else
 #ifdef Q_OS_LINUX
@@ -112,13 +115,13 @@ void ConfigLists::refreshModules()
 	rtAudioNames << "haiku" << "none";
 #endif
 #ifdef Q_OS_LINUX
-	rtMidiNames << "none" << "alsa" << "alsaseq" << "portmidi" << "virtual";
+	rtMidiNames << "none" << "alsa" << "alsaseq" << "jack" << "portmidi" << "virtual";
 #endif
 #ifdef Q_OS_SOLARIS
 	rtMidiNames << "none" << "portmidi"<< "virtual";
 #endif
 #ifdef Q_OS_MAC
-	rtMidiNames << "none" << "coremidi" << "portmidi" << "virtual";
+	rtMidiNames << "none" << "coremidi" << "portmidi" << "jack" << "virtual";
 #endif
 #ifdef Q_OS_WIN32
 	rtMidiNames << "none" << "winmm" << "portmidi" << "virtual";

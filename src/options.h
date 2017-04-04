@@ -72,7 +72,9 @@ public:
 	bool debugLiveEvents;
 	int consoleBufferSize;
 	int midiInterface;
+	QString midiInterfaceName;
 	int midiOutInterface;
+	QString midiOutInterfaceName;
 	// Csound engine flags
 	bool noBuffer;
 	bool noPython;

@@ -739,7 +739,7 @@ void CsoundEngine::stopRecording()
 	if (ud->perfThread) {
 		ud->perfThread->StopRecord();
 	}
-	qDebug("Recording stopped.");
+	//qDebug("Recording stopped.");
 #endif
 }
 

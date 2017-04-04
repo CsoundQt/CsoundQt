@@ -24,9 +24,10 @@ MidiHandler::MidiHandler(QObject *parent) :
     QObject(parent)
 {
 #ifdef QCS_RTMIDI
-	m_midiin = new RtMidiIn(RtMidi::UNSPECIFIED, "CsoundQt");
-	m_midiout = new RtMidiOut(RtMidi::UNSPECIFIED, "CsoundQt");
+	m_midiin = new RtMidiIn(RtMidi::UNSPECIFIED, "CsoundQt"); //UNIX_JACK, if set
+	m_midiout = new RtMidiOut(RtMidi::UNSPECIFIED, "CsoundQt"); //UNSPECIFIED
 	m_midiin->setCallback(&midiInMessageCallback, this);
+
 #endif
 	m_midiLearnDialog = NULL;
 }
@@ -90,6 +91,37 @@ void MidiHandler::setMidiInterface(int number)
 	}
 }
 
+int MidiHandler::findMidiInPortByName(QString name) {
+	int port = 9999; // stands for None
+	QString portName;
+	for (int i=0; i<m_midiin->getPortCount(); i++) { // find port number according to the name
+		portName = QString::fromStdString(m_midiin->getPortName(i));
+		qDebug()<<i<< " " << portName;
+		if (name==portName) {
+			qDebug()<<"Found port for " << name << ": " << i;
+			port = i;
+			break;
+		}
+	}
+	return port;
+}
+
+int MidiHandler::findMidiOutPortByName(QString name) {
+	int port = 9999; // stands for None
+	QString portName;
+	for (int i=0; i<m_midiout->getPortCount(); i++) { // find port number according to the name
+		portName = QString::fromStdString(m_midiout->getPortName(i));
+		qDebug()<<i<< " " << portName;
+		if (name==portName) {
+			qDebug()<<"Found port for " << name << ": " << i;
+			port = i;
+			break;
+		}
+	}
+	return port;
+}
+
+
 void MidiHandler::openMidiInPort(int port)
 {
 #ifdef QCS_RTMIDI
@@ -116,7 +148,7 @@ void MidiHandler::openMidiInPort(int port)
 		error.printMessage();
 		return;
 	}
-	//  qDebug() << "CsoundQt::openMidiPort opened port " << port;
+	qDebug() << "CsoundQt::openMidiPort opened port " << port;
 #endif
 	//  m_midiin->ignoreTypes(false, false, false);
 }

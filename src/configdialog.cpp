@@ -87,9 +87,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		error.printMessage();
 	}
 	try {
-		RtMidiOut midiout;
+		RtMidiOut midiout; // TODO: if m_options (või midagi) jack, then -> (RtMidi::UNIX_JACK); // kuskile veel: kui vahetab configus moodulit, siis restart MidiHandlerile... mõtle, kas seda vaja teha kõigi lehtede jaoks... ja kas see põhjustab crashi...
 		for (int i = 0; i < (int) midiout.getPortCount(); i++) {
 			midiOutInterfaceComboBox->addItem(QString::fromStdString(midiout.getPortName(i)), QVariant(i));
+			//qDebug()<<"RTMIDI out interfasce ConfigDialog: "<<QString::fromStdString(midiout.getPortName(i));
 		}
 	}
 #ifdef QCS_OLD_RTMIDI
@@ -105,11 +106,31 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 #endif
 
 	midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI In interface")), QVariant(9999));
-	int ifIndex = midiInterfaceComboBox->findData(QVariant(m_options->midiInterface));
-	midiInterfaceComboBox->setCurrentIndex(ifIndex);
+	//TODO: check by name, not index
+	//int ifIndex = midiInterfaceComboBox->findData(QVariant(m_options->midiInterface)); // m_options->midiInterfaceName
+	int ifIndex = midiInterfaceComboBox->findText(m_options->midiInterfaceName);
+	if (ifIndex>=0) {
+		midiInterfaceComboBox->setCurrentIndex(ifIndex);
+	} else {
+		qDebug()<< m_options->midiInterfaceName << "not found. Setting Midi In to None";
+		midiInterfaceComboBox->setCurrentIndex(midiInterfaceComboBox->findData(9999)); // set to none if not found
+	}
+
 	midiOutInterfaceComboBox->addItem(QString(tr("None", "No MIDI Out interface")), QVariant(9999));
-	ifIndex = midiOutInterfaceComboBox->findData(QVariant(m_options->midiOutInterface));
-	midiOutInterfaceComboBox->setCurrentIndex(ifIndex);
+	//ifIndex = midiOutInterfaceComboBox->findData(QVariant(m_options->midiOutInterface));
+	ifIndex = midiInterfaceComboBox->findText(m_options->midiOutInterfaceName);
+	if (ifIndex>=0) {
+		midiOutInterfaceComboBox->setCurrentIndex(ifIndex);
+	} else {
+		qDebug()<< m_options->midiOutInterfaceName << "not found. Setting Midi Out to None";
+		int test = midiOutInterfaceComboBox->findData(9999);
+		midiOutInterfaceComboBox->setCurrentIndex(midiOutInterfaceComboBox->findData(9999)); // set to none if not found
+		QMessageBox::warning(this, tr("CsoundQt"),
+			QString(m_options->midiOutInterfaceName) + tr( " not found. Setting Midi Out to None"));
+	}
+
+
+	//midiOutInterfaceComboBox->setCurrentIndex(ifIndex);
 
 	themeComboBox->setCurrentIndex(themeComboBox->findText(m_options->theme));
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
@@ -370,8 +391,10 @@ void ConfigDialog::accept()
 	m_options->keyRepeat = keyRepeatCheckBox->isChecked();
 	m_options->debugLiveEvents = debugLiveEventsCheckBox->isChecked();
 	m_options->consoleBufferSize = consoleBufferComboBox->itemText(consoleBufferComboBox->currentIndex()).toInt();
-	m_options->midiInterface = midiInterfaceComboBox->itemData(midiInterfaceComboBox->currentIndex()).toInt();
+	m_options->midiInterface = midiInterfaceComboBox->itemData(midiInterfaceComboBox->currentIndex()).toInt(); // actually not necessary to store thta any more but for any case...
+	m_options->midiInterfaceName = midiInterfaceComboBox->currentText();
 	m_options->midiOutInterface = midiOutInterfaceComboBox->itemData(midiOutInterfaceComboBox->currentIndex()).toInt();
+	m_options->midiOutInterfaceName = midiOutInterfaceComboBox->currentText();
 	m_options->noMessages = noMessagesCheckBox->isChecked();
 	m_options->noBuffer = noBufferCheckBox->isChecked();
 	m_options->noPython = noPythonCheckBox->isChecked();
