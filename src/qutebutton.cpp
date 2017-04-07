@@ -449,7 +449,13 @@ void QuteButton::buttonReleased()
 			}
 			if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) { // If duration is negative, use button to turn note on and off
 				if (m_currentValue == 0) { // Button has turned off. Turn off instrument
-					lineElements[0].prepend("-");
+					if ( lineElements[0].startsWith("\"") || lineElements[0].startsWith("\'")  ) {
+						//qDebug()<<"Stopping named instrument: " << lineElements[0];
+						lineElements[0].insert(1,"-");
+					} else {
+
+					lineElements[0].prepend("-"); // NB! what if string? find out instrument number
+					}
 					lineElements.prepend("i");
 					setValue(0);
 					emit(queueEventSignal(lineElements.join(" ")));
