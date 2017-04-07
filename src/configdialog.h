@@ -87,6 +87,8 @@ private slots:
 	void clearTemplate();
 	void defaultTemplate();
 
+	void on_csoundMidiCheckBox_toggled(bool checked);
+
 signals:
 	//    void changeFont();
 

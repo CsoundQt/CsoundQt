@@ -3741,7 +3741,7 @@ void WidgetLayout::processNewValues()
 
 void WidgetLayout::queueEvent(QString eventLine)
 {
-	qDebug() << "WidgetLayout::queueEvent";
+	//qDebug() << "WidgetLayout::queueEvent";
 	emit queueEventSignal(eventLine);
 }
 

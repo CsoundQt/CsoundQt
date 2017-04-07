@@ -2376,8 +2376,31 @@ void CsoundQt::applySettings()
     renderOptions += currentOptions;
     runAct->setStatusTip(tr("Play") + playOptions);
     renderAct->setStatusTip(tr("Render to file") + renderOptions);
-    midiHandler->setMidiInterface(m_options->midiInterface);
-    midiHandler->setMidiOutInterface(m_options->midiOutInterface);
+
+	if (! m_options->useCsoundMidi) {
+		QString interfaceNotFoundMessage; // find midi interface by name; if not found, set to None
+		m_options->midiInterface = midiHandler->findMidiInPortByName(m_options->midiInterfaceName); // returns 9999 if not found
+
+		midiHandler->setMidiInterface(m_options->midiInterface); // closed port, if 9999
+		if (m_options->midiInterface==9999) {
+			qDebug()<<"Midi In interface "<< m_options->midiInterfaceName << " not found!";
+			interfaceNotFoundMessage = tr("Midi In interface ") + m_options->midiInterfaceName + tr(" not found!\n Switching to None.\n");
+		}
+
+		m_options->midiOutInterface = midiHandler->findMidiOutPortByName(m_options->midiOutInterfaceName);
+		midiHandler->setMidiOutInterface(m_options->midiOutInterface);
+		if (m_options->midiOutInterface == 9999) {
+			qDebug()<<"Midi Out interface "<< m_options->midiInterfaceName << " not found!";
+			interfaceNotFoundMessage += tr("Midi Out interface ") + m_options->midiOutInterfaceName + tr(" not found!\n Switching to None.");
+		}
+		//	if (!interfaceNotFoundMessage.isEmpty()) { // probably messagebox alwais is a bit too disturbing. Keep it quiet.
+		//		QMessageBox::warning(this, tr("MIDI interface not found"),
+		//							 interfaceNotFoundMessage);
+		//	}
+	}
+
+	//midiHandler->setMidiInterface(m_options->midiInterface);
+	//midiHandler->setMidiOutInterface(m_options->midiOutInterface);
 
     fillFavoriteMenu();
     fillScriptsMenu();
@@ -4347,7 +4370,9 @@ void CsoundQt::readSettings()
     m_options->debugLiveEvents = settings.value("debugLiveEvents", false).toBool();
     m_options->consoleBufferSize = settings.value("consoleBufferSize", 1024).toInt();
     m_options->midiInterface = settings.value("midiInterface", 9999).toInt();
-    m_options->midiOutInterface = settings.value("midiOutInterface", 9999).toInt();
+	m_options->midiInterfaceName = settings.value("midiInterfaceName", "None").toString();
+	m_options->midiOutInterface = settings.value("midiOutInterface", 9999).toInt();
+	m_options->midiOutInterfaceName = settings.value("midiOutInterfaceName", "None").toString();
     m_options->noBuffer = settings.value("noBuffer", false).toBool();
     m_options->noPython = settings.value("noPython", false).toBool();
     m_options->noMessages = settings.value("noMessages", false).toBool();
@@ -4533,8 +4558,10 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
         settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
         settings.setValue("midiInterface", m_options->midiInterface);
+		settings.setValue("midiInterfaceName", m_options->midiInterfaceName);
         settings.setValue("midiOutInterface", m_options->midiOutInterface);
-        settings.setValue("noBuffer", m_options->noBuffer);
+		settings.setValue("midiOutInterfaceName", m_options->midiOutInterfaceName);
+		settings.setValue("noBuffer", m_options->noBuffer);
         settings.setValue("noPython", m_options->noPython);
         settings.setValue("noMessages", m_options->noMessages);
         settings.setValue("noEvents", m_options->noEvents);

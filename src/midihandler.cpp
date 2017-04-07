@@ -24,7 +24,7 @@ MidiHandler::MidiHandler(QObject *parent) :
     QObject(parent)
 {
 #ifdef QCS_RTMIDI
-	m_midiin = new RtMidiIn(RtMidi::UNSPECIFIED, "CsoundQt"); //UNIX_JACK, if set
+	m_midiin = new RtMidiIn(RtMidi::UNSPECIFIED, "CsoundQt"); //TODO: allow UNIX_JACK et al, if possible
 	m_midiout = new RtMidiOut(RtMidi::UNSPECIFIED, "CsoundQt"); //UNSPECIFIED
 	m_midiin->setCallback(&midiInMessageCallback, this);
 
@@ -96,7 +96,7 @@ int MidiHandler::findMidiInPortByName(QString name) {
 	QString portName;
 	for (int i=0; i<m_midiin->getPortCount(); i++) { // find port number according to the name
 		portName = QString::fromStdString(m_midiin->getPortName(i));
-		qDebug()<<i<< " " << portName;
+		//qDebug()<<i<< " " << portName;
 		if (name==portName) {
 			qDebug()<<"Found port for " << name << ": " << i;
 			port = i;
@@ -111,7 +111,7 @@ int MidiHandler::findMidiOutPortByName(QString name) {
 	QString portName;
 	for (int i=0; i<m_midiout->getPortCount(); i++) { // find port number according to the name
 		portName = QString::fromStdString(m_midiout->getPortName(i));
-		qDebug()<<i<< " " << portName;
+		//qDebug()<<i<< " " << portName;
 		if (name==portName) {
 			qDebug()<<"Found port for " << name << ": " << i;
 			port = i;

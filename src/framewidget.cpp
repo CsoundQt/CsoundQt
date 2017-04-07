@@ -31,7 +31,7 @@ FrameWidget::FrameWidget(QWidget* parent) : QFrame(parent)
 	m_resizeBox = new QFrame(this);
 	m_resizeBox->setAutoFillBackground(true);
     QPalette palette = QPalette((QColor(Qt::red)),(QColor(Qt::red)));
-    palette.setColor(QPalette::WindowText, QColor(Qt::red));
+	palette.setColor(QPalette::WindowText, QColor(Qt::red));
     m_resizeBox->setPalette(palette);
 	m_resizeBox->show();
 	m_resizeBox->setMinimumSize(2,2);
