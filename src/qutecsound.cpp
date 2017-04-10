@@ -1979,18 +1979,21 @@ void CsoundQt::setEditorFullScreen(bool full)
     if (full) {
         pre_fullscreen_state = this->saveState();
         QList<QDockWidget *> dockWidgets = findChildren<QDockWidget *>();
-        for(QDockWidget *dockWidget : dockWidgets) {
+		foreach (QDockWidget *dockWidget, dockWidgets) {
             dockWidget->hide();
         }
         this->showFullScreen();
     }
     else {
         this->restoreState(pre_fullscreen_state);
+		this->showNormal(); // to restore titlebar etc
     }
 }
 
+
 void CsoundQt::setHtmlFullScreen(bool full)
 {
+#ifdef QCS_HTML5
     if (full) {
         pre_fullscreen_state = this->saveState();
         this->csoundHtmlView->setFloating(true);
@@ -2000,6 +2003,7 @@ void CsoundQt::setHtmlFullScreen(bool full)
         this->restoreState(pre_fullscreen_state);
         this->showNormal();
     }
+#endif
 }
 
 void CsoundQt::setHelpFullScreen(bool full)
@@ -2436,15 +2440,15 @@ void CsoundQt::applySettings()
 		m_options->midiInterface = midiHandler->findMidiInPortByName(m_options->midiInterfaceName); // returns 9999 if not found
 
 		midiHandler->setMidiInterface(m_options->midiInterface); // closed port, if 9999
-		if (m_options->midiInterface==9999) {
+		if (m_options->midiInterface==9999 && !m_options->midiInterfaceName.contains("None")) {
 			qDebug()<<"Midi In interface "<< m_options->midiInterfaceName << " not found!";
 			interfaceNotFoundMessage = tr("Midi In interface ") + m_options->midiInterfaceName + tr(" not found!\n Switching to None.\n");
 		}
 
 		m_options->midiOutInterface = midiHandler->findMidiOutPortByName(m_options->midiOutInterfaceName);
 		midiHandler->setMidiOutInterface(m_options->midiOutInterface);
-		if (m_options->midiOutInterface == 9999) {
-			qDebug()<<"Midi Out interface "<< m_options->midiInterfaceName << " not found!";
+		if (m_options->midiOutInterface == 9999 && !m_options->midiOutInterfaceName.contains("None")) {
+			qDebug()<<"Midi Out interface "<< m_options->midiOutInterfaceName << " not found!";
 			interfaceNotFoundMessage += tr("Midi Out interface ") + m_options->midiOutInterfaceName + tr(" not found!\n Switching to None.");
 		}
 		//	if (!interfaceNotFoundMessage.isEmpty()) { // probably messagebox alwais is a bit too disturbing. Keep it quiet.
