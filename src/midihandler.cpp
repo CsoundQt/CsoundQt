@@ -93,6 +93,7 @@ void MidiHandler::setMidiInterface(int number)
 
 int MidiHandler::findMidiInPortByName(QString name) {
 	int port = 9999; // stands for None
+#ifdef QCS_RTMIDI
 	QString portName;
 	for (int i=0; i<m_midiin->getPortCount(); i++) { // find port number according to the name
 		portName = QString::fromStdString(m_midiin->getPortName(i));
@@ -103,11 +104,13 @@ int MidiHandler::findMidiInPortByName(QString name) {
 			break;
 		}
 	}
+#endif
 	return port;
 }
 
 int MidiHandler::findMidiOutPortByName(QString name) {
 	int port = 9999; // stands for None
+#ifdef QCS_RTMIDI
 	QString portName;
 	for (int i=0; i<m_midiout->getPortCount(); i++) { // find port number according to the name
 		portName = QString::fromStdString(m_midiout->getPortName(i));
@@ -118,6 +121,7 @@ int MidiHandler::findMidiOutPortByName(QString name) {
 			break;
 		}
 	}
+#endif
 	return port;
 }
 
