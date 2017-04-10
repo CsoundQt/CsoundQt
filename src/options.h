@@ -42,6 +42,7 @@ public:
 	float consoleFontPointSize;
 	QColor consoleFontColor;
 	QColor consoleBgColor;
+	QColor editorBgColor;
 	int tabWidth;
 	bool tabIndents;
 	bool colorVariables;

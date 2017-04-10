@@ -83,7 +83,7 @@ private slots:
 	void selectMidiOutput();
 	void selectTextColor();
 	void selectBgColor();
-
+	void selectEditorBgColor();
 	void clearTemplate();
 	void defaultTemplate();
 

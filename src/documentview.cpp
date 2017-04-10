@@ -1255,6 +1255,7 @@ void DocumentView::createContextMenu(QPoint pos)
 	}
 }
 
+
 void DocumentView::showOrc(bool show)
 {
 	// FIXME set m_viewmode

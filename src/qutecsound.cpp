@@ -2393,6 +2393,7 @@ void CsoundQt::configure()
     dialog.newParserCheckBox->setEnabled(csoundGetVersion() > 5125);
     dialog.multicoreCheckBox->setEnabled(csoundGetVersion() > 5125);
     dialog.numThreadsSpinBox->setEnabled(csoundGetVersion() > 5125);
+	connect(dialog.applyButton, SIGNAL(released()), this, SLOT(applySettings()));
     if (dialog.exec() == QDialog::Accepted) {
         applySettings();
     }
@@ -2457,9 +2458,6 @@ void CsoundQt::applySettings()
 		//	}
 	}
 
-	//midiHandler->setMidiInterface(m_options->midiInterface);
-	//midiHandler->setMidiOutInterface(m_options->midiOutInterface);
-
     fillFavoriteMenu();
     fillScriptsMenu();
     DocumentView *pad =  static_cast<LiveCodeEditor *>(
@@ -2497,7 +2495,8 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
                             (int) m_options->consoleFontPointSize));
     p->setConsoleColors(m_options->consoleFontColor,
                         m_options->consoleBgColor);
-    p->setScriptDirectory(m_options->pythonDir);
+	p->setEditorBgColor(m_options->editorBgColor);
+	p->setScriptDirectory(m_options->pythonDir);
     p->setPythonExecutable(m_options->pythonExecutable);
     p->useOldFormat(m_options->oldFormat);
     p->setConsoleBufferSize(m_options->consoleBufferSize);
@@ -4442,6 +4441,8 @@ void CsoundQt::readSettings()
 
     m_options->consoleFontColor = settings.value("consoleFontColor", QVariant(QColor(Qt::black))).value<QColor>();
     m_options->consoleBgColor = settings.value("consoleBgColor", QVariant(QColor(Qt::white))).value<QColor>();
+	m_options->editorBgColor = settings.value("editorBgColor", QVariant(QColor(Qt::white))).value<QColor>();
+
     m_options->tabWidth = settings.value("tabWidth", 40).toInt();
     m_options->tabIndents = settings.value("tabIndents", false).toBool();
     m_options->colorVariables = settings.value("colorvariables", true).toBool();
@@ -4625,6 +4626,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("consolefontsize", m_options->consoleFontPointSize);
         settings.setValue("consoleFontColor", QVariant(m_options->consoleFontColor));
         settings.setValue("consoleBgColor", QVariant(m_options->consoleBgColor));
+		settings.setValue("editorBgColor", QVariant(m_options->editorBgColor));
         settings.setValue("tabWidth", m_options->tabWidth );
         settings.setValue("tabIndents", m_options->tabIndents);
         settings.setValue("colorvariables", m_options->colorVariables);

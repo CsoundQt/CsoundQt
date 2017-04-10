@@ -880,6 +880,7 @@ DocumentView *DocumentPage::getView()
 void DocumentPage::setTextFont(QFont font)
 {
 	m_view->setFont(font);
+
 }
 
 void DocumentPage::setTabStopWidth(int tabWidth)
@@ -1008,6 +1009,11 @@ void DocumentPage::setConsoleFont(QFont font)
 void DocumentPage::setConsoleColors(QColor fontColor, QColor bgColor)
 {
 	m_console->setColors(fontColor, bgColor);
+}
+
+void DocumentPage::setEditorBgColor(QColor bgColor)
+{
+	m_view->setBackgroundColor(bgColor);
 }
 
 //DocumentView * DocumentPage::view()

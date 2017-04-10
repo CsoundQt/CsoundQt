@@ -159,6 +159,7 @@ public:
 	// Console properties
 	void setConsoleFont(QFont font);
 	void setConsoleColors(QColor fontColor, QColor bgColor);
+	void setEditorBgColor(QColor bgColor);
 	// Event Sheet Properties
 	void setScriptDirectory(QString dir);
 	void setDebugLiveEvents(bool debug);

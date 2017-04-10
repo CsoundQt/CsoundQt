@@ -295,30 +295,7 @@ void BaseView::setColorVariables(bool color)
 
 void BaseView::setBackgroundColor(QColor color)
 {
-	QPalette p = m_mainEditor->palette();
-	p.setColor(static_cast<QPalette::ColorRole>(9), color);
-	m_mainEditor->setPalette(p);
-	//  p = m_orcEditor->palette();
-	//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-	//  m_orcEditor->setPalette(p);
-	//  p = m_scoreEditor->palette();
-	//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-	//  m_scoreEditor->setPalette(p);
-	//  p = m_optionsEditor->palette();
-	//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-	//  m_optionsEditor->setPalette(p);
-	//  p = m_filebEditor->palette();
-	//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-	//  m_filebEditor->setPalette(p);
-	//  p = m_otherCsdEditor->palette();
-	//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-	//  m_otherCsdEditor->setPalette(p);
-	//  p = m_otherEditor->palette();
-	//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-	//  m_otherEditor->setPalette(p);
-	//  p = m_widgetEditor->palette();
-	//  p.setColor(static_cast<QPalette::ColorRole>(9), color);
-	//  m_widgetEditor->setPalette(p);
+	m_mainEditor->setStyleSheet("QTextEdit { background-color: "+color.name() + "}"); // before it was setPalette, but that does not work runtime.
 }
 
 void BaseView::setOrc(QString text)

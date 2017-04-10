@@ -123,13 +123,7 @@ void Console::setDefaultFont(QFont font)
 
 void Console::setColors(QColor textColor, QColor bgColor)
 {
-	setTextColor(textColor);
-	//       text->setTextBackgroundColor(bgColor);
-	QPalette p = palette();
-	p.setColor(QPalette::WindowText, textColor);
-	p.setColor(static_cast<QPalette::ColorRole>(9), bgColor);
-	setPalette(p);
-	setAutoFillBackground(true);
+	this->setStyleSheet(QString("QTextEdit { color: %1; background-color: %2 }").arg(textColor.name(), bgColor.name())); // before it was setPalette, but that does not work runtime.
 	m_textColor = textColor;
 	m_bgColor = bgColor;
 }

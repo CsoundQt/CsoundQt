@@ -37,6 +37,8 @@ Options::Options(ConfigLists *configlists) :
 	consoleFontPointSize = 10;
 	consoleFontColor = Qt::black;
 	consoleBgColor = Qt::white;
+	editorBgColor = Qt::white;
+
 	tabWidth = 8;
 	colorVariables = true;
 	autoPlay = true;
