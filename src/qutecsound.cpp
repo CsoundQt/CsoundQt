@@ -471,14 +471,7 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     m_closing = true;
     this->showNormal();  // Don't store full screen size in preferences
     qApp->processEvents();
-    QStringList files;
-    if (m_options->rememberFile) {
-        for (int i = 0; i < documentPages.size(); i++ ) {
-            files.append(documentPages[i]->getFileName());
-        }
-    }
-    int lastIndex = documentTabs->currentIndex();
-    writeSettings(files, lastIndex);
+	storeSettings();
 #ifdef USE_QT_GT_53
 	if (!m_virtualKeyboardPointer.isNull() && m_virtualKeyboard->isVisible()) {
 		showVirtualKeyboard(false);
@@ -1304,6 +1297,7 @@ bool CsoundQt::closeTab(bool forceCloseApp, int index)
     }
     deleteTab(index);
     changePage(curPage);
+	storeSettings();
     return true;
 }
 
@@ -2271,6 +2265,7 @@ void CsoundQt::resetPreferences()
                                      QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
     if (ret ==  QMessageBox::Ok) {
         m_resetPrefs = true;
+		storeSettings();
         QMessageBox::information(this, tr("Reset Preferences"),
                                  tr("Preferences have been reset.\nYou must restart CsoundQt."),
                                  QMessageBox::Ok, QMessageBox::Ok);
@@ -2471,6 +2466,7 @@ void CsoundQt::applySettings()
         m_options->newParser = -1; // Don't use new parser flags
     }
     setupEnvironment();
+	storeSettings(); // save always when something new is changed
 }
 
 void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
@@ -2756,6 +2752,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     parameterModeAct->setShortcut(tr("Shift+Alt+P"));
 	cabbageAct->setShortcut(tr("Shift+Ctrl+C"));
     //	showParametersAct->setShortcut(tr("Alt+P"));
+	storeSettings();
 }
 
 void CsoundQt::showNoPythonQtWarning()
@@ -4583,6 +4580,18 @@ void CsoundQt::readSettings()
 	}
 }
 
+void CsoundQt::storeSettings()
+{
+	QStringList files;
+	if (m_options->rememberFile) {
+		for (int i = 0; i < documentPages.size(); i++ ) {
+			files.append(documentPages[i]->getFileName());
+		}
+	}
+	int lastIndex = documentTabs->currentIndex();
+	writeSettings(files, lastIndex);
+}
+
 void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 {
     QSettings settings("csound", "qutecsound");
@@ -4837,7 +4846,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     if (index != -1) {
         documentTabs->setCurrentIndex(index);
         changePage(index);
-        return index;
+		return index;
     }
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly)) {
@@ -5038,6 +5047,7 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
     documentPages[curPage]->getEngine()->setMidiHandler(midiHandler);
 
     setCurrentOptionsForPage(documentPages[curPage]); // Redundant but does the trick of setting the font properly now that stylesheets are being used...
+	storeSettings();
     return true;
 }
 
