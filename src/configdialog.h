@@ -68,6 +68,7 @@ private slots:
 	void browseFavorite();
 	void browsePythonDir();
 	void browseCsoundExecutable();
+    void browsePythonExecutable();
 	void browseLogFile();
 	void browseSdkDir();
 	void browseTemplateDir();
