@@ -315,6 +315,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(Opcode6dir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
 
 	connect(csoundExecutableToolButton,SIGNAL(clicked()),this, SLOT(browseCsoundExecutable()));
+    connect(pythonExecutableToolButton,SIGNAL(clicked()),this, SLOT(browsePythonExecutable()));
+
 
 #ifndef QCS_PYTHONQT
 	pythonDirLineEdit->setEnabled(false);
@@ -543,6 +545,12 @@ void ConfigDialog::browseCsoundExecutable()
 {
 	browseFile(m_options->csoundExecutable);
 	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
+}
+
+void ConfigDialog::browsePythonExecutable()
+{
+    browseFile(m_options->pythonExecutable);
+    pythonExecutableLineEdit->setText(m_options->pythonExecutable);
 }
 
 //void ConfigDialog::browseDefaultCsd()

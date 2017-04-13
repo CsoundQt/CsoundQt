@@ -1297,7 +1297,7 @@ bool CsoundQt::closeTab(bool forceCloseApp, int index)
     }
     deleteTab(index);
     changePage(curPage);
-	storeSettings();
+    //storeSettings(); // do not store here, since all tabs are closed on exit
     return true;
 }
 
@@ -2466,7 +2466,14 @@ void CsoundQt::applySettings()
         m_options->newParser = -1; // Don't use new parser flags
     }
     setupEnvironment();
-	storeSettings(); // save always when something new is changed
+
+    //set editorBgColor also for inspector, codepad and python console. Maybe the latter should use the same color as console?
+    m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(m_options->editorBgColor.name()));
+    m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
+#ifdef QCS_PYTHONQT
+    m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
+#endif
+    storeSettings(); // save always when something new is changed
 }
 
 void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
