@@ -158,7 +158,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
 
     createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
-    readSettings();
+	createMenus();
+	createToolBars(); // TODO: take care that the position is stored when toolbars or panels are moved/resized. maybe.
+	createStatusBar();
+	readSettings();
 
 	bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state // was: isVisible() - in some reason reported always false
     showWidgetsAct->setChecked(false); // To avoid showing and reshowing panels during initial load
@@ -167,10 +170,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
     if (scratchPadVisible)
         m_scratchPad->hide();  // Hide until CsoundQt has finished loading
-
-    createMenus();
-    createToolBars();
-    createStatusBar();
 
     documentTabs = new QTabWidget (this);
     documentTabs->setTabsClosable(true);
@@ -4342,8 +4341,8 @@ void CsoundQt::createToolBars()
     //	toolWidget->show();
 
 
-    controlToolBar = addToolBar(tr("Control"));
-    controlToolBar->setObjectName("controlToolBar");
+	controlToolBar = addToolBar(tr("Control"));
+	controlToolBar->setObjectName("controlToolBar");
     controlToolBar->addAction(runAct);
     controlToolBar->addAction(pauseAct);
     controlToolBar->addAction(stopAct);
@@ -4352,7 +4351,7 @@ void CsoundQt::createToolBars()
     controlToolBar->addAction(renderAct);
     controlToolBar->addAction(externalEditorAct);
     controlToolBar->addAction(externalPlayerAct);
-    controlToolBar->addAction(configureAct);
+	controlToolBar->addAction(configureAct);
 
     configureToolBar = addToolBar(tr("Panels"));
     configureToolBar->setObjectName("panelToolBar");
@@ -4403,7 +4402,7 @@ void CsoundQt::readSettings()
     move(pos);
     if (settings.contains("dockstate")) {
         restoreState(settings.value("dockstate").toByteArray());
-    }
+	}
     lastUsedDir = settings.value("lastuseddir", "").toString();
     lastFileDir = settings.value("lastfiledir", "").toString();
     //  showLiveEventsAct->setChecked(settings.value("liveEventsActive", true).toBool());
@@ -4613,7 +4612,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.beginGroup("GUI");
     if (!m_resetPrefs) {
         settings.setValue("pos", pos());
-        settings.setValue("size", size());
+		settings.setValue("size", size());
         settings.setValue("dockstate", saveState());
         settings.setValue("lastuseddir", lastUsedDir);
         settings.setValue("lastfiledir", lastFileDir);
