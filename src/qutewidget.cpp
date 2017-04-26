@@ -30,6 +30,10 @@ QuteWidget::QuteWidget(QWidget *parent):
 	propertiesAct->setStatusTip(tr("Open widget properties"));
 	connect(propertiesAct, SIGNAL(triggered()), this, SLOT(openProperties()));
 
+	addChn_kAct = new QAction(tr("Add chn_k to csd"),this);
+	addChn_kAct->setStatusTip(tr("Add chn_k definitionto ;;channels section in editor"));
+	connect(addChn_kAct, SIGNAL(triggered()), this, SLOT(addChn_k()));
+
 	m_value = 0.0;
 	m_value2 = 0.0;
 	m_stringValue = "";
@@ -288,6 +292,11 @@ void QuteWidget::popUpMenu(QPoint pos)
 	menu.addAction(propertiesAct);
 	menu.addSeparator();
 
+	if (!m_channel.isEmpty() || !m_channel2.isEmpty()) {
+		menu.addAction(addChn_kAct);
+		menu.addSeparator();
+	}
+
 	QList<QAction *> actionList = getParentActionList();
 
 	for (int i = 0; i < actionList.size(); i++) {
@@ -330,6 +339,7 @@ void QuteWidget::popUpMenu(QPoint pos)
 		connect(act, SIGNAL(triggered()), layout, SLOT(loadPresetFromAction()));
 		presetMenu.addAction(act);
 	}
+
 	menu.exec(pos);
 }
 
@@ -362,6 +372,17 @@ void QuteWidget::deleteWidget()
 void QuteWidget::openMidiDialog()
 {
 	emit showMidiLearn(this);
+}
+
+void QuteWidget::addChn_k()
+{
+	//qDebug()<<Q_FUNC_INFO << m_channel << m_channel2;
+	if (!m_channel.isEmpty()) {
+		emit addChn_kSignal(m_channel);
+	}
+	if (!m_channel2.isEmpty()) {
+		emit addChn_kSignal(m_channel2);
+	}
 }
 
 void QuteWidget::createPropertiesDialog()

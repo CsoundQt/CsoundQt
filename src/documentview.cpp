@@ -1744,6 +1744,42 @@ void DocumentView::opcodeFromMenu()
 	}
 }
 
+void DocumentView::insertChn_k(QString channel)
+{
+	QTextCursor cursor;
+	cursor = m_mainEditor->textCursor();
+	m_mainEditor->moveCursor(QTextCursor::Start);
+	if (m_mainEditor->find(";;channels")) {
+		m_mainEditor->moveCursor(QTextCursor::NextBlock);
+	} else if (m_mainEditor->find("0dbfs")) { // if no ;;channels try to put under 0dbfs line in options
+		m_mainEditor->moveCursor(QTextCursor::NextBlock);
+		m_mainEditor->insertPlainText("\n;;channels\n");
+	} else if (m_mainEditor->find("instr ")) { // or before last instrument
+		m_mainEditor->moveCursor(QTextCursor::PreviousBlock);
+		m_mainEditor->insertPlainText("\n");
+		m_mainEditor->moveCursor(QTextCursor::PreviousBlock);
+		m_mainEditor->insertPlainText("\n;;channels\n");
+	} else { // or ask if current cursor position is OK
+		int response = QMessageBox::question(this, tr("Where to insert?"),tr("Could find section ;;channels\nIs it OK to insert ;;channels and chn_k declaration before in the current position?"));
+		if (response==QMessageBox::Yes) {
+			m_mainEditor->setTextCursor(cursor);
+			m_mainEditor->moveCursor(QTextCursor::StartOfLine);
+			m_mainEditor->insertPlainText("\n;;channels\n");
+		} else {
+			m_mainEditor->setTextCursor(cursor);
+			return;
+		}
+	}
+
+	if (getBasicText().contains("chn_k \""+channel)) {
+		QMessageBox::information(this, tr("chn_kdeclaration"),tr("This channel is already declared."));
+	} else {
+		m_mainEditor->insertPlainText(QString("chn_k \"%1\",3\n").arg(channel));
+	}
+
+	m_mainEditor->setTextCursor(cursor);
+}
+
 void DocumentView::contextMenuEvent(QContextMenuEvent *event)
 {
 	qDebug() << "DocumentView::contextMenuEvent";

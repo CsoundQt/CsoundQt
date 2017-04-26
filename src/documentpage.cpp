@@ -56,6 +56,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLis
 		connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)), this, SLOT(passSelectedWidget(QuteWidget*)));
 		connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)), this, SLOT(passUnselectedWidget(QuteWidget*)));
 		connect(wl,SIGNAL(showMidiLearn(QuteWidget*)),this, SLOT(showMidiLearn(QuteWidget*)));
+		connect(wl, SIGNAL(addChn_kSignal(QString)), m_view, SLOT(insertChn_k(QString)) );
 	}
 }
 
@@ -1656,6 +1657,7 @@ void DocumentPage::evaluatePython(QString code)
 {
 	emit evaluatePythonSignal(code);
 }
+
 
 void DocumentPage::setPanelLoopEnabled(LiveEventFrame *panel, bool enabled)
 {

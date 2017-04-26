@@ -944,6 +944,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
 	connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
 	connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
 	connect(widget, SIGNAL(showMidiLearn(QuteWidget *)), this, SIGNAL(showMidiLearn(QuteWidget *)));
+	connect(widget, SIGNAL(addChn_kSignal(QString)), this, SIGNAL(addChn_kSignal(QString)) );
 	m_widgets.append(widget);
 	//  qDebug() << "WidgetLayout::registerWidget " << m_widgets.size() << widget;
 	if (m_editMode) {

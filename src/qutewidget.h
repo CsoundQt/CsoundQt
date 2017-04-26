@@ -121,10 +121,14 @@ protected slots:
 private:
 
 	QAction *propertiesAct;
+	QAction *addChn_kAct;
 
 	QPushButton *applyButton;
 	QPushButton *cancelButton;
 	QPushButton *acceptButton;
+
+private slots:
+	void addChn_k(); // probably temporary -  later just forward a signal
 
 signals:
 	void newValue(QPair<QString,double> channelValue);
@@ -133,6 +137,7 @@ signals:
 	void deleteThisWidget(QuteWidget *thisWidget);
 	void propertiesAccepted();
 	void showMidiLearn(QuteWidget* widget);
+	void addChn_kSignal(QString channel);
 
 };
 
