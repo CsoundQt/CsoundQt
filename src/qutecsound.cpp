@@ -1081,6 +1081,14 @@ void CsoundQt::onReadyRead()
 	}
 }
 
+void CsoundQt::disableInternalRtMidi()
+{
+#ifdef QCS_RTMIDI
+	midiHandler->closeMidiInPort();
+	midiHandler->closeMidiOutPort();
+#endif
+}
+
 bool CsoundQt::saveAs()
 {
     QString fileName = getSaveFileName();
@@ -2388,6 +2396,7 @@ void CsoundQt::configure()
     dialog.multicoreCheckBox->setEnabled(csoundGetVersion() > 5125);
     dialog.numThreadsSpinBox->setEnabled(csoundGetVersion() > 5125);
 	connect(dialog.applyButton, SIGNAL(released()), this, SLOT(applySettings()));
+	connect(&dialog, SIGNAL(disableInternalRtMidi()), this, SLOT(disableInternalRtMidi()) );
     if (dialog.exec() == QDialog::Accepted) {
         applySettings();
     }

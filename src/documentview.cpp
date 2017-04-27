@@ -1649,7 +1649,7 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
 		QTextCharFormat errorFormat;
 		errorFormat.setBackground(QBrush(QColor(255, 182, 193)));
 		QTextCursor cur = m_mainEditor->textCursor();
-		cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor); // TODO: viimane line
+		cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
 		for(int i = 0; i < lines.size(); i++) {
 			int line = lines[i].first;
 			QString text = lines[i].second;

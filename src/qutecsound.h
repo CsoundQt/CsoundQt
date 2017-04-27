@@ -270,6 +270,7 @@ private slots:
 //	void showParametersInEditor();
 	void onNewConnection(); // when new client is connecting to localServer
 	void onReadyRead(); // when message comes in
+	void disableInternalRtMidi();
 #ifdef QCS_DEBUGGER
 	void runDebugger();
 	void stopDebugger();

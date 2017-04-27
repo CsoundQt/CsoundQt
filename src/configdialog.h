@@ -89,8 +89,10 @@ private slots:
 	void defaultTemplate();
 
 	void on_csoundMidiCheckBox_toggled(bool checked);
+	void checkRtMidiModule(QString module);
 
 signals:
+	void disableInternalRtMidi();
 	//    void changeFont();
 
 };

@@ -317,6 +317,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(csoundExecutableToolButton,SIGNAL(clicked()),this, SLOT(browseCsoundExecutable()));
     connect(pythonExecutableToolButton,SIGNAL(clicked()),this, SLOT(browsePythonExecutable()));
 
+	connect(RtMidiModuleComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(checkRtMidiModule(QString)) );
+
 
 #ifndef QCS_PYTHONQT
 	pythonDirLineEdit->setEnabled(false);
@@ -691,11 +693,16 @@ void ConfigDialog::selectMidiInput()
 
 	QMenu menu(this);
 
-	deviceList.insert("Disabled", "");
+	if (module == "jack") {
+		deviceList.insert("dummy","dummy"); // since getMidiInputDevices does not return jack clients yet and empty parametery may crash csound
+	} else {
+		deviceList.insert("Disabled", "");
+	}
 
 	if (module == "portmidi") {
 		deviceList.insert("all", "a");
 	}
+
 	QHashIterator<QString, QString> i(deviceList);
 	while (i.hasNext()) {
 		i.next();
@@ -711,13 +718,22 @@ void ConfigDialog::selectMidiInput()
 
 void ConfigDialog::selectMidiOutput()
 {
-	QList<QPair<QString, QString> > deviceList = m_configlists->getMidiOutputDevices(RtMidiModuleComboBox->currentText());
+	QString module = RtMidiModuleComboBox->currentText();
+	QList<QPair<QString, QString> > deviceList = m_configlists->getMidiOutputDevices(module);
 	QMenu menu(this);
 	QVector<QAction*> actions;
 
+
 	QPair<QString, QString> device;
-	device.first = "none";
-	device.second = "";
+
+	if (module == "jack") {
+		device.first = "dummy"; // since getMidiInputDevices does not return jack clients yet and empty parametery may crash csound
+		device.second = "dummy";
+	} else {
+		device.first = "none";
+		device.second = "";
+	}
+
 	deviceList.prepend(device);
 
 	for (int i = 0; i < deviceList.size(); i++) {
@@ -807,7 +823,16 @@ void ConfigDialog::defaultTemplate()
 void ConfigDialog::on_csoundMidiCheckBox_toggled(bool checked)
 {
 	if (checked) { // close internal rtmidi
-		qDebug()<<Q_FUNC_INFO<<" should close internal rtmidi now. Not implemented yet.";
-		// send signal to CsoundQt, there midiHandler-> interface to 9999
+		qDebug()<<Q_FUNC_INFO<<" closing internal rtmidi now.";
+		emit disableInternalRtMidi();
+	}
+}
+
+void ConfigDialog::checkRtMidiModule(QString module)
+{
+	if (module=="jack") {
+		qDebug()<<Q_FUNC_INFO<<"Setting dummy input and output for jack midi";
+		RtMidiInputLineEdit->setText("dummy");
+		RtMidiOutputLineEdit->setText("dummy");
 	}
 }
