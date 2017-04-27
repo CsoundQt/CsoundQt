@@ -20,6 +20,11 @@
 	02111-1307 USA
 */
 
+#include <qglobal.h>
+#if defined(QCS_PYTHONQT) && defined(Q_OS_MACOS)
+    #include <Python.h> // necessary for pythonqt build on OSX
+#endif
+
 #include "pythonconsole.h"
 #include "PythonQt.h"
 //#include "PythonQtGui.h"
