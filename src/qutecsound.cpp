@@ -54,6 +54,10 @@
 #include "documentview.h"
 #include "widgetlayout.h"
 
+#ifdef QCS_RTMIDI
+#include "RtMidi.h"
+#endif
+
 #ifdef Q_OS_WIN32
 static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.bat";
 #else
@@ -138,10 +142,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "boring").toString();
 
-    midiHandler = new MidiHandler(this);
-    m_midiLearn = new MidiLearnDialog(this);
-    m_midiLearn->setModal(false);
-    midiHandler->setMidiLearner(m_midiLearn);
+	// try to move later, after reading settings
+//	qDebug()<<"MIDI API in qutecsound: "<<m_options->rtMidiApi;
+//	midiHandler = new MidiHandler(m_options->rtMidiApi,  this); // are options set already here? I guess, not...
+//    m_midiLearn = new MidiLearnDialog(this);
+//    m_midiLearn->setModal(false);
+//    midiHandler->setMidiLearner(m_midiLearn);
 
 	m_server = new QLocalServer();
 	connect(m_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
@@ -162,6 +168,13 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	createToolBars(); // TODO: take care that the position is stored when toolbars or panels are moved/resized. maybe.
 	createStatusBar();
 	readSettings();
+
+	// this section was above before, check that it does not create problems... Later: find a way to recreate Midi Handler, if API jack/alsa or similar is changed
+	midiHandler = new MidiHandler(m_options->rtMidiApi,  this);
+	m_midiLearn = new MidiLearnDialog(this);
+	m_midiLearn->setModal(false);
+	midiHandler->setMidiLearner(m_midiLearn);
+
 
 	bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state // was: isVisible() - in some reason reported always false
     showWidgetsAct->setChecked(false); // To avoid showing and reshowing panels during initial load
@@ -4491,10 +4504,26 @@ void CsoundQt::readSettings()
 	m_options->midiInterfaceName = settings.value("midiInterfaceName", "None").toString();
 	m_options->midiOutInterface = settings.value("midiOutInterface", 9999).toInt();
 	m_options->midiOutInterfaceName = settings.value("midiOutInterfaceName", "None").toString();
-    m_options->noBuffer = settings.value("noBuffer", false).toBool();
+	m_options->noBuffer = settings.value("noBuffer", false).toBool();
     m_options->noPython = settings.value("noPython", false).toBool();
     m_options->noMessages = settings.value("noMessages", false).toBool();
     m_options->noEvents = settings.value("noEvents", false).toBool();
+
+
+	//experimental: enable setting internal RtMidi API in settings file. See RtMidi.h
+#ifdef QCS_RTMIDI
+	QString rtMidiApiString = settings.value("rtMidiApi","UNSPECIFIED").toString();
+	if (rtMidiApiString.toUpper()=="LINUX_ALSA" )
+		m_options->rtMidiApi = RtMidi::LINUX_ALSA;
+	else if (rtMidiApiString.toUpper()=="UNIX_JACK" )
+				m_options->rtMidiApi = RtMidi::UNIX_JACK;
+	else if (rtMidiApiString.toUpper()=="MACOSX_CORE" )
+				m_options->rtMidiApi = RtMidi::MACOSX_CORE;
+	else if (rtMidiApiString.toUpper()=="WINDOWS_MM" )
+		m_options->rtMidiApi = RtMidi::WINDOWS_MM;
+	else
+		m_options->rtMidiApi = RtMidi::UNSPECIFIED;
+#endif
 
     m_options->bufferSize = settings.value("bufferSize", 1024).toInt();
     m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();

@@ -20,12 +20,13 @@ static void midiInMessageCallback(double deltatime,
 #endif
 
 
-MidiHandler::MidiHandler(QObject *parent) :
+MidiHandler::MidiHandler(int api, QObject *parent) :
     QObject(parent)
 {
 #ifdef QCS_RTMIDI
-	m_midiin = new RtMidiIn(RtMidi::UNSPECIFIED, "CsoundQt"); //TODO: allow UNIX_JACK et al, if possible
-	m_midiout = new RtMidiOut(RtMidi::UNSPECIFIED, "CsoundQt"); //UNSPECIFIED
+	qDebug()<<"Using RtMidi API: " << api;
+	m_midiin = new RtMidiIn((RtMidi::Api) api, "CsoundQt"); //api - see RtMidi.h for types
+	m_midiout = new RtMidiOut((RtMidi::Api) api, "CsoundQt");
 	m_midiin->setCallback(&midiInMessageCallback, this);
 
 #endif

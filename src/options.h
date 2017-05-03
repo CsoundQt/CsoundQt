@@ -76,6 +76,7 @@ public:
 	QString midiInterfaceName;
 	int midiOutInterface;
 	QString midiOutInterfaceName;
+	int rtMidiApi; // "UNSPECIFIED" | "LINUX_ALSA" | "UNIX_JACK" | "MACOSX_CORE" | "WINDOWS_MM" see RtMidi.h
 	// Csound engine flags
 	bool noBuffer;
 	bool noPython;

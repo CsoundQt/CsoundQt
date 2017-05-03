@@ -12,7 +12,7 @@ class MidiHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit MidiHandler(QObject *parent = 0);
+	explicit MidiHandler(int api=0, QObject *parent = 0);
 	void setMidiInterface(int number);
 	void setMidiInterface(QString name);
 	int findMidiInPortByName(QString name);

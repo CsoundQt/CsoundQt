@@ -72,7 +72,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 #ifdef QCS_RTMIDI
 	try {
-		RtMidiIn midiin(RtMidi::UNSPECIFIED); // later: should be possible also with other APIs UNIX_JACK etc
+		RtMidiIn midiin((RtMidi::Api) m_options->rtMidiApi); // later: should be possible also with other APIs UNIX_JACK etc
 		for (int i = 0; i < (int) midiin.getPortCount(); i++) {
 			midiInterfaceComboBox->addItem(QString::fromStdString(midiin.getPortName(i)), QVariant(i));
 		}
@@ -87,7 +87,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		error.printMessage();
 	}
 	try {
-		RtMidiOut midiout(RtMidi::UNSPECIFIED);
+		RtMidiOut midiout((RtMidi::Api) m_options->rtMidiApi);
 		for (int i = 0; i < (int) midiout.getPortCount(); i++) {
 			midiOutInterfaceComboBox->addItem(QString::fromStdString(midiout.getPortName(i)), QVariant(i));
 		}
@@ -824,6 +824,7 @@ void ConfigDialog::on_csoundMidiCheckBox_toggled(bool checked)
 {
 	if (checked) { // close internal rtmidi
 		qDebug()<<Q_FUNC_INFO<<" closing internal rtmidi now.";
+
 		emit disableInternalRtMidi();
 	}
 }

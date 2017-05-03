@@ -68,6 +68,8 @@ Options::Options(ConfigLists *configlists) :
 	midiInterface = 0; // For internal CsoundQt MIDI control
 	midiOutInterface = 0; // For internal CsoundQt MIDI control
 
+	rtMidiApi = 0;
+
 	csdPath = "./"; //path of active csd needed for setting -o -i paths
 
 	menuDepth = 3;
