@@ -823,9 +823,13 @@ void ConfigDialog::defaultTemplate()
 void ConfigDialog::on_csoundMidiCheckBox_toggled(bool checked)
 {
 	if (checked) { // close internal rtmidi
+		midiInterfaceComboBox->setEnabled(false);
+		midiOutInterfaceComboBox->setEnabled(false);
 		qDebug()<<Q_FUNC_INFO<<" closing internal rtmidi now.";
-
 		emit disableInternalRtMidi();
+	} else {
+		midiInterfaceComboBox->setEnabled(true);
+		midiOutInterfaceComboBox->setEnabled(true);
 	}
 }
 

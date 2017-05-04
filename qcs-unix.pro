@@ -43,6 +43,12 @@ rtmidi {
 DEFINES += __LINUX_ALSASEQ__
 DEFINES += __LINUX_ALSA__
 LIBS += -lasound
+# check if jack is present
+exists(/usr/lib64/libjack.so) | exists(/usr/lib/libjack.so) | exists(/usr/local/lib/libjack.so)  { # maybe there is better way to test if library is presesnt
+	message("FOUND JACK")
+	DEFINES += __UNIX_JACK__
+	LIBS += -ljack
+	}
 }
 quteapp_f {
 message(Bundling QuteApp_f)

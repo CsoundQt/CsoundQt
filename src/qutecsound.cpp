@@ -2456,7 +2456,7 @@ void CsoundQt::applySettings()
 		QString interfaceNotFoundMessage; // find midi interface by name; if not found, set to None
 		m_options->midiInterface = midiHandler->findMidiInPortByName(m_options->midiInterfaceName); // returns 9999 if not found
 
-		midiHandler->setMidiInterface(m_options->midiInterface); // closed port, if 9999
+		midiHandler->setMidiInterface(m_options->midiInterface); // close port, if 9999
 		if (m_options->midiInterface==9999 && !m_options->midiInterfaceName.contains("None")) {
 			qDebug()<<"Midi In interface "<< m_options->midiInterfaceName << " not found!";
 			interfaceNotFoundMessage = tr("Midi In interface ") + m_options->midiInterfaceName + tr(" not found!\n Switching to None.\n");
