@@ -72,7 +72,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 	instFormat.setForeground(QColor("purple"));
 	instFormat.setFontWeight(QFont::Bold);
 	instPatterns << "instr" << "endin" << "opcode" << "endop";
-	headerPatterns << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs";
+    headerPatterns << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs" << "A4";
 	keywordPatterns << "do" << "od";
 	csdtagFormat.setForeground(QColor("brown"));
 	csdtagFormat.setFontWeight(QFont::Bold);
