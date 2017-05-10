@@ -24,6 +24,20 @@ To activate the new shortcuts, you must reset the shorcuts in Edit->Set Keyboard
 
 * In Confiiguration->Editor there is now an option to set editors background colour. The same colour is used also for Inspector, Scratchpad and Python Console panel. The font-color of editor cannot be changed (for now) due to fixed higlighting colors of different keywords.   The background color of Console panel can be set from Configure->General.
 
+* "Add chn_k declaration" in widgets' cotext menu - now it easy to add the chn_k lines for widget's channel to be used with chnget/chnset opcode.
+
+* Added support for jack midi
+
+* Experimental support for choosing midi module for internal RT-midi (Linux only): add line 
+
+
+		Run\rtMidiApi=UNIX_JACK
+
+or
+
+	Run\rtMidiApi=LINUX_ALSA
+
+to configuration file `($HOME/.config/csound/qutecsound.conf)`.
 
 ### Fixes
 
@@ -32,4 +46,14 @@ To activate the new shortcuts, you must reset the shorcuts in Edit->Set Keyboard
 * Fixed non-visible font color of widget channels on widget panel in editing mode.
 
 * Fixed bug of black console background color on OSX 10.12
+
+* Toolbar positions are saved and restored correctly
+
+* Support for building with PuthonQt3.1 (OSX)
+
+* Better switching between internal RT-midi and Csound midi modules.
+
+
+
+
 
