@@ -317,7 +317,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(csoundExecutableToolButton,SIGNAL(clicked()),this, SLOT(browseCsoundExecutable()));
     connect(pythonExecutableToolButton,SIGNAL(clicked()),this, SLOT(browsePythonExecutable()));
 
-	connect(RtMidiModuleComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(checkRtMidiModule(QString)) );
+	//connect(RtMidiModuleComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(checkRtMidiModule(QString)) );
 
 
 #ifndef QCS_PYTHONQT
@@ -694,7 +694,7 @@ void ConfigDialog::selectMidiInput()
 	QMenu menu(this);
 
 	if (module == "jack") {
-		deviceList.insert("dummy","dummy"); // since getMidiInputDevices does not return jack clients yet and empty parametery may crash csound
+		deviceList.insert("dummy","dummy"); // just to create client in jack
 	} else {
 		deviceList.insert("Disabled", "");
 	}
@@ -835,7 +835,7 @@ void ConfigDialog::on_csoundMidiCheckBox_toggled(bool checked)
 
 void ConfigDialog::checkRtMidiModule(QString module)
 {
-	if (module=="jack") {
+	if (module=="jack") { // && there is no lists; but now not connected. later: remove this function!
 		qDebug()<<Q_FUNC_INFO<<"Setting dummy input and output for jack midi";
 		RtMidiInputLineEdit->setText("dummy");
 		RtMidiOutputLineEdit->setText("dummy");
