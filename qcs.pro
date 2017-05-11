@@ -174,7 +174,7 @@ unix:!macx {
 	}
 	target.path = $$INSTALL_DIR/bin
 	target.commands = ln -sf $$TARGET $(INSTALL_ROOT)/$$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
-	target.files = $$DESTDIR/$$TARGET
+	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET
 
 
 	desktop.path=$$SHARE_DIR/applications
