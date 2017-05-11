@@ -1198,8 +1198,7 @@ uintptr_t WidgetLayout::getCurveById(uintptr_t id)
 void WidgetLayout::updateCurve(WINDAT *windat)
 {
 	//  qDebug() << "WidgetLayout::updateCurve(WINDAT *windat) " << windat->windid;
-	if (curveUpdateBufferCount < QCS_CURVE_BUFFER_SIZE) {
-		curveUpdateBufferCount++;
+	if (++curveUpdateBufferCount < QCS_CURVE_BUFFER_SIZE) {
 		curveUpdateBuffer[curveUpdateBufferCount] = *windat;
 	}
 }
