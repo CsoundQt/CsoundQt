@@ -159,6 +159,7 @@ public:
 	// Console properties
 	void setConsoleFont(QFont font);
 	void setConsoleColors(QColor fontColor, QColor bgColor);
+	void setEditorBgColor(QColor bgColor);
 	// Event Sheet Properties
 	void setScriptDirectory(QString dir);
 	void setDebugLiveEvents(bool debug);
@@ -216,7 +217,10 @@ public slots:
 	void newLiveEventPanel(QString text = QString());
 	LiveEventFrame * createLiveEventPanel(QString text = QString());
 	void deleteLiveEventPanel(LiveEventFrame *frame);
-	void showLiveEventPanels(bool visible);
+	void showLiveEventControl(bool visible);
+	void showLiveEventPanels();
+	void hideLiveEventPanels();
+
 	void stopAllSlot();
 	void newPanelSlot();
 	void playPanelSlot(int index);

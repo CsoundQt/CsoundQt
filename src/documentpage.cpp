@@ -56,6 +56,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLis
 		connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)), this, SLOT(passSelectedWidget(QuteWidget*)));
 		connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)), this, SLOT(passUnselectedWidget(QuteWidget*)));
 		connect(wl,SIGNAL(showMidiLearn(QuteWidget*)),this, SLOT(showMidiLearn(QuteWidget*)));
+		connect(wl, SIGNAL(addChn_kSignal(QString)), m_view, SLOT(insertChn_k(QString)) );
 	}
 }
 
@@ -711,7 +712,7 @@ void DocumentPage::updateCsLadspaText()
 void DocumentPage::updateCabbageText()
 {
 	if (widgetCount()==0) {
-		QMessageBox::warning(Q_NULLPTR, tr("No widgets"), tr("There are no widgets to convert!"));
+		QMessageBox::warning(NULL, tr("No widgets"), tr("There are no widgets to convert!"));
 		return;
 	}
 	QString text = "<Cabbage>\n";
@@ -880,6 +881,7 @@ DocumentView *DocumentPage::getView()
 void DocumentPage::setTextFont(QFont font)
 {
 	m_view->setFont(font);
+
 }
 
 void DocumentPage::setTabStopWidth(int tabWidth)
@@ -1010,6 +1012,11 @@ void DocumentPage::setConsoleColors(QColor fontColor, QColor bgColor)
 	m_console->setColors(fontColor, bgColor);
 }
 
+void DocumentPage::setEditorBgColor(QColor bgColor)
+{
+	m_view->setBackgroundColor(bgColor);
+}
+
 //DocumentView * DocumentPage::view()
 //{
 //  return m_view;
@@ -1062,27 +1069,40 @@ void DocumentPage::setPythonExecutable(QString pythonExec)
 	m_pythonExecutable = pythonExec;
 }
 
-void DocumentPage::showLiveEventPanels(bool visible)
+
+void DocumentPage::showLiveEventPanels()
 {
 	if (fileName.endsWith(".csd")) {
-		m_liveEventControl->setVisible(visible);
 		for (int i = 0; i < m_liveFrames.size(); i++) {
-			if (visible) {
-				//        qDebug() << "DocumentPage::showLiveEventPanels  " << visible << (int) this;
-				if (m_liveFrames[i]->isVisible())
+			//   qDebug() << "DocumentPage::showLiveEventPanels  " << visible << (int) this;
+			if (m_liveFrames[i]->isVisible())
+				m_liveFrames[i]->raise();
+			else {
+				if (m_liveFrames[i]->getVisibleEnabled()) {
+					m_liveFrames[i]->setWindowFlags(Qt::Window);
+					m_liveFrames[i]->show();
 					m_liveFrames[i]->raise();
-				else {
-					if (m_liveFrames[i]->getVisibleEnabled()) {
-						m_liveFrames[i]->setWindowFlags(Qt::Window);
-						m_liveFrames[i]->show();
-						m_liveFrames[i]->raise();
-					}
 				}
 			}
-			else {
-				m_liveFrames[i]->setWindowFlags(Qt::Widget);
-				m_liveFrames[i]->hide();
-			}
+		}
+	}
+
+}
+
+void DocumentPage::hideLiveEventPanels() {
+	if (fileName.endsWith(".csd")) {
+		for (int i = 0; i < m_liveFrames.size(); i++) {
+			m_liveFrames[i]->setWindowFlags(Qt::Widget); // don't hide
+			m_liveFrames[i]->hide();
+		}
+	}
+}
+
+void DocumentPage::showLiveEventControl(bool visible) {
+	if (fileName.endsWith(".csd")) {
+		m_liveEventControl->setVisible(visible);
+		if (visible) {
+			showLiveEventPanels();
 		}
 	}
 }
@@ -1217,6 +1237,7 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 	connect(m_liveEventControl, SIGNAL(setPanelTempoSignal(int,double)), this, SLOT(setPanelTempoSlot(int,double)));
 	connect(m_liveEventControl, SIGNAL(setPanelLoopLengthSignal(int,double)), this, SLOT(setPanelLoopLengthSlot(int,double)));
 	connect(m_liveEventControl, SIGNAL(setPanelLoopRangeSignal(int,double,double)), this, SLOT(setPanelLoopRangeSlot(int,double,double)));
+	connect(m_liveEventControl, SIGNAL(hidePanels()), this, SLOT(hideLiveEventPanels())  );
 
 	// Connect for clearing marked lines and letting inspector know text has changed
 	connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));
@@ -1570,6 +1591,7 @@ void DocumentPage::deleteLiveEventPanel(LiveEventFrame *frame)
 	}
 }
 
+
 void DocumentPage::textChanged()
 {
 	//  qDebug() << "DocumentPage::textChanged()";
@@ -1595,8 +1617,7 @@ void DocumentPage::textChanged()
 void DocumentPage::liveEventControlClosed()
 {
 	qDebug()<< "DocumentPage::liveEventControlClosed()";
-	showLiveEventPanels(false);
-	emit liveEventsVisible(false);
+	showLiveEventControl(false);
 }
 
 void DocumentPage::renamePanel(LiveEventFrame *panel,QString newName)
@@ -1636,6 +1657,7 @@ void DocumentPage::evaluatePython(QString code)
 {
 	emit evaluatePythonSignal(code);
 }
+
 
 void DocumentPage::setPanelLoopEnabled(LiveEventFrame *panel, bool enabled)
 {

@@ -356,7 +356,11 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QComboBox" name="midiInterfaceComboBox"/>
+               <widget class="QComboBox" name="midiInterfaceComboBox">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
               <item row="0" column="2">
                <spacer name="horizontalSpacer_8">
@@ -1397,6 +1401,20 @@
                   </item>
                  </widget>
                 </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_41">
+                  <property name="text">
+                   <string>Background Color</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QPushButton" name="editorBgColorButton">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
               <item row="0" column="3">
@@ -1782,6 +1800,13 @@
                   </property>
                  </widget>
                 </item>
+                <item row="11" column="3">
+                 <widget class="QToolButton" name="pythonExecutableToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
              </layout>
@@ -2054,6 +2079,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="applyButton">
+       <property name="text">
+        <string>Apply</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="cancelButton">
        <property name="text">
         <string>Cancel</string>
@@ -2098,7 +2130,6 @@
     </hint>
    </hints>
   </connection>
-  
   <connection>
    <sender>SsdirCheckBox</sender>
    <signal>toggled(bool)</signal>
@@ -2771,6 +2802,5 @@
     </hint>
    </hints>
   </connection>
-  
  </connections>
 </ui>

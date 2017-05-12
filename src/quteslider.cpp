@@ -67,7 +67,7 @@ void QuteSlider::setValue(double value)
 }
 
 void QuteSlider::setMidiValue(int value)
-{
+{ qDebug()<<Q_FUNC_INFO<<value;
 	double max = property("QCS_maximum").toDouble();
 	double min = property("QCS_minimum").toDouble();
 	double newval = min + ((value / 127.0)* (max - min));

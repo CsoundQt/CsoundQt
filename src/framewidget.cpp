@@ -31,13 +31,13 @@ FrameWidget::FrameWidget(QWidget* parent) : QFrame(parent)
 	m_resizeBox = new QFrame(this);
 	m_resizeBox->setAutoFillBackground(true);
     QPalette palette = QPalette((QColor(Qt::red)),(QColor(Qt::red)));
-    palette.setColor(QPalette::WindowText, QColor(Qt::red));
+	palette.setColor(QPalette::WindowText, QColor(Qt::red));
     m_resizeBox->setPalette(palette);
 	m_resizeBox->show();
 	m_resizeBox->setMinimumSize(2,2);
 	m_selected = false;
 	m_changed = false;
-	this->setStyleSheet(" QFrame, QLabel, QToolTip {border: 2px solid green;}");
+	this->setStyleSheet(" QFrame, QLabel, QToolTip {color: black; border: 2px solid green;}");
 }
 
 FrameWidget::~FrameWidget()
@@ -47,7 +47,7 @@ FrameWidget::~FrameWidget()
 void FrameWidget::select()
 {
 	m_selected = true;
-	this->setStyleSheet(" QFrame, QLabel, QToolTip {border: 4px solid green;}");
+	this->setStyleSheet(" QFrame, QLabel, QToolTip {color: black; border: 4px solid green;}");
 
 	emit widgetSelected(m_widget);
 }
@@ -55,7 +55,7 @@ void FrameWidget::select()
 void FrameWidget::deselect()
 {
 	m_selected = false;
-	this->setStyleSheet(" QFrame, QLabel, QToolTip {border: 2px solid green;}");
+	this->setStyleSheet(" QFrame, QLabel, QToolTip {color: black; border: 2px solid green;}");
 	emit widgetUnselected(m_widget);
 }
 

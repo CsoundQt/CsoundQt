@@ -944,6 +944,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
 	connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
 	connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
 	connect(widget, SIGNAL(showMidiLearn(QuteWidget *)), this, SIGNAL(showMidiLearn(QuteWidget *)));
+	connect(widget, SIGNAL(addChn_kSignal(QString)), this, SIGNAL(addChn_kSignal(QString)) );
 	m_widgets.append(widget);
 	//  qDebug() << "WidgetLayout::registerWidget " << m_widgets.size() << widget;
 	if (m_editMode) {
@@ -1197,7 +1198,7 @@ uintptr_t WidgetLayout::getCurveById(uintptr_t id)
 void WidgetLayout::updateCurve(WINDAT *windat)
 {
 	//  qDebug() << "WidgetLayout::updateCurve(WINDAT *windat) " << windat->windid;
-	if (curveUpdateBufferCount < QCS_CURVE_BUFFER_SIZE) {
+	if (curveUpdateBufferCount+1 < QCS_CURVE_BUFFER_SIZE) {
 		curveUpdateBufferCount++;
 		curveUpdateBuffer[curveUpdateBufferCount] = *windat;
 	}
@@ -3741,7 +3742,7 @@ void WidgetLayout::processNewValues()
 
 void WidgetLayout::queueEvent(QString eventLine)
 {
-	qDebug() << "WidgetLayout::queueEvent";
+	//qDebug() << "WidgetLayout::queueEvent";
 	emit queueEventSignal(eventLine);
 }
 

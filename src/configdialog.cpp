@@ -72,7 +72,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 #ifdef QCS_RTMIDI
 	try {
-		RtMidiIn midiin;
+		RtMidiIn midiin((RtMidi::Api) m_options->rtMidiApi); // later: should be possible also with other APIs UNIX_JACK etc
 		for (int i = 0; i < (int) midiin.getPortCount(); i++) {
 			midiInterfaceComboBox->addItem(QString::fromStdString(midiin.getPortName(i)), QVariant(i));
 		}
@@ -87,7 +87,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		error.printMessage();
 	}
 	try {
-		RtMidiOut midiout;
+		RtMidiOut midiout((RtMidi::Api) m_options->rtMidiApi);
 		for (int i = 0; i < (int) midiout.getPortCount(); i++) {
 			midiOutInterfaceComboBox->addItem(QString::fromStdString(midiout.getPortName(i)), QVariant(i));
 		}
@@ -105,11 +105,23 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 #endif
 
 	midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI In interface")), QVariant(9999));
-	int ifIndex = midiInterfaceComboBox->findData(QVariant(m_options->midiInterface));
-	midiInterfaceComboBox->setCurrentIndex(ifIndex);
-	midiOutInterfaceComboBox->addItem(QString(tr("None", "No MIDI Out interface")), QVariant(9999));
-	ifIndex = midiOutInterfaceComboBox->findData(QVariant(m_options->midiOutInterface));
-	midiOutInterfaceComboBox->setCurrentIndex(ifIndex);
+	//match interface by nameby name, not by index
+	int ifIndex = midiInterfaceComboBox->findText(m_options->midiInterfaceName);
+	if (ifIndex>=0) {
+		midiInterfaceComboBox->setCurrentIndex(ifIndex);
+	} else {
+		qDebug()<< m_options->midiInterfaceName << "not found. Setting Midi In to None";
+		midiInterfaceComboBox->setCurrentIndex(midiInterfaceComboBox->findData(9999)); // set to none if not found
+	}
+	midiOutInterfaceComboBox->addItem(QString(tr(" None", "No MIDI Out interface")), QVariant(9999));
+
+	ifIndex = midiOutInterfaceComboBox->findText(m_options->midiOutInterfaceName);
+	if (ifIndex>=0) {
+		midiOutInterfaceComboBox->setCurrentIndex(ifIndex);
+	} else {
+		qDebug()<< m_options->midiOutInterfaceName << " not found. Setting Midi Out to None";
+		midiOutInterfaceComboBox->setCurrentIndex(midiOutInterfaceComboBox->findData(9999));
+	}
 
 	themeComboBox->setCurrentIndex(themeComboBox->findText(m_options->theme));
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
@@ -128,6 +140,11 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	consoleBgColorPushButton->setIcon(pixmap);
 	palette = QPalette(m_options->consoleBgColor);
 	consoleBgColorPushButton->setPalette(palette);
+
+	pixmap.fill(m_options->editorBgColor);
+	editorBgColorButton->setIcon(pixmap);
+	palette = QPalette(m_options->editorBgColor);
+	editorBgColorButton->setPalette(palette);
 
 	tabWidthSpinBox->setValue(m_options->tabWidth);
 	tabIndentCheckBox->setChecked(m_options->tabIndents);
@@ -288,6 +305,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(midiOutputToolButton, SIGNAL(released()), this, SLOT(selectMidiOutput()));
 	connect(consoleFontColorPushButton, SIGNAL(released()), this, SLOT(selectTextColor()));
 	connect(consoleBgColorPushButton, SIGNAL(released()), this, SLOT(selectBgColor()));
+	connect(editorBgColorButton, SIGNAL(released()), this, SLOT(selectEditorBgColor()));
 
 	connect(clearTemplatePushButton,SIGNAL(released()), this, SLOT(clearTemplate()));
 	connect(defaultTemplatePushButton,SIGNAL(released()), this, SLOT(defaultTemplate()));
@@ -297,6 +315,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(Opcode6dir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
 
 	connect(csoundExecutableToolButton,SIGNAL(clicked()),this, SLOT(browseCsoundExecutable()));
+    connect(pythonExecutableToolButton,SIGNAL(clicked()),this, SLOT(browsePythonExecutable()));
+
+	//connect(RtMidiModuleComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(checkRtMidiModule(QString)) );
+
 
 #ifndef QCS_PYTHONQT
 	pythonDirLineEdit->setEnabled(false);
@@ -370,8 +392,10 @@ void ConfigDialog::accept()
 	m_options->keyRepeat = keyRepeatCheckBox->isChecked();
 	m_options->debugLiveEvents = debugLiveEventsCheckBox->isChecked();
 	m_options->consoleBufferSize = consoleBufferComboBox->itemText(consoleBufferComboBox->currentIndex()).toInt();
-	m_options->midiInterface = midiInterfaceComboBox->itemData(midiInterfaceComboBox->currentIndex()).toInt();
+	m_options->midiInterface = midiInterfaceComboBox->itemData(midiInterfaceComboBox->currentIndex()).toInt(); // actually not necessary to store thta any more but for any case...
+	m_options->midiInterfaceName = midiInterfaceComboBox->currentText();
 	m_options->midiOutInterface = midiOutInterfaceComboBox->itemData(midiOutInterfaceComboBox->currentIndex()).toInt();
+	m_options->midiOutInterfaceName = midiOutInterfaceComboBox->currentText();
 	m_options->noMessages = noMessagesCheckBox->isChecked();
 	m_options->noBuffer = noBufferCheckBox->isChecked();
 	m_options->noPython = noPythonCheckBox->isChecked();
@@ -525,6 +549,12 @@ void ConfigDialog::browseCsoundExecutable()
 	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
 }
 
+void ConfigDialog::browsePythonExecutable()
+{
+    browseFile(m_options->pythonExecutable);
+    pythonExecutableLineEdit->setText(m_options->pythonExecutable);
+}
+
 //void ConfigDialog::browseDefaultCsd()
 //{
 //  browseFile(m_options->defaultCsd);
@@ -663,11 +693,16 @@ void ConfigDialog::selectMidiInput()
 
 	QMenu menu(this);
 
-	deviceList.insert("Disabled", "");
+	if (module == "jack") {
+		deviceList.insert("dummy","dummy"); // just to create client in jack
+	} else {
+		deviceList.insert("Disabled", "");
+	}
 
 	if (module == "portmidi") {
 		deviceList.insert("all", "a");
 	}
+
 	QHashIterator<QString, QString> i(deviceList);
 	while (i.hasNext()) {
 		i.next();
@@ -683,13 +718,22 @@ void ConfigDialog::selectMidiInput()
 
 void ConfigDialog::selectMidiOutput()
 {
-	QList<QPair<QString, QString> > deviceList = m_configlists->getMidiOutputDevices(RtMidiModuleComboBox->currentText());
+	QString module = RtMidiModuleComboBox->currentText();
+	QList<QPair<QString, QString> > deviceList = m_configlists->getMidiOutputDevices(module);
 	QMenu menu(this);
 	QVector<QAction*> actions;
 
+
 	QPair<QString, QString> device;
-	device.first = "none";
-	device.second = "";
+
+	if (module == "jack") {
+		device.first = "dummy"; // since getMidiInputDevices does not return jack clients yet and empty parametery may crash csound
+		device.second = "dummy";
+	} else {
+		device.first = "none";
+		device.second = "";
+	}
+
 	deviceList.prepend(device);
 
 	for (int i = 0; i < deviceList.size(); i++) {
@@ -750,6 +794,21 @@ void ConfigDialog::selectBgColor()
 	}
 }
 
+
+void ConfigDialog::selectEditorBgColor()
+{
+	QColor color = QColorDialog::getColor(m_options->editorBgColor, this);
+	if (color.isValid()) {
+		m_options->editorBgColor = color;
+		QPixmap pixmap (64,64);
+		pixmap.fill(m_options->editorBgColor);
+		editorBgColorButton->setIcon(pixmap);
+		QPalette palette(m_options->editorBgColor);
+		editorBgColorButton->setPalette(palette);
+	}
+}
+
+
 void ConfigDialog::clearTemplate()
 {
 	templateTextEdit->clear();
@@ -759,4 +818,26 @@ void ConfigDialog::defaultTemplate()
 {
 	QString defaultText = QCS_DEFAULT_TEMPLATE;
 	templateTextEdit->setPlainText(defaultText );
+}
+
+void ConfigDialog::on_csoundMidiCheckBox_toggled(bool checked)
+{
+	if (checked) { // close internal rtmidi
+		midiInterfaceComboBox->setEnabled(false);
+		midiOutInterfaceComboBox->setEnabled(false);
+		qDebug()<<Q_FUNC_INFO<<" closing internal rtmidi now.";
+		emit disableInternalRtMidi();
+	} else {
+		midiInterfaceComboBox->setEnabled(true);
+		midiOutInterfaceComboBox->setEnabled(true);
+	}
+}
+
+void ConfigDialog::checkRtMidiModule(QString module)
+{
+	if (module=="jack") { // && there is no lists; but now not connected. later: remove this function!
+		qDebug()<<Q_FUNC_INFO<<"Setting dummy input and output for jack midi";
+		RtMidiInputLineEdit->setText("dummy");
+		RtMidiOutputLineEdit->setText("dummy");
+	}
 }
