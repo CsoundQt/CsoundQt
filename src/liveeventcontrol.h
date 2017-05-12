@@ -65,10 +65,11 @@ private slots:
 	void frameClosed(LiveEventFrame *e);
 	void cellChangedSlot(int row, int column);
 	void cellClickedSlot(int row, int column);
+	void on_closeAllButton_clicked();
 
 signals:
 	void closed();  // To inform DocumentPage that live event panel has been closed
-	//    void hidePanels(bool show);
+	void hidePanels();
 	void stopAll();
 	void newPanel();
 	void playPanel(int index);

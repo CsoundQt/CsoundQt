@@ -42,6 +42,7 @@ public:
 	float consoleFontPointSize;
 	QColor consoleFontColor;
 	QColor consoleBgColor;
+	QColor editorBgColor;
 	int tabWidth;
 	bool tabIndents;
 	bool colorVariables;
@@ -72,7 +73,10 @@ public:
 	bool debugLiveEvents;
 	int consoleBufferSize;
 	int midiInterface;
+	QString midiInterfaceName;
 	int midiOutInterface;
+	QString midiOutInterfaceName;
+	int rtMidiApi; // "UNSPECIFIED" | "LINUX_ALSA" | "UNIX_JACK" | "MACOSX_CORE" | "WINDOWS_MM" see RtMidi.h
 	// Csound engine flags
 	bool noBuffer;
 	bool noPython;

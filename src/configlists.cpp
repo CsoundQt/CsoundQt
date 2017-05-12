@@ -94,6 +94,9 @@ void ConfigLists::refreshModules()
 //			printf("MIDI Module %d:  %s (%s) \n", n, name, type);
 		}
 	}
+	if (rtAudioNames.contains("jack")) { // if jack audio is present, also jack midi can be used
+		rtMidiNames <<  "jack";
+	}
 	rtMidiNames << "virtual" << "none";
 #else
 #ifdef Q_OS_LINUX
@@ -112,13 +115,13 @@ void ConfigLists::refreshModules()
 	rtAudioNames << "haiku" << "none";
 #endif
 #ifdef Q_OS_LINUX
-	rtMidiNames << "none" << "alsa" << "alsaseq" << "portmidi" << "virtual";
+	rtMidiNames << "none" << "alsa" << "alsaseq" << "jack" << "portmidi" << "virtual";
 #endif
 #ifdef Q_OS_SOLARIS
 	rtMidiNames << "none" << "portmidi"<< "virtual";
 #endif
 #ifdef Q_OS_MAC
-	rtMidiNames << "none" << "coremidi" << "portmidi" << "virtual";
+	rtMidiNames << "none" << "coremidi" << "portmidi" << "jack" << "virtual";
 #endif
 #ifdef Q_OS_WIN32
 	rtMidiNames << "none" << "winmm" << "portmidi" << "virtual";
@@ -133,6 +136,10 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 	QHash<QString,QString> deviceList;
 #ifdef CSOUND6
 	CSOUND *cs = csoundCreate(NULL);
+	if (module=="jack") {
+		csoundSetOption(cs,"-+rtaudio=jack");
+		csoundSetOption(cs,"-+rtmidi=jack");
+	}
 	csoundSetMIDIModule(cs, module.toLatin1().data());
 	int i,newn, n = csoundGetMIDIDevList(cs,NULL,0);
 	CS_MIDIDEVICE *devs = (CS_MIDIDEVICE *) malloc(n*sizeof(CS_MIDIDEVICE));
@@ -142,9 +149,16 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 		return deviceList;
 	}
 	for (i = 0; i < n; i++) {
-//		qDebug() << devs[i].device_name;
-		QString displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
-		deviceList.insert(displayName, QString(devs[i].device_id));
+		qDebug() << "Device "<<i << devs[i].device_name;
+		QString displayName, id;
+		if (module=="jack") {
+			displayName = devs[i].device_name;
+			id = devs[i].device_name;
+		} else {
+			displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
+			id = QString(devs[i].device_id);
+		}
+		deviceList.insert(displayName, id);
 	}
 	free(devs);
     csoundDestroy(cs);
@@ -240,6 +254,7 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 		}
 	}
 #endif
+	qDebug()<<"Devices found: "<<deviceList;
 	return deviceList;
 }
 
@@ -248,6 +263,10 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(QString module
 	QList<QPair<QString, QString> > deviceList;
 #ifdef CSOUND6
 	CSOUND *cs = csoundCreate(NULL);
+	if (module=="jack") {
+		csoundSetOption(cs,"-+rtaudio=jack");
+		csoundSetOption(cs,"-+rtmidi=jack");
+	}
 	csoundSetMIDIModule(cs, module.toLatin1().data());
 	int i,newn, n = csoundGetMIDIDevList(cs,NULL,1);
 	CS_MIDIDEVICE *devs = (CS_MIDIDEVICE *) malloc(n*sizeof(CS_MIDIDEVICE));
@@ -258,8 +277,16 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(QString module
 	}
 	for (i = 0; i < n; i++) {
 //		qDebug() << devs[i].device_name;
-		QString displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
-		deviceList.append(QPair<QString,QString>(displayName, QString(devs[i].device_id)));
+		QString displayName, id;
+		if (module=="jack") {
+			displayName = devs[i].device_name;
+			id = devs[i].device_name;
+		} else {
+			displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
+			id = QString(devs[i].device_id);
+		}
+
+		deviceList.append(QPair<QString,QString>(displayName, id));
 	}
 	free(devs);
     csoundDestroy(cs);

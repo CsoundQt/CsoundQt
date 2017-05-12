@@ -28,7 +28,7 @@
 #include <QDebug>
 #include <csound.h>
 
-#define QCS_VERSION "0.9.3"
+#define QCS_VERSION "0.9.4"
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_DEFAULT_TIME 50
@@ -95,7 +95,7 @@
 #define DEFAULT_LOG_FILE ""
 #endif
 
-#define QCS_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 128\nnchnls = 2\n0dbfs = 1.0\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
+#define QCS_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n-odac -d\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 32\nnchnls = 2\n0dbfs = 1\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
 
 
 enum viewMode {

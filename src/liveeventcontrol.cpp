@@ -216,7 +216,7 @@ void LiveEventControl::openLoopRangeDialog(int row)
 void LiveEventControl::closeEvent(QCloseEvent * event)
 {
 	qDebug() << "LiveEventControl::closeEvent";
-	//  emit hidePanels(false);
+	this->hide();
 	emit closed();
 	event->accept();
 }
@@ -270,4 +270,9 @@ void LiveEventControl::frameClosed(LiveEventFrame *e)
 {
 
 	qDebug() << "LiveEventControl::frameClosed not implemented...";
+}
+
+void LiveEventControl::on_closeAllButton_clicked()
+{
+	emit hidePanels();
 }

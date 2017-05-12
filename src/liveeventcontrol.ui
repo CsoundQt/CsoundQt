@@ -14,7 +14,16 @@
    <string extracomment="(Live Event Controller)">LE Controller</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>5</number>
+   </property>
+   <property name="topMargin">
+    <number>5</number>
+   </property>
+   <property name="rightMargin">
+    <number>5</number>
+   </property>
+   <property name="bottomMargin">
     <number>5</number>
    </property>
    <item row="1" column="0">
@@ -139,6 +148,13 @@
       <widget class="QPushButton" name="newButton">
        <property name="text">
         <string>New</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="closeAllButton">
+       <property name="text">
+        <string>Close All</string>
        </property>
       </widget>
      </item>
