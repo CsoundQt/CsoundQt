@@ -1991,9 +1991,18 @@ void CsoundQt::setFullScreen(bool full)
 void CsoundQt::setEditorFullScreen(bool full)
 {
     if (full) {
+
+
+        /*if (this->helpPanel->isFullScreen()) {
+            setHelpFullScreen(false);
+        }
+        if (this->widgetPanel->isFullScreen()) {
+            setWidgetsFullScreen(false);
+        } */
+
         pre_fullscreen_state = this->saveState();
         QList<QDockWidget *> dockWidgets = findChildren<QDockWidget *>();
-		foreach (QDockWidget *dockWidget, dockWidgets) {
+        foreach (QDockWidget *dockWidget, dockWidgets) {
             dockWidget->hide();
         }
         this->showFullScreen();
@@ -2023,6 +2032,14 @@ void CsoundQt::setHtmlFullScreen(bool full)
 void CsoundQt::setHelpFullScreen(bool full)
 {
     if (full) {
+
+        /*if (this->widgetPanel->isFullScreen()) {
+           setWidgetsFullScreen(false);
+        }
+        if (this->isFullScreen()) {
+            this->setFullScreen(false);
+        } */
+
         pre_fullscreen_state = this->saveState();
         this->helpPanel->setFloating(true);
         this->helpPanel->showFullScreen();
@@ -2036,6 +2053,20 @@ void CsoundQt::setHelpFullScreen(bool full)
 void CsoundQt::setWidgetsFullScreen(bool full)
 {
     if (full) {
+        /*
+        if (this->helpPanel->isFullScreen()) {
+           setHelpFullScreen(false);
+        }
+        if (this->isFullScreen()) {
+            setFullScreen(false                         );
+        }
+#ifdef QCS_HTML5
+        if (this->csoundHtmlView->isFullScreen()) {
+            this->csoundHtmlView->showNormal();
+        }
+#endif
+*/
+
         pre_fullscreen_state = this->saveState();
         this->widgetPanel->setFloating(true);
         this->widgetPanel->showFullScreen();
@@ -4632,7 +4663,8 @@ void CsoundQt::storeSettings()
 			files.append(documentPages[i]->getFileName());
 		}
 	}
-	int lastIndex = documentTabs->currentIndex();
+
+    int lastIndex = (documentPages.size()==0) ? 0 : documentTabs->currentIndex(); // sometimes settings are stored in startup when there is no pages open
 	writeSettings(files, lastIndex);
 }
 
