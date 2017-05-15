@@ -41,6 +41,7 @@
 #include "midilearndialog.h"
 #include "livecodeeditor.h"
 #include "csoundhtmlview.h"
+#include <thread>
 
 #ifdef QCS_PYTHONQT
 #include "pythonconsole.h"
@@ -4877,7 +4878,7 @@ void CsoundQt::clearSettings()
 
 int CsoundQt::execute(QString executable, QString options)
 {
-    int ret;
+    int ret = 0;
 
 #ifdef Q_OS_MAC
     QString commandLine = "open -a \"" + executable + "\" " + options;
@@ -4892,8 +4893,11 @@ int CsoundQt::execute(QString executable, QString options)
     QString commandLine = "\"" + executable + "\" " + options;
 #endif
 #ifdef Q_OS_WIN32
-    QString commandLine = "\"" + executable + "\" " + (executable.startsWith("cmd")? " /k ": " ") + options;
-    ret = !QProcess::startDetached(commandLine) ? 1: 0;
+    QString commandLine = "\"" + executable + "\" " + (executable.startsWith("cmd")? " /k " : " ") + options;
+    auto command_line = commandLine.toUtf8();
+    qDebug() << "command_line: " << command_line;
+    std::thread system_thread([command_line]{std::system(command_line);});
+    system_thread.detach();
 #else
     qDebug() << "CsoundQt::execute   " << commandLine << documentPages[curPage]->getFilePath();
     QProcess *p = new QProcess(this);
