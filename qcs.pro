@@ -50,6 +50,11 @@ csound6 {
     message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now default.")
 }
 
+# Add C++11 support since version 0.9.4
+greaterThan(QT_MAJOR_VERSION, 4){
+CONFIG += c++11
+}
+
 !csound5 {
     DEFINES += CSOUND6
     CONFIG += csound6
