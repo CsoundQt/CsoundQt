@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
         QStringList fileNames;
         QApplication qapp(argc, argv);
 #ifdef Q_OS_OSX
-       if (strcmp(VERSION, "6.09")<0) { // this build does not work with older Csound on OSX
+       if (csoundGetVersion()<6090) { // this build does not work with older Csound on OSX
            qDebug()<<"Csound version too old: "<< VERSION;
            QMessageBox::warning(NULL, QObject::tr("Csound version mismatch"), QObject::tr("This version of CsoundQt requires Csound 6.09 or newer. Please download it from <br>") +"<a href=http://csound.github.io/download>http://csound.github.io/download</a>" );
            return(0);
