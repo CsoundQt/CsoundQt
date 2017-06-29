@@ -43,6 +43,11 @@
 #include "csoundhtmlview.h"
 #include <thread>
 
+#ifdef Q_OS_WIN
+#include <ole2.h> // for OleInitialize() FLTK bug workaround
+#endif
+
+
 #ifdef QCS_PYTHONQT
 #include "pythonconsole.h"
 #endif
@@ -99,6 +104,14 @@ CsoundQt::CsoundQt(QStringList fileNames)
     helpPanel->setObjectName("helpPanel");
     helpPanel->show();
     addDockWidget(Qt::RightDockWidgetArea, helpPanel);
+
+#ifdef Q_OS_WIN
+    // Call OleInitialize  to enable clipboard together with FLTK libraries
+    HRESULT result = OleInitialize(NULL);
+    if (result) {
+        qDebug()<<"Problem with OleInitialization" << result;
+    }
+#endif
 
     widgetPanel = new WidgetPanel(this);
     widgetPanel->setFocusPolicy(Qt::NoFocus);

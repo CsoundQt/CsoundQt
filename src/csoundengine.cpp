@@ -773,8 +773,8 @@ int CsoundEngine::runCsound()
 #ifdef Q_OS_WIN
 	// Call OleInitialize twice to keep the FLTK opcodes from reducing the COM
 	// reference count to zero.
-	OleInitialize(NULL);
-	OleInitialize(NULL);
+    // OleInitialize(NULL); // Do not initialize here but in CsoundQt onbject
+    // OleInitialize(NULL);
 #endif
 	eventQueueSize = 0; //Flush events gathered while idle
 	ud->audioOutputBuffer.allZero();
