@@ -12,9 +12,12 @@ class MidiHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit MidiHandler(QObject *parent = 0);
-    void setMidiInterface(int number);
-    void openMidiInPort(int port);
+	explicit MidiHandler(int api=0, QObject *parent = 0);
+	void setMidiInterface(int number);
+	void setMidiInterface(QString name);
+	int findMidiInPortByName(QString name);
+	int findMidiOutPortByName(QString name);
+	void openMidiInPort(int port);
     void setMidiOutInterface(int number);
     void openMidiOutPort(int port);
     void closeMidiInPort();
@@ -28,6 +31,7 @@ public:
 
     void passMidiMessage(std::vector< unsigned char > *message);
     void sendMidiOut(std::vector< unsigned char > *message);
+
 
 signals:
 

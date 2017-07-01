@@ -1,3 +1,4 @@
+
 RESOURCES += "src/application.qrc" \
     "src/pythonscripts.qrc" \
     "src/icons.qrc" \

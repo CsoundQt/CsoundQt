@@ -54,6 +54,10 @@
 #include "documentview.h"
 #include "widgetlayout.h"
 
+#ifdef QCS_RTMIDI
+#include "RtMidi.h"
+#endif
+
 #ifdef Q_OS_WIN32
 static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.bat";
 #else
@@ -131,10 +135,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "boring").toString();
 
-    midiHandler = new MidiHandler(this);
-    m_midiLearn = new MidiLearnDialog(this);
-    m_midiLearn->setModal(false);
-    midiHandler->setMidiLearner(m_midiLearn);
+	// try to move later, after reading settings
+//	qDebug()<<"MIDI API in qutecsound: "<<m_options->rtMidiApi;
+//	midiHandler = new MidiHandler(m_options->rtMidiApi,  this); // are options set already here? I guess, not...
+//    m_midiLearn = new MidiLearnDialog(this);
+//    m_midiLearn->setModal(false);
+//    midiHandler->setMidiLearner(m_midiLearn);
 
 	m_server = new QLocalServer();
 	connect(m_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
@@ -150,16 +156,23 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
 //TODO: #ifdef QCS_WEBKIT
     createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
-    readSettings();
+	createMenus();
+	createToolBars(); // TODO: take care that the position is stored when toolbars or panels are moved/resized. maybe.
+	createStatusBar();
+	readSettings();
+
+	// this section was above before, check that it does not create problems... Later: find a way to recreate Midi Handler, if API jack/alsa or similar is changed
+	midiHandler = new MidiHandler(m_options->rtMidiApi,  this);
+	m_midiLearn = new MidiLearnDialog(this);
+	m_midiLearn->setModal(false);
+	midiHandler->setMidiLearner(m_midiLearn);
+
 	bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state // was: isVisible() - in some reason reported always false
     showWidgetsAct->setChecked(false); // To avoid showing and reshowing panels during initial load
 	widgetPanel->hide();  // Hide until CsoundQt has finished loading
     bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
     if (scratchPadVisible)
         m_scratchPad->hide();  // Hide until CsoundQt has finished loading
-    createMenus();
-    createToolBars();
-    createStatusBar();
     documentTabs = new QTabWidget (this);
     documentTabs->setTabsClosable(true);
     connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
@@ -331,8 +344,9 @@ void CsoundQt::changePage(int index)
 #endif
         disconnect(showLiveEventsAct, 0,0,0);
         disconnect(documentPages[curPage], SIGNAL(stopSignal()),0,0);
-        documentPages[curPage]->showLiveEventPanels(false);
-        documentPages[curPage]->hideWidgets();
+		documentPages[curPage]->hideLiveEventPanels();
+		documentPages[curPage]->showLiveEventControl(false);
+		documentPages[curPage]->hideWidgets();
         if (!m_options->widgetsIndependent) {
             QRect panelGeometry = widgetPanel->geometry();
             if (!widgetPanel->isFloating()) {
@@ -348,8 +362,8 @@ void CsoundQt::changePage(int index)
     if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
         setCurrentFile(documentPages[curPage]->getFileName());
         connectActions();
-        documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
-        //    documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
+		documentPages[curPage]->showLiveEventControl(showLiveEventsAct->isChecked());
+		//    documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
         if (!m_options->widgetsIndependent) {
             WidgetLayout *w = documentPages[curPage]->getWidgetLayout();
             widgetPanel->addWidgetLayout(w);
@@ -443,14 +457,7 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     m_closing = true;
     this->showNormal();  // Don't store full screen size in preferences
     qApp->processEvents();
-    QStringList files;
-    if (m_options->rememberFile) {
-        for (int i = 0; i < documentPages.size(); i++ ) {
-            files.append(documentPages[i]->getFileName());
-        }
-    }
-    int lastIndex = documentTabs->currentIndex();
-    writeSettings(files, lastIndex);
+	storeSettings();
 #ifdef USE_QT_GT_53
 	if (!m_virtualKeyboardPointer.isNull() && m_virtualKeyboard->isVisible()) {
 		showVirtualKeyboard(false);
@@ -885,8 +892,9 @@ void CsoundQt::deleteTab(int index)
     disconnect(showLiveEventsAct, 0,0,0);
     DocumentPage *d = documentPages[index];
     d->stop();
-    d->showLiveEventPanels(false);
-    midiHandler->removeListener(d);
+	d->showLiveEventControl(false);
+	d->hideLiveEventPanels();
+	midiHandler->removeListener(d);
     if (!m_options->widgetsIndependent) {
         QRect panelGeometry = widgetPanel->geometry();
         if (!widgetPanel->isFloating()) {
@@ -1054,6 +1062,14 @@ void CsoundQt::onReadyRead()
 			}
 		}
 	}
+}
+
+void CsoundQt::disableInternalRtMidi()
+{
+#ifdef QCS_RTMIDI
+	midiHandler->closeMidiInPort();
+	midiHandler->closeMidiOutPort();
+#endif
 }
 
 bool CsoundQt::saveAs()
@@ -1271,6 +1287,7 @@ bool CsoundQt::closeTab(bool forceCloseApp, int index)
     }
     deleteTab(index);
     changePage(curPage);
+    //storeSettings(); // do not store here, since all tabs are closed on exit
     return true;
 }
 
@@ -1404,7 +1421,28 @@ void CsoundQt::updateCsladspaText()
 
 void CsoundQt::updateCabbageText()
 {
-    documentPages[curPage]->updateCabbageText();
+	documentPages[curPage]->updateCabbageText();
+	// check if necessary options for Cabbage
+	QString optionsText=documentPages[curPage]->getOptionsText().trimmed();
+	if (!(optionsText.contains("-d") && optionsText.contains("-n"))) {
+		int answer = QMessageBox::question(this, tr("Insert Cabbage options?"),
+							  tr("There seems to be no Cabbage specific options in <CsOptions>.\n Do you want to insert it?\nNB! Comment your old options out, if necessary!"), QMessageBox::Yes|QMessageBox::No );
+		if (answer==QMessageBox::Yes) {
+			if (!optionsText.simplified().isEmpty()) {
+				optionsText += "\n"; // add newline if there is some text
+			}
+			optionsText += "-n -d -+rtmidi=NULL -M0 --midi-key-cps=4 --midi-velocity-amp=5";
+			documentPages[curPage]->setOptionsText(optionsText);
+		}
+	}
+	QString scoreText = documentPages[curPage]->getSco();
+	if (scoreText.simplified().isEmpty()) {
+		int answer = QMessageBox::question(this, tr("Insert scorelines for Cabbage?"),
+										   tr("The score is empty. Cabbage needs some lines to work.\n Do you want to insert it?"), QMessageBox::Yes|QMessageBox::No );
+		if (answer==QMessageBox::Yes) {
+			documentPages[curPage]->setSco("f 0 3600\n;i 1 0 3600 ; don't forget to start your instrument if you are using it as an effect!");
+		}
+	}
 }
 
 void CsoundQt::setCurrentAudioFile(const QString fileName)
@@ -1577,8 +1615,8 @@ void CsoundQt::play(bool realtime, int index)
                     showWidgetsAct->setChecked(true);
                 }
                 widgetPanel->setFocus(Qt::OtherFocusReason);
-                documentPages[curPage]->showLiveEventPanels(showLiveEventsAct->isChecked());
-                documentPages[curPage]->focusWidgets();
+				documentPages[curPage]->showLiveEventControl(showLiveEventsAct->isChecked());
+				documentPages[curPage]->focusWidgets();
             }
         }
     }
@@ -1925,21 +1963,30 @@ void CsoundQt::setFullScreen(bool full)
 void CsoundQt::setEditorFullScreen(bool full)
 {
     if (full) {
+        /*if (this->helpPanel->isFullScreen()) {
+            setHelpFullScreen(false);
+        }
+        if (this->widgetPanel->isFullScreen()) {
+            setWidgetsFullScreen(false);
+        } */
+
         pre_fullscreen_state = this->saveState();
         QList<QDockWidget *> dockWidgets = findChildren<QDockWidget *>();
-        for(QDockWidget *dockWidget : dockWidgets) {
+        foreach (QDockWidget *dockWidget, dockWidgets) {
             dockWidget->hide();
         }
         this->showFullScreen();
     }
     else {
         this->restoreState(pre_fullscreen_state);
+		this->showNormal(); // to restore titlebar etc
     }
 }
 
-#if defined(QCS_QTHTML)
+
 void CsoundQt::setHtmlFullScreen(bool full)
 {
+#ifdef QCS_QTHTML
     if (full) {
         pre_fullscreen_state = this->saveState();
         this->csoundHtmlView->setFloating(true);
@@ -1949,12 +1996,18 @@ void CsoundQt::setHtmlFullScreen(bool full)
         this->restoreState(pre_fullscreen_state);
         this->showNormal();
     }
-}
 #endif
+}
 
 void CsoundQt::setHelpFullScreen(bool full)
 {
     if (full) {
+        /*if (this->widgetPanel->isFullScreen()) {
+           setWidgetsFullScreen(false);
+        }
+        if (this->isFullScreen()) {
+            this->setFullScreen(false);
+        } */
         pre_fullscreen_state = this->saveState();
         this->helpPanel->setFloating(true);
         this->helpPanel->showFullScreen();
@@ -1968,6 +2021,19 @@ void CsoundQt::setHelpFullScreen(bool full)
 void CsoundQt::setWidgetsFullScreen(bool full)
 {
     if (full) {
+        /*
+        if (this->helpPanel->isFullScreen()) {
+           setHelpFullScreen(false);
+        }
+        if (this->isFullScreen()) {
+            setFullScreen(false                         );
+        }
+#ifdef QCS_QTHTML
+        if (this->csoundHtmlView->isFullScreen()) {
+            this->csoundHtmlView->showNormal();
+        }
+#endif
+*/
         pre_fullscreen_state = this->saveState();
         this->widgetPanel->setFloating(true);
         this->widgetPanel->showFullScreen();
@@ -2221,6 +2287,7 @@ void CsoundQt::resetPreferences()
                                      QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
     if (ret ==  QMessageBox::Ok) {
         m_resetPrefs = true;
+		storeSettings();
         QMessageBox::information(this, tr("Reset Preferences"),
                                  tr("Preferences have been reset.\nYou must restart CsoundQt."),
                                  QMessageBox::Ok, QMessageBox::Ok);
@@ -2350,6 +2417,8 @@ void CsoundQt::configure()
     dialog.newParserCheckBox->setEnabled(csoundGetVersion() > 5125);
     dialog.multicoreCheckBox->setEnabled(csoundGetVersion() > 5125);
     dialog.numThreadsSpinBox->setEnabled(csoundGetVersion() > 5125);
+	connect(dialog.applyButton, SIGNAL(released()), this, SLOT(applySettings()));
+	connect(&dialog, SIGNAL(disableInternalRtMidi()), this, SLOT(disableInternalRtMidi()) );
     if (dialog.exec() == QDialog::Accepted) {
         applySettings();
     }
@@ -2391,8 +2460,28 @@ void CsoundQt::applySettings()
     renderOptions += currentOptions;
     runAct->setStatusTip(tr("Play") + playOptions);
     renderAct->setStatusTip(tr("Render to file") + renderOptions);
-    midiHandler->setMidiInterface(m_options->midiInterface);
-    midiHandler->setMidiOutInterface(m_options->midiOutInterface);
+
+	if (! m_options->useCsoundMidi) {
+		QString interfaceNotFoundMessage; // find midi interface by name; if not found, set to None
+		m_options->midiInterface = midiHandler->findMidiInPortByName(m_options->midiInterfaceName); // returns 9999 if not found
+
+		midiHandler->setMidiInterface(m_options->midiInterface); // close port, if 9999
+		if (m_options->midiInterface==9999 && !m_options->midiInterfaceName.contains("None")) {
+			qDebug()<<"Midi In interface "<< m_options->midiInterfaceName << " not found!";
+			interfaceNotFoundMessage = tr("Midi In interface ") + m_options->midiInterfaceName + tr(" not found!\n Switching to None.\n");
+		}
+
+		m_options->midiOutInterface = midiHandler->findMidiOutPortByName(m_options->midiOutInterfaceName);
+		midiHandler->setMidiOutInterface(m_options->midiOutInterface);
+		if (m_options->midiOutInterface == 9999 && !m_options->midiOutInterfaceName.contains("None")) {
+			qDebug()<<"Midi Out interface "<< m_options->midiOutInterfaceName << " not found!";
+			interfaceNotFoundMessage += tr("Midi Out interface ") + m_options->midiOutInterfaceName + tr(" not found!\n Switching to None.");
+		}
+		//	if (!interfaceNotFoundMessage.isEmpty()) { // probably messagebox alwais is a bit too disturbing. Keep it quiet.
+		//		QMessageBox::warning(this, tr("MIDI interface not found"),
+		//							 interfaceNotFoundMessage);
+		//	}
+	}
 
     fillFavoriteMenu();
     fillScriptsMenu();
@@ -2407,6 +2496,14 @@ void CsoundQt::applySettings()
         m_options->newParser = -1; // Don't use new parser flags
     }
     setupEnvironment();
+
+    //set editorBgColor also for inspector, codepad and python console. Maybe the latter should use the same color as console?
+    m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(m_options->editorBgColor.name()));
+    m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
+#ifdef QCS_PYTHONQT
+    m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
+#endif
+    storeSettings(); // save always when something new is changed
 }
 
 void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
@@ -2431,7 +2528,8 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
                             (int) m_options->consoleFontPointSize));
     p->setConsoleColors(m_options->consoleFontColor,
                         m_options->consoleBgColor);
-    p->setScriptDirectory(m_options->pythonDir);
+	p->setEditorBgColor(m_options->editorBgColor);
+	p->setScriptDirectory(m_options->pythonDir);
     p->setPythonExecutable(m_options->pythonExecutable);
     p->useOldFormat(m_options->oldFormat);
     p->setConsoleBufferSize(m_options->consoleBufferSize);
@@ -2644,7 +2742,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #endif
 
     viewEditorFullScreenAct->setShortcut(tr("Alt+Ctrl+0"));
-#if defined(QCS_QTHTML)
+#ifdef QCS_QTHTML
     viewHtmlFullScreenAct->setShortcut(tr("Alt+Ctrl+H"));
 #endif
     viewHelpFullScreenAct->setShortcut(tr("Alt+Ctrl+1"));
@@ -2660,8 +2758,9 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showInspectorAct->setShortcut(tr("Alt+5"));
     showLiveEventsAct->setShortcut(tr("Alt+6"));
 
-#if defined(QCS_QTHTML)
-    showHtml5Act->setShortcut(tr("Alt+H"));
+
+#ifdef QCS_QTHTML
+	showHtml5Act->setShortcut(tr("Alt+H"));
 #endif
 	openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Alt+9"));
@@ -2692,6 +2791,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     parameterModeAct->setShortcut(tr("Shift+Alt+P"));
 	cabbageAct->setShortcut(tr("Shift+Ctrl+C"));
     //	showParametersAct->setShortcut(tr("Alt+P"));
+	storeSettings();
 }
 
 void CsoundQt::showNoPythonQtWarning()
@@ -3169,10 +3269,10 @@ void CsoundQt::createActions()
     connect(showConsoleAct, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
     connect(m_console, SIGNAL(Close(bool)), showConsoleAct, SLOT(setChecked(bool)));
 
-    viewFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View Full Screen"), this);
+    viewFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View Fullscreen"), this);
     viewFullScreenAct->setCheckable(true);
     viewFullScreenAct->setChecked(false);
-    viewFullScreenAct->setStatusTip(tr("Have CsoundQt occupy all the available screen space"));
+    viewFullScreenAct->setStatusTip(tr("Have CsoundQt occupy all available screen space"));
     viewFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(viewFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setFullScreen(bool)));
 
@@ -3182,7 +3282,8 @@ void CsoundQt::createActions()
     viewEditorFullScreenAct->setStatusTip(tr("Have the editor occupy all available screen space"));
     viewEditorFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(viewEditorFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setEditorFullScreen(bool)));
-#if defined(QCS_QTHTML)
+
+#ifdef QCS_QTHTML
     viewHtmlFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View HTML Fullscreen"), this);
     viewHtmlFullScreenAct->setCheckable(true);
     viewHtmlFullScreenAct->setChecked(false);
@@ -3580,7 +3681,7 @@ void CsoundQt::connectActions()
     connect(m_inspector, SIGNAL(Close(bool)), showInspectorAct, SLOT(setChecked(bool)));
 
     disconnect(showLiveEventsAct, 0,0,0);
-    connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventPanels(bool)));
+	connect(showLiveEventsAct, SIGNAL(toggled(bool)), doc, SLOT(showLiveEventControl(bool)));
     disconnect(doc, 0,0,0);
     connect(doc, SIGNAL(liveEventsVisible(bool)), showLiveEventsAct, SLOT(setChecked(bool)));
     connect(doc, SIGNAL(stopSignal()), this, SLOT(markStopped()));
@@ -3746,8 +3847,7 @@ void CsoundQt::createMenus()
 	viewMenu->addAction(showTableEditorAct);
 #endif
     viewMenu->addSeparator();
-    viewMenu->addAction(viewFullScreenAct);
-
+	viewMenu->addAction(viewFullScreenAct);
     viewMenu->addAction(viewEditorFullScreenAct);
 #if defined(QCS_QTHTML)
     viewMenu->addAction(viewHtmlFullScreenAct);
@@ -4282,8 +4382,8 @@ void CsoundQt::createToolBars()
     //	toolWidget->show();
 
 
-    controlToolBar = addToolBar(tr("Control"));
-    controlToolBar->setObjectName("controlToolBar");
+	controlToolBar = addToolBar(tr("Control"));
+	controlToolBar->setObjectName("controlToolBar");
     controlToolBar->addAction(runAct);
     controlToolBar->addAction(pauseAct);
     controlToolBar->addAction(stopAct);
@@ -4292,7 +4392,7 @@ void CsoundQt::createToolBars()
     controlToolBar->addAction(renderAct);
     controlToolBar->addAction(externalEditorAct);
     controlToolBar->addAction(externalPlayerAct);
-    controlToolBar->addAction(configureAct);
+	controlToolBar->addAction(configureAct);
 
     configureToolBar = addToolBar(tr("Panels"));
     configureToolBar->setObjectName("panelToolBar");
@@ -4343,7 +4443,7 @@ void CsoundQt::readSettings()
     move(pos);
     if (settings.contains("dockstate")) {
         restoreState(settings.value("dockstate").toByteArray());
-    }
+	}
     lastUsedDir = settings.value("lastuseddir", "").toString();
     lastFileDir = settings.value("lastfiledir", "").toString();
     //  showLiveEventsAct->setChecked(settings.value("liveEventsActive", true).toBool());
@@ -4385,6 +4485,8 @@ void CsoundQt::readSettings()
 
     m_options->consoleFontColor = settings.value("consoleFontColor", QVariant(QColor(Qt::black))).value<QColor>();
     m_options->consoleBgColor = settings.value("consoleBgColor", QVariant(QColor(Qt::white))).value<QColor>();
+	m_options->editorBgColor = settings.value("editorBgColor", QVariant(QColor(Qt::white))).value<QColor>();
+
     m_options->tabWidth = settings.value("tabWidth", 40).toInt();
     m_options->tabIndents = settings.value("tabIndents", false).toBool();
     m_options->colorVariables = settings.value("colorvariables", true).toBool();
@@ -4418,11 +4520,29 @@ void CsoundQt::readSettings()
     m_options->debugLiveEvents = settings.value("debugLiveEvents", false).toBool();
     m_options->consoleBufferSize = settings.value("consoleBufferSize", 1024).toInt();
     m_options->midiInterface = settings.value("midiInterface", 9999).toInt();
-    m_options->midiOutInterface = settings.value("midiOutInterface", 9999).toInt();
-    m_options->noBuffer = settings.value("noBuffer", false).toBool();
+	m_options->midiInterfaceName = settings.value("midiInterfaceName", "None").toString();
+	m_options->midiOutInterface = settings.value("midiOutInterface", 9999).toInt();
+	m_options->midiOutInterfaceName = settings.value("midiOutInterfaceName", "None").toString();
+	m_options->noBuffer = settings.value("noBuffer", false).toBool();
     m_options->noPython = settings.value("noPython", false).toBool();
     m_options->noMessages = settings.value("noMessages", false).toBool();
     m_options->noEvents = settings.value("noEvents", false).toBool();
+
+
+	//experimental: enable setting internal RtMidi API in settings file. See RtMidi.h
+#ifdef QCS_RTMIDI
+	QString rtMidiApiString = settings.value("rtMidiApi","UNSPECIFIED").toString();
+	if (rtMidiApiString.toUpper()=="LINUX_ALSA" )
+		m_options->rtMidiApi = RtMidi::LINUX_ALSA;
+	else if (rtMidiApiString.toUpper()=="UNIX_JACK" )
+				m_options->rtMidiApi = RtMidi::UNIX_JACK;
+	else if (rtMidiApiString.toUpper()=="MACOSX_CORE" )
+				m_options->rtMidiApi = RtMidi::MACOSX_CORE;
+	else if (rtMidiApiString.toUpper()=="WINDOWS_MM" )
+		m_options->rtMidiApi = RtMidi::WINDOWS_MM;
+	else
+		m_options->rtMidiApi = RtMidi::UNSPECIFIED;
+#endif
 
     m_options->bufferSize = settings.value("bufferSize", 1024).toInt();
     m_options->bufferSizeActive = settings.value("bufferSizeActive", false).toBool();
@@ -4523,6 +4643,19 @@ void CsoundQt::readSettings()
 	}
 }
 
+void CsoundQt::storeSettings()
+{
+	QStringList files;
+	if (m_options->rememberFile) {
+		for (int i = 0; i < documentPages.size(); i++ ) {
+			files.append(documentPages[i]->getFileName());
+		}
+	}
+
+    int lastIndex = (documentPages.size()==0) ? 0 : documentTabs->currentIndex(); // sometimes settings are stored in startup when there is no pages open
+	writeSettings(files, lastIndex);
+}
+
 void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 {
     QSettings settings("csound", "qutecsound");
@@ -4537,7 +4670,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.beginGroup("GUI");
     if (!m_resetPrefs) {
         settings.setValue("pos", pos());
-        settings.setValue("size", size());
+		settings.setValue("size", size());
         settings.setValue("dockstate", saveState());
         settings.setValue("lastuseddir", lastUsedDir);
         settings.setValue("lastfiledir", lastFileDir);
@@ -4566,6 +4699,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("consolefontsize", m_options->consoleFontPointSize);
         settings.setValue("consoleFontColor", QVariant(m_options->consoleFontColor));
         settings.setValue("consoleBgColor", QVariant(m_options->consoleBgColor));
+		settings.setValue("editorBgColor", QVariant(m_options->editorBgColor));
         settings.setValue("tabWidth", m_options->tabWidth );
         settings.setValue("tabIndents", m_options->tabIndents);
         settings.setValue("colorvariables", m_options->colorVariables);
@@ -4604,8 +4738,10 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
         settings.setValue("consoleBufferSize", m_options->consoleBufferSize);
         settings.setValue("midiInterface", m_options->midiInterface);
+		settings.setValue("midiInterfaceName", m_options->midiInterfaceName);
         settings.setValue("midiOutInterface", m_options->midiOutInterface);
-        settings.setValue("noBuffer", m_options->noBuffer);
+		settings.setValue("midiOutInterfaceName", m_options->midiOutInterfaceName);
+		settings.setValue("noBuffer", m_options->noBuffer);
         settings.setValue("noPython", m_options->noPython);
         settings.setValue("noMessages", m_options->noMessages);
         settings.setValue("noEvents", m_options->noEvents);
@@ -4774,7 +4910,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     if (index != -1) {
         documentTabs->setCurrentIndex(index);
         changePage(index);
-        return index;
+		return index;
     }
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly)) {
@@ -4933,7 +5069,7 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
     }
     documentPages.insert(insertPoint, newPage);
     //  documentPages[curPage]->setOpcodeNameList(m_opcodeTree->opcodeNameList());
-    documentPages[curPage]->showLiveEventPanels(false);
+	documentPages[curPage]->showLiveEventControl(false);
     setCurrentOptionsForPage(documentPages[curPage]);
 
     documentPages[curPage]->setFileName(fileName);  // Must set before sending text to set highlighting mode
@@ -4975,6 +5111,7 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
     documentPages[curPage]->getEngine()->setMidiHandler(midiHandler);
 
     setCurrentOptionsForPage(documentPages[curPage]); // Redundant but does the trick of setting the font properly now that stylesheets are being used...
+	storeSettings();
     return true;
 }
 

@@ -68,6 +68,7 @@ private slots:
 	void browseFavorite();
 	void browsePythonDir();
 	void browseCsoundExecutable();
+    void browsePythonExecutable();
 	void browseLogFile();
 	void browseSdkDir();
 	void browseTemplateDir();
@@ -83,11 +84,15 @@ private slots:
 	void selectMidiOutput();
 	void selectTextColor();
 	void selectBgColor();
-
+	void selectEditorBgColor();
 	void clearTemplate();
 	void defaultTemplate();
 
+	void on_csoundMidiCheckBox_toggled(bool checked);
+	void checkRtMidiModule(QString module);
+
 signals:
+	void disableInternalRtMidi();
 	//    void changeFont();
 
 };

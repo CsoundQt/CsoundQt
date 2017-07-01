@@ -20,13 +20,15 @@ static void midiInMessageCallback(double deltatime,
 #endif
 
 
-MidiHandler::MidiHandler(QObject *parent) :
+MidiHandler::MidiHandler(int api, QObject *parent) :
     QObject(parent)
 {
 #ifdef QCS_RTMIDI
-	m_midiin = new RtMidiIn(RtMidi::UNSPECIFIED, "CsoundQt");
-	m_midiout = new RtMidiOut(RtMidi::UNSPECIFIED, "CsoundQt");
+	qDebug()<<"Using RtMidi API: " << api;
+	m_midiin = new RtMidiIn((RtMidi::Api) api, "CsoundQt"); //api - see RtMidi.h for types
+	m_midiout = new RtMidiOut((RtMidi::Api) api, "CsoundQt");
 	m_midiin->setCallback(&midiInMessageCallback, this);
+
 #endif
 	m_midiLearnDialog = NULL;
 }
@@ -92,6 +94,53 @@ void MidiHandler::setMidiInterface(int number)
 	}
 }
 
+int MidiHandler::findMidiInPortByName(QString name) {
+	int port = 9999; // stands for None
+#ifdef QCS_RTMIDI
+	// to check agains alsa names wihtout port
+	int index = QRegExp("(\\s\\d+):(\\d+)$").indexIn(name);
+	if (index>0) {
+		qDebug()<<name << " seems to be Alsa device. Excluding port part.";
+		name=name.left(index); // remove also space
+	}
+	QString portName;
+	for (int i=0; i<m_midiin->getPortCount(); i++) { // find port number according to the name
+		portName = QString::fromStdString(m_midiin->getPortName(i));
+		// for alsa portnames come in formant <portname> <dd:dd> - get rid of the last part to match the device if i
+
+		if (portName.startsWith(name)) {
+			qDebug()<<"Found port for " << name << ": " << i;
+			port = i;
+			break;
+		}
+	}
+#endif
+	return port;
+}
+
+int MidiHandler::findMidiOutPortByName(QString name) {
+	int port = 9999; // stands for None
+#ifdef QCS_RTMIDI
+	int index = QRegExp("(\\s\\d+):(\\d+)$").indexIn(name);
+	if (index>0) {
+		qDebug()<<name << " seems to be Alsa device. Excluding port part.";
+		name=name.left(index);
+	}
+	QString portName;
+	for (int i=0; i<m_midiout->getPortCount(); i++) { // find port number according to the name
+		portName = QString::fromStdString(m_midiout->getPortName(i));
+		//qDebug()<<i<< " " << portName;
+		if (portName.startsWith(name)) {
+			qDebug()<<"Found port for " << name << ": " << i;
+			port = i;
+			break;
+		}
+	}
+#endif
+	return port;
+}
+
+
 void MidiHandler::openMidiInPort(int port)
 {
     (void) port;
@@ -119,7 +168,7 @@ void MidiHandler::openMidiInPort(int port)
 		error.printMessage();
 		return;
 	}
-	//  qDebug() << "CsoundQt::openMidiPort opened port " << port;
+	qDebug() << "CsoundQt::openMidiPort opened port " << port;
 #endif
 	//  m_midiin->ignoreTypes(false, false, false);
 }

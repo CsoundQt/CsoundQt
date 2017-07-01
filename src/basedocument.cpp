@@ -268,7 +268,6 @@ void BaseDocument::stopRecording()
 
 void BaseDocument::queueEvent(QString eventLine, int delay)
 {
-	//   qDebug("%s", eventLine.toStdString().c_str());
 	m_csEngine->queueEvent(eventLine, delay);  //TODO  implement passing of timestamp
 }
 

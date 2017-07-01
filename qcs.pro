@@ -180,8 +180,8 @@ unix:!macx {
 		SHARE_DIR=/usr/share # ~/.local for HOME install
 	}
 	target.path = $$INSTALL_DIR/bin
-	target.commands = ln -sf $$TARGET $(INSTALL_ROOT)/$$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
-	target.files = $$DESTDIR/$$TARGET
+	target.commands = ln -sf  $(INSTALL_ROOT)/$$INSTALL_DIR/bin/$$TARGET $(INSTALL_ROOT)/$$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
+	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET
 
 
 	desktop.path=$$SHARE_DIR/applications
@@ -201,6 +201,14 @@ unix:!macx {
 
 # for OSX add Scripts and Examples to be bundle in Contents->Resources
 macx {
+
+    #testing for stdlib problem:
+#LIBS += -stdlib=libstdc++
+
+#QMAKE_CXXFLAGS -= -stdlib=libc++
+#QMAKE_CXXFLAGS += -stdlib=libstdc++
+#QMAKE_LFLAGS += -stdlib=libstdc++
+
     pythonqt {
         scripts.path = Contents/Resources
         scripts.files = src/Scripts
@@ -229,11 +237,16 @@ macx {
         INSTALLS += pythonqt
     }
 
-    pythonlinks.path= a$$PWD
+    pythonlinks.path= $$PWD
     pythonlinks.commands = install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
     pythonqt {
         pythonlinks.commands += install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/libPythonQt.1.dylib ;
-        pythonlinks.commands += install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/libPythonQt_QtAll.1.dylib
+        pythonlinks.commands += install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/libPythonQt_QtAll.1.dylib ;
+        pythonlinks.commands += install_name_tool -change libPythonQt.1.dylib @rpath/libPythonQt.1.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        pythonlinks.commands += install_name_tool -change libPythonQt_QtAll.1.dylib @rpath/libPythonQt_QtAll.1.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        pythonlinks.commands += install_name_tool -change libPythonQt.1.dylib @rpath/libPythonQt.1.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/libPythonQt_QtAll.1.dylib ;
+
+
     }
 
     final.commands = rm -rf  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework ;

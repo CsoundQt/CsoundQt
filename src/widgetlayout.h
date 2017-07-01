@@ -403,6 +403,7 @@ signals:
 	void widgetSelectedSignal(QuteWidget *widget);
 	void widgetUnselectedSignal(QuteWidget *widget);
 	void showMidiLearn(QuteWidget *);
+	void addChn_kSignal(QString channel);
 	//    void setWidgetClipboardSignal(QString text);  // To propagate clipboard for sharing between pages
 };
 

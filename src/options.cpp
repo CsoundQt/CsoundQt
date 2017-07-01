@@ -37,6 +37,8 @@ Options::Options(ConfigLists *configlists) :
 	consoleFontPointSize = 10;
 	consoleFontColor = Qt::black;
 	consoleBgColor = Qt::white;
+	editorBgColor = Qt::white;
+
 	tabWidth = 8;
 	colorVariables = true;
 	autoPlay = true;
@@ -65,6 +67,8 @@ Options::Options(ConfigLists *configlists) :
 	consoleBufferSize = 1024;
 	midiInterface = 0; // For internal CsoundQt MIDI control
 	midiOutInterface = 0; // For internal CsoundQt MIDI control
+
+	rtMidiApi = 0;
 
 	csdPath = "./"; //path of active csd needed for setting -o -i paths
 

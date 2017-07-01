@@ -508,7 +508,7 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
 				&& csoundGetChannelPtr(ud->csound, &pvalue,
 									   ud->outputStringChannelNames[i].toLocal8Bit().constData(),
 									   CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
-            char chanString[128];
+			char chanString[2048]; // large enough for long strings in displays
             csoundGetStringChannel(ud->csound, ud->outputStringChannelNames[i].toLocal8Bit().constData(),
                                                    chanString);
             if(ud->previousStringOutputValues[i] != QString(chanString)) {
@@ -741,7 +741,7 @@ void CsoundEngine::stopRecording()
 	if (ud->perfThread) {
 		ud->perfThread->StopRecord();
 	}
-	qDebug("Recording stopped.");
+	//qDebug("Recording stopped.");
 #endif
 }
 
