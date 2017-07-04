@@ -48,7 +48,9 @@ void CsoundHtmlWrapper::setCsoundEngine(CsoundEngine *csEngine)
 
 int CsoundHtmlWrapper::compileCsd(const QString &filename) {
     if (!csound) {
-        return -1;
+        //return -1;
+        // or maybe let's create it here, if for example html file...
+        csound = csoundCreate(NULL);
     }
 #if CS_APIVERSION>=4
     return csoundCompileCsd(csound, filename.toLocal8Bit());
@@ -59,7 +61,9 @@ int CsoundHtmlWrapper::compileCsd(const QString &filename) {
 
 int CsoundHtmlWrapper::compileCsdText(const QString &text) {
     if (!csound) {
-        return -1;
+        //return -1;
+        // or maybe let's create it here, if for example html file...
+        csound = csoundCreate(NULL);
     }
     return csoundCompileCsdText(csound, text.toLocal8Bit());
 }
@@ -200,7 +204,11 @@ void CsoundHtmlWrapper::message(const QString &text) {
 
 int CsoundHtmlWrapper::perform() {
     if (!csound) {
-        return -1;
+        //maybe create csound here?
+       csound = csoundCreate(NULL);
+       // but what about CsoundOptions??
+       // first time default (-o test.wav is taken), second time works...
+       //maybe perfomrCsd(QString string)
     }
     stop();
     csound_thread = new std::thread(&CsoundHtmlWrapper::perform_thread_routine, this);
@@ -228,7 +236,7 @@ int CsoundHtmlWrapper::perform_thread_routine() {
     // if (result) {
     //     message("Failed to clean up Csound performance.");
     // }
-    // csoundReset(csound);
+    csoundReset(csound);
     return result;
 }
 
