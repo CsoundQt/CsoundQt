@@ -208,6 +208,21 @@ CsoundQt::CsoundQt(QStringList fileNames)
     modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
     modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
 
+    //test set shortcuts to change between tabs, Shift+Alt +<tab no>
+    // example from: https://stackoverflow.com/questions/10160232/qt-designer-shortcut-to-another-tab
+    // Setup a signal mapper to avoid creating custom slots for each tab
+    QSignalMapper *mapper = new QSignalMapper(this);
+    // Setup the shortcut for tabs 1..10
+    for (int i=0; i<10; i++) {
+        QString key = (i==9) ? "0" : QString::number(i+1);
+        QShortcut *shortcut = new QShortcut(QKeySequence("Shift+Alt+"+key), this);
+        connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()));
+        mapper->setMapping(shortcut, i);
+    }
+    // Wire the signal mapper to the tab widget index change slot
+    connect(mapper, SIGNAL(mapped(int)), documentTabs, SLOT(setCurrentIndex(int)));
+
+
     fillFileMenu(); // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
     fillScriptsMenu(); // Must be placed after readSettings to know directory
