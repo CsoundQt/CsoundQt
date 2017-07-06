@@ -176,7 +176,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     csoundHtmlView->show();
     addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
 #endif
-
+    focusMapper = new QSignalMapper(this);
     createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
 	createMenus();
 	createToolBars(); // TODO: take care that the position is stored when toolbars or panels are moved/resized. maybe.
@@ -221,7 +221,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     }
     // Wire the signal mapper to the tab widget index change slot
     connect(mapper, SIGNAL(mapped(int)), documentTabs, SLOT(setCurrentIndex(int)));
-
 
     fillFileMenu(); // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
@@ -1129,6 +1128,63 @@ void CsoundQt::disableInternalRtMidi()
 	midiHandler->closeMidiInPort();
 	midiHandler->closeMidiOutPort();
 #endif
+}
+
+void CsoundQt::focusToTab(int tab)
+{  QDockWidget *panel = nullptr;
+   QAction * action = nullptr;
+   switch (tab) {
+   case 1:
+       qDebug()<<"Focus to widgets";
+       panel = widgetPanel;
+       action = showWidgetsAct;
+       break;
+    case 2:
+       qDebug()<<"Focus to help";
+       panel = helpPanel;
+       action = showHelpAct;
+       break;
+    case 3:
+       qDebug()<<"Focus to console";
+       panel = m_console;
+       action = showConsoleAct;
+       break;
+   case 4:
+       qDebug()<<"Focus to html panel";
+#ifdef QCS_QTHTML
+       panel = m_html5View; // check!
+       action = showHtml5Act;
+#endif
+       break;
+   case 5:
+       qDebug()<<"Focus to inspector";
+       panel = m_inspector;
+       action = showInspectorAct;
+       break;
+   // 6 is  Live events that is independent window
+
+   case 7:
+       qDebug()<<"Focus to Pyton Console";
+#ifdef QCS_PYTHONQT
+       panel = m_pythonConsole; // check!
+       action = showPythonConasoleAct;
+#endif
+       break;
+
+   case 8:
+       qDebug()<<"Focus to Code Pad";
+       panel = m_scratchPad;
+       action = showScratchPadAct;
+       break;
+   }
+
+   if (panel) {
+       if (!panel->isVisible()) {
+           panel->show();
+           action->setChecked(true);
+       }
+       panel->raise();
+   }
 }
 
 bool CsoundQt::saveAs()
@@ -2781,11 +2837,11 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     externalPlayerAct->setShortcut(tr(""));
     externalEditorAct->setShortcut(tr(""));
     focusEditorAct->setShortcut(tr("Alt+0"));
-    showWidgetsAct->setShortcut(tr("Alt+1"));
-    showHelpAct->setShortcut(tr("Alt+2"));
+    raiseHelpAct->setShortcut(tr("Alt+2"));
+    raiseWidgetsAct->setShortcut(tr("Alt+1"));
     showGenAct->setShortcut(tr(""));
     showOverviewAct->setShortcut(tr(""));
-    showConsoleAct->setShortcut(tr("Alt+3"));
+    raiseConsoleAct->setShortcut(tr("Alt+3"));
 #ifdef Q_OS_MAC
     viewFullScreenAct->setShortcut(tr("Ctrl+Alt+F"));
 #else
@@ -2795,8 +2851,8 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #if defined(QCS_HTML5) || defined(QCS_QTHTML)
     viewHtmlFullScreenAct->setShortcut(tr("Alt+Ctrl+H"));
 #endif
-    viewHelpFullScreenAct->setShortcut(tr("Alt+Ctrl+1"));
-    viewWidgetsFullScreenAct->setShortcut(tr("Alt+Ctrl+2"));
+    viewHelpFullScreenAct->setShortcut(tr("Alt+Ctrl+2")); // was vice versa
+    viewWidgetsFullScreenAct->setShortcut(tr("Alt+Ctrl+1"));
 #ifdef QCS_DEBUGGER
     showDebugAct->setShortcut(tr("F5"));
 #endif
@@ -2805,11 +2861,11 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
     midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
     createCodeGraphAct->setShortcut(tr("Alt+4"));
-    showInspectorAct->setShortcut(tr("Alt+5"));
+    raiseInspectorAct->setShortcut(tr("Alt+5"));
     showLiveEventsAct->setShortcut(tr("Alt+6"));
 
 #ifdef QCS_HTML5
-	showHtml5Act->setShortcut(tr("Alt+H"));
+    raiseHtml5Act->setShortcut(tr("Alt+4")); // Alt-4 was before for Code graph
 #endif
 	openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Alt+9"));
@@ -2825,8 +2881,8 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     evaluateAct->setShortcut(tr("Shift+Ctrl+E"));
     evaluateSectionAct->setShortcut(tr("Shift+Ctrl+W"));
     scratchPadCsdModeAct->setShortcut(tr("Shift+Alt+S"));
-    showPythonConsoleAct->setShortcut(tr("Alt+7"));
-    showScratchPadAct->setShortcut(tr("Alt+8"));
+    raisePythonConsoleAct->setShortcut(tr("Alt+7"));
+    raiseScratchPadAct->setShortcut(tr("Alt+8"));
     killLineAct->setShortcut(tr("Ctrl+K"));
     killToEndAct->setShortcut(tr("Shift+Alt+K"));
     showOrcAct->setShortcut(tr("Shift+Alt+1"));
@@ -3231,6 +3287,13 @@ void CsoundQt::createActions()
     showWidgetsAct->setIconText(tr("Widgets"));
     showWidgetsAct->setShortcutContext(Qt::ApplicationShortcut);
 
+    raiseWidgetsAct = new QAction(this);
+    raiseWidgetsAct->setText(tr("Show/Raise Widgets Panel"));
+    raiseWidgetsAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(raiseWidgetsAct, SIGNAL(triggered()), focusMapper, SLOT(map()));
+    focusMapper->setMapping(raiseWidgetsAct, 1);
+    this->addAction(raiseWidgetsAct);
+
     showInspectorAct = new QAction(QIcon(prefix + "edit-find.png"), tr("Inspector"), this);
     showInspectorAct->setCheckable(true);
     showInspectorAct->setStatusTip(tr("Show Inspector"));
@@ -3238,6 +3301,13 @@ void CsoundQt::createActions()
     showInspectorAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showInspectorAct, SIGNAL(triggered(bool)), m_inspector, SLOT(setVisible(bool)));
     connect(m_inspector, SIGNAL(Close(bool)), showInspectorAct, SLOT(setChecked(bool)));
+
+    raiseInspectorAct = new QAction(this);
+    raiseInspectorAct->setText(tr("Show/Raise Inspector Panel"));
+    raiseInspectorAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(raiseInspectorAct, SIGNAL(triggered()), focusMapper, SLOT(map()));
+    focusMapper->setMapping(raiseInspectorAct, 5);
+    this->addAction(raiseInspectorAct);
 
     focusEditorAct = new QAction(tr("Focus Text Editor", "Give keyboard focus to the text editor"), this);
     focusEditorAct->setStatusTip(tr("Give keyboard focus to the text editor"));
@@ -3253,6 +3323,14 @@ void CsoundQt::createActions()
     showHelpAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
     connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
+
+    raiseHelpAct = new QAction(this);
+    raiseHelpAct->setText(tr("Show/Raise help panel"));
+    raiseHelpAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(raiseHelpAct, SIGNAL(triggered()), focusMapper, SLOT(map()));
+    focusMapper->setMapping(raiseHelpAct, 2);
+    connect(focusMapper, SIGNAL(mapped(int)), this, SLOT(focusToTab(int)));
+    this->addAction(raiseHelpAct);
 
     showLiveEventsAct = new QAction(QIcon(prefix + "note.png"), tr("Live Events"), this);
     showLiveEventsAct->setCheckable(true);
@@ -3274,6 +3352,13 @@ void CsoundQt::createActions()
     connect(showPythonConsoleAct, SIGNAL(triggered()), this, SLOT(showNoPythonQtWarning()));
 #endif
 
+    raisePythonConsoleAct = new QAction(this);
+    raisePythonConsoleAct->setText(tr("Show/Raise Python Console"));
+    raisePythonConsoleAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(raisePythonConsoleAct, SIGNAL(triggered()), focusMapper, SLOT(map()));
+    focusMapper->setMapping(raisePythonConsoleAct, 7);
+    this->addAction(raisePythonConsoleAct);
+
     showScratchPadAct = new QAction(QIcon(prefix + "scratchpad.png"), tr("CodePad"), this);
     showScratchPadAct->setCheckable(true);
     //  showPythonConsoleAct->setChecked(true);  // Unnecessary because it is set by options
@@ -3282,6 +3367,13 @@ void CsoundQt::createActions()
     showScratchPadAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showScratchPadAct, SIGNAL(triggered(bool)), m_scratchPad, SLOT(setVisible(bool)));
     connect(m_scratchPad, SIGNAL(visibilityChanged(bool)), showScratchPadAct, SLOT(setChecked(bool)));
+
+    raiseScratchPadAct = new QAction(this);
+    raiseScratchPadAct->setText(tr("Show/Raise Code Pad"));
+    raiseScratchPadAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(raiseScratchPadAct, SIGNAL(triggered()), focusMapper, SLOT(map()));
+    focusMapper->setMapping(raiseScratchPadAct, 8);
+    this->addAction(raiseScratchPadAct);
 
     showManualAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("Csound Manual"), this);
     showManualAct->setStatusTip(tr("Show the Csound manual in the help panel"));
@@ -3317,6 +3409,13 @@ void CsoundQt::createActions()
     showConsoleAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showConsoleAct, SIGNAL(toggled(bool)), m_console, SLOT(setVisible(bool)));
     connect(m_console, SIGNAL(Close(bool)), showConsoleAct, SLOT(setChecked(bool)));
+
+    raiseConsoleAct = new QAction(this);
+    raiseConsoleAct->setText(tr("Show/Raise Console"));
+    raiseConsoleAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(raiseConsoleAct, SIGNAL(triggered()), focusMapper, SLOT(map()));
+    focusMapper->setMapping(raiseConsoleAct, 3);
+    this->addAction(raiseConsoleAct);
 
     viewFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View Fullscreen"), this);
     viewFullScreenAct->setCheckable(true);
@@ -3633,15 +3732,15 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(externalPlayerAct);
     m_keyActions.append(externalEditorAct);
     m_keyActions.append(focusEditorAct);
-    m_keyActions.append(showWidgetsAct);
-    m_keyActions.append(showHelpAct);
+    m_keyActions.append(raiseWidgetsAct);
+    m_keyActions.append(raiseHelpAct);
     m_keyActions.append(showGenAct);
     m_keyActions.append(showOverviewAct);
-    m_keyActions.append(showConsoleAct);
-    m_keyActions.append(showInspectorAct);
+    m_keyActions.append(raiseConsoleAct);
+    m_keyActions.append(raiseInspectorAct);
     m_keyActions.append(showLiveEventsAct);
-    m_keyActions.append(showPythonConsoleAct);
-    m_keyActions.append(showScratchPadAct);
+    m_keyActions.append(raisePythonConsoleAct);
+    m_keyActions.append(raiseScratchPadAct);
     m_keyActions.append(showUtilitiesAct);
     m_keyActions.append(showVirtualKeyboardAct);
 	m_keyActions.append(showTableEditorAct);
