@@ -1135,44 +1135,44 @@ void CsoundQt::focusToTab(int tab)
    QAction * action = nullptr;
    switch (tab) {
    case 1:
-       qDebug()<<"Focus to widgets";
+       qDebug()<<"Raise widgets";
        panel = widgetPanel;
        action = showWidgetsAct;
        break;
     case 2:
-       qDebug()<<"Focus to help";
+       qDebug()<<"Raise help";
        panel = helpPanel;
        action = showHelpAct;
        break;
     case 3:
-       qDebug()<<"Focus to console";
+       qDebug()<<"Raise console";
        panel = m_console;
        action = showConsoleAct;
        break;
    case 4:
-       qDebug()<<"Focus to html panel";
+       qDebug()<<"Raise html panel";
 #ifdef QCS_QTHTML
        panel = m_html5View; // check!
        action = showHtml5Act;
 #endif
        break;
    case 5:
-       qDebug()<<"Focus to inspector";
+       qDebug()<<"Raise inspector";
        panel = m_inspector;
        action = showInspectorAct;
        break;
    // 6 is  Live events that is independent window
 
    case 7:
-       qDebug()<<"Focus to Pyton Console";
+       qDebug()<<"Raise Pyton Console";
 #ifdef QCS_PYTHONQT
-       panel = m_pythonConsole; // check!
-       action = showPythonConasoleAct;
+       panel = m_pythonConsole;
+       action = showPythonConsoleAct;
 #endif
        break;
 
    case 8:
-       qDebug()<<"Focus to Code Pad";
+       qDebug()<<"Raise Code Pad";
        panel = m_scratchPad;
        action = showScratchPadAct;
        break;
