@@ -120,16 +120,16 @@ instr	2															;PLAYS FILE AND SENSES FADER MOVEMENT AND RESTARTS INSTR F
 		
 	;A TEXT MACRO IS DEFINED THAT WILL BE THE CODE FOR DERIVING DATA FOR EACH FORMANT. A MACRO IS USED TO AVOID HAVING TO USING CODE REPETITION AND TO EASIER FACICLITATE CODE MODIFICATION
 #define	FORMANT_DATA(NUM')	#
-	kfreq$NUMU	table	(gkx)*(3/5),$NUM+ivoice_os, 1					;READ DATA FOR FREQUENCY (UPPER EDGE OF PANEL)
-	kfreq$NUML	table	((1-gkx)*(1/5))+(4/5),$NUM+ivoice_os, 1				;READ DATA FOR FREQUENCY (LOWER EDGE OF PANEL)
-	kfreq$NUM		ntrpol	kfreq$NUML, kfreq$NUMU, gky						;INTERPOLATE BETWEEN UPPER VALUE AND LOWER VALUE (DETERMINED BY Y-LOCATION ON PANEL)                          
+	kfreq$NUM._U	table	(gkx)*(3/5),$NUM+ivoice_os, 1					;READ DATA FOR FREQUENCY (UPPER EDGE OF PANEL)
+	kfreq$NUM._L	table	((1-gkx)*(1/5))+(4/5),$NUM+ivoice_os, 1				;READ DATA FOR FREQUENCY (LOWER EDGE OF PANEL)
+	kfreq$NUM		ntrpol	kfreq$NUM._L, kfreq$NUM._U, gky						;INTERPOLATE BETWEEN UPPER VALUE AND LOWER VALUE (DETERMINED BY Y-LOCATION ON PANEL)                          
 	kfreq$NUM		=		kfreq$NUM * gkFrqMlt							;MULTIPLY FREQUENCY VALUE BY VALUE FROM 'Frequency Multiply' SLIDER
-	kdbamp$NUMU	table	(gkx)*(3/5),$NUM+ivoice_os+5, 1					;READ DATA FOR INTENSITY (UPPER EDGE OF PANEL)                                      
-	kdbamp$NUML	table	((1-gkx)*(1/5))+(4/5),$NUM+ivoice_os+5, 1				;READ DATA FOR INTENSITY (LOWER EDGE OF PANEL)                                      
-	kdbamp$NUM	ntrpol	kdbamp$NUML, kdbamp$NUMU, gky						;INTERPOLATE BETWEEN UPPER VALUE AND LOWER VALUE (DETERMINED BY Y-LOCATION ON PANEL)
-	kbw$NUMU		table	(gkx)*(3/5),$NUM+ivoice_os+10, 1					;READ DATA FOR BANDWIDTH (UPPER EDGE OF PANEL)                                      
-	kbw$NUML		table	((1-gkx)*(1/5))+(4/5),$NUM+ivoice_os+10, 1				;READ DATA FOR BANDWIDTH (LOWER EDGE OF PANEL)                                      
-	kbw$NUM		ntrpol	kbw$NUML, kbw$NUMU, gky							;INTERPOLATE BETWEEN UPPER VALUE AND LOWER VALUE (DETERMINED BY Y-LOCATION ON PANEL)
+	kdbamp$NUM._U	table	(gkx)*(3/5),$NUM+ivoice_os+5, 1					;READ DATA FOR INTENSITY (UPPER EDGE OF PANEL)                                      
+	kdbamp$NUM._L	table	((1-gkx)*(1/5))+(4/5),$NUM+ivoice_os+5, 1				;READ DATA FOR INTENSITY (LOWER EDGE OF PANEL)                                      
+	kdbamp$NUM	ntrpol	kdbamp$NUM._L, kdbamp$NUM._U, gky						;INTERPOLATE BETWEEN UPPER VALUE AND LOWER VALUE (DETERMINED BY Y-LOCATION ON PANEL)
+	kbw$NUM._U		table	(gkx)*(3/5),$NUM+ivoice_os+10, 1					;READ DATA FOR BANDWIDTH (UPPER EDGE OF PANEL)                                      
+	kbw$NUM._L		table	((1-gkx)*(1/5))+(4/5),$NUM+ivoice_os+10, 1				;READ DATA FOR BANDWIDTH (LOWER EDGE OF PANEL)                                      
+	kbw$NUM		ntrpol	kbw$NUM._L, kbw$NUM._U, gky							;INTERPOLATE BETWEEN UPPER VALUE AND LOWER VALUE (DETERMINED BY Y-LOCATION ON PANEL)
 	kbw$NUM		=		kbw$NUM*gkBWMlt								;MULTIPLY BANDWIDTH VALUE BY VALUE FROM 'Bandwidth Multiply' SLIDER
 
 	if 	kDisplayTrigger == 1	then
@@ -138,7 +138,7 @@ instr	2															;PLAYS FILE AND SENSES FADER MOVEMENT AND RESTARTS INSTR F
 		outvalue	"bw$NUM", kbw$NUM										;UPDATE DISPLAY OF BANDWIDTH VALUE IN THE ON-SCREEN VALUATOR BOX                                                          
 	endif
 	#																;END OF MACRO!
-
+	
 	kDisplayTrigger	metro	10										;CREATE A TRIGGER METRONOME (USED TO UPDATE VALUATOR BOX DISPLAYS
 
 ;READING DATA FOR FORMANTS (MACROS IMPLEMENTED)
