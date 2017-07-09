@@ -1452,7 +1452,7 @@ void CsoundQt::setCurrentAudioFile(const QString fileName)
 
 void CsoundQt::play(bool realtime, int index)
 {
-    qDebug()  << "...";
+    qDebug()  << "CsoundQt::play...";
     // TODO make csound pause if it is already running
     int oldPage = curPage;
     if (index == -1) {
@@ -1621,15 +1621,17 @@ void CsoundQt::play(bool realtime, int index)
         }
     }
 #if defined(QCS_QTHTML)
-	if (!documentPages.isEmpty()) {
-		if ( !m_options->saveChanges ) { // otherwise the htmlview gets updated on save
-			updateHtmlView();
-			qDebug()<<"update html on run";
-		}
-		if (!documentPages[curPage]->getHtmlText().isEmpty()) {
-			csoundHtmlView->setCsoundEngine(getEngine(curPage));
-		}
-	}
+    if (!documentPages.isEmpty()) {
+        if ( !m_options->saveChanges ) { // otherwise the htmlview gets updated on save
+            updateHtmlView();
+            qDebug()<<"update html on run";
+        }
+        DocumentPage *documentPage = documentPages[curPage];
+        if (!documentPage->getHtmlText().isEmpty()) {
+            CsoundEngine *engine = documentPage->getEngine();
+            csoundHtmlView->setCsoundEngine(engine);
+        }
+    }
 #endif
 	curPage = oldPage;
 }
@@ -5920,12 +5922,13 @@ bool CsoundQt::startServer()
 	m_server->removeServer("csoundqt"); // for any case, if socket was not cleard due crash before
 	return m_server->listen("csoundqt");
 }
+
 #if defined(QCS_QTHTML)
 void CsoundQt::updateHtmlView()
 {
 	QString htmlText = documentPages[curPage]->getHtmlText();
 	if (!htmlText.isEmpty()) {
-		csoundHtmlView->setCsoundEngine(getEngine(curPage));
+        ///csoundHtmlView->setCsoundEngine(getEngine(curPage));
         csoundHtmlView->load(documentPages[curPage]);
 	} else {
 		csoundHtmlView->clear();

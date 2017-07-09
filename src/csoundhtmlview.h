@@ -39,7 +39,7 @@ public:
     void loadFromUrl(const QUrl &url);
     void load(DocumentPage *documentPage);
     void stop();
-	void setCsoundEngine(CsoundEngine *csEngine) {csoundWrapper.setCsoundEngine(csEngine); }
+    void setCsoundEngine(CsoundEngine *csEngine);
     void viewHtml(QString htmlText);
 	void clear();
 #ifdef USE_WEBKIT
@@ -61,7 +61,11 @@ protected:
 private:
 	Ui::Html5GuiDisplay *ui;
 	std::atomic<DocumentPage *> documentPage; // ?? why and what is std::atomic
+#ifdef _MSC_VER
+    DWORD pid;
+#else
     pid_t pid;
+#endif
 
 	CsoundHtmlWrapper csoundWrapper;
 	CsoundEngine * m_csoundEngine;

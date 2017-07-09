@@ -65,13 +65,6 @@ QString getElement(const QString &text, const QString &tag)
     return element;
 }
 
-/**
- * @brief Html5GuiDisplay.play
- * @param documentPage
- *
- * Save the <html> element, if it exists,
- * to filename xxx.csd.html, and load it into the CEF web view.
- */
 void CsoundHtmlView::load(DocumentPage *documentPage_)
 {
     //TODO: call this whenever document is saved, not only on run. Usually always saved when run but there is also option not to save... Think.
@@ -149,6 +142,12 @@ document.addEventListener("DOMContentLoaded", function () {
     repaint();
 }
 
+void CsoundHtmlView::setCsoundEngine(CsoundEngine *csEngine)
+{
+    csoundWrapper.setCsoundEngine(csEngine);
+}
+
+
 void CsoundHtmlView::stop() // why is this function necessary?
 {
     documentPage = 0;
@@ -210,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {//void CsoundHtmlView
 #ifdef USE_WEBENGINE
         webView->page()->setWebChannel(&channel);
         channel.registerObject("csound", &csoundWrapper) ;
-        qDebug() << "Setting JavaScript object on load.";
+        qDebug() << "Setting JavaScript object on view.";
 #endif
 	}
 }

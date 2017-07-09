@@ -21,7 +21,8 @@
 */
 
 
-// code based partly on CsoundHtmlWrapper by Michael Gogins https://github.com/gogins/gogins.github.io/tree/master/csound_html5
+// Code based partly on CsoundHtmlWrapper by Michael Gogins https://github.com/gogins/gogins.github.io/tree/master/csound_html5.
+// This class must be safe against calling with a null or uninitialized CsoundEngine.
 
 #include "csoundhtmlwrapper.h"
 #include <QApplication>
@@ -29,151 +30,157 @@
 
 CsoundHtmlWrapper::CsoundHtmlWrapper(QObject *parent) :
     QObject(parent),
-    csound_stop(true),
-    csound_finished(true),
-    csound(nullptr),
     m_csoundEngine(nullptr),
-    csound_thread(nullptr),
     message_callback(nullptr)
 {
 }
 
+CSOUND *CsoundHtmlWrapper::getCsound()
+{
+    if(!m_csoundEngine) {
+        return nullptr;
+    }
+    return m_csoundEngine->getCsound();
+}
+
+CsoundPerformanceThread *CsoundHtmlWrapper::getThread()
+{
+    if(!m_csoundEngine) {
+        return nullptr;
+    }
+    return m_csoundEngine->getUserData()->perfThread;
+}
+
+
 void CsoundHtmlWrapper::setCsoundEngine(CsoundEngine *csEngine)
 {
     m_csoundEngine = csEngine;
-	if (m_csoundEngine) {
-        csound = m_csoundEngine->getCsound();
-    }
 }
 
 int CsoundHtmlWrapper::compileCsd(const QString &filename) {
-    if (!csound) {
-        //return -1;
-        // or maybe let's create it here, if for example html file...
-        csound = csoundCreate(NULL);
+    if (!m_csoundEngine) {
+        return -1;
     }
 #if CS_APIVERSION>=4
-    return csoundCompileCsd(csound, filename.toLocal8Bit());
+    return csoundCompileCsd(getCsound(), filename.toLocal8Bit());
 #else
-    return csoundCompileCsd(csound, filename.toLocal8Bit().data());
+    return csoundCompileCsd(getCsound(), filename.toLocal8Bit().data());
 #endif
 }
 
 int CsoundHtmlWrapper::compileCsdText(const QString &text) {
-    if (!csound) {
-        //return -1;
-        // or maybe let's create it here, if for example html file...
-        csound = csoundCreate(NULL);
+    if (!m_csoundEngine) {
+        return -1;
     }
-    return csoundCompileCsdText(csound, text.toLocal8Bit());
+    return csoundCompileCsdText(getCsound(), text.toLocal8Bit());
 }
 
 int CsoundHtmlWrapper::compileOrc(const QString &text) {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundCompileOrc(csound, text.toLocal8Bit());
+    return csoundCompileOrc(getCsound(), text.toLocal8Bit());
 }
 
 double CsoundHtmlWrapper::evalCode(const QString &text) {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundEvalCode(csound, text.toLocal8Bit());
+    return csoundEvalCode(getCsound(), text.toLocal8Bit());
 }
 
 double CsoundHtmlWrapper::get0dBFS() {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundGet0dBFS(csound); //cs->Get0dBFS();
+    return csoundGet0dBFS(getCsound());
 }
 
 int CsoundHtmlWrapper::getApiVersion() {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
     return csoundGetAPIVersion();
 }
 
 double CsoundHtmlWrapper::getControlChannel(const QString &name) {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
     int result = 0;
-    double value = csoundGetControlChannel(csound, name.toLocal8Bit(), &result);
+    double value = csoundGetControlChannel(getCsound(), name.toLocal8Bit(), &result);
     return value;
 }
 
 qint64 CsoundHtmlWrapper::getCurrentTimeSamples() { // FIXME: unknown type int64_t qint64
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundGetCurrentTimeSamples(csound);
+    return csoundGetCurrentTimeSamples(getCsound());
 }
 
 QString CsoundHtmlWrapper::getEnv(const QString &name) { // not sure, if it works... test with setGlobalEnv
-    if (!csound) {
+    if (!m_csoundEngine) {
         return QString();
     }
-    return csoundGetEnv(csound,name.toLocal8Bit());
+    return csoundGetEnv(getCsound(),name.toLocal8Bit());
 }
 
 int CsoundHtmlWrapper::getKsmps() {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundGetKsmps(csound);
+    return csoundGetKsmps(getCsound());
 }
 
 int CsoundHtmlWrapper::getNchnls() {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundGetNchnls(csound);
+    return csoundGetNchnls(getCsound());
 }
 
 int CsoundHtmlWrapper::getNchnlsInput() {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundGetNchnlsInput(csound);
+    return csoundGetNchnlsInput(getCsound());
 }
 
 QString CsoundHtmlWrapper::getOutputName() {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return QString();
     }
-    return QString(csoundGetOutputName(csound));
+    return QString(csoundGetOutputName(getCsound()));
 }
 
 double CsoundHtmlWrapper::getScoreOffsetSeconds() {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundGetScoreOffsetSeconds(csound);
+    return csoundGetScoreOffsetSeconds(getCsound());
 }
 
 double CsoundHtmlWrapper::getScoreTime() {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundGetScoreTime(csound);
+    return csoundGetScoreTime(getCsound());
 }
 
 int CsoundHtmlWrapper::getSr() {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundGetSr(csound);
+    return csoundGetSr(getCsound());
 }
 
 QString CsoundHtmlWrapper::getStringChannel(const QString &name) {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return QString();
     }
     char buffer[0x100];
-    csoundGetStringChannel(csound,name.toLocal8Bit(), buffer);
+    csoundGetStringChannel(getCsound(),name.toLocal8Bit(), buffer);
     return QString(buffer);
 }
 
@@ -189,115 +196,90 @@ bool CsoundHtmlWrapper::isPlaying() {
 }
 
 int CsoundHtmlWrapper::isScorePending() {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundIsScorePending(csound);
+    return csoundIsScorePending(getCsound());
 }
 
 void CsoundHtmlWrapper::message(const QString &text) {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return;
     }
-    csoundMessage(csound, "%s", text.toLocal8Bit().constData());
+    qDebug() << text;
+    if (isPlaying()) {
+        csoundMessage(getCsound(), "%s", text.toLocal8Bit().constData());
+    }
 }
 
 int CsoundHtmlWrapper::perform() {
-    if (!csound) {
-        //maybe create csound here?
-       csound = csoundCreate(NULL);
-       // but what about CsoundOptions??
-       // first time default (-o test.wav is taken), second time works...
-       //maybe perfomrCsd(QString string)
-    }
-    stop();
-    csound_thread = new std::thread(&CsoundHtmlWrapper::perform_thread_routine, this);
-    if (csound_thread) {
-        return 0;
-    } else {
-        return 1;
-    }
-}
-
-int CsoundHtmlWrapper::perform_thread_routine() {
-    qDebug() ;
-    int result = 0;
-    result = csoundStart(csound);
-    message("Csound has started running...");
-    for (csound_stop = false, csound_finished = false;
-         ((csound_stop == false) && (csound_finished == false) && (csound != nullptr)); )
-    {
-        csound_finished = csoundPerformKsmps(csound);
-    }
-    message("Csound has stopped running.");
-    // Although the thread has been started by the CsoundHtmlWrapper,
-    // the cleanup should be done by the CsoundEngine.
-    // result = csoundCleanup(csound);
-    // if (result) {
-    //     message("Failed to clean up Csound performance.");
-    // }
-    csoundReset(csound);
-    return result;
-}
-
-
-int CsoundHtmlWrapper::readScore(const QString &text) {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundReadScore(csound, text.toLocal8Bit());
+    m_csoundEngine->getUserData()->perfThread->Play();
+    return 0;
+}
+
+int CsoundHtmlWrapper::readScore(const QString &text) {
+    if (!m_csoundEngine) {
+        return -1;
+    }
+    if (isPlaying()) {
+        return csoundReadScore(getCsound(), text.toLocal8Bit());
+    }
+    return -1;
 }
 
 void CsoundHtmlWrapper::reset() {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return;
     }
-    csoundReset(csound);
+    csoundReset(getCsound());
 }
 
 void CsoundHtmlWrapper::rewindScore() {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return;
     }
-    csoundRewindScore(csound);
+    csoundRewindScore(getCsound());
 }
 
 int CsoundHtmlWrapper::runUtility(const QString &command, int argc, char **argv) {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundRunUtility(csound, command.toLocal8Bit(), argc, argv); // probably does not work from JS due char **
+    return csoundRunUtility(getCsound(), command.toLocal8Bit(), argc, argv); // probably does not work from JS due char **
 }
 
 int CsoundHtmlWrapper::scoreEvent(char type, const double *pFields, long numFields) {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundScoreEvent(csound,type, pFields, numFields);
+    return csoundScoreEvent(getCsound(),type, pFields, numFields);
 }
 
 void CsoundHtmlWrapper::setControlChannel(const QString &name, double value) {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return;
     }
-    csoundSetControlChannel(csound,name.toLocal8Bit(), value);
+    csoundSetControlChannel(getCsound(),name.toLocal8Bit(), value);
 }
 
 int CsoundHtmlWrapper::setGlobalEnv(const QString &name, const QString &value) {
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
     return csoundSetGlobalEnv(name.toLocal8Bit(), value.toLocal8Bit());
 }
 
 void CsoundHtmlWrapper::setInput(const QString &name){
-    if (!csound) {
+    if (!m_csoundEngine) {
         return;
     }
 #if CS_APIVERSION>=4
-    csoundSetInput(csound, name.toLocal8Bit());
+    csoundSetInput(getCsound(), name.toLocal8Bit());
 #else
-    csoundSetInput(csound, name.toLocal8Bit().data());
+    csoundSetInput(getCsound(), name.toLocal8Bit().data());
 #endif
 }
 
@@ -307,81 +289,81 @@ void CsoundHtmlWrapper::setMessageCallback(QObject *callback){
 }
 
 int CsoundHtmlWrapper::setOption(const QString &name){
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
 #if CS_APIVERSION>=4
-    return csoundSetOption(csound, name.toLocal8Bit());
+    return csoundSetOption(getCsound(), name.toLocal8Bit());
 #else
-    return csoundSetOption(csound, name.toLocal8Bit().data());
+    return csoundSetOption(getCsound(), name.toLocal8Bit().data());
 #endif
 }
 
 void CsoundHtmlWrapper::setOutput(const QString &name, const QString &type, const QString &format){
-    if (!csound) {
+    if (!m_csoundEngine) {
         return;
     }
 #if CS_APIVERSION>=4
-    csoundSetOutput(csound, name.toLocal8Bit(), type.toLocal8Bit(), format.toLocal8Bit());
+    csoundSetOutput(getCsound(), name.toLocal8Bit(), type.toLocal8Bit(), format.toLocal8Bit());
 #else
-    csoundSetOutput(csound, name.toLocal8Bit().data(), type.toLocal8Bit().data(), format.toLocal8Bit().data());
+    csoundSetOutput(getCsound(), name.toLocal8Bit().data(), type.toLocal8Bit().data(), format.toLocal8Bit().data());
 #endif
 }
 
 void CsoundHtmlWrapper::setScoreOffsetSeconds(double value){
-    if (!csound) {
+    if (!m_csoundEngine) {
         return;
     }
-    csoundSetScoreOffsetSeconds(csound, value);
+    csoundSetScoreOffsetSeconds(getCsound(), value);
 }
 
 void CsoundHtmlWrapper::setScorePending(bool value){
-    if (!csound) {
+    if (!m_csoundEngine) {
         return;
     }
-    csoundSetScorePending(csound,(int) value);
+    csoundSetScorePending(getCsound(),(int) value);
 }
 
 void CsoundHtmlWrapper::setStringChannel(const QString &name, const QString &value){
-    if (!csound) {
+    if (!m_csoundEngine) {
         return;
     }
-    csoundSetStringChannel(csound,  name.toLocal8Bit(), value.toLocal8Bit().data());
+    csoundSetStringChannel(getCsound(),  name.toLocal8Bit(), value.toLocal8Bit().data());
+}
+
+int CsoundHtmlWrapper::start(){
+    if (!m_csoundEngine) {
+        return -1;
+    }
+    return csoundStart(getCsound());
 }
 
 void CsoundHtmlWrapper::stop(){
-    if (!csound) {
+    if (!m_csoundEngine) {
         return;
     }
-    csound_stop = true;
-    if (csound_thread) {
-        csound_thread->join();
-        csound_thread = nullptr;
-    }
-    // Although the thread has been started in the CsoundHtmlWrapper,
-    // the actual cleanup should be done by the CsoundEngine.
-    // csoundStop(csound);
+    getThread()->Stop();
 }
 
 double CsoundHtmlWrapper::tableGet(int table_number, int index){
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundTableGet(csound, table_number, index);
+    return csoundTableGet(getCsound(), table_number, index);
 }
 
 int CsoundHtmlWrapper::tableLength(int table_number){
-    if (!csound) {
+    if (!m_csoundEngine) {
         return -1;
     }
-    return csoundTableLength(csound, table_number);
+    return csoundTableLength(getCsound(), table_number);
 }
 
 void CsoundHtmlWrapper::tableSet(int table_number, int index, double value){
-    if (!csound) {
+    if (!m_csoundEngine) {
         return;
     }
-    csoundTableSet(csound, table_number, index, value);
+    csoundTableSet(getCsound(), table_number, index, value);
 }
 
 

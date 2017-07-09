@@ -307,21 +307,3 @@ AppProperties BaseDocument::getAppProperties()
 {
 	return m_view->getAppProperties();
 }
-
-//void BaseDocument::playParent()
-//{
-//  static_cast<qutecsound *>(parent())->play();
-//}
-//
-//void BaseDocument::renderParent()
-//{
-//  static_cast<qutecsound *>(parent())->render();
-//}
-
-//void BaseDocument::registerButton(QuteButton *b)
-//{
-//  connect(b, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(play()));
-//  connect(b, SIGNAL(render()), static_cast<qutecsound *>(parent()), SLOT(render()));
-//  connect(b, SIGNAL(pause()), static_cast<qutecsound *>(parent()), SLOT(pause()));
-//  connect(b, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
-//}
