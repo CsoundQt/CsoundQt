@@ -215,7 +215,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // Setup the shortcut for tabs 1..10
     for (int i=0; i<10; i++) {
         QString key = (i==9) ? "0" : QString::number(i+1);
-        QShortcut *shortcut = new QShortcut(QKeySequence("Shift+Alt+"+key), this);
+		QShortcut *shortcut = new QShortcut(QKeySequence("Alt+"+key), this);
         connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()));
         mapper->setMapping(shortcut, i);
     }
@@ -1179,6 +1179,11 @@ void CsoundQt::focusToTab(int tab)
    }
 
    if (panel) {
+	   if (panel->isFloating() && panel->isVisible()) { // if as separate window, close it shortcut activated again
+		   panel->setVisible(false);
+		   action->setChecked(false);
+		   return;
+	   }
        if (!panel->isVisible()) {
            panel->show();
            action->setChecked(true);
@@ -2836,12 +2841,12 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     renderAct->setShortcut(tr("Alt+F"));
     externalPlayerAct->setShortcut(tr(""));
     externalEditorAct->setShortcut(tr(""));
-    focusEditorAct->setShortcut(tr("Alt+0"));
-    raiseHelpAct->setShortcut(tr("Alt+2"));
-    raiseWidgetsAct->setShortcut(tr("Alt+1"));
+	focusEditorAct->setShortcut(tr("Ctrl+0"));
+	raiseHelpAct->setShortcut(tr("Ctrl+2"));
+	raiseWidgetsAct->setShortcut(tr("Ctrl+1"));
     showGenAct->setShortcut(tr(""));
     showOverviewAct->setShortcut(tr(""));
-    raiseConsoleAct->setShortcut(tr("Alt+3"));
+	raiseConsoleAct->setShortcut(tr("Ctrl+3"));
 #ifdef Q_OS_MAC
     viewFullScreenAct->setShortcut(tr("Ctrl+Alt+F"));
 #else
@@ -2860,15 +2865,15 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	showTableEditorAct->setShortcut(tr("Ctrl+Shift+T"));
 	splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
     midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
-    createCodeGraphAct->setShortcut(tr("Alt+4"));
-    raiseInspectorAct->setShortcut(tr("Alt+5"));
-    showLiveEventsAct->setShortcut(tr("Alt+6"));
+	createCodeGraphAct->setShortcut(tr("")); // was Ctr +4 save it for html view
+	raiseInspectorAct->setShortcut(tr("Ctrl+5"));
+	showLiveEventsAct->setShortcut(tr("Ctrl+6"));
 
 #ifdef QCS_HTML5
-    raiseHtml5Act->setShortcut(tr("Alt+4")); // Alt-4 was before for Code graph
+	raiseHtml5Act->setShortcut(tr("Ctrl+4")); // Alt-4 was before for Code graph
 #endif
 	openDocumentationAct->setShortcut(tr("F1"));
-    showUtilitiesAct->setShortcut(tr("Alt+9"));
+	showUtilitiesAct->setShortcut(tr("Ctrl+9"));
     setHelpEntryAct->setShortcut(tr("Shift+F1"));
     browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
     browseForwardAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
@@ -2881,8 +2886,8 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     evaluateAct->setShortcut(tr("Shift+Ctrl+E"));
     evaluateSectionAct->setShortcut(tr("Shift+Ctrl+W"));
     scratchPadCsdModeAct->setShortcut(tr("Shift+Alt+S"));
-    raisePythonConsoleAct->setShortcut(tr("Alt+7"));
-    raiseScratchPadAct->setShortcut(tr("Alt+8"));
+	raisePythonConsoleAct->setShortcut(tr("Ctrl+7"));
+	raiseScratchPadAct->setShortcut(tr("Ctrl+8"));
     killLineAct->setShortcut(tr("Ctrl+K"));
     killToEndAct->setShortcut(tr("Shift+Alt+K"));
     showOrcAct->setShortcut(tr("Shift+Alt+1"));
@@ -3745,7 +3750,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(showVirtualKeyboardAct);
 	m_keyActions.append(showTableEditorAct);
 #ifdef QCS_HTML5
-    m_keyActions.append(showHtml5Act);
+	m_keyActions.append(raiseHtml5Act);
 #endif
     m_keyActions.append(setHelpEntryAct);
     m_keyActions.append(browseBackAct);
