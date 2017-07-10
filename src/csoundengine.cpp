@@ -783,7 +783,7 @@ int CsoundEngine::runCsound()
     ud->msgRefreshTime = m_refreshTime*1000;
     QDir::setCurrent(m_options.fileName1);
     for (int i = 0; i < consoles.size(); i++) {
-        consoles[0]->reset();
+        consoles[i]->reset();
     }
 #ifdef QCS_DESTROY_CSOUND
     ud->csound=csoundCreate((void *) ud);
@@ -883,7 +883,6 @@ int CsoundEngine::runCsound()
     csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
     csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
     if (!m_options.fileName1.endsWith(".html", Qt::CaseInsensitive)) {
-
 #if CS_APIVERSION>=4
         char const **argv;// since there was change in Csound API
         argv = (const char **) calloc(33, sizeof(char*));
@@ -1158,10 +1157,14 @@ void CsoundEngine::flushQueues()
 #endif
     while (!messageQueue.isEmpty()) {
         QString msg = messageQueue.takeFirst();
-        for (int i = 0; i < ud->csEngine->consoles.size(); i++) {
-            ud->csEngine->consoles[i]->appendMessage(msg);
+        ConsoleWidget *console = nullptr;
+        if (isRunning()) {
+            for (int i = 0; i < consoles.size(); i++) {
+                console = consoles[i];
+                console->appendMessage(msg);
+            }
+            ud->wl->appendMessage(msg);
         }
-        ud->wl->appendMessage(msg);
     }
     m_messageMutex.unlock();
     ud->wl->flushGraphBuffer();

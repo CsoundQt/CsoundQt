@@ -216,7 +216,7 @@ int CsoundHtmlWrapper::perform() {
     if (!m_csoundEngine) {
         return -1;
     }
-    m_csoundEngine->getUserData()->perfThread->Play();
+    getThread()->Play();
     return 0;
 }
 
