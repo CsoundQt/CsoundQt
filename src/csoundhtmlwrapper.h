@@ -36,6 +36,7 @@ public:
 	explicit CsoundHtmlWrapper(QObject *parent = 0);
     CSOUND *getCsound();
     CsoundPerformanceThread *getThread();
+    CsoundUserData *getUserData();
     void setCsoundEngine(CsoundEngine *csEngine); // necessay to get CsoundEngine::isPlaying()
     Q_INVOKABLE int compileCsd(const QString &filename);
 	Q_INVOKABLE int compileCsdText(const QString &text);

@@ -913,11 +913,11 @@ int CsoundEngine::runCsound()
     if (ud->enableWidgets) {
         setupChannels();
     }
-    ud->perfThread = new CsoundPerformanceThread(ud->csound);
-    ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
     // Do not run the performance thread if the piece is an HTML file,
     // the HTML code must do that.
     if (!m_options.fileName1.endsWith(".html", Qt::CaseInsensitive)) {
+        ud->perfThread = new CsoundPerformanceThread(ud->csound);
+        ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
         ud->perfThread->Play();
     }
     return 0;

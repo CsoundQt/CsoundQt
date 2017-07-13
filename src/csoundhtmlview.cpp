@@ -131,7 +131,8 @@ document.addEventListener("DOMContentLoaded", function () {
         QTextStream out(&htmlfile);
         out << html;
         htmlfile.close();
-		loadFromUrl(QUrl::fromLocalFile(htmlfilename));
+        ///oadFromUrl(QUrl::fromLocalFile(htmlfilename));
+        webView->load(QUrl::fromLocalFile(htmlfilename));
         // kas aitab, kui on siin:
 #ifdef USE_WEBENGINE
         webView->page()->setWebChannel(&channel);

@@ -51,6 +51,13 @@ CsoundPerformanceThread *CsoundHtmlWrapper::getThread()
     return m_csoundEngine->getUserData()->perfThread;
 }
 
+CsoundUserData *CsoundHtmlWrapper::getUserData()
+{
+    if(!m_csoundEngine) {
+        return nullptr;
+    }
+    return m_csoundEngine->getUserData();
+}
 
 void CsoundHtmlWrapper::setCsoundEngine(CsoundEngine *csEngine)
 {
@@ -216,6 +223,14 @@ int CsoundHtmlWrapper::perform() {
     if (!m_csoundEngine) {
         return -1;
     }
+    if (getThread()) {
+        qDebug() << "Stopping existing Csound performance thread.";
+        getThread()->Stop();
+        getThread()->Join();
+        delete getThread();
+    }
+    getUserData()->perfThread = new CsoundPerformanceThread(getCsound());
+    getThread()->SetProcessCallback(CsoundEngine::csThread, (void*)getUserData());
     getThread()->Play();
     return 0;
 }
@@ -342,7 +357,7 @@ void CsoundHtmlWrapper::stop(){
     if (!m_csoundEngine) {
         return;
     }
-    getThread()->Stop();
+    csoundStop(getCsound());
 }
 
 double CsoundHtmlWrapper::tableGet(int table_number, int index){
