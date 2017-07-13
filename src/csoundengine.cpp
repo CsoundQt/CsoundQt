@@ -128,13 +128,13 @@ void CsoundEngine::messageCallbackThread(CSOUND *csound,
 {
 
     CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
+    qDebug() << msg;
     if (!(ud->flags & QCS_NO_CONSOLE_MESSAGES)) {
         QString msg;
         msg = msg.vsprintf(fmt, args);
         if (msg.isEmpty()) {
             return;
         }
-        qDebug() << msg;
         ud->csEngine->queueMessage(msg);
     }
 }
@@ -1091,7 +1091,6 @@ void CsoundEngine::messageListDispatcher(void *data)
 {
     //	qDebug() ;
     CsoundUserData *ud_local = (CsoundUserData *) data;
-
     while (ud_local->runDispatcher) {
         ud_local->playMutex->lock();
         if (ud_local->perfThread && (ud_local->perfThread->GetStatus() != 0)) { // In case score has ended
@@ -1101,14 +1100,12 @@ void CsoundEngine::messageListDispatcher(void *data)
             ud_local->playMutex->unlock();
         }
         CSOUND *csound = ud_local->csEngine->getCsound();
-
         if (csound) {
             if (ud_local->wl) {
                 ud_local->wl->getMouseValues(&ud_local->mouseValues);
             }
 #ifdef CSOUND6
             int count = csoundGetMessageCnt(csound);
-
             ud_local->csEngine->m_messageMutex.lock();
             for (int i = 0; i< count; i++) {
                 ud_local->csEngine->messageQueue << csoundGetFirstMessage(csound);
@@ -1157,6 +1154,9 @@ void CsoundEngine::flushQueues()
 #endif
     while (!messageQueue.isEmpty()) {
         QString msg = messageQueue.takeFirst();
+        // Print ALL Csound messages to QtCreator's application output pane.
+        // This can save time while debugging.
+        qDebug() << msg;
         ConsoleWidget *console = nullptr;
         if (isRunning()) {
             for (int i = 0; i < consoles.size(); i++) {

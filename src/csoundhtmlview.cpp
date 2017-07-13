@@ -224,8 +224,6 @@ void CsoundHtmlView::addJSObject()
 }
 #endif
 
-
-
 void CsoundHtmlView::loadFromUrl(const QUrl &url)
 {
     qDebug();
