@@ -20,25 +20,20 @@
 	02111-1307 USA
 */
 
-#ifndef CsoundHtmlWrapper_H
-#define CsoundHtmlWrapper_H
+#ifndef CsoundHtmlOnlyWrapper_H
+#define CsoundHtmlOnlyWrapper_H
 
 #include <QObject>
 #include <QDebug>
-#include <thread>
-#include "csoundengine.h"
+#include <csound_threaded.hpp>
 
-
-class CsoundHtmlWrapper : public QObject
+class CsoundHtmlOnlyWrapper : public QObject
 {
     Q_OBJECT
 public:
-	explicit CsoundHtmlWrapper(QObject *parent = 0);
-    Q_INVOKABLE CSOUND *getCsound();
-    Q_INVOKABLE CsoundPerformanceThread *getThread();
-    Q_INVOKABLE CsoundUserData *getUserData();
-    Q_INVOKABLE void setCsoundEngine(CsoundEngine *csEngine); // necessay to get CsoundEngine::isPlaying()
-    Q_INVOKABLE int compileCsd(const QString &filename);
+	explicit CsoundHtmlOnlyWrapper(QObject *parent = 0);
+    virtual ~CsoundHtmlOnlyWrapper();
+	Q_INVOKABLE int compileCsd(const QString &filename);
 	Q_INVOKABLE int compileCsdText(const QString &text);
 	Q_INVOKABLE int compileOrc(const QString &text);
 	Q_INVOKABLE double evalCode(const QString &text);
@@ -59,7 +54,7 @@ public:
 	Q_INVOKABLE bool isPlaying();
 	Q_INVOKABLE int isScorePending();
 	Q_INVOKABLE void message(const QString &text);
-	Q_INVOKABLE int perform();
+    Q_INVOKABLE int perform();
     Q_INVOKABLE int readScore(const QString &text);
     Q_INVOKABLE void reset();
     Q_INVOKABLE void rewindScore();
@@ -81,8 +76,8 @@ public:
 	Q_INVOKABLE int tableLength(int table_number);
 	Q_INVOKABLE void tableSet(int table_number, int index, double value);
 private:
-    CsoundEngine *m_csoundEngine;
     QObject *message_callback;
+    CsoundThreaded csound;
 };
 
 #endif // CsoundHtmlWrapper_H

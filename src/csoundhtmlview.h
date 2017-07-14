@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QDockWidget>
 #include "csoundhtmlwrapper.h"
+#include "CsoundHtmlOnlyWrapper.h"
 
 #ifdef USE_WEBKIT
 	#include <QtWebKit>
@@ -56,20 +57,20 @@ public slots:
 	void addJSObject();
 #endif
 
-protected:
-	//virtual void closeEvent(QCloseEvent *event);
 private:
 	Ui::Html5GuiDisplay *ui;
-	std::atomic<DocumentPage *> documentPage; // ?? why and what is std::atomic
+    std::atomic<DocumentPage *> documentPage;
 #ifdef _MSC_VER
     DWORD pid;
 #else
     pid_t pid;
 #endif
-
-	CsoundHtmlWrapper csoundWrapper;
-	CsoundEngine * m_csoundEngine;
-	QTemporaryFile  tempHtml;
+    // For performing CSD files with embedded <html> element.
+    CsoundHtmlWrapper csoundWrapper;
+    // For performing HTML files (HTML-only performance).
+    CsoundHtmlOnlyWrapper csoundHtmlOnlyWrapper;
+    CsoundEngine *m_csoundEngine;
+    QTemporaryFile tempHtml;
 
 };
 

@@ -196,10 +196,13 @@ int CsoundHtmlWrapper::getVersion() {
 }
 
 bool CsoundHtmlWrapper::isPlaying() {
-    if (!m_csoundEngine)
+    if (!m_csoundEngine) {
         return false;
-    else
-        return m_csoundEngine->isRunning();
+    }
+    if (!getThread()) {
+        return false;
+    }
+    return (getThread()->GetStatus() == 0);
 }
 
 int CsoundHtmlWrapper::isScorePending() {

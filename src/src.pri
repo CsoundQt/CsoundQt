@@ -80,7 +80,8 @@ HEADERS = "src/about.h" \
     src/debugpanel.h \
     src/livecodeeditor.h \
     src/newbreakpointdialog.h \
-    $$PWD/concurrent_queue.h
+    $$PWD/concurrent_queue.h \
+    $$PWD/CsoundHtmlOnlyWrapper.h
 
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
@@ -140,6 +141,7 @@ SOURCES = "src/about.cpp" \
     src/livecodeeditor.cpp \
     src/newbreakpointdialog.cpp \
     #src/csoundhtmlview.cpp
+    $$PWD/CsoundHtmlOnlyWrapper.cpp
 
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \

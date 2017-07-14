@@ -13,7 +13,6 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     ui(new Ui::Html5GuiDisplay),
     documentPage(0),
     pid(0),
-    csoundWrapper(nullptr),
     m_csoundEngine(nullptr)
 {
 #ifdef WIN32
@@ -23,10 +22,8 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     pid = getpid();
 #endif
     ui->setupUi(this);
-	// set csound to csoundwrapper here? setCsoundPointer(CSOUND *cs) {csoundWrapper.setCsoundPointer(cs){ csound = cs; } }
 #ifdef USE_WEBKIT
 	webView = new QWebView(this);
-	//webView->setUrl(QUrl("file:///home/tarmo/tarmo/programm/webchannel-test/test.csd.html"));
 #else
 	webView = new QWebEngineView(this);
 #endif
@@ -48,6 +45,7 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     }
     webView->page()->setWebChannel(&channel);
     //qDebug() << "Setting JavaScript object on init.";
+    channel.registerObject("csound", &csoundWrapper);
     channel.registerObject("csound", &csoundWrapper);
 #endif
 }
@@ -131,13 +129,19 @@ document.addEventListener("DOMContentLoaded", function () {
         QTextStream out(&htmlfile);
         out << html;
         htmlfile.close();
-        ///oadFromUrl(QUrl::fromLocalFile(htmlfilename));
-        webView->load(QUrl::fromLocalFile(htmlfilename));
+        loadFromUrl(QUrl::fromLocalFile(htmlfilename));
         // kas aitab, kui on siin:
 #ifdef USE_WEBENGINE
         webView->page()->setWebChannel(&channel);
-        channel.registerObject("csound", &csoundWrapper) ;
-        qDebug()  << "Setting JavaScript object on load.";
+        if (filename.endsWith(".html", Qt::CaseInsensitive)) {
+            // Register CsoundHtmlOnlyWrapper when performing HTML files.
+            qDebug()  << "Setting CsoundHtmlOnlyWrapper JavaScript object on load.";
+            channel.registerObject("csound", &csoundHtmlOnlyWrapper);
+        } else {
+            // Register CsoundHtmlWrapper when performing CSD files with embedded <html> element.
+            qDebug()  << "Setting CsoundWrapper JavaScript object on load.";
+            channel.registerObject("csound", &csoundWrapper);
+        }
 #endif
     }
     repaint();
@@ -209,8 +213,16 @@ document.addEventListener("DOMContentLoaded", function () {//void CsoundHtmlView
 		loadFromUrl(QUrl::fromLocalFile(tempHtml.fileName()));
 #ifdef USE_WEBENGINE
         webView->page()->setWebChannel(&channel);
-        channel.registerObject("csound", &csoundWrapper) ;
-        qDebug() << "Setting JavaScript object on view.";
+        auto filename = documentPage.load()->getFileName();
+        if (filename.endsWith(".html", Qt::CaseInsensitive)) {
+            // Register CsoundHtmlOnlyWrapper when performing HTML files.
+            qDebug()  << "Setting CsoundHtmlOnlyWrapper JavaScript object on view.";
+            channel.registerObject("csound", &csoundHtmlOnlyWrapper);
+        } else {
+            // Register CsoundHtmlWrapper when performing CSD files with embedded <html> element.
+            qDebug()  << "Setting CsoundWrapper JavaScript object on view.";
+            channel.registerObject("csound", &csoundWrapper);
+        }
 #endif
 	}
 }
