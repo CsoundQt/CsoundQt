@@ -37,6 +37,8 @@ CsoundHtmlOnlyWrapper::CsoundHtmlOnlyWrapper(QObject *parent) :
     QObject(parent),
     message_callback(nullptr)
 {
+    csound.SetHostData(this);
+    csound.SetMessageCallback(CsoundHtmlOnlyWrapper::csoundMessageCallback_);
 }
 
 CsoundHtmlOnlyWrapper::~CsoundHtmlOnlyWrapper() {
@@ -170,8 +172,9 @@ void CsoundHtmlOnlyWrapper::setInput(const QString &name){
 }
 
 void CsoundHtmlOnlyWrapper::setMessageCallback(QObject *callback){
-    qDebug();
-    callback->dumpObjectInfo();
+    qDebug() << "CsoundHtmlOnlyWrapper::setMessageCallback: " << callback;
+    message_callback = callback;
+    message_callback->dumpObjectInfo();
 }
 
 int CsoundHtmlOnlyWrapper::setOption(const QString &name){
@@ -214,6 +217,24 @@ int CsoundHtmlOnlyWrapper::tableLength(int table_number){
 
 void CsoundHtmlOnlyWrapper::tableSet(int table_number, int index, double value){
     csound.TableSet(table_number, index, value);
+}
+
+void CsoundHtmlOnlyWrapper::csoundMessageCallback_(CSOUND *csound,
+                                         int attr,
+                                         const char *fmt,
+                                         va_list args) {
+    CsoundHtmlOnlyWrapper *self = (CsoundHtmlOnlyWrapper *)csoundGetHostData(csound);
+    return self->csoundMessageCallback(attr, fmt, args);
+}
+
+void CsoundHtmlOnlyWrapper::csoundMessageCallback(int attr,
+                           const char *fmt,
+                           va_list args)
+{
+    char buffer[0x5000];
+    std::vsprintf(buffer, fmt, args);
+    qDebug() << buffer;
+    // TODO: Now call the JavaScript callback, passing it the buffer.
 }
 
 

@@ -76,6 +76,13 @@ public:
 	Q_INVOKABLE int tableLength(int table_number);
 	Q_INVOKABLE void tableSet(int table_number, int index, double value);
 private:
+    static void csoundMessageCallback_(CSOUND *csound,
+                                             int /*attr*/,
+                                             const char *fmt,
+                                             va_list args);
+    void csoundMessageCallback(int /*attr*/,
+                               const char *fmt,
+                               va_list args);
     QObject *message_callback;
     CsoundThreaded csound;
 };
