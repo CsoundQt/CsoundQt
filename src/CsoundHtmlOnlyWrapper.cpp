@@ -30,6 +30,7 @@ f the GNU Lesser General Public
 
 
 #include "CsoundHtmlOnlyWrapper.h"
+#include "console.h"
 #include <QApplication>
 #include <QDebug>
 
@@ -42,6 +43,13 @@ CsoundHtmlOnlyWrapper::CsoundHtmlOnlyWrapper(QObject *parent) :
 }
 
 CsoundHtmlOnlyWrapper::~CsoundHtmlOnlyWrapper() {
+}
+
+void CsoundHtmlOnlyWrapper::registerConsole(ConsoleWidget *console_){
+    console = console_;
+    if (console != nullptr) {
+             connect(this, SIGNAL(passMessages(QString)), console, SLOT(appendMessage(QString)));
+    }
 }
 
 int CsoundHtmlOnlyWrapper::compileCsd(const QString &filename) {
@@ -220,21 +228,20 @@ void CsoundHtmlOnlyWrapper::tableSet(int table_number, int index, double value){
 }
 
 void CsoundHtmlOnlyWrapper::csoundMessageCallback_(CSOUND *csound,
-                                         int attr,
-                                         const char *fmt,
+                                         int attributes,
+                                         const char *format,
                                          va_list args) {
-    CsoundHtmlOnlyWrapper *self = (CsoundHtmlOnlyWrapper *)csoundGetHostData(csound);
-    return self->csoundMessageCallback(attr, fmt, args);
+    return reinterpret_cast<CsoundHtmlOnlyWrapper *>(csoundGetHostData(csound))->csoundMessageCallback(attributes, format, args);
 }
 
-void CsoundHtmlOnlyWrapper::csoundMessageCallback(int attr,
-                           const char *fmt,
+void CsoundHtmlOnlyWrapper::csoundMessageCallback(int attributes,
+                           const char *format,
                            va_list args)
 {
-    char buffer[0x5000];
-    std::vsprintf(buffer, fmt, args);
-    qDebug() << buffer;
-    // TODO: Now call the JavaScript callback, passing it the buffer.
+    QString message = QString::vasprintf(format, args);
+    qDebug() << message;
+    passMessages(message);
+    // TODO: Now call the JavaScript callback with the message.
 }
 
 

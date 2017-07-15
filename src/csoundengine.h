@@ -234,7 +234,8 @@ public slots:
 
 	void evaluate(QString code);
 public:
-	int runCsound();
+    QVector<ConsoleWidget *> consoles;  // Consoles registered for message printing
+    int runCsound();
 	void stopCsound();
 
 	void cleanupCsound();
@@ -248,7 +249,6 @@ private:
 
 	CsoundOptions m_options;
 
-	QVector<ConsoleWidget *> consoles;  // Consoles registered for message printing
 	int m_consoleBufferSize;
 	QMutex m_messageMutex; // Protection for message queue
 	QStringList messageQueue;  // Messages from Csound execution

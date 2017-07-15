@@ -1,4 +1,5 @@
 #if defined(QCS_QTHTML)
+#include "basedocument.h"
 #include "documentpage.h"
 #include "csoundhtmlview.h"
 #include "ui_html5guidisplay.h"
@@ -45,7 +46,6 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     }
     webView->page()->setWebChannel(&channel);
     //qDebug() << "Setting JavaScript object on init.";
-    channel.registerObject("csound", &csoundWrapper);
     channel.registerObject("csound", &csoundWrapper);
 #endif
 }
@@ -137,6 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Register CsoundHtmlOnlyWrapper when performing HTML files.
             qDebug()  << "Setting CsoundHtmlOnlyWrapper JavaScript object on load.";
             channel.registerObject("csound", &csoundHtmlOnlyWrapper);
+            csoundHtmlOnlyWrapper.registerConsole(documentPage_->getConsole());
         } else {
             // Register CsoundHtmlWrapper when performing CSD files with embedded <html> element.
             qDebug()  << "Setting CsoundWrapper JavaScript object on load.";
