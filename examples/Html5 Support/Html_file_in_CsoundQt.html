@@ -4,14 +4,6 @@
     <title>Simple Csound HTML5 Example</title>
 </head>
 <script type="text/javascript">
-    // "require" must be used to instantiate Csound in csound.node, 
-    // but in other environments, where Csound has already been instantiated 
-    // by the environment, this causes an exception that must be handled.
-    try {
-        var csound = require('csound.node');
-    } catch (err) {
-        console.log(err)
-    }
     var handleMessage = function(message) {
         var messages_textarea = document.getElementById("messages");
         var existing = messages_textarea.value;
@@ -20,13 +12,9 @@
     }
     var start_onclick = function() {
         csound.stop();
-        try {
-            csound.setMessageCallback(handleMessage);
-        } catch(error) {
-            alert(error.message);
-        }
         var csd = document.getElementById('csd').value;
         csound.compileCsdText(csd);
+csound.start();
         csound.perform();
     }
     var stop_onclick = function() {
@@ -34,7 +22,7 @@
     }
     var gk_FM_index_oninput = function(event) {
         var slider_value = parseFloat(event.target.value);
-        csound.setControlChannel(event.target.id, slider_value);    
+        csound.setControlChannel(event.target.id, slider_value);
     }
 </script>
 <body>
