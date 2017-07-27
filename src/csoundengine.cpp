@@ -535,7 +535,7 @@ void CsoundEngine::setWidgetLayout(WidgetLayout *wl)
             this,SLOT(registerScope(QuteScope*)));
     connect(wl, SIGNAL(registerGraph(QuteGraph*)),
             this,SLOT(registerGraph(QuteGraph*)));
-    connect(this, SIGNAL(passMessages(QString)), wl, SLOT(appendMessage(QString)));
+    connect(this, SIGNAL(passMessages(QString)), wl, SLOT(appendMessage(QString)), Qt::UniqueConnection);
 }
 
 void CsoundEngine::setMidiHandler(MidiHandler *mh)
@@ -551,7 +551,7 @@ void CsoundEngine::enableWidgets(bool enable)
 void CsoundEngine::registerConsole(ConsoleWidget *c)
 {
     consoles.append(c);
-    connect(this,SIGNAL(passMessages(QString)), c, SLOT(appendMessage(QString)));
+    connect(this,SIGNAL(passMessages(QString)), c, SLOT(appendMessage(QString)), Qt::UniqueConnection);
 }
 
 QList<QPair<int, QString> > CsoundEngine::getErrorLines()

@@ -48,7 +48,7 @@ CsoundHtmlOnlyWrapper::~CsoundHtmlOnlyWrapper() {
 void CsoundHtmlOnlyWrapper::registerConsole(ConsoleWidget *console_){
     console = console_;
     if (console != nullptr) {
-             connect(this, SIGNAL(passMessages(QString)), console, SLOT(appendMessage(QString)));
+             connect(this, SIGNAL(passMessages(QString)), console, SLOT(appendMessage(QString)), Qt::UniqueConnection);
     }
 }
 
@@ -214,6 +214,8 @@ int CsoundHtmlOnlyWrapper::start(){
 void CsoundHtmlOnlyWrapper::stop(){
     csound.Stop();
     csound.Join();
+    csound.Cleanup();
+    csound.Reset();
 }
 
 double CsoundHtmlOnlyWrapper::tableGet(int table_number, int index){
@@ -242,7 +244,6 @@ void CsoundHtmlOnlyWrapper::csoundMessageCallback(int attributes,
     QString message = QString::vasprintf(format, args);
     qDebug() << message;
     passMessages(message);
-    // TODO: Now call the JavaScript callback with the message.
 }
 
 
