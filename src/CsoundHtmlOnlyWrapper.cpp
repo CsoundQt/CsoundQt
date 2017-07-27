@@ -213,6 +213,7 @@ int CsoundHtmlOnlyWrapper::start(){
 
 void CsoundHtmlOnlyWrapper::stop(){
     csound.Stop();
+    csound.Join();
 }
 
 double CsoundHtmlOnlyWrapper::tableGet(int table_number, int index){
