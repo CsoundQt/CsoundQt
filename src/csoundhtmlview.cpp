@@ -156,8 +156,9 @@ void CsoundHtmlView::setCsoundEngine(CsoundEngine *csEngine)
 
 void CsoundHtmlView::stop() // why is this function necessary?
 {
-    documentPage = 0;
     qDebug() ;
+    documentPage = 0;
+    csoundHtmlOnlyWrapper.stop();
 }
 
 void CsoundHtmlView::viewHtml(QString htmlText)

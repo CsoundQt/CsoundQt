@@ -48,8 +48,7 @@ public:
 #endif
 #ifdef USE_WEBENGINE
 	QWebChannel channel ;            // Channel for C++ to Javascript comms
-	QWebEngineView * webView;
-
+    QWebEngineView *webView;
 #endif
 
 public slots:
@@ -71,7 +70,6 @@ private:
     CsoundHtmlOnlyWrapper csoundHtmlOnlyWrapper;
     CsoundEngine *m_csoundEngine;
     QTemporaryFile tempHtml;
-
 };
 
 #endif

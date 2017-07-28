@@ -1580,6 +1580,9 @@ void CsoundQt::play(bool realtime, int index)
     m_options->rt = realtime;
     if (!m_options->simultaneousRun) {
         stopAllOthers();
+#if defined(QCS_QTHTML)
+        csoundHtmlView->stop();
+#endif
     }
     if (curPage == oldPage) {
         runAct->setChecked(true);  // In case the call comes from a button
@@ -1740,7 +1743,8 @@ void CsoundQt::stopAllOthers()
 {
     for (int i = 0; i < documentPages.size(); i++) {
         if (i != curPage) {
-            documentPages[i]->stop();
+            DocumentPage *documentPage = documentPages[i];
+            documentPage->stop();
         }
     }
     //	markStopped();

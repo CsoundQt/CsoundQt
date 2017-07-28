@@ -58,30 +58,20 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 #ifdef QCS_PYTHONQT
     ud->m_pythonCallback = "";
 #endif
-
     m_consoleBufferSize = 0;
-
     m_recording = false;
-
 #ifndef QCS_DESTROY_CSOUND
-    // Create only once
     ud->csound=csoundCreate( (void *) ud);
-    //	ud->perfThread = new CsoundPerformanceThread(ud->csound);
-    //	ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
 #ifdef CSOUND6
-    //    csoundSetHostImplementedMIDIIO(ud->csound, 1);
     ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
     Q_ASSERT(ud->midiBuffer);
 #endif
 #endif
-
     eventQueue.resize(QCS_MAX_EVENTS);
     eventTimeStamps.resize(QCS_MAX_EVENTS);
     eventQueueSize = 0;
-
     m_refreshTime = QCS_QUEUETIMER_DEFAULT_TIME;  // TODO Eventually allow this to be changed
     ud->msgRefreshTime = m_refreshTime*1000;
-
     ud->runDispatcher = true;
     m_msgUpdateThread = QtConcurrent::run(messageListDispatcher, (void *) ud);
 #ifdef QCS_DEBUGGER
@@ -92,7 +82,6 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
 CsoundEngine::~CsoundEngine()
 {
     disconnect(SIGNAL(passMessages(QString)),0,0);
-
     disconnect(this, 0,0,0);
     ud->runDispatcher = false;
     m_msgUpdateThread.waitForFinished(); // Join the message thread
@@ -105,21 +94,6 @@ CsoundEngine::~CsoundEngine()
 }
 
 #ifndef CSOUND6
-//void CsoundEngine::messageCallbackNoThread(CSOUND *csound,
-//										   int /*attr*/,
-//										   const char *fmt,
-//										   va_list args)
-//{
-//	CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-//	QString msg;
-//	msg = msg.vsprintf(fmt, args);
-//	if (msg.isEmpty()) {
-//		return;
-//	}
-//	for (int i = 0; i < ud->csEngine->consoles.size(); i++) {
-//		ud->csEngine->consoles[i]->appendMessage(msg);
-//	}
-//}
 
 void CsoundEngine::messageCallbackThread(CSOUND *csound,
                                          int /*attr*/,

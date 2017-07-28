@@ -579,11 +579,6 @@ EventSheet* DocumentPage::getSheet(QString sheetName)
     (void) sheetName;
 	return 0;
 }
-//
-//void *DocumentPage::getCsound()
-//{
-//  return m_csEngine->getCsound();
-//}
 
 int DocumentPage::lineCount(bool countExtras)
 {
@@ -863,15 +858,8 @@ void DocumentPage::gotoNextRow()
 			return;
 		}
 	}
-	if (m_view->childHasFocus())
+    if (m_view->childHasFocus()) {
 		m_view->gotoNextLine();
-	else {
-		// Not worth implementing for live event sheets, as this is used only
-		// when running a single line for the python interpreter
-		//    for (int i = 0; i < m_liveFrames.size(); i++) {
-		//      if (m_liveFrames[i]->getSheet()->hasFocus())
-		//        m_liveFrames[i]->getSheet()->redo();
-		//    }
 	}
 }
 
@@ -880,16 +868,6 @@ DocumentView *DocumentPage::getView()
 	Q_ASSERT(m_view != 0);
 	return m_view;
 }
-
-//void DocumentPage::setWidgetLayout(WidgetLayout *w)
-//{
-//  if (w != 0) {
-//    m_widgetLayout = w;
-//  }
-//  else {
-//    qDebug() << "NULL widget.";
-//  }
-//}
 
 void DocumentPage::setTextFont(QFont font)
 {
@@ -962,16 +940,6 @@ void DocumentPage::inToGet()
 	m_view->inToGet();
 }
 
-//void DocumentPage::setEditAct(QAction *editAct)
-//{
-//  m_widgetLayout->setEditAct(editAct);
-//}
-
-//void DocumentPage::setCsoundOptions(CsoundOptions &options)
-//{
-//  m_csEngine->setCsoundOptions(options);
-//}
-
 void DocumentPage::showWidgetTooltips(bool visible)
 {
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
@@ -1008,13 +976,6 @@ void DocumentPage::setFontScaling(double offset)
 	}
 }
 
-//void DocumentPage::passWidgetClipboard(QString text)
-//{
-//  foreach (WidgetLayout *wl, m_widgetLayouts) {
-//    wl->passWidgetClipboard(text);
-//  }
-//}
-
 void DocumentPage::setConsoleFont(QFont font)
 {
 	m_console->setDefaultFont(font);
@@ -1029,21 +990,6 @@ void DocumentPage::setEditorBgColor(QColor bgColor)
 {
 	m_view->setBackgroundColor(bgColor);
 }
-
-//DocumentView * DocumentPage::view()
-//{
-//  return m_view;
-//}
-//
-//CsoundEngine *DocumentPage::engine()
-//{
-//  return m_csEngine;
-//}
-//
-//WidgetLayout * DocumentPage::widgetLayout()
-//{
-//  return m_widgetLayout;
-//}
 
 void DocumentPage::setScriptDirectory(QString dir)
 {

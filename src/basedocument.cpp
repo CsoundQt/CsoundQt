@@ -60,20 +60,8 @@ BaseDocument::~BaseDocument()
 		WidgetLayout *wl = m_widgetLayouts.takeLast();
 		wl->hide();
         delete wl;
-//		wl->deleteLater();  //FIXME Still crashing ocassionally?
     }
-//	m_csEngine->deleteLater();
-	//  m_view->deleteLater();   // Crashes. Already destroyed?
-	//  m_widgetLayout->setParent(0);  //To make sure the widget panel from the main application doesn't attempt to delete it as its child
 }
-
-//void BaseDocument::init(QWidget *parent, OpEntryParser *opcodeTree)
-//{
-//  qDebug() ;
-////  m_view = createView(parent, opcodeTree);
-//  m_view = new BaseView(parent, opcodeTree);
-//  m_view->setFileType(0);
-//}
 
 int BaseDocument::parseAndRemoveWidgetText(QString &text)
 {
