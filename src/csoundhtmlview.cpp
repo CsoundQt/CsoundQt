@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {//void CsoundHtmlView
 		tempHtml.write(htmlText.toLocal8Bit());
 		tempHtml.resize(tempHtml.pos()); // otherwise may keep contents from previous write if that was bigger
 		tempHtml.close();
-		loadFromUrl(QUrl::fromLocalFile(tempHtml.fileName()));
+        loadFromUrl(QUrl::fromLocalFile(tempHtml.fileName()));
 #ifdef USE_WEBENGINE
         webView->page()->setWebChannel(&channel);
         auto filename = documentPage.load()->getFileName();
@@ -244,14 +244,23 @@ void CsoundHtmlView::addJSObject()
 void CsoundHtmlView::loadFromUrl(const QUrl &url)
 {
     qDebug();
+    if (!this->isVisible()) {
+        this->show();
+    }
     if(webView != 0) {
-		webView->setUrl(url);
+//        if (!webView->isVisible() ) {
+//            webView->setVisible(true);
+//        }
+        webView->setUrl(url);
     }
 }
 
 void CsoundHtmlView::clear()
 {
-    loadFromUrl(QUrl()); // empty URL to clear
+    qDebug()<<"Nothing here.";
+    //webView->hide();
+    this->hide();
+    //loadFromUrl(QUrl()); // empty URL to clear -  this causes "qt is not defined" error
 }
 
 void CsoundHtmlView::setOptions(CsoundOptions *options)
