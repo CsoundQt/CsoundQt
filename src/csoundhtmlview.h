@@ -43,6 +43,7 @@ public:
     void setCsoundEngine(CsoundEngine *csEngine);
     void viewHtml(QString htmlText);
 	void clear();
+    void setOptions(CsoundOptions * options);
 #ifdef USE_WEBKIT
 	QWebView *webView;
 #endif
@@ -70,6 +71,7 @@ private:
     CsoundHtmlOnlyWrapper csoundHtmlOnlyWrapper;
     CsoundEngine *m_csoundEngine;
     QTemporaryFile tempHtml;
+    CsoundOptions * m_options;
 };
 
 #endif

@@ -152,6 +152,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     csoundHtmlView->setObjectName("csoundHtmlView");
     csoundHtmlView->setWindowTitle(tr("HTML View"));
     csoundHtmlView->show();
+    csoundHtmlView->setOptions(m_options);
     addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
 #endif
 //TODO: #ifdef QCS_WEBKIT
@@ -1519,6 +1520,15 @@ void CsoundQt::play(bool realtime, int index)
         return;
     }
 #endif
+    if (fileName.endsWith(".html",Qt::CaseInsensitive)) {
+        QMessageBox::warning(this,
+                             tr("CsoundQt"),
+                             tr("Csound in html files should be started from html code."),
+                             QMessageBox::Ok);
+        runAct->setChecked(false);
+        curPage = documentTabs->currentIndex();
+        return;
+    }
     if (!fileName.endsWith(".csd",Qt::CaseInsensitive) && !fileName.endsWith(".py",Qt::CaseInsensitive))  {
         if (documentPages[curPage]->askForFile)
             getCompanionFileName();

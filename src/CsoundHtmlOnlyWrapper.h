@@ -78,6 +78,7 @@ public slots:
     double tableGet(int table_number, int index);
     int tableLength(int table_number);
     void tableSet(int table_number, int index, double value);
+    void setOptions(CsoundOptions * options);
 signals:
     void passMessages(QString message);
 private:
@@ -91,6 +92,8 @@ private:
     QObject *message_callback;
     ConsoleWidget *console;
     CsoundThreaded csound;
+private:
+    CsoundOptions *m_options;
 };
 
 #endif // CsoundHtmlWrapper_H

@@ -36,7 +36,8 @@ f the GNU Lesser General Public
 
 CsoundHtmlOnlyWrapper::CsoundHtmlOnlyWrapper(QObject *parent) :
     QObject(parent),
-    message_callback(nullptr)
+    message_callback(nullptr),
+    m_options(nullptr)
 {
     csound.SetHostData(this);
     csound.SetMessageCallback(CsoundHtmlOnlyWrapper::csoundMessageCallback_);
@@ -141,7 +142,7 @@ void CsoundHtmlOnlyWrapper::message(const QString &text) {
 }
 
 int CsoundHtmlOnlyWrapper::perform() {
-    // Perform in a separate thread of execution.
+    // Perform in a separate thread of execution.    
     return csound.Perform();
 }
 
@@ -207,6 +208,12 @@ void CsoundHtmlOnlyWrapper::setStringChannel(const QString &name, const QString 
 
 int CsoundHtmlOnlyWrapper::start(){
     int result = 0;
+    // set options from CsoundQt
+    if (m_options) {
+        foreach (QString option, m_options->generateCmdLineFlagsList() ) {
+            setOption(option);
+        }
+    }
     result = csound.Start();
     return result;
 }
@@ -228,6 +235,11 @@ int CsoundHtmlOnlyWrapper::tableLength(int table_number){
 
 void CsoundHtmlOnlyWrapper::tableSet(int table_number, int index, double value){
     csound.TableSet(table_number, index, value);
+}
+
+void CsoundHtmlOnlyWrapper::setOptions(CsoundOptions *options)
+{
+    m_options = options;
 }
 
 void CsoundHtmlOnlyWrapper::csoundMessageCallback_(CSOUND *csound,

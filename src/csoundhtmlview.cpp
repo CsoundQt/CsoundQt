@@ -14,7 +14,8 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     ui(new Ui::Html5GuiDisplay),
     documentPage(0),
     pid(0),
-    m_csoundEngine(nullptr)
+    m_csoundEngine(nullptr),
+    m_options(nullptr)
 {
 #ifdef WIN32
 	pid = GetCurrentProcessId();
@@ -138,6 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
             qDebug()  << "Setting CsoundHtmlOnlyWrapper JavaScript object on load.";
             channel.registerObject("csound", &csoundHtmlOnlyWrapper);
             csoundHtmlOnlyWrapper.registerConsole(documentPage_->getConsole());
+            csoundHtmlOnlyWrapper.setOptions(m_options);
         } else {
             // Register CsoundHtmlWrapper when performing CSD files with embedded <html> element.
             qDebug()  << "Setting CsoundWrapper JavaScript object on load.";
@@ -154,7 +156,7 @@ void CsoundHtmlView::setCsoundEngine(CsoundEngine *csEngine)
 }
 
 
-void CsoundHtmlView::stop() // why is this function necessary?
+void CsoundHtmlView::stop()
 {
     qDebug() ;
     documentPage = 0;
@@ -249,7 +251,12 @@ void CsoundHtmlView::loadFromUrl(const QUrl &url)
 
 void CsoundHtmlView::clear()
 {
-	loadFromUrl(QUrl()); // empty URL to clear
+    loadFromUrl(QUrl()); // empty URL to clear
+}
+
+void CsoundHtmlView::setOptions(CsoundOptions *options)
+{
+    m_options = options;
 }
 
 #endif
