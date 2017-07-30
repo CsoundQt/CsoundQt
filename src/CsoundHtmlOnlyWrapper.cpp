@@ -246,7 +246,7 @@ void CsoundHtmlOnlyWrapper::csoundMessageCallback_(CSOUND *csound,
                                          int attributes,
                                          const char *format,
                                          va_list args) {
-    return reinterpret_cast<CsoundHtmlOnlyWrapper *>(csoundGetHostData(csound))->csoundMessageCallback(attributes, format, args);
+        return reinterpret_cast<CsoundHtmlOnlyWrapper *>(csoundGetHostData(csound))->csoundMessageCallback(attributes, format, args);
 }
 
 void CsoundHtmlOnlyWrapper::csoundMessageCallback(int attributes,
@@ -255,7 +255,9 @@ void CsoundHtmlOnlyWrapper::csoundMessageCallback(int attributes,
 {
     QString message = QString::vasprintf(format, args);
     qDebug() << message;
-    passMessages(message);
+    if (!console->isHidden()) { // otherwise crash on exit
+        passMessages(message);
+    }
 }
 
 

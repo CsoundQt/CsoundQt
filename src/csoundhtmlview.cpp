@@ -244,22 +244,19 @@ void CsoundHtmlView::addJSObject()
 void CsoundHtmlView::loadFromUrl(const QUrl &url)
 {
     qDebug();
+
+    if(webView != 0) {
+        webView->setUrl(url);
+    }
     if (!this->isVisible()) {
         this->show();
-    }
-    if(webView != 0) {
-//        if (!webView->isVisible() ) {
-//            webView->setVisible(true);
-//        }
-        webView->setUrl(url);
+        this->raise();
     }
 }
 
 void CsoundHtmlView::clear()
 {
-    qDebug()<<"Nothing here.";
-    //webView->hide();
-    this->hide();
+    this->hide(); // just hide the panel, keep qwebchannel and other connections
     //loadFromUrl(QUrl()); // empty URL to clear -  this causes "qt is not defined" error
 }
 
