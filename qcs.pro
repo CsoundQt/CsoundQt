@@ -19,31 +19,15 @@
 # CONFIG+=rtmidi     To build with RtMidi support
 # CONFIG+=record_support
 # CONFIG+=debugger
-# To support HTML5 via the <html> element in the csd using the Qt WebEngine:
+# To support HTML5 via the <html> element in the csd using the Qt WebEngine
+# (preferably use Qt 5.8 or later):
 # CONFIG+=html_webengine
+# If you want to build HTML5 support using QtWebkit framework (Qt 5.5 or earlier):
+# CONFIG+=html_webkit
 # OS X only OPTIONS:
 # CONFIG+=universal  #  To build i386/ppc version. Default is x86_64
 # CONFIG+=i386  #  To build i386 version. Default is x86_64
 ################################################################################
-
-#testing for qt based html support
-#CONFIG += html_webkit # OR: html_webengine
-CONFIG += html_webengine
-
-html_webkit: {
-message("Building html support with QtWebkit")
-DEFINES += QCS_QTHTML USE_WEBKIT
-QT += network webkit webkitwidgets
-CONFIG += c++11
-}
-
-html_webengine: {
-message("Building html support with QtWebengine")
-DEFINES += QCS_QTHTML USE_WEBENGINE
-QT += network webenginewidgets webchannel
-CONFIG += c++11
-}
-
 
 DEFINES += NOMINMAX
 
@@ -151,6 +135,21 @@ pythonqt {
 	}
 }
 
+
+html_webengine: {
+message("Building html support with QtWebengine")
+DEFINES += QCS_QTHTML USE_WEBENGINE
+QT += network webenginewidgets webchannel
+CONFIG += c++11
+}
+
+html_webkit: {
+message("Building html support with QtWebkit")
+DEFINES += QCS_QTHTML USE_WEBKIT
+QT += network webkit webkitwidgets
+CONFIG += c++11
+}
+
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
 INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
 
@@ -165,6 +164,7 @@ TARGET = CsoundQt
 build32:TARGET = $${TARGET}-f
 build64:TARGET = $${TARGET}-d
 pythonqt:TARGET = $${TARGET}-py
+html_webkit|html_webengine:TARGET = $${TARGET}-html
 
 csound6:TARGET = $${TARGET}-cs6
 
