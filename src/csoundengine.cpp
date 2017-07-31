@@ -749,7 +749,10 @@ int CsoundEngine::runCsound()
     menuBarHandle = GetMenuBar();
 #endif
 #ifdef Q_OS_WIN
-    OleInitialize(NULL);
+	// Call OleInitialize twice to keep the FLTK opcodes from reducing the COM
+	// reference count to zero.
+    // OleInitialize(NULL); // Do not initialize here but in CsoundQt onbject
+    // OleInitialize(NULL);
 #endif
     eventQueueSize = 0;
     // Flush events gathered while idle.

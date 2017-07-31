@@ -14,8 +14,8 @@
 
 </CsOptions>
 <CsInstruments>
-sr 		= 48000
-ksmps 	= 10
+sr 		= 44100
+ksmps 	= 32
 nchnls 	= 2
 0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -337,11 +337,12 @@ i 2  0 3600	;INSTRUMENT 2 PLAYS FOR 1 HOUR
 i 8  0 3600	;INSTRUMENT 8 PLAYS FOR 1 HOUR	(REVERB)
 i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>438</x>
- <y>199</y>
+ <x>14</x>
+ <y>63</y>
  <width>1010</width>
  <height>705</height>
  <visible>true</visible>
@@ -406,7 +407,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -439,7 +440,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>250</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -472,7 +473,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>242</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -505,7 +506,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>234</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -538,7 +539,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>226</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -571,7 +572,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>218</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -604,7 +605,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>210</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -637,7 +638,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>202</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -670,7 +671,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>194</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -703,7 +704,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>186</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -736,7 +737,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>178</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -769,7 +770,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>170</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -802,7 +803,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>162</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -835,7 +836,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>154</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -868,7 +869,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>146</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -901,7 +902,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>138</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -934,7 +935,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>130</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -967,7 +968,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>122</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1000,7 +1001,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>114</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1033,7 +1034,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>106</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1066,7 +1067,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>98</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1099,7 +1100,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>90</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1132,7 +1133,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>82</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1165,7 +1166,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>74</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1198,7 +1199,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>66</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1231,7 +1232,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>58</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1264,7 +1265,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>50</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1297,7 +1298,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>42</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1330,7 +1331,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>34</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1363,7 +1364,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>26</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1396,7 +1397,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
    <g>255</g>
    <b>18</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>

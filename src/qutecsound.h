@@ -276,6 +276,7 @@ private slots:
 	void onNewConnection(); // when new client is connecting to localServer
 	void onReadyRead(); // when message comes in
 	void disableInternalRtMidi();
+    void focusToTab(int tab);
 #ifdef QCS_DEBUGGER
 	void runDebugger();
 	void stopDebugger();
@@ -407,12 +408,14 @@ private:
 	QAction *externalPlayerAct;
 	QAction *focusEditorAct;
 	QAction *showHelpAct;
+    QAction *raiseHelpAct;
 	QAction *showManualAct;
 	QAction *downloadManualAct;
 	QAction *showGenAct;
 	QAction *showOverviewAct;
 	QAction *showOpcodeQuickRefAct;
 	QAction *showConsoleAct;
+    QAction *raiseConsoleAct;
     QAction *viewFullScreenAct;
     QAction *viewEditorFullScreenAct;
     QAction *viewHtmlFullScreenAct;
@@ -425,6 +428,7 @@ private:
 	QAction *showTableEditorAct;
 #if defined(QCS_QTHTML)
 	QAction *showHtml5Act;
+    QAction *raiseHtml5Act;
 #endif
 	QAction *midiLearnAct;
 	QAction *splitViewAct;
@@ -443,10 +447,14 @@ private:
 	QAction *openDocumentationAct;
 	QAction *showUtilitiesAct;
 	QAction *showWidgetsAct;
+    QAction *raiseWidgetsAct;
 	QAction *showInspectorAct;
+    QAction *raiseInspectorAct;
 	QAction *showLiveEventsAct;
 	QAction *showPythonConsoleAct;
+    QAction *raisePythonConsoleAct;
 	QAction *showScratchPadAct;
+    QAction *raiseScratchPadAct;
 	QAction *commentAct;
 	//    QAction *uncommentAct;
 	QAction *indentAct;
@@ -463,6 +471,7 @@ private:
 	QAction *lineNumbersAct;
 	QAction *parameterModeAct;
 //	QAction *showParametersAct;
+    QSignalMapper *focusMapper;
 	int curPage;
 	int curCsdPage;  // To recall last csd visited
 	int configureTab; // Tab in last configure dialog accepted
