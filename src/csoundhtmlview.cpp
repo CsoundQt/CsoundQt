@@ -235,9 +235,23 @@ document.addEventListener("DOMContentLoaded", function () {//void CsoundHtmlView
 void CsoundHtmlView::addJSObject()
 {
 	if (webView) {
+        QString filename = documentPage.load()->getFileName();
         qDebug()<<"Adding Csound as JavaScript object";
-		webView->page()->mainFrame()->addToJavaScriptWindowObject("csound", &csoundWrapper);
+        if (filename.endsWith(".html", Qt::CaseInsensitive)) {
+            // Register CsoundHtmlOnlyWrapper when performing HTML files.
+            webView->page()->mainFrame()->addToJavaScriptWindowObject("csound", &csoundHtmlOnlyWrapper);
+            csoundHtmlOnlyWrapper.registerConsole(documentPage.load()->getConsole());
+            csoundHtmlOnlyWrapper.setOptions(m_options);
+        } else {
+            // Register CsoundHtmlWrapper when performing CSD files with embedded <html> element.
+            webView->page()->mainFrame()->addToJavaScriptWindowObject("csound", &csoundWrapper);
+        }
+
+
 	}
+
+
+
 }
 #endif
 
