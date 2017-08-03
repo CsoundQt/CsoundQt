@@ -208,8 +208,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
         QString key = (i==9) ? "0" : QString::number(i+1);
 		QShortcut *shortcut = new QShortcut(QKeySequence("Alt+"+key), this);
         connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()));
+		connect(shortcut, SIGNAL(activatedAmbiguously()), this, SLOT(ambiguosShortcut()) );
         mapper->setMapping(shortcut, i);
     }
+	// Wire the signal mapper to the tab widget index change slot
+	connect(mapper, SIGNAL(mapped(int)), documentTabs, SLOT(setCurrentIndex(int)));
 
     fillFileMenu(); // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
@@ -1163,6 +1166,13 @@ void CsoundQt::focusToTab(int tab)
    }
 }
 
+void CsoundQt::ambiguosShortcut()
+{
+	QMessageBox::warning(this, tr("Shortcuts changed"),
+	    tr("Ambiguous shortcut. In version 0.9.5 some shortcuts changed, please configure the shourtcuts or set to defaults (Edit->Configure shortcuts -> Restore Defaults) "));
+
+}
+
 bool CsoundQt::saveAs()
 {
     QString fileName = getSaveFileName();
@@ -2094,13 +2104,15 @@ void CsoundQt::setHtmlFullScreen(bool full)
 {
 #ifdef QCS_QTHTML
     if (full) {
-        pre_fullscreen_state = this->saveState();
-        this->csoundHtmlView->setFloating(true);
-        this->csoundHtmlView->showFullScreen();
+		qDebug()<<"Caused crash here. now commented out. Fullscreen";
+//        pre_fullscreen_state = this->saveState();
+//        this->csoundHtmlView->setFloating(true);
+//        this->csoundHtmlView->showFullScreen();
     }
     else {
-        this->restoreState(pre_fullscreen_state);
-        this->showNormal();
+		qDebug()<<"Back from fullscreen";
+//        this->restoreState(pre_fullscreen_state);
+//        this->showNormal();
     }
 #endif
 }

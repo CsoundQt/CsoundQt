@@ -277,6 +277,7 @@ private slots:
 	void onReadyRead(); // when message comes in
 	void disableInternalRtMidi();
     void focusToTab(int tab);
+    void ambiguosShortcut();
 #ifdef QCS_DEBUGGER
 	void runDebugger();
 	void stopDebugger();
