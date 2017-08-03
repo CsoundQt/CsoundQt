@@ -71,7 +71,7 @@ void Console::appendMessage(QString msg)
 	messageLine.append(msg);
 
 	if (messageLine.contains("\n")) { // line finished, analyze it now
-//		 qDebug() << "Messageline: " << messageLine;
+//		 qDebug()  << "Messageline: " << messageLine;
         if (messageLine.contains("error:", Qt::CaseInsensitive) && messageLine.contains("line ")) {
             errorTexts.append(messageLine); // .remove("\n")
 			errorTexts.last().remove("\n");
@@ -203,7 +203,7 @@ DockConsole::~DockConsole()
 
 void DockConsole::copy()
 {
-	qDebug() << "DockConsole::copy()";
+	qDebug() ;
 	static_cast<Console *>(widget())->copy();
 }
 

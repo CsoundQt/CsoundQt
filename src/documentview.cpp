@@ -189,17 +189,16 @@ void DocumentView::updateContext()
 
 void DocumentView::updateOrcContext(QString orc)
 {
+    (void) orc;
 	// TODO: add string as context
 	QStringList innerContextStart;
 	innerContextStart << "instr" << "opcode";
 	QTextCursor cursor = m_mainEditor->textCursor();
 	cursor.select(QTextCursor::LineUnderCursor);
 	QString line = cursor.selection().toPlainText().trimmed();
-	int innerContext = 0;
-	while (!cursor.atStart()) {
+    while (!cursor.atStart()) {
 		foreach(QString startText, innerContextStart) {
 			if (line.startsWith(startText)) {
-				innerContext = innerContextStart.indexOf(startText) + 1;
 				break;
 			}
 		}
@@ -411,7 +410,7 @@ void DocumentView::insertText(QString text, int section)
 		//  case 10:
 		//    break;
 	default:
-		qDebug() <<"DocumentView::insertText section " << section << " not implemented.";
+		qDebug() <<"Section " << section << " not implemented.";
 	}
 }
 
@@ -493,7 +492,7 @@ QString DocumentView::getSelectedText(int section)
 		text = m_appEditor->textCursor().selectedText();
 		break;
 	default:
-		qDebug() <<"DocumentView::insertText section " << section << " not implemented.";
+		qDebug() << "Section " << section << " not implemented.";
 	}
 	return text;
 }
@@ -502,7 +501,7 @@ QString DocumentView::getMacWidgetsText()
 {
 	// With tags including presets. For text that is being edited in the text editor
 	// Includes presets text
-	qDebug() << "DocumentView::getMacWidgetsText() not implemented and will crash!";
+	qDebug() << "Not implemented and will crash!";
     return "Not implemented.";
 }
 
@@ -510,7 +509,7 @@ QString DocumentView::getWidgetsText()
 {
 	// With tags including presets, in new xml format. For text that is being edited in the text editor
 	// Includes presets text
-	qDebug() << "DocumentView::getWidgetsText() not implemented and will crash!";
+	qDebug() << "Not implemented and will crash!";
     return "Not implemeneted.";
 }
 
@@ -531,7 +530,7 @@ int DocumentView::currentLine()
 		// TODO check properly for line number also from other editors
 		QWidget *w = this->focusWidget(); // Gives last child of this widget that has had focus.
 		if (w == m_scoreEditor || w == m_filebEditor) {
-			qDebug() << "DocumentView::currentLine() not implemented for score and fileb editor.";
+			qDebug() << "Not implemented for score and fileb editor.";
 		}
 		else if (w != 0 && editors.contains(w)) { // Somehow this widget can sometimes be invalid... so must check if it is one of the editors
 			QTextCursor cursor = static_cast<TextEditor *>(w)->textCursor();
@@ -554,7 +553,7 @@ QString DocumentView::wordUnderCursor()
 	}
 	else { //  Split view
 		// TODO check properly for line number also from other editors
-		qDebug() << "DocumentView::wordUnderCursor() not implemented for split view.";
+		qDebug() << "Not implemented for split view.";
 	}
 	return word;
 }
@@ -622,7 +621,7 @@ QString DocumentView::getActiveSection()
 	}
 	else { //  Split view
 		// TODO check properly for line number also from other editors
-		qDebug() << "DocumentView::getActiveSection() not implemented for split view.";
+		qDebug() << "Not implemented for split view.";
 	}
 	return section;
 }
@@ -645,7 +644,7 @@ QString DocumentView::getActiveText()
 	}
 	else { //  Split view
 		// TODO check properly for line number also from other editors
-		qDebug() << "DocumentView::getActiveText() not implemented for split view.";
+		qDebug() << "Not implemented for split view.";
 	}
 	return selection;
 }
@@ -995,7 +994,7 @@ void DocumentView::escapePressed()
 		}
 	}
 	else {
-		qDebug() << "escapePressed() not implemented for split view";
+		qDebug() << "Not implemented for split view";
 	}
 }
 
@@ -1010,7 +1009,7 @@ void DocumentView::finishParameterMode()
 			hideHoverText();
 		}
 	} else {
-		qDebug() << "finishParameterMode() not implemented for split view";
+		qDebug() << "Not implemented for split view";
 	}
 }
 
@@ -1020,7 +1019,7 @@ void DocumentView::exitParameterMode()
 	if (m_viewMode < 2) {
 		m_mainEditor->setParameterMode(false);
 	} else {
-		qDebug() << "exitParameterMode() not implemented for split view";
+		qDebug() << "Not implemented for split view";
 	}
 	hideHoverText();
 //	parameterButton->setVisible(false);
@@ -1072,7 +1071,7 @@ void DocumentView::findReplace()
 	}
 	else { //  Split view
 		// TODO check properly for line number also from other editors
-		qDebug() << "DocumentView::findReplace() not implemented for split view.";
+		qDebug() << "Not implemented for split view.";
 	}
 }
 
@@ -1085,7 +1084,7 @@ void DocumentView::getToIn()
 		m_mainEditor->document()->setModified(true);  // Necessary, or is setting it locally enough?
 	}
 	else { //  Split view
-		qDebug() << "DocumentView::getToIn() not implemented for split view.";
+		qDebug() << "Not implemented for split view.";
 	}
 }
 
@@ -1099,7 +1098,7 @@ void DocumentView::inToGet()
 	}
 	else { //  Split view
 		// TODO check properly for line number also from other editors
-		qDebug() << "DocumentView::inToGet() not implemented for split view.";
+		qDebug() << "Not implemented for split view.";
 	}
 }
 
@@ -1112,7 +1111,7 @@ void DocumentView::insertAutoCompleteText()
 	else { //  Split view
 		editor = (TextEditor *) focusWidget();
 		// TODO check properly for line number also from other editors
-		qDebug() << "DocumentView::insertAutoCompleteText() not implemented for split view.";
+		qDebug() << "Not implemented for split view.";
 	}
 	if (editor != 0) {
 		internalChange = true;
@@ -1195,7 +1194,7 @@ void DocumentView::findString(QString query)
 	}
 	else { //  Split view
 		// TODO check properly for line number also from other editors
-		qDebug() << "DocumentView::findString() not implemented for split view.";
+		qDebug() << "Not implemented for split view.";
 	}
 }
 
@@ -1251,7 +1250,7 @@ void DocumentView::createContextMenu(QPoint pos)
 	}
 	else { //  Split view
 		// TODO check properly for line number also from other editors
-		qDebug() << "DocumentView::createContextMenu() not implemented for split view.";
+		qDebug() << "Not implemented for split view.";
 	}
 }
 
@@ -1481,7 +1480,7 @@ void DocumentView::comment()
 		m_mainEditor->setTextCursor(cursor);
 	}
 	else {
-		qDebug() << "DocumentView::comment() not implemented for split view";
+		qDebug() << "Not implemented for split view";
 	}
 }
 
@@ -1521,7 +1520,7 @@ void DocumentView::uncomment()
 		m_mainEditor->setTextCursor(cursor);
 	}
 	else {
-		qDebug() << "DocumentView::uncomment() not implemented for split view";
+		qDebug() << "Not implemented for split view";
 	}
 }
 
@@ -1562,7 +1561,7 @@ void DocumentView::indent()
 		m_mainEditor->setTextCursor(cursor);
 	}
 	else {
-		qDebug() << "DocumentView::indent() not implemented for split view";
+		qDebug() << "Not implemented for split view";
 	}
 }
 
@@ -1604,7 +1603,7 @@ void DocumentView::unindent()
 		m_mainEditor->setTextCursor(cursor);
 	}
 	else {
-		qDebug() << "DocumentView::unindent() not implemented for split view";
+		qDebug() << "Not implemented for split view";
 	}
 }
 
@@ -1620,7 +1619,7 @@ void DocumentView::killLine()
 		cursor.insertText("");
 	}
 	else {
-		qDebug() << "DocumentView::killLine() not implemented for split view";
+		qDebug() << "Not implemented for split view";
 	}
 }
 
@@ -1636,7 +1635,7 @@ void DocumentView::killToEnd()
 		cursor.insertText("");
 	}
 	else {
-		qDebug() << "DocumentView::killToEnd() not implemented for split view";
+		qDebug() << "Not implemented for split view";
 	}
 }
 
@@ -1666,7 +1665,7 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
 		}
 	}
 	else {
-		qDebug() << "DocumentView::markErrorLines() not implemented for split view";
+		qDebug() << "Not implemented for split view";
 	}
 }
 
@@ -1693,7 +1692,7 @@ void DocumentView::unmarkErrorLines()
 		m_mainEditor->verticalScrollBar()->setValue(position); //return document display to initial position
 	}
 	else {
-		qDebug() << "DocumentView::unmarkErrorLines() not implemented for split view";
+		qDebug() << "Not implemented for split view";
 	}
 }
 
@@ -1740,7 +1739,7 @@ void DocumentView::opcodeFromMenu()
 		cursor.insertText(text);
 	}
 	else {
-		qDebug() << "DocumentView::opcodeFromMenu() not implemented for split view";
+		qDebug() << "Not implemented for split view";
 	}
 }
 
@@ -1926,5 +1925,6 @@ HoverWidget::HoverWidget(QWidget *parent) :
 
 void HoverWidget::mousePressEvent(QMouseEvent *ev)
 {
+    (void) ev;
 	this->hide();
 }

@@ -69,7 +69,7 @@ class EventSheet;
 class CsoundEngine;
 class MidiHandler;
 class MidiLearnDialog;
-#ifdef QCS_HTML5
+#if defined(QCS_QTHTML)
 class CsoundHtmlView;
 #endif
 
@@ -145,6 +145,9 @@ public:
 	void stkCheck();
 	// localServer
 	bool startServer();
+#if defined(QCS_QTHTML)
+	void updateHtmlView();
+#endif
 public slots:
 	int loadFile(QString fileName, bool runNow = false);
 	int loadFileFromSystem(QString fileName); // checks for m_options->autoPlay, if the function is called from other class
@@ -220,7 +223,9 @@ private slots:
 	void setHelpEntry();
     void setFullScreen(bool full);
     void setEditorFullScreen(bool full);
+#if defined(QCS_QTHTML)
     void setHtmlFullScreen(bool full);
+#endif
     void setHelpFullScreen(bool full);
     void setWidgetsFullScreen(bool full);
     void showDebugger(bool show);
@@ -272,6 +277,7 @@ private slots:
 	void onReadyRead(); // when message comes in
 	void disableInternalRtMidi();
     void focusToTab(int tab);
+    void ambiguosShortcut();
 #ifdef QCS_DEBUGGER
 	void runDebugger();
 	void stopDebugger();
@@ -330,7 +336,7 @@ private:
 	QQuickWidget *m_virtualKeyboard, *m_tableEditor;
 	QPointer <QQuickWidget> m_virtualKeyboardPointer, m_tableEditorPointer; // to control, if the object is deleted
 #endif
-#ifdef QCS_HTML5
+#if defined(QCS_QTHTML)
 public: CsoundHtmlView *csoundHtmlView;
 #endif
 private:
@@ -421,7 +427,7 @@ private:
 #endif
 	QAction *showVirtualKeyboardAct;
 	QAction *showTableEditorAct;
-#ifdef QCS_HTML5
+#if defined(QCS_QTHTML)
 	QAction *showHtml5Act;
     QAction *raiseHtml5Act;
 #endif

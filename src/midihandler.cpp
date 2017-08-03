@@ -78,6 +78,8 @@ void MidiHandler::sendMidiOut(std::vector<unsigned char> *message)
 {
 #ifdef QCS_RTMIDI
 	m_midiout->sendMessage(message);
+#else
+    (void) message;
 #endif
 }
 
@@ -141,6 +143,7 @@ int MidiHandler::findMidiOutPortByName(QString name) {
 
 void MidiHandler::openMidiInPort(int port)
 {
+    (void) port;
 #ifdef QCS_RTMIDI
 	try {
 		closeMidiInPort();
@@ -182,6 +185,7 @@ void MidiHandler::setMidiOutInterface(int number)
 
 void MidiHandler::openMidiOutPort(int port)
 {
+    (void) port;
 #ifdef QCS_RTMIDI
 	try {
 		closeMidiOutPort();

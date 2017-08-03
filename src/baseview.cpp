@@ -78,7 +78,7 @@ void BaseView::setFullText(QString text, bool goToTop)
     while (text.contains("<CsFileB ") && text.contains("</CsFileB>")) {
 		bool endsWithBreak = false;
 		if (text.indexOf("</CsFileB>") < text.indexOf("<CsFileB ")) {
-			qDebug() << "BaseView::setFullText: File corrupt, not loading remaining CsFileB sections.";
+			qDebug()  << " File corrupt, not loading remaining CsFileB sections.";
 			break;
 		}
 		if (text.indexOf("</CsFileB>") + 10 < text.size() && text[text.indexOf("</CsFileB>") + 10] == '\n' ) {
@@ -104,7 +104,7 @@ void BaseView::setFullText(QString text, bool goToTop)
 		text.remove(sectionText);
 		QDomDocument d;
 		if (!d.setContent(sectionText)) {
-			qDebug() << "BaseView::setFullText error parsing CsApp. Section will be discarded.";
+			qDebug()  << "Error parsing CsApp. Section will be discarded.";
 		} else {
 			QDomNodeList csapp = d.elementsByTagName("CsApp");
 			QDomElement p = csapp.item(0).toElement();
@@ -221,7 +221,7 @@ void BaseView::setBasicText(QString text)
 		m_mainEditor->setTextCursor(cursor);  // TODO implement for multiple views
 	}
 	else {
-		qDebug() << "BaseView::setBasicText not implemented for Split view.";
+		qDebug()  << "Not implemented for Split view.";
 	}
 }
 
@@ -302,7 +302,7 @@ void BaseView::setOrc(QString text)
 {
 	if (m_viewMode < 2) { // View is not split
 		if (m_mode != 0) {
-			qDebug() << "DocumentView::setOrc Current file is not a csd file. Text not inserted!";
+			qDebug()  << "Current file is not a csd file. Text not inserted!";
 			return;
 		}
 		QString csdText = getBasicText();
@@ -319,7 +319,7 @@ void BaseView::setOrc(QString text)
 			setBasicText(csdText);
 		}
 		else {
-			qDebug() << "DocumentView::setOrc Orchestra section not found in csd. Text not inserted!";
+			qDebug()  << "Orchestra section not found in csd. Text not inserted!";
 		}
 	}
 	else { // Split view
@@ -331,7 +331,7 @@ void BaseView::setSco(QString text)
 {
 	if (m_viewMode < 2) { // View is not split
 		if (m_mode != 0) {
-			qDebug() << "DocumentView::setSco Current file is not a csd file. Text not inserted!";
+			qDebug()  << "Current file is not a csd file. Text not inserted!";
 			return;
 		}
 		QString csdText = getBasicText();
@@ -349,7 +349,7 @@ void BaseView::setSco(QString text)
 			setBasicText(csdText);
 		}
 		else {
-			qDebug() << "DocumentView::setSco Orchestra section not found in csd. Text not inserted!";
+			qDebug()  << "Orchestra section not found in csd. Text not inserted!";
 		}
 	}
 	else {
@@ -371,7 +371,7 @@ void BaseView::setOptionsText(QString text)
 {
 	if (m_viewMode < 2) { // View is not split
 		if (m_mode != 0) {
-			qDebug() << "BaseView::setOptionsText Current file is not a csd file. Text not inserted!";
+			qDebug()  << "Current file is not a csd file. Text not inserted!";
 			return;
 		}
 		// It would be better just to select the CsOptions portion and change that but this should do the trick too.
@@ -389,7 +389,7 @@ void BaseView::setOptionsText(QString text)
 			setBasicText(csdText);
 		}
 		else {
-			qDebug() << "DocumentView::setSco Orchestra section not found in csd. Text not inserted!";
+			qDebug()  << "Orchestra section not found in csd. Text not inserted!";
 		}
 	}
 	else {
@@ -403,7 +403,7 @@ void BaseView::setLadspaText(QString text)
 {
 	if (m_viewMode < 2) { // View is not split
 		if (m_mode != 0) {
-			qDebug() << "DocumentView::setLadspaText Current file is not a csd file. Text not inserted!";
+			qDebug()  << "Current file is not a csd file. Text not inserted!";
 			return;
 		}
 		QTextCursor cursor;
@@ -428,7 +428,7 @@ void BaseView::setLadspaText(QString text)
 		}
 	}
 	else {
-		qDebug() << "BaseView::setLadspaText() not implemented for split view";
+		qDebug()  << "Not implemented for split view";
 	}
 }
 
@@ -436,7 +436,7 @@ void BaseView::setCabbageText(QString text)
 {
 	if (m_viewMode < 2) { // View is not split
 		if (m_mode != 0) {
-			qDebug() << "DocumentView::setLadspaText Current file is not a csd file. Text not inserted!";
+			qDebug()  << "Current file is not a csd file. Text not inserted!";
 			return;
 		}
 		QTextCursor cursor;
@@ -461,7 +461,7 @@ void BaseView::setCabbageText(QString text)
 		}
 	}
 	else {
-		qDebug() << "BaseView::setCabbageText() not implemented for split view";
+		qDebug()  << "Not implemented for split view";
 	}
 }
 
@@ -472,7 +472,7 @@ QString BaseView::getCabbageText()
 	QString cabbageText = QString();
 	if (m_viewMode < 2) { // View is not split
 		if (m_mode != 0) {
-			qDebug() << "DocumentView::getLadspaText Current file is not a csd file.";
+			qDebug()  << "Current file is not a csd file.";
 			return cabbageText;
 		}
 		QTextCursor cursor;
@@ -487,12 +487,12 @@ QString BaseView::getCabbageText()
 			m_mainEditor->moveCursor(QTextCursor::Start);
 		}
 		else { //Cabbage section not present, or incomplete
-			qDebug()<<"BaseView::getCabbageText() - no <Cabbage> section found.";
+			qDebug() << "No <Cabbage> section found.";
 		}
 
 	}
 	else {
-		qDebug() << "BaseView::getCabbageText() not implemented for split view";
+		qDebug()  << "Not implemented for split view";
 	}
 	return cabbageText;
 }
@@ -503,7 +503,7 @@ void BaseView::setOtherCsdText(QString text)
 {
 	if (m_viewMode < 2) { // View is not split
 		if (m_mode != 0) {
-			qDebug() << "DocumentView::setOtherCsdText Current file is not a csd file. Text not inserted!";
+			qDebug()  << "Current file is not a csd file. Text not inserted!";
 			return;
 		}
 		QTextCursor cursor;
@@ -522,7 +522,7 @@ void BaseView::setOtherText(QString text)
 {
 	if (m_viewMode < 2) { // View is not split
 		if (m_mode != 0) {
-			qDebug() << "DocumentView::setOtherText Current file is not a csd file. Text not inserted!";
+			qDebug()  << "Current file is not a csd file. Text not inserted!";
 			return;
 		}
 		QTextCursor cursor;

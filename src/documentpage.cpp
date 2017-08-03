@@ -62,7 +62,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLis
 
 DocumentPage::~DocumentPage()
 {
-	//  qDebug() << "DocumentPage::~DocumentPage()";
+	//  qDebug();
 	disconnect(m_console, 0,0,0);
 	disconnect(m_view, 0,0,0);
 	//  deleteAllLiveEvents(); // FIXME This is also crashing...
@@ -183,7 +183,7 @@ int DocumentPage::setTextString(QString &text)
 		doc.setContent(liveEventsText);
 		QDomElement panelElement = doc.firstChildElement("EventPanel");
 		QString liveText = panelElement.text();
-		//    qDebug() << "BaseDocument::setTextString   " << liveText;
+		//    qDebug() << liveText;
 		QString panelName = panelElement.attribute("name","");
 		double tempo = panelElement.attribute("tempo","60.0").toDouble();
 		double loop = panelElement.attribute("loop","8.0").toDouble();
@@ -192,7 +192,7 @@ int DocumentPage::setTextString(QString &text)
 		int width = panelElement.attribute("width","-1").toDouble();
 		int height = panelElement.attribute("height","-1").toDouble();
 		// TODO recall live event panel visibility
-		int visibleEnabled = panelElement.attribute("visible","true") == "true";
+        //int visibleEnabled = panelElement.attribute("visible","true") == "true";
 		int loopStart = panelElement.attribute("loopStart","0.0").toDouble();
 		int loopEnd = panelElement.attribute("loopEnd","0.0").toDouble();
 
@@ -294,7 +294,7 @@ QString DocumentPage::getFullText()
 	if (saveLiveEvents) { // Only add live events sections if file is a csd file
 		for (int i = 0; i < m_liveFrames.size(); i++) {
 			liveEventsText += m_liveFrames[i]->getPlainText();
-			//        qDebug() << "DocumentPage::getFullText() " <<panel;
+			//        qDebug() << panel;
 		}
 		fullText += liveEventsText;
 	}
@@ -311,7 +311,7 @@ QString DocumentPage::getFullText()
 QString DocumentPage::getDotText()
 {
 	if (fileName.endsWith("sco")) {
-		qDebug() << "DocumentPage::getDotText(): No dot for sco files";
+		qDebug() << "No dot for sco files";
 		return QString();
 	}
 	QString orcText = getFullText();
@@ -363,10 +363,22 @@ QString DocumentPage::getMacOptions(QString option)
 		option += " ";
 	int index = m_macOptions.indexOf(QRegExp(option + ".*"));
 	if (index < 0) {
-		qDebug("DocumentPage::getMacOptions() Option %s not found!", option.toLocal8Bit().constData());
+        qDebug("Option %s not found!", option.toLocal8Bit().constData());
 		return QString("");
 	}
 	return m_macOptions[index].mid(option.size());
+}
+
+QString DocumentPage::getHtmlText()
+{
+	QString fullText = BaseDocument::getFullText(); // does windows need /r/n replacemant? then probably this.getFullText();
+	// get the <html> </html> element:
+	QString::SectionFlags sectionflags = QString::SectionIncludeLeadingSep |
+					QString::SectionIncludeTrailingSep | QString::SectionCaseInsensitiveSeps;
+	QString element = fullText.section("<html", 1, 1, sectionflags);
+	element = element.section("</html>", 0, 0, sectionflags);
+	return element;
+
 }
 
 int DocumentPage::getViewMode()
@@ -564,13 +576,9 @@ EventSheet* DocumentPage::getSheet(int sheetIndex)
 
 EventSheet* DocumentPage::getSheet(QString sheetName)
 {
+    (void) sheetName;
 	return 0;
 }
-//
-//void *DocumentPage::getCsound()
-//{
-//  return m_csEngine->getCsound();
-//}
 
 int DocumentPage::lineCount(bool countExtras)
 {
@@ -745,7 +753,7 @@ void DocumentPage::setLineEnding(int lineEndingMode)
 
 void DocumentPage::copy()
 {
-	qDebug() << "DocumentPage::copy() " << m_widgetLayouts[0]->hasFocus();
+	qDebug() << m_widgetLayouts[0]->hasFocus();
 	bool liveeventfocus = false;
 	for (int i = 0; i < m_liveFrames.size(); i++) {
 		if (m_liveFrames[i]->getSheet()->hasFocus()) {
@@ -803,7 +811,7 @@ void DocumentPage::paste()
 
 void DocumentPage::undo()
 {
-	//  qDebug() << "DocumentPage::undo()";
+	//  qDebug()";
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
 		if (wl->hasFocus()) {
 			wl->undo();
@@ -850,15 +858,8 @@ void DocumentPage::gotoNextRow()
 			return;
 		}
 	}
-	if (m_view->childHasFocus())
+    if (m_view->childHasFocus()) {
 		m_view->gotoNextLine();
-	else {
-		// Not worth implementing for live event sheets, as this is used only
-		// when running a single line for the python interpreter
-		//    for (int i = 0; i < m_liveFrames.size(); i++) {
-		//      if (m_liveFrames[i]->getSheet()->hasFocus())
-		//        m_liveFrames[i]->getSheet()->redo();
-		//    }
 	}
 }
 
@@ -867,16 +868,6 @@ DocumentView *DocumentPage::getView()
 	Q_ASSERT(m_view != 0);
 	return m_view;
 }
-
-//void DocumentPage::setWidgetLayout(WidgetLayout *w)
-//{
-//  if (w != 0) {
-//    m_widgetLayout = w;
-//  }
-//  else {
-//    qDebug() << "DocumentPage::setWidgetLayout()  NULL widget.";
-//  }
-//}
 
 void DocumentPage::setTextFont(QFont font)
 {
@@ -949,16 +940,6 @@ void DocumentPage::inToGet()
 	m_view->inToGet();
 }
 
-//void DocumentPage::setEditAct(QAction *editAct)
-//{
-//  m_widgetLayout->setEditAct(editAct);
-//}
-
-//void DocumentPage::setCsoundOptions(CsoundOptions &options)
-//{
-//  m_csEngine->setCsoundOptions(options);
-//}
-
 void DocumentPage::showWidgetTooltips(bool visible)
 {
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
@@ -995,13 +976,6 @@ void DocumentPage::setFontScaling(double offset)
 	}
 }
 
-//void DocumentPage::passWidgetClipboard(QString text)
-//{
-//  foreach (WidgetLayout *wl, m_widgetLayouts) {
-//    wl->passWidgetClipboard(text);
-//  }
-//}
-
 void DocumentPage::setConsoleFont(QFont font)
 {
 	m_console->setDefaultFont(font);
@@ -1016,21 +990,6 @@ void DocumentPage::setEditorBgColor(QColor bgColor)
 {
 	m_view->setBackgroundColor(bgColor);
 }
-
-//DocumentView * DocumentPage::view()
-//{
-//  return m_view;
-//}
-//
-//CsoundEngine *DocumentPage::engine()
-//{
-//  return m_csEngine;
-//}
-//
-//WidgetLayout * DocumentPage::widgetLayout()
-//{
-//  return m_widgetLayout;
-//}
 
 void DocumentPage::setScriptDirectory(QString dir)
 {
@@ -1060,7 +1019,7 @@ void DocumentPage::setWidgetEnabled(bool enabled)
 
 void DocumentPage::useOldFormat(bool use)
 {
-	//  qDebug() << "DocumentPage::useXmlFormat " << use;
+	//  qDebug() << use;
 	saveOldFormat = use;
 }
 
@@ -1131,7 +1090,8 @@ void DocumentPage::loopPanelSlot(int index, bool loop)
 
 void DocumentPage::stopPanelSlot(int index)
 {
-	qDebug() << "DocumentPage::stopPanelSlot not implemented";
+    (void) index;
+	qDebug() << "Not implemented.";
 }
 
 void DocumentPage::setPanelVisibleSlot(int index, bool visible)
@@ -1148,7 +1108,9 @@ void DocumentPage::setPanelVisibleSlot(int index, bool visible)
 
 void DocumentPage::setPanelSyncSlot(int index, int mode)
 {
-	qDebug() << "DocumentPage::setPanelSyncSlot not implemented";
+    (void) index;
+    (void) mode;
+	qDebug() << "Not implemented.";
 }
 
 void DocumentPage::setPanelNameSlot(int index, QString name)
@@ -1173,7 +1135,7 @@ void DocumentPage::setPanelLoopRangeSlot(int index, double start, double end)
 
 void DocumentPage::registerButton(QuteButton *b)
 {
-	//  qDebug() << " DocumentPage::registerButton";
+	//  qDebug();
 	connect(b, SIGNAL(play()), static_cast<CsoundQt *>(parent()), SLOT(play()));
 	connect(b, SIGNAL(render()), static_cast<CsoundQt *>(parent()), SLOT(render()));
 	connect(b, SIGNAL(pause()), static_cast<CsoundQt *>(parent()), SLOT(pause()));
@@ -1316,6 +1278,7 @@ int DocumentPage::record(int format)
 	emit setCurrentAudioFile(recName);
 	return m_csEngine->startRecording(format, recName);
 #else
+    (void) format;
 	QMessageBox::warning(NULL, tr("Recording not possible"), tr("This version of CsoundQt was not built with recording support."));
 	return 0;
 #endif
@@ -1360,7 +1323,7 @@ void DocumentPage::closeExtraPanels()
 
 void DocumentPage::showWidgets(bool show)
 {
-	//  qDebug() << "DocumentPage::showWidgets" << show;
+	//  qDebug() << show;
 	if (!show || (!fileName.endsWith(".csd") && !fileName.isEmpty())) {
 		hideWidgets();
 		return;
@@ -1374,7 +1337,7 @@ void DocumentPage::showWidgets(bool show)
 
 void DocumentPage::hideWidgets()
 {
-	//  qDebug() << " DocumentPage::hideWidgets()";
+	//  qDebug();
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
 		wl->setVisible(false);
 	}
@@ -1388,12 +1351,13 @@ void DocumentPage::passSelectedWidget(QuteWidget *widget) // necessary only when
 void DocumentPage::passUnselectedWidget(QuteWidget *widget) // necessary only when ML is opened from edit menu and a widget is selected.
 {
 	// TODO: Better options for unselecting widgets.
+    (void) widget;
 	m_midiLearn->setCurrentWidget(NULL);
 }
 
 void DocumentPage::showMidiLearn(QuteWidget *widget)
 {
-	//qDebug()<<"DocumentPage::showMidiLearn";
+	//qDebug();
 	m_midiLearn->setCurrentWidget(widget);
 	m_midiLearn->setModal(true); // not to leave the dialog floating around
 	m_midiLearn->show();
@@ -1414,7 +1378,7 @@ void DocumentPage::applyMacOptions(QStringList options)
 		}
 	}
 	else {
-		qDebug ("DocumentPage::applyMacOptions() no Geometry!");
+		qDebug("no Geometry!");
 	}
 }
 
@@ -1426,16 +1390,16 @@ void DocumentPage::setMacOption(QString option, QString newValue)
 		option += " ";
 	int index = m_macOptions.indexOf(QRegExp(option + ".*"));
 	if (index < 0) {
-		qDebug("DocumentPage::setMacOption() Option not found!");
+		qDebug("Option not found!");
 		return;
 	}
 	m_macOptions[index] = option + newValue;
-	qDebug("DocumentPage::setMacOption() %s", m_macOptions[index].toLocal8Bit().constData());
+	qDebug("%s", m_macOptions[index].toLocal8Bit().constData());
 }
 
 void DocumentPage::setWidgetEditMode(bool active)
 {
-	//  qDebug() << "DocumentPage::setWidgetEditMode";
+	//  qDebug();
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
 		wl->setEditMode(active);
 	}
@@ -1443,7 +1407,7 @@ void DocumentPage::setWidgetEditMode(bool active)
 
 //void DocumentPage::toggleWidgetEditMode()
 //{
-//  qDebug() << "DocumentPage::toggleWidgetEditMode";
+//  qDebug() <<;
 //  m_widgetLayout->toggleEditMode();
 //}
 
@@ -1458,13 +1422,13 @@ void DocumentPage::duplicateWidgets()
 
 void DocumentPage::jumpToLine(int line)
 {
-	//  qDebug() << "DocumentPage::jumpToLine " << line;
+	//  qDebug() << line;
 	m_view->jumpToLine(line);
 }
 
 void DocumentPage::comment()
 {
-	//  qDebug() << "DocumentPage::comment()";
+	//  qDebug();
 	m_view->comment();
 }
 
@@ -1545,7 +1509,7 @@ void DocumentPage::newLiveEventPanel(QString text)
 
 LiveEventFrame * DocumentPage::createLiveEventPanel(QString text)
 {
-	//  qDebug() << "DocumentPage::newLiveEventPanel()";
+	//  qDebug()";
 	LiveEventFrame *e = new LiveEventFrame("Live Event", m_liveEventControl, Qt::Window);
 	//  e->setVisible(false);
 	//  e->setAttribute(Qt::WA_DeleteOnClose, false);

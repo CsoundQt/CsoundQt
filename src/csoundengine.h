@@ -233,11 +233,13 @@ public slots:
 	void setFlags(PerfFlags flags) {ud->flags = flags;}
 
 	void evaluate(QString code);
-private:
-	int runCsound();
+public:
+    QVector<ConsoleWidget *> consoles;  // Consoles registered for message printing
+    int runCsound();
 	void stopCsound();
 
 	void cleanupCsound();
+private:
 	void setupChannels();
 
 	QFuture<void> m_msgUpdateThread;
@@ -247,7 +249,6 @@ private:
 
 	CsoundOptions m_options;
 
-	QVector<ConsoleWidget *> consoles;  // Consoles registered for message printing
 	int m_consoleBufferSize;
 	QMutex m_messageMutex; // Protection for message queue
 	QStringList messageQueue;  // Messages from Csound execution

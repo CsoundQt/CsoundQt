@@ -80,6 +80,7 @@ HEADERS = "src/about.h" \
     src/debugpanel.h \
     src/livecodeeditor.h \
     src/newbreakpointdialog.h \
+    $$PWD/CsoundHtmlOnlyWrapper.h
 
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
@@ -139,6 +140,7 @@ SOURCES = "src/about.cpp" \
     src/livecodeeditor.cpp \
     src/newbreakpointdialog.cpp \
     #src/csoundhtmlview.cpp
+    $$PWD/CsoundHtmlOnlyWrapper.cpp
 
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
@@ -163,57 +165,12 @@ perfThread_build {
     message("Including csPerfThread files for perfThread_build.")
 }
 
-html5 {
-    HEADERS += src/cefclient.h
-    HEADERS += src/cefclient_qt.h
-    HEADERS += src/client_app.h
-    HEADERS += src/client_binding.h
-    HEADERS += src/client_handler.h
-    HEADERS += src/client_handler_qt.h
-    HEADERS += src/client_renderer.h
-    HEADERS += src/client_transfer.h
-    HEADERS += src/message_event.h
-    HEADERS += src/qcefwebview.h
-    HEADERS += src/csoundhtmlview.h
-    SOURCES += src/cefclient.cpp
-    SOURCES += src/cefclient_qt.cpp
-    SOURCES += src/client_app.cpp
-    SOURCES += src/client_app_delegates.cpp
-    SOURCES += src/client_binding.cpp
-    SOURCES += src/client_handler.cpp
-    SOURCES += src/client_handler_qt.cpp
-    SOURCES += src/client_renderer.cpp
-    SOURCES += src/client_transfer.cpp
-    SOURCES += src/message_event.cpp
-    SOURCES += src/qcefwebview.cpp
-    SOURCES += src/csoundhtmlview.cpp
-    message("Including CEF related files for html5 build.")
-}
-!html5 {
-    HEADERS -= src/cefclient.h
-    HEADERS -= src/cefclient_qt.h
-    HEADERS -= src/client_app.h
-    HEADERS -= src/client_binding.h
-    HEADERS -= src/client_handler.h
-    HEADERS -= src/client_handler_qt.h
-    HEADERS -= src/client_renderer.h
-    HEADERS -= src/client_transfer.h
-    HEADERS -= src/message_event.h
-    HEADERS -= src/qcefwebview.h
-    HEADERS -= src/csoundhtmlview.h
-    SOURCES -= src/cefclient.cpp
-    SOURCES -= src/cefclient_qt.cpp
-    SOURCES -= src/client_app.cpp
-    SOURCES -= src/client_app_delegates.cpp
-    SOURCES -= src/client_binding.cpp
-    SOURCES -= src/client_handler.cpp
-    SOURCES -= src/client_handler_qt.cpp
-    SOURCES -= src/client_renderer.cpp
-    SOURCES -= src/client_transfer.cpp
-    SOURCES -= src/message_event.cpp
-    SOURCES -= src/qcefwebview.cpp
-    SOURCES -= src/csoundhtmlview.cpp
-    message("Removing CEF related files for non-html5 build.")
+html_webkit|html_webengine: {
+	HEADERS += src/csoundhtmlview.h
+	HEADERS += src/csoundhtmlwrapper.h
+
+	SOURCES += src/csoundhtmlview.cpp
+	SOURCES += src/csoundhtmlwrapper.cpp
 }
 
 LIBS += $${LCSOUND} \

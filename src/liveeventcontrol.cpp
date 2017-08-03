@@ -100,7 +100,7 @@ void LiveEventControl::appendPanel(LiveEventFrame *e)
 	//  playItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
 	QTableWidgetItem *loopItem = getItem(newRow, 2);
 	loopItem->setCheckState(Qt::Unchecked);
-	QTableWidgetItem *syncItem = getItem(newRow, 3);
+    //  QTableWidgetItem *syncItem = getItem(newRow, 3);
 	//  loopItem->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
 	QTableWidgetItem *nameItem = getItem(newRow, 4);
 	nameItem->setData(Qt::DisplayRole, QVariant(e->getName()));
@@ -259,7 +259,7 @@ void  LiveEventControl::cellClickedSlot(int row, int column)
 		emit playPanel(row);
 	}
 	else if (column == 3) { // Sync
-		qDebug() << "LiveEventControl::cellChangedSlot sync not implemented yet.";
+		qDebug() << "Sync not implemented yet.";
 	}
 	else if (column == 6) { // Loop Range
 		openLoopRangeDialog(row);
@@ -268,8 +268,8 @@ void  LiveEventControl::cellClickedSlot(int row, int column)
 
 void LiveEventControl::frameClosed(LiveEventFrame *e)
 {
-
-	qDebug() << "LiveEventControl::frameClosed not implemented...";
+    (void) e;
+	qDebug() << "Not implemented.";
 }
 
 void LiveEventControl::on_closeAllButton_clicked()

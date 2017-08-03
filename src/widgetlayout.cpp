@@ -241,12 +241,12 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 								"Some features may not be available and will not be saved!"));
 	}
 	else if (version < QString(QCS_CURRENT_XML_VERSION).toInt()) {  // Just print a silent warning
-		qDebug() << "WidgetLayout::loadXmlWidgets Older Widget Format version";
+        qDebug() << "Older widget format.";
 	}
 	if (m_editMode) {
 		setEditMode(true);
 	}
-	
+
 //	if (m_contained) {
 //		adjustLayoutSize();
 //	}
@@ -374,7 +374,7 @@ QString WidgetLayout::getPresetsText()
 
 QString WidgetLayout::getSelectedWidgetsText()
 {
-	qDebug() << "WidgetLayout::getSelectedWidgetsText not implemented!";
+	qDebug() << "Not implemented!";
 	QString l;
 	l += "<bsbPanel>\n";
 	widgetsMutex.lock();
@@ -518,6 +518,7 @@ void WidgetLayout::setValue(int index, QString value)
 
 QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
 {
+    (void) modified;
 	//  widgetsMutex.lock();
 	for (int i = 0; i < m_activeWidgets ; i++) {
 		if (m_widgets[i]->getChannelName() == channelName) {
@@ -539,6 +540,7 @@ QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
 
 double WidgetLayout::getValueForChannel(QString channelName, bool *modified)
 {
+    (void) modified;
 	//  widgetsMutex.lock();
 	for (int i = 0; i < m_activeWidgets ; i++) {
 		//    qDebug() << "WidgetLayout::getValueForChannel " << i << "  " << m_widgets[i]->getChannelName();
@@ -725,7 +727,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 		//    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
 	}
 	else {
-		qDebug() << "WidgetLayout::newXmlWidget " << type << " not implemented";
+		qDebug() << type << " not implemented";
 		//    QuteDummy *w = new QuteDummy(this);
 	}
 	if (widget == 0) {
@@ -1205,7 +1207,7 @@ void WidgetLayout::updateCurve(WINDAT *windat)
 }
 
 
-int WidgetLayout::killCurves(CSOUND */*csound*/)
+int WidgetLayout::killCurves(CSOUND * /*csound*/)
 {
 	//  qDebug() << "qutecsound::killCurves";
 	// TODO this is a great idea, to copy data from the tables at the end of run, but the API is not working as expected
@@ -2487,7 +2489,7 @@ int WidgetLayout::parseXmlNode(QDomNode node)
 		ret = newXmlWidget(node);
 	}
 	else if (name == "bsbGroup") {
-		qDebug() << "WidgetLayout::parseXmlNode bsbGroup not implemented";
+		qDebug() << "bsbGroup not implemented";
 	}
 	else {
 		qDebug() << "WidgetLayout::parseXmlNode unknown node name: "<< name;
@@ -2944,6 +2946,7 @@ QString WidgetLayout::createScope(int x, int y, int width, int height, QString w
 
 QString WidgetLayout::createDummy(int x, int y, int width, int height, QString widgetLine)
 {
+    (void) widgetLine;
 	QuteWidget *widget= new QuteDummy(this);
 	widget->setProperty("QCS_x",x);
 	widget->setProperty("QCS_y",y);

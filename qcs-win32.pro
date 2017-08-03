@@ -2,6 +2,7 @@
     message(Building CsoundQt for Windows.)
     win32-g++: message(Building with gcc)
     win32-msvc2013: message(Building with Visual C++ 2013)
+    win32-msvc2015: message(Building with Visual C++ 2015)
 }
 
 CONFIG -= debug_and_release debug_and_release_target \
@@ -18,6 +19,7 @@ win32-g++:build64: DEFAULT_CSOUND_LIBS = csound64.dll
 # Need a Visual Studio import library for these...
 win32-msvc2013:build32: DEFAULT_CSOUND_LIBS = csound32.lib
 win32-msvc2013:build64: DEFAULT_CSOUND_LIBS = csound64.lib
+win32-msvc2015:build32: DEFAULT_CSOUND_LIBS = csound32.lib
 win32-msvc2015:build64: DEFAULT_CSOUND_LIBS = csound64.lib
 
 DEFAULT_PYTHON_INCLUDE_DIRS = "$$(HOMEDRIVE)\\Python26\\include"

@@ -70,13 +70,6 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.bat";
 static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 #endif
 
-#ifdef QCS_HTML5
-extern QMutex mutex;
-extern QWaitCondition wait_for_browsers_to_close;
-//extern CefRefPtr<ClientHandler> global_client_handler;
-#endif
-
-
 #define MAX_THREAD_COUNT 32 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
 
 CsoundQt::CsoundQt(QStringList fileNames)
@@ -166,16 +159,17 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	m_server = new QLocalServer();
 	connect(m_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 
-#ifdef QCS_HTML5
+#if defined(QCS_QTHTML)
     csoundHtmlView = new CsoundHtmlView(this);
-
     csoundHtmlView->setFocusPolicy(Qt::NoFocus);
     csoundHtmlView->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
     csoundHtmlView->setObjectName("csoundHtmlView");
     csoundHtmlView->setWindowTitle(tr("HTML View"));
     csoundHtmlView->show();
+    csoundHtmlView->setOptions(m_options);
     addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
 #endif
+
     focusMapper = new QSignalMapper(this);
     createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
 	createMenus();
@@ -189,15 +183,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	m_midiLearn->setModal(false);
 	midiHandler->setMidiLearner(m_midiLearn);
 
-
 	bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state // was: isVisible() - in some reason reported always false
     showWidgetsAct->setChecked(false); // To avoid showing and reshowing panels during initial load
 	widgetPanel->hide();  // Hide until CsoundQt has finished loading
-
     bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
     if (scratchPadVisible)
         m_scratchPad->hide();  // Hide until CsoundQt has finished loading
-
     documentTabs = new QTabWidget (this);
     documentTabs->setTabsClosable(true);
     connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
@@ -208,7 +199,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
     modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
 
-    //test set shortcuts to change between tabs, Shift+Alt +<tab no>
+    // set shortcuts to change between tabs, Alt +<tab no>
     // example from: https://stackoverflow.com/questions/10160232/qt-designer-shortcut-to-another-tab
     // Setup a signal mapper to avoid creating custom slots for each tab
     QSignalMapper *mapper = new QSignalMapper(this);
@@ -217,10 +208,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
         QString key = (i==9) ? "0" : QString::number(i+1);
 		QShortcut *shortcut = new QShortcut(QKeySequence("Alt+"+key), this);
         connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()));
+		connect(shortcut, SIGNAL(activatedAmbiguously()), this, SLOT(ambiguosShortcut()) );
         mapper->setMapping(shortcut, i);
     }
-    // Wire the signal mapper to the tab widget index change slot
-    connect(mapper, SIGNAL(mapped(int)), documentTabs, SLOT(setCurrentIndex(int)));
+	// Wire the signal mapper to the tab widget index change slot
+	connect(mapper, SIGNAL(mapped(int)), documentTabs, SLOT(setCurrentIndex(int)));
 
     fillFileMenu(); // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
@@ -372,10 +364,6 @@ void CsoundQt::changePage(int index)
     // Previous page has already been destroyed here (if it was closed).
     // Remember this is called when opening, closing or switching tabs (including loading).
     // First thing to do is blank the HTML page to prevent misfired API calls.
-#ifdef QCS_HTML5
-    /// MKG uncommented next line.
-    csoundHtmlView->stop();
-#endif
     if (index < 0) { // No tabs left
         qDebug() << "CsoundQt::changePage index < 0";
         return;
@@ -438,8 +426,11 @@ void CsoundQt::changePage(int index)
             curCsdPage = curPage;
         }
     }
-#ifdef QCS_HTML5
-    csoundHtmlView->load(documentPages[curPage]);
+#if defined(QCS_QTHTML)
+    // NB! this may have caused the crash on exit on windows!
+    if (!documentPages.isEmpty()) {
+		updateHtmlView();
+	}
 #endif
     m_inspectorNeedsUpdate = true;
 }
@@ -494,20 +485,7 @@ void CsoundQt::statusBarMessage(QString message)
 
 void CsoundQt::closeEvent(QCloseEvent *event)
 {
-    qDebug() << __FUNCTION__;
-#ifdef QCS_HTML5
-    {
-        QMutexLocker locker(&closemutex);
-        if (!csoundHtmlView->webView->CloseBrowser()) {
-            event->ignore();
-            qDebug() << "CEF closing step 2 b: is closing:" << csoundHtmlView->webView->qcef_client_handler->IsClosing();
-            return;
-        }
-    }
-    event->accept();
-    qDebug() << "CEF closing step 8: is closing:" << csoundHtmlView->webView->qcef_client_handler->IsClosing();
-    //csoundHtmlView->close();
-#endif
+    qDebug() ;
     m_closing = true;
     this->showNormal();  // Don't store full screen size in preferences
     qApp->processEvents();
@@ -524,14 +502,12 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     showWidgetsAct->setChecked(false);
     showLiveEventsAct->setChecked(false);
 // Using this block this causes HTML5 performance to leave a zombie, not using it causes a crash on exit.
-#if !defined(QCS_HTML5)
     while (!documentPages.isEmpty()) {
         if (!closeTab(true)) { // Don't ask for closing app
             event->ignore();
             return;
         }
     }
-#endif
     foreach (QString tempFile, tempScriptFiles) {
         QDir().remove(tempFile);
     }
@@ -551,7 +527,6 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     delete m_opcodeTree;
     m_opcodeTree = 0;
     close();
-    qDebug() << "CEF closing step 9.";
 }
 
 void CsoundQt::newFile()
@@ -692,7 +667,6 @@ void CsoundQt::createCodeGraph()
     command.prepend("\"");
     command.append("\"");
 #endif
-
     //   qDebug() << command;
     ret = system(command.toLatin1());
     if (ret != 0) {
@@ -822,6 +796,7 @@ void CsoundQt::evaluatePython(QString code)
 #ifdef QCS_PYTHONQT
     m_pythonConsole->evaluate(code);
 #else
+    (void) code;
     showNoPythonQtWarning();
 #endif
 }
@@ -1102,7 +1077,6 @@ void CsoundQt::onReadyRead()
 	QLocalSocket *socket = qobject_cast<QLocalSocket *>(sender());
 	if (!socket || !socket->bytesAvailable())
 		return;
-
 	QByteArray ba = socket->readAll();
 	if (ba.isEmpty())
 		return;
@@ -1152,7 +1126,7 @@ void CsoundQt::focusToTab(int tab)
    case 4:
        qDebug()<<"Raise html panel";
 #ifdef QCS_QTHTML
-       panel = m_html5View; // check!
+       panel = csoundHtmlView;
        action = showHtml5Act;
 #endif
        break;
@@ -1190,6 +1164,13 @@ void CsoundQt::focusToTab(int tab)
        }
        panel->raise();
    }
+}
+
+void CsoundQt::ambiguosShortcut()
+{
+	QMessageBox::warning(this, tr("Shortcuts changed"),
+	    tr("Ambiguous shortcut. In version 0.9.5 some shortcuts changed, please configure the shourtcuts or set to defaults (Edit->Configure shortcuts -> Restore Defaults) "));
+
 }
 
 bool CsoundQt::saveAs()
@@ -1572,11 +1553,7 @@ void CsoundQt::setCurrentAudioFile(const QString fileName)
 
 void CsoundQt::play(bool realtime, int index)
 {
-    qDebug() << "CsoundQt::play()...";
-#ifdef QCS_HTML5
-    /// MKG uncommented next line:
-    csoundHtmlView->stop();
-#endif
+    qDebug()  << "CsoundQt::play...";
     // TODO make csound pause if it is already running
     int oldPage = curPage;
     if (index == -1) {
@@ -1643,6 +1620,15 @@ void CsoundQt::play(bool realtime, int index)
         return;
     }
 #endif
+    if (fileName.endsWith(".html",Qt::CaseInsensitive)) {
+        QMessageBox::warning(this,
+                             tr("CsoundQt"),
+                             tr("Csound in html files should be started from html code."),
+                             QMessageBox::Ok);
+        runAct->setChecked(false);
+        curPage = documentTabs->currentIndex();
+        return;
+    }
     if (!fileName.endsWith(".csd",Qt::CaseInsensitive) && !fileName.endsWith(".py",Qt::CaseInsensitive))  {
         if (documentPages[curPage]->askForFile)
             getCompanionFileName();
@@ -1673,7 +1659,8 @@ void CsoundQt::play(bool realtime, int index)
                                       QMessageBox::Ok);
                 return;
             }
-			// if example, just copy, since readonly anyway, otherwise get contents from editor. Necessary since examples may contain <CsFileB> section with data
+            // If example, just copy, since readonly anyway, otherwise get contents from editor.
+            // Necessary since examples may contain <CsFileB> section with data.
 			if (fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
 				QFile file(fileName);
 				if (file.open(QFile::ReadOnly)) {
@@ -1703,6 +1690,9 @@ void CsoundQt::play(bool realtime, int index)
     m_options->rt = realtime;
     if (!m_options->simultaneousRun) {
         stopAllOthers();
+#if defined(QCS_QTHTML)
+        csoundHtmlView->stop();
+#endif
     }
     if (curPage == oldPage) {
         runAct->setChecked(true);  // In case the call comes from a button
@@ -1743,10 +1733,20 @@ void CsoundQt::play(bool realtime, int index)
             }
         }
     }
-#ifdef QCS_HTML5
-    csoundHtmlView->load(documentPages[curPage]);
+#if defined(QCS_QTHTML)
+    if (!documentPages.isEmpty()) {
+        if ( !m_options->saveChanges ) { // otherwise the htmlview gets updated on save
+            updateHtmlView();
+            qDebug()<<"update html on run";
+        }
+        DocumentPage *documentPage = documentPages[curPage];
+        if (!documentPage->getHtmlText().isEmpty()) {
+            CsoundEngine *engine = documentPage->getEngine();
+            csoundHtmlView->setCsoundEngine(engine);
+        }
+    }
 #endif
-    curPage = oldPage;
+	curPage = oldPage;
 }
 
 void CsoundQt::runInTerm(bool realtime)
@@ -1825,9 +1825,6 @@ void CsoundQt::stop(int index)
 {
     // Must guarantee that csound has stopped when it returns
     qDebug() <<"CsoundQt::stop() " <<  index;
-#ifdef QCS_HTML5
-    csoundHtmlView->stop();
-#endif
     int docIndex = index;
     if (docIndex == -1) {
         docIndex = curPage;
@@ -1856,7 +1853,8 @@ void CsoundQt::stopAllOthers()
 {
     for (int i = 0; i < documentPages.size(); i++) {
         if (i != curPage) {
-            documentPages[i]->stop();
+            DocumentPage *documentPage = documentPages[i];
+            documentPage->stop();
         }
     }
     //	markStopped();
@@ -2081,8 +2079,6 @@ void CsoundQt::setFullScreen(bool full)
 void CsoundQt::setEditorFullScreen(bool full)
 {
     if (full) {
-
-
         /*if (this->helpPanel->isFullScreen()) {
             setHelpFullScreen(false);
         }
@@ -2106,15 +2102,17 @@ void CsoundQt::setEditorFullScreen(bool full)
 
 void CsoundQt::setHtmlFullScreen(bool full)
 {
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
     if (full) {
-        pre_fullscreen_state = this->saveState();
-        this->csoundHtmlView->setFloating(true);
-        this->csoundHtmlView->showFullScreen();
+		qDebug()<<"Caused crash here. now commented out. Fullscreen";
+//        pre_fullscreen_state = this->saveState();
+//        this->csoundHtmlView->setFloating(true);
+//        this->csoundHtmlView->showFullScreen();
     }
     else {
-        this->restoreState(pre_fullscreen_state);
-        this->showNormal();
+		qDebug()<<"Back from fullscreen";
+//        this->restoreState(pre_fullscreen_state);
+//        this->showNormal();
     }
 #endif
 }
@@ -2122,14 +2120,12 @@ void CsoundQt::setHtmlFullScreen(bool full)
 void CsoundQt::setHelpFullScreen(bool full)
 {
     if (full) {
-
         /*if (this->widgetPanel->isFullScreen()) {
            setWidgetsFullScreen(false);
         }
         if (this->isFullScreen()) {
             this->setFullScreen(false);
         } */
-
         pre_fullscreen_state = this->saveState();
         this->helpPanel->setFloating(true);
         this->helpPanel->showFullScreen();
@@ -2150,13 +2146,12 @@ void CsoundQt::setWidgetsFullScreen(bool full)
         if (this->isFullScreen()) {
             setFullScreen(false                         );
         }
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML
         if (this->csoundHtmlView->isFullScreen()) {
             this->csoundHtmlView->showNormal();
         }
 #endif
 */
-
         pre_fullscreen_state = this->saveState();
         this->widgetPanel->setFloating(true);
         this->widgetPanel->showFullScreen();
@@ -2172,6 +2167,8 @@ void CsoundQt::showDebugger(bool show)
 {
 #ifdef QCS_DEBUGGER
     m_debugPanel->setVisible(show);
+#else
+    (void) show;
 #endif
 }
 
@@ -2240,6 +2237,7 @@ void CsoundQt::showTableEditor(bool show)
 
 void CsoundQt::virtualKeyboardActOff(QObject *parent)
 {
+    (void) parent;
 #ifdef USE_QT_GT_53
 	//qDebug()<<"VirtualKeyboard destroyed";
 	if (!m_virtualKeyboardPointer.isNull()) { // check if object still existing (i.e application not exiting)
@@ -2252,10 +2250,11 @@ void CsoundQt::virtualKeyboardActOff(QObject *parent)
 
 void CsoundQt::tableEditorActOff(QObject *parent)
 {
+    (void) parent;
 #ifdef USE_QT_GT_53
 	//qDebug()<<"VirtualKeyboard destroyed";
 	if (!m_tableEditorPointer.isNull()) { // check if object still existing (i.e application not exiting)
-		if (showTableEditorAct ->isChecked()) {
+        if (showTableEditorAct->isChecked()) {
 			showTableEditorAct->setChecked(false);
 		}
 	}
@@ -2265,7 +2264,7 @@ void CsoundQt::tableEditorActOff(QObject *parent)
 
 void CsoundQt::showHtml5Gui(bool show)
 {
-#ifdef QCS_HTML5
+#if defined(QCS_QTHTML)
     csoundHtmlView->setVisible(show);
 #endif
 }
@@ -2309,7 +2308,7 @@ void CsoundQt::virtualCCIn(int channel, int cc, int value)
 {
 	//qDebug()<<"CC event: "<<channel<< cc<<value;
 	std::vector<unsigned char> message;
-	unsigned char status = (11 << 4 | channel-1);
+    unsigned char status = (11 << 4 | (channel - 1));
 	message.push_back(status);
 	message.push_back(cc);
 	message.push_back(value);
@@ -2318,7 +2317,7 @@ void CsoundQt::virtualCCIn(int channel, int cc, int value)
 
 void CsoundQt::handleTableSyntax(QString syntax)
 {
-	//qDebug()<<Q_FUNC_INFO<<syntax;
+    qDebug() << syntax;
 	insertText(syntax+"\n");
 }
 
@@ -2472,6 +2471,13 @@ void CsoundQt::about()
 #ifdef QCS_PYTHONQT
     text += tr("Built with PythonQt support.")+ "<br />";
 #endif
+#ifdef USE_WEBENGINE
+    text += tr("Html5 support based on QtWebEngine")+"<br />";
+#endif
+#ifdef USE_WEBKIT
+    text += tr("Html5 support based on QtWebkit")+"<br />";
+#endif
+    text += "<br />";
     text += tr("French translation: Fran&ccedil;ois Pinot") + "<br />";
     text += tr("German translation: Joachim Heintz") + "<br />";
     text += tr("Portuguese translation: Victor Lazzarini") + "<br />";
@@ -2482,7 +2488,7 @@ void CsoundQt::about()
 	text += QString("<center><a href=\"http://csoundqt.github.io\">csoundqt.github.io</a></center>");
 	text += QString("<center><a href=\"mailto:mantaraya36@gmail.com\">mantaraya36@gmail.com</a><br /> <a href=\"mailto:trmjhnns@gmail.com\">trmjhnns@gmail.com</a> </center><br />");
     text += tr("If you find CsoundQt useful, please consider donating to the project:");
-	text += "<center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\">Support this project!</a></center><br \>";
+    text += "<center><a href=\"http://sourceforge.net/donate/index.php?group_id=227265\">Support this project!</a></center><br>";
 
     text += tr("Please file bug reports and feature suggestions in the ");
 	text += "<a href=\"https://github.com/CsoundQt/CsoundQt/issues\">";
@@ -2852,9 +2858,10 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #else
     viewFullScreenAct->setShortcut(tr("F11"));
 #endif
+
     viewEditorFullScreenAct->setShortcut(tr("Alt+Ctrl+0"));
-#if defined(QCS_HTML5) || defined(QCS_QTHTML)
-    viewHtmlFullScreenAct->setShortcut(tr("Alt+Ctrl+H"));
+#ifdef QCS_QTHTML
+    viewHtmlFullScreenAct->setShortcut(tr("Alt+Ctrl+4"));  // was H
 #endif
     viewHelpFullScreenAct->setShortcut(tr("Alt+Ctrl+2")); // was vice versa
     viewWidgetsFullScreenAct->setShortcut(tr("Alt+Ctrl+1"));
@@ -2869,7 +2876,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 	raiseInspectorAct->setShortcut(tr("Ctrl+5"));
 	showLiveEventsAct->setShortcut(tr("Ctrl+6"));
 
-#ifdef QCS_HTML5
+#ifdef QCS_QTHTML	
 	raiseHtml5Act->setShortcut(tr("Ctrl+4")); // Alt-4 was before for Code graph
 #endif
 	openDocumentationAct->setShortcut(tr("F1"));
@@ -3435,7 +3442,8 @@ void CsoundQt::createActions()
     viewEditorFullScreenAct->setStatusTip(tr("Have the editor occupy all available screen space"));
     viewEditorFullScreenAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(viewEditorFullScreenAct, SIGNAL(toggled(bool)), this, SLOT(setEditorFullScreen(bool)));
-#if defined(QCS_HTML5) || defined(QCS_QTHTML)
+
+#ifdef QCS_QTHTML
     viewHtmlFullScreenAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("View HTML Fullscreen"), this);
     viewHtmlFullScreenAct->setCheckable(true);
     viewHtmlFullScreenAct->setChecked(false);
@@ -3482,7 +3490,7 @@ void CsoundQt::createActions()
 	connect(showTableEditorAct, SIGNAL(toggled(bool)), this, SLOT(showTableEditor(bool)));
 
 
-#ifdef QCS_HTML5
+#if defined(QCS_QTHTML)
     showHtml5Act = new QAction(QIcon(":/images/html5.png"), tr("HTML View"), this);
     showHtml5Act->setIconText(tr("HTML"));
     showHtml5Act->setCheckable(true);
@@ -3490,7 +3498,15 @@ void CsoundQt::createActions()
     showHtml5Act->setStatusTip(tr("Show the HTML view"));
     showHtml5Act->setShortcutContext(Qt::ApplicationShortcut);
     connect(showHtml5Act, SIGNAL(toggled(bool)), this, SLOT(showHtml5Gui(bool)));
-    connect(csoundHtmlView, SIGNAL(Close(bool)), showHtml5Act, SLOT(setChecked(bool)));
+	connect(csoundHtmlView, SIGNAL(Close(bool)), showHtml5Act, SLOT(setChecked(bool)));
+
+    raiseHtml5Act = new QAction(this);
+    raiseHtml5Act->setText(tr("Show/Raise HtmlView"));
+    raiseHtml5Act->setShortcutContext(Qt::ApplicationShortcut);
+    connect(raiseHtml5Act, SIGNAL(triggered()), focusMapper, SLOT(map()));
+    focusMapper->setMapping(raiseHtml5Act, 4);
+    this->addAction(raiseHtml5Act);
+
 #endif
     splitViewAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Split View"), this);
     splitViewAct->setCheckable(true);
@@ -3749,8 +3765,8 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(showUtilitiesAct);
     m_keyActions.append(showVirtualKeyboardAct);
 	m_keyActions.append(showTableEditorAct);
-#ifdef QCS_HTML5
-	m_keyActions.append(raiseHtml5Act);
+#if defined(QCS_QTHTML)
+    m_keyActions.append(raiseHtml5Act);
 #endif
     m_keyActions.append(setHelpEntryAct);
     m_keyActions.append(browseBackAct);
@@ -3762,7 +3778,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(infoAct);
     m_keyActions.append(viewFullScreenAct);
     m_keyActions.append(viewEditorFullScreenAct);
-#if defined(QCS_HTML5) || defined(QCS_QTHTML)
+#if defined(QCS_QTHTML)
     m_keyActions.append(viewHtmlFullScreenAct);
 #endif
     m_keyActions.append(viewHelpFullScreenAct);
@@ -3986,7 +4002,7 @@ void CsoundQt::createMenus()
     viewMenu->addAction(showPythonConsoleAct);
 #endif
     viewMenu->addAction(showScratchPadAct);
-#ifdef QCS_HTML5
+#if defined(QCS_QTHTML)
     viewMenu->addAction(showHtml5Act);
 #endif
     viewMenu->addAction(showUtilitiesAct);
@@ -3999,9 +4015,9 @@ void CsoundQt::createMenus()
 	viewMenu->addAction(showTableEditorAct);
 #endif
     viewMenu->addSeparator();
-    viewMenu->addAction(viewFullScreenAct);
+	viewMenu->addAction(viewFullScreenAct);
     viewMenu->addAction(viewEditorFullScreenAct);
-#if defined(QCS_HTML5) || defined(QCS_QTHTML)
+#if defined(QCS_QTHTML)
     viewMenu->addAction(viewHtmlFullScreenAct);
 #endif
     viewMenu->addAction(viewHelpFullScreenAct);
@@ -4028,6 +4044,7 @@ void CsoundQt::createMenus()
     QStringList musicFiles;
     QStringList usefulFiles;
     QStringList exampleFiles;
+    QStringList htmlFiles;
     QList<QStringList> subMenus;
     QStringList subMenuNames;
 
@@ -4143,6 +4160,12 @@ void CsoundQt::createMenus()
 
     subMenus << exampleFiles;
     subMenuNames << tr("Miscellaneous");
+
+    htmlFiles.append(":/examples/Html5 Support/Minimal_Html_Example.csd");
+    htmlFiles.append(":/examples/Html5 Support/Styled_Sliders.csd");
+    htmlFiles.append(":/examples/Html5 Support/Html_file_in_CsoundQt.html");
+    subMenus << htmlFiles;
+    subMenuNames << tr("Html5 support");
 
     QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
     QAction *newAction;
@@ -4541,7 +4564,7 @@ void CsoundQt::createToolBars()
 
     configureToolBar = addToolBar(tr("Panels"));
     configureToolBar->setObjectName("panelToolBar");
-#ifdef QCS_HTML5
+#if defined(QCS_QTHTML)
     configureToolBar->addAction(showHtml5Act);
 #endif
     configureToolBar->addAction(showWidgetsAct);
@@ -5284,6 +5307,13 @@ bool CsoundQt::loadCompanionFile(const QString &fileName)
 bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
 {
     //  qDebug("CsoundQt::saveFile");
+	// update htmlview on Save
+#if defined(QCS_QTHTML)
+	if (!documentPages.isEmpty()) {
+		qDebug()<<"Update html on save";
+		updateHtmlView();
+	}
+#endif
     QString text;
     QApplication::setOverrideCursor(Qt::WaitCursor);
     if (!m_options->widgetsIndependent) { // Update outer geometry information for writing
@@ -5493,19 +5523,19 @@ void CsoundQt::setWidgetPanelGeometry()
     //	qDebug() << "CsoundQt::setWidgetPanelGeometry() " << geometry;
     if (geometry.width() <= 0 || geometry.width() > 4096) {
         geometry.setWidth(400);
-        qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: width invalid.";
+        qDebug() << "Warning: width invalid.";
     }
     if (geometry.height() <= 0 || geometry.height() > 4096) {
         geometry.setHeight(300);
-        qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: height invalid.";
+        qDebug() << "Warning: height invalid.";
     }
     if (geometry.x() < 0 || geometry.x() > 4096) {
         geometry.setX(20);
-        qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: X position invalid.";
+        qDebug() << "Warning: X position invalid.";
     }
     if (geometry.y() < 0 || geometry.y() > 4096) {
         geometry.setY(0);
-        qDebug() << "CsoundQt::setWidgetPanelGeometry() Warning: Y position invalid.";
+        qDebug() << "Warning: Y position invalid.";
     }
     //	qDebug() << "geom " << widgetPanel->geometry() << " frame " << widgetPanel->frameGeometry();
     widgetPanel->setGeometry(geometry);
@@ -5550,7 +5580,7 @@ void CsoundQt::insertText(QString text, int index, int section)
         }
     }
     else {
-        qDebug() << "CsoundQt::insertText not implemented for sections";
+        qDebug() << "Not implemented for sections";
     }
 }
 
@@ -6061,6 +6091,19 @@ bool CsoundQt::startServer()
 	m_server->removeServer("csoundqt"); // for any case, if socket was not cleard due crash before
 	return m_server->listen("csoundqt");
 }
+
+#if defined(QCS_QTHTML)
+void CsoundQt::updateHtmlView()
+{
+	QString htmlText = documentPages[curPage]->getHtmlText();
+	if (!htmlText.isEmpty()) {
+        ///csoundHtmlView->setCsoundEngine(getEngine(curPage));
+        csoundHtmlView->load(documentPages[curPage]);
+	} else {
+		csoundHtmlView->clear();
+	}
+}
+#endif
 
 EventSheet* CsoundQt::getSheet(int index, QString sheetName)
 {

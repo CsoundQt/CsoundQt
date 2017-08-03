@@ -73,10 +73,10 @@ void AppWizard::makeApp()
 	QString targetDir =  field("targetDir").toString();
 	bool useSdk = field("useSdk").toInt() == 1;
 
-	bool autorun =  field("autorun").toBool();
-	int runMode = field("runMode").toInt();
-	bool saveState = field("saveState").toBool();
-	bool newParser = field("newParser").toBool();
+    // bool autorun =  field("autorun").toBool();
+    // int runMode = field("runMode").toInt();
+    // bool saveState = field("saveState").toBool();
+    // bool newParser = field("newParser").toBool();
 
 	QString author = field("author").toString();
 	QString version = field("version").toString();
@@ -110,7 +110,7 @@ void AppWizard::makeApp()
 		return;
 	}
 
-	qDebug() << "AppWizard::makeApp() " << targetDir;
+    qDebug()  << targetDir;
 	if (useSdk) {
 		createLinuxApp(appName, targetDir, dataFiles, plugins, m_sdkDir,
 					   "", "", "");
@@ -193,7 +193,7 @@ void AppWizard::copyFolder(QString sourceFolder, QString destFolder)
 {
 	QDir sourceDir(sourceFolder);
 	if(!sourceDir.exists()) {
-		qDebug() << "AppWizard::copyFolder source dir does not exist";
+        qDebug()  << "source dir does not exist";
 		return;
 	}
 	QDir destDir(destFolder);
@@ -230,6 +230,14 @@ void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFi
 							 QStringList plugins, QString sdkDir,  QString libDir,
 							 QString opcodeDir, QString qtLibsDir)
 {
+    (void) appName;
+    (void) appDir;
+    (void) dataFiles;
+    (void) plugins;
+    (void) sdkDir;
+    (void) libDir;
+    (void) opcodeDir;
+    (void) qtLibsDir;
 	//  QDir dir(appDir);
 	//    if (dir.mkdir(appName)) {
 	//      dir.cd(appName);
@@ -241,13 +249,13 @@ void AppWizard::createWinApp(QString appName, QString appDir, QStringList dataFi
 	//      foreach(QString file, dataFiles) {
 	//        QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
 	//        QFile::copy(file, destName);
-	//        qDebug() << "createWinApp " << destName;
+    //        qDebug()  << destName;
 	//      }
 	//      dir.cd("../lib");
 	//      foreach(QString file, plugins) {
 	//        QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
 	//        QFile::copy(file, destName);
-	//        qDebug() << "createWinApp " << destName;
+    //        qDebug()  << destName;
 	//      }
 	//    }
 	//    else {
@@ -261,12 +269,20 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
 							 QStringList plugins, QString sdkDir,  QString libDir,
 							 QString opcodeDir, QString qtLibsDir)
 {
-	qDebug() << "AppWizard::createMacApp";
+    (void) appName;
+    (void) appDir;
+    (void) dataFiles;
+    (void) plugins;
+    (void) sdkDir;
+    (void) libDir;
+    (void) opcodeDir;
+    (void) qtLibsDir;
+    qDebug() ;
 	QDir dir(appDir);
 	QList<QPair<QString, QString> > copyList;
 	if (dir.exists(appName + QDir::separator() + "osx")) {
 		int ret = QProcess::execute("rm -fR " + dir.absolutePath() + QDir::separator() + appName + QDir::separator() + "osx");
-		qDebug() << "AppWizard::createMacApp deleted directory";
+        qDebug()  << "deleted directory";
 		if (ret != 0) {
 			QMessageBox::critical(this, tr("Error"), tr("Could not delete old application directory! Aborted."));
 		}
@@ -306,7 +322,7 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
 			QStringList libSearchDirs;
 			libSearchDirs << libDir << defaultLibDirs;
 			//FIXME this is not really working yet... You need to use the frameworks and libs inside the QuteApp template bundle.
-			qDebug() << "AppWizard::createMacApp Error! libDir not implemented!";
+            qDebug()  << "Error! libDir not implemented!";
 			dir.cd("../Frameworks");
 			foreach(QString file, libFiles) {
 				QString destName = dir.absolutePath() + QDir::separator() + file.mid(file.lastIndexOf(QDir::separator()) + 1);
@@ -330,12 +346,12 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
 			QFileInfo finfo((*i).first);
 			if (finfo.isDir()) {
 				copyFolder((*i).first, (*i).second);
-				qDebug() << "createMacApp dir copied:" << (*i).first;
+                qDebug()  << "dir copied:" << (*i).first;
 			} else {
 				if (QFile::copy((*i).first, (*i).second)) {
-					qDebug() << "createMacApp copied:" << (*i).first;
+                    qDebug()  << "copied:" << (*i).first;
 				} else {
-					qDebug() << "createMacApp error copying: " << (*i).first << (*i).second;
+                    qDebug()  << "error copying: " << (*i).first << (*i).second;
 				}
 			}
 		}
@@ -356,12 +372,12 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
 							   QStringList plugins, QString sdkDir, QString libDir,
 							   QString opcodeDir, QString qtLibsDir)
 {
-	qDebug() << "AppWizard::createLinuxApp";
+    qDebug() ;
 	QDir dir(appDir);
 	QList<QPair<QString, QString> > copyList;
 	if (dir.exists(appName + QDir::separator() + "linux")) {
 		int ret = QProcess::execute("rm -fR " + dir.absolutePath() + QDir::separator() + appName + QDir::separator() + "linux");
-		qDebug() << "AppWizard::createLinuxApp deleted directory";
+		qDebug() << "Deleted directory";
 		if (ret != 0) {
 			QMessageBox::critical(this, tr("Error"), tr("Could not delete old application directory! Aborted."));
 		}
@@ -449,9 +465,9 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
 		QList<QPair<QString,QString> >::const_iterator i;
 		for (i = copyList.constBegin(); i != copyList.constEnd(); ++i) {
 			if (QFile::copy((*i).first, (*i).second)) {
-				qDebug() << "createLinuxApp copied:" << (*i).first;
+                qDebug()  << "copied:" << (*i).first;
 			} else {
-				qDebug() << "createLinuxApp error copying: " << (*i).first << (*i).second;
+                qDebug()  << "error copying: " << (*i).first << (*i).second;
 			}
 		}
 		dir.cdUp();
@@ -476,16 +492,14 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
 
 void AppWizard::getLinuxLibDeps(QString libname)
 {
+    (void) libname;
 	QProcess ldd;
 	//    ldd.start("ldd", QStringList() << "-c");
 	//    if (!ldd.waitForStarted())
 	//        return false;
-
 	//    ldd.write("Qt rocks!");
 	//    ldd.closeWriteChannel();
-
 	//    if (!ldd.waitForFinished())
 	//        return false;
-
 	//    QByteArray result = ldd.readAll();
 }

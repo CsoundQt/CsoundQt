@@ -74,6 +74,7 @@ public:
 	QString getSelectedText(int section = -1);
 	QString getSelectedWidgetsText();
 	QString getMacOptions(QString option);
+	QString getHtmlText();
 	int getViewMode();
 	QString getLiveEventsText();
 	QString wordUnderCursor();

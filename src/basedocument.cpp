@@ -60,20 +60,8 @@ BaseDocument::~BaseDocument()
 		WidgetLayout *wl = m_widgetLayouts.takeLast();
 		wl->hide();
         delete wl;
-//		wl->deleteLater();  //FIXME Still crashing ocassionally?
     }
-//	m_csEngine->deleteLater();
-	//  m_view->deleteLater();   // Crashes. Already destroyed?
-	//  m_widgetLayout->setParent(0);  //To make sure the widget panel from the main application doesn't attempt to delete it as its child
 }
-
-//void BaseDocument::init(QWidget *parent, OpEntryParser *opcodeTree)
-//{
-//  qDebug() << "BaseDocument::init";
-////  m_view = createView(parent, opcodeTree);
-//  m_view = new BaseView(parent, opcodeTree);
-//  m_view->setFileType(0);
-//}
 
 int BaseDocument::parseAndRemoveWidgetText(QString &text)
 {
@@ -115,7 +103,7 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
 WidgetLayout* BaseDocument::newWidgetLayout()
 {
 	WidgetLayout* wl = new WidgetLayout(0);
-	//  qDebug() << "BaseDocument::newWidgetLayout()" << wl->windowFlags();
+	//  qDebug() " << wl->windowFlags();
 	wl->setWindowFlags(Qt::Window | wl->windowFlags());
 	connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
 	connect(wl, SIGNAL(registerButton(QuteButton*)),
@@ -241,7 +229,7 @@ void BaseDocument::pause()
 
 void BaseDocument::stop()
 {
-	//  qDebug() << "BaseDocument::stop()";
+	//  qDebug() ;
 	if (m_csEngine->isRunning()) {
 		m_csEngine->stop();
 		foreach (WidgetLayout *wl, m_widgetLayouts) {
@@ -252,9 +240,10 @@ void BaseDocument::stop()
 
 int BaseDocument::record(int format)
 {
-#ifdef	PERFTHREAD_RECORD
+#ifdef PERFTHREAD_RECORD
 	return m_csEngine->startRecording(format, "output.wav");
 #else
+    (void) format;
 	QMessageBox::warning(NULL, tr("Recording not possible"), tr("This version of CsoundQt was not built with recording support."));
 	return 0;
 #endif
@@ -306,21 +295,3 @@ AppProperties BaseDocument::getAppProperties()
 {
 	return m_view->getAppProperties();
 }
-
-//void BaseDocument::playParent()
-//{
-//  static_cast<qutecsound *>(parent())->play();
-//}
-//
-//void BaseDocument::renderParent()
-//{
-//  static_cast<qutecsound *>(parent())->render();
-//}
-
-//void BaseDocument::registerButton(QuteButton *b)
-//{
-//  connect(b, SIGNAL(play()), static_cast<qutecsound *>(parent()), SLOT(play()));
-//  connect(b, SIGNAL(render()), static_cast<qutecsound *>(parent()), SLOT(render()));
-//  connect(b, SIGNAL(pause()), static_cast<qutecsound *>(parent()), SLOT(pause()));
-//  connect(b, SIGNAL(stop()), static_cast<qutecsound *>(parent()), SLOT(stop()));
-//}
