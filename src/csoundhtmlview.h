@@ -60,11 +60,6 @@ public slots:
 private:
 	Ui::Html5GuiDisplay *ui;
     std::atomic<DocumentPage *> documentPage;
-#ifdef _MSC_VER
-    DWORD pid;
-#else
-    pid_t pid;
-#endif
     // For performing CSD files with embedded <html> element.
     CsoundHtmlWrapper csoundWrapper;
     // For performing HTML files (HTML-only performance).

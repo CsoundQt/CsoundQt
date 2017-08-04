@@ -13,16 +13,9 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     webView(nullptr),
     ui(new Ui::Html5GuiDisplay),
     documentPage(0),
-    pid(0),
     m_csoundEngine(nullptr),
     m_options(nullptr)
 {
-#ifdef WIN32
-	pid = GetCurrentProcessId();
-    qDebug("pid: %d\n", pid);
-#else
-    pid = getpid();
-#endif
     ui->setupUi(this);
 #ifdef USE_WEBKIT
 	webView = new QWebView(this);
@@ -30,7 +23,8 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 	webView = new QWebEngineView(this);
 #endif
 	setWidget(webView);
-	webView->sizePolicy().setVerticalPolicy(QSizePolicy::Policy::Expanding);
+    webView->setMinimumWidth(200);
+    webView->sizePolicy().setVerticalPolicy(QSizePolicy::Policy::Expanding);
     layout()->setMargin(0);
 #ifdef USE_WEBKIT
 	QObject::connect(webView->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),
