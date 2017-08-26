@@ -3,7 +3,7 @@
     win32-g++: message(Building with gcc)
     win32-msvc2013: message(Building with Visual C++ 2013)
     win32-msvc2015: message(Building with Visual C++ 2015)
-	win32-msvc2017: message(Building with Visual C++ 2017)
+    win32-msvc2017: message(Building with Visual C++ 2015)
 }
 
 CONFIG -= debug_and_release debug_and_release_target \
