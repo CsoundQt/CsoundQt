@@ -5065,9 +5065,13 @@ int CsoundQt::execute(QString executable, QString options)
     std::thread system_thread([command_line]{std::system(command_line);});
     system_thread.detach();
 #else
-    qDebug() << "CsoundQt::execute   " << commandLine << documentPages[curPage]->getFilePath();
+    QString path = documentPages[curPage]->getFilePath();
+    if (path.startsWith(":/examples/", Qt::CaseInsensitive)) { // example or other embedded file
+        path = QDir::tempPath(); // copy of example is saved there
+    }
+    qDebug() << "CsoundQt::execute   " << commandLine << path;
     QProcess *p = new QProcess(this);
-    p->setWorkingDirectory(documentPages[curPage]->getFilePath());
+    p->setWorkingDirectory(path);
     p->start(commandLine);
     Q_PID id = p->pid();
     qDebug() << "Launched external program with id:" << id;
