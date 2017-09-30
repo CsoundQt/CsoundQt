@@ -61,7 +61,7 @@ Options::Options(ConfigLists *configlists) :
 
 	useAPI = true;
 	enableWidgets = true;
-	widgetsIndependent = true;  // Widget layouts in Separate Window (instead of Dock Widget)
+    widgetsIndependent = false;  // Widget layouts in Separate Window (instead of Dock Widget)
 	keyRepeat = true;
 	debugLiveEvents = false;
 	consoleBufferSize = 1024;
@@ -85,7 +85,7 @@ Options::Options(ConfigLists *configlists) :
 #else
 	csoundExecutable = "csound ";
 #endif
-	logFile = "log.txt";
+    logFile = ""; // "log.txt"; - don't log by default...
 	sdkDir = "";
 	templateDir = "";
 	evalLanguage = CS_ORC;
@@ -99,7 +99,7 @@ Options::Options(ConfigLists *configlists) :
 	pdfviewer = "";
 	language = 0;  // Interface language
 
-	csdTemplate = "";
+    csdTemplate = QCS_DEFAULT_TEMPLATE ; // was: ""
 
 	// Csound Utilities options
 	cvInputName = "input.wav";

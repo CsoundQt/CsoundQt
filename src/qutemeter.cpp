@@ -178,7 +178,7 @@ QString QuteMeter::getWidgetType()
 QString QuteMeter::getCabbageLine()
 {
 	QString type = static_cast<MeterWidget *>(m_widget)->getType();
-	if (!(type == "crosshair" or type == "point")) {
+    if (!(type == "crosshair" || type == "point")) {
 		qDebug()<<"Meter can be converted to XYpad only if the type is crosshair or point";
 		return QString();
 	}
