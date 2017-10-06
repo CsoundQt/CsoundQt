@@ -2323,7 +2323,12 @@ void CsoundQt::handleTableSyntax(QString syntax)
 }
 
 void CsoundQt::openManualExample(QString fileName)
-{
+{    
+#ifdef Q_OS_WIN // on windows poper path is not forwarded. Add it if necessary.
+    if (!fileName.startsWith(helpPanel->docDir)) {
+        fileName =  helpPanel->docDir + fileName;
+    }
+#endif
     loadFile(fileName);
 }
 
@@ -5062,6 +5067,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     }
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly)) {
+        qDebug()<<"Could not open "<<fileName<<file.isReadable();
         QMessageBox::warning(this, tr("CsoundQt"),
                              tr("Cannot read file %1:\n%2.")
                              .arg(fileName)
