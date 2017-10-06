@@ -409,6 +409,7 @@ void QuteText::createPropertiesDialog()
 	label->setText(tr("Font Size"));
 	layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
 	fontSize = new QSpinBox(dialog);
+	fontSize->setMaximum(999); // allow also very big fonts
 	layout->addWidget(fontSize,8, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText(tr("Border Radius"));

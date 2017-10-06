@@ -341,11 +341,14 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     //qDebug()<<"Max thread count: "<< QThreadPool::globalInstance()->maxThreadCount();
     QThreadPool::globalInstance()->setMaxThreadCount(MAX_THREAD_COUNT);
-
+#ifndef  Q_OS_MAC // a workaround for showing close buttons on close NB! disable later
     QFile file(":/appstyle-white.css");
     file.open(QFile::ReadOnly);
+
     QString styleSheet = QLatin1String(file.readAll());
+    qDebug()<<"Stylesheet: "<<styleSheet;
     qApp->setStyleSheet(styleSheet);
+#endif
 }
 
 
