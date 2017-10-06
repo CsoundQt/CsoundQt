@@ -344,9 +344,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #ifndef  Q_OS_MAC // a workaround for showing close buttons on close NB! disable later
     QFile file(":/appstyle-white.css");
     file.open(QFile::ReadOnly);
-
     QString styleSheet = QLatin1String(file.readAll());
-    qDebug()<<"Stylesheet: "<<styleSheet;
     qApp->setStyleSheet(styleSheet);
 #endif
 }
@@ -5057,7 +5055,6 @@ int CsoundQt::loadFileFromSystem(QString fileName)
 
 int CsoundQt::loadFile(QString fileName, bool runNow)
 {
-    //  qDebug() << "CsoundQt::loadFile" << fileName;
     if (fileName.endsWith(".pdf")) {
         openPdfFile(fileName);
         return 0;
@@ -5070,7 +5067,6 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     }
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly)) {
-        qDebug()<<"Could not open "<<fileName<<file.isReadable();
         QMessageBox::warning(this, tr("CsoundQt"),
                              tr("Cannot read file %1:\n%2.")
                              .arg(fileName)

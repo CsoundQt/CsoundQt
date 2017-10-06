@@ -131,7 +131,6 @@ void DockHelp::followLink(QUrl url)
 		if (url.toString().endsWith(".csd")) {
             QString csdFile = url.toLocalFile().isEmpty() ? url.toString() : url.toLocalFile(); // necessary for windows 10
             emit openManualExample(csdFile);
-            qDebug()<<"You want to open csd: "<<csdFile;
 		}
 		else {
 			if (!url.toString().endsWith("indexframes.html") ) {
