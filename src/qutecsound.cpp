@@ -346,7 +346,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     file.open(QFile::ReadOnly);
 
     QString styleSheet = QLatin1String(file.readAll());
-    qDebug()<<"Stylesheet: "<<styleSheet;
     qApp->setStyleSheet(styleSheet);
 #endif
 }
@@ -4583,6 +4582,11 @@ void CsoundQt::readSettings()
     // Version 1 to remove "-d" from additional command line flags
     // Version 2 to save default keyboard shortcuts (weren't saved previously)
     // Version 2 to add "*" to jack client name
+	// version 4 to signal that many shotcuts have been changed
+	if (settingsVersion>0 && settingsVersion<4) {
+		QMessageBox::warning(this, tr("Settings changed"),tr("In this version the shortcuts for showing panels changed. See ... for more information. Please Use Edit->Keyboard shortcuts -> Restore Defaults to activate it."));
+	}
+
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "boring").toString();
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
@@ -4810,7 +4814,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     if (!m_resetPrefs) {
         // Version 1 when clearing additional flags, version 2 when setting jack client to *
         // version 3 to store that new widget format warning has been shown.
-        settings.setValue("settingsVersion", 3);
+		// version 4 to signal that the many shortcuts have been changed
+		settings.setValue("settingsVersion", 4);
     }
     else {
         settings.remove("");
