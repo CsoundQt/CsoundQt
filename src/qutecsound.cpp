@@ -221,6 +221,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     }
     // Wire the signal mapper to the tab widget index change slot
     connect(mapper, SIGNAL(mapped(int)), documentTabs, SLOT(setCurrentIndex(int)));
+	QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Left), this);
+	connect(tabLeft, SIGNAL(activated()), this, SLOT(pageLeft()));
+	QShortcut *tabRight = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Right), this);
+	connect(tabRight, SIGNAL(activated()), this, SLOT(pageRight()));
 
     fillFileMenu(); // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
@@ -443,7 +447,25 @@ void CsoundQt::changePage(int index)
 #ifdef QCS_HTML5
     csoundHtmlView->load(documentPages[curPage]);
 #endif
-    m_inspectorNeedsUpdate = true;
+	m_inspectorNeedsUpdate = true;
+}
+
+void CsoundQt::pageLeft()
+{
+	if (curPage >= 1) {
+		//changePage(curPage-1);
+		documentTabs->setCurrentIndex(curPage-1);
+
+	}
+}
+
+void CsoundQt::pageRight()
+{
+	if (curPage < documentPages.count()-1) {
+		//changePage(curPage+1);
+		documentTabs->setCurrentIndex(curPage+1);
+
+	}
 }
 
 void CsoundQt::setWidgetTooltipsVisible(bool visible)

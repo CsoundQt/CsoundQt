@@ -95,7 +95,13 @@ int main(int argc, char *argv[])
            return(0);
        }
 #endif
-
+		QLibrary testCsound("csound64"); // does it work on MacOS
+		bool csoundFound = testCsound.load();
+		if (!csoundFound) {
+			QMessageBox::warning(NULL, QObject::tr("Csound not found"), QObject::tr("Csound library not found. You must install it before you use Csoundqt. Please download from <br>") +"<a href=http://csound.github.io/download>http://csound.github.io/download</a>" );
+			return(0);
+		}
+		testCsound.unload();
         QStringList args = qapp.arguments();
         args.removeAt(0); // Remove program name
         foreach (QString arg, args) {
