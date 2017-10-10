@@ -223,9 +223,7 @@ private slots:
 	void setHelpEntry();
     void setFullScreen(bool full);
     void setEditorFullScreen(bool full);
-#if defined(QCS_QTHTML)
     void setHtmlFullScreen(bool full);
-#endif
     void setHelpFullScreen(bool full);
     void setWidgetsFullScreen(bool full);
     void showDebugger(bool show);
