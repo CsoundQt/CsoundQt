@@ -69,7 +69,8 @@ int main(int argc, char *argv[])
        }
 #endif
 
-    QStringList args = qapp.arguments();
+
+	QStringList args = qapp.arguments();
     args.removeAt(0); // Remove program name
     foreach (QString arg, args) {
         if (!arg.startsWith("-p")) {// avoid OS X arguments

@@ -167,8 +167,11 @@ public slots:
 	void sendEvent(QString eventLine, double delay = 0);
 	void sendEvent(int index, QString line, double delay = 0);
 	void changePage(int index);
+	void pageLeft();
+	void pageRight();
 	void setWidgetTooltipsVisible(bool visible);
 	void closeExtraPanels(); // to close help and console panels when esc is pressed in the editor
+
 	//    void updateWidgets();
 	void openExample();
 	void openTemplate();

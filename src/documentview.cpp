@@ -990,7 +990,8 @@ void DocumentView::escapePressed()
 		} else if (m_hoverText->isVisible()){
 			hideHoverText();
 		} else {
-			emit closeExtraPanels();
+            qDebug()<<"closeExtraPanels now omitted -  let know, if it should be brought back.";
+            //emit closeExtraPanels();
 		}
 	}
 	else {

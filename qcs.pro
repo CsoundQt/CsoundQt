@@ -98,7 +98,7 @@ win32-msvc2015:include (qcs-win32.pro)
 win32-msvc2017:include (qcs-win32.pro)
 
 # Requires Csound >= 6.04
-record_support {
+record_support|perfThread_build {
     DEFINES += PERFTHREAD_RECORD
     message("Building recording support.")
 }
@@ -260,6 +260,12 @@ macx {
     final.path = $$PWD
     INSTALLS += cocoa printsupport pythonlinks final
 
+}
+
+win32 {
+    first.path = $$PWD
+    first.commands = $$[QT_INSTALL_PREFIX]/bin/windeployqt  -qmldir=$$PWD/src/QML  $$OUT_PWD/$$DESTDIR/$${TARGET}.exe # first deployment
+    INSTALLS += first
 }
 
 message(CONFIGs are:    $${CONFIG})

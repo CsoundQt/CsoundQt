@@ -43,6 +43,7 @@
 #include "csoundhtmlview.h"
 #include <thread>
 
+
 #ifdef Q_OS_WIN
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
 #endif
@@ -211,8 +212,14 @@ CsoundQt::CsoundQt(QStringList fileNames)
 		connect(shortcut, SIGNAL(activatedAmbiguously()), this, SLOT(ambiguosShortcut()) );
         mapper->setMapping(shortcut, i);
     }
-	// Wire the signal mapper to the tab widget index change slot
-	connect(mapper, SIGNAL(mapped(int)), documentTabs, SLOT(setCurrentIndex(int)));
+
+    // Wire the signal mapper to the tab widget index change slot
+    connect(mapper, SIGNAL(mapped(int)), documentTabs, SLOT(setCurrentIndex(int)));
+	QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Left), this);
+	connect(tabLeft, SIGNAL(activated()), this, SLOT(pageLeft()));
+	QShortcut *tabRight = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Right), this);
+	connect(tabRight, SIGNAL(activated()), this, SLOT(pageRight()));
+
 
     fillFileMenu(); // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
@@ -333,11 +340,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     //qDebug()<<"Max thread count: "<< QThreadPool::globalInstance()->maxThreadCount();
     QThreadPool::globalInstance()->setMaxThreadCount(MAX_THREAD_COUNT);
-
+#ifndef  Q_OS_MAC // a workaround for showing close buttons on close NB! disable later
     QFile file(":/appstyle-white.css");
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
     qApp->setStyleSheet(styleSheet);
+#endif
 }
 
 
@@ -432,7 +440,25 @@ void CsoundQt::changePage(int index)
 		updateHtmlView();
 	}
 #endif
-    m_inspectorNeedsUpdate = true;
+	m_inspectorNeedsUpdate = true;
+}
+
+void CsoundQt::pageLeft()
+{
+	if (curPage >= 1) {
+		//changePage(curPage-1);
+		documentTabs->setCurrentIndex(curPage-1);
+
+	}
+}
+
+void CsoundQt::pageRight()
+{
+	if (curPage < documentPages.count()-1) {
+		//changePage(curPage+1);
+		documentTabs->setCurrentIndex(curPage+1);
+
+	}
 }
 
 void CsoundQt::setWidgetTooltipsVisible(bool visible)
@@ -1107,6 +1133,7 @@ void CsoundQt::disableInternalRtMidi()
 void CsoundQt::focusToTab(int tab)
 {  QDockWidget *panel = nullptr;
    QAction * action = nullptr;
+   qDebug()<<tab;
    switch (tab) {
    case 1:
        qDebug()<<"Raise widgets";
@@ -2322,7 +2349,12 @@ void CsoundQt::handleTableSyntax(QString syntax)
 }
 
 void CsoundQt::openManualExample(QString fileName)
-{
+{    
+#ifdef Q_OS_WIN // on windows poper path is not forwarded. Add it if necessary.
+    if (!fileName.startsWith(helpPanel->docDir)) {
+        fileName =  helpPanel->docDir + fileName;
+    }
+#endif
     loadFile(fileName);
 }
 
@@ -4603,6 +4635,11 @@ void CsoundQt::readSettings()
     // Version 1 to remove "-d" from additional command line flags
     // Version 2 to save default keyboard shortcuts (weren't saved previously)
     // Version 2 to add "*" to jack client name
+	// version 4 to signal that many shotcuts have been changed
+	if (settingsVersion>0 && settingsVersion<4) {
+		QMessageBox::warning(this, tr("Settings changed"),tr("In this version the shortcuts for showing panels changed. See ... for more information. Please Use Edit->Keyboard shortcuts -> Restore Defaults to activate it."));
+	}
+
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "boring").toString();
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
@@ -4830,7 +4867,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     if (!m_resetPrefs) {
         // Version 1 when clearing additional flags, version 2 when setting jack client to *
         // version 3 to store that new widget format warning has been shown.
-        settings.setValue("settingsVersion", 3);
+		// version 4 to signal that the many shortcuts have been changed
+		settings.setValue("settingsVersion", 4);
     }
     else {
         settings.remove("");
@@ -5076,7 +5114,6 @@ int CsoundQt::loadFileFromSystem(QString fileName)
 
 int CsoundQt::loadFile(QString fileName, bool runNow)
 {
-    //  qDebug() << "CsoundQt::loadFile" << fileName;
     if (fileName.endsWith(".pdf")) {
         openPdfFile(fileName);
         return 0;
