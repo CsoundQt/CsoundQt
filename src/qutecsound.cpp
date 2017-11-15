@@ -1862,6 +1862,12 @@ void CsoundQt::stop(int index)
     if (docIndex < documentPages.size()) {
         if (documentPages[docIndex]->isRunning()) {
             documentPages[docIndex]->stop();
+#ifdef Q_OS_WIN // necessary since sometimes fltk plugin closes the OLE/COM connection on csoundCleanup
+            HRESULT result = OleInitialize(NULL);
+            if (result) {
+                qDebug()<<"Problem with OleInitialization" << result;
+            }
+#endif
         }
     }
     markStopped();
