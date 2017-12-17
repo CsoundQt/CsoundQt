@@ -38,6 +38,8 @@ csound6 {
 # Add C++11 support since version 0.9.4
 greaterThan(QT_MAJOR_VERSION, 4){
 CONFIG += c++11
+} else {
+QMAKE_CXXFLAGS += -std=c++0x
 }
 
 !csound5 {
@@ -59,6 +61,8 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QT += printsupport
     DEFINES += USE_QT5
     CONFIG += QCS_QT5
+} else {
+    DEFINES += USE_QT_LT_50
 }
 
 greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 2) {

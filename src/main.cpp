@@ -56,9 +56,11 @@ int main(int argc, char *argv[])
 {
     int result = 0;
 
+#ifndef USE_QT_LT_50
     // Set a global template for ALL qDebug messages.
 	qSetMessagePattern("[%{if-debug}D%{endif}%{if-info}I%{endif}%{if-warning}W%{endif}%{if-critical}C%{endif}%{if-fatal}F%{endif}][%{file}:%{line} %{function}] %{message}");
     qDebug();
+#endif
     QStringList fileNames;
     QApplication qapp(argc, argv);    
 #ifdef Q_OS_OSX
