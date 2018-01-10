@@ -20,7 +20,7 @@
 </CsOptions>
 <CsInstruments>
 sr		= 44100		;SAMPLE RATE
-ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 32			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -102,8 +102,8 @@ i  2      0         3600		;INSTRUMENT 2 PLAYS FOR ONE HOUR
  <objectName/>
  <x>72</x>
  <y>179</y>
- <width>400</width>
- <height>200</height>
+ <width>804</width>
+ <height>488</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -773,9 +773,9 @@ A gain control is provided to control the gain of the live input.</label>
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>239</r>
+   <g>235</g>
+   <b>231</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
