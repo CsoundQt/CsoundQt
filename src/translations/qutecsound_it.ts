@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="it_IT">
+<TS version="2.1" language="it_IT">
 <context>
     <name>About</name>
     <message>
@@ -207,6 +207,17 @@ Aborting.</source>
     </message>
 </context>
 <context>
+    <name>BaseDocument</name>
+    <message>
+        <source>Recording not possible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This version of CsoundQt was not built with recording support.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ConfigDialog</name>
     <message>
         <source>Please note that OPCODEDIR will only be set when running in an external shell. It won&apos;t be set when using Run or Render.</source>
@@ -286,11 +297,11 @@ Aborting.</source>
     </message>
     <message>
         <source>Realtime Play</source>
-        <translation>Play in tempo reale</translation>
+        <translation type="vanished">Play in tempo reale</translation>
     </message>
     <message>
         <source>output device (-o)</source>
-        <translation>dispositivo output (-o)</translation>
+        <translation type="vanished">dispositivo output (-o)</translation>
     </message>
     <message>
         <source>Input device (-i)</source>
@@ -302,7 +313,7 @@ Aborting.</source>
     </message>
     <message>
         <source>output device (-Q)</source>
-        <translation>dispositivo output (-Q)</translation>
+        <translation type="vanished">dispositivo output (-Q)</translation>
     </message>
     <message>
         <source>Input device (-M)</source>
@@ -310,7 +321,7 @@ Aborting.</source>
     </message>
     <message>
         <source>RT MIDI Module</source>
-        <translation>Modulo MIDI RT</translation>
+        <translation type="vanished">Modulo MIDI RT</translation>
     </message>
     <message>
         <source>Jack client name</source>
@@ -502,7 +513,7 @@ Aborting.</source>
     </message>
     <message>
         <source>Record</source>
-        <translation>Registrazione</translation>
+        <translation type="vanished">Registrazione</translation>
     </message>
     <message>
         <source>Record sample format</source>
@@ -725,13 +736,9 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Internal MIDI interface</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>None</source>
         <comment>No MIDI internal interface</comment>
-        <translation type="unfinished">Nessuno</translation>
+        <translation type="obsolete">Nessuno</translation>
     </message>
     <message>
         <source>Interface language (Requires restart)</source>
@@ -829,6 +836,93 @@ Aborting.</source>
         <source>No RtMidi support</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Realtime Audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output device (-o)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Realtime MIDI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output device (-Q)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Csound MIDI Module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use Csound MIDI modules (unstable)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set Internal MIDI input interface. Controls widgets and MIDI input for Csound if Csound MIDI module usage is disabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MIDI input interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MIDI Output Interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab key always indents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable Parameter mode after autocomplete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RAWWAVE_PATH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OPCODE6DIR64</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Csound Executable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Template directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished">Applica</translation>
+    </message>
+    <message>
+        <source>No Audio Modules</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No real-time audio modules were found.
+Make sure OPCODE6DIR64 is set properly in your system or the configuration dialog.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <comment>No MIDI In interface</comment>
+        <translation type="unfinished">Nessuno</translation>
+    </message>
+    <message>
+        <source> None</source>
+        <comment>No MIDI Out interface</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleWidget</name>
@@ -844,13 +938,18 @@ Aborting.</source>
 </source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Csound code evaluated.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Csound is not running. Code not evaluated.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CsoundQt</name>
-    <message>
-        <source>Python Scratch Pad</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Open File</source>
         <translation type="unfinished"></translation>
@@ -975,7 +1074,7 @@ Volete salvare i cambiamenti prima di chiudere?</translation>
     <message>
         <source>This file has not been saved
 Please select name and location.</source>
-        <translation type="unfinished">Questo file non è stato salvato
+        <translation type="obsolete">Questo file non è stato salvato
 Selezionare nome e locazione.</translation>
     </message>
     <message>
@@ -1028,10 +1127,6 @@ to their initial default values? </source>
     <message>
         <source>Preferences have been reset.
 You must restart CsoundQt.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>by: Andres Cabrera and others</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1144,7 +1239,7 @@ You must restart CsoundQt.</source>
     </message>
     <message>
         <source>Line %1</source>
-        <translation type="unfinished">Linea %1</translation>
+        <translation type="obsolete">Linea %1</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
@@ -1208,7 +1303,7 @@ You must restart CsoundQt.</source>
     </message>
     <message>
         <source>Alt+C</source>
-        <translation type="unfinished">Alt+C</translation>
+        <translation type="obsolete">Alt+C</translation>
     </message>
     <message>
         <source>CTRL+E</source>
@@ -1236,19 +1331,19 @@ You must restart CsoundQt.</source>
     </message>
     <message>
         <source>Alt+0</source>
-        <translation type="unfinished">Alt+0</translation>
+        <translation type="obsolete">Alt+0</translation>
     </message>
     <message>
         <source>Alt+1</source>
-        <translation type="unfinished">Alt+1</translation>
+        <translation type="obsolete">Alt+1</translation>
     </message>
     <message>
         <source>Alt+2</source>
-        <translation type="unfinished">Alt+2</translation>
+        <translation type="obsolete">Alt+2</translation>
     </message>
     <message>
         <source>Alt+3</source>
-        <translation type="unfinished">Alt+3</translation>
+        <translation type="obsolete">Alt+3</translation>
     </message>
     <message>
         <source>Ctrl+Alt+F</source>
@@ -1264,19 +1359,19 @@ You must restart CsoundQt.</source>
     </message>
     <message>
         <source>Alt+4</source>
-        <translation type="unfinished">Alt+4</translation>
+        <translation type="obsolete">Alt+4</translation>
     </message>
     <message>
         <source>Alt+5</source>
-        <translation type="unfinished">Alt+5</translation>
+        <translation type="obsolete">Alt+5</translation>
     </message>
     <message>
         <source>Alt+6</source>
-        <translation type="unfinished">Alt+6</translation>
+        <translation type="obsolete">Alt+6</translation>
     </message>
     <message>
         <source>Alt+9</source>
-        <translation type="unfinished">Alt+9</translation>
+        <translation type="obsolete">Alt+9</translation>
     </message>
     <message>
         <source>Shift+F1</source>
@@ -1299,20 +1394,12 @@ You must restart CsoundQt.</source>
         <translation type="unfinished">Shift+Ctrl+I</translation>
     </message>
     <message>
-        <source>Alt+E</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shift+Alt+E</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Alt+7</source>
-        <translation type="unfinished">Alt+7</translation>
+        <translation type="obsolete">Alt+7</translation>
     </message>
     <message>
         <source>Alt+8</source>
-        <translation type="unfinished">Alt+8</translation>
+        <translation type="obsolete">Alt+8</translation>
     </message>
     <message>
         <source>Ctrl+K</source>
@@ -1589,11 +1676,11 @@ Extended Python features are not available</source>
     </message>
     <message>
         <source>AutoComplete</source>
-        <translation type="unfinished">Autocompletamento</translation>
+        <translation type="obsolete">Autocompletamento</translation>
     </message>
     <message>
         <source>Autocomplete according to Status bar display</source>
-        <translation type="unfinished">Autocompletamento in accordo con Status bar display</translation>
+        <translation type="obsolete">Autocompletamento in accordo con Status bar display</translation>
     </message>
     <message>
         <source>Configuration</source>
@@ -1745,14 +1832,6 @@ Extended Python features are not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>ScratchPad</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Python Scratch Pad</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Csound Manual</source>
         <translation type="unfinished">Manuale di Csound</translation>
     </message>
@@ -1791,14 +1870,6 @@ Extended Python features are not available</source>
     <message>
         <source>Show Csound&apos;s message console</source>
         <translation type="unfinished">Mostra la console dei messaggi di Csound</translation>
-    </message>
-    <message>
-        <source>View Full Screen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Have CsoundQt occupy all the available screen space</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Split View</source>
@@ -1989,10 +2060,6 @@ Extended Python features are not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Request a Feature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Request a feature in CsoundQt&apos;s Feature Tracker</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2069,42 +2136,6 @@ Extended Python features are not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>01 Basics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>02 Quick Start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>03 Csound Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>04 Sound Synthesis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>05 Sound Modification</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>06 Samples</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>07 MIDI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>08 OSC and WII</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>09 Csound in other Applications</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>McCurdy Collection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2132,11 +2163,11 @@ Extended Python features are not available</source>
     </message>
     <message>
         <source>File already open</source>
-        <translation type="unfinished">File gia aperto</translation>
+        <translation type="obsolete">File gia aperto</translation>
     </message>
     <message>
         <source>File loaded</source>
-        <translation type="unfinished">File caricato</translation>
+        <translation type="obsolete">File caricato</translation>
     </message>
     <message>
         <source>Application</source>
@@ -2150,7 +2181,7 @@ Extended Python features are not available</source>
     </message>
     <message>
         <source>File saved</source>
-        <translation type="unfinished">File salvato</translation>
+        <translation type="obsolete">File salvato</translation>
     </message>
     <message>
         <source>%1[*] - %2</source>
@@ -2218,6 +2249,492 @@ Please check preferences.</source>
         <source>Set the Favourites folder in the Configuration Window</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Interactive Code Pad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HTML View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Known Files (*.csd *.orc *.sco *.py *.inc);;Csound Files (*.csd *.orc *.sco *.inc *.CSD *.ORC *.SCO *.INC);;Python Files (*.py);;All Files (*)</source>
+        <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shortcuts changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ambiguous shortcut. In version 0.9.5 some shortcuts changed, please configure the shourtcuts or set to defaults (Edit-&gt;Configure shortcuts -&gt; Restore Defaults) </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert Cabbage options?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There seems to be no Cabbage specific options in &lt;CsOptions&gt;.
+ Do you want to insert it?
+NB! Comment your old options out, if necessary!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert scorelines for Cabbage?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The score is empty. Cabbage needs some lines to work.
+ Do you want to insert it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Run as temporary file?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>press &lt;b&gt;OK&lt;/b&gt;, if you don&apos;t care about this file in future.
+ Press &lt;b&gt;Save&lt;/b&gt;, if you want to save it with given name.
+ You can always save the file with &lt;b&gt;Save As&lt;/b&gt; also later, if you use the temporary file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not save temporary file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Csound in html files should be started from html code.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error running terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not run terminal program:
+   %1
+Check environment tab in preferences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CsoundQt Virtual Keyboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qt5 Required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Qt version &gt; 5.2 is required for the virtual keyboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CsoundQt table editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set manual path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Don&apos;t forget to set the path to manual in Configure -&gt; Enviromnent -&gt; Html doc directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>by: Andres Cabrera, Tarmo Johannes and others</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Html5 support based on QtWebEngine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Html5 support based on QtWebkit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Midi In interface </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> not found!
+ Switching to None.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Midi Out interface </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> not found!
+ Switching to None.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+Ctrl+0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+Ctrl+4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+Ctrl+2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alt+Ctrl+1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Shift+V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Shift+T</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Shift+M</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>F1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+9</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Ctrl+E</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Ctrl+W</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Alt+P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+Ctrl+C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Code Pad in Csound Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle the mode for the scratch pad between python and csound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show/Raise Widgets Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show/Raise Inspector Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show/Raise help panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show/Raise Python Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CodePad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Code Pad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show/Raise Code Pad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download Csound Manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download latest Csound manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show/Raise Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View Fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Have CsoundQt occupy all available screen space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View Editor Fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Have the editor occupy all available screen space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View HTML Fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Have the HTML page occupy all available screen space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View Help Fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Have the help page occupy all available screen space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View Widgets Fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Have the widgets panel occupy all available screen space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show debugger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show the Csound debugger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Virtual Keyboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show the Virtual MIDI Keyboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keyboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Table editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Table editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HTML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show the HTML view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show/Raise HtmlView</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MIDI Learn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show MIDI Learn Window for widgets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open online documentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Request a Feature (please add label &apos;Enhancement&apos;)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle parameter mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Templates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Html5 support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stria Synth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Panels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In this version the shortcuts for showing panels changed. See ... for more information. Please Use Edit-&gt;Keyboard shortcuts -&gt; Restore Defaults to activate it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Document number limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please close a document before opening another.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DebugPanel</name>
+    <message>
+        <source>Csound Debugger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Debugger stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Instr/Line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Skip count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Active instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Breakpoints</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Nuovo</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current Stack</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Variable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Instr</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>p-fields</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>k-count</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DockConsole</name>
@@ -2256,6 +2773,38 @@ Please check preferences.</source>
         <source>Find:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Documentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Home</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opcodes</source>
+        <translation type="unfinished">Opcodes</translation>
+    </message>
+    <message>
+        <source>Match Case</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whole words</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Find Next</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Find Previous</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DocumentPage</name>
@@ -2269,6 +2818,22 @@ Please check preferences.</source>
     </message>
     <message>
         <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No widgets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There are no widgets to convert!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recording not possible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This version of CsoundQt was not built with recording support.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2294,6 +2859,23 @@ Volete partire dall&apos;inizio?</translation>
     </message>
     <message>
         <source>Show/hide line numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Where to insert?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could find section ;;channels
+Is it OK to insert ;;channels and chn_k declaration before in the current position?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>chn_kdeclaration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This channel is already declared.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2832,6 +3414,13 @@ Volete partire dall&apos;inizio?</translation>
     </message>
 </context>
 <context>
+    <name>Html5GuiDisplay</name>
+    <message>
+        <source>DockWidget</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Inspector</name>
     <message>
         <source>Inspector</source>
@@ -2946,6 +3535,21 @@ E&apos; già usata.</translation>
     </message>
 </context>
 <context>
+    <name>LiveCodeEditor</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Csound Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Python Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LiveEventControl</name>
     <message>
         <source>LE Controller</source>
@@ -3006,6 +3610,10 @@ E&apos; già usata.</translation>
     </message>
     <message>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close All</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3074,6 +3682,60 @@ E&apos; già usata.</translation>
     </message>
 </context>
 <context>
+    <name>MidiLearnDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(none)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channel:</source>
+        <translation type="unfinished">Canale:</translation>
+    </message>
+    <message>
+        <source>Controller:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MIDI Learn:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(None)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(No MIDI)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewBreakpointDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Instrument</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Skip</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PluginsPage</name>
     <message>
         <source>Please highlight the Csound plugins you want to include in the Standalone App. If unsure, highlight all.</source>
@@ -3096,6 +3758,25 @@ E&apos; già usata.</translation>
     <name>PythonConsole</name>
     <message>
         <source>Python Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Csound version mismatch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This version of CsoundQt requires Csound 6.09 or newer. Please download it from &lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Another instance is already running. Are you sure you want to open a new window?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3235,6 +3916,18 @@ E&apos; già usata.</translation>
     </message>
     <message>
         <source>Presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add chn_k to csd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add chn_k definitionto ;;channels section in editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Midi learn</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3774,12 +4467,6 @@ CanaleH:</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The csd file contains more than one widget panel!
-This is not supported by the current version,
-Addtional widget panels will be lost if the file is saved!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Unrecognized wigdet format</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3847,6 +4534,25 @@ It may be saved with errors.</source>
     <message>
         <source>The file was was saved by a more recent version of CsoundQt.
 Some features may not be available and will not be saved!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The csd file contains more than one widget panel!
+This is not supported by the current version,
+Additional widget panels will be lost if the file is saved!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MIDI chan: %1 CC: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CsoundQt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not convert %1 widget(s):
+%2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
