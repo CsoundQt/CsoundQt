@@ -876,7 +876,9 @@ int CsoundEngine::runCsound()
         free(argv);
         if (ud->result!=CSOUND_SUCCESS) {
             qDebug()  << "Csound compile failed! "  << ud->result;
-            flushQueues(); // the line was here in some earlier version. Otherwise errormessaged won't be processed by Console::appendMessage()
+            // Commenting out flushQues fixes the crash. Investigate closer, if it must be here
+            // seems that messages are outputted into console anyway...
+            //flushQueues(); // the line was here in some earlier version. Otherwise errormessaged won't be processed by Console::appendMessage()
             locker.unlock(); // otherwise csoundStop will freeze
             stop();
             emit (errorLines(getErrorLines()));
@@ -1135,7 +1137,7 @@ void CsoundEngine::flushQueues()
         // This can save time while debugging.
         qDebug() << msg;
         ConsoleWidget *console = nullptr;
-        if (isRunning()) {
+        if (isRunning()) { // CRASH HAPPENS HERE, when there is an error...
             for (int i = 0; i < consoles.size(); i++) {
                 console = consoles[i];
                 console->appendMessage(msg);
