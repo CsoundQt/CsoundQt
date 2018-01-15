@@ -2493,7 +2493,7 @@ void CsoundQt::openShortcutDialog()
 void CsoundQt::downloadManual()
 {
 	QMessageBox::information(this, tr("Set manual path"), tr("Don't forget to set the path to manual in Configure -> Enviromnent -> Html doc directory"));
-	openExternalBrowser(QUrl("https://sourceforge.net/projects/csound/files/csound6/Csound6.06/manual/")); // NB! must be updated when new manual comes out!
+    openExternalBrowser(QUrl("https://github.com/csound/csound/releases/latest")); // NB! must be updated when new manual comes out!
 }
 
 void CsoundQt::about()
