@@ -30,6 +30,7 @@ f the GNU Lesser General Public
 
 
 #include "CsoundHtmlOnlyWrapper.h"
+#include "csoundhtmlview.h"
 #include "console.h"
 #include <QApplication>
 #include <QDebug>
@@ -37,13 +38,19 @@ f the GNU Lesser General Public
 CsoundHtmlOnlyWrapper::CsoundHtmlOnlyWrapper(QObject *parent) :
     QObject(parent),
     message_callback(nullptr),
-    m_options(nullptr)
+    m_options(nullptr),
+    csoundHtmlView(nullptr),
+    console(nullptr)
 {
     csound.SetHostData(this);
     csound.SetMessageCallback(CsoundHtmlOnlyWrapper::csoundMessageCallback_);
 }
 
 CsoundHtmlOnlyWrapper::~CsoundHtmlOnlyWrapper() {
+}
+
+void CsoundHtmlOnlyWrapper::setCsoundHtmlView(CsoundHtmlView *csoundHtmlView_) {
+    csoundHtmlView = csoundHtmlView_;
 }
 
 void CsoundHtmlOnlyWrapper::registerConsole(ConsoleWidget *console_){
@@ -253,6 +260,7 @@ void CsoundHtmlOnlyWrapper::csoundMessageCallback(int attributes,
                            const char *format,
                            va_list args)
 {
+    (void) attributes;
 #ifdef  USE_QT_GT_54
     QString message = QString::vasprintf(format, args);
 #else
@@ -262,6 +270,18 @@ void CsoundHtmlOnlyWrapper::csoundMessageCallback(int attributes,
     qDebug() << message;
     if (!console->isHidden()) { // otherwise crash on exit
         passMessages(message);
+    }
+    for (int i = 0, n = message.length(); i < n; i++) {
+        auto c = message[i];
+        if (c == '\n') {
+            QString code = "console.log(\"" + csoundMessageBuffer + "\\n\");";
+            if (csoundHtmlView != nullptr) {
+                csoundHtmlView->webView->page()->runJavaScript(code);
+            }
+            csoundMessageBuffer.clear();
+        } else {
+            csoundMessageBuffer.append(c);
+        }
     }
 }
 

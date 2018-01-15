@@ -25,15 +25,22 @@
 // This class must be safe against calling with a null or uninitialized CsoundEngine.
 
 #include "csoundhtmlwrapper.h"
+#include "csoundhtmlview.h"
 #include <QApplication>
 #include <QDebug>
 
 CsoundHtmlWrapper::CsoundHtmlWrapper(QObject *parent) :
     QObject(parent),
     m_csoundEngine(nullptr),
-    message_callback(nullptr)
+    message_callback(nullptr),
+    csoundHtmlView(nullptr)
 {
 }
+
+void CsoundHtmlWrapper::setCsoundHtmlView(CsoundHtmlView *csoundHtmlView_) {
+    csoundHtmlView = csoundHtmlView_;
+}
+
 
 CSOUND *CsoundHtmlWrapper::getCsound()
 {
@@ -62,6 +69,13 @@ CsoundUserData *CsoundHtmlWrapper::getUserData()
 void CsoundHtmlWrapper::setCsoundEngine(CsoundEngine *csEngine)
 {
     m_csoundEngine = csEngine;
+    if (m_csoundEngine != nullptr) {
+        auto csound = m_csoundEngine->getCsound();
+        if (csound != nullptr) {
+            //TODO: Csound crashes later -- not sure why.
+            //csoundSetMessageCallback(csound, CsoundHtmlWrapper::csoundMessageCallback_);
+        }
+    }
 }
 
 int CsoundHtmlWrapper::compileCsd(const QString &filename) {
@@ -385,4 +399,38 @@ void CsoundHtmlWrapper::tableSet(int table_number, int index, double value){
 }
 
 
+void CsoundHtmlWrapper::csoundMessageCallback_(CSOUND *csound,
+                                         int attributes,
+                                         const char *format,
+                                         va_list args) {
+        return reinterpret_cast<CsoundHtmlWrapper *>(csoundGetHostData(csound))->csoundMessageCallback(attributes, format, args);
+}
 
+void CsoundHtmlWrapper::csoundMessageCallback(int attributes,
+                           const char *format,
+                           va_list args)
+{
+    (void) attributes;
+#ifdef  USE_QT_GT_54
+    QString message = QString::vasprintf(format, args);
+#else
+    QString message;
+    message.sprintf(format, args); // NB! Should pass but not tested!
+#endif
+    qDebug() << message;
+//    if (!console->isHidden()) { // otherwise crash on exit
+//        passMessages(message);
+//    }
+    for (int i = 0, n = message.length(); i < n; i++) {
+        auto c = message[i];
+        if (c == '\n') {
+            QString code = "console.log(\"" + csoundMessageBuffer + "\\n\");";
+            if (csoundHtmlView != nullptr) {
+                csoundHtmlView->webView->page()->runJavaScript(code);
+            }
+            csoundMessageBuffer.clear();
+        } else {
+            csoundMessageBuffer.append(c);
+        }
+    }
+}

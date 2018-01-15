@@ -61,7 +61,7 @@ private:
 	Ui::Html5GuiDisplay *ui;
     std::atomic<DocumentPage *> documentPage;
     // For performing CSD files with embedded <html> element.
-    CsoundHtmlWrapper csoundWrapper;
+    CsoundHtmlWrapper csoundHtmlWrapper;
     // For performing HTML files (HTML-only performance).
     CsoundHtmlOnlyWrapper csoundHtmlOnlyWrapper;
     CsoundEngine *m_csoundEngine;
