@@ -28,12 +28,14 @@
 #include <thread>
 #include "csoundengine.h"
 
+class CsoundHtmlView;
 
 class CsoundHtmlWrapper : public QObject
 {
     Q_OBJECT
 public:
 	explicit CsoundHtmlWrapper(QObject *parent = 0);
+    void setCsoundHtmlView(CsoundHtmlView *csoundHtmlView);
 public slots:
     CSOUND *getCsound();
     CsoundPerformanceThread *getThread();
@@ -81,7 +83,17 @@ public slots:
     double tableGet(int table_number, int index);
     int tableLength(int table_number);
     void tableSet(int table_number, int index, double value);
+public:
+    static void csoundMessageCallback_(CSOUND *csound,
+                                             int attributes,
+                                             const char *format,
+                                             va_list args);
+    void csoundMessageCallback(int attributes,
+                               const char *format,
+                               va_list args);
 private:
+    QString csoundMessageBuffer;
+    CsoundHtmlView *csoundHtmlView;
     CsoundEngine *m_csoundEngine;
     QObject *message_callback;
 };

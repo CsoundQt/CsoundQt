@@ -28,12 +28,15 @@
 #include <csound_threaded.hpp>
 #include "csoundengine.h"
 
+class CsoundHtmlView;
+
 class CsoundHtmlOnlyWrapper : public QObject
 {
     Q_OBJECT
 public:
 	explicit CsoundHtmlOnlyWrapper(QObject *parent = 0);
     virtual ~CsoundHtmlOnlyWrapper();
+    void setCsoundHtmlView(CsoundHtmlView *csoundHtmlView);
 public slots:
     void registerConsole(ConsoleWidget *console);
     int compileCsd(const QString &filename);
@@ -92,8 +95,10 @@ private:
     QObject *message_callback;
     ConsoleWidget *console;
     CsoundThreaded csound;
+    CsoundHtmlView *csoundHtmlView;
 private:
     CsoundOptions *m_options;
+    QString csoundMessageBuffer;
 };
 
 #endif // CsoundHtmlWrapper_H

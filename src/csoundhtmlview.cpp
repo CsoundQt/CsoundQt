@@ -22,9 +22,12 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 #else
 	webView = new QWebEngineView(this);
 #endif
+    csoundHtmlWrapper.setCsoundHtmlView(this);
+    csoundHtmlOnlyWrapper.setCsoundHtmlView(this);
 	setWidget(webView);
     webView->setMinimumWidth(200);
     webView->sizePolicy().setVerticalPolicy(QSizePolicy::Policy::Expanding);
+    webView->
     layout()->setMargin(0);
 #ifdef USE_WEBKIT
 	QObject::connect(webView->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),
@@ -41,7 +44,7 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     }
     webView->page()->setWebChannel(&channel);
     //qDebug() << "Setting JavaScript object on init.";
-    channel.registerObject("csound", &csoundWrapper);
+    channel.registerObject("csound", &csoundHtmlWrapper);
 #endif
 }
 
@@ -137,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             // Register CsoundHtmlWrapper when performing CSD files with embedded <html> element.
             qDebug()  << "Setting CsoundWrapper JavaScript object on load.";
-            channel.registerObject("csound", &csoundWrapper);
+            channel.registerObject("csound", &csoundHtmlWrapper);
         }
 #endif
     }
@@ -146,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 void CsoundHtmlView::setCsoundEngine(CsoundEngine *csEngine)
 {
-    csoundWrapper.setCsoundEngine(csEngine);
+    csoundHtmlWrapper.setCsoundEngine(csEngine);
 }
 
 
@@ -219,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {//void CsoundHtmlView
         } else {
             // Register CsoundHtmlWrapper when performing CSD files with embedded <html> element.
             qDebug()  << "Setting CsoundWrapper JavaScript object on view.";
-            channel.registerObject("csound", &csoundWrapper);
+            channel.registerObject("csound", &csoundHtmlWrapper);
         }
 #endif
 	}
