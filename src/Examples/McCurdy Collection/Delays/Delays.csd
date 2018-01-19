@@ -12,8 +12,8 @@
 --env:SSDIR+=../SourceMaterials
 </CsOptions>
 <CsInstruments>
-sr		= 48000		;SAMPLE RATE
-ksmps	= 100		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+sr		= 44100		;SAMPLE RATE
+ksmps	= 32		;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -48,7 +48,7 @@ endin
 ;TECHNIQUE OF ITERATION WITHIN A UDO WAS INSPIRED BY STEVEN YI'S ARTICLE IN SUMMER 2006 CSOUND JOURNAL - THANKS STEVEN!
 ;UDOS=============================================================================================================================================================================
 opcode delaytap, 0, kiiiiii	;DEFINE UDO. NO OUTPUTS (AUDIO IS WRITTEN TO ZAK SPACE). ONE K-RATE INPUT, SIX I-RATE INPUTS.
-	kLPFRes, iTimeTable, iAmpTable, iLPFTable, itaps, ipan icount  xin				;NAME INPUT ARGUMENTS
+	kLPFRes, iTimeTable, iAmpTable, iLPFTable, itaps, ipan, icount  xin				;NAME INPUT ARGUMENTS
 	itime	tablei	(icount-1)/itaps, iTimeTable, 1							;READ DELAY TIME OF CURRENT TAP FROM FUNCTION TABLE WITH TABLE NUMBER iTimeTable (CREATED IN INSTR 3)
 	iamp		table	(icount-1)/itaps, iAmpTable, 1							;READ AMPLITUDE OF CURRENT TAP FROM FUNCTION TABLE WITH TABLE NUMBER iAmpTable (CREATED IN INSTR 3)
 	;prints	"Count%d Time%5.2f Amp%5.2f\\n", icount, itime, iamp					;PRINTING LINE - USE FOR CHECKING AND TROUBLE SHOOTING
@@ -139,13 +139,14 @@ i 4  	0	   3600	;INSTRUMENT 4 CREATES DELAYS
 </CsoundSynthesizer>
 
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>72</x>
  <y>179</y>
- <width>400</width>
- <height>200</height>
+ <width>911</width>
+ <height>666</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -1254,7 +1255,7 @@ Use of the resonant lowpass filter feature in this example can be rather CPU int
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
