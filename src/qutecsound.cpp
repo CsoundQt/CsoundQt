@@ -208,24 +208,26 @@ CsoundQt::CsoundQt(QStringList fileNames)
     modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
     modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
 
-	//test set shortcuts to change between tabs,Alt +<tab no>
+	// set shortcuts to change between tabs,Alt +<tab no>
     // example from: https://stackoverflow.com/questions/10160232/qt-designer-shortcut-to-another-tab
     // Setup a signal mapper to avoid creating custom slots for each tab
-    QSignalMapper *mapper = new QSignalMapper(this);
-    // Setup the shortcut for tabs 1..10
-    for (int i=0; i<10; i++) {
-		int key = (i==9) ? 0 : i+1;
-		QShortcut *shortcut = new  QShortcut(QKeySequence(Qt::ALT + (Qt::Key_0 + key)), this);
-        connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()));
-		mapper->setMapping(shortcut, i); // tab 0 -> Alt+1, tab 1 -> Alt + 2 etc tab 9 -> Alt + 0
-    }
-    // Wire the signal mapper to the tab widget index change slot
-    connect(mapper, SIGNAL(mapped(int)), documentTabs, SLOT(setCurrentIndex(int)));
-	QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Left), this);
-	connect(tabLeft, SIGNAL(activated()), this, SLOT(pageLeft()));
-	QShortcut *tabRight = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Right), this);
-	connect(tabRight, SIGNAL(activated()), this, SLOT(pageRight()));
-
+	// it is possible to switch it out from Cinfigure->Editor
+	if (m_options->tabShortcutActive) {
+		QSignalMapper *mapper = new QSignalMapper(this);
+		// Setup the shortcut for tabs 1..10
+		for (int i=0; i<10; i++) {
+			int key = (i==9) ? 0 : i+1;
+			QShortcut *shortcut = new  QShortcut(QKeySequence(Qt::ALT + (Qt::Key_0 + key)), this);
+			connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()));
+			mapper->setMapping(shortcut, i); // tab 0 -> Alt+1, tab 1 -> Alt + 2 etc tab 9 -> Alt + 0
+		}
+		// Wire the signal mapper to the tab widget index change slot
+		connect(mapper, SIGNAL(mapped(int)), documentTabs, SLOT(setCurrentIndex(int)));
+		QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Left), this);
+		connect(tabLeft, SIGNAL(activated()), this, SLOT(pageLeft()));
+		QShortcut *tabRight = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Right), this);
+		connect(tabRight, SIGNAL(activated()), this, SLOT(pageRight()));
+	}
     fillFileMenu(); // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
     fillScriptsMenu(); // Must be placed after readSettings to know directory
@@ -4697,6 +4699,7 @@ void CsoundQt::readSettings()
     m_options->fontScaling = settings.value("fontScaling", 1.0).toDouble();
     lastFiles = settings.value("lastfiles", QStringList()).toStringList();
     lastTabIndex = settings.value("lasttabindex", "").toInt();
+	m_options->tabShortcutActive = settings.value("tabSortcutActive", true).toBool();
     settings.endGroup();
     settings.beginGroup("Run");
     m_options->useAPI = settings.value("useAPI", true).toBool();
@@ -4911,6 +4914,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("fontScaling", m_options->fontScaling);
         settings.setValue("lastfiles", openFiles);
         settings.setValue("lasttabindex", lastIndex);
+		settings.setValue("tabSortcutActive", m_options->tabShortcutActive);
     }
     else {
         settings.remove("");
