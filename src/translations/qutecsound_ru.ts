@@ -37,17 +37,17 @@
     <message>
         <location filename="../appdetailspage.ui" line="33"/>
         <source>Properties</source>
-        <translation type="unfinished">Свойства</translation>
+        <translation>Свойства</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="46"/>
         <source>Local Platform</source>
-        <translation type="unfinished"></translation>
+        <translation>Локальная платформа</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="51"/>
         <source>All Platforms (Requires SDK)</source>
-        <translation type="unfinished"></translation>
+        <translation>Все платформы (требуется SDK)</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="77"/>
@@ -70,27 +70,27 @@
     <message>
         <location filename="../appdetailspage.ui" line="114"/>
         <source>Run mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим работы</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="122"/>
         <source>Realtime only</source>
-        <translation type="unfinished"></translation>
+        <translation>Только RT</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="127"/>
         <source>Render only</source>
-        <translation type="unfinished"></translation>
+        <translation>Только оффлайн</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="132"/>
         <source>Render or RT</source>
-        <translation type="unfinished"></translation>
+        <translation>Оффлайн или RT</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="153"/>
         <source>Save state</source>
-        <translation type="unfinished"></translation>
+        <translation>Статус сохранения</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="163"/>
@@ -100,62 +100,62 @@
     <message>
         <location filename="../appdetailspage.ui" line="170"/>
         <source>Show Run in Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать Старт в меню</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="177"/>
         <source>Use new parser</source>
-        <translation type="unfinished">Новый парсер</translation>
+        <translation>Новый парсер</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="213"/>
         <source>Additional</source>
-        <translation type="unfinished"></translation>
+        <translation>Дополнительно</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="219"/>
         <source>Author</source>
-        <translation type="unfinished"></translation>
+        <translation>Автор</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="229"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="239"/>
         <source>e-mail</source>
-        <translation type="unfinished"></translation>
+        <translation>e-mail</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="249"/>
         <source>Website</source>
-        <translation type="unfinished"></translation>
+        <translation>сайт</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="259"/>
         <source>Instructions (html allowed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Инструкция (html)</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="270"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Дополнительно</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="351"/>
         <source>Leave these settings unchanged if you don&apos;t need a special configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Оставьте эти настройки без изменений, если не хотите настроить специальную конфигурацию.</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="361"/>
         <source>Use custom Paths</source>
-        <translation type="unfinished"></translation>
+        <translation>Пользовательские пути</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="373"/>
         <source>Qt Libs dir</source>
-        <translation type="unfinished"></translation>
+        <translation>Директория Qt Libs</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="39"/>
@@ -218,12 +218,12 @@
     <message>
         <location filename="../appdetailspage.cpp" line="124"/>
         <source>Select Qt Libraries Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать директорию Qt Libraries</translation>
     </message>
     <message>
         <location filename="../appdetailspage.cpp" line="133"/>
         <source>Select CsoundQt SDK Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать директорию CsoundQt SDK</translation>
     </message>
     <message>
         <source>Select QuteCsound SDK Directory</source>
@@ -246,39 +246,39 @@
         <location filename="../appwizard.cpp" line="366"/>
         <location filename="../appwizard.cpp" line="488"/>
         <source>CsoundQt App Creator</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt App Creator</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="137"/>
         <source>Can&apos;t build</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно собрать</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="138"/>
         <source>Can&apos;t build for local platform for single presicion. Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно собрать для локальной платформы с одинарной точностью. Прервано.</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="142"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Выполнено</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="142"/>
         <source>App Creation finished!</source>
-        <translation type="unfinished"></translation>
+        <translation>Создание приложения завершено!</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="287"/>
         <location filename="../appwizard.cpp" line="382"/>
         <source>Error</source>
-        <translation type="unfinished">Ошибка</translation>
+        <translation>Ошибка</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="287"/>
         <location filename="../appwizard.cpp" line="382"/>
         <source>Could not delete old application directory! Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно удалить старую директорию! Прервано.</translation>
     </message>
     <message>
         <source>Destination directory exists. Please remove.</source>
@@ -303,12 +303,12 @@ Aborting.</source>
     <message>
         <location filename="../basedocument.cpp" line="247"/>
         <source>Recording not possible</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись невозможна</translation>
     </message>
     <message>
         <location filename="../basedocument.cpp" line="247"/>
         <source>This version of CsoundQt was not built with recording support.</source>
-        <translation type="unfinished"></translation>
+        <translation>Данная версия CsoundQt не поддерживает запись.</translation>
     </message>
 </context>
 <context>
@@ -476,47 +476,47 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="182"/>
         <source>Realtime Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>RT аудио</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="251"/>
         <source>Output device (-o)</source>
-        <translation type="unfinished"></translation>
+        <translation>Устройство вывода (-o)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="270"/>
         <source>Realtime MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation>Рилтайм MIDI</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="302"/>
         <source>Output device (-Q)</source>
-        <translation type="unfinished"></translation>
+        <translation>Устройство вывода (-Q)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="319"/>
         <source>Csound MIDI Module</source>
-        <translation type="unfinished"></translation>
+        <translation>Модуль Csound MIDI</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="326"/>
         <source>Use Csound MIDI modules (unstable)</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать Csound MIDI (нестабильно)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="341"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set Internal MIDI input interface. Controls widgets and MIDI input for Csound if Csound MIDI module usage is disabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Установить внутренний MIDI интерфейс ввода. Виджеты-контроллеры и MIDI, если Csound MIDI модуль неактивен.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="344"/>
         <source>MIDI input interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Входной MIDI интерфейс</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="354"/>
         <source>MIDI Output Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI выход</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="497"/>
@@ -740,17 +740,17 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="815"/>
         <source>Theme (requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Сменить тему (необходим перезапуск)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="826"/>
         <source>boring</source>
-        <translation type="unfinished"></translation>
+        <translation>скучная</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="831"/>
         <source>fun</source>
-        <translation type="unfinished"></translation>
+        <translation>веселая</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="881"/>
@@ -856,12 +856,12 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="1228"/>
         <source>Tab key always indents</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab для индентации</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1263"/>
         <source>Enable Parameter mode after autocomplete</source>
-        <translation type="unfinished"></translation>
+        <translation>Разрешить режим параметров после автовыполнения</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1383"/>
@@ -896,7 +896,7 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="1270"/>
         <source>Show line numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать номера строк</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1087"/>
@@ -936,7 +936,7 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="1143"/>
         <source>Favorites/Scripts menus maximum depth</source>
-        <translation type="unfinished"></translation>
+        <translation>Макс глубина меню пользователя/скриптов</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1440"/>
@@ -1013,38 +1013,38 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="841"/>
         <source>Record button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка записи</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1467"/>
         <source>RAWWAVE_PATH</source>
-        <translation type="unfinished"></translation>
+        <translation>RAWWAVE_PATH</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1513"/>
         <source>OPCODE6DIR64</source>
-        <translation type="unfinished"></translation>
+        <translation>OPCODE6DIR64</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1530"/>
         <source>Csound Executable</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound Executable</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1758"/>
         <location filename="../configdialog.ui" line="1768"/>
         <source>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите путь к QuteApp SDK для создания кросс-платформенных standalone-приложений.</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1761"/>
         <source>QuteApp SDK Dir</source>
-        <translation type="unfinished"></translation>
+        <translation>Директория QuteApp SDK</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1771"/>
         <source>Template directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Директория шаблонов</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1832"/>
@@ -1110,7 +1110,7 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="2084"/>
         <source>Apply</source>
-        <translation type="unfinished">Применить</translation>
+        <translation>Применить</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="2091"/>
@@ -1120,7 +1120,7 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.cpp" line="104"/>
         <source>No RtMidi support</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет поддержки RtMIDI</translation>
     </message>
     <message>
         <source>None</source>
@@ -1130,25 +1130,26 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.cpp" line="44"/>
         <source>No Audio Modules</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет модулей звука</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="45"/>
         <source>No real-time audio modules were found.
 Make sure OPCODE6DIR64 is set properly in your system or the configuration dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>RT аудио модули не найдены.
+Убедитесь, что OPCODE6DIR64 установлена правильно в системе или в настройках.</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="107"/>
         <source>None</source>
         <comment>No MIDI In interface</comment>
-        <translation type="unfinished">Нет</translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="116"/>
         <source> None</source>
         <comment>No MIDI Out interface</comment>
-        <translation type="unfinished"></translation>
+        <translation> Нет</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="344"/>
@@ -1178,12 +1179,13 @@ Make sure OPCODE6DIR64 is set properly in your system or the configuration dialo
         <location filename="../csoundengine.cpp" line="582"/>
         <source>Csound code evaluated.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Код Csound обработан.
+</translation>
     </message>
     <message>
         <location filename="../csoundengine.cpp" line="584"/>
         <source>Csound is not running. Code not evaluated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound не запущен. Код не обработан.</translation>
     </message>
     <message>
         <location filename="../csoundengine.cpp" line="730"/>
@@ -1319,7 +1321,7 @@ File not saved!</source>
     <message>
         <location filename="../qutecsound.cpp" line="1384"/>
         <source>The document </source>
-        <translation>Документ</translation>
+        <translation>Документ </translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1387"/>
@@ -1877,334 +1879,347 @@ Extended Python features are not available</source>
     <message>
         <location filename="../qutecsound.cpp" line="146"/>
         <source>Interactive Code Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>Интерактивный блокнот</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="168"/>
         <location filename="../qutecsound.cpp" line="3532"/>
         <source>HTML View</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML вид</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="585"/>
         <source>Known Files (*.csd *.orc *.sco *.py *.inc);;Csound Files (*.csd *.orc *.sco *.inc *.CSD *.ORC *.SCO *.INC);;Python Files (*.py);;All Files (*)</source>
         <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
-        <translation type="unfinished"></translation>
+        <translation>Известные типы (*.csd *.orc *.sco *.py *.inc);;Файлы Csound (*.csd *.orc *.sco *.inc *.CSD *.ORC *.SCO *.INC);;Файлы Python (*.py);;Все файлы (*)</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1198"/>
         <source>Shortcuts changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Горячие клавиши изменены</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1199"/>
         <source>Ambiguous shortcut. In version 0.9.5 some shortcuts changed, please configure the shourtcuts or set to defaults (Edit-&gt;Configure shortcuts -&gt; Restore Defaults) </source>
-        <translation type="unfinished"></translation>
+        <translation>Неправильная комбинация клавиш. В версии 0.9.5 горячие клавиши были изменены, пожалуйста, настройте горячие клавиши или установите по умолчанию (Правка-&gt;Горячие клавиши-&gt;Восстановить по умолчанию) </translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1216"/>
         <source>You can only create an app with a csd file.</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>что?</translatorcomment>
+        <translation>Вам можете только создать приложение с csd.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1221"/>
         <source>Do you want to save before creating app?</source>
-        <translation type="unfinished"></translation>
+        <translation>Хотите сохранить перед созданием приложения?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1230"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Прервать</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1230"/>
         <source>You must save the csd before creating the App!</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы должны сохранить csd перед созданием приложения!</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1556"/>
         <source>Insert Cabbage options?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставить опции Cabbage?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1557"/>
         <source>There seems to be no Cabbage specific options in &lt;CsOptions&gt;.
  Do you want to insert it?
 NB! Comment your old options out, if necessary!</source>
-        <translation type="unfinished"></translation>
+        <translation>Похоже, что отсутствуют опции Cabbage в &lt;CsOptions&gt;.
+Желаете добавить из?
+NB! Закомментируйте старые опции, если требуется!</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1568"/>
         <source>Insert scorelines for Cabbage?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставить нумерацию строк для Cabbage?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1569"/>
         <source>The score is empty. Cabbage needs some lines to work.
  Do you want to insert it?</source>
-        <translation type="unfinished"></translation>
+        <translation>Партитура пуста. Cabbage требует партитуры.
+Желаете добавить?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1595"/>
         <source>Run as temporary file?</source>
-        <translation type="unfinished"></translation>
+        <translation>Запустить как временный файл?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1596"/>
         <source>press &lt;b&gt;OK&lt;/b&gt;, if you don&apos;t care about this file in future.
  Press &lt;b&gt;Save&lt;/b&gt;, if you want to save it with given name.
  You can always save the file with &lt;b&gt;Save As&lt;/b&gt; also later, if you use the temporary file.</source>
-        <translation type="unfinished"></translation>
+        <translation>нажмите &lt;b&gt;OK&lt;/b&gt;, если не планируете использовать этот файл в будущем.
+ Нажмите &lt;b&gt;Сохранить&lt;/b&gt;, если хотите сохранить файл.
+ Вы всегда можете сохранить временный файл, используя &lt;b&gt;Сохранить как&lt;/b&gt;.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1609"/>
         <source>Save error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка при сохранении</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1609"/>
         <source>Could not save temporary file</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно сохранить временный файл</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1653"/>
         <source>Csound in html files should be started from html code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound в html файлах должен быть запущен из html кода.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1828"/>
         <source>Error running terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибки при работе с терминалом</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1829"/>
         <source>Could not run terminal program:
    %1
 Check environment tab in preferences.</source>
-        <translation type="unfinished"></translation>
+        <translation>Терминал не запускается:
+   %1
+Проверьте закладку Рабочая среда в Настройках.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2016"/>
         <location filename="../qutecsound.cpp" line="2049"/>
         <source>Render not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Рендер невозможен</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2017"/>
         <source>Could not find rendered file. Please render before calling external editor.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно найти файл. Выполните рендеринг перед вызовом внешнего редактора.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2050"/>
         <source>Could not find rendered file. Please render before calling external player.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно найти файл. Выполните рендеринг перед вызовом внешнего плеера.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2215"/>
         <source>CsoundQt Virtual Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Виртуальная клавиатура CsoundQt</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2230"/>
         <location filename="../qutecsound.cpp" line="2266"/>
         <source>Qt5 Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Требуется Qt5</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2230"/>
         <location filename="../qutecsound.cpp" line="2266"/>
         <source>Qt version &gt; 5.2 is required for the virtual keyboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для виртуальной клавиатуры нужна версия Qt &gt; 5.2.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2241"/>
         <source>CsoundQt table editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактор таблиц CsoundQt</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2376"/>
         <source>Could not open external browser:
 %1
 Please check preferences.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно открыть внешний браузер:
+%1
+Проверьте настройки.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2495"/>
         <source>Set manual path</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать путь к инструкции</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2495"/>
         <source>Don&apos;t forget to set the path to manual in Configure -&gt; Enviromnent -&gt; Html doc directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Не забудьте задать путь к инструкции в Настройки -&gt; Рабочая среда -&gt; Инструкция</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2504"/>
         <source>by: Andres Cabrera, Tarmo Johannes and others</source>
-        <translation type="unfinished"></translation>
+        <translation>: Андрес Кабрера, Тармо Йоханнес и другие</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2513"/>
         <source>Html5 support based on QtWebEngine</source>
-        <translation type="unfinished"></translation>
+        <translation>Поддержка Html5 на основе QtWebEngine</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2516"/>
         <source>Html5 support based on QtWebkit</source>
-        <translation type="unfinished"></translation>
+        <translation>Поддержка Html5 на основе QtWebkit</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2525"/>
         <source>Russian translation: Gleb Rogozinsky</source>
-        <translation type="unfinished"></translation>
+        <translation>Русский перевод: Глеб Рогозинский</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2627"/>
         <source>Midi In interface </source>
-        <translation type="unfinished"></translation>
+        <translation>Входной MIDI интерфейс </translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2627"/>
         <source> not found!
  Switching to None.
 </source>
-        <translation type="unfinished"></translation>
+        <translation> не найден!
+ Выбран None.
+</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2634"/>
         <source>Midi Out interface </source>
-        <translation type="unfinished"></translation>
+        <translation>Выходной MIDI интерфейс </translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2634"/>
         <source> not found!
  Switching to None.</source>
-        <translation type="unfinished"></translation>
+        <translation> не найден!
+ Выбран None.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2888"/>
         <source>Ctrl+0</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+0</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2889"/>
         <source>Ctrl+2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+2</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2890"/>
         <source>Ctrl+1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+1</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2893"/>
         <source>Ctrl+3</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+3</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2900"/>
         <source>Alt+Ctrl+0</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Ctrl+0</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2902"/>
         <source>Alt+Ctrl+4</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Ctrl+4</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2904"/>
         <source>Alt+Ctrl+2</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Ctrl+2</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2905"/>
         <source>Alt+Ctrl+1</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Ctrl+1</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2907"/>
         <source>F5</source>
-        <translation type="unfinished">F5</translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2909"/>
         <source>Ctrl+Shift+V</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+V</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2910"/>
         <source>Ctrl+Shift+T</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+T</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2912"/>
         <source>Ctrl+Shift+M</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+M</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2914"/>
         <source>Ctrl+5</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+5</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2915"/>
         <source>Ctrl+6</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+6</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2918"/>
         <source>Ctrl+4</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+4</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2920"/>
         <source>F1</source>
-        <translation type="unfinished">F1</translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2921"/>
         <source>Ctrl+9</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+9</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2931"/>
         <source>Shift+Ctrl+E</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Ctrl+E</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2932"/>
         <source>Shift+Ctrl+W</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Ctrl+W</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2933"/>
         <source>Shift+Alt+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+S</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2934"/>
         <source>Ctrl+7</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+7</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2935"/>
         <source>Ctrl+8</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+8</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2945"/>
         <source>Shift+Alt+L</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+L</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2946"/>
         <source>Shift+Alt+P</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+P</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2947"/>
         <source>Shift+Ctrl+C</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Ctrl+C</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3121"/>
@@ -2357,7 +2372,7 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="3210"/>
         <source>Join orc/sco files in a single csd file</source>
-        <translation>Объединить orc/sco файлы в один csd файл</translation>
+        <translation>Объединить orc/sco файлы в csd файл</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3215"/>
@@ -2382,17 +2397,17 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="3225"/>
         <source>Code Pad in Csound Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокнот в режиме Csound</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3226"/>
         <source>Toggle the mode for the scratch pad between python and csound</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключение между python и Csound режимами блокнота</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3231"/>
         <source>Invalue-&gt;Chnget</source>
-        <translation></translation>
+        <translation>Invalue-&gt;Chnget</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3232"/>
@@ -2452,144 +2467,144 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="3406"/>
         <source>Show/Raise Python Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать/Скрыть консоль Python</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3412"/>
         <location filename="../qutecsound.cpp" line="3416"/>
         <source>CodePad</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокнот</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3415"/>
         <source>Show Code Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать блокнот</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3422"/>
         <source>Show/Raise Code Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать/скрыть блокнот</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3464"/>
         <source>Show/Raise Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать/скрыть консоль</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3470"/>
         <source>View Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Полный экран</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3473"/>
         <source>Have CsoundQt occupy all available screen space</source>
-        <translation type="unfinished"></translation>
+        <translation>Разрешить CsoundQt занять все доступное экранное пространство</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3477"/>
         <source>View Editor Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактор на весь экран</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3480"/>
         <source>Have the editor occupy all available screen space</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрыть окно редактора на весь экран</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3485"/>
         <source>View HTML Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрыть HTML на весь экран</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3488"/>
         <source>Have the HTML page occupy all available screen space</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрыть страницу HTML на полный экран</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3492"/>
         <source>View Help Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Хелп на полный экран</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3495"/>
         <source>Have the help page occupy all available screen space</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрыть окно с инструкцией на полный экран</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3499"/>
         <source>View Widgets Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Виджеты на полный экран</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3502"/>
         <source>Have the widgets panel occupy all available screen space</source>
-        <translation type="unfinished"></translation>
+        <translation>Раскрыть панель виджетов на полный экран</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3507"/>
         <source>Show debugger</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать отладчик</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3510"/>
         <source>Show the Csound debugger</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать отладчик Csound</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3514"/>
         <source>Show Virtual Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Виртуальная клавиатура</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3517"/>
         <source>Show the Virtual MIDI Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Виртуальная MIDI клавиатура</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3518"/>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Клавиатура</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3522"/>
         <location filename="../qutecsound.cpp" line="3525"/>
         <source>Show Table editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать редактор таблиц</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3526"/>
         <source>Table editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактор таблиц</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3533"/>
         <source>HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3536"/>
         <source>Show the HTML view</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать HTML</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3542"/>
         <source>Show/Raise HtmlView</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать/Скрыть HTML вид</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3728"/>
         <source>Request a Feature (please add label &apos;Enhancement&apos;)</source>
-        <translation type="unfinished"></translation>
+        <translation>Запросить новые возможности (добавьте ярлык &apos;Enhancement&apos;)</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="5277"/>
         <source>Document number limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Лимит количества документов</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="5278"/>
         <source>Please close a document before opening another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Закройте текущий документ перед открытием нового.</translation>
     </message>
     <message>
         <source>AutoComplete</source>
@@ -2659,14 +2674,14 @@ Please check preferences.</source>
         <location filename="../qutecsound.cpp" line="3290"/>
         <location filename="../qutecsound.cpp" line="3291"/>
         <source>Stop</source>
-        <translation> Стоп </translation>
+        <translation>Стоп</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3295"/>
         <location filename="../qutecsound.cpp" line="3296"/>
         <location filename="../qutecsound.cpp" line="3297"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Пауза</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3301"/>
@@ -2735,7 +2750,7 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="3341"/>
         <source>Show/Raise Widgets Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать/скрыть панель виджетов</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3347"/>
@@ -2751,7 +2766,7 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="3356"/>
         <source>Show/Raise Inspector Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать/скрыть панель инспектора</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3362"/>
@@ -2787,7 +2802,7 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="3378"/>
         <source>Show/Raise help panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать/скрыть хелп</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3385"/>
@@ -2836,12 +2851,12 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="3433"/>
         <source>Download Csound Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузить инструкцию Csound</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3434"/>
         <source>Download latest Csound manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузить последнюю версию инструкции Csound</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3439"/>
@@ -2904,12 +2919,12 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="3555"/>
         <source>MIDI Learn</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Learn</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3556"/>
         <source>Show MIDI Learn Window for widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать окно MIDI Learn для виджетов</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3560"/>
@@ -3026,7 +3041,7 @@ Please check preferences.</source>
         <location filename="../qutecsound.cpp" line="3644"/>
         <location filename="../qutecsound.cpp" line="3645"/>
         <source>Open online documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть онлайн-справку</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3649"/>
@@ -3172,12 +3187,13 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="3742"/>
         <source>Show/hide line number area</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать/скрыть нумерацию строк</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3746"/>
         <source>Toggle parameter mode</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>что это?</translatorcomment>
+        <translation>Переключения режима параметров</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3966"/>
@@ -3192,7 +3208,7 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="3979"/>
         <source>Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблоны</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3984"/>
@@ -3233,7 +3249,7 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="4206"/>
         <source>Html5 support</source>
-        <translation type="unfinished"></translation>
+        <translation>Поддержка Html5</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="4208"/>
@@ -3268,7 +3284,7 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="4284"/>
         <source>Read FLOSS Manual Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Читать FLOSS Manual онлайн</translation>
     </message>
     <message>
         <source>01 Basics</source>
@@ -3314,7 +3330,7 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="4339"/>
         <source>Stria Synth</source>
-        <translation type="unfinished"></translation>
+        <translation>Stria Synth</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="4356"/>
@@ -3334,12 +3350,12 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="4453"/>
         <source>Set the Favourites folder in the Configuration Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить папку Favourites в окне Настройки</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="4603"/>
         <source>Panels</source>
-        <translation type="unfinished"></translation>
+        <translation>Панели</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="4634"/>
@@ -3349,12 +3365,12 @@ Please check preferences.</source>
     <message>
         <location filename="../qutecsound.cpp" line="4646"/>
         <source>Settings changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки изменены</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="4646"/>
         <source>In this version the shortcuts for showing panels changed. See ... for more information. Please Use Edit-&gt;Keyboard shortcuts -&gt; Restore Defaults to activate it.</source>
-        <translation type="unfinished"></translation>
+        <translation>В данной версии горячие клавиши для показа панелей изменены. См ... для подробностей.Для активации, пожалуйста, откройте Правка-&gt;Горячие клавиши -&gt; Восстановить по умолчанию.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="5136"/>
@@ -3403,103 +3419,103 @@ Please check preferences.</source>
     <message>
         <location filename="../debugpanel.ui" line="17"/>
         <source>Csound Debugger</source>
-        <translation type="unfinished"></translation>
+        <translation>Отладчик Csound</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="38"/>
         <source>Run</source>
-        <translation type="unfinished"></translation>
+        <translation>Запуск</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="53"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Пауза</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="64"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>Продолжить</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="75"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Далее</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="99"/>
         <source>Debugger stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Отладчик остановлен</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="152"/>
         <source>Enabled</source>
-        <translation type="unfinished">Включено</translation>
+        <translation>Включено</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="157"/>
         <location filename="../debugpanel.ui" line="290"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="162"/>
         <source>Instr/Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Инстр/строка</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="167"/>
         <source>Skip count</source>
-        <translation type="unfinished"></translation>
+        <translation>Пропустить</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="177"/>
         <source>Active instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Активные инструменты</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="207"/>
         <source>Breakpoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Точки останова</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="220"/>
         <source>New</source>
-        <translation type="unfinished">Новый</translation>
+        <translation>Новый</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="231"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="257"/>
         <source>Current Stack</source>
-        <translation type="unfinished"></translation>
+        <translation>Текущий стэк</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="280"/>
         <source>Variable</source>
-        <translation type="unfinished"></translation>
+        <translation>Переменная</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="285"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Значение</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="305"/>
         <source>Instr</source>
-        <translation type="unfinished"></translation>
+        <translation>Instr</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="310"/>
         <source>p-fields</source>
-        <translation type="unfinished"></translation>
+        <translation>p-поля</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="315"/>
         <source>k-count</source>
-        <translation type="unfinished"></translation>
+        <translation>k-счет</translation>
     </message>
 </context>
 <context>
@@ -3515,49 +3531,49 @@ Please check preferences.</source>
     <message>
         <location filename="../dockhelp.ui" line="14"/>
         <source>Documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Документация</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="47"/>
         <location filename="../dockhelp.ui" line="74"/>
         <location filename="../dockhelp.ui" line="95"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="88"/>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>Домой</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="115"/>
         <source>Opcodes</source>
-        <translation type="unfinished">Опкоды</translation>
+        <translation>Опкоды</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="138"/>
         <source>Find:</source>
-        <translation type="unfinished"></translation>
+        <translation>Найти:</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="145"/>
         <source>Match Case</source>
-        <translation type="unfinished"></translation>
+        <translation>Учитывать регистр</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="152"/>
         <source>Whole words</source>
-        <translation type="unfinished"></translation>
+        <translation>По словам</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="201"/>
         <source>Find Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Искать ниже</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="210"/>
         <source>Find Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Искать выше</translation>
     </message>
     <message>
         <location filename="../dockhelp.cpp" line="72"/>
@@ -3586,12 +3602,12 @@ Please check preferences.</source>
     <message>
         <location filename="../documentpage.cpp" line="723"/>
         <source>No widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>Виджеты отсутствуют</translation>
     </message>
     <message>
         <location filename="../documentpage.cpp" line="723"/>
         <source>There are no widgets to convert!</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет виджетов для преобразования!</translation>
     </message>
     <message>
         <location filename="../documentpage.cpp" line="1262"/>
@@ -3606,12 +3622,12 @@ Please check preferences.</source>
     <message>
         <location filename="../documentpage.cpp" line="1282"/>
         <source>Recording not possible</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись невозможна</translation>
     </message>
     <message>
         <location filename="../documentpage.cpp" line="1282"/>
         <source>This version of CsoundQt was not built with recording support.</source>
-        <translation type="unfinished"></translation>
+        <translation>Данная версия CsoundQt не поддерживает запись.</translation>
     </message>
 </context>
 <context>
@@ -3641,28 +3657,29 @@ Would you like to start from the top?</source>
     <message>
         <location filename="../documentview.cpp" line="1214"/>
         <source>Show/hide line numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать/скрыть номера строк</translation>
     </message>
     <message>
         <location filename="../documentview.cpp" line="1763"/>
         <source>Where to insert?</source>
-        <translation type="unfinished"></translation>
+        <translation>Куда выполнить вставку?</translation>
     </message>
     <message>
         <location filename="../documentview.cpp" line="1763"/>
         <source>Could find section ;;channels
 Is it OK to insert ;;channels and chn_k declaration before in the current position?</source>
-        <translation type="unfinished"></translation>
+        <translation>Найдены каналы ;;
+Добавить каналы ;; и декларацию chn_k перед текущей позицией?</translation>
     </message>
     <message>
         <location filename="../documentview.cpp" line="1775"/>
         <source>chn_kdeclaration</source>
-        <translation type="unfinished"></translation>
+        <translation>chn_kdeclaration</translation>
     </message>
     <message>
         <location filename="../documentview.cpp" line="1775"/>
         <source>This channel is already declared.</source>
-        <translation type="unfinished"></translation>
+        <translation>Данный канал уже декларирован.</translation>
     </message>
 </context>
 <context>
@@ -3670,7 +3687,7 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
     <message>
         <location filename="../configlists.cpp" line="191"/>
         <source>Virtual MIDI keyboard Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Виртуальная MIDI клавиатура активна</translation>
     </message>
 </context>
 <context>
@@ -4276,7 +4293,7 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
     <message>
         <location filename="../html5guidisplay.ui" line="14"/>
         <source>DockWidget</source>
-        <translation type="unfinished"></translation>
+        <translation>DockWidge</translation>
     </message>
 </context>
 <context>
@@ -4429,17 +4446,17 @@ It is already used.</source>
     <message>
         <location filename="../livecodeeditor.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Форма</translation>
+        <translation>Форма</translation>
     </message>
     <message>
         <location filename="../livecodeeditor.ui" line="36"/>
         <source>Csound Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим Csound</translation>
     </message>
     <message>
         <location filename="../livecodeeditor.ui" line="41"/>
         <source>Python Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим Python</translation>
     </message>
 </context>
 <context>
@@ -4498,7 +4515,7 @@ It is already used.</source>
     <message>
         <location filename="../liveeventcontrol.ui" line="157"/>
         <source>Close All</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыть все</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="164"/>
@@ -4606,28 +4623,28 @@ It is already used.</source>
     <message>
         <location filename="../midilearndialog.ui" line="20"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Диалог</translation>
     </message>
     <message>
         <location filename="../midilearndialog.ui" line="26"/>
         <location filename="../midilearndialog.ui" line="74"/>
         <source>(none)</source>
-        <translation type="unfinished"></translation>
+        <translation>(нет)</translation>
     </message>
     <message>
         <location filename="../midilearndialog.ui" line="33"/>
         <source>Channel:</source>
-        <translation type="unfinished">Канал:</translation>
+        <translation>Канал:</translation>
     </message>
     <message>
         <location filename="../midilearndialog.ui" line="53"/>
         <source>Controller:</source>
-        <translation type="unfinished"></translation>
+        <translation>Контроллер:</translation>
     </message>
     <message>
         <location filename="../midilearndialog.ui" line="67"/>
         <source>MIDI Learn:</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Learn:</translation>
     </message>
     <message>
         <location filename="../midilearndialog.cpp" line="30"/>
@@ -4635,13 +4652,13 @@ It is already used.</source>
         <location filename="../midilearndialog.cpp" line="39"/>
         <location filename="../midilearndialog.cpp" line="40"/>
         <source>(None)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Нет)</translation>
     </message>
     <message>
         <location filename="../midilearndialog.cpp" line="34"/>
         <location filename="../midilearndialog.cpp" line="35"/>
         <source>(No MIDI)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Нет MIDI)</translation>
     </message>
 </context>
 <context>
@@ -4649,29 +4666,29 @@ It is already used.</source>
     <message>
         <location filename="../newbreakpointdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Диалог</translation>
     </message>
     <message>
         <location filename="../newbreakpointdialog.ui" line="22"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../newbreakpointdialog.ui" line="33"/>
         <location filename="../newbreakpointdialog.ui" line="50"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Инструмент</translation>
     </message>
     <message>
         <location filename="../newbreakpointdialog.ui" line="38"/>
         <location filename="../newbreakpointdialog.ui" line="71"/>
         <source>Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Строка</translation>
     </message>
     <message>
         <location filename="../newbreakpointdialog.ui" line="85"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Пропустить</translation>
     </message>
 </context>
 <context>
@@ -4710,22 +4727,23 @@ It is already used.</source>
     <message>
         <location filename="../main.cpp" line="69"/>
         <source>Csound version mismatch</source>
-        <translation type="unfinished"></translation>
+        <translation>Несовместимая версия версия Csound</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
         <source>This version of CsoundQt requires Csound 6.09 or newer. Please download it from &lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Данная версия CsoundQt требует Csound версии 6.09 или новее. Загрузите с &lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="96"/>
         <source>CsoundQt</source>
-        <translation type="unfinished">CsoundQt</translation>
+        <translation>CsoundQt</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="96"/>
         <source>Another instance is already running. Are you sure you want to open a new window?</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Странно это все...</translatorcomment>
+        <translation>Один процесс уже запущен. Желаете открыть новое окно?</translation>
     </message>
 </context>
 <context>
@@ -4843,12 +4861,12 @@ It is already used.</source>
     <message>
         <location filename="../qutewidget.cpp" line="33"/>
         <source>Add chn_k to csd</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить chn_k к csd</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="34"/>
         <source>Add chn_k definitionto ;;channels section in editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить определение chn_k к ;;к каналам</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="311"/>
@@ -4879,7 +4897,7 @@ It is already used.</source>
     <message>
         <location filename="../qutewidget.cpp" line="443"/>
         <source>Midi learn</source>
-        <translation type="unfinished"></translation>
+        <translation>Midi learn</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="446"/>
@@ -4961,7 +4979,7 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="533"/>
         <location filename="../utilitiesdialog.ui" line="774"/>
         <source>Sample Rate (-s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота дискретизации (-s)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="105"/>
@@ -4969,7 +4987,7 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="540"/>
         <location filename="../utilitiesdialog.ui" line="781"/>
         <source>44100</source>
-        <translation type="unfinished">44100</translation>
+        <translation>44100</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="112"/>
@@ -4978,7 +4996,7 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="802"/>
         <location filename="../utilitiesdialog.ui" line="1136"/>
         <source>Begin Time (-b)</source>
-        <translation type="unfinished"></translation>
+        <translation>Начало (-b)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="119"/>
@@ -4994,7 +5012,7 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="1087"/>
         <location filename="../utilitiesdialog.ui" line="1278"/>
         <source>0.0</source>
-        <translation type="unfinished">0.0</translation>
+        <translation>0.0</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="126"/>
@@ -5002,12 +5020,12 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="575"/>
         <location filename="../utilitiesdialog.ui" line="816"/>
         <source>Duration (-d)</source>
-        <translation type="unfinished"></translation>
+        <translation>Длительность (-d)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="140"/>
         <source>Channels (-c)</source>
-        <translation type="unfinished"></translation>
+        <translation>Каналы (-c)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="169"/>
@@ -5036,53 +5054,53 @@ It is already used.</source>
     <message>
         <location filename="../utilitiesdialog.ui" line="244"/>
         <source>Num Partials (-h)</source>
-        <translation type="unfinished"></translation>
+        <translation>Кол парциалов (-h)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="251"/>
         <source>10</source>
-        <translation type="unfinished">10</translation>
+        <translation>10</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="258"/>
         <source>Max Amplitude (-M)</source>
-        <translation type="unfinished"></translation>
+        <translation>Макс. амплитуда (-M)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="265"/>
         <source>32767</source>
-        <translation type="unfinished">32767</translation>
+        <translation>32767</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="272"/>
         <source>Min Amplitude (-m)</source>
-        <translation type="unfinished"></translation>
+        <translation>Мин. амплитуда (-m)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="279"/>
         <source>64</source>
-        <translation type="unfinished">64</translation>
+        <translation>64</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="286"/>
         <source>Num Breakpoints (-n)</source>
-        <translation type="unfinished"></translation>
+        <translation>Кол. разрывов (-n)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="293"/>
         <location filename="../utilitiesdialog.ui" line="837"/>
         <source>256</source>
-        <translation type="unfinished">256</translation>
+        <translation>256</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="300"/>
         <source>Filter cutoff (-l)</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота среза (-l)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="307"/>
         <source>0</source>
-        <translation type="unfinished">0</translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="357"/>
@@ -5094,19 +5112,19 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="547"/>
         <location filename="../utilitiesdialog.ui" line="788"/>
         <source>Channel (-c)</source>
-        <translation type="unfinished"></translation>
+        <translation>Канал (-c)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="407"/>
         <location filename="../utilitiesdialog.ui" line="554"/>
         <location filename="../utilitiesdialog.ui" line="795"/>
         <source>1</source>
-        <translation type="unfinished">1</translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="442"/>
         <source>Start frequency (-f)</source>
-        <translation type="unfinished"></translation>
+        <translation>Начальная частота (-f)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="458"/>
@@ -5121,64 +5139,65 @@ It is already used.</source>
     <message>
         <location filename="../utilitiesdialog.ui" line="589"/>
         <source>Num poles (-p)</source>
-        <translation type="unfinished"></translation>
+        <translation>Кол. полюсов (-p)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="596"/>
         <source>34</source>
-        <translation type="unfinished">34</translation>
+        <translation>34</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="618"/>
         <location filename="../utilitiesdialog.ui" line="1172"/>
         <source>Hop size (-h)</source>
-        <translation type="unfinished"></translation>
+        <translation>Смещение (-h)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="625"/>
         <location filename="../utilitiesdialog.ui" line="653"/>
         <source>200</source>
-        <translation type="unfinished">200</translation>
+        <translation>200</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="632"/>
         <source>Lowest freq (-P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Нижняя частота (-P)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="639"/>
         <source>70</source>
-        <translation type="unfinished">70</translation>
+        <translation>70</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="646"/>
         <source>Max freq (-Q)</source>
-        <translation type="unfinished"></translation>
+        <translation>Верхняя частота (-Q)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="660"/>
         <source>Verbosity</source>
-        <translation type="unfinished"></translation>
+        <translation>Отладка</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="668"/>
         <source>none (0)</source>
-        <translation type="unfinished"></translation>
+        <translation>нет (0)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="673"/>
         <source>verbose (1)</source>
-        <translation type="unfinished"></translation>
+        <translation>подробно (1)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="678"/>
         <source>debug (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>дебаг (2)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="695"/>
         <source>Alternate storage (-a)</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>?????</translatorcomment>
+        <translation>Менять размер (-a)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="721"/>
@@ -5198,7 +5217,7 @@ It is already used.</source>
     <message>
         <location filename="../utilitiesdialog.ui" line="830"/>
         <source>Frame size (-n)</source>
-        <translation type="unfinished"></translation>
+        <translation>Длина кадра (-n)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="887"/>
@@ -5208,48 +5227,48 @@ It is already used.</source>
     <message>
         <location filename="../utilitiesdialog.ui" line="916"/>
         <source>Overlap factor (-w)</source>
-        <translation type="unfinished"></translation>
+        <translation>Перекрытие (-w)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="923"/>
         <location filename="../utilitiesdialog.ui" line="1150"/>
         <source>4</source>
-        <translation type="unfinished">4</translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="930"/>
         <source>Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Окно</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="938"/>
         <source>von Hann (default)</source>
-        <translation type="unfinished"></translation>
+        <translation>Хана (по умолчанию)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="943"/>
         <source>Hamming (-H)</source>
-        <translation type="unfinished"></translation>
+        <translation>Хэмминга (-H)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="948"/>
         <source>Kaiser (-K)</source>
-        <translation type="unfinished"></translation>
+        <translation>Кайзер (-K)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="956"/>
         <source>Beta (-B)</source>
-        <translation type="unfinished"></translation>
+        <translation>Бета (-B)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="963"/>
         <source>6.8</source>
-        <translation type="unfinished">6.8</translation>
+        <translation>6.8</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="972"/>
         <source>ATSA</source>
-        <translation></translation>
+        <translation>ATSA</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="994"/>
@@ -5259,159 +5278,159 @@ It is already used.</source>
     <message>
         <location filename="../utilitiesdialog.ui" line="1044"/>
         <source>output.ats</source>
-        <translation type="unfinished"></translation>
+        <translation>output.ats</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1080"/>
         <source>End time (-e)</source>
-        <translation type="unfinished"></translation>
+        <translation>Конечное время (-e)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1094"/>
         <source>Highest freq (-H)</source>
-        <translation type="unfinished"></translation>
+        <translation>Верхняя част (-H)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1101"/>
         <source>20000</source>
-        <translation type="unfinished">20000</translation>
+        <translation>20000</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1108"/>
         <source>Freq. deviat. (-d)</source>
-        <translation type="unfinished"></translation>
+        <translation>Девиация частоты (-d)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1115"/>
         <source>0.1</source>
-        <translation type="unfinished">0.1</translation>
+        <translation>0.1</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1122"/>
         <source>Lowest freq (-l)</source>
-        <translation type="unfinished"></translation>
+        <translation>Нижняя част (-l)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1129"/>
         <source>20</source>
-        <translation type="unfinished">20</translation>
+        <translation>20</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1143"/>
         <source>Win cycle (-c)</source>
-        <translation type="unfinished"></translation>
+        <translation>Цикл (-c)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1179"/>
         <source>0.25</source>
-        <translation type="unfinished">0.25</translation>
+        <translation>0.25</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1186"/>
         <source>Lowest mag (-m)</source>
-        <translation type="unfinished"></translation>
+        <translation>Мин. амп (-m)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1193"/>
         <source>-60</source>
-        <translation type="unfinished"></translation>
+        <translation>-60</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1200"/>
         <source>Min. seg. len (-s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Мин. дл. сегм. (-s)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1207"/>
         <location filename="../utilitiesdialog.ui" line="1221"/>
         <location filename="../utilitiesdialog.ui" line="1235"/>
         <source>3</source>
-        <translation type="unfinished">3</translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1214"/>
         <source>Min. gap len. (-g)</source>
-        <translation type="unfinished"></translation>
+        <translation>Мин. дл. проб. (-g)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1228"/>
         <source>Track len (-t)</source>
-        <translation type="unfinished"></translation>
+        <translation>Длина (-t)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1257"/>
         <source>SMR Thresh. (-T)</source>
-        <translation type="unfinished"></translation>
+        <translation>Порог SMR (-T)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1264"/>
         <source>30</source>
-        <translation type="unfinished">30</translation>
+        <translation>30</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1271"/>
         <source>Last pk. con. (-P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Посл. конф. (-P)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1285"/>
         <source>SMR contr. (-M)</source>
-        <translation type="unfinished"></translation>
+        <translation>SMR упр. (-M)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1292"/>
         <source>0.5</source>
-        <translation type="unfinished">0.5</translation>
+        <translation>0.5</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1299"/>
         <source>File type (-F)</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип файла (-F)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1307"/>
         <source>amp+freq</source>
-        <translation type="unfinished"></translation>
+        <translation>амп+частота</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1312"/>
         <source>amp+frq+phs</source>
-        <translation type="unfinished"></translation>
+        <translation>амп+частота+фаза</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1317"/>
         <source>amp+frq+res</source>
-        <translation type="unfinished"></translation>
+        <translation>амп+част+ост</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1322"/>
         <source>all</source>
-        <translation type="unfinished">все</translation>
+        <translation>все</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1330"/>
         <source>Window (-w)</source>
-        <translation type="unfinished"></translation>
+        <translation>Окно (-w)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1338"/>
         <source>Blackman</source>
-        <translation type="unfinished"></translation>
+        <translation>Блэкман</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1343"/>
         <source>Blackman H</source>
-        <translation type="unfinished"></translation>
+        <translation>Блэкман-Хар</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1348"/>
         <source>Hanning</source>
-        <translation type="unfinished"></translation>
+        <translation>Хан</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1353"/>
         <source>Von Hamm</source>
-        <translation type="unfinished"></translation>
+        <translation>Хэмминг</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.cpp" line="363"/>
@@ -5632,7 +5651,9 @@ It is already used.</source>
         <source>The csd file contains more than one widget panel!
 This is not supported by the current version,
 Additional widget panels will be lost if the file is saved!</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл csd содержит более одной панели виджетов!
+Это не поддерживается в данной версии,
+Дополнительные панели виджетов будут потеряны при сохранении!</translation>
     </message>
     <message>
         <source>The csd file contains more than one widget panel!
@@ -5663,7 +5684,8 @@ It may be saved with errors.</source>
         <location filename="../widgetlayout.cpp" line="240"/>
         <source>The file was was saved by a more recent version of CsoundQt.
 Some features may not be available and will not be saved!</source>
-        <translation type="unfinished"></translation>
+        <translation>Данный файл был сохранен в более новой версии CsoundQt.
+Некоторые функции могут быть недоступны и не сохранятся!</translation>
     </message>
     <message>
         <source>The file was was saved by a more recent version of QuteCsound.
@@ -5689,18 +5711,19 @@ Some features may not be available and will not be saved!</source>
     <message>
         <location filename="../widgetlayout.cpp" line="1011"/>
         <source>MIDI chan: %1 CC: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI канал: %1 CC: %2</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="1375"/>
         <source>CsoundQt</source>
-        <translation type="unfinished">CsoundQt</translation>
+        <translation>CsoundQt</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="1375"/>
         <source>Could not convert %1 widget(s):
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно преобразовать %1 виджет(а):
+%2</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="1963"/>
