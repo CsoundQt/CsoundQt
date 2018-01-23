@@ -878,7 +878,7 @@ int CsoundEngine::runCsound()
             qDebug()  << "Csound compile failed! "  << ud->result;
             // Commenting out flushQues fixes the crash. Investigate closer, if it must be here
             // seems that messages are outputted into console anyway...
-            //flushQueues(); // the line was here in some earlier version. Otherwise errormessaged won't be processed by Console::appendMessage()
+            flushQueues(); // the line was here in some earlier version. Otherwise errormessaged won't be processed by Console::appendMessage()
             locker.unlock(); // otherwise csoundStop will freeze
             stop();
             emit (errorLines(getErrorLines()));
@@ -1136,14 +1136,16 @@ void CsoundEngine::flushQueues()
         // Print ALL Csound messages to QtCreator's application output pane.
         // This can save time while debugging.
         qDebug() << msg;
+        // the following was added by Michael. isRunning goes to  deadlock...
+        // see commit 3f565353d854d41bb6be041aa04630995ce96c00
         ConsoleWidget *console = nullptr;
-        if (isRunning()) { // CRASH HAPPENS HERE, when there is an error...
+        //if (isRunning()) { // CRASH HAPPENS HERE, when there is an error...
             for (int i = 0; i < consoles.size(); i++) {
                 console = consoles[i];
                 console->appendMessage(msg);
             }
             ud->wl->appendMessage(msg);
-        }
+        //}
     }
     m_messageMutex.unlock();
     ud->wl->flushGraphBuffer();
@@ -1159,6 +1161,7 @@ void CsoundEngine::queueMessage(QString message)
 
 bool CsoundEngine::isRunning()
 {
+    qDebug();
     QMutexLocker locker(&m_playMutex);
     return (ud->perfThread && (ud->perfThread->GetStatus() == 0));
 }

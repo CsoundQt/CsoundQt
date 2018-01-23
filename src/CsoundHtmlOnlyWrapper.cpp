@@ -43,7 +43,8 @@ CsoundHtmlOnlyWrapper::CsoundHtmlOnlyWrapper(QObject *parent) :
     console(nullptr)
 {
     csound.SetHostData(this);
-    csound.SetMessageCallback(CsoundHtmlOnlyWrapper::csoundMessageCallback_);
+    // TEST: move SetMessageCallback to Start() and set it to 0 in stop
+    //csound.SetMessageCallback(CsoundHtmlOnlyWrapper::csoundMessageCallback_);
 }
 
 CsoundHtmlOnlyWrapper::~CsoundHtmlOnlyWrapper() {
@@ -221,6 +222,8 @@ int CsoundHtmlOnlyWrapper::start(){
             setOption(option);
         }
     }
+    //TEST: set message callback here, not by init of the class
+    csound.SetMessageCallback(CsoundHtmlOnlyWrapper::csoundMessageCallback_);
     result = csound.Start();
     return result;
 }
@@ -268,8 +271,10 @@ void CsoundHtmlOnlyWrapper::csoundMessageCallback(int attributes,
     message.sprintf(format, args); // NB! Should pass but not tested!
 #endif
     qDebug() << message;
-    if (!console->isHidden()) { // otherwise crash on exit
-        passMessages(message);
+    if (console) { // protext against console==NULL
+        if (!console->isHidden()) { // otherwise crash on exit
+            passMessages(message);
+        }
     }
     for (int i = 0, n = message.length(); i < n; i++) {
         auto c = message[i];

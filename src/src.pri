@@ -80,7 +80,7 @@ HEADERS = "src/about.h" \
     src/debugpanel.h \
     src/livecodeeditor.h \
     src/newbreakpointdialog.h \
-    $$PWD/CsoundHtmlOnlyWrapper.h
+    #$$PWD/CsoundHtmlOnlyWrapper.h
 
 SOURCES = "src/about.cpp" \
     "src/configdialog.cpp" \
@@ -139,8 +139,9 @@ SOURCES = "src/about.cpp" \
     src/debugpanel.cpp \
     src/livecodeeditor.cpp \
     src/newbreakpointdialog.cpp \
-    #src/csoundhtmlview.cpp
-    $$PWD/CsoundHtmlOnlyWrapper.cpp
+    #src/csoundhtmlview.cpp \
+    #$$PWD/CsoundHtmlOnlyWrapper.cpp
+
 
 DISTFILES += "src/default.csd" \
     "src/opcodes.xml" \
@@ -168,9 +169,11 @@ perfThread_build {
 html_webkit|html_webengine: {
 	HEADERS += src/csoundhtmlview.h
 	HEADERS += src/csoundhtmlwrapper.h
+    HEADERS += src/CsoundHtmlOnlyWrapper.h
 
 	SOURCES += src/csoundhtmlview.cpp
 	SOURCES += src/csoundhtmlwrapper.cpp
+    SOURCES += src/CsoundHtmlOnlyWrapper.cpp
 }
 
 LIBS += $${LCSOUND} \
