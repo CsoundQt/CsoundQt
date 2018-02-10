@@ -2516,6 +2516,7 @@ void CsoundQt::about()
     text += tr("Html5 support based on QtWebkit")+"<br />";
 #endif
     text += "<br />";
+    text += tr("Spanish translation: Andrés Cabrera and Guillermo Senna") + "<br />";
     text += tr("French translation: Fran&ccedil;ois Pinot") + "<br />";
     text += tr("German translation: Joachim Heintz") + "<br />";
     text += tr("Portuguese translation: Victor Lazzarini") + "<br />";
