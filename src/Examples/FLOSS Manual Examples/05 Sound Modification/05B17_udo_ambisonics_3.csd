@@ -1,4 +1,7 @@
 <CsoundSynthesizer>
+<CsOptions>
+--env:SSDIR+=../SourceMaterials -odac -m0
+</CsOptions>
 <CsInstruments>
 sr      =  44100
 ksmps   =  32
@@ -7,7 +10,7 @@ nchnls  =  2
 
 zakinit 81, 1		; zak space with the 11 channels of the B-format
 
-#include "ambisonics_udos.txt"
+#include "../SourceMaterials/ambisonics_udos.txt"
 
 opcode	ambi3D_enc_dist1, 0, aikkk		
 asnd,iorder,kaz,kel,kdist	xin
@@ -60,3 +63,20 @@ i1 0 100
 </CsoundSynthesizer>
 ;example by martin neukom
 
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

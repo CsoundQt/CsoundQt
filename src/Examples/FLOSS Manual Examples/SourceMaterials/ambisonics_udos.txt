@@ -1,4 +1,4 @@
-opcode	ambi_encode, k, aikk		
+opcode	ambi_encode, 0, aikk		
 
 asnd,iorder,kaz,kel	xin
 
@@ -191,10 +191,10 @@ zawm ic82*ksin_el*kcos_el_p7*kcos_7az*asnd,79
 zawm ic81*kcos_el_p8*kcos_8az*asnd,80
 
 end:
-		xout	0
+
 endop
 ;;;;;;;;;;;;
-opcode	ambi_enc_dist, k, aikkk		
+opcode	ambi_enc_dist, 0, aikkk		
 
 asnd,iorder,kaz,kel,kdist	xin
 
@@ -395,7 +395,7 @@ zawm ic82*ksin_el*kcos_el_p7*kcos_7az*asnd,79
 zawm ic81*kcos_el_p8*kcos_8az*asnd,80
 
 end:
-		xout	0
+
 endop
 
 ;;;;;;;;;;;;
@@ -1135,7 +1135,7 @@ endop
 ;;;;;;;;;;;;
 
 
-opcode	ambi_write_B,	k, Sii	
+opcode	ambi_write_B,	0, Sii	
 Sname,iorder,iformat		xin
 	if(iorder == 1) then
 	fout	Sname,iformat,zar(0),zar(1),zar(2),zar(3)
@@ -1166,7 +1166,7 @@ endop
 ;;;;;;;;;;;
 
 
-opcode	ambi_read_B, k,	Si		
+opcode	ambi_read_B, 0,	Si		
 Sname,iorder			xin
 if(iorder == 1) then
 
@@ -1477,7 +1477,7 @@ a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a
 	zawm	a80,79
 	zawm	a81,80	
 endif
-				xout	0
+
 endop
 
 ;;;;;;;;;;;;

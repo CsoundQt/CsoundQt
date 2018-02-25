@@ -1,4 +1,7 @@
 <CsoundSynthesizer>
+<CsOptions>
+--env:SSDIR+=../SourceMaterials -odac -m0
+</CsOptions>
 <CsInstruments>
 sr      =  44100
 ksmps   =  32
@@ -7,8 +10,8 @@ nchnls  =  8
 
 zakinit 16, 1	
 
-#include "ambisonics_udos.txt"
-#include "ambisonics_utilities.txt"
+#include "../SourceMaterials/ambisonics_udos.txt"
+#include "../SourceMaterials/ambisonics_utilities.txt"
 
 instr 1
 asnd    buzz    p4,p5,p6,1
@@ -31,3 +34,20 @@ i1 0 40 .5 300 40
 </CsoundSynthesizer>
 ;example by martin neukom
 
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

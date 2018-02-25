@@ -1,4 +1,7 @@
 <CsoundSynthesizer>
+<CsOptions>
+--env:SSDIR+=../SourceMaterials -odac -m0
+</CsOptions>
 <CsInstruments>
 sr      =  44100
 ksmps   =  32
@@ -8,7 +11,7 @@ nchnls  =  1
 zakinit 81, 1 ; zak space for up to 81 channels of the 8th order B-format
 
 ; the opcodes used below are safed in "ambisonics_udos.txt"
-#include "ambisonics_udos.txt"
+#include "../SourceMaterials/ambisonics_udos.txt"
 
 ; in-phase decoding up to third order for one speaker
 opcode	ambi_dec1_inph3, a, iii		
@@ -113,3 +116,20 @@ i1 0 100
 </CsoundSynthesizer>
 ;example by martin neukom
 
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

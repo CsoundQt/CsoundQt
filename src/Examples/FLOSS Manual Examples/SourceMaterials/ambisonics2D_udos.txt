@@ -1,5 +1,5 @@
 
-opcode	ambi2D_encode, k, aik		
+opcode	ambi2D_encode, 0, aik		
 
 asnd,iorder,kaz	xin
 
@@ -13,10 +13,9 @@ kk =		kk-1
 
 if	kk > 0 goto c1
 	zawm	asnd,0	
-	xout	0
 endop
 
-opcode	ambi2D_enc_dist, k, aikk		
+opcode	ambi2D_enc_dist, 0, aikk		
 asnd,iorder,kaz,kdist	xin
 
 kaz = $M_PI*kaz/180
@@ -35,7 +34,6 @@ kk =		kk-1
 
 if	kk > 0 goto c1
 	zawm	asndW,0	
-	xout	0
 endop
 
 ;***************
@@ -923,7 +921,7 @@ if	kk > 0 goto c8
 endop
 
 ;**************
-opcode	ambi2D_write_B,	k, Sii	
+opcode	ambi2D_write_B,	0, Sii	
 Sname,iorder,iformat		xin
 	if(iorder == 1) then
 	fout	Sname,iformat,zar(0),zar(1),zar(2)
@@ -989,7 +987,7 @@ endop
 ;;;;;;;;;
 
 
-opcode	ambi2D_read_B, k,	Si		
+opcode	ambi2D_read_B, 0,	Si		
 Sname,iorder			xin
 if(iorder == 1) then
 

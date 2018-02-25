@@ -22,8 +22,7 @@ asig    oscils  .2, p4+p5, 0
 endin
 
 instr 3
-        prints  "Applying the ratio of %f (adding %d Hertz)
-                 to %d Hertz!\n", p5, p4*p5, p4
+        prints  "Applying the ratio of %f (adding %d Hertz) to %d Hertz!\n", p5, p4*p5, p4
 asig    oscils  .2, p4*p5, 0
         outs    asig, asig
 endin
@@ -46,3 +45,20 @@ i 1 16 1 800
 i 3 17 1 800 [3/2]
 </CsScore>
 </CsoundSynthesizer>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
