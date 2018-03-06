@@ -203,9 +203,12 @@ void Highlighter::highlightBlock(const QString &text)
 void Highlighter::highlightCsoundBlock(const QString &text)
 {
 	// text is processed one line at a time
-	//   qDebug("Text---------------------: %s", text.toStdString().c_str());
+	//qDebug("Text---------------------: %s", text.toStdString().c_str());
 
-	int commentIndex = text.indexOf(';');
+	int commentIndex = text.indexOf("//"); // try both comment markings
+	if (commentIndex < 0) {
+		commentIndex = text.indexOf(';');
+	}
 	if (commentIndex >= 0) {
 		setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
 //		return;
