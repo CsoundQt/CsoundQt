@@ -426,7 +426,12 @@ void CsoundHtmlWrapper::csoundMessageCallback(int attributes,
         if (c == '\n') {
             QString code = "console.log(\"" + csoundMessageBuffer + "\\n\");";
             if (csoundHtmlView != nullptr) {
-                csoundHtmlView->webView->page()->runJavaScript(code);
+#ifdef USE_WEBKIT
+				csoundHtmlView->webView->page()->mainFrame()->evaluateJavaScript(code);
+#else
+				csoundHtmlView->webView->page()->runJavaScript(code);
+#endif
+
             }
             csoundMessageBuffer.clear();
         } else {

@@ -1161,7 +1161,7 @@ void CsoundEngine::queueMessage(QString message)
 
 bool CsoundEngine::isRunning()
 {
-    qDebug();
+	//qDebug();
     QMutexLocker locker(&m_playMutex);
     return (ud->perfThread && (ud->perfThread->GetStatus() == 0));
 }

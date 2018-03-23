@@ -27,8 +27,9 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 	setWidget(webView);
     webView->setMinimumWidth(200);
     webView->sizePolicy().setVerticalPolicy(QSizePolicy::Policy::Expanding);
-    webView->
-    layout()->setMargin(0);
+	if (webView->layout()) {
+		webView->layout()->setMargin(0);
+	}
 #ifdef USE_WEBKIT
 	QObject::connect(webView->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),
 						this, SLOT(addJSObject()));  // to enable adding the object after reload
@@ -241,7 +242,7 @@ void CsoundHtmlView::addJSObject()
             csoundHtmlOnlyWrapper.setOptions(m_options);
         } else {
             // Register CsoundHtmlWrapper when performing CSD files with embedded <html> element.
-            webView->page()->mainFrame()->addToJavaScriptWindowObject("csound", &csoundWrapper);
+			webView->page()->mainFrame()->addToJavaScriptWindowObject("csound", &csoundHtmlWrapper);
         }
 
 
