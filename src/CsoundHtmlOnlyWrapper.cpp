@@ -282,7 +282,7 @@ void CsoundHtmlOnlyWrapper::csoundMessageCallback(int attributes,
             QString code = "console.log(\"" + csoundMessageBuffer + "\\n\");";
             if (csoundHtmlView != nullptr) {
 #ifdef USE_WEBKIT
-				csoundHtmlView->webView->page()->mainFrame()->evaluateJavaScript(code);
+				//csoundHtmlView->webView->page()->mainFrame()->evaluateJavaScript(code); // this crashes, no messages to JS console from webkit
 #else
 				csoundHtmlView->webView->page()->runJavaScript(code);
 #endif
