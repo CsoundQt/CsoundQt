@@ -147,28 +147,35 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
     QSettings settings("csound", "qutecsound");
-    settings.beginGroup("GUI");
+	settings.beginGroup("GUI"); // Maybe this is a place that may sometimes ruin settings on Mac
     m_options->theme = settings.value("theme", "boring").toString();
+	settings.endGroup();
+	settings.beginGroup("Options");
+	settings.beginGroup("Editor");
+	m_options->debugPort = settings.value("debugPort",34711).toInt(); // necessary to get it before htmlview is created
 
-	// try to move later, after reading settings
-//	qDebug()<<"MIDI API in qutecsound: "<<m_options->rtMidiApi;
-//	midiHandler = new MidiHandler(m_options->rtMidiApi,  this); // are options set already here? I guess, not...
-//    m_midiLearn = new MidiLearnDialog(this);
-//    m_midiLearn->setModal(false);
-//    midiHandler->setMidiLearner(m_midiLearn);
 
 	m_server = new QLocalServer();
 	connect(m_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 
+
 #if defined(QCS_QTHTML)
-    csoundHtmlView = new CsoundHtmlView(this);
-    csoundHtmlView->setFocusPolicy(Qt::NoFocus);
-    csoundHtmlView->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
-    csoundHtmlView->setObjectName("csoundHtmlView");
-    csoundHtmlView->setWindowTitle(tr("HTML View"));
-    csoundHtmlView->show();
-    csoundHtmlView->setOptions(m_options);
-    addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
+#ifdef USE_WEBENGINE	// set the remote debugging port for chromium based web browser here
+	//TODO: change it when user changes
+	if (m_options->debugPort) {
+		qDebug()<<"Set port "<< m_options->debugPort << " for remote html debugging";
+		qputenv("QTWEBENGINE_REMOTE_DEBUGGING", QString::number(m_options->debugPort).toLocal8Bit().data() );
+	}
+
+#endif
+	csoundHtmlView = new CsoundHtmlView(this);
+	csoundHtmlView->setFocusPolicy(Qt::NoFocus);
+	csoundHtmlView->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea |Qt::LeftDockWidgetArea);
+	csoundHtmlView->setObjectName("csoundHtmlView");
+	csoundHtmlView->setWindowTitle(tr("HTML View"));
+	csoundHtmlView->show();
+	csoundHtmlView->setOptions(m_options);
+	addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
 #endif
 
     focusMapper = new QSignalMapper(this);
@@ -3537,7 +3544,7 @@ void CsoundQt::createActions()
     showHtml5Act->setStatusTip(tr("Show the HTML view"));
     showHtml5Act->setShortcutContext(Qt::ApplicationShortcut);
     connect(showHtml5Act, SIGNAL(toggled(bool)), this, SLOT(showHtml5Gui(bool)));
-	connect(csoundHtmlView, SIGNAL(Close(bool)), showHtml5Act, SLOT(setChecked(bool)));
+	//connect(csoundHtmlView, SIGNAL(Close(bool)), showHtml5Act, SLOT(setChecked(bool)));
 
     raiseHtml5Act = new QAction(this);
     raiseHtml5Act->setText(tr("Show/Raise HtmlView"));
@@ -3545,7 +3552,6 @@ void CsoundQt::createActions()
     connect(raiseHtml5Act, SIGNAL(triggered()), focusMapper, SLOT(map()));
     focusMapper->setMapping(raiseHtml5Act, 4);
     this->addAction(raiseHtml5Act);
-
 #endif
     splitViewAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("Split View"), this);
     splitViewAct->setCheckable(true);
@@ -4725,6 +4731,7 @@ void CsoundQt::readSettings()
     m_options->fontScaling = settings.value("fontScaling", 1.0).toDouble();
     lastFiles = settings.value("lastfiles", QStringList()).toStringList();
     lastTabIndex = settings.value("lasttabindex", "").toInt();
+	m_options->debugPort = settings.value("debugPort",34711).toInt();
     settings.endGroup();
     settings.beginGroup("Run");
     m_options->useAPI = settings.value("useAPI", true).toBool();
@@ -4939,6 +4946,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("fontScaling", m_options->fontScaling);
         settings.setValue("lastfiles", openFiles);
         settings.setValue("lasttabindex", lastIndex);
+		settings.setValue("debugPort", m_options->debugPort);
     }
     else {
         settings.remove("");

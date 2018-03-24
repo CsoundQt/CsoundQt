@@ -57,7 +57,6 @@ public slots:
 	void addJSObject();
 #endif
 #ifdef USE_WEBENGINE
-	void setDebugPort();
 	void showDebugWindow();
 #endif
 

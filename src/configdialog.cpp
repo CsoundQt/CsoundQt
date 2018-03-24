@@ -235,6 +235,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	simultaneousCheckBox->setChecked(m_options->simultaneousRun);
 
 	sampleFormatComboBox->setCurrentIndex(m_options->sampleFormat);
+	debugPortSpinBox->setValue(m_options->debugPort);
 
 	CsdocdirLineEdit->setText(m_options->csdocdir);
 	OpcodedirCheckBox->setChecked(m_options->opcodedirActive);
@@ -386,6 +387,7 @@ void ConfigDialog::accept()
 	m_options->openProperties = openPropertiesCheckBox->isChecked();
 	m_options->fontScaling = fontScalingSpinBox->value();
 	m_options->fontOffset = fontOffsetSpinBox->value();
+	m_options->debugPort = debugPortSpinBox->value();
 
 	m_options->useAPI = ApiRadioButton->isChecked();
 	//  m_options->thread = threadCheckBox->isChecked();

@@ -90,6 +90,10 @@ Options::Options(ConfigLists *configlists) :
 	templateDir = "";
 	evalLanguage = CS_ORC;
 
+#ifdef USE_WEBENGINE
+	debugPort = 34711;
+#endif
+
 	// External applications
 	terminal = "";
 	browser = "";

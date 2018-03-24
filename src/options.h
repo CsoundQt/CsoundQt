@@ -118,6 +118,9 @@ public:
 
 	QString csdTemplate;
 
+	quint16 debugPort;
+
+
 	// Csound Utilities options
 	QString cvInputName;
 	QString cvOutputName;
