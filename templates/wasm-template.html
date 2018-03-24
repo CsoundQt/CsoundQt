@@ -2,6 +2,7 @@
 <html>
 <!--
  Template for Csound-wasm html file that runs also in CsoundQt
+ Compile orchestra, make it run, set and get channel values
  (c) Tarmo Johannes 2018
 -->
 <head>
@@ -43,7 +44,6 @@ function getChannelValue(channel) { // if used in CosundQt wit QtWebengine, gett
 	var value; 
 	if (typeof qt === 'undefined') { // if not in CsoundQt, direct getControlChannel works
 		value = csound.getControlChannel(channel);
-		console.log(channel, value);
 		document.getElementById('channelValue').innerText = value;
 	} else { // if in CsoundQt, html built with QtWebEngine, requires callback to get handle the value
 		csound.getControlChannel(channel, function(value) { // asynchronous handling
@@ -82,10 +82,13 @@ function initCsoundWasm() { // this does nothing in CsoundQt since csound object
 <h1>CsoundQt-WASM template</h2>
 
 <button onclick="play();">Play</button>
-<button onclick="stop();">Stop</button><br>
+<button onclick="stop();">Stop</button>
+<button onclick='csound.readScore("i 2 0 3")'>Event</button> 
+<br>
 Volume: 
    <input type="range" id="slider" oninput='csound.setControlChannel("volume",this.value/100.0); '></input><br>
-Notes played: <label id="channelValue">0</label><br>   
+Notes played: <label id="channelValue">0</label><br> 
+
 <textarea class="code" id="instruments" hidden>
 /* this is the Csound orchestra
     - based on example by Victor Lazzarini
@@ -104,6 +107,15 @@ instr 1
  schedule 1,0.25,0.5,0.1+rnd(0.1),500+rnd(500)
 endin
 schedule 1,0,0.5,0.1,500
+
+
+instr 2 ; simple bell instrument
+ p3 random 1, 5
+ kamp linen 0.5*chnget:k("volume"),0.1,p3,p3/2
+ asig fmbell kamp, random:i(200,800), 1, random:i(0.8,1.2), random:i(0,0.2), random:i(3,6)
+outs asig, asig	
+endin
+
 </textarea>
 <br>
 <textarea id="console" rows="6" cols="60">
