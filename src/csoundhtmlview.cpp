@@ -14,22 +14,27 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     ui(new Ui::Html5GuiDisplay),
     documentPage(0),
     m_csoundEngine(nullptr),
-    m_options(nullptr)
+	m_options(nullptr)
 {
     ui->setupUi(this);
+
 #ifdef USE_WEBKIT
 	webView = new QWebView(this);
+	ui->debugRow->hide(); // inspector included in QtWebKit, no need for that
 #else
 	webView = new QWebEngineView(this);
 #endif
     csoundHtmlWrapper.setCsoundHtmlView(this);
     csoundHtmlOnlyWrapper.setCsoundHtmlView(this);
-	setWidget(webView);
-    webView->setMinimumWidth(200);
-    webView->sizePolicy().setVerticalPolicy(QSizePolicy::Policy::Expanding);
-	if (webView->layout()) {
-		webView->layout()->setMargin(0);
-	}
+	ui->mainLayout->addWidget(webView); // mainLayout is vertical layout box
+	//setWidget(webView);
+
+//    webView->setMinimumWidth(200);
+//    webView->sizePolicy().setVerticalPolicy(QSizePolicy::Policy::Expanding);
+//	if (webView->layout()) {
+//		webView->layout()->setMargin(0);
+
+//	}
 #ifdef USE_WEBKIT
 	QObject::connect(webView->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),
 						this, SLOT(addJSObject()));  // to enable adding the object after reload
@@ -40,9 +45,16 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 	inspector.setVisible(true);
 #else
     // Enable dev tools by default for the test browser
-    if (qgetenv("QTWEBENGINE_REMOTE_DEBUGGING").isNull()) {
-        qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "34711");  // should be somewhere in options
-    }
+	m_debugPort = "34711"; // hardcoded for now
+	ui->addressLabel->setText("localhost:"+m_debugPort);
+	//setDebugPort();
+	//connect(ui->updateButton, SIGNAL(clicked()),this, SLOT(setDebugPort()) );
+	connect(ui->inspectButton, SIGNAL(clicked()),this, SLOT(showDebugWindow()));
+
+	if (qgetenv("QTWEBENGINE_REMOTE_DEBUGGING").isNull()) {
+		qputenv("QTWEBENGINE_REMOTE_DEBUGGING", m_debugPort.toLocal8Bit().data() );  // should be somewhere in options
+	}
+
     webView->page()->setWebChannel(&channel);
     //qDebug() << "Setting JavaScript object on init.";
     channel.registerObject("csound", &csoundHtmlWrapper);
@@ -274,7 +286,31 @@ void CsoundHtmlView::clear()
 
 void CsoundHtmlView::setOptions(CsoundOptions *options)
 {
-    m_options = options;
+	m_options = options;
 }
 
+#ifdef USE_WEBENGINE
+void CsoundHtmlView::setDebugPort() // not used this way, delete later
+{
+	qDebug();
+	//m_debugPort = QString::number(ui->debugPortspinBox->value());
+	qputenv("QTWEBENGINE_REMOTE_DEBUGGING", m_debugPort.toLocal8Bit().data() ); // does not work, perhaps needs recreation of webchannel?
+
+	webView->page()->setWebChannel(&channel);
+	channel.registerObject("csound", &csoundHtmlOnlyWrapper);
+}
+
+void CsoundHtmlView::showDebugWindow()
+{
+	qDebug();
+	QWidget * debugger = new QWidget();
+	debugger->resize(600,400);
+	QWebEngineView * debuggerView= new QWebEngineView(debugger);
+	debugger->setAttribute(Qt::WA_DeleteOnClose);
+	qDebug()<<"Opening window for localhost:"<<m_debugPort;
+	debuggerView->setUrl(QUrl("http://localhost:"+m_debugPort));
+	debugger->show();
+}
+
+#endif
 #endif
