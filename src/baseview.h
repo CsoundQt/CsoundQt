@@ -41,6 +41,7 @@ typedef enum {
 	EDIT_ORC_MODE = 3,
 	EDIT_SCO_MODE = 4,
 	EDIT_INC_MODE = 5,
+	EDIT_HTML_MODE = 6,
 	EDIT_GENERIC_MODE = -1
 } editor_mode_t;
 

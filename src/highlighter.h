@@ -63,11 +63,32 @@ public:
 	void setColorVariables(bool color);
 	void setMode(int mode);
 
+	// for html
+	enum Construct {
+		Entity,
+		Tag,
+		Comment,
+		LastConstruct = Comment
+	};
+
+	void setFormatFor(Construct construct, const QTextCharFormat &format);
+	QTextCharFormat formatFor(Construct construct) const
+	{ return m_formats[construct]; }
+
+protected:
+	enum State {
+		NormalState = -1,
+		InComment,
+		InTag
+	};
+
+
 protected:
 	void highlightBlock(const QString &text);
 	void highlightCsoundBlock(const QString &text);
 	void highlightPythonBlock(const QString &text);
 	void highlightXmlBlock(const QString &text);
+	void highlightHtmlBlock(const QString &text);
 	int findOpcode(QString opcodeName, int start = 0, int end = -1);
 
 private:
@@ -106,6 +127,9 @@ private:
 	bool colorVariables;
 	// TODO this is duplicated in documentview class. Should it be unified?
 	int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
+
+	// for html
+	QTextCharFormat m_formats[LastConstruct + 1];
 };
 
 #endif

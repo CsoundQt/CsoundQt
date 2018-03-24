@@ -124,6 +124,26 @@ Highlighter::Highlighter(QTextDocument *parent)
 	gfsigFormat.setForeground(QColor(Qt::gray));
 	gfsigFormat.setFontItalic(true);
 	gfsigFormat.setFontWeight(QFont::Bold);
+
+	// for html
+	QTextCharFormat entityFormat;
+	entityFormat.setForeground(QColor(0, 128, 0));
+	entityFormat.setFontWeight(QFont::Bold);
+	setFormatFor(Entity, entityFormat);
+	setFormatFor(Entity, csdtagFormat);
+
+	QTextCharFormat tagFormat;
+//	tagFormat.setForeground(QColor(192, 16, 112));
+//	tagFormat.setFontWeight(QFont::Bold);
+	setFormatFor(Tag, csdtagFormat);
+
+	QTextCharFormat commentFormat;
+//	commentFormat.setForeground(QColor(128, 10, 74));
+//	commentFormat.setFontItalic(true);
+//	setFormatFor(Comment, commentFormat);
+	setFormatFor(Comment, singleLineCommentFormat);
+
+
 }
 
 
@@ -142,6 +162,7 @@ void Highlighter::setMode(int mode)
 {
 	m_mode = mode;
 }
+
 
 void Highlighter::setColorVariables(bool color)
 {
@@ -172,6 +193,9 @@ void Highlighter::highlightBlock(const QString &text)
     case 5:  // Inc
         highlightCsoundBlock(text); // maybe anything not python or xml should be higlighter as csound?
         break;
+	case 6:  // Html
+		highlightHtmlBlock(text);
+		break;
 	}
 	// for parenthesis
 	TextBlockData *data = new TextBlockData;
@@ -372,6 +396,86 @@ void Highlighter::highlightXmlBlock(const QString &/*text*/)
 {
 }
 
+// for html
+
+void Highlighter::setFormatFor(Highlighter::Construct construct, const QTextCharFormat &format)
+{
+	m_formats[construct] = format;
+	rehighlight();
+}
+
+void Highlighter::highlightHtmlBlock(const QString &text)
+{
+	qDebug();
+	int state = previousBlockState();
+	int len = text.length();
+	int start = 0;
+	int pos = 0;
+
+	while (pos < len) {
+		switch (state) {
+		case NormalState:
+		default:
+			while (pos < len) {
+				QChar ch = text.at(pos);
+				if (ch == '<') {
+					if (text.mid(pos, 4) == "<!--") {
+						state = InComment;
+					} else {
+						state = InTag;
+					}
+					break;
+				} else if (ch == '&') {
+					start = pos;
+					while (pos < len
+						   && text.at(pos++) != ';')
+						;
+					setFormat(start, pos - start,
+							  m_formats[Entity]);
+				} else {
+					++pos;
+				}
+			}
+			break;
+		case InComment:
+			start = pos;
+			while (pos < len) {
+				if (text.mid(pos, 3) == "-->") {
+					pos += 3;
+					state = NormalState;
+					break;
+				} else {
+					++pos;
+				}
+			}
+			setFormat(start, pos - start,
+					  m_formats[Comment]);
+			break;
+
+		case InTag:
+			QChar quote = QChar::Null;
+			start = pos;
+			while (pos < len) {
+				QChar ch = text.at(pos);
+				if (quote.isNull()) {
+					if (ch == '\'' || ch == '\"') {
+						quote = ch;
+					} else if (ch == '>') {
+						++pos;
+						state = NormalState;
+						break;
+					}
+				} else if (ch == quote) {
+					quote = QChar::Null;
+				}
+				++pos;
+			}
+			setFormat(start, pos - start, m_formats[Tag]);
+		}
+	}
+	setCurrentBlockState(state);
+}
+//  -----
 
 // void Highlighter::setFirstRules()
 // {
