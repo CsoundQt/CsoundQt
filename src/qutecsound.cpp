@@ -888,7 +888,7 @@ QString CsoundQt::getSaveFileName()
     dir += name.mid(name.lastIndexOf("/") + 1);
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File As"),
                                                     dir,
-                                                    tr("Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)",
+													tr("Known Files (*.csd *.orc *.sco *.py *.html);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;Html files (*.html);;All Files (*)",
                                                        "Be careful to respect spacing parenthesis and usage of punctuation"));
     if (widgetsVisible) {
         if (!m_options->widgetsIndependent) {
@@ -913,7 +913,7 @@ QString CsoundQt::getSaveFileName()
     //    fileName += ".csd";
     if (fileName.isEmpty())
         fileName = name;
-    if (!fileName.contains("."))
+	if (!fileName.contains("."))
         fileName += ".csd";
     return fileName;
 }
@@ -4434,7 +4434,7 @@ void CsoundQt::fillFileMenu()
 #endif
     }
     QStringList filters;
-    filters << "*.csd";
+	filters << "*.csd"<<"*.html";
     QStringList templateFiles = QDir(templatePath).entryList(filters,QDir::Files);
     foreach (QString fileName, templateFiles) {
         QAction *newAction = templateMenu->addAction(fileName, this,

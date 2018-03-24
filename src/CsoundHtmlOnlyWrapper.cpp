@@ -232,7 +232,7 @@ void CsoundHtmlOnlyWrapper::stop(){
     csound.Stop();
     csound.Join();
     csound.Cleanup();
-    csound.Reset();
+	csound.Reset(); // DOES THIS PERHAPS changes options, so that jack is not any more used as audio driver
 }
 
 double CsoundHtmlOnlyWrapper::tableGet(int table_number, int index){
