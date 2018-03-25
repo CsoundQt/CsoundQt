@@ -115,7 +115,7 @@ private:
 	QTextCharFormat functionFormat;
 	QTextCharFormat labelFormat;
 
-	QStringList tagPatterns, headerPatterns, instPatterns, keywordPatterns; //Csound
+	QStringList tagPatterns, headerPatterns, instPatterns, keywordPatterns, htmlKeywords, javascriptKeywords; //Csound
 
 	QStringList keywords;  //Python
 	QTextCharFormat keywordFormat;
@@ -129,6 +129,7 @@ private:
 	int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
 
 	// for html
+	QTextCharFormat jsKeywordFormat, htmlTagFormat;
 	QTextCharFormat m_formats[LastConstruct + 1];
 };
 

@@ -50,6 +50,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 {
 	commentStartExpression = QRegExp("/\\*");
 	commentEndExpression = QRegExp("\\*/");
+
 	//  b64encStartExpression = QRegExp("<CsFileB .*>");
 	//  b64encEndExpression = QRegExp("<CsFileB>");
 	colorVariables = true;
@@ -89,6 +90,70 @@ Highlighter::Highlighter(QTextDocument *parent)
 	keywords << "yield" << "assert" << "try" << "except" << "finally" << "raise";
 	keywords << "True" << "False" << "None";
 
+	// for html
+	htmlKeywords << "<\\ba\\b" << "<\\babbr\\b" << "<\\bacronym\\b" << "<\\baddress\\b" << "<\\bapplet\\b"
+				<< "<\\barea\\b" << "<\\barticle\\b" << "<\\baside\\b" << "<\\baudio\\b" << "<\\bb\\b"
+				<< "<\\bbase\\b" << "<\\bbasefont\\b" << "<\\bbdi\\b" << "<\\bbdo\\b" << "<\\bbgsound\\b"
+				<< "<\\bblockquote\\b" << "<\\bbig\\b" << "<\\bbody\\b" << "<\\bblink\\b" << "<\\bbr\\b"
+				<< "<\\bbutton\\b" << "<\\bcanvas\\b" << "<\\bcaption\\b" << "<\\bcenter\\b" << "<\\bcite\\b"
+				<< "<\\bcode\\b" << "<\\bcol\\b" << "<\\bcolgroup\\b" << "<\\bcommand\\b" << "<\\bcomment\\b"
+				<< "<\\bdata\\b" << "<\\bdatalist\\b" << "<\\bdd\\b" << "<\\bdel\\b" << "<\\bdetails\\b"
+				<< "<\\bdfn\\b" << "<\\bdialog\\b" << "<\\bdir\\b" << "<\\bdiv\\b" << "<\\bdl\\b"
+				<< "<\\bdt\\b" << "<\\bem\\b" << "<\\bembed\\b" << "<\\bfieldset\\b" << "<\\bfigcaption\\b"
+				<< "<\\bfigure\\b" << "<\\bfont\\b" << "<\\bfooter\\b" << "<\\bform\\b" << "<\\bframe\\b"
+				<< "<\\bframeset\\b" << "<\\bh1\\b" << "<\\bh2\\b" << "<\\bh3\\b" << "<\\bh4\\b"
+				<< "<\\bh5\\b" << "<\\bh6\\b" << "<\\bhead\\b" << "<\\bheader\\b" << "<\\bhgroup\\b"
+				<< "<\\bhr\\b" << "<\\bhtml\\b" << "<\\bi\\b" << "<\\biframe\\b" << "<\\bimg\\b"
+				<< "<\\binput\\b" << "<\\bins\\b" << "<\\bisindex\\b" << "<\\bkbd\\b" << "<\\bkeygen\\b"
+				<< "<\\blabel\\b" << "<\\blegend\\b" << "<\\bli\\b" << "<\\blink\\b" << "<\\blisting\\b"
+				<< "<\\bmain\\b" << "<\\bmap\\b" << "<\\bmarquee\\b" << "<\\bmark\\b" << "<\\bmenu\\b"
+				<< "<\\bamenuitem\\b" << "<\\bmeta\\b" << "<\\bmeter\\b" << "<\\bmulticol\\b" << "<\\bnav\\b"
+				<< "<\\bnobr\\b" << "<\\bnoembed\\b" << "<\\bnoindex\\b" << "<\\bnoframes\\b" << "<\\bnoscript\\b"
+				<< "<\\bobject\\b" << "<\\bol\\b" << "<\\boptgroup\\b" << "<\\boption\\b" << "<\\boutput\\b"
+				<< "<\\bp\\b" << "<\\bparam\\b" << "<\\bpicture\\b" << "<\\bplaintext\\b" << "<\\bpre\\b"
+				<< "<\\bprogress\\b" << "<\\bq\\b" << "<\\brp\\b" << "<\\brt\\b" << "<\\brtc\\b" << "<\\bruby\\b"
+				<< "<\\bs\\b" << "<\\bsamp\\b" << "<\\bscript\\b" << "<\\bsection\\b" << "<\\bselect\\b"
+				<< "<\\bsmall\\b" << "<\\bsource\\b" << "<\\bspacer\\b" << "<\\bspan\\b" << "<\\bstrike\\b"
+				<< "<\\bstrong\\b" << "<\\bstyle\\b" << "<\\bsub\\b" << "<\\bsummary\\b" << "<\\bsup\\b"
+				<< "<\\btable\\b" << "<\\btbody\\b" << "<\\btd\\b" << "<\\btemplate\\b" << "<\\btextarea\\b"
+				<< "<\\btfoot\\b" << "<\\bth\\b" << "<\\bthead\\b" << "<\\btime\\b" << "<\\btitle\\b"
+				<< "<\\btr\\b" << "<\\btrack\\b" << "<\\btt\\b" << "<\\bu\\b" << "<\\bul\\b" << "<\\bvar\\b"
+				<< "<\\bvideo\\b" << "<\\bwbr\\b" << "<\\bxmp\\b";
+
+
+
+
+	htmlKeywords << "<!\\bDOCTYPE\\b" << "</\\ba\\b" << "</\\babbr\\b" << "</\\bacronym\\b" << "</\\baddress\\b" << "</\\bapplet\\b"
+				<< "</\\barea\\b" << "</\\barticle\\b" << "</\\baside\\b" << "</\\baudio\\b" << "</\\bb\\b"
+				<< "</\\bbase\\b" << "</\\bbasefont\\b" << "</\\bbdi\\b" << "</\\bbdo\\b" << "</\\bbgsound\\b"
+				<< "</\\bblockquote\\b" << "</\\bbig\\b" << "</\\bbody\\b" << "</\\bblink\\b" << "</\\bbr\\b"
+				<< "</\\bbutton\\b" << "</\\bcanvas\\b" << "</\\bcaption\\b" << "</\\bcenter\\b" << "</\\bcite\\b"
+				<< "</\\bcode\\b" << "</\\bcol\\b" << "</\\bcolgroup\\b" << "</\\bcommand\\b" << "</\\bcomment\\b"
+				<< "</\\bdata\\b" << "</\\bdatalist\\b" << "</\\bdd\\b" << "</\\bdel\\b" << "</\\bdetails\\b"
+				<< "</\\bdfn\\b" << "</\\bdialog\\b" << "</\\bdir\\b" << "</\\bdiv\\b" << "</\\bdl\\b"
+				<< "</\\bdt\\b" << "</\\bem\\b" << "</\\bembed\\b" << "</\\bfieldset\\b" << "</\\bfigcaption\\b"
+				<< "</\\bfigure\\b" << "</\\bfont\\b" << "</\\bfooter\\b" << "</\\bform\\b" << "</\\bframe\\b"
+				<< "</\\bframeset\\b" << "</\\bh1\\b" << "</\\bh2\\b" << "</\\bh3\\b" << "</\\bh4\\b"
+				<< "</\\bh5\\b" << "</\\bh6\\b" << "</\\bhead\\b" << "</\\bheader\\b" << "</\\bhgroup\\b"
+				<< "</\\bhr\\b" << "</\\bhtml\\b" << "</\\bi\\b" << "</\\biframe\\b" << "</\\bimg\\b"
+				<< "</\\binput\\b" << "</\\bins\\b" << "</\\bisindex\\b" << "</\\bkbd\\b" << "</\\bkeygen\\b"
+				<< "</\\blabel\\b" << "</\\blegend\\b" << "</\\bli\\b" << "</\\blink\\b" << "</\\blisting\\b"
+				<< "</\\bmain\\b" << "</\\bmap\\b" << "</\\bmarquee\\b" << "</\\bmark\\b" << "</\\bmenu\\b"
+				<< "</\\bamenuitem\\b" << "</\\bmeta\\b" << "</\\bmeter\\b" << "</\\bmulticol\\b" << "</\\bnav\\b"
+				<< "</\\bnobr\\b" << "</\\bnoembed\\b" << "</\\bnoindex\\b" << "</\\bnoframes\\b" << "</\\bnoscript\\b"
+				<< "</\\bobject\\b" << "</\\bol\\b" << "</\\boptgroup\\b" << "</\\boption\\b" << "</\\boutput\\b"
+				<< "</\\bp\\b" << "</\\bparam\\b" << "</\\bpicture\\b" << "</\\bplaintext\\b" << "</\\bpre\\b"
+				<< "</\\bprogress\\b" << "</\\bq\\b" << "</\\brp\\b" << "</\\brt\\b" << "</\\brtc\\b" << "</\\bruby\\b"
+				<< "</\\bs\\b" << "</\\bsamp\\b" << "</\\bscript\\b" << "</\\bsection\\b" << "</\\bselect\\b"
+				<< "</\\bsmall\\b" << "</\\bsource\\b" << "</\\bspacer\\b" << "</\\bspan\\b" << "</\\bstrike\\b"
+				<< "</\\bstrong\\b" << "</\\bstyle\\b" << "</\\bsub\\b" << "</\\bsummary\\b" << "</\\bsup\\b"
+				<< "</\\btable\\b" << "</\\btbody\\b" << "</\\btd\\b" << "</\\btemplate\\b" << "</\\btextarea\\b"
+				<< "</\\btfoot\\b" << "</\\bth\\b" << "</\\bthead\\b" << "</\\btime\\b" << "</\\btitle\\b"
+				<< "</\\btr\\b" << "</\\btrack\\b" << "</\\btt\\b" << "</\\bu\\b" << "</\\bul\\b" << "</\\bvar\\b"
+				<< "</\\bvideo\\b" << "</\\bwbr\\b" << "</\\bxmp\\b";
+
+	javascriptKeywords << "function" << "var" << "if" << "===" << "console.log"  << "console.warn";
+
 	keywordFormat.setForeground(QColor("blue"));
 	keywordFormat.setFontWeight(QFont::Bold);
 
@@ -126,22 +191,19 @@ Highlighter::Highlighter(QTextDocument *parent)
 	gfsigFormat.setFontWeight(QFont::Bold);
 
 	// for html
-	QTextCharFormat entityFormat;
-	entityFormat.setForeground(QColor(0, 128, 0));
-	entityFormat.setFontWeight(QFont::Bold);
-	setFormatFor(Entity, entityFormat);
-	setFormatFor(Entity, csdtagFormat);
+//	jsKeywordFormat.setForeground(QColor(Qt::black));
+//	jsKeywordFormat.setFontWeight(QFont::Bold);
+	jsKeywordFormat = keywordFormat;
 
-	QTextCharFormat tagFormat;
-//	tagFormat.setForeground(QColor(192, 16, 112));
-//	tagFormat.setFontWeight(QFont::Bold);
-	setFormatFor(Tag, csdtagFormat);
+	htmlTagFormat.setForeground(QColor(Qt::cyan));
+	htmlTagFormat.setFontWeight(QFont::Bold);
+	//setFormatFor(Tag, csdtagFormat);
 
-	QTextCharFormat commentFormat;
+//	QTextCharFormat commentFormat;
 //	commentFormat.setForeground(QColor(128, 10, 74));
 //	commentFormat.setFontItalic(true);
 //	setFormatFor(Comment, commentFormat);
-	setFormatFor(Comment, singleLineCommentFormat);
+//	setFormatFor(Comment, singleLineCommentFormat);
 
 
 }
@@ -398,84 +460,108 @@ void Highlighter::highlightXmlBlock(const QString &/*text*/)
 
 // for html
 
-void Highlighter::setFormatFor(Highlighter::Construct construct, const QTextCharFormat &format)
-{
-	m_formats[construct] = format;
-	rehighlight();
-}
-
 void Highlighter::highlightHtmlBlock(const QString &text)
 {
-	qDebug();
-	int state = previousBlockState();
-	int len = text.length();
-	int start = 0;
-	int pos = 0;
-
-	while (pos < len) {
-		switch (state) {
-		case NormalState:
-		default:
-			while (pos < len) {
-				QChar ch = text.at(pos);
-				if (ch == '<') {
-					if (text.mid(pos, 4) == "<!--") {
-						state = InComment;
-					} else {
-						state = InTag;
-					}
-					break;
-				} else if (ch == '&') {
-					start = pos;
-					while (pos < len
-						   && text.at(pos++) != ';')
-						;
-					setFormat(start, pos - start,
-							  m_formats[Entity]);
-				} else {
-					++pos;
-				}
-			}
-			break;
-		case InComment:
-			start = pos;
-			while (pos < len) {
-				if (text.mid(pos, 3) == "-->") {
-					pos += 3;
-					state = NormalState;
-					break;
-				} else {
-					++pos;
-				}
-			}
-			setFormat(start, pos - start,
-					  m_formats[Comment]);
-			break;
-
-		case InTag:
-			QChar quote = QChar::Null;
-			start = pos;
-			while (pos < len) {
-				QChar ch = text.at(pos);
-				if (quote.isNull()) {
-					if (ch == '\'' || ch == '\"') {
-						quote = ch;
-					} else if (ch == '>') {
-						++pos;
-						state = NormalState;
-						break;
-					}
-				} else if (ch == quote) {
-					quote = QChar::Null;
-				}
-				++pos;
-			}
-			setFormat(start, pos - start, m_formats[Tag]);
+	QRegExp expression("\\b+\\w\\b+");
+	int index = text.indexOf(expression, 0);
+	for (int i = 0; i < htmlKeywords.size(); i++) {
+		QRegExp expression(htmlKeywords[i]);//expression("\\b+" + htmlKeywords[i] + "\\b+");
+		int index = text.indexOf(expression);
+		while (index >= 0) {
+			int length = expression.matchedLength();
+			setFormat(index, length, keywordFormat);
+			index = text.indexOf(expression, index + length);
 		}
 	}
-	setCurrentBlockState(state);
+
+	for (int i=0; i<javascriptKeywords.size(); i++) {
+		QRegExp expression("\\b+" + javascriptKeywords[i] + "\\b+");
+		int index = text.indexOf(expression);
+		while (index >= 0) {
+			int length = expression.matchedLength();
+			setFormat(index, length, jsKeywordFormat); // TODO javascriptformat
+			index = text.indexOf(expression, index + length);
+		}
+	}
+
+	QRegExp endTag( QRegExp(">$"));
+	index = text.indexOf(endTag);
+	while (index >= 0) {
+		int length = endTag.matchedLength();
+		setFormat(index, length, keywordFormat);
+		index = text.indexOf(endTag, index + length);
+	}
+
+
+	QRegExp strings( QRegExp("\"[^\"]*\""));
+	index = text.indexOf(strings);
+	while (index >= 0) {
+		int length = strings.matchedLength();
+		setFormat(index, length, quotationFormat);
+		index = text.indexOf(strings, index + length);
+	}
+	strings = QRegExp("'[^'']*'");
+	index = text.indexOf(strings);
+	while (index >= 0) {
+		int length = strings.matchedLength();
+		setFormat(index, length, quotationFormat);
+		index = text.indexOf(strings, index + length);
+	}
+	int commentIndex = -1;
+	QRegExp expComment("//.*"); // TODO: avaoid https://
+	index = text.indexOf(expComment);
+	if (index>0 ) {
+		if (text.at(index-1)!=':') { // clumsy way to avoid addresses like https://
+			while (index >= 0) { // did not manage to do it with regular expression
+				int length = expComment.matchedLength();
+				setFormat(index, length, singleLineCommentFormat);
+				index = text.indexOf(expComment, index + length);
+			}
+			commentIndex = index; // better do other way
+		}
+	}
+
+//	if (commentIndex >= 0) {
+//		setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
+////		return;
+//	}
+	if (commentIndex < 0) {
+		commentIndex = text.size() + 1;
+	}
+
+	// multiline
+	setCurrentBlockState(0);
+	QRegExp htmlCommentStartExpression = QRegExp("<!--");
+	QRegExp htmlCommentEndExpression = QRegExp("-->");
+
+
+	int startIndex = 0;
+	if (previousBlockState() != 1) {
+		startIndex = text.indexOf(htmlCommentStartExpression);
+	}
+
+	while (startIndex >= 0 && startIndex < commentIndex) {
+		int endIndex = text.indexOf(htmlCommentEndExpression, startIndex);
+		if (format(startIndex) == quotationFormat) {
+			startIndex = text.indexOf(htmlCommentStartExpression,
+									  startIndex + 1);
+			continue;
+		}
+		int commentLength;
+		if (endIndex == -1) {
+			setCurrentBlockState(1);
+			commentLength = text.length() - startIndex;
+		} else {
+			commentLength = endIndex - startIndex
+					+ htmlCommentEndExpression.matchedLength();
+		}
+		setFormat(startIndex, commentLength, multiLineCommentFormat);
+		startIndex = text.indexOf(htmlCommentStartExpression,
+								  startIndex + commentLength);
+	}
+
+
 }
-//  -----
 
 // void Highlighter::setFirstRules()
 // {
