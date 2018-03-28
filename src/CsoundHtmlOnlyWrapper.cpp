@@ -232,7 +232,7 @@ void CsoundHtmlOnlyWrapper::stop(){
     csound.Stop();
     csound.Join();
     csound.Cleanup();
-    csound.Reset();
+	csound.Reset(); // DOES THIS PERHAPS changes options, so that jack is not any more used as audio driver
 }
 
 double CsoundHtmlOnlyWrapper::tableGet(int table_number, int index){
@@ -281,8 +281,12 @@ void CsoundHtmlOnlyWrapper::csoundMessageCallback(int attributes,
         if (c == '\n') {
             QString code = "console.log(\"" + csoundMessageBuffer + "\\n\");";
             if (csoundHtmlView != nullptr) {
-                csoundHtmlView->webView->page()->runJavaScript(code);
-            }
+#ifdef USE_WEBKIT
+				//csoundHtmlView->webView->page()->mainFrame()->evaluateJavaScript(code); // this crashes, no messages to JS console from webkit
+#else
+				csoundHtmlView->webView->page()->runJavaScript(code);
+#endif
+			}
             csoundMessageBuffer.clear();
         } else {
             csoundMessageBuffer.append(c);

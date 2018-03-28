@@ -286,6 +286,9 @@ void BaseDocument::setFileName(QString name)
     else if (name.endsWith(".inc")) {
         m_view->setFileType(EDIT_INC_MODE);
     }
+	else if (name.endsWith(".html")) {
+		m_view->setFileType(EDIT_HTML_MODE);
+	}
 	else {
 		m_view->setFileType(EDIT_GENERIC_MODE);
 	}

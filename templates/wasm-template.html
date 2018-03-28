@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<!--
+ Template for Csound-wasm html file that runs also in CsoundQt
+ Compile orchestra, make it run, set and get channel values
+ (c) Tarmo Johannes 2018
+-->
+<head>
+ <title>CsoundQt-WASM template</title>
+</head>
+
+
+<script src="https://csound.github.io/wasm/js/libcsound.js"></script>
+<script src="https://csound.github.io/wasm/js/CsoundObj.js"></script>
+<!--NB! libcsound.wasm must be in the same folder as the html file.
+You can get it from: https://csound.github.io/wasm/libcsound.wasm or download from 
+http://csound.com/download.html --> 
+<script type="text/javascript">
+
+var csound;
+
+// message printout
+var count = 0;
+function print_msg(message) {
+   var element = document.getElementById('console');
+   element.value += (message + "\n");
+   element.scrollTop = 99999; // focus on bottom
+   count += 1;
+   if(count == 1000) {
+      clear_console();
+      count = 0;
+   }
+}
+
+var channelValueUpdater; // function called by setInterval to get values from Csound
+function stop() {
+	clearInterval(channelValueUpdater);
+	csound.stop();
+	csound.reset();
+}
+
+
+function getChannelValue(channel) { // if used in CosundQt wit QtWebengine, getting values from host (Csound) can be only asynchronous, ie needs callback
+	var value; 
+	if (typeof qt === 'undefined') { // if not in CsoundQt, direct getControlChannel works
+		value = csound.getControlChannel(channel);
+		document.getElementById('channelValue').innerText = value;
+	} else { // if in CsoundQt, html built with QtWebEngine, requires callback to get handle the value
+		csound.getControlChannel(channel, function(value) { // asynchronous handling
+			document.getElementById('channelValue').innerText = value; 
+		});
+	} 
+}
+
+function play() {
+	var orc = document.getElementById('instruments').value;
+	csound.compileOrc(orc);
+	channelValueUpdater = setInterval(getChannelValue, 100, "count") ; // 10 times per second
+	csound.start(); // CsoundQt html requires both calls to be present - start() and perform()
+	csound.perform(); // has no efect in Csound-Wasm 6.09
+	
+}
+
+
+function initCsoundWasm() { // this does nothing in CsoundQt since csound object is created and forwarded by QtWebChannel
+  console.log = print_msg;
+  console.warn = print_msg;
+  // function to be called after Wasm Csound is loaded
+ Module["onRuntimeInitialized"] = function (){
+    console.log("loading... loaded!");
+    csound = new CsoundObj();
+	window.addEventListener("unload", function(e){
+	if(csound != null)
+            csound.destroy();
+    }, false);
+
+  };
+}
+
+</script>
+<body onload="initCsoundWasm()">
+<h1>CsoundQt-WASM template</h2>
+
+<button onclick="play();">Play</button>
+<button onclick="stop();">Stop</button>
+<button onclick='csound.readScore("i 2 0 3")'>Event</button> 
+<br>
+Volume: 
+   <input type="range" id="slider" oninput='csound.setControlChannel("volume",this.value/100.0); '></input><br>
+Notes played: <label id="channelValue">0</label><br> 
+
+<textarea class="code" id="instruments" hidden>
+/* this is the Csound orchestra
+    - based on example by Victor Lazzarini
+*/
+nchnls=2
+0dbfs=1
+chnset 0.5, "volume"
+chnset 0, "count"
+
+instr 1
+ chnset chnget:i("count")+1, "count" ; count the notes played
+ k1 expon p4,p3,p4*0.001
+ kvolume chnget "volume"
+ a1 vco2 k1*kvolume,p5
+ outs a1,a1
+ schedule 1,0.25,0.5,0.1+rnd(0.1),500+rnd(500)
+endin
+schedule 1,0,0.5,0.1,500
+
+
+instr 2 ; simple bell instrument
+ p3 random 1, 5
+ kamp linen 0.5*chnget:k("volume"),0.1,p3,p3/2
+ asig fmbell kamp, random:i(200,800), 1, random:i(0.8,1.2), random:i(0,0.2), random:i(3,6)
+outs asig, asig	
+endin
+
+</textarea>
+<br>
+<textarea id="console" rows="6" cols="60">
+loading... (no meaning in CsoundQt)
+</textarea>
+
+</body>
+</html>
+
+
+

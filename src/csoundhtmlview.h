@@ -48,13 +48,16 @@ public:
 	QWebView *webView;
 #endif
 #ifdef USE_WEBENGINE
-	QWebChannel channel ;            // Channel for C++ to Javascript comms
-    QWebEngineView *webView;
+	QWebChannel channel ;            // Channel for C++ to Javascript communications
+    QWebEngineView *webView;	
 #endif
 
 public slots:
 #ifdef USE_WEBKIT
 	void addJSObject();
+#endif
+#ifdef USE_WEBENGINE
+	void showDebugWindow();
 #endif
 
 private:
@@ -67,6 +70,9 @@ private:
     CsoundEngine *m_csoundEngine;
     QTemporaryFile tempHtml;
     CsoundOptions * m_options;
+#ifdef USE_WEBENGINE
+	QString m_debugPort;
+#endif
 };
 
 #endif
