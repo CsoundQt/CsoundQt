@@ -2652,6 +2652,10 @@ Check environment tab in preferences.</source>
         <source>Please close a document before opening another.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Spanish translation: Andrés Cabrera and Guillermo Senna</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DebugPanel</name>
