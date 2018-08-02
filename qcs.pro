@@ -193,11 +193,16 @@ unix:!macx {
 	}
 	target.path = $$INSTALL_DIR/bin
 	target.commands = ln -sf $$TARGET $(INSTALL_ROOT)/$$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
+	# <- here is one mistake, too
 	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET
 
-
+	
+	# see comments: https://github.com/CsoundQt/CsoundQt/issues/258
+	# example: https://github.com/kunstmusik/blue/blob/develop/install_desktop_starter.sh
 	desktop.path=$$SHARE_DIR/applications
 	desktop.files=CsoundQt.desktop
+	#perhaps: sed -i "s#DESKTOPDIR#${DIR}#g" ${DIR}/csoundqt.desktop # TODO: rename .desktop file to lowercase
+	#dekstop.commands=desktop-file-install --delete-original ${DIR}/csoundqt.desktop 
 
 	icon.path=$$SHARE_DIR/icons # not sure in fact, if /usr/share/icons is enough or better to put into hicolor...
 	icon.files=images/qtcs.svg
