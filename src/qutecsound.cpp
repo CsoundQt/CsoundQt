@@ -3939,7 +3939,33 @@ QString CsoundQt::getExamplePath(QString dir)
     qDebug() << examplePath;
 #endif
 #ifdef Q_OS_LINUX
-    examplePath = qApp->applicationDirPath() + "/Examples/" + dir;
+    examplePath = QString(); //qApp->applicationDirPath() + "/Examples/" + dir;
+    QStringList possiblePaths;
+    possiblePaths << qApp->applicationDirPath() + "/Examples/" << "~/.local/share/csoundqt/Examples/"
+                  << "/usr/share/csoundqt/Examples/" << qApp->applicationDirPath() + "/../src/Examples/"
+                  << qApp->applicationDirPath() + "/../../csoundqt/src/Examples/"
+                  <<  "/../../qutecsound/src/Examples/"
+                  << "~/.local/share/qutecsound/Examples/" << "/usr/share/qutecsound/Examples/";
+
+    foreach (QString path, possiblePaths) {
+        path += dir;
+        if (QDir(path).exists()) {
+            examplePath = path;
+            break;
+        }
+    }
+    if (examplePath.isEmpty()) {
+        qDebug() << "Path to extended examples not found!";
+    } else {
+        qDebug() << "ExamplePath: " << examplePath;
+    }
+    /*
+    if (!QDir(examplePath).exists()) {
+        examplePath = "~/.local/share/csoundqt/Examples/" + dir; // if installed to HOME dir
+    }
+    if (!QDir(examplePath).exists()) {
+        examplePath = "/usr/share/csoundqt/Examples/" + dir;
+    }
     if (!QDir(examplePath).exists()) {
         examplePath = qApp->applicationDirPath() + "/../src/Examples/" + dir;
     }
@@ -3949,12 +3975,13 @@ QString CsoundQt::getExamplePath(QString dir)
     if (!QDir(examplePath).exists()) { // for out of tree builds
         examplePath = qApp->applicationDirPath() + "/../../qutecsound/src/Examples/" + dir;
     }
-	if (!QDir(examplePath).exists()) {
+    if (!QDir(examplePath).exists()) { // old name for shared folder
 		examplePath = "~/.local/share/qutecsound/Examples/" + dir; // UNTESTED! if installed to HOME dir
 	}
 	if (!QDir(examplePath).exists()) {
         examplePath = "/usr/share/qutecsound/Examples/" + dir;
-    }
+    }*/
+
 #endif
 #ifdef Q_OS_SOLARIS
     examplePath = qApp->applicationDirPath() + "/Examples/" + dir;

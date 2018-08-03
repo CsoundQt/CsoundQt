@@ -190,7 +190,6 @@ CONFIG(debug, debug|release):TARGET = $${TARGET}-debug
 # install commands for linux (for make install)
 # use 'sudo make install' for system wide installation
 unix:!macx {
-    message(insall and share $$INSTALL_DIR $$SHARE_DIR)
     isEmpty(INSTALL_DIR) {
 		INSTALL_DIR=/usr/local  # ~  #for HOME
 	}
@@ -205,31 +204,29 @@ unix:!macx {
 	# see comments: https://github.com/CsoundQt/CsoundQt/issues/258
     desktop.path=$$SHARE_DIR/applications
     desktop.commands = rm -f $$SHARE_DIR/applications/CsoundQt.desktop &&  # remove the old, uppercase one, if present one
-    desktop.commands += desktop-file-install --mode=644 $$PWD/csoundqt.desktop
+    isEmpty(SHARE_DIR) {
+        desktop.commands += desktop-file-install --mode=644 $$PWD/csoundqt.desktop
+    } else {
+        desktop.commands += desktop-file-install --mode=644 --dir=$$SHARE_DIR/applications $$PWD/csoundqt.desktop
+    }
     #TODO: if local install, ie not /usr/share, dekstop-file-install  --dir=$$desktop.path
 
     icon.path=$SHARE_DIR/icons/hicolor/scalable/apps
-	icon.files=images/qtcs.svg
+    icon.files=images/csoundqt.svg
 
 	mimetypes.path=$$INSTALL_DIR # in some reason path must be set to create install target in Makefile
 	mimetypes.commands = cd $$PWD/mime-types/; ./add_csound_mimetypes.sh $(INSTALL_ROOT)/$$INSTALL_DIR
 
-	examples.path = $$SHARE_DIR/qutecsound/
-	examples.files = src/Examples
+
+    examples.path = $$SHARE_DIR/csoundqt/
+    examples.commands = rm -rf $$SHARE_DIR/qutecsound #remove the old examples
+    examples.files = src/Examples
 
 	INSTALLS += target desktop icon mimetypes examples
 }
 
 # for OSX add Scripts and Examples to be bundle in Contents->Resources
 macx {
-
-    #testing for stdlib problem:
-#LIBS += -stdlib=libstdc++
-
-#QMAKE_CXXFLAGS -= -stdlib=libc++
-#QMAKE_CXXFLAGS += -stdlib=libstdc++
-#QMAKE_LFLAGS += -stdlib=libstdc++
-
     pythonqt {
         scripts.path = Contents/Resources
         scripts.files = src/Scripts
