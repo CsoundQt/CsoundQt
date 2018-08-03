@@ -21,6 +21,20 @@
   
  Packaging - split Examples from repo
  option for RtMidi as installed library, not required source code
+ ---
+ CHANGES:
+ 
+ Renamed CsoundQt.desktop to csoundqt.desktop
+ qcs.pro
+ Use desktop-file-install to install the desktop file
+ 
+fixed creating link csounqt to correct binary (in install dir csoundqt -> CsoundQt->CsoundQt-d-html-cs6-debug or whatever is installed) -  this enables to have several versions installed, just change the link to use correct one.
+
+corrected icons installed path to: $SHARE_DIR/icons/hicolor/scalable/apps
+
+ 
+ ---
+ 
  
  Key commands,
  

@@ -27,6 +27,11 @@
 # OS X only OPTIONS:
 # CONFIG+=universal  #  To build i386/ppc version. Default is x86_64
 # CONFIG+=i386  #  To build i386 version. Default is x86_64
+# LINUX ONLY:
+# To install CsoundQt and its dekstop file and icons somewhere else than /usr/local/bin and /usr/share
+# use variables INSTALL_DIR (default /usr/local) and SHARE_DIR (default /usr/share).
+# For example for local install use:
+# qmake qcs.pro INSTALL_DIR=~ SHARE_DIR=~/.local/share
 ################################################################################
 
 DEFINES += NOMINMAX
@@ -185,26 +190,25 @@ CONFIG(debug, debug|release):TARGET = $${TARGET}-debug
 # install commands for linux (for make install)
 # use 'sudo make install' for system wide installation
 unix:!macx {
-	isEmpty(INSTALL_DIR) {
+    message(insall and share $$INSTALL_DIR $$SHARE_DIR)
+    isEmpty(INSTALL_DIR) {
 		INSTALL_DIR=/usr/local  # ~  #for HOME
 	}
 	isEmpty(SHARE_DIR) {
-		SHARE_DIR=/usr/share # ~/.local for HOME install
+        SHARE_DIR=/usr/share # ~/.local/share for HOME install
 	}
 	target.path = $$INSTALL_DIR/bin
-	target.commands = ln -sf $$TARGET $(INSTALL_ROOT)/$$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
-	# <- here is one mistake, too
+    target.commands = ln -sf $$target.path/$$TARGET $(INSTALL_ROOT)/$$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
 	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET
 
 	
 	# see comments: https://github.com/CsoundQt/CsoundQt/issues/258
-	# example: https://github.com/kunstmusik/blue/blob/develop/install_desktop_starter.sh
-	desktop.path=$$SHARE_DIR/applications
-	desktop.files=CsoundQt.desktop
-	#perhaps: sed -i "s#DESKTOPDIR#${DIR}#g" ${DIR}/csoundqt.desktop # TODO: rename .desktop file to lowercase
-	#dekstop.commands=desktop-file-install --delete-original ${DIR}/csoundqt.desktop 
+    desktop.path=$$SHARE_DIR/applications
+    desktop.commands = rm -f $$SHARE_DIR/applications/CsoundQt.desktop &&  # remove the old, uppercase one, if present one
+    desktop.commands += desktop-file-install --mode=644 $$PWD/csoundqt.desktop
+    #TODO: if local install, ie not /usr/share, dekstop-file-install  --dir=$$desktop.path
 
-	icon.path=$$SHARE_DIR/icons # not sure in fact, if /usr/share/icons is enough or better to put into hicolor...
+    icon.path=$SHARE_DIR/icons/hicolor/scalable/apps
 	icon.files=images/qtcs.svg
 
 	mimetypes.path=$$INSTALL_DIR # in some reason path must be set to create install target in Makefile
