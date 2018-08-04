@@ -50,6 +50,13 @@ exists(/usr/lib64/libjack.so) | exists(/usr/lib/libjack.so) | exists(/usr/local/
 	LIBS += -ljack
 	}
 }
+
+system_rtmidi {
+    message(System rtmidi in qcs-unix.pro)
+    INCLUDEPATH += $${RTMIDI_DIR}
+    LIBS += -lrtmidi
+}
+
 quteapp_f {
 message(Bundling QuteApp_f)
 RESOURCES += "src/quteapp_f.qrc"

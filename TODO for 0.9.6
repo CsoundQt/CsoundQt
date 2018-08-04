@@ -32,6 +32,11 @@ fixed creating link csounqt to correct binary (in install dir csoundqt -> Csound
 
 corrected icons installed path to: $SHARE_DIR/icons/hicolor/scalable/apps
 
+renamed icon to csoundqt.svg
+changed Examples dir from qutecsound to csoundqt, fixed also code for checking that
+
+Added conditions to find rtmidi from system - it checks if /usr/include/rtmidi or /usr/local/include/rtmidi exist (ie if it is installed by the user or package management -  both rtmidi and rtmidi-dev pacakges must be installed!) sets config option system_rtmidi that omits compiling rtmidi from sources. 
+
  
  ---
  

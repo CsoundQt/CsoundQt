@@ -126,6 +126,23 @@ pythonqt {
     }
 }
 rtmidi {
+# check if RTMIDI is found in system
+unix:!macx {
+    exists("/usr/include/rtmidi")  {
+        RTMIDI_DIR = "/usr/local/rtmidi"
+        !no_messages:message(RtMidi found in /usr/local/rtmidi)
+        CONFIG -= rtmidi
+        CONFIG += system_rtmidi
+    }
+    exists("/usr/local/include/rtmidi")  {
+        RTMIDI_DIR = "/usr/local/include/rtmidi"
+        !no_messages:message(RtMidi found in /usr/local/include/rtmidi)
+        CONFIG -= rtmidi
+        CONFIG += system_rtmidi
+    }
+
+}
+
 isEmpty(RTMIDI_DIR) {
     !no_messages:message(RtMidi include directory not specified.)
     for(dir, DEFAULT_RTMIDI_DIRS) {
@@ -141,7 +158,7 @@ isEmpty(RTMIDI_DIR) {
     }
     message(Building with RtMidi support.)
 }
-!rtmidi: message(Not building with RtMidi support.)
+!rtmidi:!system_rtmidi: message(Not building with RtMidi support.)
 }
 win32 {
     CSOUND_INCLUDE_DIR = $$replace(CSOUND_INCLUDE_DIR, \\\\, /)
@@ -157,7 +174,7 @@ win32 {
         message(PythonQt source tree directory is $${PYTHONQT_SRC_DIR})
         message(PythonQt lib directory is $${PYTHONQT_LIB_DIR})
     }
-    rtmidi {
+    rtmidi|system_rtmidi {
         message(RtMidi directory is $${RTMIDI_DIR})
 		DEFINES += QCS_RTMIDI
             exists($${RTMIDI_DIR}/RtError.h): {

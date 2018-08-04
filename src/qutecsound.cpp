@@ -3959,28 +3959,6 @@ QString CsoundQt::getExamplePath(QString dir)
     } else {
         qDebug() << "ExamplePath: " << examplePath;
     }
-    /*
-    if (!QDir(examplePath).exists()) {
-        examplePath = "~/.local/share/csoundqt/Examples/" + dir; // if installed to HOME dir
-    }
-    if (!QDir(examplePath).exists()) {
-        examplePath = "/usr/share/csoundqt/Examples/" + dir;
-    }
-    if (!QDir(examplePath).exists()) {
-        examplePath = qApp->applicationDirPath() + "/../src/Examples/" + dir;
-    }
-    if (!QDir(examplePath).exists()) { // for out of tree builds
-        examplePath = qApp->applicationDirPath() + "/../../csoundqt/src/Examples/" + dir;
-    }
-    if (!QDir(examplePath).exists()) { // for out of tree builds
-        examplePath = qApp->applicationDirPath() + "/../../qutecsound/src/Examples/" + dir;
-    }
-    if (!QDir(examplePath).exists()) { // old name for shared folder
-		examplePath = "~/.local/share/qutecsound/Examples/" + dir; // UNTESTED! if installed to HOME dir
-	}
-	if (!QDir(examplePath).exists()) {
-        examplePath = "/usr/share/qutecsound/Examples/" + dir;
-    }*/
 
 #endif
 #ifdef Q_OS_SOLARIS
