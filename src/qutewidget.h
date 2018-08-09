@@ -77,6 +77,7 @@ public:
 	bool m_valueChanged;
 	bool m_value2Changed;
 
+    QString getQml();
 public slots:
 	void popUpMenu(QPoint pos);
 	void openProperties();

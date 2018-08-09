@@ -717,6 +717,12 @@ void DocumentPage::updateCsLadspaText()
 	m_view->setLadspaText(text);
 }
 
+QString DocumentPage::getQml()
+{
+    QString qml = m_widgetLayouts[0]->getQml();
+    return "Rectangle { width: 300; height: 200; color: \"green\"}";
+}
+
 void DocumentPage::updateCabbageText()
 {
 	if (widgetCount()==0) {

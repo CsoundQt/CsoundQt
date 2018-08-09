@@ -219,6 +219,7 @@ private slots:
 	void inToGet();
 	void updateCsladspaText();
 	void updateCabbageText();
+    void saveWidgetsToQml();
 	void setCurrentAudioFile(const QString fileName);
 	void openExternalEditor();
 	void openExternalPlayer();
@@ -394,7 +395,8 @@ private:
 	QAction *inToGetAct;
 	QAction *csladspaAct;
 	QAction *cabbageAct;
-	QAction *findAct;
+    QAction *qmlAct;
+    QAction *findAct;
 	QAction *findAgainAct;
 	QAction *configureAct;
 	QAction *setShortcutsAct;

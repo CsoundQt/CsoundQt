@@ -1577,7 +1577,12 @@ void CsoundQt::updateCabbageText()
 		if (answer==QMessageBox::Yes) {
 			documentPages[curPage]->setSco("f 0 3600\n;i 1 0 3600 ; don't forget to start your instrument if you are using it as an effect!");
 		}
-	}
+    }
+}
+
+void CsoundQt::saveWidgetsToQml()
+{
+    QString qml = documentPages[curPage]->getQml();
 }
 
 void CsoundQt::setCurrentAudioFile(const QString fileName)
@@ -3256,6 +3261,11 @@ void CsoundQt::createActions()
     cabbageAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(cabbageAct, SIGNAL(triggered()), this, SLOT(updateCabbageText()));
 
+    qmlAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Save widgets to QML file"), this);
+    qmlAct->setStatusTip(tr("Save widgets to QML file"));
+    qmlAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(qmlAct, SIGNAL(triggered()), this, SLOT(saveWidgetsToQml()));
+
     findAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("&Find and Replace"), this);
     findAct->setStatusTip(tr("Find and replace strings in file"));
     //   findAct->setIconText(tr("Find"));
@@ -4022,6 +4032,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(getToInAct);
     editMenu->addAction(csladspaAct);
     editMenu->addAction(cabbageAct);
+    editMenu->addAction(qmlAct);
     editMenu->addSeparator();
     editMenu->addAction(editAct);
     editMenu->addSeparator();

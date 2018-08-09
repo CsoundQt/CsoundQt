@@ -196,6 +196,7 @@ public:
 	QMutex stringValueMutex;
 	QReadWriteLock mouseLock;
 
+    QString getQml();
 public slots:
 	QString createNewLabel(int x = -1, int y = -1, QString channel = QString());
 	QString createNewDisplay(int x = -1, int y = -1, QString channel = QString());

@@ -176,7 +176,8 @@ public:
 	bool askForFile;
 	bool readOnly; // Used for manual files and internal examples
 	QVector<QString> widgetHistory;  // Undo/ Redo history
-	int widgetHistoryIndex; // Current point in history
+    int widgetHistoryIndex; // Current point in history
+    QString getQml();
 public slots:
 	virtual int play(CsoundOptions *options);
 	void stop();

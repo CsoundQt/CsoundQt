@@ -1347,6 +1347,26 @@ QString WidgetLayout::getCsladspaLines()
 	return text;
 }
 
+QString WidgetLayout::getQml()
+{
+    QString text = "";
+    int unsupported = 0;
+    widgetsMutex.lock();
+    foreach(QuteWidget *widget, m_widgets) {
+        QString line = widget->getQml();
+        if (line != "") {
+            text += line + "\n";
+        }
+        else {
+
+            unsupported++;
+        }
+    }
+    widgetsMutex.unlock();
+    qDebug() << "WidgetPanel:getQml() " << unsupported << " Unsupported widgets";
+    return text;
+}
+
 QString WidgetLayout::getCabbageWidgets()
 {
 	QString title = windowTitle();

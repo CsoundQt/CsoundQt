@@ -222,6 +222,12 @@ QString QuteWidget::getCsladspaLine()
 	return QString("");
 }
 
+QString QuteWidget::getQml()
+{
+    //Widgets return empty strings when not supported
+    return QString("");
+}
+
 QString QuteWidget::getUuid()
 {
 	if (property("QCS_uuid").isValid())
