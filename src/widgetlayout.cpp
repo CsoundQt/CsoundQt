@@ -1349,13 +1349,20 @@ QString WidgetLayout::getCsladspaLines()
 
 QString WidgetLayout::getQml()
 {
-    QString text = "";
+    QString qml = "import QtQuick 2.0\nimport QtQuick.Controls 2.0\nRectangle {\n";
+    //QColor bgcolor = this->palette().   background().color();
+    //int r = bgcolor.red(), g = bgcolor.green();
+    qml+="\tcolor: \"grey\"\n"; //TODO: find out how...
+    QSize size = getUsedSize();
+    qml += "\twidth: " + QString::number(size.width()) + "\n";
+    qml += "\theight: " + QString::number(size.height()) + "\n";
+
     int unsupported = 0;
     widgetsMutex.lock();
     foreach(QuteWidget *widget, m_widgets) {
         QString line = widget->getQml();
         if (line != "") {
-            text += line + "\n";
+            qml += line + "\n";
         }
         else {
 
@@ -1364,7 +1371,9 @@ QString WidgetLayout::getQml()
     }
     widgetsMutex.unlock();
     qDebug() << "WidgetPanel:getQml() " << unsupported << " Unsupported widgets";
-    return text;
+    qml += "}"; // end Rectangle
+    qDebug() << qml;
+    return qml;
 }
 
 QString WidgetLayout::getCabbageWidgets()

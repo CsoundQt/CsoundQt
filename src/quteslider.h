@@ -38,6 +38,7 @@ public:
 	virtual QString getCabbageLine();
 	virtual QString getCsladspaLine();
 	virtual QString getWidgetXmlText();
+    virtual QString getQml();
 
 	virtual QString getWidgetType();
 	//    void setInternalValue(double value);

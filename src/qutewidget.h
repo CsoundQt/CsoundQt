@@ -56,6 +56,7 @@ public:
 	virtual QString getWidgetLine() = 0;
 	virtual QString getCabbageLine();
 	virtual QString getCsladspaLine();
+    virtual QString getQml();
 	virtual QString getWidgetXmlText() = 0;
 	virtual QString getChannelName();
 	virtual QString getChannel2Name();
@@ -77,7 +78,7 @@ public:
 	bool m_valueChanged;
 	bool m_value2Changed;
 
-    QString getQml();
+
 public slots:
 	void popUpMenu(QPoint pos);
 	void openProperties();
@@ -129,7 +130,7 @@ private:
 	QPushButton *acceptButton;
 
 private slots:
-	void addChn_k(); // probably temporary -  later just forward a signal
+    void addChn_k();
 
 signals:
 	void newValue(QPair<QString,double> channelValue);

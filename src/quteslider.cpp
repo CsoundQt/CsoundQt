@@ -171,6 +171,26 @@ QString QuteSlider::getCabbageLine()
 	return line;
 }
 
+
+QString QuteSlider::getQml()
+{
+    QString qml = "\tSlider {\n";
+    qml += "\t\tx: " + QString::number(x()) + "\n";
+    qml += "\t\ty: " + QString::number(y()) + "\n";
+    qml += "\t\twidth: " + QString::number(width()) + "\n";
+    qml += "\t\theight: " + QString::number(height()) + "\n";
+    qml += "\t\tfrom: " + property("QCS_minimum").toString() + "\n";
+    qml += "\t\tto: " + property("QCS_maximum").toString() + "\n";
+    //step?
+    qml += "\t\tvalue: " + QString::number(getValue()) + "\n";
+
+    qml += "\t}";
+
+    return qml;
+
+
+}
+
 QString QuteSlider::getCsladspaLine()
 {
 #ifdef  USE_WIDGET_MUTEX
@@ -214,8 +234,9 @@ QString QuteSlider::getWidgetXmlText()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	return xmlText;
+    return xmlText;
 }
+
 
 QString QuteSlider::getWidgetType()
 {
