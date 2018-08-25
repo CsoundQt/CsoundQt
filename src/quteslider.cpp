@@ -175,14 +175,28 @@ QString QuteSlider::getCabbageLine()
 QString QuteSlider::getQml()
 {
     QString qml = "\tSlider {\n";
-    qml += "\t\tx: " + QString::number(x()) + "\n";
-    qml += "\t\ty: " + QString::number(y()) + "\n";
-    qml += "\t\twidth: " + QString::number(width()) + "\n";
-    qml += "\t\theight: " + QString::number(height()) + "\n";
+    qml += QString("\t\t\id: %1Slider\n").arg(m_channel);
+    qml += QString("\t\tx: %1\n").arg(x());
+    qml += QString("\t\ty: %1 \n").arg(y());
+
+
+
+    qml += QString("\t\twidth: %1\n").arg(width());
+
+    qml += QString("\t\theight: %1\n").arg(height());
+    // etc QString
     qml += "\t\tfrom: " + property("QCS_minimum").toString() + "\n";
     qml += "\t\tto: " + property("QCS_maximum").toString() + "\n";
     //step?
     qml += "\t\tvalue: " + QString::number(getValue()) + "\n";
+
+     if ( width() > height() ) {
+        qml += "\t\torientation: Qt.Horizontal\n";
+     } else {
+        qml += "\t\torientation: Qt.Vertical\n";
+     }
+
+     qml += QString("\t\t\onValueChanged: csound.setControlChannel(\"%1\", value)\n").arg(m_channel);
 
     qml += "\t}";
 

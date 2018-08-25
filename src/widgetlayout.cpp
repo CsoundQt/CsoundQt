@@ -1350,12 +1350,15 @@ QString WidgetLayout::getCsladspaLines()
 QString WidgetLayout::getQml()
 {
     QString qml = "import QtQuick 2.0\nimport QtQuick.Controls 2.0\nRectangle {\n";
-    //QColor bgcolor = this->palette().   background().color();
-    //int r = bgcolor.red(), g = bgcolor.green();
-    qml+="\tcolor: \"grey\"\n"; //TODO: find out how...
-    QSize size = getUsedSize();
-    qml += "\twidth: " + QString::number(size.width()) + "\n";
-    qml += "\theight: " + QString::number(size.height()) + "\n";
+    QColor bgcolor = this->palette().color(QWidget::backgroundRole());
+    qml+=QString("\tcolor: \"%1\"\n").arg(bgcolor.name());
+
+    // get width and hight currently from panel size, maybe not best method -  test how if works if some of the window is hidden
+    int w = this->geometry().width() + 20;
+    int h = this->geometry().height() +20;
+
+    qml += QString("\twidth: %1\n").arg(w);
+    qml += QString("\height: %1\n").arg(h);;
 
     int unsupported = 0;
     widgetsMutex.lock();
@@ -1372,7 +1375,7 @@ QString WidgetLayout::getQml()
     widgetsMutex.unlock();
     qDebug() << "WidgetPanel:getQml() " << unsupported << " Unsupported widgets";
     qml += "}"; // end Rectangle
-    qDebug() << qml;
+    //qDebug() << qml;
     return qml;
 }
 
@@ -2996,7 +2999,7 @@ QString WidgetLayout::createDummy(int x, int y, int width, int height, QString w
 
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
-	//  qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
+    qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
 	QWidget *w;
 	layoutMutex.lock();
 	w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget

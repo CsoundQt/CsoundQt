@@ -442,7 +442,6 @@ void CsoundQt::changePage(int index)
         }
     }
 #if defined(QCS_QTHTML)
-    // NB! this may have caused the crash on exit on windows!
     if (!documentPages.isEmpty()) {
 		updateHtmlView();
 	}
@@ -1583,6 +1582,25 @@ void CsoundQt::updateCabbageText()
 void CsoundQt::saveWidgetsToQml()
 {
     QString qml = documentPages[curPage]->getQml();
+
+    //QString dir = lastUsedDir;
+    QString name = documentPages[curPage]->getFileName();
+    name.replace(".csd", ".qml");
+    //dir += name.mid(name.lastIndexOf("/") + 1);
+    //TODO: get dir from name -  extract path
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Qml File"),
+                                                    name,
+                                                    tr("QML Files (*.qml *.QML);;All Files (*)",
+                                                       "Export Widgets to QML"));
+    if ( !fileName.isEmpty()) { // save to file
+        QFile file(fileName);
+
+        if(file.open(QFile::WriteOnly | QFile::Text)) {
+            QTextStream stream(&file);
+            stream << qml;
+            file.close();
+        }
+    }
 }
 
 void CsoundQt::setCurrentAudioFile(const QString fileName)
@@ -3261,8 +3279,8 @@ void CsoundQt::createActions()
     cabbageAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(cabbageAct, SIGNAL(triggered()), this, SLOT(updateCabbageText()));
 
-    qmlAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Save widgets to QML file"), this);
-    qmlAct->setStatusTip(tr("Save widgets to QML file"));
+    qmlAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Export widgets to QML"), this);
+    qmlAct->setStatusTip(tr("Export widgets in QML format"));
     qmlAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(qmlAct, SIGNAL(triggered()), this, SLOT(saveWidgetsToQml()));
 
@@ -3991,6 +4009,7 @@ void CsoundQt::createMenus()
     fileMenu->addAction(saveAct);
     fileMenu->addAction(saveAsAct);
     fileMenu->addAction(saveNoWidgetsAct);
+    fileMenu->addAction(qmlAct);
     //  fileMenu->addAction(createAppAct);
     fileMenu->addAction(reloadAct);
     fileMenu->addAction(closeTabAct);
@@ -4032,7 +4051,6 @@ void CsoundQt::createMenus()
     editMenu->addAction(getToInAct);
     editMenu->addAction(csladspaAct);
     editMenu->addAction(cabbageAct);
-    editMenu->addAction(qmlAct);
     editMenu->addSeparator();
     editMenu->addAction(editAct);
     editMenu->addSeparator();
