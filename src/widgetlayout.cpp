@@ -1349,7 +1349,7 @@ QString WidgetLayout::getCsladspaLines()
 
 QString WidgetLayout::getQml()
 {
-    QString qml = "import QtQuick 2.0\nimport QtQuick.Controls 2.0\nRectangle {\n";
+	QString qml = "import QtQuick 2.0\nimport QtQuick.Controls 2.0\n\nRectangle {\n";
     QColor bgcolor = this->palette().color(QWidget::backgroundRole());
     qml+=QString("\tcolor: \"%1\"\n").arg(bgcolor.name());
 
@@ -1358,7 +1358,10 @@ QString WidgetLayout::getQml()
     int h = this->geometry().height() +20;
 
     qml += QString("\twidth: %1\n").arg(w);
-    qml += QString("\height: %1\n").arg(h);;
+	qml += QString("\theight: %1\n").arg(h);
+
+	qml += "\tanchors.fill: parent\n";
+	qml += "\n";
 
     int unsupported = 0;
     widgetsMutex.lock();
@@ -2999,7 +3002,7 @@ QString WidgetLayout::createDummy(int x, int y, int width, int height, QString w
 
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
-    qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
+	//qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
 	QWidget *w;
 	layoutMutex.lock();
 	w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget

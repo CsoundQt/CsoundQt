@@ -39,6 +39,7 @@ public:
 	virtual QString getStringValue(); // This value represents the filename from a _Browse channel button
 	virtual QString getWidgetLine();
 	virtual QString getCabbageLine();
+	virtual QString getQml();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
 	//    void setType(QString text);

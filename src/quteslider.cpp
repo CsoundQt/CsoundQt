@@ -67,7 +67,7 @@ void QuteSlider::setValue(double value)
 }
 
 void QuteSlider::setMidiValue(int value)
-{ qDebug()<<Q_FUNC_INFO<<value;
+{	//qDebug()<<Q_FUNC_INFO<<value;
 	double max = property("QCS_maximum").toDouble();
 	double min = property("QCS_minimum").toDouble();
 	double newval = min + ((value / 127.0)* (max - min));
@@ -174,35 +174,32 @@ QString QuteSlider::getCabbageLine()
 
 QString QuteSlider::getQml()
 {
-    QString qml = "\tSlider {\n";
-    qml += QString("\t\t\id: %1Slider\n").arg(m_channel);
-    qml += QString("\t\tx: %1\n").arg(x());
-    qml += QString("\t\ty: %1 \n").arg(y());
+	QString qml = QString();
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.lockForWrite();
+#endif
+	qml = "\n\tSlider {\n";
+	qml += QString("\t\t\id: %1Slider\n").arg(m_channel);
+	qml += QString("\t\tx: %1\n").arg(x());
+	qml += QString("\t\ty: %1 \n").arg(y());
+	qml += QString("\t\twidth: %1\n").arg(width());
+	qml += QString("\t\theight: %1\n").arg(height());
+	qml += QString("\t\tfrom: %1\n").arg(property("QCS_minimum").toString());
+	qml += QString("\t\tto: %1\n").arg(property("QCS_maximum").toString());
+	qml += QString("\t\tvalue: %1\n").arg(getValue());
+	if ( width() > height() ) {
+		qml += "\t\torientation: Qt.Horizontal\n";
+	} else {
+		qml += "\t\torientation: Qt.Vertical\n";
+	}
+	qml += QString("\t\tonPositionChanged: csound.setControlChannel(\"%1\", valueAt(position))\n").arg(m_channel); // NB! this is for QtQuick.Controls 2! since onValueChanged works onlu on drag end
 
+	qml += "\t}";
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.unlock();
+#endif
 
-
-    qml += QString("\t\twidth: %1\n").arg(width());
-
-    qml += QString("\t\theight: %1\n").arg(height());
-    // etc QString
-    qml += "\t\tfrom: " + property("QCS_minimum").toString() + "\n";
-    qml += "\t\tto: " + property("QCS_maximum").toString() + "\n";
-    //step?
-    qml += "\t\tvalue: " + QString::number(getValue()) + "\n";
-
-     if ( width() > height() ) {
-        qml += "\t\torientation: Qt.Horizontal\n";
-     } else {
-        qml += "\t\torientation: Qt.Vertical\n";
-     }
-
-     qml += QString("\t\t\onValueChanged: csound.setControlChannel(\"%1\", value)\n").arg(m_channel);
-
-    qml += "\t}";
-
-    return qml;
-
-
+	return qml;
 }
 
 QString QuteSlider::getCsladspaLine()

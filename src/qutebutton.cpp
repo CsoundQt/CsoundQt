@@ -171,6 +171,83 @@ QString QuteButton::getCabbageLine()
 	return line;
 }
 
+QString QuteButton::getQml()
+{
+	QString qml = QString();
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.lockForWrite();
+#endif
+	qml = "\tButton { \n";
+	qml += QString("\t\tid: %1Button\n").arg(m_channel);
+	qml += QString("\t\tx: %1\n").arg(x());
+	qml += QString("\t\ty: %1 \n").arg(y());
+	qml += QString("\t\twidth: %1\n").arg(width());
+	qml += QString("\t\theight: %1\n").arg(height());
+	qml += QString("\t\ttext: \"%1\"\n").arg( property("QCS_text").toString());
+	bool checkable = property("QCS_latch").toBool();
+	if (checkable) {
+		qml += "\t\tcheckable: true\n";
+	}
+
+	qml += QString("\t\tproperty double pressedValue: %1\n").arg(property("QCS_pressedValue").toDouble()); // to be used for pressing the button.
+
+	QString type = property("QCS_type").toString();
+	qml += QString("\t\tproperty bool isEnventButton: %1\n").arg( (type=="value" ? "false" : "true" )  );
+	if (type == "value") {
+		qml += QString(R"(
+		onPressedChanged: {
+			if (pressed) {
+				csound.setControlChannel("%1", pressedValue );
+			} else {
+				csound.setControlChannel("%1", 0 );
+			}
+		}
+				 )").arg(m_channel);
+	}
+
+
+	if (type == "event" || type == "pictevent") {
+		QString eventLine = property("QCS_eventLine").toString();
+		QString scoreLine = eventLine;
+		if (property("QCS_latch").toBool() && eventLine.size() > 0) {
+			QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+			if (lineElements.size() > 0 && lineElements[0] == "i") {
+				lineElements.removeAt(0); // Remove first element if it is "i"
+			}
+			else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
+				lineElements[0] = lineElements[0].mid(1); // Remove "i" character
+			}
+
+			// this code is necessary to let instruments with line like "i 1 0 -1" to be switched on and off by latched button
+			if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) { // If duration is negative, use button to turn note on and off
+				if (m_currentValue == 0) { // Button has turned off. Turn off instrument
+					if ( lineElements[0].startsWith("\"") || lineElements[0].startsWith("\'")  ) {
+						//qDebug()<<"Stopping named instrument: " << lineElements[0];
+						lineElements[0].insert(1,"-");
+					} else {
+						lineElements[0].prepend("-");
+					}
+					lineElements.prepend("i");
+
+					scoreLine = lineElements.join(" ");
+				}
+			}
+			// this is more complex. Make pressedChanged together with controlling for value. if isEvent on -  onScoreLine, - off - offScoreline
+		} else { // if not latched, use onClicked event
+			qml += QString("\t\tonClicked: csound.readScore(\"%1\") \n").arg(scoreLine); // TODO: test, maybe use {{ }} as string literals to allow quotes in scoreLine
+		}
+	}
+
+
+	qml += "\t}\n";
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.unlock();
+#endif
+
+	return qml;
+
+}
+
 QString QuteButton::getWidgetXmlText()
 {
 	// Buttons are not implemented in blue
