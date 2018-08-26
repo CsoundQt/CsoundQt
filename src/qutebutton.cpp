@@ -196,7 +196,7 @@ QString QuteButton::getQml()
 	if (type == "value") {
 		qml += QString(R"(
 		onPressedChanged: {
-			if (pressed) {
+            if (pressed) {
 				csound.setControlChannel("%1", pressedValue );
 			} else {
 				csound.setControlChannel("%1", 0 );
@@ -208,7 +208,7 @@ QString QuteButton::getQml()
 
 	if (type == "event" || type == "pictevent") {
 		QString eventLine = property("QCS_eventLine").toString();
-		QString scoreLine = eventLine;
+        QString turnOffLine = QString();
 		if (property("QCS_latch").toBool() && eventLine.size() > 0) {
 			QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
 			if (lineElements.size() > 0 && lineElements[0] == "i") {
@@ -220,21 +220,21 @@ QString QuteButton::getQml()
 
 			// this code is necessary to let instruments with line like "i 1 0 -1" to be switched on and off by latched button
 			if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) { // If duration is negative, use button to turn note on and off
-				if (m_currentValue == 0) { // Button has turned off. Turn off instrument
-					if ( lineElements[0].startsWith("\"") || lineElements[0].startsWith("\'")  ) {
-						//qDebug()<<"Stopping named instrument: " << lineElements[0];
-						lineElements[0].insert(1,"-");
-					} else {
-						lineElements[0].prepend("-");
-					}
-					lineElements.prepend("i");
+                if ( lineElements[0].startsWith("\"") || lineElements[0].startsWith("\'")  ) {
+                    //qDebug()<<"Stopping named instrument: " << lineElements[0];
+                    lineElements[0].insert(1,"-");
+                } else {
+                    lineElements[0].prepend("-");
+                }
+                lineElements.prepend("i");
 
-					scoreLine = lineElements.join(" ");
-				}
+                turnOffLine = lineElements.join(" ");
+
+                qml +=  QString("onCheckedChanged: (checked) ? csound.readScore(\"%1\") : csound.readScore(\"%2\")")
+                        .arg(eventLine, turnOffLine); // if unchecked, turnOffLine should consist line to turn off the instrument
 			}
-			// this is more complex. Make pressedChanged together with controlling for value. if isEvent on -  onScoreLine, - off - offScoreline
 		} else { // if not latched, use onClicked event
-			qml += QString("\t\tonClicked: csound.readScore(\"%1\") \n").arg(scoreLine); // TODO: test, maybe use {{ }} as string literals to allow quotes in scoreLine
+            qml += QString("\t\tonClicked: csound.readScore(\"%1\") \n").arg(eventLine); // TODO: test, maybe use {{ }} as string literals to allow quotes in scoreLine
 		}
 	}
 
