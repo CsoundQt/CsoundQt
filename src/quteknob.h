@@ -36,6 +36,7 @@ public:
 	virtual QString getWidgetLine();
 	virtual QString getCsladspaLine();
 	virtual QString getCabbageLine();
+    virtual QString getQml();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
 	//    virtual void setResolution(double resolution);

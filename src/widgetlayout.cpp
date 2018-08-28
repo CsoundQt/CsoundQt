@@ -1349,7 +1349,8 @@ QString WidgetLayout::getCsladspaLines()
 
 QString WidgetLayout::getQml()
 {
-	QString qml = "import QtQuick 2.0\nimport QtQuick.Controls 2.0\n\nRectangle {\n";
+    QString qml = "import QtQuick 2.0\nimport QtQuick.Controls 2.0 // NB! Requires Qt 5.7 or later. Rewrite with QtQuick.Controls 1.X if using older Qt versions \n\n";
+    qml += "Rectangle {\n";
     QColor bgcolor = this->palette().color(QWidget::backgroundRole());
     qml+=QString("\tcolor: \"%1\"\n").arg(bgcolor.name());
 

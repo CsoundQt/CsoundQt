@@ -173,7 +173,33 @@ QString QuteKnob::getCabbageLine()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	return line;
+    return line;
+}
+
+QString QuteKnob::getQml()
+{
+    QString qml = QString();
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.lockForWrite();
+#endif
+    qml = "\n\tDial {\n";
+    qml += QString("\t\t\id: %1Dial\n").arg(m_channel);
+    qml += QString("\t\tx: %1\n").arg(x());
+    qml += QString("\t\ty: %1 \n").arg(y());
+    qml += QString("\t\twidth: %1\n").arg(width());
+    qml += QString("\t\theight: %1\n").arg(height());
+    qml += QString("\t\tfrom: %1\n").arg(property("QCS_minimum").toString());
+    qml += QString("\t\tto: %1\n").arg(property("QCS_maximum").toString());
+    qml += QString("\t\tvalue: %1\n").arg(getValue());
+    qml += QString("\t\tonPositionChanged: csound.setControlChannel(\"%1\", from + position*(to-from))\n").arg(m_channel); // NB! this is for QtQuick.Controls 2! since onValueChanged works onlu on drag end
+
+    qml += "\t}";
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.unlock();
+#endif
+
+    return qml;
+
 }
 
 QString QuteKnob::getWidgetXmlText()
