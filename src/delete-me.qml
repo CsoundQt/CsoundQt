@@ -43,4 +43,19 @@ Rectangle {
         text: qsTr("0")
     }
 
+    SpinBox {
+        id: spinBox
+        x: 41
+        y: 94
+        width: 100 + up.indicator.width + down.indicator.width
+        to: 100
+        value: 1
+        from: 1
+        stepSize: 1
+        editable: true
+        onValueChanged: console.log(value)
+    }
+
+
+
 }

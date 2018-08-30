@@ -145,7 +145,36 @@ QString QuteSpinBox::getCabbageLine()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	return line;
+    return line;
+}
+
+QString QuteSpinBox::getQml()
+{
+    QString qml = QString();
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.lockForWrite();
+#endif
+    qml = "\n\tSpinBox {\n"; // NB! Does not accept floating point numbers...
+    // see https://doc.qt.io/qt-5.9/qml-qtquick-controls2-spinbox.html accepting floating point numbers
+    qml += QString("\t\tid: %1SpinBox\n").arg(m_channel);
+    qml += QString("\t\tx: %1\n").arg(x());
+    qml += QString("\t\ty: %1 \n").arg(y());
+    qml += QString("\t\twidth: %1 + up.indicator.width + down.indicator.width\n").arg(width()); // add somehing width for +/- values?
+    qml += QString("\t\theight: %1\n").arg(height());
+    qml += QString("\t\tfrom: %1\n").arg(property("QCS_minimum").toString());
+    qml += QString("\t\tto: %1\n").arg(property("QCS_maximum").toString());
+    qml += QString("\t\tstepSize: %1\n").arg(property("QCS_resolution").toString());
+    qml += QString("\t\tvalue: %1\n").arg(getValue());
+    qml += "\t\teditable: true\n";
+    qml += QString("\t\tonValueChanged: csound.setControlChannel(\"%1\", value)\n").arg(m_channel);
+    //color, font and other outlook properties ignored by now
+    qml += "\t}";
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.unlock();
+#endif
+
+    return qml;
+
 }
 
 QString QuteSpinBox::getWidgetXmlText()
