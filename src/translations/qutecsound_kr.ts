@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ko_KR">
+<TS version="2.0" language="ko_KR">
 <context>
     <name>About</name>
     <message>
         <location filename="../about.ui" line="96"/>
         <source>About CsoundQt</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt에 대하여</translation>
     </message>
     <message>
         <location filename="../about.ui" line="304"/>
         <source>CsoundQt</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt</translation>
     </message>
 </context>
 <context>
@@ -19,17 +19,17 @@
     <message>
         <location filename="../additionalfilespage.ui" line="17"/>
         <source>Additional files</source>
-        <translation type="unfinished"></translation>
+        <translation>추가된 파일들</translation>
     </message>
     <message>
         <location filename="../additionalfilespage.ui" line="29"/>
         <source>Add file...</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 추가하기...</translation>
     </message>
     <message>
         <location filename="../additionalfilespage.ui" line="36"/>
         <source>Remove selected</source>
-        <translation type="unfinished"></translation>
+        <translation>선택 삭제</translation>
     </message>
 </context>
 <context>
@@ -37,32 +37,32 @@
     <message>
         <location filename="../appdetailspage.ui" line="33"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>속성</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="39"/>
         <source>Platform</source>
-        <translation type="unfinished"></translation>
+        <translation>플랫폼</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="46"/>
         <source>Local Platform</source>
-        <translation type="unfinished"></translation>
+        <translation>로컬 플랫폼</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="51"/>
         <source>All Platforms (Requires SDK)</source>
-        <translation type="unfinished"></translation>
+        <translation>전체 플랫폼 (SDK 필요)</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="77"/>
         <source>App Name</source>
-        <translation type="unfinished"></translation>
+        <translation>앱 이름</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="87"/>
         <source>Target Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>타겟 디렉토리</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="103"/>
@@ -70,132 +70,132 @@
         <location filename="../appdetailspage.ui" line="329"/>
         <location filename="../appdetailspage.ui" line="387"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="114"/>
         <source>Run mode</source>
-        <translation type="unfinished"></translation>
+        <translation>실행 모드</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="122"/>
         <source>Realtime only</source>
-        <translation type="unfinished"></translation>
+        <translation>리얼타임</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="127"/>
         <source>Render only</source>
-        <translation type="unfinished"></translation>
+        <translation>렌더 (파일로 저장)</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="132"/>
         <source>Render or RT</source>
-        <translation type="unfinished"></translation>
+        <translation>렌더 및 리얼타임</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="153"/>
         <source>Save state</source>
-        <translation type="unfinished"></translation>
+        <translation>상태 저장</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="163"/>
         <source>Autorun Csound</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound 자동실행</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="170"/>
         <source>Show Run in Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>메뉴에 실행 보이기</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="177"/>
         <source>Use new parser</source>
-        <translation type="unfinished"></translation>
+        <translation>새 파서 (parser) 사용</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="213"/>
         <source>Additional</source>
-        <translation type="unfinished"></translation>
+        <translation>추가</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="219"/>
         <source>Author</source>
-        <translation type="unfinished"></translation>
+        <translation>저자</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="229"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>버전</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="239"/>
         <source>e-mail</source>
-        <translation type="unfinished"></translation>
+        <translation>이메일</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="249"/>
         <source>Website</source>
-        <translation type="unfinished"></translation>
+        <translation>웹사이트</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="259"/>
         <source>Instructions (html allowed)</source>
-        <translation type="unfinished"></translation>
+        <translation>설명 (html 사용가능)</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="270"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>응용</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="278"/>
         <source>Opcode Dir</source>
-        <translation type="unfinished"></translation>
+        <translation>옵코드 디렉토리</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="309"/>
         <source>Csound Lib Dir</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound 라이브러리 디렉토리</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="351"/>
         <source>Leave these settings unchanged if you don&apos;t need a special configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>특별한 설정이 필요하지 않을 경우 변경하지 마십시오.</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="361"/>
         <source>Use custom Paths</source>
-        <translation type="unfinished"></translation>
+        <translation>개인 경로 사용</translation>
     </message>
     <message>
         <location filename="../appdetailspage.ui" line="373"/>
         <source>Qt Libs dir</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt 라이브러리 디렉토리</translation>
     </message>
     <message>
         <location filename="../appdetailspage.cpp" line="97"/>
         <source>Select Target Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Target 폴더 선택</translation>
     </message>
     <message>
         <location filename="../appdetailspage.cpp" line="106"/>
         <source>Select Csound Library Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound Library 퐅더 선택</translation>
     </message>
     <message>
         <location filename="../appdetailspage.cpp" line="115"/>
         <source>Select Csound Opcodes Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound Opcodes 폴더 선택</translation>
     </message>
     <message>
         <location filename="../appdetailspage.cpp" line="124"/>
         <source>Select Qt Libraries Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt Libraries 폴더 선택</translation>
     </message>
     <message>
         <location filename="../appdetailspage.cpp" line="133"/>
         <source>Select CsoundQt SDK Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt SDK 폴더 선택</translation>
     </message>
 </context>
 <context>
@@ -203,58 +203,58 @@
     <message>
         <location filename="../appwizard.cpp" line="67"/>
         <source>Standalone Application Generator</source>
-        <translation type="unfinished"></translation>
+        <translation>스탠드얼론 앱 생성기</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="107"/>
         <location filename="../appwizard.cpp" line="366"/>
         <location filename="../appwizard.cpp" line="488"/>
         <source>CsoundQt App Creator</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt 앱 개발자</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="108"/>
         <source>The destination directory does not exist!
 Aborting.</source>
-        <translation type="unfinished"></translation>
+        <translation>디렉토리가 존제하지 않아 중단됩니다.</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="137"/>
         <source>Can&apos;t build</source>
-        <translation type="unfinished"></translation>
+        <translation>만들 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="138"/>
         <source>Can&apos;t build for local platform for single presicion. Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>로컬플랫폼에 만들어지지 않아 중단되었습니다.</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="142"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>완료</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="142"/>
         <source>App Creation finished!</source>
-        <translation type="unfinished"></translation>
+        <translation>앱 생성이 완료되었습니다!</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="287"/>
         <location filename="../appwizard.cpp" line="382"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>에러</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="287"/>
         <location filename="../appwizard.cpp" line="382"/>
         <source>Could not delete old application directory! Aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>이전 앱 디렉토리를 삭세할 수 없어 중단되었습니다.</translation>
     </message>
     <message>
         <location filename="../appwizard.cpp" line="367"/>
         <location filename="../appwizard.cpp" line="489"/>
         <source>Error creating app directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>앱 디렉토리 생성 불가</translation>
     </message>
 </context>
 <context>
@@ -262,12 +262,12 @@ Aborting.</source>
     <message>
         <location filename="../basedocument.cpp" line="247"/>
         <source>Recording not possible</source>
-        <translation type="unfinished"></translation>
+        <translation>녹음이 불가합니다.</translation>
     </message>
     <message>
         <location filename="../basedocument.cpp" line="247"/>
         <source>This version of CsoundQt was not built with recording support.</source>
-        <translation type="unfinished"></translation>
+        <translation>이 CsoundQt 버전은 녹음을 지원하지 않습니다.</translation>
     </message>
 </context>
 <context>
@@ -275,79 +275,79 @@ Aborting.</source>
     <message>
         <location filename="../configdialog.ui" line="15"/>
         <source>CsoundQt Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt 설정</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="64"/>
         <source>Run</source>
-        <translation type="unfinished"></translation>
+        <translation>실행</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="72"/>
         <source>Buffer Size (-b)</source>
-        <translation type="unfinished"></translation>
+        <translation>Buffer Size (-b)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="82"/>
         <source>HW Buffer Size (-B)</source>
-        <translation type="unfinished"></translation>
+        <translation>HW Buffer Size (-B)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="92"/>
         <source>Dither</source>
-        <translation type="unfinished"></translation>
+        <translation>디더링</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="99"/>
         <source>Use new parser</source>
-        <translation type="unfinished"></translation>
+        <translation>새 파서 (parser) 사용</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="106"/>
         <source>Number of threads</source>
-        <translation type="unfinished"></translation>
+        <translation>스레드 개수</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="116"/>
         <source>Use multicore</source>
-        <translation type="unfinished"></translation>
+        <translation>멀티코어 사용하기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="166"/>
         <source>Additional command line flags</source>
-        <translation type="unfinished"></translation>
+        <translation>코멘트 라인 플래그 추가</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="182"/>
         <source>Realtime Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>리얼타임 오디오</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="188"/>
         <location filename="../configdialog.ui" line="452"/>
         <source>Use CsoundQt options</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt 옵션 사용하기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="198"/>
         <location filename="../configdialog.ui" line="462"/>
         <source>Ignore CsOptions</source>
-        <translation type="unfinished"></translation>
+        <translation>Cs 옵션 무시하기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="207"/>
         <source>Jack client name (use * for current filename)</source>
-        <translation type="unfinished"></translation>
+        <translation>Jack 클라이언트 이름 (* 현재 파일 이름 사용)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="221"/>
         <source>RT Audio Module</source>
-        <translation type="unfinished"></translation>
+        <translation>RT 오디오 모듈</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="231"/>
         <source>Input device (-i)</source>
-        <translation type="unfinished"></translation>
+        <translation>입력 장치 (-i)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="244"/>
@@ -379,714 +379,715 @@ Aborting.</source>
         <location filename="../configdialog.ui" line="1952"/>
         <location filename="../configdialog.ui" line="1966"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="251"/>
         <source>Output device (-o)</source>
-        <translation type="unfinished"></translation>
+        <translation>출력 장치 (-o)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="270"/>
         <source>Realtime MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation>리얼타임 MIDI</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="295"/>
         <source>Input device (-M)</source>
-        <translation type="unfinished"></translation>
+        <translation>입력 장치 (-M)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="302"/>
         <source>Output device (-Q)</source>
-        <translation type="unfinished"></translation>
+        <translation>출력 장치 (-Q)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="319"/>
         <source>Csound MIDI Module</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound MIDI 모듈</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="326"/>
         <source>Use Csound MIDI modules (unstable)</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound MIDI 모듈 사용하기 (불안정)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="341"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set Internal MIDI input interface. Controls widgets and MIDI input for Csound if Csound MIDI module usage is disabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;내장 된 MIDI 입력 인터페이스를 설정하십시오. Csound MIDI 모듈사용이 불가되어있으면, Csound 를 위한 제어창, 위젯, MIDI 입력을 사용할 수 없습니다.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="344"/>
         <source>MIDI input interface</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 입력 인터페이스</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="354"/>
         <source>MIDI Output Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 출력 인터페이스</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="384"/>
         <source>File (offline render)</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 (오프라인 렌더)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="395"/>
         <source>Ask for filename every time</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 이름 물어보기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="405"/>
         <source>Play file when finished</source>
-        <translation type="unfinished"></translation>
+        <translation>완료 후 즉시 파일 재생</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="416"/>
         <source>Input Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 이름 입력</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="433"/>
         <source>Output Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 이름 출력</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="471"/>
         <source>File type</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 타입</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="481"/>
         <source>Sample format</source>
-        <translation type="unfinished"></translation>
+        <translation>샘플 형식</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="497"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>일반</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="503"/>
         <source>Run Utilities using:</source>
-        <translation type="unfinished"></translation>
+        <translation>유틸리티 실행:</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="511"/>
         <source>Csound API</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound API</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="518"/>
         <source>External shell</source>
-        <translation type="unfinished"></translation>
+        <translation>외부 쉘 (shell)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="533"/>
         <source>Interface language (Requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>인터페이스 언어 (재시작이 필요합니다)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="545"/>
         <source>Performance tweaks</source>
-        <translation type="unfinished"></translation>
+        <translation>퍼포먼스 트윅스</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="553"/>
         <source>No messages to consoles</source>
-        <translation type="unfinished"></translation>
+        <translation>콘솔에 보낼 메시지가 없습니다.</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="560"/>
         <source>Disable recording and scopes</source>
-        <translation type="unfinished"></translation>
+        <translation>녹음과 스코프를 사용할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="567"/>
         <source>Disable realtime score events</source>
-        <translation type="unfinished"></translation>
+        <translation>리얼타임 스코어 이벤트를 사용할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="574"/>
         <source>Disable python callback</source>
-        <translation type="unfinished"></translation>
+        <translation>파이썬 콜백을 사용할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="586"/>
         <source>Console</source>
-        <translation type="unfinished"></translation>
+        <translation>콘솔</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="594"/>
         <location filename="../configdialog.ui" line="1294"/>
         <source>Font</source>
-        <translation type="unfinished"></translation>
+        <translation>글꼴</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="604"/>
         <location filename="../configdialog.ui" line="1304"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>크기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="615"/>
         <location filename="../configdialog.ui" line="1315"/>
         <source>6</source>
-        <translation type="unfinished"></translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="620"/>
         <location filename="../configdialog.ui" line="1320"/>
         <source>8</source>
-        <translation type="unfinished"></translation>
+        <translation>8</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="625"/>
         <location filename="../configdialog.ui" line="1325"/>
         <source>9</source>
-        <translation type="unfinished"></translation>
+        <translation>9</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="630"/>
         <location filename="../configdialog.ui" line="1330"/>
         <source>10</source>
-        <translation type="unfinished"></translation>
+        <translation>10</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="635"/>
         <location filename="../configdialog.ui" line="1335"/>
         <source>11</source>
-        <translation type="unfinished"></translation>
+        <translation>11</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="640"/>
         <location filename="../configdialog.ui" line="1340"/>
         <source>12</source>
-        <translation type="unfinished"></translation>
+        <translation>12</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="645"/>
         <location filename="../configdialog.ui" line="1345"/>
         <source>14</source>
-        <translation type="unfinished"></translation>
+        <translation>14</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="650"/>
         <location filename="../configdialog.ui" line="1350"/>
         <source>18</source>
-        <translation type="unfinished"></translation>
+        <translation>18</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="655"/>
         <location filename="../configdialog.ui" line="1355"/>
         <source>20</source>
-        <translation type="unfinished"></translation>
+        <translation>20</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="660"/>
         <location filename="../configdialog.ui" line="1360"/>
         <source>24</source>
-        <translation type="unfinished"></translation>
+        <translation>24</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="665"/>
         <location filename="../configdialog.ui" line="1365"/>
         <source>30</source>
-        <translation type="unfinished"></translation>
+        <translation>30</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="670"/>
         <location filename="../configdialog.ui" line="1370"/>
         <source>36</source>
-        <translation type="unfinished"></translation>
+        <translation>36</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="675"/>
         <location filename="../configdialog.ui" line="1375"/>
         <source>48</source>
-        <translation type="unfinished"></translation>
+        <translation>48</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="687"/>
         <source>Font Color</source>
-        <translation type="unfinished"></translation>
+        <translation>글자색</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="697"/>
         <location filename="../configdialog.ui" line="1407"/>
         <source>Background Color</source>
-        <translation type="unfinished"></translation>
+        <translation>배경색</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="735"/>
         <source>Console Message buffer size</source>
-        <translation type="unfinished"></translation>
+        <translation>Console Message buffer size</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="749"/>
         <source>256</source>
-        <translation type="unfinished"></translation>
+        <translation>256</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="754"/>
         <source>1024</source>
-        <translation type="unfinished"></translation>
+        <translation>j1024</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="759"/>
         <source>No limit</source>
-        <translation type="unfinished"></translation>
+        <translation>제한 없음</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="774"/>
         <source>Allow key repeats for sensekey</source>
-        <translation type="unfinished"></translation>
+        <translation>sensekey 에 키 반복 허가</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="781"/>
         <source>Debug mode for Live Event Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>라이브 이벤트 시트를 위한 디버그 모드</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="791"/>
         <source>Allow simultaneous play (May have problems with portmidi,coreaudio, and alsa audio) </source>
-        <translation type="unfinished"></translation>
+        <translation>동시다발적 재생 허가 (portmidi, coreaudio, alsa audio 에 문제가 생길 수 있습니다.)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="815"/>
         <source>Theme (requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Theme (재시작이 필요합니다)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="826"/>
         <source>boring</source>
-        <translation type="unfinished"></translation>
+        <translation>boring</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="831"/>
         <source>fun</source>
-        <translation type="unfinished"></translation>
+        <translation>fun</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="841"/>
         <source>Record button</source>
-        <translation type="unfinished"></translation>
+        <translation>녹음 버튼</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="849"/>
         <source>Record sample format</source>
-        <translation type="unfinished"></translation>
+        <translation>녹음 샘플 형식</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="857"/>
         <source>16 Bit Int</source>
-        <translation type="unfinished"></translation>
+        <translation>f16 Bit Int</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="862"/>
         <source>24 Bit Int</source>
-        <translation type="unfinished"></translation>
+        <translation>24 Bit Int</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="867"/>
         <source>32 bit float</source>
-        <translation type="unfinished"></translation>
+        <translation>32 bit float</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="881"/>
         <location filename="../configdialog.ui" line="887"/>
         <source>Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="895"/>
         <source>Enable Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 사용 가능</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="905"/>
         <source>Save widgets in csd file</source>
-        <translation type="unfinished"></translation>
+        <translation>csd파일에 위젯 저장하기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="912"/>
         <source>Make the widget panel visible when a csd is played</source>
-        <translation type="unfinished"></translation>
+        <translation>csd 가 재생 중일 때 위젯 패널 보이기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="915"/>
         <source>Show Widgets on Play</source>
-        <translation type="unfinished"></translation>
+        <translation>실행시 위젯 보기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="922"/>
         <source>Show Tooltips for widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 툴팁 보이기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="944"/>
         <location filename="../configdialog.ui" line="995"/>
         <source>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>API 사용 시 FLTK 위젯이 충동할 수 있습니다. 사용을 취소하시고 터미널에서 Csound 를 실행하십시오.</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="947"/>
         <source>Enable FLTK</source>
-        <translation type="unfinished"></translation>
+        <translation>FLTK 사용불가</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="998"/>
         <source>Run FLTK csds in Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>터미널에서 FLTK csd 실행하기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1005"/>
         <source>Store old widget format section in csd file, to allow older versions of CsoundQt to load most of the widget characteristics from the file</source>
-        <translation type="unfinished"></translation>
+        <translation>오래된 CsoundQt 버전csd 파일에서의 이전 위젯 형식 저장.(위젯에서 가져오기 위해 예전 CsoundQt버전을 허가해야함)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1008"/>
         <source>Store Old Widget Format</source>
-        <translation type="unfinished"></translation>
+        <translation>이전 위젯 형식 저장</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1015"/>
         <source>Automatically open properties dialog when a new widget is created</source>
-        <translation type="unfinished"></translation>
+        <translation>새로운 위젯 생성시 자동으로 속성창 열기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1018"/>
         <source>Open Properties when creating widget</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 생성시 속성 열기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1025"/>
         <source>Widgets are an independent window (requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 독립된 창에서 보이기 (재시작이 필요합니다)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1034"/>
         <source>Font scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>글꼴 스케일링</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1047"/>
         <source>Font offset</source>
-        <translation type="unfinished"></translation>
+        <translation>글꼴 오프셋</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1081"/>
         <location filename="../configdialog.ui" line="1184"/>
         <source>Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>편집기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1087"/>
         <source>Behavior</source>
-        <translation type="unfinished"></translation>
+        <translation>Behavior</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1096"/>
         <source>Autoplay files when launched from file</source>
-        <translation type="unfinished"></translation>
+        <translation>실행 중에 파일 자동재생</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1106"/>
         <source>Save changes automatically on run</source>
-        <translation type="unfinished"></translation>
+        <translation>실행 중에 자동으로 변경된 것을 저장하기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1113"/>
         <source>Remember open files from previous session</source>
-        <translation type="unfinished"></translation>
+        <translation>이전 세션에서 연 파일 기억하기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1120"/>
         <source>Show text for toolbar icons</source>
-        <translation type="unfinished"></translation>
+        <translation>툴바 아이콘에 텍스트 보이기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1127"/>
         <source>Show Toolbars</source>
-        <translation type="unfinished"></translation>
+        <translation>툴바 보이기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1134"/>
         <source>Automatically Join orc/sco files</source>
-        <translation type="unfinished"></translation>
+        <translation>자동적으로 orc/sco 파일 결합</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1143"/>
         <source>Favorites/Scripts menus maximum depth</source>
-        <translation type="unfinished"></translation>
+        <translation>Favorites/Scripts menus maximum depth</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1221"/>
         <source>Tab Width</source>
-        <translation type="unfinished"></translation>
+        <translation>탭 넓이</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1228"/>
         <source>Tab key always indents</source>
-        <translation type="unfinished"></translation>
+        <translation>탭 키를 들여쓰기로 이용하기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1242"/>
         <source>Color Variables</source>
-        <translation type="unfinished"></translation>
+        <translation>색깔</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1249"/>
         <source>Wrap Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>라인 끝내기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1256"/>
         <source>Autocomplete menu while typing</source>
-        <translation type="unfinished"></translation>
+        <translation>타이핑 중에 자동완료 메뉴</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1263"/>
         <source>Enable Parameter mode after autocomplete</source>
-        <translation type="unfinished"></translation>
+        <translation>자동완료 후 파라미터 모드 사용 가능</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1270"/>
         <source>Show line numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>줄 수 보이기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1383"/>
         <source>Line Ending Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>라인 엔딩 모드</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1394"/>
         <source>Unix (LF)</source>
-        <translation type="unfinished"></translation>
+        <translation>kUnix (LF)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1399"/>
         <source>Windows (CR+LF)</source>
-        <translation type="unfinished"></translation>
+        <translation>Windows (CR+LF)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1440"/>
         <location filename="../configdialog.ui" line="1446"/>
         <source>Environment</source>
-        <translation type="unfinished"></translation>
+        <translation>환경</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1467"/>
         <source>RAWWAVE_PATH</source>
-        <translation type="unfinished"></translation>
+        <translation>RAWWAVE_PATH</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1494"/>
         <location filename="../configdialog.ui" line="1665"/>
         <source>Select the location of the csound opcode plugin  directory (usually set by the installer)</source>
-        <translation type="unfinished"></translation>
+        <translation>csound 옵코드 디렉토리의 위치를 선택 (인스톨러 설정)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1497"/>
         <source>OPCODEDIR64</source>
-        <translation type="unfinished"></translation>
+        <translation>OPCODEDIR64</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1513"/>
         <source>OPCODE6DIR64</source>
-        <translation type="unfinished"></translation>
+        <translation>OPCODE6DIR64</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1530"/>
         <source>Csound Executable</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound 실행가능</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1537"/>
         <source>Python Executable</source>
-        <translation type="unfinished"></translation>
+        <translation>파이썬 실행가능</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1544"/>
         <source>Python Script Dir </source>
-        <translation type="unfinished"></translation>
+        <translation>파이썬 스크립트 디렉토리</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1558"/>
         <source>Log file</source>
-        <translation type="unfinished"></translation>
+        <translation>로그 파일</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1600"/>
         <source>Selects the location of the html documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>html 문서의 위치 선택</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1603"/>
         <source>Html Doc Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Html Doc 디렉토리</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1610"/>
         <source>Favorite dir</source>
-        <translation type="unfinished"></translation>
+        <translation>자주 사용하는 디렉토리</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1627"/>
         <source>INCDIR</source>
-        <translation type="unfinished"></translation>
+        <translation>INCDIR</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1668"/>
         <source>OPCODEDIR</source>
-        <translation type="unfinished"></translation>
+        <translation>OPCODEDIR</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1681"/>
         <source>SADIR</source>
-        <translation type="unfinished"></translation>
+        <translation>SADIR</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1701"/>
         <source>SSDIR</source>
-        <translation type="unfinished"></translation>
+        <translation>SSDIR</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1738"/>
         <source>SFDIR</source>
-        <translation type="unfinished"></translation>
+        <translation>SFDIR</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1758"/>
         <location filename="../configdialog.ui" line="1768"/>
         <source>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</source>
-        <translation type="unfinished"></translation>
+        <translation>QuteApp SDK 의 디렉토리 선택 (cross platform standalone applications 만들기)</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1761"/>
         <source>QuteApp SDK Dir</source>
-        <translation type="unfinished"></translation>
+        <translation>QuteApp SDK 디렉토리</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1771"/>
         <source>Template directory</source>
-        <translation type="unfinished"></translation>
+        <translation>템플릿 디렉토리</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1832"/>
         <location filename="../configdialog.ui" line="1838"/>
         <source>External programs</source>
-        <translation type="unfinished"></translation>
+        <translation>외부 프로그램</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1846"/>
         <source>Terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>터미널</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1866"/>
         <source>Wave Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Wave 편집기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1890"/>
         <source>Wave Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Wave 재생기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1921"/>
         <source>Browser</source>
-        <translation type="unfinished"></translation>
+        <translation>브라우저</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1938"/>
         <source>Dot</source>
-        <translation type="unfinished"></translation>
+        <translation>Dot</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1959"/>
         <source>PDF viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF 뷰어</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="1999"/>
         <source>Template</source>
-        <translation type="unfinished"></translation>
+        <translation>템플릿</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="2005"/>
         <source>csd Template</source>
-        <translation type="unfinished"></translation>
+        <translation>csd 템플릿</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="2029"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>지우기</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="2036"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>기본 설정</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="2071"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="2084"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>적용</translation>
     </message>
     <message>
         <location filename="../configdialog.ui" line="2091"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="44"/>
         <source>No Audio Modules</source>
-        <translation type="unfinished"></translation>
+        <translation>오디오 모듈이 없습니다.</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="45"/>
         <source>No real-time audio modules were found.
 Make sure OPCODE6DIR64 is set properly in your system or the configuration dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>리얼타임 오디오 모듈을 찾을 수 없습니다. 환경설정이나 설정 창에서 OPCODE6DIR64 를 확인하십시오.</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="104"/>
         <source>No RtMidi support</source>
-        <translation type="unfinished"></translation>
+        <translation>RtMidi가 지원되지 않습니다.</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="107"/>
         <source>None</source>
         <comment>No MIDI In interface</comment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>MIDI In interface 없음</translatorcomment>
+        <translation>없음</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="116"/>
         <source> None</source>
         <comment>No MIDI Out interface</comment>
-        <translation type="unfinished"></translation>
+        <translation>없음</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="344"/>
         <source>Please note that OPCODEDIR and OPCODEDIR64 will overwrite current settings so you will need to restart CsoundQt to return to default.</source>
-        <translation type="unfinished"></translation>
+        <translation>OPCODEDIR 과 OPCODEDIR64 이 현재 설정에 덮어 씌워집니다. 초기화를 원하시면 CsoundQt 를 재시작하여 주십시오.</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="751"/>
         <location filename="../configdialog.cpp" line="758"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 선택</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="765"/>
         <source>Select Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>폴더 선택</translation>
     </message>
 </context>
 <context>
@@ -1095,18 +1096,18 @@ Make sure OPCODE6DIR64 is set properly in your system or the configuration dialo
         <location filename="../csoundengine.cpp" line="582"/>
         <source>Csound code evaluated.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Csound코드가 평가되었습니다.</translation>
     </message>
     <message>
         <location filename="../csoundengine.cpp" line="584"/>
         <source>Csound is not running. Code not evaluated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound가 작동하지 않습니다. 코드를 읽을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../csoundengine.cpp" line="730"/>
         <source>Csound is not running! Event ignored.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Csound가 작동하지 않습니다! 이벤트가 무시되었습니다.</translation>
     </message>
 </context>
 <context>
@@ -1114,24 +1115,25 @@ Make sure OPCODE6DIR64 is set properly in your system or the configuration dialo
     <message>
         <location filename="../qutecsound.cpp" line="146"/>
         <source>Interactive Code Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>인터랙티브 코드패드</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="168"/>
-        <location filename="../qutecsound.cpp" line="3533"/>
+        <location filename="../qutecsound.cpp" line="3532"/>
         <source>HTML View</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML 보기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="584"/>
         <source>Open File</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 열기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="585"/>
         <source>Known Files (*.csd *.orc *.sco *.py *.inc);;Csound Files (*.csd *.orc *.sco *.inc *.CSD *.ORC *.SCO *.INC);;Python Files (*.py);;All Files (*)</source>
         <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>확장자 사용에 주의하여주십시오.</translatorcomment>
+        <translation>사용한 파일 (*.csd *.orc *.sco *.py *.inc);;Csound 파일 (*.csd *.orc *.sco *.inc *.CSD *.ORC *.SCO *.INC);;파이썬 파일 (*.py);;모든 파일 (*)</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="660"/>
@@ -1143,61 +1145,63 @@ Make sure OPCODE6DIR64 is set properly in your system or the configuration dialo
         <location filename="../qutecsound.cpp" line="1684"/>
         <location filename="../qutecsound.cpp" line="1735"/>
         <location filename="../qutecsound.cpp" line="1970"/>
-        <location filename="../qutecsound.cpp" line="5136"/>
-        <location filename="../qutecsound.cpp" line="5423"/>
+        <location filename="../qutecsound.cpp" line="5135"/>
+        <location filename="../qutecsound.cpp" line="5422"/>
         <source>CsoundQt</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="661"/>
         <source>Dot executable not found.
 Please install graphviz from
 www.graphviz.org</source>
-        <translation type="unfinished"></translation>
+        <translation>실행할 수 없습니다k.
+다음의 링크(www.graphviz.org)에서 graphviz 를 설치해주십시오.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="676"/>
         <source>Cannot create temp dot/png file.</source>
-        <translation type="unfinished"></translation>
+        <translation>임시 dot/png 파일을 만들 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="889"/>
         <source>Save File As</source>
-        <translation type="unfinished"></translation>
+        <translation>다른 이름으로 저장</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="891"/>
         <source>Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)</source>
         <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>확장자 사용에 주의하여주십시오.</translatorcomment>
+        <translation>사용한 파일 (*.csd *.orc *.sco *.py);;Csound 파일 (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;파이썬 파일 (*.py);;모든 파일 (*)</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="906"/>
         <source>The file is already open in another tab.
 File not saved!</source>
-        <translation type="unfinished"></translation>
+        <translation>이 파일을 이미 다른 탭에서 사용되어 저장되지 않습니다!</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="996"/>
         <source>New widget format</source>
-        <translation type="unfinished"></translation>
+        <translation>새 위젯 포맷</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="997"/>
         <source>  This version of CsoundQt implements a new format for storing widgets, which enables many of the new widget features you will find now.
   The old format is still read and saved, so you will be able to open files in older versions but some of the features will not be passed to older versions.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>이 CsoundQt 버전은 새로운 위젯 저장 방식을 사용합니다. 이전 방식 또한 가져오고 저장할 수 있지만, 이전의 버전에서 새로운 버전의 파일을 가져올 경우 오류가 발생할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1198"/>
         <source>Shortcuts changed</source>
-        <translation type="unfinished"></translation>
+        <translation>단축키 변경완료</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1199"/>
         <source>Ambiguous shortcut. In version 0.9.5 some shortcuts changed, please configure the shourtcuts or set to defaults (Edit-&gt;Configure shortcuts -&gt; Restore Defaults) </source>
-        <translation type="unfinished"></translation>
+        <translation>0.9.5. 버전에서는 단축키가 변경되었습니다. 설정을 확인하여 주십시오.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1216"/>
@@ -1206,227 +1210,230 @@ File not saved!</source>
         <location filename="../qutecsound.cpp" line="2397"/>
         <location filename="../qutecsound.cpp" line="2410"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>에러</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1216"/>
         <source>You can only create an app with a csd file.</source>
-        <translation type="unfinished"></translation>
+        <translation>csd 파일로만 만들 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1221"/>
-        <location filename="../qutecsound.cpp" line="3118"/>
+        <location filename="../qutecsound.cpp" line="3117"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>저장</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1221"/>
         <source>Do you want to save before creating app?</source>
-        <translation type="unfinished"></translation>
+        <translation>앱을 만들기 전에 저장하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1230"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>중단</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1230"/>
         <source>You must save the csd before creating the App!</source>
-        <translation type="unfinished"></translation>
+        <translation>앱을 만들기 전에 csd로 저장하십시오.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1362"/>
         <source>Full Path:</source>
-        <translation type="unfinished"></translation>
+        <translation>전체 경로:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1363"/>
         <source>Number of lines (Csound Text):</source>
-        <translation type="unfinished"></translation>
+        <translation>줄 수 (Csound 텍스트):</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1364"/>
         <source>Number of characters (Csound Text):</source>
-        <translation type="unfinished"></translation>
+        <translation>문자 수 (Csound 텍스트):</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1365"/>
         <source>Number of lines (total):</source>
-        <translation type="unfinished"></translation>
+        <translation>줄 수 (전체):</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1366"/>
         <source>Number of characters (total):</source>
-        <translation type="unfinished"></translation>
+        <translation>문자 수 (전체):</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1367"/>
         <source>Number of instruments:</source>
-        <translation type="unfinished"></translation>
+        <translation>인스트루먼트 개수:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1368"/>
         <source>Number of UDOs:</source>
-        <translation type="unfinished"></translation>
+        <translation>UDO 개수:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1369"/>
         <source>Number of Widgets:</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 개수:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1370"/>
         <source>Embedded Files:</source>
-        <translation type="unfinished"></translation>
+        <translation>삽입된 파일:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1371"/>
-        <location filename="../qutecsound.cpp" line="3159"/>
+        <location filename="../qutecsound.cpp" line="3158"/>
         <source>File Information</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 정보</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1384"/>
         <source>The document </source>
-        <translation type="unfinished"></translation>
+        <translation>문서</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1387"/>
         <source>
 has been modified.
 Do you want to save the changes before closing?</source>
-        <translation type="unfinished"></translation>
+        <translation>종료 전에 수정된 부분을 저장하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1403"/>
         <source>Do you want to exit CsoundQt?</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt 를 종료하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1426"/>
         <source>Print Document</source>
-        <translation type="unfinished"></translation>
+        <translation>문서 출력</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1449"/>
-        <location filename="../qutecsound.cpp" line="5520"/>
+        <location filename="../qutecsound.cpp" line="5519"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1450"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1488"/>
         <source>Join</source>
-        <translation type="unfinished"></translation>
+        <translation>연결</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1489"/>
         <source>Please open the orc and sco files in CsoundQt first!</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQT 에서 orc와 sco파일을 먼저 열어주십시오!</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1556"/>
         <source>Insert Cabbage options?</source>
-        <translation type="unfinished"></translation>
+        <translation>Cabbage 옵션 삽입하기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1557"/>
         <source>There seems to be no Cabbage specific options in &lt;CsOptions&gt;.
  Do you want to insert it?
 NB! Comment your old options out, if necessary!</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;CsOptions&gt;에 옵션이 없습니다.
+삽입하시겠습니까? </translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1568"/>
         <source>Insert scorelines for Cabbage?</source>
-        <translation type="unfinished"></translation>
+        <translation>Cabbage를 위해 스코어라인을 삽입하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1569"/>
         <source>The score is empty. Cabbage needs some lines to work.
  Do you want to insert it?</source>
-        <translation type="unfinished"></translation>
+        <translation>스코어가 비어있습니다. Cabbage 는 작업하기 위해 줄을 필요로 합니다. 삽입하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1595"/>
         <source>Run as temporary file?</source>
-        <translation type="unfinished"></translation>
+        <translation>임시 파일로 실행하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1596"/>
         <source>press &lt;b&gt;OK&lt;/b&gt;, if you don&apos;t care about this file in future.
  Press &lt;b&gt;Save&lt;/b&gt;, if you want to save it with given name.
  You can always save the file with &lt;b&gt;Save As&lt;/b&gt; also later, if you use the temporary file.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;확인&lt;/b&gt;을 눌러주십시오.
+다른 이름으로 저장을 원하시면 &lt;b&gt;저장&lt;/b&gt;을 눌러 주십시오.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1609"/>
         <source>Save error</source>
-        <translation type="unfinished"></translation>
+        <translation>저장 오류</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1609"/>
         <source>Could not save temporary file</source>
-        <translation type="unfinished"></translation>
+        <translation>임시 파일을 저장할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1653"/>
         <source>Csound in html files should be started from html code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Html 파일 안에서의 Csound 는 html 코드로 시작되어야 합니다.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1685"/>
         <source>Error creating temporary file.</source>
-        <translation type="unfinished"></translation>
+        <translation>임시파일 생성 오류</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1736"/>
         <source>Internal error running Csound.</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound 실행 오류</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1828"/>
         <source>Error running terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>터미널 실행 오류</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1829"/>
         <source>Could not run terminal program:
    %1
 Check environment tab in preferences.</source>
-        <translation type="unfinished"></translation>
+        <translation>터미널 프로그램을 실행할 수 없습니다. 설정을 확인하여 주십시오.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1953"/>
         <source>Output Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>아웃풋 파일이름</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="1971"/>
         <source>The file %1 
 already exists.
 Do you want to overwrite it?</source>
-        <translation type="unfinished"></translation>
+        <translation>이 파일은 %1 이미 존재합니다.
+정말로 덮어 씌우시겠습니까?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2016"/>
         <location filename="../qutecsound.cpp" line="2049"/>
         <source>Render not available</source>
-        <translation type="unfinished"></translation>
+        <translation>렌더 사용이 불가합니다.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2017"/>
         <source>Could not find rendered file. Please render before calling external editor.</source>
-        <translation type="unfinished"></translation>
+        <translation>렌더 된 파일을 찾을 수 없습니다. 외부 편집기를 사용하기 전에 렌더를 해주십시오.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2050"/>
         <source>Could not find rendered file. Please render before calling external player.</source>
-        <translation type="unfinished"></translation>
+        <translation>렌더 된 파일을 찾을 수 없습니다. 외부 편집기를 사용하기 전에 렌더를 해주십시오.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2097"/>
@@ -1434,1750 +1441,1750 @@ Do you want to overwrite it?</source>
         <source>HTML Documentation directory not set!
 Please go to Edit-&gt;Options-&gt;Environment and select directory
 </source>
-        <translation type="unfinished"></translation>
+        <translation>HTML 문서 디렉토리가 설정되어있지 않습니다! 편집에서 디렉토리를 설정해 주십시오.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2215"/>
         <source>CsoundQt Virtual Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>CsounQt Virtual 키보드</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2230"/>
         <location filename="../qutecsound.cpp" line="2266"/>
         <source>Qt5 Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt5 가 필요합니다.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2230"/>
         <location filename="../qutecsound.cpp" line="2266"/>
         <source>Qt version &gt; 5.2 is required for the virtual keyboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Virtual 키보드 사용을 위해 Qt 버전 5.2 이상이 요구됩니다.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2241"/>
         <source>CsoundQt table editor</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt 테이블 편집기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2376"/>
         <source>Could not open external browser:
 %1
 Please check preferences.</source>
-        <translation type="unfinished"></translation>
+        <translation>외부 브라우저에서 열 수 없습니다.
+%1
+ 설정을 확인하여 주십시오.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2411"/>
         <source>PDF viewer not found!
 Please go to Edit-&gt;Options-&gt;Environment and select directory
 </source>
-        <translation type="unfinished"></translation>
+        <translation>PDF 뷰어를 찾지 못했습니다! 편집에서 디렉토리를 설정해 주십시오.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2441"/>
         <location filename="../qutecsound.cpp" line="2447"/>
-        <location filename="../qutecsound.cpp" line="3719"/>
+        <location filename="../qutecsound.cpp" line="3718"/>
         <source>Reset Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>설정 초기화</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2442"/>
         <source>Are you sure you want to revert CsoundQt&apos;s preferences
 to their initial default values? </source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt 설정을 정말로 초기화 시키시겠습니까?</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2448"/>
         <source>Preferences have been reset.
 You must restart CsoundQt.</source>
-        <translation type="unfinished"></translation>
+        <translation>설정이 초기화 되었습니다. CsoundQt 를 다시 시작하여 주십시오.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2495"/>
         <source>Set manual path</source>
-        <translation type="unfinished"></translation>
+        <translation>메뉴얼 경로 설정하기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2495"/>
         <source>Don&apos;t forget to set the path to manual in Configure -&gt; Enviromnent -&gt; Html doc directory</source>
-        <translation type="unfinished"></translation>
+        <translation>설정 -&gt; 환경 -&gt; Html doc 디렉토리로 경로 설정하는 것을 잊지 마십시오.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2504"/>
         <source>by: Andres Cabrera, Tarmo Johannes and others</source>
-        <translation type="unfinished"></translation>
+        <translation>by: Andres Cabrera, Tarmo Johannes and others</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2505"/>
         <source>Version %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Version %1</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2506"/>
         <source>Released under the LGPLv2 or GPLv3</source>
-        <translation type="unfinished"></translation>
+        <translation>Released under the LGPLv2 or GPLv3</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2507"/>
         <source>Using Csound version:</source>
-        <translation type="unfinished"></translation>
+        <translation>사용 중인 Csound 버전:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2508"/>
         <source>Precision:</source>
-        <translation type="unfinished"></translation>
+        <translation>정확도:</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2510"/>
         <source>Built with PythonQt support.</source>
-        <translation type="unfinished"></translation>
+        <translation>파이썬Qt 지원으로 만들기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2513"/>
         <source>Html5 support based on QtWebEngine</source>
-        <translation type="unfinished"></translation>
+        <translation>Html5 지원 (QtWebEngine)</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2516"/>
         <source>Html5 support based on QtWebkit</source>
-        <translation type="unfinished"></translation>
+        <translation>Html5 지원 (QtWebkit)</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2519"/>
-        <source>Spanish translation: Andrés Cabrera and Guillermo Senna</source>
-        <translation type="unfinished"></translation>
+        <source>French translation: Fran&amp;ccedil;ois Pinot</source>
+        <translation>불어 번역: Fran&amp;ccedil;ois Pinot</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2520"/>
-        <source>French translation: Fran&amp;ccedil;ois Pinot</source>
-        <translation type="unfinished"></translation>
+        <source>German translation: Joachim Heintz</source>
+        <translation>독어 번역: Joachim Heintz</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2521"/>
-        <source>German translation: Joachim Heintz</source>
-        <translation type="unfinished"></translation>
+        <source>Portuguese translation: Victor Lazzarini</source>
+        <translation>포르투갈어 번역: Victor Lazzarini</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2522"/>
-        <source>Portuguese translation: Victor Lazzarini</source>
-        <translation type="unfinished"></translation>
+        <source>Italian translation: Francesco</source>
+        <translation>이탈리아어 번역: Francesco</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2523"/>
-        <source>Italian translation: Francesco</source>
-        <translation type="unfinished"></translation>
+        <source>Turkish translation: Ali Isciler</source>
+        <translation>터키어 번역: Ali Isciler</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2524"/>
-        <source>Turkish translation: Ali Isciler</source>
-        <translation type="unfinished"></translation>
+        <source>Finnish translation: Niko Humalam&amp;auml;ki</source>
+        <translation>핀란드어 번역: Niko Humalam&amp;auml;ki</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2525"/>
-        <source>Finnish translation: Niko Humalam&amp;auml;ki</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="2526"/>
         <source>Russian translation: Gleb Rogozinsky</source>
-        <translation type="unfinished"></translation>
+        <translation>러시아어 번역: Gleb Rogozinsky</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2529"/>
+        <location filename="../qutecsound.cpp" line="2528"/>
         <source>If you find CsoundQt useful, please consider donating to the project:</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt 가 유용하가고 생각된다면 다음 프로젝트에 기부해주십시오:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2532"/>
+        <location filename="../qutecsound.cpp" line="2531"/>
         <source>Please file bug reports and feature suggestions in the </source>
-        <translation type="unfinished"></translation>
+        <translation>버그를 신고하여 주십시오.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2534"/>
+        <location filename="../qutecsound.cpp" line="2533"/>
         <source>CsoundQt tracker</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt 트래커</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2536"/>
+        <location filename="../qutecsound.cpp" line="2535"/>
         <source>Mailing Lists:</source>
-        <translation type="unfinished"></translation>
+        <translation>메일링 리스트:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2542"/>
+        <location filename="../qutecsound.cpp" line="2541"/>
         <source>Other Resources:</source>
-        <translation type="unfinished"></translation>
+        <translation>다른 리소스:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2546"/>
+        <location filename="../qutecsound.cpp" line="2545"/>
         <source>Supported by:</source>
-        <translation type="unfinished"></translation>
+        <translation>지원:</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2549"/>
+        <location filename="../qutecsound.cpp" line="2548"/>
         <source>And other generous users.</source>
-        <translation type="unfinished"></translation>
+        <translation>And other generous users.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2603"/>
+        <location filename="../qutecsound.cpp" line="2602"/>
         <source>API</source>
-        <translation type="unfinished"></translation>
+        <translation>API</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2603"/>
-        <location filename="../qutecsound.cpp" line="3459"/>
+        <location filename="../qutecsound.cpp" line="2602"/>
+        <location filename="../qutecsound.cpp" line="3458"/>
         <source>Console</source>
-        <translation type="unfinished"></translation>
+        <translation>콘솔</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2609"/>
+        <location filename="../qutecsound.cpp" line="2608"/>
         <source>SaveWidgets</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 저장</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2609"/>
+        <location filename="../qutecsound.cpp" line="2608"/>
         <source>DontSaveWidgets</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 저장 안함</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2612"/>
-        <location filename="../qutecsound.cpp" line="2615"/>
+        <location filename="../qutecsound.cpp" line="2611"/>
+        <location filename="../qutecsound.cpp" line="2614"/>
         <source>UseCsoundQtOptions</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt 옵션 사용</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2611"/>
+        <location filename="../qutecsound.cpp" line="2614"/>
+        <source>DiscardCsoundQtOptions</source>
+        <translation>CsoundQt 옵션 취소</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2612"/>
         <location filename="../qutecsound.cpp" line="2615"/>
-        <source>DiscardCsoundQtOptions</source>
-        <translation type="unfinished"></translation>
+        <source>OverrideCsOptions</source>
+        <translation>Cs 옵션 무효</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2613"/>
-        <location filename="../qutecsound.cpp" line="2616"/>
-        <source>OverrideCsOptions</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="2617"/>
+        <source>Play</source>
+        <translation>재생</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2618"/>
-        <source>Play</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="2619"/>
+        <location filename="../qutecsound.cpp" line="3315"/>
         <location filename="../qutecsound.cpp" line="3316"/>
-        <location filename="../qutecsound.cpp" line="3317"/>
         <source>Render to file</source>
-        <translation type="unfinished"></translation>
+        <translation>렌더 (파일로 저장)</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2628"/>
+        <location filename="../qutecsound.cpp" line="2627"/>
         <source>Midi In interface </source>
-        <translation type="unfinished"></translation>
+        <translation>Midi 입력 인터페이스</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2628"/>
+        <location filename="../qutecsound.cpp" line="2627"/>
         <source> not found!
  Switching to None.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>찾을 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2635"/>
+        <location filename="../qutecsound.cpp" line="2634"/>
         <source>Midi Out interface </source>
-        <translation type="unfinished"></translation>
+        <translation>Midi 출력 인터페이스</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2635"/>
+        <location filename="../qutecsound.cpp" line="2634"/>
         <source> not found!
  Switching to None.</source>
-        <translation type="unfinished"></translation>
+        <translation>찾을 수 없습니다! </translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2853"/>
+        <source>Ctrl+N</source>
+        <translation>Ctrl+N</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2854"/>
-        <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+O</source>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2855"/>
-        <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="2856"/>
+        <source>Ctrl+S</source>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2857"/>
-        <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="2858"/>
         <source>Shift+Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2860"/>
+        <location filename="../qutecsound.cpp" line="2859"/>
         <source>Ctrl+W</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+W</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2861"/>
+        <source>Ctrl+P</source>
+        <translation>Ctrl+P</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2862"/>
-        <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+Q</source>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2863"/>
-        <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="2864"/>
+        <source>Ctrl+Z</source>
+        <translation>Ctrl+Z</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2865"/>
-        <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Ctrl+Z</source>
+        <translation>Shift+Ctrl+Z</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2866"/>
-        <source>Shift+Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="2867"/>
+        <source>Ctrl+X</source>
+        <translation>Ctrl+X</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2868"/>
-        <source>Ctrl+X</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+C</source>
+        <translation>Ctrl+C</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2869"/>
-        <source>Ctrl+C</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+V</source>
+        <translation>Ctrl+V</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2870"/>
-        <source>Ctrl+V</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+D</source>
+        <translation>Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2871"/>
-        <source>Ctrl+D</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="2875"/>
+        <source>Ctrl+F</source>
+        <translation>Ctrl+F</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2876"/>
-        <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+G</source>
+        <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2877"/>
-        <source>Ctrl+G</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="2878"/>
+        <source>CTRL+E</source>
+        <translation>CTRL+E</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2879"/>
-        <source>CTRL+E</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="2880"/>
         <source>CTRL+R</source>
-        <translation type="unfinished"></translation>
+        <translation>CTRL+R</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2882"/>
+        <location filename="../qutecsound.cpp" line="2881"/>
         <source>Alt+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+S</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2883"/>
+        <source>Ctrl+.</source>
+        <translation>Ctrl+.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2884"/>
-        <source>Ctrl+.</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+Space</source>
+        <translation>Ctrl+Space</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2885"/>
-        <source>Ctrl+Space</source>
-        <translation type="unfinished"></translation>
+        <source>Alt+F</source>
+        <translation>Alt+F</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2886"/>
-        <source>Alt+F</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="2888"/>
+        <source>Ctrl+0</source>
+        <translation>Ctrl+0</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2889"/>
-        <source>Ctrl+0</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+2</source>
+        <translation>Ctrl+2</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2890"/>
-        <source>Ctrl+2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="2891"/>
         <source>Ctrl+1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+1</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2894"/>
+        <location filename="../qutecsound.cpp" line="2893"/>
         <source>Ctrl+3</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+3</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2896"/>
+        <location filename="../qutecsound.cpp" line="2895"/>
         <source>Ctrl+Alt+F</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Alt+F</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2898"/>
+        <location filename="../qutecsound.cpp" line="2897"/>
         <source>F11</source>
-        <translation type="unfinished"></translation>
+        <translation>F11</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2901"/>
+        <location filename="../qutecsound.cpp" line="2900"/>
         <source>Alt+Ctrl+0</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Ctrl+0</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2903"/>
+        <location filename="../qutecsound.cpp" line="2902"/>
         <source>Alt+Ctrl+4</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Ctrl+4</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2904"/>
+        <source>Alt+Ctrl+2</source>
+        <translation>Alt+Ctrl+2</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2905"/>
-        <source>Alt+Ctrl+2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="2906"/>
         <source>Alt+Ctrl+1</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Ctrl+1</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2908"/>
+        <location filename="../qutecsound.cpp" line="2907"/>
         <source>F5</source>
-        <translation type="unfinished"></translation>
+        <translation>F5</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2909"/>
+        <source>Ctrl+Shift+V</source>
+        <translation>Ctrl+Shift+V</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2910"/>
-        <source>Ctrl+Shift+V</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+Shift+T</source>
+        <translation>Ctrl+Shift+T</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2911"/>
-        <source>Ctrl+Shift+T</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+Shift+A</source>
+        <translation>Ctrl+Shift+A</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2912"/>
-        <source>Ctrl+Shift+A</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+Shift+M</source>
+        <translation>Ctrl+Shift+M</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2913"/>
-        <source>Ctrl+Shift+M</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="2914"/>
+        <source>Ctrl+5</source>
+        <translation>Ctrl+5</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2915"/>
-        <source>Ctrl+5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="2916"/>
         <source>Ctrl+6</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+6</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2919"/>
+        <location filename="../qutecsound.cpp" line="2918"/>
         <source>Ctrl+4</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+4</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2920"/>
+        <source>F1</source>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2921"/>
-        <source>F1</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+9</source>
+        <translation>Ctrl+9</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2922"/>
-        <source>Ctrl+9</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="2923"/>
         <source>Shift+F1</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+F1</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2926"/>
+        <location filename="../qutecsound.cpp" line="2925"/>
         <source>Shift+Alt+F1</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+Alt+F1</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2928"/>
+        <location filename="../qutecsound.cpp" line="2927"/>
         <source>Ctrl+/</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+/</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="2929"/>
+        <source>Ctrl+I</source>
+        <translation>Ctrl+I</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2930"/>
-        <source>Ctrl+I</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Ctrl+I</source>
+        <translation>Shift+Ctrl+I</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2931"/>
-        <source>Shift+Ctrl+I</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Ctrl+E</source>
+        <translation>Shift+Ctrl+E</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2932"/>
-        <source>Shift+Ctrl+E</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Ctrl+W</source>
+        <translation>Shift+Ctrl+W</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2933"/>
-        <source>Shift+Ctrl+W</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Alt+S</source>
+        <translation>Shift+Alt+S</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2934"/>
-        <source>Shift+Alt+S</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+7</source>
+        <translation>Ctrl+7</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2935"/>
-        <source>Ctrl+7</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+8</source>
+        <translation>Ctrl+8</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2936"/>
-        <source>Ctrl+8</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+K</source>
+        <translation>Ctrl+K</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2937"/>
-        <source>Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Alt+K</source>
+        <translation>Shift+Alt+K</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2938"/>
-        <source>Shift+Alt+K</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Alt+1</source>
+        <translation>Shift+Alt+1</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2939"/>
-        <source>Shift+Alt+1</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Alt+2</source>
+        <translation>Shift+Alt+2</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2940"/>
-        <source>Shift+Alt+2</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Alt+3</source>
+        <translation>Shift+Alt+3</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2941"/>
-        <source>Shift+Alt+3</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Alt+4</source>
+        <translation>Shift+Alt+4</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2942"/>
-        <source>Shift+Alt+4</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Alt+5</source>
+        <translation>Shift+Alt+5</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2943"/>
-        <source>Shift+Alt+5</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Alt+6</source>
+        <translation>Shift+Alt+6</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2944"/>
-        <source>Shift+Alt+6</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Alt+7</source>
+        <translation>Shift+Alt+7</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2945"/>
-        <source>Shift+Alt+7</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Alt+L</source>
+        <translation>Shift+Alt+L</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2946"/>
-        <source>Shift+Alt+L</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Alt+P</source>
+        <translation>Shift+Alt+P</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2947"/>
-        <source>Shift+Alt+P</source>
-        <translation type="unfinished"></translation>
+        <source>Shift+Ctrl+C</source>
+        <translation>Shift+Ctrl+C</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="2948"/>
-        <source>Shift+Ctrl+C</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="2954"/>
+        <source>No PythonQt support</source>
+        <translation>파이썬Qt 지원 없음</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2955"/>
-        <source>No PythonQt support</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="2956"/>
         <source>This version of CsoundQt has been compiled without PythonQt support.
 Extended Python features are not available</source>
-        <translation type="unfinished"></translation>
+        <translation>이 CsoundQt 버전은 파이썬 Qt의 지원없이 사용 가능합니다. 확장된 파이썬 기능은 사용할 수 없습니다. </translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3097"/>
+        <source>&amp;New</source>
+        <translation>새</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3098"/>
-        <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <source>Create a new file</source>
+        <translation>새 파일 만들기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3099"/>
-        <source>Create a new file</source>
-        <translation type="unfinished"></translation>
+        <source>New</source>
+        <translation>새</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3100"/>
-        <source>New</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3103"/>
+        <source>&amp;Open...</source>
+        <translation>열기...</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3104"/>
-        <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
+        <source>Open an existing file</source>
+        <translation>파일 불러오기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3105"/>
-        <source>Open an existing file</source>
-        <translation type="unfinished"></translation>
+        <source>Open</source>
+        <translation>열기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3106"/>
-        <source>Open</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3109"/>
+        <source>Reload</source>
+        <translation>불러오기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3110"/>
-        <source>Reload</source>
-        <translation type="unfinished"></translation>
+        <source>Reload file from disk, discarding changes</source>
+        <translation>디스크에서 파일 불러오기(수정된 것은 저장되지 않습니다)</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3111"/>
-        <source>Reload file from disk, discarding changes</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3115"/>
+        <source>&amp;Save</source>
+        <translation>저장</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3116"/>
-        <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <source>Save the document to disk</source>
+        <translation>디스크에 문서 저장하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3117"/>
-        <source>Save the document to disk</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3121"/>
+        <source>Save &amp;As...</source>
+        <translation>다른 이름으로 저장...</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3122"/>
-        <source>Save &amp;As...</source>
-        <translation type="unfinished"></translation>
+        <source>Save the document under a new name</source>
+        <translation>새 이름으로 저장하기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3123"/>
-        <source>Save the document under a new name</source>
-        <translation type="unfinished"></translation>
+        <source>Save as</source>
+        <translation>다른 이름으로 저장</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3124"/>
-        <source>Save as</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3127"/>
+        <source>Create App...</source>
+        <translation>앱 만들기...</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3128"/>
-        <source>Create App...</source>
-        <translation type="unfinished"></translation>
+        <source>Create Standalone application</source>
+        <translation>스탠드얼론 앱 만들기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3129"/>
-        <source>Create Standalone application</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3132"/>
+        <source>Export without widgets</source>
+        <translation>위젯없이 보내기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3133"/>
-        <source>Export without widgets</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3134"/>
         <source>Save to new file without including widget sections</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 없이 새로운 파일로 저장하기</translation>
     </message>
     <message>
+        <location filename="../qutecsound.cpp" line="3138"/>
         <location filename="../qutecsound.cpp" line="3139"/>
-        <location filename="../qutecsound.cpp" line="3140"/>
         <source>Close current tab</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 탭 닫기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3145"/>
+        <source>Print</source>
+        <translation>프린트 하기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3146"/>
-        <source>Print</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3147"/>
         <source>Print current document</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 문서 출력하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3160"/>
+        <location filename="../qutecsound.cpp" line="3159"/>
         <source>Show information for the current file</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 파일의 정보 보기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3164"/>
+        <source>E&amp;xit</source>
+        <translation>종료</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3165"/>
-        <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <source>Exit the application</source>
+        <translation>앱 종료</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3166"/>
-        <source>Exit the application</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3170"/>
+        <source>View Code &amp;Graph</source>
+        <translation>코드와 그래프 보기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3171"/>
-        <source>View Code &amp;Graph</source>
-        <translation type="unfinished"></translation>
+        <source>View Code Graph</source>
+        <translation>코드와 그래프 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3172"/>
-        <source>View Code Graph</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3176"/>
+        <location filename="../qutecsound.cpp" line="3178"/>
+        <source>Undo</source>
+        <translation>뒤로 가기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3177"/>
-        <location filename="../qutecsound.cpp" line="3179"/>
-        <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <source>Undo last action</source>
+        <translation>최근 수정한 것 취소하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3178"/>
-        <source>Undo last action</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3182"/>
+        <location filename="../qutecsound.cpp" line="3184"/>
+        <source>Redo</source>
+        <translation>앞으로 가기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3183"/>
-        <location filename="../qutecsound.cpp" line="3185"/>
-        <source>Redo</source>
-        <translation type="unfinished"></translation>
+        <source>Redo last action</source>
+        <translation>최근 수정한 것 다시 불러오기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3184"/>
-        <source>Redo last action</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3188"/>
+        <source>Cu&amp;t</source>
+        <translation>잘라내기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3189"/>
-        <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3190"/>
         <source>Cut the current selection&apos;s contents to the clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>클립보드에 현재 선택 된 컨텐츠 잘라내기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3192"/>
+        <location filename="../qutecsound.cpp" line="3191"/>
         <source>Cut</source>
-        <translation type="unfinished"></translation>
+        <translation>잘라내기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3195"/>
+        <source>&amp;Copy</source>
+        <translation>복사</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3196"/>
-        <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3197"/>
         <source>Copy the current selection&apos;s contents to the clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>선택된 컨텐츠를 클립보드로 복사하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3199"/>
+        <location filename="../qutecsound.cpp" line="3198"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>복사</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3202"/>
+        <source>&amp;Paste</source>
+        <translation>붙여넣기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3203"/>
-        <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3204"/>
         <source>Paste the clipboard&apos;s contents into the current selection</source>
-        <translation type="unfinished"></translation>
+        <translation>클립보드의 컨텐츠를 붙여넣기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3206"/>
+        <location filename="../qutecsound.cpp" line="3205"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>붙여넣기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3209"/>
+        <source>&amp;Join orc/sco</source>
+        <translation>orc/sco 연결하기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3210"/>
-        <source>&amp;Join orc/sco</source>
-        <translation type="unfinished"></translation>
+        <source>Join orc/sco files in a single csd file</source>
+        <translation>single csd 에 orc/sco 파일 연결하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3211"/>
-        <source>Join orc/sco files in a single csd file</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3215"/>
+        <source>Evaluate selection</source>
+        <translation>평가 세션</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3216"/>
-        <source>Evaluate selection</source>
-        <translation type="unfinished"></translation>
+        <source>Evaluate selection in Python Console</source>
+        <translation>파이썬 콘솔에 평가 세션</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3217"/>
-        <source>Evaluate selection in Python Console</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3220"/>
+        <source>Evaluate section</source>
+        <translation>평가 섹션</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3221"/>
-        <source>Evaluate section</source>
-        <translation type="unfinished"></translation>
+        <source>Evaluate current section in Python Console</source>
+        <translation>파이썬 콘솔에 현재 평가 섹션</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3222"/>
-        <source>Evaluate current section in Python Console</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3225"/>
+        <source>Code Pad in Csound Mode</source>
+        <translation>Csound 모드에서 코드패드</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3226"/>
-        <source>Code Pad in Csound Mode</source>
-        <translation type="unfinished"></translation>
+        <source>Toggle the mode for the scratch pad between python and csound</source>
+        <translation>파이썬과 Csound 사이의 스크래치패드 모드 전환하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3227"/>
-        <source>Toggle the mode for the scratch pad between python and csound</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3231"/>
+        <source>Invalue-&gt;Chnget</source>
+        <translation>Invalue-&gt;Chnget</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3232"/>
-        <source>Invalue-&gt;Chnget</source>
-        <translation type="unfinished"></translation>
+        <source>Convert invalue/outvalue to chnget/chnset</source>
+        <translation>invalue/outvalue 에서 chnget/chnset로 변환하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3233"/>
-        <source>Convert invalue/outvalue to chnget/chnset</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3236"/>
+        <source>Chnget-&gt;Invalue</source>
+        <translation>Chnget-&gt;Invalue</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3237"/>
-        <source>Chnget-&gt;Invalue</source>
-        <translation type="unfinished"></translation>
+        <source>Convert chnget/chnset to invalue/outvalue</source>
+        <translation>chnget/chnset 에서 invalue/outvalue로 변환하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3238"/>
-        <source>Convert chnget/chnset to invalue/outvalue</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3241"/>
+        <source>Insert/Update CsLADSPA text</source>
+        <translation>CsLADSPA 텍스트를 삽입 및 업데이트하기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3242"/>
-        <source>Insert/Update CsLADSPA text</source>
-        <translation type="unfinished"></translation>
+        <source>Insert/Update CsLADSPA section to csd file</source>
+        <translation>CsLADSPA 섹션을 csd 파일에 삽입 및 업데이트하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3243"/>
-        <source>Insert/Update CsLADSPA section to csd file</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3246"/>
+        <source>Insert/Update Cabbage text</source>
+        <translation>Cabbage 텍스트 삽입 및 업데이트하기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3247"/>
-        <source>Insert/Update Cabbage text</source>
-        <translation type="unfinished"></translation>
+        <source>Insert/Update Cabbage section to csd file</source>
+        <translation>Cabbage 섹션을 csd 파일에 삽입 및 업데이트하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3248"/>
-        <source>Insert/Update Cabbage section to csd file</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3251"/>
+        <source>&amp;Find and Replace</source>
+        <translation>찾기 및 바꾸기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3252"/>
-        <source>&amp;Find and Replace</source>
-        <translation type="unfinished"></translation>
+        <source>Find and replace strings in file</source>
+        <translation>스트링 찾기 및 바꾸기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3253"/>
-        <source>Find and replace strings in file</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3257"/>
+        <source>Find a&amp;gain</source>
+        <translation>다시 찾기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3258"/>
-        <source>Find a&amp;gain</source>
-        <translation type="unfinished"></translation>
+        <source>Find next appearance of string</source>
+        <translation>스트링의 다음 화면 찾기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3259"/>
-        <source>Find next appearance of string</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3263"/>
+        <source>Configuration</source>
+        <translation>설정</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3264"/>
-        <source>Configuration</source>
-        <translation type="unfinished"></translation>
+        <source>Open configuration dialog</source>
+        <translation>설정창 열기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3265"/>
-        <source>Open configuration dialog</source>
-        <translation type="unfinished"></translation>
+        <source>Configure</source>
+        <translation>설정</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3266"/>
-        <source>Configure</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3269"/>
+        <source>Widget Edit Mode</source>
+        <translation>위젯 편집 모드</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3270"/>
-        <source>Widget Edit Mode</source>
-        <translation type="unfinished"></translation>
+        <source>Activate Edit Mode for Widget Panel</source>
+        <translation>위젯 패널에서 편집모드 실행하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3271"/>
-        <source>Activate Edit Mode for Widget Panel</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3276"/>
+        <source>Run Csound</source>
+        <translation>Csound 실행</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3277"/>
-        <source>Run Csound</source>
-        <translation type="unfinished"></translation>
+        <source>Run current file</source>
+        <translation>현재 파일 실행</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3278"/>
-        <source>Run current file</source>
-        <translation type="unfinished"></translation>
+        <source>Run</source>
+        <translation>실행</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3279"/>
-        <source>Run</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3283"/>
+        <source>Run in Terminal</source>
+        <translation>터미널에서 실행</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3284"/>
-        <source>Run in Terminal</source>
-        <translation type="unfinished"></translation>
+        <source>Run in external shell</source>
+        <translation>외부 shell 에서 실행</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3285"/>
-        <source>Run in external shell</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3286"/>
         <source>Run in Term</source>
-        <translation type="unfinished"></translation>
+        <translation>터미널에서 실행</translation>
     </message>
     <message>
+        <location filename="../qutecsound.cpp" line="3289"/>
         <location filename="../qutecsound.cpp" line="3290"/>
         <location filename="../qutecsound.cpp" line="3291"/>
-        <location filename="../qutecsound.cpp" line="3292"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>정지</translation>
     </message>
     <message>
+        <location filename="../qutecsound.cpp" line="3295"/>
         <location filename="../qutecsound.cpp" line="3296"/>
         <location filename="../qutecsound.cpp" line="3297"/>
-        <location filename="../qutecsound.cpp" line="3298"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>중지</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3301"/>
+        <location filename="../qutecsound.cpp" line="3303"/>
+        <source>Stop All</source>
+        <translation>모두 정지</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3302"/>
-        <location filename="../qutecsound.cpp" line="3304"/>
-        <source>Stop All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3303"/>
         <source>Stop all running documents</source>
-        <translation type="unfinished"></translation>
+        <translation>실행되고 있는 모든 문서 중지</translation>
     </message>
     <message>
+        <location filename="../qutecsound.cpp" line="3307"/>
         <location filename="../qutecsound.cpp" line="3308"/>
         <location filename="../qutecsound.cpp" line="3309"/>
-        <location filename="../qutecsound.cpp" line="3310"/>
         <source>Record</source>
-        <translation type="unfinished"></translation>
+        <translation>녹음</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3318"/>
+        <location filename="../qutecsound.cpp" line="3317"/>
         <source>Render</source>
-        <translation type="unfinished"></translation>
+        <translation>렌더</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3321"/>
+        <source>Play Audiofile</source>
+        <translation>오디오파일 재생</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3322"/>
-        <source>Play Audiofile</source>
-        <translation type="unfinished"></translation>
+        <source>Play rendered audiofile in External Editor</source>
+        <translation>위부 편집기에서 렌더 된 오디오파일 재생하기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3323"/>
-        <source>Play rendered audiofile in External Editor</source>
-        <translation type="unfinished"></translation>
+        <source>Ext. Player</source>
+        <translation>외부 재생기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3324"/>
-        <source>Ext. Player</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3327"/>
+        <source>Edit Audiofile</source>
+        <translation>오디오파일 편집</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3328"/>
-        <source>Edit Audiofile</source>
-        <translation type="unfinished"></translation>
+        <source>Edit rendered audiofile in External Editor</source>
+        <translation>외부 편집기에서 렌더 된 오디오파일 편집하기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3329"/>
-        <source>Edit rendered audiofile in External Editor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3330"/>
         <source>Ext. Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>외부 편집기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3334"/>
-        <location filename="../qutecsound.cpp" line="3338"/>
-        <source>Widgets</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../qutecsound.cpp" line="3333"/>
         <location filename="../qutecsound.cpp" line="3337"/>
+        <source>Widgets</source>
+        <translation>위젯</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3336"/>
         <source>Show Realtime Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>리얼타임 위젯 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3342"/>
+        <location filename="../qutecsound.cpp" line="3341"/>
         <source>Show/Raise Widgets Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 패널 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3348"/>
-        <location filename="../qutecsound.cpp" line="3351"/>
-        <source>Inspector</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../qutecsound.cpp" line="3347"/>
         <location filename="../qutecsound.cpp" line="3350"/>
-        <source>Show Inspector</source>
-        <translation type="unfinished"></translation>
+        <source>Inspector</source>
+        <translation>돋보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3357"/>
+        <location filename="../qutecsound.cpp" line="3349"/>
+        <source>Show Inspector</source>
+        <translation>돋보기 보기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3356"/>
         <source>Show/Raise Inspector Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>돋보기 패널 보기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3362"/>
+        <source>Focus Text Editor</source>
+        <comment>Give keyboard focus to the text editor</comment>
+        <translatorcomment>Give keyboard focus to the text editor</translatorcomment>
+        <translation>Focus Text Editor</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3363"/>
-        <source>Focus Text Editor</source>
-        <comment>Give keyboard focus to the text editor</comment>
-        <translation type="unfinished"></translation>
+        <source>Give keyboard focus to the text editor</source>
+        <translation>Give keyboard focus to the text editor</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3364"/>
-        <source>Give keyboard focus to the text editor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3365"/>
         <source>Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>편집기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3369"/>
+        <location filename="../qutecsound.cpp" line="3368"/>
         <source>Help Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>도움말 패널</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3371"/>
+        <source>Show the Csound Manual Panel</source>
+        <translation>Csound 매뉴얼 패널 보이기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3372"/>
-        <source>Show the Csound Manual Panel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3373"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>매뉴얼</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3379"/>
+        <location filename="../qutecsound.cpp" line="3378"/>
         <source>Show/Raise help panel</source>
-        <translation type="unfinished"></translation>
+        <translation>도움말 패널 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3386"/>
-        <location filename="../qutecsound.cpp" line="3390"/>
-        <source>Live Events</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../qutecsound.cpp" line="3385"/>
         <location filename="../qutecsound.cpp" line="3389"/>
-        <source>Show Live Events Panels</source>
-        <translation type="unfinished"></translation>
+        <source>Live Events</source>
+        <translation>라이브 이벤트</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3393"/>
+        <location filename="../qutecsound.cpp" line="3388"/>
+        <source>Show Live Events Panels</source>
+        <translation>라이브 이벤트 패널 보기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3392"/>
         <source>Python Console</source>
-        <translation type="unfinished"></translation>
+        <translation>파이썬 콘솔</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3395"/>
+        <source>Show Python Console</source>
+        <translation>파이썬 콘솔 보기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3396"/>
-        <source>Show Python Console</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3397"/>
         <source>Python</source>
-        <translation type="unfinished"></translation>
+        <translation>파이썬</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3407"/>
+        <location filename="../qutecsound.cpp" line="3406"/>
         <source>Show/Raise Python Console</source>
-        <translation type="unfinished"></translation>
+        <translation>파이썬 콘솔 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3413"/>
-        <location filename="../qutecsound.cpp" line="3417"/>
-        <source>CodePad</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../qutecsound.cpp" line="3412"/>
         <location filename="../qutecsound.cpp" line="3416"/>
-        <source>Show Code Pad</source>
-        <translation type="unfinished"></translation>
+        <source>CodePad</source>
+        <translation>코드패드</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3423"/>
+        <location filename="../qutecsound.cpp" line="3415"/>
+        <source>Show Code Pad</source>
+        <translation>코드 패드 보기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3422"/>
         <source>Show/Raise Code Pad</source>
-        <translation type="unfinished"></translation>
+        <translation>코드 패드 보기 및 올리기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3428"/>
+        <source>Csound Manual</source>
+        <translation>Csound 메뉴얼</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3429"/>
-        <source>Csound Manual</source>
-        <translation type="unfinished"></translation>
+        <source>Show the Csound manual in the help panel</source>
+        <translation>도움말 패널에 Csound 메뉴얼 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3430"/>
-        <source>Show the Csound manual in the help panel</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3433"/>
+        <source>Download Csound Manual</source>
+        <translation>Csound 메뉴얼 내려받기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3434"/>
-        <source>Download Csound Manual</source>
-        <translation type="unfinished"></translation>
+        <source>Download latest Csound manual</source>
+        <translation>최근 Csound 메뉴얼 내려받기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3435"/>
-        <source>Download latest Csound manual</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3439"/>
+        <source>GEN Routines</source>
+        <translation>GEN 루틴</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3440"/>
-        <source>GEN Routines</source>
-        <translation type="unfinished"></translation>
+        <source>Show the GEN Routines Manual page</source>
+        <translation>GEN 루틴 메뉴얼 페이지 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3441"/>
-        <source>Show the GEN Routines Manual page</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3444"/>
+        <source>Opcode Overview</source>
+        <translation>옵코드 전체보기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3445"/>
-        <source>Opcode Overview</source>
-        <translation type="unfinished"></translation>
+        <source>Show opcode overview</source>
+        <translation>업코드 전체보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3446"/>
-        <source>Show opcode overview</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3449"/>
+        <source>Opcode Quick Reference</source>
+        <translation>옵코드 Quick Reference</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3450"/>
-        <source>Opcode Quick Reference</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3451"/>
         <source>Show opcode quick reference page</source>
-        <translation type="unfinished"></translation>
+        <translation>옵코드 quick reference 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3455"/>
+        <location filename="../qutecsound.cpp" line="3454"/>
         <source>Output Console</source>
-        <translation type="unfinished"></translation>
+        <translation>아웃풋 콘솔</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3458"/>
+        <location filename="../qutecsound.cpp" line="3457"/>
         <source>Show Csound&apos;s message console</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound 메시지 콘솔 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3465"/>
+        <location filename="../qutecsound.cpp" line="3464"/>
         <source>Show/Raise Console</source>
-        <translation type="unfinished"></translation>
+        <translation>콘솔 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3471"/>
+        <location filename="../qutecsound.cpp" line="3470"/>
         <source>View Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>전체화면으로 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3474"/>
+        <location filename="../qutecsound.cpp" line="3473"/>
         <source>Have CsoundQt occupy all available screen space</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt를 최대한으로 크게 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3478"/>
+        <location filename="../qutecsound.cpp" line="3477"/>
         <source>View Editor Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>편집기 전체화면으로 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3481"/>
+        <location filename="../qutecsound.cpp" line="3480"/>
         <source>Have the editor occupy all available screen space</source>
-        <translation type="unfinished"></translation>
+        <translation>편집기를 최대한으로 크게 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3486"/>
+        <location filename="../qutecsound.cpp" line="3485"/>
         <source>View HTML Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML 전체화면으로 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3489"/>
+        <location filename="../qutecsound.cpp" line="3488"/>
         <source>Have the HTML page occupy all available screen space</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML 페이지를 최대한으로 크게 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3493"/>
+        <location filename="../qutecsound.cpp" line="3492"/>
         <source>View Help Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>도움말 전체화면으로 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3496"/>
+        <location filename="../qutecsound.cpp" line="3495"/>
         <source>Have the help page occupy all available screen space</source>
-        <translation type="unfinished"></translation>
+        <translation>도움말을 최대한으로 크게 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3500"/>
+        <location filename="../qutecsound.cpp" line="3499"/>
         <source>View Widgets Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 전체화면으로 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3503"/>
+        <location filename="../qutecsound.cpp" line="3502"/>
         <source>Have the widgets panel occupy all available screen space</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯을 최대한으로 크게 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3508"/>
+        <location filename="../qutecsound.cpp" line="3507"/>
         <source>Show debugger</source>
-        <translation type="unfinished"></translation>
+        <translation>디버그 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3511"/>
+        <location filename="../qutecsound.cpp" line="3510"/>
         <source>Show the Csound debugger</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound 디버거 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3515"/>
+        <location filename="../qutecsound.cpp" line="3514"/>
         <source>Show Virtual Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Virtual 키보드 보기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3517"/>
+        <source>Show the Virtual MIDI Keyboard</source>
+        <translation>Virtual MIDI 키보드 보기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3518"/>
-        <source>Show the Virtual MIDI Keyboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3519"/>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>키보드</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3523"/>
-        <location filename="../qutecsound.cpp" line="3526"/>
+        <location filename="../qutecsound.cpp" line="3522"/>
+        <location filename="../qutecsound.cpp" line="3525"/>
         <source>Show Table editor</source>
-        <translation type="unfinished"></translation>
+        <translation>테이블 편집기 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3527"/>
+        <location filename="../qutecsound.cpp" line="3526"/>
         <source>Table editor</source>
-        <translation type="unfinished"></translation>
+        <translation>테이블 편집기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3534"/>
+        <location filename="../qutecsound.cpp" line="3533"/>
         <source>HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3537"/>
+        <location filename="../qutecsound.cpp" line="3536"/>
         <source>Show the HTML view</source>
-        <translation type="unfinished"></translation>
+        <translation>HTML 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3543"/>
+        <location filename="../qutecsound.cpp" line="3542"/>
         <source>Show/Raise HtmlView</source>
-        <translation type="unfinished"></translation>
+        <translation>Html 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3550"/>
+        <location filename="../qutecsound.cpp" line="3549"/>
         <source>Split View</source>
-        <translation type="unfinished"></translation>
+        <translation>분리해 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3553"/>
+        <location filename="../qutecsound.cpp" line="3552"/>
         <source>Toggle between full csd and split text display</source>
-        <translation type="unfinished"></translation>
+        <translation>전체 csd 와 분리된 텍스트 디스플레이 사이의 토글</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3555"/>
+        <source>MIDI Learn</source>
+        <translation>MIDI Learn</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3556"/>
-        <source>MIDI Learn</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3557"/>
         <source>Show MIDI Learn Window for widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯을 위한 MIDI 배우기 창 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3561"/>
+        <location filename="../qutecsound.cpp" line="3560"/>
         <source>Show Orchestra</source>
-        <translation type="unfinished"></translation>
+        <translation>오케스트라 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3565"/>
-        <location filename="../qutecsound.cpp" line="3574"/>
+        <location filename="../qutecsound.cpp" line="3564"/>
+        <location filename="../qutecsound.cpp" line="3573"/>
         <source>Show orchestra panel in split view</source>
-        <translation type="unfinished"></translation>
+        <translation>오케스트라 패널을 분리된 창으로 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3570"/>
+        <location filename="../qutecsound.cpp" line="3569"/>
         <source>Show Score</source>
-        <translation type="unfinished"></translation>
+        <translation>스코어 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3579"/>
+        <location filename="../qutecsound.cpp" line="3578"/>
         <source>Show CsOptions</source>
-        <translation type="unfinished"></translation>
+        <translation>CsOption 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3583"/>
+        <location filename="../qutecsound.cpp" line="3582"/>
         <source>Show CsOptions section panel in split view</source>
-        <translation type="unfinished"></translation>
+        <translation>CsOption을 분리된 창에서 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3588"/>
+        <location filename="../qutecsound.cpp" line="3587"/>
         <source>Show Embedded files</source>
-        <translation type="unfinished"></translation>
+        <translation>추가된 파일 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3592"/>
+        <location filename="../qutecsound.cpp" line="3591"/>
         <source>Show Embedded files panel in split view</source>
-        <translation type="unfinished"></translation>
+        <translation>추가된 파일 패널을 분리된 창으로 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3597"/>
+        <location filename="../qutecsound.cpp" line="3596"/>
         <source>Show Information Text</source>
-        <translation type="unfinished"></translation>
+        <translation>안내 텍스트 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3601"/>
+        <location filename="../qutecsound.cpp" line="3600"/>
         <source>Show information text panel in split view</source>
-        <translation type="unfinished"></translation>
+        <translation>안내 텍스트 패널을 분리된 창으로 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3606"/>
+        <location filename="../qutecsound.cpp" line="3605"/>
         <source>Show Extra Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>엑스트라 태그 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3610"/>
+        <location filename="../qutecsound.cpp" line="3609"/>
         <source>Show extra tags panel in split view</source>
-        <translation type="unfinished"></translation>
+        <translation>엑스트라 태그 패널을 분리된 창으로 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3615"/>
+        <location filename="../qutecsound.cpp" line="3614"/>
         <source>Show Widgets Text</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 텍스트 보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3619"/>
+        <location filename="../qutecsound.cpp" line="3618"/>
         <source>Show Widgets text panel in split view</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 텍스트 패널을 분리된 창으로 보기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3623"/>
+        <source>Show Opcode Entry</source>
+        <translation>옵코드 엔트리 보기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3624"/>
-        <source>Show Opcode Entry</source>
-        <translation type="unfinished"></translation>
+        <source>Show Opcode Entry in help panel</source>
+        <translation>도움말 패널에서 옵코드 엔트리 보기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3625"/>
-        <source>Show Opcode Entry in help panel</source>
-        <translation type="unfinished"></translation>
+        <source>Manual for opcode</source>
+        <translation>옵코드 메뉴얼</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3626"/>
-        <source>Manual for opcode</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3629"/>
+        <source>Help Back</source>
+        <translation>도움말 뒤로가기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3630"/>
-        <source>Help Back</source>
-        <translation type="unfinished"></translation>
+        <source>Go back in help page</source>
+        <translation>도움말로 돌아가기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3631"/>
-        <source>Go back in help page</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3634"/>
+        <source>Help Forward</source>
+        <translation>도움말 이전으로 가기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3635"/>
-        <source>Help Forward</source>
-        <translation type="unfinished"></translation>
+        <source>Go forward in help page</source>
+        <translation>도움말 이전으로 가기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3636"/>
-        <source>Go forward in help page</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3639"/>
+        <source>Show Opcode Entry in External Browser</source>
+        <translation>외부 브라우저로 옵코드엔트리 보기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3640"/>
-        <source>Show Opcode Entry in External Browser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3641"/>
         <source>Show Opcode Entry in external browser</source>
-        <translation type="unfinished"></translation>
+        <translation>외부 브라우저로 옵코드엔트리 보기</translation>
     </message>
     <message>
+        <location filename="../qutecsound.cpp" line="3644"/>
         <location filename="../qutecsound.cpp" line="3645"/>
-        <location filename="../qutecsound.cpp" line="3646"/>
         <source>Open online documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>온라인 문서 열기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3649"/>
+        <source>Open Quick Reference Guide</source>
+        <translation>Quick Reference Guide 열기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3650"/>
-        <source>Open Quick Reference Guide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3651"/>
         <source>Open Quick Reference Guide in PDF viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Quick Reference Guide 를 PDF 뷰어로 열기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3655"/>
-        <location filename="../qutecsound.cpp" line="3659"/>
-        <source>Utilities</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../qutecsound.cpp" line="3654"/>
         <location filename="../qutecsound.cpp" line="3658"/>
+        <source>Utilities</source>
+        <translation>유틸리티</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3657"/>
         <source>Show the Csound Utilities dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound 유틸리티 창 보이기</translation>
     </message>
     <message>
+        <location filename="../qutecsound.cpp" line="3662"/>
         <location filename="../qutecsound.cpp" line="3663"/>
-        <location filename="../qutecsound.cpp" line="3664"/>
         <source>Set Keyboard Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>키보드 단축키 설정</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3665"/>
+        <location filename="../qutecsound.cpp" line="3664"/>
         <source>Set Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>단척키 설정</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3668"/>
+        <source>Comment/Uncomment</source>
+        <translation>코멘트 설정하기/비설정하기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3669"/>
-        <source>Comment/Uncomment</source>
-        <translation type="unfinished"></translation>
+        <source>Comment/Uncomment selection</source>
+        <translation>코멘트 설정하기/비설정하기 선택</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3670"/>
-        <source>Comment/Uncomment selection</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3680"/>
+        <source>Indent</source>
+        <translation>들여쓰기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3681"/>
-        <source>Indent</source>
-        <translation type="unfinished"></translation>
+        <source>Indent selection</source>
+        <translation>들여쓰기 선택</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3682"/>
-        <source>Indent selection</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3686"/>
+        <source>Unindent</source>
+        <translation>보통</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3687"/>
-        <source>Unindent</source>
-        <translation type="unfinished"></translation>
+        <source>Unindent selection</source>
+        <translation>보통 선택</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3688"/>
-        <source>Unindent selection</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3692"/>
+        <source>Kill Line</source>
+        <translation>줄 없애기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3693"/>
-        <source>Kill Line</source>
-        <translation type="unfinished"></translation>
+        <source>Completely delete current line</source>
+        <translation>현재 라인 전부 삭제</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3694"/>
-        <source>Completely delete current line</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3696"/>
+        <source>Kill to End of Line</source>
+        <translation>마지막 줄 없애기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3697"/>
-        <source>Kill to End of Line</source>
-        <translation type="unfinished"></translation>
+        <source>Delete everything from cursor to the end of the current line</source>
+        <translation>커서부터 현재 라인까지 전부 삭제</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3698"/>
-        <source>Delete everything from cursor to the end of the current line</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3700"/>
+        <source>&amp;About CsoundQt</source>
+        <translation>CsoundQt에 대하여</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3701"/>
-        <source>&amp;About CsoundQt</source>
-        <translation type="unfinished"></translation>
+        <source>Show the application&apos;s About box</source>
+        <translation>&apos;앱에 대하여&apos; 보이기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3702"/>
-        <source>Show the application&apos;s About box</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3706"/>
+        <source>Donate to CsoundQt</source>
+        <translation>CsoundQt 에 기부</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3707"/>
-        <source>Donate to CsoundQt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3708"/>
         <source>Donate to support development of CsoundQt</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt 지원부서에 기부</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3720"/>
+        <location filename="../qutecsound.cpp" line="3719"/>
         <source>Reset CsoundQt&apos;s preferences to their original default state</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt 환결설정 초기화하기</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3723"/>
+        <source>Report a Bug</source>
+        <translation>버그 신고하기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3724"/>
-        <source>Report a Bug</source>
-        <translation type="unfinished"></translation>
+        <source>Report a bug in CsoundQt&apos;s Bug Tracker</source>
+        <translation>CsoundQt 버그 트래커에 버그 신고하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3725"/>
-        <source>Report a bug in CsoundQt&apos;s Bug Tracker</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3728"/>
+        <source>Request a Feature (please add label &apos;Enhancement&apos;)</source>
+        <translation>Feature 요구하기(라벨에 &apos;Enhancement&apos;를 추가해주십시오)</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3729"/>
-        <source>Request a Feature (please add label &apos;Enhancement&apos;)</source>
-        <translation type="unfinished"></translation>
+        <source>Request a feature in CsoundQt&apos;s Feature Tracker</source>
+        <translation>CsoundQt 의 Feature 트래커에 feature 요구하기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3730"/>
-        <source>Request a feature in CsoundQt&apos;s Feature Tracker</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="3733"/>
+        <source>Csound IRC Chat</source>
+        <translation>Csound IRC Chat</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3734"/>
-        <source>Csound IRC Chat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3735"/>
         <source>Open the IRC chat channel #csound in your browser</source>
-        <translation type="unfinished"></translation>
+        <translation>IRC chat 채널 열기 #csound in your browser</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3739"/>
+        <location filename="../qutecsound.cpp" line="3738"/>
         <source>Duplicate Widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 복사</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3743"/>
+        <location filename="../qutecsound.cpp" line="3742"/>
         <source>Show/hide line number area</source>
-        <translation type="unfinished"></translation>
+        <translation>줄 수 보기 및 숨기기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3747"/>
+        <location filename="../qutecsound.cpp" line="3746"/>
         <source>Toggle parameter mode</source>
-        <translation type="unfinished"></translation>
+        <translation>토글 파라미터 모드</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3967"/>
+        <location filename="../qutecsound.cpp" line="3966"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>파일</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="3978"/>
+        <source>Recent files</source>
+        <translation>최근 파일들</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="3979"/>
-        <source>Recent files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="3980"/>
         <source>Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>템플릿</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="3985"/>
+        <location filename="../qutecsound.cpp" line="3984"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>편집</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4020"/>
-        <location filename="../qutecsound.cpp" line="4592"/>
+        <location filename="../qutecsound.cpp" line="4019"/>
+        <location filename="../qutecsound.cpp" line="4591"/>
         <source>Control</source>
-        <translation type="unfinished"></translation>
+        <translation>제어</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4031"/>
+        <location filename="../qutecsound.cpp" line="4030"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>보기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4097"/>
+        <location filename="../qutecsound.cpp" line="4096"/>
         <source>Live Collection</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Collection</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4146"/>
+        <location filename="../qutecsound.cpp" line="4145"/>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation>음악</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4172"/>
+        <location filename="../qutecsound.cpp" line="4171"/>
         <source>Useful</source>
-        <translation type="unfinished"></translation>
+        <translation>Useful</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4201"/>
+        <location filename="../qutecsound.cpp" line="4200"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Miscellaneous</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4207"/>
+        <location filename="../qutecsound.cpp" line="4206"/>
         <source>Html5 support</source>
-        <translation type="unfinished"></translation>
+        <translation>Html5 지원</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4209"/>
+        <location filename="../qutecsound.cpp" line="4208"/>
         <source>Examples</source>
-        <translation type="unfinished"></translation>
+        <translation>예시</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="4221"/>
+        <source>Getting Started</source>
+        <translation>시작하기</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="4222"/>
-        <source>Getting Started</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="4223"/>
         <source>Basics</source>
-        <translation type="unfinished"></translation>
+        <translation>베이직</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4243"/>
+        <location filename="../qutecsound.cpp" line="4242"/>
         <source>Realtime Interaction</source>
-        <translation type="unfinished"></translation>
+        <translation>리얼타임 인터액션</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4259"/>
+        <location filename="../qutecsound.cpp" line="4258"/>
         <source>Language Features</source>
-        <translation type="unfinished"></translation>
+        <translation>언어 설정</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="4283"/>
+        <source>FLOSS Manual Examples</source>
+        <translation>FLOSS 메뉴얼 예시</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="4284"/>
-        <source>FLOSS Manual Examples</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="4285"/>
         <source>Read FLOSS Manual Online</source>
-        <translation type="unfinished"></translation>
+        <translation>온라인 FLOSS 메뉴얼 읽기</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4309"/>
+        <location filename="../qutecsound.cpp" line="4308"/>
         <source>McCurdy Collection</source>
-        <translation type="unfinished"></translation>
+        <translation>McCurdy Collection</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4340"/>
+        <location filename="../qutecsound.cpp" line="4339"/>
         <source>Stria Synth</source>
-        <translation type="unfinished"></translation>
+        <translation>Stria Synth</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4357"/>
+        <location filename="../qutecsound.cpp" line="4356"/>
         <source>Favorites</source>
-        <translation type="unfinished"></translation>
+        <translation>최근 사용한...</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4359"/>
+        <location filename="../qutecsound.cpp" line="4358"/>
         <source>Scripts</source>
-        <translation type="unfinished"></translation>
+        <translation>스크립트</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4365"/>
+        <location filename="../qutecsound.cpp" line="4364"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>도움말</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4454"/>
+        <location filename="../qutecsound.cpp" line="4453"/>
         <source>Set the Favourites folder in the Configuration Window</source>
-        <translation type="unfinished"></translation>
+        <translation>설정에서 최근 사용한 폴더 변경</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4604"/>
+        <location filename="../qutecsound.cpp" line="4603"/>
         <source>Panels</source>
-        <translation type="unfinished"></translation>
+        <translation>패널</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4635"/>
+        <location filename="../qutecsound.cpp" line="4634"/>
         <source>Ready</source>
-        <translation type="unfinished"></translation>
+        <translation>준비</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4647"/>
+        <location filename="../qutecsound.cpp" line="4646"/>
         <source>Settings changed</source>
-        <translation type="unfinished"></translation>
+        <translation>설정이 변경되었습니다.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="4647"/>
+        <location filename="../qutecsound.cpp" line="4646"/>
         <source>In this version the shortcuts for showing panels changed. See ... for more information. Please Use Edit-&gt;Keyboard shortcuts -&gt; Restore Defaults to activate it.</source>
-        <translation type="unfinished"></translation>
+        <translation>패널보여주기의 단축기가 이 버전에서 변경되었습니다. 설정에서 확인하시기 바랍니다.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="5137"/>
+        <location filename="../qutecsound.cpp" line="5136"/>
         <source>Cannot read file %1:
 %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일을 읽을 수 없습니다. %1:
+%2.</translation>
+    </message>
+    <message>
+        <location filename="../qutecsound.cpp" line="5277"/>
+        <source>Document number limit</source>
+        <translation>문서 번호 제한</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="5278"/>
-        <source>Document number limit</source>
-        <translation type="unfinished"></translation>
+        <source>Please close a document before opening another.</source>
+        <translation>다른 문서를 열기 전에 지금 문서를 닫아주십시오.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="5279"/>
-        <source>Please close a document before opening another.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qutecsound.cpp" line="5399"/>
+        <source>Application</source>
+        <translation>어플리케이션</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="5400"/>
-        <source>Application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qutecsound.cpp" line="5401"/>
         <source>Cannot write file %1:
 %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일을 만들 수 없습니다 %1:
+%2.</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="5423"/>
+        <location filename="../qutecsound.cpp" line="5422"/>
         <source>%1[*] - %2</source>
-        <translation type="unfinished"></translation>
+        <translation>l%1[*] - %2</translation>
     </message>
     <message>
-        <location filename="../qutecsound.cpp" line="5526"/>
+        <location filename="../qutecsound.cpp" line="5525"/>
         <source>Do not ask again</source>
-        <translation type="unfinished"></translation>
+        <translation>다시 보지 않기</translation>
     </message>
 </context>
 <context>
@@ -3185,103 +3192,103 @@ Extended Python features are not available</source>
     <message>
         <location filename="../debugpanel.ui" line="17"/>
         <source>Csound Debugger</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound 디버거</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="38"/>
         <source>Run</source>
-        <translation type="unfinished"></translation>
+        <translation>실행</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="53"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>중지</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="64"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>계속</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="75"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>다음</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="99"/>
         <source>Debugger stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>디버거 중단</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="152"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>사용가능</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="157"/>
         <location filename="../debugpanel.ui" line="290"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>타입</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="162"/>
         <source>Instr/Line</source>
-        <translation type="unfinished"></translation>
+        <translation>인스트루머트/라인</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="167"/>
         <source>Skip count</source>
-        <translation type="unfinished"></translation>
+        <translation>스킵 카운트</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="177"/>
         <source>Active instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>액티브 인스트루먼트</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="207"/>
         <source>Breakpoints</source>
-        <translation type="unfinished"></translation>
+        <translation>중단</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="220"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>새로 만들기</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="231"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>삭제</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="257"/>
         <source>Current Stack</source>
-        <translation type="unfinished"></translation>
+        <translation>스택</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="280"/>
         <source>Variable</source>
-        <translation type="unfinished"></translation>
+        <translation>변수</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="285"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>밸류</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="305"/>
         <source>Instr</source>
-        <translation type="unfinished"></translation>
+        <translation>인스트루먼트</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="310"/>
         <source>p-fields</source>
-        <translation type="unfinished"></translation>
+        <translation>p열</translation>
     </message>
     <message>
         <location filename="../debugpanel.ui" line="315"/>
         <source>k-count</source>
-        <translation type="unfinished"></translation>
+        <translation>k카운트</translation>
     </message>
 </context>
 <context>
@@ -3289,7 +3296,7 @@ Extended Python features are not available</source>
     <message>
         <location filename="../console.cpp" line="190"/>
         <source>Output Console</source>
-        <translation type="unfinished"></translation>
+        <translation>아웃풋 콘솔</translation>
     </message>
 </context>
 <context>
@@ -3297,70 +3304,70 @@ Extended Python features are not available</source>
     <message>
         <location filename="../dockhelp.ui" line="14"/>
         <source>Documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>문서</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="47"/>
         <location filename="../dockhelp.ui" line="74"/>
         <location filename="../dockhelp.ui" line="95"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="88"/>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>홈</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="115"/>
         <source>Opcodes</source>
-        <translation type="unfinished"></translation>
+        <translation>옵코드</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="138"/>
         <source>Find:</source>
-        <translation type="unfinished"></translation>
+        <translation>찾기:</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="145"/>
         <source>Match Case</source>
-        <translation type="unfinished"></translation>
+        <translation>매치케이스</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="152"/>
         <source>Whole words</source>
-        <translation type="unfinished"></translation>
+        <translation>전체 단어</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="201"/>
         <source>Find Next</source>
-        <translation type="unfinished"></translation>
+        <translation>다음 찾기</translation>
     </message>
     <message>
         <location filename="../dockhelp.ui" line="210"/>
         <source>Find Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>이전 찾기</translation>
     </message>
     <message>
         <location filename="../dockhelp.cpp" line="72"/>
         <source>Not Found! Make sure the documentation path is set in the Configuration Dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>찾을 수 없습니다! 설정 안에서 문서경로를 확인하십시오.</translation>
     </message>
     <message>
         <location filename="../dockhelp.cpp" line="141"/>
         <location filename="../dockhelp.cpp" line="147"/>
         <source>CsoundQt</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt</translation>
     </message>
     <message>
         <location filename="../dockhelp.cpp" line="142"/>
         <source>Frames version only available in external browser.</source>
-        <translation type="unfinished"></translation>
+        <translation>프레임버전은 외부브라우저에서만 사용가능합니다.</translation>
     </message>
     <message>
         <location filename="../dockhelp.cpp" line="148"/>
         <source>External links can&apos;t be followed in help browser.</source>
-        <translation type="unfinished"></translation>
+        <translation>외부 링크는 도움말을 사용하실 수 없습니다.</translation>
     </message>
 </context>
 <context>
@@ -3368,32 +3375,32 @@ Extended Python features are not available</source>
     <message>
         <location filename="../documentpage.cpp" line="723"/>
         <source>No widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 없음</translation>
     </message>
     <message>
         <location filename="../documentpage.cpp" line="723"/>
         <source>There are no widgets to convert!</source>
-        <translation type="unfinished"></translation>
+        <translation>변환하기 위한 위젯이 존재하지 않습니다!</translation>
     </message>
     <message>
         <location filename="../documentpage.cpp" line="1262"/>
         <source>CsoundQt</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt</translation>
     </message>
     <message>
         <location filename="../documentpage.cpp" line="1263"/>
         <source>You must save the examples to use Record.</source>
-        <translation type="unfinished"></translation>
+        <translation>녹음을 하기 위해 이 예시를 저장하십시오.</translation>
     </message>
     <message>
         <location filename="../documentpage.cpp" line="1282"/>
         <source>Recording not possible</source>
-        <translation type="unfinished"></translation>
+        <translation>녹음이 불가합니다.</translation>
     </message>
     <message>
         <location filename="../documentpage.cpp" line="1282"/>
         <source>This version of CsoundQt was not built with recording support.</source>
-        <translation type="unfinished"></translation>
+        <translation>이 CsoundQt 버전은 녹음 기능을 지원하지 않습니다.</translation>
     </message>
 </context>
 <context>
@@ -3401,49 +3408,50 @@ Extended Python features are not available</source>
     <message>
         <location filename="../documentview.cpp" line="1184"/>
         <source>Find and replace</source>
-        <translation type="unfinished"></translation>
+        <translation>찾기 및 바꾸기</translation>
     </message>
     <message>
         <location filename="../documentview.cpp" line="1185"/>
         <source>The string was not found.
 Would you like to start from the top?</source>
-        <translation type="unfinished"></translation>
+        <translation>스트링을 찾을 수 없습니다. 처음부터 시작하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../documentview.cpp" line="1212"/>
         <source>Evaluate Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>평가 선택</translation>
     </message>
     <message>
         <location filename="../documentview.cpp" line="1213"/>
         <source>Opcode Help</source>
-        <translation type="unfinished"></translation>
+        <translation>옵코드 도움말</translation>
     </message>
     <message>
         <location filename="../documentview.cpp" line="1214"/>
         <source>Show/hide line numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>줄 번호 찾기 및 숨기기</translation>
     </message>
     <message>
         <location filename="../documentview.cpp" line="1763"/>
         <source>Where to insert?</source>
-        <translation type="unfinished"></translation>
+        <translation>어디로 삽입하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../documentview.cpp" line="1763"/>
         <source>Could find section ;;channels
 Is it OK to insert ;;channels and chn_k declaration before in the current position?</source>
-        <translation type="unfinished"></translation>
+        <translation>섹션을 찾을 수 있습니다. ;;channels
+Is it OK to insert ;;channels and chn_k declaration before in the current position?</translation>
     </message>
     <message>
         <location filename="../documentview.cpp" line="1775"/>
         <source>chn_kdeclaration</source>
-        <translation type="unfinished"></translation>
+        <translation>chn_kdeclaration</translation>
     </message>
     <message>
         <location filename="../documentview.cpp" line="1775"/>
         <source>This channel is already declared.</source>
-        <translation type="unfinished"></translation>
+        <translation>이 채널은 이미 사용되었습니다.</translation>
     </message>
 </context>
 <context>
@@ -3451,7 +3459,7 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
     <message>
         <location filename="../configlists.cpp" line="191"/>
         <source>Virtual MIDI keyboard Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Virtual MIDI키보드 사용가능</translation>
     </message>
 </context>
 <context>
@@ -3459,401 +3467,401 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
     <message>
         <location filename="../eventsheet.cpp" line="139"/>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>이벤트</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="678"/>
         <location filename="../eventsheet.cpp" line="1411"/>
         <source>Subtract</source>
-        <translation type="unfinished"></translation>
+        <translation>빼기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="687"/>
         <location filename="../eventsheet.cpp" line="1416"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>빼기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="696"/>
         <source>Multiply by</source>
-        <translation type="unfinished"></translation>
+        <translation>곱하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="705"/>
         <source>Divide by</source>
-        <translation type="unfinished"></translation>
+        <translation>나누기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="715"/>
         <source>Minimum</source>
-        <translation type="unfinished"></translation>
+        <translation>최소</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="715"/>
         <source>Maximum</source>
-        <translation type="unfinished"></translation>
+        <translation>최대</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="715"/>
         <source>Mode: 0=decimals 1=Integers only</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode: 0=decimals 1=Integers only</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="766"/>
         <source>Iterations</source>
-        <translation type="unfinished"></translation>
+        <translation>반복</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="783"/>
         <source>Rotate by</source>
-        <translation type="unfinished"></translation>
+        <translation>회전시키기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="795"/>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation>From</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="795"/>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation>To</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="795"/>
         <source>Slope (1=Linear)</source>
-        <translation type="unfinished"></translation>
+        <translation>Slope (1=Linear)</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="955"/>
         <source>Error running script</source>
-        <translation type="unfinished"></translation>
+        <translation>스크립트 오류</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1016"/>
         <source>Add columns:</source>
-        <translation type="unfinished"></translation>
+        <translation>새로운 단 추가:</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1028"/>
         <source>Add Rows:</source>
-        <translation type="unfinished"></translation>
+        <translation>새로운 열 추가:</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1083"/>
         <source>Python Scripts</source>
-        <translation type="unfinished"></translation>
+        <translation>파이썬 스크립트</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1084"/>
         <source>Conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>전환</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1090"/>
         <source>Tests</source>
-        <translation type="unfinished"></translation>
+        <translation>테스트</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1378"/>
         <source>&amp;Send Events</source>
-        <translation type="unfinished"></translation>
+        <translation>이벤트보내기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1379"/>
         <source>Send Events to Csound</source>
-        <translation type="unfinished"></translation>
+        <translation>이벤트 Csound로 보내기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1380"/>
         <source>Send Events</source>
-        <translation type="unfinished"></translation>
+        <translation>이벤트 보내기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1384"/>
         <source>&amp;Send Events without offset</source>
-        <translation type="unfinished"></translation>
+        <translation>오프셋 없이 이벤트 보내기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1385"/>
         <source>Send Events to Csound without offset</source>
-        <translation type="unfinished"></translation>
+        <translation>이벤트 없이 Csound 로 이벤트 보내기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1386"/>
         <source>Send Events no offset</source>
-        <translation type="unfinished"></translation>
+        <translation>이벤트 보내기 (no offset)</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1389"/>
         <source>&amp;Loop Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>반복재생 선택</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1390"/>
         <source>Mark loop to current selection and start looping</source>
-        <translation type="unfinished"></translation>
+        <translation>선택된 부분을 반복재생으로 설정하고 반복재생 시작하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1391"/>
         <source>Loop Events</source>
-        <translation type="unfinished"></translation>
+        <translation>이벤트 반복재생</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1394"/>
         <source>Loop Active</source>
-        <translation type="unfinished"></translation>
+        <translation>반복재생 실행</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1395"/>
         <source>Activate Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>실행 중인 반복재생</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1400"/>
         <source>Mark Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>반복재생 표기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1401"/>
         <source>Set Loop to selection, without starting loop</source>
-        <translation type="unfinished"></translation>
+        <translation>시작점 없이 반복재생 설정하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1404"/>
         <source>&amp;Stop Events</source>
-        <translation type="unfinished"></translation>
+        <translation>이벤트 멈추기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1405"/>
         <source>Stop all running and pending events</source>
-        <translation type="unfinished"></translation>
+        <translation>실행 중인 모든 이벤트 중지</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1406"/>
         <source>Stop Events</source>
-        <translation type="unfinished"></translation>
+        <translation>이벤트 멈추기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1409"/>
         <source>&amp;Subtract</source>
-        <translation type="unfinished"></translation>
+        <translation>빼기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1410"/>
         <source>Subtract a value from the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>선택한 셀에서 값 빼기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1414"/>
         <source>&amp;Add</source>
-        <translation type="unfinished"></translation>
+        <translation>더하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1415"/>
         <source>Add a value to the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>선택한 셀에서 값 더하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1419"/>
         <source>&amp;Multiply</source>
-        <translation type="unfinished"></translation>
+        <translation>곱하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1420"/>
         <source>Multiply the selected cells by a value</source>
-        <translation type="unfinished"></translation>
+        <translation>선택한 셀에서 값 곱하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1421"/>
         <source>Multiply</source>
-        <translation type="unfinished"></translation>
+        <translation>곱하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1424"/>
         <source>&amp;Divide</source>
-        <translation type="unfinished"></translation>
+        <translation>나누기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1425"/>
         <source>Divide the selected cells by a value</source>
-        <translation type="unfinished"></translation>
+        <translation>선택한 셀에서 값 나누기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1426"/>
         <source>Divide</source>
-        <translation type="unfinished"></translation>
+        <translation>나누기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1429"/>
         <source>&amp;Randomize</source>
-        <translation type="unfinished"></translation>
+        <translation>랜덤</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1430"/>
         <source>Randomize the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>선택한 셀 랜덤화</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1431"/>
         <source>Randomize</source>
-        <translation type="unfinished"></translation>
+        <translation>랜덤</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1434"/>
         <source>&amp;Reverse</source>
-        <translation type="unfinished"></translation>
+        <translation>리버스</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1435"/>
         <source>Reverse the selected cells by column</source>
-        <translation type="unfinished"></translation>
+        <translation>선택한 열 리버스하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1436"/>
         <source>Reverse</source>
-        <translation type="unfinished"></translation>
+        <translation>리버스</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1439"/>
         <source>&amp;Shuffle</source>
-        <translation type="unfinished"></translation>
+        <translation>셔플 (섞기)</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1440"/>
         <source>Shuffle the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>선택한 셀 셔플하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1441"/>
         <source>Shuffle</source>
-        <translation type="unfinished"></translation>
+        <translation>셔플(섞기)</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1449"/>
         <source>&amp;Rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>회전시키기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1450"/>
         <source>Rotate the selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>선택한 셀 회전시키기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1451"/>
         <source>Rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>회전시키기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1454"/>
         <source>&amp;Fill Cells</source>
-        <translation type="unfinished"></translation>
+        <translation>셀 채우기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1455"/>
         <source>Fill selected cells</source>
-        <translation type="unfinished"></translation>
+        <translation>선택한 셀 채우기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1456"/>
         <source>Fill</source>
-        <translation type="unfinished"></translation>
+        <translation>채우기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1459"/>
         <source>&amp;Insert Column</source>
-        <translation type="unfinished"></translation>
+        <translation>단 삽입</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1460"/>
         <source>Insert a column at the current position</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 위치에 단 삽입</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1461"/>
         <source>Insert Column</source>
-        <translation type="unfinished"></translation>
+        <translation>단 삽입</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1464"/>
         <location filename="../eventsheet.cpp" line="1466"/>
         <source>Insert Row</source>
-        <translation type="unfinished"></translation>
+        <translation>열 삽입</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1465"/>
         <source>Insert a row at the current position</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 위치에 열 삽입</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1469"/>
         <location filename="../eventsheet.cpp" line="1471"/>
         <source>Append Column</source>
-        <translation type="unfinished"></translation>
+        <translation>열 추가하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1470"/>
         <source>Append a column to the sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>시트에 열 추가하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1474"/>
         <source>&amp;Append Row</source>
-        <translation type="unfinished"></translation>
+        <translation>줄 추가하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1475"/>
         <source>Append a row to the sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>시트에 줄 추가하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1476"/>
         <source>Append Row</source>
-        <translation type="unfinished"></translation>
+        <translation>줄 추가하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1479"/>
         <location filename="../eventsheet.cpp" line="1481"/>
         <source>Append Columns...</source>
-        <translation type="unfinished"></translation>
+        <translation>여러 열 추가하기...</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1480"/>
         <source>Append columns to the sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>시트에 여러 열 추가하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1484"/>
         <location filename="../eventsheet.cpp" line="1486"/>
         <source>Append Rows...</source>
-        <translation type="unfinished"></translation>
+        <translation>여러 줄 추가하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1485"/>
         <source>Append rows to the sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>시트에 여러 줄 추가하기</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1489"/>
         <location filename="../eventsheet.cpp" line="1490"/>
         <location filename="../eventsheet.cpp" line="1491"/>
         <source>Delete Last Column</source>
-        <translation type="unfinished"></translation>
+        <translation>마지막 단 삭제</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1494"/>
         <source>Delete Selected Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>선택한 열 삭제</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1495"/>
         <location filename="../eventsheet.cpp" line="1496"/>
         <source>Delete Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>열 삭제</translation>
     </message>
     <message>
         <location filename="../eventsheet.cpp" line="1499"/>
         <source>Stop running script</source>
-        <translation type="unfinished"></translation>
+        <translation>실행되고 있는 스크립트 중지</translation>
     </message>
 </context>
 <context>
@@ -3861,58 +3869,59 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
     <message>
         <location filename="../filebeditor.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>형식</translation>
     </message>
     <message>
         <location filename="../filebeditor.ui" line="25"/>
         <source>Save as...</source>
-        <translation type="unfinished"></translation>
+        <translation>다른 이름으로 저장</translation>
     </message>
     <message>
         <location filename="../filebeditor.ui" line="32"/>
         <source>Add...</source>
-        <translation type="unfinished"></translation>
+        <translation>추가...</translation>
     </message>
     <message>
         <location filename="../filebeditor.ui" line="39"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>제거</translation>
     </message>
     <message>
         <location filename="../filebeditor.ui" line="64"/>
         <source>Embedded files</source>
-        <translation type="unfinished"></translation>
+        <translation>삽입된 파일</translation>
     </message>
     <message>
         <location filename="../filebeditor.cpp" line="79"/>
         <source>Select destination file name for file %1</source>
         <comment>For saving binary encoded embedded file</comment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>이진법 인코딩된 삽입파일 저장</translatorcomment>
+        <translation>파일이름 선택 %1</translation>
     </message>
     <message>
         <location filename="../filebeditor.cpp" line="86"/>
         <source>Saving embedded file</source>
-        <translation type="unfinished"></translation>
+        <translation>삽입 파일 저장</translation>
     </message>
     <message>
         <location filename="../filebeditor.cpp" line="87"/>
         <source>Error saving embedded file. Aborting.</source>
-        <translation type="unfinished"></translation>
+        <translation>삽입 파일 저장 오류가 생겨 중단됩니다.</translation>
     </message>
     <message>
         <location filename="../filebeditor.cpp" line="99"/>
         <source>Select files to embed</source>
-        <translation type="unfinished"></translation>
+        <translation>삽입 파일 선택</translation>
     </message>
     <message>
         <location filename="../filebeditor.cpp" line="112"/>
         <source>Encoding file</source>
-        <translation type="unfinished"></translation>
+        <translation>인코딩 파일</translation>
     </message>
     <message>
         <location filename="../filebeditor.cpp" line="113"/>
         <source>Error encoding file. Aborting.</source>
-        <translation type="unfinished"></translation>
+        <translation>인코딩 파일 에러. 중단됩니다.</translation>
     </message>
 </context>
 <context>
@@ -3920,42 +3929,42 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
     <message>
         <location filename="../findreplace.ui" line="17"/>
         <source>Find and Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>찾기 및 바꾸기</translation>
     </message>
     <message>
         <location filename="../findreplace.ui" line="32"/>
         <source>Case Sensitive</source>
-        <translation type="unfinished"></translation>
+        <translation>맞춤법</translation>
     </message>
     <message>
         <location filename="../findreplace.ui" line="48"/>
         <source>Find</source>
-        <translation type="unfinished"></translation>
+        <translation>찾기</translation>
     </message>
     <message>
         <location filename="../findreplace.ui" line="58"/>
         <source>Replace with</source>
-        <translation type="unfinished"></translation>
+        <translation>바꿀 내용</translation>
     </message>
     <message>
         <location filename="../findreplace.ui" line="80"/>
         <source>Find next</source>
-        <translation type="unfinished"></translation>
+        <translation>다음 찾기</translation>
     </message>
     <message>
         <location filename="../findreplace.ui" line="87"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>바꾸기</translation>
     </message>
     <message>
         <location filename="../findreplace.ui" line="94"/>
         <source>Replace all</source>
-        <translation type="unfinished"></translation>
+        <translation>전체 바꾸기</translation>
     </message>
     <message>
         <location filename="../findreplace.ui" line="101"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>닫기</translation>
     </message>
 </context>
 <context>
@@ -3963,93 +3972,93 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
     <message>
         <location filename="../graphicwindow.cpp" line="48"/>
         <source>Code Graphic Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>코드 그래픽 뷰어</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="74"/>
         <source>Image Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>이미지 뷰어</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="75"/>
         <source>Cannot load %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>불러올 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="96"/>
         <source>Save Image</source>
-        <translation type="unfinished"></translation>
+        <translation>이미지로 저장</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="96"/>
         <source>Image Files (*.png *.jpg *.bmp)</source>
-        <translation type="unfinished"></translation>
+        <translation>이미지파일 (*.png *.jpg *.bmp)</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="166"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>저장</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="167"/>
         <location filename="../graphicwindow.cpp" line="195"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="172"/>
         <source>&amp;Print...</source>
-        <translation type="unfinished"></translation>
+        <translation>프린트 하기</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="173"/>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+P</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="178"/>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation>종료</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="179"/>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="182"/>
         <source>Zoom &amp;In (25%)</source>
-        <translation type="unfinished"></translation>
+        <translation>확대 (25%)</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="183"/>
         <source>Ctrl++</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl++</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="188"/>
         <source>Zoom &amp;Out (25%)</source>
-        <translation type="unfinished"></translation>
+        <translation>축소 (25%)</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="189"/>
         <source>Ctrl+-</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+-</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="194"/>
         <source>&amp;Normal Size</source>
-        <translation type="unfinished"></translation>
+        <translation>기본 크기</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="200"/>
         <source>&amp;Fit to Window</source>
-        <translation type="unfinished"></translation>
+        <translation>윈도우 창에 맞추기</translation>
     </message>
     <message>
         <location filename="../graphicwindow.cpp" line="203"/>
         <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+F</translation>
     </message>
 </context>
 <context>
@@ -4057,7 +4066,7 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
     <message>
         <location filename="../html5guidisplay.ui" line="14"/>
         <source>DockWidget</source>
-        <translation type="unfinished"></translation>
+        <translation>닥 위젯</translation>
     </message>
 </context>
 <context>
@@ -4065,52 +4074,52 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
     <message>
         <location filename="../inspector.cpp" line="30"/>
         <source>Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>돋보기</translation>
     </message>
     <message>
         <location filename="../inspector.cpp" line="42"/>
         <location filename="../inspector.cpp" line="85"/>
         <source>Opcodes</source>
-        <translation type="unfinished"></translation>
+        <translation>옵코드</translation>
     </message>
     <message>
         <location filename="../inspector.cpp" line="43"/>
         <location filename="../inspector.cpp" line="88"/>
         <source>Macros</source>
-        <translation type="unfinished"></translation>
+        <translation>매크로</translation>
     </message>
     <message>
         <location filename="../inspector.cpp" line="44"/>
         <location filename="../inspector.cpp" line="90"/>
         <source>Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>인스트루먼트</translation>
     </message>
     <message>
         <location filename="../inspector.cpp" line="45"/>
         <location filename="../inspector.cpp" line="93"/>
         <source>F-tables</source>
-        <translation type="unfinished"></translation>
+        <translation>F테이블</translation>
     </message>
     <message>
         <location filename="../inspector.cpp" line="46"/>
         <location filename="../inspector.cpp" line="95"/>
         <source>Score</source>
-        <translation type="unfinished"></translation>
+        <translation>스코어</translation>
     </message>
     <message>
         <location filename="../inspector.cpp" line="208"/>
         <source>Imports</source>
-        <translation type="unfinished"></translation>
+        <translation>가져오기</translation>
     </message>
     <message>
         <location filename="../inspector.cpp" line="210"/>
         <source>Classes</source>
-        <translation type="unfinished"></translation>
+        <translation>클래스</translation>
     </message>
     <message>
         <location filename="../inspector.cpp" line="212"/>
         <source>Functions</source>
-        <translation type="unfinished"></translation>
+        <translation>기능</translation>
     </message>
 </context>
 <context>
@@ -4118,12 +4127,12 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
     <message>
         <location filename="../keyboardshortcuts.cpp" line="137"/>
         <source>Press Key Combination</source>
-        <translation type="unfinished"></translation>
+        <translation>단축키 조합 누르기</translation>
     </message>
     <message>
         <location filename="../keyboardshortcuts.cpp" line="139"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>없음</translation>
     </message>
 </context>
 <context>
@@ -4131,47 +4140,47 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
     <message>
         <location filename="../keyselector.ui" line="14"/>
         <source>Select shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>단축키 선택</translation>
     </message>
     <message>
         <location filename="../keyselector.ui" line="48"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../keyselector.ui" line="55"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../keyselector.ui" line="74"/>
         <source>Current Shortcut:    </source>
-        <translation type="unfinished"></translation>
+        <translation>현재 단축키:</translation>
     </message>
     <message>
         <location filename="../keyselector.ui" line="81"/>
         <source>current</source>
-        <translation type="unfinished"></translation>
+        <translation>현재</translation>
     </message>
     <message>
         <location filename="../keyselector.ui" line="88"/>
         <source>Command</source>
-        <translation type="unfinished"></translation>
+        <translation>명령</translation>
     </message>
     <message>
         <location filename="../keyselector.ui" line="95"/>
         <source>Action:   </source>
-        <translation type="unfinished"></translation>
+        <translation>실행:</translation>
     </message>
     <message>
         <location filename="../keyselector.ui" line="102"/>
         <source>new</source>
-        <translation type="unfinished"></translation>
+        <translation>새</translation>
     </message>
     <message>
         <location filename="../keyselector.ui" line="109"/>
         <source>New shortcut:</source>
-        <translation type="unfinished"></translation>
+        <translation>새 단축키:</translation>
     </message>
 </context>
 <context>
@@ -4180,28 +4189,28 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
         <location filename="../keyboardshortcuts.ui" line="17"/>
         <location filename="../keyboardshortcuts.cpp" line="30"/>
         <source>Keyboard Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>키보드 단축키</translation>
     </message>
     <message>
         <location filename="../keyboardshortcuts.ui" line="62"/>
         <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>설정 초기화</translation>
     </message>
     <message>
         <location filename="../keyboardshortcuts.ui" line="69"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>닫기</translation>
     </message>
     <message>
         <location filename="../keyboardshortcuts.cpp" line="120"/>
         <source>Invalid shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>단축키 불가</translation>
     </message>
     <message>
         <location filename="../keyboardshortcuts.cpp" line="121"/>
         <source>Shortcut cannot be assigned.
 It is already used.</source>
-        <translation type="unfinished"></translation>
+        <translation>이미 적용된 단축키라 사용될 수 없습니다.</translation>
     </message>
 </context>
 <context>
@@ -4209,17 +4218,17 @@ It is already used.</source>
     <message>
         <location filename="../livecodeeditor.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>형식</translation>
     </message>
     <message>
         <location filename="../livecodeeditor.ui" line="36"/>
         <source>Csound Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound 모드</translation>
     </message>
     <message>
         <location filename="../livecodeeditor.ui" line="41"/>
         <source>Python Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>파이썬 모드</translation>
     </message>
 </context>
 <context>
@@ -4228,82 +4237,83 @@ It is already used.</source>
         <location filename="../liveeventcontrol.ui" line="14"/>
         <source>LE Controller</source>
         <extracomment>(Live Event Controller)</extracomment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>라이브 이벤트 컨트롤러</translatorcomment>
+        <translation>LE 컨트롤러</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="63"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>보기</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="74"/>
         <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation>실행</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="85"/>
         <source>Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>반복재생</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="95"/>
         <source>Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>동기화</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="105"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>이름</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="115"/>
         <source>Loop length</source>
-        <translation type="unfinished"></translation>
+        <translation>반복재생 길이</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="125"/>
         <source>Loop Range</source>
-        <translation type="unfinished"></translation>
+        <translation>반복재생 범위</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="135"/>
         <source>Tempo</source>
-        <translation type="unfinished"></translation>
+        <translation>템포</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="150"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>새</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="157"/>
         <source>Close All</source>
-        <translation type="unfinished"></translation>
+        <translation>전체 닫기</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.ui" line="164"/>
         <source>Stop All</source>
-        <translation type="unfinished"></translation>
+        <translation>모두 정지</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.cpp" line="182"/>
         <source>Loop start</source>
-        <translation type="unfinished"></translation>
+        <translation>반복재생 시작</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.cpp" line="184"/>
         <source>Loop end</source>
-        <translation type="unfinished"></translation>
+        <translation>반복재생 마침</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.cpp" line="186"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../liveeventcontrol.cpp" line="187"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>취소</translation>
     </message>
 </context>
 <context>
@@ -4311,74 +4321,75 @@ It is already used.</source>
     <message>
         <location filename="../liveeventframe.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>형식</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="26"/>
         <source>Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>메뉴</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="31"/>
         <source>New Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>새 프레임</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="36"/>
         <source>Clone Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>프레임 복사</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="41"/>
         <location filename="../liveeventframe.cpp" line="193"/>
         <source>Delete Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>프레임 삭제</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="46"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>새 이름</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="51"/>
         <source>Mark Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>반복재생 표기</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="72"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>보기</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="80"/>
         <source>Sheet</source>
-        <translation type="unfinished"></translation>
+        <translation>시트</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="85"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>텍스트</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="106"/>
         <source>Tempo</source>
-        <translation type="unfinished"></translation>
+        <translation>템포</translation>
     </message>
     <message>
         <location filename="../liveeventframe.ui" line="136"/>
         <source>Loop Length</source>
-        <translation type="unfinished"></translation>
+        <translation>반복재생 길이</translation>
     </message>
     <message>
         <location filename="../liveeventframe.cpp" line="194"/>
         <source>Are you sure you want to delete this frame?</source>
-        <translation type="unfinished"></translation>
+        <translation>이 프레임을 정말로 삭제하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../liveeventframe.cpp" line="267"/>
         <source>Enter new name</source>
         <comment>New name for Live Event panel</comment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Live Event panel을 위한 새 이름</translatorcomment>
+        <translation>새 이름 입력</translation>
     </message>
 </context>
 <context>
@@ -4386,28 +4397,28 @@ It is already used.</source>
     <message>
         <location filename="../midilearndialog.ui" line="20"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>디알로그</translation>
     </message>
     <message>
         <location filename="../midilearndialog.ui" line="26"/>
         <location filename="../midilearndialog.ui" line="74"/>
         <source>(none)</source>
-        <translation type="unfinished"></translation>
+        <translation>(없음)</translation>
     </message>
     <message>
         <location filename="../midilearndialog.ui" line="33"/>
         <source>Channel:</source>
-        <translation type="unfinished"></translation>
+        <translation>채널:</translation>
     </message>
     <message>
         <location filename="../midilearndialog.ui" line="53"/>
         <source>Controller:</source>
-        <translation type="unfinished"></translation>
+        <translation>컨트롤러:</translation>
     </message>
     <message>
         <location filename="../midilearndialog.ui" line="67"/>
         <source>MIDI Learn:</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Learn:</translation>
     </message>
     <message>
         <location filename="../midilearndialog.cpp" line="30"/>
@@ -4415,13 +4426,13 @@ It is already used.</source>
         <location filename="../midilearndialog.cpp" line="39"/>
         <location filename="../midilearndialog.cpp" line="40"/>
         <source>(None)</source>
-        <translation type="unfinished"></translation>
+        <translation>(없음)</translation>
     </message>
     <message>
         <location filename="../midilearndialog.cpp" line="34"/>
         <location filename="../midilearndialog.cpp" line="35"/>
         <source>(No MIDI)</source>
-        <translation type="unfinished"></translation>
+        <translation>(MIDI 없음)</translation>
     </message>
 </context>
 <context>
@@ -4429,29 +4440,29 @@ It is already used.</source>
     <message>
         <location filename="../newbreakpointdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>디알로그</translation>
     </message>
     <message>
         <location filename="../newbreakpointdialog.ui" line="22"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>타입</translation>
     </message>
     <message>
         <location filename="../newbreakpointdialog.ui" line="33"/>
         <location filename="../newbreakpointdialog.ui" line="50"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>인스트루먼트</translation>
     </message>
     <message>
         <location filename="../newbreakpointdialog.ui" line="38"/>
         <location filename="../newbreakpointdialog.ui" line="71"/>
         <source>Line</source>
-        <translation type="unfinished"></translation>
+        <translation>라인</translation>
     </message>
     <message>
         <location filename="../newbreakpointdialog.ui" line="85"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>스킵</translation>
     </message>
 </context>
 <context>
@@ -4459,22 +4470,22 @@ It is already used.</source>
     <message>
         <location filename="../pluginspage.ui" line="17"/>
         <source>Please highlight the Csound plugins you want to include in the Standalone App. If unsure, highlight all.</source>
-        <translation type="unfinished"></translation>
+        <translation>스탠드얼론 앱에 포함하고자 하는 Csound 플러그인을 표시해 주십시오. 확실하지 않을 경우 전부 표시해 주십시오.</translation>
     </message>
     <message>
         <location filename="../pluginspage.ui" line="36"/>
         <source>Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>전체 선택</translation>
     </message>
     <message>
         <location filename="../pluginspage.ui" line="43"/>
         <source>Select None</source>
-        <translation type="unfinished"></translation>
+        <translation>선택 안함</translation>
     </message>
     <message>
         <location filename="../pluginspage.ui" line="50"/>
         <source>Deselect FLTK</source>
-        <translation type="unfinished"></translation>
+        <translation>FLTK 선택 취소</translation>
     </message>
 </context>
 <context>
@@ -4482,7 +4493,7 @@ It is already used.</source>
     <message>
         <location filename="../pythonconsole.cpp" line="44"/>
         <source>Python Console</source>
-        <translation type="unfinished"></translation>
+        <translation>파이썬 콘솔</translation>
     </message>
 </context>
 <context>
@@ -4490,22 +4501,22 @@ It is already used.</source>
     <message>
         <location filename="../main.cpp" line="69"/>
         <source>Csound version mismatch</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound 버전이 맞지 않습니다.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
         <source>This version of CsoundQt requires Csound 6.09 or newer. Please download it from &lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>이 CsoundQT 버전은 Csound 6.09 나 상위 버전을 요구합니다. 다음 주소에서 다운로드 하십시오.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="96"/>
         <source>CsoundQt</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="96"/>
         <source>Another instance is already running. Are you sure you want to open a new window?</source>
-        <translation type="unfinished"></translation>
+        <translation>이미 창이 진행 중입니다. 새 창을 여시겠습니까?</translation>
     </message>
 </context>
 <context>
@@ -4513,18 +4524,18 @@ It is already used.</source>
     <message>
         <location filename="../qutebutton.cpp" line="252"/>
         <source>Latch</source>
-        <translation type="unfinished"></translation>
+        <translation>잠금</translation>
     </message>
     <message>
         <location filename="../qutebutton.cpp" line="489"/>
         <location filename="../qutebutton.cpp" line="524"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 선택</translation>
     </message>
     <message>
         <location filename="../qutebutton.cpp" line="502"/>
         <source>Select File(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>여러 파일 선택</translation>
     </message>
 </context>
 <context>
@@ -4533,18 +4544,20 @@ It is already used.</source>
         <location filename="../qutescope.cpp" line="151"/>
         <source>all</source>
         <comment>meaning &apos;all&apos; channels in scope, must be very short (4 letter max)</comment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>스코프 안에서의 전체 채널을 의미하며, 최대 4자리로 매우 짧아야합니다.</translatorcomment>
+        <translation>전체</translation>
     </message>
     <message>
         <location filename="../qutescope.cpp" line="154"/>
         <source>None</source>
         <comment>meaning &apos;no&apos; channels in scope, must be very short (4 letter max)</comment>
-        <translation type="unfinished"></translation>
+        <translatorcomment>스코프 안에 채널이 없으며, 최대 4자리로 매우 짧아야합니다.</translatorcomment>
+        <translation>없음</translation>
     </message>
     <message>
         <location filename="../qutescope.cpp" line="159"/>
         <source>Scope ch:</source>
-        <translation type="unfinished"></translation>
+        <translation>스코프 채널:</translation>
     </message>
 </context>
 <context>
@@ -4552,60 +4565,60 @@ It is already used.</source>
     <message>
         <location filename="../qutetext.cpp" line="381"/>
         <source>Text:</source>
-        <translation type="unfinished"></translation>
+        <translation>텍스트:</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="389"/>
         <source>Text Color</source>
-        <translation type="unfinished"></translation>
+        <translation>글자색</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="395"/>
         <source>Background Color</source>
-        <translation type="unfinished"></translation>
+        <translation>배경색</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="404"/>
         <source>Font</source>
-        <translation type="unfinished"></translation>
+        <translation>글꼴</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="409"/>
         <source>Font Size</source>
-        <translation type="unfinished"></translation>
+        <translation>글자크기</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="415"/>
         <source>Border Radius</source>
-        <translation type="unfinished"></translation>
+        <translation>테두리 모양</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="420"/>
         <source>Border Width</source>
-        <translation type="unfinished"></translation>
+        <translation>테두리 굵기</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="425"/>
         <source>Alignment</source>
-        <translation type="unfinished"></translation>
+        <translation>정렬</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="428"/>
         <source>Left</source>
         <comment>Alignment</comment>
-        <translation type="unfinished"></translation>
+        <translation>왼쪽 정렬</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="429"/>
         <source>Center</source>
         <comment>Alignment</comment>
-        <translation type="unfinished"></translation>
+        <translation>가운데 정렬</translation>
     </message>
     <message>
         <location filename="../qutetext.cpp" line="430"/>
         <source>Right</source>
         <comment>Alignment</comment>
-        <translation type="unfinished"></translation>
+        <translation>오른쪽 정렬</translation>
     </message>
 </context>
 <context>
@@ -4613,68 +4626,68 @@ It is already used.</source>
     <message>
         <location filename="../qutewidget.cpp" line="29"/>
         <source>&amp;Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>속성</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="30"/>
         <source>Open widget properties</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 속성 열기</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="33"/>
         <source>Add chn_k to csd</source>
-        <translation type="unfinished"></translation>
+        <translation>csd에 chn_k 추가하기</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="34"/>
         <source>Add chn_k definitionto ;;channels section in editor</source>
-        <translation type="unfinished"></translation>
+        <translation>chn_k definitionto 추가하기;;channels section in editor</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="311"/>
         <source>Create New</source>
         <comment>Menu name in widget right-click menu</comment>
-        <translation type="unfinished"></translation>
+        <translation>새로 만들기</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="335"/>
         <source>Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>프리셋</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="410"/>
         <source>Width =</source>
-        <translation type="unfinished"></translation>
+        <translation>넓이 =</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="416"/>
         <source>Height =</source>
-        <translation type="unfinished"></translation>
+        <translation>높이 =</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="422"/>
         <source>Channel name =</source>
-        <translation type="unfinished"></translation>
+        <translation>채널 이름 =</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="443"/>
         <source>Midi learn</source>
-        <translation type="unfinished"></translation>
+        <translation>Midi learn</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="446"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="449"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>적용</translation>
     </message>
     <message>
         <location filename="../qutewidget.cpp" line="451"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>취소</translation>
     </message>
 </context>
 <context>
@@ -4682,12 +4695,12 @@ It is already used.</source>
     <message>
         <location filename="../utilitiesdialog.ui" line="14"/>
         <source>Csound Utilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Csound 유틸리티</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="30"/>
         <source>CVANAL</source>
-        <translation type="unfinished"></translation>
+        <translation>CVANAL</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="50"/>
@@ -4696,7 +4709,7 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="859"/>
         <location filename="../utilitiesdialog.ui" line="1016"/>
         <source>Input File Name</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 이름 입력</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="57"/>
@@ -4705,7 +4718,7 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="866"/>
         <location filename="../utilitiesdialog.ui" line="1023"/>
         <source>input.wav</source>
-        <translation type="unfinished"></translation>
+        <translation>input.wav</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="64"/>
@@ -4719,7 +4732,7 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="1030"/>
         <location filename="../utilitiesdialog.ui" line="1051"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="71"/>
@@ -4728,12 +4741,12 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="880"/>
         <location filename="../utilitiesdialog.ui" line="1037"/>
         <source>Output File Name</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 이름 출력</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="78"/>
         <source>output.cv</source>
-        <translation type="unfinished"></translation>
+        <translation>output.cv</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="98"/>
@@ -4741,7 +4754,7 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="533"/>
         <location filename="../utilitiesdialog.ui" line="774"/>
         <source>Sample Rate (-s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sample Rate (-s)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="105"/>
@@ -4749,7 +4762,7 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="540"/>
         <location filename="../utilitiesdialog.ui" line="781"/>
         <source>44100</source>
-        <translation type="unfinished"></translation>
+        <translation>44100</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="112"/>
@@ -4758,7 +4771,7 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="802"/>
         <location filename="../utilitiesdialog.ui" line="1136"/>
         <source>Begin Time (-b)</source>
-        <translation type="unfinished"></translation>
+        <translation>Begin Time (-b)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="119"/>
@@ -4774,7 +4787,7 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="1087"/>
         <location filename="../utilitiesdialog.ui" line="1278"/>
         <source>0.0</source>
-        <translation type="unfinished"></translation>
+        <translation>0.0</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="126"/>
@@ -4782,12 +4795,12 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="575"/>
         <location filename="../utilitiesdialog.ui" line="816"/>
         <source>Duration (-d)</source>
-        <translation type="unfinished"></translation>
+        <translation>Duration (-d)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="140"/>
         <source>Channels (-c)</source>
-        <translation type="unfinished"></translation>
+        <translation>Channels (-c)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="169"/>
@@ -4796,402 +4809,402 @@ It is already used.</source>
         <location filename="../utilitiesdialog.ui" line="745"/>
         <location filename="../utilitiesdialog.ui" line="987"/>
         <source>Reset Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>설정 초기화</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="176"/>
         <source>Run CVANAL</source>
-        <translation type="unfinished"></translation>
+        <translation>CVANAL 실행하기</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="200"/>
         <source>HETRO</source>
-        <translation type="unfinished"></translation>
+        <translation>HETRO</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="222"/>
         <source>Run HETRO</source>
-        <translation type="unfinished"></translation>
+        <translation>HETRO 실행하기</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="244"/>
         <source>Num Partials (-h)</source>
-        <translation type="unfinished"></translation>
+        <translation>Num Partials (-h)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="251"/>
         <source>10</source>
-        <translation type="unfinished"></translation>
+        <translation>10</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="258"/>
         <source>Max Amplitude (-M)</source>
-        <translation type="unfinished"></translation>
+        <translation>Max Amplitude (-M)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="265"/>
         <source>32767</source>
-        <translation type="unfinished"></translation>
+        <translation>32767</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="272"/>
         <source>Min Amplitude (-m)</source>
-        <translation type="unfinished"></translation>
+        <translation>Min Amplitude (-m)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="279"/>
         <source>64</source>
-        <translation type="unfinished"></translation>
+        <translation>64</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="286"/>
         <source>Num Breakpoints (-n)</source>
-        <translation type="unfinished"></translation>
+        <translation>Num Breakpoints (-n)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="293"/>
         <location filename="../utilitiesdialog.ui" line="837"/>
         <source>256</source>
-        <translation type="unfinished"></translation>
+        <translation>256</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="300"/>
         <source>Filter cutoff (-l)</source>
-        <translation type="unfinished"></translation>
+        <translation>Filter cutoff (-l)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="307"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="357"/>
         <source>output.het</source>
-        <translation type="unfinished"></translation>
+        <translation>output.het</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="400"/>
         <location filename="../utilitiesdialog.ui" line="547"/>
         <location filename="../utilitiesdialog.ui" line="788"/>
         <source>Channel (-c)</source>
-        <translation type="unfinished"></translation>
+        <translation>Channel (-c)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="407"/>
         <location filename="../utilitiesdialog.ui" line="554"/>
         <location filename="../utilitiesdialog.ui" line="795"/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="442"/>
         <source>Start frequency (-f)</source>
-        <translation type="unfinished"></translation>
+        <translation>Start frequency (-f)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="458"/>
         <source>LPANAL</source>
-        <translation type="unfinished"></translation>
+        <translation>LPANAL</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="504"/>
         <source>output.lp</source>
-        <translation type="unfinished"></translation>
+        <translation>output.lp</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="589"/>
         <source>Num poles (-p)</source>
-        <translation type="unfinished"></translation>
+        <translation>Num poles (-p)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="596"/>
         <source>34</source>
-        <translation type="unfinished"></translation>
+        <translation>34</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="618"/>
         <location filename="../utilitiesdialog.ui" line="1172"/>
         <source>Hop size (-h)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hop size (-h)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="625"/>
         <location filename="../utilitiesdialog.ui" line="653"/>
         <source>200</source>
-        <translation type="unfinished"></translation>
+        <translation>200</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="632"/>
         <source>Lowest freq (-P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lowest freq (-P)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="639"/>
         <source>70</source>
-        <translation type="unfinished"></translation>
+        <translation>70</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="646"/>
         <source>Max freq (-Q)</source>
-        <translation type="unfinished"></translation>
+        <translation>Max freq (-Q)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="660"/>
         <source>Verbosity</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbosity</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="668"/>
         <source>none (0)</source>
-        <translation type="unfinished"></translation>
+        <translation>none (0)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="673"/>
         <source>verbose (1)</source>
-        <translation type="unfinished"></translation>
+        <translation>verbose (1)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="678"/>
         <source>debug (2)</source>
-        <translation type="unfinished"></translation>
+        <translation>debug (2)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="695"/>
         <source>Alternate storage (-a)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alternate storage (-a)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="721"/>
         <source>Run LPANAL</source>
-        <translation type="unfinished"></translation>
+        <translation>LPANAL 실행하기</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="730"/>
         <source>PVANAL</source>
-        <translation type="unfinished"></translation>
+        <translation>PVANAL</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="752"/>
         <source>Run PVANAL</source>
-        <translation type="unfinished"></translation>
+        <translation>PVANAL 실행하기</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="830"/>
         <source>Frame size (-n)</source>
-        <translation type="unfinished"></translation>
+        <translation>Frame size (-n)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="887"/>
         <source>output.pvx</source>
-        <translation type="unfinished"></translation>
+        <translation>output.pvx</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="916"/>
         <source>Overlap factor (-w)</source>
-        <translation type="unfinished"></translation>
+        <translation>Overlap factor (-w)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="923"/>
         <location filename="../utilitiesdialog.ui" line="1150"/>
         <source>4</source>
-        <translation type="unfinished"></translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="930"/>
         <source>Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Window</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="938"/>
         <source>von Hann (default)</source>
-        <translation type="unfinished"></translation>
+        <translation>von Hann (default)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="943"/>
         <source>Hamming (-H)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hamming (-H)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="948"/>
         <source>Kaiser (-K)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaiser (-K)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="956"/>
         <source>Beta (-B)</source>
-        <translation type="unfinished"></translation>
+        <translation>Beta (-B)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="963"/>
         <source>6.8</source>
-        <translation type="unfinished"></translation>
+        <translation>6.8</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="972"/>
         <source>ATSA</source>
-        <translation type="unfinished"></translation>
+        <translation>ATSA</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="994"/>
         <source>Run ATSA</source>
-        <translation type="unfinished"></translation>
+        <translation>ATSA 실행하기</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1044"/>
         <source>output.ats</source>
-        <translation type="unfinished"></translation>
+        <translation>output.ats</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1080"/>
         <source>End time (-e)</source>
-        <translation type="unfinished"></translation>
+        <translation>End time (-e)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1094"/>
         <source>Highest freq (-H)</source>
-        <translation type="unfinished"></translation>
+        <translation>Highest freq (-H)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1101"/>
         <source>20000</source>
-        <translation type="unfinished"></translation>
+        <translation>20000</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1108"/>
         <source>Freq. deviat. (-d)</source>
-        <translation type="unfinished"></translation>
+        <translation>Freq. deviat. (-d)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1115"/>
         <source>0.1</source>
-        <translation type="unfinished"></translation>
+        <translation>0.1</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1122"/>
         <source>Lowest freq (-l)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lowest freq (-l)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1129"/>
         <source>20</source>
-        <translation type="unfinished"></translation>
+        <translation>20</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1143"/>
         <source>Win cycle (-c)</source>
-        <translation type="unfinished"></translation>
+        <translation>Win cycle (-c)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1179"/>
         <source>0.25</source>
-        <translation type="unfinished"></translation>
+        <translation>0.25</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1186"/>
         <source>Lowest mag (-m)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lowest mag (-m)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1193"/>
         <source>-60</source>
-        <translation type="unfinished"></translation>
+        <translation>-60</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1200"/>
         <source>Min. seg. len (-s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Min. seg. len (-s)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1207"/>
         <location filename="../utilitiesdialog.ui" line="1221"/>
         <location filename="../utilitiesdialog.ui" line="1235"/>
         <source>3</source>
-        <translation type="unfinished"></translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1214"/>
         <source>Min. gap len. (-g)</source>
-        <translation type="unfinished"></translation>
+        <translation>Min. gap len. (-g)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1228"/>
         <source>Track len (-t)</source>
-        <translation type="unfinished"></translation>
+        <translation>Track len (-t)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1257"/>
         <source>SMR Thresh. (-T)</source>
-        <translation type="unfinished"></translation>
+        <translation>SMR Thresh. (-T)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1264"/>
         <source>30</source>
-        <translation type="unfinished"></translation>
+        <translation>30</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1271"/>
         <source>Last pk. con. (-P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Last pk. con. (-P)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1285"/>
         <source>SMR contr. (-M)</source>
-        <translation type="unfinished"></translation>
+        <translation>SMR contr. (-M)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1292"/>
         <source>0.5</source>
-        <translation type="unfinished"></translation>
+        <translation>0.5</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1299"/>
         <source>File type (-F)</source>
-        <translation type="unfinished"></translation>
+        <translation>File type (-F)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1307"/>
         <source>amp+freq</source>
-        <translation type="unfinished"></translation>
+        <translation>amp+freq</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1312"/>
         <source>amp+frq+phs</source>
-        <translation type="unfinished"></translation>
+        <translation>amp+frq+phs</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1317"/>
         <source>amp+frq+res</source>
-        <translation type="unfinished"></translation>
+        <translation>amp+frq+res</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1322"/>
         <source>all</source>
-        <translation type="unfinished"></translation>
+        <translation>all</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1330"/>
         <source>Window (-w)</source>
-        <translation type="unfinished"></translation>
+        <translation>Window (-w)</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1338"/>
         <source>Blackman</source>
-        <translation type="unfinished"></translation>
+        <translation>Blackman</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1343"/>
         <source>Blackman H</source>
-        <translation type="unfinished"></translation>
+        <translation>Blackman H</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1348"/>
         <source>Hanning</source>
-        <translation type="unfinished"></translation>
+        <translation>Hanning</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.ui" line="1353"/>
         <source>Von Hamm</source>
-        <translation type="unfinished"></translation>
+        <translation>lVon Hamm</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.cpp" line="363"/>
@@ -5200,7 +5213,7 @@ It is already used.</source>
         <location filename="../utilitiesdialog.cpp" line="405"/>
         <location filename="../utilitiesdialog.cpp" line="419"/>
         <source>Open File</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 열기</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.cpp" line="370"/>
@@ -5210,12 +5223,12 @@ It is already used.</source>
         <location filename="../utilitiesdialog.cpp" line="426"/>
         <location filename="../utilitiesdialog.cpp" line="433"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 선택</translation>
     </message>
     <message>
         <location filename="../utilitiesdialog.cpp" line="440"/>
         <source>Select Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>디렉토리 선택</translation>
     </message>
 </context>
 <context>
@@ -5223,303 +5236,304 @@ It is already used.</source>
     <message>
         <location filename="../widgetlayout.cpp" line="74"/>
         <source>Create Slider</source>
-        <translation type="unfinished"></translation>
+        <translation>새 슬라이더</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="76"/>
         <source>Create Label</source>
-        <translation type="unfinished"></translation>
+        <translation>새 라벨</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="78"/>
         <source>Create Display</source>
-        <translation type="unfinished"></translation>
+        <translation>새 디스플레이</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="80"/>
         <source>Create ScrollNumber</source>
-        <translation type="unfinished"></translation>
+        <translation>새 스크롤넘버</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="83"/>
         <source>Create LineEdit</source>
-        <translation type="unfinished"></translation>
+        <translation>새 라인에디트</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="85"/>
         <source>Create SpinBox</source>
-        <translation type="unfinished"></translation>
+        <translation>새 스핀박스</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="87"/>
         <source>Create Button</source>
-        <translation type="unfinished"></translation>
+        <translation>새 버튼</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="89"/>
         <source>Create Knob</source>
-        <translation type="unfinished"></translation>
+        <translation>새 단추</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="91"/>
         <source>Create Checkbox</source>
-        <translation type="unfinished"></translation>
+        <translation>새 체크박스</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="93"/>
         <source>Create Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>새 메뉴</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="95"/>
         <source>Create Controller</source>
-        <translation type="unfinished"></translation>
+        <translation>새 컨트롤러</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="97"/>
         <source>Create Console</source>
-        <translation type="unfinished"></translation>
+        <translation>새 콘솔</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="99"/>
         <source>Create Graph</source>
-        <translation type="unfinished"></translation>
+        <translation>새 그래프</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="101"/>
         <source>Create Scope</source>
-        <translation type="unfinished"></translation>
+        <translation>새 스코프</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="103"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>속성</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="106"/>
         <source>Cut</source>
-        <translation type="unfinished"></translation>
+        <translation>잘라내기</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="109"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>복사</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="112"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>붙여넣기</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="115"/>
         <source>Duplicate Selected</source>
-        <translation type="unfinished"></translation>
+        <translation>선택 복사</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="117"/>
         <source>Delete Selected</source>
-        <translation type="unfinished"></translation>
+        <translation>선택 삭제</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="119"/>
         <source>Clear all widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>모두 삭제</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="121"/>
         <source>Select all widgets</source>
-        <translation type="unfinished"></translation>
+        <translation>모두 선택</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="124"/>
         <source>Align Left</source>
-        <translation type="unfinished"></translation>
+        <translation>왼쪽 맞춤</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="126"/>
         <source>Align Right</source>
-        <translation type="unfinished"></translation>
+        <translation>오른쪽 맞춤</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="128"/>
         <source>Align Top</source>
-        <translation type="unfinished"></translation>
+        <translation>위 맞춤</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="130"/>
         <source>Align Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>아래 맞춤</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="132"/>
         <source>Send to back</source>
-        <translation type="unfinished"></translation>
+        <translation>뒤로 보내기</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="134"/>
         <source>Distribute Horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>수직 분배</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="136"/>
         <source>Distribute Vertically</source>
-        <translation type="unfinished"></translation>
+        <translation>수평 분배</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="138"/>
         <source>Center Vertically</source>
-        <translation type="unfinished"></translation>
+        <translation>중앙 맞춤(수직)</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="140"/>
         <source>Center Horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>중앙 맞춤(수평)</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="143"/>
         <source>Store Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>프리셋 저장</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="145"/>
         <location filename="../widgetlayout.cpp" line="3084"/>
         <location filename="../widgetlayout.cpp" line="3273"/>
         <source>New Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>새 프리셋</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="147"/>
         <source>Recall Preset</source>
-        <translation type="unfinished"></translation>
+        <translation>프리셋 다시 가져오기</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="206"/>
         <source>Widget Error</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯 에러</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="207"/>
         <source>Widgets can&apos;t be read! No widgets created.</source>
-        <translation type="unfinished"></translation>
+        <translation>위젯을 읽을 수 없습니다! 위젯이 만들어지지 않았습니다.</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="213"/>
         <source>More than one panel</source>
-        <translation type="unfinished"></translation>
+        <translation>여러개 패널</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="214"/>
         <source>The csd file contains more than one widget panel!
 This is not supported by the current version,
 Additional widget panels will be lost if the file is saved!</source>
-        <translation type="unfinished"></translation>
+        <translation>이 csd 파일은 여러 개의 위젯판넬을 포함하고 있지만, 이 버전은 여러 위젯판넬을 지원하지 않습니다. 추가적인 위젯판넬은 파일 저장시 삭제됩니다. </translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="229"/>
         <source>Unrecognized wigdet format</source>
-        <translation type="unfinished"></translation>
+        <translation>인식할 수 없는 위젯 포맷</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="230"/>
         <source>There is unrecognized widget information in the file!
 It may be saved with errors.</source>
-        <translation type="unfinished"></translation>
+        <translation>이 파일에는 읽을 수 없는 위젯정보가 있습니다! 에러와 함께 저장됩니다. </translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="239"/>
         <source>Newer Widget Format</source>
-        <translation type="unfinished"></translation>
+        <translation>새로운 위젯 포맷</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="240"/>
         <source>The file was was saved by a more recent version of CsoundQt.
 Some features may not be available and will not be saved!</source>
-        <translation type="unfinished"></translation>
+        <translation>이 파일은 CsoundQt 최신 버전으로 저장되었습니다. 몇몇의 기능은 사용불가하며, 파일 변경 후 새로 저장할 수 없습니다!</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="999"/>
         <source>ChannelH:</source>
-        <translation type="unfinished"></translation>
+        <translation>채널H:</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="1000"/>
         <source>ChannelV:</source>
-        <translation type="unfinished"></translation>
+        <translation>채널V:</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="1007"/>
         <source>Channel:</source>
-        <translation type="unfinished"></translation>
+        <translation>채널:</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="1011"/>
         <source>MIDI chan: %1 CC: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI 채널: %1 CC: %2</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="1375"/>
         <source>CsoundQt</source>
-        <translation type="unfinished"></translation>
+        <translation>CsoundQt</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="1375"/>
         <source>Could not convert %1 widget(s):
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>변환할 수 없음 %1 위젯(들):
+%2</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="1963"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>적용</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="1965"/>
         <location filename="../widgetlayout.cpp" line="3232"/>
         <location filename="../widgetlayout.cpp" line="3272"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="1967"/>
         <location filename="../widgetlayout.cpp" line="3231"/>
         <location filename="../widgetlayout.cpp" line="3271"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="3083"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>닫기</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="3089"/>
         <source>Double-click Preset to Load</source>
-        <translation type="unfinished"></translation>
+        <translation>더블-클릴 프리셋 가져오기</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="3227"/>
         <source>New Preset Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>새 프리셋 이름:</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="3229"/>
         <source>Number:</source>
-        <translation type="unfinished"></translation>
+        <translation>번호:</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="3245"/>
         <source>Preset Already Exists</source>
-        <translation type="unfinished"></translation>
+        <translation>프리셋이 이미 존재합니다.</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="3246"/>
         <source>Preset %i already exists. Overwrite?</source>
-        <translation type="unfinished"></translation>
+        <translation>프리셋 %i 이 이미 존재합니다. 덮어 씌우시겠습니까?</translation>
     </message>
     <message>
         <location filename="../widgetlayout.cpp" line="3275"/>
         <source>Select Preset to save</source>
-        <translation type="unfinished"></translation>
+        <translation>저장할 프리셋 선택</translation>
     </message>
 </context>
 </TS>
