@@ -154,17 +154,31 @@ QString QuteSpinBox::getQml()
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.lockForWrite();
 #endif
-    qml = "\n\tSpinBox {\n"; // NB! Does not accept floating point numbers...
+    // currently QtQuick.Controls 2 SpindBox can be programmes to handle floating point
     // see https://doc.qt.io/qt-5.9/qml-qtquick-controls2-spinbox.html accepting floating point numbers
-    qml += QString("\t\tid: %1SpinBox\n").arg(m_channel);
+    // but this is not supported here yet. Use integer stepSize for your spingbox for now
+    float resolution = property("QCS_resolution").toFloat();
+    if (floorf(resolution) != resolution ) { // check if integer
+        qDebug() << "stepsize not integer";
+
+//        QMessageBox::warning(nullptr, tr("SpinBox conversion"),
+//            tr("Currently only integer resolution (stepsize) is supported for QML spinbox.\nPlease change your spinbox to use it in QML"));
+
+        // messagebox freezes here...
+        //return "";
+    }
+
+    qml = "\n\tSpinBox {\n"; // NB! Does not accept floating point numbers...
+
+    //qml += QString("\t\tid: %1SpinBox\n").arg(m_channel);
     qml += QString("\t\tx: %1\n").arg(x());
     qml += QString("\t\ty: %1 \n").arg(y());
     qml += QString("\t\twidth: %1 + up.indicator.width + down.indicator.width\n").arg(width()); // add somehing width for +/- values?
     qml += QString("\t\theight: %1\n").arg(height());
     qml += QString("\t\tfrom: %1\n").arg(property("QCS_minimum").toString());
     qml += QString("\t\tto: %1\n").arg(property("QCS_maximum").toString());
-    qml += QString("\t\tstepSize: %1\n").arg(property("QCS_resolution").toString());
-    qml += QString("\t\tvalue: %1\n").arg(getValue());
+    qml += QString("\t\tstepSize: %1\n").arg(property("QCS_resolution").toInt()); // Int for now...
+    qml += QString("\t\tvalue: %1\n").arg(int(getValue())); // TODO: use double
     qml += "\t\teditable: true\n";
     qml += QString("\t\tonValueChanged: csound.setControlChannel(\"%1\", value)\n").arg(m_channel);
     //color, font and other outlook properties ignored by now

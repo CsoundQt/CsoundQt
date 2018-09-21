@@ -179,7 +179,7 @@ QString QuteSlider::getQml()
 	widgetLock.lockForWrite();
 #endif
 	qml = "\n\tSlider {\n";
-	qml += QString("\t\t\id: %1Slider\n").arg(m_channel);
+    //qml += QString("\t\t\id: %1Slider\n").arg(m_channel);
 	qml += QString("\t\tx: %1\n").arg(x());
 	qml += QString("\t\ty: %1 \n").arg(y());
 	qml += QString("\t\twidth: %1\n").arg(width());

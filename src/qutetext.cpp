@@ -321,7 +321,36 @@ QString QuteText::getCabbageLine() // QuteText is used both for label and displa
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	return line;
+    return line;
+}
+
+QString QuteText::getQml()
+{
+    QString qml = QString();
+    if ((m_type != "label")) {
+        qDebug() << "Currently only conversion from label type to QML is supported.";
+        return "";
+    }
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.lockForWrite();
+#endif
+
+    qml = "\n\tLabel {\n";
+    //qml += QString("\t\t\id: %1Slider\n").arg(m_channel);
+    qml += QString("\t\tx: %1\n").arg(x());
+    qml += QString("\t\ty: %1 \n").arg(y());
+    qml += QString("\t\twidth: %1\n").arg(width());
+    qml += QString("\t\theight: %1\n").arg(height());
+    qml += QString("\t\tfont.pointSize: %1\n").arg(property("QCS_fontsize").toString());
+    qml += QString("\t\ttext: \"%1\"\n").arg(property("QCS_label").toString());
+    // TODO: color, border, background, font
+    qml += "\t}";
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.unlock();
+#endif
+
+    return qml;
+
 }
 
 
