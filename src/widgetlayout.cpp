@@ -131,7 +131,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 	connect(alignBottomAct, SIGNAL(triggered()), this, SLOT(alignBottom()));
 	sendToBackAct = new QAction(tr("Send to back"), this);
 	connect(sendToBackAct, SIGNAL(triggered()), this, SLOT(sendToBack()));
-	distributeHorizontalAct = new QAction(tr("Distribute Horizontally"), this);
+    distributeHorizontalAct = new QAction(tr("Distribute Horizontally"), this);
 	connect(distributeHorizontalAct, SIGNAL(triggered()), this, SLOT(distributeHorizontal()));
 	distributeVerticalAct = new QAction(tr("Distribute Vertically"), this);
 	connect(distributeVerticalAct, SIGNAL(triggered()), this, SLOT(distributeVertical()));
@@ -1362,6 +1362,9 @@ QString WidgetLayout::getQml()
 	qml += QString("\theight: %1\n").arg(h);
 
 	qml += "\tanchors.fill: parent\n";
+    qml += "Flickable {\n\tanchors.fill: parent\n";
+    // contentWidth and contentHeight?
+
 	qml += "\n";
 
     int unsupported = 0;
@@ -1378,7 +1381,8 @@ QString WidgetLayout::getQml()
     }
     widgetsMutex.unlock();
     qDebug() << "WidgetPanel:getQml() " << unsupported << " Unsupported widgets";
-    qml += "}"; // end Rectangle
+	 qml += "} // end Flickable\n";
+    qml += "} // end Rectangle\n"; // end Rectangle
     //qDebug() << qml;
     return qml;
 }
@@ -2013,7 +2017,9 @@ void WidgetLayout::propertiesDialog()
 void WidgetLayout::applyProperties()
 {
 	QColor color = bgButton->property("QCS_color").value<QColor>();
-	setBackground(bgCheckBox->isChecked(), color);
+    // remove:
+    qDebug() << color;
+    setBackground(bgCheckBox->isChecked(), color);
 	widgetChanged();
 	mouseBut2 = 0;  // Button un clicked is not propagated after opening the edit dialog. Do it artificially here
 }
@@ -2517,7 +2523,7 @@ int WidgetLayout::parseXmlNode(QDomNode node)
 		QDomElement eg = node.toElement().firstChildElement("g");
 		QDomElement eb = node.toElement().firstChildElement("b");
 
-		setBackground(bg, QColor(er.firstChild().nodeValue().toInt(),
+        setBackground(bg, QColor(er.firstChild().nodeValue().toInt(),
 								 eg.firstChild().nodeValue().toInt(),
 								 eb.firstChild().nodeValue().toInt()) );
 	}
@@ -3003,10 +3009,12 @@ QString WidgetLayout::createDummy(int x, int y, int width, int height, QString w
 
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
-	//qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
-	QWidget *w;
+    qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
+    qDebug() << "contained: " << m_contained;
+    QWidget *w;
 	layoutMutex.lock();
-	w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget
+    w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget
+
 	if (bg) // to get rid of pink backgrounds
 		w->setPalette(QPalette(bgColor));
 	else

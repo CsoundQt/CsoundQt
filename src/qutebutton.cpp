@@ -178,7 +178,7 @@ QString QuteButton::getQml()
 	widgetLock.lockForWrite();
 #endif
 	qml = "\tButton { \n";
-	qml += QString("\t\tid: %1Button\n").arg(m_channel);
+    //qml += QString("\t\tid: %1Button\n").arg(m_channel);
 	qml += QString("\t\tx: %1\n").arg(x());
 	qml += QString("\t\ty: %1 \n").arg(y());
 	qml += QString("\t\twidth: %1\n").arg(width());
