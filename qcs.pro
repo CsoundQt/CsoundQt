@@ -204,14 +204,10 @@ unix:!macx {
 	# see comments: https://github.com/CsoundQt/CsoundQt/issues/258
     desktop.path=$$SHARE_DIR/applications
     desktop.commands = rm -f $$SHARE_DIR/applications/CsoundQt.desktop &&  # remove the old, uppercase one, if present one
-    isEmpty(SHARE_DIR) {
-        desktop.commands += desktop-file-install --mode=644 $$PWD/csoundqt.desktop
-    } else {
-        desktop.commands += desktop-file-install --mode=644 --dir=$$SHARE_DIR/applications $$PWD/csoundqt.desktop
-    }
+	desktop.commands += desktop-file-install --mode=644 --dir=$$SHARE_DIR/applications $$PWD/csoundqt.desktop
     #TODO: if local install, ie not /usr/share, dekstop-file-install  --dir=$$desktop.path
 
-    icon.path=$SHARE_DIR/icons/hicolor/scalable/apps
+	icon.path=$$SHARE_DIR/icons/hicolor/scalable/apps
     icon.files=images/csoundqt.svg
 
 	mimetypes.path=$$INSTALL_DIR # in some reason path must be set to create install target in Makefile
