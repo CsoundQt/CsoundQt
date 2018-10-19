@@ -51,8 +51,8 @@ ConfigLists::ConfigLists()
 					<< "signed 8-bit" << "32 bit float"<< "long (32-bit)";
 
 	refreshModules();
-	languages << "English" << "Spanish" << "German" << "French" << "Portuguese" << "Italian"  << "Turkish"  << "Finnish" << "Russian" << "Korean";
-	languageCodes << "en" << "es" << "de" << "fr" << "pt" << "it" << "tr" << "fi" << "ru" << "kr";
+	languages << "English" << "Spanish" << "German" << "French" << "Portuguese" << "Italian"  << "Turkish"  << "Finnish" << "Russian" << "Korean" << "Persian";
+	languageCodes << "en" << "es" << "de" << "fr" << "pt" << "it" << "tr" << "fi" << "ru" << "kr" << "fa";
 }
 
 

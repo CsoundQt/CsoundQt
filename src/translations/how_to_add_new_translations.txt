@@ -2,7 +2,7 @@ How to add a new translation to CsoundQt
 ========================================
 
 
-1. In qrc.pro (around line 134), add a line like
+1. In qcs.pro (around line 134), add a line like
 	"src/translations/qutecsound_fa.ts"
 
 2. In QtCreator, run
