@@ -408,9 +408,16 @@ void QuteButton::setMidiValue(int value)
 				emit(queueEventSignal(lineElements.join(" ")));
 			}
 		}
+	} else if ((type == "value" || type == "pictvalue") && newval == pressedVal) {
+			QStringList reservedChannels = QStringList() << "_Play" <<"_Stop" << "_Pause"
+														 << "_Render" << "_Browse1" << "_Browse2" << "_MBrowse";
+			if (reservedChannels.contains(m_channel)) {
+				buttonReleased();
+			}
 	}
 	QPair<QString, double> channelValue(m_channel, newval);
 	emit newValue(channelValue);
+
 }
 
 void QuteButton::refreshWidget()
