@@ -5092,6 +5092,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
     settings.setValue("csdTemplate", m_options->csdTemplate);
     settings.endGroup();
     settings.endGroup();
+
+    settings.sync();
 }
 
 void CsoundQt::clearSettings()
@@ -5118,6 +5120,8 @@ void CsoundQt::clearSettings()
     settings.remove("");
     settings.endGroup();
     settings.endGroup();
+
+    settings.sync();
 }
 
 int CsoundQt::execute(QString executable, QString options)

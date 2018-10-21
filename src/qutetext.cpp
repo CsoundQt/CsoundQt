@@ -335,16 +335,38 @@ QString QuteText::getQml()
     widgetLock.lockForWrite();
 #endif
 
-    qml = "\n\tLabel {\n";
-    //qml += QString("\t\t\id: %1Slider\n").arg(m_channel);
+    // check if it has background and border
+    bool hasBackground = property("QCS_bgcolormode").toBool();
+    bool hasBorder = (property("QCS_bordermode").toString() == "border");
+    QString color = property("QCS_color").value<QColor>().name();
+
+    qml += "\n\tRectangle {\n"; // place within rectangle
     qml += QString("\t\tx: %1\n").arg(x());
     qml += QString("\t\ty: %1 \n").arg(y());
     qml += QString("\t\twidth: %1\n").arg(width());
     qml += QString("\t\theight: %1\n").arg(height());
-    qml += QString("\t\tfont.pointSize: %1\n").arg(property("QCS_fontsize").toString());
-    qml += QString("\t\ttext: \"%1\"\n").arg(property("QCS_label").toString());
-    // TODO: color, border, background, font
-    qml += "\t}";
+    QString bgColor = hasBackground ? property("QCS_bgcolor").value<QColor>().name() : "transparent";
+    qml += QString("\t\tcolor: \"%1\"\n").arg(bgColor);
+    if (hasBorder) {
+       qml += QString("\t\tborder.width: %1\n").arg(QString::number(property("QCS_borderwidth").toInt()));
+       qml += QString("\t\tradius: %1\n").arg(QString::number(property("QCS_borderradius").toInt()));
+       qml += QString("\t\tborder.color: \"%1\"\n").arg(color);
+    } else {
+       qml += "\n\tborder.width: 0";
+    }
+
+
+
+    qml += "\n\t\tLabel {\n";
+    qml += QString("\t\t\tanchors.centerIn: parent\n");
+    qml += QString("\t\t\tfont.pixelSize: %1\n").arg(property("QCS_fontsize").toString()); // is it OK on ndroid? not pointsize?
+    qml += QString("\t\t\ttext: \"%1\"\n").arg(property("QCS_label").toString());
+
+    qml += QString("\t\t\tcolor: \"%1\"\n").arg(color);
+    qml += QString("\t\tfont.family: \"%1\"\n").arg(property("QCS_font").toString());
+    // TODO: alignment
+    qml += "\t\t}\n"; // end label
+    qml += "\t}\n"; // end rectangle
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.unlock();
 #endif
