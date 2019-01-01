@@ -321,8 +321,8 @@ i "Audio_Thru" 0 3600
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.13286379</xValue>
-  <yValue>0.13286379</yValue>
+  <xValue>0.00892408</xValue>
+  <yValue>0.00892408</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -387,8 +387,8 @@ i "Audio_Thru" 0 3600
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-0.55694567</xValue>
-  <yValue>0.13286379</yValue>
+  <xValue>0.06345120</xValue>
+  <yValue>0.00892408</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -511,8 +511,8 @@ i "Audio_Thru" 0 3600
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.13886379</xValue>
-  <yValue>0.13886379</yValue>
+  <xValue>0.01492408</xValue>
+  <yValue>0.01492408</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -577,8 +577,8 @@ i "Audio_Thru" 0 3600
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-0.55094567</xValue>
-  <yValue>-0.55094567</yValue>
+  <xValue>0.06945120</xValue>
+  <yValue>0.06945120</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -724,7 +724,7 @@ i "Audio_Thru" 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
   <randomizable group="0">false</randomizable>
-  <mouseControl act="continuous"/>
+  <mouseControl act=""/>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>gain_in2</objectName>
@@ -798,7 +798,7 @@ i "Audio_Thru" 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <selected>true</selected>
+  <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -862,7 +862,7 @@ i "Audio_Thru" 0 3600
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
+  <xValue>1.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -957,8 +957,8 @@ i "Audio_Thru" 0 3600
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>-inf</xValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1086,7 +1086,7 @@ i "Audio_Thru" 0 3600
   <midicc>-3</midicc>
   <minimum>-48.00000000</minimum>
   <maximum>12.00000000</maximum>
-  <value>-6.68852459</value>
+  <value>-4.22950820</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1133,7 +1133,7 @@ i "Audio_Thru" 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>-6.68852459</value>
+  <value>-4.22950820</value>
   <resolution>0.10000000</resolution>
   <minimum>-12.00000000</minimum>
   <maximum>12.00000000</maximum>
