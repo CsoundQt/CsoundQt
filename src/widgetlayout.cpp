@@ -1362,8 +1362,10 @@ QString WidgetLayout::getQml()
 	qml += QString("\theight: %1\n").arg(h);
 
 	qml += "\tanchors.fill: parent\n";
-    qml += "Flickable {\n\tanchors.fill: parent\n";
-    // contentWidth and contentHeight?
+	qml += "\n\n\tFlickable {\n\tanchors.fill: parent\n";
+	qml += QString("\tcontentWidth: %1\n").arg(w);
+	qml += QString("\tcontentHeight: %1\n").arg(h);
+	// contentWidth and contentHeight?
 
 	qml += "\n";
 
@@ -1381,7 +1383,7 @@ QString WidgetLayout::getQml()
     }
     widgetsMutex.unlock();
     qDebug() << "WidgetPanel:getQml() " << unsupported << " Unsupported widgets";
-	 qml += "} // end Flickable\n";
+	qml += "\t} // end Flickable\n";
     qml += "} // end Rectangle\n"; // end Rectangle
     //qDebug() << qml;
     return qml;
