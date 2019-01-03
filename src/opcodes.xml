@@ -1042,13 +1042,16 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Provides k-rate control over table numbers.</desc><synopsis>ares <opcodename>tablekt</opcodename> xndx, kfn [, ixmode] [, ixoff] [, iwrap]</synopsis><synopsis>kres <opcodename>tablekt</opcodename> kndx, kfn [, ixmode] [, ixoff] [, iwrap]</synopsis></opcode>
 <opcode><desc>Reads function tables with linear, cubic, or sinc interpolation.</desc><synopsis>ares <opcodename>tablexkt</opcodename> xndx, kfn, kwarp, iwsize [, ixmode] [, ixoff] [, iwrap]</synopsis></opcode>
 </category>
-<category name="Table Control:Read/Write Opreations">
+<category name="Table Control:Read/Write Operations">
 <opcode><desc>Write a previously-allocated table to an audio file.</desc><synopsis>ians <opcodename>ftaudio</opcodename> ifn, &quot;filename&quot;, iformat</synopsis><synopsis>kans <opcodename>ftaudio</opcodename> ktrig, kfn, &quot;filename&quot;, kformat [, isync]</synopsis></opcode>
 <opcode><desc>Load a set of previously-allocated tables from a file.</desc><synopsis><opcodename>ftload</opcodename> Sfilename, iflag, ifn1 [, ifn2] [...]</synopsis></opcode>
 <opcode><desc>Load a set of previously-allocated tables from a file.</desc><synopsis><opcodename>ftloadk</opcodename> Sfilename, ktrig, iflag, ifn1 [, ifn2] [...]</synopsis></opcode>
+<opcode><desc>Print the contents of a table (for debugging)</desc><synopsis><opcodename>ftprint</opcodename> ifn [, ktrig, kstart, kend, kstep, inumcols ]</synopsis></opcode>
 <opcode><desc>Reads a directory for sound files.</desc><synopsis>iNumberOfFile <opcodename>ftsamplebank</opcodename> SDirectory, iFirstTableNumber, iSkipTime, iFormat, iChannel,</synopsis><synopsis>kNumberOfFile <opcodename>ftsamplebank</opcodename> SDirectory, kFirstTableNumber, kTrigger, kSkipTime, kFormat, kChannel,</synopsis></opcode>
 <opcode><desc>Save a set of previously-allocated tables to a file.</desc><synopsis><opcodename>ftsave</opcodename> &quot;filename&quot;, iflag, ifn1 [, ifn2] [...]</synopsis></opcode>
 <opcode><desc>Save a set of previously-allocated tables to a file.</desc><synopsis><opcodename>ftsavek</opcodename> &quot;filename&quot;, ktrig, iflag, ifn1 [, ifn2] [...]</synopsis></opcode>
+<opcode><desc>Copy a slice from an f-table to another f-table</desc><synopsis><opcodename>ftslice</opcodename> ifnsource, ifndest [, kstart, kend, kstep ]</synopsis></opcode>
+<opcode><desc>Copy a row from a 2D array or table, with interpolation between rows</desc><synopsis>kOut[] <opcodename>getrowlin</opcodename> kMtx[], krow [, kstart, kend, kstep ]</synopsis><synopsis>kOut[] <opcodename>getrowlin</opcodename> krow, ifn, inumcols [, iskip, start, iend, istep ]</synopsis></opcode>
 <opcode><desc>Change the contents of existing function tables of any length.</desc><synopsis><opcodename>ptablew</opcodename> asig, andx, ifn [, ixmode] [, ixoff] [, iwgmode]</synopsis><synopsis><opcodename>ptablew</opcodename> isig, indx, ifn [, ixmode] [, ixoff] [, iwgmode]</synopsis><synopsis><opcodename>ptablew</opcodename> ksig, kndx, ifn [, ixmode] [, ixoff] [, iwgmode]</synopsis></opcode>
 <opcode><desc>Simple, fast table copy opcode.</desc><synopsis><opcodename>tablecopy</opcodename> kdft, ksft</synopsis></opcode>
 <opcode><desc>Filters a source table and writes result into a destination table.</desc><synopsis>knumpassed <opcodename>tablefilter</opcodename> kouttable, kintatble, kmode, kparam</synopsis></opcode>
@@ -1073,6 +1076,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
       ifn1, ifn2 [, ifn3, ifn4, ..., ifnN]</synopsis></opcode>
 <opcode><desc>Playing-back control signals.</desc><synopsis><opcodename>tabplay</opcodename>  ktrig, knumtics, kfn, kout1 [,kout2,..., koutN]</synopsis></opcode>
 <opcode><desc>Recording of control signals.</desc><synopsis><opcodename>tabrec</opcodename>   ktrig_start, ktrig_stop, knumtics, kfn, kin1 [,kin2,...,kinN]</synopsis></opcode>
+<opcode><desc>Copy a row from an f-table to another, interpolating between rows</desc><synopsis><opcodename>tabrowlin</opcodename> krow, ifnsrc, ifndest, inumcols [, ioffset, istart, iend, istep ]</synopsis></opcode>
 </category>
 <category name="FLTK:Containers">
 <opcode><desc>A FLTK container opcode that groups child widgets.</desc><synopsis><opcodename>FLgroup</opcodename> &quot;label&quot;, iwidth, iheight, ix, iy [, iborder] [, image]</synopsis></opcode>
@@ -1792,8 +1796,11 @@ pitch control and support for timescale-modified input</desc><synopsis>asig <opc
 <category name="Array Opcodes">
 <opcode><desc>Copy data from a vector to an f-table.</desc><synopsis><opcodename>copya2ftab</opcodename> kftbl, tab</synopsis></opcode>
 <opcode><desc>Copy data from an f-table to a vector.</desc><synopsis><opcodename>copyf2array</opcodename> tab, kftbl</synopsis></opcode>
+<opcode><desc>Deinterleaves arrays by picking alternate data from its input.</desc><synopsis>kout1[], kout2[] <opcodename>deinterleave</opcodename> kin[]</synopsis></opcode>
 <opcode><desc>Gets a given column from a 2-dimensional array as a vector.</desc><synopsis>i/kout[] <opcodename>getcol</opcodename>i/kin[],i/kcol</synopsis></opcode>
 <opcode><desc>Gets a given row from a 2-dimensional array as a vector.</desc><synopsis>i/kout[] <opcodename>getrow</opcodename>i/kin[],i/krow</synopsis></opcode>
+<opcode><desc>Interleaves arrays into a a single one by placing the input data
+    in alternate positions.</desc><synopsis>kout[] <opcodename>interleave</opcodename> kin1[], kin2[]</synopsis></opcode>
 <opcode><desc>returns the maximum value in an array.</desc><synopsis>kmax [,kindx] <opcodename>maxarray</opcodename> karray</synopsis></opcode>
 <opcode><desc>returns the minimum value in an array.</desc><synopsis>kmin [,kindx] <opcodename>minarray</opcodename> karray</synopsis></opcode>
 <opcode><desc>Print the contents of an array</desc><synopsis><opcodename>printarray</opcodename> ixs[] [, Smft, Slabel ]</synopsis><synopsis><opcodename>printarray</opcodename> kxs[] [, ktrig, Sfmt, Slabel ]</synopsis></opcode>
