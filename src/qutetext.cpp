@@ -341,10 +341,10 @@ QString QuteText::getQml()
     QString color = property("QCS_color").value<QColor>().name();
 
     qml += "\n\tRectangle {\n"; // place within rectangle
-    qml += QString("\t\tx: %1\n").arg(x());
-    qml += QString("\t\ty: %1 \n").arg(y());
-    qml += QString("\t\twidth: %1\n").arg(width());
-    qml += QString("\t\theight: %1\n").arg(height());
+	qml += QString("\t\tx: %1 * scaleItem.scale\n").arg(x());
+	qml += QString("\t\ty: %1  * scaleItem.scale\n").arg(y());
+	qml += QString("\t\twidth: %1 * scaleItem.scale\n").arg(width());
+	qml += QString("\t\theight: %1 * scaleItem.scale\n").arg(height());
     QString bgColor = hasBackground ? property("QCS_bgcolor").value<QColor>().name() : "transparent";
     qml += QString("\t\tcolor: \"%1\"\n").arg(bgColor);
     if (hasBorder) {
@@ -359,7 +359,7 @@ QString QuteText::getQml()
 
     qml += "\n\t\tLabel {\n";
     qml += QString("\t\t\tanchors.centerIn: parent\n");
-    qml += QString("\t\t\tfont.pixelSize: %1\n").arg(property("QCS_fontsize").toString()); // is it OK on ndroid? not pointsize?
+	qml += QString("\t\t\tfont.pixelSize: %1 * scaleItem.scale\n").arg(property("QCS_fontsize").toString()); // is it OK on ndroid? not pointsize?
     qml += QString("\t\t\ttext: \"%1\"\n").arg(property("QCS_label").toString());
 
     qml += QString("\t\t\tcolor: \"%1\"\n").arg(color);

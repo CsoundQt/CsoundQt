@@ -179,10 +179,10 @@ QString QuteButton::getQml()
 #endif
 	qml = "\tButton { \n";
     //qml += QString("\t\tid: %1Button\n").arg(m_channel);
-	qml += QString("\t\tx: %1\n").arg(x());
-	qml += QString("\t\ty: %1 \n").arg(y());
-	qml += QString("\t\twidth: %1\n").arg(width());
-	qml += QString("\t\theight: %1\n").arg(height());
+	qml += QString("\t\tx: %1 * scaleItem.scale\n").arg(x());
+	qml += QString("\t\ty: %1 * scaleItem.scale\n").arg(y());
+	qml += QString("\t\twidth: %1 * scaleItem.scale\n").arg(width());
+	qml += QString("\t\theight: %1 * scaleItem.scale\n").arg(height());
 	qml += QString("\t\ttext: \"%1\"\n").arg( property("QCS_text").toString());
 	bool checkable = property("QCS_latch").toBool();
 	if (checkable) {

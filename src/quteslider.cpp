@@ -180,10 +180,10 @@ QString QuteSlider::getQml()
 #endif
 	qml = "\n\tSlider {\n";
     //qml += QString("\t\t\id: %1Slider\n").arg(m_channel);
-	qml += QString("\t\tx: %1\n").arg(x());
-	qml += QString("\t\ty: %1 \n").arg(y());
-	qml += QString("\t\twidth: %1\n").arg(width());
-	qml += QString("\t\theight: %1\n").arg(height());
+	qml += QString("\t\tx: %1 * scaleItem.scale\n").arg(x());
+	qml += QString("\t\ty: %1  * scaleItem.scale\n").arg(y());
+	qml += QString("\t\twidth: %1 * scaleItem.scale\n").arg(width());
+	qml += QString("\t\theight: %1 * scaleItem.scale\n").arg(height());
 	qml += QString("\t\tfrom: %1\n").arg(property("QCS_minimum").toString());
 	qml += QString("\t\tto: %1\n").arg(property("QCS_maximum").toString());
 	qml += QString("\t\tvalue: %1\n").arg(getValue());

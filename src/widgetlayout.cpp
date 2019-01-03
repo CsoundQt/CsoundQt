@@ -1350,7 +1350,10 @@ QString WidgetLayout::getCsladspaLines()
 QString WidgetLayout::getQml()
 {
     QString qml = "import QtQuick 2.0\nimport QtQuick.Controls 2.0 // NB! Requires Qt 5.7 or later. Rewrite with QtQuick.Controls 1.X if using older Qt versions \n\n";
-    qml += "Rectangle {\n";
+#ifdef USE_QT5
+	QString s2 = QString(R"()");
+#endif
+	qml += "Rectangle {\n";
     QColor bgcolor = this->palette().color(QWidget::backgroundRole());
     qml+=QString("\tcolor: \"%1\"\n").arg(bgcolor.name());
 
@@ -1365,9 +1368,29 @@ QString WidgetLayout::getQml()
 	qml += "\n\n\tFlickable {\n\tanchors.fill: parent\n";
 	qml += QString("\tcontentWidth: %1\n").arg(w);
 	qml += QString("\tcontentHeight: %1\n").arg(h);
-	// contentWidth and contentHeight?
 
 	qml += "\n";
+
+	qml += QString(R"(
+				   Item {
+					   id: scaleItem
+					   anchors.fill: parent
+				   }
+
+				   PinchArea {
+					   anchors.fill: parent
+					   pinch.maximumScale: 2.5
+					   pinch.minimumScale: 0.6
+					   pinch.target: scaleItem
+
+					   MouseArea {  // necessary for co-existense of flickable an pincharea
+						   anchors.fill: parent
+						   onClicked: console.log("Clicked tiny")
+						   propagateComposedEvents: true
+					   }
+				   }
+				   )");
+
 
     int unsupported = 0;
     widgetsMutex.lock();
