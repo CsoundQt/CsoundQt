@@ -225,7 +225,7 @@ QString QuteWidget::getCsladspaLine()
 QString QuteWidget::getQml()
 {
     //Widgets return empty strings when not supported
-    return QString("");
+	return QString();
 }
 
 QString QuteWidget::getUuid()

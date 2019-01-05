@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
         <file>res/QuteApp_d.exe</file>
-        <file>delete-me.qml</file>
     </qresource>
 </RCC>

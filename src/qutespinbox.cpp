@@ -160,6 +160,7 @@ QString QuteSpinBox::getQml()
     float resolution = property("QCS_resolution").toFloat();
     if (floorf(resolution) != resolution ) { // check if integer
         qDebug() << "stepsize not integer";
+		return QString();
 
 //        QMessageBox::warning(nullptr, tr("SpinBox conversion"),
 //            tr("Currently only integer resolution (stepsize) is supported for QML spinbox.\nPlease change your spinbox to use it in QML"));
@@ -171,10 +172,10 @@ QString QuteSpinBox::getQml()
     qml = "\n\tSpinBox {\n"; // NB! Does not accept floating point numbers...
 
     //qml += QString("\t\tid: %1SpinBox\n").arg(m_channel);
-    qml += QString("\t\tx: %1\n").arg(x());
-    qml += QString("\t\ty: %1 \n").arg(y());
-    qml += QString("\t\twidth: %1 + up.indicator.width + down.indicator.width\n").arg(width()); // add somehing width for +/- values?
-    qml += QString("\t\theight: %1\n").arg(height());
+	qml += QString("\t\tx: %1 * scaleItem.scale\n").arg(x());
+	qml += QString("\t\ty: %1  * scaleItem.scale\n").arg(y());
+	qml += QString("\t\twidth: (%1 + up.indicator.width + down.indicator.width)  * scaleItem.scale\n").arg(width());
+	qml += QString("\t\theight: %1  * scaleItem.scale\n").arg(height());
     qml += QString("\t\tfrom: %1\n").arg(property("QCS_minimum").toString());
     qml += QString("\t\tto: %1\n").arg(property("QCS_maximum").toString());
     qml += QString("\t\tstepSize: %1\n").arg(property("QCS_resolution").toInt()); // Int for now...
