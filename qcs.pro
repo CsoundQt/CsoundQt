@@ -226,7 +226,7 @@ macx {
     pythonqt {
         scripts.path = Contents/Resources
         scripts.files = src/Scripts
-        QMAKE_BUNDLE_DATA += scripts
+        QMAKE_BUNDLE_DATA += scripts        
     }
     examples.path = Contents/Resources
     examples.files = "src/Examples/FLOSS Manual Examples"
@@ -246,25 +246,29 @@ macx {
     printsupport.files =  $$[QT_INSTALL_PREFIX]/plugins/printsupport/libcocoaprintersupport.dylib
 
     pythonqt {
+        #if PythonQt 3.2, naming the libraries is different
+        #this should be set progammatically but hardcode for now.
+        pythonQtDylib = libPythonQt-Qt5-Python2.7.3.dylib# before PyhontQt3.2: libPythonQt.1.dylib
+        pythonQtAllDylib =   libPythonQt_QtAll-Qt5-Python2.7.3.dylib # # before PythonQt 3.2:  libPythonQt_QtAll.1.dylib
         pythonqt.path = $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks
-        pythonqt.files = $${PYTHONQT_LIB_DIR}/libPythonQt_QtAll.1.dylib $${PYTHONQT_LIB_DIR}/libPythonQt.1.dylib #TODO: use pythonqt/lib dir
+        pythonqt.files = $${PYTHONQT_LIB_DIR}/$$pythonQtAllDylib $${PYTHONQT_LIB_DIR}/$$pythonQtDylib #TODO: use pythonqt/lib dir
         INSTALLS += pythonqt
     }
 
     pythonlinks.path= $$PWD
     pythonlinks.commands = install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
     pythonqt {
-        pythonlinks.commands += install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/libPythonQt.1.dylib ;
-        pythonlinks.commands += install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/libPythonQt_QtAll.1.dylib ;
-        pythonlinks.commands += install_name_tool -change libPythonQt.1.dylib @rpath/libPythonQt.1.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
-        pythonlinks.commands += install_name_tool -change libPythonQt_QtAll.1.dylib @rpath/libPythonQt_QtAll.1.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
-        pythonlinks.commands += install_name_tool -change libPythonQt.1.dylib @rpath/libPythonQt.1.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/libPythonQt_QtAll.1.dylib ;
+        pythonlinks.commands += install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/$$pythonQtDylib ;
+        pythonlinks.commands += install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/$$pythonQtAllDylib ;
+        pythonlinks.commands += install_name_tool -change $$pythonQtDylib @rpath/$$pythonQtDylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        pythonlinks.commands += install_name_tool -change $$pythonQtAllDylib  @rpath/$$pythonQtAllDylib  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        pythonlinks.commands += install_name_tool -change $$pythonQtDylib @rpath/$$pythonQtDylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/$$pythonQtAllDylib  ;
 
 
     }
 
     final.commands = rm -rf  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework ;
-    final.commands += $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML
+    final.commands += $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML -dmg # nb! -dmg only for local build, do not commit to git!
     final.path = $$PWD
     INSTALLS += cocoa printsupport pythonlinks final
 
