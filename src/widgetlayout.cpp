@@ -3034,8 +3034,8 @@ QString WidgetLayout::createDummy(int x, int y, int width, int height, QString w
 
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
-    qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
-    qDebug() << "contained: " << m_contained;
+	//qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
+	//qDebug() << "contained: " << m_contained;
     QWidget *w;
 	layoutMutex.lock();
     w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget
