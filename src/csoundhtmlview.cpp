@@ -27,6 +27,7 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     csoundHtmlWrapper.setCsoundHtmlView(this);
     csoundHtmlOnlyWrapper.setCsoundHtmlView(this);
 	ui->mainLayout->addWidget(webView); // mainLayout is vertical layout box
+    webView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 #ifdef USE_WEBKIT
 	QObject::connect(webView->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),
@@ -282,6 +283,9 @@ void CsoundHtmlView::showDebugWindow()
 		QWidget * debugger = new QWidget();
 		debugger->resize(600,400);
 		QWebEngineView * debuggerView= new QWebEngineView(debugger);
+        // TO enabale prper scaling of the widget, add a layout and place view in there
+        debuggerView->setGeometry(0,0,debugger->width(), debugger->height()); // otherwise was rendered wrongly on MacOS
+        debuggerView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		debugger->setAttribute(Qt::WA_DeleteOnClose);
 		qDebug()<<"Opening window for localhost:"<<debugPort;
 		debuggerView->setUrl(QUrl("http://localhost:"+debugPort));

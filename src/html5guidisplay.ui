@@ -13,7 +13,7 @@
   <property name="minimumSize">
    <size>
     <width>196</width>
-    <height>84</height>
+    <height>100</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -21,24 +21,14 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
-     <layout class="QVBoxLayout" name="mainLayout"/>
-    </item>
-    <item row="2" column="0">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item row="0" column="0">
      <widget class="QWidget" name="inspectRow" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="leftMargin">
         <number>0</number>
@@ -79,6 +69,9 @@
        </item>
       </layout>
      </widget>
+    </item>
+    <item row="1" column="0">
+     <layout class="QVBoxLayout" name="mainLayout"/>
     </item>
    </layout>
   </widget>
