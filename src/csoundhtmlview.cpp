@@ -283,10 +283,10 @@ void CsoundHtmlView::showDebugWindow()
 		QWidget * debugger = new QWidget();
 		debugger->resize(600,400);
 		QWebEngineView * debuggerView= new QWebEngineView(debugger);
-        // TO enabale prper scaling of the widget, add a layout and place view in there
-        debuggerView->setGeometry(0,0,debugger->width(), debugger->height()); // otherwise was rendered wrongly on MacOS
-        debuggerView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		debugger->setAttribute(Qt::WA_DeleteOnClose);
+        QVBoxLayout *layout = new QVBoxLayout(debugger);
+        layout->addWidget(debuggerView);
+        debugger->setAttribute(Qt::WA_DeleteOnClose);
+        debugger->setLayout(layout);
 		qDebug()<<"Opening window for localhost:"<<debugPort;
 		debuggerView->setUrl(QUrl("http://localhost:"+debugPort));
 		debugger->show();
