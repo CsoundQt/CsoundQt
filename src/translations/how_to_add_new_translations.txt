@@ -21,3 +21,6 @@ How to add a new translation to CsoundQt
 	text += tr("Persian translation: Amin Khoshsabk") + "<br />";
 
 6. In src/configlists.cpp add the language name und the language code (around line 54)
+
+
+For updating an already existing translation, perform step 2 and 3
