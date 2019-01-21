@@ -197,8 +197,9 @@ unix:!macx {
         SHARE_DIR=/usr/share # ~/.local/share for HOME install
 	}
 	target.path = $$INSTALL_DIR/bin
-    target.commands = ln -sf $$target.path/$$TARGET $(INSTALL_ROOT)/$$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
 	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET
+	target.commands = ln -sf $$target.path/$$TARGET $(INSTALL_ROOT)/$$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
+
 
 	
 	# see comments: https://github.com/CsoundQt/CsoundQt/issues/258
