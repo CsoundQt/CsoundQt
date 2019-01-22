@@ -5,14 +5,15 @@ qcs.pro.user
 
 bin/*.exe
 bin/*.dll
+bin/CsoundQt-d-*
+bin/old
 
 Makefile
-bin/CsoundQt-d-py
 build/
 
-bin/CsoundQt-d-py-cs6
-bin/CsoundQt-d-cs6
 src/Examples/McCurdy Collection/Modulation/test.wav
 
 doc/QuteCsound Quick Reference (0.9).odt
+
+.qmake.stash
 
