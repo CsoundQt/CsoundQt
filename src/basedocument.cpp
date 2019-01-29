@@ -280,6 +280,9 @@ void BaseDocument::setFileName(QString name)
 	else if (name.endsWith(".orc")) {
 		m_view->setFileType(EDIT_ORC_MODE);
 	}
+	else if (name.endsWith(".udo")) {
+		m_view->setFileType(EDIT_ORC_MODE);
+	}
 	else if (name.endsWith(".sco")) {
 		m_view->setFileType(EDIT_SCO_MODE);
 	}
