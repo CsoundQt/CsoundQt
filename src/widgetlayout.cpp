@@ -2345,7 +2345,7 @@ void WidgetLayout::alignCenterHorizontal()
 
 void WidgetLayout::keyPressEvent(QKeyEvent *event)
 {
-	//  qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
+	qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
     if (!event->isAutoRepeat() || m_repeatKeys) {
 		QString key = event->text();
 		if (event->key() == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) { // TODO why is this necessary? The shortcut from the duplicate action in the main app is not working!
@@ -2380,11 +2380,11 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
 		//      this->redo();
 		//      event->accept();
 		//    }
-		else if (key != "") {
+		else { //else if (key != "") {
 			//      qDebug() << "WidgetLayout::keyPressEvent" <convolve< key;
 			//           appendMessage(key);
 			QWidget::keyPressEvent(event); // Propagate event if not used
-			emit keyPressed(key);
+			emit keyPressed(event->key());
 			//      event->accept();
 		}
 	}
@@ -2393,11 +2393,8 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
 void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
 {
     if (!event->isAutoRepeat() || m_repeatKeys) {
-		QString key = event->text();
-		if (key != "") {
-			//           appendMessage("rel:" + key);
-			emit keyReleased(key);
-		}
+		int key = event->key();
+		emit keyReleased(key);
 	}
 	QWidget::keyReleaseEvent(event); // Propagate event
 }

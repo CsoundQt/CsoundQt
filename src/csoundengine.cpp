@@ -385,16 +385,16 @@ int CsoundEngine::keyEventCallback(void *userData,
     CsoundUserData *ud = (CsoundUserData *) userData;
     //  WidgetLayout *wl = (WidgetLayout *) ud->wl;
     int *value = (int *) p;
-    int key = ud->csEngine->popKeyPressEvent();
-    if (key >= 0) {
-        *value = key;
-        //			qDebug()  << "Pressed: " << key;
+	int key = ud->csEngine->popKeyPressEvent();
+	if (key >= 0) {
+		*value = key;
+		qDebug()  << "Pressed: " << key;
     }
     else if (type & CSOUND_CALLBACK_KBD_EVENT) {
         key = ud->csEngine->popKeyReleaseEvent();
         if (key >= 0) {
             *value = key | 0x10000;
-            //       qDebug()  << "Released: " << key;
+			qDebug()  << "Released: " << key;
         }
     }
     return 0;
@@ -499,10 +499,10 @@ void CsoundEngine::setWidgetLayout(WidgetLayout *wl)
     ud->wl = wl;
     //  connect(wl, SIGNAL(destroyed()), this, SLOT(widgetLayoutDestroyed()));
     // Key presses on widget layout and console are passed to the engine
-    connect(wl, SIGNAL(keyPressed(QString)),
-            this, SLOT(keyPressForCsound(QString)));
-    connect(wl, SIGNAL(keyReleased(QString)),
-            this, SLOT(keyReleaseForCsound(QString)));
+	connect(wl, SIGNAL(keyPressed(int)),
+			this, SLOT(keyPressForCsound(int)));
+	connect(wl, SIGNAL(keyReleased(int)),
+			this, SLOT(keyReleaseForCsound(int)));
 
     // Register scopes and graphs to pass them the engine's user data
     connect(wl, SIGNAL(registerScope(QuteScope*)),
@@ -547,17 +547,55 @@ void CsoundEngine::setConsoleBufferSize(int size)
     m_consoleBufferSize = size;
 }
 
-void CsoundEngine::keyPressForCsound(QString key)
+QList <int> CsoundEngine::getAnsiKeySequence(int key)  // convert sepcial keys (Qt::Key) like Esc, arrows, F1 etc to ANSI escape key sequence for Csound
 {
-    //	  qDebug()  << key;
-    keyMutex.lock();
-    keyPressBuffer << key;
-    keyMutex.unlock();
+	//	  qDebug()  << key;
+	QList <int> keyArray;
+	if (key < 0xff) {
+		keyArray << key;
+	} else switch (key) {
+		case Qt::Key_Escape: keyArray << 27; break;
+		case Qt::Key_Tab: keyArray << 9; break;
+		case Qt::Key_Backspace: keyArray << 127; break;
+		case Qt::Key_Up: keyArray << 27 << 91 << 65; break;
+		case Qt::Key_Down: keyArray << 27 << 91 << 66; break;
+		case Qt::Key_Right: keyArray << 27 << 91 << 67; break;
+		case Qt::Key_Left: keyArray << 27 << 91 << 68; break;
+		case Qt::Key_Home: keyArray << 27 << 91 << 72; break;
+		case Qt::Key_End: keyArray << 27 << 91 << 70; break;
+		case Qt::Key_PageUp: keyArray << 27 << 53 << 126; break;
+		case Qt::Key_PageDown: keyArray << 27 << 52 << 126; break;
+		case Qt::Key_F1: keyArray << 27 << 91 << 80; break;
+		case Qt::Key_F2: keyArray << 27 << 79 << 81; break;
+		case Qt::Key_F3: keyArray << 27 << 79 << 82; break;
+		case Qt::Key_F4: keyArray << 27 << 79 << 83; break;
+		case Qt::Key_F5: keyArray << 27 << 91 << 49 << 53 << 126; break;
+		case Qt::Key_F6: keyArray << 27 << 91 << 49 << 55 << 126; break;
+		case Qt::Key_F7: keyArray << 27 << 91 << 49 << 56 << 126; break;
+		case Qt::Key_F8: keyArray << 27 << 91 << 49 << 57 << 126; break;
+		case Qt::Key_F9: keyArray << 27 << 91 << 50 << 48 << 126; break;
+		case Qt::Key_F10: keyArray << 27 << 91 << 50 << 49 << 126; break;
+		case Qt::Key_F11: keyArray << 27 << 91 << 50 << 51 << 126; break;
+		case Qt::Key_F12: keyArray << 27 << 91 << 50 << 52 << 126; break;
+		case Qt::Key_Insert: keyArray << 27 << 91 << 50 << 126; break;
+		case Qt::Key_Delete: keyArray << 27 << 91 << 51 << 126; break;
+
+		default: keyArray << key;
+	}
+	return keyArray;
 }
 
-void CsoundEngine::keyReleaseForCsound(QString key)
+void CsoundEngine::keyPressForCsound(int key)
 {
-    //	   qDebug()  << key;
+    //	  qDebug()  << key;
+	keyMutex.lock();
+	keyPressBuffer << getAnsiKeySequence(key);
+	keyMutex.unlock();
+}
+
+void CsoundEngine::keyReleaseForCsound(int key) // NB! I did not change this to int since seems Csound actually does not use it?
+{
+	//qDebug()  << key;
     keyMutex.lock();
     keyReleaseBuffer << key;
     keyMutex.unlock();
@@ -598,13 +636,14 @@ void CsoundEngine::evaluate(QString code)
 int CsoundEngine::popKeyPressEvent()
 {
     int value = -1;
-    if (keyMutex.tryLock()) {
+	if (keyMutex.tryLock()) {
         if (!keyPressBuffer.isEmpty()) {
-            value = (int) keyPressBuffer.takeFirst()[0].toLatin1();
-        }
+			value = keyPressBuffer.takeFirst();
+		}
+
         keyMutex.unlock();
     }
-    return value;
+	return value;
 }
 
 int CsoundEngine::popKeyReleaseEvent()
@@ -612,7 +651,7 @@ int CsoundEngine::popKeyReleaseEvent()
     int value = -1;
     if (keyMutex.tryLock()) {
         if (!keyReleaseBuffer.isEmpty()) {
-            value = (int) keyReleaseBuffer.takeFirst()[0].toLatin1();
+			value = keyReleaseBuffer.takeFirst();
         }
         keyMutex.unlock();
     }

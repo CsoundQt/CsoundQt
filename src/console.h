@@ -62,8 +62,8 @@ protected:
 	//    QMutex consoleLock;
 
 signals:
-	void keyPressed(QString key);
-	void keyReleased(QString key);
+	void keyPressed(int key);
+	void keyReleased(int key);
 	void logMessage(QString msg);
 };
 

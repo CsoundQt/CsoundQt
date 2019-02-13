@@ -394,8 +394,8 @@ private slots:
 
 signals:
 	void selection(QRect area);
-	void keyPressed(QString key);
-	void keyReleased(QString key);
+	void keyPressed(int key);
+	void keyReleased(int key);
 	void changed(); // Should be triggered whenever widgets change, to let main document know
 	void registerScope(QuteScope *scope);
 	void registerGraph(QuteGraph *graph);

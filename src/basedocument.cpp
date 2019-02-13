@@ -44,10 +44,10 @@ BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree, ConfigLis
 	m_console->setReadOnly(true);
 	// Register the console with the engine for message printing
 	m_csEngine->registerConsole(m_console);
-	connect(m_console, SIGNAL(keyPressed(QString)),
-			m_csEngine, SLOT(keyPressForCsound(QString)));
-	connect(m_console, SIGNAL(keyReleased(QString)),
-			m_csEngine, SLOT(keyReleaseForCsound(QString)));
+	connect(m_console, SIGNAL(keyPressed(int)),
+			m_csEngine, SLOT(keyPressForCsound(int)));
+	connect(m_console, SIGNAL(keyReleased(int)),
+			m_csEngine, SLOT(keyReleaseForCsound(int)));
 }
 
 BaseDocument::~BaseDocument()

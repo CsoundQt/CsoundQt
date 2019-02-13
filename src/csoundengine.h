@@ -224,8 +224,8 @@ public slots:
 	int startRecording(int format, QString filename);
 	void stopRecording();
 	void queueEvent(QString eventLine, int delay = 0);
-	void keyPressForCsound(QString key);  // For key press events from consoles and widget panel
-	void keyReleaseForCsound(QString key);
+	void keyPressForCsound(int key);  // For key press events from consoles and widget panel
+	void keyReleaseForCsound(int key);
 
 	void registerScope(QuteScope *scope);
 	//    void unregisterScope(QuteScope *scope);
@@ -241,6 +241,7 @@ public:
 	void cleanupCsound();
 private:
 	void setupChannels();
+	QList <int> getAnsiKeySequence(int key);
 
 	QFuture<void> m_msgUpdateThread;
 	static void messageListDispatcher(void *data); // Function run in updater thread
@@ -253,8 +254,8 @@ private:
 	QMutex m_messageMutex; // Protection for message queue
 	QStringList messageQueue;  // Messages from Csound execution
 	QMutex keyMutex; // For keys pressed to pass to Csound from console and widget panel
-	QStringList keyPressBuffer; // protected by keyMutex
-	QStringList keyReleaseBuffer; // protected by keyMutex
+	QList <int> keyPressBuffer; // protected by keyMutex
+	QList <int> keyReleaseBuffer; // protected by keyMutex
 
 	bool m_recording;
 	QMutex m_playMutex; // To prevent from starting a Csound instance while another is starting or closing
