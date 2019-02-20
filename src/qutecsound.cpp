@@ -353,6 +353,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QString styleSheet = QLatin1String(file.readAll());
     qApp->setStyleSheet(styleSheet);
 #endif
+    //test  ---- this is ugly workaround for problem reported by Renè that on firt run ival = 16.0/3 gets rounded...
+    play();
+    stop();
 }
 
 
