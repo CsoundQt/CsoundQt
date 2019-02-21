@@ -3978,7 +3978,8 @@ QString CsoundQt::getExamplePath(QString dir)
                   << "/usr/share/csoundqt/Examples/" << qApp->applicationDirPath() + "/../src/Examples/"
                   << qApp->applicationDirPath() + "/../../csoundqt/src/Examples/"
                   <<  "/../../qutecsound/src/Examples/"
-                  << "~/.local/share/qutecsound/Examples/" << "/usr/share/qutecsound/Examples/";
+                  << "~/.local/share/qutecsound/Examples/" << "/usr/share/qutecsound/Examples/"
+                  << qApp->applicationDirPath() + "/../share/csoundqt/Examples/";
 
     foreach (QString path, possiblePaths) {
         path += dir;
