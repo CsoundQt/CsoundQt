@@ -2345,9 +2345,9 @@ void WidgetLayout::alignCenterHorizontal()
 
 void WidgetLayout::keyPressEvent(QKeyEvent *event)
 {
-	qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
+	//qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
     if (!event->isAutoRepeat() || m_repeatKeys) {
-		QString key = event->text();
+		QString keyText = event->text();
 		if (event->key() == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) { // TODO why is this necessary? The shortcut from the duplicate action in the main app is not working!
 			this->duplicate();
 			event->accept();
@@ -2384,7 +2384,12 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
 			//      qDebug() << "WidgetLayout::keyPressEvent" <convolve< key;
 			//           appendMessage(key);
 			QWidget::keyPressEvent(event); // Propagate event if not used
-			emit keyPressed(event->key());
+			if (!keyText.isEmpty()) {
+				int key = static_cast<int>( keyText[0].toLatin1() ); // if simple character send ASCII code
+				emit keyPressed(key);
+			} else {
+				emit keyPressed(event->key()); // else send keycode and let CsoundEngine process it
+			}
 			//      event->accept();
 		}
 	}
@@ -2393,7 +2398,13 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
 void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
 {
     if (!event->isAutoRepeat() || m_repeatKeys) {
-		int key = event->key();
+		QString keyText = event->text();
+		int key = -1;
+		if (!keyText.isEmpty()) {
+			key = (int) keyText[0].toLatin1(); // if simple character send ASCII code
+		} else {
+			key = event->key();
+		}
 		emit keyReleased(key);
 	}
 	QWidget::keyReleaseEvent(event); // Propagate event

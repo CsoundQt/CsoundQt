@@ -164,10 +164,12 @@ void Console::contextMenuEvent(QContextMenuEvent *event)
 void Console::keyPressEvent(QKeyEvent *event)
 {
     if (!event->isAutoRepeat() || m_repeatKeys) {
-		emit keyPressed(event->key());
-		QString key = event->text();
-		if (key != "") {
-			appendMessage(key);
+		QString keyText = event->text();
+		if (!keyText.isEmpty()) {
+			appendMessage(keyText);
+			emit keyPressed(static_cast<int>(keyText[0].toLatin1()));
+		} else {
+			emit keyPressed(event->key());
 		}
 	}
 }
@@ -175,7 +177,13 @@ void Console::keyPressEvent(QKeyEvent *event)
 void Console::keyReleaseEvent(QKeyEvent *event)
 {
     if (!event->isAutoRepeat() || m_repeatKeys) {
-		emit keyReleased(event->key());
+		QString keyText = event->text();
+		if (!keyText.isEmpty()) {
+			appendMessage(keyText);
+			emit keyReleased(static_cast<int>(keyText[0].toLatin1()));
+		} else {
+			emit keyReleased(event->key());
+		}
 	}
 }
 
