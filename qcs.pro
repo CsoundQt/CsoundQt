@@ -235,6 +235,11 @@ macx {
     examples.files += "src/Examples/Stria Synth"
     QMAKE_BUNDLE_DATA += examples
 
+    templates.path = Contents
+    templates.files = "templates"
+    QMAKE_BUNDLE_DATA += templates
+
+
     # EXPERIMENTAL INSTALL instructions for making bundle (ie make install)
     first.path = $$PWD
     first.commands = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML # first deployment
@@ -272,7 +277,7 @@ macx {
     final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
     final.commands += install_name_tool -change  @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
     #final.commands += $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML -dmg # nb! -dmg only for local build, do not commit to git!
-    final.commands += hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname CsoundQt {TARGET}.dmg # untested!
+    final.commands += hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname CsoundQt $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg # untested!
     final.path = $$PWD
     INSTALLS += cocoa printsupport pythonlinks final
 

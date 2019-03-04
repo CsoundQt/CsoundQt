@@ -231,11 +231,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
     fillFileMenu(); // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
     fillScriptsMenu(); // Must be placed after readSettings to know directory
-    if (m_options->opcodexmldir == "") {
+//    if (m_options->opcodexmldir == "") { // drop support for setting external path for opcodes.xml -  was one cause of possible crashes
         m_opcodeTree = new OpEntryParser(":/opcodes.xml");
-    }
-    else
-        m_opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "/opcodes.xml"));
+//    }
+//    else //TEST! this can be reason of crashes on MacOS -  set it always to embedded opcode file.
+//        m_opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "/opcodes.xml"));
 
     LiveCodeEditor *liveeditor = new LiveCodeEditor(m_scratchPad, m_opcodeTree);
     liveeditor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -5072,7 +5072,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("logFile",m_options->logFile);
         settings.setValue("sdkDir",m_options->sdkDir);
         settings.setValue("templateDir",m_options->templateDir);
-        settings.setValue("opcodexmldir", m_options->opcodexmldir);
+        settings.setValue("opcodexmldir", m_options->opcodexmldir); // TEST can be that this is the reason for crash MacOS -  dir set wrong from corrupted plist file
         settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
     }
     else {
