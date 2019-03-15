@@ -580,7 +580,7 @@ QList <int> CsoundEngine::getAnsiKeySequence(int key)  // convert sepcial keys (
 		case Qt::Key_Insert: keyArray << 27 << 91 << 50 << 126; break;
 		case Qt::Key_Delete: keyArray << 27 << 91 << 51 << 126; break;
 
-		default: keyArray << key;
+        default: qDebug()<<"Key " << key << " ignored."; //keyArray << key;
 	}
 	return keyArray;
 }
