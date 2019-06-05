@@ -146,6 +146,7 @@ You need to have qt development libraries (usually with ending `-dev` or `-devel
 
     $ sudo apt-get install qt5-qmake
     $ sudo apt-get install qt5-default
+    $ sudo apt-get install qtdeclarative5-dev
  
     
 You may need to install also other qt5 libraries. (In case you get an error message like "Unknown module(s) in QT: ...", go to your package manager and install libqt5...) 
