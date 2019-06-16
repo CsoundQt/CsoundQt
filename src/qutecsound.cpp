@@ -1697,7 +1697,9 @@ void CsoundQt::play(bool realtime, int index)
             //Must switch filename order when open file is a sco file
             fileName2 = fileName;
             fileName = documentPages[curPage]->getCompanionFileName();
-        }
+		} else if (fileName.endsWith(".orc",Qt::CaseInsensitive) && documentPages[curPage]->getCompanionFileName().isEmpty()) {
+			//TODO: create empty score file
+		}
         else
             fileName2 = documentPages[curPage]->getCompanionFileName();
     }
@@ -5603,7 +5605,12 @@ void CsoundQt::getCompanionFileName()
         list->setCurrentItem(itemList[0]);
     dialog.exec();
     QListWidgetItem *item = list->currentItem();
-    QString itemText = item->text();
+	if (!item) {
+		qDebug() << "Empty list. Create empty score file";
+		documentPages[curPage]->setCompanionFileName("");
+		return;
+	}
+	QString itemText = item->text();
     if (checkbox->isChecked())
         documentPages[curPage]->askForFile = false;
     documentPages[curPage]->setCompanionFileName(itemText);
