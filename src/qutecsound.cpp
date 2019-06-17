@@ -5607,7 +5607,21 @@ void CsoundQt::getCompanionFileName()
     QListWidgetItem *item = list->currentItem();
 	if (!item) {
 		qDebug() << "Empty list. Create empty score file";
-		documentPages[curPage]->setCompanionFileName("");
+		QString companion = "";
+		if (documentPages[curPage]->getFileName().endsWith(".orc")) {
+			// create an empty score file to run the orchestra scorelessly
+
+#ifdef USE_QT5
+			companion = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/empty.sco"; // QT >5.0
+			QFile f(companion); // does it create it here
+#else
+			companion = QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/
+		#endif
+			f.open(QIODevice::ReadWrite | QIODevice::Text);
+			f.close();
+			qDebug() << "Created empty score file as companion: " << companion;
+		}
+		documentPages[curPage]->setCompanionFileName(companion);
 		return;
 	}
 	QString itemText = item->text();
