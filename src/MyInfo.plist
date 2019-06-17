@@ -13,6 +13,7 @@
           <string>sco</string>
           <string>csd</string>
           <string>inc</string>
+		  <string>udo</string>
         </array>
         <key>CFBundleTypeIconFile</key>
         <string>qtcs.icns</string>

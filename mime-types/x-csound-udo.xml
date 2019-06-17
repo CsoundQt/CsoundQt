@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+	<mime-type type="text/x-csound-udo">
+		<comment>Csound score</comment>
+		<sub-class-of type="text/plain"/>
+		<icon name="csound"/>
+		<glob pattern="*.udo"/>
+	</mime-type>
+</mime-info>
