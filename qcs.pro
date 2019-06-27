@@ -197,6 +197,7 @@ unix:!macx {
         SHARE_DIR=/usr/share # ~/.local/share for HOME install
 	}
 	target.path = $$INSTALL_DIR/bin
+
 	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET
 	target.commands = ln -sf $$target.path/$$TARGET $(INSTALL_ROOT)/$$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
 
@@ -212,7 +213,7 @@ unix:!macx {
     icon.files=images/csoundqt.svg
 
 	mimetypes.path=$$INSTALL_DIR # in some reason path must be set to create install target in Makefile
-	mimetypes.commands = cd $$PWD/mime-types/; ./add_csound_mimetypes.sh $(INSTALL_ROOT)/$$INSTALL_DIR
+	mimetypes.commands = cd $$PWD/mime-types/; ./add_csound_mimetypes.sh $$SHARE_DIR
 
 
     examples.path = $$SHARE_DIR/csoundqt/

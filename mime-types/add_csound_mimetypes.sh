@@ -1,16 +1,16 @@
 #!/bin/sh 
 
 #copy icon for csound mimetypes
-INSTALLDIR="$1"
-if [ -z "$INSTALLDIR" ] ; then
-	INSTALLDIR=/usr #~/.local # use the latter one for local install
+SHAREDIR="$1"
+if [ -z "$SHAREDIR" ] ; then
+	SHAREDIR=/usr/share #~/.local/share # use the latter one for local install
 fi
-ICONDIR=$INSTALLDIR/share/icons/hicolor/128x128/mimetypes 
+ICONDIR=$SHAREDIR/icons/hicolor/128x128/mimetypes 
 mkdir -v -p $ICONDIR
 cp -v csound-light-128.png $ICONDIR/csound.png
 
 #create and register mimetype
-MIMEDIR=$INSTALLDIR/share/mime # or /usr/share/mime 
+MIMEDIR=$SHAREDIR/mime # or /usr/share/mime 
 DESTDIR=$MIMEDIR/packages 
 mkdir -v -p $DESTDIR # make if does not exist
 cp -v *.xml $DESTDIR
