@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CsoundQt and WebAudio Csound html template</title>
+</head>
+<script type="text/javascript" src="js/csound.js"></script>
+<script type="text/javascript">
+	
+
+	function moduleDidLoad() { // necessary for WebAudio Csound
+	  console.log("Module did load. Press Start button");
+ 		// do not put any csound calls here, otherwise it is missed in CsoundQt
+	}
+
+	var handleMessage = function(message) {
+		var messages_textarea = document.getElementById("messages");
+		var existing = messages_textarea.value;
+		messages_textarea.value = existing + message;
+		messages_textarea.scrollTop = messages_textarea.scrollHeight;
+	}
+
+	function start() { 
+		var orc = document.getElementById('orc').value;
+	csound.CompileOrc(orc);
+			csound.Start();
+	}
+
+	function stop() {
+		if (typeof(qt) === "object") { 
+			csound.Stop(); // for CsoundQt-html
+		} else if ( typeof(csound.Csound)==="object" ) { // WebaudioCsound Csound() object 
+			csound.Pause(); //otherwise resets Csound and audio context
+		} else {
+			csound.stop();
+		}
+	}
+
+	function getHarmonics() {
+		var value;
+		if (typeof(qt) === "object") { 
+		// get values from CsoundQt Webchannel are always returned via callbacks
+	csound.getControlChannel("harmonics", function(value) {
+				document.getElementById("harmonics").innerHTML = value;
+			}); 	 
+		} else if ( typeof(csound.Csound)==="object" ) { // WebaudioCsound Csound() object 
+			var value = csound.RequestChannel("harmonics");
+			document.getElementById("harmonics").innerHTML = value;
+		} else {
+			var value = csound.getControlChannel("harmonics") // should work in csound.node
+			document.getElementById("harmonics").innerHTML = value;
+		}
+	}
+
+	function makeSound() {
+		csound.Event("i 1 0 1")
+		setTimeout(getHarmonics , 50); // give a little bit of time for the value to be set in Csound
+	}
+
+    
+</script>
+<body>
+	<h1>Html template for CsoundQt and WebAudio Csound</h1>
+	<br>
+Press "Strart" to compile the orchestra, "Event" to make the sound and display number of harmonics used.<br>
+	
+	<br>
+	<input type="button" value="Start" onclick="start()"/>
+	<input type="button" value="Stop" onclick="stop()"/><br>
+	
+	<button onclick='makeSound()'>Event</button>
+	Number of harmonics: <label id="harmonics">?</label><br>
+Volume: <input type="range" id="slider" oninput='csound.SetChannel("volume",this.value/100.0); '></input><br>  
+	<h4>Csound Code</h4>
+	<textarea id="orc" rows=20 cols=80>
+
+sr          =           44100
+ksmps       =           32
+nchnls      =           2
+0dbfs = 1
+
+chn_k "volume", 1  // the channel must be declared to work in CsoundQt
+chnset 0.5, "volume"
+
+instr 1
+	ifreq random 200, 400
+	iharm = int(random:i(1,20))
+	chnset iharm, "harmonics"
+	print ifreq, iharm
+	kvolume chnget "volume"
+	asig buzz adsr(0.1,0.1,0.5, 0.5) *chnget:k("volume"), ifreq, iharm, -1
+	outs asig, asig
+endin
+
+</textarea>
+	<h4>Csound Messages</h4>
+	<textarea id="messages" rows=10 cols=80>
+In CsoundQt the messages are directed to console tab. 	
+	</textarea>
+</body>
+</html>

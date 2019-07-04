@@ -230,9 +230,9 @@ int CsoundHtmlOnlyWrapper::start(){
 
 int CsoundHtmlOnlyWrapper::Start() {
 	if ( isPlaying()  ) {
-		stop();
-		// this does not work as expected - user must still press the Stop button from UI
-		//QThread::msleep(500); // wait a bit
+		csound.Stop();
+		csound.Join();
+		// using stop() does not work since Cleanup and Reset are not needed
 	}
 
 	start();

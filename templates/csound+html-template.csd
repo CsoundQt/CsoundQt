@@ -4,7 +4,7 @@
 <html>
   <head>
   </head>
-  <body bgcolor="lightblue">
+  <body bgcolor="lightgreen">
    <h2>Csd+html template</h2><br>
    Press "Run" in CsoundQt (or other host) to start the csd. 
    <br><br>
