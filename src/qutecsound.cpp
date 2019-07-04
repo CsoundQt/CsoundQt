@@ -4472,7 +4472,7 @@ void CsoundQt::fillFileMenu()
             templatePath = qApp->applicationDirPath() + "/../../qutecsound/templates/";
         }
         if (!QDir(templatePath).exists()) {
-            templatePath = "/usr/share/qutecsound/templates/";
+			templatePath = "/usr/share/csoundqt/templates/";
         }
 #endif
 #ifdef Q_OS_SOLARIS

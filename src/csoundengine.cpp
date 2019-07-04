@@ -1174,7 +1174,7 @@ void CsoundEngine::flushQueues()
         QString msg = messageQueue.takeFirst();
         // Print ALL Csound messages to QtCreator's application output pane.
         // This can save time while debugging.
-        qDebug() << msg;
+		//qDebug() << msg;
         // the following was added by Michael. isRunning goes to  deadlock...
         // see commit 3f565353d854d41bb6be041aa04630995ce96c00
         ConsoleWidget *console = nullptr;

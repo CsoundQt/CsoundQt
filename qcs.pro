@@ -220,7 +220,10 @@ unix:!macx {
     examples.commands = rm -rf $$SHARE_DIR/qutecsound #remove the old examples
     examples.files = src/Examples
 
-	INSTALLS += target desktop icon mimetypes examples
+	templates.path = $$SHARE_DIR/csoundqt/
+	templates.files = templates
+
+	INSTALLS += target desktop icon mimetypes examples templates
 }
 
 # for OSX add Scripts and Examples to be bundle in Contents->Resources
@@ -287,6 +290,10 @@ macx {
 win32 {
     first.path = $$PWD
     first.commands = $$[QT_INSTALL_PREFIX]/bin/windeployqt  -qmldir=$$PWD/src/QML  $$OUT_PWD/$$DESTDIR/$${TARGET}.exe # first deployment
+
+	templates.path = $$OUT_PWD/$$DESTDIR/ # not sure if this works
+	templates.files = templates
+
     INSTALLS += first
 }
 
