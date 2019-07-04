@@ -40,12 +40,20 @@ public:
 public slots:
     void registerConsole(ConsoleWidget *console);
     int compileCsd(const QString &filename);
+	// Uppercase aliases to comply with Webaudio Csound, see https://vlazzarini.github.io/paw/examples/docs/Csound.html
+	// NB! midi related methods not implemented yet
+	int CompileCsd(const QString &filename) { return compileCsd(filename);}
     int compileCsdText(const QString &text);
+	int CompileCsdText(const QString &text) { return compileCsdText(text);}
     int compileOrc(const QString &text);
+	int CompileOrc(const QString &text) { return compileOrc(text);}
     double evalCode(const QString &text);
+	double EvalCode(const QString &text) { return evalCode(text); };
     double get0dBFS();
+	double Get0dBFS() {return get0dBFS();}
     int getApiVersion();
     double getControlChannel(const QString &name);
+	//double RequestChannel(const QString &name) { return getControlChannel(const QString &name)  } // NB! this works differently, better do not provide this alias!
     qint64 getCurrentTimeSamples();
     QString getEnv(const QString &name);
     int getKsmps();
@@ -54,6 +62,7 @@ public slots:
     QString getOutputName();
     double getScoreOffsetSeconds();
     double getScoreTime();
+	double GetScoreTime() {return getScoreTime();}
     int getSr();
     QString getStringChannel(const QString &name);
     int getVersion();
@@ -62,11 +71,15 @@ public slots:
     void message(const QString &text);
     int perform();
     int readScore(const QString &text);
+	int ReadScore(const QString &text) {return readScore(text);}
+	int Event(const QString &text) {return readScore(text);}
     void reset();
+	void Reset() {reset();}
     void rewindScore();
     int runUtility(const QString &command, int argc, char **argv);
     int scoreEvent(char type, const double *pFields, long numFields);
     void setControlChannel(const QString &name, double value);
+	void SetChannel(const QString &name, double value) {setControlChannel(name, value);}
     int setGlobalEnv(const QString &name, const QString &value);
     void setInput(const QString &name);
     // Dummy for now.
@@ -76,11 +89,18 @@ public slots:
     void setScoreOffsetSeconds(double value);
     void setScorePending(bool value);
     void setStringChannel(const QString &name, const QString &value);
+	void SetStringChannel(const QString &name, const QString &value) { setStringChannel(name, value); }
     int start();
+	int Start(); // NB! Start() does not require have to call for perform separately!
+	void Play() {start(); perform();}
+	void PlayCsd(const QString &csd) { compileCsd(csd); Play(); } // untested
     void stop();
+	void Stop() { stop();}
+	//TODO: void Pause();
     double tableGet(int table_number, int index);
     int tableLength(int table_number);
     void tableSet(int table_number, int index, double value);
+	void SetTable(int table_number, int index, double value) { tableSet(table_number, index, value); }
     void setOptions(CsoundOptions * options);
 signals:
     void passMessages(QString message);

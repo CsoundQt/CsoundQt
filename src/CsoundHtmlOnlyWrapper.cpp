@@ -228,9 +228,20 @@ int CsoundHtmlOnlyWrapper::start(){
     return result;
 }
 
+int CsoundHtmlOnlyWrapper::Start() {
+	if ( isPlaying()  ) {
+		stop();
+		// this does not work as expected - user must still press the Stop button from UI
+		//QThread::msleep(500); // wait a bit
+	}
+
+	start();
+	return perform();
+}
+
 void CsoundHtmlOnlyWrapper::stop(){
-    csound.Stop();
-    csound.Join();
+	csound.Stop();
+	csound.Join();
     csound.Cleanup();
 	csound.Reset(); // DOES THIS PERHAPS changes options, so that jack is not any more used as audio driver
 }
