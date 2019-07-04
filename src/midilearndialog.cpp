@@ -55,8 +55,8 @@ void MidiLearnDialog::setMidiController(int channel, int cc)
         if (m_widget && m_widget->acceptsMidi()) {
             m_widget->setProperty("QCS_midicc", cc);
             m_widget->setProperty("QCS_midichan", channel);
-            m_widget->applyInternalProperties();
-            m_widget->markChanged();
+//			m_widget->applyInternalProperties(); // <-- commenting this out seems to solve button<->midi slider crash problem
+//			m_widget->markChanged();
 			m_widget->updateDialogWindow(cc,channel); // if widgets' properties dialog is open, update the values there too
         }
     }
