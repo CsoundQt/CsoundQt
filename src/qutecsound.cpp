@@ -353,9 +353,13 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QString styleSheet = QLatin1String(file.readAll());
     qApp->setStyleSheet(styleSheet);
 #endif
-    //test  ---- this is ugly workaround for problem reported by Renè that on firt run ival = 16.0/3 gets rounded...
-//    play(); // - bad fix, don't commit.
-//    stop();
+	// ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3 gets rounded... Did not find the real reasound
+	// Csound must be started and stopped once, then it works:
+	makeNewPage("", "");
+	documentPages[curPage]->play(m_options);
+	documentPages[curPage]->stop();
+	deleteTab(curPage);
+
 }
 
 
