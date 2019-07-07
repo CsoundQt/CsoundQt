@@ -46,9 +46,9 @@ public slots:
     int compileCsdText(const QString &text);
 	int CompileCsdText(const QString &text) { return compileCsdText(text);}
     int compileOrc(const QString &text);
-	int CompileOrc(const QString &text) { return compileOrc(text);}
+    int CompileOrc(const QString &text) { return compileOrc(text);}
     double evalCode(const QString &text);
-	double EvalCode(const QString &text) { return evalCode(text); };
+    double EvalCode(const QString &text) { return evalCode(text); }
     double get0dBFS();
 	double Get0dBFS() {return get0dBFS();}
     int getApiVersion();

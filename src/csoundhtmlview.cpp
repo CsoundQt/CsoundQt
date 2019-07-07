@@ -23,6 +23,7 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 	ui->inspectRow->hide(); // inspector included in QtWebKit, no need for that
 #else
 	webView = new QWebEngineView(this);
+    //webView->page()->profile()->clearHttpCache();
 #endif
     csoundHtmlWrapper.setCsoundHtmlView(this);
     csoundHtmlOnlyWrapper.setCsoundHtmlView(this);

@@ -48,6 +48,7 @@ CsoundHtmlOnlyWrapper::CsoundHtmlOnlyWrapper(QObject *parent) :
 }
 
 CsoundHtmlOnlyWrapper::~CsoundHtmlOnlyWrapper() {
+    stop();
 }
 
 void CsoundHtmlOnlyWrapper::setCsoundHtmlView(CsoundHtmlView *csoundHtmlView_) {
@@ -76,6 +77,7 @@ int CsoundHtmlOnlyWrapper::compileOrc(const QString &text) {
 double CsoundHtmlOnlyWrapper::evalCode(const QString &text) {
     return csound.EvalCode(text.toLocal8Bit());
 }
+
 
 double CsoundHtmlOnlyWrapper::get0dBFS() {
     return csound.Get0dBFS(); //cs->Get0dBFS();
@@ -295,7 +297,8 @@ void CsoundHtmlOnlyWrapper::csoundMessageCallback(int attributes,
 #ifdef USE_WEBKIT
 				//csoundHtmlView->webView->page()->mainFrame()->evaluateJavaScript(code); // this crashes, no messages to JS console from webkit
 #else
-				csoundHtmlView->webView->page()->runJavaScript(code);
+
+                // csoundHtmlView->webView->page()->runJavaScript(code); // this crashes too on exit -  FIXME!
 #endif
 			}
             csoundMessageBuffer.clear();
