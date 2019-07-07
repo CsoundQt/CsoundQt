@@ -9,6 +9,7 @@ MidiLearnDialog::MidiLearnDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     m_widget = 0;
+	m_cc = -1; m_channel = -1;
 }
 
 MidiLearnDialog::~MidiLearnDialog()
@@ -49,15 +50,34 @@ void MidiLearnDialog::setCurrentWidget(QuteWidget *widget)
 
 void MidiLearnDialog::setMidiController(int channel, int cc)
 {
-    if (this->isVisible()) {
-        ui->channelLabel->setText(QString::number(channel));
-        ui->ccLabel->setText(QString::number(cc));
-        if (m_widget && m_widget->acceptsMidi()) {
-            m_widget->setProperty("QCS_midicc", cc);
-            m_widget->setProperty("QCS_midichan", channel);
-//			m_widget->applyInternalProperties(); // <-- commenting this out seems to solve button<->midi slider crash problem
-//			m_widget->markChanged();
-			m_widget->updateDialogWindow(cc,channel); // if widgets' properties dialog is open, update the values there too
-        }
-    }
+	m_channel = channel; m_cc = cc;
+	ui->channelLabel->setText(QString::number(channel));
+	ui->ccLabel->setText(QString::number(cc));
+}
+
+void MidiLearnDialog::on_setButton_clicked()
+{
+	if (m_cc<0 || m_channel<0 ) {
+		QMessageBox::warning(this, tr("Controller not set"), tr("Midi controller is not selected!"));
+		return;
+	}
+	if (m_widget && m_widget->acceptsMidi()) {
+		m_widget->setProperty("QCS_midicc", m_cc);
+		m_widget->setProperty("QCS_midichan", m_channel);
+		m_widget->applyInternalProperties();
+		m_widget->markChanged();
+
+		m_widget->updateDialogWindow(m_cc,m_channel);
+	}
+}
+
+void MidiLearnDialog::on_cancelButton_clicked()
+{
+	this->close();
+}
+
+void MidiLearnDialog::on_closeButton_clicked()
+{
+	on_setButton_clicked();
+	this->close();
 }

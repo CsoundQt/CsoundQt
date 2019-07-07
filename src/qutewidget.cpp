@@ -24,7 +24,7 @@
 #include "widgetlayout.h"
 
 QuteWidget::QuteWidget(QWidget *parent):
-	QWidget(parent)
+	QWidget(parent), dialog(NULL)
 {
 	propertiesAct = new QAction(tr("&Properties"), this);
 	propertiesAct->setStatusTip(tr("Open widget properties"));
@@ -278,6 +278,12 @@ void QuteWidget::canFocus(bool can)
 
 void QuteWidget::updateDialogWindow(int cc, int channel) // to update values from midi Learn window to widget properties' dialog
 {
+
+	if (!dialog) {
+		qDebug() << "Dialog window not careated";
+		return;
+	}
+
 	if (dialog->isVisible() && acceptsMidi()) {
 		midiccSpinBox->setValue(cc);
 		midichanSpinBox->setValue(channel);
@@ -302,6 +308,11 @@ void QuteWidget::popUpMenu(QPoint pos)
 
 	if (!m_channel.isEmpty() || !m_channel2.isEmpty()) {
 		menu.addAction(addChn_kAct);
+		menu.addSeparator();
+	}
+
+	if (acceptsMidi()) {
+		menu.addAction(tr("Midi learn"), this, &QuteWidget::openMidiDialog  ); //midi learn act
 		menu.addSeparator();
 	}
 
@@ -379,6 +390,7 @@ void QuteWidget::deleteWidget()
 
 void QuteWidget::openMidiDialog()
 {
+	//createPropertiesDialog(); <- tryout for midi learn from context menu
 	emit showMidiLearn(this);
 }
 
@@ -395,7 +407,7 @@ void QuteWidget::addChn_k()
 
 void QuteWidget::createPropertiesDialog()
 {
-//	qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n" << dynamicPropertyNames ();
+	qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n" << dynamicPropertyNames ();
 	dialog = new QDialog(this);
 	dialog->resize(300, 300);
 	//  dialog->setModal(true);

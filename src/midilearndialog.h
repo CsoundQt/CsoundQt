@@ -23,9 +23,17 @@ public slots:
 
 protected:
 //    virtual void closeEvent(QCloseEvent * event);
+private slots:
+	void on_setButton_clicked();
+
+	void on_cancelButton_clicked();
+
+	void on_closeButton_clicked();
+
 private:
     Ui::MidiLearnDialog *ui;
     QuteWidget *m_widget;
+	int m_cc, m_channel;
 };
 
 #endif // MIDILEARNDIALOG_H

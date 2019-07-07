@@ -125,6 +125,7 @@ private:
 	QAction *propertiesAct;
 	QAction *addChn_kAct;
 
+
 	QPushButton *applyButton;
 	QPushButton *cancelButton;
 	QPushButton *acceptButton;
