@@ -199,7 +199,7 @@ unix:!macx {
 	target.path = $$INSTALL_DIR/bin
 
 	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET
-	target.commands = ln -sf $$target.path/$$TARGET $(INSTALL_ROOT)/$$INSTALL_DIR/bin/csoundqt #	 create link always with the same name
+	target.commands = ln -sf $$target.path/$$TARGET $$target.path/csoundqt #	 create link always with the same name
 
 
 	

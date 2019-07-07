@@ -129,8 +129,8 @@ rtmidi {
 # check if RTMIDI is found in system
 unix:!macx {
     exists("/usr/include/rtmidi")  {
-        RTMIDI_DIR = "/usr/local/rtmidi"
-        !no_messages:message(RtMidi found in /usr/local/rtmidi)
+		RTMIDI_DIR = "/usr/include/rtmidi"
+		!no_messages:message(RtMidi found in /usr/include/rtmidi)
         CONFIG -= rtmidi
         CONFIG += system_rtmidi
     }
