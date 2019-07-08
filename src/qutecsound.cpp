@@ -502,12 +502,23 @@ void CsoundQt::openExample()
 
 void CsoundQt::openTemplate()
 {
-    QObject *sender = QObject::sender();
+	QObject *sender = QObject::sender();
     if (sender == 0)
         return;
     QAction *action = static_cast<QAction *>(sender);
-    loadFile(action->data().toString());
-    saveAs();
+
+	QString dir = lastUsedDir;
+	QString name = action->data().toString();
+	dir += name.mid(name.lastIndexOf("/") + 1);
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Save Template As"), dir,
+		tr("Known Files (*.csd *.html);;Csound Files (*.csd);;Html files (*.html);;All Files (*)",
+		"Rename and save the template"));
+	if (!fileName.isEmpty()) {
+		loadFile(fileName);
+	} else {
+		qDebug() << "No file selected";
+	}
+
 }
 
 void CsoundQt::logMessage(QString msg)
