@@ -46,8 +46,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>842</width>
-        <height>863</height>
+        <width>732</width>
+        <height>841</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -1317,7 +1317,7 @@
                 <item>
                  <widget class="QCheckBox" name="tabShortcutActiveCheckBox">
                   <property name="text">
-                   <string>Change tabs with Alt+&lt;Number&gt;  (requires restart)</string>
+                   <string>Change tabs with Alt(Ctrl)+&lt;Number&gt;  (requires restart)</string>
                   </property>
                   <property name="checked">
                    <bool>false</bool>

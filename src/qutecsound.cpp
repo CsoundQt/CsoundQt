@@ -226,7 +226,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 		}
 		// Wire the signal mapper to the tab widget index change slot
 		connect(mapper, SIGNAL(mapped(int)), documentTabs, SLOT(setCurrentIndex(int)));
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::META + Qt::Key_Left), this);
         QShortcut *tabRight = new QShortcut(QKeySequence(Qt::META + Qt::Key_Right), this);
 #else
