@@ -56,6 +56,7 @@ public:
 	bool wrapLines;
 	bool autoComplete;
 	bool autoParameterMode;
+    bool tabShortcutActive;
 
 	bool showWidgetsOnRun;
 	bool showTooltips;

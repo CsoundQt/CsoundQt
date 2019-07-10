@@ -171,6 +171,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	openPropertiesCheckBox->setChecked(m_options->openProperties);
 	fontScalingSpinBox->setValue(m_options->fontScaling);
 	fontOffsetSpinBox->setValue(m_options->fontOffset);
+    tabShortcutActiveCheckBox->setChecked(m_options->tabShortcutActive);
 
 	if (m_options->useAPI)
 		ApiRadioButton->setChecked(true);
@@ -388,7 +389,7 @@ void ConfigDialog::accept()
 	m_options->fontScaling = fontScalingSpinBox->value();
 	m_options->fontOffset = fontOffsetSpinBox->value();
 	m_options->debugPort = debugPortSpinBox->value();
-
+    m_options->tabShortcutActive = tabShortcutActiveCheckBox->isChecked();
 	m_options->useAPI = ApiRadioButton->isChecked();
 	//  m_options->thread = threadCheckBox->isChecked();
 	m_options->keyRepeat = keyRepeatCheckBox->isChecked();

@@ -46,8 +46,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>737</width>
-        <height>835</height>
+        <width>842</width>
+        <height>863</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -69,7 +69,7 @@
           <bool>true</bool>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -1311,6 +1311,16 @@
                  <widget class="QCheckBox" name="lineNumbersCheckBox">
                   <property name="text">
                    <string>Show line numbers</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="tabShortcutActiveCheckBox">
+                  <property name="text">
+                   <string>Change tabs with Alt+&lt;Number&gt;  (requires restart)</string>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>

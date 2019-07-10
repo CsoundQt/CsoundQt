@@ -14,7 +14,7 @@
 </CsOptions>
 <CsInstruments>
 sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps 	= 32	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -58,13 +58,15 @@ endin
 ;INSTR | START | DURATION
 i 1		0	   3600		;GUI
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>285</x>
- <y>278</y>
+ <x>478</x>
+ <y>371</y>
  <width>792</width>
- <height>264</height>
+ <height>294</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -72,7 +74,7 @@ i 1		0	   3600		;GUI
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -101,7 +103,7 @@ i 1		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>516</x>
   <y>2</y>
@@ -130,7 +132,7 @@ i 1		0	   3600		;GUI
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>519</x>
   <y>20</y>
@@ -160,7 +162,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>8</x>
   <y>6</y>
@@ -179,7 +181,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Filter_Cutoff_Value</objectName>
   <x>448</x>
   <y>63</y>
@@ -208,7 +210,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Filter_Cutoff</objectName>
   <x>8</x>
   <y>46</y>
@@ -226,7 +228,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>63</y>
@@ -255,7 +257,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>101</y>
@@ -284,7 +286,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Resonance</objectName>
   <x>8</x>
   <y>84</y>
@@ -302,7 +304,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Resonance</objectName>
   <x>448</x>
   <y>101</y>
@@ -331,7 +333,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Oscillator_Frequency_Value</objectName>
   <x>448</x>
   <y>138</y>
@@ -360,7 +362,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Oscillator_Frequency</objectName>
   <x>8</x>
   <y>121</y>
@@ -378,7 +380,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>138</y>
@@ -407,7 +409,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Amplitude_Scaling</objectName>
   <x>448</x>
   <y>214</y>
@@ -436,7 +438,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Amplitude_Scaling</objectName>
   <x>8</x>
   <y>197</y>
@@ -454,7 +456,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>214</y>
@@ -483,7 +485,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Initialisation</objectName>
   <x>380</x>
   <y>6</y>
