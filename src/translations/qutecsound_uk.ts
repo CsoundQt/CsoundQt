@@ -826,6 +826,10 @@ Make sure OPCODE6DIR64 is set properly in your system or the configuration dialo
         <comment>No MIDI Out interface</comment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Html remote debugging port (requires restart): </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CsoundEngine</name>
@@ -848,11 +852,6 @@ Make sure OPCODE6DIR64 is set properly in your system or the configuration dialo
     <name>CsoundQt</name>
     <message>
         <source>Open File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Known Files (*.csd *.orc *.sco *.py);;Csound Files (*.csd *.orc *.sco *.CSD *.ORC *.SCO);;Python Files (*.py);;All Files (*)</source>
-        <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2069,11 +2068,6 @@ Please check preferences.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Known Files (*.csd *.orc *.sco *.py *.inc);;Csound Files (*.csd *.orc *.sco *.inc *.CSD *.ORC *.SCO *.INC);;Python Files (*.py);;All Files (*)</source>
-        <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Shortcuts changed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2465,6 +2459,50 @@ Check environment tab in preferences.</source>
     </message>
     <message>
         <source>Spanish translation: Andrés Cabrera and Guillermo Senna</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save Template As</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Known Files (*.csd *.html);;Csound Files (*.csd);;Html files (*.html);;All Files (*)</source>
+        <comment>Rename and save the template</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Known Files (*.csd *.orc *.sco *.py *.inc *.udo *.html);;Csound Files (*.csd *.orc *.sco *.inc *.udo *.CSD *.ORC *.SCO *.INC *.UDO);;Python Files (*.py);;HTML files (*.html);;All Files (*)</source>
+        <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Known Files (*.csd *.orc *.sco *.py *.udo *.html);;Csound Files (*.csd *.orc *.sco *.udo *.inc *.CSD *.ORC *.SCO *.UDO *.INC);;Python Files (*.py);;Html files (*.html);;All Files (*)</source>
+        <comment>Be careful to respect spacing parenthesis and usage of punctuation</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save Qml File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>QML Files (*.qml *.QML);;All Files (*)</source>
+        <comment>Export Widgets to QML</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Persian translation: Amin Khoshsabk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Korean translation: Jieun Jun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export widgets to QML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export widgets in QML format</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3167,6 +3205,10 @@ Is it OK to insert ;;channels and chn_k declaration before in the current positi
         <source>DockWidget</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Inspect</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Inspector</name>
@@ -3452,6 +3494,26 @@ It is already used.</source>
     </message>
     <message>
         <source>(No MIDI)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set and close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Controller not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Midi controller is not selected!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
