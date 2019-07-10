@@ -40,6 +40,9 @@ Via *File->Export Widgets to QML* menu not yet all, but the main CsoundQt widget
 
 * Added "Midi Learn"  to widgets' context menu.
 
+* Changing between tabs has been improved for Mac: the default (unfortunately hard-coded) shortcut for that is on MacOS Control + number, on other platforms Alt + number. It can be switched out from options: Configure -> Editor -> Change tabs with Alt(Ctrl) + number
+
+
 
 ### Fixes
 
@@ -70,6 +73,8 @@ Via *File->Export Widgets to QML* menu not yet all, but the main CsoundQt widget
 * Fixed crash on running .orc file when there is no .sco. Now orc without score can be run as scoreless csd.
 
 * Better Midi Learn dialog, added Set/Cancel buttons, fixed crash on assigning MIDI slider/knob to button, spinbox and similar.
+
+* Force light (aqua) theme on MacOS Mojave, looks the same also when used with systems's dark theme (otherwise colours were badly off in  dark theme)
 
 
 Tarmo Johannes
