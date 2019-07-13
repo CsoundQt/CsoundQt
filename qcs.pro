@@ -192,14 +192,16 @@ CONFIG(debug, debug|release):TARGET = $${TARGET}-debug
 unix:!macx {
     isEmpty(INSTALL_DIR) {
 		INSTALL_DIR=/usr/local  # ~  #for HOME
-	}
+    }
 	isEmpty(SHARE_DIR) {
         SHARE_DIR=/usr/share # ~/.local/share for HOME install
 	}
-	target.path = $$INSTALL_DIR/bin
 
-	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET
-	target.commands = cd $$INSTALL_DIR/bin; ln -sf $$TARGET csoundqt #  ln -sf $$target.path/$$TARGET $$target.path/csoundqt #	 create link always with the same name
+	target.path = $$INSTALL_DIR/bin
+    target.commands = cd $$OUT_PWD/$$DESTDIR/; ln -sf $$TARGET csoundqt #  ln -sf $$target.path/$$TARGET $$target.path/csoundqt #	 create link always with the same name, keep the original binary with its unique name
+    #target.files = $$OUT_PWD/$$DESTDIR/$$TARGET # do not install with the full name
+    target.files += $$OUT_PWD/$$DESTDIR/csoundqt # but as csoundqt
+
 
 
 	
