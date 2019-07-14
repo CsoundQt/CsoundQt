@@ -364,10 +364,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
 	// ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3 gets rounded... Did not find the real reasound
 	// Csound must be started and stopped once, then it works:
-	makeNewPage("", "");
-	documentPages[curPage]->play(m_options);
-	documentPages[curPage]->stop();
-	deleteTab(curPage);
+    makeNewPage(QDir::tempPath()+"/tmp.csd",  QCS_DEFAULT_TEMPLATE);
+    save();
+    play(true, -1);
+    QThread::msleep(100); // wait a tiny bit
+    stop();
+    deleteTab(curPage);
 
 }
 
