@@ -230,11 +230,11 @@ QString QuteButton::getQml()
 
                 turnOffLine = lineElements.join(" ");
 
-                qml +=  QString("onCheckedChanged: (checked) ? csound.readScore(\"%1\") : csound.readScore(\"%2\")")
+				qml +=  QString("onCheckedChanged: (checked) ? csound.readScore(\'%1\') : csound.readScore(\'%2\')")
                         .arg(eventLine, turnOffLine); // if unchecked, turnOffLine should consist line to turn off the instrument
 			}
 		} else { // if not latched, use onClicked event
-            qml += QString("\t\tonClicked: csound.readScore(\"%1\") \n").arg(eventLine); // TODO: test, maybe use {{ }} as string literals to allow quotes in scoreLine
+			qml += QString("\t\tonClicked: csound.readScore(\'%1\') \n").arg(eventLine);
 		}
 	}
 
