@@ -147,12 +147,13 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
     QSettings settings("csound", "qutecsound");
-	settings.beginGroup("GUI"); // Maybe this is a place that may sometimes ruin settings on Mac
+    settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "boring").toString();
-	settings.endGroup();
-	settings.beginGroup("Options");
-	settings.beginGroup("Editor");
-	m_options->debugPort = settings.value("debugPort",34711).toInt(); // necessary to get it before htmlview is created
+    settings.endGroup();
+    settings.beginGroup("Options");
+    settings.beginGroup("Editor");
+    m_options->debugPort = settings.value("debugPort",34711).toInt(); // necessary to get it before htmlview is created
+    settings.endGroup();
 
 
 	m_server = new QLocalServer();
@@ -183,7 +184,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	createMenus();
 	createToolBars(); // TODO: take care that the position is stored when toolbars or panels are moved/resized. maybe.
 	createStatusBar();
-	readSettings();
+    readSettings();
 
 	// this section was above before, check that it does not create problems... Later: find a way to recreate Midi Handler, if API jack/alsa or similar is changed
 	midiHandler = new MidiHandler(m_options->rtMidiApi,  this);
@@ -303,6 +304,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
     applySettings();
     createQuickRefPdf();
 
+#ifdef Q_OS_MAC // workaround to set resotre window size for Mac. Does not work within readSettings()
+    QSettings settings2("csound", "qutecsound");
+    QSize size = settings2.value("GUI/size", QSize(600, 400)).toSize();
+    resize(size);
+#endif
+
     openLogFile();
 
     // FIXME is there still need for no atexit?
@@ -362,6 +369,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QString styleSheet = QLatin1String(file.readAll());
     qApp->setStyleSheet(styleSheet);
 #endif
+#ifdef Q_OS_LINUX
 	// ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3 gets rounded... Did not find the real reasound
 	// Csound must be started and stopped once, then it works:
     makeNewPage(QDir::tempPath()+"/tmp.csd",  QCS_DEFAULT_TEMPLATE);
@@ -370,6 +378,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QThread::msleep(100); // wait a tiny bit
     stop();
     deleteTab(curPage);
+#endif
 
 }
 
@@ -4737,7 +4746,7 @@ void CsoundQt::readSettings()
     m_options->theme = settings.value("theme", "boring").toString();
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(600, 500)).toSize();
-    resize(size);
+    resize(size); // does not work here for MacOS Mojave
     move(pos);
     if (settings.contains("dockstate")) {
         restoreState(settings.value("dockstate").toByteArray());
