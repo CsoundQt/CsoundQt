@@ -370,14 +370,16 @@ CsoundQt::CsoundQt(QStringList fileNames)
     qApp->setStyleSheet(styleSheet);
 #endif
 #ifdef Q_OS_LINUX
-	// ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3 gets rounded... Did not find the real reasound
-	// Csound must be started and stopped once, then it works:
+    // ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3 gets rounded... Did not find the real reasound
+    // Csound must be started and stopped once, then it works:
+    int oldPage = documentTabs->currentIndex();
     makeNewPage(QDir::tempPath()+"/tmp.csd",  QCS_DEFAULT_TEMPLATE);
     save();
-    play(true, -1);
+    play(true, -1); // problem, if pulse/alsa in settings but jack has been started
     QThread::msleep(100); // wait a tiny bit
     stop();
     deleteTab(curPage);
+    documentTabs->setCurrentIndex(oldPage);
 #endif
 
 }
