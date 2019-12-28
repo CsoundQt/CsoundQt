@@ -968,10 +968,12 @@ QString CsoundQt::getSaveFileName()
     //    && !fileName.endsWith(".sco",Qt::CaseInsensitive) && !fileName.endsWith(".txt",Qt::CaseInsensitive)
     //    && !fileName.endsWith(".udo",Qt::CaseInsensitive))
     //    fileName += ".csd";
-    if (fileName.isEmpty())
+	if (fileName.isEmpty()) {
         fileName = name;
-	if (!fileName.contains("."))
+	}
+	if (!fileName.contains(".")) {
         fileName += ".csd";
+	}
     return fileName;
 }
 

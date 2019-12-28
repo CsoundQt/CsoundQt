@@ -10,6 +10,7 @@ static void midiInMessageCallback(double deltatime,
 								std::vector< unsigned char > *message,
 								void *userData)
 {
+	Q_UNUSED(deltatime);
 	MidiHandler *midiHandler = (MidiHandler *) userData;
 	midiHandler->passMidiMessage(message);
 	//  if (nBytes > 0) {
