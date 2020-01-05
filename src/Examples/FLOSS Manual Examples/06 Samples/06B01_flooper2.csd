@@ -13,7 +13,7 @@ nchnls 	= 	1
 0dbfs   =       1
 
 ; STORE AUDIO IN RAM USING GEN01 FUNCTION TABLE
-giSoundFile   ftgen   0, 0, 262144, 1, "loop.wav", 0, 0, 0
+giSoundFile   ftgen   0, 0, 0, 1, "loop.wav", 0, 0, 0
 
   instr	1 ; play audio from function table using flooper2 opcode
 kAmp         =         1   ; amplitude
@@ -38,3 +38,20 @@ e
 </CsScore>
 
 </CsoundSynthesizer>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
