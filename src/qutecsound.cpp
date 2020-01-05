@@ -147,12 +147,13 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
     QSettings settings("csound", "qutecsound");
-	settings.beginGroup("GUI"); // Maybe this is a place that may sometimes ruin settings on Mac
+    settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "boring").toString();
-	settings.endGroup();
-	settings.beginGroup("Options");
-	settings.beginGroup("Editor");
-	m_options->debugPort = settings.value("debugPort",34711).toInt(); // necessary to get it before htmlview is created
+    settings.endGroup();
+    settings.beginGroup("Options");
+    settings.beginGroup("Editor");
+    m_options->debugPort = settings.value("debugPort",34711).toInt(); // necessary to get it before htmlview is created
+    settings.endGroup();
 
 
 	m_server = new QLocalServer();
@@ -183,7 +184,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	createMenus();
 	createToolBars(); // TODO: take care that the position is stored when toolbars or panels are moved/resized. maybe.
 	createStatusBar();
-	readSettings();
+    readSettings();
 
 	// this section was above before, check that it does not create problems... Later: find a way to recreate Midi Handler, if API jack/alsa or similar is changed
 	midiHandler = new MidiHandler(m_options->rtMidiApi,  this);
@@ -303,6 +304,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
     applySettings();
     createQuickRefPdf();
 
+#ifdef Q_OS_MAC // workaround to set resotre window size for Mac. Does not work within readSettings()
+    QSettings settings2("csound", "qutecsound");
+    QSize size = settings2.value("GUI/size", QSize(600, 400)).toSize();
+    resize(size);
+#endif
+
     openLogFile();
 
     // FIXME is there still need for no atexit?
@@ -362,14 +369,18 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QString styleSheet = QLatin1String(file.readAll());
     qApp->setStyleSheet(styleSheet);
 #endif
-	// ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3 gets rounded... Did not find the real reasound
-	// Csound must be started and stopped once, then it works:
+#ifdef Q_OS_LINUX
+    // ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3 gets rounded... Did not find the real reasound
+    // Csound must be started and stopped once, then it works:
+    int oldPage = documentTabs->currentIndex();
     makeNewPage(QDir::tempPath()+"/tmp.csd",  QCS_DEFAULT_TEMPLATE);
     save();
-    play(true, -1);
+    play(true, -1); // problem, if pulse/alsa in settings but jack has been started
     QThread::msleep(100); // wait a tiny bit
     stop();
     deleteTab(curPage);
+    documentTabs->setCurrentIndex(oldPage);
+#endif
 
 }
 
@@ -957,10 +968,12 @@ QString CsoundQt::getSaveFileName()
     //    && !fileName.endsWith(".sco",Qt::CaseInsensitive) && !fileName.endsWith(".txt",Qt::CaseInsensitive)
     //    && !fileName.endsWith(".udo",Qt::CaseInsensitive))
     //    fileName += ".csd";
-    if (fileName.isEmpty())
+	if (fileName.isEmpty()) {
         fileName = name;
-	if (!fileName.contains("."))
+	}
+	if (!fileName.contains(".")) {
         fileName += ".csd";
+	}
     return fileName;
 }
 
@@ -2652,6 +2665,7 @@ void CsoundQt::configure()
 	connect(&dialog, SIGNAL(disableInternalRtMidi()), this, SLOT(disableInternalRtMidi()) );
     if (dialog.exec() == QDialog::Accepted) {
         applySettings();
+		storeSettings();
     }
     configureTab = dialog.currentTab();
 }
@@ -2734,7 +2748,7 @@ void CsoundQt::applySettings()
 #ifdef QCS_PYTHONQT
     m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
 #endif
-    storeSettings(); // save always when something new is changed
+	//storeSettings(); // save always when something new is changed
 }
 
 void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
@@ -4736,7 +4750,7 @@ void CsoundQt::readSettings()
     m_options->theme = settings.value("theme", "boring").toString();
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(600, 500)).toSize();
-    resize(size);
+    resize(size); // does not work here for MacOS Mojave
     move(pos);
     if (settings.contains("dockstate")) {
         restoreState(settings.value("dockstate").toByteArray());
@@ -4944,6 +4958,7 @@ void CsoundQt::readSettings()
 
 void CsoundQt::storeSettings()
 {
+	qDebug();
 	QStringList files;
 	if (m_options->rememberFile) {
 		for (int i = 0; i < documentPages.size(); i++ ) {
@@ -4952,7 +4967,11 @@ void CsoundQt::storeSettings()
 	}
 
     int lastIndex = (documentPages.size()==0) ? 0 : documentTabs->currentIndex(); // sometimes settings are stored in startup when there is no pages open
-	writeSettings(files, lastIndex);
+	if (documentPages.size() > 0) {
+		writeSettings(files, lastIndex);
+	} else {
+		qDebug() << "No files open. Will not store settings (for any case - testing)"; // this is just for testing
+	}
 }
 
 void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
@@ -5423,7 +5442,7 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
     documentPages[curPage]->getEngine()->setMidiHandler(midiHandler);
 
     setCurrentOptionsForPage(documentPages[curPage]); // Redundant but does the trick of setting the font properly now that stylesheets are being used...
-	storeSettings();
+	// storeSettings(); // try: do not store on making new page still...
     return true;
 }
 

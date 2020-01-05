@@ -401,7 +401,7 @@ void QuteButton::setMidiValue(int value)
 			else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
 				lineElements[0] = lineElements[0].mid(1); // Remove "i" character
 			}
-			bool test = property("QCS_latch").toBool();
+			//bool test = property("QCS_latch").toBool();
 			if (lineElements.size() > 2 && lineElements[2].toDouble() < 0 && property("QCS_latch").toBool() ) { // If duration is negative, turn it off. But not when it is not a latched button!
 				lineElements[0].prepend("-");
 				lineElements.prepend("i");

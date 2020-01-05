@@ -225,7 +225,24 @@ unix:!macx {
 	templates.path = $$SHARE_DIR/csoundqt/
 	templates.files = templates
 
-	INSTALLS += target desktop icon mimetypes examples templates
+    # now, build AppImage using linuxdeploy and linuxdeploy-plugin-qt
+    # download linuxdeploy and its Qt plugin
+    #wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+    #wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+
+    # make them executableappImage
+    #chmod +x linuxdeploy*.AppImage
+
+    appImage.path = $$OUT_PWD/$$DESTDIR/
+    appImage.files = icon.files
+    #appImage.files += $$PWD/csoundqt.desktop
+    #TODO: examples
+    appImage.commands = cd $$OUT_PWD/$$DESTDIR/; ln -sf $$TARGET csoundqt
+    appImage.commands += export VERSION=0.9.7-beta; export QML_SOURCES_PATHS=$$PWD/src/QML;
+    #TODO: kas dekstop failis vaja seada käivitatav $$TARGETiks või siis bianry oleks csounqt. praegu nimetan käsitisi ümber AppDir/usr/bin juures
+    appImage.commands += linuxdeploy --appdir AppDir --executable=$$TARGET  --desktop-file=$$PWD/csoundqt.desktop  -i $$PWD/images/csoundqt.svg  --plugin=qt  --output appimage
+
+    INSTALLS += target desktop icon mimetypes examples templates #appImage
 }
 
 # for OSX add Scripts and Examples to be bundle in Contents->Resources

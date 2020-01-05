@@ -704,7 +704,7 @@ int CsoundEngine::play(CsoundOptions *options)
     QMutexLocker locker(&m_playMutex);
     if (ud->perfThread && (ud->perfThread->GetStatus() == 0)) {
 //        ud->perfThread->TogglePause(); // no need for that when there is Pause button
-//        return 0; // keep the code, to see if it does not break anything
+		return 0;
     }
     else {
         if (options) {
