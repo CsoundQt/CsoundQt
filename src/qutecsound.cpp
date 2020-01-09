@@ -310,7 +310,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     resize(size);
 #endif
 
-    openLogFile();
+    //openLogFile();
 
     // FIXME is there still need for no atexit?
 #ifdef CSOUND6
@@ -2734,9 +2734,9 @@ void CsoundQt::applySettings()
                 m_scratchPad->widget())->getDocumentView();
     pad->setFont(QFont(m_options->font,
                        (int) m_options->fontPointSize));
-    if (m_options->logFile != logFile.fileName()) {
-        openLogFile();
-    }
+//    if (m_options->logFile != logFile.fileName()) {
+//        openLogFile();
+//    }
     if (csoundGetVersion() < 5140) {
         m_options->newParser = -1; // Don't use new parser flags
     }
