@@ -41,6 +41,7 @@ public:
 	virtual QString getCabbageLine();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
+    virtual QString getQml();
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();

@@ -315,7 +315,7 @@ QString QuteText::getCabbageLine() // QuteText is used both for label and displa
 	if ( m_type == "label" ) 	{ // then it is a label
 		line += "text(\"" + property("QCS_label").toString() + "\") " ;
 	} else { // display
-		line += QString("range(-1000000000000,1000000000000,%1), ").arg(m_value); // set redicolously large min and max value and hope the user will use larger numbers...
+        line += QString("range(-1000000000000,1000000000000,%1), ").arg(m_value); // set redicolously large min and max value and hope the user will not use larger numbers...
 		line += "active(0)";
 	}
 #ifdef  USE_WIDGET_MUTEX
@@ -327,46 +327,48 @@ QString QuteText::getCabbageLine() // QuteText is used both for label and displa
 QString QuteText::getQml()
 {
     QString qml = QString();
-    if ((m_type != "label")) {
-        qDebug() << "Currently only conversion from label type to QML is supported.";
-        return "";
-    }
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.lockForWrite();
 #endif
 
-    // check if it has background and border
-    bool hasBackground = property("QCS_bgcolormode").toBool();
-    bool hasBorder = (property("QCS_bordermode").toString() == "border");
-    QString color = property("QCS_color").value<QColor>().name();
+    if (m_type == "display") {
 
-    qml += "\n\tRectangle {\n"; // place within rectangle
-	qml += QString("\t\tx: %1 * scaleItem.scale\n").arg(x());
-	qml += QString("\t\ty: %1  * scaleItem.scale\n").arg(y());
-	qml += QString("\t\twidth: %1 * scaleItem.scale\n").arg(width());
-	qml += QString("\t\theight: %1 * scaleItem.scale\n").arg(height());
-    QString bgColor = hasBackground ? property("QCS_bgcolor").value<QColor>().name() : "transparent";
-    qml += QString("\t\tcolor: \"%1\"\n").arg(bgColor);
-    if (hasBorder) {
-       qml += QString("\t\tborder.width: %1\n").arg(QString::number(property("QCS_borderwidth").toInt()));
-       qml += QString("\t\tradius: %1\n").arg(QString::number(property("QCS_borderradius").toInt()));
-       qml += QString("\t\tborder.color: \"%1\"\n").arg(color);
-    } else {
-       qml += "\n\tborder.width: 0";
+        qml = "";
+    } else if (m_type == "label") {
+
+        // check if it has background and border
+        bool hasBackground = property("QCS_bgcolormode").toBool();
+        bool hasBorder = (property("QCS_bordermode").toString() == "border");
+        QString color = property("QCS_color").value<QColor>().name();
+
+        qml += "\n\tRectangle {\n"; // place within rectangle
+        qml += QString("\t\tx: %1 * scaleItem.scale\n").arg(x());
+        qml += QString("\t\ty: %1  * scaleItem.scale\n").arg(y());
+        qml += QString("\t\twidth: %1 * scaleItem.scale\n").arg(width());
+        qml += QString("\t\theight: %1 * scaleItem.scale\n").arg(height());
+        QString bgColor = hasBackground ? property("QCS_bgcolor").value<QColor>().name() : "transparent";
+        qml += QString("\t\tcolor: \"%1\"\n").arg(bgColor);
+        if (hasBorder) {
+            qml += QString("\t\tborder.width: %1\n").arg(QString::number(property("QCS_borderwidth").toInt()));
+            qml += QString("\t\tradius: %1\n").arg(QString::number(property("QCS_borderradius").toInt()));
+            qml += QString("\t\tborder.color: \"%1\"\n").arg(color);
+        } else {
+            qml += "\n\tborder.width: 0";
+        }
+
+
+
+        qml += "\n\t\tLabel {\n";
+        qml += QString("\t\t\tanchors.centerIn: parent\n");
+        qml += QString("\t\t\tfont.pixelSize: %1 * scaleItem.scale\n").arg(property("QCS_fontsize").toString()); // is it OK on ndroid? not pointsize?
+        qml += QString("\t\t\ttext: \"%1\"\n").arg(property("QCS_label").toString());
+
+        qml += QString("\t\t\tcolor: \"%1\"\n").arg(color);
+        qml += QString("\t\tfont.family: \"%1\"\n").arg(property("QCS_font").toString());
+        // TODO: alignment
+        qml += "\t\t}\n"; // end label
+        qml += "\t}\n"; // end rectangle
     }
-
-
-
-    qml += "\n\t\tLabel {\n";
-    qml += QString("\t\t\tanchors.centerIn: parent\n");
-	qml += QString("\t\t\tfont.pixelSize: %1 * scaleItem.scale\n").arg(property("QCS_fontsize").toString()); // is it OK on ndroid? not pointsize?
-    qml += QString("\t\t\ttext: \"%1\"\n").arg(property("QCS_label").toString());
-
-    qml += QString("\t\t\tcolor: \"%1\"\n").arg(color);
-    qml += QString("\t\tfont.family: \"%1\"\n").arg(property("QCS_font").toString());
-    // TODO: alignment
-    qml += "\t\t}\n"; // end label
-    qml += "\t}\n"; // end rectangle
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.unlock();
 #endif
