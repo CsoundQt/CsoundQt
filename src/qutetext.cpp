@@ -331,10 +331,7 @@ QString QuteText::getQml()
     widgetLock.lockForWrite();
 #endif
 
-    if (m_type == "display") {
-
-        qml = "";
-    } else if (m_type == "label") {
+    if (m_type == "label" || m_type == "display") {
 
         // check if it has background and border
         bool hasBackground = property("QCS_bgcolormode").toBool();
@@ -359,6 +356,11 @@ QString QuteText::getQml()
 
 
         qml += "\n\t\tLabel {\n";
+
+        if (m_type == "display" && !m_channel.isEmpty()) {
+            qml += QString("\t\t\tid: "+m_channel + "\n");    // display has a channel ad mark it as ID
+        }
+
         qml += QString("\t\t\tanchors.centerIn: parent\n");
         qml += QString("\t\t\tfont.pixelSize: %1 * scaleItem.scale\n").arg(property("QCS_fontsize").toString()); // is it OK on ndroid? not pointsize?
         qml += QString("\t\t\ttext: \"%1\"\n").arg(property("QCS_label").toString());

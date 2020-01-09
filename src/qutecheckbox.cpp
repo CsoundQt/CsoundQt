@@ -146,7 +146,6 @@ QString QuteCheckBox::getQml()
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.unlock();
 #endif
-    qDebug() << "CheckBox qml: " << qml;
     return qml;
 
 }
