@@ -199,7 +199,41 @@ QString QuteMeter::getCabbageLine()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	return line;
+    return line;
+}
+
+QString QuteMeter::getQml()
+{
+    QString qml = QString();
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.lockForWrite();
+#endif
+
+    // todo: only if fill - horizontal vüi vertical
+    // todo: crosshair jm
+
+    qml = "\n\tRectangle {\n";
+    qml += QString("\t\tx: %1 * scaleItem.scale\n").arg(x());
+    qml += QString("\t\ty: %1  * scaleItem.scale\n").arg(y());
+    qml += QString("\t\twidth: %1 * scaleItem.scale\n").arg(width());
+    qml += QString("\t\theight: %1 * scaleItem.scale\n").arg(height());
+    qml += QString("\t\tfrom: %1\n").arg(property("QCS_minimum").toString());
+    qml += QString("\t\tto: %1\n").arg(property("QCS_maximum").toString());
+    qml += QString("\t\tvalue: %1\n").arg(getValue());
+    if ( width() > height() ) {
+        qml += "\t\torientation: Qt.Horizontal\n";
+    } else {
+        qml += "\t\torientation: Qt.Vertical\n";
+    }
+    qml += QString("\t\tonPositionChanged: csound.setControlChannel(\"%1\", valueAt(position))\n").arg(m_channel); // NB! this is for QtQuick.Controls 2! since onValueChanged works onlu on drag end
+
+    qml += "\t}";
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.unlock();
+#endif
+
+    return qml;
+
 }
 
 void QuteMeter::createPropertiesDialog()
