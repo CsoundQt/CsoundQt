@@ -8,7 +8,7 @@
 ;example by Oeyvind Brandtsegg
 
 sr = 44100
-ksmps = 512
+ksmps = 128
 nchnls = 2
 0dbfs = 1
 
@@ -20,7 +20,7 @@ giLive    ftgen 0,0,giTablen,2,0
 giSigRise ftgen 0,0,8192,19,0.5,1,270,1		
 
 ; test sound
-giSample  ftgen 0,0,524288,1,"fox.wav", 0,0,0
+giSample  ftgen 0,0,0,1,"fox.wav", 0,0,0
 
 instr 1
 ; test sound, replace with live input
@@ -76,3 +76,20 @@ i 3 0 20
 e
 </CsScore>
 </CsoundSynthesizer>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
