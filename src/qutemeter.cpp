@@ -212,22 +212,55 @@ QString QuteMeter::getQml()
     // todo: only if fill - horizontal vüi vertical
     // todo: crosshair jm
 
-    qml = "\n\tRectangle {\n";
-    qml += QString("\t\tx: %1 * scaleItem.scale\n").arg(x());
-    qml += QString("\t\ty: %1  * scaleItem.scale\n").arg(y());
-    qml += QString("\t\twidth: %1 * scaleItem.scale\n").arg(width());
-    qml += QString("\t\theight: %1 * scaleItem.scale\n").arg(height());
-    qml += QString("\t\tfrom: %1\n").arg(property("QCS_minimum").toString());
-    qml += QString("\t\tto: %1\n").arg(property("QCS_maximum").toString());
-    qml += QString("\t\tvalue: %1\n").arg(getValue());
-    if ( width() > height() ) {
-        qml += "\t\torientation: Qt.Horizontal\n";
-    } else {
-        qml += "\t\torientation: Qt.Vertical\n";
-    }
-    qml += QString("\t\tonPositionChanged: csound.setControlChannel(\"%1\", valueAt(position))\n").arg(m_channel); // NB! this is for QtQuick.Controls 2! since onValueChanged works onlu on drag end
+	qml=QString(R"(
+				Rectangle {
+									id: meter
+									x: 14
+									y: 144
+									width: 48
+									height: 115
+									color: "black"
+									border.color: "#00000f"
+									border.width: 2
+									property double min: 2
+									property double max: 4
+									property double value: 2.2
 
-    qml += "\t}";
+									onValueChanged: {
+										if (value>max) value=max;
+										if (value<min) value=min;
+									}
+
+
+									MouseArea {
+										anchors.fill: parent
+
+										function setValue() { // value from min..max
+											var value = parent.min +  (1 - (mouseY/parent.height)) * (parent.max-parent.min);
+											parent.value = value;
+										}
+
+										onClicked: setValue();
+										onMouseYChanged: setValue();
+									}
+
+									Rectangle {
+										id: meterHandle
+										width: parent.width - 2*parent.border.width
+										property double relativeValue: (parent.value-parent.min)/(parent.max-parent.min)
+										anchors.margins: parent.border.width
+										anchors.horizontalCenter: parent.horizontalCenter
+										anchors.bottom: parent.bottom
+										height: (parent.height-2*parent.border.width) *relativeValue
+										color: "green"
+									}
+								}
+
+
+
+				)");
+
+
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.unlock();
 #endif
