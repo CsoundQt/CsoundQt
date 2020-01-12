@@ -206,17 +206,12 @@ unix:!macx {
 	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET # do not install with the full name
 	#target.files += $$OUT_PWD/$$DESTDIR/csoundqt # but as csoundqt
 
-
 	postinstall.path = $$INSTALL_DIR/bin
 	postinstall.commands = cd $$INSTALL_DIR/bin; ln -sf $$TARGET csoundqt
-
-
 	
 	# see comments: https://github.com/CsoundQt/CsoundQt/issues/258
     desktop.path=$$SHARE_DIR/applications
-	desktop.commands = rm -f $$SHARE_DIR/applications/CsoundQt.desktop &&  # remove the old, uppercase one, if present one
-	desktop.commands += desktop-file-install --mode=644 --dir=$$SHARE_DIR/applications $$PWD/csoundqt.desktop
-    #TODO: if local install, ie not /usr/share, dekstop-file-install  --dir=$$desktop.path
+	desktop.files = $$PWD/csoundqt.desktop
 
 	icon.path=$$SHARE_DIR/icons/hicolor/scalable/apps
     icon.files=images/csoundqt.svg
@@ -250,7 +245,9 @@ unix:!macx {
     appImage.commands += linuxdeploy --appdir AppDir --executable=$$TARGET  --desktop-file=$$PWD/csoundqt.desktop  -i $$PWD/images/csoundqt.svg  --plugin=qt #  --output appimage
     # move and remove what necessary here:
     #  appImage.commands += linuxdeploy --appdir AppDir  --output appimage
-	INSTALLS += target postinstall desktop icon mimetypes examples templates # appImage
+
+	INSTALLS += target postinstall desktop icon mimetypes examples templates
+	#INSTALLS += appImage
 }
 
 # for OSX add Scripts and Examples to be bundle in Contents->Resources
