@@ -213,8 +213,6 @@ QString QuteMeter::getQml()
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.lockForWrite();
 #endif
-	//if ( m_widget->m_type!= "fill" ) // why error?
-    // todo: only if fill - horizontal vüi vertical
     // todo: crosshair jm
 
 	bool vertical;

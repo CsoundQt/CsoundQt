@@ -133,8 +133,7 @@ QString QuteCheckBox::getQml()
     widgetLock.lockForWrite();
 #endif
 
-    qml = "\n\tCheckBox {\n"; // NB! Does not accept floating point numbers...
-
+	qml = "\n\tCheckBox {\n";
     qml += QString("\t\tx: %1 * scaleItem.scale\n").arg(x());
     qml += QString("\t\ty: %1  * scaleItem.scale\n").arg(y());
     qml += QString("\t\twidth: %1  * scaleItem.scale\n").arg(width());

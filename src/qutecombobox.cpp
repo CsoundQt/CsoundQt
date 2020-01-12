@@ -111,6 +111,39 @@ QString QuteComboBox::getWidgetType()
 	return QString("BSBDropdown");
 }
 
+QString QuteComboBox::getQml()
+{
+	QString qml = QString();
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.lockForWrite();
+#endif
+
+	// create model
+	QString list = "";
+	for (int i = 0; i < static_cast<QComboBox *>(m_widget)->count(); i++) {
+		list += "\"" + static_cast<QComboBox *>(m_widget)->itemText(i) + "\",";
+	}
+	list.chop(1); //remove last comma
+
+	qml = QString(R"(
+				  ComboBox {
+					  property string channel: "%1"
+					  x: %2 * scaleItem.scale
+					  y: %3 * scaleItem.scale
+					  width: %4 * scaleItem.scale
+					  height: %5 * scaleItem.scale
+					  model: [ %6 ]
+					  currentIndex: %7
+					  onCurrentIndexChanged: if (typeof(csound)!='undefined') csound.setControlChannel(channel, currentIndex);
+				  }
+	)").arg(m_channel).arg(x()).arg(y()).arg(width()).arg(height()).
+			arg(list).arg(((QComboBox *)m_widget)->currentIndex());
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.unlock();
+#endif
+	return qml;
+}
+
 QString QuteComboBox::itemList()
 {
 	// For old format
