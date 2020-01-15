@@ -1,11 +1,25 @@
 <CsoundSynthesizer>
 <CsOptions>
+-odac1 -d
 </CsOptions>
 <CsLicense>
-======== STRIA Rel. 2.7  Written by Eugenio Giordani 06/02/ 2015 ====================
+
+======== STRIA Rel. 3.00  Written by Eugenio Giordani 22/12/ 2018 ====================
+
 List of changes
+> Added a function display for Mixture Play plus a control slider
+> Added a Chopper/Granulator on Grid OScillator stream with parameter included in morphing process (not compatible with old banks)
 
+List of changes
+======== STRIA Rel. 2.90  Written by Eugenio Giordani 25/11/ 2018 ====================
+> Added two switches (msw1/msw2) to allow automatic switch on/off of the sound when mouse is over the pads. Uses instr 7 and instr 8
 
+======== STRIA Rel. 2.80  Written by Eugenio Giordani 17/11/ 2018 ====================
+
+>Fix bug of wrong working of "slide grid" (check box)
+>Added Drunk (read randomic continuous sequence)
+
+------------------
 >Added 2 further cc MIDI controls and MIDI table doubled (from 16 to 32 values)
 >Minor bugs fixed
 >Added Factory Preset
@@ -33,17 +47,21 @@ prints "Finished parsing and compiling, now running."
 ;!!!! Tested with  Core Audio MAc OSX -  Output device: Firewire M-Audio 410       "                "                 "           "           "  
 
 sr = 44100;48000
-ksmps = 512;1000
+ksmps = 1024;1000
 nchnls = 2
 
 #define		EPSILON #int(sr/ksmps)#
 #define		MAXFSPREAD #100#				; the same maxvalue of widget "band"
 #define		MAXIMOD #4#					; the same maxvalue of widget "indx1"
+#define 	DEFAULT # 0 #
+#define 	SCALEFACTOR1 # 5000 #
+#define 	SCALEFACTOR2 # 5000 #
 
 massign 0,0									; Disable MIDI instr. triggering
+gkMORPH_FLAG		init 0
 gifreq				init 1
 gipitchspace		init 2048	;frequency lookup table (pitchspace)
-gispace				init 64
+gispace				init 128
 gind 				init 0		;table index (pitchspace)
 girecompile_G  	init 0
 giSEQ 				init 0
@@ -89,6 +107,9 @@ gaREVREC_R		init 0
 gaCONV_L		init 0
 gaCONV_R		init 0
 
+gaGRAN_L		init 0
+gaGRAN_R		init 0
+
 
 gkval_1_old 	init 0
 gkval_2_old 	init 0
@@ -114,7 +135,7 @@ gkMIDIVAR_6 	init 0
 gkMIDIVAR_7 	init 0
 gkMIDIVAR_8		init 0
 gkMIDIVAR_9		init 0
-gkMIDIVAR_10		init 0
+gkMIDIVAR_10	init 0
 
 gkinv_1		init 0
 gkinv_2		init 0
@@ -154,9 +175,19 @@ giPC_start		init 0
 
 giGRID			init 0
 
-#define DEFAULT # 0 #
-#define SCALEFACTOR1 # 5000 #
-#define SCALEFACTOR2 # 2000 #
+
+gaPAD1_CTRL 	init 0
+gaPAD2_CTRL 	init 0
+
+
+gamixgran init 1
+gkchop_dur init 0.05
+
+
+
+;#define DEFAULT # 0 #
+;#define SCALEFACTOR1 # 5000 #
+;#define SCALEFACTOR2 # 5000 #
 
 ; 48 tables allocation containing 48 snapshots
 gisna0 	ftgen 200, 0, gispace, -2, $DEFAULT		;1st table containing snapshot parameters (Snap01 ->   Get = 0 )
@@ -237,7 +268,16 @@ gifn508 ftgen	508,0,8,16, 1,   4,  0, 0.1, 4, 0, 1  ; V-shaped ramp (1 - 0.1 - 1
 gifn509 ftgen	509,0,8,16, 0.1, 4,  0, 1, 4, 0, 0.1  ; TRI-shaped ramp (1 - 0.1 - 1)
 
 
-;iLiveBuf	ftgen		0, 0, 1024, 2, 0	; buffer for writing and reading live input (future expansion)
+;giLiveBufL	ftgen		600, 0, 2^18, 2, 0	; LEFT buffer for writing and reading live input (future expansion)
+;giLiveBufR	ftgen		601, 0, 2^18, 2, 0	; RIGHT buffer for writing and reading live input (future expansion)
+;
+;giGRAIN_ENV1	ftgen		602,0,1025 , 20, 2			; Gaussian Grain/Chop Envelope
+;giGRAIN_ENV2	ftgen 		603,0,1025, 7, 0, 44, 1, 182, 0.5, 209, 0.27, 205, 0.08, 203, 0, 182, 0
+
+
+giMIXGRAN ftgen 0,0,1025, 7, 0.000000, 50, 0.290909, 80, 0.566667, 142, 0.787879, 214, 0.927273, 285, 0.984848, 253, 1.000000
+
+
 
 
 ;====================== INPUT VIRTUAL SURFACE CONTROL PARAMETERS ==========
@@ -248,7 +288,7 @@ ktrig	metro	7	; widgets scan timing (10 scans/seconds)
 
 	if ktrig == 1 then
 		gkxfade_0		invalue "XFADE"
-		gkxfade 		port gkxfade_0, 0.05
+		gkxfade 		port gkxfade_0, 0.1
 
 outvalue "disp_G1LEV", 1 - gkxfade
 outvalue "disp_G2LEV", gkxfade
@@ -299,8 +339,8 @@ gkindx1			invalue "indx1"
 gkSHAPE_0		invalue "SHAPE"
 gkvoi			invalue "vox"
 
-;gkpad_Y2		invalue "pad_Y2"
-;gkpad_X2		invalue "pad_X2"
+gkpad_Y2		invalue "pad_Y2"
+gkpad_X2		invalue "pad_X2"
 gkran2_amp		invalue "ran2amp"
 gkran2_vel		invalue "ran2vel"
 gkfun2			invalue "Fun_2"
@@ -384,10 +424,28 @@ gkcc_L			invalue "cc_L"
 gkmaxSNAP		invalue "maxSNAP"
 gkminSNAP		invalue "minSNAP"
 
-endif
+gkMSC1			invalue "MSC1"
+gkMSC2			invalue "MSC2"
 
-gkpad_Y2		invalue "pad_Y2"
-gkpad_X2		invalue "pad_X2"
+
+gkdens			invalue "dens"
+
+
+
+gkREVSEND3		invalue "REVSEND3"
+
+
+gkrand_dens_amt	invalue "rand_dens_amt"
+gkchop_dur  		invalue "chop_dur"
+
+gkchop_dens 		invalue "chop_dens"
+gkfmod_range 		invalue "fmod_range"
+
+gkgeo_grid_cont	invalue "geo_grid_cont"
+endif
+gkmixgran 		invalue "MIXGRAN"
+
+
 
 gkpad_Y1L 	limit gkpad_Y1, 0,1
 gkpad_X1L 	limit gkpad_X1, 0.0,1.0		;gkpad_X1L 	limit gkpad_X1, 0.001,1
@@ -423,11 +481,37 @@ if ktrig2 == 1 then
 outvalue "ABOUT", 0
 endif
 
+
+ktrig_metronome changed gkmetronome
+
+if ktrig_metronome == 1 then
+schedkwhen ktrig_metronome,0,1,6,0,0.1
+
+endif
+
+
+
 endin
 
 
 
+instr 6;----------> Update Sequencer timeline duration
+schedule 974, 0, 3600
+schedule 977, 0, 1
+turnoff2 978, 0, 0
+turnoff
+endin
+
 ;=============   BUTTONS STATE MANAGER   ===============
+
+
+
+
+
+
+
+
+
 
 instr 2;----> Main Buttons State Manager (Old but stable)
 
@@ -446,17 +530,17 @@ elseif p4 == 2 then 										; TEST on p4 (Button On/Off 2)
 	gksw2 = 1 - gksw2
 	schedule 102,0,36000									; if yes call  scheduler 2 (instr 102)
 
-elseif p4 == 3 then										; TEST on p4 (button Random 1)
-	gksw3 = 1 - gksw3
-	schedule 21,0,36000									; if yes switch on random gen. 1 (instr 21)
+;elseif p4 == 3 then										; TEST on p4 (button Random 1)
+;	gksw3 = 1 - gksw3
+;	schedule 21,0,36000									; if yes switch on random gen. 1 (instr 21)
 
-elseif p4 == 4 then										; TEST on p4 button Random 2
-	gksw4 = 1 - gksw4
-	schedule 22,0,36000									; if yes switch on generator random 2 (instr 22)
+;elseif p4 == 4 then										; TEST on p4 button Random 2
+;	gksw4 = 1 - gksw4
+;	schedule 22,0,36000									; if yes switch on generator random 2 (instr 22)
 
-elseif p4 == 5 then										; TEST on p4  button Timer
-	gksw5 = 1 - gksw5
-	schedule 950,0,36000									; if yes switch on Timer (instr 950)
+;elseif p4 == 5 then										; TEST on p4  button Timer
+;	gksw5 = 1 - gksw5
+;	schedule 950,0,36000									; if yes switch on Timer (instr 950)
 
 
 endif
@@ -694,7 +778,7 @@ if (iroom_sw == 0) then
 endif
 
 
-turnoff
+;turnoff
 
 endin
 
@@ -725,9 +809,6 @@ instr 4;---> MIDI PATCHER
 ktrig	metro	7	; widgets scanning at 10 per sec
 
 	if ktrig == 1 then
-
-
-
 
 
 gkMIDIVAR_1		invalue "MIDIVAR_1"
@@ -769,6 +850,8 @@ gkinv_10	invalue "inv10"
 endif
 
 
+
+
 gkMIDIsave	invalue "MIDIsave"
 
 gkstatus, gkchan, gkdata1, gkdata2 midiin  ; read MIDI informations
@@ -787,31 +870,102 @@ gkGet		invalue "Get"	; Read the snaphot pointer
 
 endin
 
+
+
+
+instr 7 ; -------> Pad Mouse Control On/Off init switches (instrument is momentary on after 0.1 s)
+
+outvalue "MSC1",0
+outvalue "MSC2",0
+
+endin 
+
+instr 8  ; -------> Pad Mouse Control On/Off
+
+kres,kkeydown sensekey
+
+ktrig changed  kres, kkeydown
+
+
+
+kXM invalue "_MouseRelX"	;get mouse Left X 
+kYM invalue "_MouseRelY"	;get mouse Left Y
+
+
+
+if   (int(kXM)>=13 && int(kXM) < 143)  && (int(kYM) >550  && int(kYM) <683)     then   ; if mouse is inside PAD 1
+
+
+kPAD1_CTRL = 1																				; set this variable to 1
+else
+kPAD1_CTRL = 0																				; else = 0
+endif
+
+if gkMSC1 == 0 then																		; if the msw1 is on (= 1) 
+kPAD1_CTRL = 1																				; force PAD1_CTRL = 1
+endif
+
+if   (int(kXM)>=242 && int(kXM) < 372) && (int(kYM) >550  && int(kYM) <683)   then	;the same for PAD 2
+
+
+kPAD2_CTRL = 1
+else
+kPAD2_CTRL = 0
+endif
+
+if gkMSC2 == 0 then
+kPAD2_CTRL = 1
+endif
+
+if kres == 97 || kres ==  65 then						; if letter "a" (or "A") is pressed on keyboard
+outvalue "MSC1",1										; set msw1 = 1 (PAD 1 is controlled by entry the mouse over it)
+elseif kres == 115 || kres == 83 then					; if letter "s" (or "S") is pressed on keyboard
+outvalue "MSC1",0										; set msw1 = 0 (PAD 1 is always on)
+endif
+
+
+if kres = 122 || kres == 90 then						;The same for PAD 2
+outvalue "MSC2",1
+elseif kres = 120 || kres == 88 then
+outvalue "MSC2",0
+endif
+
+
+;printk2 kPAD1_CTRL
+gaPAD1_CTRL interp kPAD1_CTRL							;cast k to a
+gaPAD2_CTRL interp kPAD2_CTRL
+
+endin
+
+
 ;============== RANDOM GENERATORS ==================
+
 
 instr 21;----> Random Gen. 1
 
-	if gksw3 == 1 goto on
-	outvalue "led3",0
-	gkfauto1 = 0
-	turnoff
-	on:
-	outvalue "led3",1
+;	if gksw3 == 1 goto on
+;	outvalue "led3",0
+;	gkfauto1 = 0
+;	turnoff
+;	on:
+;	outvalue "led3",1
+	
+	;kran1rate jspline 0.5, 1,10*gkran1_vel
 
 	gkfauto1 randh (1-gkran1_mute) * gkpad_X1L * gkran1_amp*25000, gkran1_vel
-
+	;gkfauto1 randh (1-gkran1_mute) * gkpad_X1L * gkran1_amp*25000, 0.5+kran1rate
 
 	outvalue "disp_rand1", gkfauto1
 
 endin
 
 instr 22;----> Random Gen. 2
-	if gksw4 == 1 goto on
-	outvalue "led4",0
-	gkfauto2 = 0
-	turnoff
-	on:
-	outvalue "led4",1
+;	if gksw4 == 1 goto on
+;	outvalue "led4",0
+;	gkfauto2 = 0
+;	turnoff
+;	on:
+;	outvalue "led4",1
 
 	gkfauto2 randh (1-gkran2_mute)*gkpad_X2L * gkran2_amp*25000, gkran2_vel
 	outvalue "disp_rand2", gkfauto2
@@ -822,6 +976,14 @@ endin
 ;==================  Switch off Leds at start
 instr 9; ----> All LEDS OFF
 ;ftload "/Users/eg/Documents/QuteCSEX/data.txt", 1, gisna50
+
+outvalue "_RAND1",0
+outvalue "_RAND2",0
+
+
+outvalue "geo_grid_cont",0
+outvalue "harm_grid_cont",0
+outvalue "fibo_grid_cont",0
 
 outvalue "led_TIMER1", 0
 outvalue "led_TIMER2", 0 
@@ -999,6 +1161,7 @@ endin
 ;=============== HARMONIC SPECTRA GENERATOR ======================
 
 instr 12;----> CREATE HARMONIC
+
 giHARMONIC init 1
 ind init 0
 
@@ -1113,8 +1276,6 @@ icc_I = i(gkcc_I)
 icc_L = i(gkcc_L)
 
 
-
-
 ipar1 = i(gkMIDIVAR_1)
 ipar2 = i(gkMIDIVAR_2)
 ipar3 = i(gkMIDIVAR_3)
@@ -1150,13 +1311,23 @@ tabw_i ipar9,18, 11
 tabw_i ipar10,19, 11
 
 
-
-
-
-
 endin
 
 
+instr 15 ; -------> GEOM Sense Continuous Grid Change
+ktrigGEOM	changed gk_ratio,gk_outf,gk_num,gk_den,gk_G_oct,gk_G_key		
+schedkwhen ktrigGEOM,0,1, 10, 0, 0.1 
+endin
+
+instr 16  ; -------> HARM Sense Continuous Grid Change
+ktrigHARM	changed gk_ffund,gk_exp, gk_H_oct, gk_H_key
+schedkwhen ktrigHARM,0,1, 12, 0, 0.1
+endin
+
+instr 17	; -------> FIBO Sense Continuous Grid Change
+ktrigFIBO	changed gkFIB_Start,gkFIB_Fund
+schedkwhen ktrigFIBO,0,1, 13, 0, 0.1
+endin
 
 ;================== WAVEFORM MORPHING AND SINE LED CONTROL ===================
 
@@ -1177,13 +1348,30 @@ else
 outvalue "sine2", 0
 endif
 
+
+
 endin
+
+instr 61
+
+ktrig changed gkSHAPE_0
+
+if ktrig !=0 then
+schedkwhen ktrig, 0,1,62,0,0.1
+endif
+endin
+
+instr 62
+outvalue "dispSHAPE",501+gkSHAPE_0 
+endin
+
 
 
 
 ;=========================== SWITCH ON SNAPSHOT LED =========
 instr 70  ;  Switch on the corrisponding write led
 inum = i(gkGet) + 1
+
 
 if inum == 1 then
 	outvalue "L01", 1
@@ -1288,8 +1476,8 @@ turnoff
 
 endin
 
-;======================== SWITCH OFF SNAPSHOT LED AND CLEAR 1st VALUE =================
-instr 71
+
+instr 71;--------> SWITCH OFF SNAPSHOT LED AND CLEAR 1st VALUE 
 inum = i(gkGet) + 1		; Get the snapshop pointer value
 
 if     inum == 1 then
@@ -1328,7 +1516,6 @@ elseif inum == 11 then
 elseif inum == 12 then
 	outvalue "L12", 0
 	vtabwi	0, 211, 0
-
 elseif inum == 13 then
 	outvalue "L13", 0
 	vtabwi	0, 212, 0
@@ -1560,6 +1747,9 @@ endin
 instr 91 ; READ SNAP	&  MORPH
 ;print giPC_flag
 ; Freeze in table 703 the current values of the parameters
+
+if i(gkMORPH_FLAG) == 1 igoto NOSCHED
+
 vtabwi 0,703,\
 i(gkband),i(gkrate),i(gkdur),\
 i(gk_CAR_min),i(gk_CAR_max), i(gk_MOD_min), i(gk_MOD_max),\
@@ -1578,6 +1768,7 @@ i(gkREL1), i(gkREL2), \
 i(gkREVSEND1), i(gkREVSEND2), \
 i(gkxfade_0), \
 i(gkSHAPE_0), \
+i(gkchop_dens),i(gkrand_dens_amt),i(gkchop_dur),i(gkfmod_range),i(gkREVSEND3),i(gkmixgran),\
 i(gkTIME), i(gkTYPE),\   ; index 35, 36
 i(gkmute1),i(gkmute2),i(gk_cm),i(gk_ADSYN), \ ; index = 37, 38, 39, 40
 gisw_G, gisw_H, gisw_F, \							;index = 41, 42, 43
@@ -1585,6 +1776,8 @@ i(gk_ratio), i(gk_num), i(gk_den), i(gkmode_in), i(gk_outf),i(gk_G_fund),i(gk_G_
 i(gk_ffund), i(gk_exp), i(gk_maxharm), i(gk_H_fund), i(gk_H_oct), i(gk_H_key), \
 i(gkFIB_Start), i(gkFIB_Fund),\
 i(gkran1_mute), i(gkran2_mute)
+
+
 
 ;print giSEQ
 if giSEQ == 0 then	; test if SEQUENCER is  active  (0 : inactive  / !=0 : active)
@@ -1597,13 +1790,17 @@ isnap = giPrn-1   ; if not snapshot got from sequencer descriptor
 
 endif
 
-isnap = (p4 != 0? p4-1 : isnap)
+;isnap = (p4 != 0? p4-1 : isnap)
 ;print isnap, p4
 
 tableicopy	704, 200 + isnap   ; Make a copy of all the parameters of the current snapshot in table 704
-schedule 92, 0, 3600,isnap  ; call the transition instrument
 
-turnoff
+
+schedule 92, 0,3600,isnap  ; call the transition instrument
+NOSCHED:
+
+
+
 
 
 endin
@@ -1612,10 +1809,13 @@ endin
 
 instr 92  ;++++>LOAD SNAP - called by instr 91 (readsnap)
 
+
+ioff init 6  
+
 gkstop init 0
 kTr init 0
-;iTIME = i(gkTIME)+ 0.01
-;iTYPE = i(gkTYPE)
+gkMORPH_FLAG = 1
+
 iBYSTTIME = i(gkBYSTTIME)
 
 
@@ -1631,7 +1831,7 @@ endif
 
 
 iSNAP = (giPC_flag!=0? p4 : iSNAP)
-print iSNAP
+
 
 ifirst_value 	table 0, 200 + iSNAP ; read first value of table 200
 
@@ -1640,7 +1840,7 @@ if ifirst_value != 0 goto proceed
 SEmptySnap sprintf "WARNING ! Snap %d is empty", iSNAP + 1
 
 outvalue	"warn", SEmptySnap
-
+gkMORPH_FLAG = 0
 turnoff
 
 proceed:
@@ -1652,76 +1852,75 @@ outvalue "warn",SLoadingSnap
 
 
 if iBYSTTIME == 1 goto bypass				; IF iBYSTTIE == 1 DON'T USES THE MORPH TIME FROM SNAPSHOT
-			iTIME table 35, 200 + iSNAP
+			iTIME table 35+ioff, 200 + iSNAP
  			outvalue "TIME", iTIME
-			iTYPE table 36, 200 + iSNAP
+			iTYPE table 36+ioff, 200 + iSNAP
  			outvalue "TYPE", iTYPE
-			;imute1 table 37, 200 + iSNAP
+			
 bypass:
-			imute1 table 37, 200 + iSNAP
+			imute1 table 37+ioff, 200 + iSNAP
 			outvalue "MUTE1", imute1
-			imute2 table 38, 200 + iSNAP
+			imute2 table 38+ioff, 200 + iSNAP
  			outvalue "MUTE2", imute2
-			icm 	table 39, 200 + iSNAP
+			icm 	table 39+ioff, 200 + iSNAP
  			outvalue "cm", icm
-			iADSYN table 40, 200 + iSNAP
+			iADSYN table 40+ioff, 200 + iSNAP
  			outvalue "ADSYN", iADSYN
 
 
 
-			iGEO 	table 41, 200 + iSNAP
-			iHARM 	table 42, 200 + iSNAP
-			iFIB 	table 43, 200 + iSNAP
+			iGEO 	table 41+ioff, 200 + iSNAP
+			iHARM 	table 42+ioff, 200 + iSNAP
+			iFIB 	table 43+ioff, 200 + iSNAP
 
 ;i(gk_ratio), i(gk_num), i(gk_den), i(gkmode_in), i(gk_outf),i(gk_G_fund),i(gk_G_oct), i(gk_G_key)
 ;iRATIO		iNUM			iDEN		iMODE_IN		iOUTF			iG_FUND		iG_OCT			iG_KEY
 
-			iRATIO		table 44, 200 + iSNAP
-			iNUM		table 45, 200 + iSNAP
-			iDEN		table 46, 200 + iSNAP
-			iMODE_IN	table 47, 200 + iSNAP
-			iOUTF		table 48, 200 + iSNAP
-			iG_FUND		table 49, 200 + iSNAP
-			iG_OCT		table 50, 200 + iSNAP
-			iG_KEY		table 51, 200 + iSNAP
+			iRATIO		table 44+ioff, 200 + iSNAP
+			iNUM		table 45+ioff, 200 + iSNAP
+			iDEN		table 46+ioff, 200 + iSNAP
+			iMODE_IN	table 47+ioff, 200 + iSNAP
+			iOUTF		table 48+ioff, 200 + iSNAP
+			iG_FUND		table 49+ioff, 200 + iSNAP
+			iG_OCT		table 50+ioff, 200 + iSNAP
+			iG_KEY		table 51+ioff, 200 + iSNAP
 
 ;i(gk_ffund), i(gk_exp), i(gk_maxharm), i(gk_H_fund), i(gk_H_oct), i(gk_H_key)
 ;iFFUND			iEXP		iMAXHARM		iHFUND				iHOCT			iHKEY
 
-			iFFUND		table 52, 200 + iSNAP
-			iEXP		table 53, 200 + iSNAP
-			iMAXHARM	table 54, 200 + iSNAP
-			iHFUND		table 55, 200 + iSNAP
-			iHOCT		table 56, 200 + iSNAP
-			iHKEY		table 57, 200 + iSNAP
+			iFFUND		table 52+ioff, 200 + iSNAP
+			iEXP		table 53+ioff, 200 + iSNAP
+			iMAXHARM	table 54+ioff, 200 + iSNAP
+			iHFUND		table 55+ioff, 200 + iSNAP
+			iHOCT		table 56+ioff, 200 + iSNAP
+			iHKEY		table 57+ioff, 200 + iSNAP
 
-;i(gkFIB_Start), i(gkFIB_Fund)
-;iFIBSTART, 		iFIBFUND
 
-			iFIBSTART	table 58, 200 + iSNAP
-			iFIBFUND	table 59, 200 + iSNAP
 
-			iRAN1MUTE 	table 60, 200 + iSNAP
-			iRAN2MUTE 	table 61, 200 + iSNAP
+			iFIBSTART	table 58+ioff, 200 + iSNAP
+			iFIBFUND	table 59+ioff, 200 + iSNAP
+
+			iRAN1MUTE 	table 60+ioff, 200 + iSNAP
+			iRAN2MUTE 	table 61+ioff, 200 + iSNAP
 
 			outvalue 	"RAN1MUTE", iRAN1MUTE
 			outvalue 	"RAN2MUTE", iRAN2MUTE
 
 if iGEO == 1 then
- ;schedule 10, 0, 3600
+ 
 	schedule 200, 0, 3600, iRATIO, iNUM, iDEN, iMODE_IN, iOUTF, iG_FUND, iG_OCT, iG_KEY
 
 elseif  iHARM == 1  then
-	;schedule 12, 0, 3600
+	
 	schedule 202, 0, 3600, iFFUND,iEXP,iMAXHARM,iHFUND,iHOCT,iHKEY
 elseif iFIB == 1  then
-	;schedule 13, 0, 3600
+	
 	schedule 203, 0, 3600, iFIBSTART, iFIBFUND
 endif
 
 
 
-tableicopy 301,300
+tableicopy 301,300     
 
 
 gkstop invalue "STOP"					; CHECK TRANSITION MANUAL STOP
@@ -1729,7 +1928,7 @@ kTr_LIN line 0,iTIME, 1
 kTr 	transeg 0, iTIME, iTYPE, 1
 
 if gkgrid_morph == 1 then				;CHECK IF GRID MORPH IS ACTIVE
-ftmorf kTr, 303, 300
+ftmorf kTr, 303, 300   ; 303,300
 
 else
 tablecopy 300,302
@@ -1755,7 +1954,8 @@ gkATK1, gkATK2, \
 gkREL1, gkREL2, \
 gkREVSEND1, gkREVSEND2, \
 gkxfade_0,\
-gkSHAPE_0
+gkSHAPE_0,\
+gkchop_dens,gkrand_dens_amt,gkchop_dur,gkfmod_range,gkREVSEND3,gkmixgran
 
 
 ; UPDATE PARAMETERS AND WIDGETS
@@ -1796,6 +1996,7 @@ outvalue 	"ran2vel", gkran2_vel
 
 outvalue 	"REVSEND1", gkREVSEND1
 outvalue 	"REVSEND2", gkREVSEND2
+outvalue 	"REVSEND3", gkREVSEND3
 
 outvalue	"REVLEV", gkREVLEV
 outvalue	"ROOM", gkROOM
@@ -1812,23 +2013,33 @@ outvalue 	"MOD_min", gk_MOD_min
 outvalue 	"MOD_max", gk_MOD_max
 
 outvalue 	"XFADE", gkxfade_0
+
 outvalue 	"SHAPE", gkSHAPE_0
 
 outvalue   "over", gkover_0
+
+outvalue "chop_dens", gkchop_dens
+outvalue "rand_dens_amt", gkrand_dens_amt
+outvalue "chop_dur", gkchop_dur
+outvalue "fmod_range", gkfmod_range
+outvalue "MIXGRAN",gkmixgran
 
 if kTr < 1 goto go
  outvalue "progress",0
  outvalue "progress_lin",0
  SLoadedSnap	sprintf	"Snap %d Loaded ! ", iSNAP + 1
  outvalue "warn", SLoadedSnap
+ gkMORPH_FLAG = 0
  turnoff
 go:
-  if gkstop == 1 then
+  if gkstop == 1  then
 
    gkstop = 0
+   gkMORPH_FLAG = 0
    turnoff
    endif
-
+   
+ 
 giPC_flag = 0
 endin
 
@@ -1839,6 +2050,7 @@ endin
 instr 100 ;++++> WRITE SNAP (schedule i70 and copy all 60 parameters into table 200)
 
 schedule 70, 0, 3600
+;print i(gkGet)
 
 ;saves all parameters into the table of the current snap
 vtabwi 0,200 + i(gkGet),\
@@ -1857,15 +2069,16 @@ i(gkREVLEV),i(gkROOM),i(gkHF),\
 i(gkATK1), i(gkATK2), \
 i(gkREL1), i(gkREL2), \
 i(gkREVSEND1), i(gkREVSEND2),\
-i(gkxfade_0),\
+i(gkxfade_0),\					
 i(gkSHAPE_0),\
-i(gkTIME), i(gkTYPE),\   ; index 35, 36
-i(gkmute1),i(gkmute2),i(gk_cm),i(gk_ADSYN), \ ; index = 37, 38, 39, 40
-gisw_G, gisw_H, gisw_F, \							;index = 41, 42, 43
-i(gk_ratio), i(gk_num), i(gk_den), i(gkmode_in), i(gk_outf),i(gk_G_fund),i(gk_G_oct), i(gk_G_key), \
-i(gk_ffund), i(gk_exp), i(gk_maxharm), i(gk_H_fund), i(gk_H_oct), i(gk_H_key), \
-i(gkFIB_Start), i(gkFIB_Fund), \ ; index 58, 59
-i(gkran1_mute), i(gkran2_mute)   ; index 60, 61
+i(gkchop_dens),i(gkrand_dens_amt),i(gkchop_dur),i(gkfmod_range),i(gkREVSEND3),i(gkmixgran),\
+i(gkTIME), i(gkTYPE),\   ; index 41, 42
+i(gkmute1),i(gkmute2),i(gk_cm),i(gk_ADSYN), \ ; index = 43, 44 45, 46
+gisw_G, gisw_H, gisw_F, \							;index = 47, 48, 49
+i(gk_ratio), i(gk_num), i(gk_den), i(gkmode_in), i(gk_outf),i(gk_G_fund),i(gk_G_oct), i(gk_G_key), \;index= 50,...57
+i(gk_ffund), i(gk_exp), i(gk_maxharm), i(gk_H_fund), i(gk_H_oct), i(gk_H_key), \ ; index = 58,59,60,61,62,63
+i(gkFIB_Start), i(gkFIB_Fund), \ ; index 64, 65
+i(gkran1_mute), i(gkran2_mute)   ; index 66, 67
 
 
 
@@ -1876,8 +2089,7 @@ endin
 ;=====================
 
 instr 101;-=-=-> CALLING INSTRUMENT 1
-
-
+print 99999
 
 reset:
 
@@ -1890,24 +2102,24 @@ istep_0		= i(gkstep)		;reads step value
 istep		= int(istep_0)	;cast to integer
 ifauto1		= i(gkfauto1)
 
+kpad_X1L = gkpad_X1L*gind
 
-if gkkeyb_SW == 0 goto nokeyb		;check if MIDI keyboard is selected
+if gkkeyb_SW == 0 goto nxt	;check if MIDI keyboard is selected
 
 if1gr = gind *(i(gkdata1)-12)/96	; Maps the MIDI keyboard
 iXKB = if1gr / gind
-outvalue "pad_X1", iXKB
+;print if1gr,gind,iXKB
+;outvalue "pad_X1", iXKB
 goto nxt
 
-nokeyb:
-kpad_X1L = gkpad_X1L*gind
-if1gr = abs(int(i(kpad_X1L))); scale X PAD1 on variable gind
-
+;nokeyb:
+;if1gr = abs(int(i(kpad_X1L))); scale X PAD1 on variable gind
 
 nxt:
-kpad_X1L = gkpad_X1L*gind
 if1gr = i(kpad_X1L)	; sscale X PAD1 on variable gind
-
 if1gr_int = int(if1gr)
+
+
 
 outvalue "grid_index", if1gr
 gif1 tab_i		if1gr,300			; reads 1st partial freq.
@@ -1961,6 +2173,8 @@ iatk2 = 	i(gkATK2)		;reads and freeze attack time
 irel2 = 	i(gkREL2)		;reads and freeze release time
 ifun2 =		i(gkfun2)
 
+;print ifun2
+
 
 kpad_X2L 		= gkpad_X2L* 2500
 ifreq_ref2 		= i(kpad_X2L)+ i(gkfauto2)
@@ -2000,7 +2214,7 @@ ileft = (ichan <= 0 ? 1 : 0)
 iright = (ichan > 0 ? 1 : 0)
 
 icar  random	i(gk_CAR_min), i(gk_CAR_max);extracts random number for	car_min
-imod  random  	i(gk_MOD_min), i(gk_MOD_max) ;extracts random number for car_max
+imod  random i(gk_MOD_min), i(gk_MOD_max) ;extracts random number for car_max
 
 
 icar = (i(gk_cm) = 0 ?  int(icar) : icar)	;select if use integer or float values
@@ -2026,14 +2240,14 @@ invoices  = i(gkvoi_i)					;set number of simultaneous voices
 								;k1	linen ilev, iat,p3,irel
 								;kindex  linseg 0,p3/2,iindex,p3/2,0
 
-kindex  linseg 0,p3/2,iindex,p3/2,0		;FM modulation index envelope
+kindex  cosseg 0,p3/2,iindex,p3/2,0		;FM modulation index envelope
 ;ak1	  linen ilev, iat,p3,irel			;amplitude envelope
 
 
 
-;ak1	transeg 0,p3/2,2,ilev,p3/2,2,0
-ak1	transeg 0,p3/2,2,ilev, p3/2,2,0   ;  amplitude envelope (as in AFM8)
 
+;ak1	transeg 0,p3/2,2,ilev, p3/2,2,0   ;  amplitude envelope (as in AFM8)
+ak1	cosseg 0,p3/2,ilev, p3/2,0
 if i(gk_ADSYN)  == 1 goto ADSYN
 
 FM:
@@ -2303,25 +2517,33 @@ aout sum a1
 
 
 outsum:
-aL = (1-gkmute1) * gkover * aout * $SCALEFACTOR1 * ileft * (1 - gkxfade)
-aR = (1-gkmute1) * gkover * aout * $SCALEFACTOR1 * iright * (1 - gkxfade)
+
+
+aL = (1-gkmute1) * gkover * aout * $SCALEFACTOR1 * ileft * (1 - gkxfade)*gaPAD1_CTRL
+aR = (1-gkmute1) * gkover * aout * $SCALEFACTOR1 * iright * (1 - gkxfade)*gaPAD1_CTRL
 aL dcblock aL
 aR dcblock aR
-	outs	aL, aR   ;  Audio to DAC -  outs PAD N. 1 
 
-gaFFT = gaFFT + aL
-gaREVL= gaREVL + aL * gkREVSEND1
-gaREVR=gaREVR + aR * gkREVSEND1
+amixgran interp gkmixgran	;balance between stria main stream and its granuled version
 
-gaMETER_L = gaMETER_L + aL
-gaMETER_R = gaMETER_R + aR
+aLPAD_1 = aL*(1-amixgran)
+aRPAD_1 = aR*(1-amixgran)
 
-gaWRITE_L = gaWRITE_L + aL
-gaWRITE_R = gaWRITE_R + aR
+	outs	aLPAD_1, aLPAD_1   ;  Audio to DAC -  outs PAD N. 1 
+
+gaFFT = gaFFT + aLPAD_1
+gaREVL= gaREVL + aLPAD_1 * gkREVSEND1
+gaREVR=gaREVR + aRPAD_1 * gkREVSEND1
+
+gaMETER_L = gaMETER_L + aLPAD_1
+gaMETER_R = gaMETER_R + aRPAD_1
+
+gaWRITE_L = gaWRITE_L + aLPAD_1
+gaWRITE_R = gaWRITE_R + aRPAD_1
 
 
-gaCONV_L = gaCONV_L + aL
-gaCONV_R = gaCONV_R + aR
+gaGRAN_L = gaGRAN_L + aL
+gaGRAN_R = gaGRAN_R + aR
 
 	endin
 
@@ -2358,8 +2580,8 @@ kindex	linseg 0,p3/2,iindex,p3/2,0
 
 a1	foscil ak1,p4+irandfreq*gkband, icar,imod, kindex, ifun
 
-aL = gkover * a1 * $SCALEFACTOR2 * ileft  * (1- gkmute2)*gkxfade
-aR = gkover * a1 * $SCALEFACTOR2 * iright * (1 - gkmute2)*gkxfade
+aL = gkover * a1 * $SCALEFACTOR2 * ileft  * (1- gkmute2)*gkxfade*gaPAD2_CTRL
+aR = gkover * a1 * $SCALEFACTOR2 * iright * (1 - gkmute2)*gkxfade*gaPAD2_CTRL
 aL dcblock aL
 aR dcblock aR
 	outs	aL,aR	;  Audio to DAC -  outs PAD N. 2
@@ -2378,6 +2600,68 @@ gaWRITE_R = gaWRITE_R + aR
 	endin
 
 ;==========================================
+
+
+instr 161 ; ;;;;;;;; PSEUDO GRANULATOR >(Grain 3)
+
+
+
+imax_grain_overlap init 60
+kfn init 903
+
+kgrwin invalue "grwin"
+ftmorf kgrwin, 600, 601
+ain_L = gaGRAN_L
+ain_R = gaGRAN_R
+
+
+krand_dens randomh -gkrand_dens_amt,gkrand_dens_amt,gkchop_dens
+kdens_tot = 0.01+gkchop_dens*(1+krand_dens)
+
+kfmod randomh 100,gkfmod_range,kdens_tot
+
+
+afmod interp kfmod
+if kfmod > 100 then
+amod oscil3 1,afmod
+else
+amod = 1
+amod tone amod,1
+
+endif
+
+
+
+agrain_ENV grain3 1, 1, 1,1, gkchop_dur,kdens_tot,imax_grain_overlap, kfn, 601,1, 1
+
+amixgran interp gkmixgran
+
+
+agrain_ENV tone agrain_ENV, 40
+
+
+achop_L = agrain_ENV * ain_L 
+achop_R = agrain_ENV * ain_R 
+
+achop_OUT_L = achop_L*amixgran*amod
+achop_OUT_R = achop_R*amixgran*amod
+
+outs achop_OUT_L,achop_OUT_L
+
+gaREVL = gaREVL + achop_OUT_L * gkREVSEND3
+gaREVR = gaREVR + achop_OUT_R * gkREVSEND3
+
+gaFFT = gaFFT + achop_OUT_L
+
+gaWRITE_L = gaWRITE_L + achop_OUT_L
+gaWRITE_R = gaWRITE_R + achop_OUT_R
+
+clear gaGRAN_L,gaGRAN_R
+
+endin
+
+
+
 
 instr 200;-----> GEOM. COMPILER AFTER SNAP READ
 ;  p4      p5     p6        p7    p8        p9      p10		p11
@@ -2437,7 +2721,7 @@ do:
     if ifreq > sr/2 goto stop
 
 tabw_i	ifreq, ind, 302
-tabw_i	ifreq, ind, 301
+						;tabw_i	ifreq, ind, 301
 
 
 
@@ -2518,7 +2802,7 @@ ind = ind + 1
 iexpval pow ind, (1+iexp)
 icurfreq = ifund * iexpval
 tabw_i	icurfreq, ind - 1, 302
-tabw_i	icurfreq, ind - 1, 301
+							;tabw_i	icurfreq, ind - 1, 301
 
 gind = ind
 gifreq = icurfreq
@@ -2562,7 +2846,7 @@ ifreq_old = ifreq
 ifreq = ifund * ((iPHI ^(index + istart) - (1 - iPHI)^(index + istart))/ sqrt(5))
 if ifreq > sr/2 goto stop
 tabw_i	ifreq, index, 302
-tabw_i	ifreq, index, 301
+							;tabw_i	ifreq, index, 301
 
 
 gifreq = ifreq
@@ -2611,10 +2895,6 @@ SubString	strsubk String_Read, 0, kpos	;Get the name before point
 Sfile_MIDISetup  strcat SubString, "_MIDI.txt"   ;Concatenate with _MIDI.txt to make the name
 
 
-
-
-
-
 ftsave Sfile_MIDISetup, 1, 11
 
 turnoff
@@ -2624,8 +2904,6 @@ endin
 
 instr 301;-----> LOAD BANK FROM DISK
 
-;String_Read	invalue "string"
-;outvalue		"strout", String_Read
 
 String_Read  invalue "_Browse1"
 
@@ -2638,7 +2916,8 @@ Sfile_MIDISetup  strcat SubString, "_MIDI.txt"   ;Concatena con _MIDI.txt per fo
 
 outvalue		"strout", String_Read2
 
-if gkMIDIsave == 0 goto noload
+if i(gkMIDIsave) == 0 goto noload
+
 
 	ftload Sfile_MIDISetup, 1, 11
 iCC1 	tab_i 0, 11
@@ -3103,6 +3382,9 @@ denorm ainL
 denorm ainR
 ;arevL, arevR 	freeverb  ainL, ainR, gkROOM, gkHF
 
+gkROOM 	port gkROOM, 0.1
+gkHF		port gkHF,0.1
+gkREVLEV 	port gkREVLEV, 0.1
 arevL, arevR reverbsc ainL, ainR, gkROOM*0.995, gkHF * sr/2
 outs arevL*gkREVLEV, arevR*gkREVLEV	;  Audio to DAC -  REVERB out 	
 
@@ -3112,10 +3394,6 @@ gaREVREC_R = arevR*gkREVLEV
 gaREVL= 0
 gaREVR = 0
 endin
-
-
-
-
 
 ;==========================================
 
@@ -3229,6 +3507,8 @@ outvalue "pad_X1", kval
  elseif gkMIDIVAR_1 == 29 then
  outvalue "MOD_max", 1 + kval * 13
  
+ elseif gkMIDIVAR_1 == 30 then
+ outvalue "MIXGRAN",  kval 
  
  else
  
@@ -4183,9 +4463,6 @@ next:
 endin
 
 
-
-
-
 instr 910  ; ---> Connects ext. MIDI cc to the selected parameter  (5th controller)
 
 kSwitch	changed	gkcc_L		;check ifyou want to change external cc
@@ -4303,10 +4580,6 @@ next:
 endin
 
 
-
-
-
-
 instr 919 ; ---> Enable all cc (all on)
 outvalue "midi_1", 1
 outvalue "midi_2", 1
@@ -4334,17 +4607,7 @@ outvalue "midi_10", 0
 endin
 
 
-;==========================================
 
-;==========================================
-
-; MKG instr 911; Not Used
-
-;event "i", 12, 0, 1
-
-;turnoff
-
-; MKG endin
 
 
 ;========================================
@@ -4372,9 +4635,9 @@ instr 999 ;-----> FFT
 
 kfft_onoff invalue "fftONOFF"
 if kfft_onoff != 0 then
- outvalue "disptab", 81
+ outvalue "disptab", 89
  asig = gaFFT
- dispfft asig+0.0001,0.3,512, 1
+ dispfft asig+0.0001,0.1,512, 1
  gaFFT = 0
 endif
 
@@ -4421,15 +4684,32 @@ outvalue "led_TIMER2", ineglamp
 
 
 
-if gksw5 != 0 kgoto on
-turnoff
-on:
+;if gksw5 != 0 kgoto on
+;turnoff
+;on:
 endin
 
 ;==========================================
 
 instr 960;-----> RECORD File wav
 
+gaWRITE_L init 0 
+gaREVREC_L init 0
+gaWRITE_R init 0 
+gaREVREC_R init 0
+
+
+krec_atk invalue "rec_atk"
+krec_rel invalue "rec_rel"
+kfade_onoff invalue "fade_onoff"
+
+irec_atk = i(krec_atk)
+irec_rel = i(krec_rel)
+itot_fade = irec_atk+irec_rel
+ifade_onoff = i(kfade_onoff)
+
+knchn invalue "nchn"
+inchn = i(knchn)
 kdatares invalue "_datares"  ; select bit depth for audio saved data
 idatares = i(kdatares)
 if idatares == 0 then
@@ -4450,11 +4730,50 @@ p3 = irectime
 
 k1 			timeinsts
 
+ibitflag = (idatares == 0? 14 : 18)
+
 go:
 
-icurrent_type =  14+itype
+if ifade_onoff == 1 then
 
-fout Sfile, icurrent_type, gaWRITE_L+gaREVREC_L, gaWRITE_R+gaREVREC_R   ; save stereo audio data
+	if irec_atk == 0 then
+
+ 
+    	aramp linseg 1,irectime-irec_rel,1,irec_rel/2,0,irec_rel/2,0
+  
+   		
+   		else
+		aramp linseg 0,irec_atk,1,irectime-itot_fade,1,irec_rel-2/kr,0,2/kr,0
+	endif
+else
+
+ aramp = 1
+endif	
+	
+	
+if inchn == 0  then
+
+
+
+fout Sfile, ibitflag, aramp*(gaWRITE_L+gaREVREC_L), aramp*(gaWRITE_R+gaREVREC_R)   ; save stereo audio data
+
+elseif inchn == 1 then
+
+fout Sfile, ibitflag, aramp*(gaWRITE_L+gaREVREC_L)
+
+elseif inchn == 2 then
+fout Sfile, ibitflag, aramp*(gaWRITE_R+gaREVREC_R)
+
+else
+
+fout Sfile, ibitflag, aramp*(0.5*(gaWRITE_L+gaREVREC_L)+0.5*(gaWRITE_R+gaREVREC_R))
+endif
+
+
+
+
+
+
 
 gaWRITE_L = 0
 gaWRITE_R = 0
@@ -4479,7 +4798,7 @@ endin
 ;==========================================
 
 
-instr 969  ;-----> THE RANDOM SEQUENCER
+instr 968  ;-----> THE RANDOM SEQUENCER  (DRUNK)
 icont init 0
 
 outvalue "seqran", 1
@@ -4499,6 +4818,80 @@ seq:
 icont random 1,gimaxindex
 icont = int(icont)
 
+;			if icont == gimaxindex then
+;				giSEQ = 0
+;				outvalue "ledseq", 0
+;				outvalue "ledton",0
+;
+;				turnoff			
+;				else			
+;				endif
+
+
+
+iaddress = (icont-1)*5
+;print icont, iaddress
+outvalue "contdisp", icont
+giSEQ = 1
+
+;print giDEBUG_01
+
+iTon  	tab_i iaddress + 1, 900   ; read 2nd element..(tempo di ON prima della transizione)
+giPrn  	tab_i iaddress + 2, 900	; read 3rd element..(snapshot)
+giTtran	tab_i iaddress + 3, 900	; read 4th element..(tempo  transizione)
+giMode		tab_i iaddress + 4, 900
+outvalue "Get",giPrn-1
+outvalue "TYPE", giMode
+
+iTon = iTon / imetronome
+giTtran = giTtran / imetronome
+
+schedule 91, iTon, 3600
+
+
+isumtime = giTtran + 0.001 + iTon
+
+if iTon > 0 then
+outvalue "ledton", 1
+else
+outvalue "ledton", 0
+endif
+
+timout 0, isumtime, wait
+                      
+reinit seq
+
+                   
+wait:
+
+imetronome = i(gkmetronome)
+
+endin
+
+
+
+
+
+instr 969  ;-----> THE RANDOM SEQUENCER
+icont init 0
+
+outvalue "seqran", 1
+event_i "i", 977, 0, 1
+event_i "i", 975, 0, 3600
+event_i "i", 978, 0, 3600
+
+
+imetronome = i(gkmetronome)
+giSEQ = 1						; set sequencer flag active (= 1)
+outvalue "ledseq", 1
+;iaddress init -5				; start pointer 4 location before first descriptor element
+seq:
+
+;icont = icont + 1
+
+icont random 1,gimaxindex
+icont = int(icont)
+;print icont,gimaxindex
 if icont == gimaxindex then
 giSEQ = 0
 outvalue "ledseq", 0
@@ -4598,10 +4991,13 @@ icont = icont + incr
 
 
 
-	if icont == imax then
+	if icont == imax then;--------------------------
 		giSEQ = 0
 		outvalue "ledseq", 0
 		outvalue "ledton",0
+
+gkstop = 0					;linee aggiunte per far ripartire correttamente il sequencer dopo l'HALT
+   gkMORPH_FLAG = 0
 
 		turnoff
 	else
@@ -4655,6 +5051,10 @@ endin
 instr 971 ;-----> Halt sequencer
 
 giSEQ = 0
+
+gkstop = 0					;linee aggiunte per far ripartire correttamente il sequencer dopo l'HALT
+   gkMORPH_FLAG = 0
+
 outvalue "ledseq",0
 outvalue "ledon", 0
 outvalue "seqblink", 0
@@ -4662,10 +5062,12 @@ outvalue "seq",0
 outvalue "seqran",0
 turnoff2 970,0,0		;Stop sequential timeline
 turnoff2 969,0,0		;Stop random timeline
+
 turnoff2 92,0,0
 turnoff2 91,0,0
 turnoff2 975,0,0
 turnoff
+
 endin
 
 ;==========================================
@@ -4699,6 +5101,7 @@ start:
 iend 		tab_i index*5, 900		 ; read 1st element of descriptor iaddress-th  (flag di ultimo elemento)
 
 index = index + 1
+;print iend
 if iend !=0 igoto stop
 
 igoto start
@@ -6419,19 +6822,19 @@ instr 1001 ; -----> Set factory preset
 
 outvalue "Lev_1", 0.25
 outvalue "pad_X1", 0.1
-outvalue "pad_Y1", 0.8
+outvalue "pad_Y1", 0.9
 outvalue "Fun_1", 0.1
 outvalue "indx1", 1
 outvalue "XFADE", 0.5
 outvalue "vox", 4
-outvalue "knob154", 2
+outvalue "knob154", 1 ; ...step
 outvalue "AT1", 0.9
 outvalue "RE1", 0.9
 outvalue "REVSEND1",1.0
 outvalue "ran1amp",0.001
 outvalue "ran1vel", 0.104
 
-outvalue "Lev_2", 0.25
+outvalue "Lev_2", 0.5
 outvalue "pad_X2", 0.1
 outvalue "pad_Y2", 0.8
 outvalue "Fun_1", 0.1
@@ -6450,18 +6853,24 @@ outvalue "band", 0.1
 outvalue "CAR_min", 1
 outvalue "CAR_max", 1
 
-outvalue "MOD_min", 2
-outvalue "MOD_max", 2
+outvalue "MOD_min", 1
+outvalue "MOD_max", 1
 
-outvalue "over", 0.4
+outvalue "over", 0.5
 
 
-outvalue "ROOM", 0.99
+outvalue "ROOM", 0.95
 outvalue "HF", 0.7
 outvalue "REVLEV", 1.0
 
+outvalue "OnOff_Chop",0
+;outvalue "chop_dur", 0.05
+
+outvalue "led_G", 0
 
 endin
+
+
 </CsInstruments>
 <CsScore>
 
@@ -6475,26 +6884,47 @@ f301	0 2048 -2 0			    ;A copy of f300
 f302	0 2048 -2 0			    ;Contains pitch grid after a snap read
 f303	0  2   -2  301 302 	;List
 
+
+f600 0 4 -2 602 603 604 605  
+f601 0 1024 10 1 /*init contents of 601 dont matter */
+
+
+
+f602 0 1025  20 5
+f603 0 1025 7 0 64 1 768 1 64 0
+f604 0 1025 7 0 6 1 500 0.3 500 0 6 0 12 0 
+f605 0 1025 5 1 1024 0.001
+
+
 f701  	0  2   -2  703 704	;Contains the list of tables for snap morphing  (2 tables)
-f702  	0  64  10  1			; Morph table (don't care initial content)
-f703  	0  64  -2  0  		    ; 1st table
-f704  	0  64  -2  0			; 2nd table
+f702  	0  128  10  1			; Morph table (don't care initial content)
+f703  	0  128  -2  0  		; 1st table
+f704  	0  128  -2  0			; 2nd table
 
 f800 0   32 7 1 15 1 1 -1 15 -1
-;             y/n On  Prn  Tt
-f900 0 512 -7 1 512 1
+;            
+f900 0 512 -7 1 512 1			;
 f901 0 512 -2 0
 ;MKG f902 0 512 -2 0
 
 f902 0 512 7 1 128 1 0 0 384 0
+
+f903 0 1024 -19 1 0 0 1  ; UNITY FUNCTION FOR CHOP/GRAIN
 ;-------------------------------------------------
 
 i 1 0 36000
 i 4 0 36000
 
-i 9 0 0.1
-i 60 0 36000
 
+i 7 0.1 0.1
+i 8 0 36000
+i 9 0 0.1
+;i 15 0 3600
+i 60 0 36000
+i 61 0 36000
+
+
+i 161 0 36000
 i 901 0 36000
 i 902 0 36000
 i 903 0 36000
@@ -6510,24 +6940,24 @@ i 900 0 36000
 i 976 0 36000
 
 i 991 0 36000
-				i 992 0 36000
+i 992 0 36000
 		
 
-;i 997 0 36000
+
 i 999 0 36000
 
 i 1001  0 0.1
-i 1002  0 36000
+i 1002  0.1 36000
 e
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>86</x>
- <y>121</y>
- <width>1476</width>
- <height>881</height>
+ <x>323</x>
+ <y>82</y>
+ <width>1521</width>
+ <height>895</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -6535,6 +6965,171 @@ e
   <g>129</g>
   <b>185</b>
  </bgcolor>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>2</x>
+  <y>41</y>
+  <width>383</width>
+  <height>820</height>
+  <uuid>{fc7d52f7-0833-4f1e-b03c-093d233b237e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>51</r>
+   <g>51</g>
+   <b>51</b>
+  </color>
+  <bgcolor mode="background">
+   <r>20</r>
+   <g>103</g>
+   <b>160</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>6</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBGraph" version="2">
+  <objectName/>
+  <x>265</x>
+  <y>201</y>
+  <width>101</width>
+  <height>72</height>
+  <uuid>{2d5e0e62-a83e-4aae-9142-15280207bdd2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <value>65</value>
+  <objectName2>dispSHAPE</objectName2>
+  <zoomx>1.00000000</zoomx>
+  <zoomy>1.00000000</zoomy>
+  <dispx>1.00000000</dispx>
+  <dispy>1.00000000</dispy>
+  <modex>lin</modex>
+  <modey>lin</modey>
+  <all>true</all>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>533</x>
+  <y>536</y>
+  <width>231</width>
+  <height>137</height>
+  <uuid>{2d9a23db-3207-4890-b3b4-488540758566}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>109</r>
+   <g>122</g>
+   <b>55</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>6</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>388</x>
+  <y>675</y>
+  <width>376</width>
+  <height>186</height>
+  <uuid>{0df9a44f-4ebd-4c8e-adba-c2a15ace3bfd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Helvetica</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>1</r>
+   <g>143</g>
+   <b>194</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>6</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>584</x>
+  <y>686</y>
+  <width>57</width>
+  <height>33</height>
+  <uuid>{deb42eb7-4bc7-4300-8c24-678d680d67df}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>254</r>
+   <g>204</g>
+   <b>102</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>2</borderradius>
+  <borderwidth>4</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>504</x>
+  <y>685</y>
+  <width>57</width>
+  <height>33</height>
+  <uuid>{9a53f95c-2380-41f8-9f1d-c71c02f2b328}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <label/>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>252</r>
+   <g>1</g>
+   <b>7</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>border</bordermode>
+  <borderradius>2</borderradius>
+  <borderwidth>4</borderwidth>
+ </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>1088</x>
@@ -6624,35 +7219,6 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>4</x>
-  <y>41</y>
-  <width>382</width>
-  <height>820</height>
-  <uuid>{fc7d52f7-0833-4f1e-b03c-093d233b237e}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label/>
-  <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>51</r>
-   <g>51</g>
-   <b>51</b>
-  </color>
-  <bgcolor mode="background">
-   <r>41</r>
-   <g>103</g>
-   <b>154</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>6</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject type="BSBLabel" version="2">
-  <objectName/>
   <x>766</x>
   <y>641</y>
   <width>320</width>
@@ -6680,35 +7246,6 @@ e
   <borderradius>6</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
-  <objectName/>
-  <x>388</x>
-  <y>674</y>
-  <width>376</width>
-  <height>187</height>
-  <uuid>{0df9a44f-4ebd-4c8e-adba-c2a15ace3bfd}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label/>
-  <alignment>left</alignment>
-  <font>Helvetica</font>
-  <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>1</r>
-   <g>143</g>
-   <b>194</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>6</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>Lev_1</objectName>
   <x>67</x>
@@ -6721,7 +7258,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.25383931</value>
+  <value>0.25000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -6735,17 +7272,17 @@ e
   <height>128</height>
   <uuid>{ca339ec4-5284-43c2-a15b-eca1d7a653a3}</uuid>
   <visible>true</visible>
-  <midichan>0</midichan>
+  <midichan>1</midichan>
   <midicc>0</midicc>
   <objectName2>pad_Y1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.27443520</xValue>
-  <yValue>0.89266944</yValue>
+  <xValue>0.18750000</xValue>
+  <yValue>0.84375000</yValue>
   <type>point</type>
-  <pointsize>10</pointsize>
+  <pointsize>12</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
@@ -6775,10 +7312,10 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.10313481</xValue>
-  <yValue>0.80293038</yValue>
+  <xValue>0.10000000</xValue>
+  <yValue>0.80000000</yValue>
   <type>point</type>
-  <pointsize>10</pointsize>
+  <pointsize>12</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
@@ -6812,25 +7349,6 @@ e
   <latch>false</latch>
   <latched>true</latched>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
-  <objectName>_RAND1</objectName>
-  <x>0</x>
-  <y>352</y>
-  <width>127</width>
-  <height>31</height>
-  <uuid>{bda0bdb3-2374-49ae-82b2-e3465c8a3fd2}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <type>event</type>
-  <pressedValue>0.00000000</pressedValue>
-  <stringvalue/>
-  <text>Rand_1</text>
-  <image>/</image>
-  <eventLine>i2 0 -1 3</eventLine>
-  <latch>false</latch>
-  <latched>false</latched>
- </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>ran1vel</objectName>
   <x>3</x>
@@ -6843,7 +7361,7 @@ e
   <midicc>0</midicc>
   <minimum>0.01000000</minimum>
   <maximum>4.00000000</maximum>
-  <value>0.12165305</value>
+  <value>0.10400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -6861,7 +7379,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00100000</minimum>
   <maximum>0.20000000</maximum>
-  <value>0.00839099</value>
+  <value>0.00100000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -6879,7 +7397,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>4.00000000</maximum>
-  <value>1.13084409</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -6912,7 +7430,7 @@ e
   <uuid>{ef32a9a3-d053-47ba-971d-cf3e814341ec}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -6920,10 +7438,10 @@ e
   <image>/</image>
   <eventLine>i2 0 -1 2</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName>Rand_2</objectName>
+  <objectName>_RAND2</objectName>
   <x>233</x>
   <y>348</y>
   <width>127</width>
@@ -6931,14 +7449,14 @@ e
   <uuid>{e8870e05-5ee3-4a34-91b5-82af8f1103b6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Rand_2</text>
   <image>/</image>
-  <eventLine>i2 0 -1 4</eventLine>
-  <latch>false</latch>
+  <eventLine>i22 0 -1 </eventLine>
+  <latch>true</latch>
   <latched>false</latched>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -7003,7 +7521,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.254</label>
+  <label>0.250</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -7025,7 +7543,7 @@ e
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
   <x>125</x>
-  <y>69</y>
+  <y>71</y>
   <width>197</width>
   <height>25</height>
   <uuid>{1c5835d1-a5b3-4955-870a-58e57c86241d}</uuid>
@@ -7092,7 +7610,7 @@ e
   <midicc>0</midicc>
   <minimum>0.17000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.19883767</value>
+  <value>0.20000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -7129,9 +7647,9 @@ e
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>SHAPE</objectName>
-  <x>246</x>
-  <y>205</y>
-  <width>120</width>
+  <x>261</x>
+  <y>180</y>
+  <width>110</width>
   <height>22</height>
   <uuid>{067f5083-a238-490a-aa22-6ac18c48de7e}</uuid>
   <visible>true</visible>
@@ -7352,13 +7870,13 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_GEO</objectName>
-  <x>623</x>
+  <x>620</x>
   <y>64</y>
-  <width>134</width>
+  <width>143</width>
   <height>28</height>
   <uuid>{9422b830-28f5-473d-bafd-6e348a4a1ed1}</uuid>
   <visible>true</visible>
-  <midichan>0</midichan>
+  <midichan>1</midichan>
   <midicc>0</midicc>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
@@ -7379,7 +7897,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>28784.599</label>
+  <label>22061.979</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -7437,7 +7955,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>16.000</label>
+  <label>502.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -7526,7 +8044,7 @@ e
   <midicc>0</midicc>
   <minimum>1.00000000</minimum>
   <maximum>400.00000000</maximum>
-  <value>1.00000000</value>
+  <value>56.41666700</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -7598,7 +8116,7 @@ e
   <midicc>0</midicc>
   <minimum>-0.01000000</minimum>
   <maximum>0.01000000</maximum>
-  <value>0.00028200</value>
+  <value>0.00098600</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -7643,7 +8161,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <alignment>left</alignment>
+  <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <color>
@@ -7660,17 +8178,17 @@ e
   <minimum>1</minimum>
   <maximum>40</maximum>
   <randomizable group="0">false</randomizable>
-  <value>36</value>
+  <value>32</value>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
-  <x>952</x>
+  <objectName>_HARM</objectName>
+  <x>947</x>
   <y>59</y>
-  <width>126</width>
+  <width>138</width>
   <height>27</height>
   <uuid>{dd81d472-15c7-46fe-a2ba-79e0844243b3}</uuid>
   <visible>true</visible>
-  <midichan>0</midichan>
+  <midichan>1</midichan>
   <midicc>0</midicc>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
@@ -7679,7 +8197,7 @@ e
   <image>/</image>
   <eventLine>i12 0 -1</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -7743,8 +8261,8 @@ e
   <objectName/>
   <x>388</x>
   <y>536</y>
-  <width>376</width>
-  <height>136</height>
+  <width>143</width>
+  <height>137</height>
   <uuid>{1193ada3-1abf-49d6-8846-aa21b454804d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -7760,9 +8278,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="background">
-   <r>121</r>
-   <g>147</g>
-   <b>181</b>
+   <r>143</r>
+   <g>153</g>
+   <b>179</b>
   </bgcolor>
   <bordermode>border</bordermode>
   <borderradius>6</borderradius>
@@ -8086,7 +8604,7 @@ e
   <stringvalue/>
   <text>Read Snap</text>
   <image>/</image>
-  <eventLine>i91 0 3600</eventLine>
+  <eventLine>i91 0 0.1</eventLine>
   <latch>false</latch>
   <latched>true</latched>
  </bsbObject>
@@ -8138,7 +8656,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/Users/eug/Documents/CSD/Stria/NOISES.txt</label>
+  <label>/Users/eug/Documents/CSD/Stria/Chop_test.txt</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -8149,40 +8667,11 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>237</r>
-   <g>237</g>
-   <b>237</b>
+   <r>236</r>
+   <g>236</g>
+   <b>236</b>
   </bgcolor>
   <background>nobackground</background>
- </bsbObject>
- <bsbObject type="BSBDisplay" version="2">
-  <objectName>CAR_min</objectName>
-  <x>425</x>
-  <y>382</y>
-  <width>50</width>
-  <height>22</height>
-  <uuid>{779bd783-4f70-48e6-b257-c27bb7323ed9}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>1.000</label>
-  <alignment>center</alignment>
-  <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>255</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>0</r>
-   <g>64</g>
-   <b>128</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -8211,35 +8700,6 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject type="BSBDisplay" version="2">
-  <objectName>CAR_max</objectName>
-  <x>485</x>
-  <y>382</y>
-  <width>50</width>
-  <height>22</height>
-  <uuid>{43c84062-ea57-4457-b8b4-d5247404f64d}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>1.262</label>
-  <alignment>center</alignment>
-  <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>255</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>0</r>
-   <g>64</g>
-   <b>128</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -8274,7 +8734,7 @@ e
  <bsbObject type="BSBVSlider" version="2">
   <objectName>MOD_min</objectName>
   <x>645</x>
-  <y>403</y>
+  <y>404</y>
   <width>18</width>
   <height>80</height>
   <uuid>{aac066de-93ed-498c-ae63-41072fec5f90}</uuid>
@@ -8282,41 +8742,12 @@ e
   <midichan>0</midichan>
   <midicc>0</midicc>
   <minimum>1.00000000</minimum>
-  <maximum>13.00000000</maximum>
-  <value>1.95638530</value>
+  <maximum>14.00000000</maximum>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject type="BSBDisplay" version="2">
-  <objectName>MOD_min</objectName>
-  <x>627</x>
-  <y>382</y>
-  <width>50</width>
-  <height>22</height>
-  <uuid>{e41fa2ef-ca07-4879-aaef-f4a235bda239}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>1.956</label>
-  <alignment>center</alignment>
-  <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>255</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>0</r>
-   <g>64</g>
-   <b>128</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -8345,53 +8776,6 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject type="BSBVSlider" version="2">
-  <objectName>MOD_max</objectName>
-  <x>704</x>
-  <y>403</y>
-  <width>16</width>
-  <height>80</height>
-  <uuid>{cc339e7a-6fc5-409a-b59b-76664373c173}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <minimum>1.00000000</minimum>
-  <maximum>13.00000000</maximum>
-  <value>2.10685600</value>
-  <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
-  <resolution>-1.00000000</resolution>
-  <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject type="BSBDisplay" version="2">
-  <objectName>MOD_max</objectName>
-  <x>689</x>
-  <y>382</y>
-  <width>48</width>
-  <height>22</height>
-  <uuid>{5ea68fd2-12a5-4cd3-8fe4-1a3f0dd28192}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>2.107</label>
-  <alignment>center</alignment>
-  <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>255</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>0</r>
-   <g>64</g>
-   <b>128</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>3</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -8426,27 +8810,27 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>4</x>
-  <y>6</y>
+  <y>4</y>
   <width>1425</width>
-  <height>33</height>
+  <height>35</height>
   <uuid>{dc64f028-5104-43f1-9ab8-e4f576ac58ab}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>            StriaCSO 2.70 -Multilevel Interactive Sound Synthesizer</label>
+  <label>            StriaCSO v. 3.0a -Multilevel Interactive Sound Synthesizer - E.G.</label>
   <alignment>left</alignment>
   <font>Papyrus</font>
-  <fontsize>20</fontsize>
+  <fontsize>22</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </color>
   <bgcolor mode="background">
-   <r>204</r>
-   <g>179</g>
-   <b>127</b>
+   <r>16</r>
+   <g>128</g>
+   <b>128</b>
   </bgcolor>
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
@@ -8464,7 +8848,7 @@ e
   <midicc>0</midicc>
   <minimum>1.00000000</minimum>
   <maximum>8.00000000</maximum>
-  <value>1.17385302</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -8482,7 +8866,7 @@ e
   <midicc>0</midicc>
   <minimum>0.01000000</minimum>
   <maximum>4.00000000</maximum>
-  <value>0.12845079</value>
+  <value>0.10400000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -8586,7 +8970,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.893</label>
+  <label>0.844</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -8642,7 +9026,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>240.00000000</maximum>
-  <value>30.85714286</value>
+  <value>6.85714286</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -8660,7 +9044,7 @@ e
   <midicc>0</midicc>
   <minimum>-5.00000000</minimum>
   <maximum>5.00000000</maximum>
-  <value>1.80000000</value>
+  <value>0.85714286</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -8734,7 +9118,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.800</label>
+  <label>0.857</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -8765,7 +9149,7 @@ e
   <midicc>0</midicc>
   <minimum>0.20000000</minimum>
   <maximum>3.00000000</maximum>
-  <value>0.46752260</value>
+  <value>0.47000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -8783,7 +9167,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00010000</minimum>
   <maximum>400.00000000</maximum>
-  <value>0.18420057</value>
+  <value>0.10000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -8844,7 +9228,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -8857,7 +9241,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.500</label>
+  <label>1.224</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -8917,7 +9301,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.40436147</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -9037,7 +9421,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.274</label>
+  <label>0.188</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -9066,7 +9450,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>9.886</label>
+  <label>93.938</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -9153,7 +9537,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.174</label>
+  <label>0.100</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -9182,7 +9566,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.131</label>
+  <label>1.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -9380,72 +9764,6 @@ e
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
-  <objectName>led4</objectName>
-  <x>328</x>
-  <y>359</y>
-  <width>11</width>
-  <height>6</height>
-  <uuid>{0322d9a7-cf83-4dd7-a5d4-689b3c265ba4}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <objectName2>led</objectName2>
-  <xMin>0.00000000</xMin>
-  <xMax>1.00000000</xMax>
-  <yMin>0.00000000</yMin>
-  <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
-  <type>fill</type>
-  <pointsize>1</pointsize>
-  <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>102</r>
-   <g>204</g>
-   <b>255</b>
-  </color>
-  <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
- </bsbObject>
- <bsbObject type="BSBController" version="2">
-  <objectName>led3</objectName>
-  <x>96</x>
-  <y>363</y>
-  <width>11</width>
-  <height>6</height>
-  <uuid>{24bed986-0b12-4f2c-99c3-6ee0215722bb}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <objectName2>led</objectName2>
-  <xMin>0.00000000</xMin>
-  <xMax>1.00000000</xMax>
-  <yMin>0.00000000</yMin>
-  <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
-  <type>fill</type>
-  <pointsize>1</pointsize>
-  <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>255</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
- </bsbObject>
- <bsbObject type="BSBController" version="2">
   <objectName>hor153</objectName>
   <x>1131</x>
   <y>78</y>
@@ -9461,7 +9779,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.67603210</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -9494,7 +9812,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.73698389</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -9550,7 +9868,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>550.311</label>
+  <label>256.995</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -9579,7 +9897,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>660.407</label>
+  <label>256.995</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -9608,7 +9926,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>770.508</label>
+  <label>259.822</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -9637,7 +9955,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>880.614</label>
+  <label>262.680</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -9666,7 +9984,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>990.723</label>
+  <label>169.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -9695,7 +10013,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1100.837</label>
+  <label>273.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -9724,7 +10042,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1266.012</label>
+  <label>442.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -9753,7 +10071,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>440.000</label>
+  <label>715.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -9774,15 +10092,15 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>disp_rand1</objectName>
-  <x>129</x>
-  <y>326</y>
+  <x>148</x>
+  <y>328</y>
   <width>53</width>
   <height>22</height>
   <uuid>{e3edd5e6-3729-40e6-84f1-ab7274249bd6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>-549.287</label>
+  <label>-47.136</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -9805,8 +10123,8 @@ e
   <objectName>status</objectName>
   <x>799</x>
   <y>620</y>
-  <width>60</width>
-  <height>19</height>
+  <width>62</width>
+  <height>21</height>
   <uuid>{6113eb38-586d-4b3a-b8fc-7e10e873c5b0}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -9834,8 +10152,8 @@ e
   <objectName>chan</objectName>
   <x>864</x>
   <y>620</y>
-  <width>60</width>
-  <height>19</height>
+  <width>61</width>
+  <height>20</height>
   <uuid>{000770d1-0211-466f-aa8d-69872017a014}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -9863,8 +10181,8 @@ e
   <objectName>data1</objectName>
   <x>930</x>
   <y>620</y>
-  <width>60</width>
-  <height>19</height>
+  <width>58</width>
+  <height>20</height>
   <uuid>{6b53557a-be5b-4cc9-aeb7-4a784f894795}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -9893,7 +10211,7 @@ e
   <x>1000</x>
   <y>620</y>
   <width>60</width>
-  <height>19</height>
+  <height>20</height>
   <uuid>{a5ae21f2-a55c-4040-894e-29484827eb0c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -9981,17 +10299,17 @@ e
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>ROOM</objectName>
-  <x>513</x>
-  <y>565</y>
-  <width>21</width>
-  <height>70</height>
+  <x>401</x>
+  <y>582</y>
+  <width>23</width>
+  <height>52</height>
   <uuid>{b1ac27ad-299f-4dcc-84fe-46adc41d9aaa}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>0.99000000</maximum>
-  <value>0.98999991</value>
+  <value>0.95000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -10017,17 +10335,17 @@ e
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>HF</objectName>
-  <x>558</x>
-  <y>565</y>
+  <x>446</x>
+  <y>582</y>
   <width>21</width>
-  <height>70</height>
+  <height>52</height>
   <uuid>{ea1debea-a58d-429f-96b3-0e432a56a825}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.71308423</value>
+  <value>0.70000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -10035,8 +10353,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>550</x>
-  <y>634</y>
+  <x>439</x>
+  <y>635</y>
   <width>40</width>
   <height>22</height>
   <uuid>{4357487e-cd33-48fd-af53-15d1ab732f91}</uuid>
@@ -10064,25 +10382,25 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>259</x>
-  <y>229</y>
-  <width>97</width>
-  <height>24</height>
+  <x>266</x>
+  <y>202</y>
+  <width>98</width>
+  <height>21</height>
   <uuid>{bc937f22-a17c-499e-9899-b00f9d68c7ad}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>MiXTURE Shape</label>
+  <label>MIXTURE Shape</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>16</r>
+   <g>128</g>
+   <b>64</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -10122,17 +10440,17 @@ e
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>REVLEV</objectName>
-  <x>602</x>
-  <y>565</y>
+  <x>484</x>
+  <y>582</y>
   <width>21</width>
-  <height>70</height>
+  <height>52</height>
   <uuid>{d188e35c-727f-4468-8807-b4a66f84c07e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.99875388</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -10140,8 +10458,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>591</x>
-  <y>634</y>
+  <x>475</x>
+  <y>635</y>
   <width>51</width>
   <height>21</height>
   <uuid>{3675af4e-4763-4a90-aff7-8e086f74021f}</uuid>
@@ -10255,7 +10573,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
+  <xValue>1.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -10469,7 +10787,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>0</selectedIndex>
+  <selectedIndex>4</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
@@ -10529,7 +10847,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>2</selectedIndex>
+  <selectedIndex>3</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -10600,7 +10918,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <selected>true</selected>
+  <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -10615,7 +10933,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>65.406</label>
+  <label>91.900</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -10706,7 +11024,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>9</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
@@ -10837,7 +11155,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <selected>true</selected>
+  <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -10852,7 +11170,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>54.995</label>
+  <label>0.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -10919,7 +11237,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
+  <xValue>1.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -10952,7 +11270,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -10972,18 +11290,18 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>active</objectName>
-  <x>124</x>
-  <y>232</y>
+  <x>136</x>
+  <y>231</y>
   <width>43</width>
   <height>22</height>
   <uuid>{e1e8d964-5223-42d3-9487-08488ab2a1d3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>18.000</label>
+  <label>15.000</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
-  <fontsize>12</fontsize>
+  <fontsize>11</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -11061,7 +11379,7 @@ e
   <objectName>AT2</objectName>
   <x>250</x>
   <y>443</y>
-  <width>14</width>
+  <width>16</width>
   <height>82</height>
   <uuid>{900ecb0f-1661-4ed8-8e3c-68c2d5c7d99e}</uuid>
   <visible>true</visible>
@@ -11069,7 +11387,7 @@ e
   <midicc>0</midicc>
   <minimum>0.05000000</minimum>
   <maximum>0.90000000</maximum>
-  <value>0.89321844</value>
+  <value>0.90000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -11079,7 +11397,7 @@ e
   <objectName>RE2</objectName>
   <x>290</x>
   <y>443</y>
-  <width>14</width>
+  <width>16</width>
   <height>82</height>
   <uuid>{2d22ac08-8247-4e57-aa6e-ead2a14895a8}</uuid>
   <visible>true</visible>
@@ -11087,7 +11405,7 @@ e
   <midicc>0</midicc>
   <minimum>0.05000000</minimum>
   <maximum>0.90000000</maximum>
-  <value>0.87649063</value>
+  <value>0.90000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -11260,7 +11578,7 @@ e
   <objectName>vox</objectName>
   <x>9</x>
   <y>442</y>
-  <width>14</width>
+  <width>16</width>
   <height>84</height>
   <uuid>{2a19a4b3-4317-49b1-b238-fb1adcd4325b}</uuid>
   <visible>true</visible>
@@ -11268,7 +11586,7 @@ e
   <midicc>0</midicc>
   <minimum>1.00000000</minimum>
   <maximum>8.00000000</maximum>
-  <value>4.17445512</value>
+  <value>4.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -11278,7 +11596,7 @@ e
   <objectName>knob154</objectName>
   <x>39</x>
   <y>443</y>
-  <width>14</width>
+  <width>16</width>
   <height>82</height>
   <uuid>{beef446c-f708-43b2-8294-cbaf5b45a054}</uuid>
   <visible>true</visible>
@@ -11286,7 +11604,7 @@ e
   <midicc>0</midicc>
   <minimum>1.00000000</minimum>
   <maximum>9.00000000</maximum>
-  <value>2.08403806</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -11302,7 +11620,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>4.174</label>
+  <label>4.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -11331,7 +11649,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>2.084</label>
+  <label>1.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -11354,7 +11672,7 @@ e
   <objectName>AT1</objectName>
   <x>69</x>
   <y>442</y>
-  <width>14</width>
+  <width>16</width>
   <height>82</height>
   <uuid>{7d817cef-7686-4f7a-b429-22b938fe0e49}</uuid>
   <visible>true</visible>
@@ -11372,7 +11690,7 @@ e
   <objectName>RE1</objectName>
   <x>99</x>
   <y>442</y>
-  <width>14</width>
+  <width>16</width>
   <height>82</height>
   <uuid>{74dcef88-2ca2-4ea2-9ae4-a4dde400816d}</uuid>
   <visible>true</visible>
@@ -11390,7 +11708,7 @@ e
   <objectName>REVSEND1</objectName>
   <x>129</x>
   <y>442</y>
-  <width>14</width>
+  <width>16</width>
   <height>82</height>
   <uuid>{fb9efe43-88c0-475b-9f14-3b682984515d}</uuid>
   <visible>true</visible>
@@ -11437,7 +11755,7 @@ e
   <objectName>Lev_2</objectName>
   <x>290</x>
   <y>750</y>
-  <width>14</width>
+  <width>16</width>
   <height>72</height>
   <uuid>{57db54b2-e29a-4a69-a417-0c7e67be43a6}</uuid>
   <visible>true</visible>
@@ -11445,7 +11763,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.23909633</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -11455,7 +11773,7 @@ e
   <objectName>indx2</objectName>
   <x>336</x>
   <y>750</y>
-  <width>15</width>
+  <width>16</width>
   <height>72</height>
   <uuid>{ac76dcc5-6e09-40e2-94e4-19104e85055f}</uuid>
   <visible>true</visible>
@@ -11463,7 +11781,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>4.00000000</maximum>
-  <value>0.96728898</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -11479,7 +11797,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.239</label>
+  <label>0.500</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -11508,7 +11826,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.967</label>
+  <label>1.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -11589,7 +11907,7 @@ e
   <objectName>Fun_2</objectName>
   <x>243</x>
   <y>750</y>
-  <width>15</width>
+  <width>16</width>
   <height>72</height>
   <uuid>{1e0aa7c6-ded1-4434-be30-b7787198437a}</uuid>
   <visible>true</visible>
@@ -11597,7 +11915,7 @@ e
   <midicc>0</midicc>
   <minimum>1.00000000</minimum>
   <maximum>8.00000000</maximum>
-  <value>1.08480633</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -11613,7 +11931,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.085</label>
+  <label>0.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -11691,7 +12009,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
+  <xValue>1.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -11851,7 +12169,7 @@ e
  <bsbObject type="BSBHSlider" version="2">
   <objectName>XFADE</objectName>
   <x>153</x>
-  <y>611</y>
+  <y>609</y>
   <width>79</width>
   <height>16</height>
   <uuid>{71d90790-9d2c-4446-909a-edf670213a8f}</uuid>
@@ -11860,7 +12178,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.50855733</value>
+  <value>0.50000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -11869,7 +12187,7 @@ e
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>174</x>
-  <y>627</y>
+  <y>629</y>
   <width>44</width>
   <height>21</height>
   <uuid>{07b31920-1aeb-484c-845c-fd86c76a603a}</uuid>
@@ -11905,7 +12223,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.509</label>
+  <label>0.500</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -11940,7 +12258,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.80000000</xValue>
-  <yValue>0.50456077</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -11973,7 +12291,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.80000000</xValue>
-  <yValue>0.49543923</yValue>
+  <yValue>0.50000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -11992,15 +12310,15 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>disp_rand2</objectName>
-  <x>183</x>
-  <y>325</y>
-  <width>54</width>
-  <height>21</height>
+  <x>194</x>
+  <y>327</y>
+  <width>50</width>
+  <height>20</height>
   <uuid>{808d323d-6d70-49b4-be90-883c7a6cb84e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>-463.582</label>
+  <label>24.422</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -12162,13 +12480,13 @@ e
   <objectName>transtime</objectName>
   <x>1214</x>
   <y>652</y>
-  <width>73</width>
-  <height>25</height>
+  <width>75</width>
+  <height>26</height>
   <uuid>{3e4479f8-8d4d-4379-9c51-87b74fe92e57}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>3.418</label>
+  <label>6.863</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
@@ -12189,9 +12507,9 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName/>
-  <x>922</x>
+  <x>917</x>
   <y>296</y>
-  <width>116</width>
+  <width>124</width>
   <height>30</height>
   <uuid>{45582961-ca11-4ece-b3bc-daf5dfc8991f}</uuid>
   <visible>true</visible>
@@ -12247,7 +12565,7 @@ e
   <midicc>0</midicc>
   <bsbDropdownItemList>
    <bsbDropdownItem>
-    <name>About:   Stria is written by Eugenio Giordani as a tribute to prof. John Chowning - Ver. 2.70  - 15 Feb 2015</name>
+    <name>About:   Stria is written by Eugenio Giordani as a tribute to prof. John Chowning - Ver. 3.0a  - 27 Nov 2019</name>
     <value>0</value>
     <stringvalue/>
    </bsbDropdownItem>
@@ -12267,7 +12585,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
    <bsbDropdownItem>
-    <name>Contact: e.giordani@conservatoriorossini.it</name>
+    <name>Contact: eugenio.giordani18i@gmail.com</name>
     <value>4</value>
     <stringvalue/>
    </bsbDropdownItem>
@@ -12308,12 +12626,12 @@ e
   <objectName>button1</objectName>
   <x>624</x>
   <y>288</y>
-  <width>134</width>
+  <width>136</width>
   <height>32</height>
   <uuid>{fd7cec78-9036-41d2-989e-467c46de560c}</uuid>
   <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
+  <midichan>1</midichan>
+  <midicc>15</midicc>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -12462,8 +12780,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.04361470</xValue>
-  <yValue>0.04361470</yValue>
+  <xValue>0.00000000</xValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -12664,7 +12982,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.893</label>
+  <label>0.900</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -12693,7 +13011,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.876</label>
+  <label>0.900</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -12744,14 +13062,14 @@ e
  <bsbObject type="BSBDisplay" version="2">
   <objectName>ran1amp</objectName>
   <x>92</x>
-  <y>274</y>
+  <y>273</y>
   <width>41</width>
-  <height>22</height>
+  <height>20</height>
   <uuid>{daf46d05-620f-4261-8d12-f928493ccc53}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.008</label>
+  <label>0.001</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -12773,14 +13091,14 @@ e
  <bsbObject type="BSBDisplay" version="2">
   <objectName>ran1vel</objectName>
   <x>92</x>
-  <y>309</y>
+  <y>310</y>
   <width>41</width>
-  <height>22</height>
+  <height>20</height>
   <uuid>{c791519a-c4ac-41d3-bf86-7641dd8bf2fe}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.122</label>
+  <label>0.104</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -12801,8 +13119,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>235</x>
-  <y>271</y>
+  <x>250</x>
+  <y>276</y>
   <width>90</width>
   <height>21</height>
   <uuid>{89651332-834c-4a4c-88ae-5fc416a870ac}</uuid>
@@ -12830,15 +13148,15 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>ran2amp</objectName>
-  <x>324</x>
-  <y>273</y>
+  <x>322</x>
+  <y>274</y>
   <width>39</width>
-  <height>22</height>
+  <height>20</height>
   <uuid>{5e108611-300e-468a-b894-24b2c7c1886b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.010</label>
+  <label>0.001</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -12891,12 +13209,12 @@ e
   <x>322</x>
   <y>309</y>
   <width>39</width>
-  <height>22</height>
+  <height>20</height>
   <uuid>{23d34afa-69ba-43b3-9e51-009e167ce0ae}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.128</label>
+  <label>0.104</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -12949,7 +13267,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.42857100</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -13349,7 +13667,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -13382,7 +13700,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.42857100</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -13415,7 +13733,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.42857100</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -13448,7 +13766,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.42857100</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -13481,7 +13799,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.42857100</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -13514,7 +13832,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.42857100</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -13547,7 +13865,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.42857100</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -13580,7 +13898,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.42857100</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -13613,7 +13931,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.42857100</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -13646,7 +13964,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.42857100</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -13679,7 +13997,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.42857100</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -13712,7 +14030,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -14093,7 +14411,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -14126,7 +14444,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -15831,7 +16149,7 @@ e
   </bgcolor>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
-  <objectName>46</objectName>
+  <objectName>L46</objectName>
   <x>1006</x>
   <y>793</y>
   <width>20</width>
@@ -16019,19 +16337,19 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>false</latched>
+  <latched>true</latched>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>ROOM</objectName>
-  <x>504</x>
-  <y>540</y>
+  <x>392</x>
+  <y>562</y>
   <width>40</width>
-  <height>24</height>
+  <height>20</height>
   <uuid>{bc33df27-673c-453c-9376-8b9c2655b9ad}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.990</label>
+  <label>0.950</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -16052,15 +16370,15 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>HF</objectName>
-  <x>549</x>
-  <y>540</y>
+  <x>434</x>
+  <y>562</y>
   <width>40</width>
-  <height>24</height>
+  <height>20</height>
   <uuid>{ef115b20-1e9d-40a6-9618-28870d28e9ef}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.713</label>
+  <label>0.700</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -16081,15 +16399,15 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>REVLEV</objectName>
-  <x>594</x>
-  <y>540</y>
+  <x>476</x>
+  <y>562</y>
   <width>40</width>
-  <height>24</height>
+  <height>20</height>
   <uuid>{de72f0b2-2f96-483a-a369-afe9ad185839}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.999</label>
+  <label>1.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -16264,7 +16582,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/Users/eug/Documents/CSD/Stria/NOISES.txt-> Loaded !</label>
+  <label>/Users/eug/Documents/CSD/Stria/Chop_test.txt-> Loaded !</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -16295,7 +16613,7 @@ e
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/Users/eug/Documents/CSD/Stria/NOISES.txt</stringvalue>
+  <stringvalue>/Users/eug/Documents/CSD/Stria/Chop_test.txt</stringvalue>
   <text>Browse</text>
   <image>/</image>
   <eventLine/>
@@ -16331,7 +16649,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <selected>true</selected>
+  <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -16340,8 +16658,8 @@ e
   <objectName/>
   <x>926</x>
   <y>321</y>
-  <width>126</width>
-  <height>20</height>
+  <width>125</width>
+  <height>24</height>
   <uuid>{ba200599-b433-433e-9428-2f48c76e4b1c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -16388,7 +16706,7 @@ e
    <g>64</g>
    <b>128</b>
   </bgcolor>
-  <value>10.28571429</value>
+  <value>6.85714286</value>
   <resolution>0.01000000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>999999999999.00000000</maximum>
@@ -16461,7 +16779,7 @@ e
   <objectName>button1</objectName>
   <x>1218</x>
   <y>237</y>
-  <width>127</width>
+  <width>128</width>
   <height>32</height>
   <uuid>{17bd9b33-a756-476d-8201-3d835ecc43b9}</uuid>
   <visible>true</visible>
@@ -16472,8 +16790,8 @@ e
   <stringvalue/>
   <text>TIMER Start/Stop</text>
   <image>/</image>
-  <eventLine>i2 0 -1 5</eventLine>
-  <latch>false</latch>
+  <eventLine>i950 0 -1 </eventLine>
+  <latch>true</latch>
   <latched>true</latched>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -16544,7 +16862,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <selected>false</selected>
+  <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -16675,7 +16993,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>550.311</label>
+  <label>256.995</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
@@ -16791,7 +17109,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>Loading Snap 3 .... </label>
+  <label/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -16907,7 +17225,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.184</label>
+  <label>0.100</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -16936,7 +17254,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.468</label>
+  <label>0.470</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -16965,7 +17283,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.199</label>
+  <label>0.200</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -17145,14 +17463,19 @@ e
     <value>29</value>
     <stringvalue/>
    </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>MIXGRAN</name>
+    <value>30</value>
+    <stringvalue/>
+   </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>CAR_min</objectName>
   <x>441</x>
-  <y>403</y>
+  <y>404</y>
   <width>20</width>
   <height>80</height>
   <uuid>{6634db4e-2b53-4f3d-8344-85c2eca80ddc}</uuid>
@@ -17170,7 +17493,7 @@ e
  <bsbObject type="BSBVSlider" version="2">
   <objectName>CAR_max</objectName>
   <x>499</x>
-  <y>403</y>
+  <y>404</y>
   <width>20</width>
   <height>80</height>
   <uuid>{6a4fbb47-ca15-4e40-a026-faa746cb1772}</uuid>
@@ -17179,7 +17502,7 @@ e
   <midicc>0</midicc>
   <minimum>1.00000000</minimum>
   <maximum>14.00000000</maximum>
-  <value>1.26223335</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -17215,7 +17538,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.44000000</value>
+  <value>0.78000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -17251,7 +17574,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.62000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -17287,7 +17610,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.52000000</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -17403,7 +17726,7 @@ e
    <g>0</g>
    <b>128</b>
   </bgcolor>
-  <value>1.30400000</value>
+  <value>0.62000000</value>
   <resolution>0.00100000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>99999999999999.00000000</maximum>
@@ -17663,7 +17986,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <selected>true</selected>
+  <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -18041,8 +18364,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>499</x>
-  <y>634</y>
+  <x>396</x>
+  <y>635</y>
   <width>48</width>
   <height>22</height>
   <uuid>{670a3087-8a3d-49ce-bc5b-a83ff3bdadda}</uuid>
@@ -18351,7 +18674,7 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
-  <x>512</x>
+  <x>508</x>
   <y>689</y>
   <width>49</width>
   <height>25</height>
@@ -18391,7 +18714,7 @@ e
    <g>230</g>
    <b>97</b>
   </bgcolor>
-  <value>100.00000000</value>
+  <value>20.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>0.00000000</minimum>
   <maximum>3600.00000000</maximum>
@@ -18403,7 +18726,7 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>LED_WRITE</objectName>
-  <x>567</x>
+  <x>566</x>
   <y>697</y>
   <width>12</width>
   <height>12</height>
@@ -18444,7 +18767,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>24</label>
+  <label>19.992</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -18498,9 +18821,9 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
-  <x>583</x>
+  <x>588</x>
   <y>690</y>
-  <width>56</width>
+  <width>50</width>
   <height>25</height>
   <uuid>{f7f107a3-7708-4e72-93b9-af57ac0d6642}</uuid>
   <visible>true</visible>
@@ -18575,9 +18898,9 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
-  <x>1222</x>
+  <x>1220</x>
   <y>296</y>
-  <width>76</width>
+  <width>82</width>
   <height>25</height>
   <uuid>{a2bbbbbf-433d-4661-9061-b272524452af}</uuid>
   <visible>true</visible>
@@ -18627,9 +18950,9 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>ledton</objectName>
-  <x>1089</x>
+  <x>1091</x>
   <y>350</y>
-  <width>25</width>
+  <width>23</width>
   <height>5</height>
   <uuid>{1fd49133-263e-4cf3-9269-670cf0696b49}</uuid>
   <visible>true</visible>
@@ -18662,7 +18985,7 @@ e
   <objectName>button1</objectName>
   <x>1352</x>
   <y>297</y>
-  <width>70</width>
+  <width>74</width>
   <height>25</height>
   <uuid>{a83da1f0-11f9-43e1-848d-56f53417d434}</uuid>
   <visible>true</visible>
@@ -18681,7 +19004,7 @@ e
   <objectName>button1</objectName>
   <x>1354</x>
   <y>380</y>
-  <width>72</width>
+  <width>78</width>
   <height>28</height>
   <uuid>{2ed98655-8698-407c-baa9-d86ec0e0a03c}</uuid>
   <visible>true</visible>
@@ -18700,7 +19023,7 @@ e
   <objectName>button1</objectName>
   <x>1224</x>
   <y>380</y>
-  <width>72</width>
+  <width>78</width>
   <height>28</height>
   <uuid>{f9634069-6c10-4295-9cda-91b30f526e04}</uuid>
   <visible>true</visible>
@@ -18761,7 +19084,7 @@ e
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/Users/eug/Documents/CSD/Stria/Anthony_Seq.txt</stringvalue>
+  <stringvalue>/Users/eug/Documents/CSD/Stria/EUGSEQ_new.txt</stringvalue>
   <text>Browse</text>
   <image>/</image>
   <eventLine/>
@@ -18773,7 +19096,7 @@ e
   <x>1141</x>
   <y>467</y>
   <width>44</width>
-  <height>20</height>
+  <height>21</height>
   <uuid>{04f186ef-53e1-4b58-bcd9-c426ef04c072}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -18802,7 +19125,7 @@ e
   <x>1186</x>
   <y>467</y>
   <width>46</width>
-  <height>20</height>
+  <height>21</height>
   <uuid>{e6886748-0a01-4848-9bc6-3231f1a3621c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -18831,7 +19154,7 @@ e
   <x>1233</x>
   <y>467</y>
   <width>44</width>
-  <height>20</height>
+  <height>21</height>
   <uuid>{5ffb1ede-547d-44a7-bd27-27bcf4327cd1}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -18860,7 +19183,7 @@ e
   <x>1278</x>
   <y>467</y>
   <width>46</width>
-  <height>20</height>
+  <height>21</height>
   <uuid>{00fce5c5-3c03-4ab1-a104-a14fe3629afa}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -18911,14 +19234,14 @@ e
   <minimum>0</minimum>
   <maximum>99</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>16</value>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>readtype</objectName>
   <x>1325</x>
   <y>467</y>
   <width>46</width>
-  <height>20</height>
+  <height>21</height>
   <uuid>{a9c8025d-1d2c-4af7-98d2-c12fed91c805}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -19143,7 +19466,7 @@ e
   <minimum>1</minimum>
   <maximum>90</maximum>
   <randomizable group="0">false</randomizable>
-  <value>6.002</value>
+  <value>6</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>den</objectName>
@@ -19172,7 +19495,7 @@ e
   <minimum>1</minimum>
   <maximum>90</maximum>
   <randomizable group="0">false</randomizable>
-  <value>4</value>
+  <value>4.9</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>outf</objectName>
@@ -19201,7 +19524,7 @@ e
   <minimum>50</minimum>
   <maximum>400</maximum>
   <randomizable group="0">false</randomizable>
-  <value>202.817</value>
+  <value>91.9</value>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>outf</objectName>
@@ -19215,7 +19538,7 @@ e
   <midicc>0</midicc>
   <minimum>50.00000000</minimum>
   <maximum>400.00000000</maximum>
-  <value>202.81690141</value>
+  <value>91.90000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -19248,7 +19571,7 @@ e
   <minimum>1</minimum>
   <maximum>400</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>56.4167</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>exp</objectName>
@@ -19277,7 +19600,7 @@ e
   <minimum>-0.01</minimum>
   <maximum>0.01</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.000282</value>
+  <value>0.000986</value>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse3</objectName>
@@ -19291,7 +19614,7 @@ e
   <midicc>0</midicc>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/Users/eug/Desktop/provarec.wav</stringvalue>
+  <stringvalue>/Users/eug/Documents/CSD/recordSTRIA.wav</stringvalue>
   <text>Browse Soundfile</text>
   <image>/</image>
   <eventLine/>
@@ -19387,7 +19710,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>5.00000000</value>
+  <value>3.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
   <maximum>48.00000000</maximum>
@@ -19453,7 +19776,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>-1.00000000</value>
+  <value>2.00000000</value>
   <resolution>0.10000000</resolution>
   <minimum>-5.00000000</minimum>
   <maximum>5.00000000</maximum>
@@ -19519,7 +19842,7 @@ e
   <minimum>1</minimum>
   <maximum>30</maximum>
   <randomizable group="0">false</randomizable>
-  <value>8</value>
+  <value>13</value>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName/>
@@ -19529,22 +19852,22 @@ e
   <height>33</height>
   <uuid>{3057a1e5-1bac-4563-91b4-2fb6cc9aed63}</uuid>
   <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
+  <midichan>1</midichan>
+  <midicc>99</midicc>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
   <text>Gauss Shot</text>
   <image>/</image>
-  <eventLine>i3 0 -1</eventLine>
+  <eventLine>i3 0 0.1</eventLine>
   <latch>false</latch>
   <latched>false</latched>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button495</objectName>
-  <x>921</x>
+  <x>916</x>
   <y>274</y>
-  <width>116</width>
+  <width>124</width>
   <height>22</height>
   <uuid>{a3a903ec-7d67-4b2f-a770-c69646640a8b}</uuid>
   <visible>true</visible>
@@ -19586,7 +19909,7 @@ e
   <minimum>0.0001</minimum>
   <maximum>400</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.184201</value>
+  <value>0.1</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>metronome</objectName>
@@ -19615,7 +19938,7 @@ e
   <minimum>0.1</minimum>
   <maximum>20</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>2</value>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
@@ -19627,7 +19950,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/Users/eug/Documents/CSD/Stria/Anthony_Seq.txt</label>
+  <label>/Users/eug/Documents/CSD/Stria/EUGSEQ_new.txt</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19638,9 +19961,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>237</r>
-   <g>237</g>
-   <b>237</b>
+   <r>236</r>
+   <g>236</g>
+   <b>236</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -19654,7 +19977,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>provarec.wav</label>
+  <label>/Users/eug/Documents/CSD/recordSTRIA.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19665,15 +19988,15 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>237</r>
-   <g>237</g>
-   <b>237</b>
+   <r>236</r>
+   <g>236</g>
+   <b>236</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>seq</objectName>
-  <x>1229</x>
+  <x>1227</x>
   <y>308</y>
   <width>7</width>
   <height>4</height>
@@ -19706,15 +20029,15 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>393</x>
-  <y>542</y>
-  <width>60</width>
-  <height>23</height>
+  <x>390</x>
+  <y>538</y>
+  <width>54</width>
+  <height>21</height>
   <uuid>{7974ef0c-e8b3-4bbe-a5c4-cfe0f8ff9524}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>Reverb </label>
+  <label>Reverb</label>
   <alignment>left</alignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
@@ -19732,36 +20055,6 @@ e
   <bordermode>noborder</bordermode>
   <borderradius>6</borderradius>
   <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject type="BSBDropdown" version="2">
-  <objectName>_datares</objectName>
-  <x>464</x>
-  <y>722</y>
-  <width>75</width>
-  <height>22</height>
-  <uuid>{035355d3-a1af-4196-bc06-77ad8450e509}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <bsbDropdownItemList>
-   <bsbDropdownItem>
-    <name>16 bit</name>
-    <value>0</value>
-    <stringvalue/>
-   </bsbDropdownItem>
-   <bsbDropdownItem>
-    <name> 24 bit</name>
-    <value>1</value>
-    <stringvalue/>
-   </bsbDropdownItem>
-   <bsbDropdownItem>
-    <name> 32 bit</name>
-    <value>2</value>
-    <stringvalue/>
-   </bsbDropdownItem>
-  </bsbDropdownItemList>
-  <selectedIndex>2</selectedIndex>
-  <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -19807,8 +20100,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>2.00000000</yMax>
-  <xValue>0.11076951</xValue>
-  <yValue>0.11076951</yValue>
+  <xValue>0.00000000</xValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -19827,15 +20120,15 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>mpercent</objectName>
-  <x>1374</x>
-  <y>697</y>
-  <width>38</width>
+  <x>1370</x>
+  <y>696</y>
+  <width>45</width>
   <height>23</height>
   <uuid>{786c51b2-b8d3-490b-a051-e23bc85cb6e8}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>4.361</label>
+  <label>0.000</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>11</fontsize>
@@ -19856,8 +20149,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>1404</x>
-  <y>697</y>
+  <x>1406</x>
+  <y>696</y>
   <width>31</width>
   <height>22</height>
   <uuid>{763dfad7-6f52-43ac-877d-af2e0d6f50c2}</uuid>
@@ -19886,7 +20179,7 @@ e
  <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>6</x>
-  <y>10</y>
+  <y>7</y>
   <width>40</width>
   <height>28</height>
   <uuid>{0dbdc8b0-fc05-4581-9839-390c2b0e26d7}</uuid>
@@ -19896,7 +20189,7 @@ e
   <value>-255.00000000</value>
   <type>poincare</type>
   <zoomx>18.00000000</zoomx>
-  <zoomy>15.00000000</zoomy>
+  <zoomy>16.00000000</zoomy>
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
@@ -19998,7 +20291,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <value>81</value>
+  <value>89</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -20011,9 +20304,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>IM1_SW</objectName>
   <x>118</x>
-  <y>838</y>
-  <width>13</width>
-  <height>14</height>
+  <y>840</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{5d55657e-9b08-4cf1-8084-a582e7d7f67c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20030,9 +20323,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>F1_SW</objectName>
   <x>19</x>
-  <y>838</y>
-  <width>13</width>
-  <height>14</height>
+  <y>840</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{b48650aa-361e-4bcd-80d8-1f54fc5f10d9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20049,9 +20342,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>X1_SW</objectName>
   <x>154</x>
-  <y>548</y>
-  <width>13</width>
-  <height>15</height>
+  <y>552</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{9b53a133-0863-4865-9eef-908be7bd3aa6}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20067,10 +20360,10 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>X2_SW</objectName>
-  <x>216</x>
-  <y>547</y>
-  <width>13</width>
-  <height>15</height>
+  <x>218</x>
+  <y>552</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{ac5d6394-0aeb-44c2-8cfa-a39d30ccb16b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20087,9 +20380,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>VOI_SW</objectName>
   <x>10</x>
-  <y>534</y>
-  <width>13</width>
-  <height>14</height>
+  <y>538</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{5439183a-4b25-4290-8475-a9b5e2cfd566}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20106,9 +20399,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>STEP_SW</objectName>
   <x>39</x>
-  <y>534</y>
-  <width>13</width>
-  <height>14</height>
+  <y>538</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{8f25ea20-d7bf-45fa-b65b-6ff2501c30ff}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20125,9 +20418,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>AT1_SW</objectName>
   <x>69</x>
-  <y>534</y>
-  <width>13</width>
-  <height>14</height>
+  <y>538</y>
+  <width>11</width>
+  <height>12</height>
   <uuid>{5e62ef73-109e-4cd2-9d9e-4aa2b6b58cf0}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20144,9 +20437,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>REL1_SW</objectName>
   <x>100</x>
-  <y>534</y>
-  <width>13</width>
-  <height>14</height>
+  <y>538</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{d0df1cab-c659-4396-a3e3-d374c5bb2651}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20163,9 +20456,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>REV1_SW</objectName>
   <x>129</x>
-  <y>534</y>
-  <width>13</width>
-  <height>14</height>
+  <y>538</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{0b4aa9f4-218a-494f-989b-d145ce55ccdb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20182,9 +20475,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>AT2_SW</objectName>
   <x>246</x>
-  <y>534</y>
-  <width>13</width>
-  <height>14</height>
+  <y>538</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{7878e3cb-acf6-4900-9fc1-e2b401ce5610}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20201,9 +20494,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>REL2_SW</objectName>
   <x>287</x>
-  <y>534</y>
-  <width>13</width>
-  <height>14</height>
+  <y>538</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{64bb996b-ce56-4d3b-924a-e8fcc8fde170}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20220,9 +20513,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>REV2_SW</objectName>
   <x>331</x>
-  <y>534</y>
-  <width>13</width>
-  <height>14</height>
+  <y>538</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{224ec89c-6bf3-4415-970e-add6a17fde4c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20239,9 +20532,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>IM2_SW</objectName>
   <x>336</x>
-  <y>837</y>
-  <width>13</width>
-  <height>14</height>
+  <y>840</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{9ff89b46-07ef-4f0e-802b-1a1199c22e58}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20258,9 +20551,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>LEV2_SW</objectName>
   <x>289</x>
-  <y>838</y>
-  <width>14</width>
-  <height>14</height>
+  <y>840</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{f1b7f4df-a44e-4b96-a0e6-fe4e0c506b70}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20276,10 +20569,10 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>F2_SW</objectName>
-  <x>243</x>
-  <y>838</y>
-  <width>13</width>
-  <height>14</height>
+  <x>245</x>
+  <y>840</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{84dc4251-6955-4f0d-94cf-009c894ac78c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20296,9 +20589,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>SHAPE_SW</objectName>
   <x>230</x>
-  <y>206</y>
-  <width>13</width>
-  <height>14</height>
+  <y>187</y>
+  <width>11</width>
+  <height>8</height>
   <uuid>{e00bb5ae-1779-40df-9c1f-ce0ebd532ae0}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20315,9 +20608,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>RATE_SW</objectName>
   <x>219</x>
-  <y>150</y>
-  <width>13</width>
-  <height>14</height>
+  <y>157</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{ab84a741-79d6-4ac2-ab49-73db21449acf}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20334,9 +20627,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>DUR_SW</objectName>
   <x>219</x>
-  <y>104</y>
-  <width>13</width>
-  <height>14</height>
+  <y>111</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{a6d9e28a-6644-41e7-bb38-b62bd976bf09}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20353,9 +20646,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>BAND_SW</objectName>
   <x>219</x>
-  <y>61</y>
-  <width>13</width>
-  <height>14</height>
+  <y>69</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{db3c1a40-c491-4681-8a01-d86eaf8f66f9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20372,9 +20665,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>LEV1_SW</objectName>
   <x>69</x>
-  <y>839</y>
-  <width>13</width>
-  <height>14</height>
+  <y>840</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{447ffde1-aaa9-4fed-a6e3-9140282d4f94}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20391,9 +20684,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>CARMIN_SW</objectName>
   <x>444</x>
-  <y>506</y>
-  <width>13</width>
-  <height>14</height>
+  <y>508</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{4ed9bee6-586f-4c73-8d80-a25d9a63e57f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20410,9 +20703,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>CARMAX_SW</objectName>
   <x>502</x>
-  <y>506</y>
-  <width>13</width>
-  <height>14</height>
+  <y>508</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{f048459d-e254-49ac-8b7a-f88e1e7f7e28}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20429,9 +20722,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>MODMIN_SW</objectName>
   <x>648</x>
-  <y>506</y>
-  <width>13</width>
-  <height>14</height>
+  <y>508</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{8829971f-047b-44cb-9591-fbac670bd1f8}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20448,9 +20741,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>MODMAX_SW</objectName>
   <x>707</x>
-  <y>506</y>
-  <width>13</width>
-  <height>14</height>
+  <y>508</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{c87973c4-2eca-4071-a26c-c5feb4c836a9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20467,9 +20760,9 @@ e
  <bsbObject type="BSBButton" version="2">
   <objectName>FADE_SW</objectName>
   <x>187</x>
-  <y>641</y>
-  <width>13</width>
-  <height>14</height>
+  <y>648</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{025a478e-7c81-4542-b14c-32dac50906b5}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -20499,9 +20792,9 @@ e
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </color>
   <bgcolor mode="nobackground">
    <r>255</r>
@@ -20528,9 +20821,9 @@ e
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
   </color>
   <bgcolor mode="nobackground">
    <r>255</r>
@@ -20609,15 +20902,15 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>max_index_FI</objectName>
-  <x>666</x>
-  <y>320</y>
+  <x>547</x>
+  <y>300</y>
   <width>71</width>
   <height>22</height>
   <uuid>{24ba47c9-ccce-439e-a906-e78e9396f49a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>16.000</label>
+  <label>15.000</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -20638,7 +20931,7 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
-  <x>600</x>
+  <x>552</x>
   <y>325</y>
   <width>65</width>
   <height>22</height>
@@ -20704,7 +20997,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.000</label>
+  <label>1.000</label>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -20745,9 +21038,9 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <color>
-   <r>0</r>
-   <g>255</g>
-   <b>255</b>
+   <r>252</r>
+   <g>1</g>
+   <b>7</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
@@ -20766,7 +21059,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.404</label>
+  <label>0.500</label>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -20883,8 +21176,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>1094</x>
-  <y>321</y>
+  <x>1095</x>
+  <y>326</y>
   <width>63</width>
   <height>22</height>
   <uuid>{ed0119d9-e921-4a3c-9cd6-07cbdad783e0}</uuid>
@@ -20894,7 +21187,7 @@ e
   <label>Event #</label>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
-  <fontsize>11</fontsize>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>255</r>
@@ -20970,10 +21263,10 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>1236</x>
-  <y>670</y>
-  <width>30</width>
-  <height>22</height>
+  <x>1233</x>
+  <y>672</y>
+  <width>40</width>
+  <height>24</height>
   <uuid>{cddccb46-8aee-4d23-88d1-dc1b150d8291}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -21001,7 +21294,7 @@ e
   <objectName>fftONOFF</objectName>
   <x>1158</x>
   <y>49</y>
-  <width>84</width>
+  <width>92</width>
   <height>30</height>
   <uuid>{bd7cdd8e-efcf-4eb5-87bb-d5dd436e3e84}</uuid>
   <visible>true</visible>
@@ -21020,8 +21313,8 @@ e
   <objectName>button548</objectName>
   <x>1132</x>
   <y>295</y>
-  <width>79</width>
-  <height>26</height>
+  <width>88</width>
+  <height>28</height>
   <uuid>{a9a80c43-c18d-47c1-828d-cbebabaacf63}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -21029,7 +21322,7 @@ e
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text> Rand Seq</text>
+  <text>  Rand Seq</text>
   <image>/</image>
   <eventLine>i969 0 3600  </eventLine>
   <latch>false</latch>
@@ -21124,10 +21417,10 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>REVLEV_SW</objectName>
-  <x>607</x>
-  <y>649</y>
-  <width>13</width>
-  <height>14</height>
+  <x>491</x>
+  <y>655</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{180f948f-e1fa-4609-bb74-a4fc2bf023dc}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -21143,10 +21436,10 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>ROOM_SW</objectName>
-  <x>516</x>
-  <y>649</y>
-  <width>13</width>
-  <height>14</height>
+  <x>410</x>
+  <y>655</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{36c1678c-9679-4a24-9aa9-1eecbdd1e9d9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -21162,10 +21455,10 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>HF_SW</objectName>
-  <x>562</x>
-  <y>649</y>
-  <width>13</width>
-  <height>14</height>
+  <x>453</x>
+  <y>655</y>
+  <width>12</width>
+  <height>12</height>
   <uuid>{1c9c7efa-04ed-49a9-87ec-901f7502cac7}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -21211,8 +21504,8 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>keyb_SW</objectName>
-  <x>777</x>
-  <y>297</y>
+  <x>781</x>
+  <y>299</y>
   <width>117</width>
   <height>30</height>
   <uuid>{1b5384ca-d2ec-4f4f-93ff-4a813b88afa4}</uuid>
@@ -21255,18 +21548,18 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>contdisp</objectName>
-  <x>1158</x>
-  <y>320</y>
-  <width>27</width>
-  <height>28</height>
+  <x>1152</x>
+  <y>325</y>
+  <width>28</width>
+  <height>25</height>
   <uuid>{c7d8cdc5-8097-4ebe-ae29-812d4b6c1095}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.000</label>
+  <label>4.000</label>
   <alignment>left</alignment>
   <font>Arial</font>
-  <fontsize>12</fontsize>
+  <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
    <r>102</r>
@@ -21616,7 +21909,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>19</selectedIndex>
+  <selectedIndex>18</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
@@ -21781,7 +22074,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>2</selectedIndex>
+  <selectedIndex>17</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
@@ -21946,7 +22239,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>18</selectedIndex>
+  <selectedIndex>13</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
@@ -22111,7 +22404,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>17</selectedIndex>
+  <selectedIndex>4</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
@@ -22651,10 +22944,10 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>1.00000000</value>
+  <value>127.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
-  <maximum>50.00000000</maximum>
+  <maximum>127.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
@@ -22684,7 +22977,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>1.00000000</value>
+  <value>23.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
   <maximum>50.00000000</maximum>
@@ -22717,7 +23010,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>2.00000000</value>
+  <value>22.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
   <maximum>50.00000000</maximum>
@@ -22750,7 +23043,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>2.00000000</value>
+  <value>31.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
   <maximum>50.00000000</maximum>
@@ -22783,7 +23076,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>3.00000000</value>
+  <value>33.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
   <maximum>50.00000000</maximum>
@@ -22816,7 +23109,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>16.00000000</value>
+  <value>0.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
   <maximum>50.00000000</maximum>
@@ -22849,7 +23142,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>17.00000000</value>
+  <value>0.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
   <maximum>50.00000000</maximum>
@@ -22882,7 +23175,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>19.00000000</value>
+  <value>0.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
   <maximum>50.00000000</maximum>
@@ -23020,7 +23313,7 @@ e
   <objectName/>
   <x>1029</x>
   <y>274</y>
-  <width>58</width>
+  <width>60</width>
   <height>28</height>
   <uuid>{0339a7d7-39f1-4ed7-ae6c-643bfd9b48c1}</uuid>
   <visible>true</visible>
@@ -23039,7 +23332,7 @@ e
   <objectName/>
   <x>1030</x>
   <y>296</y>
-  <width>58</width>
+  <width>60</width>
   <height>28</height>
   <uuid>{3aaae69e-6021-4578-b663-0bf150d5ffb2}</uuid>
   <visible>true</visible>
@@ -23155,8 +23448,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>ran1vel_cc</objectName>
-  <x>57</x>
-  <y>342</y>
+  <x>134</x>
+  <y>334</y>
   <width>11</width>
   <height>6</height>
   <uuid>{9b4e6b32-710d-4da7-adb4-9e7977e47096}</uuid>
@@ -23221,8 +23514,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>ran1amp_cc</objectName>
-  <x>57</x>
-  <y>307</y>
+  <x>134</x>
+  <y>300</y>
   <width>11</width>
   <height>6</height>
   <uuid>{a0070990-f3fa-4d5c-9342-7f150fd397ca}</uuid>
@@ -23387,7 +23680,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName>XFADE_cc</objectName>
   <x>187</x>
-  <y>625</y>
+  <y>628</y>
   <width>11</width>
   <height>6</height>
   <uuid>{eb6ee144-479c-40d1-a0cc-7d8be306dd5c}</uuid>
@@ -23419,8 +23712,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>ran2vel_cc</objectName>
-  <x>287</x>
-  <y>342</y>
+  <x>364</x>
+  <y>334</y>
   <width>11</width>
   <height>6</height>
   <uuid>{a5278c9e-f1b0-47bf-9e9b-169862a2dac7}</uuid>
@@ -23452,8 +23745,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>SHAPE_cc</objectName>
-  <x>298</x>
-  <y>227</y>
+  <x>230</x>
+  <y>204</y>
   <width>11</width>
   <height>6</height>
   <uuid>{079496c4-5416-429b-ba30-883a577b38da}</uuid>
@@ -23485,8 +23778,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>ran2amp_cc</objectName>
-  <x>287</x>
-  <y>307</y>
+  <x>364</x>
+  <y>300</y>
   <width>11</width>
   <height>6</height>
   <uuid>{14a45463-092b-47bd-aded-bdca923541b4}</uuid>
@@ -23585,7 +23878,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName>rate_cc</objectName>
   <x>126</x>
-  <y>156</y>
+  <y>159</y>
   <width>11</width>
   <height>6</height>
   <uuid>{2008619b-d8ae-42c3-a72a-f40486ad83de}</uuid>
@@ -23815,7 +24108,7 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>MOD_max_cc</objectName>
-  <x>706</x>
+  <x>708</x>
   <y>484</y>
   <width>11</width>
   <height>6</height>
@@ -24014,7 +24307,7 @@ e
  <bsbObject type="BSBController" version="2">
   <objectName>band_cc</objectName>
   <x>126</x>
-  <y>67</y>
+  <y>73</y>
   <width>11</width>
   <height>6</height>
   <uuid>{a8c9086f-34ee-4cd5-865f-2215dcbb4653}</uuid>
@@ -24056,7 +24349,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.72000000</value>
+  <value>0.78000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -24298,7 +24591,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>43.00000000</value>
+  <value>0.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
   <maximum>50.00000000</maximum>
@@ -24368,7 +24661,7 @@ e
    <g>0</g>
    <b>128</b>
   </bgcolor>
-  <value>0.96900000</value>
+  <value>0.78000000</value>
   <resolution>0.00100000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>999999999999.00000000</maximum>
@@ -24581,7 +24874,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>13.00000000</value>
+  <value>0.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>1.00000000</minimum>
   <maximum>50.00000000</maximum>
@@ -24780,10 +25073,10 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>839</x>
-  <y>284</y>
-  <width>57</width>
-  <height>19</height>
+  <x>847</x>
+  <y>283</y>
+  <width>56</width>
+  <height>21</height>
   <uuid>{870f4eb7-3110-44d8-9d2b-f576d6fec0e1}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -24842,8 +25135,8 @@ e
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>maxSNAP</objectName>
-  <x>853</x>
-  <y>274</y>
+  <x>858</x>
+  <y>273</y>
   <width>28</width>
   <height>13</height>
   <uuid>{0b366bc5-6240-4ff7-b2e5-5caf34176b5e}</uuid>
@@ -24872,6 +25165,1379 @@ e
   <borderwidth>1</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>button605</objectName>
+  <x>1352</x>
+  <y>271</y>
+  <width>73</width>
+  <height>30</height>
+  <uuid>{b6ae6aec-c9d0-4cf4-ae6a-b10da853050a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Drunk</text>
+  <image>/</image>
+  <eventLine>i968 0 -1</eventLine>
+  <latch>true</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>MSC2</objectName>
+  <x>193</x>
+  <y>473</y>
+  <width>58</width>
+  <height>26</height>
+  <uuid>{8b8d829b-b5d7-4eb0-9163-f4f96aab0304}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>msw2</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>true</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>MSC1</objectName>
+  <x>142</x>
+  <y>473</y>
+  <width>58</width>
+  <height>26</height>
+  <uuid>{a1e83a52-921e-41af-816d-f4aceeb0d260}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>msw1</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>true</latch>
+  <latched>true</latched>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>153</x>
+  <y>458</y>
+  <width>45</width>
+  <height>23</height>
+  <uuid>{7f55ae11-d79b-4d07-86f5-c8af2d049acf}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>A / S</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>202</x>
+  <y>458</y>
+  <width>36</width>
+  <height>21</height>
+  <uuid>{84a88194-c2b1-41f6-be95-72b3f06fd478}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Z / X</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>157</x>
+  <y>443</y>
+  <width>82</width>
+  <height>24</height>
+  <uuid>{a5c3ce6e-1dfe-419a-9c2a-210717b5586c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>--- KBD ---</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>117</x>
+  <y>211</y>
+  <width>86</width>
+  <height>23</height>
+  <uuid>{f5b3046c-4cf6-460c-8579-4dfdeee1fe29}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Active Oscils</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDropdown" version="2">
+  <objectName>nchn</objectName>
+  <x>404</x>
+  <y>731</y>
+  <width>104</width>
+  <height>24</height>
+  <uuid>{fa648a5b-72af-4e81-bc68-fc48df1e707f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>Stereo</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>Mono (L) </name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>Mono (R)</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>Mono (L+R)</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>400</x>
+  <y>749</y>
+  <width>103</width>
+  <height>21</height>
+  <uuid>{6815f606-b474-4969-9476-db1a9f3069d8}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Channels</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDropdown" version="2">
+  <objectName>_datares</objectName>
+  <x>418</x>
+  <y>771</y>
+  <width>75</width>
+  <height>22</height>
+  <uuid>{6dab7574-d672-4b21-a03c-7a1072d18ffe}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>16 bit</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name> 24 bit</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>408</x>
+  <y>793</y>
+  <width>85</width>
+  <height>22</height>
+  <uuid>{158fb726-95f7-4750-8a20-17e11754919f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Bit Depth</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBKnob" version="2">
+  <objectName>rec_atk</objectName>
+  <x>649</x>
+  <y>717</y>
+  <width>55</width>
+  <height>39</height>
+  <uuid>{004b6761-a416-4b1e-bdf9-2048fe54c6ed}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.22000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBKnob" version="2">
+  <objectName>rec_rel</objectName>
+  <x>701</x>
+  <y>717</y>
+  <width>55</width>
+  <height>39</height>
+  <uuid>{aedbd6f6-a1ba-4664-bb12-9f37c51e5734}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.02000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.33360000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>652</x>
+  <y>754</y>
+  <width>56</width>
+  <height>25</height>
+  <uuid>{d905d6ac-ac8e-44d8-850f-607fe6c128ba}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Fade In</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>128</r>
+   <g>0</g>
+   <b>2</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>696</x>
+  <y>754</y>
+  <width>65</width>
+  <height>24</height>
+  <uuid>{1d2be6bf-fd6f-48c8-9601-847c77dfb861}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Fade Out</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>128</r>
+   <g>255</g>
+   <b>7</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>rec_atk</objectName>
+  <x>660</x>
+  <y>697</y>
+  <width>34</width>
+  <height>18</height>
+  <uuid>{11dc8dae-129c-42bc-acc7-c76d3022f580}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>0.22000000</value>
+  <resolution>0.01000000</resolution>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>rec_rel</objectName>
+  <x>709</x>
+  <y>697</y>
+  <width>34</width>
+  <height>18</height>
+  <uuid>{a2ddf1d6-b303-4da2-be92-2d5cec4cafbc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>0.33360000</value>
+  <resolution>0.01000000</resolution>
+  <minimum>0.02000000</minimum>
+  <maximum>1.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>fade_onoff</objectName>
+  <x>670</x>
+  <y>783</y>
+  <width>69</width>
+  <height>27</height>
+  <uuid>{2a887535-478e-4487-be1f-ed86054324be}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>On/Off</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>true</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>653</x>
+  <y>808</y>
+  <width>103</width>
+  <height>21</height>
+  <uuid>{f3a2c9e5-6235-4c13-8cdf-3aba006f3ed2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>RecFade</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>536</x>
+  <y>634</y>
+  <width>34</width>
+  <height>21</height>
+  <uuid>{b8f03a36-ef3f-44e5-bdb6-5c12e2ce0d05}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Dens</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>9</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>chop_dens</objectName>
+  <x>539</x>
+  <y>560</y>
+  <width>28</width>
+  <height>14</height>
+  <uuid>{c876d84c-7e68-47e1-b287-42af877a6133}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>7.46093800</value>
+  <resolution>0.10000000</resolution>
+  <minimum>0.50000000</minimum>
+  <maximum>50.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>564</x>
+  <y>634</y>
+  <width>33</width>
+  <height>30</height>
+  <uuid>{8a2a92b2-fadf-4d9f-9588-1ac54cc47764}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Rand
+Dens</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>9</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>rand_dens_amt</objectName>
+  <x>568</x>
+  <y>560</y>
+  <width>28</width>
+  <height>14</height>
+  <uuid>{7924fc68-8292-427c-883a-aa95b8e3a625}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>0.34375000</value>
+  <resolution>0.01000000</resolution>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>593</x>
+  <y>634</y>
+  <width>33</width>
+  <height>30</height>
+  <uuid>{59dffc93-f310-4f83-b79f-31b3acb33dbd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Dur
+</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>9</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>chop_dur</objectName>
+  <x>597</x>
+  <y>560</y>
+  <width>28</width>
+  <height>14</height>
+  <uuid>{a5412602-c274-4c99-8448-ff9079bc95ee}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>0.01000000</value>
+  <resolution>0.00100000</resolution>
+  <minimum>0.01000000</minimum>
+  <maximum>0.30000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>643</x>
+  <y>635</y>
+  <width>42</width>
+  <height>31</height>
+  <uuid>{390c4592-2d20-425c-872d-e9b76e66f983}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Grain
+Win
+</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>9</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>grwin</objectName>
+  <x>655</x>
+  <y>560</y>
+  <width>28</width>
+  <height>14</height>
+  <uuid>{588f7600-d0a8-401f-a2f0-236c836ffa8a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>0.00000000</value>
+  <resolution>0.01000000</resolution>
+  <minimum>0.00000000</minimum>
+  <maximum>3.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>537</x>
+  <y>538</y>
+  <width>74</width>
+  <height>22</height>
+  <uuid>{e803bc66-71ca-4b7c-8754-33447ffa9b31}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Chop/Grain</label>
+  <alignment>left</alignment>
+  <font>Helvetica</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>102</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>6</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>724</x>
+  <y>638</y>
+  <width>36</width>
+  <height>21</height>
+  <uuid>{01c34935-4a78-477b-8372-2c6c8ad1c37f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Mix</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>9</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>128</r>
+   <g>0</g>
+   <b>2</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>MIXGRAN</objectName>
+  <x>731</x>
+  <y>561</y>
+  <width>28</width>
+  <height>14</height>
+  <uuid>{375cf078-e74d-4bc6-b503-a9e9eb9c578b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>0.00000000</value>
+  <resolution>0.01000000</resolution>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>622</x>
+  <y>634</y>
+  <width>33</width>
+  <height>30</height>
+  <uuid>{821fae68-727f-479a-9a80-4d67b950ea32}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Fmod
+</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>9</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>fmod_range</objectName>
+  <x>626</x>
+  <y>560</y>
+  <width>28</width>
+  <height>14</height>
+  <uuid>{0ba14ac1-259c-4184-9549-0ad85304a86a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>226.56250000</value>
+  <resolution>1.00000000</resolution>
+  <minimum>100.00000000</minimum>
+  <maximum>1000.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBVSlider" version="2">
+  <objectName>chop_dens</objectName>
+  <x>545</x>
+  <y>578</y>
+  <width>20</width>
+  <height>64</height>
+  <uuid>{17b5479e-8e7b-47df-b2a3-97507c2ac16e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.50000000</minimum>
+  <maximum>50.00000000</maximum>
+  <value>7.46093800</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBVSlider" version="2">
+  <objectName>rand_dens_amt</objectName>
+  <x>571</x>
+  <y>576</y>
+  <width>20</width>
+  <height>64</height>
+  <uuid>{d3becb2f-3b5e-4c6e-8bf0-491fca11c19b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.34375000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBVSlider" version="2">
+  <objectName>chop_dur</objectName>
+  <x>600</x>
+  <y>577</y>
+  <width>20</width>
+  <height>64</height>
+  <uuid>{3d511ef3-ad83-4593-a2cd-fa3a729909b1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.01000000</minimum>
+  <maximum>0.30000000</maximum>
+  <value>0.01000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBVSlider" version="2">
+  <objectName>fmod_range</objectName>
+  <x>628</x>
+  <y>577</y>
+  <width>20</width>
+  <height>64</height>
+  <uuid>{bb2673cd-c516-45ae-b919-5f197d84c6d9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>100.00000000</minimum>
+  <maximum>1000.00000000</maximum>
+  <value>226.56250000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBVSlider" version="2">
+  <objectName>grwin</objectName>
+  <x>657</x>
+  <y>577</y>
+  <width>20</width>
+  <height>64</height>
+  <uuid>{eb05e8c3-9c4c-41be-8e2f-6a99c1af354e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>3.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBVSlider" version="2">
+  <objectName>MIXGRAN</objectName>
+  <x>733</x>
+  <y>578</y>
+  <width>20</width>
+  <height>64</height>
+  <uuid>{c8095c77-5615-4b8a-85cf-7467eaa2cae5}</uuid>
+  <visible>true</visible>
+  <midichan>1</midichan>
+  <midicc>29</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>673</x>
+  <y>635</y>
+  <width>42</width>
+  <height>31</height>
+  <uuid>{c3d57a73-4ac2-4943-9849-772bbc3ebf2b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <label>Rev
+Send
+</label>
+  <alignment>center</alignment>
+  <font>Lucida Grande</font>
+  <fontsize>9</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>REVSEND3</objectName>
+  <x>684</x>
+  <y>560</y>
+  <width>28</width>
+  <height>14</height>
+  <uuid>{6f8e35d5-2024-4056-b2d4-9b48e504df41}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>0.34375000</value>
+  <resolution>0.01000000</resolution>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBVSlider" version="2">
+  <objectName>REVSEND3</objectName>
+  <x>687</x>
+  <y>577</y>
+  <width>20</width>
+  <height>64</height>
+  <uuid>{34a27277-bfe8-4816-be79-5dcd1d0cbb84}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.34375000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>geo_grid_cont</objectName>
+  <x>653</x>
+  <y>84</y>
+  <width>81</width>
+  <height>28</height>
+  <uuid>{c0fc145c-7c51-4d75-9e23-67646c79dda7}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>cont/shot</text>
+  <image>/</image>
+  <eventLine>i15 0 -1</eventLine>
+  <latch>true</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>harm_grid_cont</objectName>
+  <x>981</x>
+  <y>80</y>
+  <width>81</width>
+  <height>28</height>
+  <uuid>{6f4f6c30-e4c7-41e6-829f-24099bb4b67e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>cont/shot</text>
+  <image>/</image>
+  <eventLine>i16 0 -1</eventLine>
+  <latch>true</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>fibo_grid_cont</objectName>
+  <x>652</x>
+  <y>311</y>
+  <width>81</width>
+  <height>28</height>
+  <uuid>{74c159e7-d088-482f-b560-6d438c0cc6f2}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>cont/shot</text>
+  <image>/</image>
+  <eventLine>i17 0 -1</eventLine>
+  <latch>true</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>SHAPE</objectName>
+  <x>243</x>
+  <y>202</y>
+  <width>20</width>
+  <height>71</height>
+  <uuid>{0cb4cb96-e06d-4d20-8808-c26f0ad787e4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>15</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <value>0.00000000</value>
+  <resolution>1.00000000</resolution>
+  <minimum>0.00000000</minimum>
+  <maximum>8.00000000</maximum>
+  <bordermode>border</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>_RAND1</objectName>
+  <x>1</x>
+  <y>352</y>
+  <width>127</width>
+  <height>31</height>
+  <uuid>{4ae9d1c2-4624-4dd8-aac9-870a388d08b4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Rand_1</text>
+  <image>/</image>
+  <eventLine>i21 0 -1</eventLine>
+  <latch>true</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>_Stop</objectName>
+  <x>1244</x>
+  <y>48</y>
+  <width>56</width>
+  <height>29</height>
+  <uuid>{f55fd277-d9c6-43cd-bed6-78dc40852a4c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Stop</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>false</latch>
+  <latched>false</latched>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>CAR_min</objectName>
+  <x>426</x>
+  <y>382</y>
+  <width>50</width>
+  <height>22</height>
+  <uuid>{095223be-aa4d-4ea2-9331-d92882edb34d}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>255</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>0</r>
+   <g>64</g>
+   <b>128</b>
+  </bgcolor>
+  <value>1.00000000</value>
+  <resolution>0.00100000</resolution>
+  <minimum>1.00000000</minimum>
+  <maximum>14.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act="continuous"/>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>CAR_max</objectName>
+  <x>486</x>
+  <y>382</y>
+  <width>50</width>
+  <height>22</height>
+  <uuid>{1922e6d0-9e12-4c19-8ff8-6693c427fea9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>255</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>0</r>
+   <g>64</g>
+   <b>128</b>
+  </bgcolor>
+  <value>1.00000000</value>
+  <resolution>0.00100000</resolution>
+  <minimum>1.00000000</minimum>
+  <maximum>14.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>MOD_min</objectName>
+  <x>631</x>
+  <y>382</y>
+  <width>50</width>
+  <height>22</height>
+  <uuid>{28fe41f7-3ec5-465c-b555-fae9d8ea8bfd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>255</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>0</r>
+   <g>64</g>
+   <b>128</b>
+  </bgcolor>
+  <value>1.00000000</value>
+  <resolution>0.00100000</resolution>
+  <minimum>1.00000000</minimum>
+  <maximum>14.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBScrollNumber" version="2">
+  <objectName>MOD_max</objectName>
+  <x>691</x>
+  <y>382</y>
+  <width>50</width>
+  <height>22</height>
+  <uuid>{2493a4c1-6903-4c15-a9c5-674a3a3ff8f1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <alignment>center</alignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <color>
+   <r>0</r>
+   <g>255</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>0</r>
+   <g>64</g>
+   <b>128</b>
+  </bgcolor>
+  <value>1.00000000</value>
+  <resolution>0.00100000</resolution>
+  <minimum>1.00000000</minimum>
+  <maximum>14.00000000</maximum>
+  <bordermode>noborder</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>1</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
+ </bsbObject>
+ <bsbObject type="BSBVSlider" version="2">
+  <objectName>MOD_max</objectName>
+  <x>704</x>
+  <y>404</y>
+  <width>18</width>
+  <height>80</height>
+  <uuid>{c5c0752d-6d3d-4746-a411-e272403c3164}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>1.00000000</minimum>
+  <maximum>14.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>-1.00000000</resolution>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

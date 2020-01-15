@@ -34,6 +34,7 @@
 # qmake qcs.pro INSTALL_DIR=~ SHARE_DIR=~/.local/share
 ################################################################################
 
+
 DEFINES += NOMINMAX
 
 csound6 {
@@ -192,38 +193,60 @@ CONFIG(debug, debug|release):TARGET = $${TARGET}-debug
 unix:!macx {
     isEmpty(INSTALL_DIR) {
 		INSTALL_DIR=/usr/local  # ~  #for HOME
-	}
+    }
 	isEmpty(SHARE_DIR) {
         SHARE_DIR=/usr/share # ~/.local/share for HOME install
 	}
+
 	target.path = $$INSTALL_DIR/bin
+	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET # do not install with the full name
+	INSTALLS += target
 
-	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET
-	target.commands = cd $$INSTALL_DIR/bin; ln -sf $$TARGET csoundqt #  ln -sf $$target.path/$$TARGET $$target.path/csoundqt #	 create link always with the same name
+	postInstall.path = $$INSTALL_DIR/bin
+	postInstall.commands = cd  $(INSTALL_ROOT)/$$INSTALL_DIR/bin; ln -sf $$TARGET csoundqt
+	INSTALLS += postInstall
 
-
-	
 	# see comments: https://github.com/CsoundQt/CsoundQt/issues/258
     desktop.path=$$SHARE_DIR/applications
-    desktop.commands = rm -f $$SHARE_DIR/applications/CsoundQt.desktop &&  # remove the old, uppercase one, if present one
-	desktop.commands += desktop-file-install --mode=644 --dir=$$SHARE_DIR/applications $$PWD/csoundqt.desktop
-    #TODO: if local install, ie not /usr/share, dekstop-file-install  --dir=$$desktop.path
+	desktop.files = $$PWD/csoundqt.desktop
+	INSTALLS += desktop
 
 	icon.path=$$SHARE_DIR/icons/hicolor/scalable/apps
     icon.files=images/csoundqt.svg
+	INSTALLS += icon
 
 	mimetypes.path=$$INSTALL_DIR # in some reason path must be set to create install target in Makefile
-	mimetypes.commands = cd $$PWD/mime-types/; ./add_csound_mimetypes.sh $$SHARE_DIR
-
+	mimetypes.commands = cd $$PWD/mime-types/; ./add_csound_mimetypes.sh  $(INSTALL_ROOT)/$$SHARE_DIR
+	INSTALLS += mimetypes
 
     examples.path = $$SHARE_DIR/csoundqt/
-    examples.commands = rm -rf $$SHARE_DIR/qutecsound #remove the old examples
+	examples.commands = rm -rf  $(INSTALL_ROOT)/$$SHARE_DIR/qutecsound #remove the old examples
     examples.files = src/Examples
+	INSTALLS += examples
 
 	templates.path = $$SHARE_DIR/csoundqt/
 	templates.files = templates
+	INSTALLS += templates
 
-	INSTALLS += target desktop icon mimetypes examples templates
+    # EXPERIMENTAL AppImage build  using linuxdeploy and linuxdeploy-plugin-qt
+    # download linuxdeploy and its Qt plugin
+    #wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+    #wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+
+    # make them executableappImage
+    #chmod +x linuxdeploy*.AppImage
+
+    appImage.path = $$OUT_PWD/$$DESTDIR/
+    appImage.files = icon.files
+    #appImage.files += $$PWD/csoundqt.desktop
+    #TODO: examples
+	#appImage.commands = cd $$OUT_PWD/$$DESTDIR/; ln -sf $$TARGET csoundqt
+    appImage.commands += export VERSION=0.9.7-beta; export QML_SOURCES_PATHS=$$PWD/src/QML;
+    #TODO: kas dekstop failis vaja seada käivitatav $$TARGETiks või siis bianry oleks csounqt. praegu nimetan käsitisi ümber AppDir/usr/bin juures
+    appImage.commands += linuxdeploy --appdir AppDir --executable=$$TARGET  --desktop-file=$$PWD/csoundqt.desktop  -i $$PWD/images/csoundqt.svg  --plugin=qt #  --output appimage
+    # move and remove what necessary here:
+    #  appImage.commands += linuxdeploy --appdir AppDir  --output appimage
+	#INSTALLS += appImage
 }
 
 # for OSX add Scripts and Examples to be bundle in Contents->Resources

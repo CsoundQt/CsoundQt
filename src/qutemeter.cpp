@@ -199,7 +199,103 @@ QString QuteMeter::getCabbageLine()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	return line;
+    return line;
+}
+
+QString QuteMeter::getQml()
+{
+    QString qml = QString();
+	QString type = property("QCS_type").toString();
+	if ( type != "fill") {
+		qDebug() << "Currently exporting only meter controllers (type \"fill\") is supported";
+		return qml;
+	}
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.lockForWrite();
+#endif
+    // todo: crosshair jm
+
+	bool vertical;
+	if (m_widget->width() > m_widget->height()) {
+		vertical = false;
+	} else {
+		vertical = true;
+	}
+	double max, min, value;
+	QString channel;
+	if (vertical) {
+		max = property("QCS_yMax").toDouble();
+		min = property("QCS_yMin").toDouble();
+		channel = m_channel2;
+		value = m_value2;
+	}
+	else {
+		max = property("QCS_xMax").toDouble();
+		min = property("QCS_xMin").toDouble();
+		channel = m_channel;
+		value = m_value;
+	}
+
+	qml=QString(R"(
+				Rectangle {
+					x: %1 * scaleItem.scale
+					y: %2 * scaleItem.scale
+					width: %3 * scaleItem.scale
+					height: %4 * scaleItem.scale
+					color: "black"
+					border.color: "black"
+					border.width: 2
+					property double min: %5
+					property double max: %6
+					property double value: %7
+					property string channel: "%8"
+					property bool isVertical: height>width
+
+					MouseArea {
+						anchors.fill: parent
+
+						function setValue() { // value from min..max
+							var value;
+							if (parent.isVertical) {
+								value = parent.min +  (1 - (mouseY/parent.height)) * (parent.max-parent.min);
+							} else {
+								value = parent.min +  (mouseX/parent.width) * (parent.max-parent.min);
+							}
+
+							if (value>parent.max) value=parent.max;
+							if (value<parent.min) value=parent.min;
+							if (typeof(csound) !== 'undefined' ) csound.setControlChannel(parent.channel, value);
+
+							parent.value = value;
+						}
+
+						onClicked: setValue();
+						onMouseYChanged: setValue();
+					}
+
+					Rectangle {
+						property double relativeValue: (parent.value-parent.min)/(parent.max-parent.min)
+						width: parent.isVertical ? parent.width - 2*parent.border.width :
+												  (parent.width-2*parent.border.width) *relativeValue
+						height: parent.isVertical ? (parent.height-2*parent.border.width) *relativeValue :
+													parent.height - 2*parent.border.width
+
+						anchors.margins: parent.border.width
+						anchors.bottom: parent.bottom
+						anchors.left: parent.left
+						color: "%9"
+					}
+				}
+				)").arg(x()).arg(y()).arg(width()).arg(height()).arg(min).arg(max).arg(value).
+			arg(channel).arg(property("QCS_color").toString());
+
+
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.unlock();
+#endif
+
+    return qml;
+
 }
 
 void QuteMeter::createPropertiesDialog()

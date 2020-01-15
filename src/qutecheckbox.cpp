@@ -123,7 +123,30 @@ QString QuteCheckBox::getCabbageLine()
 
 QString QuteCheckBox::getWidgetType()
 {
-	return QString("BSBCheckBox");
+    return QString("BSBCheckBox");
+}
+
+QString QuteCheckBox::getQml()
+{
+    QString qml = QString();
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.lockForWrite();
+#endif
+
+	qml = "\n\tCheckBox {\n";
+    qml += QString("\t\tx: %1 * scaleItem.scale\n").arg(x());
+    qml += QString("\t\ty: %1  * scaleItem.scale\n").arg(y());
+    qml += QString("\t\twidth: %1  * scaleItem.scale\n").arg(width());
+    qml += QString("\t\theight: %1  * scaleItem.scale\n").arg(height());
+    qml += QString("\t\tchecked: %1\n").arg(getValue()==0 ? "false" : "true" );
+    qml += QString("\t\tonCheckedChanged: csound.setControlChannel(\"%1\", checked ? %2 : 0)\n").arg(m_channel).arg(property("QCS_pressedValue").toDouble());
+    //color, font and other outlook properties ignored by now
+    qml += "\t}";
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.unlock();
+#endif
+    return qml;
+
 }
 
 QString QuteCheckBox::getWidgetXmlText()

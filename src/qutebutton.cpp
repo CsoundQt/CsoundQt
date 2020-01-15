@@ -230,11 +230,11 @@ QString QuteButton::getQml()
 
                 turnOffLine = lineElements.join(" ");
 
-                qml +=  QString("onCheckedChanged: (checked) ? csound.readScore(\"%1\") : csound.readScore(\"%2\")")
+				qml +=  QString("onCheckedChanged: (checked) ? csound.readScore(\'%1\') : csound.readScore(\'%2\')")
                         .arg(eventLine, turnOffLine); // if unchecked, turnOffLine should consist line to turn off the instrument
 			}
 		} else { // if not latched, use onClicked event
-            qml += QString("\t\tonClicked: csound.readScore(\"%1\") \n").arg(eventLine); // TODO: test, maybe use {{ }} as string literals to allow quotes in scoreLine
+			qml += QString("\t\tonClicked: csound.readScore(\'%1\') \n").arg(eventLine);
 		}
 	}
 
@@ -401,7 +401,7 @@ void QuteButton::setMidiValue(int value)
 			else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
 				lineElements[0] = lineElements[0].mid(1); // Remove "i" character
 			}
-			bool test = property("QCS_latch").toBool();
+			//bool test = property("QCS_latch").toBool();
 			if (lineElements.size() > 2 && lineElements[2].toDouble() < 0 && property("QCS_latch").toBool() ) { // If duration is negative, turn it off. But not when it is not a latched button!
 				lineElements[0].prepend("-");
 				lineElements.prepend("i");
