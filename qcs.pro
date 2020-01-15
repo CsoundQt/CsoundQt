@@ -228,7 +228,7 @@ unix:!macx {
 	templates.files = templates
 	INSTALLS += templates
 
-	# EXPERIMENTAL build AppImage using linuxdeploy and linuxdeploy-plugin-qt
+    # EXPERIMENTAL AppImage build  using linuxdeploy and linuxdeploy-plugin-qt
     # download linuxdeploy and its Qt plugin
     #wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
     #wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
