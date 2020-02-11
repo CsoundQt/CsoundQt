@@ -923,6 +923,11 @@
                </item>
                <item>
                 <property name="text">
+                 <string>breeze</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
                  <string>fun</string>
                 </property>
                </item>

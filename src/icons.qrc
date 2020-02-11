@@ -58,5 +58,36 @@
         <file>themes/boring/pyroom.png</file>
         <file>themes/boring/midi_keyboard.png</file>
         <file>themes/fun/midi_keyboard.png</file>
+
+        <file>themes/breeze/gtk-reload.png</file>
+        <file>themes/breeze/control-center2.png</file>
+        <file>themes/breeze/gnome-mime-application-x-diagram.png</file>
+        <file>themes/breeze/gnome-dev-floppy.png</file>
+        <file>themes/breeze/gnome-folder.png</file>
+        <file>themes/breeze/gksu-root-terminal.png</file>
+        <file>themes/breeze/edit-find.png</file>
+        <file>themes/breeze/gtk-media-play-ltr2.png</file>
+        <file>themes/breeze/gtk-paste.png</file>
+        <file>themes/breeze/gtk-copy.png</file>
+        <file>themes/breeze/editfile.png</file>
+        <file>themes/breeze/gtk-undo.png</file>
+        <file>themes/breeze/gtk-redo.png</file>
+        <file>themes/breeze/playfile.png</file>
+        <file>themes/breeze/gnome-devel.png</file>
+        <file>themes/breeze/scratchpad.png</file>
+        <file>themes/breeze/gtk-new.png</file>
+        <file>themes/breeze/gtk-media-play-trl.png</file>
+        <file>themes/breeze/gtk-cut.png</file>
+        <file>themes/breeze/gtk-media-play-ltr.png</file>
+        <file>themes/breeze/gtk-close.png</file>
+        <file>themes/breeze/gtk-media-record.png</file>
+        <file>themes/breeze/render.png</file>
+        <file>themes/breeze/gtk-media-pause.png</file>
+        <file>themes/breeze/gtk-info.png</file>
+        <file>themes/breeze/note.png</file>
+        <file>themes/breeze/gtk-media-stop.png</file>
+        <file>themes/breeze/pyroom.png</file>
+        <file>themes/breeze/midi_keyboard.png</file>
+
     </qresource>
 </RCC>
