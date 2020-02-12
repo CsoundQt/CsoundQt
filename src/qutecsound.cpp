@@ -4748,6 +4748,7 @@ void CsoundQt::createToolBars()
     //	editToolBar->setToolButtonStyle(toolButtonStyle);
     controlToolBar->setToolButtonStyle(toolButtonStyle);
     configureToolBar->setToolButtonStyle(toolButtonStyle);
+    configureToolBar->setIconSize(QSize(16, 16));
 }
 
 void CsoundQt::createStatusBar()
@@ -4807,12 +4808,14 @@ void CsoundQt::readSettings()
     settings.beginGroup("Editor");
 #ifdef Q_OS_MAC
     m_options->font = settings.value("font", "Menlo").toString();
+    m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
 #elif Q_OS_WIN32
     m_options->font = settings.value("font", "Consolas").toString();
+    m_options->fontPointSize = settings.value("fontsize", 11).toDouble();
 #else
     m_options->font = settings.value("font", "Liberation Mono").toString();
-#endif
     m_options->fontPointSize = settings.value("fontsize", 11).toDouble();
+#endif
     m_options->showLineNumberArea = settings.value("showLineNumberArea", true).toBool();
 #ifdef Q_OS_WIN32
     m_options->lineEnding = settings.value("lineEnding", 1).toInt();
