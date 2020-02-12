@@ -89,6 +89,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QLocale::setDefault(QLocale::system());
     curPage = -1;
     m_options = new Options(&m_configlists);
+
+#ifdef Q_OS_MAC
+	this->setUnifiedTitleAndToolBarOnMac(true);
+#endif
     // Create GUI panels
 
     helpPanel = new DockHelp(this);
@@ -327,7 +331,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
 #ifdef Q_OS_MAC // workaround to set resotre window size for Mac. Does not work within readSettings()
     QSettings settings2("csound", "qutecsound");
-    QSize size = settings2.value("GUI/size", QSize(600, 400)).toSize();
+    QSize size = settings2.value("GUI/size", QSize(800, 600)).toSize();
     resize(size);
 #endif
 
@@ -4720,7 +4724,8 @@ void CsoundQt::createToolBars()
     controlToolBar->addAction(externalEditorAct);
     controlToolBar->addAction(externalPlayerAct);
     controlToolBar->addAction(configureAct);
-
+	controlToolBar->setIconSize(QSize(24, 24));
+	
     configureToolBar = addToolBar(tr("Panels"));
     configureToolBar->setObjectName("panelToolBar");
 #if defined(QCS_QTHTML)
