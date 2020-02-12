@@ -4828,19 +4828,23 @@ void CsoundQt::readSettings()
 #ifdef Q_OS_MAC
     m_options->font = settings.value("font", "Menlo").toString();
     m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
-#elifdef Q_OS_WIN
+#endif
+#ifdef Q_OS_WIN
     m_options->font = settings.value("font", "Consolas").toString();
     m_options->fontPointSize = settings.value("fontsize", 11).toDouble();
-#else
+#endif
+#ifdef Q_OS_UNIX
     m_options->font = settings.value("font", "Liberation Mono").toString();
     m_options->fontPointSize = settings.value("fontsize", 11).toDouble();
 #endif
     m_options->showLineNumberArea = settings.value("showLineNumberArea", true).toBool();
-#ifdef Q_OS_WIN32
+
+#ifdef Q_OS_WIN
     m_options->lineEnding = settings.value("lineEnding", 1).toInt();
 #else
     m_options->lineEnding = settings.value("lineEnding", 0).toInt();
 #endif
+
     m_options->consoleFont = settings.value("consolefont", "Courier").toString();
     m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
 
