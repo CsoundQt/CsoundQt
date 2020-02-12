@@ -34,7 +34,7 @@ DockHelp::DockHelp(QWidget *parent)
 {
 	ui->setupUi(this);
 	findFlags = 0;
-	setWindowTitle("Opcode Help"); // titlebar and overall layout
+    setWindowTitle("Opcode Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
 
 //	connect(ui->toggleFindButton, SIGNAL(released()), this, SLOT(toggleFindBarVisible()));
@@ -216,6 +216,6 @@ void DockHelp::findText(QString expr)
 void DockHelp::resizeEvent(QResizeEvent *e)
 {
 	QDockWidget::resizeEvent(e);
-	ui->backButton->move(frameGeometry().width()/2-25, 0);
-	ui->forwardButton->move(frameGeometry().width()/2, 0);
+    // ui->backButton->move(frameGeometry().width()/2-25, 0);
+    // ui->forwardButton->move(frameGeometry().width()/2, 0);
 }

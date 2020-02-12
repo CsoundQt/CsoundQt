@@ -53,6 +53,7 @@ public:
 	bool saveWidgets;
 	bool iconText;
 	bool showToolbar;
+    bool lockToolbar;
 	bool wrapLines;
 	bool autoComplete;
 	bool autoParameterMode;

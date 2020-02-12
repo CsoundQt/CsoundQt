@@ -89,9 +89,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-140</y>
-        <width>907</width>
-        <height>974</height>
+        <y>0</y>
+        <width>732</width>
+        <height>851</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -918,12 +918,12 @@
               <widget class="QComboBox" name="themeComboBox">
                <item>
                 <property name="text">
-                 <string>boring</string>
+                 <string>breeze</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>breeze</string>
+                 <string>boring</string>
                 </property>
                </item>
                <item>
@@ -1173,90 +1173,6 @@
            <string>Editor</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_9">
-           <item row="1" column="0">
-            <widget class="QGroupBox" name="groupBox_10">
-             <property name="title">
-              <string>Behavior</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout">
-              <item>
-               <widget class="QCheckBox" name="autoplayCheckBox">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>Autoplay files when launched from file</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="saveChangesCheckBox">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>Save changes automatically on run</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="rememberFileCheckBox">
-                <property name="text">
-                 <string>Remember open files from previous session</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="iconTextCheckBox">
-                <property name="text">
-                 <string>Show text for toolbar icons</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="toolbarCheckBox">
-                <property name="text">
-                 <string>Show Toolbars</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="autoJoinCheckBox">
-                <property name="text">
-                 <string>Automatically Join orc/sco files</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_8">
-                <item>
-                 <widget class="QLabel" name="label_35">
-                  <property name="text">
-                   <string>Favorites/Scripts menus maximum depth</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="menusDepthSpinBox"/>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_4">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
            <item row="2" column="0">
             <spacer name="verticalSpacer_5">
              <property name="orientation">
@@ -1531,6 +1447,103 @@
                  </size>
                 </property>
                </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QGroupBox" name="groupBox_10">
+             <property name="title">
+              <string>Behavior</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout">
+              <item>
+               <widget class="QCheckBox" name="autoplayCheckBox">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>Autoplay files when launched from file</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="saveChangesCheckBox">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>Save changes automatically on run</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="rememberFileCheckBox">
+                <property name="text">
+                 <string>Remember open files from previous session</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="iconTextCheckBox">
+                <property name="text">
+                 <string>Show text for toolbar icons</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="toolbarCheckBox">
+                <property name="text">
+                 <string>Show Toolbars</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="lockToolbarCheckBox">
+                <property name="toolTip">
+                 <string>Lock the toolbars in place, remove handle</string>
+                </property>
+                <property name="text">
+                 <string>Lock Toolbars</string>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="autoJoinCheckBox">
+                <property name="text">
+                 <string>Automatically Join orc/sco files</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_8">
+                <item>
+                 <widget class="QLabel" name="label_35">
+                  <property name="text">
+                   <string>Favorites/Scripts menus maximum depth</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="menusDepthSpinBox"/>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>

@@ -100,6 +100,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
                               Qt::BottomDockWidgetArea |
                               Qt::LeftDockWidgetArea);
     helpPanel->setObjectName("helpPanel");
+
+    QLabel *helpTitle = new QLabel("Help", helpPanel);
+    helpTitle->setStyleSheet("qproperty-alignment: AlignCenter; padding: 3px; font-size: 9pt; ");
+    helpPanel->setTitleBarWidget(helpTitle);
+
     helpPanel->show();
     addDockWidget(Qt::RightDockWidgetArea, helpPanel);
 
@@ -123,6 +128,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     m_console = new DockConsole(this);
     m_console->setObjectName("m_console");
+    m_console->setFeatures(QDockWidget::DockWidgetMovable |
+                           QDockWidget::DockWidgetClosable);
+    QLabel *consoleTitle = new QLabel("Console", m_console);
+    consoleTitle->setStyleSheet("qproperty-alignment: AlignCenter; padding: 3px; font-size: 9pt; ");
+    m_console->setTitleBarWidget(consoleTitle);
+
     //   m_console->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
     // addDockWidget(Qt::BottomDockWidgetArea, m_console);
     addDockWidget(Qt::RightDockWidgetArea, m_console);
@@ -2712,6 +2723,8 @@ void CsoundQt::applySettings()
     //	editToolBar->setVisible(m_options->showToolbar);
     controlToolBar->setVisible(m_options->showToolbar);
     configureToolBar->setVisible(m_options->showToolbar);
+    controlToolBar->setMovable(!(m_options->lockToolbar));
+    configureToolBar->setMovable(!(m_options->lockToolbar));
 
     QString currentOptions = (m_options->useAPI ? tr("API") : tr("Console")) + " ";
     //  if (m_options->useAPI) {
@@ -4719,13 +4732,14 @@ void CsoundQt::createToolBars()
     controlToolBar->addAction(pauseAct);
     controlToolBar->addAction(stopAct);
     controlToolBar->addAction(recAct);
+    controlToolBar->addSeparator();
     controlToolBar->addAction(runTermAct);
     controlToolBar->addAction(renderAct);
-    controlToolBar->addAction(externalEditorAct);
-    controlToolBar->addAction(externalPlayerAct);
+    // controlToolBar->addAction(externalEditorAct);
+    // controlToolBar->addAction(externalPlayerAct);
     controlToolBar->addAction(configureAct);
-	controlToolBar->setIconSize(QSize(24, 24));
-	
+    controlToolBar->setIconSize(QSize(20, 20));
+
     configureToolBar = addToolBar(tr("Panels"));
     configureToolBar->setObjectName("panelToolBar");
 #if defined(QCS_QTHTML)
@@ -4753,7 +4767,7 @@ void CsoundQt::createToolBars()
     //	editToolBar->setToolButtonStyle(toolButtonStyle);
     controlToolBar->setToolButtonStyle(toolButtonStyle);
     configureToolBar->setToolButtonStyle(toolButtonStyle);
-    configureToolBar->setIconSize(QSize(16, 16));
+    configureToolBar->setIconSize(QSize(20, 20));
 }
 
 void CsoundQt::createStatusBar()
@@ -4814,7 +4828,7 @@ void CsoundQt::readSettings()
 #ifdef Q_OS_MAC
     m_options->font = settings.value("font", "Menlo").toString();
     m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
-#elif Q_OS_WIN32
+#elifdef Q_OS_WIN
     m_options->font = settings.value("font", "Consolas").toString();
     m_options->fontPointSize = settings.value("fontsize", 11).toDouble();
 #else
@@ -4846,6 +4860,7 @@ void CsoundQt::readSettings()
     m_options->widgetsIndependent = settings.value("widgetsIndependent", false).toBool();
     m_options->iconText = settings.value("iconText", true).toBool();
     m_options->showToolbar = settings.value("showToolbar", true).toBool();
+    m_options->lockToolbar = settings.value("lockToolbar", false).toBool();
     m_options->wrapLines = settings.value("wrapLines", true).toBool();
     m_options->autoComplete = settings.value("autoComplete", true).toBool();
     m_options->autoParameterMode = settings.value("autoParameterMode", true).toBool();
@@ -5067,6 +5082,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("widgetsIndependent", m_options->widgetsIndependent);
         settings.setValue("iconText", m_options->iconText);
         settings.setValue("showToolbar", m_options->showToolbar);
+        settings.setValue("lockToolbar", m_options->lockToolbar);
         settings.setValue("wrapLines", m_options->wrapLines);
         settings.setValue("autoComplete", m_options->autoComplete);
         settings.setValue("autoParameterMode", m_options->autoParameterMode);

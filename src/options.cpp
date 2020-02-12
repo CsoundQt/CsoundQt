@@ -55,6 +55,7 @@ Options::Options(ConfigLists *configlists) :
     // iconText = true;
     iconText = false;
     showToolbar = true;
+    lockToolbar = false;
     wrapLines = true;
     autoComplete = true;
 
