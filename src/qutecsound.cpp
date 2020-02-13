@@ -101,9 +101,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
                               Qt::LeftDockWidgetArea);
     helpPanel->setObjectName("helpPanel");
 
-    QLabel *helpTitle = new QLabel("Help", helpPanel);
-    helpTitle->setStyleSheet("qproperty-alignment: AlignCenter; padding: 3px; font-size: 9pt; ");
-    helpPanel->setTitleBarWidget(helpTitle);
+    // QLabel *helpTitle = new QLabel("Help", helpPanel);
+    // helpTitle->setStyleSheet("qproperty-alignment: AlignCenter; padding: 3px; font-size: 9pt; ");
+    // helpPanel->setTitleBarWidget(helpTitle);
 
     helpPanel->show();
     addDockWidget(Qt::RightDockWidgetArea, helpPanel);
@@ -4760,7 +4760,6 @@ void CsoundQt::createToolBars()
     // configureToolBar->addAction(showScratchPadAct);
     // configureToolBar->addAction(showUtilitiesAct);
 
-
     Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
                                            Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
     //	fileToolBar->setToolButtonStyle(toolButtonStyle);
@@ -4833,7 +4832,7 @@ void CsoundQt::readSettings()
     m_options->font = settings.value("font", "Consolas").toString();
     m_options->fontPointSize = settings.value("fontsize", 11).toDouble();
 #endif
-#ifdef Q_OS_UNIX
+#ifdef Q_OS_LINUX
     m_options->font = settings.value("font", "Liberation Mono").toString();
     m_options->fontPointSize = settings.value("fontsize", 11).toDouble();
 #endif

@@ -154,7 +154,7 @@
       <item row="0" column="4">
        <widget class="QCheckBox" name="caseBox">
         <property name="styleSheet">
-         <string notr="true">padding-right: 8</string>
+         <string notr="true">padding-right: 8; padding-left: 8;</string>
         </property>
         <property name="text">
          <string>Match Case </string>
@@ -193,6 +193,9 @@
           <width>16777215</width>
           <height>40</height>
          </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">padding-left: 8px; padding-right: 20px</string>
         </property>
        </widget>
       </item>
