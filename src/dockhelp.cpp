@@ -37,7 +37,7 @@ DockHelp::DockHelp(QWidget *parent)
     setWindowTitle("Opcode Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
 
-//	connect(ui->toggleFindButton, SIGNAL(released()), this, SLOT(toggleFindBarVisible()));
+    connect(ui->toggleFindButton, SIGNAL(released()), this, SLOT(toggleFindBarVisible()));
 	connect(ui->backButton, SIGNAL(released()), this, SLOT(browseBack()));
 	connect(ui->forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
     // connect(ui->opcodesToolButton, SIGNAL(released()), this, SLOT(showOverview()));
@@ -54,6 +54,14 @@ DockHelp::DockHelp(QWidget *parent)
 	connect(ui->caseBox,SIGNAL(stateChanged(int)),this,SLOT(onCaseBoxChanged(int)));
 	connect(ui->wholeWordBox,SIGNAL(stateChanged(int)),this,SLOT(onWholeWordBoxChanged(int)));
 	connect(ui->text, SIGNAL(anchorClicked(QUrl)), this, SLOT(followLink(QUrl)));
+
+    ui->toggleFindButton->setChecked(false);
+    ui->findLine->setVisible(false);
+    ui->caseBox->setVisible(false);
+    ui->wholeWordBox->setVisible(false);
+    ui->label->setVisible(false);
+    ui->nextFindButton->setVisible(false);
+    ui->previousFindButton->setVisible(false);
 }
 
 DockHelp::~DockHelp()
