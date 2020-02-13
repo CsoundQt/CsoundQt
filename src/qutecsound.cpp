@@ -4726,7 +4726,14 @@ void CsoundQt::createToolBars()
     //	addDockWidget(Qt::AllDockWidgetAreas, toolWidget);
     //	toolWidget->show();
 
+#ifdef Q_OS_MAC
+    QMacToolBar *toolBar = new QMacToolBar(this);
+    QMacToolBarItem *toolBarItem = toolBar->addItem(QIcon(), QStringLiteral("foo"));
+    connect(toolBarItem, SIGNAL(activated()), this, SLOT(fooClicked()));
 
+    this->window()->winId(); // create window->windowhandle()
+    toolBar->attachToWindow(this->window()->windowHandle());
+#endif
     controlToolBar = addToolBar(tr("Control"));
     controlToolBar->setObjectName("controlToolBar");
     controlToolBar->addAction(runAct);
