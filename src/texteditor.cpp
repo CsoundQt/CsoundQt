@@ -129,11 +129,17 @@ TextEditLineNumbers::TextEditLineNumbers(QWidget *parent)
 	connect(this->document(),SIGNAL(blockCountChanged(int)),this,SLOT(updateLineArea(int)));
 	connect(this->verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(updateLineArea(int)));
 	connect(this,SIGNAL(cursorPositionChanged()),this,SLOT(updateLineArea()));
+    lineNumberArea->setLineNumberSizeScaling(0.8);
 }
 
 int TextEditLineNumbers::getAreaWidth()
 {
-	return (2 + this->fontMetrics().width(QLatin1Char('9'))) * 4; //space of 4 digits, add some padding
+    qreal scaling = lineNumberArea->lineNumberSizeScaling();
+    int right_padding = lineNumberArea->padding();
+    int left_padding  = lineNumberArea->padding();
+    int numDigits = 4;
+    int oneDigit = this->fontMetrics().width(QLatin1Char('9'));
+    return oneDigit * scaling * numDigits + left_padding + right_padding;
 }
 
 void TextEditLineNumbers::resizeEvent(QResizeEvent *e)
@@ -193,7 +199,7 @@ void TextEditLineNumbers::updateLineArea()
 
 void LineNumberArea::paintEvent(QPaintEvent *)
 {
-	if ( !codeEditor->lineAreaVisble() )
+    if ( !codeEditor->lineAreaVisble() )
 		return;
 	QPainter painter(this);
 	painter.fillRect(rect(), Qt::lightGray);
@@ -204,10 +210,16 @@ void LineNumberArea::paintEvent(QPaintEvent *)
 	QTextBlock current_block = codeEditor->document()->findBlock(codeEditor->textCursor().position());
 
 	int line_count = 0;
-	painter.setPen(QColor(Qt::darkGray).darker()); // not exactly black
-	bool bold;
+    // painter.setPen(QColor(Qt::darkGray).darker()); // not exactly black
+    painter.setPen(QColor(Qt::darkGray)); // not exactly black
+
+    bool bold;
 	QFont font = painter.font();
-	while (block.isValid()) {
+    // font.setPixelSize((int)(font.pixelSize() * 0.8));
+    font.setPointSizeF(font.pointSizeF() * m_lineNumberSizeScaling);
+    painter.setFont(font);
+
+    while (block.isValid()) {
 		line_count += 1;
 		QString number = QString::number(line_count);
 		QPointF position = codeEditor->document()->documentLayout()->blockBoundingRect(block).topLeft();
@@ -220,7 +232,7 @@ void LineNumberArea::paintEvent(QPaintEvent *)
 				font.setBold(true);
 				painter.setFont(font);
 			}
-			painter.drawText(codeEditor->getAreaWidth() - codeEditor->fontMetrics().width(number) - 3, y, number); // 3 - add some padding
+            painter.drawText(codeEditor->getAreaWidth() - codeEditor->fontMetrics().width(number)*m_lineNumberSizeScaling - m_padding, y, number); // 3 - add some padding
 
 
 			if (bold) {

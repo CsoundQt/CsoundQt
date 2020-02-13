@@ -83,7 +83,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     //	initialDir = QDir::current().path();
     initialDir = QCoreApplication::applicationDirPath();
     setWindowTitle("CsoundQt[*]");
-    resize(780,550);
+    // resize(780,550);
     setWindowIcon(QIcon(":/images/qtcs.png"));
     //Does this take care of the decimal separator for different locales?
     QLocale::setDefault(QLocale::system());
@@ -243,6 +243,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     documentTabs->setDocumentMode(true);
     modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
     modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
+    documentTabs->setMinimumSize(QSize(500, 500));
 
     // set shortcuts to change between tabs,Alt +<tab no>
     // example from: https://stackoverflow.com/questions/10160232/qt-designer-shortcut-to-another-tab
@@ -3651,7 +3652,7 @@ void CsoundQt::createActions()
     showVirtualKeyboardAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showVirtualKeyboardAct, SIGNAL(toggled(bool)), this, SLOT(showVirtualKeyboard(bool)));
 
-    showTableEditorAct = new QAction(/*QIcon(prefix + "midi_keyboard.png"), */tr("Show Table editor"), this);
+    showTableEditorAct = new QAction(tr("Show Table editor"), this);
     showTableEditorAct->setCheckable(true); // TODO: make it clickable, ie not checkable
     showTableEditorAct->setChecked(false);
     showTableEditorAct->setStatusTip(tr("Show Table editor"));
@@ -4863,7 +4864,7 @@ void CsoundQt::readSettings()
     m_options->widgetsIndependent = settings.value("widgetsIndependent", false).toBool();
     m_options->iconText = settings.value("iconText", true).toBool();
     m_options->showToolbar = settings.value("showToolbar", true).toBool();
-    m_options->lockToolbar = settings.value("lockToolbar", false).toBool();
+    m_options->lockToolbar = settings.value("lockToolbar", true).toBool();
     m_options->wrapLines = settings.value("wrapLines", true).toBool();
     m_options->autoComplete = settings.value("autoComplete", true).toBool();
     m_options->autoParameterMode = settings.value("autoParameterMode", true).toBool();

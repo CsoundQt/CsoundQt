@@ -70,7 +70,7 @@ public:
 	TextEditLineNumbers(QWidget *parent = 0);
 	int getAreaWidth();
 	void setLineAreaVisble(bool visible);
-	bool lineAreaVisble() {return m_lineAreaVisble;}
+    bool lineAreaVisble() {return m_lineAreaVisble;}
 	QAction *toggleAction;
 
 public slots:
@@ -99,9 +99,14 @@ public:
 	LineNumberArea(TextEditLineNumbers *editor) : QWidget(editor) {
 		codeEditor = editor;
 		m_currentDebugLine = -1;
+        m_lineNumberSizeScaling = 1;
+        m_padding = 8;
 	}
 	void setDebugLines(QVector<int> debugLines) {m_debugLines = debugLines;}
 	void setCurrentDebugLine(int line) {m_currentDebugLine = line;}
+    void setLineNumberSizeScaling(qreal factor) {m_lineNumberSizeScaling = factor;}
+    qreal lineNumberSizeScaling() { return m_lineNumberSizeScaling; }
+    int padding() { return m_padding; }
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -109,6 +114,8 @@ protected:
 private:
 	QVector<int> m_debugLines;
 	int m_currentDebugLine;
+    int m_padding;
+    double m_lineNumberSizeScaling;
 	TextEditLineNumbers *codeEditor;
 };
 
