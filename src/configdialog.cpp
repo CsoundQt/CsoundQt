@@ -642,7 +642,8 @@ void ConfigDialog::selectAudioInput()
 	QList<QPair<QString, QString> > deviceList
 			= m_configlists->getAudioInputDevices(
 				RtModuleComboBox->itemData(RtModuleComboBox->currentIndex()).toString());
-	QMenu menu(this);
+    // QMenu menu(this);
+    QMenu menu(audioInputToolButton);
 	QVector<QAction*> actions;
 
 	QPair<QString, QString> device;
@@ -659,8 +660,13 @@ void ConfigDialog::selectAudioInput()
 		actions.append(action);
 	}
 
-	int index = actions.indexOf(menu.exec(this->mapToGlobal(QPoint(260,440))));
-	if (index >= 0)
+    // int index = actions.indexOf(menu.exec(this->mapToGlobal(QPoint(260,440))));
+    QPoint pos = audioInputToolButton->pos();
+    pos.setY(pos.y() + audioInputToolButton->height()*1.5 + menu.height());
+    // audioInputToolButton->setMenu(&menu);
+    // int index = actions.indexOf(menu.exec());
+    int index = actions.indexOf(menu.exec(this->mapToGlobal(pos)));
+    if (index >= 0)
 		RtInputLineEdit->setText(deviceList[index].second);
 }
 

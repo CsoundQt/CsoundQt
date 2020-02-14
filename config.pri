@@ -47,7 +47,7 @@ isEmpty(CSOUND_API_INCLUDE_DIR) {
             exists($${dir}):exists($${dir}/csound.h):exists($${dir}/cwindow.h) {
                 !no_messages {
                     message(CSOUND_API_INCLUDE_DIR set to $${dir})
-                    message()
+                    # message()
                 }
                 CSOUND_API_INCLUDE_DIR = $${dir}
                 break()
@@ -67,7 +67,7 @@ isEmpty(CSOUND_LIBRARY_DIR) {
                 for(csound_lib, DEFAULT_CSOUND_LIBS):exists($${dir}/$${csound_lib}) {
                     !no_messages {
                         message(CSOUND_LIBRARY_DIR set to $${dir})
-                        message()
+                        # message()
                     }
                     CSOUND_LIB = $${csound_lib}
                     CSOUND_LIBRARY_DIR = $${dir}
@@ -150,7 +150,7 @@ isEmpty(RTMIDI_DIR) {
         exists($${dir}) {
             !no_messages {
                 message(RTMIDI_DIR set to $${dir})
-                message()
+                message( )
             }
 			RTMIDI_DIR = $${dir}
             break()
@@ -182,7 +182,7 @@ win32 {
                 message("Using RtMidi < 2.1")
             }
     }
-    message()
+    # message()
 }
 !no_checks {
     defineTest(directoryExists) {
@@ -252,5 +252,3 @@ win32-msvc2015:DEFINES += _TIMESPEC_DEFINED
 win32-msvc2017:QMAKE_CXXFLAGS += -ID:\\msys\\local\\include -DSUB_PROCESS_DISABLED=1 /Zi
 win32-msvc2017:QMAKE_LFLAGS += /DEBUG /OPT:REF /OPT:ICF /INCREMENTAL:NO
 win32-msvc2017:DEFINES += _TIMESPEC_DEFINED
-
-
