@@ -660,12 +660,8 @@ void ConfigDialog::selectAudioInput()
 		actions.append(action);
 	}
 
-    // int index = actions.indexOf(menu.exec(this->mapToGlobal(QPoint(260,440))));
-    QPoint pos = audioInputToolButton->pos();
-    pos.setY(pos.y() + audioInputToolButton->height()*1.5 + menu.height());
-    // audioInputToolButton->setMenu(&menu);
-    // int index = actions.indexOf(menu.exec());
-    int index = actions.indexOf(menu.exec(this->mapToGlobal(pos)));
+    QPoint pos = audioInputToolButton->mapToGlobal(QPoint(0, audioInputToolButton->height()));
+    int index = actions.indexOf(menu.exec(pos));
     if (index >= 0)
 		RtInputLineEdit->setText(deviceList[index].second);
 }
@@ -692,8 +688,9 @@ void ConfigDialog::selectAudioOutput()
 		actions.append(action);
 	}
 
-	int index = actions.indexOf(menu.exec(this->mapToGlobal(QPoint(260,475))));
-	if (index >= 0)
+    QPoint pos = audioOutputToolButton->mapToGlobal(QPoint(0, audioOutputToolButton->height()));
+    int index = actions.indexOf(menu.exec(pos));
+    if (index >= 0)
 		RtOutputLineEdit->setText(deviceList[index].second);
 }
 
@@ -721,8 +718,10 @@ void ConfigDialog::selectMidiInput()
 		action->setData(i.value());
 	}
 
-	QAction *selected = menu.exec(this->mapToGlobal(QPoint(560,445)));
-	if (selected) {
+    QPoint pos = midiInputToolButton->mapToGlobal(QPoint(0, midiInputToolButton->height()));
+    QAction *selected = menu.exec(pos);
+
+    if (selected) {
 		RtMidiInputLineEdit->setText(selected->data().toString());
 	}
 }
@@ -731,7 +730,7 @@ void ConfigDialog::selectMidiOutput()
 {
 	QString module = RtMidiModuleComboBox->currentText();
 	QList<QPair<QString, QString> > deviceList = m_configlists->getMidiOutputDevices(module);
-	QMenu menu(this);
+    QMenu menu(this);
 	QVector<QAction*> actions;
 
 
@@ -752,8 +751,10 @@ void ConfigDialog::selectMidiOutput()
 		actions.append(action);
 	}
 
-	int index = actions.indexOf(menu.exec(this->mapToGlobal(QPoint(560,475))));
-	if (index >= 0)
+    QPoint pos = midiOutputToolButton->mapToGlobal(QPoint(0, midiOutputToolButton->height()));
+    int index = actions.indexOf(menu.exec(pos));
+    // int index = actions.indexOf(menu.exec(this->mapToGlobal(pos)));
+    if (index >= 0)
 		RtMidiOutputLineEdit->setText(deviceList[index].second);
 }
 
