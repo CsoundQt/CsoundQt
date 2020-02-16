@@ -22,23 +22,46 @@
 
 #include "quteknob.h"
 
+QVdial::~QVdial() {};
+
+void QVdial::mousePressEvent (QMouseEvent *event) {
+    m_mouse_press_point = event->pos();
+    m_dragging = true;
+    m_base_value = value();
+    m_temp_scale_factor = event->modifiers() & Qt::AltModifier ? 0.25f : 1.0f;
+}
+
+
+void QVdial::mouseReleaseEvent (QMouseEvent *event) {
+    m_dragging = false;
+}
+
+void QVdial::mouseMoveEvent (QMouseEvent *event) {
+    if (!m_dragging)
+        return;
+    float delta = (m_mouse_press_point.y() - event->y()) / (float)this->height() * (float)this->maximum();
+    float fvalue = m_base_value + delta * m_temp_scale_factor * m_scale_factor;
+    setValue((int)fvalue);
+}
+
+
 QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 {
 	//TODO add resolution to config dialog and set these values accordingly
-	m_widget = new QDial(this);
-	static_cast<QDial *>(m_widget)->setMinimum(0);
-	static_cast<QDial *>(m_widget)->setMaximum(100);
-	static_cast<QDial *>(m_widget)->setNotchesVisible(true);
+    m_widget = new QVdial(this);
+    static_cast<QVdial *>(m_widget)->setMinimum(0);
+    static_cast<QVdial *>(m_widget)->setMaximum(10000);
+    static_cast<QVdial *>(m_widget)->setNotchesVisible(true);
+
 	m_widget->setPalette(QPalette(Qt::gray));
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
-
-	setProperty("QCS_minimum", 0.0);
-	setProperty("QCS_maximum", 99.0);
+    setProperty("QCS_minimum", 0.0);
+    setProperty("QCS_maximum", 99.0);
 	setProperty("QCS_value", 0.0);
 	setProperty("QCS_mode", "lin");
 	setProperty("QCS_mouseControl", "continuous");
-	setProperty("QCS_mouseControlAct", "jump");
+    // setProperty("QCS_mouseControlAct", "jump");
 	setProperty("QCS_resolution", 0.01);
 	setProperty("QCS_randomizable", false);
 	setProperty("QCS_randomizableGroup", 0);
@@ -61,6 +84,7 @@ void QuteKnob::setRange(double min, double max)
 		m_value =  max;
 	else if (m_value > min)
 		m_value = min;
+    qDebug() << "QCS_maximum: " << max << "\n";
 	setProperty("QCS_maximum", max);
 	setProperty("QCS_minimum", min);
 	m_valueChanged = true;

@@ -227,3 +227,8 @@ void DockHelp::resizeEvent(QResizeEvent *e)
     // ui->backButton->move(frameGeometry().width()/2-25, 0);
     // ui->forwardButton->move(frameGeometry().width()/2, 0);
 }
+
+
+void DockHelp::focusText() {
+    ui->text->setFocus();
+}

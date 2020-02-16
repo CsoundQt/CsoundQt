@@ -2212,6 +2212,8 @@ void CsoundQt::setHelpEntry()
         //        helpPanel->loadFile(dir + "/index.html");
         //    }
         helpPanel->show();
+        helpPanel->raise();
+        helpPanel->focusText();
     }
     else {
         QMessageBox::critical(this,

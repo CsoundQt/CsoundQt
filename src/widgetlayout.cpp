@@ -2345,14 +2345,38 @@ void WidgetLayout::alignCenterHorizontal()
 
 void WidgetLayout::keyPressEvent(QKeyEvent *event)
 {
-	//qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
+    // qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
+    int key = event->key();
+    if(m_editMode) {
+        switch(key) {
+        case Qt::Key_Left:
+            this->moveSelected(event->modifiers() & Qt::AltModifier ? -5 : -1, 0);
+            event->accept();
+            return;
+        case Qt::Key_Right:
+            this->moveSelected(event->modifiers() & Qt::AltModifier ? 5 : 1, 0);
+            event->accept();
+            return;
+        case Qt::Key_Up:
+            this->moveSelected(0, event->modifiers() & Qt::AltModifier ? -5 : -1);
+            event->accept();
+            return;
+        case Qt::Key_Down:
+            this->moveSelected(0, event->modifiers() & Qt::AltModifier ? 5 : 1);
+            event->accept();
+            return;
+        }
+    }
+
     if (!event->isAutoRepeat() || m_repeatKeys) {
 		QString keyText = event->text();
-		if (event->key() == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) { // TODO why is this necessary? The shortcut from the duplicate action in the main app is not working!
+        if (key == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) {
+            // TODO why is this necessary? The shortcut from the duplicate action in the main app is not working!
 			this->duplicate();
 			event->accept();
 			return;
 		}
+
 		//    if (event->key() == Qt::Key_X && (event->modifiers() & Qt::ControlModifier )) {
 		//      this->cut();
 		//      event->accept();
@@ -2368,9 +2392,10 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
 		//      event->accept();
 		//      return;
 		//    }
-		if (event->key()  == Qt::Key_Delete || event->key()  == Qt::Key_Backspace) {
+        if (key == Qt::Key_Delete || key == Qt::Key_Backspace) {
 			this->deleteSelected();
 			event->accept();
+            return;
 		}
 		//    else if (event->matches(QKeySequence::Undo)) {
 		//      this->undo();
@@ -3872,6 +3897,21 @@ void WidgetLayout::deleteSelected()
 	}
 	widgetsMutex.unlock();
 	markHistory();
+}
+
+void WidgetLayout::moveSelected(int horiz, int vert) {
+    widgetsMutex.lock();
+    for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
+        if(editWidgets[i]->isSelected()) {
+            widgetsMutex.unlock();
+            QPoint pos = m_widgets[i]->pos();
+            m_widgets[i]->move(pos.x() + horiz, pos.y() + vert);
+            editWidgets[i]->move(pos.x() + horiz, pos.y() + vert);
+            widgetsMutex.lock();
+        }
+    }
+    widgetsMutex.unlock();
+    markHistory();
 }
 
 void WidgetLayout::undo()

@@ -25,6 +25,33 @@
 
 #include "qutewidget.h"
 
+/* QVdial: A knob with vertical dragging instead of circular
+ *
+ */
+class QVdial: public QDial {
+public:
+    QVdial (QWidget *parent = nullptr)
+    : QDial(parent)
+    , m_dragging(false)
+    , m_scale_factor(1.0f)
+    , m_temp_scale_factor(1.0f)
+    {}
+    virtual ~QVdial() override;
+    void setScaleFactor(float factor) { m_scale_factor = factor; }
+
+protected:
+    virtual void mousePressEvent (QMouseEvent *event) override;
+    virtual void mouseReleaseEvent (QMouseEvent *event) override;
+    virtual void mouseMoveEvent (QMouseEvent *event) override;
+
+private:
+    bool   m_dragging;
+    QPoint m_mouse_press_point;
+    int    m_base_value;
+    float  m_scale_factor;
+    float  m_temp_scale_factor;
+};
+
 class QuteKnob : public QuteWidget
 {
 	Q_OBJECT

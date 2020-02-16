@@ -67,6 +67,7 @@ public slots:
 	void onPreviousButtonPressed();
 	void onWholeWordBoxChanged(int value);
 	void onCaseBoxChanged(int value);
+    void focusText();
 
 private:
 	Ui::DockHelp *ui;

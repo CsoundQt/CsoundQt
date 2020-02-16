@@ -257,6 +257,7 @@ public slots:
 	//    void paste(QPoint pos);
 	void duplicate();
 	void deleteSelected();
+    void moveSelected(int horiz, int vert);
 	void undo();
 	void redo();
 
