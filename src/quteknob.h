@@ -43,6 +43,7 @@ protected:
     virtual void mousePressEvent (QMouseEvent *event) override;
     virtual void mouseReleaseEvent (QMouseEvent *event) override;
     virtual void mouseMoveEvent (QMouseEvent *event) override;
+    virtual void paintEvent(QPaintEvent *event) override;
 
 private:
     bool   m_dragging;

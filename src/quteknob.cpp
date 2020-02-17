@@ -44,13 +44,35 @@ void QVdial::mouseMoveEvent (QMouseEvent *event) {
     setValue((int)fvalue);
 }
 
+void QVdial::paintEvent(QPaintEvent *event) {
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    QPoint center = this->rect().center();
+    qreal r = qMin(this->rect().height(), this->rect().width()) / 2.0;
+    r *= 0.75;
+    int const penWidth = r*0.5;
+    QPen const fgPen(QColor(255, 152, 0), penWidth, Qt::SolidLine, Qt::FlatCap);
+    QPen const bgPen(QColor(30, 30, 30),  penWidth, Qt::SolidLine, Qt::FlatCap);
+    QRectF const rect(center.x() - r, center.y() - r, r * 2, r * 2);
+    int const startAngle = 135.0f * 16;
+    double relvalue = (double)this->value() / this->maximum();
+    int const offset = 0;
+    int steps = relvalue * (16 * 270 - offset);
+    painter.setPen(bgPen);
+    painter.drawArc(rect, -startAngle, -270 * 16);
+    painter.setPen(fgPen);
+    painter.drawArc(rect, -startAngle, -(steps + offset));
+
+}
+
 QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 {
 	//TODO add resolution to config dialog and set these values accordingly
     m_widget = new QVdial(this);
+    int const maximum = 10000;
     static_cast<QVdial *>(m_widget)->setMinimum(0);
-    static_cast<QVdial *>(m_widget)->setMaximum(10000);
-    static_cast<QVdial *>(m_widget)->setNotchTarget(100);
+    static_cast<QVdial *>(m_widget)->setMaximum(maximum);
+    static_cast<QVdial *>(m_widget)->setNotchTarget(maximum / 10);
     static_cast<QVdial *>(m_widget)->setNotchesVisible(true);
 
 
