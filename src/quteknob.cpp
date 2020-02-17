@@ -44,14 +44,15 @@ void QVdial::mouseMoveEvent (QMouseEvent *event) {
     setValue((int)fvalue);
 }
 
-
 QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 {
 	//TODO add resolution to config dialog and set these values accordingly
     m_widget = new QVdial(this);
     static_cast<QVdial *>(m_widget)->setMinimum(0);
     static_cast<QVdial *>(m_widget)->setMaximum(10000);
+    static_cast<QVdial *>(m_widget)->setNotchTarget(100);
     static_cast<QVdial *>(m_widget)->setNotchesVisible(true);
+
 
 	m_widget->setPalette(QPalette(Qt::gray));
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
