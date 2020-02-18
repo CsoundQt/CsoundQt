@@ -25,6 +25,9 @@
 QVdial::~QVdial() {};
 
 void QVdial::mousePressEvent (QMouseEvent *event) {
+    if(!(event->button() & Qt::LeftButton)) {
+        return;
+    }
     m_mouse_press_point = event->pos();
     m_dragging = true;
     m_base_value = value();
@@ -48,13 +51,13 @@ void QVdial::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     QPoint center = this->rect().center();
-    qreal r = qMin(this->rect().height(), this->rect().width()) / 2.0;
+    double r = qMin(this->rect().height(), this->rect().width()) / 2.0;
     r *= 0.75;
-    int const penWidth = r*0.5;
-    QPen const fgPen(QColor(255, 152, 0), penWidth, Qt::SolidLine, Qt::FlatCap);
+    int const penWidth = r * 0.5;
+    QPen const fgPen(m_color, penWidth, Qt::SolidLine, Qt::FlatCap);
     QPen const bgPen(QColor(30, 30, 30),  penWidth, Qt::SolidLine, Qt::FlatCap);
     QRectF const rect(center.x() - r, center.y() - r, r * 2, r * 2);
-    int const startAngle = 135.0f * 16;
+    int const startAngle = static_cast<int>(135.0f * 16);
     double relvalue = (double)this->value() / this->maximum();
     int const offset = 0;
     int steps = relvalue * (16 * 270 - offset);
@@ -62,6 +65,14 @@ void QVdial::paintEvent(QPaintEvent *event) {
     painter.drawArc(rect, -startAngle, -270 * 16);
     painter.setPen(fgPen);
     painter.drawArc(rect, -startAngle, -(steps + offset));
+    if(m_draw_value && r >= 20) {
+        float display_value = ((float)this->value()/(float)this->maximum()) *
+                             (m_display_max - m_display_min) + m_display_min;
+        int fontSize = r*0.37;
+        painter.setFont({"Helvetica", fontSize});
+        QString strValue = QString::number((double)display_value, 'f', m_decimals);
+        painter.drawText(this->rect(), Qt::AlignCenter, strValue);
+    }
 
 }
 
@@ -74,7 +85,7 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
     static_cast<QVdial *>(m_widget)->setMaximum(maximum);
     static_cast<QVdial *>(m_widget)->setNotchTarget(maximum / 10);
     static_cast<QVdial *>(m_widget)->setNotchesVisible(true);
-
+    static_cast<QVdial *>(m_widget)->displayValue(true);
 
 	m_widget->setPalette(QPalette(Qt::gray));
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
@@ -88,6 +99,8 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_resolution", 0.01);
 	setProperty("QCS_randomizable", false);
 	setProperty("QCS_randomizableGroup", 0);
+    setProperty("QCS_color", QColor(245, 124, 0));
+    setProperty("QCS_showvalue", true);
 	connect(static_cast<QDial *>(m_widget), SIGNAL(valueChanged(int)), this, SLOT(knobChanged(int)));
 }
 
@@ -111,6 +124,8 @@ void QuteKnob::setRange(double min, double max)
 	setProperty("QCS_maximum", max);
 	setProperty("QCS_minimum", min);
 	m_valueChanged = true;
+    static_cast<QVdial *>(m_widget)->setDisplayRange(min, max);
+
 }
 
 void QuteKnob::setMidiValue(int value)
@@ -130,25 +145,24 @@ void QuteKnob::refreshWidget()
 #endif
 	double max = property("QCS_maximum").toDouble();
 	double min = property("QCS_minimum").toDouble();
-	int val = (int) (static_cast<QDial *>(m_widget)->maximum() * (m_value - min)/(max-min));
+
+    int val = (int) (static_cast<QDial *>(m_widget)->maximum() * (m_value - min)/(max-min));
 	m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
 	m_widget->blockSignals(true);
-	static_cast<QDial *>(m_widget)->setValue(val);
-	m_widget->blockSignals(false);
+    static_cast<QVdial *>(m_widget)->setValue(val);
+    m_widget->blockSignals(false);
 }
 
 void QuteKnob::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
-	//  qDebug() << "QuteSlider::applyInternalProperties()";
-	//  QVariant prop;
-	//  m_value = property("QCS_value").toDouble();
-	//  m_value2 = property("QCS_value2").toDouble();
-	//  m_stringValue = property("QCS_stringValue").toString();
-	setValue(property("QCS_value").toDouble());
+    setValue(property("QCS_value").toDouble());
+    QColor color = property("QCS_color").value<QColor>();
+    setKnobColor(color);
+    static_cast<QVdial *>(m_widget)->displayValue(property("QCS_showvalue").toBool());
 }
 
 //void QuteKnob::setResolution(double resolution)
@@ -272,8 +286,15 @@ QString QuteKnob::getWidgetXmlText()
 	s.writeCharacters(property("QCS_randomizable").toBool() ? "true": "false");
 	s.writeEndElement();
 
-	// Thesecome from blue, but they are not implemented here
-	//s.writeTextElement("knobWidth", "");
+    QColor color = property("QCS_color").value<QColor>();
+    s.writeStartElement("color");
+    s.writeTextElement("r", QString::number(color.red()));
+    s.writeTextElement("g", QString::number(color.green()));
+    s.writeTextElement("b", QString::number(color.blue()));
+    s.writeEndElement();
+
+    s.writeTextElement("showvalue", property("QCS_showvalue").toBool() ? "true" : "false");
+
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -286,6 +307,22 @@ QString QuteKnob::getWidgetType()
 	return QString("BSBKnob");
 }
 
+void QuteKnob::setKnobColor(QColor color) {
+    if(color.isValid())
+        static_cast<QVdial *>(m_widget)->setColor(color);
+}
+
+void QuteKnob::selectKnobColor() {
+    QColor color = QColorDialog::getColor(m_widget->palette().color(QPalette::WindowText), this);
+    setKnobColor(color);
+    if(knobColorButton != nullptr) {
+        QPixmap pixmap(64,64);
+        pixmap.fill(color);
+        knobColorButton->setPalette(QPalette(color));
+        knobColorButton->setIcon(pixmap);
+    }
+}
+
 void QuteKnob::createPropertiesDialog()
 {
 	QuteWidget::createPropertiesDialog();
@@ -294,6 +331,7 @@ void QuteKnob::createPropertiesDialog()
 #endif
 	dialog->setWindowTitle("Knob");
 	QLabel *label = new QLabel(dialog);
+
 	label->setText("Min =");
 	layout->addWidget(label, 2, 0, Qt::AlignRight|Qt::AlignVCenter);
 	minSpinBox = new QDoubleSpinBox(dialog);
@@ -308,14 +346,28 @@ void QuteKnob::createPropertiesDialog()
 	maxSpinBox->setDecimals(6);
 	maxSpinBox->setRange(-99999.0, 99999.0);
 	maxSpinBox->setValue(property("QCS_maximum").toDouble());
-	layout->addWidget(maxSpinBox, 2,3, Qt::AlignLeft|Qt::AlignVCenter);
-	label->setText("Resolution");
-	layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
-	//   resolutionSpinBox = new QDoubleSpinBox(dialog);
-	//   resolutionSpinBox->setDecimals(6);
-	//   resolutionSpinBox->setValue(getResolution());
-	//   layout->addWidget(resolutionSpinBox, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	//  setProperty("QCS_value", m_value);
+    layout->addWidget(maxSpinBox, 2, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label->setText("Resolution");
+    layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    displayValueCheckBox = new QCheckBox(dialog);
+    displayValueCheckBox->setText("Display value");
+    displayValueCheckBox->setCheckState(
+                property("QCS_showvalue").toBool()?Qt::Checked:Qt::Unchecked);
+    layout->addWidget(displayValueCheckBox, 5, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    knobColorButton = new QPushButton(dialog);
+    label->setText("Color");
+    layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(knobColorButton, 6, 1, Qt::AlignLeft | Qt::AlignVCenter);
+    connect(knobColorButton, SIGNAL(released()), this, SLOT(selectKnobColor()));
+    QPixmap pixmap(64, 64);
+    QColor knobColor = property("QCS_color").value<QColor>();
+    pixmap.fill(knobColor);
+    knobColorButton->setIcon(pixmap);
+    knobColorButton->setPalette(QPalette(knobColor));
+
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -328,11 +380,18 @@ void QuteKnob::applyProperties()
 #endif
 	setProperty("QCS_maximum", maxSpinBox->value());
 	setProperty("QCS_minimum", minSpinBox->value());
+    QColor color = knobColorButton->palette().color(QPalette::Window);
+    setProperty("QCS_color", color);
+
 	//   m_resolution = resolutionSpinBox->value();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
+    static_cast<QVdial *>(m_widget)->setDisplayRange(minSpinBox->value(), maxSpinBox->value());
+    bool showvalue = displayValueCheckBox->checkState();
+    setProperty("QCS_showvalue", showvalue);
+    static_cast<QVdial *>(m_widget)->displayValue(showvalue);
+    QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
 }
 
 void QuteKnob::knobChanged(int value)

@@ -35,9 +35,28 @@ public:
     , m_dragging(false)
     , m_scale_factor(1.0f)
     , m_temp_scale_factor(1.0f)
+    , m_draw_value(true)
+    , m_decimals(2)
+    , m_display_min(0.0f)
+    , m_display_max(1.0f)
+    , m_color(QColor(245, 124, 0))
     {}
     virtual ~QVdial() override;
     void setScaleFactor(float factor) { m_scale_factor = factor; }
+    void setDecimals(int decimals) { m_decimals = decimals; }
+    void setDisplayRange(float min, float max) {
+        m_display_min = min;
+        m_display_max = max;
+        max = qAbs(max);
+        if(max < 100)
+            m_decimals = 2;
+        else if(max < 1000)
+            m_decimals = 1;
+        else
+            m_decimals = 0;
+    }
+    void displayValue(bool enable) { m_draw_value = enable; }
+    void setColor(QColor color) { m_color = color; }
 
 protected:
     virtual void mousePressEvent (QMouseEvent *event) override;
@@ -51,6 +70,11 @@ private:
     int    m_base_value;
     float  m_scale_factor;
     float  m_temp_scale_factor;
+    bool   m_draw_value;
+    int    m_decimals;
+    float  m_display_min;
+    float  m_display_max;
+    QColor m_color;
 };
 
 class QuteKnob : public QuteWidget
@@ -67,13 +91,18 @@ public:
     virtual QString getQml();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
-	//    virtual void setResolution(double resolution);
+    //    virtual void setResolution(double resolution);
 	void setRange(double min, double max);
 	virtual void setMidiValue(int value);
 	virtual bool acceptsMidi() {return true;}
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
+    void setKnobColor(QColor c);
+
+private slots:
+    void selectKnobColor();
+
 
 protected:
 	virtual void createPropertiesDialog();
@@ -87,6 +116,8 @@ private:
 	QDoubleSpinBox *minSpinBox;
 	QDoubleSpinBox *maxSpinBox;
 	QDoubleSpinBox *resolutionSpinBox;
+    QCheckBox      *displayValueCheckBox;
+    QPushButton    *knobColorButton;
 
 };
 
