@@ -72,16 +72,26 @@ void QVdial::paintEvent(QPaintEvent *event) {
     painter.drawArc(rect, -startAngle, -m_degrees * 16);
     painter.setPen(fgPen);
     painter.drawArc(rect, -startAngle, -steps);
-    if(m_draw_value && r >= 18) {
+    if(m_draw_value && r > 15) {
         double display_value = ((double)this->value()/(double)this->maximum()) *
                              (m_display_max - m_display_min) + m_display_min;
-        double fontScale = display_value < 10000 ? 0.43 : 0.34;
+        int decimals = m_intDisplay ? 0 : m_decimals;
+        QString strValue = QString::number((double)display_value, 'f', decimals);
+        double numChars = (double)strValue.size();
+        if(decimals > 0) {
+            // do not account for decimal .
+            numChars -= 0.2;
+        }
+        if(display_value < 0) {
+            numChars -= 0.5;
+
+        }
+        numChars = numChars > 4 ? numChars : 4;
+        double fontScale = 0.46 * 4/numChars;
         int fontSize = (int) (r * fontScale);
         painter.setFont({"Helvetica", fontSize});
-        QString strValue = QString::number((double)display_value, 'f', m_decimals);
         painter.drawText(this->rect(), Qt::AlignCenter, strValue);
     }
-
 }
 
 void QVdial::setValueDialog() {
@@ -115,7 +125,7 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
     setProperty("QCS_minimum", 0.0);
-    setProperty("QCS_maximum", 99.0);
+    setProperty("QCS_maximum", 1.0);
 	setProperty("QCS_value", 0.0);
 	setProperty("QCS_mode", "lin");
 	setProperty("QCS_mouseControl", "continuous");
@@ -126,6 +136,7 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
     setProperty("QCS_color", QColor(245, 124, 0));
     setProperty("QCS_showvalue", true);
     setProperty("QCS_flatstyle", true);
+    setProperty("QCS_integerMode", false);
 	connect(static_cast<QDial *>(m_widget), SIGNAL(valueChanged(int)), this, SLOT(knobChanged(int)));
 }
 
@@ -187,7 +198,10 @@ void QuteKnob::applyInternalProperties()
     setKnobColor(color);
     static_cast<QVdial *>(m_widget)->setDrawValue(property("QCS_showvalue").toBool());
     static_cast<QVdial *>(m_widget)->setFlatStyle(property("QCS_flatstyle").toBool());
+    static_cast<QVdial *>(m_widget)->setIntegerMode(property("QCS_integerMode").toBool());
 
+    static_cast<QVdial *>(m_widget)->setDisplayRange(
+                property("QCS_minimum").toDouble(), property("QCS_maximum").toDouble());
 }
 
 void QuteKnob::setWidgetGeometry(int x, int y, int width, int height)
@@ -309,6 +323,8 @@ QString QuteKnob::getWidgetXmlText()
 
     s.writeTextElement("showvalue", property("QCS_showvalue").toBool() ? "true" : "false");
     s.writeTextElement("flatstyle", property("QCS_flatstyle").toBool() ? "true" : "false");
+    s.writeTextElement("integerMode", property("QCS_integerMode").toBool() ? "true" : "false");
+
 
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
@@ -377,6 +393,12 @@ void QuteKnob::createPropertiesDialog()
                 property("QCS_showvalue").toBool()?Qt::Checked:Qt::Unchecked);
     layout->addWidget(displayValueCheckBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
+    intModeCheckBox = new QCheckBox(dialog);
+    intModeCheckBox->setText("Constrain to integer");
+    intModeCheckBox->setCheckState(
+                property("QCS_integerMode").toBool()?Qt::Checked:Qt::Unchecked);
+    layout->addWidget(intModeCheckBox, 6, 2, Qt::AlignLeft|Qt::AlignVCenter);
+
     knobColorButton = new QPushButton(dialog);
     label->setText("Color");
     layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
@@ -396,6 +418,9 @@ void QuteKnob::createPropertiesDialog()
             knobColorButton, SLOT(setEnabled(bool)));
     connect(flatStyleCheckBox, SIGNAL(toggled(bool)),
             label, SLOT(setEnabled(bool)));
+    connect(flatStyleCheckBox, SIGNAL(toggled(bool)),
+            intModeCheckBox, SLOT(setEnabled(bool)));
+
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -423,6 +448,10 @@ void QuteKnob::applyProperties()
     bool flatstyle = flatStyleCheckBox->checkState();
     setProperty("QCS_flatstyle", flatstyle);
     static_cast<QVdial *>(m_widget)->setFlatStyle(flatstyle);
+
+    bool intmode = intModeCheckBox->checkState();
+    setProperty("QCS_integerMode", intmode);
+    static_cast<QVdial *>(m_widget)->setIntegerMode(intmode);
 
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.unlock();

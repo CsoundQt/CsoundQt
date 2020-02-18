@@ -42,6 +42,7 @@ public:
     , m_color(QColor(245, 124, 0))
     , m_flat(true)
     , m_degrees(300)
+    , m_intDisplay(true)
     {}
     virtual ~QVdial() override;
     void setScaleFactor(double factor) { m_scale_factor = factor; }
@@ -61,6 +62,7 @@ public:
     void setColor(QColor color) { m_color = color; }
     void setFlatStyle(bool enable) { m_flat = enable; }
     void setValueDialog();
+    void setIntegerMode(bool enable) { m_intDisplay = enable; }
 
     void setValueFromDisplayValue(double display_value) {
         double delta = (display_value - m_display_min) / (m_display_max-m_display_min);
@@ -94,6 +96,7 @@ private:
     QColor m_color;
     bool   m_flat;
     int    m_degrees;
+    bool   m_intDisplay;
 };
 
 class QuteKnob : public QuteWidget
@@ -138,6 +141,7 @@ private:
     QCheckBox      *displayValueCheckBox;
     QCheckBox      *flatStyleCheckBox;
     QPushButton    *knobColorButton;
+    QCheckBox      *intModeCheckBox;
 
 };
 
