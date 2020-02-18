@@ -31,9 +31,8 @@ void QVdial::mousePressEvent (QMouseEvent *event) {
     m_mouse_press_point = event->pos();
     m_dragging = true;
     m_base_value = value();
-    m_temp_scale_factor = event->modifiers() & Qt::AltModifier ? 0.25f : 1.0f;
+    m_temp_scale_factor = event->modifiers() & Qt::AltModifier ? 0.25 : 1.0;
 }
-
 
 void QVdial::mouseReleaseEvent (QMouseEvent *event) {
     m_dragging = false;
@@ -42,39 +41,64 @@ void QVdial::mouseReleaseEvent (QMouseEvent *event) {
 void QVdial::mouseMoveEvent (QMouseEvent *event) {
     if (!m_dragging)
         return;
-    float delta = (m_mouse_press_point.y() - event->y()) / (float)this->height() * (float)this->maximum();
-    float fvalue = m_base_value + delta * m_temp_scale_factor * m_scale_factor;
+    int mouse_distance = m_mouse_press_point.y() - event->y();
+    double delta = mouse_distance / (double)this->height() * (double)this->maximum();
+    double fvalue = m_base_value + delta * m_temp_scale_factor * m_scale_factor;
     setValue((int)fvalue);
 }
 
+void QVdial::mouseDoubleClickEvent(QMouseEvent *event) {
+    this->setValueDialog();
+}
+
 void QVdial::paintEvent(QPaintEvent *event) {
+    if(!m_flat)
+        return this->QDial::paintEvent(event);
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     QPoint center = this->rect().center();
     double r = qMin(this->rect().height(), this->rect().width()) / 2.0;
     r *= 0.75;
-    int const penWidth = r * 0.5;
+    int const penWidth = (int)(r * 0.5);
     QPen const fgPen(m_color, penWidth, Qt::SolidLine, Qt::FlatCap);
     QPen const bgPen(QColor(30, 30, 30),  penWidth, Qt::SolidLine, Qt::FlatCap);
     QRectF const rect(center.x() - r, center.y() - r, r * 2, r * 2);
-    int const startAngle = static_cast<int>(135.0f * 16);
+    int const startAngle360 = 90 + (360 - m_degrees) / 2;
+    int const startAngle = startAngle360 * 16;
     double relvalue = (double)this->value() / this->maximum();
-    int const offset = 0;
-    int steps = relvalue * (16 * 270 - offset);
+    int steps = (int)(relvalue * 16 * m_degrees);
     painter.setPen(bgPen);
-    painter.drawArc(rect, -startAngle, -270 * 16);
+    painter.drawArc(rect, -startAngle, -m_degrees * 16);
     painter.setPen(fgPen);
-    painter.drawArc(rect, -startAngle, -(steps + offset));
-    if(m_draw_value && r >= 20) {
-        float display_value = ((float)this->value()/(float)this->maximum()) *
+    painter.drawArc(rect, -startAngle, -steps);
+    if(m_draw_value && r >= 18) {
+        double display_value = ((double)this->value()/(double)this->maximum()) *
                              (m_display_max - m_display_min) + m_display_min;
-        int fontSize = r*0.37;
+        double fontScale = display_value < 10000 ? 0.43 : 0.34;
+        int fontSize = (int) (r * fontScale);
         painter.setFont({"Helvetica", fontSize});
         QString strValue = QString::number((double)display_value, 'f', m_decimals);
         painter.drawText(this->rect(), Qt::AlignCenter, strValue);
     }
 
 }
+
+void QVdial::setValueDialog() {
+    double oldvalue = this->displayValue();
+    double newvalue = QInputDialog::getDouble(
+                this,
+                tr("Enter New Value"),
+                tr("Value"),
+                oldvalue,
+                m_display_min,
+                m_display_max,
+                3);
+    setValueFromDisplayValue(newvalue);
+}
+
+// ------------------------------------------------------
+
 
 QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 {
@@ -85,7 +109,7 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
     static_cast<QVdial *>(m_widget)->setMaximum(maximum);
     static_cast<QVdial *>(m_widget)->setNotchTarget(maximum / 10);
     static_cast<QVdial *>(m_widget)->setNotchesVisible(true);
-    static_cast<QVdial *>(m_widget)->displayValue(true);
+    static_cast<QVdial *>(m_widget)->setDrawValue(true);
 
 	m_widget->setPalette(QPalette(Qt::gray));
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
@@ -101,12 +125,11 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_randomizableGroup", 0);
     setProperty("QCS_color", QColor(245, 124, 0));
     setProperty("QCS_showvalue", true);
+    setProperty("QCS_flatstyle", true);
 	connect(static_cast<QDial *>(m_widget), SIGNAL(valueChanged(int)), this, SLOT(knobChanged(int)));
 }
 
-QuteKnob::~QuteKnob()
-{
-}
+QuteKnob::~QuteKnob() {}
 
 void QuteKnob::setRange(double min, double max)
 {
@@ -162,24 +185,14 @@ void QuteKnob::applyInternalProperties()
     setValue(property("QCS_value").toDouble());
     QColor color = property("QCS_color").value<QColor>();
     setKnobColor(color);
-    static_cast<QVdial *>(m_widget)->displayValue(property("QCS_showvalue").toBool());
+    static_cast<QVdial *>(m_widget)->setDrawValue(property("QCS_showvalue").toBool());
+    static_cast<QVdial *>(m_widget)->setFlatStyle(property("QCS_flatstyle").toBool());
+
 }
-
-//void QuteKnob::setResolution(double resolution)
-//{
-//  setProperty("QCS_resolution", resolution);
-//}
-
-//void QuteKnob::setWidgetLine(QString line)
-//{
-//  m_line = line;
-//}
 
 void QuteKnob::setWidgetGeometry(int x, int y, int width, int height)
 {
-	//  qDebug() << "QuteKnob::setWidgetGeometry " << width << "," << height;
 	QuteWidget::setWidgetGeometry(x,y,width,height);
-
 	m_widget->blockSignals(true);
 	m_widget->setFixedSize(width, height);
 	m_widget->blockSignals(false);
@@ -227,7 +240,8 @@ QString QuteKnob::getCabbageLine()
 	line += "channel(\"" + m_channel + "\"),  ";
 	line += QString("bounds(%1,%2,%3,%4), ").arg(x()).arg(y()).arg(width()).arg(height());
 	line += QString("range(%1,%2,%3), ").arg(property("QCS_minimum").toDouble()).arg(property("QCS_maximum").toDouble()).arg(m_value);
-	if (property("QCS_midicc").toInt() >= 0 && property("QCS_midichan").toInt()>0) { // insert only if midi channel is above 0
+    // insert only if midi channel is above 0
+    if (property("QCS_midicc").toInt() >= 0 && property("QCS_midichan").toInt() > 0) {
 		line += ", midiCtrl(\"" + QString::number(property("QCS_midichan").toInt()) + ",";
 		line +=  QString::number(property("QCS_midicc").toInt()) + "\")";
 	}
@@ -294,6 +308,7 @@ QString QuteKnob::getWidgetXmlText()
     s.writeEndElement();
 
     s.writeTextElement("showvalue", property("QCS_showvalue").toBool() ? "true" : "false");
+    s.writeTextElement("flatstyle", property("QCS_flatstyle").toBool() ? "true" : "false");
 
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
@@ -351,22 +366,36 @@ void QuteKnob::createPropertiesDialog()
     label->setText("Resolution");
     layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
 
+    flatStyleCheckBox = new QCheckBox(dialog);
+    flatStyleCheckBox->setText("Flat style");
+    flatStyleCheckBox->setCheckState(property("QCS_flatstyle").toBool()?Qt::Checked:Qt::Unchecked);
+    layout->addWidget(flatStyleCheckBox, 5, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
     displayValueCheckBox = new QCheckBox(dialog);
     displayValueCheckBox->setText("Display value");
     displayValueCheckBox->setCheckState(
                 property("QCS_showvalue").toBool()?Qt::Checked:Qt::Unchecked);
-    layout->addWidget(displayValueCheckBox, 5, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(displayValueCheckBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     knobColorButton = new QPushButton(dialog);
     label->setText("Color");
-    layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
-    layout->addWidget(knobColorButton, 6, 1, Qt::AlignLeft | Qt::AlignVCenter);
+    layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(knobColorButton, 7, 1, Qt::AlignLeft | Qt::AlignVCenter);
     connect(knobColorButton, SIGNAL(released()), this, SLOT(selectKnobColor()));
     QPixmap pixmap(64, 64);
     QColor knobColor = property("QCS_color").value<QColor>();
     pixmap.fill(knobColor);
     knobColorButton->setIcon(pixmap);
     knobColorButton->setPalette(QPalette(knobColor));
+
+    connect(flatStyleCheckBox, SIGNAL(toggled(bool)),
+            displayValueCheckBox, SLOT(setEnabled(bool)));
+    connect(flatStyleCheckBox, SIGNAL(toggled(bool)),
+            knobColorButton, SLOT(setEnabled(bool)));
+    connect(flatStyleCheckBox, SIGNAL(toggled(bool)),
+            knobColorButton, SLOT(setEnabled(bool)));
+    connect(flatStyleCheckBox, SIGNAL(toggled(bool)),
+            label, SLOT(setEnabled(bool)));
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -378,19 +407,27 @@ void QuteKnob::applyProperties()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
-	setProperty("QCS_maximum", maxSpinBox->value());
+
+    setProperty("QCS_maximum", maxSpinBox->value());
 	setProperty("QCS_minimum", minSpinBox->value());
+
     QColor color = knobColorButton->palette().color(QPalette::Window);
     setProperty("QCS_color", color);
 
-	//   m_resolution = resolutionSpinBox->value();
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
     static_cast<QVdial *>(m_widget)->setDisplayRange(minSpinBox->value(), maxSpinBox->value());
+
     bool showvalue = displayValueCheckBox->checkState();
     setProperty("QCS_showvalue", showvalue);
-    static_cast<QVdial *>(m_widget)->displayValue(showvalue);
+    static_cast<QVdial *>(m_widget)->setDrawValue(showvalue);
+
+    bool flatstyle = flatStyleCheckBox->checkState();
+    setProperty("QCS_flatstyle", flatstyle);
+    static_cast<QVdial *>(m_widget)->setFlatStyle(flatstyle);
+
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.unlock();
+#endif
+
     QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
 }
 

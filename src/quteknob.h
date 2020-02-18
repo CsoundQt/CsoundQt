@@ -33,18 +33,20 @@ public:
     QVdial (QWidget *parent = nullptr)
     : QDial(parent)
     , m_dragging(false)
-    , m_scale_factor(1.0f)
-    , m_temp_scale_factor(1.0f)
+    , m_scale_factor(1.0)
+    , m_temp_scale_factor(1.0)
     , m_draw_value(true)
     , m_decimals(2)
-    , m_display_min(0.0f)
-    , m_display_max(1.0f)
+    , m_display_min(0.0)
+    , m_display_max(1.0)
     , m_color(QColor(245, 124, 0))
+    , m_flat(true)
+    , m_degrees(300)
     {}
     virtual ~QVdial() override;
-    void setScaleFactor(float factor) { m_scale_factor = factor; }
+    void setScaleFactor(double factor) { m_scale_factor = factor; }
     void setDecimals(int decimals) { m_decimals = decimals; }
-    void setDisplayRange(float min, float max) {
+    void setDisplayRange(double min, double max) {
         m_display_min = min;
         m_display_max = max;
         max = qAbs(max);
@@ -55,26 +57,43 @@ public:
         else
             m_decimals = 0;
     }
-    void displayValue(bool enable) { m_draw_value = enable; }
+    void setDrawValue(bool enable) { m_draw_value = enable; }
     void setColor(QColor color) { m_color = color; }
+    void setFlatStyle(bool enable) { m_flat = enable; }
+    void setValueDialog();
+
+    void setValueFromDisplayValue(double display_value) {
+        double delta = (display_value - m_display_min) / (m_display_max-m_display_min);
+        double minval = (double)this->minimum();
+        double flvalue = delta * (this->maximum() - minval) + minval;
+        setValue((int)flvalue);
+    }
+
+    double displayValue() {
+        return ((double)this->value()/(double)this->maximum()) *
+                (m_display_max - m_display_min) + m_display_min;
+    }
 
 protected:
     virtual void mousePressEvent (QMouseEvent *event) override;
     virtual void mouseReleaseEvent (QMouseEvent *event) override;
     virtual void mouseMoveEvent (QMouseEvent *event) override;
+    virtual void mouseDoubleClickEvent (QMouseEvent *event) override;
     virtual void paintEvent(QPaintEvent *event) override;
 
 private:
     bool   m_dragging;
     QPoint m_mouse_press_point;
     int    m_base_value;
-    float  m_scale_factor;
-    float  m_temp_scale_factor;
+    double m_scale_factor;
+    double m_temp_scale_factor;
     bool   m_draw_value;
     int    m_decimals;
-    float  m_display_min;
-    float  m_display_max;
+    double m_display_min;
+    double m_display_max;
     QColor m_color;
+    bool   m_flat;
+    int    m_degrees;
 };
 
 class QuteKnob : public QuteWidget
@@ -117,6 +136,7 @@ private:
 	QDoubleSpinBox *maxSpinBox;
 	QDoubleSpinBox *resolutionSpinBox;
     QCheckBox      *displayValueCheckBox;
+    QCheckBox      *flatStyleCheckBox;
     QPushButton    *knobColorButton;
 
 };
