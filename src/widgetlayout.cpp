@@ -52,6 +52,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 	m_xmlFormat = true;
 	m_currentPreset = -1;
 	m_activeWidgets = 0;
+    m_updateRate = 30;
 
 	m_modified = false;
 	closing = 0;
@@ -3951,8 +3952,10 @@ void WidgetLayout::updateData()
 	}
 
 	refreshWidgets();
+    int const refresh_rate = m_updateRate;
+	int const msec = 1000 / refresh_rate;
 	if (!layoutMutex.tryLock(1)) {
-		updateTimer.singleShot(30, this, SLOT(updateData()));
+		updateTimer.singleShot(msec, this, SLOT(updateData()));
 		return;
 	}
 	while (!newCurveBuffer.isEmpty()) {
@@ -3965,7 +3968,7 @@ void WidgetLayout::updateData()
 		WINDAT * curveData = &curveUpdateBuffer[curveUpdateBufferCount--];
 		Curve *curve = (Curve *) getCurveById(curveData->windid);
 		//    qDebug() << "WidgetLayout::updateData() " << curveUpdateBuffer.size() <<  " ---" << curveData << "  " << curve;
-		if (curve != 0 && curveData != 0) {
+        if (curve != nullptr && curveData != nullptr) {
 			//      qDebug() << "WidgetLayout::updateData() " << windat->caption << "-" <<  curve->get_caption();
 			curve->set_size(curveData->npts);      // number of points
 			curve->set_data(curveData->fdata);
@@ -3984,7 +3987,7 @@ void WidgetLayout::updateData()
 	}
 	layoutMutex.unlock();
 	closing = 0;
-	updateTimer.singleShot(30, this, SLOT(updateData()));
+	updateTimer.singleShot(msec, this, SLOT(updateData()));
 }
 
 void WidgetLayout::widgetSelected(QuteWidget *widget)

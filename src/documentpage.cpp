@@ -977,9 +977,15 @@ void DocumentPage::setFontOffset(double offset)
 
 void DocumentPage::setFontScaling(double offset)
 {
-	foreach (WidgetLayout *wl, m_widgetLayouts) {
+    foreach (WidgetLayout *wl, m_widgetLayouts) {
 		wl->setFontScaling(offset);
 	}
+}
+
+void DocumentPage::setGraphUpdateRate(int rate) {
+    foreach (WidgetLayout *wl, m_widgetLayouts) {
+        wl->setUpdateRate(rate);
+    }
 }
 
 void DocumentPage::setConsoleFont(QFont font)
@@ -1237,7 +1243,7 @@ WidgetLayout* DocumentPage::newWidgetLayout()
 	//  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
 	//        this, SLOT(setWidgetClipboard(QString)));
 	connect(wl,SIGNAL(showMidiLearn(QuteWidget *)),this, SLOT(showMidiLearn(QuteWidget *)));
-	return wl;
+    return wl;
 }
 
 int DocumentPage::play(CsoundOptions *options)

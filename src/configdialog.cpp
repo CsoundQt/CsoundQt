@@ -165,6 +165,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	widgetsCheckBox->setChecked(m_options->enableWidgets);
 	showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
 	showTooltipsCheckBox->setChecked(m_options->showTooltips);
+    graphUpdateRateSpinBox->setValue(m_options->graphUpdateRate);
 	enableFLTKCheckBox->setChecked(m_options->enableFLTK);
 	terminalFLTKCheckBox->setChecked(m_options->terminalFLTK);
 	terminalFLTKCheckBox->setEnabled(m_options->enableFLTK);
@@ -390,6 +391,7 @@ void ConfigDialog::accept()
 	m_options->openProperties = openPropertiesCheckBox->isChecked();
 	m_options->fontScaling = fontScalingSpinBox->value();
 	m_options->fontOffset = fontOffsetSpinBox->value();
+    m_options->graphUpdateRate = graphUpdateRateSpinBox->value();
 	m_options->debugPort = debugPortSpinBox->value();
     m_options->tabShortcutActive = tabShortcutActiveCheckBox->isChecked();
 	m_options->useAPI = ApiRadioButton->isChecked();

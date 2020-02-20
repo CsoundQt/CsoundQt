@@ -66,6 +66,7 @@ Options::Options(ConfigLists *configlists) :
     openProperties = true;  // Open properties automatically when creating a widget
     fontScaling = 1.0;
     fontOffset = 0.0;
+    graphUpdateRate = 30;
 
     useAPI = true;
     enableWidgets = true;

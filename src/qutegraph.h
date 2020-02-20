@@ -28,6 +28,9 @@
 
 class Curve;
 
+enum GraphType { ftable = 1, signal = 2, spectrum = 4 };
+
+
 class QuteGraph : public QuteWidget
 {
 	Q_OBJECT
@@ -50,7 +53,7 @@ public:
 	void addCurve(Curve *curve);
 	int getCurveIndex(Curve * curve);
 	void setCurveData(Curve * curve);
-	void setUd(CsoundUserData *ud);
+    void setUd(CsoundUserData *ud) { m_ud = ud; }
 	virtual void applyInternalProperties();
 
 protected:
@@ -60,9 +63,12 @@ protected:
 	QLineEdit* name2LineEdit;
 	QDoubleSpinBox *zoomxBox;
 	QDoubleSpinBox *zoomyBox;
+    QCheckBox *showSelectorCheckBox;
 	QVector<Curve *> curves;
 	QVector<QVector <QGraphicsLineItem *> > lines;
 	QVector<QGraphicsPolygonItem *> polygons;
+    QVector<QPainterPath *>painterPaths;
+    QVector<GraphType>graphtypes;
 
 	QVector<QVector <QGraphicsLineItem *> > m_gridlines;
 	QVector<QVector <QGraphicsTextItem *> > m_gridtext;
@@ -77,12 +83,19 @@ public slots:
 
 private:
 	void drawFtable(Curve * curve, int index);
+    void drawFtablePath(Curve * curve, int index);
+
     void drawSpectrum(Curve * curve, int index);
+    void drawSpectrumPath(Curve * curve, int index);
+
     void drawSignal(Curve * curve, int index);
 	void scaleGraph(int index);
 	int getTableNumForIndex(int index);
 	int getIndexForTableNum(int ftable);
 	void setInternalValue(double value);
+    void drawGraph(Curve *curve, int index);
+
+
 
 	//    QMutex curveLock;
 	bool m_grid;
@@ -123,5 +136,7 @@ public:
   signals:
 	void popUpMenu(QPoint pos);*/
 };
+
+
 
 #endif

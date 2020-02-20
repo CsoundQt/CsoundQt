@@ -2806,6 +2806,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setOpenProperties(m_options->openProperties);
     p->setFontOffset(m_options->fontOffset);
     p->setFontScaling(m_options->fontScaling);
+    p->setGraphUpdateRate(m_options->graphUpdateRate);
     p->setDebugLiveEvents(m_options->debugLiveEvents);
     p->setTextFont(QFont(m_options->font,
                          (int) m_options->fontPointSize));
@@ -4878,6 +4879,7 @@ void CsoundQt::readSettings()
     m_options->openProperties = settings.value("openProperties", true).toBool();
     m_options->fontOffset = settings.value("fontOffset", 0.0).toDouble();
     m_options->fontScaling = settings.value("fontScaling", 1.0).toDouble();
+    m_options->graphUpdateRate = settings.value("graphUpdateRate", 30).toInt();
     lastFiles = settings.value("lastfiles", QStringList()).toStringList();
     lastTabIndex = settings.value("lasttabindex", "").toInt();
     m_options->debugPort = settings.value("debugPort",34711).toInt();
@@ -5093,6 +5095,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("autoParameterMode", m_options->autoParameterMode);
         settings.setValue("enableWidgets", m_options->enableWidgets);
         settings.setValue("showWidgetsOnRun", m_options->showWidgetsOnRun);
+        settings.setValue("graphUpdateRate", m_options->graphUpdateRate);
         settings.setValue("showTooltips", m_options->showTooltips);
         settings.setValue("enableFLTK", m_options->enableFLTK);
         settings.setValue("terminalFLTK", m_options->terminalFLTK);
