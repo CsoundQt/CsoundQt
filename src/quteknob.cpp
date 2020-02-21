@@ -48,7 +48,10 @@ void QVdial::mouseMoveEvent (QMouseEvent *event) {
 }
 
 void QVdial::mouseDoubleClickEvent(QMouseEvent *event) {
-    this->setValueDialog();
+    if(!event->modifiers())
+        this->setValueDialog();
+    else
+        this->QDial::mouseDoubleClickEvent(event);
 }
 
 void QVdial::paintEvent(QPaintEvent *event) {
@@ -353,6 +356,7 @@ void QuteKnob::selectKnobColor() {
         knobColorButton->setIcon(pixmap);
     }
 }
+
 
 void QuteKnob::createPropertiesDialog()
 {

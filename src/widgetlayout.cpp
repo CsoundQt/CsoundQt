@@ -2346,24 +2346,23 @@ void WidgetLayout::alignCenterHorizontal()
 
 void WidgetLayout::keyPressEvent(QKeyEvent *event)
 {
-    // qDebug() << "WidgetLayout::keyPressEvent --- " << event->key() << "___" << event->modifiers() << " control = " <<  Qt::ControlModifier;
     int key = event->key();
     if(m_editMode) {
         switch(key) {
         case Qt::Key_Left:
-            this->moveSelected(event->modifiers() & Qt::AltModifier ? -5 : -1, 0);
+            this->moveSelected(event->modifiers() & Qt::AltModifier ? -1 : -5, 0);
             event->accept();
             return;
         case Qt::Key_Right:
-            this->moveSelected(event->modifiers() & Qt::AltModifier ? 5 : 1, 0);
+            this->moveSelected(event->modifiers() & Qt::AltModifier ? 1 : 5, 0);
             event->accept();
             return;
         case Qt::Key_Up:
-            this->moveSelected(0, event->modifiers() & Qt::AltModifier ? -5 : -1);
+            this->moveSelected(0, event->modifiers() & Qt::AltModifier ? -1 : -5);
             event->accept();
             return;
         case Qt::Key_Down:
-            this->moveSelected(0, event->modifiers() & Qt::AltModifier ? 5 : 1);
+            this->moveSelected(0, event->modifiers() & Qt::AltModifier ? 1 : 5);
             event->accept();
             return;
         }

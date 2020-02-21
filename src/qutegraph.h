@@ -46,7 +46,7 @@ public:
 
 	virtual QString getWidgetLine();
 	virtual QString getWidgetXmlText();
-	virtual QString getWidgetType();
+    virtual QString getWidgetType();
 	virtual void setWidgetGeometry(int x,int y,int width,int height);
 	void setValue(double value);
 	void clearCurves();
@@ -54,6 +54,17 @@ public:
 	int getCurveIndex(Curve * curve);
 	void setCurveData(Curve * curve);
     void setUd(CsoundUserData *ud) { m_ud = ud; }
+    void showGrid(bool visible) { m_drawGrid = visible; }
+    void showTableInfo(bool state) {
+        m_drawTableInfo = state;
+        setProperty("QCS_showTableInfo", state?"true":"false");
+        if(m_label != nullptr) {
+            if(state)
+                m_label->show();
+            else
+                m_label->hide();
+        }
+    }
 	virtual void applyInternalProperties();
 
 protected:
@@ -64,6 +75,8 @@ protected:
 	QDoubleSpinBox *zoomxBox;
 	QDoubleSpinBox *zoomyBox;
     QCheckBox *showSelectorCheckBox;
+    QCheckBox *showGridCheckBox;
+    QCheckBox *showTableInfoCheckBox;
 	QVector<Curve *> curves;
 	QVector<QVector <QGraphicsLineItem *> > lines;
 	QVector<QGraphicsPolygonItem *> polygons;
@@ -73,9 +86,12 @@ protected:
 	QVector<QVector <QGraphicsLineItem *> > m_gridlines;
 	QVector<QVector <QGraphicsTextItem *> > m_gridtext;
 
+    QPainterPath *gridPath;
+
 	virtual void refreshWidget();
 	virtual void createPropertiesDialog();
 	virtual void applyProperties();
+    virtual void keyPressEvent(QKeyEvent *ev);
 
 public slots:
 	void changeCurve(int index);
@@ -89,18 +105,20 @@ private:
     void drawSpectrumPath(Curve * curve, int index);
 
     void drawSignal(Curve * curve, int index);
+    void drawSignalPath(Curve * curve, int index);
+
 	void scaleGraph(int index);
 	int getTableNumForIndex(int index);
 	int getIndexForTableNum(int ftable);
 	void setInternalValue(double value);
     void drawGraph(Curve *curve, int index);
 
-
-
 	//    QMutex curveLock;
 	bool m_grid;
 	bool m_logx;
 	bool m_logy;
+    bool m_drawGrid;
+    bool m_drawTableInfo;
 };
 
 class StackedLayoutWidget : public QStackedWidget
