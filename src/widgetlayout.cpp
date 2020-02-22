@@ -3264,51 +3264,48 @@ void WidgetLayout::loadPresetFromIndex(int index)
 		QString savedId = ids[i];
 		for (int j = 0; j < m_widgets.size(); j++) {
 			QString id = m_widgets[j]->getUuid();
-			if (savedId == id) {
-				int mode = p.getMode(i);
-				if (mode & 1) {
-					m_widgets[j]->setValue(p.getValue(i));
-					QString channel = m_widgets[j]->getChannelName();
-					if (!channel.isEmpty()) { // Now store the value in the changes buffer to read from chnget
-						valueMutex.lock();
-						if(newValues.contains(channel)) {
-							newValues[channel] = p.getValue(i);
-						}
-						else {
-							newValues.insert(channel, p.getValue(i));
-						}
-						valueMutex.unlock();
-					}
-				}
-				if (mode & 2) {
-					m_widgets[j]->setValue2(p.getValue2(i));
-					QString channel = m_widgets[j]->getChannelName();
-					if (!channel.isEmpty()) { // Now store the value in the changes buffer to read from chnget
-						valueMutex.lock();
-						if(newValues.contains(channel)) {
-							newValues[channel] = p.getValue2(i);
-						}
-						else {
-							newValues.insert(channel, p.getValue2(i));
-						}
-						valueMutex.unlock();
-					}
-				}
-				if (mode & 4) {
-					m_widgets[j]->setValue(p.getStringValue(i));
-					QString channel = m_widgets[j]->getChannelName();
-					if (!channel.isEmpty()) { // Now store the value in the changes buffer to read from chnget
-						stringValueMutex.lock();
-						if(newStringValues.contains(channel)) {
-							newStringValues[channel] = p.getStringValue(i);
-						}
-						else {
-							newStringValues.insert(channel, p.getStringValue(i));
-						}
-						stringValueMutex.unlock();
-					}
-				}
-			}
+            if (savedId != id)
+                continue;
+            int mode = p.getMode(i);
+            if (mode & 1) {
+                m_widgets[j]->setValue(p.getValue(i));
+                QString channel = m_widgets[j]->getChannelName();
+                // Store the value in the changes buffer to read from chnget
+                if (!channel.isEmpty()) {
+                    valueMutex.lock();
+                    if(newValues.contains(channel))
+                        newValues[channel] = p.getValue(i);
+                    else
+                        newValues.insert(channel, p.getValue(i));
+                    valueMutex.unlock();
+                }
+            }
+            if (mode & 2) {
+                m_widgets[j]->setValue2(p.getValue2(i));
+                QString channel = m_widgets[j]->getChannelName();
+                // store the value in the changes buffer to read from chnget
+                if (!channel.isEmpty()) {
+                    valueMutex.lock();
+                    if(newValues.contains(channel))
+                        newValues[channel] = p.getValue2(i);
+                    else
+                        newValues.insert(channel, p.getValue2(i));
+                    valueMutex.unlock();
+                }
+            }
+            if (mode & 4) {
+                m_widgets[j]->setValue(p.getStringValue(i));
+                QString channel = m_widgets[j]->getChannelName();
+                // Store the value in the changes buffer to read from chnget
+                if (!channel.isEmpty()) {
+                    stringValueMutex.lock();
+                    if(newStringValues.contains(channel))
+                        newStringValues[channel] = p.getStringValue(i);
+                    else
+                        newStringValues.insert(channel, p.getStringValue(i));
+                    stringValueMutex.unlock();
+                }
+            }
 		}
 	}
 	widgetsMutex.unlock();
@@ -3629,13 +3626,7 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
 
 void WidgetLayout::markHistory()
 {
-	QString text;
-	if (m_xmlFormat) {
-		text = getWidgetsText();
-	}
-	else {
-		text = getMacWidgetsText();
-	}
+    QString text = m_xmlFormat ? getWidgetsText() : getMacWidgetsText();
 	if (m_history.isEmpty()) {
 		m_history << "";
 		m_historyIndex = 0;
@@ -3650,7 +3641,6 @@ void WidgetLayout::markHistory()
 		if (m_history.size() != m_historyIndex + 1)
 			m_history.resize(m_historyIndex + 1);
 		m_history[m_historyIndex] = text;
-		//    qDebug() << "WidgetLayout::markHistory "<< *m_historyIndex << " ....."  << text;
 	}
 }
 
@@ -3685,10 +3675,10 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
 {
 	//  qDebug() << "WidgetLayout::newValue " << channelValue.first << "--" << channelValue.second;
 	if (channelValue.first == "_SetPreset") {
-		loadPreset(channelValue.second);
+        loadPreset((int)channelValue.second);
 	}
 	if (channelValue.first == "_SetPresetIndex") {
-		loadPresetFromIndex(channelValue.second);
+        loadPresetFromIndex((int)channelValue.second);
 	}
 	QString channelName = channelValue.first;
 	if (channelName.contains("/")) {
@@ -3697,16 +3687,15 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
 	QString path = channelValue.first.mid(channelValue.first.indexOf("/") + 1);
 	//  qDebug() << "WidgetLayout::newValue " << channelName << "--" << path;
 	widgetsMutex.lock();
-	if (!channelName.isEmpty()) {  // Pass the value on to the other widgets
+    if (!channelName.isEmpty()) {
+        // Pass the value on to the other widgets
 		for (int i = 0; i < m_widgets.size(); i++){
 			if (m_widgets[i]->getChannelName() == channelName) {
-				//        qDebug() << "WidgetLayout::newValue " << channelValue.first << "--" << m_widgets[i]->getChannelName();
-				if (path == channelName) {
+                // qDebug() << "WidgetLayout::newValue " << channelValue.first << "--" << m_widgets[i]->getChannelName();
+                if (path == channelName)
 					m_widgets[i]->setValue(channelValue.second);
-				}
-				else {
+                else
 					m_widgets[i]->widgetMessage(path,channelValue.second);
-				}
 			}
 			if (m_widgets[i]->getChannel2Name() == channelValue.first) {
 				m_widgets[i]->setValue2(channelValue.second);
@@ -3714,14 +3703,13 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
 		}
 	}
 	widgetsMutex.unlock();
-	if (!channelValue.first.isEmpty()) { // Now store the value in the changes buffer to read from chnget
+    // Now store the value in the changes buffer to read from chnget
+    if (!channelValue.first.isEmpty()) {
 		valueMutex.lock();
-		if(newValues.contains(channelValue.first)) {
+        if(newValues.contains(channelValue.first))
 			newValues[channelValue.first] = channelValue.second;
-		}
-		else {
+        else
 			newValues.insert(channelValue.first, channelValue.second);
-		}
 		valueMutex.unlock();
 	}
 }
@@ -3735,28 +3723,26 @@ void WidgetLayout::newValue(QPair<QString, QString> channelValue)
 		channelName = channelValue.first.left(channelValue.first.indexOf("/"));
 	}
 	QString path = channelValue.first.mid(channelValue.first.indexOf("/") + 1);
-	widgetsMutex.lock();  // Send value to a widget if channel matches
+    // Send value to a widget if channel matches
+    widgetsMutex.lock();
 	if (!channelName.isEmpty()) {
 		for (int i = 0; i < m_widgets.size(); i++){
-			if (m_widgets[i]->getChannelName() == channelName) {
-				if (path == channelName) {
-					m_widgets[i]->setValue(channelValue.second);
-				}
-				else {
-					m_widgets[i]->widgetMessage(path,channelValue.second);
-				}
-			}
+            if (m_widgets[i]->getChannelName() != channelName)
+                continue;
+            if (path == channelName)
+                m_widgets[i]->setValue(channelValue.second);
+            else
+                m_widgets[i]->widgetMessage(path,channelValue.second);
 		}
 	}
 	widgetsMutex.unlock();
-	if (!channelValue.first.isEmpty()) { // Now store the value in the changes buffer to read from chnget
+    // Now store the value in the changes buffer to read from chnget
+    if (!channelValue.first.isEmpty()) {
 		stringValueMutex.lock();
-		if(newStringValues.contains(channelValue.first)) {
+        if(newStringValues.contains(channelValue.first))
 			newStringValues[channelValue.first] = channelValue.second;
-		}
-		else {
+        else
 			newStringValues.insert(channelValue.first, channelValue.second);
-		}
 		stringValueMutex.unlock();
 	}
 }
@@ -3847,53 +3833,50 @@ void WidgetLayout::processNewValues()
 
 void WidgetLayout::queueEvent(QString eventLine)
 {
-	//qDebug() << "WidgetLayout::queueEvent";
-	emit queueEventSignal(eventLine);
+    emit queueEventSignal(eventLine);
 }
 
 void WidgetLayout::duplicate()
 {
-	qDebug("WidgetLayout::duplicate()");
-	if (m_editMode) {
-		widgetsMutex.lock();
-		QList<int> selectedWidgets;
-		for (int i = 0; i < editWidgets.size() ; i++) {
-			if (editWidgets[i]->isSelected()) {
-				selectedWidgets << i;
-			}
-		}
-		for (int i = 0; i < selectedWidgets.size() ; i++) {
-			int index = selectedWidgets[i];
-			editWidgets[index]->deselect();
-			if (m_xmlFormat) {
-				QDomDocument doc;
-				doc.setContent(m_widgets[index]->getWidgetXmlText());
-				widgetsMutex.unlock();
-				newXmlWidget(doc.firstChildElement("bsbObject"), true, true);
-				widgetsMutex.lock();
-			}
-			else {
-				widgetsMutex.unlock();
-				newMacWidget(m_widgets[index]->getWidgetLine(), true);
-				widgetsMutex.lock();
-			}
-			//      editWidgets.last()->select();
-		}
-		widgetsMutex.unlock();
-	}
+    if(!m_editMode)
+        return;
+    widgetsMutex.lock();
+    QList<int> selectedWidgets;
+    for (int i = 0; i < editWidgets.size() ; i++) {
+        if (editWidgets[i]->isSelected()) {
+            selectedWidgets << i;
+        }
+    }
+    for (int i = 0; i < selectedWidgets.size() ; i++) {
+        int index = selectedWidgets[i];
+        editWidgets[index]->deselect();
+        if (m_xmlFormat) {
+            QDomDocument doc;
+            doc.setContent(m_widgets[index]->getWidgetXmlText());
+            widgetsMutex.unlock();
+            newXmlWidget(doc.firstChildElement("bsbObject"), true, true);
+            widgetsMutex.lock();
+        }
+        else {
+            widgetsMutex.unlock();
+            newMacWidget(m_widgets[index]->getWidgetLine(), true);
+            widgetsMutex.lock();
+        }
+        // editWidgets.last()->select();
+    }
+    widgetsMutex.unlock();
 	markHistory();
 }
 
 void WidgetLayout::deleteSelected()
 {
-	//   qDebug("WidgetLayout::deleteSelected()");
-	widgetsMutex.lock();
+    widgetsMutex.lock();
 	for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
-		if (editWidgets[i]->isSelected()) {
-			widgetsMutex.unlock();
-			deleteWidget(m_widgets[i]);
-			widgetsMutex.lock();
-		}
+        if (!editWidgets[i]->isSelected())
+            continue;
+        widgetsMutex.unlock();
+        deleteWidget(m_widgets[i]);
+        widgetsMutex.lock();
 	}
 	widgetsMutex.unlock();
 	markHistory();
@@ -3902,13 +3885,13 @@ void WidgetLayout::deleteSelected()
 void WidgetLayout::moveSelected(int horiz, int vert) {
     widgetsMutex.lock();
     for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
-        if(editWidgets[i]->isSelected()) {
-            widgetsMutex.unlock();
-            QPoint pos = m_widgets[i]->pos();
-            m_widgets[i]->move(pos.x() + horiz, pos.y() + vert);
-            editWidgets[i]->move(pos.x() + horiz, pos.y() + vert);
-            widgetsMutex.lock();
-        }
+        if(!editWidgets[i]->isSelected())
+            continue;
+        widgetsMutex.unlock();
+        QPoint pos = m_widgets[i]->pos();
+        m_widgets[i]->move(pos.x() + horiz, pos.y() + vert);
+        editWidgets[i]->move(pos.x() + horiz, pos.y() + vert);
+        widgetsMutex.lock();
     }
     widgetsMutex.unlock();
     markHistory();
@@ -3916,31 +3899,24 @@ void WidgetLayout::moveSelected(int horiz, int vert) {
 
 void WidgetLayout::undo()
 {
-	//  qDebug() << "WidgetLayout::undo()";
-	if (m_historyIndex > 0) {
-		(m_historyIndex)--;
-		if (m_xmlFormat) {
-			loadXmlWidgets(m_history[m_historyIndex]);
-		}
-		else {
-			//      qDebug() << "WidgetLayout::undo() " << m_historyIndex << "...." << m_history[m_historyIndex];
-			loadMacWidgets(m_history[m_historyIndex]);
-		}
-	}
+    if(m_historyIndex <= 0)
+        return;
+    m_historyIndex--;
+    if (m_xmlFormat)
+        loadXmlWidgets(m_history[m_historyIndex]);
+    else
+        loadMacWidgets(m_history[m_historyIndex]);
 }
 
 void WidgetLayout::redo()
 {
-	//  qDebug() << "WidgetLayout::redo()";
-	if (m_historyIndex < m_history.size() - 1) {
-		m_historyIndex++;
-		if (m_xmlFormat) {
-			loadXmlWidgets(m_history[m_historyIndex]);
-		}
-		else {
-			loadMacWidgets(m_history[m_historyIndex]);
-		}
-	}
+    if (m_historyIndex >= m_history.size() - 1)
+        return;
+    m_historyIndex++;
+    if (m_xmlFormat)
+        loadXmlWidgets(m_history[m_historyIndex]);
+    else
+        loadMacWidgets(m_history[m_historyIndex]);
 }
 
 void WidgetLayout::updateData()
@@ -3959,27 +3935,27 @@ void WidgetLayout::updateData()
 	}
 	while (!newCurveBuffer.isEmpty()) {
 		Curve * curve = newCurveBuffer.takeFirst();
-		newCurve(curve); // Register new curve
-		//    qDebug() << "WidgetLayout::updateData() new curve " << curve;
-	}
+        newCurve(curve);  // Register new curve
+    }
 	// Check for graph updates after creating new curves
 	while (curveUpdateBufferCount > 0) {
 		WINDAT * curveData = &curveUpdateBuffer[curveUpdateBufferCount--];
 		Curve *curve = (Curve *) getCurveById(curveData->windid);
-		//    qDebug() << "WidgetLayout::updateData() " << curveUpdateBuffer.size() <<  " ---" << curveData << "  " << curve;
+        // qDebug() << "WidgetLayout::updateData" << curveUpdateBuffer.size() \
+        // << " ---" << curveData << " " << curve;
         if (curve != nullptr && curveData != nullptr) {
-			//      qDebug() << "WidgetLayout::updateData() " << windat->caption << "-" <<  curve->get_caption();
-			curve->set_size(curveData->npts);      // number of points
+            curve->set_size(curveData->npts);    // number of points
 			curve->set_data(curveData->fdata);
-			curve->set_caption(QString(curveData->caption)); // title of curve
-			//      curve->set_polarity(windat->polarity); // polarity
-			curve->set_max(curveData->max);        // curve max
-			curve->set_min(curveData->min);        // curve min
-			curve->set_absmax(curveData->absmax);     // abs max of above
-			//      curve->set_y_scale(windat->y_scale);    // Y axis scaling factor
+            curve->set_caption(QString(curveData->caption));
+            // curve->set_polarity(windat->polarity);
+            curve->set_max(curveData->max);
+            curve->set_min(curveData->min);
+            curve->set_absmax(curveData->absmax);
+            // Y axis scaling factor
+            // curve->set_y_scale(windat->y_scale);
 			setCurveData(curve);
 		}
-		//    delete curveData; //FIXME don't do this deleting here...
+        // delete curveData; //FIXME don't do this deleting here...
 	}
 	for (int i = 0; i < scopeWidgets.size(); i++) {
 		scopeWidgets[i]->updateData();

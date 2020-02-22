@@ -95,7 +95,7 @@
 #define DEFAULT_LOG_FILE ""
 #endif
 
-#define QCS_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n-odac -d\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 32\nnchnls = 2\n0dbfs = 1\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
+#define QCS_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n-odac -d\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 64\nnchnls = 2\n0dbfs = 1\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
 
 
 enum viewMode {
@@ -115,8 +115,9 @@ public:
 class RingBuffer
 {
 public:
-	RingBuffer() {
-		size = 8192*4;
+    RingBuffer() {
+        // size = 8192*4;
+        size = 1024 * 4;
 		resize(size);
 		currentPos = 0;
 		currentReadPos = 0;
@@ -138,29 +139,65 @@ public:
 		mutex.unlock();
 	}
 
+    long availableWriteSpace() {
+        if(currentReadPos < currentPos)
+            return size - currentPos + currentReadPos;
+        return currentReadPos - currentPos;
+    }
+
+    long availableReadSpace() {
+        return (currentReadPos <= currentPos ?
+                currentPos - currentReadPos :
+                currentPos - currentReadPos + size);
+    }
+
 	void put(MYFLT value) {
-		//qDebug() << "RingBuffer::put";
-		mutex.lock();
-		//qDebug() << "RingBuffer::put lock";
-		//lock = true;
-		//	  qDebug() << "RingBuffer::put currentPos " << currentPos << " value " << value;
+        mutex.lock();
+        // qDebug() << "RingBuffer::put currentPos " << currentPos << " value " << value;
 		buffer[currentPos] = value;
 		currentPos++;
-		//       if (currentPos == currentReadPos) {
-		//         qDebug("RingBuffer: Buffer overflow!");
-		//       }
+        // if (currentPos == currentReadPos) {
+        //     qDebug("RingBuffer: Buffer overflow!");
+        // }
 		if (currentPos >= size)
 			currentPos = 0;
 		mutex.unlock();
 	}
 
+    void putMany(MYFLT *data, long dataSize) {
+        long space = availableWriteSpace();
+        if(dataSize >= space) {
+            // qDebug("RingBuffer: Buffer overflow, only writing %ld elements!", space);
+            currentReadPos = currentPos;
+        }
+
+        mutex.lock();
+        for(int i=0; i<dataSize; i++) {
+            buffer[currentPos] = data[i];
+            currentPos = (currentPos + 1) % size;
+        }
+        mutex.unlock();
+    }
+
+    void putManyScaled(MYFLT *data, long dataSize, MYFLT scaleFactor) {
+        long space = availableWriteSpace();
+        if(dataSize >= space) {
+            // qDebug("RingBuffer: Buffer overflow, only writing %ld elements!", space);
+            currentReadPos = currentPos;
+        }
+        mutex.lock();
+        for(int i=0; i<dataSize; i++) {
+            buffer[currentPos] = data[i] * scaleFactor;
+            currentPos = (currentPos + 1) % size;
+        }
+        mutex.unlock();
+    }
+
 	bool copyAvailableBuffer(MYFLT *data, int saveSize) {
 		//		qDebug() << "RingBuffer::copyAvailableBuffer saveSize " << saveSize << " currentPos " << currentPos << " currentReadPos " << currentReadPos ;
 		mutex.lock();
-		//qDebug() << "RingBuffer::copyAvailableBuffer lock";
-		int available = (currentReadPos <= currentPos ?
-							 currentPos - currentReadPos :  currentPos - currentReadPos + size);
-		//       qDebug("RingBuffer: Available: %i", available);
+        int available = availableReadSpace();
+        //       qDebug("RingBuffer: Available: %i", available);
 		if (available <= saveSize) { //not enough data in buffer
 			mutex.unlock();
 			return false;
@@ -170,8 +207,7 @@ public:
 			data[i] = buffer[currentReadPos];
 			currentReadPos++;
 			if (currentReadPos == size) {
-				currentReadPos = 0;
-			}
+				currentReadPos = 0;			}
 		}
 		mutex.unlock();
 		return true;
