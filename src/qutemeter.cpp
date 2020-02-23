@@ -53,7 +53,7 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_mouseControlAct", "press");
 
 	setProperty("QCS_color", QColor(Qt::green));
-	setProperty("QCS_bgcolor", QColor(Qt::black));
+    setProperty("QCS_bgcolor", QColor(30, 30, 30));
 	setProperty("QCS_randomizable", false);
 	setProperty("QCS_randomizableGroup", 0);
 	setProperty("QCS_randomizableMode", "both");
@@ -157,7 +157,7 @@ QString QuteMeter::getWidgetXmlText()
 	s.writeTextElement("b", QString::number(bgcolor.blue()));
 	s.writeEndElement();
 
-	s.writeEndElement();
+    s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -311,8 +311,7 @@ void QuteMeter::createPropertiesDialog()
 	//  nameLineEdit->setText(getChannelName());
 
 	QLabel *label = new QLabel(dialog);
-	label = new QLabel(dialog);
-	label->setText("Vertical Channel name =");
+    label->setText("Vertical Channel name =");
 	layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
 	name2LineEdit = new QLineEdit(dialog);
 	name2LineEdit->setText(getChannel2Name());
@@ -329,10 +328,11 @@ void QuteMeter::createPropertiesDialog()
 	//    }
 	//  }
 
-	label = new QLabel(dialog);
-	label->setText("Color");
-	label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-	layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
+    auto colorLabel = new QLabel(dialog);
+    colorLabel->setText("Color");
+    colorLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(colorLabel, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
+
 	colorButton = new QPushButton(dialog);
 	QPixmap pixmap(64,64);
 	pixmap.fill(static_cast<MeterWidget *>(m_widget)->getColor());
@@ -343,10 +343,22 @@ void QuteMeter::createPropertiesDialog()
 	layout->addWidget(colorButton, 5,1, Qt::AlignLeft|Qt::AlignVCenter);
 	connect(colorButton, SIGNAL(released()), this, SLOT(selectTextColor()));
 
-	label->setText("Type");
+    bgColorButton = new QPushButton(dialog);
+    QColor bgcolor = static_cast<MeterWidget *>(m_widget)->getBgColor();
+    QPixmap pixmap2(64,64);
+    pixmap2.fill(bgcolor);
+    bgColorButton->setIcon(pixmap2);
+    QPalette palette2(bgcolor);
+    palette.color(QPalette::Window);
+    bgColorButton->setPalette(palette2);
+    layout->addWidget(bgColorButton, 5,2, Qt::AlignLeft|Qt::AlignVCenter);
+    connect(bgColorButton, SIGNAL(released()), this, SLOT(selectBgColor()));
+
+    label->setText("Type");
 	label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 	layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
-	typeComboBox = new QComboBox(dialog);
+
+    typeComboBox = new QComboBox(dialog);
 	typeComboBox->addItem("fill");
 	typeComboBox->addItem("llif");
 	typeComboBox->addItem("line");
@@ -358,14 +370,13 @@ void QuteMeter::createPropertiesDialog()
 	label = new QLabel(dialog);
 	label->setText("Point size:");
 	label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-	layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
 	pointSizeSpinBox = new QSpinBox(dialog);
 	pointSizeSpinBox->setValue(((MeterWidget *)m_widget)->getPointSize());
 	layout->addWidget(pointSizeSpinBox, 7,1, Qt::AlignLeft|Qt::AlignVCenter);
 	if (static_cast<MeterWidget *>(m_widget)->getType() != "point") {
 		label->setEnabled(false);
 		pointSizeSpinBox->setEnabled(false);
-
 	}
 
 	label = new QLabel(dialog);
@@ -387,7 +398,8 @@ void QuteMeter::createPropertiesDialog()
 	behaviorComboBox->addItem("jump");
 	behaviorComboBox->addItem("relative");
 	behaviorComboBox->addItem("none");
-	behaviorComboBox->setCurrentIndex(behaviorComboBox->findText(property("QCS_mouseControl").toString()));
+    behaviorComboBox->setCurrentIndex(
+                behaviorComboBox->findText(property("QCS_mouseControl").toString()));
 	layout->addWidget(behaviorComboBox,8, 1, Qt::AlignLeft|Qt::AlignVCenter);
 	label->setEnabled(false);
 	behaviorComboBox->setEnabled(false);
@@ -419,6 +431,7 @@ void QuteMeter::createPropertiesDialog()
 	m_yMaxBox->setRange(-999999999.0, 999999999.0);
 	m_yMaxBox->setValue(property("QCS_yMax").toDouble());
 	layout->addWidget(m_yMaxBox, 10,3, Qt::AlignLeft|Qt::AlignVCenter);
+
 	setProperty("QCS_xValue", m_value);
 	setProperty("QCS_yValue", m_value2);
 #ifdef  USE_WIDGET_MUTEX
@@ -459,6 +472,7 @@ void QuteMeter::applyProperties()
 	// Only properties should be changed here as applyInternalProperties takes care of the rest
 	setProperty("QCS_objectName2", name2LineEdit->text());
 	setProperty("QCS_color", colorButton->palette().color(QPalette::Window));
+    setProperty("QCS_bgcolor", bgColorButton->palette().color(QPalette::Window));
 	setProperty("QCS_type", typeComboBox->currentText());
 	setProperty("QCS_pointsize", pointSizeSpinBox->value());
 	setProperty("QCS_fadeSpeed", fadeSpeedSpinBox->value());
@@ -487,15 +501,19 @@ void QuteMeter::setWidgetGeometry(int x,int y,int width,int height)
 void QuteMeter::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
-	static_cast<MeterWidget *>(m_widget)->setColor(property("QCS_color").value<QColor>());
-	static_cast<MeterWidget *>(m_widget)->setType(property("QCS_type").toString());
-	static_cast<MeterWidget *>(m_widget)->setPointSize(property("QCS_pointsize").toInt());
-	static_cast<MeterWidget *>(m_widget)->setRanges(property("QCS_xMin").toDouble(),
-													property("QCS_xMax").toDouble(),
-													property("QCS_yMin").toDouble(),
-													property("QCS_yMax").toDouble());
+    auto meter = static_cast<MeterWidget *>(m_widget);
+    meter->setColor(property("QCS_color").value<QColor>());
+    meter->setBgColor(property("QCS_bgcolor").value<QColor>());
+    meter->setType(property("QCS_type").toString());
+    meter->setPointSize(property("QCS_pointsize").toInt());
+    meter->setRanges(property("QCS_xMin").toDouble(),
+                     property("QCS_xMax").toDouble(),
+                     property("QCS_yMin").toDouble(),
+                     property("QCS_yMax").toDouble());
+
 	m_value = property("QCS_xValue").toDouble();
 	m_value2 = property("QCS_yValue").toDouble();
+
 	//  if (m_value2 == m_value) {
 	//    qDebug() << "Warning! Controller Widget can't have the same name for both channels!";
 	//    m_value2 = "";
@@ -516,6 +534,19 @@ void QuteMeter::selectTextColor()
 		palette.color(QPalette::Window);
 		colorButton->setPalette(palette);
 	}
+}
+
+void QuteMeter::selectBgColor()
+{
+    QColor color = QColorDialog::getColor(property("QCS_bgcolor").value<QColor>(), this);
+    if (color.isValid()) {
+        QPixmap pixmap(64,64);
+        pixmap.fill(color);
+        bgColorButton->setIcon(pixmap);
+        QPalette palette(color);
+        palette.color(QPalette::Window);
+        bgColorButton->setPalette(palette);
+    }
 }
 
 void QuteMeter::valueChanged(double value1)
@@ -563,12 +594,13 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
 	setAlignment(Qt::AlignLeft | Qt::AlignTop);
 	setTransformationAnchor(QGraphicsView::NoAnchor);
 	setInteractive (true);
-	m_scene = new QGraphicsScene(5,5, 20, 20, this);
+    // m_scene = new QGraphicsScene(5,5, 20, 20, this);
+    m_scene = new QGraphicsScene(0, 0, 20, 20, this);
 	m_scene->setBackgroundBrush(Qt::black);
 	m_scene->setSceneRect(0,0, 20, 20);
 	setScene(m_scene);
 	m_mouseDown = false;
-	m_block = m_scene->addRect(0, 0, 0, 0, QPen() , QBrush(Qt::green));
+    m_block = m_scene->addRect(0, 0, 0, 0, Qt::NoPen, QBrush(Qt::green));
 	m_point = m_scene->addEllipse(0, 0, 0, 0, QPen(Qt::green) , QBrush(Qt::green));
 	m_vline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
 	m_hline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
@@ -582,6 +614,12 @@ QColor MeterWidget::getColor()
 {
 	return m_block->brush().color();
 }
+
+QColor MeterWidget::getBgColor()
+{
+    return m_scene->backgroundBrush().color();
+}
+
 
 void MeterWidget::setValue(double value)
 {
@@ -764,6 +802,10 @@ void MeterWidget::setColor(QColor color)
 	m_point->setBrush(QBrush(color));
 	m_vline->setPen(QPen(color));
 	m_hline->setPen(QPen(color));
+}
+
+void MeterWidget::setBgColor(QColor color) {
+    m_scene->setBackgroundBrush(color);
 }
 
 void MeterWidget::setWidgetGeometry(int x,int y,int width,int height)

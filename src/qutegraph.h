@@ -113,6 +113,8 @@ private:
 	void setInternalValue(double value);
     void drawGraph(Curve *curve, int index);
 
+    QGraphicsView* getView(int index);
+
 	//    QMutex curveLock;
 	bool m_grid;
 	bool m_logx;

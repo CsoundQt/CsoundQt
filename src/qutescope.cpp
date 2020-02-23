@@ -41,7 +41,7 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
 	static_cast<ScopeWidget *>(m_widget)->setScene(m_scene);
 	static_cast<ScopeWidget *>(m_widget)->setResizeAnchor(QGraphicsView::AnchorViewCenter);
     // static_cast<ScopeWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
-	m_label = new QLabel(this);
+    m_label = new QLabel(this);
 	QPalette palette = m_widget->palette();
 	palette.setColor(QPalette::WindowText, Qt::white);
 	m_label->setPalette(palette);
@@ -389,7 +389,7 @@ LissajouData::LissajouData(ScopeParams *params) : DataDisplay(params)
 	curveData.resize(m_params->width);
 	curve = new ScopeItem(m_params->width, m_params->height);
     auto pen = QPen(Qt::green);
-    pen.setCosmetic();
+    pen.setCosmetic(true);
     curve->setPen(pen);
 	curve->hide();
 	m_params->scene->addItem(curve);

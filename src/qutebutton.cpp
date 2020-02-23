@@ -24,15 +24,18 @@
 
 QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 {
-	m_widget = new QPushButton(this);
-	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
-	m_currentValue = 0;
-	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    m_widget = new QPushButton(this);
+    m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+    m_currentValue = 0;
+    // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    m_widget->setMouseTracking(true);
 	setMouseTracking(true);
 	canFocus(false);
 	//  m_imageFilename = "/";
-	connect(static_cast<QPushButton *>(m_widget), SIGNAL(pressed()), this, SLOT(buttonPressed()));
-	connect(static_cast<QPushButton *>(m_widget), SIGNAL(released()), this, SLOT(buttonReleased()));
+    connect(static_cast<QPushButton *>(m_widget), SIGNAL(pressed()),
+            this, SLOT(buttonPressed()));
+    connect(static_cast<QPushButton *>(m_widget), SIGNAL(released()),
+            this, SLOT(buttonReleased()));
 
 	setProperty("QCS_type", "event");
 	setProperty("QCS_pressedValue", 1.0);
@@ -42,7 +45,8 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_eventLine", "");
 	setProperty("QCS_latch", false);
 	setProperty("QCS_latched", false);
-
+    setProperty("QCS_fontsize", 10.0);
+    
 	QPixmap p = QPixmap(8, 8);
 	p.fill(QColor(Qt::green));
 	onIcon.addPixmap(p, QIcon::Normal, QIcon::On);
@@ -267,6 +271,7 @@ QString QuteButton::getWidgetXmlText()
 	s.writeTextElement("eventLine", property("QCS_eventLine").toString());
 	s.writeTextElement("latch", property("QCS_latch").toString());
 	s.writeTextElement("latched", property("QCS_latched").toString());
+    s.writeTextElement("fontsize", property("QCS_fontsize").toString());
 
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
@@ -287,7 +292,8 @@ void QuteButton::applyProperties()
 #endif
 	QString eventLine = line->text();
     while (eventLine.size() > 0 && eventLine[0] == ' ') {
-		eventLine.remove(0,1); //remove all spaces at the beginning. This is needed for event queue lines
+        // remove all spaces at the beginning. This is needed for event queue lines
+        eventLine.remove(0,1);
 	}
 	setProperty("QCS_eventLine", eventLine);
 	setProperty("QCS_text", text->toPlainText());
@@ -295,15 +301,16 @@ void QuteButton::applyProperties()
 	setProperty("QCS_type", typeComboBox->currentText());
 	setProperty("QCS_pressedValue", valueBox->value());
 	setProperty("QCS_latch", latchCheckBox->isChecked());
-	//  setWidgetGeometry(xSpinBox->value(), ySpinBox->value(), wSpinBox->value(), hSpinBox->value());
-	//  setType(typeComboBox->currentText());
+    setProperty("QCS_fontsize", fontSizeSpinBox->value());
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
+    //Must be last to make sure the widgetChanged signal is last
+    QuteWidget::applyProperties();
 	//  qDebug() << "QuteButton::applyProperties()" << m_value;
 }
+
 
 void QuteButton::createPropertiesDialog()
 {
@@ -332,36 +339,50 @@ void QuteButton::createPropertiesDialog()
 	label = new QLabel(dialog);
 	label->setText("Value");
 	layout->addWidget(label, 4, 2, Qt::AlignRight|Qt::AlignVCenter);
-	valueBox = new QDoubleSpinBox(dialog);
+
+    valueBox = new QDoubleSpinBox(dialog);
 	valueBox->setDecimals(6);
 	valueBox->setRange(-9999999.0, 9999999.0);
 	valueBox->setValue(m_value);
 	layout->addWidget(valueBox, 4, 3, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
+
+    label = new QLabel(dialog);
 	label->setText("Text:");
 	layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
-	text = new QTextEdit(dialog);
+
+    text = new QTextEdit(dialog);
 	text->setMinimumWidth(320);
 	text->setText(property("QCS_text").toString());
 	layout->addWidget(text, 6,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel(dialog);
+    label->setText(tr("Font Size"));
+    layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    fontSizeSpinBox = new QSpinBox(dialog);
+    fontSizeSpinBox->setMinimum(6);
+    fontSizeSpinBox->setMaximum(999);
+    fontSizeSpinBox->setValue(property("QCS_fontsize").toInt());
+    layout->addWidget(fontSizeSpinBox, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
 	label = new QLabel(dialog);
 	label->setText("Image:");
-	layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
 	filenameLineEdit = new QLineEdit(dialog);
 	filenameLineEdit->setMinimumWidth(320);
 	filenameLineEdit->setText(property("QCS_image").toString());
-	layout->addWidget(filenameLineEdit, 7,1,1,2, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(filenameLineEdit, 8,1,1,2, Qt::AlignLeft|Qt::AlignVCenter);
 	QPushButton *browseButton = new QPushButton(dialog);
 	browseButton->setText("...");
-	layout->addWidget(browseButton, 7, 3, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(browseButton, 9, 3, Qt::AlignCenter|Qt::AlignVCenter);
 	connect(browseButton, SIGNAL(released()), this, SLOT(browseFile()));
 
 	label = new QLabel(dialog);
 	label->setText("Event:");
-	layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 10, 0, Qt::AlignRight|Qt::AlignVCenter);
 	line = new QLineEdit(dialog);
 	//   text->setText(((QuteLabel *)m_widget)->toPlainText());
-	layout->addWidget(line, 9,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(line, 10,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
 	line->setMinimumWidth(320);
 	line->setText(property("QCS_eventLine").toString());
 #ifdef  USE_WIDGET_MUTEX
@@ -373,7 +394,7 @@ void QuteButton::setText(QString text)
 {
 	// For old widget format conversion of line endings
 	setProperty("QCS_text", text);
-	static_cast<QPushButton *>(m_widget)->setText(text);
+    static_cast<QPushButton *>(m_widget)->setText(text);
 }
 
 void QuteButton::popUpMenu(QPoint pos)
@@ -387,7 +408,8 @@ void QuteButton::setMidiValue(int value)
 	double newval= value == 0 ? 0 : pressedVal;
 	setValue(newval);
 	QString type = property("QCS_type").toString();
-	if (m_valueChanged && (type == "event" || type == "pictevent") ) { // if event type, start/stop event on MIDI button press/release
+    // if event type, start/stop event on MIDI button press/release
+    if (m_valueChanged && (type == "event" || type == "pictevent") ) {
 		QString eventLine = property("QCS_eventLine").toString();
 		if (newval==1) {
 			emit(queueEventSignal(eventLine));
@@ -396,24 +418,28 @@ void QuteButton::setMidiValue(int value)
 		if (newval==0 && eventLine.size() > 0) {
 			QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
 			if (lineElements.size() > 0 && lineElements[0] == "i") {
-				lineElements.removeAt(0); // Remove first element if it is "i"
+                // Remove first element if it is "i"
+                lineElements.removeAt(0);
 			}
 			else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
 				lineElements[0] = lineElements[0].mid(1); // Remove "i" character
 			}
 			//bool test = property("QCS_latch").toBool();
-			if (lineElements.size() > 2 && lineElements[2].toDouble() < 0 && property("QCS_latch").toBool() ) { // If duration is negative, turn it off. But not when it is not a latched button!
+            if (lineElements.size() > 2 &&
+                    lineElements[2].toDouble() < 0 &&
+                    property("QCS_latch").toBool() ) {
+                // If duration is negative, turn it off. But not when it is not a latched button!
 				lineElements[0].prepend("-");
 				lineElements.prepend("i");
 				emit(queueEventSignal(lineElements.join(" ")));
 			}
 		}
 	} else if ((type == "value" || type == "pictvalue") && newval == pressedVal) {
-			QStringList reservedChannels = QStringList() << "_Play" <<"_Stop" << "_Pause"
-														 << "_Render" << "_Browse1" << "_Browse2" << "_MBrowse";
-			if (reservedChannels.contains(m_channel)) {
-				buttonReleased();
-			}
+        QStringList reservedChannels = QStringList() << "_Play" <<"_Stop" << "_Pause"
+                                                     << "_Render" << "_Browse1"
+                                                     << "_Browse2" << "_MBrowse";
+        if (reservedChannels.contains(m_channel))
+            buttonReleased();
 	}
 	QPair<QString, double> channelValue(m_channel, newval);
 	emit newValue(channelValue);
@@ -439,6 +465,7 @@ void QuteButton::refreshWidget()
 #endif
 }
 
+
 void QuteButton::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
@@ -447,29 +474,36 @@ void QuteButton::applyInternalProperties()
 	//  m_value2 = property("QCS_value2").toDouble();
 	m_stringValue = property("QCS_stringvalue").toString();
 	QString type = property("QCS_type").toString();
-	static_cast<QPushButton *>(m_widget)->setCheckable(property("QCS_latch").toBool());
-	if (property("QCS_latch").toBool()) { // Set icon here, because it can be overwritten if button is "pict"
+    static_cast<QPushButton *>(m_widget)->setCheckable(property("QCS_latch").toBool());
+    // Set icon here, because it can be overwritten if button is "pict"
+    if (property("QCS_latch").toBool()) {
 		static_cast<QPushButton *>(m_widget)->setIcon(onIcon);
-	}
-	else {
+    } else {
 		static_cast<QPushButton *>(m_widget)->setIcon(QIcon());
-	}
+    }
+
     if (type == "event" || type == "value") {
 		icon = QIcon();
 		static_cast<QPushButton *>(m_widget)->setIcon(icon);
-	}
-    else if (type == "pictevent" || type == "pictvalue" || type == "pict") {
+    } else if (type == "pictevent" || type == "pictvalue" || type == "pict") {
 		icon = QIcon(QPixmap(property("QCS_image").toString()));
 		static_cast<QPushButton *>(m_widget)->setIcon(icon);
 		static_cast<QPushButton *>(m_widget)->setIconSize(QSize(width(),height()));
+    } else {
+        qDebug() << "Warning! QuteButton::applyInternalProperties() unrecognized type:"
+                 << type;
 	}
-	else {
-		qDebug() << "Warning! QuteButton::applyInternalProperties() unrecognized type:" << type;
-	}
-	static_cast<QPushButton *>(m_widget)->setText(property("QCS_text").toString());
 
-	m_widget->setStyleSheet("QPushButton { border-color:" + property("QCS_color").value<QColor>().name()
-							+ "; }");  // Why is this here?
+    auto w = static_cast<QPushButton*>(m_widget);
+    w->setText(property("QCS_text").toString());
+
+    auto font = w->font();
+    font.setPointSizeF(property("QCS_fontsize").toDouble());
+    w->setFont(font);
+
+    // Why is this here?
+    // QString colorstr = property("QCS_color").value<QColor>().name();
+    // m_widget->setStyleSheet("QPushButton { border-color:" + colorstr + "; }");
 }
 
 void QuteButton::buttonPressed()
@@ -532,25 +566,27 @@ void QuteButton::buttonReleased()
 			else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
 				lineElements[0] = lineElements[0].mid(1); // Remove "i" character
 			}
-			if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) { // If duration is negative, use button to turn note on and off
+            // If duration is negative, use button to turn note on and off
+            if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) {
 				if (m_currentValue == 0) { // Button has turned off. Turn off instrument
 					if ( lineElements[0].startsWith("\"") || lineElements[0].startsWith("\'")  ) {
 						//qDebug()<<"Stopping named instrument: " << lineElements[0];
 						lineElements[0].insert(1,"-");
-					} else {
-
-					lineElements[0].prepend("-"); // NB! what if string? find out instrument number
+                    }
+                    else {
+                        // NB! what if string? find out instrument number
+                        lineElements[0].prepend("-");
 					}
 					lineElements.prepend("i");
 					setValue(0);
 					emit(queueEventSignal(lineElements.join(" ")));
-				}
-				else { // Button has turned on. Turn on instrument
+                }
+                else { // Button has turned on. Turn on instrument
 					setValue(1);
 					emit(queueEventSignal(eventLine));
 				}
-			}
-			else {
+            }
+            else {
 				emit(queueEventSignal(eventLine));
 			}
 		}

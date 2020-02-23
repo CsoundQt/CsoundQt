@@ -434,7 +434,6 @@ void QuteGraph::addCurve(Curve * curve)
 	QGraphicsView *view = new QGraphicsView(m_widget);
 	QGraphicsScene *scene = new QGraphicsScene(view);
 	view->setContextMenuPolicy(Qt::NoContextMenu);
-    view->setRenderHint(QPainter::Antialiasing);
     view->setScene(scene);
     view->setObjectName(curve->get_caption());
     view->show();
@@ -451,13 +450,16 @@ void QuteGraph::addCurve(Curve * curve)
     GraphType graphType;
     if(caption.contains("fft")) {
         graphType = GraphType::spectrum;
+        view->setRenderHint(QPainter::Antialiasing);
     } else if(caption.contains("ftable")) {
         graphType = GraphType::ftable;
+        view->setRenderHint(QPainter::Antialiasing);
     } else {
         graphType = GraphType::signal;
     }
 
     if(graphType == GraphType::spectrum) {
+
 
         for (int i = 0 ; i < numTicksX; i++) {
             QGraphicsLineItem *gridLine = new QGraphicsLineItem();
@@ -535,14 +537,26 @@ int QuteGraph::getCurveIndex(Curve * curve)
     return index;
 }
 
+QGraphicsView * QuteGraph::getView(int index) {
+    StackedLayoutWidget *widget_ = static_cast<StackedLayoutWidget *>(m_widget);
+    QGraphicsView *view = static_cast<QGraphicsView *>(widget_->widget(index));
+    return view;
+}
+
 void QuteGraph::drawGraph(Curve *curve, int index) {
     // QString caption = curve->get_caption();
+    // auto view = getView(index);
+
     switch(graphtypes[index]) {
     case GraphType::ftable:
         // drawFtable(curve, index);
+        // view->setRenderHint(QPainter::Antialiasing);
+
         drawFtablePath(curve, index);
         break;
     case GraphType::spectrum:
+        // view->setRenderHint(QPainter::Antialiasing);
+
         drawSpectrum(curve, index);
         // drawSpectrumPath(curve, index);
         break;
