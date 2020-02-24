@@ -81,15 +81,6 @@
        id="perspective10" />
     <filter
        inkscape:collect="always"
-       id="filter3319">
-      <feBlend
-         inkscape:collect="always"
-         mode="lighten"
-         in2="BackgroundImage"
-         id="feBlend3321" />
-    </filter>
-    <filter
-       inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter4774"
        x="-0.059667747"
@@ -123,8 +114,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.6833786"
-     inkscape:cx="52.184746"
-     inkscape:cy="237.84906"
+     inkscape:cx="230.94842"
+     inkscape:cy="81.531052"
      inkscape:document-units="px"
      inkscape:current-layer="layer6"
      showgrid="false"
@@ -141,7 +132,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -158,17 +149,17 @@
        x="0.59404343"
        y="-171.99194"
        transform="translate(0,172)"
-       ry="7.7225633" />
+       ry="0" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:48px;line-height:1.25;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none"
        x="91.044632"
-       y="259.05328"
+       y="256.08301"
        id="text4803"><tspan
          sodipodi:role="line"
          id="tspan4801"
          x="91.044632"
-         y="259.05328"
+         y="256.08301"
          style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:48px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1">CsoundQt</tspan></text>
     <text
        xml:space="preserve"
@@ -179,7 +170,7 @@
          sodipodi:role="line"
          id="tspan5179"
          x="479.69955"
-         y="171.57028"></tspan></text>
+         y="171.57028" /></text>
   </g>
   <g
      inkscape:groupmode="layer"
@@ -197,7 +188,7 @@
        style="display:inline;opacity:1;fill:#105a48;fill-opacity:1;stroke:#000000;stroke-width:0.1746666;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.41428576;enable-background:new"
        id="path860"
        cx="201.08369"
-       cy="-52.032955"
+       cy="-55.597218"
        r="87.311241" />
   </g>
   <g
@@ -214,8 +205,8 @@
      transform="translate(0,172)">
     <g
        id="g4404"
-       style="display:inline;opacity:0.304;filter:url(#filter4774);enable-background:new"
-       transform="matrix(1.4555453,0,0,1.4555453,112.07135,-145.71238)">
+       style="display:inline;opacity:0.30400002;filter:url(#filter4774);enable-background:new"
+       transform="matrix(1.4555453,0,0,1.4555453,112.07135,-149.27662)">
       <path
          d="M 92.127346,84.256247 A 33.790051,33.790051 0 0 1 54.118795,99.999904 33.790051,33.790051 0 0 1 29.074253,67.361222 33.790051,33.790051 0 0 1 54.118794,34.722539 33.790051,33.790051 0 0 1 92.127345,50.466195"
          sodipodi:open="true"
@@ -229,7 +220,7 @@
          id="path1955"
          style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:6.15744305;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;enable-background:new" />
       <path
-         style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#090909;stroke-width:6.15714262;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;enable-background:new"
+         style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#090909;stroke-width:6.15714264;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;enable-background:new"
          id="path1957"
          sodipodi:type="arc"
          sodipodi:cx="63.700146"
@@ -241,8 +232,7 @@
          sodipodi:open="true"
          d="M 103.71314,90.462732 A 46.203022,46.203022 0 0 1 51.741924,111.98991 46.203022,46.203022 0 0 1 17.497124,67.361222 46.203022,46.203022 0 0 1 51.741923,22.732529 46.203022,46.203022 0 0 1 103.71314,44.259709" />
       <g
-         id="g4313"
-         style="">
+         id="g4313">
         <circle
            transform="rotate(65.302462)"
            r="20.185347"
@@ -262,7 +252,7 @@
     </g>
     <g
        id="g5188"
-       transform="translate(-5.9883136)">
+       transform="translate(-5.9883136,-3.5642605)">
       <rect
          transform="rotate(30)"
          y="-150.23709"
