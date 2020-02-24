@@ -1,9 +1,12 @@
 <RCC>
     <qresource prefix="/">
         <file>../images/splashscreen.png</file>
+        <file>../images/splashscreen-alt.png</file>
         <file>../images/modIcon.png</file>
         <file>../images/modIcon2.png</file>
         <file>../images/qtcs.png</file>
+        <file>../images/qtcs-alt.png</file>
+        <file>../images/qtcs-alt.svg</file>
         <file>../images/br_next.png</file>
         <file>../images/br_prev.png</file>
         <file>../images/go-home-16.png</file>

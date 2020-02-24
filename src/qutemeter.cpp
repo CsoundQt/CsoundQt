@@ -598,8 +598,13 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
     m_scene = new QGraphicsScene(0, 0, 20, 20, this);
 	m_scene->setBackgroundBrush(Qt::black);
 	m_scene->setSceneRect(0,0, 20, 20);
-	setScene(m_scene);
+
+    setScene(m_scene);
 	m_mouseDown = false;
+    auto borderPen = QPen(QColor(Qt::green).darker(200), 0);
+
+    m_border = m_scene->addRect(m_scene->sceneRect(), borderPen);
+    m_border->hide();
     m_block = m_scene->addRect(0, 0, 0, 0, Qt::NoPen, QBrush(Qt::green));
 	m_point = m_scene->addEllipse(0, 0, 0, 0, QPen(Qt::green) , QBrush(Qt::green));
 	m_vline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
@@ -640,6 +645,7 @@ void MeterWidget::setValue(double value)
 
 	double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
 	double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
+
     if (m_type == "fill" && !m_vertical) {
 		m_block->setRect(0, 0, portionx*width(), height());
 	}
@@ -798,6 +804,7 @@ void MeterWidget::setColor(QColor color)
 {
 	//   qDebug("MeterWidget::setColor()");
 	m_block->setBrush(QBrush(color));
+    m_border->setPen(color.darker(200));
 	m_point->setPen(QPen(Qt::NoPen));
 	m_point->setBrush(QBrush(color));
 	m_vline->setPen(QPen(color));
@@ -811,6 +818,7 @@ void MeterWidget::setBgColor(QColor color) {
 void MeterWidget::setWidgetGeometry(int x,int y,int width,int height)
 {
 	m_scene->setSceneRect(0,0, width, height);
+    m_border->setRect(0, 0, width-1, height-1);
 	setSceneRect(0,0, width, height);
 	setGeometry(x,y,width, height);
 	setMaximumSize(width, height);

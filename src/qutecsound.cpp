@@ -84,7 +84,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
     initialDir = QCoreApplication::applicationDirPath();
     setWindowTitle("CsoundQt[*]");
     // resize(780,550);
+#ifdef QCS_USE_NEW_ICON
+    // setWindowIcon(QIcon(":/images/qtcs-alt.svg"));
+    setWindowIcon(QIcon(":/images/qtcs-alt.png"));
+#else
     setWindowIcon(QIcon(":/images/qtcs.png"));
+#endif
     //Does this take care of the decimal separator for different locales?
     QLocale::setDefault(QLocale::system());
     curPage = -1;
@@ -964,6 +969,11 @@ void CsoundQt::duplicate()
 {
     qDebug() << "CsoundQt::duplicate()";
     documentPages[curPage]->duplicateWidgets();
+}
+
+void CsoundQt::testAudioSetup()
+{
+    qDebug() << "CsoundQt::testAudioSetup";
 }
 
 QString CsoundQt::getSaveFileName()
@@ -3454,13 +3464,16 @@ void CsoundQt::createActions()
     renderAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
 
-    externalPlayerAct = new QAction(QIcon(prefix + "playfile.png"), tr("Play Audiofile"), this);
-    externalPlayerAct->setStatusTip(tr("Play rendered audiofile in External Editor"));
+    testAudioSetupAct = new QAction(tr("Test Audio Setup"), this);
+    connect(testAudioSetupAct, SIGNAL(triggered(bool)), this, SLOT(testAudioSetup()));
+
+    externalPlayerAct = new QAction(QIcon(prefix + "playfile.png"), tr("Play Rendered Audiofile"), this);
+    externalPlayerAct->setStatusTip(tr("Play rendered audiofile in external application"));
     externalPlayerAct->setIconText(tr("Ext. Player"));
     externalPlayerAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(externalPlayerAct, SIGNAL(triggered()), this, SLOT(openExternalPlayer()));
 
-    externalEditorAct = new QAction(QIcon(prefix + "editfile.png"), tr("Edit Audiofile"), this);
+    externalEditorAct = new QAction(QIcon(prefix + "editfile.png"), tr("Edit Rendered Audiofile"), this);
     externalEditorAct->setStatusTip(tr("Edit rendered audiofile in External Editor"));
     externalEditorAct->setIconText(tr("Ext. Editor"));
     externalEditorAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -4156,6 +4169,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(editAct);
     editMenu->addSeparator();
     editMenu->addAction(configureAct);
+    editMenu->addAction(testAudioSetupAct);
     editMenu->addAction(setShortcutsAct);
 
     controlMenu = menuBar()->addMenu(tr("Control"));
@@ -4166,6 +4180,7 @@ void CsoundQt::createMenus()
     controlMenu->addAction(recAct);
     controlMenu->addAction(stopAct);
     controlMenu->addAction(stopAllAct);
+    controlMenu->addSeparator();
     controlMenu->addAction(externalEditorAct);
     controlMenu->addAction(externalPlayerAct);
 

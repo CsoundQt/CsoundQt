@@ -60,6 +60,8 @@ public:
     }
     void setDrawValue(bool enable) { m_draw_value = enable; }
     void setColor(QColor color) { m_color = color; }
+    void setTextColor(QColor color) { m_textcolor = color; }
+
     void setFlatStyle(bool enable) { m_flat = enable; }
     void setValueDialog();
     void setIntegerMode(bool enable) { m_intDisplay = enable; }
@@ -94,6 +96,7 @@ private:
     double m_display_min;
     double m_display_max;
     QColor m_color;
+    QColor m_textcolor;
     bool   m_flat;
     int    m_degrees;
     bool   m_intDisplay;
@@ -120,11 +123,10 @@ public:
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
-    void setKnobColor(QColor c);
 
 private slots:
     void selectKnobColor();
-
+    void selectKnobTextColor();
 
 protected:
 	virtual void createPropertiesDialog();
@@ -141,6 +143,7 @@ private:
     QCheckBox      *displayValueCheckBox;
     QCheckBox      *flatStyleCheckBox;
     QPushButton    *knobColorButton;
+    QPushButton    *knobTextColorButton;
     QCheckBox      *intModeCheckBox;
 
 };

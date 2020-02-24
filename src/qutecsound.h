@@ -44,6 +44,8 @@
 #include <Carbon/Carbon.h>
 #endif
 
+#define QCS_USE_NEW_ICON
+
 class QAction;
 class QMenu;
 class QTextEdit;
@@ -280,6 +282,7 @@ private slots:
 	void disableInternalRtMidi();
     void focusToTab(int tab);
     void ambiguosShortcut();
+    void testAudioSetup();
 #ifdef QCS_DEBUGGER
 	void runDebugger();
 	void stopDebugger();
@@ -402,6 +405,7 @@ private:
 	QAction *setShortcutsAct;
 	QAction *editAct;
 	QAction *runAct;
+    QAction *testAudioSetupAct;
 	QAction *runTermAct;
 	QAction *pauseAct;
 	QAction *stopAct;

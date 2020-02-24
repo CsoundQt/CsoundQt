@@ -98,6 +98,9 @@
   <property name="autoFillBackground">
    <bool>true</bool>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
@@ -326,7 +329,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="application.qrc">:/images/qtcs.png</pixmap>
+    <pixmap resource="application.qrc">:/images/qtcs-alt.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>

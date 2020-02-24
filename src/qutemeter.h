@@ -125,6 +125,8 @@ private:
 	QGraphicsScene* m_scene;
 
 	QGraphicsRectItem* m_block;
+    QGraphicsRectItem* m_border;
+
 	QGraphicsEllipseItem* m_point;
 	QGraphicsLineItem* m_vline;
 	QGraphicsLineItem* m_hline;

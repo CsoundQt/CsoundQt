@@ -407,7 +407,8 @@ void QuteWidget::addChn_k()
 
 void QuteWidget::createPropertiesDialog()
 {
-	qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n" << dynamicPropertyNames ();
+    qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n"
+             << dynamicPropertyNames ();
 	dialog = new QDialog(this);
 	dialog->resize(300, 300);
 	//  dialog->setModal(true);
@@ -438,8 +439,8 @@ void QuteWidget::createPropertiesDialog()
 	layout->addWidget(hSpinBox, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	channelLabel = new QLabel(dialog);
 	channelLabel->setText(tr("Channel name ="));
-	channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-	layout->addWidget(channelLabel, 3, 0, Qt::AlignLeft|Qt::AlignVCenter);
+    // channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(channelLabel, 3, 0, Qt::AlignRight|Qt::AlignVCenter);
 	nameLineEdit = new QLineEdit(dialog);
 	nameLineEdit->setFocus(Qt::OtherFocusReason);
 	nameLineEdit->selectAll();

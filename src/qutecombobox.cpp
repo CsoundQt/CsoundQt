@@ -24,8 +24,10 @@
 
 QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
 {
-	m_widget = new QComboBox(this);
-	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+    m_widget = new QComboBox(this);
+    auto w = static_cast<QComboBox*>(m_widget);
+    w->setStyleSheet("padding-left: 2px;");
+    m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 	//  canFocus(false);
 	//   connect((QComboBox *)m_widget, SIGNAL(released()), this, SLOT(buttonReleased()));
@@ -204,8 +206,7 @@ void QuteComboBox::refreshWidget()
 void QuteComboBox::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
-	//  qDebug() << "QuteComboBox::applyInternalProperties()";
-	setValue(property("QCS_selectedIndex").toInt());
+    setValue(property("QCS_selectedIndex").toInt());
 }
 
 void QuteComboBox::createPropertiesDialog()
@@ -214,13 +215,19 @@ void QuteComboBox::createPropertiesDialog()
 	dialog->setWindowTitle("Menu");
 	QLabel *label = new QLabel(dialog);
 
-	label = new QLabel(dialog);
-	label->setText("Items (separated by commas):");
-	layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
-	text = new QLineEdit(dialog);
-	layout->addWidget(text, 5,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
-	text->setMinimumWidth(320);
+    auto spacer = new QSpacerItem(20, 20, QSizePolicy::Expanding);
+    layout->addItem(spacer, 4, 4, Qt::AlignLeft);
 
+	label = new QLabel(dialog);
+    label->setText("Items (comma-separated)");
+    layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+	text = new QLineEdit(dialog);
+    text->setToolTip("Items in the menu, separated by commas");
+    text->setMinimumWidth(420);
+    text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    layout->addWidget(text, 5,1,1,4, Qt::AlignLeft|Qt::AlignVCenter);
+    // text->setSizePolicy()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
