@@ -47,13 +47,13 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
     QMutexLocker locker(&m_playMutex);
     ud = new CsoundUserData();
     ud->csEngine = this;
-    ud->csound = NULL;
-    ud->perfThread = NULL;
+    ud->csound = nullptr;
+    ud->perfThread = nullptr;
     ud->flags = QCS_NO_FLAGS;
     ud->mouseValues.resize(6); // For _MouseX _MouseY _MouseRelX _MouseRelY _MouseBut1 and _MouseBut2 channels
-    ud->wl = NULL;
-    ud->midiBuffer = NULL;
-    ud->virtualMidiBuffer = NULL;
+    ud->wl = nullptr;
+    ud->midiBuffer = nullptr;
+    ud->virtualMidiBuffer = nullptr;
     ud->playMutex = &m_playMutex;
 #ifdef QCS_PYTHONQT
     ud->m_pythonCallback = "";
@@ -319,7 +319,7 @@ int CsoundEngine::midiOutCloseCb(CSOUND *csound, void *ud)
 const char *CsoundEngine::midiErrorStringCb(int)
 {
 
-    return NULL;
+    return nullptr;
 }
 
 void CsoundEngine::queueMidiIn(std::vector< unsigned char > *message)

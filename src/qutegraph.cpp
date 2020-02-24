@@ -352,7 +352,7 @@ void QuteGraph::changeCurve(int index)
 
     m_value = index;
     switch(graphtypes[index]) {
-    case GraphType::ftable: {
+    case GraphType::GRAPH_FTABLE: {
         int ftable = getTableNumForIndex(index);
         if (m_value2 != ftable) {
             m_value2 = ftable;
@@ -371,11 +371,11 @@ void QuteGraph::changeCurve(int index)
             drawGraph(curves[index], index);
         break;
     }
-    case GraphType::spectrum:
+    case GraphType::GRAPH_SPECTRUM:
         m_value2 = -1;
         m_label->hide();
         break;
-    case GraphType::signal:
+    case GraphType::GRAPH_AUDIOSIGNAL:
         m_value2 = -1;
         m_label->hide();
         break;
@@ -449,16 +449,16 @@ void QuteGraph::addCurve(Curve * curve)
     QString caption = curve->get_caption();
     GraphType graphType;
     if(caption.contains("fft")) {
-        graphType = GraphType::spectrum;
+        graphType = GraphType::GRAPH_SPECTRUM;
         view->setRenderHint(QPainter::Antialiasing);
     } else if(caption.contains("ftable")) {
-        graphType = GraphType::ftable;
+        graphType = GraphType::GRAPH_FTABLE;
         view->setRenderHint(QPainter::Antialiasing);
     } else {
-        graphType = GraphType::signal;
+        graphType = GraphType::GRAPH_AUDIOSIGNAL;
     }
 
-    if(graphType == GraphType::spectrum) {
+    if(graphType == GraphType::GRAPH_SPECTRUM) {
 
 
         for (int i = 0 ; i < numTicksX; i++) {
@@ -548,19 +548,19 @@ void QuteGraph::drawGraph(Curve *curve, int index) {
     // auto view = getView(index);
 
     switch(graphtypes[index]) {
-    case GraphType::ftable:
+    case GraphType::GRAPH_FTABLE:
         // drawFtable(curve, index);
         // view->setRenderHint(QPainter::Antialiasing);
 
         drawFtablePath(curve, index);
         break;
-    case GraphType::spectrum:
+    case GraphType::GRAPH_SPECTRUM:
         // view->setRenderHint(QPainter::Antialiasing);
 
         drawSpectrum(curve, index);
         // drawSpectrumPath(curve, index);
         break;
-    case GraphType::signal:
+    case GraphType::GRAPH_AUDIOSIGNAL:
         // drawSignal(curve, index);
         drawSignalPath(curve, index);
         break;
@@ -809,10 +809,10 @@ void QuteGraph::scaleGraph(int index)
     auto view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
 	//  view->setResizeAnchor(QGraphicsView::NoAnchor);
     auto graphType = graphtypes[index];
-    if(graphType == GraphType::ftable && max != min) {
+    if(graphType == GraphType::GRAPH_FTABLE && max != min) {
         view->setSceneRect(0, -max*1.17, (double) size, (max - min)*1.17);
         view->fitInView(0, -max*1.17/zoomy, (double) size/zoomx, (max - min)*1.17/zoomy);
-    } else if(graphType == GraphType::spectrum) {
+    } else if(graphType == GraphType::GRAPH_SPECTRUM) {
         view->setSceneRect (0, 0, size, 90.);
         view->fitInView(0, 0, (double) size/zoomx, 90./zoomy);
     } else { //from display opcode
@@ -829,7 +829,7 @@ int QuteGraph::getTableNumForIndex(int index) {
 		return -1;
 	}
 	int ftable = -1;
-    if(graphtypes[index] == GraphType::ftable) {
+    if(graphtypes[index] == GraphType::GRAPH_FTABLE) {
         QString caption = curves[index]->get_caption();
 		ftable= caption.mid(caption.indexOf(" ") + 1,
 							caption.indexOf(":") - caption.indexOf(" ") - 1).toInt();

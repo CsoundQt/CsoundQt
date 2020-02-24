@@ -28,7 +28,7 @@
 
 class Curve;
 
-enum GraphType { ftable = 1, signal = 2, spectrum = 4 };
+enum GraphType { GRAPH_FTABLE, GRAPH_AUDIOSIGNAL, GRAPH_SPECTRUM };
 
 
 class QuteGraph : public QuteWidget
@@ -109,7 +109,7 @@ private:
 
 	void scaleGraph(int index);
 	int getTableNumForIndex(int index);
-	int getIndexForTableNum(int ftable);
+    int getIndexForTableNum(int GRAPH_FTABLE);
 	void setInternalValue(double value);
     void drawGraph(Curve *curve, int index);
 
