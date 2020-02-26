@@ -66,6 +66,7 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	rtMidiModule = "";
 	rtMidiInputDevice = "0";
 	rtMidiOutputDevice = "0";
+    useSystemSamplerate = false;
 	useCsoundMidi = false;
 	simultaneousRun = true; // Allow running various instances (tabs) simultaneously.
 

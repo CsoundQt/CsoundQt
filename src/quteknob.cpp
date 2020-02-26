@@ -24,6 +24,7 @@
 
 QVdial::~QVdial() {};
 
+
 void QVdial::mousePressEvent (QMouseEvent *event) {
     if(!(event->button() & Qt::LeftButton)) {
         return;
@@ -138,9 +139,9 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_resolution", 0.01);
 	setProperty("QCS_randomizable", false);
 	setProperty("QCS_randomizableGroup", 0);
-    QColor fg = QColor(245, 124, 0);
-    setProperty("QCS_color", fg);
-    setProperty("QCS_textcolor", fg.darker(300));
+
+    setColor(QColor(245, 124, 0));
+    setTextColor(QColor(81, 41, 0));
 
     setProperty("QCS_showvalue", true);
     setProperty("QCS_flatstyle", true);
@@ -162,8 +163,7 @@ void QuteKnob::setRange(double min, double max)
 		m_value =  max;
 	else if (m_value > min)
 		m_value = min;
-    qDebug() << "QCS_maximum: " << max << "\n";
-	setProperty("QCS_maximum", max);
+    setProperty("QCS_maximum", max);
 	setProperty("QCS_minimum", min);
 	m_valueChanged = true;
     static_cast<QVdial *>(m_widget)->setDisplayRange(min, max);
@@ -203,11 +203,10 @@ void QuteKnob::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
     setValue(property("QCS_value").toDouble());
-    QColor color = property("QCS_color").value<QColor>();
-    QColor textcolor = property("QCS_textcolor").value<QColor>();
     auto w = static_cast<QVdial*>(m_widget);
-    w->setColor(color);
-    w->setTextColor(textcolor);
+
+    w->setColor(property("QCS_color").value<QColor>());
+    w->setTextColor(QColor(property("QCS_textcolor").toString()));
     w->setDrawValue(property("QCS_showvalue").toBool());
     w->setFlatStyle(property("QCS_flatstyle").toBool());
     w->setIntegerMode(property("QCS_integerMode").toBool());
@@ -333,14 +332,16 @@ QString QuteKnob::getWidgetXmlText()
     s.writeTextElement("b", QString::number(color.blue()));
     s.writeEndElement();
 
+    // we save textcolor as a hex value (QColor::name() returns the hex
+    // representation, which can be used to create a QColor also
+    QColor textcolor = static_cast<QVdial*>(m_widget)->getTextColor();
+    s.writeTextElement("textcolor", textcolor.name());
     s.writeTextElement("showvalue",
                        property("QCS_showvalue").toBool() ? "true" : "false");
     s.writeTextElement("flatstyle",
                        property("QCS_flatstyle").toBool() ? "true" : "false");
     s.writeTextElement("integerMode",
                        property("QCS_integerMode").toBool() ? "true" : "false");
-
-
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -353,28 +354,28 @@ QString QuteKnob::getWidgetType()
 	return QString("BSBKnob");
 }
 
+void buttonSetColorIcon(QPushButton *button, QColor color, int size) {
+    QPixmap pixmap(size, size);
+    pixmap.fill(color);
+    button->setPalette(QPalette(color));
+    button->setIcon(pixmap);
+}
+
 void QuteKnob::selectKnobColor() {
     auto currentColor = m_widget->palette().color(QPalette::WindowText);
     QColor color = QColorDialog::getColor(currentColor, this);
-    static_cast<QVdial*>(m_widget)->setColor(color);
+    setColor(color);
     if(knobColorButton != nullptr) {
-        QPixmap pixmap(64,64);
-        pixmap.fill(color);
-        knobColorButton->setPalette(QPalette(color));
-        knobColorButton->setIcon(pixmap);
+        buttonSetColorIcon(knobColorButton, color, 64);
     }
 }
 
 void QuteKnob::selectKnobTextColor() {
     auto currentColor = m_widget->palette().color(QPalette::WindowText);
-    QColor color = QColorDialog::getColor(currentColor, this);
-    static_cast<QVdial*>(m_widget)->setTextColor(color);
-    if(knobColorButton != nullptr) {
-        QPixmap pixmap(64,64);
-        pixmap.fill(color);
-        knobTextColorButton->setPalette(QPalette(color));
-        knobTextColorButton->setIcon(pixmap);
-    }
+    QColor c = QColorDialog::getColor(currentColor, this);
+    setTextColor(c);
+    if(knobColorButton != nullptr)
+        buttonSetColorIcon(knobTextColorButton, c, 64);
 }
 
 void QuteKnob::createPropertiesDialog()
@@ -427,29 +428,23 @@ void QuteKnob::createPropertiesDialog()
                 property("QCS_integerMode").toBool()?Qt::Checked:Qt::Unchecked);
     layout->addWidget(intModeCheckBox, 6, 2, Qt::AlignLeft|Qt::AlignVCenter);
 
-    knobColorButton = new QPushButton(dialog);
     label = new QLabel(dialog);
     label->setText("Color");
     layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    knobColorButton = new QPushButton(dialog);
+    QColor color = property("QCS_color").value<QColor>();
+    buttonSetColorIcon(knobColorButton, color, 64);
     layout->addWidget(knobColorButton, 7, 1, Qt::AlignLeft | Qt::AlignVCenter);
     connect(knobColorButton, SIGNAL(released()), this, SLOT(selectKnobColor()));
-
-    QPixmap pixmap(64, 64);
-    QColor knobColor = property("QCS_color").value<QColor>();
-    pixmap.fill(knobColor);
-    knobColorButton->setIcon(pixmap);
-    knobColorButton->setPalette(QPalette(knobColor));
 
     label = new QLabel(dialog);
     label->setText("Text Color");
     layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     knobTextColorButton = new QPushButton(dialog);
-    QPixmap pixmap2(64, 64);
-    QColor knobTextColor = property("QCS_textcolor").value<QColor>();
-    pixmap2.fill(knobTextColor);
-    knobTextColorButton->setIcon(pixmap2);
-    knobTextColorButton->setPalette(QPalette(knobTextColor));
+    QColor textcolor = QColor(property("QCS_textcolor").toString());
+    buttonSetColorIcon(knobTextColorButton, textcolor, 64);
     layout->addWidget(knobTextColorButton, 7, 3, Qt::AlignLeft | Qt::AlignVCenter);
     connect(knobTextColorButton, SIGNAL(released()), this, SLOT(selectKnobTextColor()));
 
@@ -481,10 +476,13 @@ void QuteKnob::applyProperties()
     setProperty("QCS_maximum", maxSpinBox->value());
 	setProperty("QCS_minimum", minSpinBox->value());
 
-    QColor color = knobColorButton->palette().color(QPalette::Window);
+    // QColor color = knobColorButton->palette().color(QPalette::Window);
+    QColor color = static_cast<QVdial*>(m_widget)->getColor();
+
     setProperty("QCS_color", color);
-    color = knobTextColorButton->palette().color(QPalette::Window);
-    setProperty("QCS_textcolor", color);
+    // QColor textcolor = knobTextColorButton->palette().color(QPalette::Window);
+    QColor textcolor = static_cast<QVdial*>(m_widget)->getTextColor();
+    setProperty("QCS_textcolor", textcolor.name());
 
     auto w = static_cast<QVdial*>(m_widget);
     w->setDisplayRange(minSpinBox->value(), maxSpinBox->value());
@@ -528,3 +526,12 @@ void QuteKnob::knobChanged(int value)
 	emit newValue(channelValue);
 }
 
+void QuteKnob::setColor(QColor c) {
+    setProperty("QCS_color", c);
+    static_cast<QVdial*>(m_widget)->setColor(c);
+}
+
+void QuteKnob::setTextColor(QColor c) {
+    setProperty("QCS_textcolor", c.name());
+    static_cast<QVdial*>(m_widget)->setTextColor(c);
+}

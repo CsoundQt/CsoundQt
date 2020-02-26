@@ -90,6 +90,7 @@ private slots:
 
 	void on_csoundMidiCheckBox_toggled(bool checked);
 	void checkRtMidiModule(QString module);
+    void testAudioSetup();
 
 signals:
 	void disableInternalRtMidi();

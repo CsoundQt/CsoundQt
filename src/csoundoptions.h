@@ -76,6 +76,7 @@ public:
 	QString rtMidiModule;
 	QString rtMidiInputDevice;
 	QString rtMidiOutputDevice;
+    bool useSystemSamplerate;
 	bool useCsoundMidi;
 	bool simultaneousRun; // Allow running various instances (tabs) simultaneously.
 

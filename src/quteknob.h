@@ -40,6 +40,7 @@ public:
     , m_display_min(0.0)
     , m_display_max(1.0)
     , m_color(QColor(245, 124, 0))
+    , m_textcolor(QColor(81, 41, 0))
     , m_flat(true)
     , m_degrees(300)
     , m_intDisplay(true)
@@ -59,8 +60,16 @@ public:
             m_decimals = 0;
     }
     void setDrawValue(bool enable) { m_draw_value = enable; }
-    void setColor(QColor color) { m_color = color; }
-    void setTextColor(QColor color) { m_textcolor = color; }
+    void setColor(QColor color) {
+        if(!color.isValid()) {
+            qDebug() << "QVdial::setColor: invalid color";
+            return;
+        }
+        m_color = color; }
+    QColor getColor() { return m_color; }
+    void setTextColor(QColor c) { m_textcolor = c; }
+
+    QColor getTextColor() { return m_textcolor; }
 
     void setFlatStyle(bool enable) { m_flat = enable; }
     void setValueDialog();
@@ -123,6 +132,9 @@ public:
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
+
+    virtual void setColor(QColor c);
+    virtual void setTextColor(QColor c);
 
 private slots:
     void selectKnobColor();

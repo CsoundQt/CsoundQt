@@ -3615,12 +3615,16 @@ void WidgetLayout::createEditFrame(QuteWidget* widget)
 	editWidgets.append(frame);
 	connect(frame, SIGNAL(popUpMenu(QPoint)), widget, SLOT(popUpMenu(QPoint)));
 	connect(frame, SIGNAL(deselectAllSignal()), this, SLOT(deselectAll()));
-	connect(frame, SIGNAL(moved( QPair<int, int> )), this, SLOT(widgetMoved( QPair<int, int> )));
-	connect(frame, SIGNAL(resized( QPair<int, int> )), this, SLOT(widgetResized( QPair<int, int> )));
+    connect(frame, SIGNAL(moved( QPair<int, int> )),
+            this, SLOT(widgetMoved( QPair<int, int> )));
+    connect(frame, SIGNAL(resized( QPair<int, int> )),
+            this, SLOT(widgetResized( QPair<int, int> )));
 	connect(frame, SIGNAL(mouseReleased()), this, SLOT(markHistory()));
 	connect(frame, SIGNAL(editWidget()), widget, SLOT(openProperties()));
-	connect(frame, SIGNAL(widgetSelected(QuteWidget*)), this, SLOT(widgetSelected(QuteWidget*)));
-	connect(frame, SIGNAL(widgetUnselected(QuteWidget*)), this, SLOT(widgetUnselected(QuteWidget*)));
+    connect(frame, SIGNAL(widgetSelected(QuteWidget*)),
+            this, SLOT(widgetSelected(QuteWidget*)));
+    connect(frame, SIGNAL(widgetUnselected(QuteWidget*)),
+            this, SLOT(widgetUnselected(QuteWidget*)));
 
 }
 

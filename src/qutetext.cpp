@@ -38,6 +38,7 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	//   connect(static_cast<QLabel*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 	setProperty("QCS_label", "");
 	setProperty("QCS_alignment", "left");
+    setProperty("QCS_valignment", "top");
 	setProperty("QCS_precision", 3);
 	setProperty("QCS_font", "Arial");
 	setProperty("QCS_fontsize", 12.0);
@@ -183,24 +184,28 @@ void QuteText::applyInternalProperties()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif
-	//  qDebug() << "QuteText::applyInternalProperties()";
-
-	static_cast<QLabel*>(m_widget)->setText(property("QCS_label").toString());
+    static_cast<QLabel*>(m_widget)->setText(property("QCS_label").toString());
 	m_stringValue = property("QCS_label").toString();
 	m_value = m_stringValue.toDouble();
 	m_valueChanged = true;
-	//  qDebug() << "QuteText::applyInternalProperties()" << property("QCS_label").toString();
-	Qt::Alignment align;
-	QString alignText = property("QCS_alignment").toString();
-	if (alignText == "left") {
-		align = Qt::AlignLeft|Qt::AlignTop;
-	}
-	else if (alignText == "center") {
-		align = Qt::AlignHCenter|Qt::AlignTop;
-	}
-	else if (alignText == "right") {
-		align = Qt::AlignRight|Qt::AlignTop;
-	}
+    Qt::Alignment align;
+    QString horizontalAlignment = property("QCS_alignment").toString();
+    QString verticalAlignment = property("QCS_valignment").toString();
+
+    if(verticalAlignment == "top")
+        align = Qt::AlignTop;
+    else if(verticalAlignment == "center")
+        align = Qt::AlignVCenter;
+    else
+        align= Qt::AlignBottom;
+
+    if(horizontalAlignment == "left")
+        align |= Qt::AlignLeft;
+    else if(horizontalAlignment == "center")
+        align |= Qt::AlignCenter;
+    else {
+        align |= Qt::AlignRight;
+    }
 	static_cast<QLabel*>(m_widget)->setAlignment(align);
 	setTextColor(property("QCS_color").value<QColor>());
 	QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
@@ -311,7 +316,8 @@ QString QuteText::getCabbageLine() // QuteText is used both for label and displa
 	line += "fontcolour(" + QString::number(color.red()) + "," +  QString::number(color.green()) + "," +  QString::number(color.blue()) + "), ";
 	color = property("QCS_bgcolor").value<QColor>();
 	line += "colour(" + QString::number(color.red()) + "," +  QString::number(color.green()) + "," +  QString::number(color.blue()) + "), ";
-	// Cabbage does not set font or fontsize. Text is scaled according to heigth. Maybe set heigth = fontsize + something?
+    // Cabbage does not set font or fontsize.
+    // Text is scaled according to heigth. Maybe set heigth = fontsize + something?
 	if ( m_type == "label" ) 	{ // then it is a label
 		line += "text(\"" + property("QCS_label").toString() + "\") " ;
 	} else { // display
@@ -391,6 +397,8 @@ QString QuteText::getWidgetXmlText()
 #endif
 	s.writeTextElement("label", property("QCS_label").toString());
 	s.writeTextElement("alignment", property("QCS_alignment").toString());
+    s.writeTextElement("valignment", property("QCS_valignment").toString());
+
 
 	s.writeTextElement("font", property("QCS_font").toString());
 	s.writeTextElement("fontsize", QString::number(property("QCS_fontsize").toInt()));
@@ -446,14 +454,13 @@ void QuteText::createPropertiesDialog()
 	textColor = new QPushButton(dialog);
 	layout->addWidget(textColor, 6,1, Qt::AlignLeft|Qt::AlignVCenter);
 	connect(textColor, SIGNAL(released()), this, SLOT(selectTextColor()));
-	label = new QLabel(dialog);
-	label->setText(tr("Background Color"));
-	layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
+
+    bg = new QCheckBox("Background", dialog);
+    layout->addWidget(bg, 6, 2, Qt::AlignLeft|Qt::AlignVCenter);
 	bgColor = new QPushButton(dialog);
 	layout->addWidget(bgColor, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
-	bg = new QCheckBox("Background", dialog);
-	layout->addWidget(bg, 7,3, Qt::AlignLeft|Qt::AlignVCenter);
-	border = new QCheckBox("Border", dialog);
+
+    border = new QCheckBox("Border", dialog);
 	layout->addWidget(border, 7,2, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText(tr("Font"));
@@ -476,14 +483,26 @@ void QuteText::createPropertiesDialog()
 	layout->addWidget(label, 9, 2, Qt::AlignRight|Qt::AlignVCenter);
 	borderWidth = new QSpinBox(dialog);
 	layout->addWidget(borderWidth, 9, 3, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
-	label->setText(tr("Alignment"));
+
+    label = new QLabel(dialog);
+    label->setText(tr("Horiz. Align"));
 	layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
 	alignment = new QComboBox(dialog);
 	alignment->addItem(tr("Left", "Alignment"));
 	alignment->addItem(tr("Center", "Alignment"));
 	alignment->addItem(tr("Right", "Alignment"));
 	layout->addWidget(alignment,9, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel(dialog);
+    label->setText(tr("Vert. Align"));
+    layout->addWidget(label, 10, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    vertAlignmentComboBox = new QComboBox(dialog);
+    vertAlignmentComboBox->addItem(tr("Top", "Alignment"));
+    vertAlignmentComboBox->addItem(tr("Center", "Alignment"));
+    vertAlignmentComboBox->addItem(tr("Bottom", "Alignment"));
+    layout->addWidget(vertAlignmentComboBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
 	connect(bgColor, SIGNAL(released()), this, SLOT(selectBgColor()));
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
@@ -506,26 +525,27 @@ void QuteText::createPropertiesDialog()
 	fontSize->setValue(property("QCS_fontsize").toInt());
 	borderRadius->setValue(property("QCS_borderradius").toInt());
 	borderWidth->setValue(property("QCS_borderwidth").toInt());
-	QString currentAlignment = property("QCS_alignment").toString();
-	int align;
-	if (currentAlignment == "left") {
-		align = 0;
-	}
-	else if (currentAlignment == "center") {
-		align = 1;
-	}
-	else if (currentAlignment == "right") {
-		align = 2;
-	}
-	else
-		align = 0;
-	alignment->setCurrentIndex(align);
-	//  label = new QLabel(dialog);
-	//  label->setText(tr("Type"));
-	//  layout->addWidget(label, 12, 0, Qt::AlignRight|Qt::AlignVCenter);
-	//  label = new QComboBox(dialog);
-	//  label->setText(tr("Type"));
-	//  layout->addWidget(label, 12, 0, Qt::AlignLeft|Qt::AlignVCenter);
+
+    QString currentAlignment = property("QCS_alignment").toString();
+    if (currentAlignment == "left")
+        alignment->setCurrentIndex(0);
+    else if (currentAlignment == "center")
+        alignment->setCurrentIndex(1);
+    else if (currentAlignment == "right")
+        alignment->setCurrentIndex(2);
+    else
+        alignment->setCurrentIndex(0);
+
+    currentAlignment = property("QCS_valignment").toString();
+    if (currentAlignment == "top")
+        vertAlignmentComboBox->setCurrentIndex(0);
+    else if (currentAlignment == "center")
+        vertAlignmentComboBox->setCurrentIndex(1);
+    else if(currentAlignment == "bottom")
+        vertAlignmentComboBox->setCurrentIndex(2);
+    else
+        vertAlignmentComboBox->setCurrentIndex(0);
+
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -538,7 +558,8 @@ void QuteText::applyProperties()
 	widgetLock.lockForWrite();
 #endif
 	setProperty("QCS_label", text->toPlainText());
-	switch (alignment->currentIndex()) {
+
+    switch (alignment->currentIndex()) {
 	case 0:
 		setProperty("QCS_alignment", "left");
 		break;
@@ -551,7 +572,22 @@ void QuteText::applyProperties()
 	default:
 		setProperty("QCS_alignment", "");
 	}
-	setProperty("QCS_font", font->currentFont().family());
+
+    switch (vertAlignmentComboBox->currentIndex()) {
+    case 0:
+        setProperty("QCS_valignment", "top");
+        break;
+    case 1:
+        setProperty("QCS_valignment", "center");
+        break;
+    case 2:
+        setProperty("QCS_valignment", "bottom");
+        break;
+    default:
+        setProperty("QCS_valignment", "");
+    }
+
+    setProperty("QCS_font", font->currentFont().family());
 	setProperty("QCS_fontsize", fontSize->value());
 	setProperty("QCS_bgcolor", bgColor->palette().color(QPalette::Window));
 	setProperty("QCS_bgcolormode", bg->isChecked());
@@ -734,6 +770,7 @@ void QuteLineEdit::applyInternalProperties()
 	m_stringValue = property("QCS_label").toString();
 	m_valueChanged = true;
 	Qt::Alignment align;
+
 	QString alignText = property("QCS_alignment").toString();
 	if (alignText == "left") {
 		align = Qt::AlignLeft|Qt::AlignVCenter;

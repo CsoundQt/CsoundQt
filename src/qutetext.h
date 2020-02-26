@@ -78,6 +78,7 @@ protected:
 	QFontComboBox  *font;
 	QSpinBox * fontSize;
 	QComboBox * alignment;
+    QComboBox * vertAlignmentComboBox;
 
 private slots:
 	void selectTextColor();

@@ -974,6 +974,11 @@ void CsoundQt::duplicate()
 void CsoundQt::testAudioSetup()
 {
     qDebug() << "CsoundQt::testAudioSetup";
+    loadFile(":/examples/Useful/IO_Test.csd");
+    widgetPanel->setVisible(true);
+    widgetPanel->setFocus();
+    play();
+
 }
 
 QString CsoundQt::getSaveFileName()
@@ -2710,8 +2715,12 @@ void CsoundQt::configure()
     dialog.newParserCheckBox->setEnabled(csoundGetVersion() > 5125);
     dialog.multicoreCheckBox->setEnabled(csoundGetVersion() > 5125);
     dialog.numThreadsSpinBox->setEnabled(csoundGetVersion() > 5125);
-    connect(dialog.applyButton, SIGNAL(released()), this, SLOT(applySettings()));
-    connect(&dialog, SIGNAL(disableInternalRtMidi()), this, SLOT(disableInternalRtMidi()) );
+    connect(dialog.applyButton, SIGNAL(released()),
+            this, SLOT(applySettings()));
+    connect(&dialog, SIGNAL(disableInternalRtMidi()),
+            this, SLOT(disableInternalRtMidi()) );
+    connect(dialog.testAudioSetupButton, SIGNAL(released()),
+            this, SLOT(testAudioSetup()));
     if (dialog.exec() == QDialog::Accepted) {
         applySettings();
         storeSettings();
@@ -3464,7 +3473,8 @@ void CsoundQt::createActions()
     renderAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(renderAct, SIGNAL(triggered()), this, SLOT(render()));
 
-    testAudioSetupAct = new QAction(tr("Test Audio Setup"), this);
+    testAudioSetupAct = new QAction(QIcon(prefix+"hearing.svg"),
+                                    tr("Test Audio Setup"), this);
     connect(testAudioSetupAct, SIGNAL(triggered(bool)), this, SLOT(testAudioSetup()));
 
     externalPlayerAct = new QAction(QIcon(prefix + "playfile.png"), tr("Play Rendered Audiofile"), this);
@@ -4169,7 +4179,6 @@ void CsoundQt::createMenus()
     editMenu->addAction(editAct);
     editMenu->addSeparator();
     editMenu->addAction(configureAct);
-    editMenu->addAction(testAudioSetupAct);
     editMenu->addAction(setShortcutsAct);
 
     controlMenu = menuBar()->addMenu(tr("Control"));
@@ -4183,6 +4192,9 @@ void CsoundQt::createMenus()
     controlMenu->addSeparator();
     controlMenu->addAction(externalEditorAct);
     controlMenu->addAction(externalPlayerAct);
+    controlMenu->addSeparator();
+    controlMenu->addAction(testAudioSetupAct);
+
 
     viewMenu = menuBar()->addMenu(tr("View"));
     viewMenu->addAction(focusEditorAct);
@@ -5287,8 +5299,9 @@ int CsoundQt::execute(QString executable, QString options)
     system_thread.detach();
 #else
     QString path = documentPages[curPage]->getFilePath();
-    if (path.startsWith(":/examples/", Qt::CaseInsensitive)) { // example or other embedded file
-        path = QDir::tempPath(); // copy of example is saved there
+    if (path.startsWith(":/examples/", Qt::CaseInsensitive)) {
+        // example or other embedded file
+        path = QDir::tempPath();   // copy of example is saved there
     }
     qDebug() << "CsoundQt::execute   " << commandLine << path;
     QProcess *p = new QProcess(this);
@@ -5304,6 +5317,57 @@ int CsoundQt::execute(QString executable, QString options)
 int CsoundQt::loadFileFromSystem(QString fileName)
 {
     return loadFile(fileName,m_options->autoPlay);
+}
+
+void changeNewLines(QByteArray &line) {
+    while(line.contains("\r\n")) {
+        line.replace("\r\n", "\n");
+    }
+    while (line.contains("\r")) {
+        line.replace("\r", "\n");
+    }
+}
+
+void fillCompanionSco(QString &fileName, QString &text) {
+    auto companionFileName = fileName.replace(".orc", ".sco");
+    if (!QFile::exists(companionFileName))
+        return;
+    text.prepend("<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n");
+    text.append("\n</CsInstruments>\n<CsScore>\n");
+    QFile companionFile(companionFileName);
+    if (!companionFile.open(QFile::ReadOnly))
+        return;
+    while (!companionFile.atEnd()) {
+        QByteArray line = companionFile.readLine();
+        changeNewLines(line);
+        QTextDecoder decoder(QTextCodec::codecForLocale());
+        text = text + decoder.toUnicode(line);
+        if (!line.endsWith("\n"))
+            text.append("\n");
+    }
+    text.append("</CsScore>\n</CsoundSynthesizer>\n");
+}
+
+void fillCompanionOrc(QString &fileName, QString &text) {
+    auto companionFileName = fileName.replace(".sco", ".orc");
+    if (!QFile::exists(companionFileName))
+        return;
+    QFile companionFlle(companionFileName);
+    QString orcText = "";
+    if (!companionFlle.open(QFile::ReadOnly))
+        return;
+    while (!companionFlle.atEnd()) {
+        QByteArray line = companionFlle.readLine();
+        changeNewLines(line);
+        QTextDecoder decoder(QTextCodec::codecForLocale());
+        orcText = orcText + decoder.toUnicode(line);
+        if (!line.endsWith("\n"))
+            orcText += "\n";
+    }
+    text.prepend("\n</CsInstruments>\n<CsScore>\n");
+    text.prepend(orcText);
+    text.prepend("<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n");
+    text += "</CsScore>\n</CsoundSynthesizer>\n";
 }
 
 int CsoundQt::loadFile(QString fileName, bool runNow)
@@ -5336,12 +5400,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
             inEncFile = true;
         }
         if (!inEncFile) {
-            while (line.contains("\r\n")) {
-                line.replace("\r\n", "\n");  //Change Win returns to line endings
-            }
-            while (line.contains("\r")) {
-                line.replace("\r", "\n");  //Change Mac returns to line endings
-            }
+            changeNewLines(line);
             QTextDecoder decoder(QTextCodec::codecForLocale());
             text = text + decoder.toUnicode(line);
             if (!line.endsWith("\n"))
@@ -5355,61 +5414,12 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         }
     }
     if (m_options->autoJoin) {
-        QString companionFileName = fileName;
-        if (fileName.endsWith(".orc")) {
-            companionFileName = companionFileName.replace(".orc", ".sco");
-            if (QFile::exists(companionFileName)) {
-                text.prepend("<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n");
-                text += "\n</CsInstruments>\n<CsScore>\n";
-                QFile companionFile(companionFileName);
-                if (companionFile.open(QFile::ReadOnly)) {
-                    while (!companionFile.atEnd()) {
-                        QByteArray line = companionFile.readLine();
-                        while (line.contains("\r\n")) {
-                            line.replace("\r\n", "\n");  //Change Win returns to line endings
-                        }
-                        while (line.contains("\r")) {
-                            line.replace("\r", "\n");  //Change Mac returns to line endings
-                        }
-                        QTextDecoder decoder(QTextCodec::codecForLocale());
-                        text = text + decoder.toUnicode(line);
-                        if (!line.endsWith("\n"))
-                            text += "\n";
-                    }
-                }
-                text += "</CsScore>\n</CsoundSynthesizer>\n";
-            }
-        }
-        else if (fileName.endsWith(".sco")) {
-            companionFileName = companionFileName.replace(".sco", ".orc");
-            if (QFile::exists(companionFileName)) {
-                QFile companionFlle(companionFileName);
-                QString orcText = "";
-                if (companionFlle.open(QFile::ReadOnly)) {
-                    while (!companionFlle.atEnd()) {
-                        QByteArray line = companionFlle.readLine();
-                        while (line.contains("\r\n")) {
-                            line.replace("\r\n", "\n");  //Change Win returns to line endings
-                        }
-                        while (line.contains("\r")) {
-                            line.replace("\r", "\n");  //Change Mac returns to line endings
-                        }
-                        QTextDecoder decoder(QTextCodec::codecForLocale());
-                        orcText = orcText + decoder.toUnicode(line);
-                        if (!line.endsWith("\n"))
-                            orcText += "\n";
-                    }
-                }
-                text.prepend("\n</CsInstruments>\n<CsScore>\n");
-                text.prepend(orcText);
-                text.prepend("<CsoundSynthesizer>\n<CsOptions>\n</CsOptions>\n<CsInstruments>\n");
-                text += "</CsScore>\n</CsoundSynthesizer>\n";
-            }
-        }
+        // QString companionFileName = fileName;
+        if (fileName.endsWith(".orc"))
+            fillCompanionSco(fileName, text);
+        else if (fileName.endsWith(".sco"))
+            fillCompanionOrc(fileName, text);
     }
-    //else {
-    //    loadCompanionFile(fileName); // If here and autojoin unchecked and you open an sco or orc, it falls to endless loop loadFile<->loadCompanionFile
-    //}
 
     if (fileName == ":/default.csd") {
         fileName = QString("");
@@ -5419,7 +5429,10 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         QApplication::restoreOverrideCursor();
         return -1;
     }
-    if (!m_options->autoJoin && (fileName.endsWith(".sco") || fileName.endsWith(".orc")) ) { // load companion, when the new page is made, otherwise isOpen works uncorrect
+    if (!m_options->autoJoin &&
+            (fileName.endsWith(".sco") ||
+             fileName.endsWith(".orc")) ) {
+        // load companion, when the new page is made, otherwise isOpen works uncorrect
         loadCompanionFile(fileName);
     }
     if (!m_options->autoJoin) {
@@ -5433,12 +5446,10 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
             fileName +=  ".csd";
             documentPages[curPage]->setFileName(fileName);  // Must update internal name
             setCurrentFile(fileName);
-            if (!QFile::exists(fileName)) {
+            if (!QFile::exists(fileName))
                 save();
-            }
-            else {
+            else
                 saveAs();
-            }
         }
         else {
             documentPages[curPage]->setModified(false);
@@ -5478,7 +5489,9 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
     documentPages[curPage]->showLiveEventControl(false);
     setCurrentOptionsForPage(documentPages[curPage]);
 
-    documentPages[curPage]->setFileName(fileName);  // Must set before sending text to set highlighting mode
+    // Must set before sending text to set highlighting mode
+    documentPages[curPage]->setFileName(fileName);
+
 #ifdef QCS_PYTHONQT
     documentPages[curPage]->getEngine()->setPythonConsole(m_pythonConsole);
 #endif

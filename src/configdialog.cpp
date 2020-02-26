@@ -180,7 +180,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	else
 		ExternalRadioButton->setChecked(true);
 
-
 	noMessagesCheckBox->setChecked(m_options->noMessages);
 	noBufferCheckBox->setChecked(m_options->noBuffer);
 	noPythonCheckBox->setChecked(m_options->noPython);
@@ -230,6 +229,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	RtModuleComboBox->setCurrentIndex(index);
 	RtInputLineEdit->setText(m_options->rtInputDevice);
 	RtOutputLineEdit->setText(m_options->rtOutputDevice);
+    useSystemSamplerateCheckBox->setChecked(m_options->useSystemSamplerate);
 	JackNameLineEdit->setText(m_options->rtJackName);
 	RtMidiModuleComboBox->setCurrentIndex(RtMidiModuleComboBox->findData(m_options->rtMidiModule));
 	RtMidiInputLineEdit->setText(m_options->rtMidiInputDevice);
@@ -320,6 +320,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 	connect(csoundExecutableToolButton,SIGNAL(clicked()),this, SLOT(browseCsoundExecutable()));
     connect(pythonExecutableToolButton,SIGNAL(clicked()),this, SLOT(browsePythonExecutable()));
+
+
+    connect(testAudioSetupButton, SIGNAL(released()), this, SLOT(testAudioSetup()));
 
 	//connect(RtMidiModuleComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(checkRtMidiModule(QString)) );
 
@@ -435,6 +438,7 @@ void ConfigDialog::accept()
 	m_options->rtInputDevice = RtInputLineEdit->text();
 	m_options->rtOutputDevice = RtOutputLineEdit->text();
 	m_options->rtJackName = JackNameLineEdit->text();
+    m_options->useSystemSamplerate = useSystemSamplerateCheckBox->isChecked();
 	m_options->rtMidiModule = RtMidiModuleComboBox->currentText();
 	m_options->rtMidiInputDevice = RtMidiInputLineEdit->text();
 	m_options->rtMidiOutputDevice = RtMidiOutputLineEdit->text();
@@ -561,6 +565,7 @@ void ConfigDialog::browsePythonExecutable()
     browseFile(m_options->pythonExecutable);
     pythonExecutableLineEdit->setText(m_options->pythonExecutable);
 }
+
 
 //void ConfigDialog::browseDefaultCsd()
 //{
@@ -854,4 +859,20 @@ void ConfigDialog::checkRtMidiModule(QString module)
 		RtMidiInputLineEdit->setText("dummy");
 		RtMidiOutputLineEdit->setText("dummy");
 	}
+}
+
+bool backendSupportsSystemSamplerate(QString module) {
+    if(module == "jack"  ||
+       module == "auhal")
+        return true;
+    return false;
+}
+
+void ConfigDialog::testAudioSetup() {
+    // here we only accept to close the dialog. The actual functionality
+    // is called from CsoundQt::configure, where the testAudioSetupButton
+    // is connected to CsoundQt::testAudioSetup
+    // This is done like this because CsoundQt creates this dialog
+    // each time and holds no reference to it.
+    this->accept();
 }

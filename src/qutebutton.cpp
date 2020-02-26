@@ -374,15 +374,15 @@ void QuteButton::createPropertiesDialog()
     layout->addWidget(filenameLineEdit, 8,1,1,2, Qt::AlignLeft|Qt::AlignVCenter);
 	QPushButton *browseButton = new QPushButton(dialog);
 	browseButton->setText("...");
-    layout->addWidget(browseButton, 9, 3, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(browseButton, 8, 3, Qt::AlignCenter|Qt::AlignVCenter);
 	connect(browseButton, SIGNAL(released()), this, SLOT(browseFile()));
 
 	label = new QLabel(dialog);
 	label->setText("Event:");
-    layout->addWidget(label, 10, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
 	line = new QLineEdit(dialog);
 	//   text->setText(((QuteLabel *)m_widget)->toPlainText());
-    layout->addWidget(line, 10,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(line, 9,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
 	line->setMinimumWidth(320);
 	line->setText(property("QCS_eventLine").toString());
 #ifdef  USE_WIDGET_MUTEX

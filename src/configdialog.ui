@@ -138,7 +138,7 @@
               <string>Realtime Audio</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_16">
-              <item row="1" column="0" colspan="2">
+              <item row="2" column="0" colspan="2">
                <layout class="QGridLayout" name="rtadioLayout">
                 <property name="horizontalSpacing">
                  <number>2</number>
@@ -146,33 +146,25 @@
                 <property name="verticalSpacing">
                  <number>4</number>
                 </property>
-                <item row="6" column="1">
-                 <widget class="QLineEdit" name="RtOutputLineEdit">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <item row="6" column="4">
+                 <widget class="QPushButton" name="testAudioSetupButton">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="RtUseOptionsCheckBox">
-                  <property name="text">
-                   <string>Use CsoundQt options</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="0">
-                 <widget class="QLabel" name="label_5">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>16777215</height>
+                   </size>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">padding-right: 6</string>
+                   <string notr="true"/>
                   </property>
                   <property name="text">
-                   <string>Output device (-o)</string>
+                   <string>▶  Test Audio Setup</string>
                   </property>
                  </widget>
                 </item>
@@ -183,34 +175,48 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="1">
-                 <widget class="QComboBox" name="RtModuleComboBox">
-                  <property name="minimumSize">
-                   <size>
-                    <width>100</width>
-                    <height>0</height>
-                   </size>
+                <item row="3" column="4">
+                 <widget class="QCheckBox" name="useSystemSamplerateCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
                   </property>
                   <property name="toolTip">
-                   <string>Audio backend used when running Csound in realtime</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the samplerate of the backend. Not all backends support this option. When checked, the samplerate set in the csd file (via, for example, &lt;span style=&quot; font-weight:600;&quot;&gt;sr = 44100&lt;/span&gt;) is overridden in favor of the backend's samplerate&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Use System Samplerate</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="6">
-                 <spacer name="horizontalSpacer_25">
+                <item row="5" column="4">
+                 <spacer name="horizontalSpacer_23">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
                   <property name="sizeType">
-                   <enum>QSizePolicy::Minimum</enum>
+                   <enum>QSizePolicy::Expanding</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
-                    <width>18</width>
-                    <height>20</height>
+                    <width>40</width>
+                    <height>18</height>
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item row="6" column="2">
+                 <widget class="QToolButton" name="audioOutputToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QLineEdit" name="RtOutputLineEdit">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
                 </item>
                 <item row="5" column="0">
                  <widget class="QLabel" name="label_4">
@@ -231,13 +237,52 @@
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
-                 <widget class="QCheckBox" name="RtOverrideCheckBox">
+                <item row="6" column="0">
+                 <widget class="QLabel" name="label_5">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
                   <property name="styleSheet">
-                   <string notr="true">padding-left: 12</string>
+                   <string notr="true">padding-right: 6</string>
                   </property>
                   <property name="text">
-                   <string>Ignore CsOptions</string>
+                   <string>Output device (-o)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="RtUseOptionsCheckBox">
+                  <property name="text">
+                   <string>Use CsoundQt options</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_3">
+                  <property name="toolTip">
+                   <string>Audio backend used when running Csound in realtime</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">padding-right: 6</string>
+                  </property>
+                  <property name="text">
+                   <string>RT Audio Module</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QComboBox" name="RtModuleComboBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>100</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Audio backend used when running Csound in realtime</string>
                   </property>
                  </widget>
                 </item>
@@ -270,51 +315,44 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="6" column="2">
-                 <widget class="QToolButton" name="audioOutputToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_3">
+                <item row="1" column="1">
+                 <widget class="QCheckBox" name="RtOverrideCheckBox">
                   <property name="toolTip">
-                   <string>Audio backend used when running Csound in realtime</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If checked, the options set within the tag &lt;span style=&quot; font-weight:600;&quot;&gt;CsOptions&lt;/span&gt; in the .csd file are ignored&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">padding-right: 6</string>
+                   <string notr="true">padding-left: 12</string>
                   </property>
                   <property name="text">
-                   <string>RT Audio Module</string>
+                   <string>Ignore CsOptions</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="4">
-                 <spacer name="horizontalSpacer_23">
+                <item row="3" column="5">
+                 <spacer name="horizontalSpacer_3">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeType">
-                   <enum>QSizePolicy::Expanding</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>40</width>
-                    <height>18</height>
+                    <height>20</height>
                    </size>
                   </property>
                  </spacer>
                 </item>
-                <item row="3" column="5">
-                 <widget class="QPushButton" name="testAudioSetupButton">
-                  <property name="styleSheet">
-                   <string notr="true"/>
+                <item row="6" column="5">
+                 <spacer name="horizontalSpacer_8">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
                   </property>
-                  <property name="text">
-                   <string>Test Audio Setup</string>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
                   </property>
-                 </widget>
+                 </spacer>
                 </item>
                </layout>
               </item>
@@ -1411,39 +1449,6 @@ This setting is used only when jack is selected as the RT audio module. </string
               <string>Widgets</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_7">
-              <item row="3" column="0">
-               <widget class="QCheckBox" name="terminalFLTKCheckBox">
-                <property name="toolTip">
-                 <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
-                </property>
-                <property name="text">
-                 <string>Run FLTK csds in Terminal</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QCheckBox" name="enableFLTKCheckBox">
-                <property name="toolTip">
-                 <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
-                </property>
-                <property name="text">
-                 <string>Enable FLTK</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <spacer name="horizontalSpacer_3">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
               <item row="0" column="0">
                <layout class="QVBoxLayout" name="verticalLayout_2">
                 <item>
@@ -1498,51 +1503,6 @@ This setting is used only when jack is selected as the RT audio module. </string
                  </widget>
                 </item>
                 <item>
-                 <widget class="QGroupBox" name="horizontalGroupBox">
-                  <property name="title">
-                   <string>Graphs / Scopes</string>
-                  </property>
-                  <layout class="QHBoxLayout" name="updaterate">
-                   <item>
-                    <widget class="QLabel" name="label_13">
-                     <property name="text">
-                      <string>Update Rate</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QSpinBox" name="graphUpdateRateSpinBox">
-                     <property name="toolTip">
-                      <string>Update rate for graphs and scopes</string>
-                     </property>
-                     <property name="minimum">
-                      <number>8</number>
-                     </property>
-                     <property name="maximum">
-                      <number>60</number>
-                     </property>
-                     <property name="value">
-                      <number>30</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <spacer name="horizontalSpacer_9">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>40</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
                  <widget class="QCheckBox" name="oldFormatCheckBox">
                   <property name="toolTip">
                    <string>Store old widget format section in csd file, to allow older versions of CsoundQt to load most of the widget characteristics from the file</string>
@@ -1553,21 +1513,27 @@ This setting is used only when jack is selected as the RT audio module. </string
                  </widget>
                 </item>
                 <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_5">
-                  <item>
-                   <spacer name="horizontalSpacer_2">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
+                 <widget class="QCheckBox" name="enableFLTKCheckBox">
+                  <property name="toolTip">
+                   <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
+                  </property>
+                  <property name="text">
+                   <string>Enable FLTK</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="terminalFLTKCheckBox">
+                  <property name="toolTip">
+                   <string>FLTK widgets from Csound can crash when running using the API. Preferably leave unchecked and run Csound from the terminal</string>
+                  </property>
+                  <property name="text">
+                   <string>Run FLTK csds in Terminal</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_5"/>
                 </item>
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -1629,6 +1595,64 @@ This setting is used only when jack is selected as the RT audio module. </string
                  </layout>
                 </item>
                </layout>
+              </item>
+              <item row="2" column="0">
+               <widget class="QGroupBox" name="horizontalGroupBox">
+                <property name="title">
+                 <string>Graphs / Scopes</string>
+                </property>
+                <layout class="QHBoxLayout" name="updaterate">
+                 <item>
+                  <widget class="QLabel" name="label_13">
+                   <property name="text">
+                    <string>Update Rate</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="graphUpdateRateSpinBox">
+                   <property name="toolTip">
+                    <string>Update rate for graphs and scopes</string>
+                   </property>
+                   <property name="minimum">
+                    <number>8</number>
+                   </property>
+                   <property name="maximum">
+                    <number>60</number>
+                   </property>
+                   <property name="value">
+                    <number>30</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_9">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
              </layout>
             </widget>
@@ -3396,6 +3420,22 @@ Default directory for sound files. Used if no full path is given for sound files
     <hint type="destinationlabel">
      <x>270</x>
      <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>useSystemSamplerateCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>107</x>
+     <y>96</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>488</x>
+     <y>128</y>
     </hint>
    </hints>
   </connection>
