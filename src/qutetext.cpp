@@ -202,7 +202,7 @@ void QuteText::applyInternalProperties()
     if(horizontalAlignment == "left")
         align |= Qt::AlignLeft;
     else if(horizontalAlignment == "center")
-        align |= Qt::AlignCenter;
+        align |= Qt::AlignHCenter;
     else {
         align |= Qt::AlignRight;
     }
@@ -446,9 +446,10 @@ void QuteText::createPropertiesDialog()
 	text = new QTextEdit(dialog);
 	text->setAcceptRichText(false);
 	text->setText(property("QCS_label").toString());
-	layout->addWidget(text, 5,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
-	text->setMinimumWidth(320);
-	label = new QLabel(dialog);
+    layout->addWidget(text, 5, 1, 1, 4, Qt::AlignLeft|Qt::AlignVCenter);
+    text->setMinimumWidth(320);
+    text->setMaximumWidth(740);
+    label = new QLabel(dialog);
 	label->setText(tr("Text Color"));
 	layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
 	textColor = new QPushButton(dialog);
@@ -456,7 +457,7 @@ void QuteText::createPropertiesDialog()
 	connect(textColor, SIGNAL(released()), this, SLOT(selectTextColor()));
 
     bg = new QCheckBox("Background", dialog);
-    layout->addWidget(bg, 6, 2, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(bg, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
 	bgColor = new QPushButton(dialog);
 	layout->addWidget(bgColor, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -466,7 +467,8 @@ void QuteText::createPropertiesDialog()
 	label->setText(tr("Font"));
 	layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
 	font = new QFontComboBox(dialog);
-	layout->addWidget(font, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    font->setMaximumWidth(200);
+    layout->addWidget(font, 7, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText(tr("Font Size"));
 	layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
