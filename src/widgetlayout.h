@@ -180,6 +180,7 @@ public:
 	QAction *alignTopAct;
 	QAction *alignBottomAct;
 	QAction *sendToBackAct;
+    QAction *sendToFrontAct;
 	QAction *distributeHorizontalAct;
 	QAction *distributeVerticalAct;
 	QAction *alignCenterHorizontalAct;
@@ -268,6 +269,7 @@ public slots:
 	void alignTop();
 	void alignBottom();
 	void sendToBack();
+    void sendToFront();
 	void distributeHorizontal();
 	void distributeVertical();
 	void alignCenterVertical();

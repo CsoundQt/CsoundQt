@@ -114,7 +114,8 @@ int main(int argc, char *argv[])
 #endif
 
     QSplashScreen *splash = new QSplashScreen(pixmap);
-    splash->showMessage(QString("Version %1").arg(QCS_VERSION), Qt::AlignCenter | Qt::AlignBottom, Qt::white);
+    splash->showMessage(QString("Version %1").arg(QCS_VERSION),
+                        Qt::AlignCenter | Qt::AlignBottom, Qt::white);
     splash->show();
     splash->raise();
     qapp.processEvents();

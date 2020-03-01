@@ -72,13 +72,14 @@ protected:
 	QPushButton *textColor;
 	QPushButton *bgColor;
 	QCheckBox *bg;
-	QCheckBox *border;
+    // QCheckBox *border;
 	QSpinBox *borderRadius;
 	QSpinBox *borderWidth;
 	QFontComboBox  *font;
 	QSpinBox * fontSize;
 	QComboBox * alignment;
     QComboBox * vertAlignmentComboBox;
+    QHash<QString, QLabel *>labelPtrs;
 
 private slots:
 	void selectTextColor();
@@ -143,6 +144,7 @@ public slots:
 	void setResolution(double resolution);
 	void addValue(double delta);
 	void setValueFromWidget(double value);
+    void setValueFromDialog();
 };
 
 class ScrollNumberWidget : public QLabel
@@ -186,6 +188,13 @@ protected:
 		pressed = false;
 	}
 
+    virtual void mouseDoubleClickEvent (QMouseEvent *event) {
+        if(!event->modifiers())
+            emit doubleClick();
+        else
+            QLabel::mouseDoubleClickEvent(event);
+    }
+
 private:
 	double m_resolution;
 //	double m_min, m_max;
@@ -195,6 +204,7 @@ private:
 signals:
 	void addValue(double delta);
 	void setValue(double value);
+    void doubleClick();
 };
 
 #endif

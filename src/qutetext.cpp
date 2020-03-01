@@ -31,7 +31,8 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	static_cast<QLabel*>(m_widget)->setMargin (5);
 	//  static_cast<QLabel*>(m_widget)->setTextFormat(Qt::RichText);
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
-	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    m_widget->setMouseTracking(true);
 	setMouseTracking(true);
 	//  canFocus(true);
 
@@ -52,6 +53,8 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	m_fontScaling = 1.0;
 	m_fontOffset = 1.0;
 	m_type = "display";
+
+    qDebug()<< "exit qutetext constr";
 }
 
 QuteText::~QuteText()
@@ -208,7 +211,15 @@ void QuteText::applyInternalProperties()
     }
 	static_cast<QLabel*>(m_widget)->setAlignment(align);
 	setTextColor(property("QCS_color").value<QColor>());
-	QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
+    int borderWidth = property("QCS_borderwidth").toInt();
+    QString bordermode = property("QCS_bordermode").toString();
+    if(bordermode == "noborder" && borderWidth > 0) {
+        setProperty("QCS_borderwidth", 0);
+        borderWidth = 0;
+    } else if(bordermode == "border" && borderWidth == 0) {
+        setProperty("QCS_bordermode", "noborder");
+    }
+    QString borderStyle = borderWidth > 0 ? "solid" : "none";
 
 	int new_fontSize = 0;
 	int totalHeight = 0;
@@ -220,25 +231,21 @@ void QuteText::applyInternalProperties()
 		QFontMetricsF fm(font);
 		totalHeight = fm.ascent() + fm.descent();
 	}
-	QFont test(property("QCS_font").toString());
-	test.setPixelSize(fontSize);
-	QFontMetricsF fm(test);
-	totalHeight = fm.ascent() + fm.descent();
-	//  qDebug() << "QuteText::applyInternalProperties()" <<  property("QCS_label").toString() << new_fontSize << totalHeight;
 
-	m_widget->setStyleSheet("QLabel { font-family:\"" + property("QCS_font").toString()
-							+ "\"; font-size: " + QString::number(new_fontSize) + "pt"
-							+ (property("QCS_bgcolormode").toBool() ?
-								   QString("; background-color:") + property("QCS_bgcolor").value<QColor>().name() : QString("; "))
-							+ "; color:" + property("QCS_color").value<QColor>().name()
-							+ "; border-color:" + property("QCS_color").value<QColor>().name()
-							+ "; border-radius:" + QString::number(property("QCS_borderradius").toInt()) + "px"
-							+ "; border-width: " + QString::number(property("QCS_borderwidth").toInt()) + "px"
-							+ "; border-style: " + borderStyle
-							+ "; }");
-	//  qDebug() << property("QCS_bgcolormode").toBool();
-	//  qDebug() << "QuteText::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
+    QString bgstr = property("QCS_bgcolormode").toBool() ?
+        (QString("; background-color:")+property("QCS_bgcolor").value<QColor>().name()) :
+        QString("");
 
+    m_widget->setStyleSheet(
+        "QLabel{ font-family:\"" + property("QCS_font").toString() + "\""
+            + "; font-size: " + QString::number(new_fontSize) + "pt"
+            + bgstr
+            + "; color:" + property("QCS_color").value<QColor>().name()
+            + "; border-color:" + property("QCS_color").value<QColor>().name()
+            + "; border-radius:" + QString::number(property("QCS_borderradius").toInt()) + "px"
+            + "; border-width: " + QString::number(borderWidth) + "px"
+            + "; border-style: " + borderStyle
+            + "; }");
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -359,8 +366,6 @@ QString QuteText::getQml()
             qml += "\n\tborder.width: 0";
         }
 
-
-
         qml += "\n\t\tLabel {\n";
 
         if (m_type == "display" && !m_channel.isEmpty()) {
@@ -440,19 +445,26 @@ void QuteText::createPropertiesDialog()
 		dialog->setWindowTitle("Display");
 	}
 
+    labelPtrs.clear();
+
 	QLabel *label = new QLabel(dialog);
 	label->setText(tr("Text:"));
 	layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
+    labelPtrs["text"] = label;
+
 	text = new QTextEdit(dialog);
 	text->setAcceptRichText(false);
 	text->setText(property("QCS_label").toString());
-    layout->addWidget(text, 5, 1, 1, 4, Qt::AlignLeft|Qt::AlignVCenter);
     text->setMinimumWidth(320);
     text->setMaximumWidth(740);
+    layout->addWidget(text, 5, 1, 1, 4, Qt::AlignLeft|Qt::AlignVCenter);
+
     label = new QLabel(dialog);
 	label->setText(tr("Text Color"));
 	layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
-	textColor = new QPushButton(dialog);
+    labelPtrs["textColor"] = label;
+
+    textColor = new QPushButton(dialog);
 	layout->addWidget(textColor, 6,1, Qt::AlignLeft|Qt::AlignVCenter);
 	connect(textColor, SIGNAL(released()), this, SLOT(selectTextColor()));
 
@@ -461,35 +473,51 @@ void QuteText::createPropertiesDialog()
 	bgColor = new QPushButton(dialog);
 	layout->addWidget(bgColor, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
 
-    border = new QCheckBox("Border", dialog);
-	layout->addWidget(border, 7,2, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
+    // border = new QCheckBox("Border", dialog);
+    // layout->addWidget(border, 7,2, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel(dialog);
 	label->setText(tr("Font"));
 	layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
-	font = new QFontComboBox(dialog);
+    labelPtrs["font"] = label;
+
+    font = new QFontComboBox(dialog);
     font->setMaximumWidth(200);
     layout->addWidget(font, 7, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
+
+    label = new QLabel(dialog);
 	label->setText(tr("Font Size"));
 	layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
-	fontSize = new QSpinBox(dialog);
+    labelPtrs["fontSize"] = label;
+
+    fontSize = new QSpinBox(dialog);
 	fontSize->setMaximum(999); // allow also very big fonts
 	layout->addWidget(fontSize,8, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
+
+    label = new QLabel(dialog);
 	label->setText(tr("Border Radius"));
 	layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
-	borderRadius = new QSpinBox(dialog);
+    labelPtrs["borderRadius"] = label;
+
+    borderRadius = new QSpinBox(dialog);
 	layout->addWidget(borderRadius, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
+
+    label = new QLabel(dialog);
 	label->setText(tr("Border Width"));
 	layout->addWidget(label, 9, 2, Qt::AlignRight|Qt::AlignVCenter);
-	borderWidth = new QSpinBox(dialog);
-	layout->addWidget(borderWidth, 9, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    labelPtrs["borderWidth"] = label;
+
+    borderWidth = new QSpinBox(dialog);
+    borderWidth->setMinimum(0);
+    borderWidth->setToolTip(tr("Set the width to 0 disable the border"));
+    layout->addWidget(borderWidth, 9, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
     label->setText(tr("Horiz. Align"));
 	layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
-	alignment = new QComboBox(dialog);
+    labelPtrs["horizAlign"] = label;
+
+    alignment = new QComboBox(dialog);
 	alignment->addItem(tr("Left", "Alignment"));
 	alignment->addItem(tr("Center", "Alignment"));
 	alignment->addItem(tr("Right", "Alignment"));
@@ -498,6 +526,7 @@ void QuteText::createPropertiesDialog()
     label = new QLabel(dialog);
     label->setText(tr("Vert. Align"));
     layout->addWidget(label, 10, 0, Qt::AlignRight|Qt::AlignVCenter);
+    labelPtrs["vertAlign"] = label;
 
     vertAlignmentComboBox = new QComboBox(dialog);
     vertAlignmentComboBox->addItem(tr("Top", "Alignment"));
@@ -509,8 +538,8 @@ void QuteText::createPropertiesDialog()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
-	//   QPixmap pixmap(64,64);
-	QPixmap pixmap(64,64);
+
+    QPixmap pixmap(64,64);
 	pixmap.fill(property("QCS_color").value<QColor>());
 	textColor->setIcon(pixmap);
 	QPalette palette(property("QCS_color").value<QColor>());
@@ -522,7 +551,7 @@ void QuteText::createPropertiesDialog()
 	bgColor->setPalette(palette);
 	palette.color(QPalette::Window);
 	bg->setChecked(property("QCS_bgcolormode").toBool());
-	border->setChecked(property("QCS_bordermode").toString() == "border");
+    // border->setChecked(property("QCS_bordermode").toString() == "border");
 	font->setCurrentFont(QFont(property("QCS_font").toString()));
 	fontSize->setValue(property("QCS_fontsize").toInt());
 	borderRadius->setValue(property("QCS_borderradius").toInt());
@@ -535,8 +564,10 @@ void QuteText::createPropertiesDialog()
         alignment->setCurrentIndex(1);
     else if (currentAlignment == "right")
         alignment->setCurrentIndex(2);
-    else
+    else {
+        qDebug() << "QuteText. Unknown alignment, setting to left";
         alignment->setCurrentIndex(0);
+    }
 
     currentAlignment = property("QCS_valignment").toString();
     if (currentAlignment == "top")
@@ -594,8 +625,8 @@ void QuteText::applyProperties()
 	setProperty("QCS_bgcolor", bgColor->palette().color(QPalette::Window));
 	setProperty("QCS_bgcolormode", bg->isChecked());
 	setProperty("QCS_color", textColor->palette().color(QPalette::Window));
-	setProperty("QCS_bordermode", border->isChecked() ? "border" : "noborder");
-	setProperty("QCS_borderradius", borderRadius->value());
+    setProperty("QCS_bordermode", borderWidth->value() > 0);
+    setProperty("QCS_borderradius", borderRadius->value());
 	setProperty("QCS_borderwidth", borderWidth->value());
 
 #ifdef  USE_WIDGET_MUTEX
@@ -898,8 +929,13 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
 	delete m_widget; //delete widget created by parent constructor
 	m_widget = new ScrollNumberWidget(this);
 	//  connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
-	connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(addValue(double)), this, SLOT(addValue(double)));
-	connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(setValue(double)), this, SLOT(setValueFromWidget(double)));
+    connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(addValue(double)),
+            this, SLOT(addValue(double)));
+    connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(setValue(double)),
+            this, SLOT(setValueFromWidget(double)));
+    connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(doubleClick()),
+            this, SLOT(setValueFromDialog()));
+
 	m_type = "scroll";
 
 	setProperty("QCS_value", (double) 0.0);
@@ -1123,6 +1159,9 @@ void QuteScrollNumber::createPropertiesDialog()
 	resolutionSpinBox->setValue(property("QCS_resolution").toDouble());
 	minSpinBox->setValue(property("QCS_minimum").toDouble());
 	maxSpinBox->setValue(property("QCS_maximum").toDouble());
+
+    vertAlignmentComboBox->hide();
+    labelPtrs["vertAlign"]->hide();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -1148,7 +1187,9 @@ void QuteScrollNumber::applyInternalProperties()
 {
 	//  qDebug() << "QuteScrollNumber::applyInternalProperties()";
 
-	QuteWidget::applyInternalProperties();
+    // QuteWidget::applyInternalProperties();
+    QuteText::applyInternalProperties();
+
 	m_min = property("QCS_minimum").toDouble();
 	m_max = property("QCS_maximum").toDouble();
 	setResolution(property("QCS_resolution").toDouble());
@@ -1170,7 +1211,9 @@ void QuteScrollNumber::applyInternalProperties()
 	}
 	static_cast<ScrollNumberWidget*>(m_widget)->setAlignment(align);
 	setTextColor(property("QCS_color").value<QColor>());
+    /*
 	QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
+
 
 	int new_fontSize = 0;
 	int totalHeight = 0;
@@ -1195,6 +1238,7 @@ void QuteScrollNumber::applyInternalProperties()
 							+ "; }");
 	//  qDebug() << property("QCS_bgcolormode").toBool();
 	//  qDebug() << "QuteScrollNumber::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
+    */
 	m_valueChanged = true;
 }
 
@@ -1305,4 +1349,18 @@ void QuteScrollNumber::setValueFromWidget(double value)
 	widgetLock.unlock();
 #endif
 	emit newValue(channelValue);
+}
+
+void QuteScrollNumber::setValueFromDialog() {
+    double newvalue = QInputDialog::getDouble(
+                this,
+                tr("Enter New Value"),
+                tr("Value"),
+                m_value,
+                property("QCS_minimum").toDouble(),
+                property("QCS_maximum").toDouble(),
+                3);
+    setValue(newvalue);
+    QPair<QString, double> channelValue(m_channel, m_value);
+    emit newValue(channelValue);
 }

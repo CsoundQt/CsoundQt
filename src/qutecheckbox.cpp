@@ -25,19 +25,27 @@
 QuteCheckBox::QuteCheckBox(QWidget *parent) : QuteWidget(parent)
 {
 	m_widget = new QCheckBox(this);
-	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    auto w = static_cast<QCheckBox *>(m_widget);
+    // w->setStyleSheet("QCheckBox::indicator { width:50px; height: 50px; }");
+
+    // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    m_widget->setMouseTracking(true);
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 	canFocus(false);
 
 	setProperty("QCS_selected", false);
-	setProperty("QCS_label", "");
+    setProperty("QCS_label", "");
 	setProperty("QCS_pressedValue", 1.0);
 	setProperty("QCS_randomizable", false);
 	setProperty("QCS_randomizableGroup", 0);
 
 	m_currentValue = 0;
 
-	connect(static_cast<QCheckBox *>(m_widget), SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
+    w->setStyleSheet(QString("QCheckBox::indicator { "
+                             "width:%1px; "
+                             "height: %1px; }").arg(this->height()));
+
+    connect(w, SIGNAL(stateChanged(int)), this, SLOT(stateChanged(int)));
 }
 
 QuteCheckBox::~QuteCheckBox()
@@ -162,7 +170,8 @@ QString QuteCheckBox::getWidgetXmlText()
 	s.writeTextElement("selected",
 					   m_currentValue != 0 ? QString("true"):QString("false"));
 	s.writeTextElement("label", property("QCS_label").toString());
-	s.writeTextElement("pressedValue", QString::number(property("QCS_pressedValue").toDouble()));
+    s.writeTextElement("pressedValue",
+                       QString::number(property("QCS_pressedValue").toDouble()));
 	s.writeStartElement("randomizable");
 	s.writeAttribute("group", QString::number(property("QCS_randomizableGroup").toInt()));
 	s.writeCharacters(property("QCS_randomizable").toBool() ? "true": "false");
@@ -186,19 +195,35 @@ void QuteCheckBox::refreshWidget()
 	m_widget->blockSignals(false);
 	//  setProperty("QCS_pressedValue", m_value);
 	setProperty("QCS_selected", m_currentValue != 0);
+
 	m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
 }
 
+void QuteCheckBox::resizeEvent(QResizeEvent *event) {
+    int size = qMin(this->height(), this->width());
+    static_cast<QCheckBox*>(m_widget)->setStyleSheet(QString("QCheckBox::indicator { "
+                             "width:%1px; "
+                             "height: %1px; }").arg(size));
+    QuteWidget::resizeEvent(event);
+}
+
+
 void QuteCheckBox::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
 	//  qDebug() << "QuteSlider::applyInternalProperties()";
-	m_value = property("QCS_pressedValue").toDouble(); // Pressed value must go before selected to make sure it has the right value...
+    // Pressed value must go before selected to make sure it has the right value...
+    m_value = property("QCS_pressedValue").toDouble();
 	setValue(property("QCS_selected").toBool() ? 1:0);
-	setLabel(property("QCS_label").toString());
+    setLabel(property("QCS_label").toString());
+
+    static_cast<QCheckBox*>(m_widget)->setStyleSheet(QString("QCheckBox::indicator { "
+                             "width:%1px; "
+                             "height: %1px; }").arg(this->height()));
+
 }
 
 void QuteCheckBox::stateChanged(int state)
@@ -231,13 +256,22 @@ void QuteCheckBox::createPropertiesDialog()
 {
 	QuteWidget::createPropertiesDialog();
 	dialog->setWindowTitle("Check Box");
+
 	QLabel * label = new QLabel(dialog);
 	label->setText("Pressed Value");
 	layout->addWidget(label, 4, 2, Qt::AlignRight|Qt::AlignVCenter);
-	valueBox = new QDoubleSpinBox(dialog);
+
+    valueBox = new QDoubleSpinBox(dialog);
 	valueBox->setDecimals(6);
 	valueBox->setRange(-9999999.0, 9999999.0);
 	layout->addWidget(valueBox, 4, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+    /*
+    label = new QLabel(dialog);
+    label->setText("Label");
+    layout->addWidget(label, 5, 2, Qt::AlignRight|Qt::AlignVCenter);
+    */
+
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif

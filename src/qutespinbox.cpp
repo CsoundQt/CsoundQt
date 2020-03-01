@@ -21,6 +21,7 @@
 */
 
 #include "qutespinbox.h"
+#include <QStringBuilder>
 #include <cmath>
 
 QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
@@ -28,14 +29,15 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
 	delete m_widget; //delete widget created by parent constructor
 	m_widget = new QDoubleSpinBox(this);
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
-	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    m_widget->setMouseTracking(true);
 	static_cast<QDoubleSpinBox*>(m_widget)->setAccelerated(true);
 	static_cast<QDoubleSpinBox*>(m_widget)->setRange(-999999999999.0, 999999999999.0);
 	static_cast<QDoubleSpinBox*>(m_widget)->setKeyboardTracking (false);
 	connect(static_cast<QDoubleSpinBox *>(m_widget), SIGNAL(valueChanged(double)),
 			this, SLOT(valueChanged(double)));
-	//   connect(static_cast<QDoubleSpinBox*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
-	m_type = "editnum";
+
+    m_type = "editnum";
 
 	setProperty("QCS_value", (double) 0.0);
 	setProperty("QCS_resolution", (double) 0.1);
@@ -43,15 +45,19 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
 	setProperty("QCS_maximum", (double) 999999999999.0);
 	setProperty("QCS_randomizable", false);
 	setProperty("QCS_randomizableGroup", 0);
-	setProperty("QCS_label", QVariant()); // Remove this property which is part of parent class.
-	setProperty("QCS_color", QVariant()); // Remove this property which is part of parent class.
-	setProperty("QCS_borderradius", QVariant()); // Remove this property which is part of parent class.
-	setProperty("QCS_borderwidth", QVariant()); // Remove this property which is part of parent class.
+    // For numbers with fixed resolution it makes more sense to align to the right
+    setProperty("QCS_alignment", "right");
+
+    // Remove these properties, which are part of parent class but
+    // have no meaning here
+    setProperty("QCS_label", QVariant());
+    setProperty("QCS_color", QVariant());
+    setProperty("QCS_borderradius", QVariant());
+    setProperty("QCS_borderwidth", QVariant());
+    qDebug() << "exited SpinBox constr";
 }
 
-QuteSpinBox::~QuteSpinBox()
-{
-}
+QuteSpinBox::~QuteSpinBox() {}
 
 void QuteSpinBox::setText(QString text)
 {
@@ -274,25 +280,22 @@ void QuteSpinBox::applyInternalProperties()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif
-	//  static_cast<QDoubleSpinBox*>(m_widget)->setValue(property("QCS_value").toDouble());
-	//  m_value2 = property("QCS_value2").toDouble();
-	//  m_stringValue = property("QCS_stringValue").toString();
-	static_cast<QDoubleSpinBox*>(m_widget)->setRange(property("QCS_minimum").toDouble(),property("QCS_maximum").toDouble());
+    auto w = static_cast<QDoubleSpinBox*>(m_widget);
+    w->setRange(property("QCS_minimum").toDouble(),property("QCS_maximum").toDouble());
 	m_value = property("QCS_value").toDouble();
 	double resolution = property("QCS_resolution").toDouble();
 	m_valueChanged = true;
 	int i;
-	for (i = 0; i < 8; i++) {//     Check for used decimal places.
+    for (i=0; i < 8; i++) {//     Check for used decimal places.
 		double fractpart, intpart;
 		fractpart = modf (resolution * pow(10, i), &intpart);
 		if (fractpart < 1e-200) {
 			break;
 		}
 	}
-	static_cast<QDoubleSpinBox*>(m_widget)->setDecimals(i);
-	static_cast<QDoubleSpinBox*>(m_widget)->setSingleStep(resolution);
-	//  static_cast<QLabel*>(m_widget)->setText(property("QCS_label").toString());
-	Qt::Alignment align;
+    w->setDecimals(i);
+    w->setSingleStep(resolution);
+    Qt::Alignment align;
 	QString alignText = property("QCS_alignment").toString();
 	if (alignText == "left") {
 		align = Qt::AlignLeft|Qt::AlignVCenter;
@@ -303,9 +306,9 @@ void QuteSpinBox::applyInternalProperties()
 	else if (alignText == "right") {
 		align = Qt::AlignRight|Qt::AlignVCenter;
 	}
-	static_cast<QDoubleSpinBox*>(m_widget)->setAlignment(align);
+    w->setAlignment(align);
 	setTextColor(property("QCS_color").value<QColor>());
-	QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
+    // QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
 
 	int new_fontSize = 0;
 	int totalHeight = 0;
@@ -317,18 +320,21 @@ void QuteSpinBox::applyInternalProperties()
 		QFontMetricsF fm(font);
 		totalHeight = fm.ascent() + fm.descent();
 	}
+    auto bgstr = property("QCS_bgcolormode").toBool() ?
+        QString("background-color:")+property("QCS_bgcolor").value<QColor>().name()+";" :
+        QString("");
+    auto sheet = QString(
+        "QDoubleSpinBox {"
+        "font-family: \"%1\";"
+        "font-size: %2pt;"
+        "color: %3;"
+        "%4 }")
+        .arg(property("QCS_font").toString())
+        .arg(QString::number(new_fontSize))
+        .arg(property("QCS_color").value<QColor>().name())
+        .arg(bgstr);
+    m_widget->setStyleSheet(sheet);
 
-	m_widget->setStyleSheet("QDoubleSpinBox { font-family:\"" + property("QCS_font").toString()
-							+ "\"; font-size: " + QString::number(new_fontSize) + "pt"
-							+ (property("QCS_bgcolormode").toBool() ?
-								   QString("; background-color:") + property("QCS_bgcolor").value<QColor>().name() : QString("; "))
-							+ "; color:" + property("QCS_color").value<QColor>().name()
-							//                          + "; border-color:" + property("QCS_color").value<QColor>().name()
-							//                          + "; border-radius:" + QString::number(property("QCS_borderradius").toInt()) + "px"
-							//                          + "; border-width: :" + QString::number(property("QCS_borderwidth").toInt()) + "px"
-							//                          + "; border-style: " + borderStyle
-							+ "; }");
-	//  qDebug() << "QuteSpinBox::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -361,15 +367,12 @@ void QuteSpinBox::createPropertiesDialog()
 	maxSpinBox->setDecimals(6);
 	maxSpinBox->setRange(-999999999999.0, 999999999999.0);
 	layout->addWidget(maxSpinBox, 2,3, Qt::AlignLeft|Qt::AlignVCenter);
-	//  fontSize->hide();
-	//  font->hide();
-	//  border->hide();
-	//  bg->hide();
-	//  textColor->hide();
-	//  bgColor->hide();
-	//  border->hide();
 	borderRadius->hide();
+    labelPtrs["borderRadius"]->hide();
 	borderWidth->hide();
+    labelPtrs["borderWidth"]->hide();
+    vertAlignmentComboBox->hide();
+    labelPtrs["vertAlign"]->hide();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -384,7 +387,6 @@ void QuteSpinBox::createPropertiesDialog()
 
 void QuteSpinBox::applyProperties()
 {
-
 	switch (alignment->currentIndex()) {
 	case 0:
 		setProperty("QCS_alignment", "left");
@@ -403,14 +405,13 @@ void QuteSpinBox::applyProperties()
 	setProperty("QCS_bgcolor", bgColor->palette().color(QPalette::Window));
 	setProperty("QCS_bgcolormode", bg->isChecked());
 	setProperty("QCS_color", textColor->palette().color(QPalette::Window));
-	setProperty("QCS_bordermode", border->isChecked() ? "border" : "noborder");
-	setProperty("QCS_resolution", resolutionSpinBox->value());
+    setProperty("QCS_resolution", resolutionSpinBox->value());
 	setProperty("QCS_value", text->toPlainText().toDouble());
 	setProperty("QCS_maximum", maxSpinBox->value());
 	setProperty("QCS_minimum", minSpinBox->value());
 	//  setProperty("QCS_randomizable",false);
-
-	QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
+    // setProperty("QCS_bordermode", border->isChecked() ? "border" : "noborder");
+    QuteWidget::applyProperties();  // Must be last so that the widgetChanged signal is last
 }
 
 void QuteSpinBox::valueChanged(double value)
@@ -444,7 +445,5 @@ void QuteSpinBox::editingFinishedSlot()
 void QuteSpinBox::setInternalValue(double value)
 {
 	m_value = value;
-	//  m_stringValue = QString::number(value);
-	m_valueChanged = true;
-	//  setProperty("QCS_value", m_value);
+    m_valueChanged = true;
 }

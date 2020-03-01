@@ -48,9 +48,9 @@ void QVdial::mouseMoveEvent (QMouseEvent *event) {
     setValue((int)fvalue);
 }
 
-void QVdial::mouseDoubleClickEvent(QMouseEvent *event) {
+void QVdial::mouseDoubleClickEvent (QMouseEvent *event) {
     if(!event->modifiers())
-        this->setValueDialog();
+        emit doubleClick();
     else
         this->QDial::mouseDoubleClickEvent(event);
 }
@@ -100,18 +100,6 @@ void QVdial::paintEvent(QPaintEvent *event) {
     }
 }
 
-void QVdial::setValueDialog() {
-    double oldvalue = this->displayValue();
-    double newvalue = QInputDialog::getDouble(
-                this,
-                tr("Enter New Value"),
-                tr("Value"),
-                oldvalue,
-                m_display_min,
-                m_display_max,
-                3);
-    setValueFromDisplayValue(newvalue);
-}
 
 // ------------------------------------------------------
 
@@ -121,15 +109,17 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 	//TODO add resolution to config dialog and set these values accordingly
     m_widget = new QVdial(this);
     int const maximum = 10000;
-    static_cast<QVdial *>(m_widget)->setMinimum(0);
-    static_cast<QVdial *>(m_widget)->setMaximum(maximum);
-    static_cast<QVdial *>(m_widget)->setNotchTarget(maximum / 10);
-    static_cast<QVdial *>(m_widget)->setNotchesVisible(true);
-    static_cast<QVdial *>(m_widget)->setDrawValue(true);
+    auto w = static_cast<QVdial *>(m_widget);
+    w->setMinimum(0);
+    w->setMaximum(maximum);
+    w->setNotchTarget(maximum / 10);
+    w->setNotchesVisible(true);
+    w->setDrawValue(true);
 
-	m_widget->setPalette(QPalette(Qt::gray));
+    m_widget->setPalette(QPalette(Qt::gray));
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
-	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    m_widget->setMouseTracking(true);
     setProperty("QCS_minimum", 0.0);
     setProperty("QCS_maximum", 1.0);
 	setProperty("QCS_value", 0.0);
@@ -146,7 +136,10 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
     setProperty("QCS_showvalue", true);
     setProperty("QCS_flatstyle", true);
     setProperty("QCS_integerMode", false);
-	connect(static_cast<QDial *>(m_widget), SIGNAL(valueChanged(int)), this, SLOT(knobChanged(int)));
+    connect(w, SIGNAL(valueChanged(int)),
+            this, SLOT(knobChanged(int)));
+    connect(w, SIGNAL(doubleClick()),
+            this, SLOT(setValueFromDialog()));
 }
 
 QuteKnob::~QuteKnob() {}
@@ -173,7 +166,7 @@ void QuteKnob::setRange(double min, double max)
 void QuteKnob::setMidiValue(int value)
 {
 	double max = property("QCS_maximum").toDouble();
-	double min = property("QCS_minimum").toDouble();
+    double min = property("QCS_minimum").toDouble();
 	double newval= min + ((value / 127.0)* (max - min));
 	setValue(newval);
 	QPair<QString, double> channelValue(m_channel, newval);
@@ -187,10 +180,10 @@ void QuteKnob::refreshWidget()
 #endif
     auto w = static_cast<QVdial *>(m_widget);
 	double max = property("QCS_maximum").toDouble();
-	double min = property("QCS_minimum").toDouble();
+    double min = property("QCS_minimum").toDouble();
 
     int val = (int)(w->maximum() * (m_value - min)/(max-min));
-	m_valueChanged = false;
+    m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -310,8 +303,8 @@ QString QuteKnob::getWidgetXmlText()
 	widgetLock.lockForRead();
 #endif
 
-	s.writeTextElement("minimum", QString::number(property("QCS_minimum").toDouble(), 'f', 8));
-	s.writeTextElement("maximum", QString::number(property("QCS_maximum").toDouble(), 'f', 8));
+    s.writeTextElement("minimum", QString::number(property("QCS_minimum").toDouble(), 'f', 8));
+    s.writeTextElement("maximum", QString::number(property("QCS_maximum").toDouble(), 'f', 8));
 	s.writeTextElement("value", QString::number(m_value, 'f', 8));
 	s.writeTextElement("mode", property("QCS_mode").toString());
 	s.writeStartElement("mouseControl");
@@ -342,7 +335,7 @@ QString QuteKnob::getWidgetXmlText()
                        property("QCS_flatstyle").toBool() ? "true" : "false");
     s.writeTextElement("integerMode",
                        property("QCS_integerMode").toBool() ? "true" : "false");
-	s.writeEndElement();
+    s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -394,7 +387,7 @@ void QuteKnob::createPropertiesDialog()
 	minSpinBox->setRange(-99999.0, 99999.0);
 	minSpinBox->setValue(property("QCS_minimum").toDouble());
 	layout->addWidget(minSpinBox, 2,1, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
+    label = new QLabel(dialog);
 	label->setText("Max =");
 	layout->addWidget(label, 2, 2, Qt::AlignRight|Qt::AlignVCenter);
 	maxSpinBox = new QDoubleSpinBox(dialog);
@@ -474,7 +467,7 @@ void QuteKnob::applyProperties()
 #endif
 
     setProperty("QCS_maximum", maxSpinBox->value());
-	setProperty("QCS_minimum", minSpinBox->value());
+    setProperty("QCS_minimum", minSpinBox->value());
 
     // QColor color = knobColorButton->palette().color(QPalette::Window);
     QColor color = static_cast<QVdial*>(m_widget)->getColor();
@@ -512,13 +505,13 @@ void QuteKnob::knobChanged(int value)
 	widgetLock.lockForWrite();
 #endif
 	double min = property("QCS_minimum").toDouble();
-	double max = property("QCS_maximum").toDouble();
+    double max = property("QCS_maximum").toDouble();
 	QDial *knob = static_cast<QDial *>(m_widget);
 	double normalized = (double) (value - knob->minimum())
-			/ (double) (knob->maximum() - knob->minimum());
+            / (double) (knob->maximum() - knob->minimum());
 	m_value =  min + (normalized * (max-min));
     // setInternalValue(scaledValue);
-	m_valueChanged = true;
+    m_valueChanged = true;
 	QPair<QString, double> channelValue(m_channel, m_value);
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -535,3 +528,17 @@ void QuteKnob::setTextColor(QColor c) {
     setProperty("QCS_textcolor", c.name());
     static_cast<QVdial*>(m_widget)->setTextColor(c);
 }
+
+void QuteKnob::setValueFromDialog() {
+    qDebug() << "knob value dialog"
+             << m_value
+             << property("QCS_minimum").toDouble()
+             << property("QCS_maximum").toDouble();
+    double newvalue = QInputDialog::getDouble(this, tr("Enter New Value"), tr("Value"),
+                                              m_value, property("QCS_minimum").toDouble(),
+                                              property("QCS_maximum").toDouble(), 3);
+    setValue(newvalue);
+    QPair<QString, double> channelValue(m_channel, m_value);
+    emit newValue(channelValue);
+}
+

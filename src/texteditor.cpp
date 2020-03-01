@@ -48,9 +48,10 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 	case Qt::Key_Tab:
 		if (m_parameterMode) {
 			emit tabPressed();
-		} /* else if(m_tabIndents) { // this blocks default behaviour and only tab does not move any further
+        } else if(m_tabIndents) {
+            // this blocks default behaviour and only tab does not move any further
 			emit requestIndent();
-		} */ else {
+        } else {
 			QTextEdit::keyPressEvent(event);
 		}
 		return;

@@ -29,6 +29,8 @@
  *
  */
 class QVdial: public QDial {
+    Q_OBJECT
+
 public:
     QVdial (QWidget *parent = nullptr)
     : QDial(parent)
@@ -72,7 +74,6 @@ public:
     QColor getTextColor() { return m_textcolor; }
 
     void setFlatStyle(bool enable) { m_flat = enable; }
-    void setValueDialog();
     void setIntegerMode(bool enable) { m_intDisplay = enable; }
 
     void setValueFromDisplayValue(double display_value) {
@@ -91,8 +92,8 @@ protected:
     virtual void mousePressEvent (QMouseEvent *event) override;
     virtual void mouseReleaseEvent (QMouseEvent *event) override;
     virtual void mouseMoveEvent (QMouseEvent *event) override;
-    virtual void mouseDoubleClickEvent (QMouseEvent *event) override;
     virtual void paintEvent(QPaintEvent *event) override;
+    virtual void mouseDoubleClickEvent (QMouseEvent *event) override;
 
 private:
     bool   m_dragging;
@@ -109,7 +110,11 @@ private:
     bool   m_flat;
     int    m_degrees;
     bool   m_intDisplay;
+
+signals:
+    void doubleClick();
 };
+
 
 class QuteKnob : public QuteWidget
 {
@@ -136,21 +141,20 @@ public:
     virtual void setColor(QColor c);
     virtual void setTextColor(QColor c);
 
-private slots:
-    void selectKnobColor();
-    void selectKnobTextColor();
-
 protected:
 	virtual void createPropertiesDialog();
 	virtual void applyProperties();
 
 protected slots:
+    void selectKnobColor();
+    void selectKnobTextColor();
+    void setValueFromDialog();
 	void knobChanged(int value);
 
 private:
 	void setInternalValue(double value);
 	QDoubleSpinBox *minSpinBox;
-	QDoubleSpinBox *maxSpinBox;
+    QDoubleSpinBox *maxSpinBox;
 	QDoubleSpinBox *resolutionSpinBox;
     QCheckBox      *displayValueCheckBox;
     QCheckBox      *flatStyleCheckBox;

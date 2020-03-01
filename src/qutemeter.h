@@ -75,6 +75,7 @@ private:
 	QDoubleSpinBox* m_yMinBox;
 	QDoubleSpinBox* m_yMaxBox;
     QCheckBox *flatCheckBox;
+    QCheckBox *borderCheckBox;
 
 private slots:
 	void selectTextColor();
@@ -100,6 +101,12 @@ public:
 	void setPointSize(int size);
 	void setColor(QColor color);
     void setBgColor(QColor color);
+    void showBorder(bool show) {
+        if(show)
+            m_border->show();
+        else
+            m_border->hide();
+    }
 
     void setWidgetGeometry(int x,int y,int width,int height);
 

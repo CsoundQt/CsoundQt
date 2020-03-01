@@ -44,8 +44,8 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_image", "");
 	setProperty("QCS_eventLine", "");
 	setProperty("QCS_latch", false);
-	setProperty("QCS_latched", false);
-    setProperty("QCS_fontsize", 10.0);
+    setProperty("QCS_latched", false);
+    setProperty("QCS_fontsize", 10);
     
 	QPixmap p = QPixmap(8, 8);
 	p.fill(QColor(Qt::green));
@@ -252,6 +252,8 @@ QString QuteButton::getQml()
 
 }
 
+#define propDouble(prop, decimals) (QString::number(property(prop).toDouble(),'f', decimals))
+
 QString QuteButton::getWidgetXmlText()
 {
 	// Buttons are not implemented in blue
@@ -271,8 +273,7 @@ QString QuteButton::getWidgetXmlText()
 	s.writeTextElement("eventLine", property("QCS_eventLine").toString());
 	s.writeTextElement("latch", property("QCS_latch").toString());
 	s.writeTextElement("latched", property("QCS_latched").toString());
-    s.writeTextElement("fontsize", property("QCS_fontsize").toString());
-
+    s.writeTextElement("fontsize", QString::number(property("QCS_fontsize").toInt()));
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -296,7 +297,7 @@ void QuteButton::applyProperties()
         eventLine.remove(0,1);
 	}
 	setProperty("QCS_eventLine", eventLine);
-	setProperty("QCS_text", text->toPlainText());
+    setProperty("QCS_text", text->toPlainText());
 	setProperty("QCS_image", filenameLineEdit->text());
 	setProperty("QCS_type", typeComboBox->currentText());
 	setProperty("QCS_pressedValue", valueBox->value());
@@ -308,7 +309,7 @@ void QuteButton::applyProperties()
 #endif
     //Must be last to make sure the widgetChanged signal is last
     QuteWidget::applyProperties();
-	//  qDebug() << "QuteButton::applyProperties()" << m_value;
+    //  qDebug() << "QuteButton::applyProperties()" << m_value;
 }
 
 
@@ -469,7 +470,8 @@ void QuteButton::refreshWidget()
 void QuteButton::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
-	//  qDebug() << "QuteButton::applyInternalProperties()";
+
+    qDebug() << "QuteButton::applyInternalProperties()";
 	m_value = property("QCS_pressedValue").toDouble();
 	//  m_value2 = property("QCS_value2").toDouble();
 	m_stringValue = property("QCS_stringvalue").toString();
@@ -497,9 +499,21 @@ void QuteButton::applyInternalProperties()
     auto w = static_cast<QPushButton*>(m_widget);
     w->setText(property("QCS_text").toString());
 
-    auto font = w->font();
-    font.setPointSizeF(property("QCS_fontsize").toDouble());
-    w->setFont(font);
+    auto fontsizeProperty = property("QCS_fontsize");
+    if(!fontsizeProperty.isValid()) {
+        qDebug() << "Button: fontsize invalid / not present. Setting to default";
+    } else {
+        int fontsize = fontsizeProperty.toInt();
+        if(fontsize <= 0)
+            qDebug() << "Invalid font size for button, skipping";
+        else {
+            // auto font = w->font();
+            // font.setPointSize(fontsize);
+            // w->setFont(font);
+            auto sheet = QString("QPushButton {font-size: %1pt; }").arg(fontsize);
+            w->setStyleSheet(sheet);
+        }
+    }
 
     // Why is this here?
     // QString colorstr = property("QCS_color").value<QColor>().name();

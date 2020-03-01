@@ -132,6 +132,9 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 	connect(alignBottomAct, SIGNAL(triggered()), this, SLOT(alignBottom()));
 	sendToBackAct = new QAction(tr("Send to back"), this);
 	connect(sendToBackAct, SIGNAL(triggered()), this, SLOT(sendToBack()));
+    sendToFrontAct = new QAction(tr("Send to Front"), this);
+    connect(sendToFrontAct, SIGNAL(triggered()), this, SLOT(sendToFront()));
+
     distributeHorizontalAct = new QAction(tr("Distribute Horizontally"), this);
 	connect(distributeHorizontalAct, SIGNAL(triggered()), this, SLOT(distributeHorizontal()));
 	distributeVerticalAct = new QAction(tr("Distribute Vertically"), this);
@@ -200,7 +203,7 @@ WidgetLayout::~WidgetLayout()
 
 void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 {
-	m_xmlFormat = true;
+    m_xmlFormat = true;
 	clearWidgetLayout();
 	QDomDocument doc;
 	if (!doc.setContent(xmlWidgets)) {
@@ -228,7 +231,7 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 		if (ret == -1) {
 			qDebug() << "WidgetLayout::loadXmlWidgets Error in Xml node parsing";
 			QMessageBox::warning(this, tr("Unrecognized wigdet format"),
-								 tr("There is unrecognized widget information in the file!\n"
+                                 tr("There is unrecognized widget information in the file\n"
 									"It may be saved with errors."));
 		}
 		if (ret > version) {
@@ -641,7 +644,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 		return -1;
 	}
 	int ret = 0;
-	QuteWidget *widget = 0;
+    QuteWidget *widget = nullptr;
 	QDomNodeList c = mainnode.childNodes();
 	QString type = mainnode.toElement().attribute("type");
 	ret = mainnode.toElement().attribute("version").toInt();
@@ -662,53 +665,66 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 	}
 	else if (type == "BSBSpinBox") {
 		widget = static_cast<QuteSpinBox *>(new QuteSpinBox(this));
-		connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+                this, SLOT(newValue(QPair<QString,double>)));
 	}
 	else if (type == "BSBLineEdit") {
 		widget = static_cast<QuteLineEdit *>(new QuteLineEdit(this));
-		connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
-		connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
+        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+                this, SLOT(newValue(QPair<QString,double>)));
+        connect(widget, SIGNAL(newValue(QPair<QString,QString>)),
+                this, SLOT(newValue(QPair<QString,QString>)));
 	}
 	else if (type == "BSBCheckBox") {
 		widget = static_cast<QuteWidget *>(new QuteCheckBox(this));
-		connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+                this, SLOT(newValue(QPair<QString,double>)));
 	}
 	else if (type == "BSBSlider" || type == "BSBHSlider" || type == "BSBVSlider") {
 		widget = static_cast<QuteWidget *>( new QuteSlider(this));
-		connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+                this, SLOT(newValue(QPair<QString,double>)));
 	}
 	else if (type == "BSBKnob") {
 		widget = static_cast<QuteWidget *>(new QuteKnob(this));
-		connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+                this, SLOT(newValue(QPair<QString,double>)));
 	}
 	else if (type == "BSBScrollNumber") {
 		QuteScrollNumber *w = new QuteScrollNumber(this);
 		w->setFontOffset(m_fontOffset);
 		w->setFontScaling(m_fontScaling);
 		widget = static_cast<QuteWidget *>(w);
-		connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+                this, SLOT(newValue(QPair<QString,double>)));
 	}
 	else if (type == "BSBButton") {
 		QuteButton *w = new QuteButton(this);
 		widget = static_cast<QuteWidget *>(w);
-		connect(widget, SIGNAL(queueEventSignal(QString)), this, SLOT(queueEvent(QString)));
-		connect(widget, SIGNAL(newValue(QPair<QString,QString>)), this, SLOT(newValue(QPair<QString,QString>)));
-		connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+        connect(widget, SIGNAL(queueEventSignal(QString)),
+                this, SLOT(queueEvent(QString)));
+        connect(widget, SIGNAL(newValue(QPair<QString,QString>)),
+                this, SLOT(newValue(QPair<QString,QString>)));
+        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+                this, SLOT(newValue(QPair<QString,double>)));
 		emit registerButton(w);
 	}
 	else if (type == "BSBDropdown") {
 		widget = static_cast<QuteWidget *>(new QuteComboBox(this));
-		connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+                this, SLOT(newValue(QPair<QString,double>)));
 	}
 	else if (type == "BSBController") {
 		QuteMeter *w = new QuteMeter(this);
 		widget = static_cast<QuteWidget *>(w);
-		connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+                this, SLOT(newValue(QPair<QString,double>)));
 	}
 	else if (type == "BSBGraph") {
 		QuteGraph *w = new QuteGraph(this);
 		widget = static_cast<QuteWidget *>(w);
-		connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+                this, SLOT(newValue(QPair<QString,double>)));
 		for (int i = 0; i < curves.size(); i++) {
 			w->addCurve(curves[i]);
 		}
@@ -731,7 +747,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 		qDebug() << type << " not implemented";
 		//    QuteDummy *w = new QuteDummy(this);
 	}
-	if (widget == 0) {
+    if (widget == nullptr) {
 		qDebug() << "WidgetLayout::newXmlWidget ERROR widget has not been created!";
 		return -2;
 	}
@@ -837,6 +853,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 		}
 		else {  // STRING type (all the rest)
 			QDomNode n = node.firstChild();
+            // qDebug() << mainnode.nodeName() << "property" << nodeName << "value" << n.nodeValue();
 			nodeName.prepend("QCS_");
 			widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue());
 		}
@@ -844,7 +861,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 		//        << " set to: " << widget->property(nodeName.toLocal8Bit())
 		//        << " from: " << QVariant(n.nodeValue());
 	}
-	widget->applyInternalProperties();
+    widget->applyInternalProperties();
 	registerWidget(widget);
 	return ret;
 }
@@ -959,7 +976,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
 	m_activeWidgets++;
 	widgetsMutex.unlock();
 	adjustLayoutSize();
-	widget->show();
+    widget->show();
 }
 
 void WidgetLayout::appendMessage(QString message)
@@ -1747,6 +1764,7 @@ QString WidgetLayout::createNewSpinBox(int x, int y, QString channel)
 
 QString WidgetLayout::createNewButton(int x, int y, QString channel)
 {
+    qDebug() << "WidgetLayout::createNewButton";
 	QString uuid;
 	bool dialog;
 	int posx = x >= 0 ? x : currentPosition.x();
@@ -2069,19 +2087,23 @@ void WidgetLayout::selectBgColor()
 
 void WidgetLayout::alignLeft()
 {
-	int newx = 99999;
+    int leftmost = 99999;
 	if (m_editMode) {
 		widgetsMutex.lock();
 		int size = editWidgets.size();
 		for (int i = 0; i < size ; i++) { // First find leftmost
-			if (editWidgets[i]->isSelected()) {
-				newx =  editWidgets[i]->x() < newx ? editWidgets[i]->x(): newx;
-			}
+            if (editWidgets[i]->isSelected())
+                leftmost =  qMin(leftmost, editWidgets[i]->x());
 		}
+        if(leftmost == 99999) {
+            // no widgets selected
+            widgetsMutex.unlock();
+            return;
+        }
 		for (int i = 0; i < size ; i++) { // Then put all x values to that
 			if (editWidgets[i]->isSelected()) {
-				editWidgets[i]->move(newx, editWidgets[i]->y());
-				m_widgets[i]->move(newx, editWidgets[i]->y());
+                editWidgets[i]->move(leftmost, editWidgets[i]->y());
+                m_widgets[i]->move(leftmost, editWidgets[i]->y());
 			}
 		}
 		widgetsMutex.unlock();
@@ -2092,19 +2114,24 @@ void WidgetLayout::alignLeft()
 
 void WidgetLayout::alignRight()
 {
-	int newx = -99999;
+    int rightmost = -1;
 	if (m_editMode) {
 		widgetsMutex.lock();
 		int size = editWidgets.size();
 		for (int i = 0; i < size ; i++) { // First find leftmost
-			if (editWidgets[i]->isSelected()) {
-				newx =  editWidgets[i]->x() + editWidgets[i]->width() > newx ? editWidgets[i]->x()+ editWidgets[i]->width() : newx;
-			}
+            if (editWidgets[i]->isSelected())
+                rightmost = qMax(rightmost, editWidgets[i]->x() + editWidgets[i]->width());
 		}
+        if(rightmost < 0) {
+            // no widgets selected
+            widgetsMutex.unlock();
+            return;
+        }
 		for (int i = 0; i < size ; i++) { // Then put all x values to that
 			if (editWidgets[i]->isSelected()) {
-				editWidgets[i]->move(newx - editWidgets[i]->width(), editWidgets[i]->y());
-				m_widgets[i]->move(newx - editWidgets[i]->width(), editWidgets[i]->y());
+                int x = rightmost - editWidgets[i]->width();
+                editWidgets[i]->move(x, editWidgets[i]->y());
+                m_widgets[i]->move(x, editWidgets[i]->y());
 			}
 		}
 		widgetsMutex.unlock();
@@ -2115,19 +2142,23 @@ void WidgetLayout::alignRight()
 
 void WidgetLayout::alignTop()
 {
-	int newy = 99999;
+    int top = 99999;
 	if (m_editMode) {
 		widgetsMutex.lock();
 		int size = editWidgets.size();
 		for (int i = 0; i < size ; i++) { // First find uppermost
-			if (editWidgets[i]->isSelected()) {
-				newy =  editWidgets[i]->y() < newy ? editWidgets[i]->y(): newy;
-			}
+            if (editWidgets[i]->isSelected())
+                top = editWidgets[i]->y() < top ? editWidgets[i]->y(): top;
 		}
+        if(top == 99999) {
+            // no widgets selected
+            widgetsMutex.unlock();
+            return;
+        }
 		for (int i = 0; i < size ; i++) { // Then put all y values to that
 			if (editWidgets[i]->isSelected()) {
-				editWidgets[i]->move(editWidgets[i]->x(), newy);
-				m_widgets[i]->move(editWidgets[i]->x(), newy);
+                editWidgets[i]->move(editWidgets[i]->x(), top);
+                m_widgets[i]->move(editWidgets[i]->x(), top);
 			}
 		}
 		widgetsMutex.unlock();
@@ -2138,19 +2169,24 @@ void WidgetLayout::alignTop()
 
 void WidgetLayout::alignBottom()
 {
-	int newy = -99999;
+    int bottom = -1;
 	if (m_editMode) {
 		widgetsMutex.lock();
 		int size = editWidgets.size();
-		for (int i = 0; i < size ; i++) { // First find uppermost
-			if (editWidgets[i]->isSelected()) {
-				newy =  editWidgets[i]->y() > newy ? editWidgets[i]->y(): newy;
-			}
+        for (int i = 0; i < size ; i++) {
+            if (editWidgets[i]->isSelected())
+                bottom = qMax(bottom, editWidgets[i]->y()+editWidgets[i]->height());
 		}
-		for (int i = 0; i < size ; i++) { // Then put all y values to that
+        if(bottom < 0) {
+            // no widgets selected
+            widgetsMutex.unlock();
+            return;
+        }
+        for (int i = 0; i < size ; i++) {
 			if (editWidgets[i]->isSelected()) {
-				editWidgets[i]->move(editWidgets[i]->x(), newy);
-				m_widgets[i]->move(editWidgets[i]->x(), newy);
+                int y = bottom - editWidgets[i]->height();
+                editWidgets[i]->move(editWidgets[i]->x(), y);
+                m_widgets[i]->move(editWidgets[i]->x(), y);
 			}
 		}
 		widgetsMutex.unlock();
@@ -2161,34 +2197,49 @@ void WidgetLayout::alignBottom()
 
 void WidgetLayout::sendToBack()
 {
-	if (m_editMode) {
-		widgetsMutex.lock();
-		for (int i = 0; i < editWidgets.size() ; i++) { // First invert selection
-			if (editWidgets[i]->isSelected()) {
-				editWidgets[i]->deselect();
-			}
-			else {
-				editWidgets[i]->select();
-			}
-		}
-		widgetsMutex.unlock();
-		cut();
-		paste();
-		deselectAll();
-		markHistory();
-		setModified(true);
-		//    widgetsMutex.lock();
-		//    for (int i = 0; i < editWidgets.size() ; i++) { // Now invert selection again
-		//      if (editWidgets[i]->isSelected()) {
-		//        editWidgets[i]->deselect();
-		//      }
-		//      else {
-		//        editWidgets[i]->select();
-		//      }
-		//    }
-		//    widgetsMutex.unlock();
-	}
+    if (!m_editMode)
+        return;
+
+    widgetsMutex.lock();
+    for (int i = 0; i < editWidgets.size() ; i++) { // First invert selection
+        if (editWidgets[i]->isSelected()) {
+            editWidgets[i]->deselect();
+        }
+        else {
+            editWidgets[i]->select();
+        }
+    }
+    widgetsMutex.unlock();
+    cut();
+    paste();
+    deselectAll();
+    markHistory();
+    setModified(true);
+    //    widgetsMutex.lock();
+    //    for (int i = 0; i < editWidgets.size() ; i++) { // Now invert selection again
+    //      if (editWidgets[i]->isSelected()) {
+    //        editWidgets[i]->deselect();
+    //      }
+    //      else {
+    //        editWidgets[i]->select();
+    //      }
+    //    }
+    //    widgetsMutex.unlock();
 }
+
+void WidgetLayout::sendToFront()
+{
+    if(!m_editMode)
+        return;
+    if (m_editMode) {
+        cut();
+        paste();
+        deselectAll();
+        markHistory();
+        setModified(true);
+    }
+}
+
 
 void WidgetLayout::distributeHorizontal()
 {
@@ -2371,7 +2422,8 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
     if (!event->isAutoRepeat() || m_repeatKeys) {
 		QString keyText = event->text();
         if (key == Qt::Key_D && (event->modifiers() & Qt::ControlModifier )) {
-            // TODO why is this necessary? The shortcut from the duplicate action in the main app is not working!
+            // TODO why is this necessary? The shortcut from the duplicate
+            // action in the main app is not working!
 			this->duplicate();
 			event->accept();
 			return;
@@ -2437,7 +2489,7 @@ void WidgetLayout::keyReleaseEvent(QKeyEvent *event)
 
 void WidgetLayout::widgetChanged(QuteWidget* widget)
 {
-	if (widget != 0) {
+    if (widget != nullptr) {
 		//    widgetsMutex.lock();
 		int index = m_widgets.indexOf(widget);
         if (index >= 0 && editWidgets.size() > index) {
@@ -2472,11 +2524,7 @@ void WidgetLayout::mousePressEvent(QMouseEvent *event)
 			deselectAll();
 		}
 	}
-	//  else if (m_editMode && (event->button() & Qt::RightButton)) {
-	//
-	//  }
-	//  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
-	mouseLock.lockForWrite();
+    mouseLock.lockForWrite();
 	if (event->button() == Qt::LeftButton)
 		mouseBut1 = 1;
 	else if (event->button() == Qt::RightButton)
@@ -2492,15 +2540,14 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
 	int y = starty;
 	int width = abs(event->x() - startx + xOffset);
 	int height = abs(event->y() - starty + yOffset);
-	if (event->buttons() & Qt::LeftButton) {  // Currently dragging selection
+    if (event->buttons() & Qt::LeftButton) {
+        // Currently dragging selection
 		if (event->x() < (startx - xOffset)) {
 			x = event->x() + xOffset;
-			//         width = event->x() - startx;
-		}
+        }
 		if (event->y() < (starty - yOffset)) {
 			y = event->y() + yOffset;
-			//         height = event->y() - starty;
-		}
+        }
 		selectionFrame->setGeometry(x, y, width, height);
 		selectionChanged(QRect(x - xOffset, y - yOffset, width, height));
 	}
@@ -2802,7 +2849,7 @@ QString WidgetLayout::createSpinBox(int x, int y, int width, int height, QString
 
 QString WidgetLayout::createButton(int x, int y, int width, int height, QString widgetLine)
 {
-	//   qDebug("WidgetPanel::createButton");
+    qDebug("WidgetPanel::createButton");
 	QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), QString::SkipEmptyParts);
 	QStringList quoteParts = widgetLine.split('"');
     //   if (parts.size()<20 || quoteParts.size()>5)

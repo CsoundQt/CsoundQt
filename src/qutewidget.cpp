@@ -531,6 +531,7 @@ QList<QAction *> QuteWidget::getParentActionList()
 	actionList.append(layout->alignTopAct);
 	actionList.append(layout->alignBottomAct);
 	actionList.append(layout->sendToBackAct);
+    actionList.append(layout->sendToFrontAct);
 	actionList.append(layout->distributeHorizontalAct);
 	actionList.append(layout->distributeVerticalAct);
 	actionList.append(layout->alignCenterHorizontalAct);

@@ -38,8 +38,10 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 	//   static_cast<MeterWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
 	//  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 	//  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValues(double, double)), this, SLOT(setValuesFromWidget(double,double)));
-	connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValue1(double)), this, SLOT(valueChanged(double)));
-	connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValue2(double)), this, SLOT(value2Changed(double)));
+    connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValue1(double)),
+            this, SLOT(valueChanged(double)));
+    connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValue2(double)),
+            this, SLOT(value2Changed(double)));
 
 	setProperty("QCS_xMin", 0.0);
 	setProperty("QCS_xMax", 1.0);
@@ -57,6 +59,8 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_randomizable", false);
 	setProperty("QCS_randomizableGroup", 0);
 	setProperty("QCS_randomizableMode", "both");
+
+    setProperty("QCS_bordermode", "noborder");
 
 }
 
@@ -327,7 +331,7 @@ void QuteMeter::createPropertiesDialog()
 	//      name2LineEdit->setEnabled(false);
 	//    }
 	//  }
-
+    auto w = static_cast<MeterWidget *>(m_widget);
     auto colorLabel = new QLabel(dialog);
     colorLabel->setText("Color");
     colorLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
@@ -354,6 +358,12 @@ void QuteMeter::createPropertiesDialog()
     layout->addWidget(bgColorButton, 5,2, Qt::AlignLeft|Qt::AlignVCenter);
     connect(bgColorButton, SIGNAL(released()), this, SLOT(selectBgColor()));
 
+    borderCheckBox = new QCheckBox(tr("Border"), dialog);
+    borderCheckBox->setCheckState(
+        property("QCS_bordermode").toString()=="border" ? Qt::Checked : Qt::Unchecked);
+    layout->addWidget(borderCheckBox, 5, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel(dialog);
     label->setText("Type");
 	label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 	layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
@@ -364,17 +374,18 @@ void QuteMeter::createPropertiesDialog()
 	typeComboBox->addItem("line");
 	typeComboBox->addItem("crosshair");
 	typeComboBox->addItem("point");
-	typeComboBox->setCurrentIndex(typeComboBox->findText(static_cast<MeterWidget *>(m_widget)->getType()));
+    typeComboBox->setCurrentIndex(typeComboBox->findText(w->getType()));
 	layout->addWidget(typeComboBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
 	label = new QLabel(dialog);
 	label->setText("Point size:");
 	label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
     layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
-	pointSizeSpinBox = new QSpinBox(dialog);
-	pointSizeSpinBox->setValue(((MeterWidget *)m_widget)->getPointSize());
+
+    pointSizeSpinBox = new QSpinBox(dialog);
+    pointSizeSpinBox->setValue(w->getPointSize());
 	layout->addWidget(pointSizeSpinBox, 7,1, Qt::AlignLeft|Qt::AlignVCenter);
-	if (static_cast<MeterWidget *>(m_widget)->getType() != "point") {
+    if (w->getType() != "point") {
 		label->setEnabled(false);
 		pointSizeSpinBox->setEnabled(false);
 	}
@@ -393,41 +404,50 @@ void QuteMeter::createPropertiesDialog()
 	label = new QLabel(dialog);
 	label->setText("Behavior");
 	label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-	layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+    label->setEnabled(false);
+    layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+
 	behaviorComboBox = new QComboBox(dialog);
 	behaviorComboBox->addItem("jump");
 	behaviorComboBox->addItem("relative");
 	behaviorComboBox->addItem("none");
     behaviorComboBox->setCurrentIndex(
                 behaviorComboBox->findText(property("QCS_mouseControl").toString()));
-	layout->addWidget(behaviorComboBox,8, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	label->setEnabled(false);
-	behaviorComboBox->setEnabled(false);
-	label = new QLabel(dialog);
+    behaviorComboBox->setEnabled(false);
+    layout->addWidget(behaviorComboBox,8, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel(dialog);
 	label->setText("Min X value =");
 	layout->addWidget(label,9, 0, Qt::AlignRight|Qt::AlignVCenter);
-	m_xMinBox = new QDoubleSpinBox(dialog);
+
+    m_xMinBox = new QDoubleSpinBox(dialog);
 	m_xMinBox->setRange(-999999999.0, 999999999.0);
 	m_xMinBox->setValue(property("QCS_xMin").toDouble());
 	layout->addWidget(m_xMinBox, 9,1, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
+
+    label = new QLabel(dialog);
 	label->setText("Max X value =");
 	layout->addWidget(label, 9, 2, Qt::AlignRight|Qt::AlignVCenter);
-	m_xMaxBox = new QDoubleSpinBox(dialog);
+
+    m_xMaxBox = new QDoubleSpinBox(dialog);
 	m_xMaxBox->setRange(-999999999.0, 999999999.0);
 	m_xMaxBox->setValue(property("QCS_xMax").toDouble());
 	layout->addWidget(m_xMaxBox, 9,3, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
+
+    label = new QLabel(dialog);
 	label->setText("Min Y value =");
 	layout->addWidget(label, 10, 0, Qt::AlignRight|Qt::AlignVCenter);
-	m_yMinBox = new QDoubleSpinBox(dialog);
+
+    m_yMinBox = new QDoubleSpinBox(dialog);
 	m_yMinBox->setRange(-999999999.0, 999999999.0);
 	m_yMinBox->setValue(property("QCS_yMin").toDouble());
 	layout->addWidget(m_yMinBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
+
+    label = new QLabel(dialog);
 	label->setText("Max Y value =");
 	layout->addWidget(label, 10, 2, Qt::AlignRight|Qt::AlignVCenter);
-	m_yMaxBox = new QDoubleSpinBox(dialog);
+
+    m_yMaxBox = new QDoubleSpinBox(dialog);
 	m_yMaxBox->setRange(-999999999.0, 999999999.0);
 	m_yMaxBox->setValue(property("QCS_yMax").toDouble());
 	layout->addWidget(m_yMaxBox, 10,3, Qt::AlignLeft|Qt::AlignVCenter);
@@ -481,11 +501,11 @@ void QuteMeter::applyProperties()
 	setProperty("QCS_xMax", m_xMaxBox->value());
 	setProperty("QCS_yMin", m_yMinBox->value());
 	setProperty("QCS_yMax", m_yMaxBox->value());
+    setProperty("QCS_bordermode", borderCheckBox->checkState()?"border":"noborder");
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
 	QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
-//	qDebug("QuteMeter::applyProperties()");
 }
 
 void QuteMeter::setWidgetGeometry(int x,int y,int width,int height)
@@ -510,10 +530,10 @@ void QuteMeter::applyInternalProperties()
                      property("QCS_xMax").toDouble(),
                      property("QCS_yMin").toDouble(),
                      property("QCS_yMax").toDouble());
+    meter->showBorder(property("QCS_bordermode").toString()=="border");
 
 	m_value = property("QCS_xValue").toDouble();
 	m_value2 = property("QCS_yValue").toDouble();
-
 	//  if (m_value2 == m_value) {
 	//    qDebug() << "Warning! Controller Widget can't have the same name for both channels!";
 	//    m_value2 = "";
@@ -601,14 +621,15 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
 
     setScene(m_scene);
 	m_mouseDown = false;
-    auto borderPen = QPen(QColor(Qt::green).darker(200), 0);
+    auto borderPen = QPen(QColor(Qt::green).darker(150), 0);
 
-    m_border = m_scene->addRect(m_scene->sceneRect(), borderPen);
-    m_border->hide();
     m_block = m_scene->addRect(0, 0, 0, 0, Qt::NoPen, QBrush(Qt::green));
 	m_point = m_scene->addEllipse(0, 0, 0, 0, QPen(Qt::green) , QBrush(Qt::green));
 	m_vline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
 	m_hline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
+    m_border = m_scene->addRect(m_scene->sceneRect(), borderPen);
+    m_border->hide();
+
 }
 
 MeterWidget::~MeterWidget()
@@ -804,7 +825,7 @@ void MeterWidget::setColor(QColor color)
 {
 	//   qDebug("MeterWidget::setColor()");
 	m_block->setBrush(QBrush(color));
-    m_border->setPen(color.darker(200));
+    m_border->setPen(color.darker(150));
 	m_point->setPen(QPen(Qt::NoPen));
 	m_point->setBrush(QBrush(color));
 	m_vline->setPen(QPen(color));

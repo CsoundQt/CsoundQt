@@ -262,7 +262,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #ifdef Q_OS_MACOS
             QShortcut *shortcut = new  QShortcut(QKeySequence(Qt::META + (Qt::Key_0 + key)), this);
 #else
-            QShortcut *shortcut = new  QShortcut(QKeySequence(Qt::ALT + (Qt::Key_0 + key)), this);
+            QShortcut *shortcut = new QShortcut(QKeySequence(Qt::ALT + (Qt::Key_0 + key)), this);
 #endif
             connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()));
             mapper->setMapping(shortcut, i); // tab 0 -> Alt+1, tab 1 -> Alt + 2 etc tab 9 -> Alt + 0
@@ -329,7 +329,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #ifdef Q_OS_MAC
      possibleDirectories <<  initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/") <<  "/Library/Frameworks/CsoundLib64.framework/Resources/Manual/";
 #endif
-    if (m_options->csdocdir.isEmpty() || !QFile::exists(m_options->csdocdir+"/index.html") ) {
+    if (m_options->csdocdir.isEmpty() ||
+            !QFile::exists(m_options->csdocdir+"/index.html") ) {
         foreach (QString dir, possibleDirectories) {
             if (QFile::exists(dir+"/index.html")) {
                 docDir = dir;
@@ -365,7 +366,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     }
     qApp->processEvents(); // To finish settling dock widgets and other stuff before messing with them (does it actually work?)
 
-    if (lastTabIndex < documentPages.size() && documentTabs->currentIndex() != lastTabIndex) {
+    if (lastTabIndex < documentPages.size() &&
+            documentTabs->currentIndex() != lastTabIndex) {
         changePage(lastTabIndex);
         documentTabs->setCurrentIndex(lastTabIndex);
     }
@@ -705,6 +707,10 @@ void CsoundQt::reload()
         QString fileName = documentPages[curPage]->getFileName();
         deleteTab();
         loadFile(fileName);
+        // auto doc = documentPages[curPage];
+
+    } else {
+        QMessageBox::information(nullptr, "Reload", "File was not modified");
     }
 }
 
@@ -3970,7 +3976,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(externalBrowserAct);
     m_keyActions.append(openQuickRefAct);
     m_keyActions.append(openDocumentationAct);
-    m_keyActions.append(showOpcodeQuickRefAct);
+    // m_keyActions.append(showOpcodeQuickRefAct);
     m_keyActions.append(infoAct);
     m_keyActions.append(viewFullScreenAct);
     m_keyActions.append(viewEditorFullScreenAct);
@@ -4543,13 +4549,13 @@ void CsoundQt::createMenus()
     helpMenu->addAction(showOverviewAct);
     helpMenu->addAction(showOpcodeQuickRefAct);
     helpMenu->addAction(showGenAct);
-    helpMenu->addAction(openQuickRefAct);
+    // helpMenu->addAction(openQuickRefAct);
     helpMenu->addSeparator();
     helpMenu->addAction(resetPreferencesAct);
     helpMenu->addSeparator();
     helpMenu->addAction(reportBugAct);
-    helpMenu->addAction(requestFeatureAct);
-    helpMenu->addAction(chatAct);
+    // helpMenu->addAction(requestFeatureAct);
+    // helpMenu->addAction(chatAct);
     helpMenu->addSeparator();
     helpMenu->addAction(aboutAct);
     helpMenu->addAction(donateAct);

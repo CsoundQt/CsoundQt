@@ -259,6 +259,7 @@ void DocumentPage::setSco(QString text)
 void DocumentPage::setWidgetsText(QString text)
 {
 	// TODO support multiple layouts
+    qDebug() << "DocumentPage. calling loadXmlWidgets";
 	return m_widgetLayouts.at(0)->loadXmlWidgets(text);
 }
 
