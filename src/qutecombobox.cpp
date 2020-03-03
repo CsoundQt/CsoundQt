@@ -26,7 +26,9 @@ QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
 {
     m_widget = new QComboBox(this);
     auto w = static_cast<QComboBox*>(m_widget);
+#ifdef Q_OS_LINUX
     w->setStyleSheet("padding-left: 2px;");
+#endif
     m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 	//  canFocus(false);
