@@ -136,13 +136,17 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     connect(sendToFrontAct, SIGNAL(triggered()), this, SLOT(sendToFront()));
 
     distributeHorizontalAct = new QAction(tr("Distribute Horizontally"), this);
-	connect(distributeHorizontalAct, SIGNAL(triggered()), this, SLOT(distributeHorizontal()));
+    connect(distributeHorizontalAct, SIGNAL(triggered()),
+            this, SLOT(distributeHorizontal()));
 	distributeVerticalAct = new QAction(tr("Distribute Vertically"), this);
-	connect(distributeVerticalAct, SIGNAL(triggered()), this, SLOT(distributeVertical()));
+    connect(distributeVerticalAct, SIGNAL(triggered()),
+            this, SLOT(distributeVertical()));
 	alignCenterHorizontalAct = new QAction(tr("Center Vertically"), this);
-	connect(alignCenterHorizontalAct, SIGNAL(triggered()), this, SLOT(alignCenterVertical()));
+    connect(alignCenterHorizontalAct, SIGNAL(triggered()),
+            this, SLOT(alignCenterHorizontal()));
 	alignCenterVerticalAct = new QAction(tr("Center Horizontally"), this);
-	connect(alignCenterVerticalAct, SIGNAL(triggered()), this, SLOT(alignCenterHorizontal()));
+    connect(alignCenterVerticalAct, SIGNAL(triggered()),
+            this, SLOT(alignCenterVertical()));
 
 	storePresetAct = new QAction(tr("Store Preset"), this);
 	connect(storePresetAct, SIGNAL(triggered()), this, SLOT(savePreset()));
@@ -214,10 +218,10 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 	}
 	QDomNodeList panel = doc.elementsByTagName("bsbPanel");
 	if (panel.size() > 1) {
-		QMessageBox::warning(this, tr("More than one panel"),
-							 tr("The csd file contains more than one widget panel!\n"
-								"This is not supported by the current version,\n"
-								"Additional widget panels will be lost if the file is saved!"));
+        QMessageBox::warning(this, tr("More than one panel"),
+            tr("The csd file contains more than one widget panel!\n"
+               "This is not supported by the current version,\n"
+               "Additional widget panels will be lost if the file is saved!"));
 	}
 	QDomNode p = panel.item(0);
 	if (p.isNull()) {
@@ -241,7 +245,7 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 	if (version > QString(QCS_CURRENT_XML_VERSION).toInt()) {
 		qDebug() << "WidgetLayout::loadXmlWidgets Newer Widget Format version";
 		QMessageBox::warning(this, tr("Newer Widget Format"),
-							 tr("The file was was saved by a more recent version of CsoundQt.\n"
+                             tr("The file was saved by a more recent version of CsoundQt.\n"
 								"Some features may not be available and will not be saved!"));
 	}
 	else if (version < QString(QCS_CURRENT_XML_VERSION).toInt()) {  // Just print a silent warning
@@ -960,11 +964,16 @@ QString WidgetLayout::newMacWidget(QString widgetLine, bool offset)
 void WidgetLayout::registerWidget(QuteWidget * widget)
 {
 	widgetsMutex.lock();
-	connect(widget, SIGNAL(widgetChanged(QuteWidget *)), this, SLOT(widgetChanged(QuteWidget *)));
-	connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)), this, SLOT(deleteWidget(QuteWidget *)));
-	connect(widget, SIGNAL(propertiesAccepted()), this, SLOT(markHistory()));
-	connect(widget, SIGNAL(showMidiLearn(QuteWidget *)), this, SIGNAL(showMidiLearn(QuteWidget *)));
-	connect(widget, SIGNAL(addChn_kSignal(QString)), this, SIGNAL(addChn_kSignal(QString)) );
+    connect(widget, SIGNAL(widgetChanged(QuteWidget *)),
+            this, SLOT(widgetChanged(QuteWidget *)));
+    connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)),
+            this, SLOT(deleteWidget(QuteWidget *)));
+    connect(widget, SIGNAL(propertiesAccepted()),
+            this, SLOT(markHistory()));
+    connect(widget, SIGNAL(showMidiLearn(QuteWidget *)),
+            this, SIGNAL(showMidiLearn(QuteWidget *)));
+    connect(widget, SIGNAL(addChn_kSignal(QString)),
+            this, SIGNAL(addChn_kSignal(QString)) );
 	m_widgets.append(widget);
 	//  qDebug() << "WidgetLayout::registerWidget " << m_widgets.size() << widget;
 	if (m_editMode) {
@@ -1017,7 +1026,7 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 			QString text = tr("ChannelH:") + widget->getChannelName()
 					+ "\n"+ tr("ChannelV:")+ widget->getChannel2Name();
 			widget->setToolTip(text);
-			if (getEditWidget(widget) != 0) {
+            if (getEditWidget(widget) != nullptr) {
 				getEditWidget(widget)->setToolTip(text);
 			}
 		}
@@ -1029,14 +1038,14 @@ void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 				text += QString(tr("MIDI chan: %1 CC: %2")).arg(midichan).arg(midicc);
 			}
 			widget->setToolTip(text);
-			if (getEditWidget(widget) != 0) {
+            if (getEditWidget(widget) != nullptr) {
 				getEditWidget(widget)->setToolTip(text);
 			}
 		}
 	}
 	else {
 		widget->setToolTip("");
-		if (m_editMode && getEditWidget(widget) != 0) {
+        if (m_editMode && getEditWidget(widget) != nullptr) {
 			getEditWidget(widget)->setToolTip("");
 		}
 	}
@@ -1072,7 +1081,8 @@ void WidgetLayout::setFontOffset(double offset)
 	m_fontOffset = offset;
 	widgetsMutex.lock();
 	for (int i=0; i < m_widgets.size(); i++) {
-		if (m_widgets[i]->getWidgetType() == "BSBLabel" || m_widgets[i]->getWidgetType() == "BSBScrollNumber") {
+        if (m_widgets[i]->getWidgetType() == "BSBLabel" ||
+                m_widgets[i]->getWidgetType() == "BSBScrollNumber") {
 			static_cast<QuteText *>(m_widgets[i])->setFontOffset(offset);
 			m_widgets[i]->applyInternalProperties();
 		}
@@ -1085,7 +1095,8 @@ void WidgetLayout::setFontScaling(double scaling)
 	m_fontScaling = scaling;
 	widgetsMutex.lock();
 	for (int i=0; i < m_widgets.size(); i++) {
-		if (m_widgets[i]->getWidgetType() == "BSBLabel" || m_widgets[i]->getWidgetType() == "BSBScrollNumber") {
+        if (m_widgets[i]->getWidgetType() == "BSBLabel" ||
+                m_widgets[i]->getWidgetType() == "BSBScrollNumber") {
 			static_cast<QuteText *>(m_widgets[i])->setFontScaling(scaling);
 			m_widgets[i]->applyInternalProperties();
 		}
@@ -1105,14 +1116,17 @@ void WidgetLayout::setWidgetsLocked(bool lock)
 void WidgetLayout::appendCurve(WINDAT *windat)
 {
 	// Called from the Csound callback, creates a curve and queues it for processing
-	// Csound itself deletes the WINDAT structures, that's why we retain a copy of the data for when Csound stops
+    // Csound itself deletes the WINDAT structures, that's why we retain a copy of
+    // the data for when Csound stops
 	// It would be nice if Csound used a single windat for every f-table, but it reuses them...
-	//  for (int i = 0; i < curves.size(); i++) {  // Check if windat is already handled by one of the existing curves
+    //  for (int i = 0; i < curves.size(); i++) {
+    //    // Check if windat is already handled by one of the existing curves
 	//    if (windat == curves[i]->getOriginal()) {
 	//      return;
 	//    }
 	//  }
-    for (int i = 0; i < curves.size(); i++) {  // Check if caption is already present to replace curve rather than create a new one.
+    for (int i = 0; i < curves.size(); i++) {
+        // Check if caption is already present to replace curve rather than create a new one.
         if (curves[i]->get_caption() == windat->caption) {
             windat->windid = (uintptr_t) curves[i];
             return;
@@ -1146,23 +1160,22 @@ void WidgetLayout::appendCurve(WINDAT *windat)
 	//    }
 	//  }
 	if (indexInBuffer < 0) {
-		Curve *curve
-				= new Curve(windat->fdata,
-							windat->npts,
-							windat->caption,
-							polarity,
-							windat->max,
-							windat->min,
-							windat->absmax,
-							windat->oabsmax,
-							windat->danflag,
-							windat);  //FIXME delete these when starting a new run
+        auto curve = new Curve(windat->fdata,
+                               (size_t)windat->npts,
+                               windat->caption,
+                               polarity,
+                               windat->max,
+                               windat->min,
+                               windat->absmax,
+                               windat->oabsmax,
+                               windat->danflag,
+                               windat);  //FIXME delete these when starting a new run
 		windat->windid = (uintptr_t) curve;
 		newCurveBuffer.append(curve);
-		//    qDebug() << "WidgetLayout::appendCurve " << curve << "__--__" << windat;
+        // qDebug() << "WidgetLayout::appendCurve " << curve << "__--__" << windat;
 	}
 	else {
-		qDebug() << "WidgetLayout::appendCurve reusing curve buffer " <<indexInBuffer;
+        qDebug() << "WidgetLayout::appendCurve reusing curve buffer " << indexInBuffer;
 		newCurveBuffer[indexInBuffer]->set_data(windat->fdata);
 		newCurveBuffer[indexInBuffer]->setOriginal(windat);
 	}
@@ -1172,7 +1185,7 @@ void WidgetLayout::killCurve(WINDAT *windat)
 {
 	qDebug() << "WidgetLayout::killCurve()";
 	Curve *curve = (Curve *) getCurveById(windat->windid);
-	curve->setOriginal(0);
+    curve->setOriginal(nullptr);
 }
 
 void WidgetLayout::newCurve(Curve* curve)
@@ -1208,7 +1221,7 @@ uintptr_t WidgetLayout::getCurveById(uintptr_t id)
 {
 	//  qDebug() << "WidgetLayout::getCurveById ";
 	foreach (Curve *thisCurve, curves) {
-		//    qDebug() << "WidgetLayout::getCurveById " << (uintptr_t) thisCurve << " id " << id;
+        // qDebug() << "WidgetLayout::getCurveById " << (uintptr_t)thisCurve << "id" << id;
 		if ((uintptr_t) thisCurve == id)
 			return (uintptr_t) thisCurve;
 	}
@@ -1228,7 +1241,8 @@ void WidgetLayout::updateCurve(WINDAT *windat)
 int WidgetLayout::killCurves(CSOUND * /*csound*/)
 {
 	//  qDebug() << "qutecsound::killCurves";
-	// TODO this is a great idea, to copy data from the tables at the end of run, but the API is not working as expected
+    // TODO this is a great idea, to copy data from the tables at the end of run,
+    // but the API is not working as expected
 	//  for (int i = 0; i < curves.size(); i++) {
 	//    WINDAT * windat = curves[i]->getOriginal();
 	//    if (windat->npts > 0 && windat->windid == (uintptr_t)curves[i]) { // Check for sanity of pointer
@@ -1244,7 +1258,8 @@ int WidgetLayout::killCurves(CSOUND * /*csound*/)
 	//    }
 	//  }
 
-	// Curves are freed not when Csound finishes, but when Csound is run again, to have them available even if Csound is stopped.
+    // Curves are freed not when Csound finishes, but when Csound is run again,
+    // to have them available even if Csound is stopped.
 	return 0;
 }
 
@@ -1275,7 +1290,9 @@ void WidgetLayout::flushGraphBuffer()
 
 void WidgetLayout::refreshWidgets()
 {
-	while (midiReadCounter != midiWriteCounter) { // TODO it is inefficient to have this per layout (when more than one layout is available)
+    while (midiReadCounter != midiWriteCounter) {
+        // TODO it is inefficient to have this per layout (when more than one
+        // layout is available)
 		int index =midiReadCounter;
 		int status = midiQueue[index][0];
 		if (status & 176) { // MIDI control change

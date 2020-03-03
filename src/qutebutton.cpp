@@ -354,7 +354,7 @@ void QuteButton::createPropertiesDialog()
     text = new QTextEdit(dialog);
 	text->setMinimumWidth(320);
 	text->setText(property("QCS_text").toString());
-	layout->addWidget(text, 6,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(text, 6, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
     label->setText(tr("Font Size"));
@@ -372,10 +372,11 @@ void QuteButton::createPropertiesDialog()
 	filenameLineEdit = new QLineEdit(dialog);
 	filenameLineEdit->setMinimumWidth(320);
 	filenameLineEdit->setText(property("QCS_image").toString());
-    layout->addWidget(filenameLineEdit, 8,1,1,2, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(filenameLineEdit, 8, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
 	QPushButton *browseButton = new QPushButton(dialog);
-	browseButton->setText("...");
-    layout->addWidget(browseButton, 8, 3, Qt::AlignCenter|Qt::AlignVCenter);
+    browseButton->setText("Browse");
+    layout->addWidget(browseButton, 8, 4, Qt::AlignLeft|Qt::AlignVCenter);
 	connect(browseButton, SIGNAL(released()), this, SLOT(browseFile()));
 
 	label = new QLabel(dialog);
@@ -471,8 +472,7 @@ void QuteButton::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
 
-    qDebug() << "QuteButton::applyInternalProperties()";
-	m_value = property("QCS_pressedValue").toDouble();
+    m_value = property("QCS_pressedValue").toDouble();
 	//  m_value2 = property("QCS_value2").toDouble();
 	m_stringValue = property("QCS_stringvalue").toString();
 	QString type = property("QCS_type").toString();

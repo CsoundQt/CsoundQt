@@ -980,7 +980,7 @@ void CsoundQt::duplicate()
 void CsoundQt::testAudioSetup()
 {
     qDebug() << "CsoundQt::testAudioSetup";
-    loadFile(":/examples/Useful/IO_Test.csd");
+    loadFile(":/examples/Useful/AudioMidiTest.csd");
     widgetPanel->setVisible(true);
     widgetPanel->setFocus();
     play();
@@ -1001,10 +1001,13 @@ QString CsoundQt::getSaveFileName()
     QString dir = lastUsedDir;
     QString name = documentPages[curPage]->getFileName();
     dir += name.mid(name.lastIndexOf("/") + 1);
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File As"),
-                                                    dir,
-                                                    tr("Known Files (*.csd *.orc *.sco *.py *.udo *.html);;Csound Files (*.csd *.orc *.sco *.udo *.inc *.CSD *.ORC *.SCO *.UDO *.INC);;Python Files (*.py);;Html files (*.html);;All Files (*)",
-                                                       "Be careful to respect spacing parenthesis and usage of punctuation"));
+    QString fileName = QFileDialog::getSaveFileName(
+                this, tr("Save File As"), dir,
+                tr("Known Files (*.csd *.orc *.sco *.py *.udo *.html);;"
+                   "Csound Files (*.csd *.orc *.sco *.udo *.inc *.CSD *.ORC"
+                   "*.SCO *.UDO *.INC);;Python Files (*.py);;"
+                   "Html files (*.html);;All Files (*)",
+                   "Be careful to respect spacing parenthesis and usage of punctuation"));
     if (widgetsVisible) {
         if (!m_options->widgetsIndependent) {
             widgetPanel->show(); // Necessary for Mac, as widget Panel covers open dialog
@@ -1037,7 +1040,8 @@ QString CsoundQt::getSaveFileName()
 
 void CsoundQt::createQuickRefPdf()
 {
-    QString tempFileName(QDir::tempPath() + QDir::separator() + "QuteCsound Quick Reference.pdf");
+    QString tempFileName(QDir::tempPath() + QDir::separator() +
+                         "QuteCsound Quick Reference.pdf");
     //  if (QFile::exists(tempFileName))
     //  {
     //
@@ -1111,10 +1115,12 @@ void CsoundQt::openLogFile()
 void CsoundQt::showNewFormatWarning()
 {
     QMessageBox::warning(this, tr("New widget format"),
-                         tr("  This version of CsoundQt implements a new format for storing widgets, which "
-                            "enables many of the new widget features you will find now.\n"
-                            "  The old format is still read and saved, so you will be able to open files in older versions "
-                            "but some of the features will not be passed to older versions.\n"),
+                         tr("This version of CsoundQt implements a new format for storing"
+                            " widgets, which enables many of the new widget features you "
+                            "will find now.\n"
+                            "The old format is still read and saved, so you will be able "
+                            "to open files in older versions but some of the features will "
+                            "not be passed to older versions.\n"),
                          QMessageBox::Ok);
 }
 
@@ -1313,7 +1319,9 @@ void CsoundQt::focusToTab(int tab)
 void CsoundQt::ambiguosShortcut()
 {
     QMessageBox::warning(this, tr("Shortcuts changed"),
-        tr("Ambiguous shortcut. In version 0.9.5 some shortcuts changed, please configure the shourtcuts or set to defaults (Edit->Configure shortcuts -> Restore Defaults) "));
+        tr("Ambiguous shortcut. In version 0.9.5 some shortcuts changed, please configure "
+           "the shourtcuts or set to defaults "
+           "(Edit/Configure shortcuts/Restore Defaults) "));
 
 }
 
@@ -1330,13 +1338,16 @@ void CsoundQt::createApp()
 {
     QString opcodeDir;
     if (!documentPages[curPage]->getFileName().endsWith(".csd")) {
-        QMessageBox::critical(this, tr("Error"), tr("You can only create an app with a csd file."));
+        QMessageBox::critical(this, tr("Error"),
+                              tr("You can only create an app with a csd file."));
         return;
     }
-    if (documentPages[curPage]->isModified() || documentPages[curPage]->getFileName().startsWith(":/")) {
-        QMessageBox::StandardButton but =
-                QMessageBox::question(this, tr("Save"), tr("Do you want to save before creating app?"),
-                                      QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    if (documentPages[curPage]->isModified() ||
+            documentPages[curPage]->getFileName().startsWith(":/")) {
+        auto but = QMessageBox::question(
+                    this, tr("Save"),
+                    tr("Do you want to save before creating app?"),
+                    QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
         if (but == QMessageBox::Yes) {
             bool ret = save();
             if (!ret) {
@@ -1344,7 +1355,8 @@ void CsoundQt::createApp()
                 return;
             }
         } else {
-            QMessageBox::critical(this, tr("Abort"), tr("You must save the csd before creating the App!"));
+            QMessageBox::critical(this, tr("Abort"),
+                                  tr("You must save the csd before creating the App!"));
             return;
         }
     }
@@ -1477,14 +1489,22 @@ bool CsoundQt::saveNoWidgets()
 void CsoundQt::info()
 {
     QString text = tr("Full Path:") + " " + documentPages[curPage]->getFileName() + "\n\n";
-    text += tr("Number of lines (Csound Text):") + " " + QString::number(documentPages[curPage]->lineCount(true)) + "\n";
-    text += tr("Number of characters (Csound Text):") + " " + QString::number(documentPages[curPage]->characterCount(true)) + "\n";
-    text += tr("Number of lines (total):") + " " + QString::number(documentPages[curPage]->lineCount()) + "\n";
-    text += tr("Number of characters (total):") + " " + QString::number(documentPages[curPage]->characterCount()) + "\n";
-    text += tr("Number of instruments:") + " " + QString::number(documentPages[curPage]->instrumentCount()) + "\n";
-    text += tr("Number of UDOs:") + " " + QString::number(documentPages[curPage]->udoCount()) + "\n";
-    text += tr("Number of Widgets:") + " " + QString::number(documentPages[curPage]->widgetCount()) + "\n";
-    text += tr("Embedded Files:") + " " + documentPages[curPage]->embeddedFiles() + "\n";
+    text += tr("Number of lines (Csound Text):") + " " +
+            QString::number(documentPages[curPage]->lineCount(true)) + "\n";
+    text += tr("Number of characters (Csound Text):") + " " +
+            QString::number(documentPages[curPage]->characterCount(true)) + "\n";
+    text += tr("Number of lines (total):") + " " +
+            QString::number(documentPages[curPage]->lineCount()) + "\n";
+    text += tr("Number of characters (total):") + " " +
+            QString::number(documentPages[curPage]->characterCount()) + "\n";
+    text += tr("Number of instruments:") + " " +
+            QString::number(documentPages[curPage]->instrumentCount()) + "\n";
+    text += tr("Number of UDOs:") + " " +
+            QString::number(documentPages[curPage]->udoCount()) + "\n";
+    text += tr("Number of Widgets:") + " " +
+            QString::number(documentPages[curPage]->widgetCount()) + "\n";
+    text += tr("Embedded Files:") + " " +
+            documentPages[curPage]->embeddedFiles() + "\n";
     QMessageBox::information(this, tr("File Information"),
                              text,
                              QMessageBox::Ok,
@@ -1532,7 +1552,7 @@ bool CsoundQt::closeTab(bool forceCloseApp, int index)
     }
     deleteTab(index);
     changePage(curPage);
-    //storeSettings(); // do not store here, since all tabs are closed on exit
+    // storeSettings(); // do not store here, since all tabs are closed on exit
     return true;
 }
 
@@ -1626,18 +1646,14 @@ bool CsoundQt::join(bool ask)
         documentPages[curPage]->loadTextString(text);
         return true;
     }
-    //   else {
-    //     qDebug("CsoundQt::join() : No Action");
-    //   }
     return false;
 }
 
 void CsoundQt::showUtilities(bool show)
 {
-    //  qDebug() << "CsoundQt::showUtilities" << show;
     if (!show) {
-        if (utilitiesDialog != 0 && utilitiesDialog->close()) {
-            utilitiesDialog = 0;
+        if (utilitiesDialog != nullptr && utilitiesDialog->close()) {
+            utilitiesDialog = nullptr;
         }
     }
     else {
@@ -1699,10 +1715,10 @@ void CsoundQt::saveWidgetsToQml()
     name.replace(".csd", ".qml");
     //dir += name.mid(name.lastIndexOf("/") + 1);
     //TODO: get dir from name -  extract path
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Qml File"),
-                                                    name,
-                                                    tr("QML Files (*.qml *.QML);;All Files (*)",
-                                                       "Export Widgets to QML"));
+    QString fileName = QFileDialog::getSaveFileName(
+                this, tr("Save Qml File"), name,
+                tr("QML Files (*.qml *.QML);;All Files (*)",
+                "Export Widgets to QML"));
     if ( !fileName.isEmpty()) { // save to file
         QFile file(fileName);
 
@@ -1734,17 +1750,18 @@ void CsoundQt::play(bool realtime, int index)
     curPage = index;
     if (documentPages[curPage]->getFileName().isEmpty()) { // ask for if temporary file or serious work:
         int answer = QMessageBox::question(this, tr("Run as temporary file?"),
-                              tr("press <b>OK</b>, if you don't care about this file in future.\n Press <b>Save</b>, if you want to save it with given name.\n You can always save the file with <b>Save As</b> also later, if you use the temporary file."), QMessageBox::Ok|QMessageBox::Save|QMessageBox::Cancel );
+                    tr("press <b>OK</b>, if you don't care about this file in "
+                       "future.\n Press <b>Save</b>, if you want to save it with "
+                       "given name.\n You can always save the file with <b>Save As</b> "
+                       "also later, if you use the temporary file."),
+                    QMessageBox::Ok|QMessageBox::Save|QMessageBox::Cancel );
         bool saved = false;
         if (answer==QMessageBox::Save) {
             saved = saveAs();
         } else if (answer==QMessageBox::Ok) {
-#ifdef USE_QT5
-            QString temporaryPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-#else
-            QString temporaryPath = QDesktopServices::storageLocation(QDesktopServices::TempLocation);
-#endif
-            if (!temporaryPath.isEmpty() && saveFile(temporaryPath + "/csoundqt-temp.csd")) {
+            QString tempPath =
+                    QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+            if (!tempPath.isEmpty() && saveFile(tempPath + "/csoundqt-temp.csd")) {
                 saved = true;
             } else {
                 QMessageBox::critical(this,tr("Save error"), tr("Could not save temporary file"));
@@ -1805,7 +1822,8 @@ void CsoundQt::play(bool realtime, int index)
             //Must switch filename order when open file is a sco file
             fileName2 = fileName;
             fileName = documentPages[curPage]->getCompanionFileName();
-        } else if (fileName.endsWith(".orc",Qt::CaseInsensitive) && documentPages[curPage]->getCompanionFileName().isEmpty()) {
+        } else if (fileName.endsWith(".orc",Qt::CaseInsensitive) &&
+                   documentPages[curPage]->getCompanionFileName().isEmpty()) {
             //TODO: create empty score file
         }
         else
@@ -1886,7 +1904,8 @@ void CsoundQt::play(bool realtime, int index)
     } else if (ret == 0) { // No problem
         if (m_options->enableWidgets && m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
 
-            if (!documentPages[curPage]->usesFltk()) { // Don't bring up widget panel if there's an FLTK panel
+            if (!documentPages[curPage]->usesFltk()) {
+                // Don't bring up widget panel if there's an FLTK panel
                 if (!m_options->widgetsIndependent) {
                     if (widgetPanel->isFloating()) {
                         widgetPanel->setVisible(true);
@@ -2096,12 +2115,13 @@ void CsoundQt::render()
         QFileDialog dialog(this,tr("Output Filename"),defaultFile);
         dialog.setAcceptMode(QFileDialog::AcceptSave);
         //    dialog.setConfirmOverwrite(false);
-        QString filter = QString(m_configlists.fileTypeLongNames[m_options->fileFileType] + " Files ("
-                + m_configlists.fileTypeExtensions[m_options->fileFileType] + ")");
+        auto extensions = m_configlists.fileTypeExtensions[m_options->fileFileType];
+        QString filter = QString(m_configlists.fileTypeLongNames[m_options->fileFileType] +
+                " Files (" + extensions + ")");
         dialog.selectNameFilter(filter);
         if (dialog.exec() == QDialog::Accepted) {
-            QString extension = m_configlists.fileTypeExtensions[m_options->fileFileType].left(m_configlists.fileTypeExtensions[m_options->fileFileType].indexOf(";"));
-            //       // Remove the '*' from the extension
+            QString extension = extensions.left(extensions.indexOf(";"));
+            // Remove the '*' from the extension
             extension.remove(0,1);
             m_options->fileOutputFilename = dialog.selectedFiles()[0];
             if (!m_options->fileOutputFilename.endsWith(".wav")
@@ -2109,12 +2129,13 @@ void CsoundQt::render()
                     && !m_options->fileOutputFilename.endsWith(extension) ) {
                 m_options->fileOutputFilename += extension;
             }
-            if (QFile::exists(m_options->fileOutputFilename)) {
-                int ret = QMessageBox::warning(this, tr("CsoundQt"),
-                                               tr("The file %1 \nalready exists.\n"
-                                                  "Do you want to overwrite it?").arg(m_options->fileOutputFilename),
-                                               QMessageBox::Save | QMessageBox::Cancel,
-                                               QMessageBox::Save);
+            auto outfile = m_options->fileOutputFilename;
+            if (QFile::exists(outfile)) {
+                int ret = QMessageBox::warning(
+                            this, tr("CsoundQt"),
+                            tr("The file %1 already exists.\n Do you want to overwrite it?")
+                               .arg(outfile),
+                            QMessageBox::Save|QMessageBox::Cancel, QMessageBox::Save);
                 if (ret == QMessageBox::Cancel)
                     return;
             }
@@ -2157,7 +2178,8 @@ void CsoundQt::openExternalEditor()
     }
     if (!QFile::exists(name)) {
         QMessageBox::critical(this, tr("Render not available"),
-                              tr("Could not find rendered file. Please render before calling external editor."));
+                              tr("Could not find rendered file. Please render before calling"
+                                 " external editor."));
     }
     if (!m_options->waveeditor.isEmpty()) {
         name = "\"" + name + "\"";
@@ -2190,7 +2212,8 @@ void CsoundQt::openExternalPlayer()
     }
     if (!QFile::exists(name)) {
         QMessageBox::critical(this, tr("Render not available"),
-                              tr("Could not find rendered file. Please render before calling external player."));
+                              tr("Could not find rendered file. Please render before calling"
+                                 " external player."));
     }
     if (!m_options->waveplayer.isEmpty()) {
         name = "\"" + name + "\"";
@@ -2354,8 +2377,10 @@ void CsoundQt::showVirtualKeyboard(bool show)
 {
 #ifdef USE_QT_GT_53
     if (show) {
-        m_virtualKeyboard = new QQuickWidget(this); // create here to be able to
-        m_virtualKeyboard->setAttribute(Qt::WA_DeleteOnClose); // ... be able to delete in on close and catch destroyed() to uncheck action button
+        // create here to be able to be able to delete in on close and catch destroyed()
+        // to uncheck action button
+        m_virtualKeyboard = new QQuickWidget(this);
+        m_virtualKeyboard->setAttribute(Qt::WA_DeleteOnClose);
         m_virtualKeyboardPointer = m_virtualKeyboard;  // guarded pointer to check if object is  alive
         m_virtualKeyboard->setWindowTitle(tr("CsoundQt Virtual Keyboard"));
         m_virtualKeyboard->setWindowFlags(Qt::Window);
@@ -2739,8 +2764,8 @@ void CsoundQt::applySettings()
     for (int i = 0; i < documentPages.size(); i++) {
         setCurrentOptionsForPage(documentPages[i]);
     }
-    Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
-                                               Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
+    auto toolButtonStyle = (m_options->iconText ?
+                                Qt::ToolButtonTextUnderIcon : Qt::ToolButtonIconOnly);
 
     //	setUnifiedTitleAndToolBarOnMac(m_options->iconText);
     //	fileToolBar->setToolButtonStyle(toolButtonStyle);
@@ -2766,7 +2791,10 @@ void CsoundQt::applySettings()
     playOptions += " (" + (m_options->rtUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions"));
     playOptions += " " + (m_options->rtOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
     playOptions += currentOptions;
-    QString renderOptions = " (" + (m_options->fileUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions")) + " ";
+    QString renderOptions =
+            " ("
+            + (m_options->fileUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions"))
+            + " ";
     renderOptions +=  "" + (m_options->fileOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
     renderOptions += currentOptions;
     runAct->setStatusTip(tr("Play") + playOptions);
@@ -2774,19 +2802,24 @@ void CsoundQt::applySettings()
 
     if (! m_options->useCsoundMidi) {
         QString interfaceNotFoundMessage; // find midi interface by name; if not found, set to None
-        m_options->midiInterface = midiHandler->findMidiInPortByName(m_options->midiInterfaceName); // returns 9999 if not found
-
-        midiHandler->setMidiInterface(m_options->midiInterface); // close port, if 9999
+        // returns 9999 if not found
+        m_options->midiInterface = midiHandler->findMidiInPortByName(m_options->midiInterfaceName);
+        midiHandler->setMidiInterface(m_options->midiInterface);
+        // close port, if 9999
         if (m_options->midiInterface==9999 && !m_options->midiInterfaceName.contains("None")) {
             qDebug()<<"Midi In interface "<< m_options->midiInterfaceName << " not found!";
-            interfaceNotFoundMessage = tr("Midi In interface ") + m_options->midiInterfaceName + tr(" not found!\n Switching to None.\n");
+            interfaceNotFoundMessage = tr("Midi In interface ") +
+                    m_options->midiInterfaceName +
+                    tr(" not found!\n Switching to None.\n");
         }
 
         m_options->midiOutInterface = midiHandler->findMidiOutPortByName(m_options->midiOutInterfaceName);
         midiHandler->setMidiOutInterface(m_options->midiOutInterface);
         if (m_options->midiOutInterface == 9999 && !m_options->midiOutInterfaceName.contains("None")) {
             qDebug()<<"Midi Out interface "<< m_options->midiOutInterfaceName << " not found!";
-            interfaceNotFoundMessage += tr("Midi Out interface ") + m_options->midiOutInterfaceName + tr(" not found!\n Switching to None.");
+            interfaceNotFoundMessage += tr("Midi Out interface ") +
+                    m_options->midiOutInterfaceName +
+                    tr(" not found!\n Switching to None.");
         }
         //	if (!interfaceNotFoundMessage.isEmpty()) { // probably messagebox alwais is a bit too disturbing. Keep it quiet.
         //		QMessageBox::warning(this, tr("MIDI interface not found"),
@@ -2809,8 +2842,9 @@ void CsoundQt::applySettings()
     setupEnvironment();
 
     //set editorBgColor also for inspector, codepad and python console. Maybe the latter should use the same color as console?
-    m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(m_options->editorBgColor.name()));
-    m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
+    auto bgColor= m_options->editorBgColor.name();
+    m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(bgColor));
+    m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(bgColor));
 #ifdef QCS_PYTHONQT
     m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
 #endif
@@ -3495,7 +3529,8 @@ void CsoundQt::createActions()
     externalEditorAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(externalEditorAct, SIGNAL(triggered()), this, SLOT(openExternalEditor()));
 
-    showWidgetsAct = new QAction(QIcon(prefix + "gnome-mime-application-x-diagram.png"), tr("Widgets"), this);
+    showWidgetsAct = new QAction(QIcon(prefix + "gnome-mime-application-x-diagram.png"),
+                                 tr("Widgets"), this);
     showWidgetsAct->setCheckable(true);
     //showWidgetsAct->setChecked(true);
     showWidgetsAct->setStatusTip(tr("Show Realtime Widgets"));
@@ -3536,7 +3571,8 @@ void CsoundQt::createActions()
     showHelpAct->setStatusTip(tr("Show the Csound Manual Panel"));
     showHelpAct->setIconText(tr("Manual"));
     showHelpAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
+    // connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
+    connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisibleAndRaise(bool)));
     connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
 
     raiseHelpAct = new QAction(this);
@@ -4059,7 +4095,8 @@ void CsoundQt::connectActions()
     connect(doc, SIGNAL(closeExtraPanelsSignal()), this, SLOT(closeExtraPanels()));
     connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
 
-    connect(doc->getView(), SIGNAL(opcodeSyntaxSignal(QString)), this, SLOT(statusBarMessage(QString)));
+    connect(doc->getView(), SIGNAL(opcodeSyntaxSignal(QString)),
+            this, SLOT(statusBarMessage(QString)));
 
     connect(doc, SIGNAL(modified()), this, SLOT(documentWasModified()));
     //  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
@@ -4075,8 +4112,10 @@ void CsoundQt::connectActions()
         //    connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
     }
     else {
-        connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
-        connect(widgetPanel, SIGNAL( Close(bool)), showWidgetsAct, SLOT(setChecked(bool))); // uppercase?? Close also in  2949
+        // connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(setVisible(bool)));
+        connect(showWidgetsAct, SIGNAL(triggered(bool)), widgetPanel, SLOT(showAndRaise(bool)));
+
+        connect(widgetPanel, SIGNAL( Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
     }
 }
 
@@ -4150,7 +4189,6 @@ void CsoundQt::createMenus()
     templateMenu = fileMenu->addMenu(tr("Templates"));
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
-
 
     editMenu = menuBar()->addMenu(tr("Edit"));
     editMenu->addAction(undoAct);
@@ -4819,9 +4857,11 @@ void CsoundQt::readSettings()
     // Version 2 to add "*" to jack client name
     // version 4 to signal that many shotcuts have been changed
     if (settingsVersion>0 && settingsVersion<4) {
-        QMessageBox::warning(this, tr("Settings changed"),tr("In this version the shortcuts for showing panels changed. See ... for more information. Please Use Edit->Keyboard shortcuts -> Restore Defaults to activate it."));
+        QMessageBox::warning(this, tr("Settings changed"),
+                             tr("In this version the shortcuts for showing panels changed. "
+                                "See ... for more information. Please Use "
+                                "'Edit/Keyboard shortcuts/Restore Defaults' to activate it."));
     }
-
 
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "breeze").toString();
@@ -4883,9 +4923,12 @@ void CsoundQt::readSettings()
     m_options->consoleFont = settings.value("consolefont", "Courier").toString();
     m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
 
-    m_options->consoleFontColor = settings.value("consoleFontColor", QVariant(QColor(Qt::black))).value<QColor>();
-    m_options->consoleBgColor = settings.value("consoleBgColor", QVariant(QColor(Qt::white))).value<QColor>();
-    m_options->editorBgColor = settings.value("editorBgColor", QVariant(QColor(Qt::white))).value<QColor>();
+    m_options->consoleFontColor = settings.value("consoleFontColor",
+                                                 QVariant(QColor(Qt::black))).value<QColor>();
+    m_options->consoleBgColor = settings.value("consoleBgColor",
+                                               QVariant(QColor(Qt::white))).value<QColor>();
+    m_options->editorBgColor = settings.value("editorBgColor",
+                                              QVariant(QColor(Qt::white))).value<QColor>();
 
     m_options->tabWidth = settings.value("tabWidth", 24).toInt();
     m_options->tabIndents = settings.value("tabIndents", false).toBool();
@@ -4957,6 +5000,9 @@ void CsoundQt::readSettings()
     m_options->multicore = settings.value("multicore", false).toBool();
     m_options->numThreads = settings.value("numThreads", 1).toInt();
     m_options->additionalFlags = settings.value("additionalFlags", "").toString();
+    m_options->useSystemSamplerate = settings.value("useSystemSamplerate", false).toBool();
+    m_options->overrideNumChannels = settings.value("overrideNumChannels", false).toBool();
+    m_options->numChannels = settings.value("numChannels", 0).toInt();
     if (settingsVersion < 1)
         m_options->additionalFlags.remove("-d");  // remove old -d preference, as it is fixed now.
     m_options->additionalFlagsActive = settings.value("additionalFlagsActive", false).toBool();
@@ -5167,6 +5213,9 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("newParser", m_options->newParser);
         settings.setValue("multicore", m_options->multicore);
         settings.setValue("numThreads", m_options->numThreads);
+        settings.setValue("useSystemSamplerate", m_options->useSystemSamplerate);
+        settings.setValue("overrideNumChannels", m_options->overrideNumChannels);
+        settings.setValue("numChannels", m_options->numChannels);
 
         settings.setValue("additionalFlags", m_options->additionalFlags);
         settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);

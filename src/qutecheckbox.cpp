@@ -236,8 +236,7 @@ void QuteCheckBox::stateChanged(int state)
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	//  qDebug() << "QuteCheckBox::stateChanged" << state << property("QCS_pressedValue").toDouble() << m_currentValue;
-	emit newValue(channelValue);
+    emit newValue(channelValue);
 }
 
 void QuteCheckBox::applyProperties()
@@ -249,7 +248,8 @@ void QuteCheckBox::applyProperties()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
+    //Must be last to make sure the widgetChanged signal is last
+    QuteWidget::applyProperties();
 }
 
 void QuteCheckBox::createPropertiesDialog()
@@ -265,12 +265,6 @@ void QuteCheckBox::createPropertiesDialog()
 	valueBox->setDecimals(6);
 	valueBox->setRange(-9999999.0, 9999999.0);
 	layout->addWidget(valueBox, 4, 3, Qt::AlignLeft|Qt::AlignVCenter);
-
-    /*
-    label = new QLabel(dialog);
-    label->setText("Label");
-    layout->addWidget(label, 5, 2, Qt::AlignRight|Qt::AlignVCenter);
-    */
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();

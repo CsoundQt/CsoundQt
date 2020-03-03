@@ -335,7 +335,12 @@ void QuteGraph::changeCurve(int index)
 	}
     else if (stacked->currentIndex() == index) {
         return;
+    } else if (index >= stacked->count()) {
+        qDebug() << "changeCurve: index out of range. Num indices:"<<stacked->size();
+        return;
     } else {
+        qDebug()<<"changeCurve"<<index;
+
         // change curve
         auto view = stacked->currentWidget();
         view->hide();

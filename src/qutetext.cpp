@@ -33,8 +33,9 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
     // Necessary to pass mouse tracking to widget panel for _MouseX channels
     m_widget->setMouseTracking(true);
-	setMouseTracking(true);
-	//  canFocus(true);
+    setMouseTracking(true);
+    // m_widget->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    //  canFocus(true);
 
 	//   connect(static_cast<QLabel*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 	setProperty("QCS_label", "");
@@ -53,8 +54,6 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	m_fontScaling = 1.0;
 	m_fontOffset = 1.0;
 	m_type = "display";
-
-    qDebug()<< "exit qutetext constr";
 }
 
 QuteText::~QuteText()
@@ -95,8 +94,7 @@ void QuteText::setType(QString type)
 
 void QuteText::setAlignment(QString alignment)
 {
-	qDebug() << "QuteText::setAlignment " <<  alignment;
-	Qt::Alignment align;
+    Qt::Alignment align;
 	if (alignment == "left") {
 		align = Qt::AlignLeft|Qt::AlignTop;
 	}

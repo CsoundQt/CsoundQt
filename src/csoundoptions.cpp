@@ -23,6 +23,7 @@
 #include "csoundoptions.h"
 #include "configlists.h"
 #include <QDir> // for static QDir::separator()
+#include <QDebug>
 #include <cstdlib> // for calloc
 
 CsoundOptions::CsoundOptions(ConfigLists *configlists) :
@@ -33,7 +34,7 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	rt = true;
 
 	enableFLTK = true;
-	bufferSize = 1024;
+    bufferSize = 1024;
 	bufferSizeActive = false;
 	HwBufferSize = 2048;
 	HwBufferSizeActive = false;
@@ -67,6 +68,8 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	rtMidiInputDevice = "0";
 	rtMidiOutputDevice = "0";
     useSystemSamplerate = false;
+    overrideNumChannels = false;
+    numChannels = 2;
 	useCsoundMidi = false;
 	simultaneousRun = true; // Allow running various instances (tabs) simultaneously.
 
@@ -144,6 +147,12 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 		}
         if (useSystemSamplerate)
             opts << "--use-system-sr";
+        if (overrideNumChannels) {
+            if(numChannels <= 0) {
+                qDebug("Setting nchnls, but numChannels is invalid: %d", numChannels);
+            } else
+                opts << ("--nchnls=" + QString::number(numChannels));
+        }
 	}
 	else {
         opts << "--format=" + m_configlists->fileTypeNames[fileFileType]

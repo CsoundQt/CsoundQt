@@ -50,6 +50,7 @@ private:
 	void browseFile(QString &destination);
 	void browseSaveFile(QString &destination);
 	void browseDir(QString &destination);
+    int m_selectedOutputDeviceIndex;
 
 private slots:
 	virtual void accept();
