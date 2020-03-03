@@ -33,7 +33,8 @@ QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 	//  canFocus(false);
 	//   connect((QComboBox *)m_widget, SIGNAL(released()), this, SLOT(buttonReleased()));
-	connect(static_cast<QComboBox *>(m_widget), SIGNAL(currentIndexChanged(int)), this, SLOT(indexChanged(int)));
+    connect(static_cast<QComboBox *>(m_widget), SIGNAL(currentIndexChanged(int)),
+            this, SLOT(indexChanged(int)));
 	setProperty("QCS_selectedIndex", 0);
 	setProperty("QCS_randomizable", false);
 	setProperty("QCS_randomizableGroup", 0);
