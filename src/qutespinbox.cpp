@@ -54,7 +54,6 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
     setProperty("QCS_color", QVariant());
     setProperty("QCS_borderradius", QVariant());
     setProperty("QCS_borderwidth", QVariant());
-    qDebug() << "exited SpinBox constr";
 }
 
 QuteSpinBox::~QuteSpinBox() {}

@@ -926,12 +926,15 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
 {
 	delete m_widget; //delete widget created by parent constructor
 	m_widget = new ScrollNumberWidget(this);
+    auto w = static_cast<ScrollNumberWidget*>(m_widget);
+    w->setMargin(4);  // padding between border and start of contents
+
 	//  connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
-    connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(addValue(double)),
+    connect(w, SIGNAL(addValue(double)),
             this, SLOT(addValue(double)));
-    connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(setValue(double)),
+    connect(w, SIGNAL(setValue(double)),
             this, SLOT(setValueFromWidget(double)));
-    connect(static_cast<ScrollNumberWidget*>(m_widget), SIGNAL(doubleClick()),
+    connect(w, SIGNAL(doubleClick()),
             this, SLOT(setValueFromDialog()));
 
 	m_type = "scroll";

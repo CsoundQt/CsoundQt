@@ -3486,5 +3486,37 @@ Default directory for sound files. Used if no full path is given for sound files
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>numChannelsCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>107</x>
+     <y>97</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>442</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>numChannelsSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>107</x>
+     <y>97</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>507</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>
