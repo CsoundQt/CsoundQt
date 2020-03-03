@@ -29,6 +29,9 @@ QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
 #ifdef Q_OS_LINUX
     w->setStyleSheet("padding-left: 2px;");
 #endif
+#ifdef Q_OS_MACOS
+    w->setStyleSheet("color: #000000;");
+#endif
     m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 	//  canFocus(false);
