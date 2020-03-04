@@ -617,19 +617,20 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
     // m_scene = new QGraphicsScene(5,5, 20, 20, this);
     m_scene = new QGraphicsScene(0, 0, 20, 20, this);
 	m_scene->setBackgroundBrush(Qt::black);
-	m_scene->setSceneRect(0,0, 20, 20);
+    m_scene->setForegroundBrush(Qt::NoBrush);
+    m_scene->setSceneRect(0,0, 20, 20);
 
     setScene(m_scene);
 	m_mouseDown = false;
     auto borderPen = QPen(QColor(Qt::green).darker(150), 0);
-
-    m_block = m_scene->addRect(0, 0, 0, 0, Qt::NoPen, QBrush(Qt::green));
+    // auto blockPen = QPen(QColor(Qt::green), 0);
+    auto blockPen = Qt::NoPen;
+    m_block = m_scene->addRect(0, 0, 0, 0, blockPen, QBrush(Qt::green));
 	m_point = m_scene->addEllipse(0, 0, 0, 0, QPen(Qt::green) , QBrush(Qt::green));
 	m_vline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
 	m_hline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
     m_border = m_scene->addRect(m_scene->sceneRect(), borderPen);
     m_border->hide();
-
 }
 
 MeterWidget::~MeterWidget()
@@ -671,13 +672,13 @@ void MeterWidget::setValue(double value)
 		m_block->setRect(0, 0, portionx*width(), height());
 	}
     else if (m_type == "llif" && !m_vertical) {
-		m_block->setRect(portionx*width(),0, width(), height());
+        m_block->setRect(portionx*width(), 0, width(), height());
 	}
     else if (m_type == "line" && !m_vertical) {
-		m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
+        m_vline->setLine(portionx*width(), 0, portionx*width(), height());
 	}
 	else {
-		m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
+        m_vline->setLine(portionx*width(), 0, portionx*width(), height());
 		m_point->setRect(portionx*width()- (m_pointSize/2.0), (1-portiony)*height()- (m_pointSize/2.0), m_pointSize, m_pointSize);
 	}
 	mutex.unlock();
@@ -838,15 +839,13 @@ void MeterWidget::setBgColor(QColor color) {
 
 void MeterWidget::setWidgetGeometry(int x,int y,int width,int height)
 {
-	m_scene->setSceneRect(0,0, width, height);
-    m_border->setRect(0, 0, width-1, height-1);
+    m_scene->setSceneRect(0,0, width, height);
+    // m_border->setRect(0, 0, width-1, height-1);
+    m_border->setRect(0, 0, width, height);
 	setSceneRect(0,0, width, height);
 	setGeometry(x,y,width, height);
 	setMaximumSize(width, height);
-	if (width > height)
-		m_vertical = false;
-	else
-		m_vertical = true;
+    m_vertical = width <= height;
 	setType(m_type);  // update widgets which depend on verticality
 }
 
