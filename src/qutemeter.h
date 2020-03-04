@@ -83,8 +83,12 @@ private slots:
 
 	void valueChanged(double value1);
 	void value2Changed(double value2);
+
+    void checkTypeComboBox();
 	//    void setValuesFromWidget(double value1, double value2);
 };
+
+enum MeterWidgetType { FILL, LLIF, LINE, CROSSHAIR, POINT };
 
 class MeterWidget : public QGraphicsView
 {
@@ -114,6 +118,7 @@ public:
     QColor getBgColor();
 
 	QString getType() {return m_type;}
+    MeterWidgetType getMeterType() { return m_metertype; }
 	int getPointSize() {return m_pointSize;}
 	bool m_vertical;
 
@@ -125,6 +130,7 @@ protected:
 private:
 	double m_value, m_value2;  // value1 is vertical, value2 is horizontal
 	double m_xmin, m_xmax, m_ymin, m_ymax;
+    MeterWidgetType m_metertype;
 	QString m_type;
 	int m_pointSize;
 	bool m_mouseDown;
