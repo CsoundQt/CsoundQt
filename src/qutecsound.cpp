@@ -2743,7 +2743,7 @@ void CsoundQt::configure()
 {
     ConfigDialog dialog(this,  m_options, &m_configlists);
     dialog.setCurrentTab(configureTab);
-    dialog.newParserCheckBox->setEnabled(csoundGetVersion() > 5125);
+    // dialog.newParserCheckBox->setEnabled(csoundGetVersion() > 5125);
     dialog.multicoreCheckBox->setEnabled(csoundGetVersion() > 5125);
     dialog.numThreadsSpinBox->setEnabled(csoundGetVersion() > 5125);
     connect(dialog.applyButton, SIGNAL(released()),
@@ -5001,8 +5001,11 @@ void CsoundQt::readSettings()
     m_options->numThreads = settings.value("numThreads", 1).toInt();
     m_options->additionalFlags = settings.value("additionalFlags", "").toString();
     m_options->useSystemSamplerate = settings.value("useSystemSamplerate", false).toBool();
+    m_options->samplerate = settings.value("overrideSamplerate", 0).toInt();
     m_options->overrideNumChannels = settings.value("overrideNumChannels", false).toBool();
     m_options->numChannels = settings.value("numChannels", 0).toInt();
+    m_options->realtimeFlag = settings.value("realtimeFlag", false).toBool();
+    m_options->sampleAccurateFlag = settings.value("sampleAccurateFlag", false).toBool();
     if (settingsVersion < 1)
         m_options->additionalFlags.remove("-d");  // remove old -d preference, as it is fixed now.
     m_options->additionalFlagsActive = settings.value("additionalFlagsActive", false).toBool();
@@ -5210,10 +5213,13 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("HwBufferSize",m_options->HwBufferSize);
         settings.setValue("HwBufferSizeActive", m_options->HwBufferSizeActive);
         settings.setValue("dither", m_options->dither);
+        settings.setValue("realtimeFlag", m_options->realtimeFlag);
+        settings.setValue("sampleAccurateFlag", m_options->sampleAccurateFlag);
         settings.setValue("newParser", m_options->newParser);
         settings.setValue("multicore", m_options->multicore);
         settings.setValue("numThreads", m_options->numThreads);
         settings.setValue("useSystemSamplerate", m_options->useSystemSamplerate);
+        settings.setValue("overrideSamplerate", m_options->samplerate);
         settings.setValue("overrideNumChannels", m_options->overrideNumChannels);
         settings.setValue("numChannels", m_options->numChannels);
 

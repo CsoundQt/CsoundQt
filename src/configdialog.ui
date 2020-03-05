@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>730</width>
-    <height>832</height>
+    <width>719</width>
+    <height>736</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,8 +90,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>722</width>
-        <height>783</height>
+        <width>697</width>
+        <height>710</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -112,6 +112,9 @@
          <property name="enabled">
           <bool>true</bool>
          </property>
+         <property name="toolTip">
+          <string>Use sample-accurate timing of events</string>
+         </property>
          <property name="currentIndex">
           <number>0</number>
          </property>
@@ -128,27 +131,178 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>671</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>180</height>
+               <height>16777215</height>
               </size>
              </property>
              <property name="title">
               <string>Realtime Audio</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_16">
+              <property name="leftMargin">
+               <number>4</number>
+              </property>
+              <property name="topMargin">
+               <number>4</number>
+              </property>
+              <property name="rightMargin">
+               <number>4</number>
+              </property>
               <property name="bottomMargin">
-               <number>9</number>
+               <number>19</number>
+              </property>
+              <property name="verticalSpacing">
+               <number>6</number>
               </property>
               <item row="2" column="0" colspan="2">
                <layout class="QGridLayout" name="rtadioLayout">
                 <property name="horizontalSpacing">
-                 <number>4</number>
-                </property>
-                <property name="verticalSpacing">
                  <number>6</number>
                 </property>
+                <property name="verticalSpacing">
+                 <number>4</number>
+                </property>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="label_5">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">padding-right: 6</string>
+                  </property>
+                  <property name="text">
+                   <string>Output device (-o)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="6">
+                 <widget class="QSpinBox" name="numChannelsSpinBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>120</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If active, overrides the number of channels set in the orchestra via the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls &lt;/span&gt;variable. To set a different number of input channels, set the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls_i &lt;/span&gt;variable in the orchestra, or use the &lt;span style=&quot; font-weight:600;&quot;&gt;--nchnls_i&lt;/span&gt; flag&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_3">
+                  <property name="toolTip">
+                   <string>Audio backend used when running Csound in realtime</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">padding-right: 6</string>
+                  </property>
+                  <property name="text">
+                   <string>RT Audio Module</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="6">
+                 <widget class="QComboBox" name="samplerateComboBox">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>120</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Orchestra</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>System</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>22050</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>44100</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>48000</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>88200</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>96000</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>192000</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="5" column="4" alignment="Qt::AlignLeft">
+                 <widget class="QLabel" name="samplerateLabel">
+                  <property name="text">
+                   <string>Samplerate</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="RtUseOptionsCheckBox">
+                  <property name="text">
+                   <string>Override</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
                 <item row="5" column="0">
                  <widget class="QLabel" name="label_4">
                   <property name="minimumSize">
@@ -168,72 +322,33 @@
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="0">
-                 <widget class="QLabel" name="label_5">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <item row="3" column="3">
+                 <spacer name="horizontalSpacer_13">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
                   </property>
-                  <property name="styleSheet">
-                   <string notr="true">padding-right: 6</string>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Minimum</enum>
                   </property>
-                  <property name="text">
-                   <string>Output device (-o)</string>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>24</width>
+                    <height>13</height>
+                   </size>
                   </property>
-                 </widget>
+                 </spacer>
                 </item>
-                <item row="1" column="1">
-                 <widget class="QCheckBox" name="RtOverrideCheckBox">
+                <item row="5" column="2">
+                 <widget class="QToolButton" name="audioInputToolButton">
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If checked, the options set within the tag &lt;span style=&quot; font-weight:600;&quot;&gt;CsOptions&lt;/span&gt; in the .csd file are ignored&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>Browse a list of input devices</string>
                   </property>
-                  <property name="styleSheet">
-                   <string notr="true">padding-left: 12</string>
-                  </property>
-                  <property name="text">
-                   <string>Ignore CsOptions</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="2">
-                 <widget class="QToolButton" name="audioOutputToolButton">
                   <property name="text">
                    <string>...</string>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="6">
-                 <widget class="QPushButton" name="testAudioSetupButton">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>160</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>▶  Test Audio Setup</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="RtUseOptionsCheckBox">
-                  <property name="text">
-                   <string>Use CsoundQt options</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
+                <item row="3" column="1" colspan="2">
                  <widget class="QComboBox" name="RtModuleComboBox">
                   <property name="minimumSize">
                    <size>
@@ -246,31 +361,11 @@
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="2">
-                 <widget class="QToolButton" name="audioInputToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_3">
-                  <property name="toolTip">
-                   <string>Audio backend used when running Csound in realtime</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">padding-right: 6</string>
-                  </property>
-                  <property name="text">
-                   <string>RT Audio Module</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="5" column="1">
                  <widget class="QLineEdit" name="RtInputLineEdit">
                   <property name="minimumSize">
                    <size>
-                    <width>100</width>
+                    <width>80</width>
                     <height>0</height>
                    </size>
                   </property>
@@ -279,48 +374,26 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="3">
-                 <spacer name="horizontalSpacer_13">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeType">
-                   <enum>QSizePolicy::Minimum</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>18</width>
-                    <height>2</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                 <item row="6" column="1">
                  <widget class="QLineEdit" name="RtOutputLineEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>100</width>
+                    <height>0</height>
+                   </size>
+                  </property>
                   <property name="toolTip">
                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="5">
-                 <widget class="QSpinBox" name="numChannelsSpinBox">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>40</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>50</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
+                <item row="1" column="1">
+                 <widget class="QCheckBox" name="RtOverrideCheckBox">
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If active, overrides the number of channels set in the orchestra via the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls &lt;/span&gt;variable. To set a different number of input channels, set the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls_i &lt;/span&gt;variable in the orchestra, or use the &lt;span style=&quot; font-weight:600;&quot;&gt;--nchnls_i&lt;/span&gt; flag&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If checked, the options set within the tag &lt;span style=&quot; font-weight:600;&quot;&gt;CsOptions&lt;/span&gt; in the .csd file are ignored&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Ignore CsOptions</string>
                   </property>
                  </widget>
                 </item>
@@ -334,29 +407,38 @@
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="6">
-                 <spacer name="horizontalSpacer_3">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="3" column="4" colspan="2">
-                 <widget class="QCheckBox" name="useSystemSamplerateCheckBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
+                <item row="6" column="2">
+                 <widget class="QToolButton" name="audioOutputToolButton">
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the samplerate of the backend. Not all backends support this option. When checked, the samplerate set in the csd file (via, for example, &lt;span style=&quot; font-weight:600;&quot;&gt;sr = 44100&lt;/span&gt;) is overridden in favor of the backend's samplerate&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>Select from a list of output devices</string>
                   </property>
                   <property name="text">
-                   <string>Use System Samplerate</string>
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="6" rowspan="2">
+                 <widget class="QPushButton" name="testAudioSetupButton">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>200</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Test the current audio/midi setup</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>▶  Test Audio Setup</string>
                   </property>
                  </widget>
                 </item>
@@ -380,8 +462,17 @@
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
              <layout class="QGridLayout" name="gridLayout_8">
+              <property name="leftMargin">
+               <number>6</number>
+              </property>
               <property name="topMargin">
-               <number>8</number>
+               <number>6</number>
+              </property>
+              <property name="rightMargin">
+               <number>4</number>
+              </property>
+              <property name="bottomMargin">
+               <number>4</number>
               </property>
               <property name="verticalSpacing">
                <number>4</number>
@@ -389,64 +480,26 @@
               <item row="2" column="0" colspan="5">
                <layout class="QGridLayout" name="midilayout">
                 <property name="horizontalSpacing">
-                 <number>4</number>
-                </property>
-                <property name="verticalSpacing">
                  <number>6</number>
                 </property>
-                <item row="2" column="3">
-                 <widget class="QToolButton" name="midiInputToolButton">
-                  <property name="text">
-                   <string>...</string>
+                <property name="verticalSpacing">
+                 <number>4</number>
+                </property>
+                <item row="2" column="4">
+                 <spacer name="horizontalSpacer_14">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
                   </property>
-                 </widget>
-                </item>
-                <item row="2" column="7">
-                 <widget class="QToolButton" name="midiOutputToolButton">
-                  <property name="text">
-                   <string>...</string>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
                   </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QCheckBox" name="csoundMidiCheckBox">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use Csound's own MIDI implementation. All MIDI input/output is performed by csound directly. If this is selected, the internal MIDI interface is not used.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Csound MIDI Module</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="6">
-                 <widget class="QComboBox" name="midiOutInterfaceComboBox">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="minimumSize">
+                  <property name="sizeHint" stdset="0">
                    <size>
-                    <width>100</width>
+                    <width>24</width>
                     <height>0</height>
                    </size>
                   </property>
-                 </widget>
-                </item>
-                <item row="2" column="2">
-                 <widget class="QLineEdit" name="RtMidiInputLineEdit">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the &amp;quot;...&amp;quot; button to select a MIDI input device from a list of available devices (select the Csound MIDI Module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QComboBox" name="RtMidiModuleComboBox">
-                  <property name="toolTip">
-                   <string>Select the MIDI backend used by Csound</string>
-                  </property>
-                 </widget>
+                 </spacer>
                 </item>
                 <item row="2" column="5">
                  <widget class="QLabel" name="label_8">
@@ -458,58 +511,6 @@
                   </property>
                   <property name="text">
                    <string>Output device</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="6">
-                 <widget class="QLineEdit" name="RtMidiOutputLineEdit">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the &amp;quot;...&amp;quot; button to select a MIDI output device from a list of available devices (select the Csound MIDI Module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="5">
-                 <widget class="QLabel" name="label_38">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">padding-right: 4</string>
-                  </property>
-                  <property name="text">
-                   <string>Internal Output</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="4">
-                 <spacer name="horizontalSpacer_14">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeType">
-                   <enum>QSizePolicy::Fixed</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>18</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QComboBox" name="midiInterfaceComboBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>100</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set Internal MIDI input interface. Controls widgets and MIDI input for Csound if Csound MIDI module usage is disabled. MIDI learn functionality is only available when using the internal MIDI input&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                  </widget>
                 </item>
@@ -534,6 +535,13 @@
                   </property>
                  </widget>
                 </item>
+                <item row="2" column="6">
+                 <widget class="QLineEdit" name="RtMidiOutputLineEdit">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the &amp;quot;...&amp;quot; button to select a MIDI output device from a list of available devices (select the Csound MIDI Module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="2" column="1">
                  <widget class="QLabel" name="label_12">
                   <property name="toolTip">
@@ -547,6 +555,89 @@
                   </property>
                  </widget>
                 </item>
+                <item row="2" column="2">
+                 <widget class="QLineEdit" name="RtMidiInputLineEdit">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the &amp;quot;...&amp;quot; button to select a MIDI input device from a list of available devices (select the Csound MIDI Module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="7">
+                 <widget class="QToolButton" name="midiOutputToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2" colspan="2">
+                 <widget class="QComboBox" name="RtMidiModuleComboBox">
+                  <property name="toolTip">
+                   <string>Select the MIDI backend used by Csound</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2" colspan="2">
+                 <widget class="QComboBox" name="midiInterfaceComboBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>100</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set Internal MIDI input interface. Controls widgets and MIDI input for Csound if Csound MIDI module usage is disabled. MIDI learn functionality is only available when using the internal MIDI input&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="6" colspan="2">
+                 <widget class="QComboBox" name="midiOutInterfaceComboBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>100</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QToolButton" name="midiInputToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="5">
+                 <widget class="QLabel" name="label_38">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">padding-right: 4</string>
+                  </property>
+                  <property name="text">
+                   <string>Internal Output</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QCheckBox" name="csoundMidiCheckBox">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use Csound's own MIDI implementation. All MIDI input/output is performed by csound directly. If this is selected, the internal MIDI interface is not used.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Csound MIDI Module</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
              </layout>
@@ -556,6 +647,12 @@
             <widget class="QGroupBox" name="AdvancedGroup">
              <property name="enabled">
               <bool>true</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
              <property name="maximumSize">
               <size>
@@ -568,207 +665,240 @@
              </property>
              <layout class="QGridLayout" name="gridLayout_19">
               <property name="leftMargin">
-               <number>8</number>
+               <number>6</number>
               </property>
               <property name="topMargin">
-               <number>8</number>
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>4</number>
               </property>
               <property name="bottomMargin">
-               <number>8</number>
+               <number>4</number>
               </property>
               <property name="horizontalSpacing">
-               <number>8</number>
+               <number>6</number>
               </property>
               <property name="verticalSpacing">
-               <number>2</number>
+               <number>4</number>
               </property>
-              <item row="4" column="4">
-               <widget class="QCheckBox" name="DitherCheckBox">
-                <property name="toolTip">
-                 <string/>
+              <item row="0" column="2">
+               <layout class="QGridLayout" name="gridLayout_23">
+                <property name="horizontalSpacing">
+                 <number>6</number>
                 </property>
-                <property name="text">
-                 <string>Dither</string>
+                <property name="verticalSpacing">
+                 <number>4</number>
                 </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QCheckBox" name="BufferSizeCheckBox">
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-                <property name="text">
-                 <string>Buffer Size (-b)</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1" colspan="6">
-               <widget class="QLineEdit" name="AdditionalFlagsLineEdit">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>100</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>800</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QCheckBox" name="AdditionalFlagsCheckBox">
-                <property name="toolTip">
-                 <string>Extra command line flags passed to Csound</string>
-                </property>
-                <property name="text">
-                 <string>Additional flags</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="BufferSizeLineEdit">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>70</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="4">
-               <widget class="QCheckBox" name="HwBufferSizeCheckBox">
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-                <property name="text">
-                 <string>HW Buffer Size (-B)</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1" colspan="4">
-               <widget class="QLineEdit" name="JackNameLineEdit">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use * for current filename. &lt;/p&gt;&lt;p&gt;This setting is used only when jack is selected as the RT audio module. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="1">
-               <widget class="QSpinBox" name="numThreadsSpinBox">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>50</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="toolTip">
-                 <string>Number of threads when using multicore</string>
-                </property>
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>12</number>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="5">
-               <widget class="QLineEdit" name="HwBufferSizeLineEdit">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>70</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>70</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="0">
-               <widget class="QCheckBox" name="multicoreCheckBox">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="toolTip">
-                 <string>Use multiple cores when running Csound</string>
-                </property>
-                <property name="text">
-                 <string>Use multicore</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="6">
-               <spacer name="horizontalSpacer_17">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="4" column="5">
-               <widget class="QCheckBox" name="newParserCheckBox">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="toolTip">
-                 <string>Use the new parser (deprecated)</string>
-                </property>
-                <property name="text">
-                 <string>Use new parser</string>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="label_6">
-                <property name="toolTip">
-                 <string>Use * for current filename. 
+                <item row="0" column="5">
+                 <widget class="QCheckBox" name="daemonCheckBox">
+                  <property name="text">
+                   <string>Daemon</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="BufferSizeLineEdit">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QCheckBox" name="multicoreCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Use multiple cores when running Csound</string>
+                  </property>
+                  <property name="text">
+                   <string>Multicore</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QSpinBox" name="numThreadsSpinBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Number of threads when using multicore</string>
+                  </property>
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>12</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="HwBufferSizeCheckBox">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>HW Buffer Size (-B)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="4">
+                 <widget class="QCheckBox" name="realtimeCheckBox">
+                  <property name="toolTip">
+                   <string>Realtime priority mode</string>
+                  </property>
+                  <property name="text">
+                   <string>Realtime</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="HwBufferSizeLineEdit">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>70</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QCheckBox" name="sampleAccurateCheckBox">
+                  <property name="text">
+                   <string>Sample-accurate</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="BufferSizeCheckBox">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Buffer Size (-b)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <spacer name="horizontalSpacer_8">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>18</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="6">
+                 <widget class="QCheckBox" name="DitherCheckBox">
+                  <property name="toolTip">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string>Dither</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QCheckBox" name="AdditionalFlagsCheckBox">
+                  <property name="toolTip">
+                   <string>Extra command line flags passed to Csound</string>
+                  </property>
+                  <property name="text">
+                   <string>Additional flags</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QLabel" name="label_6">
+                  <property name="toolTip">
+                   <string>Use * for current filename. 
 This setting is used only when jack is selected as the RT audio module. </string>
-                </property>
-                <property name="text">
-                 <string>Jack client name </string>
-                </property>
-               </widget>
+                  </property>
+                  <property name="text">
+                   <string>Jack client name </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="4" colspan="3">
+                 <widget class="QLineEdit" name="AdditionalFlagsLineEdit">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>100</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>600</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Csound flags&lt;/span&gt;:&lt;/p&gt;&lt;p&gt;--ksmps → Override number of samples per cycle&lt;br/&gt;--sample-rate=48000 → Override sample rate&lt;br/&gt;--env:NAME=VALUE → Set environment veriable NAME to VALUE&lt;br/&gt;--omacro:XXX=YYY → set orchestra macro XXX to value YYY&lt;br/&gt;--smacro:XXX=YYY → Set score macro XXX to value YYY&lt;br/&gt;--sample-accurate → Use sample-accurate timing of events&lt;br/&gt;--realtime → Realtime priority mode&lt;br/&gt;--daemon → Do not exit if orchestra is not given&lt;br/&gt;--port=N → liston to UDP port N for code (implies --daemon) &lt;br/&gt;--udp-echo → Echo UDP commands on terminal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="4" colspan="2">
+                 <widget class="QLineEdit" name="JackNameLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use * for current filename. &lt;/p&gt;&lt;p&gt;This setting is used only when jack is selected as the RT audio module. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>
@@ -789,101 +919,138 @@ This setting is used only when jack is selected as the RT audio module. </string
              </property>
              <layout class="QGridLayout" name="gridLayout_15">
               <property name="leftMargin">
-               <number>8</number>
+               <number>4</number>
+              </property>
+              <property name="topMargin">
+               <number>4</number>
+              </property>
+              <property name="rightMargin">
+               <number>4</number>
+              </property>
+              <property name="bottomMargin">
+               <number>4</number>
               </property>
               <property name="horizontalSpacing">
-               <number>8</number>
-              </property>
-              <property name="verticalSpacing">
                <number>6</number>
               </property>
-              <item row="2" column="1">
+              <property name="verticalSpacing">
+               <number>4</number>
+              </property>
+              <item row="2" column="0" colspan="2">
                <layout class="QGridLayout" name="formatLayout">
-                <property name="spacing">
-                 <number>6</number>
-                </property>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_9">
-                  <property name="text">
-                   <string>File type</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <spacer name="horizontalSpacer_15">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QComboBox" name="FileTypeComboBox"/>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QComboBox" name="FileFormatComboBox"/>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_10">
-                  <property name="text">
-                   <string>Sample format</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="3" column="0" colspan="2">
-               <layout class="QGridLayout" name="filenamesLayout">
                 <property name="horizontalSpacing">
-                 <number>2</number>
+                 <number>6</number>
                 </property>
                 <property name="verticalSpacing">
-                 <number>6</number>
+                 <number>4</number>
                 </property>
-                <item row="0" column="3">
+                <item row="1" column="1">
+                 <widget class="QComboBox" name="FileTypeComboBox">
+                  <property name="maximumSize">
+                   <size>
+                    <width>100</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QCheckBox" name="InputFilenameCheckBox">
+                  <property name="text">
+                   <string>Input File</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QComboBox" name="FileFormatComboBox">
+                  <property name="maximumSize">
+                   <size>
+                    <width>100</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="6">
                  <widget class="QToolButton" name="inputFilenameToolButton">
                   <property name="text">
                    <string>...</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="2">
-                 <widget class="QLineEdit" name="InputFilenameLineEdit"/>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="InputFilenameCheckBox">
-                  <property name="text">
-                   <string>Input Filename</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="OutputFilenameCheckBox">
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>Output  Filename</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QLineEdit" name="OutputFilenameLineEdit"/>
-                </item>
-                <item row="1" column="3">
+                <item row="2" column="6">
                  <widget class="QToolButton" name="outputFilenameToolButton">
                   <property name="text">
                    <string>...</string>
                   </property>
                  </widget>
                 </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_9">
+                  <property name="text">
+                   <string>File type</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QCheckBox" name="OutputFilenameCheckBox">
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>Output  File</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="4" colspan="2">
+                 <widget class="QLineEdit" name="InputFilenameLineEdit"/>
+                </item>
+                <item row="2" column="4" colspan="2">
+                 <widget class="QLineEdit" name="OutputFilenameLineEdit"/>
+                </item>
+                <item row="0" column="3" colspan="2">
+                 <widget class="QCheckBox" name="AskFilenameCheckBox">
+                  <property name="text">
+                   <string>Ask for filename</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="FileUseOptionsCheckBox">
+                  <property name="text">
+                   <string>Override</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_10">
+                  <property name="text">
+                   <string>Sample format</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="5">
+                 <widget class="QCheckBox" name="FilePlayFinishedCheckBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Play when finished</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="0" column="1">
-                 <spacer name="horizontalSpacer_10">
+                 <widget class="QCheckBox" name="FileOverrideCheckBox">
+                  <property name="text">
+                   <string>Ignore CsOptions</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <spacer name="horizontalSpacer_3">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
@@ -892,54 +1059,13 @@ This setting is used only when jack is selected as the RT audio module. </string
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
-                    <width>20</width>
+                    <width>24</width>
                     <height>20</height>
                    </size>
                   </property>
                  </spacer>
                 </item>
                </layout>
-              </item>
-              <item row="2" column="0">
-               <layout class="QVBoxLayout" name="askLayout">
-                <item>
-                 <widget class="QCheckBox" name="AskFilenameCheckBox">
-                  <property name="text">
-                   <string>Always ask for filename</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="FilePlayFinishedCheckBox">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Play file when finished</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="0" column="0">
-               <widget class="QCheckBox" name="FileUseOptionsCheckBox">
-                <property name="text">
-                 <string>Use CsoundQt options</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QCheckBox" name="FileOverrideCheckBox">
-                <property name="styleSheet">
-                 <string notr="true">padding-left: 12</string>
-                </property>
-                <property name="text">
-                 <string>Ignore CsOptions</string>
-                </property>
-               </widget>
               </item>
              </layout>
             </widget>
@@ -1480,6 +1606,19 @@ This setting is used only when jack is selected as the RT audio module. </string
               <string>Widgets</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_7">
+              <item row="1" column="0">
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
               <item row="0" column="0">
                <layout class="QVBoxLayout" name="verticalLayout_2">
                 <item>
@@ -1671,19 +1810,6 @@ This setting is used only when jack is selected as the RT audio module. </string
                  </item>
                 </layout>
                </widget>
-              </item>
-              <item row="1" column="0">
-               <spacer name="horizontalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
               </item>
              </layout>
             </widget>
@@ -2815,38 +2941,6 @@ Default directory for sound files. Used if no full path is given for sound files
    </hints>
   </connection>
   <connection>
-   <sender>InputFilenameCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>InputFilenameLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>279</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>256</x>
-     <y>280</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>OutputFilenameCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>OutputFilenameLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>308</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>256</x>
-     <y>309</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>Opcodedir64CheckBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>Opcodedir64LineEdit</receiver>
@@ -2879,454 +2973,6 @@ Default directory for sound files. Used if no full path is given for sound files
    </hints>
   </connection>
   <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>RtMidiModuleComboBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>529</x>
-     <y>571</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_12</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>125</x>
-     <y>600</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>RtMidiInputLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>234</x>
-     <y>600</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>midiInputToolButton</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>305</x>
-     <y>599</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_8</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>411</x>
-     <y>600</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>RtMidiOutputLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>529</x>
-     <y>600</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>midiOutputToolButton</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>570</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>600</x>
-     <y>599</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>AskFilenameCheckBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>105</x>
-     <y>219</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>FileTypeComboBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>562</x>
-     <y>220</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_9</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>417</x>
-     <y>220</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_10</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>417</x>
-     <y>249</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>FileFormatComboBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>562</x>
-     <y>249</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>InputFilenameCheckBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>75</x>
-     <y>279</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>InputFilenameLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>256</x>
-     <y>280</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>OutputFilenameCheckBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>125</x>
-     <y>308</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>OutputFilenameLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>256</x>
-     <y>309</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>inputFilenameToolButton</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>600</x>
-     <y>279</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>FileUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>outputFilenameToolButton</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>190</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>600</x>
-     <y>308</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_4</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>100</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>108</x>
-     <y>438</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>RtInputLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>231</x>
-     <y>438</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>audioInputToolButton</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>305</x>
-     <y>437</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_5</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>411</x>
-     <y>438</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>RtOutputLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>527</x>
-     <y>438</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>audioOutputToolButton</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>600</x>
-     <y>437</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>groupBox_2</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_6</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>94</x>
-     <y>329</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>125</x>
-     <y>469</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>JackNameLineEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>398</x>
-     <y>469</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_3</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>87</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>87</x>
-     <y>409</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>RtModuleComboBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>231</x>
-     <y>409</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>rawWaveCheckBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>rawWaveLineEdit</receiver>
@@ -3343,34 +2989,18 @@ Default directory for sound files. Used if no full path is given for sound files
    </hints>
   </connection>
   <connection>
-   <sender>csoundMidiCheckBox</sender>
+   <sender>multicoreCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>label_38</receiver>
-   <slot>setDisabled(bool)</slot>
+   <receiver>numThreadsSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>210</x>
-     <y>561</y>
+     <x>94</x>
+     <y>558</y>
     </hint>
     <hint type="destinationlabel">
-     <x>444</x>
-     <y>535</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>csoundMidiCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>midiOutInterfaceComboBox</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
      <x>189</x>
-     <y>564</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>554</x>
-     <y>533</y>
+     <y>559</y>
     </hint>
    </hints>
   </connection>
@@ -3423,18 +3053,114 @@ Default directory for sound files. Used if no full path is given for sound files
    </hints>
   </connection>
   <connection>
-   <sender>multicoreCheckBox</sender>
+   <sender>csoundMidiCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>numThreadsSpinBox</receiver>
+   <receiver>midiOutInterfaceComboBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>189</x>
+     <y>564</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>554</x>
+     <y>533</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_12</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>94</x>
-     <y>558</y>
+     <x>125</x>
+     <y>570</y>
     </hint>
     <hint type="destinationlabel">
-     <x>189</x>
-     <y>559</y>
+     <x>125</x>
+     <y>600</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>RtMidiOutputLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>570</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>600</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>midiOutputToolButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>570</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>600</x>
+     <y>599</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_38</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>210</x>
+     <y>561</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>444</x>
+     <y>535</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>RtMidiModuleComboBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>570</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>571</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_8</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>570</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>600</y>
     </hint>
    </hints>
   </connection>
@@ -3455,18 +3181,50 @@ Default directory for sound files. Used if no full path is given for sound files
    </hints>
   </connection>
   <connection>
-   <sender>RtUseOptionsCheckBox</sender>
+   <sender>csoundMidiCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>useSystemSamplerateCheckBox</receiver>
+   <receiver>RtMidiInputLineEdit</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>107</x>
-     <y>96</y>
+     <x>125</x>
+     <y>570</y>
     </hint>
     <hint type="destinationlabel">
-     <x>488</x>
-     <y>128</y>
+     <x>234</x>
+     <y>600</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csoundMidiCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>midiInputToolButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>570</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>599</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>groupBox_2</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_6</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>94</x>
+     <y>329</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>125</x>
+     <y>469</y>
     </hint>
    </hints>
   </connection>
@@ -3489,16 +3247,32 @@ Default directory for sound files. Used if no full path is given for sound files
   <connection>
    <sender>RtUseOptionsCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>numChannelsCheckBox</receiver>
+   <receiver>JackNameLineEdit</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>107</x>
-     <y>97</y>
+     <x>124</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
-     <x>442</x>
-     <y>196</y>
+     <x>398</x>
+     <y>469</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>RtOutputLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>379</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>527</x>
+     <y>438</y>
     </hint>
    </hints>
   </connection>
@@ -3515,6 +3289,374 @@ Default directory for sound files. Used if no full path is given for sound files
     <hint type="destinationlabel">
      <x>507</x>
      <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_4</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>100</x>
+     <y>379</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>108</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>numChannelsCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>107</x>
+     <y>97</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>442</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>samplerateComboBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>109</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>587</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>audioInputToolButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>379</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>437</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_5</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>379</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>samplerateLabel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>109</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>449</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>RtModuleComboBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>379</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>409</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_3</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>87</x>
+     <y>379</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>87</x>
+     <y>409</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>RtInputLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>379</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>audioOutputToolButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>379</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>600</x>
+     <y>437</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>FileUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_10</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>417</x>
+     <y>249</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>FileUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>FileTypeComboBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>562</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>FileUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>InputFilenameLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>256</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>FileUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>FileFormatComboBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>562</x>
+     <y>249</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>FileUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>outputFilenameToolButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>600</x>
+     <y>308</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>FileUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>OutputFilenameCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>125</x>
+     <y>308</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>FileUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>AskFilenameCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>105</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>FileUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>OutputFilenameLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>256</x>
+     <y>309</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>FileUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>InputFilenameCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>75</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>InputFilenameCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>InputFilenameLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>279</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>256</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>OutputFilenameCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>OutputFilenameLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>308</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>256</x>
+     <y>309</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>FileUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>inputFilenameToolButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>600</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>FileUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_9</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>417</x>
+     <y>220</y>
     </hint>
    </hints>
   </connection>

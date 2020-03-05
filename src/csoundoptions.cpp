@@ -42,6 +42,8 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	newParser = false;
 	multicore = false;
 	numThreads = 1;
+    realtimeFlag = false;
+    sampleAccurateFlag = false;
 	additionalFlags = "";
 	additionalFlagsActive = false;
 
@@ -113,6 +115,10 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
         opts << " -Z";
     if (multicore)
         opts << "-j" + QString::number(numThreads);
+    if (realtimeFlag)
+        opts << "--realtime";
+    if (sampleAccurateFlag)
+        opts << "--sample-accurate";
     if (rt && rtUseOptions) {
 		if (rtOverrideOptions)
             opts << "-+ignore_csopts=1";
@@ -147,6 +153,9 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 		}
         if (useSystemSamplerate)
             opts << "--use-system-sr";
+        else if(samplerate > 0) {
+            opts << "--sample-rate=" + QString::number(samplerate);
+        }
         if (overrideNumChannels) {
             if(numChannels <= 0) {
                 qDebug("Setting nchnls, but numChannels is invalid: %d", numChannels);

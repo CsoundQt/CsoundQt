@@ -48,6 +48,8 @@ public:
 	int HwBufferSize;
 	bool HwBufferSizeActive;
 	bool dither;
+    bool sampleAccurateFlag;
+    bool realtimeFlag;
 	bool newParser;
 	bool multicore;
 	int numThreads;
@@ -77,6 +79,7 @@ public:
 	QString rtMidiInputDevice;
 	QString rtMidiOutputDevice;
     bool useSystemSamplerate;
+    int samplerate;
     bool overrideNumChannels;
     int numChannels;
 	bool useCsoundMidi;

@@ -218,7 +218,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	HwBufferSizeCheckBox->setChecked(m_options->HwBufferSizeActive);
 	HwBufferSizeLineEdit->setEnabled(m_options->HwBufferSizeActive);
 	DitherCheckBox->setChecked(m_options->dither);
-	newParserCheckBox->setChecked(m_options->newParser);
+    // newParserCheckBox->setChecked(m_options->newParser);
 	multicoreCheckBox->setChecked(m_options->multicore);
 	numThreadsSpinBox->setValue(m_options->numThreads);
 	AdditionalFlagsCheckBox->setChecked(m_options->additionalFlagsActive);
@@ -245,11 +245,24 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	RtModuleComboBox->setCurrentIndex(index);
 	RtInputLineEdit->setText(m_options->rtInputDevice);
 	RtOutputLineEdit->setText(m_options->rtOutputDevice);
-    useSystemSamplerateCheckBox->setChecked(m_options->useSystemSamplerate);
+    // useSystemSamplerateCheckBox->setChecked(m_options->useSystemSamplerate);
+
+    if(m_options->useSystemSamplerate) {
+        samplerateComboBox->setCurrentText("System");
+    } else if (m_options->samplerate == 0) {
+        samplerateComboBox->setCurrentText("Orchestra");
+    } else {
+        samplerateComboBox->setCurrentText(QString::number(m_options->samplerate));
+    }
+
     numChannelsCheckBox->setChecked(m_options->overrideNumChannels);
     numChannelsSpinBox->setValue(m_options->numChannels);
     numChannelsSpinBox->setMinimum(0);
     numChannelsSpinBox->setMaximum(64);
+
+    realtimeCheckBox->setChecked(m_options->realtimeFlag);
+    sampleAccurateCheckBox->setChecked(m_options->sampleAccurateFlag);
+
 	JackNameLineEdit->setText(m_options->rtJackName);
 	RtMidiModuleComboBox->setCurrentIndex(RtMidiModuleComboBox->findData(m_options->rtMidiModule));
 	RtMidiInputLineEdit->setText(m_options->rtMidiInputDevice);
@@ -439,7 +452,8 @@ void ConfigDialog::accept()
 	m_options->HwBufferSize = HwBufferSizeLineEdit->text().toInt();
 	m_options->HwBufferSizeActive = HwBufferSizeCheckBox->isChecked();
 	m_options->dither = DitherCheckBox->isChecked();
-	m_options->newParser = newParserCheckBox->isChecked() ? 1 : 0;
+    m_options->realtimeFlag =
+    // m_options->newParser = newParserCheckBox->isChecked() ? 1 : 0;
 	m_options->multicore = multicoreCheckBox->isChecked();
 	m_options->numThreads = numThreadsSpinBox->value();
 	m_options->additionalFlags = AdditionalFlagsLineEdit->text();
@@ -460,9 +474,23 @@ void ConfigDialog::accept()
 	m_options->rtInputDevice = RtInputLineEdit->text();
 	m_options->rtOutputDevice = RtOutputLineEdit->text();
 	m_options->rtJackName = JackNameLineEdit->text();
-    m_options->useSystemSamplerate = useSystemSamplerateCheckBox->isChecked();
+    // m_options->useSystemSamplerate = useSystemSamplerateCheckBox->isChecked();
+    auto srmenu = samplerateComboBox->currentText();
+    if(srmenu == "System") {
+        m_options->useSystemSamplerate = true;
+        m_options->samplerate = 0;
+    } else if (srmenu == "Orchestra") {
+        m_options->useSystemSamplerate = false;
+        m_options->samplerate = 0;
+    } else {
+        m_options->useSystemSamplerate = false;
+        m_options->samplerate = srmenu.toInt();
+    }
     m_options->overrideNumChannels = numChannelsCheckBox->isChecked();
     m_options->numChannels = numChannelsSpinBox->value();
+    m_options->realtimeFlag = realtimeCheckBox->isChecked();
+    m_options->sampleAccurateFlag = sampleAccurateCheckBox->isChecked();
+
 	m_options->rtMidiModule = RtMidiModuleComboBox->currentText();
 	m_options->rtMidiInputDevice = RtMidiInputLineEdit->text();
 	m_options->rtMidiOutputDevice = RtMidiOutputLineEdit->text();
