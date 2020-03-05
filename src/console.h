@@ -97,9 +97,9 @@ public:
 		setReadOnly(true);
 		setFontItalic(false);
 #ifdef Q_OS_MAC
-		document()->setDefaultFont(QFont("Courier", 10));
+        document()->setDefaultFont(QFont("Courier New", 10));
 #else
-		document()->setDefaultFont(QFont("Courier New", 7));
+        document()->setDefaultFont(QFont("Courier New", 7));
 #endif
 		//       connect(text, SIGNAL(popUpMenu(QPoint)), this, SLOT(emitPopUpMenu(QPoint)));
 	}

@@ -79,13 +79,16 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
 	}
 	if (!xmlPanels.isEmpty()) {
 		//FIXME allow multiple layouts
-		m_widgetLayouts[0]->loadXmlWidgets(xmlPanels[0]);
+        m_widgetLayouts[0]->loadXmlWidgets(xmlPanels[0]);
 		m_widgetLayouts[0]->markHistory();
         if (text.contains("<bsbPresets>") && text.contains("</bsbPresets>")) {
 			QString presets = text.right(text.size()-text.indexOf("<bsbPresets>"));
 			presets.resize(presets.indexOf("</bsbPresets>") + 13);
-            if (text.indexOf("</bsbPresets>") + 13 < text.size() && text[text.indexOf("</bsbPresets>") + 15] == '\n')
-				text.remove(text.indexOf("</bsbPresets>") + 15, 1); //remove final line break
+            if (text.indexOf("</bsbPresets>") + 13 < text.size() &&
+                    text[text.indexOf("</bsbPresets>") + 15] == '\n') {
+                //remove final line break
+                text.remove(text.indexOf("</bsbPresets>") + 15, 1);
+            }
             if (text.indexOf("<bsbPresets>") > 0 && text[text.indexOf("<bsbPresets>") - 1] == '\n')
 				text.remove(text.indexOf("<bsbPresets>") - 1, 1); //remove initial line break
 			text.remove(text.indexOf("<bsbPresets>"), presets.size());
@@ -93,7 +96,8 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
 			m_widgetLayouts[0]->loadXmlPresets(presets);
 		}
 	} else {
-		QString defaultPanel = "<bsbPanel><visible>true</visible><x>100</x><y>100</y><width>320</width><height>240</height></bsbPanel>";
+        QString defaultPanel = "<bsbPanel><visible>true</visible><x>100</x><y>100</y>"
+                               "<width>320</width><height>240</height></bsbPanel>";
 		m_widgetLayouts[0]->loadXmlWidgets(defaultPanel);
 		m_widgetLayouts[0]->markHistory();
 	}
@@ -233,7 +237,8 @@ void BaseDocument::stop()
 	if (m_csEngine->isRunning()) {
 		m_csEngine->stop();
 		foreach (WidgetLayout *wl, m_widgetLayouts) {
-			wl->engineStopped();  // TODO only needed to flush graph buffer, but this should be moved to this class
+            // TODO only needed to flush graph buffer, but this should be moved to this class
+            wl->engineStopped();
 		}
 	}
 }
@@ -244,7 +249,8 @@ int BaseDocument::record(int format)
 	return m_csEngine->startRecording(format, "output.wav");
 #else
     (void) format;
-	QMessageBox::warning(NULL, tr("Recording not possible"), tr("This version of CsoundQt was not built with recording support."));
+    QMessageBox::warning(NULL, tr("Recording not possible"),
+                         tr("This version of CsoundQt was not built with recording support."));
 	return 0;
 #endif
 }

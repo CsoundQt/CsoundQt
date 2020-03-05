@@ -25,6 +25,97 @@
 
 #include "qutewidget.h"
 
+/* QVdial: A knob with vertical dragging instead of circular
+ *
+ */
+class QVdial: public QDial {
+    Q_OBJECT
+
+public:
+    QVdial (QWidget *parent = nullptr)
+    : QDial(parent)
+    , m_dragging(false)
+    , m_scale_factor(1.0)
+    , m_temp_scale_factor(1.0)
+    , m_draw_value(true)
+    , m_decimals(2)
+    , m_display_min(0.0)
+    , m_display_max(1.0)
+    , m_color(QColor(245, 124, 0))
+    , m_textcolor(QColor(81, 41, 0))
+    , m_flat(true)
+    , m_degrees(300)
+    , m_intDisplay(true)
+    {}
+    virtual ~QVdial() override;
+    void setScaleFactor(double factor) { m_scale_factor = factor; }
+    void setDecimals(int decimals) { m_decimals = decimals; }
+    void setDisplayRange(double min, double max) {
+        m_display_min = min;
+        m_display_max = max;
+        max = qAbs(max);
+        if(max < 100)
+            m_decimals = 2;
+        else if(max < 1000)
+            m_decimals = 1;
+        else
+            m_decimals = 0;
+    }
+    void setDrawValue(bool enable) { m_draw_value = enable; }
+    void setColor(QColor color) {
+        if(!color.isValid()) {
+            qDebug() << "QVdial::setColor: invalid color";
+            return;
+        }
+        m_color = color; }
+    QColor getColor() { return m_color; }
+    void setTextColor(QColor c) { m_textcolor = c; }
+
+    QColor getTextColor() { return m_textcolor; }
+
+    void setFlatStyle(bool enable) { m_flat = enable; }
+    void setIntegerMode(bool enable) { m_intDisplay = enable; }
+
+    void setValueFromDisplayValue(double display_value) {
+        double delta = (display_value - m_display_min) / (m_display_max-m_display_min);
+        double minval = (double)this->minimum();
+        double flvalue = delta * (this->maximum() - minval) + minval;
+        setValue((int)flvalue);
+    }
+
+    double displayValue() {
+        return ((double)this->value()/(double)this->maximum()) *
+                (m_display_max - m_display_min) + m_display_min;
+    }
+
+protected:
+    virtual void mousePressEvent (QMouseEvent *event) override;
+    virtual void mouseReleaseEvent (QMouseEvent *event) override;
+    virtual void mouseMoveEvent (QMouseEvent *event) override;
+    virtual void paintEvent(QPaintEvent *event) override;
+    virtual void mouseDoubleClickEvent (QMouseEvent *event) override;
+
+private:
+    bool   m_dragging;
+    QPoint m_mouse_press_point;
+    int    m_base_value;
+    double m_scale_factor;
+    double m_temp_scale_factor;
+    bool   m_draw_value;
+    int    m_decimals;
+    double m_display_min;
+    double m_display_max;
+    QColor m_color;
+    QColor m_textcolor;
+    bool   m_flat;
+    int    m_degrees;
+    bool   m_intDisplay;
+
+signals:
+    void doubleClick();
+};
+
+
 class QuteKnob : public QuteWidget
 {
 	Q_OBJECT
@@ -39,7 +130,7 @@ public:
     virtual QString getQml();
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
-	//    virtual void setResolution(double resolution);
+    //    virtual void setResolution(double resolution);
 	void setRange(double min, double max);
 	virtual void setMidiValue(int value);
 	virtual bool acceptsMidi() {return true;}
@@ -47,18 +138,29 @@ public:
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
 
+    virtual void setColor(QColor c);
+    virtual void setTextColor(QColor c);
+
 protected:
 	virtual void createPropertiesDialog();
 	virtual void applyProperties();
 
 protected slots:
+    void selectKnobColor();
+    void selectKnobTextColor();
+    void setValueFromDialog();
 	void knobChanged(int value);
 
 private:
 	void setInternalValue(double value);
 	QDoubleSpinBox *minSpinBox;
-	QDoubleSpinBox *maxSpinBox;
+    QDoubleSpinBox *maxSpinBox;
 	QDoubleSpinBox *resolutionSpinBox;
+    QCheckBox      *displayValueCheckBox;
+    QCheckBox      *flatStyleCheckBox;
+    QPushButton    *knobColorButton;
+    QPushButton    *knobTextColorButton;
+    QCheckBox      *intModeCheckBox;
 
 };
 

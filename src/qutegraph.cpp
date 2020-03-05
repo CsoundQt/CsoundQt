@@ -34,17 +34,19 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 	m_label = new QLabel(this);
 	QPalette palette = m_widget->palette();
-	palette.setColor(QPalette::WindowText, Qt::white);
+    palette.setColor(QPalette::WindowText, QColor(150, 150, 150));
 	m_label->setPalette(palette);
 	m_label->setText("");
-	m_label->move(105, 0);
+    m_label->setFont(QFont({"Helvetica", 7}));
+    m_label->move(110, -4);
 	m_label->resize(500, 25);
-
 	m_pageComboBox = new QComboBox(this);
-	m_pageComboBox->resize(100, 25);
-
-	m_pageComboBox->setFocusPolicy(Qt::NoFocus);
+    m_pageComboBox->resize(104, 14);
+    m_pageComboBox->setFont(QFont({"Sans", 7}));
+    m_pageComboBox->setFocusPolicy(Qt::NoFocus);
 	m_label->setFocusPolicy(Qt::NoFocus);
+    m_drawGrid = true;
+    m_drawTableInfo = true;
 	canFocus(false);
 	connect(m_pageComboBox, SIGNAL(currentIndexChanged(int)),
 			this, SLOT(indexChanged(int)));
@@ -63,6 +65,9 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_dispy", 1.0);
 	setProperty("QCS_modex", "auto");
 	setProperty("QCS_modey", "auto");
+    setProperty("QCS_showSelector", true);
+    setProperty("QCS_showGrid", true);
+    setProperty("QCS_showTableInfo", true);
 	setProperty("QCS_all", true);
 }
 
@@ -108,6 +113,10 @@ QString QuteGraph::getWidgetXmlText()
 	s.writeTextElement("dispy", QString::number(property("QCS_dispy").toDouble(), 'f', 8));
 	s.writeTextElement("modex", property("QCS_modex").toString());
 	s.writeTextElement("modey", property("QCS_modey").toString());
+    s.writeTextElement("showSelector",
+                       property("QCS_showSelector").toBool() ? "true" : "false");
+    s.writeTextElement("showGrid", property("QCS_showGrid").toBool() ? "true" : "false");
+    s.writeTextElement("showTableInfo", property("QCS_showTableInfo").toBool()?"true":"false");
 	s.writeTextElement("all", property("QCS_all").toBool() ? "true" : "false");
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
@@ -116,9 +125,9 @@ QString QuteGraph::getWidgetXmlText()
 	return xmlText;
 }
 
-QString QuteGraph::getWidgetType()
-{
-	return QString("BSBGraph");
+
+QString QuteGraph::getWidgetType() {
+    return QString("BSBGraph");
 }
 
 void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)
@@ -126,9 +135,42 @@ void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)
 	QuteWidget::setWidgetGeometry(x,y,width, height);
 	static_cast<StackedLayoutWidget *>(m_widget)->setWidgetGeometry(0,0,width, height);
 	int index = static_cast<StackedLayoutWidget *>(m_widget)->currentIndex();
-	if (index < 0)
+    changeCurve(-2);
+
+    if (index < 0)
 		return;
-	changeCurve(index);
+    // changeCurve(index);
+}
+
+void QuteGraph::keyPressEvent(QKeyEvent *event) {
+    bool flag;
+    switch(event->key()) {
+    case Qt::Key_S:
+        flag = !property("QCS_showSelector").toBool();
+        setProperty("QCS_showSelector", flag?"true":"false");
+        if(flag)
+            m_pageComboBox->show();
+        else
+            m_pageComboBox->hide();
+        event->accept();
+        break;
+    case Qt::Key_G:
+        flag = !property("QCS_showGrid").toBool();
+        setProperty("QCS_showGrid", flag?"true":"false");
+        m_drawGrid = flag;
+        event->accept();
+        break;
+    case Qt::Key_C:
+        flag = !property("QCS_showTableInfo").toBool();
+        setProperty("QCS_showTableInfo", flag?"true":"false");
+        m_drawTableInfo = flag;
+        if(flag)
+            m_label->show();
+        else
+            m_label->hide();
+        event->accept();
+        break;
+    }
 }
 
 void QuteGraph::setValue(double value)
@@ -144,10 +186,9 @@ void QuteGraph::refreshWidget()
 	widgetLock.lockForRead();
 #endif
 	int index = 0;
-	//  qDebug() << "QuteGraph::refreshWidget()" << m_value << m_valueChanged << m_value2 << m_value2Changed;
 	if (m_valueChanged) {
-		index = (int) m_value;
-		m_value2 = getTableNumForIndex(index);
+        index = (int) m_value;
+        m_value2 = getTableNumForIndex(index);
 		m_value2Changed = false;
 		m_valueChanged = false;
 		needsUpdate = true;
@@ -168,14 +209,20 @@ void QuteGraph::refreshWidget()
 		if (index < 0) {
 			index = getIndexForTableNum(-index);
 		}
-		if (index < 0 || index >= curves.size() || curves[index]->get_caption().isEmpty()) { // Don't show if curve has no name. Is this likely?
+        if (index < 0 ||
+            index >= curves.size() ||
+            curves[index]->get_caption().isEmpty()) {
+            // Don't show if curve has no name. Is this likely?
 			return;
 		}
 		//    m_pageComboBox->blockSignals(true);
 		//    m_pageComboBox->setCurrentIndex(index);
 		//    m_pageComboBox->blockSignals(false);
 		changeCurve(index);
+
 	}
+    // QComboBox *cb = this->m_pageComboBox;
+    // cb->move(this->width() - cb->width(),  this->height()-cb->height());
 }
 
 void QuteGraph::createPropertiesDialog()
@@ -214,6 +261,26 @@ void QuteGraph::createPropertiesDialog()
 	zoomyBox->setSingleStep(0.1);
 	layout->addWidget(zoomyBox, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
+    showSelectorCheckBox = new QCheckBox(dialog);
+    showSelectorCheckBox->setText("Show Selector");
+    showSelectorCheckBox->setCheckState(
+                property("QCS_showSelector").toBool()?Qt::Checked:Qt::Unchecked);
+    layout->addWidget(showSelectorCheckBox, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    showGridCheckBox = new QCheckBox(dialog);
+    showGridCheckBox->setText("Show Grid");
+    showGridCheckBox->setCheckState(
+                property("QCS_showGrid").toBool()?Qt::Checked:Qt::Unchecked);
+    showGridCheckBox->setToolTip("Show the grid. Has effect only for spectral graphs");
+    layout->addWidget(showGridCheckBox, 9, 1, Qt::AlignRight|Qt::AlignVCenter);
+
+    showTableInfoCheckBox = new QCheckBox(dialog);
+    showTableInfoCheckBox->setText("Show Table Information");
+    showTableInfoCheckBox->setCheckState(
+                property("QCS_showTableInfo").toBool()?Qt::Checked:Qt::Unchecked);
+    showTableInfoCheckBox->setToolTip("Show the grid. Has effect only for spectral graphs");
+    layout->addWidget(showTableInfoCheckBox, 9, 2, Qt::AlignRight|Qt::AlignVCenter);
+
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -239,6 +306,9 @@ void QuteGraph::applyProperties()
 	setProperty("QCS_modex", "lin");
 	setProperty("QCS_modey", "lin");
 	setProperty("QCS_all", true);
+    setProperty("QCS_showSelector", showSelectorCheckBox->checkState());
+    setProperty("QCS_showGrid", showGridCheckBox->checkState());
+    showTableInfo(showTableInfoCheckBox->checkState());
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -248,72 +318,79 @@ void QuteGraph::applyProperties()
 
 
 void QuteGraph::changeCurve(int index)
-{
-	StackedLayoutWidget *stacked =  static_cast<StackedLayoutWidget *>(m_widget);
-	if (index == -1) {// goto last curve
-		index = stacked->count() - 1;
+{    
+    if(curves.size() <= 0)
+        return;
+
+    int origRequest = index;
+    StackedLayoutWidget *stacked =  static_cast<StackedLayoutWidget *>(m_widget);
+    if (index == -1) { // goto last curve
+        index = stacked->count() - 1;
 	}
 	else if (index == -2) { // update curve but don't change which
-		if (m_value < 0) {
+        if (m_value < 0)
 			index = getIndexForTableNum(-m_value);
-		}
-		else {
+        else
 			index = (int) m_value;
-		}
 	}
     else if (stacked->currentIndex() == index) {
         return;
-    }
-	if (index < 0  || index >= curves.size()
-			|| curves.size() <= 0 || curves[index]->get_caption().isEmpty()) { // Invalid index
-		return;
-	}
-	stacked->blockSignals(true);
-	stacked->setCurrentIndex(index);
-	stacked->blockSignals(false);
-	m_pageComboBox->blockSignals(true);
-	m_pageComboBox->setCurrentIndex(index);
-	m_pageComboBox->blockSignals(false);
-//    if (curves[index]->get_caption().contains("ftable")) {
-//        drawFtable(curves[index], index);
-//    } else if (curves[index]->get_caption().contains("fft")) {
-//        drawSpectrum(curves[index], index);
-//    } else {
-//        drawSignal(curves[index], index);
-//    }
-	m_value = index;
+    } else if (index >= stacked->count()) {
+        qDebug() << "changeCurve: index out of range. Num indices:"<<stacked->size();
+        return;
+    } else {
+        qDebug()<<"changeCurve"<<index;
 
-    double max = curves[index]->get_max();
-    double min = curves[index]->get_min();
-	//  double span = max - min;
-	//  FIXME implement dispx, dispy and modex, modey
-	int size = curves[index]->get_size();
-	QString caption = curves[index]->get_caption();
-	//  qDebug() << "QuteGraph::changeCurve"<< curves[index]->get_caption() << index <<max<< min<< zoomx<< zoomy << size;
-	//  view->setResizeAnchor(QGraphicsView::NoAnchor);
-	if (caption.contains("ftable")) {
-		int ftable = getTableNumForIndex(index);
-		if (m_value2 != ftable) {
-			m_value2 = ftable;
-			m_value2Changed = true;
-		}
-	}
-	else {
-		if (caption.contains("fft")) {
-			m_value2 = -1;
-		}
-		else { //from display opcode
-			m_value2 = -1;
-		}
-	}
+        // change curve
+        auto view = stacked->currentWidget();
+        view->hide();
+        stacked->blockSignals(true);
+        stacked->setCurrentIndex(index);
+        stacked->blockSignals(false);
+        m_pageComboBox->blockSignals(true);
+        m_pageComboBox->setCurrentIndex(index);
+        m_pageComboBox->blockSignals(false);
+    }
+
+    if (index < 0  || index >= curves.size())  // Invalid index
+        return;
+
+    m_value = index;
+    switch(graphtypes[index]) {
+    case GraphType::GRAPH_FTABLE: {
+        int ftable = getTableNumForIndex(index);
+        if (m_value2 != ftable) {
+            m_value2 = ftable;
+            m_value2Changed = true;
+        }
+        if(m_drawTableInfo) {
+            auto curve = curves[index];
+            auto text = QString("%1 pts (%2, %3)")
+                    .arg(curve->get_size())
+                    .arg(curve->get_max(), 0, 'f', 3)
+                    .arg(curve->get_min(), 0, 'f', 3);
+            m_label->setText(text);
+            m_label->show();
+        }
+        if(origRequest >= 0)
+            drawGraph(curves[index], index);
+        break;
+    }
+    case GraphType::GRAPH_SPECTRUM:
+        m_value2 = -1;
+        m_label->hide();
+        break;
+    case GraphType::GRAPH_AUDIOSIGNAL:
+        m_value2 = -1;
+        m_label->hide();
+        break;
+    }
     scaleGraph(index);
-	QString text = QString::number(size) + " pts Max=";
-	text += QString::number(max) + " Min =" + QString::number(min);
-	m_label->setText(text);
 }
 
 void QuteGraph::indexChanged(int index)
 {
+    qDebug()<<"indexChanged"<<index<<"\n";
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -321,6 +398,7 @@ void QuteGraph::indexChanged(int index)
 		setInternalValue(index);
 	}
 	else {
+        qDebug() << "channel value" << m_channel << index << "\n";
 		QPair<QString, double> channelValue(m_channel, index);
 		emit newValue(channelValue);
 	}
@@ -331,10 +409,11 @@ void QuteGraph::indexChanged(int index)
 		QPair<QString, double> channel2Value(m_channel2, getTableNumForIndex(index));
 		emit newValue(channel2Value);
 	}
-	//  qDebug() << "QuteGraph::indexChanged " << m_channel << m_value << m_channel2 << m_value2;
+
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
+
 }
 
 void QuteGraph::clearCurves()
@@ -356,11 +435,10 @@ void QuteGraph::clearCurves()
 
 void QuteGraph::addCurve(Curve * curve)
 {
-	Q_ASSERT(curve != 0);
+    Q_ASSERT(curve != nullptr);
 	QGraphicsView *view = new QGraphicsView(m_widget);
 	QGraphicsScene *scene = new QGraphicsScene(view);
 	view->setContextMenuPolicy(Qt::NoContextMenu);
-	view->setRenderHint(QPainter::Antialiasing);
     view->setScene(scene);
     view->setObjectName(curve->get_caption());
     view->show();
@@ -368,56 +446,92 @@ void QuteGraph::addCurve(Curve * curve)
     lines.append(QVector<QGraphicsLineItem *>());
 	QVector<QGraphicsLineItem *> gridLinesVector;
 	QVector<QGraphicsTextItem *> gridTextVector;
-	for (int i = 0 ; i < 24; i++) {
-		QGraphicsLineItem *gridLine = new QGraphicsLineItem();
-		QPen pen(Qt::gray, 0.6, Qt::SolidLine);
-		gridLine->setPen(pen);
-//		gridLine->setFlags(QGraphicsItem::ItemIgnoresTransformations);
-		scene->addItem(gridLine);
-		gridLinesVector.append(gridLine);
-		QGraphicsTextItem *gridText = new QGraphicsTextItem();
-		gridText->setDefaultTextColor(Qt::gray);
-		gridText->setFlags(QGraphicsItem::ItemIgnoresTransformations);
-		if (i < 12) {
-			if (i != 0) {
-				gridText->setHtml(QString("<div style=\"background:#000000;\">%1kHz</p>").arg((i * 11.0/12.0) * 2.0, 2, 'f', 1));
-			}
-		} else {
-			gridText->setHtml(QString("<div style=\"background:#000000;\"> -%1dBFS</p>").arg((i - 12)* 10));
-		}
-		gridText->setFont(QFont("Sans", 6));
-        gridText->setVisible(false);
-        scene->addItem(gridText);
-		gridTextVector.append(gridText);
-	}
-	m_gridlines.append(gridLinesVector);
-	m_gridtext.append(gridTextVector);
-	//  qDebug() << "QuteGraph::addCurve()" << curve << curve->get_caption() ;
-	//  if (curve->get_caption().contains("ftable")) {
-	//    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	//  }
-	// Add dummy polygon for all graphs when they are created
-    QGraphicsPolygonItem * item = new QGraphicsPolygonItem(/*polygon*/);
-    item->setPen(QPen(Qt::yellow));
+    int numTicksX = 12;
+    int numTicksY = 6;
+    auto gridpen = QPen(QColor(90, 90, 90));
+    gridpen.setCosmetic(true);
+
+    QString caption = curve->get_caption();
+    GraphType graphType;
+    if(caption.contains("fft")) {
+        graphType = GraphType::GRAPH_SPECTRUM;
+        view->setRenderHint(QPainter::Antialiasing);
+    } else if(caption.contains("ftable")) {
+        graphType = GraphType::GRAPH_FTABLE;
+        view->setRenderHint(QPainter::Antialiasing);
+    } else {
+        graphType = GraphType::GRAPH_AUDIOSIGNAL;
+    }
+
+    if(graphType == GraphType::GRAPH_SPECTRUM) {
+
+
+        for (int i = 0 ; i < numTicksX; i++) {
+            QGraphicsLineItem *gridLine = new QGraphicsLineItem();
+            gridLine->setPen(gridpen);
+            scene->addItem(gridLine);
+            gridLinesVector.append(gridLine);
+            QGraphicsTextItem *gridText = new QGraphicsTextItem();
+            gridText->setDefaultTextColor(Qt::gray);
+            gridText->setFlags(QGraphicsItem::ItemIgnoresTransformations);
+            if (i > 0) {
+                double kHz = i*((numTicksX-1.0)/numTicksX) * 2.0;
+                gridText->setHtml(QString("<div style=\"background:#000000;\">%1k</p>"
+                                          ).arg(kHz, 2, 'f', 1));
+            }
+            gridText->setFont(QFont("Sans", 6));
+            gridText->setVisible(false);
+            scene->addItem(gridText);
+            gridTextVector.append(gridText);
+        }
+
+        for (int i = 0 ; i < numTicksY; i++) {
+            QGraphicsLineItem *gridLine = new QGraphicsLineItem();
+            gridLine->setPen(gridpen);
+            scene->addItem(gridLine);
+            gridLinesVector.append(gridLine);
+            QGraphicsTextItem *gridText = new QGraphicsTextItem();
+            gridText->setDefaultTextColor(Qt::gray);
+            gridText->setFlags(QGraphicsItem::ItemIgnoresTransformations);
+            int dbs = round(float(i)/numTicksY * 120.0);
+            gridText->setHtml(QString("<div style=\"background:#000000;\">-%1</p>"
+                                      ).arg(dbs));
+            gridText->setFont(QFont("Sans", 6));
+            gridText->setVisible(false);
+            scene->addItem(gridText);
+            gridTextVector.append(gridText);
+        }
+    }
+
+    m_gridlines.append(gridLinesVector);
+    m_gridtext.append(gridTextVector);
+
+    graphtypes.append(graphType);
+
+    QGraphicsPolygonItem * item = new QGraphicsPolygonItem();
+    auto graphPen = QPen(Qt::yellow);
+    graphPen.setCosmetic(true);
+    item->setPen(graphPen);
     item->show();
     polygons.append(item);
     scene->addItem(item);
     view->setResizeAnchor (QGraphicsView::NoAnchor);
-//	view->setFocusPolicy(Qt::NoFocus);
+    // view->setFocusPolicy(Qt::NoFocus);
 	m_pageComboBox->blockSignals(true);
 	m_pageComboBox->addItem(curve->get_caption());
 	m_pageComboBox->blockSignals(false);
 	//  curveLock.lock();
 	static_cast<StackedLayoutWidget *>(m_widget)->addWidget(view);
     curves.append(curve);
-	if (m_value == curves.size() - 1) { // If new curve created corresponds to current stored value
+    if (m_value == curves.size() - 1) {
+        // If new curve created corresponds to current stored value
 		changeCurve(m_value);
 	}
 }
 
 int QuteGraph::getCurveIndex(Curve * curve)
 {
-	Q_ASSERT(curve != 0);
+    Q_ASSERT(curve != nullptr);
 	int index = -1;
 	for (int i = 0; i < curves.size(); i++) {
 		if (curves[i] == curve) {
@@ -425,55 +539,95 @@ int QuteGraph::getCurveIndex(Curve * curve)
 			break;
 		}
 	}
-	//   qDebug("QuteGraph::getCurveIndex %i - %i", index, curve);
-	return index;
+    return index;
+}
+
+QGraphicsView * QuteGraph::getView(int index) {
+    StackedLayoutWidget *widget_ = static_cast<StackedLayoutWidget *>(m_widget);
+    QGraphicsView *view = static_cast<QGraphicsView *>(widget_->widget(index));
+    return view;
+}
+
+void QuteGraph::drawGraph(Curve *curve, int index) {
+    // QString caption = curve->get_caption();
+    // auto view = getView(index);
+
+    switch(graphtypes[index]) {
+    case GraphType::GRAPH_FTABLE:
+        // drawFtable(curve, index);
+        // view->setRenderHint(QPainter::Antialiasing);
+
+        drawFtablePath(curve, index);
+        break;
+    case GraphType::GRAPH_SPECTRUM:
+        // view->setRenderHint(QPainter::Antialiasing);
+
+        drawSpectrum(curve, index);
+        // drawSpectrumPath(curve, index);
+        break;
+    case GraphType::GRAPH_AUDIOSIGNAL:
+        // drawSignal(curve, index);
+        drawSignalPath(curve, index);
+        break;
+    }
+    changeCurve(-2); //update curve
 }
 
 void QuteGraph::setCurveData(Curve * curve)
 {
-	Q_ASSERT(curve != 0);
+    Q_ASSERT(curve != nullptr);
 	int index = getCurveIndex(curve);
-	//  qDebug() << "QuteGraph::setCurveData " << index << curve;
-	if (index >= curves.size() || index < 0) {
-		return;
+
+    if (index >= curves.size() ||
+        index < 0 ||
+        index != m_value) {
+        return;
 	}
-	curves[index] = curve;
-	StackedLayoutWidget *widget_ = static_cast<StackedLayoutWidget *>(m_widget);
+    StackedLayoutWidget *widget_ = static_cast<StackedLayoutWidget *>(m_widget);
 	QGraphicsView *view = static_cast<QGraphicsView *>(widget_->widget(index));
-//	QString modex = property("QCS_modex").toString();
-//	QString modey = property("QCS_modey").toString();
-	// Refitting curves in view resets the scrollbar so we need the previous value
+    // Refitting curves in view resets the scrollbar so we need the previous value
 	int viewPosx = view->horizontalScrollBar()->value();
 	int viewPosy = view->verticalScrollBar()->value();
-    QString caption = curve->get_caption();
-    if (caption.contains("ftable")) {
-        drawFtable(curve, index);
-    } else if (caption.contains("fft")) {
-        drawSpectrum(curve, index);
-    } else {
-        drawSignal(curve, index);
-    }
-	//  qDebug() << "QuteGraph::setCurveData " << index << m_pageComboBox->currentIndex();
-	if (index == m_pageComboBox->currentIndex()) {
-		changeCurve(-2); //update curve
-	}
+    // QString caption = curve->get_caption();
+    drawGraph(curve, index);
     view->horizontalScrollBar()->setValue(viewPosx);
     view->verticalScrollBar()->setValue(viewPosy);
-
-//    changeCurve(-2);
-}
-
-void QuteGraph::setUd(CsoundUserData *ud)
-{
-	m_ud = ud;
 }
 
 void QuteGraph::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
+    if(property("QCS_showSelector").toBool()) {
+        m_pageComboBox->show();
+    } else {
+        m_pageComboBox->hide();
+    }
 	changeCurve(-2);  // Redraw
-	//  qDebug() << "QuteSlider::applyInternalProperties()";
+    m_drawGrid = property("QCS_showGrid").toBool();
+    m_drawTableInfo = property("QCS_showTableInfo").toBool();
 }
+
+void QuteGraph::drawFtablePath(Curve *curve, int index) {
+    Q_ASSERT(index >= 0);
+    QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
+    double max = curve->get_max();
+    max = max == 0 ? 1: max;
+    int size = (int) curve->get_size();
+    int decimate = size /1024;
+    if (decimate == 0) {
+        decimate = 1;
+    }
+    int curveSize = curve->get_size();
+    auto pen = QPen(QColor(255, 45, 7), 0.02);
+    QPainterPath path;
+    for (int i = 0; i < (int) curveSize; i++) {
+        double value = curve->get_data(i);
+        path.lineTo(QPointF(i, -value));
+    }
+    scene->clear();
+    scene->addPath(path, pen);
+}
+
 
 void QuteGraph::drawFtable(Curve * curve, int index)
 {
@@ -492,6 +646,8 @@ void QuteGraph::drawFtable(Curve * curve, int index)
     if (decimate == 0) {
         decimate = 1;
     }
+    auto pen = QPen(QColor(255, 45, 7));
+    pen.setCosmetic(true);
     if (lines[index].size() != size) {
         foreach (QGraphicsLineItem *line, lines[index]) {
             scene->removeItem(line);
@@ -501,6 +657,7 @@ void QuteGraph::drawFtable(Curve * curve, int index)
         for (int i = 0; i < size; i++) {
             if (decimate == 0 || i%decimate == 0) {
                 QGraphicsLineItem *line = new QGraphicsLineItem(i, 0, i, 0);
+                line->setPen(pen);
                 lines[index].append(line);
                 scene->addItem(line);
             }
@@ -510,45 +667,118 @@ void QuteGraph::drawFtable(Curve * curve, int index)
         QGraphicsLineItem *line = static_cast<QGraphicsLineItem *>(lines[index][i]);
         MYFLT value = curve->get_data((i * decimate));
         line->setLine((i * decimate), 0, (i * decimate),  -value );
-        int colorValue = (int) (220.0*fabs(value)/max);
-        colorValue = colorValue > 220 ? 220 : colorValue;
-        QPen pen(QColor(30 + colorValue,
-                        220,
-                        colorValue));
-        pen.setWidth(0);
-        line->setPen(pen);
         line->show();
     }
     scaleGraph(index);
 }
 
-void QuteGraph::drawSpectrum(Curve *curve, int index)
-{
+void QuteGraph::drawSpectrumPath(Curve *curve, int index) {
+    int curveSize = curve->get_size();
+    QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
+    QPainterPath path;
+
+    double db0 = m_ud->zerodBFS;
+    for(int i=0; i < curveSize; i++) {
+        double value = 20.0*log10(fabs(curve->get_data(i))/db0);
+        path.lineTo(QPointF(i, -value));
+    }
+    scene->clear();
+    auto pen = QPen(Qt::yellow);
+    pen.setCosmetic(true);
+
+    QPainterPath gridPath;
+    QPainter painter;
+
+    if(m_drawGrid) {
+        int numTicksX = 12;
+        int numTicksY = 6;
+
+        auto gridPen = QPen(QColor(40, 40, 40));
+        gridPen.setCosmetic(true);
+        auto font = QFont({"Sans", 6});
+        for (int i = 0; i < numTicksX; i++) {
+            qreal x = i * qreal(curveSize)/numTicksX;
+            gridPath.moveTo(x, 0);
+            gridPath.lineTo(x, 110);
+            auto item = new QGraphicsTextItem();
+            item->setPlainText("foo");
+            item->setPos(x, 0);
+            scene->addItem(item);
+        }
+        scene->addPath(gridPath, gridPen);
+    }
+    scene->addPath(path, pen);
+
+}
+
+
+void QuteGraph::drawSpectrum(Curve *curve, int index) {
     int curveSize = curve->get_size();
     QVector<QPointF> polygonPoints;
     polygonPoints.resize(curveSize + 2);
     polygonPoints[0] = QPointF(0,110);
+    double db0 = m_ud->zerodBFS;
+
     for (int i = 0; i < (int) curveSize; i++) {
-        double value;
-        value =  20.0*log10(fabs(curve->get_data(i))/m_ud->zerodBFS);
-        //				if (m_)
-        polygonPoints[i + 1] = QPointF(i, -value); //skip first item, which is base line
+        double value = 20.0*log10(fabs(curve->get_data(i))/db0);
+        polygonPoints[i+1] = QPointF(i, -value); //skip first item, which is base line
     }
-    polygonPoints.back() =  QPointF(curveSize - 1,110);
+
+    polygonPoints.back() = QPointF(curveSize - 1,110);
     polygons[index]->setPolygon(QPolygonF(polygonPoints));
-    m_pageComboBox->setItemText(index, curve->get_caption());
-    for (int i = 0; i < 12; i++) {
-        m_gridlines[index][i]->setLine(i * float(curveSize)/12.0, 0,
-                                       i * float(curveSize)/12.0, 110);
-        m_gridlines[index][i]->setVisible(true);
-        m_gridlines[index][i + 12]->setLine(0, int(i * 110.0/12.0),
-                                            curveSize, int(i * 110.0/12.0));
-        m_gridlines[index][i + 12]->setVisible(true);
-        m_gridtext[index][i]->setPos(-25 +(i * float(curveSize)/12.0), 83);
-        m_gridtext[index][i]->setVisible(true);
-        m_gridtext[index][i + 12]->setPos(-5, -4 + int(i * 110.0/12.0));
-        m_gridtext[index][i + 12]->setVisible(true);
+
+    // m_pageComboBox->setItemText(index, curve->get_caption());
+    // draw Grid
+    int numTicksX = 12;
+    int numTicksY = 6;
+    auto gridlinesvec = m_gridlines[index];
+    auto gridtextvec = m_gridtext[index];
+    if(m_drawGrid) {
+        for (int i = 0; i < numTicksX; i++) {
+            qreal x = i * qreal(curveSize)/numTicksX;
+            gridlinesvec[i]->setLine(x, 0, x, 110);
+            gridlinesvec[i]->setVisible(true);
+            m_gridtext[index][i]->setPos(x, 0);
+            m_gridtext[index][i]->setVisible(true);
+        }
+
+        for (int i = 0; i < numTicksY; i++) {
+            int y = i/float(numTicksY) * 110.0;
+            int idx = i+numTicksX;
+            gridlinesvec[idx]->setLine(0, y, curveSize, y);
+            gridlinesvec[idx]->setVisible(true);
+            gridtextvec[idx]->setPos(0, -4 + y);
+            gridtextvec[idx]->setVisible(true);
+        }
+    } else {
+        for (int i = 0; i < numTicksX; i++) {
+            gridlinesvec[i]->setVisible(false);
+            gridtextvec[i]->setVisible(false);
+        }
+        for(int i=0; i < numTicksY; i++) {
+            gridlinesvec[i+numTicksX]->setVisible(false);
+            gridtextvec[i+numTicksX]->setVisible(false);
+        }
     }
+}
+
+void QuteGraph::drawSignalPath(Curve *curve, int index) {
+    int curveSize = curve->get_size();
+    QPainterPath path;
+    auto zerodbfs = m_ud->zerodBFS;
+    for(int i=0; i<curveSize; i++) {
+        auto value = curve->get_data(i)/zerodbfs;
+        path.lineTo(i, value);
+    }
+    QPainterPath grid;
+    grid.moveTo(0, 0);
+    grid.lineTo(curveSize, 0);
+
+    QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
+    auto pen = QPen(QColor(255, 193, 7), 0);
+    scene->clear();
+    scene->addPath(grid, QPen(QColor(40, 40, 40), 0));
+    scene->addPath(path, pen);
 }
 
 void QuteGraph::drawSignal(Curve *curve, int index)
@@ -559,57 +789,57 @@ void QuteGraph::drawSignal(Curve *curve, int index)
     polygonPoints[0] = QPointF(0,0);
     for (int i = 0; i < (int) curveSize; i++) {
         double value = curve->get_data(i)/m_ud->zerodBFS;
-        polygonPoints[i + 1] = QPointF(i, -value); //skip first item, which is base line
+        polygonPoints[i + 1] = QPointF(i, value); //skip first item, which is base line
     }
     polygonPoints.back() = QPointF(curveSize - 1,0);
     polygons[index]->setPolygon(QPolygonF(polygonPoints));
+    auto pen = QPen(QColor(255, 193, 7));
+    pen.setCosmetic(true);
+    polygons[index]->setPen(pen);
+    polygons[index]->setBrush(Qt::NoBrush);
     m_pageComboBox->setItemText(index, curve->get_caption());
 }
 
 void QuteGraph::scaleGraph(int index)
 {
+    auto curve = curves[index];
+
     double max = curves[index]->get_max();
     double min = curves[index]->get_min();
 	double zoomx = property("QCS_zoomx").toDouble();
 	double zoomy = property("QCS_zoomy").toDouble();
 	//  double span = max - min;
     //  FIXME implement dispx, dispy and modex, modey
-	int size = curves[index]->get_size();
-	QString caption = curves[index]->get_caption();
-	QGraphicsView *view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
-//	qDebug() << "QuteGraph::scaleGraph"<< curves[index]->get_caption() << index <<max<< min<< zoomx<< zoomy << size;
+    int size = curve->get_size();
+    auto view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
 	//  view->setResizeAnchor(QGraphicsView::NoAnchor);
-    if (caption.contains("ftable") && max != min) {
+    auto graphType = graphtypes[index];
+    if(graphType == GraphType::GRAPH_FTABLE && max != min) {
         view->setSceneRect(0, -max*1.17, (double) size, (max - min)*1.17);
-        qDebug() << view->sceneRect();
         view->fitInView(0, -max*1.17/zoomy, (double) size/zoomx, (max - min)*1.17/zoomy);
-    }
-	else {
-		if (caption.contains("fft")) {
-			view->setSceneRect (0, 0, size, 90.);
-			view->fitInView(0, 0, (double) size/zoomx, 90./zoomy);
-		}
-		else { //from display opcode
-			view->setSceneRect (0, -1, size, 2);
-			view->fitInView(0, -10./zoomy, (double) size/zoomx, 10./zoomy);
-		}
+    } else if(graphType == GraphType::GRAPH_SPECTRUM) {
+        view->setSceneRect (0, 0, size, 90.);
+        view->fitInView(0, 0, (double) size/zoomx, 90./zoomy);
+    } else { //from display opcode
+        view->setSceneRect (0, -1, size, 2);
+        // view->fitInView(0, -10./zoomy, (double) size/zoomx, 10./zoomy);
+        view->fitInView(0, -2./zoomy, (double) size/zoomx, 2./zoomy);
 	}
+
 }
 
-int QuteGraph::getTableNumForIndex(int index)
-{
-	if (index < 0  || index >= curves.size()
-			|| curves.size() <= 0) { // Invalid index
+int QuteGraph::getTableNumForIndex(int index) {
+    if (index < 0 || index >= curves.size() || curves.size() <= 0) {
+        // Invalid index
 		return -1;
 	}
-	QString caption = curves[index]->get_caption();
 	int ftable = -1;
-	if (caption.contains("ftable")) {
+    if(graphtypes[index] == GraphType::GRAPH_FTABLE) {
+        QString caption = curves[index]->get_caption();
 		ftable= caption.mid(caption.indexOf(" ") + 1,
 							caption.indexOf(":") - caption.indexOf(" ") - 1).toInt();
 	}
-	//  qDebug() << "QuteGraph::getTableNumForIndex ftable" << ftable << index;
-	return ftable;
+    return ftable;
 }
 
 int QuteGraph::getIndexForTableNum(int ftable)
@@ -619,8 +849,7 @@ int QuteGraph::getIndexForTableNum(int ftable)
 		QString text = curves[i]->get_caption();
 		if (text.contains("ftable")) {
 			QStringList parts = text.split(QRegExp("[ :]"), QString::SkipEmptyParts);
-			//      qDebug() << "QuteGraph::setValue " << parts << " " << value;
-			if (parts.size() > 1) {
+            if (parts.size() > 1) {
 				int num = parts.last().toInt();
 				if (ftable == num) {
 					index = i;

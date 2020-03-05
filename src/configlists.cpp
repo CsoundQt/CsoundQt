@@ -31,19 +31,28 @@
 #include "csound.h"
 #include "configlists.h"
 
+typedef QPair<QString, QString> QStringPair;
+
+
 ConfigLists::ConfigLists()
 {
-	fileTypeNames << "wav" << "aiff" << "au" << "avr" << "caf" << "flac"
-				  << "htk" << "ircam" << "mat4" << "mat5" << "nis" << "paf" << "pvf"
-				  << "raw" << "sd2" << "sds" << "svx" << "voc" << "w64" << "wavex";
-	fileTypeExtensions << "*.wav" << "*.aif;*.aiff" << "*.au" << "*.avr" << "*.caf"
-					   << "*.flac" << "*.htk;*.*" << "*.ircam;*.*" << "*.mat4;*.*" << "*.mat5;*.*"
-					   << "*.nis;*.*" << "*.paf;*.*" << "*.pvf" << "*.raw;*.*" << "*.sd2;*.*" << "*.sds;*.*"
+    fileTypeNames      << "wav" << "aiff" << "au" << "avr"
+                       << "caf" << "flac" << "htk" << "ircam"
+                       << "mat4" << "mat5" << "nis" << "paf"
+                       << "pvf" << "raw" << "sd2" << "sds"
+                       << "svx" << "voc" << "w64" << "wavex";
+
+    fileTypeExtensions << "*.wav" << "*.aif;*.aiff" << "*.au" << "*.avr"
+                       << "*.caf" << "*.flac" << "*.htk;*.*" << "*.ircam;*.*"
+                       << "*.mat4;*.*" << "*.mat5;*.*" << "*.nis;*.*" << "*.paf;*.*"
+                       << "*.pvf" << "*.raw;*.*" << "*.sd2;*.*" << "*.sds;*.*"
 					   << "*.svx;*.*" << "*.voc;*.*" << "*.w64;*.wav" << "*.wavex;*.wav";
-	fileTypeLongNames << "WAVE" << "AIFF" << "au" << "avr" << "CAF" << "FLAC"
-					  << "htk" << "ircam" << "mat4" << "mat5" << "nis" << "paf" << "pvf"
-					  << "Raw (Headerless)" << "Sound Designer II" << "sds" << "svx" << "voc"
-					  << "WAVE (w64)" << "WAVE (wavex)";
+
+    fileTypeLongNames  << "WAVE" << "AIFF" << "au" << "avr"
+                       << "CAF" << "FLAC" << "htk" << "ircam"
+                       << "mat4" << "mat5" << "nis" << "paf"
+                       << "pvf" << "Raw (Headerless)" << "Sound Designer II" << "sds"
+                       << "svx" << "voc" << "WAVE (w64)" << "WAVE (wavex)";
 
 	fileFormatFlags << "24bit" << "short"<< "uchar"
 					<< "schar"<< "float"<< "long";
@@ -51,8 +60,14 @@ ConfigLists::ConfigLists()
 					<< "signed 8-bit" << "32 bit float"<< "long (32-bit)";
 
 	refreshModules();
-	languages << "English" << "Spanish" << "German" << "French" << "Portuguese" << "Italian"  << "Turkish"  << "Finnish" << "Russian" << "Korean" << "Persian";
-	languageCodes << "en" << "es" << "de" << "fr" << "pt" << "it" << "tr" << "fi" << "ru" << "kr" << "fa";
+
+    languages << "English" << "Spanish" << "German" << "French" << "Portuguese"
+              << "Italian"  << "Turkish"  << "Finnish" << "Russian" << "Korean"
+              << "Persian";
+
+    languageCodes << "en" << "es" << "de" << "fr" << "pt"
+                  << "it" << "tr" << "fi" << "ru" << "kr"
+                  << "fa";
 }
 
 
@@ -77,13 +92,12 @@ void ConfigLists::refreshModules()
 	rtMidiNames.clear();
 	rtAudioNames.clear();
 #ifdef CSOUND6
-	CSOUND *csound = csoundCreate(NULL);
+    CSOUND *csound = csoundCreate(nullptr);
 	char *name, *type;
 	int n = 0;
 	while(!csoundGetModule(csound, n++, &name, &type)) {
 		if (strcmp(type, "audio") == 0) {
 			rtAudioNames << name;
-//			printf("Module %d:  %s (%s) \n", n, name, type);
 		}
 	}
 	rtAudioNames << "null"; // add also none (-+rtaudio=null)
@@ -91,13 +105,12 @@ void ConfigLists::refreshModules()
 	while(!csoundGetModule(csound, n++, &name, &type)) {
 		if (strcmp(type, "midi") == 0) {
 			rtMidiNames << name;
-//			printf("MIDI Module %d:  %s (%s) \n", n, name, type);
 		}
 	}
-	if (rtAudioNames.contains("jack")) { // if jack audio is present, also jack midi can be used
-		rtMidiNames <<  "jack";
+    if (rtAudioNames.contains("jack")) {
+        rtMidiNames <<  "jack";
 	}
-	rtMidiNames << "virtual" << "none";
+    rtMidiNames << "virtual" << "none";
 #else
 #ifdef Q_OS_LINUX
 	rtAudioNames << "portaudio" << "alsa" << "jack" << "pulse" << "none";
@@ -133,15 +146,15 @@ void ConfigLists::refreshModules()
 QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 {
 	// based on code by Steven Yi
-	QHash<QString,QString> deviceList;
+    QHash<QString,QString> deviceList;
 #ifdef CSOUND6
-	CSOUND *cs = csoundCreate(NULL);
+    CSOUND *cs = csoundCreate(nullptr);
 	if (module=="jack") {
-		csoundSetOption(cs,"-+rtaudio=jack");
-		csoundSetOption(cs,"-+rtmidi=jack");
+        csoundSetOption(cs, "-+rtaudio=jack");
+        csoundSetOption(cs, "-+rtmidi=jack");
 	}
 	csoundSetMIDIModule(cs, module.toLatin1().data());
-	int i,newn, n = csoundGetMIDIDevList(cs,NULL,0);
+    int i,newn, n = csoundGetMIDIDevList(cs, nullptr, 0);
 	CS_MIDIDEVICE *devs = (CS_MIDIDEVICE *) malloc(n*sizeof(CS_MIDIDEVICE));
 	newn = csoundGetMIDIDevList(cs,devs,0);
 	if (newn != n) {
@@ -155,7 +168,9 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 			displayName = devs[i].device_name;
 			id = devs[i].device_name;
 		} else {
-			displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
+            displayName = QString("%1 (%2)")
+                    .arg(devs[i].device_name)
+                    .arg(devs[i].interface_name);
 			id = QString(devs[i].device_id);
 		}
 		deviceList.insert(displayName, id);
@@ -262,13 +277,13 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(QString module
 {
 	QList<QPair<QString, QString> > deviceList;
 #ifdef CSOUND6
-	CSOUND *cs = csoundCreate(NULL);
+    CSOUND *cs = csoundCreate(nullptr);
 	if (module=="jack") {
-		csoundSetOption(cs,"-+rtaudio=jack");
-		csoundSetOption(cs,"-+rtmidi=jack");
+        csoundSetOption(cs, "-+rtaudio=jack");
+        csoundSetOption(cs, "-+rtmidi=jack");
 	}
 	csoundSetMIDIModule(cs, module.toLatin1().data());
-	int i,newn, n = csoundGetMIDIDevList(cs,NULL,1);
+    int i,newn, n = csoundGetMIDIDevList(cs, nullptr, 1);
 	CS_MIDIDEVICE *devs = (CS_MIDIDEVICE *) malloc(n*sizeof(CS_MIDIDEVICE));
 	newn = csoundGetMIDIDevList(cs,devs,1);
 	if (newn != n) {
@@ -276,17 +291,19 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(QString module
 		return deviceList;
 	}
 	for (i = 0; i < n; i++) {
-//		qDebug() << devs[i].device_name;
+        // qDebug() << devs[i].device_name;
 		QString displayName, id;
 		if (module=="jack") {
 			displayName = devs[i].device_name;
 			id = devs[i].device_name;
 		} else {
-			displayName = QString("%1 (%2)").arg(devs[i].device_name).arg(devs[i].interface_name);
+            displayName = QString("%1 (%2)")
+                    .arg(devs[i].device_name)
+                    .arg(devs[i].interface_name);
 			id = QString(devs[i].device_id);
 		}
 
-		deviceList.append(QPair<QString,QString>(displayName, id));
+        deviceList.append(QStringPair(displayName, id));
 	}
 	free(devs);
     csoundDestroy(cs);
@@ -375,12 +392,11 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(QString module
 
 QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(QString module)
 {
-	//  qDebug()  ;
-	QList<QPair<QString, QString> > deviceList;
+    QList<QStringPair> deviceList;
 #ifdef CSOUND6
-	CSOUND *cs = csoundCreate(NULL);
+    CSOUND *cs = csoundCreate(nullptr);
 	csoundSetRTAudioModule(cs, module.toLatin1().data());
-	int i,newn, n = csoundGetAudioDevList(cs,NULL,0);
+    int i,newn, n = csoundGetAudioDevList(cs, nullptr, 0);
 	CS_AUDIODEVICE *devs = (CS_AUDIODEVICE *) malloc(n*sizeof(CS_AUDIODEVICE));
 	newn = csoundGetAudioDevList(cs,devs,0);
 	if (newn != n) {
@@ -388,8 +404,8 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(QString module
 		return deviceList;
 	}
 	for (i = 0; i < n; i++) {
-//		qDebug()  << "evs[i].device_name;
-		deviceList.append(QPair<QString,QString>(devs[i].device_name,  QString(devs[i].device_id)));
+        // qDebug() << "evs[i].device_name;
+        deviceList.append(QStringPair(devs[i].device_name, devs[i].device_id));
 	}
 	free(devs);
     csoundDestroy(cs);
@@ -545,14 +561,14 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(QString module
 	return deviceList;
 }
 
+
 QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(QString module)
 {
-	//  qDebug() ;
-	QList<QPair<QString, QString> > deviceList;
+    QList<QPair<QString, QString> > deviceList;
 #ifdef CSOUND6
-	CSOUND *cs = csoundCreate(NULL);
+    CSOUND *cs = csoundCreate(nullptr);
 	csoundSetRTAudioModule(cs, module.toLatin1().data());
-	int i,newn, n = csoundGetAudioDevList(cs,NULL,1);
+    int i,newn, n = csoundGetAudioDevList(cs, nullptr, 1);
 	CS_AUDIODEVICE *devs = (CS_AUDIODEVICE *) malloc(n*sizeof(CS_AUDIODEVICE));
 	newn = csoundGetAudioDevList(cs,devs,1);
 	if (newn != n) {
@@ -560,8 +576,8 @@ QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(QString modul
 		return deviceList;
 	}
 	for (i = 0; i < n; i++) {
-		//		qDebug()  << devs[i].device_name;
-		deviceList.append(QPair<QString,QString>(devs[i].device_name,  QString(devs[i].device_id)));
+        // qDebug()  << devs[i].device_name;
+        deviceList.append(QStringPair(devs[i].device_name, devs[i].device_id));
 	}
 	free(devs);
     csoundDestroy(cs);
@@ -748,7 +764,7 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
 	if(!result) {
 		csoundPerform(csoundD);
     } else {
-        qDebug()  << "Error compiling.";
+        qDebug() << "Error compiling.";
         qDebug() << m_messages;
     }
 
@@ -760,4 +776,14 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
 	SetMenuBar(menuBarHandle);
 #endif
 	return m_messages.split("\n");
+}
+
+
+bool ConfigLists::isJackRunning() {
+    CSOUND *cs = csoundCreate(nullptr);
+    csoundSetRTAudioModule(cs, "jack");
+    int n = csoundGetAudioDevList(cs, nullptr, 1);
+    qDebug() << "isJackRunning" << n;
+    csoundDestroy(cs);
+    return n > 0;
 }

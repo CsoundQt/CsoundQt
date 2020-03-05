@@ -50,6 +50,7 @@ private:
 	void browseFile(QString &destination);
 	void browseSaveFile(QString &destination);
 	void browseDir(QString &destination);
+    int m_selectedOutputDeviceIndex;
 
 private slots:
 	virtual void accept();
@@ -90,6 +91,7 @@ private slots:
 
 	void on_csoundMidiCheckBox_toggled(bool checked);
 	void checkRtMidiModule(QString module);
+    void testAudioSetup();
 
 signals:
 	void disableInternalRtMidi();

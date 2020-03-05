@@ -259,6 +259,7 @@ void DocumentPage::setSco(QString text)
 void DocumentPage::setWidgetsText(QString text)
 {
 	// TODO support multiple layouts
+    qDebug() << "DocumentPage. calling loadXmlWidgets";
 	return m_widgetLayouts.at(0)->loadXmlWidgets(text);
 }
 
@@ -977,9 +978,15 @@ void DocumentPage::setFontOffset(double offset)
 
 void DocumentPage::setFontScaling(double offset)
 {
-	foreach (WidgetLayout *wl, m_widgetLayouts) {
+    foreach (WidgetLayout *wl, m_widgetLayouts) {
 		wl->setFontScaling(offset);
 	}
+}
+
+void DocumentPage::setGraphUpdateRate(int rate) {
+    foreach (WidgetLayout *wl, m_widgetLayouts) {
+        wl->setUpdateRate(rate);
+    }
 }
 
 void DocumentPage::setConsoleFont(QFont font)
@@ -1237,7 +1244,7 @@ WidgetLayout* DocumentPage::newWidgetLayout()
 	//  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
 	//        this, SLOT(setWidgetClipboard(QString)));
 	connect(wl,SIGNAL(showMidiLearn(QuteWidget *)),this, SLOT(showMidiLearn(QuteWidget *)));
-	return wl;
+    return wl;
 }
 
 int DocumentPage::play(CsoundOptions *options)

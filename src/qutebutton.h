@@ -71,6 +71,7 @@ private:
 	QTextEdit *text;
 	QLineEdit *filenameLineEdit;
 	QLineEdit *line;
+    QSpinBox  *fontSizeSpinBox;
 
 	QIcon icon;
 	QIcon onIcon;

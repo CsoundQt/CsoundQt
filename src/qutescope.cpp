@@ -34,24 +34,33 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
 	m_widget->show();
 	m_widget->setAutoFillBackground(true);
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
-	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    m_widget->setMouseTracking(true);
 	//  m_widget->setWindowFlags(Qt::WindowStaysOnTopHint);
 	canFocus(false);
 	static_cast<ScopeWidget *>(m_widget)->setScene(m_scene);
 	static_cast<ScopeWidget *>(m_widget)->setResizeAnchor(QGraphicsView::AnchorViewCenter);
-	//   static_cast<ScopeWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
-	m_label = new QLabel(this);
+    // static_cast<ScopeWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
+    m_label = new QLabel(this);
 	QPalette palette = m_widget->palette();
 	palette.setColor(QPalette::WindowText, Qt::white);
 	m_label->setPalette(palette);
 	m_label->setText("Scope");
 	m_label->move(85, 0);
 	m_label->resize(500, 25);
-	m_params = new ScopeParams(0, m_scene, static_cast<ScopeWidget *>(m_widget), &scopeLock, this->width(), this->height());
-	m_scopeData = new ScopeData(m_params);
+
+    m_params = new ScopeParams(nullptr,
+                               m_scene,
+                               static_cast<ScopeWidget *>(m_widget),
+                               &scopeLock,
+                               this->width(),
+                               this->height());
+
+    m_scopeData    = new ScopeData(m_params);
 	m_lissajouData = new LissajouData(m_params);
 	m_poincareData = new PoincareData(m_params);
-	m_dataDisplay = (DataDisplay *)m_scopeData;
+
+    m_dataDisplay = (DataDisplay *)m_scopeData;
 	m_dataDisplay->show();
 
 	// Default properties
@@ -103,7 +112,7 @@ QString QuteScope::getWidgetXmlText()
 	s.writeTextElement("zoomy", QString::number(property("QCS_zoomy").toDouble(), 'f', 8));
 	s.writeTextElement("dispx", QString::number(property("QCS_dispx").toDouble(), 'f', 8));
 	s.writeTextElement("dispy", QString::number(property("QCS_dispy").toDouble(), 'f', 8));
-	s.writeTextElement("mode", QString::number(property("QCS_mode").toDouble(), 'f', 8));
+    s.writeTextElement("mode",  QString::number(property("QCS_mode").toDouble(), 'f', 8));
 
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
@@ -148,10 +157,10 @@ void QuteScope::updateLabel()
 {
 	QString chan;
 	if ((int) m_value < 0) {
-		chan = tr("all", "meaning 'all' channels in scope, must be very short (4 letter max)");
+        chan = tr("all", "meaning 'all' channels in scope, 4 letter max");
 	}
 	else if ((int) m_value <= 0) {
-		chan = tr("None", "meaning 'no' channels in scope, must be very short (4 letter max)");
+        chan = tr("None", "meaning 'no' channels in scope, 4 letter max");
 	}
 	else {
 		chan =  QString::number((int) m_value );
@@ -232,7 +241,8 @@ void QuteScope::applyProperties()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
+    //Must be last to make sure the widgetChanged signal is last
+    QuteWidget::applyProperties();
 }
 
 void QuteScope::resizeEvent(QResizeEvent * event)
@@ -250,8 +260,10 @@ void QuteScope::resizeEvent(QResizeEvent * event)
 
 void QuteScope::updateData()
 {
-	//  qDebug() <<"QuteScope::updateData() " << property( "QCS_chan").toInt() << "  " << property("QCS_zoomx").toDouble() ;
-	m_dataDisplay->updateData((int) m_value, property("QCS_zoomx").toDouble(), property("QCS_zoomy").toDouble(), static_cast<ScopeWidget *>(m_widget)->freeze);
+    m_dataDisplay->updateData((int) m_value,
+                              property("QCS_zoomx").toDouble(),
+                              property("QCS_zoomy").toDouble(),
+                              static_cast<ScopeWidget *>(m_widget)->freeze);
 }
 
 ScopeItem::ScopeItem(int width, int height)
@@ -260,7 +272,9 @@ ScopeItem::ScopeItem(int width, int height)
 	m_height = height;
 }
 
-void ScopeItem::paint(QPainter *p, const QStyleOptionGraphicsItem */*option*/, QWidget */*widget*/)
+void ScopeItem::paint(QPainter *p,
+                      const QStyleOptionGraphicsItem */*option*/,
+                      QWidget */*widget*/)
 {
 	p->setPen(m_pen);
 	p->drawPoints(m_polygon);
@@ -288,7 +302,7 @@ ScopeData::ScopeData(ScopeParams *params) : DataDisplay(params)
 {
 	curveData.resize(m_params->width + 2);
 	curve = new QGraphicsPolygonItem(/*&curveData*/);
-	curve->setPen(QPen(Qt::green));
+    curve->setPen(QPen(Qt::green, 0));
 	curve->hide();
 	m_params->scene->addItem(curve);
 }
@@ -311,42 +325,46 @@ void ScopeData::updateData(int channel, double zoomx, double zoomy, bool freeze)
 	int numChnls = ud->numChnls;
 	MYFLT newValue;
     if (channel == 0 || channel > numChnls ) {
-		//     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
-		return;
+        return;
 	}
 	channel = (channel < 0 ? -1: channel - 1);
 #ifdef  USE_WIDGET_MUTEX
-	QReadWriteLock *mutex = m_params->mutex;  //FIXME is this locking needed, or should a separate locking mechanism be implemented?
+    //FIXME is this locking needed, or should a separate locking mechanism be implemented?
+    QReadWriteLock *mutex = m_params->mutex;
 	mutex->lockForWrite();
 #endif
-	// FIXME how to make sure the buffer is read before it is flushed when recorded? Have another buffer?
+    // FIXME how to make sure the buffer is read before it is flushed when recorded?
+    // Have another buffer?
 	RingBuffer *buffer = &ud->audioOutputBuffer;
 	buffer->lock();
 	QList<MYFLT> list = buffer->buffer;
 	buffer->unlock();
 	long listSize = list.size();
-	long offset = buffer->currentPos;
+    // long offset = buffer->currentPos;
+    long offset = buffer->currentReadPos;
 	for (int i = 0; i < width; i++) {
 		value = 0;
-		for (int j = 0; j < (int) zoomx; j++) {
+        for (int j = 0; j < (int) zoomx; j++) {
 			if (channel == -1) {
+                // all channels
 				newValue = 0;
 				for (int k = 0; k < numChnls; k++) {
-					int bufferIndex = (int)((((i* zoomx)+ j)*numChnls) + offset + k) % listSize;
-					newValue += list[bufferIndex];
+                    int bufIdx = (int)((((i*zoomx)+j)*numChnls) + offset + k) % listSize;
+                    newValue += list[bufIdx];
 				}
 				newValue /= numChnls;
 				if (fabs(newValue) > fabs(value))
 					value = -(double) newValue;
 			}
 			else {
-				int bufferIndex = (int)((((i* zoomx)+ j)*numChnls) + offset + channel) % listSize;
-				if (fabs(list[bufferIndex]) > fabs(value))
-					value = (double) -list[bufferIndex];
+                int bufIdx = (int)((((i*zoomx)+j)*numChnls) + offset + channel) % listSize;
+                if (fabs(list[bufIdx]) > fabs(value))
+                    value = (double) -list[bufIdx];
 			}
 		}
-		curveData[i+1] = QPoint(i, zoomy*value*height/(2/* * m_ud->zerodBFS*/));
+        curveData[i+1] = QPoint(i, zoomy*value*height/2);
 	}
+    buffer->currentReadPos += width;
 	m_params->widget->setSceneRect(0, -height/2, width, height );
 	curveData.last() = QPoint(width-4, 0);
 	curveData.first() = QPoint(0, 0);
@@ -370,7 +388,9 @@ LissajouData::LissajouData(ScopeParams *params) : DataDisplay(params)
 {
 	curveData.resize(m_params->width);
 	curve = new ScopeItem(m_params->width, m_params->height);
-	curve->setPen(QPen(Qt::green));
+    auto pen = QPen(Qt::green);
+    pen.setCosmetic(true);
+    curve->setPen(pen);
 	curve->hide();
 	m_params->scene->addItem(curve);
 }
@@ -389,7 +409,7 @@ void LissajouData::updateData(int channel, double zoomx, double zoomy, bool free
 	CsoundUserData *ud = m_params->ud;
 	int width = m_params->width;
 	int height = m_params->height;
-    if (ud == 0 || !ud->csEngine->isRunning() )
+    if (ud == nullptr || !ud->csEngine->isRunning())
 		return;
 	if (freeze)
 		return;
@@ -398,8 +418,7 @@ void LissajouData::updateData(int channel, double zoomx, double zoomy, bool free
 	// We take two consecutives channels, the first one for abscissas and
 	// the second one for ordinates
     if (channel == 0 || channel >= numChnls || numChnls < 2) {
-		//     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
-		return;
+        return;
 	}
 	channel = (channel < 0 ? 0 : channel - 1);
 #ifdef  USE_WIDGET_MUTEX
@@ -440,7 +459,7 @@ PoincareData::PoincareData(ScopeParams *params) : DataDisplay(params)
 {
 	curveData.resize(m_params->width);
 	curve = new ScopeItem(m_params->width, m_params->height);
-	curve->setPen(QPen(Qt::green));
+    curve->setPen(QPen(Qt::green, 0));
 	curve->hide();
 	lastValue = 0.0;
 	m_params->scene->addItem(curve);
@@ -466,8 +485,7 @@ void PoincareData::updateData(int channel, double zoomx, double zoomy, bool free
 	double value;
 	int numChnls = ud->numChnls;
     if (channel == 0 || channel > numChnls) {
-		//     qDebug() << "QuteScope::updateData() Channel out of range " << channel;
-		return;
+        return;
 	}
 	channel = (channel < 0 ? 0 :  channel - 1);
 #ifdef  USE_WIDGET_MUTEX

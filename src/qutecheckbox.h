@@ -47,6 +47,7 @@ public:
 	virtual void applyInternalProperties();
 
 	//    void popUpMenu(QPoint pos);
+    virtual void resizeEvent(QResizeEvent *);
 
 protected:
 	virtual void applyProperties();

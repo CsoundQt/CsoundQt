@@ -23,6 +23,7 @@
 #include "csoundoptions.h"
 #include "configlists.h"
 #include <QDir> // for static QDir::separator()
+#include <QDebug>
 #include <cstdlib> // for calloc
 
 CsoundOptions::CsoundOptions(ConfigLists *configlists) :
@@ -33,7 +34,7 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	rt = true;
 
 	enableFLTK = true;
-	bufferSize = 1024;
+    bufferSize = 1024;
 	bufferSizeActive = false;
 	HwBufferSize = 2048;
 	HwBufferSizeActive = false;
@@ -41,6 +42,8 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	newParser = false;
 	multicore = false;
 	numThreads = 1;
+    realtimeFlag = false;
+    sampleAccurateFlag = false;
 	additionalFlags = "";
 	additionalFlagsActive = false;
 
@@ -66,6 +69,9 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	rtMidiModule = "";
 	rtMidiInputDevice = "0";
 	rtMidiOutputDevice = "0";
+    useSystemSamplerate = false;
+    overrideNumChannels = false;
+    numChannels = 2;
 	useCsoundMidi = false;
 	simultaneousRun = true; // Allow running various instances (tabs) simultaneously.
 
@@ -94,71 +100,76 @@ QString CsoundOptions::generateCmdLineFlags()
 
 QStringList CsoundOptions::generateCmdLineFlagsList()
 {
-	QStringList list;
+    QStringList opts;
 	if (bufferSizeActive)
-		list << "-b" + QString::number(bufferSize);
+        opts << "-b" + QString::number(bufferSize);
 	if (HwBufferSizeActive)
-		list << "-B" + QString::number(HwBufferSize);
+        opts << "-B" + QString::number(HwBufferSize);
 	if (additionalFlagsActive && !additionalFlags.trimmed().isEmpty()) {
 		QStringList addFlags = additionalFlags.split(QRegExp("[\\s]"),QString::SkipEmptyParts);
 		foreach (QString f, addFlags) {
-			list << f;
+            opts << f;
 		}
 	}
-	if (dither) {
-		list << " -Z";
-	}
-#ifndef CSOUND6
-    if (newParser == 1) {
-		list << "--new-parser";
-#endif
-		if (multicore) {
-			list << "-j" + QString::number(numThreads);
-		}
-#ifndef CSOUND6
-    } else if (newParser == 0) {
-        list << "--old-parser";
-	}
-#endif
-	if (rt && rtUseOptions) {
+    if (dither)
+        opts << " -Z";
+    if (multicore)
+        opts << "-j" + QString::number(numThreads);
+    if (realtimeFlag)
+        opts << "--realtime";
+    if (sampleAccurateFlag)
+        opts << "--sample-accurate";
+    if (rt && rtUseOptions) {
 		if (rtOverrideOptions)
-			list << "-+ignore_csopts=1";
+            opts << "-+ignore_csopts=1";
 		if (m_configlists->rtAudioNames.indexOf(rtAudioModule) >= 0
 				&& rtAudioModule != "none") {
-			list << "-+rtaudio=" + rtAudioModule;
+            opts << "-+rtaudio=" + rtAudioModule;
 			if (rtInputDevice != "") {
-				list << "-i" + rtInputDevice;
+                opts << "-i" + rtInputDevice;
 			}
-			list << "-o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
+            opts << "-o" + (rtOutputDevice == "" ? "dac":rtOutputDevice);
 			if (rtJackName != "" && rtAudioModule == "jack") {
 				QString jackName = rtJackName;
 				if (jackName.contains("*")) {
-					jackName.replace("*",fileName1.mid(fileName1.lastIndexOf(QDir::separator()) + 1));
-					jackName.replace(" ","_");
+                    auto base = fileName1.mid(fileName1.lastIndexOf(QDir::separator())+1);
+                    jackName.replace("*", base);
+                    jackName.replace(" ","_");
 				}
 				if (jackName.size() > m_jackNameSize) {
 					jackName = jackName.left(m_jackNameSize);
 				}
-				list << "-+jack_client=" + jackName;
+                opts << "-+jack_client=" + jackName;
 			}
 		}
 		if (useCsoundMidi &&
 				m_configlists->rtMidiNames.indexOf(rtMidiModule) >= 0 &&
 				rtMidiModule != "none") {
-			list << "-+rtmidi=" + rtMidiModule;
+            opts << "-+rtmidi=" + rtMidiModule;
 			if (rtMidiInputDevice != "")
-				list << "-M" + rtMidiInputDevice;
+                opts << "-M" + rtMidiInputDevice;
 			if (rtMidiOutputDevice != "")
-				list << "-Q" + rtMidiOutputDevice;
+                opts << "-Q" + rtMidiOutputDevice;
 		}
+        if (useSystemSamplerate)
+            opts << "--use-system-sr";
+        else if(samplerate > 0) {
+            opts << "--sample-rate=" + QString::number(samplerate);
+        }
+        if (overrideNumChannels) {
+            if(numChannels <= 0) {
+                qDebug("Setting nchnls, but numChannels is invalid: %d", numChannels);
+            } else
+                opts << ("--nchnls=" + QString::number(numChannels));
+        }
 	}
 	else {
-		list << "--format=" + m_configlists->fileTypeNames[fileFileType]
+        opts << "--format=" + m_configlists->fileTypeNames[fileFileType]
 				+ ":" + m_configlists->fileFormatFlags[fileSampleFormat];
 		if (fileInputFilenameActive)
-			list << "-i" + fileInputFilename + "";
+            opts << "-i" + fileInputFilename + "";
         if (fileOutputFilenameActive || fileAskFilename) {
-			list << "-o" + fileOutputFilename + "";
+            opts << "-o" + fileOutputFilename + "";
 		}
 	}
 	// These lines break setting of variables. Are they actually needed here for some reason?
@@ -170,8 +181,8 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 	//    list << "--env:SFDIR='" + sfdir + "'";
 	//  if (incdirActive)
 	//    list << "--env:INCDIR='" + incdir + "'";
-	list << "--env:CSNOSTOP=yes";
-	return list;
+    opts << "--env:CSNOSTOP=yes";
+    return opts;
 }
 
 int CsoundOptions::generateCmdLine(char **argv)

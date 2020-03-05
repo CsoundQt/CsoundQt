@@ -28,7 +28,7 @@ QuteConsole::QuteConsole(QWidget *parent) : QuteWidget(parent)
 	m_widget->setAutoFillBackground(true);
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 	canFocus(false);
-	setProperty("QCS_font", "Courier");
+    setProperty("QCS_font", "Courier");
 	setProperty("QCS_fontsize", 8.0);
 	setProperty("QCS_bgcolor", QColor(Qt::white));
 	setProperty("QCS_bgcolormode", false);

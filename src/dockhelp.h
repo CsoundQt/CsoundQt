@@ -67,6 +67,13 @@ public slots:
 	void onPreviousButtonPressed();
 	void onWholeWordBoxChanged(int value);
 	void onCaseBoxChanged(int value);
+    void focusText();
+    void setVisibleAndRaise(bool show) {
+        setVisible(show);
+        if(show)
+            raise();
+    }
+
 
 private:
 	Ui::DockHelp *ui;

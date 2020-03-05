@@ -156,6 +156,7 @@ public:
 	void setOpenProperties(bool open);
 	void setFontOffset(double offset);
 	void setFontScaling(double offset);
+    void setGraphUpdateRate(int rate);
 	//    void passWidgetClipboard(QString text);
 	// Console properties
 	void setConsoleFont(QFont font);

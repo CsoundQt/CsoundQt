@@ -64,6 +64,8 @@ protected:
 private:
 	QLineEdit* name2LineEdit;
 	QPushButton*  colorButton;
+    QPushButton*  bgColorButton;
+
 	QComboBox* typeComboBox;
 	QSpinBox* pointSizeSpinBox;
 	QSpinBox* fadeSpeedSpinBox;
@@ -72,13 +74,21 @@ private:
 	QDoubleSpinBox* m_xMaxBox;
 	QDoubleSpinBox* m_yMinBox;
 	QDoubleSpinBox* m_yMaxBox;
+    QCheckBox *flatCheckBox;
+    QCheckBox *borderCheckBox;
 
 private slots:
 	void selectTextColor();
+    void selectBgColor();
+
 	void valueChanged(double value1);
 	void value2Changed(double value2);
+
+    void checkTypeComboBox();
 	//    void setValuesFromWidget(double value1, double value2);
 };
+
+enum MeterWidgetType { FILL, LLIF, LINE, CROSSHAIR, POINT };
 
 class MeterWidget : public QGraphicsView
 {
@@ -94,10 +104,21 @@ public:
 	void setRanges(double minx,double  maxx,double  miny,double  maxy);
 	void setPointSize(int size);
 	void setColor(QColor color);
-	void setWidgetGeometry(int x,int y,int width,int height);
+    void setBgColor(QColor color);
+    void showBorder(bool show) {
+        if(show)
+            m_border->show();
+        else
+            m_border->hide();
+    }
+
+    void setWidgetGeometry(int x,int y,int width,int height);
 
 	QColor getColor();
+    QColor getBgColor();
+
 	QString getType() {return m_type;}
+    MeterWidgetType getMeterType() { return m_metertype; }
 	int getPointSize() {return m_pointSize;}
 	bool m_vertical;
 
@@ -109,6 +130,7 @@ protected:
 private:
 	double m_value, m_value2;  // value1 is vertical, value2 is horizontal
 	double m_xmin, m_xmax, m_ymin, m_ymax;
+    MeterWidgetType m_metertype;
 	QString m_type;
 	int m_pointSize;
 	bool m_mouseDown;
@@ -116,6 +138,8 @@ private:
 	QGraphicsScene* m_scene;
 
 	QGraphicsRectItem* m_block;
+    QGraphicsRectItem* m_border;
+
 	QGraphicsEllipseItem* m_point;
 	QGraphicsLineItem* m_vline;
 	QGraphicsLineItem* m_hline;

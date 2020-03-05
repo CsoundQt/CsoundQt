@@ -53,6 +53,8 @@ public:
 	QStringList languageCodes;
 
 	void refreshModules();
+    bool isJackRunning();
+    int jackSamplerate();
 
 	QHash<QString, QString> getMidiInputDevices(QString module);
 	QList<QPair<QString, QString> > getMidiOutputDevices(QString module);

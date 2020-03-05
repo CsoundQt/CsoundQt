@@ -48,7 +48,13 @@ public:
 
 	void setWidgetScrollBarsActive(bool active);
 
+
 public slots:
+    void showAndRaise(bool show) {
+        this->setVisible(show);
+        if(show)
+            this->raise();
+    }
 
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent *event);
