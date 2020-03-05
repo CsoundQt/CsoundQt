@@ -410,6 +410,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3 gets rounded... Did not find the real reasound
     // Csound must be started and stopped once, then it works:
     int oldPage = documentTabs->currentIndex();
+	QString tmp1 = lastUsedDir;
+	QString tmp2 = lastFileDir;
     makeNewPage(QDir::tempPath()+"/tmp.csd",  QCS_DEFAULT_TEMPLATE);
     save();
     play(true, -1); // problem, if pulse/alsa in settings but jack has been started
@@ -417,6 +419,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     stop();
     deleteTab(curPage);
     documentTabs->setCurrentIndex(oldPage);
+	lastUsedDir = tmp1;
+	lastFileDir = tmp2;
 #endif
 
 }
