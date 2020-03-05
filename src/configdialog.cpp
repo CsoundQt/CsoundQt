@@ -217,7 +217,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	HwBufferSizeLineEdit->setText(QString::number(m_options->HwBufferSize));
 	HwBufferSizeCheckBox->setChecked(m_options->HwBufferSizeActive);
 	HwBufferSizeLineEdit->setEnabled(m_options->HwBufferSizeActive);
-	DitherCheckBox->setChecked(m_options->dither);
+    // DitherCheckBox->setChecked(m_options->dither);
     // newParserCheckBox->setChecked(m_options->newParser);
 	multicoreCheckBox->setChecked(m_options->multicore);
 	numThreadsSpinBox->setValue(m_options->numThreads);
@@ -451,7 +451,7 @@ void ConfigDialog::accept()
 	m_options->bufferSizeActive = BufferSizeCheckBox->isChecked();
 	m_options->HwBufferSize = HwBufferSizeLineEdit->text().toInt();
 	m_options->HwBufferSizeActive = HwBufferSizeCheckBox->isChecked();
-	m_options->dither = DitherCheckBox->isChecked();
+    // m_options->dither = DitherCheckBox->isChecked();
     m_options->realtimeFlag =
     // m_options->newParser = newParserCheckBox->isChecked() ? 1 : 0;
 	m_options->multicore = multicoreCheckBox->isChecked();
