@@ -30,6 +30,9 @@
 #include "console.h"
 
 
+#define QDEBUG qDebug() << __FUNCTION__ << ":"
+
+
 BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists) :
 	QObject(parent), m_opcodeTree(opcodeTree), m_csEngine(0)
 {
@@ -44,6 +47,7 @@ BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree, ConfigLis
 	m_console->setReadOnly(true);
 	// Register the console with the engine for message printing
 	m_csEngine->registerConsole(m_console);
+    m_status = PlayStopStatus::Ok;
 	connect(m_console, SIGNAL(keyPressed(int)),
 			m_csEngine, SLOT(keyPressForCsound(int)));
 	connect(m_console, SIGNAL(keyReleased(int)),
@@ -107,8 +111,7 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
 WidgetLayout* BaseDocument::newWidgetLayout()
 {
 	WidgetLayout* wl = new WidgetLayout(0);
-	//  qDebug() " << wl->windowFlags();
-	wl->setWindowFlags(Qt::Window | wl->windowFlags());
+    wl->setWindowFlags(Qt::Window | wl->windowFlags());
 	connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
 	connect(wl, SIGNAL(registerButton(QuteButton*)),
 			this, SLOT(registerButton(QuteButton*)));
@@ -217,13 +220,21 @@ CsoundEngine *BaseDocument::getEngine()
 
 int BaseDocument::play(CsoundOptions *options)
 {
-	if (!m_csEngine->isRunning()) {
+    while(m_status == PlayStopStatus::Stopping) {
+        QDEBUG << "Stopping, waiting";
+        QThread::msleep(100);
+    }
+    mutex.lock();
+    m_status = PlayStopStatus::Starting;
+    if (!m_csEngine->isRunning()) {
 		foreach (WidgetLayout *wl, m_widgetLayouts) {
 			wl->flush();   // Flush accumulated values
 			wl->clearGraphs();
 		}
 	}
-	return m_csEngine->play(options);
+    m_status = PlayStopStatus::Ok;
+    mutex.unlock();
+    return m_csEngine->play(options);
 }
 
 void BaseDocument::pause()
@@ -233,14 +244,32 @@ void BaseDocument::pause()
 
 void BaseDocument::stop()
 {
-	//  qDebug() ;
-	if (m_csEngine->isRunning()) {
-		m_csEngine->stop();
-		foreach (WidgetLayout *wl, m_widgetLayouts) {
-            // TODO only needed to flush graph buffer, but this should be moved to this class
-            wl->engineStopped();
-		}
-	}
+    if (!m_csEngine->isRunning()) {
+        QDEBUG << "Csound is not running";
+        return;
+    }
+    if(m_status == PlayStopStatus::Stopping) {
+        qDebug() << "Already stopping";
+        return;
+    }
+    if(m_status == PlayStopStatus::Starting) {
+        QDEBUG << "Asked to stop, but we are already starting";
+        return;
+    }
+    QDEBUG << "getting lock";
+    mutex.lock();
+    QDEBUG << "locked, stopping engine";
+    m_status = PlayStopStatus::Stopping;
+
+    m_csEngine->stop();
+    QDEBUG << "Engine stopped, signaling widgets...";
+    foreach (WidgetLayout *wl, m_widgetLayouts) {
+        // TODO only needed to flush graph buffer, but this should be moved to this class
+        wl->engineStopped();
+    }
+    m_status = PlayStopStatus::Ok;
+    mutex.unlock();
+    QDEBUG << "Stopped OK";
 }
 
 int BaseDocument::record(int format)

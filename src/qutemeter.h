@@ -24,6 +24,7 @@
 #define QUTEMETER_H
 
 #include "qutewidget.h"
+#include "selectcolorbutton.h"
 
 // This class is named "meter" internally, following MacCsound's name
 // It is called "Controller" for the user of CsoundQt
@@ -63,8 +64,10 @@ protected:
 
 private:
 	QLineEdit* name2LineEdit;
-	QPushButton*  colorButton;
-    QPushButton*  bgColorButton;
+    // QPushButton*  colorButton;
+    SelectColorButton *colorButton;
+    // QPushButton*  bgColorButton;
+    SelectColorButton *bgColorButton;
 
 	QComboBox* typeComboBox;
 	QSpinBox* pointSizeSpinBox;

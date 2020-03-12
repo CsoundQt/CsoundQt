@@ -76,9 +76,10 @@ WidgetLayout * WidgetPanel::takeWidgetLayout(QRect outerGeometry)
 	disconnect(this,SIGNAL(topLevelChanged(bool)));
 	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
 	if (!s) // scroll area is sometimes null during startup and shutdown
-		return 0;
-	WidgetLayout *w = (WidgetLayout *) s->takeWidget();  //This transfers ownership of the widget to the caller
-	if (w != 0) {
+        return nullptr;
+    // This transfers ownership of the widget to the caller
+    WidgetLayout *w = (WidgetLayout *) s->takeWidget();
+    if (w != nullptr) {
 		w->setOuterGeometry(outerGeometry);
 		w->setContained(false);  // Must set before removing from container to get background
 		disconnect(w, SIGNAL(selection(QRect)), 0, 0);
@@ -108,7 +109,7 @@ void WidgetPanel::closeEvent(QCloseEvent * /*event*/)
 void WidgetPanel::contextMenuEvent(QContextMenuEvent *event)
 {
 	QScrollArea *s = (QScrollArea*) m_stack->currentWidget();
-	Q_ASSERT(s != 0);
+    Q_ASSERT(s != nullptr);
 	static_cast<WidgetLayout *>(s->widget())->createContextMenu(event);
 }
 
@@ -134,7 +135,7 @@ void WidgetPanel::mouseMoveEvent(QMouseEvent * event)
 	if (!s) // scroll area is sometimes null during startup and shutdown
 		return;
 	WidgetLayout *w  = static_cast<WidgetLayout *>(s->widget());
-	if (w != 0) {
+    if (w != nullptr) {
 		w->mouseMoveEventParent(event);
 	}
 }

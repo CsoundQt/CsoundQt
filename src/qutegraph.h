@@ -25,10 +25,11 @@
 
 #include "qutewidget.h"
 #include "csoundengine.h"  //necessary for the CsoundUserData struct
+#include "selectcolorbutton.h"
 
 class Curve;
 
-enum GraphType { GRAPH_FTABLE, GRAPH_AUDIOSIGNAL, GRAPH_SPECTRUM };
+enum GraphType { GRAPH_FTABLE=1, GRAPH_AUDIOSIGNAL=2, GRAPH_SPECTRUM=3 };
 
 
 class QuteGraph : public QuteWidget
@@ -121,6 +122,10 @@ private:
 	bool m_logy;
     bool m_drawGrid;
     bool m_drawTableInfo;
+
+signals:
+    void requestUpdateCurve(Curve *curve);
+
 };
 
 class StackedLayoutWidget : public QStackedWidget
@@ -155,6 +160,99 @@ public:
 
   signals:
 	void popUpMenu(QPoint pos);*/
+};
+
+// ----------------------------------------------------------------------------------
+
+
+// -----------------------------------------------------------------------------------
+
+class QuteTableWidget : public QWidget {
+    Q_OBJECT
+
+public:
+    QuteTableWidget(QWidget *parent = nullptr)
+        : QWidget(parent)
+        , m_tabnum(0)
+        , m_ud(nullptr)
+        , m_running(false)
+        , m_data(nullptr)
+        , m_tabsize(0)
+        , m_margin(8)
+        , m_maxy(1.0)
+        , m_autorange(true)
+        , m_path(nullptr)
+        , m_showGrid(true)
+    {}
+    virtual ~QuteTableWidget() override;
+    void setUserData(CsoundUserData *ud) { m_ud = ud; }
+    void updateData(int tabnum, bool check=true);
+    int currentTableNumber() { return m_tabnum; }
+    void updatePath();
+    void setColor(QColor color) { m_color = color; }
+    void setRange(double maxy=1.0);
+    void showGrid(bool show) { m_showGrid = show; }
+    void reset();
+    void paintGrid(QPainter *painter);
+
+protected:
+    virtual void paintEvent(QPaintEvent *event) override;
+
+private:
+    int m_tabnum;
+    CsoundUserData *m_ud;
+    bool m_running;
+    QColor m_color;
+    MYFLT *m_data;
+    int m_tabsize;
+    int m_margin;
+    double m_maxy;
+    bool m_autorange;
+    QPainterPath *m_path;
+    QMutex mutex;
+    bool m_showGrid;
+
+// public slot:
+
+};
+
+
+class QuteTable : public QuteWidget {
+    Q_OBJECT
+
+public:
+    QuteTable(QWidget *parent);
+    ~QuteTable();
+    virtual QString getWidgetLine() { return QString(""); }
+    virtual QString getWidgetXmlText();
+    virtual QString getWidgetType() { return QString("BSBTableDisplay"); }
+    // virtual void setWidgetGeometry(int x,int y,int width,int height);
+    virtual void applyInternalProperties();
+    virtual void createPropertiesDialog();
+    virtual void refreshWidget();
+
+    virtual void setCsoundUserData(CsoundUserData *ud);
+    virtual void setValue(double value);
+    virtual void setValue(QString s);
+    virtual void setColor(QColor color);
+
+public slots:
+    void onStop();
+
+private:
+    int m_tabnum;
+
+protected:
+    // virtual void mousePressEvent(QMouseEvent *event);
+    // virtual void mouseReleaseEvent(QMouseEvent *event);
+
+    virtual void applyProperties();
+    SelectColorButton *colorButton;
+    QCheckBox *rangeCheckBox;
+    QDoubleSpinBox *rangeSpinBox;
+    QCheckBox *gridCheckBox;
+    QMutex mutex;
+
 };
 
 

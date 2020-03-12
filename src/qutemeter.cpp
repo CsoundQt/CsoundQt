@@ -343,26 +343,22 @@ void QuteMeter::createPropertiesDialog()
     colorLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
     layout->addWidget(colorLabel, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
 
-	colorButton = new QPushButton(dialog);
-	QPixmap pixmap(64,64);
-	pixmap.fill(static_cast<MeterWidget *>(m_widget)->getColor());
-	colorButton->setIcon(pixmap);
-	QPalette palette(static_cast<MeterWidget *>(m_widget)->getColor());
-	palette.color(QPalette::Window);
-	colorButton->setPalette(palette);
-	layout->addWidget(colorButton, 5,1, Qt::AlignLeft|Qt::AlignVCenter);
-	connect(colorButton, SIGNAL(released()), this, SLOT(selectTextColor()));
+    // colorButton = new QPushButton(dialog);
+    colorButton = new SelectColorButton(dialog);
+    colorButton->setColor(static_cast<MeterWidget *>(m_widget)->getColor());
 
-    bgColorButton = new QPushButton(dialog);
-    QColor bgcolor = static_cast<MeterWidget *>(m_widget)->getBgColor();
-    QPixmap pixmap2(64,64);
-    pixmap2.fill(bgcolor);
-    bgColorButton->setIcon(pixmap2);
-    QPalette palette2(bgcolor);
-    palette.color(QPalette::Window);
-    bgColorButton->setPalette(palette2);
+    // QPixmap pixmap(64,64);
+    // pixmap.fill(static_cast<MeterWidget *>(m_widget)->getColor());
+    // colorButton->setIcon(pixmap);
+    // QPalette palette(static_cast<MeterWidget *>(m_widget)->getColor());
+    // palette.color(QPalette::Window);
+    // colorButton->setPalette(palette);
+	layout->addWidget(colorButton, 5,1, Qt::AlignLeft|Qt::AlignVCenter);
+    // connect(colorButton, SIGNAL(released()), this, SLOT(selectTextColor()));
+
+    bgColorButton = new SelectColorButton(dialog);
+    bgColorButton->setColor(static_cast<MeterWidget *>(m_widget)->getBgColor());
     layout->addWidget(bgColorButton, 5,2, Qt::AlignLeft|Qt::AlignVCenter);
-    connect(bgColorButton, SIGNAL(released()), this, SLOT(selectBgColor()));
 
     borderCheckBox = new QCheckBox(tr("Border"), dialog);
     borderCheckBox->setCheckState(
@@ -513,8 +509,10 @@ void QuteMeter::applyProperties()
 #endif
 	// Only properties should be changed here as applyInternalProperties takes care of the rest
 	setProperty("QCS_objectName2", name2LineEdit->text());
-	setProperty("QCS_color", colorButton->palette().color(QPalette::Window));
-    setProperty("QCS_bgcolor", bgColorButton->palette().color(QPalette::Window));
+    // setProperty("QCS_color", colorButton->palette().color(QPalette::Window));
+    setProperty("QCS_color", colorButton->getColor());
+    // setProperty("QCS_bgcolor", bgColorButton->palette().color(QPalette::Window));
+    setProperty("QCS_bgcolor", bgColorButton->getColor());
 	setProperty("QCS_type", typeComboBox->currentText());
 	setProperty("QCS_pointsize", pointSizeSpinBox->value());
 	setProperty("QCS_fadeSpeed", fadeSpeedSpinBox->value());

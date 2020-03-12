@@ -415,7 +415,7 @@ void DocumentPage::setWidgetLayoutOuterGeometry(QRect r)
 void DocumentPage::setChannelValue(QString channel, double value)
 {
 	for (int i = 0; i < m_widgetLayouts.size(); i++) {
-		m_widgetLayouts[i]->newValue(QPair<QString,double>(channel, value));
+        m_widgetLayouts[i]->newValue(QPair<QString,double>(channel, value));
 	}
 }
 

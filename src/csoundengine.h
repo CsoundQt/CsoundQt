@@ -50,6 +50,7 @@ class Curve;
 class CsoundEngine;
 class WidgetLayout;
 class MidiHandler;
+class QuteWidget;
 
 // Csound 5.10 needs to be destroyed for opcodes like ficlose to flush the output
 // This still necessary for 5.12 and Csound6
@@ -230,6 +231,7 @@ public slots:
 	void registerScope(QuteScope *scope);
 	//    void unregisterScope(QuteScope *scope);
 	void registerGraph(QuteGraph *scope);
+    void requestCsoundUserData(QuteWidget *widget);
 	void setFlags(PerfFlags flags) {ud->flags = flags;}
 
 	void evaluate(QString code);
@@ -258,8 +260,10 @@ private:
 	QList <int> keyReleaseBuffer; // protected by keyMutex
 
 	bool m_recording;
-	QMutex m_playMutex; // To prevent from starting a Csound instance while another is starting or closing
+    // To prevent from starting a Csound instance while another is starting or closing
+    QMutex m_playMutex;
 	QMutex eventMutex;
+    QMutex csoundMutex;
 	QVector<QString> eventQueue;
 	int m_refreshTime; // time in milliseconds for widget value updates (both input and output)
 	QVector<unsigned long> eventTimeStamps;

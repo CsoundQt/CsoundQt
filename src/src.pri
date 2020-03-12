@@ -75,6 +75,7 @@ HEADERS = "src/about.h" \
     "src/additionalfilespage.h" \
     "src/scoreeditor.h" \
     "src/filebeditor.h" \
+    $$PWD/selectcolorbutton.h \
     src/midihandler.h \
     src/midilearndialog.h \
     src/debugpanel.h \
@@ -134,6 +135,7 @@ SOURCES = "src/about.cpp" \
     "src/additionalfilespage.cpp" \
     "src/scoreeditor.cpp" \
     "src/filebeditor.cpp" \
+    $$PWD/selectcolorbutton.cpp \
     src/midihandler.cpp \
     src/midilearndialog.cpp \
     src/debugpanel.cpp \

@@ -25,6 +25,39 @@
 #include <cmath>
 #include <QPalette>
 
+
+#include <QColorDialog>
+
+
+enum CsoundEngineStatus {
+    Running=0,
+    UserDataNotSet,
+    CsoundInstanceNotSet,
+    EngineNotSet,
+    NotRunning
+};
+
+
+inline CsoundEngineStatus csoundEngineStatus(CsoundUserData *ud) {
+    if(ud == nullptr) {
+        return CsoundEngineStatus::UserDataNotSet;
+    }
+    if(ud->csound == nullptr) {
+        return CsoundEngineStatus::CsoundInstanceNotSet;
+    }
+    if(ud->csEngine == nullptr) {
+        return CsoundEngineStatus::EngineNotSet;
+    }
+    if(!ud->csEngine->isRunning()) {
+        // qDebug() << "csound not running";
+        return CsoundEngineStatus::NotRunning;
+    }
+    return CsoundEngineStatus::Running;
+}
+
+
+// -----------------------------------------------------------------------------------------
+
 QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 {
 	m_widget = new StackedLayoutWidget(this);
@@ -181,7 +214,7 @@ void QuteGraph::setValue(double value)
 
 void QuteGraph::refreshWidget()
 {
-	bool needsUpdate = false;
+    bool needsUpdate = false;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -194,17 +227,18 @@ void QuteGraph::refreshWidget()
 		needsUpdate = true;
 	}
 	else if (m_value2Changed) {
-		index = getIndexForTableNum(m_value2);
-		if (index >= 0) {
-			m_value = index;
+        index = getIndexForTableNum((int)m_value2);
+        if (index >= 0) {
+            m_value = index;
 			//      m_valueChanged = false;
-		}
-		m_value2Changed = false;
-		needsUpdate = true;
+        }
+        m_value2Changed = false;
+        needsUpdate = true;
 	}
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();  // unlock
 #endif
+    qDebug() << "needsUpdate" << needsUpdate << "index: " << index;
 	if (needsUpdate) {
 		if (index < 0) {
 			index = getIndexForTableNum(-index);
@@ -865,4 +899,398 @@ void QuteGraph::setInternalValue(double value)
 {
 	m_value = value;
 	m_valueChanged = true;
+}
+
+// ----------------------
+QuteTableWidget::~QuteTableWidget() {
+};
+
+void QuteTableWidget::reset() {
+    QMutexLocker locker(&mutex);
+    m_tabnum = 0;
+    m_running = false;
+    m_data = nullptr;
+    m_tabsize = 0;
+    if(m_autorange)
+        m_maxy = 1.0;
+    if(m_path != nullptr) {
+        delete m_path;
+        m_path = nullptr;
+    }
+}
+
+void QuteTableWidget::paintGrid(QPainter *painter) {
+    int margin = m_margin;
+    QString maxystr;
+    if(m_maxy >= 10)
+        maxystr = QString::number((int)m_maxy);
+    else if(m_maxy >= 1)
+        maxystr = QString::number(m_maxy, 'f', 1);
+    else
+        maxystr = QString::number(m_maxy, 'f', 2);
+    auto rect = this->rect();
+    const int yoffset = 0;
+    auto x0 = rect.x() + margin;
+    auto x1 = rect.x() + rect.width() - margin + 1;
+    auto y0 = rect.y() + margin + yoffset;
+    auto y1 = rect.y() + rect.height() - margin + yoffset ;
+    auto ycenter = (y0+y1) / 2;
+
+    auto font = QFont({"Sans", 8});
+    QFontMetrics fm(font);
+    auto tabsizestr = QString::number(m_tabsize);
+    const int textMargin = 4;
+    painter->setBrush(Qt::NoBrush);
+    painter->setPen(QPen(QColor(96, 96, 96), 0));
+    painter->drawLine(rect.x() + fm.horizontalAdvance(maxystr)+textMargin*2, y0, x1, y0);
+    painter->drawLine(x0, ycenter, x1, ycenter);
+    painter->drawLine(x0, y1, x1 - fm.horizontalAdvance(tabsizestr) - 2, y1);
+
+    painter->setPen(QColor(48, 48, 48));
+    painter->drawLine(x0, (y0+ycenter)/2, x1, (y0+ycenter)/2);
+    painter->drawLine(x0, (y1+ycenter)/2, x1, (y1+ycenter)/2);
+
+    painter->setPen(QColor(200, 200, 200));
+    painter->setFont(font);
+    painter->drawText(rect.x()+textMargin, y0+textMargin, maxystr);
+    // right padding
+    rect.setWidth(rect.width() - textMargin);
+    painter->drawText(rect, Qt::AlignRight|Qt::AlignBottom, tabsizestr);
+
+}
+
+void QuteTableWidget::paintEvent(QPaintEvent *event) {
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(Qt::NoPen);
+    bool running = csoundEngineStatus(m_ud) == CsoundEngineStatus::Running;
+    if(!running) {
+        painter.setBrush(QColor(176, 0, 32));
+        painter.drawRect(this->rect());
+        painter.setPen(Qt::white);
+        painter.drawText(this->rect(), Qt::AlignCenter, "Stopped");
+        return;
+    }
+    if(m_tabnum <= 0) {
+        // table not set
+        painter.setBrush(QColor(0, 176, 32));
+        painter.drawRect(this->rect());
+        painter.setPen(Qt::white);
+        painter.drawText(this->rect(), Qt::AlignCenter, "Table not set");
+        return;
+    }
+    // running OK
+    painter.setBrush(QColor(24, 24, 24));
+    painter.drawRect(this->rect());
+    painter.setBrush(Qt::NoBrush);
+    if(m_path == nullptr)
+        return;
+    mutex.lock();
+    if(m_showGrid) {
+        this->paintGrid(&painter);
+    }
+    painter.setPen(QPen(m_color, 0));
+    painter.drawPath(*m_path);
+
+    mutex.unlock();
+}
+
+void QuteTableWidget::setRange(double maxy) {
+    if(maxy == 0.0) {
+        m_autorange = true;
+    } else {
+        m_autorange = false;
+        m_maxy = maxy;
+    }
+}
+
+void QuteTableWidget::updatePath() {
+    if(m_tabnum <= 0 && m_data == nullptr)
+        return;
+    if(csoundEngineStatus(m_ud) != CsoundEngineStatus::Running)
+        return;
+    int margin = m_margin;
+    auto rect = this->rect();
+    auto width = rect.width() - margin*2;
+    auto height = rect.height() - margin*2;
+    double maxy = this->m_maxy;
+    double newmaxy = maxy;
+    double xscale = width / (double)m_tabsize;
+    double yscale = height * 0.5 / maxy;
+    double y0 = rect.y() + margin;
+    double x0 = rect.x() + margin;
+    int step = m_tabsize / width;
+    if(step == 0)
+        step = 1;
+
+    auto path = new QPainterPath();
+    double ydata = m_data[0];
+    path->moveTo(x0, (ydata+maxy)*yscale+y0);
+    for(int i=0; i < m_tabsize; i+=step) {
+        ydata = m_data[i];
+        double x2 = i*xscale + x0;
+        double y2 = (ydata+maxy)*yscale + y0;
+        path->lineTo(x2, y2);
+        if(ydata > newmaxy)
+            newmaxy = ydata;
+    }
+    mutex.lock();
+    if(m_autorange) {
+        m_maxy = ceil(newmaxy);
+    }
+    if(m_path != nullptr)
+        delete m_path;
+    m_path = path;
+    mutex.unlock();
+}
+
+void QuteTableWidget::updateData(int tabnum, bool check) {
+    if(check && csoundEngineStatus(m_ud) != CsoundEngineStatus::Running) {
+        m_tabnum = 0;
+        return;
+    }
+    if(tabnum == -1 || tabnum == m_tabnum ) {
+        if(m_tabnum == 0 || m_data == nullptr || m_tabsize == 0) {
+            qDebug() << "Table not set, can't update";
+            return;
+        }
+        this->updatePath();
+        this->update();
+        return;
+    }
+    // Asked to change table ( or set for the first time )
+    MYFLT *data;
+    int tabsize = csoundGetTable(m_ud->csound, &data, tabnum);
+    if(tabsize == 0 || data == nullptr) {
+        qDebug() << "Table" << tabnum << "not found";
+        this->reset();
+        return;
+    }
+    mutex.lock();
+    m_data = data;
+    m_tabsize = tabsize;
+    if(m_autorange && m_tabnum != tabnum) {
+        m_maxy = 1.0;
+    }
+    m_tabnum = tabnum;
+    mutex.unlock();
+    this->updatePath();
+    this->update();
+}
+
+
+// -------------------------
+
+QuteTable::~QuteTable() {};
+
+// void QuteTable::mousePressEvent(QMouseEvent *event) {};
+// void QuteTable::mouseReleaseEvent(QMouseEvent *event) {};
+
+QuteTable::QuteTable(QWidget *parent) : QuteWidget(parent) {
+    m_widget = new QuteTableWidget(this);
+    m_value = 0;
+    m_tabnum = 0;
+    // auto w = static_cast<QuteTableWidget*>(m_widget);
+    setProperty("QCS_randomizable", false);
+    m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+    m_widget->setMouseTracking(true);
+    setProperty("QCS_range", 0.0);
+    setColor(QColor(255, 193, 3));
+    setProperty("QCS_showGrid", true);
+}
+
+void QuteTable::setColor(QColor color) {
+    setProperty("QCS_color", color);
+    static_cast<QuteTableWidget*>(m_widget)->setColor(color);
+}
+
+void QuteTable::applyInternalProperties() {
+    QuteWidget::applyInternalProperties();
+    auto w = static_cast<QuteTableWidget*>(m_widget);
+    auto color = property("QCS_color").value<QColor>();
+    w->setColor(color);
+    w->setRange(property("QCS_range").toDouble());
+    w->showGrid(property("QCS_showGrid").toBool());
+}
+
+void QuteTable::createPropertiesDialog() {
+    QuteWidget::createPropertiesDialog();
+    dialog->setWindowTitle("Table Display");
+    auto label = new QLabel(dialog);
+    label->setText("Color");
+    layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    colorButton = new SelectColorButton(dialog);
+    colorButton->setColor(property("QCS_color").value<QColor>());
+    layout->addWidget(colorButton, 4, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    double range = property("QCS_range").toDouble();
+    rangeCheckBox = new QCheckBox("Fixed Range", dialog);
+    rangeCheckBox->setToolTip("If checked the range is fixed to the value set on the right."
+                              "If the table has values outside this range these will not be"
+                              "displayed");
+    rangeCheckBox->setChecked(range > 0.0);
+    layout->addWidget(rangeCheckBox, 5, 1, Qt::AlignRight|Qt::AlignVCenter);
+
+    rangeSpinBox = new QDoubleSpinBox(dialog);
+    rangeSpinBox->setRange(0.1, 999999.0);
+    rangeSpinBox->setSingleStep(0.1);
+    rangeSpinBox->setToolTip("Sets the max. range to plot. Disable this to use autorange"
+                             "With a fixed range, values outside the range will not be "
+                             "visiable");
+    rangeSpinBox->setValue(range > 0 ? range : 1.0);
+    layout->addWidget(rangeSpinBox, 5, 2, Qt::AlignLeft|Qt::AlignVCenter);
+    connect(rangeCheckBox, SIGNAL(toggled(bool)), rangeSpinBox, SLOT(setEnabled(bool)));
+
+    gridCheckBox = new QCheckBox("Show Grid", dialog);
+    gridCheckBox->setChecked(property("QCS_showGrid").toBool());
+    layout->addWidget(gridCheckBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+}
+
+void QuteTable::applyProperties() {
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.lockForWrite();
+#endif
+    setProperty("QCS_color", colorButton->getColor());
+    bool fixedrange = rangeCheckBox->isChecked();
+    double range = rangeSpinBox->value();
+    if(fixedrange) {
+        Q_ASSERT(range > 0.0);
+        setProperty("QCS_range", range);
+    } else {
+        setProperty("QCS_range", 0.0);
+    }
+    setProperty("QCS_showGrid", gridCheckBox->isChecked());
+
+#ifdef  USE_WIDGET_MUTEX
+    widgetLock.unlock();
+#endif
+    QuteWidget::applyProperties();
+}
+
+void QuteTable::refreshWidget() {
+    Q_ASSERT(m_valueChanged);
+    QMutexLocker locker(&mutex);
+    m_valueChanged = false;
+    if(csoundEngineStatus(m_csoundUserData) != CsoundEngineStatus::Running)
+        return;
+    auto w = static_cast<QuteTableWidget*>(m_widget);
+    int tabnum = (int)m_value;
+    w->blockSignals(true);
+    w->updateData(tabnum, true);
+    w->blockSignals(false);
+}
+
+QString QuteTable::getWidgetXmlText() {
+    xmlText = "";
+    QXmlStreamWriter s(&xmlText);
+    createXmlWriter(s);        // --------- start
+
+    QColor color = property("QCS_color").value<QColor>();
+    s.writeStartElement("color");
+    s.writeTextElement("r", QString::number(color.red()));
+    s.writeTextElement("g", QString::number(color.green()));
+    s.writeTextElement("b", QString::number(color.blue()));
+    s.writeEndElement();
+
+    auto range = property("QCS_range").toDouble();
+    s.writeTextElement("range", QString::number(range, 'f', 2));
+
+    s.writeEndElement();      // --------- end
+    return xmlText;
+}
+
+void QuteTable::onStop() {
+    mutex.lock();
+    this->blockSignals(true);
+    m_tabnum = 0;
+    m_value = 0;
+    m_valueChanged = true;
+
+    auto w = static_cast<QuteTableWidget*>(m_widget);
+    w->setUserData(m_csoundUserData);
+    w->blockSignals(true);
+    w->reset();
+    w->blockSignals(false);
+    // this->applyInternalProperties();
+    this->blockSignals(false);
+    mutex.unlock();
+}
+
+void QuteTable::setCsoundUserData(CsoundUserData *ud) {
+    qDebug()<<"QuteTable::setCsoundUserData" << ud;
+    if(ud == nullptr) {
+        qDebug()<<"CsoundUserData is null";
+        return;
+    }
+    QMutexLocker locker(&mutex);
+    m_csoundUserData = ud;
+    auto w = static_cast<QuteTableWidget*>(m_widget);
+    if(w == nullptr) {
+        qDebug() << "widget is null";
+        return;
+    }
+    w->setUserData(ud);
+    connect(ud->csEngine, SIGNAL(stopSignal()), this, SLOT(onStop()));
+}
+
+/*
+void QuteTable::setWidgetGeometry(int x, int y, int width, int height) {
+
+    if(csoundEngineStatus(m_csoundUserData)==CsoundEngineStatus::Running) {
+        return;
+    }
+    QuteWidget::setWidgetGeometry(x,y,width, height);
+}
+*/
+
+void QuteTable::setValue(double value) {
+    if(m_value == value) {
+        return;
+    }
+
+#ifdef USE_WIDGET_MUTEX
+    widgetLock.lockForWrite();
+#endif
+    mutex.lock();
+    if(value == -1 && m_tabnum > 0) {
+        // update data, don't change table number
+        m_valueChanged = false;
+        auto w = static_cast<QuteTableWidget*>(m_widget);
+        w->blockSignals(true);
+        w->updateData(m_tabnum);
+        w->blockSignals(false);
+        mutex.unlock();
+        return;
+    }
+    m_value = value;
+    m_valueChanged = true;
+    m_tabnum = (int)value;
+    mutex.unlock();
+    static_cast<QuteTableWidget*>(m_widget)->updateData(m_tabnum);
+
+#ifdef USE_WIDGET_MUTEX
+    widgetLock.unlock();
+#endif
+
+};
+
+void QuteTable::setValue(QString s) {
+    if(s.isEmpty())
+        return;
+    auto parts = s.splitRef(' ', QString::SkipEmptyParts);
+    if(parts.size() == 0)
+        return;
+    if(parts[0] == "@set") {
+        if(parts.size() != 2) {
+            qDebug() << "@set message expects a table number (example: @set 103)";
+            return;
+        }
+        int tabnum = parts[1].toInt();
+        setValue((double)tabnum);
+    } else if (parts[0] == "@update") {
+        setValue(-1);
+    } else
+        qDebug() << "Message not supported:" << s;
 }

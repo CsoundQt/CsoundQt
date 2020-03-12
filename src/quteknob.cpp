@@ -425,21 +425,17 @@ void QuteKnob::createPropertiesDialog()
     label->setText("Color");
     layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
 
-    knobColorButton = new QPushButton(dialog);
-    QColor color = property("QCS_color").value<QColor>();
-    buttonSetColorIcon(knobColorButton, color, 64);
+    knobColorButton = new SelectColorButton(dialog);
+    knobColorButton->setColor(property("QCS_color").value<QColor>());
     layout->addWidget(knobColorButton, 7, 1, Qt::AlignLeft | Qt::AlignVCenter);
-    connect(knobColorButton, SIGNAL(released()), this, SLOT(selectKnobColor()));
 
     label = new QLabel(dialog);
     label->setText("Text Color");
     layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
 
-    knobTextColorButton = new QPushButton(dialog);
-    QColor textcolor = QColor(property("QCS_textcolor").toString());
-    buttonSetColorIcon(knobTextColorButton, textcolor, 64);
+    knobTextColorButton = new SelectColorButton(dialog);
+    knobTextColorButton->setColor(QColor(property("QCS_textcolor").toString()));
     layout->addWidget(knobTextColorButton, 7, 3, Qt::AlignLeft | Qt::AlignVCenter);
-    connect(knobTextColorButton, SIGNAL(released()), this, SLOT(selectKnobTextColor()));
 
     connect(flatStyleCheckBox, SIGNAL(toggled(bool)),
             displayValueCheckBox, SLOT(setEnabled(bool)));
@@ -465,19 +461,21 @@ void QuteKnob::applyProperties()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
+    auto w = static_cast<QVdial*>(m_widget);
 
     setProperty("QCS_maximum", maxSpinBox->value());
     setProperty("QCS_minimum", minSpinBox->value());
 
     // QColor color = knobColorButton->palette().color(QPalette::Window);
-    QColor color = static_cast<QVdial*>(m_widget)->getColor();
-
+    QColor color = knobColorButton->getColor();
     setProperty("QCS_color", color);
-    // QColor textcolor = knobTextColorButton->palette().color(QPalette::Window);
-    QColor textcolor = static_cast<QVdial*>(m_widget)->getTextColor();
-    setProperty("QCS_textcolor", textcolor.name());
+    w->setColor(color);
 
-    auto w = static_cast<QVdial*>(m_widget);
+    QColor textcolor = knobTextColorButton->getColor();
+    setProperty("QCS_textcolor", textcolor.name());
+    qDebug() << "knob textcolor" << textcolor;
+    w->setTextColor(textcolor);
+
     w->setDisplayRange(minSpinBox->value(), maxSpinBox->value());
 
     bool showvalue = displayValueCheckBox->checkState();

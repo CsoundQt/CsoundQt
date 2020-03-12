@@ -82,12 +82,18 @@ void FrameWidget::mousePressEvent ( QMouseEvent * event )
 			m_resize = true;
 		else
 			m_resize = false;
-		if (!(event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier)) ) {
-			if (!this->isSelected())
-				emit deselectAllSignal();
+        if (event->modifiers() & Qt::ShiftModifier) {
+            this->select();
+        } else if (event->modifiers() & Qt::ControlModifier) {
+            if(this->isSelected())
+                this->deselect();
+            else
+                this->select();
+        } else {
+            emit deselectAllSignal();
+            this->select();
 		}
-		this->select();
-	}
+    }
 	event->accept(); //to avoid propagation of the event to parent widgets
 }
 
@@ -101,9 +107,20 @@ void FrameWidget::mouseReleaseEvent ( QMouseEvent * event )
 void FrameWidget::mouseMoveEvent (QMouseEvent* event)
 {
 	if (m_resize) {
-		//     qDebug("FrameWidget::mouseMoveEvent %i, %i", event->x()- startx,event->y()- starty );
-		QPair<int, int> pair(event->x()- oldx, event->y()- oldy);
-		emit resized(pair);
+        if(event->modifiers() & Qt::ShiftModifier) {
+            auto dx = event->x() - oldx;
+            auto dy = event->y() - oldy;
+            if(qAbs(dx) > qAbs(dy)) {
+                QPair<int,int> pair(dx, 0);
+                emit resized(pair);
+            } else {
+                QPair<int, int> pair(0, dy);
+                emit resized(pair);
+            }
+        } else {
+            QPair<int, int> pair(event->x()- oldx, event->y()- oldy);
+            emit resized(pair);
+        }
 	}
 	else {
 		QPair<int, int> pair(event->x()- startx, event->y()- starty);
