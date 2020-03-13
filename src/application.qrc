@@ -52,6 +52,7 @@
         <file>../examples/Widgets/Menu_Widget.csd</file>
         <file>../examples/Widgets/Controller_Widget.csd</file>
         <file>../examples/Widgets/Scope_Widget.csd</file>
+        <file>../examples/Widgets/Tableplot_Widget.csd</file>
         <file>../examples/Widgets/String_Channels.csd</file>
         <file>../examples/Widgets/Presets.csd</file>
         <file>../examples/Widgets/Reserved_Channels.csd</file>

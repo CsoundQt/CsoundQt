@@ -954,7 +954,7 @@ void CsoundEngine::stopCsound()
         }
         if(status < 0) {
             QDEBUG << "Error when stopping csound";
-            return;
+            break;
         }
         if(status == 0) {
             QDEBUG << "Csound still playing, trying again in " << waitTime << "msecs";
@@ -1041,13 +1041,8 @@ void CsoundEngine::cleanupCsound()
         csoundDebuggerClean(ud->csound);
     }
 #endif
-    printf("!!!!!!!! 4\n");
-
     csoundCleanup(ud->csound);
-    printf("!!!!!!!! 5\n");
-
     flushQueues();
-    printf("!!!!!!!! 6\n");
 
 #ifndef CSOUND6
     csoundSetMessageCallback(ud->csound, 0);
@@ -1062,8 +1057,6 @@ void CsoundEngine::cleanupCsound()
     ud->virtualMidiBuffer = nullptr;
     csoundDestroy(ud->csound);
     ud->csound = nullptr;
-    printf("!!!!!!!! 7\n");
-
 #else
     csoundReset(ud->csound);
 #endif
