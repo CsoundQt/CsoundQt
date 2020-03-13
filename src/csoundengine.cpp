@@ -970,9 +970,10 @@ void CsoundEngine::stopCsound()
         csoundStop(ud->csound);
         QDEBUG << "Csound stopped";
         ud->perfThread = nullptr;
-        printf(" ---------------- 0\n"); fflush(stdout);
-        csoundMutex.unlock();
+        pt->SetProcessCallback(nullptr, nullptr);
         delete pt;
+        csoundMutex.unlock();
+
         printf(" ---------------- 1\n"); fflush(stdout);
         QDEBUG << "Cleaning up csound";
         this->cleanupCsound();
@@ -990,7 +991,7 @@ void CsoundEngine::stopCsound()
     QDEBUG  << "Joined.";
 
     ud->perfThread = NULL;
-    // delete pt;
+    delete pt;
 
     QDEBUG << "Cleaning up csound...";
 
@@ -1022,15 +1023,11 @@ void CsoundEngine::cleanupCsound()
         return;
     }
     QMutexLocker locker(&csoundMutex);
-    printf("!!!!!!!! 1\n");
     csoundSetIsGraphable(ud->csound, 0);
-    printf("!!!!!!!! 2\n");
-
     csoundSetMakeGraphCallback(ud->csound, nullptr);
     csoundSetDrawGraphCallback(ud->csound, nullptr);
     csoundSetKillGraphCallback(ud->csound, nullptr);
     csoundSetExitGraphCallback(ud->csound, nullptr);
-    printf("!!!!!!!! 3\n");
 
 #ifdef CSOUND6
     csoundRemoveKeyboardCallback(ud->csound,
