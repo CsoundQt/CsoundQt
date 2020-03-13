@@ -971,11 +971,10 @@ void CsoundEngine::stopCsound()
         QDEBUG << "Csound stopped";
         ud->perfThread = nullptr;
         printf(" ---------------- 0\n"); fflush(stdout);
-
+        csoundMutex.unlock();
         delete pt;
         printf(" ---------------- 1\n"); fflush(stdout);
         QDEBUG << "Cleaning up csound";
-        csoundMutex.unlock();
         this->cleanupCsound();
         printf(" ---------------- 2\n"); fflush(stdout);
         QDEBUG << "Cleaned up OK, emiting stop signal";
