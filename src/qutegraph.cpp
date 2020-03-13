@@ -1115,7 +1115,7 @@ void QuteTable::applyInternalProperties() {
 
 void QuteTable::createPropertiesDialog() {
     QuteWidget::createPropertiesDialog();
-    dialog->setWindowTitle("Table Display");
+    dialog->setWindowTitle("Table Plot");
     auto label = new QLabel(dialog);
     label->setText("Color");
     layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);

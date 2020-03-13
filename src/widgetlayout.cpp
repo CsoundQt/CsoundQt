@@ -104,7 +104,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     createScopeAct = new QAction(tr("Scope"),this);
 	connect(createScopeAct, SIGNAL(triggered()), this, SLOT(createNewScope()));
 
-    createTableDisplayAct = new QAction(tr("Table Display"), this);
+    createTableDisplayAct = new QAction(tr("Table Plot"), this);
     connect(createTableDisplayAct, SIGNAL(triggered()), this, SLOT(createNewTableDisplay()));
 
 	propertiesAct = new QAction(tr("Properties"),this);
