@@ -970,6 +970,8 @@ void CsoundEngine::stopCsound()
         csoundStop(ud->csound);
         QDEBUG << "Csound stopped";
         ud->perfThread = nullptr;
+        printf(" ---------------- 0\n"); fflush(stdout);
+
         delete pt;
         printf(" ---------------- 1\n"); fflush(stdout);
         QDEBUG << "Cleaning up csound";
