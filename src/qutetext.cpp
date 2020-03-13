@@ -121,21 +121,22 @@ void QuteText::setFontSize(int fontSize)
 	setProperty("QCS_fontsize", fontSize);
 }
 
-void QuteText::setTextColor(QColor textColor)
+
+void QuteText::setTextColor(QColor color)
 {
 	// For old format only
-	setProperty("QCS_color", textColor);
+    setProperty("QCS_color", color);
 	QPalette palette = m_widget->palette();
-	palette.setColor(QPalette::WindowText, textColor);
+    palette.setColor(QPalette::WindowText, color);
 	m_widget->setPalette(palette);
 }
 
-void QuteText::setBgColor(QColor bgColor)
+void QuteText::setBgColor(QColor color)
 {
 	// For old format only
-	setProperty("QCS_bgcolor", bgColor);
+    setProperty("QCS_bgcolor", color);
 	QPalette palette = m_widget->palette();
-	palette.setColor(QPalette::Window, bgColor);
+    palette.setColor(QPalette::Window, color);
 	m_widget->setPalette(palette);
 }
 
@@ -462,14 +463,16 @@ void QuteText::createPropertiesDialog()
 	layout->addWidget(label, 6, 0, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["textColor"] = label;
 
-    textColor = new QPushButton(dialog);
-	layout->addWidget(textColor, 6,1, Qt::AlignLeft|Qt::AlignVCenter);
-	connect(textColor, SIGNAL(released()), this, SLOT(selectTextColor()));
+    textColor = new SelectColorButton(dialog);
+    textColor->setColor(property("QCS_color").value<QColor>());
+    layout->addWidget(textColor, 6,1, Qt::AlignLeft|Qt::AlignVCenter);
+    // connect(textColor, SIGNAL(released()), this, SLOT(selectTextColor()));
 
     bg = new QCheckBox("Background", dialog);
     layout->addWidget(bg, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
-	bgColor = new QPushButton(dialog);
-	layout->addWidget(bgColor, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
+    bgColor = new SelectColorButton(dialog);
+    bgColor->setColor(property("QCS_bgcolor").value<QColor>());
+    layout->addWidget(bgColor, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
 
     // border = new QCheckBox("Border", dialog);
     // layout->addWidget(border, 7,2, Qt::AlignLeft|Qt::AlignVCenter);
@@ -532,23 +535,26 @@ void QuteText::createPropertiesDialog()
     vertAlignmentComboBox->addItem(tr("Bottom", "Alignment"));
     layout->addWidget(vertAlignmentComboBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-	connect(bgColor, SIGNAL(released()), this, SLOT(selectBgColor()));
+    // connect(bgColor, SIGNAL(released()), this, SLOT(selectBgColor()));
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
-
-    QPixmap pixmap(64,64);
-	pixmap.fill(property("QCS_color").value<QColor>());
+    // QPixmap pixmap(64,64);
+    // QPalette palette(property("QCS_color").value<QColor>());
+    /*
+    pixmap.fill(property("QCS_color").value<QColor>());
 	textColor->setIcon(pixmap);
-	QPalette palette(property("QCS_color").value<QColor>());
-	textColor->setPalette(palette);
+    textColor->setPalette(palette);
 	palette.color(QPalette::Window);
+    */
+    /*
 	pixmap.fill(property("QCS_bgcolor").value<QColor>());
 	bgColor->setIcon(pixmap);
 	palette = QPalette(property("QCS_bgcolor").value<QColor>());
 	bgColor->setPalette(palette);
-	palette.color(QPalette::Window);
-	bg->setChecked(property("QCS_bgcolormode").toBool());
+    palette.color(QPalette::Window);
+    */
+    bg->setChecked(property("QCS_bgcolormode").toBool());
     // border->setChecked(property("QCS_bordermode").toString() == "border");
 	font->setCurrentFont(QFont(property("QCS_font").toString()));
 	fontSize->setValue(property("QCS_fontsize").toInt());
@@ -620,9 +626,10 @@ void QuteText::applyProperties()
 
     setProperty("QCS_font", font->currentFont().family());
 	setProperty("QCS_fontsize", fontSize->value());
-	setProperty("QCS_bgcolor", bgColor->palette().color(QPalette::Window));
-	setProperty("QCS_bgcolormode", bg->isChecked());
-	setProperty("QCS_color", textColor->palette().color(QPalette::Window));
+    setProperty("QCS_bgcolor", bgColor->getColor());
+    setProperty("QCS_bgcolormode", bg->isChecked());
+    // setProperty("QCS_color", textColor->palette().color(QPalette::Window));
+    setProperty("QCS_color", textColor->getColor());
     setProperty("QCS_bordermode", borderWidth->value() > 0);
     setProperty("QCS_borderradius", borderRadius->value());
 	setProperty("QCS_borderwidth", borderWidth->value());
@@ -633,6 +640,7 @@ void QuteText::applyProperties()
 	QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
 }
 
+/*
 void QuteText::selectTextColor()
 {
 	QColor color = QColorDialog::getColor(m_widget->palette().color(QPalette::WindowText), this);
@@ -645,7 +653,9 @@ void QuteText::selectTextColor()
 		textColor->setIcon(pixmap);
 	}
 }
+*/
 
+/*
 void QuteText::selectBgColor()
 {
 	QColor color = QColorDialog::getColor(m_widget->palette().color(QPalette::Window), this);
@@ -658,6 +668,7 @@ void QuteText::selectBgColor()
 		bgColor->setIcon(pixmap);
 	}
 }
+*/
 
 /* -----------------------------------------------------------------*/
 /*               QuteLineEdit class                                 */

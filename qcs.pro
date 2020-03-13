@@ -36,6 +36,7 @@
 
 
 DEFINES += NOMINMAX
+# DEFINES += USE_WIDGET_MUTEX
 
 csound6 {
     message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now default.")

@@ -26,6 +26,7 @@
 #include "types.h"
 #include "csoundoptions.h"
 #include <QWidget>
+#include <QThread>
 
 class WidgetLayout;
 class CsoundEngine;
@@ -34,6 +35,8 @@ class OpEntryParser;
 class ConsoleWidget;
 class QuteButton; // For registering buttons with main application
 class AppProperties;
+
+enum PlayStopStatus { Ok=0, Starting=1, Stopping=2 };
 
 class BaseDocument : public QObject
 {
@@ -82,6 +85,9 @@ protected:
 	DocumentView *m_view;
 	ConsoleWidget *m_console;
 	CsoundEngine *m_csEngine;
+    PlayStopStatus m_status;
+    QMutex mutex;
+
 };
 
 #endif // BASEDOCUMENT_H

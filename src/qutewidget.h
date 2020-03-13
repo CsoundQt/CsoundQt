@@ -34,6 +34,12 @@
 #define QCS_CURVE_BUFFER_SIZE 256
 //#define USE_WIDGET_MUTEX
 
+#include "csoundengine.h"
+
+enum QuteWidgetType { UNKNOWN=0, SPINBOX=1, LINEEDIT, CHECKBOX, SLIDER, KNOB, SCROLLNUMBER,
+                      BUTTON, DROPDOWN, CONTROLLER, GRAPH, SCOPE, CONSOLE,
+                      TABLEDISPLAY };
+
 class QuteWidget : public QWidget
 {
 	Q_OBJECT
@@ -74,6 +80,7 @@ public:
 	void markChanged();
 	void canFocus(bool can);
 	void updateDialogWindow(int cc, int channel);
+    virtual void setCsoundUserData(CsoundUserData *ud) { m_csoundUserData = ud; }
 
 	bool m_valueChanged;
 	bool m_value2Changed;
@@ -101,6 +108,8 @@ protected:
 	QString m_channel, m_channel2;
 	int m_midicc, m_midichan;
 	bool m_locked; // Allow modification of widget (properties, alignment, etc.)
+    CsoundUserData *m_csoundUserData;
+
 
 #ifdef  USE_WIDGET_MUTEX
 	QReadWriteLock widgetLock;

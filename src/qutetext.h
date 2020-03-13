@@ -24,6 +24,7 @@
 #define QUTETEXT_H
 
 #include "qutewidget.h"
+#include "selectcolorbutton.h"
 
 class QuteText : public QuteWidget
 {
@@ -69,9 +70,11 @@ protected:
 	double m_fontScaling, m_fontOffset;
 
 	QTextEdit *text;
-	QPushButton *textColor;
-	QPushButton *bgColor;
-	QCheckBox *bg;
+    // QPushButton *textColor;
+    SelectColorButton *textColor;
+   //  QPushButton *bgColor;
+    SelectColorButton *bgColor;
+    QCheckBox *bg;
     // QCheckBox *border;
 	QSpinBox *borderRadius;
 	QSpinBox *borderWidth;
@@ -82,8 +85,8 @@ protected:
     QHash<QString, QLabel *>labelPtrs;
 
 private slots:
-	void selectTextColor();
-	void selectBgColor();
+    // void selectTextColor();
+    // void selectBgColor();
 };
 
 class QuteLineEdit : public QuteText

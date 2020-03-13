@@ -43,10 +43,13 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
     // static_cast<ScopeWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
     m_label = new QLabel(this);
 	QPalette palette = m_widget->palette();
-	palette.setColor(QPalette::WindowText, Qt::white);
+    palette.setColor(QPalette::WindowText, QColor(196, 196, 196));
 	m_label->setPalette(palette);
+    auto font = m_label->font();
+    font.setPixelSize(11);
+    m_label->setFont(font);
 	m_label->setText("Scope");
-	m_label->move(85, 0);
+    m_label->move(10, 0);
 	m_label->resize(500, 25);
 
     m_params = new ScopeParams(nullptr,

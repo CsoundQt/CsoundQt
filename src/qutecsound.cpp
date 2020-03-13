@@ -2013,7 +2013,6 @@ void CsoundQt::pause(int index)
 void CsoundQt::stop(int index)
 {
     // Must guarantee that csound has stopped when it returns
-    qDebug() <<"CsoundQt::stop() " <<  index;
     int docIndex = index;
     if (docIndex == -1) {
         docIndex = curPage;
@@ -2022,16 +2021,23 @@ void CsoundQt::stop(int index)
         return; // A bit of a hack to avoid crashing when documents are deleted very quickly...
     }
     Q_ASSERT(docIndex >= 0);
-    if (docIndex < documentPages.size()) {
-        if (documentPages[docIndex]->isRunning()) {
-            documentPages[docIndex]->stop();
-#ifdef Q_OS_WIN // necessary since sometimes fltk plugin closes the OLE/COM connection on csoundCleanup
-            HRESULT result = OleInitialize(NULL);
-            if (result) {
-                qDebug()<<"Problem with OleInitialization" << result;
-            }
-#endif
+    if (docIndex >= documentPages.size()) {
+        qDebug() << "CsoundQt::stop : document index" << docIndex
+                 << "out of range (max=" << documentPages.size() << ")";
+        markStopped();
+        return;
+    }
+    if (documentPages[docIndex]->isRunning()) {
+        documentPages[docIndex]->stop();
+
+#ifdef Q_OS_WIN
+        // necessary since sometimes fltk plugin closes the OLE/COM connection on csoundCleanup
+        HRESULT result = OleInitialize(NULL);
+        if (result) {
+            qDebug()<<"Problem with OleInitialization" << result;
         }
+#endif
+
     }
     markStopped();
 }
@@ -4321,6 +4327,7 @@ void CsoundQt::createMenus()
     widgetFiles.append(":/examples/Widgets/Controller_Widget.csd");
     widgetFiles.append(":/examples/Widgets/Lineedit_Widget.csd");
     widgetFiles.append(":/examples/Widgets/Scope_Widget.csd");
+    widgetFiles.append(":/examples/Widgets/Tableplot_Widget.csd");
     widgetFiles.append(":/examples/Widgets/String_Channels.csd");
     widgetFiles.append(":/examples/Widgets/Presets.csd");
     widgetFiles.append(":/examples/Widgets/Reserved_Channels.csd");

@@ -37,6 +37,7 @@ class QuteGraph;
 class QuteScope;
 class QuteButton;
 class FrameWidget;
+class QuteTable;
 
 class RegisteredController {
 public:
@@ -152,6 +153,7 @@ public:
 	QAction *cutAct;
 	QAction *copyAct;
 	QAction *pasteAct;
+    QAction *reloadWidgetsAct;
 	QAction *clearAct;
 	QAction *selectAllAct;
 	QAction *duplicateAct;
@@ -173,6 +175,7 @@ public:
 	QAction *createConsoleAct;
 	QAction *createGraphAct;
 	QAction *createScopeAct;
+    QAction *createTableDisplayAct;
 
 	// Alignment Actions
 	QAction *alignLeftAct;
@@ -191,7 +194,8 @@ public:
 	QAction *newPresetAct;
 	QAction *recallPresetAct;
 
-	// Value changes buffer to store all value changes from widgets that have been triggered from the GUI
+    // Value changes buffer to store all value changes from widgets that
+    // have been triggered from the GUI
 	QHash<QString, double> newValues;
 	QHash<QString, QString> newStringValues;
 	QMutex valueMutex;
@@ -199,6 +203,10 @@ public:
 	QReadWriteLock mouseLock;
 
     QString getQml();
+
+    QuteWidgetType widgetNameToType(QString widgetName);
+    void addCreateWidgetActionsToMenu(QMenu &menu);
+
 public slots:
 	QString createNewLabel(int x = -1, int y = -1, QString channel = QString());
 	QString createNewDisplay(int x = -1, int y = -1, QString channel = QString());
@@ -214,6 +222,8 @@ public slots:
 	QString createNewConsole(int x = -1, int y = -1, QString channel = QString());
 	QString createNewGraph(int x = -1, int y = -1, QString channel = QString());
 	QString createNewScope(int x = -1, int y = -1, QString channel = QString());
+    QString createNewTableDisplay(int x= -1, int y= -1, QString channel = QString());
+
 	void clearWidgets();
 	void clearWidgetLayout();
 
@@ -262,6 +272,7 @@ public slots:
     void moveSelected(int horiz, int vert);
 	void undo();
 	void redo();
+    void reloadWidgets();
 
 	// Alignment
 	void alignLeft();
@@ -286,8 +297,10 @@ public slots:
 	void processNewValues();
 	void queueEvent(QString eventLine);
 
+    void processUpdateCurve(Curve *curve);
 	// Messages
 	void appendMessage(QString message);
+
 
 protected:
 	virtual void mousePressEvent(QMouseEvent *event);
@@ -374,6 +387,8 @@ private:
 	QString createGraph(int x, int y, int width, int height, QString widgetLine);
 	QString createScope(int x, int y, int width, int height, QString widgetLine);
 	QString createDummy(int x, int y, int width, int height, QString widgetLine);
+    QString createTableDisplay(int x, int y, int width, int height, QString widgetLine);
+
 
 	void setBackground(bool bg, QColor bgColor);
 	FrameWidget *getEditWidget(QuteWidget *widget);
@@ -392,6 +407,8 @@ private:
 	//XML helper functions
 	QColor getColorFromElement(QDomElement elem);  // Converts an XML color element to a QColor structure
 
+    QHash<QString, QuteWidgetType> m_widgetNameToType;
+
 private slots:
 	void updateData();
 	void widgetSelected(QuteWidget *widget);
@@ -405,7 +422,8 @@ signals:
 	void registerScope(QuteScope *scope);
 	void registerGraph(QuteGraph *graph);
 	void registerButton(QuteButton *button);
-	void queueEventSignal(QString eventLine);
+    void requestCsoundUserData(QuteWidget *widget);
+    void queueEventSignal(QString eventLine);
 	void widgetSelectedSignal(QuteWidget *widget);
 	void widgetUnselectedSignal(QuteWidget *widget);
 	void showMidiLearn(QuteWidget *);

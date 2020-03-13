@@ -24,6 +24,7 @@
 #define QUTEKNOB_H
 
 #include "qutewidget.h"
+#include "selectcolorbutton.h"
 
 /* QVdial: A knob with vertical dragging instead of circular
  *
@@ -158,8 +159,8 @@ private:
 	QDoubleSpinBox *resolutionSpinBox;
     QCheckBox      *displayValueCheckBox;
     QCheckBox      *flatStyleCheckBox;
-    QPushButton    *knobColorButton;
-    QPushButton    *knobTextColorButton;
+    SelectColorButton *knobColorButton;
+    SelectColorButton *knobTextColorButton;
     QCheckBox      *intModeCheckBox;
 
 };

@@ -40,6 +40,9 @@ QuteWidget::QuteWidget(QWidget *parent):
 	m_valueChanged = false;
 	m_value2Changed = false;
 	m_locked = false;
+    // used by all widgets which need access to the api (TableDisplay)
+    // TODO: adapt Scope and Graph to use this instead of implementing their own
+    m_csoundUserData = nullptr;
 
 	this->setMinimumSize(2,2);
 	this->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
@@ -179,7 +182,8 @@ void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
 
 double QuteWidget::getValue()
 {
-	// When reimplementing this, remember to use the widget mutex to protect data, as this can be called from many different places
+    // When reimplementing this, remember to use the widget mutex to protect data,
+    // as this can be called from many different places
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -306,6 +310,7 @@ void QuteWidget::popUpMenu(QPoint pos)
 	menu.addAction(propertiesAct);
 	menu.addSeparator();
 
+
 	if (!m_channel.isEmpty() || !m_channel2.isEmpty()) {
 		menu.addAction(addChn_kAct);
 		menu.addSeparator();
@@ -321,35 +326,19 @@ void QuteWidget::popUpMenu(QPoint pos)
 	for (int i = 0; i < actionList.size(); i++) {
 		menu.addAction(actionList[i]);
 	}
-	WidgetLayout *layout = static_cast<WidgetLayout *>(this->parentWidget());
-	layout->setCurrentPosition(layout->mapFromGlobal(pos));
 
 	menu.addSeparator();
-	QMenu createMenu(tr("Create New", "Menu name in widget right-click menu"),&menu);
-	createMenu.addAction(layout->createSliderAct);
-	createMenu.addAction(layout->createLabelAct);
-	createMenu.addAction(layout->createDisplayAct);
-	createMenu.addAction(layout->createScrollNumberAct);
-	createMenu.addAction(layout->createLineEditAct);
-	createMenu.addAction(layout->createSpinBoxAct);
-	createMenu.addAction(layout->createButtonAct);
-	createMenu.addAction(layout->createKnobAct);
-	createMenu.addAction(layout->createCheckBoxAct);
-	createMenu.addAction(layout->createMenuAct);
-	createMenu.addAction(layout->createMeterAct);
-	createMenu.addAction(layout->createConsoleAct);
-	createMenu.addAction(layout->createGraphAct);
-	createMenu.addAction(layout->createScopeAct);
 
-	menu.addMenu(&createMenu);
+    WidgetLayout *layout = static_cast<WidgetLayout *>(this->parentWidget());
+    layout->setCurrentPosition(layout->mapFromGlobal(pos));
 
-	menu.addSeparator();
-	menu.addAction(layout->storePresetAct);
+    menu.addAction(layout->storePresetAct);
 	menu.addAction(layout->newPresetAct);
 	menu.addAction(layout->recallPresetAct);
-	menu.addSeparator();
 
-	QMenu presetMenu(tr("Presets"),&menu);
+    menu.addSeparator();
+
+    QMenu presetMenu(tr("Presets"), &menu);
 
 	QList<int> list = layout->getPresetNums();
 	for (int i = 0; i < list.size(); i++) {
@@ -359,6 +348,27 @@ void QuteWidget::popUpMenu(QPoint pos)
 		presetMenu.addAction(act);
 	}
 
+    /*
+    menu.addSeparator();
+
+    QMenu createMenu(tr("Create New", "Menu name in widget right-click menu"),&menu);
+    createMenu.addAction(layout->createSliderAct);
+    createMenu.addAction(layout->createLabelAct);
+    createMenu.addAction(layout->createDisplayAct);
+    createMenu.addAction(layout->createScrollNumberAct);
+    createMenu.addAction(layout->createLineEditAct);
+    createMenu.addAction(layout->createSpinBoxAct);
+    createMenu.addAction(layout->createButtonAct);
+    createMenu.addAction(layout->createKnobAct);
+    createMenu.addAction(layout->createCheckBoxAct);
+    createMenu.addAction(layout->createMenuAct);
+    createMenu.addAction(layout->createMeterAct);
+    createMenu.addAction(layout->createConsoleAct);
+    createMenu.addAction(layout->createGraphAct);
+    createMenu.addAction(layout->createScopeAct);
+
+    menu.addMenu(&createMenu);
+    */
 	menu.exec(pos);
 }
 

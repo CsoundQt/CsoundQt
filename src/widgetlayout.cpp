@@ -72,37 +72,46 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 	curveUpdateBuffer.resize(QCS_CURVE_BUFFER_SIZE);
 	curveUpdateBufferCount = 0;
 
-	createSliderAct = new QAction(tr("Create Slider"),this);
+    createSliderAct = new QAction(tr("Slider"),this);
 	connect(createSliderAct, SIGNAL(triggered()), this, SLOT(createNewSlider()));
-	createLabelAct = new QAction(tr("Create Label"),this);
+    createLabelAct = new QAction(tr("Label"),this);
 	connect(createLabelAct, SIGNAL(triggered()), this, SLOT(createNewLabel()));
-	createDisplayAct = new QAction(tr("Create Display"),this);
+    createDisplayAct = new QAction(tr("Display"),this);
 	connect(createDisplayAct, SIGNAL(triggered()), this, SLOT(createNewDisplay()));
-	createScrollNumberAct = new QAction(tr("Create ScrollNumber"),this);
+    createScrollNumberAct = new QAction(tr("ScrollNumber"),this);
 	connect(createScrollNumberAct, SIGNAL(triggered()),
 			this, SLOT(createNewScrollNumber()));
-	createLineEditAct = new QAction(tr("Create LineEdit"),this);
+    createLineEditAct = new QAction(tr("LineEdit"),this);
 	connect(createLineEditAct, SIGNAL(triggered()), this, SLOT(createNewLineEdit()));
-	createSpinBoxAct = new QAction(tr("Create SpinBox"),this);
+    createSpinBoxAct = new QAction(tr("SpinBox"),this);
 	connect(createSpinBoxAct, SIGNAL(triggered()), this, SLOT(createNewSpinBox()));
-	createButtonAct = new QAction(tr("Create Button"),this);
+    createButtonAct = new QAction(tr("Button"),this);
 	connect(createButtonAct, SIGNAL(triggered()), this, SLOT(createNewButton()));
-	createKnobAct = new QAction(tr("Create Knob"),this);
+    createKnobAct = new QAction(tr("Knob"),this);
 	connect(createKnobAct, SIGNAL(triggered()), this, SLOT(createNewKnob()));
-	createCheckBoxAct = new QAction(tr("Create Checkbox"),this);
+    createCheckBoxAct = new QAction(tr("Checkbox"),this);
 	connect(createCheckBoxAct, SIGNAL(triggered()), this, SLOT(createNewCheckBox()));
-	createMenuAct = new QAction(tr("Create Menu"),this);
+    createMenuAct = new QAction(tr("Menu"),this);
 	connect(createMenuAct, SIGNAL(triggered()), this, SLOT(createNewMenu()));
-	createMeterAct = new QAction(tr("Create Controller"),this);
+    createMeterAct = new QAction(tr("Controller"),this);
 	connect(createMeterAct, SIGNAL(triggered()), this, SLOT(createNewMeter()));
-	createConsoleAct = new QAction(tr("Create Console"),this);
+    createConsoleAct = new QAction(tr("Console"),this);
 	connect(createConsoleAct, SIGNAL(triggered()), this, SLOT(createNewConsole()));
-	createGraphAct = new QAction(tr("Create Graph"),this);
+
+    createGraphAct = new QAction(tr("Graph"),this);
 	connect(createGraphAct, SIGNAL(triggered()), this, SLOT(createNewGraph()));
-	createScopeAct = new QAction(tr("Create Scope"),this);
+
+    createScopeAct = new QAction(tr("Scope"),this);
 	connect(createScopeAct, SIGNAL(triggered()), this, SLOT(createNewScope()));
+
+    createTableDisplayAct = new QAction(tr("Table Plot"), this);
+    connect(createTableDisplayAct, SIGNAL(triggered()), this, SLOT(createNewTableDisplay()));
+
 	propertiesAct = new QAction(tr("Properties"),this);
 	connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
+
+    reloadWidgetsAct = new QAction(tr("Reload Widgets"), this);
+    connect(reloadWidgetsAct, SIGNAL(triggered()), this, SLOT(reloadWidgets()));
 
 	cutAct = new QAction(tr("Cut"), this);
 	//  cutAct->setShortcut(tr("Ctrl+X"));
@@ -168,6 +177,20 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 	setBackground(false, QColor("white"));
 	updateData(); // Starts updataData timer
 	//  qDebug() << "WidgetLayout::WidgetLayout " << this << " updateTimer " << &updateTimer;
+
+    m_widgetNameToType["BSBSpinBox"] = QuteWidgetType::SPINBOX;
+    m_widgetNameToType["BSBLineEdit"] = QuteWidgetType::LINEEDIT;
+    m_widgetNameToType["BSBCheckBox"] = QuteWidgetType::CHECKBOX;
+    m_widgetNameToType["BSBSlider"] = QuteWidgetType::SLIDER;
+    m_widgetNameToType["BSBKnob"] = QuteWidgetType::KNOB;
+    m_widgetNameToType["BSBScrollNumber"] = QuteWidgetType::SCROLLNUMBER;
+    m_widgetNameToType["BSBButton"] = QuteWidgetType::BUTTON;
+    m_widgetNameToType["BSBDropDown"] = QuteWidgetType::DROPDOWN;
+    m_widgetNameToType["BSBController"] = QuteWidgetType::CONTROLLER;
+    m_widgetNameToType["BSBGraph"] = QuteWidgetType::GRAPH;
+    m_widgetNameToType["BSBScope"] = QuteWidgetType::SCOPE;
+    m_widgetNameToType["BSBConsole"] = QuteWidgetType::CONSOLE;
+    m_widgetNameToType["BSBTableDisplay"] = QuteWidgetType::TABLEDISPLAY;
 }
 
 WidgetLayout::~WidgetLayout()
@@ -204,6 +227,13 @@ WidgetLayout::~WidgetLayout()
 //    loadMacWidgets(widgets);
 //  }
 //}
+
+
+QuteWidgetType WidgetLayout::widgetNameToType(QString widgetName) {
+    if(!m_widgetNameToType.contains(widgetName))
+        return QuteWidgetType::UNKNOWN;
+    return m_widgetNameToType[widgetName];
+}
 
 void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
 {
@@ -440,12 +470,14 @@ void WidgetLayout::setValue(QString channelName, double value)
 	widgetsMutex.lock();
 	for (int i = 0; i < m_widgets.size(); i++) {
 		if (m_widgets[i]->getChannelName() == channelName) {
+            // printf("WidgetLayout::setValue: %s=%f", channelName.toStdString().c_str(), value);
 			m_widgets[i]->setValue(value);
 		}
 		if (m_widgets[i]->getChannel2Name() == channelName) {
 			m_widgets[i]->setValue2(value);
 		}
 		if (m_widgets[i]->getUuid() == channelName) {
+            printf("WidgetLayout::setValue: %s=%f", channelName.toStdString().c_str(), value);
 			m_widgets[i]->setValue(value);
 			break;
 		}
@@ -729,6 +761,9 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 		widget = static_cast<QuteWidget *>(w);
         connect(widget, SIGNAL(newValue(QPair<QString,double>)),
                 this, SLOT(newValue(QPair<QString,double>)));
+        connect(w, SIGNAL(requestUpdateCurve(Curve*)),
+                this, SLOT(processUpdateCurve(Curve*)));
+
 		for (int i = 0; i < curves.size(); i++) {
 			w->addCurve(curves[i]);
 		}
@@ -746,6 +781,11 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 		widget = static_cast<QuteWidget *>(w);
 		consoleWidgets.append(w);
 		//    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+    }
+    else if (type == "BSBTableDisplay") {
+        auto w = new QuteTable(this);
+        widget = static_cast<QuteWidget *>(w);
+        emit requestCsoundUserData(w);
 	}
 	else {
 		qDebug() << type << " not implemented";
@@ -768,14 +808,14 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 			nodeName.prepend("QCS_");
 			widget->setProperty(nodeName.toLocal8Bit(), getColorFromElement(node));
 		}
-		// It's necessary to do a type conversion here rather than storing the values as QVariant strings and then converting
-		// because the proeprty will be rightly typed, and that can be queried
+        // It's necessary to do a type conversion here rather than storing
+        // the values as QVariant strings and then converting
+        // because the property will be rightly typed, and that can be queried
 		else if (nodeName == "value" || nodeName == "resolution"
 				 || nodeName == "minimum" || nodeName == "maximum"
 				 || nodeName == "pressedValue") {  // DOUBLE type
 			QDomNode n = node.firstChild();
 			nodeName.prepend("QCS_");
-			//      qDebug() << "WidgetLayout::newXmlWidget DOUBLE property:  " << nodeName.toLocal8Bit() << "--" << n.nodeValue().toDouble();
 			widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toDouble());
 		}
 		else if (nodeName == "selectedIndex") {  // INT type
@@ -977,8 +1017,7 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
 	m_widgets.append(widget);
 	//  qDebug() << "WidgetLayout::registerWidget " << m_widgets.size() << widget;
 	if (m_editMode) {
-		//    deselectAll();
-		createEditFrame(widget);
+        createEditFrame(widget);
 		editWidgets.last()->select();
 	}
 	setWidgetToolTip(widget, m_tooltips);
@@ -1237,6 +1276,12 @@ void WidgetLayout::updateCurve(WINDAT *windat)
 	}
 }
 
+void WidgetLayout::processUpdateCurve(Curve *curve) {
+    WINDAT *orig = curve->getOriginal();
+    qDebug() << "processUpdateCurve" << orig->npts << orig->caption;
+    this->updateCurve(orig);
+}
+
 
 int WidgetLayout::killCurves(CSOUND * /*csound*/)
 {
@@ -1483,39 +1528,57 @@ bool WidgetLayout::isModified()
 	return m_modified;
 }
 
+void WidgetLayout::addCreateWidgetActionsToMenu(QMenu &menu) {
+    menu.addAction(createSliderAct);
+    menu.addAction(createLabelAct);
+    menu.addAction(createDisplayAct);
+    menu.addAction(createScrollNumberAct);
+    menu.addAction(createLineEditAct);
+    menu.addAction(createSpinBoxAct);
+    menu.addAction(createButtonAct);
+    menu.addAction(createKnobAct);
+    menu.addAction(createCheckBoxAct);
+    menu.addAction(createMenuAct);
+    menu.addAction(createMeterAct);
+    menu.addAction(createConsoleAct);
+    menu.addAction(createGraphAct);
+    menu.addAction(createScopeAct);
+    menu.addAction(createTableDisplayAct);
+}
+
 void WidgetLayout::createContextMenu(QContextMenuEvent *event)
 {
 	QMenu menu;
-	menu.addAction(createSliderAct);
-	menu.addAction(createLabelAct);
-	menu.addAction(createDisplayAct);
-	menu.addAction(createScrollNumberAct);
-	menu.addAction(createLineEditAct);
-	menu.addAction(createSpinBoxAct);
-	menu.addAction(createButtonAct);
-	menu.addAction(createKnobAct);
-	menu.addAction(createCheckBoxAct);
-	menu.addAction(createMenuAct);
-	menu.addAction(createMeterAct);
-	menu.addAction(createConsoleAct);
-	menu.addAction(createGraphAct);
-	menu.addAction(createScopeAct);
-	menu.addSeparator();
-	menu.addAction(cutAct);
-	menu.addAction(copyAct);
-	menu.addAction(pasteAct);
-	menu.addAction(selectAllAct);
-	//  menu.addAction(duplicateAct); // Shortcut from the duplicate action is not working from some reason...
-	menu.addAction(deleteAct);
-	menu.addAction(clearAct);
-	menu.addSeparator();
-	menu.addAction(propertiesAct);
-	menu.addSeparator();
-	menu.addAction(storePresetAct);
-	menu.addAction(recallPresetAct);
-	menu.addAction(newPresetAct);
-	menu.addSeparator();
-	currentPosition = event->pos();
+    QMenu newMenu(tr("New Widget", "New Widget submenu in widget layout popup"), &menu);
+        this->addCreateWidgetActionsToMenu(newMenu);
+    menu.addMenu(&newMenu);
+    menu.addSeparator(); // ------------------------------------------------------------
+
+    QMenu editMenu(tr("Edit", "Edit menu in widget layout right-click menu"), &menu);
+        editMenu.addAction(cutAct);
+        editMenu.addAction(copyAct);
+        editMenu.addAction(pasteAct);
+        editMenu.addAction(selectAllAct);
+        // Shortcut from the duplicate action is not working from some reason...
+        //  menu.addAction(duplicateAct);
+        editMenu.addAction(deleteAct);
+        editMenu.addAction(clearAct);
+    menu.addMenu(&editMenu);
+
+    menu.addSeparator(); // ------------------------------------------------------------
+
+    QMenu presetMenu(tr("Presets", "Preset submenu in widget layout popup"), &menu);
+        presetMenu.addAction(storePresetAct);
+        presetMenu.addAction(recallPresetAct);
+        presetMenu.addAction(newPresetAct);
+    menu.addMenu(&presetMenu);
+
+    menu.addSeparator(); // ------------------------------------------------------------
+
+    menu.addAction(propertiesAct);
+    menu.addAction(reloadWidgetsAct);
+
+    currentPosition = event->pos();
 	//  if (m_sbActive) {
 	//    currentPosition.setX(currentPosition.x() + scrollArea->horizontalScrollBar()->value());
 	//    currentPosition.setY(currentPosition.y() + scrollArea->verticalScrollBar()->value() - 20);
@@ -1917,6 +1980,8 @@ QString WidgetLayout::createNewConsole(int x, int y, QString channel)
 
 QString WidgetLayout::createNewGraph(int x, int y, QString channel)
 {
+    qDebug() << ">>>>>>>> createNewGraph";
+
 	QString uuid;
 	bool dialog;
 	int posx = x >= 0 ? x : currentPosition.x();
@@ -1935,6 +2000,29 @@ QString WidgetLayout::createNewGraph(int x, int y, QString channel)
 	}
 	markHistory();
 	return uuid;
+}
+
+QString WidgetLayout::createNewTableDisplay(int x, int y, QString channel)
+{
+    QString uuid;
+    bool dialog;
+    int posx = x >= 0 ? x : currentPosition.x();
+    int posy = y >= 0 ? y : currentPosition.y();
+    deselectAll();
+    if (channel.isEmpty()) {
+        channel = "graph" + QString::number(m_widgets.size());
+        dialog = true;
+    } else {
+        dialog = false;
+    }
+    uuid = createTableDisplay(posx, posy, 350, 150,
+                              QString("ioGraph {%1, %2} {%1, %2}").arg(posx, posy));
+    widgetChanged();
+    if (dialog && getOpenProperties()) {
+        m_widgets.last()->openProperties();
+    }
+    markHistory();
+    return uuid;
 }
 
 QString WidgetLayout::createNewScope(int x, int y, QString channel)
@@ -2433,7 +2521,27 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
             this->moveSelected(0, event->modifiers() & Qt::AltModifier ? 1 : 5);
             event->accept();
             return;
+        case Qt::Key_S:
+            this->createNewSlider();
+            event->accept();
+            return;
+        case Qt::Key_K:
+            this->createNewKnob();
+            event->accept();
+            return;
+        case Qt::Key_B:
+            this->createNewButton();
+            event->accept();
+            return;
+        case Qt::Key_A:
+            qDebug() << event->modifiers();
+            if(event->modifiers() & Qt::ControlModifier) {
+                this->selectAll();
+                event->accept();
+                return;
+            }
         }
+
     }
 
     if (!event->isAutoRepeat() || m_repeatKeys) {
@@ -2532,7 +2640,7 @@ void WidgetLayout::mousePressEvent(QMouseEvent *event)
 {
 	//  qDebug() << "WidgetLayout::mousePressEvent";
 	if (m_editMode && (event->button() & Qt::LeftButton)) {
-		this->setFocus(Qt::MouseFocusReason);
+        this->setFocus(Qt::MouseFocusReason);
 		selectionFrame->show();
 		startx = event->x() + xOffset;
 		starty = event->y() + yOffset;
@@ -2686,7 +2794,8 @@ QString WidgetLayout::createSlider(int x, int y, int width, int height, QString 
 		widget->setProperty("QCS_objectName", channelName);
 	}
 	widget->applyInternalProperties();
-	connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this,
+            SLOT(newValue(QPair<QString,double>)));
 	registerWidget(widget);
 	return widget->getUuid();
 }
@@ -3127,6 +3236,21 @@ QString WidgetLayout::createDummy(int x, int y, int width, int height, QString w
 	setWidgetToolTip(widget, m_tooltips);
 	widgetsMutex.unlock();
 	return widget->getUuid();
+}
+
+QString WidgetLayout::createTableDisplay(int x, int y, int width, int height, QString widgetLine) {
+
+    QuteTable *widget = new QuteTable(this);
+    widget->setProperty("QCS_x", x);
+    widget->setProperty("QCS_y", y);
+    widget->setProperty("QCS_width", width);
+    widget->setProperty("QCS_height", height);
+    widget->setProperty("QCS_tableNumber", 0);
+
+    emit requestCsoundUserData(widget);
+    registerWidget(widget);
+    widget->applyInternalProperties();
+    return widget->getUuid();
 }
 
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
@@ -3741,8 +3865,7 @@ void WidgetLayout::deleteWidget(QuteWidget *widget)
 
 void WidgetLayout::newValue(QPair<QString, double> channelValue)
 {
-	//  qDebug() << "WidgetLayout::newValue " << channelValue.first << "--" << channelValue.second;
-	if (channelValue.first == "_SetPreset") {
+    if (channelValue.first == "_SetPreset") {
         loadPreset((int)channelValue.second);
 	}
 	if (channelValue.first == "_SetPresetIndex") {
@@ -3759,9 +3882,9 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
         // Pass the value on to the other widgets
 		for (int i = 0; i < m_widgets.size(); i++){
 			if (m_widgets[i]->getChannelName() == channelName) {
-                // qDebug() << "WidgetLayout::newValue " << channelValue.first << "--" << m_widgets[i]->getChannelName();
-                if (path == channelName)
-					m_widgets[i]->setValue(channelValue.second);
+                if (path == channelName) {
+                    m_widgets[i]->setValue(channelValue.second);
+                }
                 else
 					m_widgets[i]->widgetMessage(path,channelValue.second);
 			}
@@ -3976,6 +4099,12 @@ void WidgetLayout::undo()
         loadMacWidgets(m_history[m_historyIndex]);
 }
 
+void WidgetLayout::reloadWidgets() {
+    if(m_historyIndex <= 0)
+        return;
+    loadXmlWidgets(m_history[m_historyIndex]);
+}
+
 void WidgetLayout::redo()
 {
     if (m_historyIndex >= m_history.size() - 1)
@@ -4009,8 +4138,8 @@ void WidgetLayout::updateData()
 	while (curveUpdateBufferCount > 0) {
 		WINDAT * curveData = &curveUpdateBuffer[curveUpdateBufferCount--];
 		Curve *curve = (Curve *) getCurveById(curveData->windid);
-        // qDebug() << "WidgetLayout::updateData" << curveUpdateBuffer.size() \
-        // << " ---" << curveData << " " << curve;
+        qDebug() << "WidgetLayout::updateData" << "size: " << curveUpdateBuffer.size()
+                 << " ---" << curveData->windid << curveData->npts;
         if (curve != nullptr && curveData != nullptr) {
             curve->set_size(curveData->npts);    // number of points
 			curve->set_data(curveData->fdata);

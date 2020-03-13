@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="qtcs.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="/home/andres/src/qutecsound/trunk/qutecsound/images/qtcs.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   version="1.0"
+   style="enable-background:new">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3457">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3459" />
+      <stop
+         id="stop3467"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:0.85714287;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.24675325;"
+         offset="0.5"
+         id="stop3210" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop3461" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3339">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3341" />
+      <stop
+         style="stop-color:#1b9ee1;stop-opacity:0;"
+         offset="1"
+         id="stop3343" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3281">
+      <stop
+         id="stop3297"
+         offset="0"
+         style="stop-color:#0a690e;stop-opacity:1;" />
+      <stop
+         style="stop-color:#0c7e11;stop-opacity:1;"
+         offset="0.5"
+         id="stop3315" />
+      <stop
+         id="stop3317"
+         offset="0.75"
+         style="stop-color:#15f420;stop-opacity:1;" />
+      <stop
+         style="stop-color:#1be11b;stop-opacity:0.33116883;"
+         offset="1"
+         id="stop3285" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <filter
+       inkscape:collect="always"
+       id="filter3319">
+      <feBlend
+         inkscape:collect="always"
+         mode="lighten"
+         in2="BackgroundImage"
+         id="feBlend3321" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3391">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="5.2579167"
+         id="feGaussianBlur3393" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3281"
+       id="radialGradient3432"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,1.1195371,-7.8091938e-6,-57.601704)"
+       spreadMethod="pad"
+       cx="345.92844"
+       cy="481.87286"
+       fx="345.92844"
+       fy="481.87286"
+       r="280.52634" />
+    <filter
+       inkscape:collect="always"
+       id="filter3453">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="6.7301651"
+         id="feGaussianBlur3455" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3457"
+       id="radialGradient3463"
+       cx="419.63126"
+       cy="511.45642"
+       fx="419.63126"
+       fy="511.45642"
+       r="336.50827"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1332106,0,0,1.1332106,-65.259823,-59.827259)" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.3806568"
+     inkscape:cx="29.084505"
+     inkscape:cy="37.893881"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer3"
+     showgrid="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="769"
+     inkscape:window-x="51"
+     inkscape:window-y="81" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="fondo" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Letra C"
+     style="display:inline">
+    <path
+       sodipodi:type="arc"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path3469"
+       sodipodi:cx="409.94211"
+       sodipodi:cy="489.80093"
+       sodipodi:rx="367.35071"
+       sodipodi:ry="367.35071"
+       d="M 777.29282,489.80093 A 367.35071,367.35071 0 1 1 42.5914,489.80093 A 367.35071,367.35071 0 1 1 777.29282,489.80093 z"
+       transform="matrix(0.1712592,0,0,0.1712592,-3.6504412,-19.873248)"
+       inkscape:export-filename="/Users/dani/Desktop/logo-qutecsd128.png"
+       inkscape:export-xdpi="15.679839"
+       inkscape:export-ydpi="15.679839" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:1;fill:url(#radialGradient3463);fill-opacity:1;stroke:none;stroke-width:9.76303387;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter3453)"
+       id="path3447"
+       sodipodi:cx="419.63126"
+       sodipodi:cy="511.45642"
+       sodipodi:rx="331.62674"
+       sodipodi:ry="331.62674"
+       d="M 751.258,511.45642 A 331.62674,331.62674 0 1 1 88.004517,511.45642 A 331.62674,331.62674 0 1 1 751.258,511.45642 z"
+       transform="matrix(0.1547956,0,0,0.1547956,3.4120051,-17.054081)"
+       inkscape:export-filename="/Users/dani/Desktop/logo-qutecsd128.png"
+       inkscape:export-xdpi="15.679839"
+       inkscape:export-ydpi="15.679839" />
+    <path
+       sodipodi:type="arc"
+       id="path3215"
+       style="fill:#000000;stroke:none"
+       sodipodi:cx="486.6846"
+       sodipodi:cy="612.23004"
+       sodipodi:rx="1.5"
+       sodipodi:ry="1.5"
+       d="M 488.1846,612.23004 A 1.5,1.5 0 1 1 485.1846,612.23004 A 1.5,1.5 0 1 1 488.1846,612.23004 z"
+       inkscape:export-filename="/Users/dani/Desktop/logo-qutecsd128.png"
+       inkscape:export-xdpi="15.679839"
+       inkscape:export-ydpi="15.679839"
+       transform="matrix(0.1712592,0,0,0.1712592,2.7319556,-18.657552)" />
+    <path
+       style="opacity:0.80995477;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.40000033;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter3391)"
+       d="M 377.47449,171.27551 C 204.97451,171.27551 64.974484,311.27552 64.974494,483.77551 C 64.974493,656.27549 204.97449,796.2755 377.47449,796.27551 C 469.17852,796.27552 551.6981,756.69457 608.88074,693.71301 L 561.44324,646.27551 C 516.44455,697.17632 450.70425,729.30676 377.47449,729.30676 C 241.93879,729.30673 131.94324,619.31123 131.94324,483.77551 C 131.94326,348.23978 241.9388,238.24426 377.47449,238.24426 C 450.70424,238.24427 516.44455,270.3747 561.44324,321.27551 L 608.88074,273.83801 C 551.69751,210.84668 469.18666,171.2755 377.47449,171.27551 z M 561.44324,321.27551 L 541.97449,340.74426 C 575.29378,379.03229 595.47449,429.07265 595.47449,483.77551 C 595.47448,538.48582 575.27066,588.48546 541.94324,626.77551 L 561.44324,646.27551 C 599.72939,602.96766 623.00573,546.08145 623.00574,483.77551 C 623.00574,421.46957 599.7294,364.58336 561.44324,321.27551 z M 541.94324,626.77551 L 508.81824,593.65051 C 477.38977,631.17267 430.21185,655.05676 377.47449,655.05676 C 282.92477,655.05675 206.19324,578.32522 206.19324,483.77551 C 206.19325,389.22577 282.92477,312.49426 377.47449,312.49426 C 430.21447,312.49426 477.38978,336.37514 508.81824,373.90051 L 541.97449,340.74426 C 501.9976,294.80582 443.10762,265.7755 377.47449,265.77551 C 257.13849,265.7755 159.47448,363.4395 159.47449,483.77551 C 159.47449,604.11151 257.13848,701.77549 377.47449,701.77551 C 443.10017,701.77551 501.9666,672.70488 541.94324,626.77551 z M 508.81824,593.65051 L 508.81824,593.65051 z"
+       id="rect3228"
+       sodipodi:nodetypes="cssccssscccccsccscccsssccsssccc"
+       inkscape:export-filename="/Users/dani/Desktop/logo-qutecsd128.png"
+       inkscape:export-xdpi="15.679839"
+       inkscape:export-ydpi="15.679839"
+       transform="matrix(0.1712592,0,0,0.1712592,2.7319556,-18.657552)" />
+    <path
+       style="opacity:1;fill:url(#radialGradient3432);fill-opacity:1;stroke:none;stroke-width:1.29999995;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline;filter:url(#filter3319)"
+       d="M 369.86586,785.33598 C 302.69846,782.37588 240.00537,759.00041 187.35909,717.28732 C 164.56206,699.22459 138.55106,670.89917 121.85173,645.95117 C 68.790152,566.67972 54.942652,465.83214 84.718702,375.5214 C 124.1054,256.06157 228.87968,172.39316 353.75216,160.68232 C 370.96426,159.06814 410.21516,159.92435 425.94036,162.25704 C 494.85096,172.4793 556.87269,203.75652 605.00859,252.5602 C 609.80929,257.4275 613.73719,261.9745 613.73719,262.66462 C 613.73719,263.35473 603.29159,274.3569 590.52469,287.11388 L 567.31219,310.30836 L 574.09349,318.50503 C 647.72449,419.24877 646.03939,525.91887 573.90449,626.62257 L 567.05069,635.11145 L 590.56869,658.64689 C 618.12109,686.21977 617.12189,681.33784 598.73369,698.53986 C 556.85369,737.71817 509.21276,763.87475 456.62266,776.56384 C 428.95526,783.23948 396.57826,786.51321 369.86586,785.33598 z M 421.17936,714.06908 C 464.72306,706.64673 502.54026,689.76357 535.97339,662.82034 C 545.28909,655.31295 565.06869,636.32093 565.06869,634.88353 C 565.06869,634.48459 561.04689,630.15724 556.13129,625.26721 L 547.19399,616.37627 L 535.74529,627.70267 C 494.10886,668.89446 440.73106,690.80842 382.03296,690.80842 C 333.65097,690.80842 287.9683,675.18837 248.51538,645.15543 C 237.54555,636.80476 218.10194,617.36603 209.76662,606.41631 C 185.81282,574.94934 170.95306,539.60012 165.72706,501.65273 C 163.59743,486.18887 163.60052,458.4335 165.73359,443.00592 C 172.26295,395.78194 194.12378,352.00078 228.1786,317.94597 C 284.29915,261.8254 366.68846,240.4526 442.60656,262.32072 C 478.08876,272.54132 507.56176,289.78526 534.69269,316.19804 L 547.16609,328.34128 L 556.38189,319.08094 L 565.59769,309.82061 L 552.90159,297.42654 C 515.59346,261.00609 471.00356,238.7241 418.78776,230.40862 C 401.93656,227.72504 368.29906,227.20222 352.40866,229.37694 C 324.8716,233.14559 298.67457,241.03509 274.58214,252.81519 C 202.36681,288.12513 152.74414,356.06399 140.10887,436.92371 C 137.47133,453.80281 137.46568,490.77729 140.09805,507.77267 C 144.14381,533.89317 150.66487,554.98096 161.85504,578.13034 C 174.97254,605.26679 188.05876,623.76494 209.04829,644.84069 C 249.48505,685.44357 301.55156,710.33143 358.22776,716.14864 C 373.66256,717.73289 405.94096,716.66658 421.17936,714.06909 L 421.17936,714.06908 z M 399.57086,642.0438 C 427.87526,639.21721 457.48016,627.97363 481.76556,610.82724 L 516.22109,581.33392 C 530.90242,596.45199 545.81279,613.56979 546.45109,613.56501 C 624.59632,542.24485 607.67523,407.94836 547.39199,331.13543 C 547.18029,330.87222 539.75789,337.89477 530.89776,346.74108 C 522.03756,355.58738 514.49706,362.82528 514.14106,362.82528 C 513.78506,362.82528 508.55346,357.93092 502.51536,351.94892 C 469.54796,319.28786 428.38686,302.25896 382.56196,302.32254 C 336.14506,302.38695 294.36349,319.56073 262.07843,351.8458 C 235.90834,378.0159 220.23948,408.98997 213.70702,447.46609 C 211.93486,457.90392 211.92111,485.85697 213.6825,497.19257 C 219.43244,534.19697 235.88379,566.78678 261.99415,592.89713 C 298.27657,629.17954 348.55035,647.1389 399.57086,642.0438 L 399.57086,642.0438 z"
+       id="path3271"
+       sodipodi:nodetypes="csssssssccccccssccsscccssssssscccccsssssssscccccccsssssssscc"
+       inkscape:export-filename="/Users/dani/Desktop/logo-qutecsd128.png"
+       inkscape:export-xdpi="15.679839"
+       inkscape:export-ydpi="15.679839"
+       transform="matrix(0.1712592,0,0,0.1712592,2.7319556,-18.657552)" />
+  </g>
+  <g
+     inkscape:label="Qt"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline;filter:url(#filter3319)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Frente"
+     style="display:inline">
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.4000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 68.36907,39.082753 C 55.275957,39.082753 44.649663,49.70904 44.649663,62.802153 C 44.649663,75.895267 55.275957,86.521555 68.36907,86.521555 C 81.462181,86.521555 92.088473,75.895267 92.088473,62.802153 C 92.088473,49.70904 81.462181,39.082753 68.36907,39.082753 z M 68.36907,44.391782 C 78.531594,44.391782 86.779438,52.639629 86.779438,62.802153 C 86.779438,72.964666 78.531594,81.212525 68.36907,81.212525 C 58.206544,81.212525 49.958699,72.964666 49.958699,62.802153 C 49.958699,52.639629 58.206544,44.391782 68.36907,44.391782 z"
+       id="path3414"
+       inkscape:export-filename="/Users/dani/Desktop/logo-qutecsd128.png"
+       inkscape:export-xdpi="15.679839"
+       inkscape:export-ydpi="15.679839" />
+    <g
+       style="stroke:none"
+       id="g3416"
+       transform="matrix(0.1712592,0,0,0.1712592,-19.454589,-40.63264)"
+       inkscape:export-filename="/Users/dani/Desktop/logo-qutecsd128.png"
+       inkscape:export-xdpi="15.679839"
+       inkscape:export-ydpi="15.679839">
+      <rect
+         transform="matrix(0.7071068,-0.7071068,0.7071068,0.7071068,0,0)"
+         style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.39999986;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect3418"
+         width="138"
+         height="32"
+         x="-130.62791"
+         y="834.37793" />
+      <rect
+         transform="matrix(0.7071068,0.7071068,-0.7071068,0.7071068,0,0)"
+         y="45.627911"
+         x="834.37793"
+         height="32"
+         width="138"
+         id="rect3420"
+         style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.39999986;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>
