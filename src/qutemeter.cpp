@@ -56,6 +56,7 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 
 	setProperty("QCS_color", QColor(Qt::green));
     setProperty("QCS_bgcolor", QColor(30, 30, 30));
+    setProperty("QCS_bgcolormode", true);
 	setProperty("QCS_randomizable", false);
 	setProperty("QCS_randomizableGroup", 0);
 	setProperty("QCS_randomizableMode", "both");
@@ -163,6 +164,8 @@ QString QuteMeter::getWidgetXmlText()
 	s.writeTextElement("g", QString::number(bgcolor.green()));
 	s.writeTextElement("b", QString::number(bgcolor.blue()));
 	s.writeEndElement();
+
+    s.writeTextElement("bgcolormode", property("QCS_bgcolormode").toBool()?"true":"false");
 
     s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
@@ -338,14 +341,14 @@ void QuteMeter::createPropertiesDialog()
 	//    }
 	//  }
     auto w = static_cast<MeterWidget *>(m_widget);
-    auto colorLabel = new QLabel(dialog);
-    colorLabel->setText("Color");
-    colorLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
-    layout->addWidget(colorLabel, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
+    label = new QLabel("Color", dialog);
+    label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     // colorButton = new QPushButton(dialog);
     colorButton = new SelectColorButton(dialog);
     colorButton->setColor(static_cast<MeterWidget *>(m_widget)->getColor());
+    layout->addWidget(colorButton, 5,1, Qt::AlignLeft|Qt::AlignVCenter);
 
     // QPixmap pixmap(64,64);
     // pixmap.fill(static_cast<MeterWidget *>(m_widget)->getColor());
@@ -353,17 +356,23 @@ void QuteMeter::createPropertiesDialog()
     // QPalette palette(static_cast<MeterWidget *>(m_widget)->getColor());
     // palette.color(QPalette::Window);
     // colorButton->setPalette(palette);
-	layout->addWidget(colorButton, 5,1, Qt::AlignLeft|Qt::AlignVCenter);
-    // connect(colorButton, SIGNAL(released()), this, SLOT(selectTextColor()));
+
+    bgColorCheckBox = new QCheckBox("Background", dialog);
+    bgColorCheckBox->setChecked(property("QCS_bgcolormode").toBool());
+    layout->addWidget(bgColorCheckBox, 5, 2, Qt::AlignVCenter);
+
+    connect(colorButton, SIGNAL(released()), this, SLOT(selectTextColor()));
 
     bgColorButton = new SelectColorButton(dialog);
     bgColorButton->setColor(static_cast<MeterWidget *>(m_widget)->getBgColor());
-    layout->addWidget(bgColorButton, 5,2, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(bgColorButton, 5, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+    connect(bgColorCheckBox, SIGNAL(toggled(bool)), bgColorButton, SLOT(setEnabled(bool)));
 
     borderCheckBox = new QCheckBox(tr("Border"), dialog);
     borderCheckBox->setCheckState(
         property("QCS_bordermode").toString()=="border" ? Qt::Checked : Qt::Unchecked);
-    layout->addWidget(borderCheckBox, 5, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(borderCheckBox, 5, 4, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
     label->setText("Type");
@@ -513,6 +522,7 @@ void QuteMeter::applyProperties()
     setProperty("QCS_color", colorButton->getColor());
     // setProperty("QCS_bgcolor", bgColorButton->palette().color(QPalette::Window));
     setProperty("QCS_bgcolor", bgColorButton->getColor());
+    setProperty("QCS_bgcolormode", bgColorCheckBox->isChecked());
 	setProperty("QCS_type", typeComboBox->currentText());
 	setProperty("QCS_pointsize", pointSizeSpinBox->value());
 	setProperty("QCS_fadeSpeed", fadeSpeedSpinBox->value());
@@ -544,6 +554,7 @@ void QuteMeter::applyInternalProperties()
     auto meter = static_cast<MeterWidget *>(m_widget);
     meter->setColor(property("QCS_color").value<QColor>());
     meter->setBgColor(property("QCS_bgcolor").value<QColor>());
+    meter->showBackground(property("QCS_bgcolormode").toBool());
     meter->setType(property("QCS_type").toString());
     meter->setPointSize(property("QCS_pointsize").toInt());
     meter->setRanges(property("QCS_xMin").toDouble(),
@@ -636,6 +647,8 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
     m_scene = new QGraphicsScene(0, 0, 20, 20, this);
 	m_scene->setBackgroundBrush(Qt::black);
     m_scene->setSceneRect(0,0, 20, 20);
+    m_showBackground = true;
+    m_bgcolor = Qt::black;
     setFrameStyle(QFrame::NoFrame);
 
     setScene(m_scene);
@@ -874,6 +887,15 @@ void MeterWidget::setColor(QColor color)
 
 void MeterWidget::setBgColor(QColor color) {
     m_scene->setBackgroundBrush(color);
+    m_bgcolor = color;
+}
+
+void MeterWidget::showBackground(bool show) {
+    if(!show) {
+        m_scene->setBackgroundBrush(Qt::NoBrush);
+    } else {
+        m_scene->setBackgroundBrush(m_bgcolor);
+    }
 }
 
 void MeterWidget::setWidgetGeometry(int x,int y,int width,int height)

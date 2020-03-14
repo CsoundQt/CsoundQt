@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>169</height>
+    <width>473</width>
+    <height>171</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -37,11 +37,11 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>481</width>
-     <height>71</height>
+     <width>451</width>
+     <height>60</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="Layout_2">
+   <layout class="QFormLayout" name="formLayout">
     <item row="0" column="0">
      <widget class="QLabel" name="label">
       <property name="text">
@@ -49,18 +49,25 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1" colspan="2">
+    <item row="0" column="1">
      <widget class="QLineEdit" name="findLineEdit"/>
     </item>
-    <item row="1" column="0" colspan="2">
+    <item row="1" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
        <string>Replace with</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="2">
-     <widget class="QLineEdit" name="replaceLineEdit"/>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="replaceLineEdit">
+      <property name="minimumSize">
+       <size>
+        <width>320</width>
+        <height>0</height>
+       </size>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -69,7 +76,7 @@
     <rect>
      <x>10</x>
      <y>120</y>
-     <width>481</width>
+     <width>451</width>
      <height>41</height>
     </rect>
    </property>

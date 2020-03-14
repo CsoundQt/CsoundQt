@@ -79,6 +79,7 @@ private:
 	QDoubleSpinBox* m_yMaxBox;
     QCheckBox *flatCheckBox;
     QCheckBox *borderCheckBox;
+    QCheckBox *bgColorCheckBox;
 
 private slots:
 	void selectTextColor();
@@ -108,6 +109,7 @@ public:
 	void setPointSize(int size);
 	void setColor(QColor color);
     void setBgColor(QColor color);
+    void showBackground(bool show);
     void showBorder(bool show) {
         if(show)
             m_border->show();
@@ -137,6 +139,8 @@ private:
 	QString m_type;
 	int m_pointSize;
 	bool m_mouseDown;
+    bool m_showBackground;
+    QColor m_bgcolor;
 
 	QGraphicsScene* m_scene;
 

@@ -4852,7 +4852,9 @@ void CsoundQt::createToolBars()
 
 void CsoundQt::createStatusBar()
 {
-    statusBar()->showMessage(tr("Ready"));
+    auto statusbar = statusBar();
+    statusbar->showMessage(tr("Ready"));
+    // TODO: add widgets on the right
 }
 
 void CsoundQt::readSettings()

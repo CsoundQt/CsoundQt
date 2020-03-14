@@ -456,6 +456,7 @@ private:
 	QAction *showUtilitiesAct;
 	QAction *showWidgetsAct;
     QAction *raiseWidgetsAct;
+
 	QAction *showInspectorAct;
     QAction *raiseInspectorAct;
 	QAction *showLiveEventsAct;
