@@ -143,7 +143,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QGridLayout" name="findBarGrid">
       <property name="leftMargin">
        <number>8</number>
       </property>
@@ -153,23 +153,6 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Find:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QCheckBox" name="caseBox">
-        <property name="styleSheet">
-         <string notr="true">padding-right: 8; padding-left: 8;</string>
-        </property>
-        <property name="text">
-         <string>Match Case </string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="2">
        <widget class="QToolButton" name="previousFindButton">
         <property name="icon">
@@ -181,17 +164,6 @@
         </property>
         <property name="arrowType">
          <enum>Qt::NoArrow</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QToolButton" name="nextFindButton">
-        <property name="icon">
-         <iconset resource="application.qrc">
-          <normaloff>:/images/br_next.png</normaloff>:/images/br_next.png</iconset>
-        </property>
-        <property name="autoRaise">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -212,6 +184,34 @@
        <widget class="QCheckBox" name="wholeWordBox">
         <property name="text">
          <string>Whole words</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Find:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QToolButton" name="nextFindButton">
+        <property name="icon">
+         <iconset resource="application.qrc">
+          <normaloff>:/images/br_next.png</normaloff>:/images/br_next.png</iconset>
+        </property>
+        <property name="autoRaise">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QCheckBox" name="caseBox">
+        <property name="styleSheet">
+         <string notr="true">padding-right: 8; padding-left: 8;</string>
+        </property>
+        <property name="text">
+         <string>Match Case </string>
         </property>
        </widget>
       </item>
@@ -251,102 +251,5 @@
  <resources>
   <include location="application.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>toggleFindButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>14</x>
-     <y>35</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>22</x>
-     <y>62</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>toggleFindButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>findLine</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>11</x>
-     <y>36</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>76</x>
-     <y>64</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>toggleFindButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>caseBox</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>15</x>
-     <y>31</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>247</x>
-     <y>68</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>toggleFindButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>wholeWordBox</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>24</x>
-     <y>30</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>391</x>
-     <y>68</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>toggleFindButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>nextFindButton</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>22</x>
-     <y>27</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>171</x>
-     <y>60</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>toggleFindButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>previousFindButton</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>29</x>
-     <y>36</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>142</x>
-     <y>48</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

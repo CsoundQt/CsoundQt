@@ -1570,6 +1570,11 @@ void CsoundQt::print()
 
 void CsoundQt::findReplace()
 {
+    if(this->helpPanel->hasFocus()) {
+        // TODO : call the help panel find
+        this->helpPanel->toggleFindBarVisible(true);
+        return;
+    }
     documentPages[curPage]->findReplace();
 }
 

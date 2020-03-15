@@ -479,13 +479,13 @@ void QuteButton::applyInternalProperties()
     static_cast<QPushButton *>(m_widget)->setCheckable(property("QCS_latch").toBool());
     // Set icon here, because it can be overwritten if button is "pict"
     if (property("QCS_latch").toBool()) {
-		static_cast<QPushButton *>(m_widget)->setIcon(onIcon);
+        static_cast<QPushButton *>(m_widget)->setIcon(onIcon);
     } else {
-		static_cast<QPushButton *>(m_widget)->setIcon(QIcon());
+        static_cast<QPushButton *>(m_widget)->setIcon(QIcon());
     }
 
     if (type == "event" || type == "value") {
-		icon = QIcon();
+        icon = QIcon();
 		static_cast<QPushButton *>(m_widget)->setIcon(icon);
     } else if (type == "pictevent" || type == "pictvalue" || type == "pict") {
 		icon = QIcon(QPixmap(property("QCS_image").toString()));

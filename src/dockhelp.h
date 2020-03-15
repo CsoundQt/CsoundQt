@@ -47,6 +47,7 @@ public:
 private:
 	QTextDocument::FindFlags findFlags;
 	virtual void closeEvent(QCloseEvent * event);
+    virtual void keyPressEvent(QKeyEvent *event);
 	void findText(QString expr); // bool backward = false, bool caseSensitive = false, bool wholeWords = false);
 
 protected:
@@ -73,6 +74,7 @@ public slots:
         if(show)
             raise();
     }
+    void toggleFindBarVisible(bool show);
 
 
 private:
