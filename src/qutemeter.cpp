@@ -645,8 +645,8 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
 	setInteractive (true);
     // m_scene = new QGraphicsScene(5,5, 20, 20, this);
     m_scene = new QGraphicsScene(0, 0, 20, 20, this);
-	m_scene->setBackgroundBrush(Qt::black);
-    m_scene->setSceneRect(0,0, 20, 20);
+    m_scene->setBackgroundBrush(Qt::black);
+    m_scene->setSceneRect(0, 0, 20, 20);
     m_showBackground = true;
     m_bgcolor = Qt::black;
     setFrameStyle(QFrame::NoFrame);
@@ -660,7 +660,7 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
 	m_point = m_scene->addEllipse(0, 0, 0, 0, QPen(Qt::green) , QBrush(Qt::green));
 	m_vline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
     m_hline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
-    m_border = m_scene->addRect(m_scene->sceneRect(), borderPen);
+    m_border = m_scene->addRect(m_scene->sceneRect(), borderPen, Qt::NoBrush);
     m_border->hide();
 }
 
@@ -893,9 +893,12 @@ void MeterWidget::setBgColor(QColor color) {
 void MeterWidget::showBackground(bool show) {
     if(!show) {
         m_scene->setBackgroundBrush(Qt::NoBrush);
+        this->setStyleSheet("background: transparent");
     } else {
-        m_scene->setBackgroundBrush(m_bgcolor);
+        // m_scene->setBackgroundBrush(m_bgcolor);
+        this->setStyleSheet("background: " + m_bgcolor.name());
     }
+    m_showBackground = show;
 }
 
 void MeterWidget::setWidgetGeometry(int x,int y,int width,int height)

@@ -1,3 +1,8 @@
+# Fixes
+
+* meter/control widget: fix no background mode in macOS
+
+
 # Taken from github's issues
 
 * In the Configuration Menu where i can select the default folders, 
@@ -12,4 +17,4 @@
    would be very cool, i would turn it into darkness."
    (https://github.com/CsoundQt/CsoundQt/issues/210)
 
-* 
+* background color for button. Maybe a new flat button would be better 

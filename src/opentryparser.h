@@ -57,6 +57,7 @@ private:
 	QStringList excludedOpcodes;
 
 	void addOpcode(Opcode opcode);
+    void addFlag(QString flag, QString description);
 
 };
 
