@@ -107,6 +107,7 @@ win32-g++:include (qcs-win32.pro)
 win32-msvc2013:include (qcs-win32.pro)
 win32-msvc2015:include (qcs-win32.pro)
 win32-msvc2017:include (qcs-win32.pro)
+win32-msvc:include (qcs-win32.pro)
 
 # Requires Csound >= 6.04
 record_support|perfThread_build {

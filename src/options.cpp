@@ -30,7 +30,7 @@ Options::Options(ConfigLists *configlists) :
 {
 #ifdef Q_OS_MAC
     font = "Menlo";
-#elif Q_OS_WIN
+#elif defined(Q_OS_WIN)
     font = "Consolas";
 #else
     font = "Monospace";

@@ -92,7 +92,7 @@ private slots:
 	//    void setValuesFromWidget(double value1, double value2);
 };
 
-enum MeterWidgetType { FILL, LLIF, LINE, CROSSHAIR, POINT };
+enum MeterWidgetType { FILL, LLIF, LINE, CROSSHAIR, POINT_ };
 
 class MeterWidget : public QGraphicsView
 {
