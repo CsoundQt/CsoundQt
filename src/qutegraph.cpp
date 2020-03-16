@@ -942,9 +942,9 @@ void QuteTableWidget::paintGrid(QPainter *painter) {
     const int textMargin = 4;
     painter->setBrush(Qt::NoBrush);
     painter->setPen(QPen(QColor(96, 96, 96), 0));
-    painter->drawLine(rect.x() + fm.horizontalAdvance(maxystr)+textMargin*2, y0, x1, y0);
+    painter->drawLine(rect.x() + fm.boundingRect(maxystr).width()+textMargin*2, y0, x1, y0);
     painter->drawLine(x0, ycenter, x1, ycenter);
-    painter->drawLine(x0, y1, x1 - fm.horizontalAdvance(tabsizestr) - 2, y1);
+    painter->drawLine(x0, y1, x1 - fm.boundingRect(tabsizestr).width() - 2, y1);
 
     painter->setPen(QColor(48, 48, 48));
     painter->drawLine(x0, (y0+ycenter)/2, x1, (y0+ycenter)/2);

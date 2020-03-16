@@ -316,7 +316,7 @@ void QuteSpinBox::applyInternalProperties()
 	while (totalHeight < fontSize + 1) {
 		new_fontSize++;
 		QFont font(property("QCS_font").toString(), new_fontSize);
-		QFontMetricsF fm(font);
+        QFontMetricsF fm(font);
 		totalHeight = fm.ascent() + fm.descent();
 	}
     auto bgstr = property("QCS_bgcolormode").toBool() ?
