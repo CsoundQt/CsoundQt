@@ -37,8 +37,8 @@ DockHelp::DockHelp(QWidget *parent)
     setWindowTitle("Opcode Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
 
-    connect(ui->toggleFindButton, SIGNAL(released()), this, SLOT(toggleFindBarVisible()));
-	connect(ui->backButton, SIGNAL(released()), this, SLOT(browseBack()));
+    connect(ui->toggleFindButton, SIGNAL(toggled(bool)), this, SLOT(toggleFindBarVisible(bool)));
+    connect(ui->backButton, SIGNAL(released()), this, SLOT(browseBack()));
 	connect(ui->forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
     // connect(ui->opcodesToolButton, SIGNAL(released()), this, SLOT(showOverview()));
 	connect(ui->homeToolButton, SIGNAL(released()), this, SLOT(showManual()));
@@ -70,7 +70,9 @@ DockHelp::~DockHelp()
 
 bool DockHelp::hasFocus()
 {
-	return QDockWidget::hasFocus() || ui->text->hasFocus();
+    return QDockWidget::hasFocus()
+           || ui->text->hasFocus()
+           || ui->findLine->hasFocus();
 }
 
 void DockHelp::loadFile(QString fileName)
@@ -231,4 +233,22 @@ void DockHelp::resizeEvent(QResizeEvent *e)
 
 void DockHelp::focusText() {
     ui->text->setFocus();
+}
+
+void DockHelp::keyPressEvent(QKeyEvent *event) {
+    if(event->key() == Qt::Key_Escape) {
+        toggleFindBarVisible(false);
+    }
+}
+
+void DockHelp::toggleFindBarVisible(bool show) {
+    ui->findLine->setVisible(show);
+    ui->label->setVisible(show);
+    ui->caseBox->setVisible(show);
+    ui->wholeWordBox->setVisible(show);
+    ui->nextFindButton->setVisible(show);
+    ui->previousFindButton->setVisible(show);
+    if(show) {
+        ui->findLine->setFocus();
+    }
 }

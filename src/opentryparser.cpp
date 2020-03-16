@@ -75,7 +75,6 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
 					if (!node.isNull())
 						op.inArgs = node.toText().data().simplified();
 				}
-				//               qDebug() << "out =" << op.outArgs << " op=" << op.opcodeName << " in=" << op.inArgs << "---" << description;
 				if (op.opcodeName != "" && excludedOpcodes.count(op.opcodeName) == 0
 						&& catName !="Utilities") {
 					addOpcode(op);
@@ -101,11 +100,16 @@ OpEntryParser::~OpEntryParser()
 
 void OpEntryParser::addExtraOpcodes()
 {
-	Opcode opcode;
+    Opcode opcode;
 	opcode.outArgs = "";
 	opcode.opcodeName = "then";
 	opcode.inArgs ="";
 	addOpcode(opcode);
+
+    addFlag("--use-system-sr", "Use the samplerate defined by the realtime audio backend");
+    addFlag("--omacro", "--omacro:XXX=YYY set orchestra macro XXX to value YYY");
+    addFlag("--port", "--port=N. listen to UDP port N for instruments/orchestra code");
+
 }
 
 QStringList OpEntryParser::opcodeNameList()
@@ -125,6 +129,15 @@ void OpEntryParser::addOpcode(Opcode opcode)
 	while (i<size && opcodeList[i].opcodeName < opcode.opcodeName)
 		i++;
 	opcodeList.insert(i, opcode);
+}
+
+void OpEntryParser::addFlag(QString flag, QString desc) {
+    Opcode opcode;
+    opcode.desc = desc;
+    opcode.opcodeName = flag;
+    opcode.inArgs = "";
+    opcode.outArgs = "";
+    opcodeList.append(opcode);
 }
 
 QString OpEntryParser::getSyntax(QString opcodeName)

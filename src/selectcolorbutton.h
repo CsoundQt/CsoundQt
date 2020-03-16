@@ -10,16 +10,19 @@ class SelectColorButton : public QPushButton
 
 public:
     SelectColorButton( QWidget* parent );
-
+    void setEnabled(bool);
     void setColor( const QColor& color );
     const QColor& getColor();
 
 public slots:
-    void updateColor();
-    void changeColor();
+    void selectColor();
 
 private:
     QColor color;
+    void paintColor(QColor color);
+
+protected:
+    virtual void changeEvent(QEvent *event) override;
 };
 
 

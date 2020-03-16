@@ -283,12 +283,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     fillFileMenu(); // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
     fillScriptsMenu(); // Must be placed after readSettings to know directory
-//    if (m_options->opcodexmldir == "") { // drop support for setting external path for opcodes.xml -  was one cause of possible crashes
-        m_opcodeTree = new OpEntryParser(":/opcodes.xml");
-//    }
-//    else //TEST! this can be reason of crashes on MacOS -  set it always to embedded opcode file.
-//        m_opcodeTree = new OpEntryParser(QString(m_options->opcodexmldir + "/opcodes.xml"));
-
+    m_opcodeTree = new OpEntryParser(":/opcodes.xml");
     LiveCodeEditor *liveeditor = new LiveCodeEditor(m_scratchPad, m_opcodeTree);
     liveeditor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     // liveeditor->show();
@@ -652,7 +647,7 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     documentTabs->close();
     m_console->close();
     delete m_opcodeTree;
-    m_opcodeTree = 0;
+    m_opcodeTree = nullptr;
     close();
 }
 
@@ -1570,6 +1565,11 @@ void CsoundQt::print()
 
 void CsoundQt::findReplace()
 {
+    if(this->helpPanel->hasFocus()) {
+        // TODO : call the help panel find
+        this->helpPanel->toggleFindBarVisible(true);
+        return;
+    }
     documentPages[curPage]->findReplace();
 }
 
@@ -4852,7 +4852,9 @@ void CsoundQt::createToolBars()
 
 void CsoundQt::createStatusBar()
 {
-    statusBar()->showMessage(tr("Ready"));
+    auto statusbar = statusBar();
+    statusbar->showMessage(tr("Ready"));
+    // TODO: add widgets on the right
 }
 
 void CsoundQt::readSettings()

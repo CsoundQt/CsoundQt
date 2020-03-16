@@ -21,3 +21,6 @@ doc/QuteCsound Quick Reference (0.9).odt
 #*
 *.pro.user
 *.autosave
+__pycache__
+*.pyc
+util/opcodes.xml
