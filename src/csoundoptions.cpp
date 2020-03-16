@@ -182,6 +182,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 	//  if (incdirActive)
 	//    list << "--env:INCDIR='" + incdir + "'";
     opts << "--env:CSNOSTOP=yes";
+    qDebug() << "Csound options: " << opts;
     return opts;
 }
 

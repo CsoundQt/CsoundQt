@@ -178,9 +178,9 @@ QString QuteMeter::getWidgetType()
 {
     // QString type = static_cast<MeterWidget *>(m_widget)->getType();
     auto type = static_cast<MeterWidget*>(m_widget)->getMeterType();
-    if (type == MeterWidgetType::FILL ||
-            type == MeterWidgetType::LINE ||
-            type == MeterWidgetType::LLIF) {
+    if (type == MeterWidgetType::Fill ||
+            type == MeterWidgetType::Line ||
+            type == MeterWidgetType::Llif) {
         return QString("BSBController");
 	}
 	//  else if (type == "crosshair" or type == "point") {
@@ -192,7 +192,7 @@ QString QuteMeter::getCabbageLine()
 {
     // QString type = static_cast<MeterWidget *>(m_widget)->getType();
     auto type = static_cast<MeterWidget*>(m_widget)->getMeterType();
-    if (!(type == MeterWidgetType::CROSSHAIR || type == MeterWidgetType::POINT)) {
+    if (!(type == MeterWidgetType::Crosshair || type == MeterWidgetType::Point)) {
 		qDebug()<<"Meter can be converted to XYpad only if the type is crosshair or point";
 		return QString();
 	}
@@ -398,8 +398,8 @@ void QuteMeter::createPropertiesDialog()
     pointSizeSpinBox->setToolTip("Size of the point / line if applicable");
 	layout->addWidget(pointSizeSpinBox, 7,1, Qt::AlignLeft|Qt::AlignVCenter);
 
-    if(w->getMeterType() != MeterWidgetType::POINT &&
-            w->getMeterType() != MeterWidgetType::LINE) {
+    if(w->getMeterType() != MeterWidgetType::Point &&
+            w->getMeterType() != MeterWidgetType::Line) {
         // label->setEnabled(false);
         pointSizeSpinBox->setEnabled(false);
     }
@@ -699,13 +699,13 @@ void MeterWidget::setValue(double value)
 	double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
 	double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
 
-    if (m_metertype == MeterWidgetType::FILL && !m_vertical) {
+    if (m_metertype == MeterWidgetType::Fill && !m_vertical) {
 		m_block->setRect(0, 0, portionx*width(), height());
 	}
-    else if (m_metertype == MeterWidgetType::LLIF && !m_vertical) {
+    else if (m_metertype == MeterWidgetType::Llif && !m_vertical) {
         m_block->setRect(portionx*width(), 0, width(), height());
 	}
-    else if (m_metertype == MeterWidgetType::LINE && !m_vertical) {
+    else if (m_metertype == MeterWidgetType::Line && !m_vertical) {
         m_vline->setLine(portionx*width(), 0, portionx*width(), height());
 	}
 	else {
@@ -735,13 +735,13 @@ void MeterWidget::setValue2(double value)
 	m_value2 = value;
 	double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
 	double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
-    if (m_metertype == MeterWidgetType::FILL && m_vertical) {
+    if (m_metertype == MeterWidgetType::Fill && m_vertical) {
 		m_block->setRect(0, (1-portiony)*height(), width(), height());
 	}
-    else if (m_metertype == MeterWidgetType::LLIF && m_vertical) {
+    else if (m_metertype == MeterWidgetType::Llif && m_vertical) {
 		m_block->setRect(0, 0, width(), (1-portiony)*height());
 	}
-    else if (m_metertype == MeterWidgetType::LINE && m_vertical) {
+    else if (m_metertype == MeterWidgetType::Line && m_vertical) {
 		m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
 		//    m_hline->setLine(portiony*width(), 0 ,portiony*width(), height());
 	}
@@ -767,19 +767,19 @@ void MeterWidget::setValues(double value1, double value2)
     double portionx = (m_value - m_xmin) / (m_xmax - m_xmin);
     double portiony = (m_value2 - m_ymin) / (m_ymax - m_ymin);
     switch(m_metertype) {
-    case MeterWidgetType::FILL:
+    case MeterWidgetType::Fill:
         if (!m_vertical)
             m_block->setRect(0, 0, portionx*width(), height());
         else
             m_block->setRect(0, (1-portiony)*height(), width(), portiony * height());
         break;
-    case MeterWidgetType::LLIF:
+    case MeterWidgetType::Llif:
         if (!m_vertical)
             m_block->setRect(portionx*width(),0, width(), height());
         else
             m_block->setRect(0, 0, width(), (1-portiony)*height());
         break;
-    case MeterWidgetType::LINE:
+    case MeterWidgetType::Line:
         if (!m_vertical)
             m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
         else
@@ -802,7 +802,7 @@ void MeterWidget::setType(QString type)
 	//   qDebug() << "MeterWidget::setType " << type << m_vertical;
 	if (type == "fill") {
 		m_type = type;
-        m_metertype = MeterWidgetType::FILL;
+        m_metertype = MeterWidgetType::Fill;
 		m_block->show();
 		m_point->hide();
 		m_vline->hide();
@@ -810,7 +810,7 @@ void MeterWidget::setType(QString type)
         setRenderHint(QPainter::Antialiasing, false);
 	}
 	else if (type == "llif") {
-        m_metertype = MeterWidgetType::LLIF;
+        m_metertype = MeterWidgetType::Llif;
 		m_type = type;
 		m_block->show();
 		m_point->hide();
@@ -818,7 +818,7 @@ void MeterWidget::setType(QString type)
 		m_hline->hide();
 	}
 	else if (type == "line") {
-        m_metertype = MeterWidgetType::LINE;
+        m_metertype = MeterWidgetType::Line;
 		m_type = type;
 		m_block->hide();
 		m_point->hide();
@@ -832,7 +832,7 @@ void MeterWidget::setType(QString type)
 		}
 	}
 	else if (type == "crosshair") {
-        m_metertype = MeterWidgetType::CROSSHAIR;
+        m_metertype = MeterWidgetType::Crosshair;
 		m_type = type;
 		m_block->hide();
 		m_point->hide();
@@ -840,7 +840,7 @@ void MeterWidget::setType(QString type)
 		m_hline->show();
 	}
 	else if (type == "point") {
-        m_metertype = MeterWidgetType::POINT;
+        m_metertype = MeterWidgetType::Point;
 		m_type = type;
 		m_block->hide();
 		m_point->show();
@@ -933,16 +933,16 @@ void MeterWidget::mouseMoveEvent(QMouseEvent* event)
 			newvert = m_ymin;
 		}
         switch(m_metertype) {
-        case MeterWidgetType::FILL:
-        case MeterWidgetType::LINE:
-        case MeterWidgetType::LLIF:
+        case MeterWidgetType::Fill:
+        case MeterWidgetType::Line:
+        case MeterWidgetType::Llif:
             if (m_vertical)
                 emit newValue2(newvert);
             else
                 emit newValue1(newhor);
             break;
-        case MeterWidgetType::CROSSHAIR:
-        case MeterWidgetType::POINT:
+        case MeterWidgetType::Crosshair:
+        case MeterWidgetType::Point:
             emit newValue1(newhor);
             emit newValue2(newvert);
             break;
@@ -958,16 +958,16 @@ void MeterWidget::mousePressEvent(QMouseEvent* event)
         double newhor =  m_xmin + (m_xmax - m_xmin) * (double)event->x()/width();
         double newvert = m_ymin + (m_ymax - m_ymin) * (1-((double)event->y()/height()));
         switch(m_metertype) {
-        case MeterWidgetType::FILL:
-        case MeterWidgetType::LINE:
-        case MeterWidgetType::LLIF:
+        case MeterWidgetType::Fill:
+        case MeterWidgetType::Line:
+        case MeterWidgetType::Llif:
             if (m_vertical)
                 emit newValue2(newvert);
             else
                 emit newValue1(newhor);
             break;
-        case MeterWidgetType::CROSSHAIR:
-        case MeterWidgetType::POINT:
+        case MeterWidgetType::Crosshair:
+        case MeterWidgetType::Point:
             emit newValue1(newhor);
             emit newValue2(newvert);
        }
