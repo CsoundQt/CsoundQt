@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <csound.h>
 
+
 #define QCS_VERSION "0.9.8-beta"
 
 // Time in milliseconds for widget and console messages updates
