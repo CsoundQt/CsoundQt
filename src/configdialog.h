@@ -93,6 +93,10 @@ private slots:
 	void checkRtMidiModule(QString module);
     void testAudioSetup();
 
+    void onRtModuleComboBoxChanged(int index);
+
+
+
 signals:
 	void disableInternalRtMidi();
 	//    void changeFont();

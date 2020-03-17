@@ -319,18 +319,15 @@ void WidgetLayout::loadXmlPresets(QString xmlPresets)
 				if (mode & 1) {
 					double val = valueElement.text().toDouble();
 					newPreset.addValue(id, val);
-					//          qDebug() << "WidgetLayout::loadXmlPresets " << val;
-				}
+                }
 				if (mode & 2) {
 					double val = valueElement.text().toDouble();
 					newPreset.addValue2(id, val);
-					//          qDebug() << "WidgetLayout::loadXmlPresets value2" << val;
-				}
+                }
 				if (mode & 4) {
 					QString val = valueElement.text();
 					newPreset.addStringValue(id, val);
-					//          qDebug() << "WidgetLayout::loadXmlPresets string value" << val;
-				}
+                }
 			}
 			presets.append(newPreset);
 			usedNumbers.append(newNumber);
@@ -4138,8 +4135,6 @@ void WidgetLayout::updateData()
 	while (curveUpdateBufferCount > 0) {
 		WINDAT * curveData = &curveUpdateBuffer[curveUpdateBufferCount--];
 		Curve *curve = (Curve *) getCurveById(curveData->windid);
-        qDebug() << "WidgetLayout::updateData" << "size: " << curveUpdateBuffer.size()
-                 << " ---" << curveData->windid << curveData->npts;
         if (curve != nullptr && curveData != nullptr) {
             curve->set_size(curveData->npts);    // number of points
 			curve->set_data(curveData->fdata);

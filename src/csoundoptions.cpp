@@ -22,6 +22,8 @@
 
 #include "csoundoptions.h"
 #include "configlists.h"
+#include "types.h"
+
 #include <QDir> // for static QDir::separator()
 #include <QDebug>
 #include <cstdlib> // for calloc
@@ -108,6 +110,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 	if (additionalFlagsActive && !additionalFlags.trimmed().isEmpty()) {
 		QStringList addFlags = additionalFlags.split(QRegExp("[\\s]"),QString::SkipEmptyParts);
 		foreach (QString f, addFlags) {
+            QDEBUG << "Additional Flags:" << additionalFlags;
             opts << f;
 		}
 	}
@@ -182,7 +185,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 	//  if (incdirActive)
 	//    list << "--env:INCDIR='" + incdir + "'";
     opts << "--env:CSNOSTOP=yes";
-    qDebug() << "Csound options: " << opts;
+    qDebug() << ">>>>> Csound options: " << opts;
     return opts;
 }
 

@@ -30,9 +30,6 @@
 #include "console.h"
 
 
-#define QDEBUG qDebug() << __FUNCTION__ << ":"
-
-
 BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists) :
 	QObject(parent), m_opcodeTree(opcodeTree), m_csEngine(0)
 {

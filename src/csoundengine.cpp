@@ -41,7 +41,7 @@
 #include "qutegraph.h"  // Needed for passing the ud to the graph for display data
 #include "midihandler.h"
 
-#define QDEBUG qDebug() << __FUNCTION__ << ":"
+// #define QDEBUG qDebug() << __FUNCTION__ << ":"
 
 CsoundEngine::CsoundEngine(ConfigLists *configlists) :
     m_options(configlists)

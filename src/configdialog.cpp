@@ -242,8 +242,12 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	if (index < 0 || index >= RtModuleComboBox->count()) {
 		index = 0;
 	}
-	RtModuleComboBox->setCurrentIndex(index);
-	RtInputLineEdit->setText(m_options->rtInputDevice);
+    RtModuleComboBox->setCurrentIndex(index);
+
+    connect(RtModuleComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(onRtModuleComboBoxChanged(int)) );
+
+    RtInputLineEdit->setText(m_options->rtInputDevice);
 	RtOutputLineEdit->setText(m_options->rtOutputDevice);
     // useSystemSamplerateCheckBox->setChecked(m_options->useSystemSamplerate);
 
@@ -311,7 +315,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 	templateTextEdit->setPlainText(m_options->csdTemplate);
 
-	connect(inputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseInputFilename()));
+    connect(inputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseInputFilename()));
 	connect(outputFilenameToolButton, SIGNAL(clicked()), this, SLOT(browseOutputFilename()));
 	connect(csdocdirToolButton, SIGNAL(clicked()), this, SLOT(browseCsdocdir()));
 	connect(opcodedirToolButton, SIGNAL(clicked()), this, SLOT(browseOpcodedir()));
@@ -372,6 +376,11 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 ConfigDialog::~ConfigDialog()
 {
+}
+
+void ConfigDialog::onRtModuleComboBoxChanged(int index) {
+    RtInputLineEdit->setText("");
+    RtOutputLineEdit->setText("");
 }
 
 int ConfigDialog::currentTab()
@@ -470,7 +479,8 @@ void ConfigDialog::accept()
 	m_options->fileOutputFilename = OutputFilenameLineEdit->text();
 	m_options->rtUseOptions = RtUseOptionsCheckBox->isChecked();
 	m_options->rtOverrideOptions = RtOverrideCheckBox->isChecked();
-	m_options->rtAudioModule = RtModuleComboBox->itemData(RtModuleComboBox->currentIndex()).toString();
+    m_options->rtAudioModule = RtModuleComboBox->itemData(
+                RtModuleComboBox->currentIndex()).toString();
 	m_options->rtInputDevice = RtInputLineEdit->text();
 	m_options->rtOutputDevice = RtOutputLineEdit->text();
 	m_options->rtJackName = JackNameLineEdit->text();
