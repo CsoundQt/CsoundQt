@@ -82,10 +82,7 @@ private:
     QCheckBox *bgColorCheckBox;
 
 private slots:
-	void selectTextColor();
-    void selectBgColor();
-
-	void valueChanged(double value1);
+    void valueChanged(double value1);
 	void value2Changed(double value2);
 
     void checkTypeComboBox();

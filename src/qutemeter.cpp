@@ -345,7 +345,6 @@ void QuteMeter::createPropertiesDialog()
     label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
     layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
 
-    // colorButton = new QPushButton(dialog);
     colorButton = new SelectColorButton(dialog);
     colorButton->setColor(static_cast<MeterWidget *>(m_widget)->getColor());
     layout->addWidget(colorButton, 5,1, Qt::AlignLeft|Qt::AlignVCenter);
@@ -360,8 +359,6 @@ void QuteMeter::createPropertiesDialog()
     bgColorCheckBox = new QCheckBox("Background", dialog);
     bgColorCheckBox->setChecked(property("QCS_bgcolormode").toBool());
     layout->addWidget(bgColorCheckBox, 5, 2, Qt::AlignVCenter);
-
-    connect(colorButton, SIGNAL(released()), this, SLOT(selectTextColor()));
 
     bgColorButton = new SelectColorButton(dialog);
     bgColorButton->setColor(static_cast<MeterWidget *>(m_widget)->getBgColor());
@@ -572,32 +569,6 @@ void QuteMeter::applyInternalProperties()
     setValue2(m_value2);
 }
 
-
-void QuteMeter::selectTextColor()
-{
-    QColor color = QColorDialog::getColor(property("QCS_color").value<QColor>(), this);
-    if (color.isValid()) {
-        QPixmap pixmap(64,64);
-        pixmap.fill(color);
-        colorButton->setIcon(pixmap);
-        QPalette palette(color);
-        palette.color(QPalette::Window);
-        colorButton->setPalette(palette);
-    }
-}
-
-void QuteMeter::selectBgColor()
-{
-    QColor color = QColorDialog::getColor(property("QCS_bgcolor").value<QColor>(), this);
-    if (color.isValid()) {
-        QPixmap pixmap(64,64);
-        pixmap.fill(color);
-        bgColorButton->setIcon(pixmap);
-        QPalette palette(color);
-        palette.color(QPalette::Window);
-        bgColorButton->setPalette(palette);
-    }
-}
 
 void QuteMeter::valueChanged(double value1)
 {
