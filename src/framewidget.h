@@ -38,6 +38,7 @@ public:
 	void select();
 	void deselect();
 	bool isSelected();
+    void setSelected(bool status);
 
 	void setWidget(QuteWidget* widget) {m_widget = widget;}
 	QuteWidget* getWidget() {return m_widget;}

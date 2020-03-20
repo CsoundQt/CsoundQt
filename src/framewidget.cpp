@@ -52,6 +52,13 @@ void FrameWidget::select()
 	emit widgetSelected(m_widget);
 }
 
+void FrameWidget::setSelected(bool status) {
+    if(status) {
+        this->select();
+    } else
+        this->deselect();
+}
+
 void FrameWidget::deselect()
 {
 	m_selected = false;
@@ -85,14 +92,11 @@ void FrameWidget::mousePressEvent ( QMouseEvent * event )
         if (event->modifiers() & Qt::ShiftModifier) {
             this->select();
         } else if (event->modifiers() & Qt::ControlModifier) {
-            if(this->isSelected())
-                this->deselect();
-            else
-                this->select();
-        } else {
+            this->setSelected(!this->isSelected());
+        } else if(!isSelected()) {
             emit deselectAllSignal();
             this->select();
-		}
+        }
     }
 	event->accept(); //to avoid propagation of the event to parent widgets
 }
