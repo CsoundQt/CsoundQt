@@ -1244,6 +1244,7 @@ WidgetLayout* DocumentPage::newWidgetLayout()
 	//  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
 	//        this, SLOT(setWidgetClipboard(QString)));
 	connect(wl,SIGNAL(showMidiLearn(QuteWidget *)),this, SLOT(showMidiLearn(QuteWidget *)));
+    // XXXX edu
     return wl;
 }
 
@@ -1336,13 +1337,12 @@ void DocumentPage::closeExtraPanels()
 
 void DocumentPage::showWidgets(bool show)
 {
-	//  qDebug() << show;
-	if (!show || (!fileName.endsWith(".csd") && !fileName.isEmpty())) {
+    if (!show || (!fileName.endsWith(".csd") && !fileName.isEmpty())) {
 		hideWidgets();
 		return;
 	}
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
-		wl->adjustWidgetSize();
+        wl->adjustWidgetSize();
 		wl->setVisible(true);
 		wl->raise();
 	}

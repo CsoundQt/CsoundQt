@@ -2708,6 +2708,11 @@ void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
 	}
 }
 
+void WidgetLayout::closeEvent(QCloseEvent *event) {
+    QDEBUG << "closeEvent!!!!";
+    emit this->windowStatus(false);
+}
+
 int WidgetLayout::parseXmlNode(QDomNode node)
 {
 	int ret = 0;

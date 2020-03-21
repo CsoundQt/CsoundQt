@@ -455,7 +455,9 @@ void CsoundQt::changePage(int index)
         qDebug() << "CsoundQt::changePage index < 0";
         return;
     }
-    if (documentPages.size() > curPage && documentPages.size() > 0 && documentPages[curPage]) {
+    if (documentPages.size() > curPage
+            && documentPages.size() > 0
+            && documentPages[curPage]) {
 #ifdef QCS_DEBUGGER
         if (documentPages[curPage]->getEngine()->m_debugging) {
             stop(); // TODO How to better handle this rather than forcing stop?
@@ -1252,67 +1254,87 @@ void CsoundQt::disableInternalRtMidi()
 #endif
 }
 
-void CsoundQt::focusToTab(int tab)
-{  QDockWidget *panel = nullptr;
-   QAction * action = nullptr;
-   qDebug()<<tab;
-   switch (tab) {
-   case 1:
-       qDebug()<<"Raise widgets";
-       panel = widgetPanel;
-       action = showWidgetsAct;
-       break;
+void CsoundQt::focusToTab(int tab) {
+    QDockWidget *panel = nullptr;
+    QAction * action = nullptr;
+    qDebug()<<tab;
+    switch (tab) {
+    case 1:
+        qDebug()<<"Raise widgets";
+        if(m_options->widgetsIndependent) {
+            QDEBUG << "Widget panel is an independent window";
+            auto doc = this->documentPages[this->curPage];
+            auto wl = doc->getWidgetLayout();
+            if(wl->isVisible()) {
+                wl->setVisible(false);
+                showWidgetsAct->setChecked(false);
+            } else {
+                // not visible
+                wl->setVisible(true);
+                showWidgetsAct->setChecked(true);
+            }
+            return;
+        } else {
+           panel = widgetPanel;
+           action = showWidgetsAct;
+           break;
+        }
     case 2:
-       qDebug()<<"Raise help";
-       panel = helpPanel;
-       action = showHelpAct;
-       break;
+        qDebug()<<"Raise help";
+        panel = helpPanel;
+        action = showHelpAct;
+        break;
     case 3:
-       qDebug()<<"Raise console";
-       panel = m_console;
-       action = showConsoleAct;
-       break;
-   case 4:
-       qDebug()<<"Raise html panel";
-#ifdef QCS_QTHTML
-       panel = csoundHtmlView;
-       action = showHtml5Act;
-#endif
-       break;
-   case 5:
-       qDebug()<<"Raise inspector";
-       panel = m_inspector;
-       action = showInspectorAct;
-       break;
-   // 6 is  Live events that is independent window
+        qDebug()<<"Raise console";
+        panel = m_console;
+        action = showConsoleAct;
+        break;
+    case 4:
+        qDebug()<<"Raise html panel";
+    #ifdef QCS_QTHTML
+        panel = csoundHtmlView;
+        action = showHtml5Act;
+    #endif
+        break;
+    case 5:
+        qDebug()<<"Raise inspector";
+        panel = m_inspector;
+        action = showInspectorAct;
+        break;
+    // 6 is  Live events that is independent window
 
-   case 7:
-       qDebug()<<"Raise Pyton Console";
-#ifdef QCS_PYTHONQT
-       panel = m_pythonConsole;
-       action = showPythonConsoleAct;
-#endif
-       break;
+    case 7:
+        qDebug()<<"Raise Pyton Console";
+    #ifdef QCS_PYTHONQT
+        panel = m_pythonConsole;
+        action = showPythonConsoleAct;
+    #endif
+        break;
 
-   case 8:
-       qDebug()<<"Raise Code Pad";
-       panel = m_scratchPad;
-       action = showScratchPadAct;
-       break;
-   }
+    case 8:
+        qDebug()<<"Raise Code Pad";
+        panel = m_scratchPad;
+        action = showScratchPadAct;
+        break;
+    default:
+        qDebug() << "focusToTab: unknoun tab" << tab;
+        return;
+    }
 
-   if (panel) {
-       if (panel->isFloating() && panel->isVisible()) { // if as separate window, close it shortcut activated again
-           panel->setVisible(false);
-           action->setChecked(false);
-           return;
-       }
-       if (!panel->isVisible()) {
-           panel->show();
-           action->setChecked(true);
-       }
-       panel->raise();
-   }
+    if(!panel)
+        return;
+
+    if (panel->isFloating() && panel->isVisible()) { // if as separate window, close it shortcut activated again
+        QDEBUG << "panel is floating, hiding";
+        panel->setVisible(false);
+        action->setChecked(false);
+        return;
+    }
+    if (!panel->isVisible()) {
+        panel->show();
+        action->setChecked(true);
+    }
+    panel->raise();
 }
 
 void CsoundQt::ambiguosShortcut()
@@ -2331,19 +2353,13 @@ void CsoundQt::setHtmlFullScreen(bool full)
 void CsoundQt::setHelpFullScreen(bool full)
 {
     if (full) {
-        /*if (this->widgetPanel->isFullScreen()) {
-           setWidgetsFullScreen(false);
-        }
-        if (this->isFullScreen()) {
-            this->setFullScreen(false);
-        } */
         pre_fullscreen_state = this->saveState();
         this->helpPanel->setFloating(true);
         this->helpPanel->showFullScreen();
     }
     else {
         this->restoreState(pre_fullscreen_state);
-        this->showNormal();
+        // this->showNormal();
     }
 }
 
@@ -2364,12 +2380,31 @@ void CsoundQt::setWidgetsFullScreen(bool full)
 #endif
 */
         pre_fullscreen_state = this->saveState();
-        this->widgetPanel->setFloating(true);
-        this->widgetPanel->showFullScreen();
+        if(m_options->widgetsIndependent) {
+            auto doc = getCurrentDocumentPage();
+            if(doc == nullptr)
+                return;
+            auto wl = doc->getWidgetLayout();
+            wl->setVisible(true);
+            wl->showFullScreen();
+        } else {
+            this->widgetPanel->setFloating(true);
+            this->widgetPanel->set
+            this->widgetPanel->showFullScreen();
+        }
     }
     else {
-        this->restoreState(pre_fullscreen_state);
-        this->showNormal();
+        if(m_options->widgetsIndependent) {
+            auto doc = getCurrentDocumentPage();
+            if(doc == nullptr)
+                return;
+            auto wl = doc->getWidgetLayout();
+            wl->showNormal();
+        } else {
+            this->restoreState(pre_fullscreen_state);
+            // this->showNormal();
+        }
+
     }
 }
 
@@ -4119,6 +4154,8 @@ void CsoundQt::connectActions()
     disconnect(showWidgetsAct, 0,0,0);
     if (m_options->widgetsIndependent) {
         connect(showWidgetsAct, SIGNAL(triggered(bool)), doc, SLOT(showWidgets(bool)));
+        auto wl = doc->getWidgetLayout();
+        connect(wl, SIGNAL(windowStatus(bool)), showWidgetsAct, SLOT(setChecked(bool)));
         //    connect(widgetPanel, SIGNAL(Close(bool)), showWidgetsAct, SLOT(setChecked(bool)));
     }
     else {

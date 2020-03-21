@@ -309,6 +309,7 @@ protected:
 	virtual void keyPressEvent(QKeyEvent *event);
 	virtual void keyReleaseEvent(QKeyEvent *event);
 	virtual void contextMenuEvent(QContextMenuEvent *event);
+    virtual void closeEvent(QCloseEvent *event);
 	QRubberBand *selectionFrame;
 	int startx, starty;
 
@@ -428,6 +429,7 @@ signals:
 	void widgetUnselectedSignal(QuteWidget *widget);
 	void showMidiLearn(QuteWidget *);
 	void addChn_kSignal(QString channel);
+    void windowStatus(bool);
 	//    void setWidgetClipboardSignal(QString text);  // To propagate clipboard for sharing between pages
 };
 

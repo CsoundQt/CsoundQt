@@ -283,6 +283,11 @@ private slots:
     void focusToTab(int tab);
     void ambiguosShortcut();
     void testAudioSetup();
+    DocumentPage *getCurrentDocumentPage() {
+        if(curPage >= documentPages.size())
+            return nullptr;
+        return documentPages[curPage];
+    }
 #ifdef QCS_DEBUGGER
 	void runDebugger();
 	void stopDebugger();

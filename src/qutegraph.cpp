@@ -238,8 +238,7 @@ void QuteGraph::refreshWidget()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();  // unlock
 #endif
-    qDebug() << "needsUpdate" << needsUpdate << "index: " << index;
-	if (needsUpdate) {
+    if (needsUpdate) {
 		if (index < 0) {
 			index = getIndexForTableNum(-index);
 		}
