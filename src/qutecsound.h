@@ -71,6 +71,8 @@ class EventSheet;
 class CsoundEngine;
 class MidiHandler;
 class MidiLearnDialog;
+class WidgetLayout;
+
 #if defined(QCS_QTHTML)
 class CsoundHtmlView;
 #endif
@@ -288,6 +290,7 @@ private slots:
             return nullptr;
         return documentPages[curPage];
     }
+
 #ifdef QCS_DEBUGGER
 	void runDebugger();
 	void stopDebugger();
@@ -316,6 +319,7 @@ private:
 	void storeSettings();
 	void writeSettings(QStringList openFiles=QStringList(), int lastIndex = 0);
 	void clearSettings();
+    void setToolbarIconSize(int size);
 	int execute(QString executable, QString options);
 	//    bool saveCurrent();
 	bool makeNewPage(QString fileName, QString text);

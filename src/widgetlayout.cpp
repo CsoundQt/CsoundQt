@@ -765,6 +765,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 			w->addCurve(curves[i]);
 		}
 		graphWidgets.append(w);
+        emit requestCsoundUserData(widget);
 		emit registerGraph(w);
 	}
 	else if (type == "BSBScope") {
@@ -3173,6 +3174,7 @@ QString WidgetLayout::createGraph(int x, int y, int width, int height, QString w
 		widget->addCurve(curves[i]);
 	}
 	graphWidgets.append(widget);
+    emit requestCsoundUserData(widget);
 	emit registerGraph(widget);
 	registerWidget(widget);
 	widget->applyInternalProperties();

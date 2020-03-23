@@ -175,6 +175,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	iconTextCheckBox->setChecked(m_options->iconText);
 	toolbarCheckBox->setChecked(m_options->showToolbar);
     lockToolbarCheckBox->setChecked(m_options->lockToolbar);
+    toolbarIconSizeSpinBox->setValue(m_options->toolbarIconSize);
 	wrapLinesCheckBox->setChecked(m_options->wrapLines);
 	autoCompleteCheckBox->setChecked(m_options->autoComplete);
 	autoParameterModeCheckBox->setChecked(m_options->autoParameterMode);
@@ -426,6 +427,7 @@ void ConfigDialog::accept()
 	m_options->iconText = iconTextCheckBox->isChecked();
 	m_options->showToolbar = toolbarCheckBox->isChecked();
     m_options->lockToolbar = lockToolbarCheckBox->isChecked();
+    m_options->toolbarIconSize = toolbarIconSizeSpinBox->value();
 	m_options->wrapLines = wrapLinesCheckBox->isChecked();
 	m_options->autoComplete = autoCompleteCheckBox->isChecked();
 	m_options->autoParameterMode = autoParameterModeCheckBox->isChecked();

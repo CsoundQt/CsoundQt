@@ -65,6 +65,7 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 	//  m_widget->setAutoFillBackground(true);
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+    m_numticksY = 6;
 	m_label = new QLabel(this);
 	QPalette palette = m_widget->palette();
     palette.setColor(QPalette::WindowText, QColor(150, 150, 150));
@@ -462,7 +463,8 @@ void QuteGraph::clearCurves()
 	lines.clear();
 	polygons.clear();
 	m_gridlines.clear();
-    m_gridtext.clear();
+    m_gridTextsX.clear();
+    m_gridTextsY.clear();
 	//  curveLock.unlock();
 }
 
@@ -477,13 +479,17 @@ void QuteGraph::addCurve(Curve * curve)
     view->show();
     scene->setBackgroundBrush(QBrush(Qt::black));
     lines.append(QVector<QGraphicsLineItem *>());
-	QVector<QGraphicsLineItem *> gridLinesVector;
-	QVector<QGraphicsTextItem *> gridTextVector;
-    int numTicksX = 12;
-    int numTicksY = 6;
+    QVector<QGraphicsLineItem *> gridLinesVector;
+    QVector<QGraphicsTextItem *> gridTextVectorX;
+    QVector<QGraphicsTextItem *> gridTextVectorY;
+    qreal freqStep = 1000.0;
+    // Max. samplerate. We generate a grid for this and can make lines/labels visible or
+    // not depending on the actual sample rate
+    qreal sr = 96000;
+    int numTicksX = (int)(sr*0.5 / freqStep);
+    int numTicksY = m_numticksY;
     auto gridpen = QPen(QColor(90, 90, 90));
     gridpen.setCosmetic(true);
-
     QString caption = curve->get_caption();
     GraphType graphType;
     if(caption.contains("fft")) {
@@ -497,28 +503,8 @@ void QuteGraph::addCurve(Curve * curve)
     }
 
     if(graphType == GraphType::GRAPH_SPECTRUM) {
-
-
-        for (int i = 0 ; i < numTicksX; i++) {
-            QGraphicsLineItem *gridLine = new QGraphicsLineItem();
-            gridLine->setPen(gridpen);
-            scene->addItem(gridLine);
-            gridLinesVector.append(gridLine);
-            QGraphicsTextItem *gridText = new QGraphicsTextItem();
-            gridText->setDefaultTextColor(Qt::gray);
-            gridText->setFlags(QGraphicsItem::ItemIgnoresTransformations);
-            if (i > 0) {
-                double kHz = i*((numTicksX-1.0)/numTicksX) * 2.0;
-                gridText->setHtml(QString("<div style=\"background:#000000;\">%1k</p>"
-                                          ).arg(kHz, 2, 'f', 1));
-            }
-            gridText->setFont(QFont("Sans", 6));
-            gridText->setVisible(false);
-            scene->addItem(gridText);
-            gridTextVector.append(gridText);
-        }
-
         for (int i = 0 ; i < numTicksY; i++) {
+            // 0 - 0db, 5 -> 100 dB (6:120
             QGraphicsLineItem *gridLine = new QGraphicsLineItem();
             gridLine->setPen(gridpen);
             scene->addItem(gridLine);
@@ -527,17 +513,41 @@ void QuteGraph::addCurve(Curve * curve)
             gridText->setDefaultTextColor(Qt::gray);
             gridText->setFlags(QGraphicsItem::ItemIgnoresTransformations);
             int dbs = round(float(i)/numTicksY * 120.0);
-            gridText->setHtml(QString("<div style=\"background:#000000;\">-%1</p>"
+            gridText->setHtml(QString("<div style=\"background:#000000;\">-%1 </p>"
                                       ).arg(dbs));
             gridText->setFont(QFont("Sans", 6));
             gridText->setVisible(false);
             scene->addItem(gridText);
-            gridTextVector.append(gridText);
+            gridTextVectorY.append(gridText);
         }
+
+        for (int i = 0; i < numTicksX; i++) {
+            QGraphicsLineItem *gridLine = new QGraphicsLineItem();
+            gridLine->setPen(gridpen);
+            scene->addItem(gridLine);
+            gridLinesVector.append(gridLine);
+            QGraphicsTextItem *gridText = new QGraphicsTextItem();
+            gridText->setDefaultTextColor(Qt::gray);
+            gridText->setFlags(QGraphicsItem::ItemIgnoresTransformations);
+            if (i > 0) {
+                // double kHz = i*((numTicksX-1.0)/numTicksX) * 2.0;
+                double kHz = i * freqStep / 1000.0 ;
+                gridText->setHtml(QString("<div style=\"background:#000000;\">%1k</p>"
+                                          ).arg(kHz, 2, 'f', 1));
+
+            }
+            gridText->setFont(QFont("Sans", 6));
+            gridText->setVisible(false);
+            scene->addItem(gridText);
+            gridTextVectorX.append(gridText);
+        }
+
+
     }
 
     m_gridlines.append(gridLinesVector);
-    m_gridtext.append(gridTextVector);
+    m_gridTextsX.append(gridTextVectorX);
+    m_gridTextsY.append(gridTextVectorY);
 
     graphtypes.append(graphType);
 
@@ -594,7 +604,6 @@ void QuteGraph::drawGraph(Curve *curve, int index) {
         break;
     case GraphType::GRAPH_SPECTRUM:
         // view->setRenderHint(QPainter::Antialiasing);
-
         drawSpectrum(curve, index);
         // drawSpectrumPath(curve, index);
         break;
@@ -619,7 +628,8 @@ void QuteGraph::setCurveData(Curve * curve)
     StackedLayoutWidget *widget_ = static_cast<StackedLayoutWidget *>(m_widget);
 	QGraphicsView *view = static_cast<QGraphicsView *>(widget_->widget(index));
     // Refitting curves in view resets the scrollbar so we need the previous value
-	int viewPosx = view->horizontalScrollBar()->value();
+
+    int viewPosx = view->horizontalScrollBar()->value();
 	int viewPosy = view->verticalScrollBar()->value();
     // QString caption = curve->get_caption();
     drawGraph(curve, index);
@@ -645,19 +655,29 @@ void QuteGraph::drawFtablePath(Curve *curve, int index) {
     QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
     double max = curve->get_max();
     max = max == 0 ? 1: max;
-    int size = (int) curve->get_size();
-    int decimate = size /1024;
+    int curveSize = curve->get_size();
+
+    int decimate = curveSize /1024;
     if (decimate == 0) {
         decimate = 1;
     }
-    int curveSize = curve->get_size();
-    auto pen = QPen(QColor(255, 45, 7), 0.02);
+    auto pen = QPen(QColor(255, 45, 7), 0);
+
+    auto rect = this->rect();
+    int width = rect.width();
+    int step = curveSize / width;
+    if(step == 0)
+        step = 1;
+
     QPainterPath path;
-    for (int i = 0; i < (int) curveSize; i++) {
+    for (int i = 0; i < curveSize; i+=step) {
         double value = curve->get_data(i);
         path.lineTo(QPointF(i, -value));
     }
     scene->clear();
+    if(step > 1) {
+        pen.setWidth(0.05);
+    }
     scene->addPath(path, pen);
 }
 
@@ -709,9 +729,9 @@ void QuteGraph::drawSpectrumPath(Curve *curve, int index) {
     int curveSize = curve->get_size();
     QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
     QPainterPath path;
-
     double db0 = m_ud->zerodBFS;
-    for(int i=0; i < curveSize; i++) {
+    path.moveTo(0, -20.0*log10(fabs(curve->get_data(0))/db0));
+    for(int i=1; i < curveSize; i++) {
         double value = 20.0*log10(fabs(curve->get_data(i))/db0);
         path.lineTo(QPointF(i, -value));
     }
@@ -723,25 +743,40 @@ void QuteGraph::drawSpectrumPath(Curve *curve, int index) {
     QPainter painter;
 
     if(m_drawGrid) {
-        int numTicksX = 12;
-        int numTicksY = 6;
+        int sr = (int)this->getSr();
+        int nyquist = sr / 2;
+        int step = 1000;
+        int numTicksX = nyquist / step;
+        int numTicksY = 7;
+        printf("grid: nyquist: %d, numticks: %d\n", nyquist, numTicksX);
 
         auto gridPen = QPen(QColor(40, 40, 40));
         gridPen.setCosmetic(true);
-        auto font = QFont({"Sans", 6});
-        for (int i = 0; i < numTicksX; i++) {
-            qreal x = i * qreal(curveSize)/numTicksX;
+        auto textColor = QColor(128, 128, 128);
+        qreal curveSizeF = (qreal)curveSize;
+        auto font = QFont("Sans");
+        font.setPixelSize(9);
+        const int maxy = 110;
+        for (int i = 1; i < numTicksX; i++) {
+            qreal freq = i * step;
+            qreal x = freq/nyquist * curveSizeF;
             gridPath.moveTo(x, 0);
-            gridPath.lineTo(x, 110);
-            auto item = new QGraphicsTextItem();
-            item->setPlainText("foo");
-            item->setPos(x, 0);
-            scene->addItem(item);
+            gridPath.lineTo(x, maxy);
+            if(i%2 == 0) {
+                auto item = scene->addText(QString::number(freq/1000.0, 'f', 1), font);
+                item->setDefaultTextColor(textColor);
+                item->setPos(x, 0);
+                item->setFlag(item->ItemIgnoresTransformations, true);
+            }
+        }
+        for (int i=1; i < numTicksY-1; i++) {
+            qreal y = (qreal)i/numTicksY * maxy;
+            gridPath.moveTo(0, y);
+            gridPath.lineTo(curveSizeF, y);
         }
         scene->addPath(gridPath, gridPen);
     }
     scene->addPath(path, pen);
-
 }
 
 
@@ -753,8 +788,10 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
     double db0 = m_ud->zerodBFS;
 
     for (int i = 0; i < (int) curveSize; i++) {
-        double value = 20.0*log10(fabs(curve->get_data(i))/db0);
-        polygonPoints[i+1] = QPointF(i, -value); //skip first item, which is base line
+        auto data = curve->get_data(i);
+        double db = data > 0.000001 ? 20.0*log10(data/db0) : -120;
+        // double value = 20.0*log10(fabs(curve->get_data(i))/db0);
+        polygonPoints[i+1] = QPointF(i, -db); //skip first item, which is base line
     }
 
     polygonPoints.back() = QPointF(curveSize - 1,110);
@@ -762,35 +799,43 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
 
     // m_pageComboBox->setItemText(index, curve->get_caption());
     // draw Grid
-    int numTicksX = 12;
-    int numTicksY = 6;
+    int numTicksY = m_numticksY;
     auto gridlinesvec = m_gridlines[index];
-    auto gridtextvec = m_gridtext[index];
+    auto gridtextvecx = m_gridTextsX[index];
+    auto gridtextvecy = m_gridTextsY[index];
+    qreal sr = this->getSr(44100.0);
+    qreal nyquist = sr * 0.5;
+    qreal freqStep = 1000.0;  // TODO: allow to configure this
+    int numTicksX = (int)(nyquist / freqStep);
+    // TODO: fix y axis
     if(m_drawGrid) {
-        for (int i = 0; i < numTicksX; i++) {
-            qreal x = i * qreal(curveSize)/numTicksX;
-            gridlinesvec[i]->setLine(x, 0, x, 110);
+        gridtextvecy[0]->setVisible(true);
+        for (int i = 1; i < numTicksY; i++) {
+            int y = float(i)/(numTicksY) * 100.0;
+            gridlinesvec[i]->setLine(0, y, curveSize, y);
             gridlinesvec[i]->setVisible(true);
-            m_gridtext[index][i]->setPos(x, 0);
-            m_gridtext[index][i]->setVisible(true);
+            gridtextvecy[i]->setPos(0, y);
+            gridtextvecy[i]->setVisible(true);
         }
 
-        for (int i = 0; i < numTicksY; i++) {
-            int y = i/float(numTicksY) * 110.0;
-            int idx = i+numTicksX;
-            gridlinesvec[idx]->setLine(0, y, curveSize, y);
+        for (int i = 1; i < numTicksX; i++) {
+            // qreal x = i * qreal(curveSize)/numTicksX;
+            qreal freq = i * freqStep;
+            qreal x = freq/nyquist * curveSize;
+            int idx = i + m_numticksY;
+            gridlinesvec[idx]->setLine(x, 0, x, 120);
             gridlinesvec[idx]->setVisible(true);
-            gridtextvec[idx]->setPos(0, -4 + y);
-            gridtextvec[idx]->setVisible(true);
+            gridtextvecx[i]->setPos(x, 0);
+            gridtextvecx[i]->setVisible(true);
         }
     } else {
-        for (int i = 0; i < numTicksX; i++) {
-            gridlinesvec[i]->setVisible(false);
-            gridtextvec[i]->setVisible(false);
-        }
         for(int i=0; i < numTicksY; i++) {
-            gridlinesvec[i+numTicksX]->setVisible(false);
-            gridtextvec[i+numTicksX]->setVisible(false);
+            gridlinesvec[i]->setVisible(false);
+            gridtextvecy[i]->setVisible(false);
+        }
+        for (int i = 0; i < numTicksX; i++) {
+            gridlinesvec[i+m_numticksY]->setVisible(false);
+            gridtextvecx[i]->setVisible(false);
         }
     }
 }

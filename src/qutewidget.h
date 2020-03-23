@@ -81,6 +81,22 @@ public:
 	void canFocus(bool can);
 	void updateDialogWindow(int cc, int channel);
     virtual void setCsoundUserData(CsoundUserData *ud) { m_csoundUserData = ud; }
+    double getSr(double defaultSr=0.0) {
+        if(m_csoundUserData == nullptr) {
+            QDEBUG << "csoundUserData: null";
+            return defaultSr;
+        }
+        auto engine = m_csoundUserData->csEngine;
+        if(engine == nullptr) {
+            QDEBUG << "engine null";
+            return defaultSr;
+        }
+        if(!engine->isRunning()) {
+            QDEBUG << "not running";
+            return defaultSr;
+        }
+        return csoundGetSr(engine->getCsound());
+    }
 
 	bool m_valueChanged;
 	bool m_value2Changed;

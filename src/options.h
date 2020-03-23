@@ -54,6 +54,7 @@ public:
 	bool iconText;
 	bool showToolbar;
     bool lockToolbar;
+    int  toolbarIconSize;
 	bool wrapLines;
 	bool autoComplete;
 	bool autoParameterMode;

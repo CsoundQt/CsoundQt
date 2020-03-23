@@ -116,7 +116,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -1643,7 +1643,7 @@
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QGroupBox" name="">
+            <widget class="QGroupBox" name="groupBox">
              <property name="title">
               <string>Theme</string>
              </property>
@@ -1706,14 +1706,24 @@
               <string>Behavior</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_24">
-              <item row="3" column="1">
-               <widget class="QCheckBox" name="rememberFileCheckBox">
+              <item row="6" column="0">
+               <widget class="QLabel" name="toolbarIconSizeLabel">
                 <property name="text">
-                 <string>Remember open files from previous session</string>
+                 <string>Toolbar Icon Size (*)</string>
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
+              <item row="10" column="1">
+               <widget class="QSpinBox" name="menusDepthSpinBox"/>
+              </item>
+              <item row="6" column="3">
+               <widget class="QCheckBox" name="autoJoinCheckBox">
+                <property name="text">
+                 <string>Automatically Join orc/sco files</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
                <widget class="QCheckBox" name="saveChangesCheckBox">
                 <property name="enabled">
                  <bool>true</bool>
@@ -1723,28 +1733,50 @@
                 </property>
                </widget>
               </item>
-              <item row="4" column="0">
-               <widget class="QCheckBox" name="toolbarCheckBox">
+              <item row="0" column="3">
+               <widget class="QCheckBox" name="autoplayCheckBox">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
                 <property name="text">
-                 <string>Show Toolbars</string>
+                 <string>Autoplay files when launched from file</string>
                 </property>
                </widget>
               </item>
-              <item row="7" column="0">
-               <layout class="QHBoxLayout" name="horizontalLayout_8">
-                <item>
-                 <widget class="QLabel" name="label_35">
-                  <property name="text">
-                   <string>Favorites/Scripts menus maximum depth</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="menusDepthSpinBox"/>
-                </item>
-               </layout>
+              <item row="4" column="3">
+               <widget class="QCheckBox" name="rememberFileCheckBox">
+                <property name="text">
+                 <string>Remember open files from previous session</string>
+                </property>
+               </widget>
               </item>
-              <item row="5" column="0">
+              <item row="6" column="2">
+               <spacer name="horizontalSpacer_13">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="0" column="4">
+               <spacer name="horizontalSpacer_15">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="4" column="0">
                <widget class="QCheckBox" name="lockToolbarCheckBox">
                 <property name="toolTip">
                  <string>Lock the toolbars in place, remove handle</string>
@@ -1757,6 +1789,35 @@
                 </property>
                </widget>
               </item>
+              <item row="10" column="0">
+               <widget class="QLabel" name="label_35">
+                <property name="text">
+                 <string>Favorites/Scripts menus max. depth</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QSpinBox" name="toolbarIconSizeSpinBox">
+                <property name="minimumSize">
+                 <size>
+                  <width>80</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="suffix">
+                 <string> px</string>
+                </property>
+                <property name="prefix">
+                 <string/>
+                </property>
+                <property name="minimum">
+                 <number>16</number>
+                </property>
+                <property name="maximum">
+                 <number>48</number>
+                </property>
+               </widget>
+              </item>
               <item row="3" column="0">
                <widget class="QCheckBox" name="iconTextCheckBox">
                 <property name="text">
@@ -1765,19 +1826,9 @@
                </widget>
               </item>
               <item row="0" column="0">
-               <widget class="QCheckBox" name="autoplayCheckBox">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
+               <widget class="QCheckBox" name="toolbarCheckBox">
                 <property name="text">
-                 <string>Autoplay files when launched from file</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="1">
-               <widget class="QCheckBox" name="autoJoinCheckBox">
-                <property name="text">
-                 <string>Automatically Join orc/sco files</string>
+                 <string>Show Toolbars</string>
                 </property>
                </widget>
               </item>
@@ -3612,6 +3663,54 @@ Default directory for sound files. Used if no full path is given for sound files
     <hint type="destinationlabel">
      <x>372</x>
      <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolbarCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>iconTextCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>132</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>132</x>
+     <y>360</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolbarCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>lockToolbarCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>132</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>132</x>
+     <y>390</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolbarCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>toolbarIconSizeSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>132</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>281</x>
+     <y>422</y>
     </hint>
    </hints>
   </connection>

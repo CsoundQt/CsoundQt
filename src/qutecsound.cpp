@@ -222,9 +222,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
     createMenus();
     // TODO: take care that the position is stored when toolbars or panels are moved/resized. maybe.
-    createToolBars();
     createStatusBar();
+    createToolBars();
     readSettings();
+    this->setToolbarIconSize(m_options->toolbarIconSize);
 
     // this section was above before, check that it does not create problems...
     // Later: find a way to recreate Midi Handler, if API jack/alsa or similar is changed
@@ -2389,7 +2390,6 @@ void CsoundQt::setWidgetsFullScreen(bool full)
             wl->showFullScreen();
         } else {
             this->widgetPanel->setFloating(true);
-            this->widgetPanel->set
             this->widgetPanel->showFullScreen();
         }
     }
@@ -2398,8 +2398,7 @@ void CsoundQt::setWidgetsFullScreen(bool full)
             auto doc = getCurrentDocumentPage();
             if(doc == nullptr)
                 return;
-            auto wl = doc->getWidgetLayout();
-            wl->showNormal();
+            doc->getWidgetLayout()->showNormal();
         } else {
             this->restoreState(pre_fullscreen_state);
             // this->showNormal();
@@ -2890,6 +2889,7 @@ void CsoundQt::applySettings()
     auto bgColor= m_options->editorBgColor.name();
     m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(bgColor));
     m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(bgColor));
+    this->setToolbarIconSize(m_options->toolbarIconSize);
 #ifdef QCS_PYTHONQT
     m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
 #endif
@@ -4847,6 +4847,8 @@ void CsoundQt::createToolBars()
     //	}
     //	addDockWidget(Qt::AllDockWidgetAreas, toolWidget);
     //	toolWidget->show();
+    const int iconSize = this->m_options->toolbarIconSize;
+    printf(">>>>>>>>>>>>>>>>>>>>>>> iconSize: %d\n", iconSize);
 
     controlToolBar = addToolBar(tr("Control"));
     controlToolBar->setObjectName("controlToolBar");
@@ -4860,7 +4862,8 @@ void CsoundQt::createToolBars()
     // controlToolBar->addAction(externalEditorAct);
     // controlToolBar->addAction(externalPlayerAct);
     controlToolBar->addAction(configureAct);
-    controlToolBar->setIconSize(QSize(20, 20));
+    controlToolBar->setIconSize(QSize(iconSize, iconSize));
+    controlToolBar->setFloatable(false);
 
     configureToolBar = addToolBar(tr("Panels"));
     configureToolBar->setObjectName("panelToolBar");
@@ -4878,9 +4881,10 @@ void CsoundQt::createToolBars()
 #endif
 #ifdef QCS_PYTHONQT
     configureToolBar->addAction(showPythonConsoleAct);
-#endif
+#endif    
     // configureToolBar->addAction(showScratchPadAct);
     // configureToolBar->addAction(showUtilitiesAct);
+    configureToolBar->setFloatable(false);
 
     Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
                                            Qt::ToolButtonTextUnderIcon: Qt::ToolButtonIconOnly);
@@ -4888,7 +4892,13 @@ void CsoundQt::createToolBars()
     //	editToolBar->setToolButtonStyle(toolButtonStyle);
     controlToolBar->setToolButtonStyle(toolButtonStyle);
     configureToolBar->setToolButtonStyle(toolButtonStyle);
-    configureToolBar->setIconSize(QSize(20, 20));
+    configureToolBar->setIconSize(QSize(iconSize, iconSize));
+}
+
+void CsoundQt::setToolbarIconSize(int size) {
+    controlToolBar->setIconSize(QSize(size, size));
+    configureToolBar->setIconSize(QSize(size, size));
+
 }
 
 void CsoundQt::createStatusBar()
@@ -4993,6 +5003,7 @@ void CsoundQt::readSettings()
     m_options->iconText = settings.value("iconText", true).toBool();
     m_options->showToolbar = settings.value("showToolbar", true).toBool();
     m_options->lockToolbar = settings.value("lockToolbar", true).toBool();
+    m_options->toolbarIconSize = settings.value("toolbarIconSize", 20).toInt();
     m_options->wrapLines = settings.value("wrapLines", true).toBool();
     m_options->autoComplete = settings.value("autoComplete", true).toBool();
     m_options->autoParameterMode = settings.value("autoParameterMode", true).toBool();
@@ -5222,6 +5233,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("iconText", m_options->iconText);
         settings.setValue("showToolbar", m_options->showToolbar);
         settings.setValue("lockToolbar", m_options->lockToolbar);
+        settings.setValue("toolbarIconSize", m_options->toolbarIconSize);
         settings.setValue("wrapLines", m_options->wrapLines);
         settings.setValue("autoComplete", m_options->autoComplete);
         settings.setValue("autoParameterMode", m_options->autoParameterMode);

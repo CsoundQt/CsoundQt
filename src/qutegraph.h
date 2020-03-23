@@ -85,7 +85,9 @@ protected:
     QVector<GraphType>graphtypes;
 
 	QVector<QVector <QGraphicsLineItem *> > m_gridlines;
-	QVector<QVector <QGraphicsTextItem *> > m_gridtext;
+    QVector<QVector <QGraphicsTextItem *> > m_gridTextsX;
+    QVector<QVector <QGraphicsTextItem *> > m_gridTextsY;
+
 
     QPainterPath *gridPath;
 
@@ -122,6 +124,7 @@ private:
 	bool m_logy;
     bool m_drawGrid;
     bool m_drawTableInfo;
+    int m_numticksY;
 
 signals:
     void requestUpdateCurve(Curve *curve);
