@@ -269,7 +269,7 @@ public slots:
 	//    void paste(QPoint pos);
 	void duplicate();
 	void deleteSelected();
-    void moveSelected(int horiz, int vert);
+    void moveSelected(int horiz, int vert, int grid=1);
 	void undo();
 	void redo();
     void reloadWidgets();

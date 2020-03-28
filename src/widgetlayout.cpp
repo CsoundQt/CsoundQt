@@ -2502,21 +2502,22 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
 {
     int key = event->key();
     if(m_editMode) {
+        int quant = (event->modifiers() & Qt::AltModifier) ? 1 : 5;
         switch(key) {
         case Qt::Key_Left:
-            this->moveSelected(event->modifiers() & Qt::AltModifier ? -1 : -5, 0);
+            this->moveSelected(-quant, 0, quant);
             event->accept();
             return;
         case Qt::Key_Right:
-            this->moveSelected(event->modifiers() & Qt::AltModifier ? 1 : 5, 0);
+            this->moveSelected(quant, 0, quant);
             event->accept();
             return;
         case Qt::Key_Up:
-            this->moveSelected(0, event->modifiers() & Qt::AltModifier ? -1 : -5);
+            this->moveSelected(0, -quant, quant);
             event->accept();
             return;
         case Qt::Key_Down:
-            this->moveSelected(0, event->modifiers() & Qt::AltModifier ? 1 : 5);
+            this->moveSelected(0, quant, quant);
             event->accept();
             return;
         case Qt::Key_S:
@@ -4077,15 +4078,24 @@ void WidgetLayout::deleteSelected()
 	markHistory();
 }
 
-void WidgetLayout::moveSelected(int horiz, int vert) {
+void WidgetLayout::moveSelected(int horiz, int vert, int grid) {
     widgetsMutex.lock();
     for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
         if(!editWidgets[i]->isSelected())
             continue;
         widgetsMutex.unlock();
         QPoint pos = m_widgets[i]->pos();
-        m_widgets[i]->move(pos.x() + horiz, pos.y() + vert);
-        editWidgets[i]->move(pos.x() + horiz, pos.y() + vert);
+        int x = pos.x() + horiz;
+        int y = pos.y() + vert;
+        if(grid > 1) {
+            double xq = round(x / (double)grid) * grid;
+            x = (int)xq;
+            double yq = round(y / (double)grid) * grid;
+            y = (int)yq;
+
+        }
+        m_widgets[i]->move(x, y);
+        editWidgets[i]->move(x, y);
         widgetsMutex.lock();
     }
     widgetsMutex.unlock();
