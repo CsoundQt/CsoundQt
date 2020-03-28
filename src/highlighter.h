@@ -62,6 +62,8 @@ public:
 	void setOpcodeNameList(QStringList list);
 	void setColorVariables(bool color);
 	void setMode(int mode);
+    void setTheme(const QString &theme);
+    QTextCharFormat getFormat(QString tag);
 
 	// for html
 	enum Construct {
@@ -96,6 +98,7 @@ private:
 	{
 		QRegExp pattern;
 		QTextCharFormat format;
+        int group;
 	};
 	QVector<HighlightingRule> highlightingRules;
 	QVector<HighlightingRule> lastHighlightingRules;
@@ -105,7 +108,8 @@ private:
 	//    QRegExp b64encStartExpression;
 	//    QRegExp b64encEndExpression;
 
-	QTextCharFormat /*csdBlockFormat,*/ csdtagFormat, instFormat;
+
+    QTextCharFormat csdtagFormat, instFormat, headerFormat;
 	QTextCharFormat irateFormat, krateFormat, arateFormat, girateFormat, gkrateFormat, garateFormat;
 	QTextCharFormat stringVarFormat, gstringVarFormat, fsigFormat, gfsigFormat;
 	QTextCharFormat opcodeFormat, macroDefineFormat, pfieldFormat;
@@ -113,12 +117,21 @@ private:
 	QTextCharFormat multiLineCommentFormat;
 	QTextCharFormat quotationFormat;
 	QTextCharFormat functionFormat;
+    QTextCharFormat nameFormat;
+    QTextCharFormat ioFormat;
+
+
 	QTextCharFormat labelFormat;
+    QTextCharFormat csoundOptionFormat;
+    QTextCharFormat defaultFormat;
 
-	QStringList tagPatterns, headerPatterns, instPatterns, keywordPatterns, htmlKeywords, javascriptKeywords; //Csound
+    QStringList tagPatterns, headerPatterns, instPatterns,
+                keywordLiterals, htmlKeywords, javascriptKeywords,
+                csoundOptions, ioPatterns; //Csound
 
-	QStringList keywords;  //Python
+    QStringList pythonKeywords;  //Python
 	QTextCharFormat keywordFormat;
+    QRegExp csoundOptionsRx, csoundOptionsRx2;
 
 	//     void setFirstRules();
 	void setLastRules();
@@ -127,6 +140,8 @@ private:
 	bool colorVariables;
 	// TODO this is duplicated in documentview class. Should it be unified?
 	int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
+
+    QString m_theme;
 
 	// for html
 	QTextCharFormat jsKeywordFormat, htmlTagFormat;

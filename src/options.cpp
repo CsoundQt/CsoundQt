@@ -47,6 +47,7 @@ Options::Options(ConfigLists *configlists) :
 
     tabWidth = 4;
     colorVariables = true;
+    highlightingTheme = "classic";
     autoPlay = true;
     autoJoin = false;
     saveChanges = false;

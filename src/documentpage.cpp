@@ -30,7 +30,8 @@
 #include "liveeventframe.h"
 #include "eventsheet.h"
 #include "liveeventcontrol.h"
-#include "qutecsound.h" // For playParent and renderParent functions (called from button reserved channels) and for connecting from console to log file
+#include "qutecsound.h" // For playParent and renderParent functions (called from button
+                        // reserved channels) and for connecting from console to log file
 #include "opentryparser.h"
 #include "types.h"
 #include "dotgenerator.h"
@@ -45,7 +46,8 @@
 #include <QMessageBox>
 
 // TODO is is possible to move the editor to a separate child class, to be able to use a cleaner class?
-DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLists *configlists, MidiLearnDialog *midiLearn):
+DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
+                           ConfigLists *configlists, MidiLearnDialog *midiLearn):
 	BaseDocument(parent, opcodeTree, configlists)
 {
 	init(parent, opcodeTree);
@@ -53,8 +55,10 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree, ConfigLis
 	m_midiLearn = midiLearn;
 	foreach(WidgetLayout* wl, m_widgetLayouts) {
 		connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
-		connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)), this, SLOT(passSelectedWidget(QuteWidget*)));
-		connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)), this, SLOT(passUnselectedWidget(QuteWidget*)));
+        connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)),
+                this, SLOT(passSelectedWidget(QuteWidget*)));
+        connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)),
+                this, SLOT(passUnselectedWidget(QuteWidget*)));
 		connect(wl,SIGNAL(showMidiLearn(QuteWidget*)),this, SLOT(showMidiLearn(QuteWidget*)));
 		connect(wl, SIGNAL(addChn_kSignal(QString)), m_view, SLOT(insertChn_k(QString)) );
 	}
@@ -99,7 +103,8 @@ int DocumentPage::setTextString(QString &text)
 	int ret = 0;
 	deleteAllLiveEvents();
 	if (!fileName.endsWith(".csd") && !fileName.isEmpty()) {
-		m_view->setFullText(text, true); // Put all text since not a csd file (and not default file which has no name)
+        // Put all text since not a csd file (and not default file which has no name)
+        m_view->setFullText(text, true);
 		m_view->setModified(false);
 		return ret;
 	}
@@ -108,7 +113,8 @@ int DocumentPage::setTextString(QString &text)
 		QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
 		options.resize(options.indexOf("</MacOptions>") + 13);
 		//     qDebug("<MacOptions> present. \n%s", options.toStdString().c_str());
-        if (text.indexOf("</MacOptions>") + 13 < text.size() && text[text.indexOf("</MacOptions>") + 13] == '\n')
+        if (text.indexOf("</MacOptions>") + 13 < text.size()
+                && text[text.indexOf("</MacOptions>") + 13] == '\n')
 			text.remove(text.indexOf("</MacOptions>") + 13, 1); //remove final line break
         if (text.indexOf("<MacOptions>") > 0 && text[text.indexOf("<MacOptions>") - 1] == '\n')
 			text.remove(text.indexOf("<MacOptions>") - 1, 1); //remove initial line break
@@ -147,7 +153,8 @@ int DocumentPage::setTextString(QString &text)
 		m_macGUI = "";
 	}
 	if (baseRet != 1) {  // Use the old options only if the new ones are not present
-		// This here is for compatibility with MacCsound (copy output filename from <MacOptions> to <CsOptions>)
+        // This here is for compatibility with MacCsound (copy output filename from
+        // <MacOptions> to <CsOptions>)
 		QString optionsText = getMacOptions("Options:");
 		if (optionsText.contains(" -o")) {
 			QString outFile = optionsText.mid(optionsText.indexOf(" -o") + 1);
@@ -175,7 +182,8 @@ int DocumentPage::setTextString(QString &text)
 		qDebug("<MacOptions> loaded.");
 	}
 	// Load Live Event Panels ------------------------
-	while (text.indexOf("<EventPanel") != -1 && text.indexOf("<EventPanel") < text.indexOf("</EventPanel>")) {
+    while (text.indexOf("<EventPanel") != -1
+           && text.indexOf("<EventPanel") < text.indexOf("</EventPanel>")) {
 		QString liveEventsText = text.mid(text.indexOf("<EventPanel "),
 										  text.indexOf("</EventPanel>") - text.indexOf("<EventPanel ") + 13
 										  + (text[text.indexOf("</EventPanel>") + 14] == '\n' ? 1:0));
@@ -215,8 +223,9 @@ int DocumentPage::setTextString(QString &text)
 	//  if (m_liveFrames.size() == 0) {
 	//    LiveEventFrame *e = createLiveEventPanel();
 	//    e->setFromText(QString()); // Must set blank for undo history point
-	//  }
-	m_view->setFullText(text,true);  // This must be last as some of the text has been removed along the way
+    //  }
+    // This must be last as some of the text has been removed along the way
+    m_view->setFullText(text,true);
 	m_view->setModified(false);
 	return ret;
 }
@@ -317,9 +326,10 @@ QString DocumentPage::getDotText()
 	}
 	QString orcText = getFullText();
 	if (!fileName.endsWith("orc")) { //asume csd
-		if (orcText.contains("<CsInstruments>") && orcText.contains("</CsInstruments>")) {
-			orcText = orcText.mid(orcText.indexOf("<CsInstruments>") + 15,
-								  orcText.indexOf("</CsInstruments>") - orcText.indexOf("<CsInstruments>") - 15);
+        if (orcText.contains("<CsInstruments>")) {
+            auto start = orcText.indexOf("<CsInstruments>");
+            orcText = orcText.mid(start + 15,
+                                  orcText.indexOf("</CsInstruments>") - start - 15);
 		}
 	}
 	DotGenerator dot(fileName, orcText, m_opcodeTree);
@@ -372,7 +382,8 @@ QString DocumentPage::getMacOptions(QString option)
 
 QString DocumentPage::getHtmlText()
 {
-	QString fullText = BaseDocument::getFullText(); // does windows need /r/n replacemant? then probably this.getFullText();
+    QString fullText = BaseDocument::getFullText();
+    // does windows need /r/n replacemant? then probably this.getFullText();
 	// get the <html> </html> element:
 	QString::SectionFlags sectionflags = QString::SectionIncludeLeadingSep |
 					QString::SectionIncludeTrailingSep | QString::SectionCaseInsensitiveSeps;
@@ -467,8 +478,9 @@ bool DocumentPage::destroyWidget(QString widgetid)
 
 }
 
-QStringList DocumentPage::listWidgetProperties(QString widgetid) // widgetid can be eihter uuid (prefered) or channel
+QStringList DocumentPage::listWidgetProperties(QString widgetid)
 {
+    // widgetid can be eihter uuid (prefered) or channel
 	//FIXME allow multiple
 	return m_widgetLayouts[0]->listProperties(widgetid);
 }
@@ -572,13 +584,13 @@ EventSheet* DocumentPage::getSheet(int sheetIndex)
 	if (sheetIndex < m_liveFrames.size() && sheetIndex >= 0) {
 		return m_liveFrames[sheetIndex]->getSheet();
 	}
-	return 0;
+    return nullptr;
 }
 
 EventSheet* DocumentPage::getSheet(QString sheetName)
 {
     (void) sheetName;
-	return 0;
+    return nullptr;
 }
 
 int DocumentPage::lineCount(bool countExtras)
@@ -727,7 +739,7 @@ QString DocumentPage::getQml()
 void DocumentPage::updateCabbageText()
 {
 	if (widgetCount()==0) {
-		QMessageBox::warning(NULL, tr("No widgets"), tr("There are no widgets to convert!"));
+        QMessageBox::warning(nullptr, tr("No widgets"), tr("There are no widgets to convert!"));
 		return;
 	}
 	QString text = "<Cabbage>\n";
@@ -999,9 +1011,11 @@ void DocumentPage::setConsoleColors(QColor fontColor, QColor bgColor)
 	m_console->setColors(fontColor, bgColor);
 }
 
-void DocumentPage::setEditorBgColor(QColor bgColor)
-{
-	m_view->setBackgroundColor(bgColor);
+void DocumentPage::setEditorColors(QColor text, QColor bg) {
+    QDEBUG << "text:" << text << "background:" << bg;
+    this->setProperty("textColor", text);
+    this->setProperty("backgroundColor", bg);
+    m_view->setColors(text, bg);
 }
 
 void DocumentPage::setScriptDirectory(QString dir)
@@ -1189,6 +1203,7 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 	saveLiveEvents = true;
 
 	m_view = new DocumentView(parent, opcodeTree);
+
 	//connect(m_view, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
 	connect(m_view,SIGNAL(setHelp()), this, SLOT(setHelp()));
 	connect(m_view, SIGNAL(closeExtraPanels()), this, SLOT(closeExtraPanels()));
@@ -1206,12 +1221,17 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 	connect(m_liveEventControl, SIGNAL(playPanel(int)), this, SLOT(playPanelSlot(int)));
 	connect(m_liveEventControl, SIGNAL(loopPanel(int,bool)), this, SLOT(loopPanelSlot(int,bool)));
 	connect(m_liveEventControl, SIGNAL(stopPanel(int)), this, SLOT(stopPanelSlot(int)));
-	connect(m_liveEventControl, SIGNAL(setPanelVisible(int,bool)), this, SLOT(setPanelVisibleSlot(int,bool)));
+    connect(m_liveEventControl, SIGNAL(setPanelVisible(int,bool)),
+            this, SLOT(setPanelVisibleSlot(int,bool)));
 	connect(m_liveEventControl, SIGNAL(setPanelSync(int,int)), this, SLOT(setPanelSyncSlot(int,int)));
-	connect(m_liveEventControl, SIGNAL(setPanelNameSignal(int,QString)), this, SLOT(setPanelNameSlot(int,QString)));
-	connect(m_liveEventControl, SIGNAL(setPanelTempoSignal(int,double)), this, SLOT(setPanelTempoSlot(int,double)));
-	connect(m_liveEventControl, SIGNAL(setPanelLoopLengthSignal(int,double)), this, SLOT(setPanelLoopLengthSlot(int,double)));
-	connect(m_liveEventControl, SIGNAL(setPanelLoopRangeSignal(int,double,double)), this, SLOT(setPanelLoopRangeSlot(int,double,double)));
+    connect(m_liveEventControl, SIGNAL(setPanelNameSignal(int,QString)),
+            this, SLOT(setPanelNameSlot(int,QString)));
+    connect(m_liveEventControl, SIGNAL(setPanelTempoSignal(int,double)),
+            this, SLOT(setPanelTempoSlot(int,double)));
+    connect(m_liveEventControl, SIGNAL(setPanelLoopLengthSignal(int,double)),
+            this, SLOT(setPanelLoopLengthSlot(int,double)));
+    connect(m_liveEventControl, SIGNAL(setPanelLoopRangeSignal(int,double,double)),
+            this, SLOT(setPanelLoopRangeSlot(int,double,double)));
 	connect(m_liveEventControl, SIGNAL(hidePanels()), this, SLOT(hideLiveEventPanels())  );
 
 	// Connect for clearing marked lines and letting inspector know text has changed
@@ -1239,12 +1259,13 @@ WidgetLayout* DocumentPage::newWidgetLayout()
 {
 	WidgetLayout* wl = BaseDocument::newWidgetLayout();
 	connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
-	connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)), this, SLOT(passSelectedWidget(QuteWidget*)));
-	connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)), this, SLOT(passUnselectedWidget(QuteWidget*)));
+    connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)),
+            this, SLOT(passSelectedWidget(QuteWidget*)));
+    connect(wl, SIGNAL(widgetUnselectedSignal(QuteWidget*)),
+            this, SLOT(passUnselectedWidget(QuteWidget*)));
 	//  connect(wl, SIGNAL(setWidgetClipboardSignal(QString)),
 	//        this, SLOT(setWidgetClipboard(QString)));
 	connect(wl,SIGNAL(showMidiLearn(QuteWidget *)),this, SLOT(showMidiLearn(QuteWidget *)));
-    // XXXX edu
     return wl;
 }
 
@@ -1293,7 +1314,7 @@ int DocumentPage::record(int format)
 	return m_csEngine->startRecording(format, recName);
 #else
     (void) format;
-	QMessageBox::warning(NULL, tr("Recording not possible"), tr("This version of CsoundQt was not built with recording support."));
+    QMessageBox::warning(nullptr, tr("Recording not possible"), tr("This version of CsoundQt was not built with recording support."));
 	return 0;
 #endif
 }
@@ -1365,7 +1386,7 @@ void DocumentPage::passUnselectedWidget(QuteWidget *widget) // necessary only wh
 {
 	// TODO: Better options for unselecting widgets.
     (void) widget;
-	m_midiLearn->setCurrentWidget(NULL);
+    m_midiLearn->setCurrentWidget(nullptr);
 }
 
 void DocumentPage::showMidiLearn(QuteWidget *widget)
@@ -1536,7 +1557,8 @@ LiveEventFrame * DocumentPage::createLiveEventPanel(QString text)
 	//  connect(e, SIGNAL(closed()), this, SLOT(liveEventFrameClosed()));
 	connect(e, SIGNAL(newFrameSignal(QString)), this, SLOT(newLiveEventPanel(QString)));
 	connect(e, SIGNAL(deleteFrameSignal(LiveEventFrame *)), this, SLOT(deleteLiveEventPanel(LiveEventFrame *)));
-	connect(e, SIGNAL(renamePanel(LiveEventFrame *, QString)), this, SLOT(renamePanel(LiveEventFrame *,QString)));
+    connect(e, SIGNAL(renamePanel(LiveEventFrame *, QString)),
+            this, SLOT(renamePanel(LiveEventFrame *,QString)));
 	connect(e, SIGNAL(setLoopRangeFromPanel(LiveEventFrame *, double, double)),
 			this, SLOT(setPanelLoopRange(LiveEventFrame *,double, double)));
 	connect(e, SIGNAL(setTempoFromPanel(LiveEventFrame *, double)),
@@ -1642,4 +1664,13 @@ void DocumentPage::setPanelLoopEnabled(LiveEventFrame *panel, bool enabled)
 	if (index >= 0) {
 		m_liveEventControl->setPanelLoopEnabled(index, enabled);
 	}
+}
+
+void DocumentPage::setHighlightingTheme(QString theme) {
+    if(m_view == nullptr)
+        return;
+    m_view->setTheme(theme);
+    auto defaultFormat = m_view->getDefaultFormat();
+    this->setEditorColors(defaultFormat.foreground().color(),
+                          defaultFormat.background().color());
 }

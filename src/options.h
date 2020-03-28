@@ -46,6 +46,7 @@ public:
 	int tabWidth;
 	bool tabIndents;
 	bool colorVariables;
+    QString highlightingTheme;
 	bool autoPlay;
 	bool autoJoin;
 	bool saveChanges;

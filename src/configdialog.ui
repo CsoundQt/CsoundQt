@@ -1709,7 +1709,7 @@
               <item row="6" column="0">
                <widget class="QLabel" name="toolbarIconSizeLabel">
                 <property name="text">
-                 <string>Toolbar Icon Size (*)</string>
+                 <string>Toolbar Icon Size</string>
                 </property>
                </widget>
               </item>
@@ -1835,7 +1835,7 @@
              </layout>
             </widget>
            </item>
-           <item row="2" column="0" alignment="Qt::AlignRight|Qt::AlignTop">
+           <item row="3" column="0" alignment="Qt::AlignRight|Qt::AlignTop">
             <widget class="QLabel" name="label_44">
              <property name="text">
               <string>(*) Requires restart</string>
@@ -1848,16 +1848,118 @@
               <string>Editor</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_17">
-              <item row="0" column="0" rowspan="2">
-               <layout class="QGridLayout" name="_2">
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_2">
+              <item row="0" column="1">
+               <layout class="QVBoxLayout" name="_3">
+                <property name="leftMargin">
+                 <number>9</number>
+                </property>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_11"/>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="tabIndentCheckBox">
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
                   <property name="text">
-                   <string>Size</string>
+                   <string>Tab key always indents</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="1" colspan="2">
+                <item>
+                 <widget class="QCheckBox" name="wrapLinesCheckBox">
+                  <property name="text">
+                   <string>Wrap Lines</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="autoCompleteCheckBox">
+                  <property name="text">
+                   <string>Autocomplete menu while typing</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="autoParameterModeCheckBox">
+                  <property name="text">
+                   <string>Parameter mode after autocomplete</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="lineNumbersCheckBox">
+                  <property name="text">
+                   <string>Show line numbers</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="tabShortcutActiveCheckBox">
+                  <property name="text">
+                   <string>Change tabs with Alt(Ctrl)+&lt;Number&gt;  (*)</string>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="0" rowspan="2">
+               <layout class="QGridLayout" name="_2">
+                <item row="4" column="0">
+                 <widget class="QLabel" name="label_34">
+                  <property name="text">
+                   <string>Line Ending Mode</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_18">
+                  <property name="text">
+                   <string>Syntax Highlighting</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>Font</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QComboBox" name="highlightingThemeComboBox">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>classic</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>light</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>dark</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>none</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="4" column="1">
                  <widget class="QComboBox" name="lineEndingComboBox">
                   <property name="maximumSize">
                    <size>
@@ -1870,45 +1972,24 @@
                   </property>
                   <item>
                    <property name="text">
-                    <string>Unix (LF)</string>
+                    <string>Unix</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>Windows (CR+LF)</string>
+                    <string>Windows</string>
                    </property>
                   </item>
                  </widget>
                 </item>
-                <item row="4" column="0">
-                 <widget class="QLabel" name="label_19">
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_2">
                   <property name="text">
-                   <string>Tab Width</string>
+                   <string>Size</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label">
-                  <property name="text">
-                   <string>Font</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_41">
-                  <property name="text">
-                   <string>Background Color</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_34">
-                  <property name="text">
-                   <string>Line Ending Mode</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
+                <item row="5" column="1">
                  <widget class="QSpinBox" name="tabWidthSpinBox">
                   <property name="maximumSize">
                    <size>
@@ -1930,11 +2011,25 @@
                   </property>
                  </widget>
                 </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="label_19">
+                  <property name="text">
+                   <string>Tab Width</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_41">
+                  <property name="text">
+                   <string>Background Color</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="1" column="1">
                  <widget class="QComboBox" name="fontSizeComboBox">
                   <property name="maximumSize">
                    <size>
-                    <width>100</width>
+                    <width>16777215</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2008,11 +2103,11 @@
                   </item>
                  </widget>
                 </item>
-                <item row="2" column="1">
+                <item row="3" column="1">
                  <widget class="QPushButton" name="editorBgColorButton">
                   <property name="maximumSize">
                    <size>
-                    <width>100</width>
+                    <width>16777215</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -2021,78 +2116,13 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1" colspan="3">
+                <item row="0" column="1" colspan="2">
                  <widget class="QFontComboBox" name="fontComboBox">
                   <property name="maximumSize">
                    <size>
                     <width>220</width>
                     <height>16777215</height>
                    </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="1">
-                 <widget class="QCheckBox" name="tabIndentCheckBox">
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>Tab key always indents</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="0" column="1">
-               <layout class="QVBoxLayout" name="_3">
-                <property name="leftMargin">
-                 <number>9</number>
-                </property>
-                <item>
-                 <widget class="QCheckBox" name="colorVariablesCheckBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="text">
-                   <string>Color Variables</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="wrapLinesCheckBox">
-                  <property name="text">
-                   <string>Wrap Lines</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="autoCompleteCheckBox">
-                  <property name="text">
-                   <string>Autocomplete menu while typing</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="autoParameterModeCheckBox">
-                  <property name="text">
-                   <string>Parameter mode after autocomplete</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="lineNumbersCheckBox">
-                  <property name="text">
-                   <string>Show line numbers</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="tabShortcutActiveCheckBox">
-                  <property name="text">
-                   <string>Change tabs with Alt(Ctrl)+&lt;Number&gt;  (*)</string>
-                  </property>
-                  <property name="checked">
-                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>

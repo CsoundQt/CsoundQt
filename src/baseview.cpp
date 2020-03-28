@@ -295,8 +295,23 @@ void BaseView::setColorVariables(bool color)
 
 void BaseView::setBackgroundColor(QColor color)
 {
-	m_mainEditor->setStyleSheet("QTextEdit { background-color: "+color.name() + "}"); // before it was setPalette, but that does not work runtime.
+    // before it was setPalette, but that does not work runtime.
+    m_mainEditor->setStyleSheet("QTextEdit { background-color: "+color.name() + "}");
 }
+
+void BaseView::setTextColor(QColor color)
+{
+    // before it was setPalette, but that does not work runtime.
+    m_mainEditor->setStyleSheet("QTextEdit { color: " + color.name() + "}");
+}
+
+void BaseView::setColors(QColor text, QColor background) {
+    auto sheet = QString("QTextEdit { color: %1; background-color: %2}")
+            .arg(text.name())
+            .arg(background.name());
+    m_mainEditor->setStyleSheet(sheet);
+}
+
 
 void BaseView::setOrc(QString text)
 {

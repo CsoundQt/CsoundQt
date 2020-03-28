@@ -66,7 +66,8 @@ public:
 	void toggleLineArea();
 	void toggleParameterMode();
 	void showParametersInEditor();
-	virtual QString getFullText();
+    void setHighlightingTheme(QString theme);
+    virtual QString getFullText();
 	QString getDotText();
 	QString getMacWidgetsText();
 	QString getMacPresetsText();
@@ -161,7 +162,8 @@ public:
 	// Console properties
 	void setConsoleFont(QFont font);
 	void setConsoleColors(QColor fontColor, QColor bgColor);
-	void setEditorBgColor(QColor bgColor);
+    void setEditorColors(QColor text, QColor background);
+
 	// Event Sheet Properties
 	void setScriptDirectory(QString dir);
 	void setDebugLiveEvents(bool debug);

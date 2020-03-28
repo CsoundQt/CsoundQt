@@ -89,7 +89,9 @@ public:
 	void setAutoComplete(bool autoComplete);
 	void setColorVariables(bool color);
 	void setBackgroundColor(QColor color);
-	//    void setOpcodeNameList(QStringList list);
+    void setTextColor(QColor color);
+    void setColors(QColor text, QColor background);
+    //    void setOpcodeNameList(QStringList list);
 	//    void setOpcodeTree(OpEntryParser *opcodeTree);
 	void setOrc(QString text);
 	void setSco(QString text);
@@ -104,6 +106,13 @@ public:
 	void setAppText(QString text);
 	void setAppProperties(AppProperties properties);
 	void showLineArea(bool visible);
+    void setTheme(const QString &theme) {
+        qDebug() << "baseview: setTheme" << theme;
+        m_highlighter.setTheme(theme);
+    }
+    QTextCharFormat getDefaultFormat() {
+        return m_highlighter.getFormat("default");
+    }
 
 	QString getFullText();
 	QString getOrc();  // Without tags

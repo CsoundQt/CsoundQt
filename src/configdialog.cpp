@@ -164,7 +164,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 	tabWidthSpinBox->setValue(m_options->tabWidth);
 	tabIndentCheckBox->setChecked(m_options->tabIndents);
-	colorVariablesCheckBox->setChecked(m_options->colorVariables);
+    highlightingThemeComboBox->setCurrentText(m_options->highlightingTheme);
 	autoplayCheckBox->setChecked(m_options->autoPlay);
 	autoJoinCheckBox->setChecked(m_options->autoJoin);
 	menusDepthSpinBox->setValue(m_options->menuDepth);
@@ -416,8 +416,9 @@ void ConfigDialog::accept()
 	m_options->consoleFontPointSize = consoleFontSizeComboBox->currentText().toDouble();
 	m_options->tabWidth = tabWidthSpinBox->value();
 	m_options->tabIndents = tabIndentCheckBox->isChecked();
-	m_options->colorVariables = colorVariablesCheckBox->isChecked();
-	m_options->autoPlay = autoplayCheckBox->isChecked();
+    m_options->highlightingTheme = highlightingThemeComboBox->currentText();
+    m_options->colorVariables = m_options->highlightingTheme != "none";
+    m_options->autoPlay = autoplayCheckBox->isChecked();
 	m_options->autoJoin = autoJoinCheckBox->isChecked();
 	m_options->menuDepth = menusDepthSpinBox->value();
 	m_options->saveChanges = saveChangesCheckBox->isChecked();

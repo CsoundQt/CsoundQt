@@ -189,7 +189,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     settings.beginGroup("Options");
     settings.beginGroup("Editor");
     // necessary to get it before htmlview is created
-    m_options->debugPort = settings.value("debugPort",34711).toInt();
+    m_options->debugPort = settings.value("debugPort", 34711).toInt();
+    m_options->highlightingTheme = settings.value("higlightingTheme", "classic").toString();
     settings.endGroup();
 
     m_server = new QLocalServer();
@@ -2805,11 +2806,13 @@ void CsoundQt::configure()
 
 void CsoundQt::applySettings()
 {
+    // This is called at initialization, when clicking "apply" in the settings dialog
+    // and when closing it with "OK"
     for (int i = 0; i < documentPages.size(); i++) {
         setCurrentOptionsForPage(documentPages[i]);
     }
-    auto toolButtonStyle = (m_options->iconText ?
-                                Qt::ToolButtonTextUnderIcon : Qt::ToolButtonIconOnly);
+    auto toolButtonStyle = (m_options->iconText ? Qt::ToolButtonTextUnderIcon :
+                                                  Qt::ToolButtonIconOnly);
 
     //	setUnifiedTitleAndToolBarOnMac(m_options->iconText);
     //	fileToolBar->setToolButtonStyle(toolButtonStyle);
@@ -2829,10 +2832,11 @@ void CsoundQt::applySettings()
     //  }
 
     // Display a summary of options on the status bar
-    currentOptions +=  (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
+    currentOptions += (m_options->saveWidgets ? tr("SaveWidgets") : tr("DontSaveWidgets")) + " ";
     QString playOptions = " (Audio:" + m_options->rtAudioModule + " ";
     playOptions += "MIDI:" +  m_options->rtMidiModule + ")";
-    playOptions += " (" + (m_options->rtUseOptions? tr("UseCsoundQtOptions"): tr("DiscardCsoundQtOptions"));
+    playOptions += " (" + (m_options->rtUseOptions ? tr("UseCsoundQtOptions"):
+                                                     tr("DiscardCsoundQtOptions"));
     playOptions += " " + (m_options->rtOverrideOptions? tr("OverrideCsOptions"): tr("")) + ") ";
     playOptions += currentOptions;
     QString renderOptions =
@@ -2845,7 +2849,8 @@ void CsoundQt::applySettings()
     renderAct->setStatusTip(tr("Render to file") + renderOptions);
 
     if (! m_options->useCsoundMidi) {
-        QString interfaceNotFoundMessage; // find midi interface by name; if not found, set to None
+        QString interfaceNotFoundMessage;
+        // find midi interface by name; if not found, set to None
         // returns 9999 if not found
         m_options->midiInterface = midiHandler->findMidiInPortByName(m_options->midiInterfaceName);
         midiHandler->setMidiInterface(m_options->midiInterface);
@@ -2873,19 +2878,15 @@ void CsoundQt::applySettings()
 
     fillFavoriteMenu();
     fillScriptsMenu();
-    DocumentView *pad =  static_cast<LiveCodeEditor *>(
-                m_scratchPad->widget())->getDocumentView();
-    pad->setFont(QFont(m_options->font,
-                       (int) m_options->fontPointSize));
-//    if (m_options->logFile != logFile.fileName()) {
-//        openLogFile();
-//    }
+    DocumentView *pad = static_cast<LiveCodeEditor*>(m_scratchPad->widget())->getDocumentView();
+    pad->setFont(QFont(m_options->font, (int) m_options->fontPointSize));
     if (csoundGetVersion() < 5140) {
         m_options->newParser = -1; // Don't use new parser flags
     }
     setupEnvironment();
 
-    //set editorBgColor also for inspector, codepad and python console. Maybe the latter should use the same color as console?
+    // set editorBgColor also for inspector, codepad and python console.
+    // Maybe the latter should use the same color as console?
     auto bgColor= m_options->editorBgColor.name();
     m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(bgColor));
     m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(bgColor));
@@ -2919,12 +2920,13 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
                             (int) m_options->consoleFontPointSize));
     p->setConsoleColors(m_options->consoleFontColor,
                         m_options->consoleBgColor);
-    p->setEditorBgColor(m_options->editorBgColor);
+    // p->setEditorBgColor(m_options->editorBgColor);
     p->setScriptDirectory(m_options->pythonDir);
     p->setPythonExecutable(m_options->pythonExecutable);
     p->useOldFormat(m_options->oldFormat);
     p->setConsoleBufferSize(m_options->consoleBufferSize);
     p->showLineNumbers(m_options->showLineNumberArea);
+    p->setHighlightingTheme(m_options->highlightingTheme);
 
     int flags = m_options->noBuffer ? QCS_NO_COPY_BUFFER : 0;
     flags |= m_options->noPython ? QCS_NO_PYTHON_CALLBACK : 0;
@@ -4992,7 +4994,9 @@ void CsoundQt::readSettings()
 
     m_options->tabWidth = settings.value("tabWidth", 24).toInt();
     m_options->tabIndents = settings.value("tabIndents", false).toBool();
-    m_options->colorVariables = settings.value("colorvariables", true).toBool();
+    // m_options->colorVariables = settings.value("colorvariables", true).toBool();
+    m_options->highlightingTheme = settings.value("highlightingTheme", "classic").toString();
+    m_options->colorVariables = m_options->highlightingTheme != "none";
     m_options->autoPlay = settings.value("autoplay", false).toBool();
     m_options->autoJoin = settings.value("autoJoin", true).toBool();
     m_options->menuDepth = settings.value("menuDepth", 3).toInt();
@@ -5223,6 +5227,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("tabWidth", m_options->tabWidth );
         settings.setValue("tabIndents", m_options->tabIndents);
         settings.setValue("colorvariables", m_options->colorVariables);
+        settings.setValue("highlightingTheme", m_options->highlightingTheme);
         settings.setValue("autoplay", m_options->autoPlay);
         settings.setValue("autoJoin", m_options->autoJoin);
         settings.setValue("menuDepth", m_options->menuDepth);

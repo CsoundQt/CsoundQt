@@ -70,7 +70,8 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
     while (text.contains("<bsbPanel") && text.contains("</bsbPanel>")) {
 		QString panel = text.right(text.size()-text.indexOf("<bsbPanel"));
 		panel.resize(panel.indexOf("</bsbPanel>") + 11);
-        if (text.indexOf("</bsbPanel>") + 11 < text.size() && text[text.indexOf("</bsbPanel>") + 13] == '\n')
+        if (text.indexOf("</bsbPanel>") + 11 < text.size() &&
+                text[text.indexOf("</bsbPanel>") + 13] == '\n')
 			text.remove(text.indexOf("</bsbPanel>") + 13, 1); //remove final line break
         if (text.indexOf("<bsbPanel") > 0 && text[text.indexOf("<bsbPanel") - 1] == '\n')
 			text.remove(text.indexOf("<bsbPanel") - 1, 1); //remove initial line break
@@ -90,10 +91,13 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
                 //remove final line break
                 text.remove(text.indexOf("</bsbPresets>") + 15, 1);
             }
-            if (text.indexOf("<bsbPresets>") > 0 && text[text.indexOf("<bsbPresets>") - 1] == '\n')
-				text.remove(text.indexOf("<bsbPresets>") - 1, 1); //remove initial line break
+            if (text.indexOf("<bsbPresets>") > 0
+                    && text[text.indexOf("<bsbPresets>") - 1] == '\n') {
+                // remove initial line break
+                text.remove(text.indexOf("<bsbPresets>") - 1, 1);
+            }
 			text.remove(text.indexOf("<bsbPresets>"), presets.size());
-			//FIXME allow multiple
+            // FIXME allow multiple
 			m_widgetLayouts[0]->loadXmlPresets(presets);
 		}
 	} else {

@@ -45,6 +45,254 @@ void TextBlockData::insert(ParenthesisInfo *info)
 	m_parentheses.insert(i, info);
 }
 
+QColor saturateColor(QColor color, int percent) {
+    int sat = color.saturation();
+    sat = sat * percent / 100;
+    if(sat > 255)
+        sat = 255;
+    return QColor::fromHsl(color.hue(), sat, color.lightness());
+}
+
+void Highlighter::setTheme(const QString &theme) {
+    if(theme == "none") {
+        defaultFormat.setForeground(QColor("black"));
+        defaultFormat.setBackground(QColor(250, 250, 250));
+        /*
+        csdtagFormat = defaultFormat;
+        instFormat = defaultFormat;
+        keywordFormat = defaultFormat;
+        headerFormat = defaultFormat;
+        opcodeFormat = defaultFormat;
+        singleLineCommentFormat  = defaultFormat;
+        */
+
+
+    }
+    else if(theme == "classic") {
+        defaultFormat.setForeground(QColor("black"));
+        defaultFormat.setBackground(QColor(250, 250, 250));
+
+        csdtagFormat.setForeground(QColor("brown"));
+        csdtagFormat.setFontWeight(QFont::Bold);
+
+        instFormat.setForeground(QColor("purple"));
+        instFormat.setFontWeight(QFont::Bold);
+
+        keywordFormat.setForeground(QColor("#E65100"));
+        keywordFormat.setFontWeight(QFont::Bold);
+
+        headerFormat.setForeground(QColor("red"));
+
+        opcodeFormat.setForeground(QColor("blue"));
+        opcodeFormat.setFontWeight(QFont::Bold);
+
+        singleLineCommentFormat.setForeground(QColor("green"));
+        singleLineCommentFormat.setFontItalic(true);
+
+        macroDefineFormat.setForeground(QColor("green"));
+        macroDefineFormat.setFontWeight(QFont::Bold);
+
+        pfieldFormat.setFontWeight(QFont::Bold);
+
+        irateFormat.setForeground(QColor("darkCyan"));
+        krateFormat.setForeground(QColor("darkCyan"));
+
+        arateFormat.setForeground(QColor("darkCyan"));
+        arateFormat.setFontWeight(QFont::Bold);
+
+        stringVarFormat.setForeground(QColor(Qt::darkYellow));
+        stringVarFormat.setFontWeight(QFont::Bold);
+
+        fsigFormat.setForeground(QColor(Qt::gray));
+        fsigFormat.setFontWeight(QFont::Bold);
+
+        labelFormat.setForeground(QColor(205,92,92));
+        labelFormat.setFontWeight(QFont::Bold);
+
+        nameFormat.setForeground(QColor("#880E4F"));
+        nameFormat.setFontWeight(QFont::Bold);
+        // nameFormat.setFontUnderline(true);
+
+        quotationFormat.setForeground(Qt::red);
+        multiLineCommentFormat.setForeground(QColor("green"));
+
+        ioFormat = opcodeFormat;
+    }
+    else if(theme == "light") {
+        defaultFormat.setForeground(QColor("#030303"));
+        defaultFormat.setBackground(QColor("#FCFCFC"));
+
+        // csdtagFormat.setFontWeight(QFont::Bold);
+
+        instFormat.setForeground(QColor("#82387B"));
+        instFormat.setFontWeight(QFont::Bold);
+
+        keywordFormat.setForeground(QColor("#E65100"));
+        keywordFormat.setFontWeight(QFont::Bold);
+
+        // headerFormat.setForeground(QColor("#C62828"));
+        // headerFormat.setFontWeight(QFont::Bold);
+        headerFormat = keywordFormat;
+
+        opcodeFormat.setForeground(QColor("#303F9F"));
+        opcodeFormat.setFontWeight(QFont::Bold);
+
+        singleLineCommentFormat.setForeground(QColor("#8F8F7F"));
+        singleLineCommentFormat.setFontItalic(true);
+
+        macroDefineFormat.setForeground(QColor("#00695C"));
+        macroDefineFormat.setFontWeight(QFont::Bold);
+
+        pfieldFormat.setFontWeight(QFont::Bold);
+
+
+        krateFormat.setForeground(QColor("#10796C"));
+        irateFormat.setForeground(QColor("#303F9F"));
+
+        // arateFormat.setForeground(QColor("#C62828"));
+        arateFormat.setForeground(QColor("#B71C1C"));
+        arateFormat.setFontWeight(QFont::Bold);
+
+        stringVarFormat.setForeground(QColor(Qt::darkYellow));
+        stringVarFormat.setFontWeight(QFont::Normal);
+
+        fsigFormat.setForeground(QColor("#Ad1457"));
+        fsigFormat.setFontWeight(QFont::Bold);
+
+        labelFormat.setForeground(QColor(205,92,92));
+        labelFormat.setFontWeight(QFont::Bold);
+        labelFormat.setFontUnderline(true);
+
+        nameFormat.setForeground(QColor("#F50057"));
+        nameFormat.setFontWeight(QFont::Bold);
+        // nameFormat.setFontUnderline(true);
+
+        // quotationFormat.setForeground(QColor("#4CAf50"));
+        quotationFormat.setForeground(QColor("#827717"));
+        multiLineCommentFormat.setForeground(quotationFormat.foreground());
+
+        ioFormat.setForeground(opcodeFormat.foreground().color().lighter(150));
+        ioFormat.setFontWeight(QFont::Bold);
+        ioFormat.setFontItalic(true);
+        csdtagFormat.setForeground(instFormat.foreground());
+    }
+    else if(theme == "dark") {
+        defaultFormat.setForeground(QColor("#FBFBFB"));
+        defaultFormat.setBackground(QColor("#161616"));
+
+        // csdtagFormat.setFontWeight(QFont::Bold);
+
+        instFormat.setForeground(QColor("#B268AB"));
+        instFormat.setFontWeight(QFont::Bold);
+
+        keywordFormat.setForeground(QColor("#F67110"));
+        keywordFormat.setFontWeight(QFont::Bold);
+
+        // headerFormat.setForeground(QColor("#C62828"));
+        // headerFormat.setFontWeight(QFont::Bold);
+        headerFormat = keywordFormat;
+
+        opcodeFormat.setForeground(QColor("#4FC3F7"));
+        opcodeFormat.setFontWeight(QFont::Bold);
+
+        singleLineCommentFormat.setForeground(QColor("#9F9F8F"));
+        singleLineCommentFormat.setFontItalic(true);
+
+        macroDefineFormat.setForeground(QColor("#B39DDB"));
+        macroDefineFormat.setFontWeight(QFont::Bold);
+
+        pfieldFormat.setFontWeight(QFont::Bold);
+
+        krateFormat.setForeground(QColor("#FFD082"));
+        irateFormat.setForeground(QColor("#90DBD4"));
+
+        // arateFormat.setForeground(QColor("#C62828"));
+        arateFormat.setForeground(QColor("#F75C5C"));
+        arateFormat.setFontWeight(QFont::Bold);
+
+        stringVarFormat.setForeground(QColor(Qt::darkYellow).lighter(200));
+        stringVarFormat.setFontWeight(QFont::Normal);
+
+        fsigFormat.setForeground(QColor("#Ad1457"));
+        fsigFormat.setFontWeight(QFont::Bold);
+
+        labelFormat.setForeground(QColor(205,92,92));
+        labelFormat.setFontWeight(QFont::Bold);
+        labelFormat.setFontUnderline(true);
+
+        nameFormat.setForeground(QColor("#D298FB"));
+        nameFormat.setFontWeight(QFont::Bold);
+        // nameFormat.setFontUnderline(true);
+
+        quotationFormat.setForeground(QColor("#56F69A"));
+        multiLineCommentFormat.setForeground(quotationFormat.foreground());
+
+        ioFormat.setForeground(QColor("#FFD54F"));
+        ioFormat.setFontWeight(QFont::Bold);
+        // ioFormat.setFontItalic(true);
+        csdtagFormat.setForeground(instFormat.foreground());
+
+
+    }
+    else {
+        qDebug() << "Theme" << theme << "not defined, using default";
+        this->setTheme("classic");
+        return;
+    }
+    // --------------------------------------
+    girateFormat.setForeground(irateFormat.foreground());
+    girateFormat.setFontItalic(true);
+
+    gkrateFormat.setForeground(krateFormat.foreground());
+    // gkrateFormat.setFontWeight(QFont::Bold);
+    gkrateFormat.setFontItalic(true);
+
+    garateFormat.setForeground(arateFormat.foreground());
+    garateFormat.setFontWeight(arateFormat.fontWeight());
+    garateFormat.setFontItalic(true);
+
+    gfsigFormat.setForeground(fsigFormat.foreground());
+    gfsigFormat.setFontWeight(fsigFormat.fontWeight());
+    gfsigFormat.setFontItalic(true);
+
+    gstringVarFormat.setForeground(stringVarFormat.foreground());
+    gstringVarFormat.setFontWeight(QFont::Bold);
+    gstringVarFormat.setFontItalic(true);
+
+    // ioFormat.setFontItalic(true);
+
+    QColor color = saturateColor(headerFormat.foreground().color().lighter(150), 150);
+    csoundOptionFormat.setForeground(color);
+    jsKeywordFormat = keywordFormat;
+
+    m_theme = theme;
+    emit this->rehighlight();
+}
+
+QTextCharFormat Highlighter::getFormat(QString tag) {
+    if(tag == "" || tag == "default") {
+        return defaultFormat;
+    }
+    if(tag == "csdtag")
+        return csdtagFormat;
+    if(tag == "inst")
+        return instFormat;
+    if(tag == "keyword")
+        return keywordFormat;
+    if(tag == "opcode")
+        return opcodeFormat;
+    if(tag == "singleLineComment")
+        return singleLineCommentFormat;
+    if(tag == "macroDefine")
+        return macroDefineFormat;
+    if(tag == "pfield")
+        return pfieldFormat;
+    QTextCharFormat fallback;
+    fallback.setForeground(QColor("black"));
+    fallback.setBackground(QColor(250, 250, 250));
+    return fallback;
+}
+
 Highlighter::Highlighter(QTextDocument *parent)
 	: QSyntaxHighlighter(parent)
 {
@@ -56,10 +304,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 	colorVariables = true;
 	m_mode = 0; // default to Csound mode
 
-	// For Csound
-	csdtagFormat.setForeground(QColor("brown"));
-	csdtagFormat.setFontWeight(QFont::Bold);
-	tagPatterns << "<CsoundSynthesizer>" << "</CsoundSynthesizer>"
+    tagPatterns << "<CsoundSynthesizer>" << "</CsoundSynthesizer>"
 				<< "<CsInstruments>" << "</CsInstruments>"
 				<< "<CsOptions>" << "</CsOptions>"
 				<< "<CsScore>" << "</CsScore>"
@@ -69,143 +314,87 @@ Highlighter::Highlighter(QTextDocument *parent)
 				<< "<csLADSPA>" << "</csLADSPA>"
                 << "<Cabbage>" << "</Cabbage>"
 				<< "<CsHtml5>" << "</CsHtml5>"
-				<< "<CsFileB>" << "</CsFileB>"    ;
-	instFormat.setForeground(QColor("purple"));
-	instFormat.setFontWeight(QFont::Bold);
-	instPatterns << "instr" << "endin" << "opcode" << "endop";
-    headerPatterns << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs" << "A4";
-	keywordPatterns << "do" << "od";
-	csdtagFormat.setForeground(QColor("brown"));
-	csdtagFormat.setFontWeight(QFont::Bold);
-	opcodeFormat.setForeground(QColor("blue"));
-	opcodeFormat.setFontWeight(QFont::Bold);
+                << "<CsFileB>" << "</CsFileB>";
 
-	// For Python
-	keywords << "and" << "or" << "not" << "is";
-	keywords << "global" << "with" << "from" << "import" << "as";
-	keywords << "if" << "else" << "elif";
-	keywords << "print" << "class" << "del" << "exec";
-	keywords << "for" << "in" << "while" << "continue" << "pass" << "break";
-	keywords << "def" << "return" << "lambda";
-	keywords << "yield" << "assert" << "try" << "except" << "finally" << "raise";
-	keywords << "True" << "False" << "None";
+    instPatterns << "instr" << "endin" << "opcode" << "endop";
+    headerPatterns << "sr" << "kr" << "ksmps" << "nchnls" << "nchnls_i" << "0dbfs" << "A4"
+                   << "zakinit" << "massign";
+
+    keywordLiterals << "init" << "if" << "then" << "endif" << "elseif" << "while" << "goto"
+                    << "do" << "od"
+                    << "int" << "turnoff" << "xin" << "xout";
+
+    ioPatterns      << "in" << "ins" << "inch" << "out" << "outs" << "outch"
+                    << "outvalue" << "invalue" << "chnget" << "chnset" << "chn_k" << "chn_a"
+                    << "zaw" << "zar" << "zkw" << "zkr" << "zawm"
+                    << "OSCsend" << "OSClisten" << "OSCraw" << "OSCinit";
+
+    csoundOptions << "-+rtaudio=" << "-+rtmidi=" << "--nodisplays" << "--nosound"
+                  << "--syntax-check-only" << "--control-rate=" << "--messagelevel="
+                  << "--env:" << "--dither" << "--sched" << "--omacro:"
+                  << "--smacro:" << "--verbose" << "--sample-accurate" << "--realtime"
+                  << "--nchnls=" << "--nchnls_i=" << "--sinesize" << "--daemon"
+                  << "--port=" << "--use-system-sr" << "--ksmps=" << "-+jack_client="
+                  ;
+
+    csoundOptionsRx = QRegExp("--(env|nodisplays|nosound|control-rate|messagelevel=|"
+                              "dither|sched|omacro:|smacro:|verbose|sample-accurate|"
+                              "realtime|nchnls|nchnls_i|sinesize=|daemon|port=|"
+                              "use-system-sr|ksmps|midi-key-cps=|midi-velocity=)");
+
+    csoundOptionsRx2 = QRegExp("-+(rtaudio=|rtmidi=|jack_client=)");
+
+    // For Python
+    pythonKeywords << "and" << "or" << "not" << "is"
+                   << "global" << "with" << "from" << "import" << "as"
+                   << "if" << "else" << "elif"
+                   << "print" << "class" << "del" << "exec"
+                   << "for" << "in" << "while" << "continue" << "pass" << "break"
+                   << "def" << "return" << "lambda"
+                   << "yield" << "assert" << "try" << "except" << "finally" << "raise"
+                   << "True" << "False" << "None";
 
 	// for html
-	htmlKeywords << "<\\ba\\b" << "<\\babbr\\b" << "<\\bacronym\\b" << "<\\baddress\\b" << "<\\bapplet\\b"
-				<< "<\\barea\\b" << "<\\barticle\\b" << "<\\baside\\b" << "<\\baudio\\b" << "<\\bb\\b"
-				<< "<\\bbase\\b" << "<\\bbasefont\\b" << "<\\bbdi\\b" << "<\\bbdo\\b" << "<\\bbgsound\\b"
-				<< "<\\bblockquote\\b" << "<\\bbig\\b" << "<\\bbody\\b" << "<\\bblink\\b" << "<\\bbr\\b"
-				<< "<\\bbutton\\b" << "<\\bcanvas\\b" << "<\\bcaption\\b" << "<\\bcenter\\b" << "<\\bcite\\b"
-				<< "<\\bcode\\b" << "<\\bcol\\b" << "<\\bcolgroup\\b" << "<\\bcommand\\b" << "<\\bcomment\\b"
-				<< "<\\bdata\\b" << "<\\bdatalist\\b" << "<\\bdd\\b" << "<\\bdel\\b" << "<\\bdetails\\b"
-				<< "<\\bdfn\\b" << "<\\bdialog\\b" << "<\\bdir\\b" << "<\\bdiv\\b" << "<\\bdl\\b"
-				<< "<\\bdt\\b" << "<\\bem\\b" << "<\\bembed\\b" << "<\\bfieldset\\b" << "<\\bfigcaption\\b"
-				<< "<\\bfigure\\b" << "<\\bfont\\b" << "<\\bfooter\\b" << "<\\bform\\b" << "<\\bframe\\b"
+    htmlKeywords << "<\\ba\\b" << "<\\babbr\\b" << "<\\bacronym\\b" << "<\\baddress\\b"
+                 << "<\\bapplet\\b" << "<\\barea\\b" << "<\\barticle\\b" << "<\\baside\\b"
+                 << "<\\baudio\\b" << "<\\bb\\b" << "<\\bbase\\b" << "<\\bbasefont\\b"
+                 << "<\\bbdi\\b" << "<\\bbdo\\b" << "<\\bbgsound\\b" << "<\\bblockquote\\b"
+                 << "<\\bbig\\b" << "<\\bbody\\b" << "<\\bblink\\b" << "<\\bbr\\b"
+                << "<\\bbutton\\b" << "<\\bcanvas\\b" << "<\\bcaption\\b" << "<\\bcenter\\b"
+                << "<\\bcite\\b" << "<\\bcode\\b" << "<\\bcol\\b" << "<\\bcolgroup\\b"
+                << "<\\bcomment\\b" << "<\\bdata\\b" << "<\\bdatalist\\b" << "<\\bdd\\b"
+                << "<\\bdel\\b" << "<\\bdetails\\b" << "<\\bdfn\\b" << "<\\bdialog\\b"
+                << "<\\bdir\\b" << "<\\bdiv\\b" << "<\\bdl\\b" << "<\\bdt\\b"
+                << "<\\bem\\b" << "<\\bembed\\b"
+                << "<\\bfieldset\\b" << "<\\bfigcaption\\b" << "<\\bfigure\\b"
+                << "<\\bfont\\b" << "<\\bfooter\\b" << "<\\bform\\b" << "<\\bframe\\b"
 				<< "<\\bframeset\\b" << "<\\bh1\\b" << "<\\bh2\\b" << "<\\bh3\\b" << "<\\bh4\\b"
 				<< "<\\bh5\\b" << "<\\bh6\\b" << "<\\bhead\\b" << "<\\bheader\\b" << "<\\bhgroup\\b"
 				<< "<\\bhr\\b" << "<\\bhtml\\b" << "<\\bi\\b" << "<\\biframe\\b" << "<\\bimg\\b"
-				<< "<\\binput\\b" << "<\\bins\\b" << "<\\bisindex\\b" << "<\\bkbd\\b" << "<\\bkeygen\\b"
-				<< "<\\blabel\\b" << "<\\blegend\\b" << "<\\bli\\b" << "<\\blink\\b" << "<\\blisting\\b"
-				<< "<\\bmain\\b" << "<\\bmap\\b" << "<\\bmarquee\\b" << "<\\bmark\\b" << "<\\bmenu\\b"
-				<< "<\\bamenuitem\\b" << "<\\bmeta\\b" << "<\\bmeter\\b" << "<\\bmulticol\\b" << "<\\bnav\\b"
-				<< "<\\bnobr\\b" << "<\\bnoembed\\b" << "<\\bnoindex\\b" << "<\\bnoframes\\b" << "<\\bnoscript\\b"
-				<< "<\\bobject\\b" << "<\\bol\\b" << "<\\boptgroup\\b" << "<\\boption\\b" << "<\\boutput\\b"
-				<< "<\\bp\\b" << "<\\bparam\\b" << "<\\bpicture\\b" << "<\\bplaintext\\b" << "<\\bpre\\b"
-				<< "<\\bprogress\\b" << "<\\bq\\b" << "<\\brp\\b" << "<\\brt\\b" << "<\\brtc\\b" << "<\\bruby\\b"
-				<< "<\\bs\\b" << "<\\bsamp\\b" << "<\\bscript\\b" << "<\\bsection\\b" << "<\\bselect\\b"
-				<< "<\\bsmall\\b" << "<\\bsource\\b" << "<\\bspacer\\b" << "<\\bspan\\b" << "<\\bstrike\\b"
-				<< "<\\bstrong\\b" << "<\\bstyle\\b" << "<\\bsub\\b" << "<\\bsummary\\b" << "<\\bsup\\b"
-				<< "<\\btable\\b" << "<\\btbody\\b" << "<\\btd\\b" << "<\\btemplate\\b" << "<\\btextarea\\b"
-				<< "<\\btfoot\\b" << "<\\bth\\b" << "<\\bthead\\b" << "<\\btime\\b" << "<\\btitle\\b"
-				<< "<\\btr\\b" << "<\\btrack\\b" << "<\\btt\\b" << "<\\bu\\b" << "<\\bul\\b" << "<\\bvar\\b"
-				<< "<\\bvideo\\b" << "<\\bwbr\\b" << "<\\bxmp\\b";
-
-
-
-
-	htmlKeywords << "<!\\bDOCTYPE\\b" << "</\\ba\\b" << "</\\babbr\\b" << "</\\bacronym\\b" << "</\\baddress\\b" << "</\\bapplet\\b"
-				<< "</\\barea\\b" << "</\\barticle\\b" << "</\\baside\\b" << "</\\baudio\\b" << "</\\bb\\b"
-				<< "</\\bbase\\b" << "</\\bbasefont\\b" << "</\\bbdi\\b" << "</\\bbdo\\b" << "</\\bbgsound\\b"
-				<< "</\\bblockquote\\b" << "</\\bbig\\b" << "</\\bbody\\b" << "</\\bblink\\b" << "</\\bbr\\b"
-				<< "</\\bbutton\\b" << "</\\bcanvas\\b" << "</\\bcaption\\b" << "</\\bcenter\\b" << "</\\bcite\\b"
-				<< "</\\bcode\\b" << "</\\bcol\\b" << "</\\bcolgroup\\b" << "</\\bcommand\\b" << "</\\bcomment\\b"
-				<< "</\\bdata\\b" << "</\\bdatalist\\b" << "</\\bdd\\b" << "</\\bdel\\b" << "</\\bdetails\\b"
-				<< "</\\bdfn\\b" << "</\\bdialog\\b" << "</\\bdir\\b" << "</\\bdiv\\b" << "</\\bdl\\b"
-				<< "</\\bdt\\b" << "</\\bem\\b" << "</\\bembed\\b" << "</\\bfieldset\\b" << "</\\bfigcaption\\b"
-				<< "</\\bfigure\\b" << "</\\bfont\\b" << "</\\bfooter\\b" << "</\\bform\\b" << "</\\bframe\\b"
-				<< "</\\bframeset\\b" << "</\\bh1\\b" << "</\\bh2\\b" << "</\\bh3\\b" << "</\\bh4\\b"
-				<< "</\\bh5\\b" << "</\\bh6\\b" << "</\\bhead\\b" << "</\\bheader\\b" << "</\\bhgroup\\b"
-				<< "</\\bhr\\b" << "</\\bhtml\\b" << "</\\bi\\b" << "</\\biframe\\b" << "</\\bimg\\b"
-				<< "</\\binput\\b" << "</\\bins\\b" << "</\\bisindex\\b" << "</\\bkbd\\b" << "</\\bkeygen\\b"
-				<< "</\\blabel\\b" << "</\\blegend\\b" << "</\\bli\\b" << "</\\blink\\b" << "</\\blisting\\b"
-				<< "</\\bmain\\b" << "</\\bmap\\b" << "</\\bmarquee\\b" << "</\\bmark\\b" << "</\\bmenu\\b"
-				<< "</\\bamenuitem\\b" << "</\\bmeta\\b" << "</\\bmeter\\b" << "</\\bmulticol\\b" << "</\\bnav\\b"
-				<< "</\\bnobr\\b" << "</\\bnoembed\\b" << "</\\bnoindex\\b" << "</\\bnoframes\\b" << "</\\bnoscript\\b"
-				<< "</\\bobject\\b" << "</\\bol\\b" << "</\\boptgroup\\b" << "</\\boption\\b" << "</\\boutput\\b"
-				<< "</\\bp\\b" << "</\\bparam\\b" << "</\\bpicture\\b" << "</\\bplaintext\\b" << "</\\bpre\\b"
-				<< "</\\bprogress\\b" << "</\\bq\\b" << "</\\brp\\b" << "</\\brt\\b" << "</\\brtc\\b" << "</\\bruby\\b"
-				<< "</\\bs\\b" << "</\\bsamp\\b" << "</\\bscript\\b" << "</\\bsection\\b" << "</\\bselect\\b"
-				<< "</\\bsmall\\b" << "</\\bsource\\b" << "</\\bspacer\\b" << "</\\bspan\\b" << "</\\bstrike\\b"
-				<< "</\\bstrong\\b" << "</\\bstyle\\b" << "</\\bsub\\b" << "</\\bsummary\\b" << "</\\bsup\\b"
-				<< "</\\btable\\b" << "</\\btbody\\b" << "</\\btd\\b" << "</\\btemplate\\b" << "</\\btextarea\\b"
-				<< "</\\btfoot\\b" << "</\\bth\\b" << "</\\bthead\\b" << "</\\btime\\b" << "</\\btitle\\b"
-				<< "</\\btr\\b" << "</\\btrack\\b" << "</\\btt\\b" << "</\\bu\\b" << "</\\bul\\b" << "</\\bvar\\b"
-				<< "</\\bvideo\\b" << "</\\bwbr\\b" << "</\\bxmp\\b";
+                << "<\\binput\\b" << "<\\bins\\b" << "<\\bisindex\\b" << "<\\bkbd\\b"
+                << "<\\bkeygen\\b" << "<\\blabel\\b" << "<\\blegend\\b" << "<\\bli\\b"
+                << "<\\blink\\b" << "<\\blisting\\b" << "<\\bmain\\b" << "<\\bmap\\b"
+                << "<\\bmarquee\\b" << "<\\bmark\\b" << "<\\bmenu\\b"
+                << "<\\bamenuitem\\b" << "<\\bmeta\\b" << "<\\bmeter\\b" << "<\\bmulticol\\b"
+                << "<\\bnav\\b" << "<\\bnobr\\b" << "<\\bnoembed\\b" << "<\\bnoindex\\b"
+                << "<\\bnoframes\\b" << "<\\bnoscript\\b" << "<\\bobject\\b" << "<\\bol\\b"
+                << "<\\boptgroup\\b" << "<\\boption\\b" << "<\\boutput\\b"
+                << "<\\bp\\b" << "<\\bparam\\b" << "<\\bpicture\\b" << "<\\bplaintext\\b"
+                << "<\\bpre\\b" << "<\\bprogress\\b" << "<\\bq\\b" << "<\\brp\\b"
+                << "<\\brt\\b" << "<\\brtc\\b" << "<\\bruby\\b" << "<\\bs\\b"
+                << "<\\bsamp\\b" << "<\\bscript\\b" << "<\\bsection\\b" << "<\\bselect\\b"
+                << "<\\bsmall\\b" << "<\\bsource\\b" << "<\\bspacer\\b" << "<\\bspan\\b"
+                << "<\\bstrike\\b" << "<\\bstrong\\b" << "<\\bstyle\\b" << "<\\bsub\\b"
+                << "<\\bsummary\\b" << "<\\bsup\\b" << "<\\btable\\b" << "<\\btbody\\b"
+                << "<\\btd\\b" << "<\\btemplate\\b" << "<\\btextarea\\b"
+                << "<\\btfoot\\b" << "<\\bth\\b" << "<\\bthead\\b" << "<\\btime\\b"
+                << "<\\btitle\\b" << "<\\btr\\b" << "<\\btrack\\b" << "<\\btt\\b"
+                << "<\\bu\\b" << "<\\bul\\b" << "<\\bvar\\b" << "<\\bwbr\\b" << "<\\bxmp\\b"
+                << "<!\\bDOCTYPE\\b";
 
 	javascriptKeywords << "function" << "var" << "if" << "===" << "console.log"  << "console.warn";
 
-	keywordFormat.setForeground(QColor("blue"));
-	keywordFormat.setFontWeight(QFont::Bold);
-
-	singleLineCommentFormat.setForeground(QColor("green"));
-	singleLineCommentFormat.setFontItalic(true);
-
-	macroDefineFormat.setForeground(QColor("green"));
-	macroDefineFormat.setFontWeight(QFont::Bold);
-
-	pfieldFormat.setFontWeight(QFont::Bold);
-
-	irateFormat.setForeground(QColor("darkCyan"));
-	krateFormat.setForeground(QColor("darkCyan"));
-	arateFormat.setForeground(QColor("darkCyan"));
-	arateFormat.setFontWeight(QFont::Bold);
-
-	girateFormat.setForeground(QColor("darkCyan"));
-	girateFormat.setFontItalic(true);
-	gkrateFormat.setForeground(QColor("darkCyan"));
-	gkrateFormat.setFontItalic(true);
-	garateFormat.setForeground(QColor("darkCyan"));
-	garateFormat.setFontWeight(QFont::Bold);
-	garateFormat.setFontItalic(true);
-
-	stringVarFormat.setForeground(QColor(Qt::darkYellow));
-	stringVarFormat.setFontWeight(QFont::Bold);
-	gstringVarFormat.setForeground(QColor(Qt::darkYellow));
-	gstringVarFormat.setFontWeight(QFont::Bold);
-	gstringVarFormat.setFontItalic(true);
-
-	fsigFormat.setForeground(QColor(Qt::gray));
-	fsigFormat.setFontWeight(QFont::Bold);
-	gfsigFormat.setForeground(QColor(Qt::gray));
-	gfsigFormat.setFontItalic(true);
-	gfsigFormat.setFontWeight(QFont::Bold);
-
-	// for html
-//	jsKeywordFormat.setForeground(QColor(Qt::black));
-//	jsKeywordFormat.setFontWeight(QFont::Bold);
-	jsKeywordFormat = keywordFormat;
-
-	htmlTagFormat.setForeground(QColor(Qt::cyan));
-	htmlTagFormat.setFontWeight(QFont::Bold);
-	//setFormatFor(Tag, csdtagFormat);
-
-//	QTextCharFormat commentFormat;
-//	commentFormat.setForeground(QColor(128, 10, 74));
-//	commentFormat.setFontItalic(true);
-//	setFormatFor(Comment, commentFormat);
-//	setFormatFor(Comment, singleLineCommentFormat);
-
-
+    // this->setTheme("classic");
 }
 
 
@@ -286,10 +475,14 @@ void Highlighter::highlightBlock(const QString &text)
 	setCurrentBlockUserData(data);
 }
 
+
+
+
 void Highlighter::highlightCsoundBlock(const QString &text)
 {
 	// text is processed one line at a time
-	//qDebug("Text---------------------: %s", text.toStdString().c_str());
+    if(m_theme == "none")
+        return;
 
 	int commentIndex = text.indexOf("//"); // try both comment markings
 	if (commentIndex < 0) {
@@ -301,29 +494,74 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 	}
 	else {
 		commentIndex = text.size() + 1;
-	}
-	int macroIndex = text.indexOf('#');
-	if (macroIndex >= 0 && macroIndex < commentIndex) {
-		setFormat(macroIndex, text.size() - macroIndex, macroDefineFormat);
-		commentIndex = macroIndex;
-	}
-	QRegExp expression("\\b+[\\w:]+\\b"); // how to find, if macro name, starts with '$'?
-	int index = text.indexOf(expression, 0);
-	int length = expression.matchedLength();
+    }
+
+    QRegExp regexp;
+    int index = 0;
+    int length;
+
+    // string
+    regexp = QRegExp("\"[^\"]*\"");
+
+    index = text.indexOf(regexp);
+    while (index >= 0 && index < commentIndex) {
+        length = regexp.matchedLength();
+        setFormat(index, length, quotationFormat);
+        index = text.indexOf(regexp, index + length);
+    }
+
+    // define
+    regexp = QRegExp("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
+    index = text.indexOf(regexp);
+    if(index >= 0 && index < commentIndex) {
+        int length = regexp.matchedLength();
+        setFormat(index, length, macroDefineFormat);
+        index = text.indexOf(regexp,index+length);
+    }
+
+    regexp = QRegExp("\\b(instr|opcode)\\s+(\\w+)\\b");
+    index = 0;
+    while ((index = regexp.indexIn(text, index)) != -1) {
+        auto group = regexp.cap(2);
+        length = regexp.matchedLength();
+        setFormat(regexp.pos(2), group.length(), nameFormat);
+        index += length;
+    }
+
+    index = 0;
+    while ((index = csoundOptionsRx.indexIn(text, index)) != -1 && index < commentIndex) {
+        length = csoundOptionsRx.matchedLength();
+        setFormat(index, length, csoundOptionFormat);
+        index += length;
+    }
+
+    index = 0;
+    while ((index = csoundOptionsRx2.indexIn(text, index)) != -1 && index < commentIndex) {
+        length = csoundOptionsRx2.matchedLength();
+        setFormat(index, length, csoundOptionFormat);
+        index += length;
+    }
+
+    QRegExp expression("\\b[\\w:]+\\b");
+    index = text.indexOf(expression, 0);
+    length = expression.matchedLength();
 
 	while (index >= 0 && index < commentIndex) {
 		int wordStart = index;
 		int wordEnd = wordStart + length;
-		if (index>0 && text.at(index-1)=='$') { // check if macro name - replacement for regexp solution which I could not find
+        auto prev = text.at(index - 1);
+        if (index>0 && (prev == '$' || prev == '#')) {
+            // check if macro name - replacement for regexp solution which I could not find
 			wordStart--;
 			length++;
-			//qDebug()<<"Found macro ";
-			setFormat(wordStart, wordEnd - wordStart, macroDefineFormat);
+            setFormat(wordStart, wordEnd - wordStart, macroDefineFormat);
+            index = text.indexOf(expression, wordEnd);
+            length = expression.matchedLength();
+            continue;
 		}
 		wordEnd = (wordEnd > 0 ? wordEnd : text.size());
 		QString word = text.mid(wordStart, length);
-//		qDebug() << "word: " << word;
-		if (word.indexOf(QRegExp("p[\\d]+\\b")) != -1) {
+        if (word.indexOf(QRegExp("p[\\d]+\\b")) != -1) {
 			setFormat(wordStart, wordEnd - wordStart, pfieldFormat);
 		}
 		if (instPatterns.contains(word)) {
@@ -331,14 +569,20 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 			break; // was: return. FOr any case, to go through lines after while loop
 		}
 		else if (tagPatterns.contains("<" + word + ">") && wordStart > 0) {
-			setFormat(wordStart - (text[wordStart - 1] == '/' ?  2 : 1), wordEnd - wordStart + (text[wordStart - 1] == '/' ?  3 : 2), csdtagFormat);
+            setFormat(wordStart - (text[wordStart - 1] == '/'? 2: 1),
+                      wordEnd - wordStart + (text[wordStart - 1] == '/'? 3: 2),
+                      csdtagFormat);
 		}
 		else if (headerPatterns.contains(word)) {
-			setFormat(wordStart, wordEnd - wordStart, csdtagFormat);
+            setFormat(wordStart, wordEnd - wordStart, headerFormat);
 		}
-		else if (keywordPatterns.contains(word)) {
-			setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
+        else if (keywordLiterals.contains(word)) {
+            setFormat(wordStart, wordEnd - wordStart, keywordFormat);
 		}
+        else if (ioPatterns.contains(word)) {
+            setFormat(wordStart, wordEnd - wordStart, ioFormat);
+        }
+
 		else if (word.contains(":")) {
 			QStringList parts = word.split(":");
 			if (parts.size() == 2) {
@@ -347,21 +591,27 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 				}
 			}
 		}
-		else if (findOpcode(word) >= 0) {
+        else if (findOpcode(word) >= 0) {
 			setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
 		}
 		else if (word.startsWith('a') && colorVariables) {
 			setFormat(wordStart, wordEnd - wordStart, arateFormat);
 		}
-		else if ((word.startsWith('k') || word.startsWith('i')) && colorVariables) {
+        else if (word.startsWith('k') && colorVariables) {
 			setFormat(wordStart, wordEnd - wordStart, krateFormat);
 		}
+        else if (word.startsWith('i') && colorVariables) {
+            setFormat(wordStart, wordEnd - wordStart, irateFormat);
+        }
 		else if (word.startsWith("ga")  && colorVariables) {
 			setFormat(wordStart, wordEnd - wordStart, garateFormat);
 		}
-		else if ((word.startsWith("gk") || word.startsWith("gi")) && colorVariables) {
+        else if (word.startsWith("gk")  && colorVariables) {
 			setFormat(wordStart, wordEnd - wordStart, gkrateFormat);
 		}
+        else if (word.startsWith("gi")  && colorVariables) {
+            setFormat(wordStart, wordEnd - wordStart, girateFormat);
+        }
 		else if (word.startsWith("S")  && colorVariables) {
 			setFormat(wordStart, wordEnd - wordStart, stringVarFormat);
 		}
@@ -378,16 +628,22 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 		length = expression.matchedLength();
 	}
 	//last rules
-	for (int i = 0; i < lastHighlightingRules.size(); i++) {
-		QRegExp expression(lastHighlightingRules[i].pattern);
-		//     QString temp = rule.pattern.pattern();
-		int index = text.indexOf(expression);
-		while (index >= 0 && index < commentIndex) {
-			int length = expression.matchedLength();
-			setFormat(index, length, lastHighlightingRules[i].format);
-			index = text.indexOf(expression, index + length);
-		}
-	}
+    for (int i = 0; i < lastHighlightingRules.size(); i++) {
+        QRegExp expression(lastHighlightingRules[i].pattern);
+        int index = 0, length;
+        while((index = expression.indexIn(text, index)) != -1 && index < commentIndex) {
+            int group = lastHighlightingRules[i].group;
+            if(group == 0) {
+                length = expression.matchedLength();
+                setFormat(index, length, lastHighlightingRules[i].format);
+            } else {
+                auto capture = expression.cap(group);
+                length = expression.matchedLength();
+                setFormat(expression.pos(group), capture.length(), lastHighlightingRules[i].format);
+            }
+            index += length;
+        }
+    }
 
 	setCurrentBlockState(0);
 
@@ -422,8 +678,8 @@ void Highlighter::highlightPythonBlock(const QString &text)
 {
 	QRegExp expression("\\b+\\w\\b+");
 	int index = text.indexOf(expression, 0);
-	for (int i = 0; i < keywords.size(); i++) {
-		QRegExp expression("\\b+" + keywords[i] + "\\b+");
+    for (int i = 0; i < pythonKeywords.size(); i++) {
+        QRegExp expression("\\b+" + pythonKeywords[i] + "\\b+");
 		int index = text.indexOf(expression);
 		while (index >= 0) {
 			int length = expression.matchedLength();
@@ -492,7 +748,6 @@ void Highlighter::highlightHtmlBlock(const QString &text)
 		index = text.indexOf(endTag, index + length);
 	}
 
-
 	QRegExp strings( QRegExp("\"[^\"]*\""));
 	index = text.indexOf(strings);
 	while (index >= 0) {
@@ -559,8 +814,6 @@ void Highlighter::highlightHtmlBlock(const QString &text)
 		startIndex = text.indexOf(htmlCommentStartExpression,
 								  startIndex + commentLength);
 	}
-
-
 }
 
 // void Highlighter::setFirstRules()
@@ -572,25 +825,20 @@ void Highlighter::setLastRules()
 {
 	HighlightingRule rule;
 
-	labelFormat.setForeground(QColor(205,92,92));
-	labelFormat.setFontWeight(QFont::Bold);
-	rule.pattern = QRegExp("^\\s*\\w+:\\s*");
-	rule.format = labelFormat;
+    rule = {QRegExp("^\\s*([a-zA-Z]\\w*):\\s*"), labelFormat, 1};
+    lastHighlightingRules.append(rule);
+
+    // strings
+    rule = {QRegExp("\"[^\"]*\""), quotationFormat, 0};
+    lastHighlightingRules.append(rule);
+
+    // multi line strings
+    rule = {QRegExp("\\{\\{.*"), quotationFormat, 0};
 	lastHighlightingRules.append(rule);
 
-	quotationFormat.setForeground(Qt::red);
-//	rule.pattern = QRegExp("\".*\"");
-	rule.pattern = QRegExp("\"[^\"]*\"");
-	rule.format = quotationFormat;
+    // end multi line strings
+    rule = {QRegExp(".*\\}\\}"), quotationFormat, 0};
 	lastHighlightingRules.append(rule);
-	rule.pattern = QRegExp("\\{\\{.*");
-	rule.format = quotationFormat;
-	lastHighlightingRules.append(rule);
-	rule.pattern = QRegExp(".*\\}\\}");
-	rule.format = quotationFormat;
-	lastHighlightingRules.append(rule);
-
-	multiLineCommentFormat.setForeground(QColor("green"));
 }
 
 int Highlighter::findOpcode(QString opcodeName, int start, int end)

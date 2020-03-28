@@ -107,7 +107,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	syntaxMenu = new MySyntaxMenu(m_mainEditor);
 	//  syntaxMenu->setFocusPolicy(Qt::NoFocus);
 	syntaxMenu->setAutoFillBackground(true);
-	QPalette p =syntaxMenu-> palette();
+    QPalette p = syntaxMenu->palette();
 	p.setColor(QPalette::WindowText, Qt::blue);
 	p.setColor(static_cast<QPalette::ColorRole>(9), QColor("#eaeac5")); // was: Qt::yellow
 	syntaxMenu->setPalette(p);
