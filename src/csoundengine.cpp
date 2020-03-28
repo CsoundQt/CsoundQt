@@ -973,15 +973,9 @@ void CsoundEngine::stopCsound()
         pt->SetProcessCallback(nullptr, nullptr);
         delete pt;
         csoundMutex.unlock();
-
-        printf(" ---------------- 1\n"); fflush(stdout);
-        QDEBUG << "Cleaning up csound";
         this->cleanupCsound();
-        printf(" ---------------- 2\n"); fflush(stdout);
         QDEBUG << "Cleaned up OK, emiting stop signal";
         emit stopSignal();
-        printf(" ---------------- 3\n"); fflush(stdout);
-
         QDEBUG << "Stopped OK";
         return;
     }

@@ -107,9 +107,23 @@ public:
 	void setAppProperties(AppProperties properties);
 	void showLineArea(bool visible);
     void setTheme(const QString &theme) {
-        qDebug() << "baseview: setTheme" << theme;
         m_highlighter.setTheme(theme);
+        auto defaultFormat = m_highlighter.getFormat("default");
+        auto fg = defaultFormat.foreground().color();
+        auto bg = defaultFormat.background().color();
+        if(fg.lightness() < bg.lightness()) {
+            // light
+            m_mainEditor->setLineAreaColors(fg.lighter(140),
+                                            bg.darker(125));
+            // m_mainEditor->setLineAreaColors(QColor("#303030"), QColor("#C0C0C0"));
+        } else {
+            m_mainEditor->setLineAreaColors(fg.darker(140),
+                                            bg.lighter(125));
+            // m_mainEditor->setLineAreaColors(QColor("#C0C0C0"), QColor("#303030"));
+
+        }
     }
+
     QTextCharFormat getDefaultFormat() {
         return m_highlighter.getFormat("default");
     }

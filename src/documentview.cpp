@@ -438,7 +438,7 @@ void DocumentView::setViewMode(int mode)
 	case 0: // csd without extra sections
 		m_mainEditor->show();
 		m_highlighter.setDocument(m_mainEditor->document());
-		break;
+        break;
 	case 1: // full plain text
 		m_mainEditor->show();
 		m_highlighter.setDocument(m_mainEditor->document());
@@ -453,6 +453,14 @@ void DocumentView::setViewMode(int mode)
 		m_otherCsdEditor->setVisible(m_viewMode & 64);
 		m_widgetEditor->setVisible(m_viewMode & 128);
 		m_appEditor->setVisible(m_viewMode & 256);
+        auto defaultFormat = m_highlighter.getFormat("default");
+        auto sheet =  QString("QTextEdit { color: %1; background-color: %2}")
+                .arg(defaultFormat.foreground().color().name())
+                .arg(defaultFormat.background().color().name());
+        if(m_viewMode & 2) {
+            m_orcEditor->setStyleSheet(sheet);
+        }
+
 	}
 }
 

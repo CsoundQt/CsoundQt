@@ -2528,7 +2528,7 @@ void CsoundQt::splitView(bool split)
         mode |= showOtherCsdAct->isChecked() ? 64 : 0 ;
         mode |= showWidgetEditAct->isChecked() ? 128 : 0 ;
         if (mode == 0) {
-            mode = 2+4+8;
+            mode = 2+4;
         }
         documentPages[curPage]->setViewMode(mode);
     }

@@ -125,7 +125,7 @@ void TextEditor::mouseReleaseEvent(QMouseEvent *e)
 TextEditLineNumbers::TextEditLineNumbers(QWidget *parent)
 	: TextEditor(parent)
 {
-	setLineAreaVisble(false);
+	setLineAreaVisible(false);
 	lineNumberArea = new LineNumberArea(this);
 	connect(this->document(),SIGNAL(blockCountChanged(int)),this,SLOT(updateLineArea(int)));
 	connect(this->verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(updateLineArea(int)));
@@ -153,7 +153,7 @@ void TextEditLineNumbers::resizeEvent(QResizeEvent *e)
 	}
 }
 
-void TextEditLineNumbers::setLineAreaVisble(bool visible)
+void TextEditLineNumbers::setLineAreaVisible(bool visible)
 {
 	m_lineAreaVisble = visible;
 	if (m_lineAreaVisble) {
@@ -198,12 +198,17 @@ void TextEditLineNumbers::updateLineArea()
 	lineNumberArea->update();
 }
 
+void TextEditLineNumbers::setLineAreaColors(QColor foreground, QColor background)
+{
+    lineNumberArea->setColors(foreground, background);
+}
+
 void LineNumberArea::paintEvent(QPaintEvent *)
 {
     if ( !codeEditor->lineAreaVisble() )
 		return;
 	QPainter painter(this);
-	painter.fillRect(rect(), Qt::lightGray);
+    painter.fillRect(rect(), m_background);
 	//code based partly on: http://john.nachtimwald.com/2009/08/15/qtextedit-with-line-numbers/
 	QTextBlock block = codeEditor->document()->begin();
 	int contents_y = codeEditor->verticalScrollBar()->value();
@@ -211,14 +216,14 @@ void LineNumberArea::paintEvent(QPaintEvent *)
 	QTextBlock current_block = codeEditor->document()->findBlock(codeEditor->textCursor().position());
 
 	int line_count = 0;
-    // painter.setPen(QColor(Qt::darkGray).darker()); // not exactly black
-    painter.setPen(QColor(Qt::darkGray)); // not exactly black
+    painter.setPen(m_foreground); // not exactly black
 
     bool bold;
 	QFont font = painter.font();
-    // font.setPixelSize((int)(font.pixelSize() * 0.8));
-    font.setPointSizeF(font.pointSizeF() * m_lineNumberSizeScaling);
+    font.setPointSizeF(font.pointSizeF() * m_lineNumbersSizeFactor);
     painter.setFont(font);
+    auto width = codeEditor->getAreaWidth();
+    auto metrics = codeEditor->fontMetrics();
 
     while (block.isValid()) {
 		line_count += 1;
@@ -226,16 +231,15 @@ void LineNumberArea::paintEvent(QPaintEvent *)
 		QPointF position = codeEditor->document()->documentLayout()->blockBoundingRect(block).topLeft();
 		if (position.y() > page_bottom)
 			break;
-		int y = round(position.y()) - contents_y + codeEditor->fontMetrics().ascent();
+        int y = round(position.y()) - contents_y + metrics.ascent();
 		if (y>=0) { // the line is visible
 			if (block == current_block) {
 				bold = true;
 				font.setBold(true);
 				painter.setFont(font);
 			}
-            painter.drawText(codeEditor->getAreaWidth() - codeEditor->fontMetrics().width(number)*m_lineNumberSizeScaling - m_padding, y, number); // 3 - add some padding
-
-
+            int x = width - metrics.width(number)*m_lineNumbersSizeFactor - m_padding;
+            painter.drawText(x, y, number);
 			if (bold) {
 				font.setBold(false);
 				painter.setFont(font);

@@ -69,9 +69,10 @@ class TextEditLineNumbers : public TextEditor
 public:
 	TextEditLineNumbers(QWidget *parent = 0);
 	int getAreaWidth();
-	void setLineAreaVisble(bool visible);
+	void setLineAreaVisible(bool visible);
     bool lineAreaVisble() {return m_lineAreaVisble;}
 	QAction *toggleAction;
+    void setLineAreaColors(QColor foreground, QColor background);
 
 public slots:
 	void markDebugLine(int line);
@@ -99,14 +100,21 @@ public:
 	LineNumberArea(TextEditLineNumbers *editor) : QWidget(editor) {
 		codeEditor = editor;
 		m_currentDebugLine = -1;
-        m_lineNumberSizeScaling = 1;
+        m_lineNumbersSizeFactor = 1;
         m_padding = 8;
+        m_background = QColor("#A0A0A0");
+        m_foreground = QColor("#303030");
+
 	}
 	void setDebugLines(QVector<int> debugLines) {m_debugLines = debugLines;}
 	void setCurrentDebugLine(int line) {m_currentDebugLine = line;}
-    void setLineNumberSizeScaling(qreal factor) {m_lineNumberSizeScaling = factor;}
-    qreal lineNumberSizeScaling() { return m_lineNumberSizeScaling; }
+    void setLineNumberSizeScaling(qreal factor) {m_lineNumbersSizeFactor = factor;}
+    qreal lineNumberSizeScaling() { return m_lineNumbersSizeFactor; }
     int padding() { return m_padding; }
+    void setColors(QColor foreground, QColor background) {
+        m_foreground = foreground;
+        m_background = background;
+    }
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -115,8 +123,10 @@ private:
 	QVector<int> m_debugLines;
 	int m_currentDebugLine;
     int m_padding;
-    double m_lineNumberSizeScaling;
-	TextEditLineNumbers *codeEditor;
+    double m_lineNumbersSizeFactor;
+    QColor m_background;
+    QColor m_foreground;
+    TextEditLineNumbers *codeEditor;
 };
 
 #endif // TEXTEDITOR_H

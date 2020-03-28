@@ -120,7 +120,6 @@ private:
     QTextCharFormat nameFormat;
     QTextCharFormat ioFormat;
 
-
 	QTextCharFormat labelFormat;
     QTextCharFormat csoundOptionFormat;
     QTextCharFormat defaultFormat;

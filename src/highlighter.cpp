@@ -127,7 +127,7 @@ void Highlighter::setTheme(const QString &theme) {
         instFormat.setForeground(QColor("#82387B"));
         instFormat.setFontWeight(QFont::Bold);
 
-        keywordFormat.setForeground(QColor("#E65100"));
+        keywordFormat.setForeground(QColor("#D64100"));
         keywordFormat.setFontWeight(QFont::Bold);
 
         // headerFormat.setForeground(QColor("#C62828"));
@@ -185,17 +185,18 @@ void Highlighter::setTheme(const QString &theme) {
         instFormat.setForeground(QColor("#B268AB"));
         instFormat.setFontWeight(QFont::Bold);
 
-        keywordFormat.setForeground(QColor("#F67110"));
+        keywordFormat.setForeground(QColor("#FF9800"));
         keywordFormat.setFontWeight(QFont::Bold);
 
-        // headerFormat.setForeground(QColor("#C62828"));
+        // headerFormat.setForeground(QColor("#FFD54F"));
         // headerFormat.setFontWeight(QFont::Bold);
         headerFormat = keywordFormat;
 
         opcodeFormat.setForeground(QColor("#4FC3F7"));
         opcodeFormat.setFontWeight(QFont::Bold);
 
-        singleLineCommentFormat.setForeground(QColor("#9F9F8F"));
+        // singleLineCommentFormat.setForeground(QColor("#9F9F8F"));
+        singleLineCommentFormat.setForeground(QColor("#755CB0"));
         singleLineCommentFormat.setFontItalic(true);
 
         macroDefineFormat.setForeground(QColor("#B39DDB"));
@@ -203,15 +204,13 @@ void Highlighter::setTheme(const QString &theme) {
 
         pfieldFormat.setFontWeight(QFont::Bold);
 
-        krateFormat.setForeground(QColor("#FFD082"));
-        irateFormat.setForeground(QColor("#90DBD4"));
+        krateFormat.setForeground(QColor("#D1AEE7"));
+        irateFormat.setForeground(QColor("#FFFFFF"));
 
         // arateFormat.setForeground(QColor("#C62828"));
         arateFormat.setForeground(QColor("#F75C5C"));
         arateFormat.setFontWeight(QFont::Bold);
 
-        stringVarFormat.setForeground(QColor(Qt::darkYellow).lighter(200));
-        stringVarFormat.setFontWeight(QFont::Normal);
 
         fsigFormat.setForeground(QColor("#Ad1457"));
         fsigFormat.setFontWeight(QFont::Bold);
@@ -224,7 +223,11 @@ void Highlighter::setTheme(const QString &theme) {
         nameFormat.setFontWeight(QFont::Bold);
         // nameFormat.setFontUnderline(true);
 
-        quotationFormat.setForeground(QColor("#56F69A"));
+        // quotationFormat.setForeground(QColor("#66FFAA"));
+        quotationFormat.setForeground(QColor("#91FF55"));
+        stringVarFormat.setForeground(quotationFormat.foreground());
+        stringVarFormat.setFontWeight(QFont::Normal);
+
         multiLineCommentFormat.setForeground(quotationFormat.foreground());
 
         ioFormat.setForeground(QColor("#FFD54F"));
@@ -241,6 +244,7 @@ void Highlighter::setTheme(const QString &theme) {
     }
     // --------------------------------------
     girateFormat.setForeground(irateFormat.foreground());
+    // girateFormat.setFontWeight(QFont::Bold);
     girateFormat.setFontItalic(true);
 
     gkrateFormat.setForeground(krateFormat.foreground());

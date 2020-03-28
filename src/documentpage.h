@@ -256,6 +256,8 @@ private:
 	bool saveLiveEvents;
 	bool saveOldFormat;
 	int m_lineEnding;
+    QString m_colorTheme;
+
 private slots:
 	void textChanged();
 	void liveEventControlClosed();

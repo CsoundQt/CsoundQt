@@ -573,7 +573,7 @@ void BaseView::toggleParameterMode()
 
 void BaseView::showLineArea(bool visible)
 {
-	m_mainEditor->setLineAreaVisble(visible);
+    m_mainEditor->setLineAreaVisible(visible);
 }
 
 QString BaseView::getBasicText()

@@ -53,6 +53,7 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 	init(parent, opcodeTree);
 	m_view->showLineArea(true);
 	m_midiLearn = midiLearn;
+    m_colorTheme = "";
 	foreach(WidgetLayout* wl, m_widgetLayouts) {
 		connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
         connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)),
@@ -1012,7 +1013,6 @@ void DocumentPage::setConsoleColors(QColor fontColor, QColor bgColor)
 }
 
 void DocumentPage::setEditorColors(QColor text, QColor bg) {
-    QDEBUG << "text:" << text << "background:" << bg;
     this->setProperty("textColor", text);
     this->setProperty("backgroundColor", bg);
     m_view->setColors(text, bg);
@@ -1494,6 +1494,7 @@ void DocumentPage::killLine()
 void DocumentPage::setViewMode(int mode)
 {
 	m_view->setViewMode(mode);
+    // this->setHighlightingTheme(m_colorTheme);
 }
 
 void DocumentPage::showOrc(bool show)
@@ -1669,6 +1670,7 @@ void DocumentPage::setPanelLoopEnabled(LiveEventFrame *panel, bool enabled)
 void DocumentPage::setHighlightingTheme(QString theme) {
     if(m_view == nullptr)
         return;
+    m_colorTheme = theme;
     m_view->setTheme(theme);
     auto defaultFormat = m_view->getDefaultFormat();
     this->setEditorColors(defaultFormat.foreground().color(),
