@@ -85,6 +85,8 @@ protected:
 private:
 	LineNumberArea *lineNumberArea;
 	bool m_lineAreaVisble;
+    // padding between line number area and editor (in pixels)
+    int m_editorPadding;
 	QVector<int> m_debugLines;
 
 private slots:

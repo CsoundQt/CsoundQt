@@ -131,6 +131,7 @@ TextEditLineNumbers::TextEditLineNumbers(QWidget *parent)
 	connect(this->verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(updateLineArea(int)));
 	connect(this,SIGNAL(cursorPositionChanged()),this,SLOT(updateLineArea()));
     lineNumberArea->setLineNumberSizeScaling(0.8);
+    m_editorPadding = 6;
 }
 
 int TextEditLineNumbers::getAreaWidth()
@@ -147,20 +148,22 @@ void TextEditLineNumbers::resizeEvent(QResizeEvent *e)
 {
 	QTextEdit::resizeEvent(e);
 	if (m_lineAreaVisble) {
-		setViewportMargins(getAreaWidth(),0,0,0); // since font might have changed
+        setViewportMargins(getAreaWidth()+m_editorPadding, 0, 0, 0); // since font might have changed
 		QRect cr = contentsRect();
 		lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), getAreaWidth(), cr.height()));
-	}
+    } else
+        setViewportMargins(m_editorPadding, 0, 0, 0); // since font might have changed
+
 }
 
 void TextEditLineNumbers::setLineAreaVisible(bool visible)
 {
 	m_lineAreaVisble = visible;
 	if (m_lineAreaVisble) {
-		setViewportMargins(getAreaWidth(),0,0,0);
+        setViewportMargins(getAreaWidth() + m_editorPadding, 0, 0, 0);
 	}
 	else {
-		setViewportMargins(0,0,0,0);
+        setViewportMargins(m_editorPadding, 0, 0, 0);
 	}
 }
 

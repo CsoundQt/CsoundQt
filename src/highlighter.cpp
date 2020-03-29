@@ -199,12 +199,12 @@ void Highlighter::setTheme(const QString &theme) {
         singleLineCommentFormat.setForeground(QColor("#755CB0"));
         singleLineCommentFormat.setFontItalic(true);
 
-        macroDefineFormat.setForeground(QColor("#B39DDB"));
+        macroDefineFormat.setForeground(QColor("#F06292"));
         macroDefineFormat.setFontWeight(QFont::Bold);
 
         pfieldFormat.setFontWeight(QFont::Bold);
 
-        krateFormat.setForeground(QColor("#D1AEE7"));
+        krateFormat.setForeground(QColor("#EF9A9A"));
         irateFormat.setForeground(QColor("#FFFFFF"));
 
         // arateFormat.setForeground(QColor("#C62828"));
@@ -215,7 +215,7 @@ void Highlighter::setTheme(const QString &theme) {
         fsigFormat.setForeground(QColor("#Ad1457"));
         fsigFormat.setFontWeight(QFont::Bold);
 
-        labelFormat.setForeground(QColor(205,92,92));
+        labelFormat.setForeground(instFormat.foreground());
         labelFormat.setFontWeight(QFont::Bold);
         labelFormat.setFontUnderline(true);
 
@@ -326,7 +326,8 @@ Highlighter::Highlighter(QTextDocument *parent)
 
     keywordLiterals << "init" << "if" << "then" << "endif" << "elseif" << "while" << "goto"
                     << "do" << "od"
-                    << "int" << "turnoff" << "xin" << "xout";
+                    << "int" << "turnoff" << "xin" << "xout"
+                    << "passign";
 
     ioPatterns      << "in" << "ins" << "inch" << "out" << "outs" << "outch"
                     << "outvalue" << "invalue" << "chnget" << "chnset" << "chn_k" << "chn_a"

@@ -48,8 +48,8 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
 	m_otherCsdEditor->setPalette(p);
 	m_otherCsdEditor->setTextColor(QColor("gray"));
 	m_widgetEditor = new TextEditor(this);
-	m_appEditor = new TextEditor(this);
-	editors << m_mainEditor << m_orcEditor << m_scoreEditor << m_optionsEditor << m_filebEditor
+    m_appEditor = new TextEditor(this);
+    editors << m_mainEditor << m_orcEditor << m_scoreEditor << m_optionsEditor << m_filebEditor
 			<< m_otherEditor << m_otherCsdEditor << m_widgetEditor << m_appEditor;
 	splitter = new QSplitter(this); // Deleted with parent
 	splitter->setOrientation(Qt::Vertical);
@@ -306,7 +306,7 @@ void BaseView::setTextColor(QColor color)
 }
 
 void BaseView::setColors(QColor text, QColor background) {
-    auto sheet = QString("QTextEdit { color: %1; background-color: %2}")
+    auto sheet = QString("QTextEdit { color: %1; background-color: %2; }")
             .arg(text.name())
             .arg(background.name());
     m_mainEditor->setStyleSheet(sheet);

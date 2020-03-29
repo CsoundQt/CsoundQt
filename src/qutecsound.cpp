@@ -3183,6 +3183,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     parameterModeAct->setShortcut(tr("Shift+Alt+P"));
     cabbageAct->setShortcut(tr("Shift+Ctrl+C"));
     //	showParametersAct->setShortcut(tr("Alt+P"));
+    showInspectorAct->setShortcut(tr("F5"));
     storeSettings();
 }
 
@@ -4039,6 +4040,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(externalEditorAct);
     m_keyActions.append(focusEditorAct);
     m_keyActions.append(raiseWidgetsAct);
+    m_keyActions.append(showInspectorAct);
     m_keyActions.append(raiseHelpAct);
     m_keyActions.append(showGenAct);
     m_keyActions.append(showOverviewAct);

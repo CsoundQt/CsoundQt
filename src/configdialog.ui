@@ -2020,6 +2020,9 @@
                 </item>
                 <item row="3" column="0">
                  <widget class="QLabel" name="label_41">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Background Color</string>
                   </property>
@@ -2105,6 +2108,9 @@
                 </item>
                 <item row="3" column="1">
                  <widget class="QPushButton" name="editorBgColorButton">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="maximumSize">
                    <size>
                     <width>16777215</width>
