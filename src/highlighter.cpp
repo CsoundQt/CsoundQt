@@ -577,15 +577,18 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 	while (index >= 0 && index < commentIndex) {
 		int wordStart = index;
 		int wordEnd = wordStart + length;
-        auto prev = text.at(index - 1);
-        if (index>0 && (prev == '$' || prev == '#')) {
-            // check if macro name - replacement for regexp solution which I could not find
-			wordStart--;
-			length++;
-            setFormat(wordStart, wordEnd - wordStart, macroDefineFormat);
-            index = text.indexOf(expression, wordEnd);
-            length = expression.matchedLength();
-            continue;
+
+		if (index>0) {
+			auto prev = text.at(index - 1);
+			if (prev == '$' || prev == '#') {
+				// check if macro name - replacement for regexp solution which I could not find
+				wordStart--;
+				length++;
+				setFormat(wordStart, wordEnd - wordStart, macroDefineFormat);
+				index = text.indexOf(expression, wordEnd);
+				length = expression.matchedLength();
+				continue;
+			}
 		}
 		wordEnd = (wordEnd > 0 ? wordEnd : text.size());
 		QString word = text.mid(wordStart, length);
