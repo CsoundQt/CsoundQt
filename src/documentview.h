@@ -99,6 +99,8 @@ public:
 	bool matchLeftParenthesis(QTextBlock currentBlock, int i, int numLeftParentheses);
 	bool matchRightParenthesis(QTextBlock currentBlock, int index, int numRightParentheses);
 	void createParenthesisSelection(int pos, bool paired=true);
+    void setParsedUDOs(QStringList udos);
+    Highlighter* getHighlighter() { return &m_highlighter; }
 
 public slots:
 	void setModified(bool mod = true);

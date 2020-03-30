@@ -50,6 +50,7 @@ Inspector::Inspector(QWidget *parent)
 	m_treeWidget->expandItem(treeItem3);
 	m_treeWidget->expandItem(treeItem4);
 	m_treeWidget->expandItem(treeItem5);
+    opcodeRegexp = QRegExp("\\bopcode\\s+(\\w+)\\b");
 }
 
 
@@ -61,6 +62,7 @@ Inspector::~Inspector()
 void Inspector::parseText(const QString &text)
 {
 	//  qDebug() << "Inspector::parseText";
+    // m_opcodes.clear();
 	inspectorMutex.lock();
 	bool treeItem1Expanded = true;
 	bool treeItem2Expanded = true;
@@ -97,9 +99,12 @@ void Inspector::parseText(const QString &text)
 	treeItem5->setBackground(0, Qt::lightGray);
 	TreeItem *currentInstrument = treeItem3;
 	int commentIndex = 0;
+    int index;
 	bool partOfComment = false;
 	QStringList lines = text.split(QRegExp("[\n\r]"));
+    QString line;
 	for (int i = 0; i< lines.size(); i++) {
+        line = lines[i].trimmed();
 		if (!partOfComment && lines[i].indexOf("/*") != -1) {
 			partOfComment = true;
 			commentIndex = lines[i].indexOf("/*");
@@ -112,8 +117,8 @@ void Inspector::parseText(const QString &text)
 				commentIndex = 0;
 			}
 		}
-		if (lines[i].trimmed().startsWith("instr")) {
-			QString text = lines[i].mid(lines[i].indexOf("instr") + 6);
+        if (line.startsWith("instr")) {
+            QString text = line.mid(line.indexOf("instr") + 6);
 			QStringList columnslist(QString("instr %1").arg(text).simplified());
 			TreeItem *newItem = new TreeItem(treeItem3, columnslist);
 			newItem->setLine(i + 1);
@@ -121,38 +126,42 @@ void Inspector::parseText(const QString &text)
 			newItem->setBackground(0, QColor(240, 240, 240));
 			currentInstrument = newItem;
 		}
-		if (lines[i].trimmed().startsWith(";;")) {
+        else if (line.startsWith(";; ")) {
 			QStringList columnslist(lines[i].trimmed().remove(0,2));
 			TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
 			newItem->setForeground (0, QBrush(Qt::darkGreen) );
 			newItem->setLine(i + 1);
 		}
-		else if (lines[i].trimmed().startsWith("endin")) {
-			currentInstrument = treeItem3; // everything between instruments is placed in the main instrument menu
+        else if (line.startsWith("endin")) {
+            // everything between instruments is placed in the main instrument menu
+            currentInstrument = treeItem3;
 		}
-		else if (lines[i].trimmed().startsWith("opcode")) {
-			QString text = lines[i].trimmed();
-			QStringList columnslist(text.simplified());
-			if (treeItem1->childCount() == 0) { // set line for element to the first one found
-				treeItem1->setLine(i + 1);
-			}
-			TreeItem *newItem = new TreeItem(treeItem1, columnslist);
-			newItem->setLine(i + 1);
-			currentInstrument = newItem;
-			newItem->setBackground(0, QColor(240, 240, 240));
-		}
-        else if (lines[i].trimmed().startsWith("#define") || lines[i].trimmed().startsWith("# define")) {
-			QString text = lines[i].trimmed();
-			QStringList columnslist(text.simplified());
+        else if ((index = opcodeRegexp.indexIn(line, 0)) != -1) {
+            auto opcodeName = opcodeRegexp.cap(1);
+            QString text = line.simplified();
+            QStringList columnslist(text.mid(7));
+            // m_opcodes.append(opcodeName);
+            if (treeItem1->childCount() == 0) { // set line for element to the first one found
+                treeItem1->setLine(i + 1);
+            }
+            TreeItem *newItem = new TreeItem(treeItem1, columnslist);
+            newItem->setLine(i + 1);
+            currentInstrument = newItem;
+            newItem->setBackground(0, QColor(240, 240, 240));
+        }
+        else if (line.startsWith("#define")) {
+            QString text = line.simplified().mid(8);
+            QStringList columnslist(text);
 			if (treeItem2->childCount() == 0) { // set line for element to the first one found
 				treeItem2->setLine(i + 1);
 			}
 			TreeItem *newItem = new TreeItem(treeItem2, columnslist);
 			newItem->setLine(i + 1);
 		}
-		else if (lines[i].trimmed().contains(QRegExp("^f\\s*\\d")) ||
-				 lines[i].trimmed().contains(QRegExp("^[\\w]*[\\s]*ftgen"))) {
-			QString text = lines[i].trimmed();
+        // table
+        else if (line.contains(QRegExp("^f\\s*\\d")) ||
+                 line.contains(QRegExp("^[\\w]*[\\s]*ftgen"))) {
+            QString text = line;
 			QStringList columnslist(text.simplified());
 			if (treeItem4->childCount() == 0) { // set line for element to the first one found
 				treeItem4->setLine(i + 1);
@@ -160,27 +169,28 @@ void Inspector::parseText(const QString &text)
 			TreeItem *newItem = new TreeItem(treeItem4, columnslist);
 			newItem->setLine(i + 1);
 		}
-		else if (lines[i].trimmed().contains(QRegExp("^s\\s*\\b")) ||
-				 lines[i].trimmed().contains(QRegExp("^m\\s*\\b"))) {
-			QString text = lines[i].trimmed();
+        else if (line.contains(QRegExp("^s\\s*\\b")) ||
+                 line.contains(QRegExp("^m\\s*\\b"))) {
+            QString text = line;
 			QStringList columnslist(text.simplified());
 			TreeItem *newItem = new TreeItem(treeItem5, columnslist);
 			newItem->setLine(i + 1);
 		}
-		else if (lines[i].trimmed().contains(QRegExp("[^;]\\w+:"))
+        // label
+        else if (line.contains(QRegExp("^\\s*\\b\\w+:"))
 				 && (!partOfComment || commentIndex > lines[i].indexOf(":")) ) {
-			QString text = lines[i].trimmed();
+            QString text = line;
 			QStringList columnslist(text.simplified());
 			if (currentInstrument != 0) {
 				TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
 				newItem->setLine(i + 1);
 			}
 		}
-		else if (lines[i].trimmed().contains("<CsScore>")) {
+        else if (line.contains("<CsScore>")) {
 			treeItem5->setLine(i + 1);
 			currentInstrument = treeItem5;
 		}
-		else if (lines[i].trimmed().contains("<CsInstruments>")) {
+        else if (line.contains("<CsInstruments>")) {
 			treeItem3->setLine(i + 1);
 		}
 	}
@@ -190,13 +200,13 @@ void Inspector::parseText(const QString &text)
 	treeItem4->setExpanded(treeItem4Expanded);
 	treeItem5->setExpanded(treeItem5Expanded);
 
-	for (int i = 0; i < treeItem3->childCount(); i++) {
+    for (int i = 0; i < treeItem3->childCount(); i++) {
 		QTreeWidgetItem * instr = treeItem3->child(i);
 		if (instrumentExpanded.contains(instr->text(0))) {
 			instr->setExpanded(instrumentExpanded[instr->text(0)]);
 		}
 	}
-	inspectorMutex.unlock();
+    inspectorMutex.unlock();
 }
 
 void Inspector::parsePythonText(const QString &text)

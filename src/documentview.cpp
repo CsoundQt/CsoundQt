@@ -442,6 +442,7 @@ void DocumentView::setViewMode(int mode)
 	case 1: // full plain text
 		m_mainEditor->show();
 		m_highlighter.setDocument(m_mainEditor->document());
+
 		break;
 	default:
 		m_highlighter.setDocument(m_orcEditor->document());
@@ -1867,6 +1868,10 @@ void DocumentView::restoreCursorPosition()
 		m_mainEditor->setTextCursor(cursor);
 		m_oldCursorPosition = -1;
 	}
+}
+
+void DocumentView::setParsedUDOs(QStringList udos) {
+    m_highlighter.setUDOs(udos);
 }
 
 MySyntaxMenu::MySyntaxMenu(QWidget * parent) :

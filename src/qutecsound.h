@@ -184,6 +184,8 @@ public slots:
 	//    void registerLiveEvent(QWidget *e);
 	void evaluateCsound(QString code = QString());
 	void breakpointReached();
+    void setParsedUDOs();
+
 protected:
 	virtual void closeEvent(QCloseEvent *event);
 	//    virtual void keyPressEvent(QKeyEvent *event);
@@ -266,7 +268,8 @@ private slots:
 	void runUtility(QString flags);
 	//     void widgetDockLocationChanged(Qt::DockWidgetArea area);
 	void updateInspector();
-	void markInspectorUpdate(); // Notification that inspector needs update
+    void updateCurrentPageTask();
+    void markInspectorUpdate(); // Notification that inspector needs update
 	void setDefaultKeyboardShortcuts();
 	void showNoPythonQtWarning();
 	void showOrc(bool);

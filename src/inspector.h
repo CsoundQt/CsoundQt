@@ -49,6 +49,7 @@ public:
 	~Inspector();
 	void parseText(const QString &text);
 	void parsePythonText(const QString &text);
+    QStringList getParsedUDOs() { return m_opcodes; }
 
 protected:
 	virtual void focusInEvent (QFocusEvent * event);
@@ -63,6 +64,9 @@ private:
 	TreeItem *treeItem5;
 
 	QMutex inspectorMutex;
+    // QVector<QString> m_opcodes;
+    QStringList m_opcodes;
+    QRegExp opcodeRegexp;
 
 private slots:
 	void itemActivated(QTreeWidgetItem * item, int column = 0);
@@ -71,6 +75,7 @@ private slots:
 signals:
 	void Close(bool visible);
 	void jumpToLine(int line);
+    void parsedUDOs();
 };
 
 #endif // INSPECTOR_H

@@ -73,6 +73,9 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 
 #define MAX_THREAD_COUNT 32 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
 
+#define INSPECTOR_UPDATE_PERIOD_MS 2000
+
+
 CsoundQt::CsoundQt(QStringList fileNames)
 {
     m_closing = false;
@@ -146,7 +149,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_inspector = new Inspector(this);
     m_inspector->parseText(QString());
     m_inspector->setObjectName("Inspector");
-    // m_inspector->show();
     addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
     m_inspector->hide();
 
@@ -384,6 +386,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_closing = false;
     updateInspector(); //Starts update inspector thread
 
+    // Starts updating things like a list of udos for the current page, etc.
+    updateCurrentPageTask();
+
     showWidgetsAct->setChecked(widgetsVisible);
     if (!m_options->widgetsIndependent) {
         // FIXME: for some reason this produces a move event for widgetlayout with pos (0,0)
@@ -467,9 +472,10 @@ void CsoundQt::changePage(int index)
 #endif
         disconnect(showLiveEventsAct, 0,0,0);
         disconnect(documentPages[curPage], SIGNAL(stopSignal()),0,0);
-        documentPages[curPage]->hideLiveEventPanels();
-        documentPages[curPage]->showLiveEventControl(false);
-        documentPages[curPage]->hideWidgets();
+        auto page = documentPages[curPage];
+        page->hideLiveEventPanels();
+        page->showLiveEventControl(false);
+        page->hideWidgets();
         if (!m_options->widgetsIndependent) {
             QRect panelGeometry = widgetPanel->geometry();
             if (!widgetPanel->isFloating()) {
@@ -478,43 +484,44 @@ void CsoundQt::changePage(int index)
             }
             widgetPanel->takeWidgetLayout(panelGeometry);
         } else {
-            documentPages[curPage]->setWidgetLayoutOuterGeometry(QRect());
+            page->setWidgetLayoutOuterGeometry(QRect());
         }
     }
     curPage = index;
     if (curPage >= 0 && curPage < documentPages.size() && documentPages[curPage] != NULL) {
-        setCurrentFile(documentPages[curPage]->getFileName());
+        auto page = documentPages[curPage];
+        setCurrentFile(page->getFileName());
         connectActions();
-        documentPages[curPage]->showLiveEventControl(showLiveEventsAct->isChecked());
+        page->showLiveEventControl(showLiveEventsAct->isChecked());
         //    documentPages[curPage]->passWidgetClipboard(m_widgetClipboard);
         if (!m_options->widgetsIndependent) {
-            WidgetLayout *w = documentPages[curPage]->getWidgetLayout();
+            WidgetLayout *w = page->getWidgetLayout();
             widgetPanel->addWidgetLayout(w);
             setWidgetPanelGeometry();
         } else {
-            WidgetLayout *w = documentPages[curPage]->getWidgetLayout();
+            WidgetLayout *w = page->getWidgetLayout();
             w->adjustWidgetSize();
         }
-        if (!documentPages[curPage]->getFileName().endsWith(".csd")
-                && !documentPages[curPage]->getFileName().isEmpty()) {
+        if (!page->getFileName().endsWith(".csd") && !page->getFileName().isEmpty()) {
             widgetPanel->hide();
         }
         else {
             if (!m_options->widgetsIndependent) {
-                documentPages[curPage]->showWidgets();
+                page->showWidgets();
                 widgetPanel->setVisible(showWidgetsAct->isChecked());
             }
             else {
-                documentPages[curPage]->showWidgets(showWidgetsAct->isChecked());
+                page->showWidgets(showWidgetsAct->isChecked());
             }
         }
-        m_console->setWidget(documentPages[curPage]->getConsole());
-        //		updateInspector();
-        runAct->setChecked(documentPages[curPage]->isRunning());
-        recAct->setChecked(documentPages[curPage]->isRecording());
-        splitViewAct->setChecked(documentPages[curPage]->getViewMode() > 1);
-        if (documentPages[curPage]->getFileName().endsWith(".csd")) {
+        m_console->setWidget(page->getConsole());
+        runAct->setChecked(page->isRunning());
+        recAct->setChecked(page->isRecording());
+        splitViewAct->setChecked(page->getViewMode() > 1);
+        if (page->getFileName().endsWith(".csd")) {
             curCsdPage = curPage;
+            // force parsing
+            page->parseUdos(true);
         }
     }
 #if defined(QCS_QTHTML)
@@ -3057,6 +3064,18 @@ void CsoundQt::runUtility(QString flags)
     }
 }
 
+
+void CsoundQt::updateCurrentPageTask() {
+    if (m_closing) {
+        return;  // And don't call this again from the timer
+    }
+    Q_ASSERT(documentPages.size() > curPage);
+    auto currentPage = documentPages[curPage];
+    currentPage->parseUdos();
+    QTimer::singleShot(INSPECTOR_UPDATE_PERIOD_MS, this, SLOT(updateCurrentPageTask()));
+}
+
+
 void CsoundQt::updateInspector()
 {
     if (m_closing) {
@@ -3064,10 +3083,9 @@ void CsoundQt::updateInspector()
     }
     Q_ASSERT(documentPages.size() > curPage);
     if (!m_inspectorNeedsUpdate) {
-        QTimer::singleShot(2000, this, SLOT(updateInspector()));
+        QTimer::singleShot(INSPECTOR_UPDATE_PERIOD_MS, this, SLOT(updateInspector()));
         return; // Retrigger timer, but do no update
     }
-    //  qDebug() << "CsoundQt::updateInspector";
     if (!documentPages[curPage]->getFileName().endsWith(".py")) {
         m_inspector->parseText(documentPages[curPage]->getBasicText());
     }
@@ -3075,7 +3093,8 @@ void CsoundQt::updateInspector()
         m_inspector->parsePythonText(documentPages[curPage]->getBasicText());
     }
     m_inspectorNeedsUpdate = false;
-    QTimer::singleShot(2000, this, SLOT(updateInspector()));
+    // this->setParsedUDOs();
+    QTimer::singleShot(INSPECTOR_UPDATE_PERIOD_MS, this, SLOT(updateInspector()));
 }
 
 void CsoundQt::markInspectorUpdate()
@@ -4143,6 +4162,7 @@ void CsoundQt::connectActions()
     connect(doc, SIGNAL(setHelpSignal()), this, SLOT(setHelpEntry()));
     connect(doc, SIGNAL(closeExtraPanelsSignal()), this, SLOT(closeExtraPanels()));
     connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
+    connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(markCurrentPageUpdate()));
 
     connect(doc->getView(), SIGNAL(opcodeSyntaxSignal(QString)),
             this, SLOT(statusBarMessage(QString)));
@@ -6531,4 +6551,10 @@ void CsoundQt::loadPreset(int preSetIndex, int index) {
     else {
         return;
     }
+}
+
+void CsoundQt::setParsedUDOs() {
+    auto udos = m_inspector->getParsedUDOs();
+    auto doc = documentPages[curPage];
+    doc->setParsedUDOs(udos);
 }

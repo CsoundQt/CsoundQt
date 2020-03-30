@@ -77,6 +77,8 @@ public:
 	QTextCharFormat formatFor(Construct construct) const
 	{ return m_formats[construct]; }
 
+    void setUDOs(QStringList udos);
+
 protected:
 	enum State {
 		NormalState = -1,
@@ -105,6 +107,7 @@ private:
 
 	QRegExp commentStartExpression;
 	QRegExp commentEndExpression;
+    QRegExp functionRegex;
 	//    QRegExp b64encStartExpression;
 	//    QRegExp b64encEndExpression;
 
@@ -112,7 +115,7 @@ private:
     QTextCharFormat csdtagFormat, instFormat, headerFormat;
 	QTextCharFormat irateFormat, krateFormat, arateFormat, girateFormat, gkrateFormat, garateFormat;
 	QTextCharFormat stringVarFormat, gstringVarFormat, fsigFormat, gfsigFormat;
-	QTextCharFormat opcodeFormat, macroDefineFormat, pfieldFormat;
+    QTextCharFormat opcodeFormat, udoFormat, macroDefineFormat, pfieldFormat;
 	QTextCharFormat singleLineCommentFormat;
 	QTextCharFormat multiLineCommentFormat;
 	QTextCharFormat quotationFormat;
@@ -145,6 +148,8 @@ private:
 	// for html
 	QTextCharFormat jsKeywordFormat, htmlTagFormat;
 	QTextCharFormat m_formats[LastConstruct + 1];
+
+    QStringList m_parsedUDOs;
 };
 
 #endif

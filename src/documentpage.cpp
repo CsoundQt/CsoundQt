@@ -54,6 +54,8 @@ DocumentPage::DocumentPage(QWidget *parent, OpEntryParser *opcodeTree,
 	m_view->showLineArea(true);
 	m_midiLearn = midiLearn;
     m_colorTheme = "";
+    regexUdo.setPattern("\\n\\s*\\bopcode\\s+(\\w+)\\s*,\\s*[a-zA-Z0\\[\\]]+\\s*,\\s*[a-zA-Z0\\[\\]]+");
+    m_parseUdosNeeded = true;
 	foreach(WidgetLayout* wl, m_widgetLayouts) {
 		connect(wl, SIGNAL(changed()), this, SLOT(setModified()));
         connect(wl, SIGNAL(widgetSelectedSignal(QuteWidget*)),
@@ -1596,6 +1598,7 @@ void DocumentPage::textChanged()
 {
 	//  qDebug() << "DocumentPage::textChanged()";
 	setModified(true);
+    m_parseUdosNeeded = true;
 	emit currentTextUpdated();
 }
 
@@ -1675,4 +1678,29 @@ void DocumentPage::setHighlightingTheme(QString theme) {
     auto defaultFormat = m_view->getDefaultFormat();
     this->setEditorColors(defaultFormat.foreground().color(),
                           defaultFormat.background().color());
+}
+
+void DocumentPage::setParsedUDOs(QStringList udos) {
+    m_view->setParsedUDOs(udos);
+}
+
+void DocumentPage::parseUdos(bool force) {
+    if(!m_parseUdosNeeded && !force)
+        return;
+    auto text = this->getBasicText();
+    QRegularExpressionMatchIterator i = regexUdo.globalMatch(text);
+    int numUdos = m_parsedUdos.size();
+    m_parsedUdos.clear();
+    while(i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
+        QString udoName = match.captured(1);
+        m_parsedUdos.append(udoName);
+    }
+    auto highlighter = m_view->getHighlighter();
+    highlighter->setUDOs(m_parsedUdos);
+    // qDebug() << "Parsed UDOs in " << mytimer.elapsed() << "ms";
+    if(numUdos != m_parsedUdos.size()) {
+        highlighter->rehighlight();
+    }
+    m_parseUdosNeeded = false;
 }

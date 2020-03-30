@@ -26,6 +26,8 @@
 #ifdef USE_QT5
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
+#include <QRegularExpression>
+
 #endif
 #include <QTextEdit>
 #include <QDomElement>
@@ -67,6 +69,7 @@ public:
 	void toggleParameterMode();
 	void showParametersInEditor();
     void setHighlightingTheme(QString theme);
+    void setParsedUDOs(QStringList udos);
     virtual QString getFullText();
 	QString getDotText();
 	QString getMacWidgetsText();
@@ -181,6 +184,8 @@ public:
 	QVector<QString> widgetHistory;  // Undo/ Redo history
     int widgetHistoryIndex; // Current point in history
     QString getQml();
+    void parseUdos(bool force=false);
+
 public slots:
 	virtual int play(CsoundOptions *options);
 	void stop();
@@ -257,6 +262,9 @@ private:
 	bool saveOldFormat;
 	int m_lineEnding;
     QString m_colorTheme;
+    QStringList m_parsedUdos;
+    bool m_parseUdosNeeded;
+    QRegularExpression regexUdo;
 
 private slots:
 	void textChanged();

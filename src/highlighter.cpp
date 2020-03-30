@@ -117,6 +117,7 @@ void Highlighter::setTheme(const QString &theme) {
         multiLineCommentFormat.setForeground(QColor("green"));
 
         ioFormat = opcodeFormat;
+        udoFormat = opcodeFormat;
     }
     else if(theme == "light") {
         defaultFormat.setForeground(QColor("#030303"));
@@ -174,7 +175,12 @@ void Highlighter::setTheme(const QString &theme) {
         ioFormat.setForeground(opcodeFormat.foreground().color().lighter(150));
         ioFormat.setFontWeight(QFont::Bold);
         ioFormat.setFontItalic(true);
+
+        udoFormat = opcodeFormat;
+        udoFormat.setForeground(opcodeFormat.foreground().color().darker(150));
+
         csdtagFormat.setForeground(instFormat.foreground());
+
     }
     else if(theme == "dark") {
         defaultFormat.setForeground(QColor("#FBFBFB"));
@@ -232,6 +238,12 @@ void Highlighter::setTheme(const QString &theme) {
 
         ioFormat.setForeground(QColor("#FFD54F"));
         ioFormat.setFontWeight(QFont::Bold);
+
+        // udoFormat.setForeground(QColor("#60BBB4"));
+        // udoFormat.setFontWeight(opcodeFormat.fontWeight());
+        udoFormat.setForeground(opcodeFormat.foreground());
+        udoFormat.setFontWeight(QFont::Normal);
+
         // ioFormat.setFontItalic(true);
         csdtagFormat.setForeground(instFormat.foreground());
 
@@ -348,6 +360,8 @@ Highlighter::Highlighter(QTextDocument *parent)
                               "use-system-sr|ksmps|midi-key-cps=|midi-velocity=)");
 
     csoundOptionsRx2 = QRegExp("-+(rtaudio=|rtmidi=|jack_client=)");
+
+    functionRegex = QRegExp("\\b\\w+(\\:a|\\:k|\\:i)?(?=\\()");
 
     // For Python
     pythonKeywords << "and" << "or" << "not" << "is"
@@ -547,6 +561,15 @@ void Highlighter::highlightCsoundBlock(const QString &text)
         index += length;
     }
 
+    /*
+    index = 0;
+    while ((index = functionRegex.indexIn(text, index)) != -1 && index < commentIndex) {
+        length = functionRegex.matchedLength();
+        setFormat(index, length, opcodeFormat);
+        index += length;
+    }
+    */
+
     QRegExp expression("\\b[\\w:]+\\b");
     index = text.indexOf(expression, 0);
     length = expression.matchedLength();
@@ -596,6 +619,9 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 				}
 			}
 		}
+        else if (m_parsedUDOs.contains(word)) {
+            setFormat(wordStart, wordEnd - wordStart, udoFormat);
+        }
         else if (findOpcode(word) >= 0) {
 			setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
 		}
@@ -863,4 +889,9 @@ int Highlighter::findOpcode(QString opcodeName, int start, int end)
 	else if (opcodeName > m_opcodeList[pos])
 		return findOpcode(opcodeName, pos + 1, end);
 	return -1;
+}
+
+void Highlighter::setUDOs(QStringList udos)
+{
+       m_parsedUDOs = udos;
 }
