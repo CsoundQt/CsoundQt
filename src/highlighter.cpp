@@ -336,7 +336,7 @@ Highlighter::Highlighter(QTextDocument *parent)
     headerPatterns << "sr" << "kr" << "ksmps" << "nchnls" << "nchnls_i" << "0dbfs" << "A4"
                    << "zakinit" << "massign";
 
-    keywordLiterals << "init" << "if" << "then" << "endif" << "elseif" << "while" << "goto"
+    keywordLiterals << "init" << "if" << "then" << "endif" << "elseif" << "while" << "goto" << "igoto" << "kgoto"
                     << "do" << "od"
                     << "int" << "turnoff" << "xin" << "xout"
                     << "passign";
