@@ -61,12 +61,13 @@ int main(int argc, char *argv[])
 	qSetMessagePattern("[%{if-debug}D%{endif}%{if-info}I%{endif}%{if-warning}W%{endif}%{if-critical}C%{endif}%{if-fatal}F%{endif}][%{file}:%{line} %{function}] %{message}");
     qDebug();
 #endif
-    QStringList fileNames;
-    QApplication qapp(argc, argv);
 #ifdef USE_QT_GT_55
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling); // TO test if this solved hight DPI problems
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
+    QStringList fileNames;
+    QApplication qapp(argc, argv);
+
 #ifdef Q_OS_OSX
        if (csoundGetVersion()<6090) { // this build does not work with older Csound on OSX
            qDebug()<<"Csound version too old: "<< VERSION;
