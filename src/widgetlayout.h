@@ -348,13 +348,16 @@ private:
 	QCheckBox *bgCheckBox;
 	QPushButton *bgButton;
 	int closing; // to control timer when destroying this object
+    // XXXX: flag to control updateData
+    bool m_updating;
 
 	QVector<QString> m_history;  // Undo/ Redo history
 	int m_historyIndex; // Current point in history
 	bool m_modified;
 	bool m_editMode;
 	//    QString m_clipboard;
-	bool m_contained; // Whether contained in another widget (e.g. scrollbar in widget panel or widget panel)
+    // Whether contained in another widget (scrollbar in widget panel or widget panel)
+    bool m_contained;
 
 	QVector<WidgetPreset> presets;
 	int m_currentPreset; // If -1 no current preset

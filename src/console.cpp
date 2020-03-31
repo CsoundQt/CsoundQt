@@ -23,11 +23,8 @@
 #include "console.h"
 
 #include <QDebug>
-#ifdef USE_QT5
 #include <QtWidgets>
-#else
-#include <QtGui>
-#endif
+
 
 Console::Console(QWidget *parent) : QTextEdit(parent)
 {
@@ -43,77 +40,66 @@ Console::~Console()
 
 void Console::appendMessage(QString msg)
 {
-	//  consoleLock.lock();
+    QMutexLocker locker(&consoleLock);
 	logMessage(msg);
-	// Filter unnecessary messages
-	if (msg.startsWith("libsndfile-1") || msg.startsWith("UnifiedCSD: ")
-			|| msg.startsWith("orchname: ") || msg.startsWith("scorename: ")
-            /* // acutally - why not to show theses messages
-            || msg.startsWith("PortMIDI real time MIDI plugin for Csound")
-			|| msg.startsWith("PortAudio real-time audio module for Csound")
-			|| msg.startsWith("virtual_keyboard real time MIDI plugin for Csound")
-			|| msg.startsWith("Removing temporary file")
-			//          || msg.startsWith("Csound version")
-			|| msg.startsWith("STARTING")
-			|| msg.startsWith("Creating")
-			|| msg.startsWith("Parsing")
-			//          || msg.startsWith("0dBFS")
-			|| msg.startsWith("add a global")
-            || msg.startsWith("rtaudio:") */
-			) {
-		// This filtering should ideally happen inside Csound!
-		//    consoleLock.unlock();
-		return;
+
+    // Filter unnecessary messages
+    if (msg.startsWith("libsndfile-1")
+            || msg.startsWith("UnifiedCSD: ")
+            || msg.startsWith("orchname: ")
+            || msg.startsWith("scorename: ")) {
+        return;
 	}
 	setTextColor(m_textColor);
-	if ( msg.contains("(token") ) // if "unexpected token error", remove this newline, otherwise line number stays in next messageLine
+    // if "unexpected token error", remove this newline, otherwise line number stays
+    // in next messageLine
+    if ( msg.contains("(token") )
 		msg.remove("\n");
 	messageLine.append(msg);
 
-	if (messageLine.contains("\n")) { // line finished, analyze it now
-//		 qDebug()  << "Messageline: " << messageLine;
-        if (messageLine.contains("error:", Qt::CaseInsensitive) && messageLine.contains("line ")) {
-            errorTexts.append(messageLine); // .remove("\n")
+    if (messageLine.contains("\n")) {
+        // line finished, analyze it now
+        if (messageLine.contains("error:", Qt::CaseInsensitive)
+                && messageLine.contains("line ")) {
+            errorTexts.append(messageLine);
 			errorTexts.last().remove("\n");
 
 			QStringList parts = messageLine.split("line "); // get the line number
-			QString lnr = parts.last().remove(">>>"); // somehow all the .removes in one line did not always work correctly
+            QString lnr = parts.last().remove(">>>");
 			lnr = lnr.remove(":");
 			lnr = lnr.trimmed();
 			errorLines.append(lnr.toInt());
 			qDebug() << "error line appended --- " << lnr.toInt();
-
 		}
-        if (messageLine.contains("Line:", Qt::CaseSensitive))  { // as in type erroris in csound6 like  'Line: 54 Loc: 1'
+        if (messageLine.contains("Line:", Qt::CaseSensitive))  {
+            // as in type erroris in csound6 like  'Line: 54 Loc: 1'
             errorTexts.append("Error");
-
-            QStringList parts = messageLine.split(" "); // get the line number
-            QString lnr = parts[1]; // should be second element in the array
+            QStringList parts = messageLine.split(" ");  // get the line number
+            QString lnr = parts[1];                      // 2nd element in the array
             errorLines.append(lnr.toInt());
             qDebug() << "error line appended --- " << lnr.toInt();
         }
 
-        if (messageLine.startsWith("B ") || messageLine.contains("rtevent", Qt::CaseInsensitive) ||  messageLine.contains("evaluated", Qt::CaseInsensitive)) {
-			setTextColor(QColor("blue"));
+        if (messageLine.startsWith("B ")
+                || messageLine.contains("rtevent", Qt::CaseInsensitive)
+                ||  messageLine.contains("evaluated", Qt::CaseInsensitive)) {
+            setTextColor(QColor("#4040FF"));
 		}
 		if (messageLine.contains("overall samples out of range")
                 || messageLine.contains("disabled")
                 || messageLine.contains("error", Qt::CaseInsensitive)
                 || messageLine.contains("Found:")
                 || messageLine.contains("Line:")) { // any error
-			setTextColor(QColor("red"));
+            setTextColor(QColor("FF4040"));
 		}
 		if (messageLine.contains("warning", Qt::CaseInsensitive)) {
 			setTextColor(QColor("orange"));
 		}
-
 		insertPlainText(messageLine);
 		setTextColor(m_textColor);
 		moveCursor(QTextCursor::End);
 		messageLine.clear();
-
 	}
-	//  consoleLock.unlock();
 }
 
 void Console::setDefaultFont(QFont font)
@@ -123,7 +109,10 @@ void Console::setDefaultFont(QFont font)
 
 void Console::setColors(QColor textColor, QColor bgColor)
 {
-	this->setStyleSheet(QString("QTextEdit { color: %1; background-color: %2 }").arg(textColor.name(), bgColor.name())); // before it was setPalette, but that does not work runtime.
+    // before it was setPalette, but that does not work runtime.
+    auto sheet = QString("QTextEdit { color: %1; background-color: %2 }")
+            .arg(textColor.name(), bgColor.name());
+    this->setStyleSheet(sheet);
 	m_textColor = textColor;
 	m_bgColor = bgColor;
 }
@@ -145,13 +134,6 @@ void Console::setKeyRepeatMode(bool repeat)
 {
 	m_repeatKeys = repeat;
 }
-
-// void Console::refresh()
-// {
-//   // This is a necessary hack since QTextEdit appears to not refresh correctly
-//   // Not working...
-//   //text->repaint(QRect(0,0, text->width(), text->height()));
-// }
 
 void Console::contextMenuEvent(QContextMenuEvent *event)
 {

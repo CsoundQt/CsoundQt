@@ -4162,7 +4162,6 @@ void CsoundQt::connectActions()
     connect(doc, SIGNAL(setHelpSignal()), this, SLOT(setHelpEntry()));
     connect(doc, SIGNAL(closeExtraPanelsSignal()), this, SLOT(closeExtraPanels()));
     connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(markInspectorUpdate()));
-    connect(doc, SIGNAL(currentTextUpdated()), this, SLOT(markCurrentPageUpdate()));
 
     connect(doc->getView(), SIGNAL(opcodeSyntaxSignal(QString)),
             this, SLOT(statusBarMessage(QString)));

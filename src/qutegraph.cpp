@@ -303,8 +303,7 @@ void QuteGraph::createPropertiesDialog()
 
     showGridCheckBox = new QCheckBox(dialog);
     showGridCheckBox->setText("Show Grid");
-    showGridCheckBox->setCheckState(
-                property("QCS_showGrid").toBool()?Qt::Checked:Qt::Unchecked);
+    showGridCheckBox->setChecked(property("QCS_showGrid").toBool());
     showGridCheckBox->setToolTip("Show the grid. Has effect only for spectral graphs");
     layout->addWidget(showGridCheckBox, 9, 1, Qt::AlignRight|Qt::AlignVCenter);
 
@@ -489,6 +488,7 @@ void QuteGraph::addCurve(Curve * curve)
     int numTicksX = (int)(sr*0.5 / freqStep);
     int numTicksY = m_numticksY;
     auto gridpen = QPen(QColor(90, 90, 90));
+    auto gridpen2 = QPen(QColor(60, 60, 60));
     gridpen.setCosmetic(true);
     QString caption = curve->get_caption();
     GraphType graphType;
@@ -523,17 +523,23 @@ void QuteGraph::addCurve(Curve * curve)
 
         for (int i = 0; i < numTicksX; i++) {
             QGraphicsLineItem *gridLine = new QGraphicsLineItem();
-            gridLine->setPen(gridpen);
+            gridLine->setPen(i%2 == 0 ? gridpen : gridpen2);
             scene->addItem(gridLine);
             gridLinesVector.append(gridLine);
             QGraphicsTextItem *gridText = new QGraphicsTextItem();
             gridText->setDefaultTextColor(Qt::gray);
             gridText->setFlags(QGraphicsItem::ItemIgnoresTransformations);
-            if (i > 0) {
+            if (i > 0 && i%2==0) {
                 // double kHz = i*((numTicksX-1.0)/numTicksX) * 2.0;
                 double kHz = i * freqStep / 1000.0 ;
-                gridText->setHtml(QString("<div style=\"background:#000000;\">%1k</p>"
-                                          ).arg(kHz, 2, 'f', 1));
+                if(i%10==0)
+                    gridText->setHtml(
+                                QString("<div style=\"background:#000000;\">%1k</p>")
+                                .arg(kHz, 2, 'f', 1));
+                else
+                    gridText->setHtml(
+                                QString("<div style=\"background:#000000;\">%1</p>")
+                                .arg(kHz, 2, 'f', 1));
 
             }
             gridText->setFont(QFont("Sans", 6));

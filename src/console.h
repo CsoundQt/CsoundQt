@@ -25,6 +25,8 @@
 
 #include <QTextEdit>
 #include <QDockWidget>
+#include <QtGui>
+
 
 class Console : public QTextEdit
 {
@@ -59,7 +61,7 @@ protected:
 	QColor m_textColor;
 	QColor m_bgColor;
 	bool m_repeatKeys;
-	//    QMutex consoleLock;
+    QMutex consoleLock;
 
 signals:
 	void keyPressed(int key);

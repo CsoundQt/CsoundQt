@@ -800,13 +800,11 @@ int CsoundEngine::runCsound()
     }
 #ifdef QCS_DESTROY_CSOUND
     ud->csound=csoundCreate((void *) ud);
-#ifdef CSOUND6
     ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
     Q_ASSERT(ud->midiBuffer);
     ud->virtualMidiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
     Q_ASSERT(ud->virtualMidiBuffer);
     // csoundFlushCircularBuffer(ud->csound, ud->midiBuffer);
-#endif
 #endif
 #ifdef QCS_DEBUGGER
     if(m_debugging) {
@@ -836,13 +834,7 @@ int CsoundEngine::runCsound()
         csoundSetExternalMidiOutCloseCallback(ud->csound, &midiOutCloseCb);
         csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
     }
-#ifdef CSOUND6
     csoundCreateMessageBuffer(ud->csound, 0);
-#else
-    // Message Callbacks must be set before compile, otherwise some information is missed
-    csoundSetMessageCallback(ud->csound, &CsoundEngine::messageCallbackThread);
-    csoundPreCompile(ud->csound);  //Need to run PreCompile to create the FLTK_Flags global variable
-#endif
     if (m_options.enableFLTK) {
         // Disable FLTK graphs, but allow FLTK widgets.
         int *var = (int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags");
@@ -906,7 +898,8 @@ int CsoundEngine::runCsound()
         free(argv);
         if (ud->result != CSOUND_SUCCESS) {
             qDebug()  << "Csound compile failed! "  << ud->result;
-            // Commenting out flushQues fixes the crash. Investigate closer, if it must be here
+            // Commenting out flushQues fixes the crash.
+            // Investigate closer, if it must be here
             // seems that messages are outputted into console anyway...
             flushQueues(); // the line was here in some earlier version. Otherwise errormessaged won't be processed by Console::appendMessage()
             locker.unlock(); // otherwise csoundStop will freeze
@@ -1021,28 +1014,17 @@ void CsoundEngine::cleanupCsound()
     csoundSetMakeGraphCallback(ud->csound, nullptr);
     csoundSetDrawGraphCallback(ud->csound, nullptr);
     csoundSetKillGraphCallback(ud->csound, nullptr);
-    csoundSetExitGraphCallback(ud->csound, nullptr);
-
-#ifdef CSOUND6
-    csoundRemoveKeyboardCallback(ud->csound,
-                                 &CsoundEngine::keyEventCallback);
-#else
-    csoundRemoveCallback(ud->csound,
-                         &CsoundEngine::keyEventCallback);
-#endif
+    csoundSetExitGraphCallback(ud->csound, nullptr);    
+    csoundRemoveKeyboardCallback(ud->csound, &CsoundEngine::keyEventCallback);
 #ifdef QCS_DEBUGGER
     if(m_debugging) {
         csoundDebuggerClean(ud->csound);
     }
 #endif
+
     csoundCleanup(ud->csound);
     flushQueues();
-
-#ifndef CSOUND6
-    csoundSetMessageCallback(ud->csound, 0);
-#else
     csoundDestroyMessageBuffer(ud->csound);
-#endif
 
 #ifdef QCS_DESTROY_CSOUND
     csoundDestroyCircularBuffer(ud->csound, ud->midiBuffer);
@@ -1063,24 +1045,13 @@ void CsoundEngine::setupChannels()
     ud->outputStringChannelNames.clear();
     ud->previousOutputValues.clear();
     ud->previousStringOutputValues.clear();
-#ifndef CSOUND6
-    // For invalue/outvalue
-    csoundSetInputValueCallback(ud->csound, &CsoundEngine::inputValueCallback);
-    csoundSetOutputValueCallback(ud->csound, &CsoundEngine::outputValueCallback);
-#else
     csoundSetInputChannelCallback(ud->csound, &CsoundEngine::inputValueCallback);
     csoundSetOutputChannelCallback(ud->csound, &CsoundEngine::outputValueCallback);
-#endif
     // For chnget/chnset
-#ifndef CSOUND6
-    CsoundChannelListEntry *channelList;
-    int numChannels = csoundListChannels(ud->csound, &channelList);
-    CsoundChannelListEntry *entry = channelList;
-#else
     controlChannelInfo_t *channelList;
     int numChannels = csoundListChannels(ud->csound, &channelList);
     controlChannelInfo_t *entry = channelList;
-#endif
+
     MYFLT *pvalue;
     QVector<QuteWidget *> widgets = ud->wl->getWidgets();
     // Set channels values for existing channels (i.e. those declared with chn_*
@@ -1194,11 +1165,7 @@ void CsoundEngine::messageListDispatcher(void *data)
             ud_local->csEngine->messageQueue << "\nCsoundQt: Message buffer overflow. Messages discarded!\n";
         }
         ud_local->csEngine->m_messageMutex.unlock();
-#ifdef USE_QT5
         QThread::usleep(ud_local->msgRefreshTime);
-#else
-        usleep(ud_local->msgRefreshTime);
-#endif
     }
 }
 
@@ -1208,28 +1175,21 @@ void CsoundEngine::flushQueues()
     int count = csoundGetMessageCnt(ud->csound);
     for (int i = 0; i < count; i++) {
         messageQueue << csoundGetFirstMessage(ud->csound);
-        // FIXME: Is this thread safe?
         csoundPopFirstMessage(ud->csound);
     }
+
     while (!messageQueue.isEmpty()) {
         QString msg = messageQueue.takeFirst();
-        // Print ALL Csound messages to QtCreator's application output pane.
-        // This can save time while debugging.
-		//qDebug() << msg;
-        // the following was added by Michael. isRunning goes to  deadlock...
-        // see commit 3f565353d854d41bb6be041aa04630995ce96c00
         ConsoleWidget *console = nullptr;
-        //if (isRunning()) { // CRASH HAPPENS HERE, when there is an error...
-            for (int i = 0; i < consoles.size(); i++) {
-                console = consoles[i];
-                console->appendMessage(msg);
-            }
-            ud->wl->appendMessage(msg);
-        //}
+        for (int i = 0; i < consoles.size(); i++) {
+            console = consoles[i];
+            console->appendMessage(msg);
+        }
+        ud->wl->appendMessage(msg);
+
     }
     m_messageMutex.unlock();
     ud->wl->flushGraphBuffer();
-    //	qApp->processEvents();
 }
 
 void CsoundEngine::queueMessage(QString message)
@@ -1241,9 +1201,13 @@ void CsoundEngine::queueMessage(QString message)
 
 bool CsoundEngine::isRunning()
 {
-	//qDebug();
-    QMutexLocker locker(&m_playMutex);
-    return (ud->perfThread && (ud->perfThread->GetStatus() == 0));
+    if(!m_playMutex.tryLock(1)) {
+        qDebug() << "Could not acquire lock";
+        return false;
+    }
+    auto out = (ud->perfThread && (ud->perfThread->GetStatus() == 0));
+    m_playMutex.unlock();
+    return out;
 }
 
 bool CsoundEngine::isRecording()

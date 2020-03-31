@@ -589,7 +589,7 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 				length = expression.matchedLength();
 				continue;
 			}
-		}
+        }
 		wordEnd = (wordEnd > 0 ? wordEnd : text.size());
 		QString word = text.mid(wordStart, length);
         if (word.indexOf(QRegExp("p[\\d]+\\b")) != -1) {
