@@ -667,9 +667,9 @@ void DocumentPage::setModified(bool mod)
 	// This slot is triggered by the document children whenever they are modified
 	// It is also called from the main application when the file is saved to set as unmodified.
 	// FIXME live frame modification should also affect here
-	//  qDebug() << "DocumentPage::setModified(bool mod) "<< mod;
-	if (mod == true) {
-		emit modified();
+    // qDebug() << "DocumentPage::setModified :" << mod;
+    if (mod == true) {
+        emit modified();
 	}
 	else {
 		m_view->setModified(false);
@@ -689,15 +689,18 @@ void DocumentPage::sendCodeToEngine(QString code)
 
 bool DocumentPage::isModified()
 {
-	if (m_view->isModified())
-		return true;
+    if (m_view->isModified()) {
+        return true;
+    }
 	foreach (WidgetLayout *wl, m_widgetLayouts) {
-		if (wl->isModified())
-			return true;
+        if (wl->isModified()) {
+            return true;
+        }
 	}
 	for (int i = 0; i < m_liveFrames.size(); i++) {
-		if (m_liveFrames[i]->isModified())
-			return true;
+        if (m_liveFrames[i]->isModified()) {
+            return true;
+        }
 	}
 	return false;
 }
@@ -1596,8 +1599,7 @@ void DocumentPage::deleteLiveEventPanel(LiveEventFrame *frame)
 
 void DocumentPage::textChanged()
 {
-	//  qDebug() << "DocumentPage::textChanged()";
-	setModified(true);
+    setModified(true);
     m_parseUdosNeeded = true;
 	emit currentTextUpdated();
 }
@@ -1674,10 +1676,13 @@ void DocumentPage::setHighlightingTheme(QString theme) {
     if(m_view == nullptr)
         return;
     m_colorTheme = theme;
+    bool modified = isModified();
     m_view->setTheme(theme);
+    setModified(modified);
     auto defaultFormat = m_view->getDefaultFormat();
     this->setEditorColors(defaultFormat.foreground().color(),
                           defaultFormat.background().color());
+
 }
 
 void DocumentPage::setParsedUDOs(QStringList udos) {

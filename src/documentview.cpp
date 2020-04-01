@@ -31,6 +31,7 @@
 
 
 
+
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	BaseView(parent,opcodeTree)
 {
@@ -51,7 +52,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 
 	for (int i = 0; i < editors.size(); i++) {
 		if (editors[i]!=m_filebEditor) { // FilebEditor does not have this slot
-			connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
+            connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
 		}
 		splitter->addWidget(editors[i]);
 		editors[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -65,8 +66,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	setFocusProxy(m_mainEditor);  // for comment action from main application
 	internalChange = false;
 
-
-	//  m_highlighter = new Highlighter();
+    //  m_highlighter = new Highlighter();
 	connect(m_mainEditor, SIGNAL(textChanged()),
 			this, SLOT(textChanged()));
 	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
@@ -363,8 +363,10 @@ void DocumentView::updateHoverText(int x, int y, QString text)
 
 void DocumentView::setModified(bool mod)
 {
-	//  qDebug() << "DocumentView::setModified";
-	emit contentsChanged();
+    // auto sender = static_cast<QTextEdit*>(this->sender());
+    // auto senderName = sender != nullptr ? sender->property("name").toString() : "";
+    // QDEBUG << "sender: " << senderName << "modified:"<<mod;
+    emit contentsChanged();
 	m_isModified = mod;
 }
 
@@ -823,7 +825,7 @@ void DocumentView::createParenthesisSelection(int pos, bool paired)
 void DocumentView::textChanged()
 {
 	if (internalChange) {
-		internalChange = false;
+        internalChange = false;
 		return;
 	}
 	TextEditor *editor = m_mainEditor;
@@ -1087,11 +1089,12 @@ void DocumentView::findReplace()
 
 void DocumentView::getToIn()
 {
+    // Change chnget/chnset to invalue/outvalue
 	// TODO implment for multiple views
 	if (m_viewMode < 2) {
 		internalChange = true;
 		m_mainEditor->setPlainText(changeToInvalue(m_mainEditor->toPlainText()));
-		m_mainEditor->document()->setModified(true);  // Necessary, or is setting it locally enough?
+        m_mainEditor->document()->setModified(true);  // Necessary, or is setting it locally enough?
 	}
 	else { //  Split view
 		qDebug() << "Not implemented for split view.";
@@ -1104,7 +1107,7 @@ void DocumentView::inToGet()
 	if (m_viewMode < 2) {
 		internalChange = true;
 		m_mainEditor->setPlainText(changeToChnget(m_mainEditor->toPlainText()));
-		m_mainEditor->document()->setModified(true);
+        m_mainEditor->document()->setModified(true);
 	}
 	else { //  Split view
 		// TODO check properly for line number also from other editors

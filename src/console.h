@@ -60,6 +60,7 @@ protected:
 	QString messageLine;
 	QColor m_textColor;
 	QColor m_bgColor;
+    QColor m_warningColor;
 	bool m_repeatKeys;
     QMutex consoleLock;
 

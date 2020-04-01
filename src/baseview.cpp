@@ -28,9 +28,13 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
 {
 	QPalette p = palette();
 	m_mainEditor = new TextEditLineNumbers(this);
+    m_mainEditor->setProperty("name", "mainEditor");
 	m_orcEditor = new TextEditor(this);
+    m_orcEditor->setProperty("name", "orcEditor");
 	m_scoreEditor = new ScoreEditor(this);
+    m_scoreEditor->setProperty("name", "scoreEditor");
 	m_optionsEditor = new TextEditor(this);
+    m_optionsEditor->setProperty("name", "optionsEditor");
 	m_optionsEditor->setMaximumHeight(60);
 	p.setColor(QPalette::WindowText, QColor("darkRed"));
 	p.setColor(static_cast<QPalette::ColorRole>(9), QColor(200, 200, 200));

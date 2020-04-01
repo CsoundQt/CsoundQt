@@ -51,6 +51,7 @@ Options::Options(ConfigLists *configlists) :
     autoPlay = true;
     autoJoin = false;
     saveChanges = false;
+    askIfTemporary = false;
     rememberFile = true;
     saveWidgets = true;
     // iconText = true;

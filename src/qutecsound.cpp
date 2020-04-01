@@ -222,9 +222,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
 
     focusMapper = new QSignalMapper(this);
-    createActions(); // Must be before readSettings as this sets the default shortcuts, and after widgetPanel
+    createActions(); // Must be before readSettings: this sets default shortcuts
     createMenus();
-    // TODO: take care that the position is stored when toolbars or panels are moved/resized. maybe.
+    // TODO: take care that the position is stored when toolbars or panels are
+    // moved/resized. maybe.
     createStatusBar();
     createToolBars();
     readSettings();
@@ -237,16 +238,23 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_midiLearn->setModal(false);
     midiHandler->setMidiLearner(m_midiLearn);
 
-    bool widgetsVisible = !widgetPanel->isHidden(); // Must be after readSettings() to save last state // was: isVisible() - in some reason reported always false
-    showWidgetsAct->setChecked(false); // To avoid showing and reshowing panels during initial load
-    widgetPanel->hide();  // Hide until CsoundQt has finished loading
-    bool scratchPadVisible = !m_scratchPad->isHidden(); // Must be after readSettings() to save last state
+    // Must be after readSettings() to save last state // was: isVisible()
+    // in some reason reported always false
+    bool widgetsVisible = !widgetPanel->isHidden();
+    // To avoid showing and reshowing panels during initial load
+    showWidgetsAct->setChecked(false);
+    // Hide until CsoundQt has finished loading
+    widgetPanel->hide();
+    // Must be after readSettings() to save last state
+    bool scratchPadVisible = !m_scratchPad->isHidden();
     if (scratchPadVisible)
         m_scratchPad->hide();  // Hide until CsoundQt has finished loading
     documentTabs = new QTabWidget (this);
     documentTabs->setTabsClosable(true);
     connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
-    connect(documentTabs, SIGNAL(tabCloseRequested(int)), documentTabs, SLOT(setCurrentIndex(int))); // To force changing to clicked tab before closing
+    // To force changing to clicked tab before closing
+    connect(documentTabs, SIGNAL(tabCloseRequested(int)),
+            documentTabs, SLOT(setCurrentIndex(int)));
     connect(documentTabs, SIGNAL(tabCloseRequested(int)), closeTabAct, SLOT(trigger()));
     setCentralWidget(documentTabs);
     documentTabs->setDocumentMode(true);
@@ -284,13 +292,12 @@ CsoundQt::CsoundQt(QStringList fileNames)
         connect(tabRight, SIGNAL(activated()), this, SLOT(pageRight()));
     }
 
-    fillFileMenu(); // Must be placed after readSettings to include recent Files
+    fillFileMenu();     // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
-    fillScriptsMenu(); // Must be placed after readSettings to know directory
+    fillScriptsMenu();  // Must be placed after readSettings to know directory
     m_opcodeTree = new OpEntryParser(":/opcodes.xml");
     LiveCodeEditor *liveeditor = new LiveCodeEditor(m_scratchPad, m_opcodeTree);
     liveeditor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    // liveeditor->show();
     connect(liveeditor, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));
     connect(liveeditor, SIGNAL(enableCsdMode(bool)),
             scratchPadCsdModeAct, SLOT(setChecked(bool)));
@@ -299,15 +306,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_scratchPad->setWidget(liveeditor);
     m_scratchPad->setFocusProxy(liveeditor->getDocumentView());
     scratchPadCsdModeAct->setChecked(true);
-
-    // Open files saved from last session
-    if (!lastFiles.isEmpty()) {
-        foreach (QString lastFile, lastFiles) {
-            if (lastFile!="" && !lastFile.startsWith("untitled")) {
-                loadFile(lastFile);
-            }
-        }
-    }
 
     if (documentPages.size() == 0) { // No files yet open. Open default
         newFile();
@@ -318,7 +316,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QString index = docDir + QString("/index.html");
     QStringList possibleDirectories;
 #ifdef Q_OS_LINUX
-        possibleDirectories  << "/usr/share/doc/csound-manual/html/" << "/usr/share/doc/csound-doc/html/";
+        possibleDirectories  << "/usr/share/doc/csound-manual/html/"
+                             << "/usr/share/doc/csound-doc/html/";
 #endif
 #ifdef Q_OS_WIN
         QString programFilesPath = QDir::fromNativeSeparators(getenv("PROGRAMFILES"));
@@ -355,15 +354,14 @@ CsoundQt::CsoundQt(QStringList fileNames)
     //openLogFile();
 
     // FIXME is there still need for no atexit?
-#ifdef CSOUND6
     int init = csoundInitialize(0);
-#else
-    int init = csoundInitialize(0,0,0);
-#endif
     if (init < 0) {
-        qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\nCsoundQt will probably crash if you try to run Csound.");
+        qDebug("CsoundEngine::CsoundEngine() Error initializing Csound!\n"
+               "CsoundQt will probably crash if you try to run Csound.");
     }
-    qApp->processEvents(); // To finish settling dock widgets and other stuff before messing with them (does it actually work?)
+    // To finish settling dock widgets and other stuff before messing with
+    // them (does it actually work?)
+    qApp->processEvents();
 
     if (lastTabIndex < documentPages.size() &&
             documentTabs->currentIndex() != lastTabIndex) {
@@ -409,14 +407,27 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     //qDebug()<<"Max thread count: "<< QThreadPool::globalInstance()->maxThreadCount();
     QThreadPool::globalInstance()->setMaxThreadCount(MAX_THREAD_COUNT);
+
 #ifndef  Q_OS_MAC // a workaround for showing close buttons on close NB! disable later
     QFile file(":/appstyle-white.css");
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
     qApp->setStyleSheet(styleSheet);
 #endif
+
+    // Open files saved from last session
+    if (!lastFiles.isEmpty()) {
+        foreach (QString lastFile, lastFiles) {
+            if (lastFile!="" && !lastFile.startsWith("untitled")) {
+                loadFile(lastFile);
+            }
+        }
+    }
+
+/*
 #ifdef Q_OS_LINUX
-    // ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3 gets rounded... Did not find the real reasound
+    // ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3
+    // gets rounded... Did not find the real reasound
     // Csound must be started and stopped once, then it works:
     int oldPage = documentTabs->currentIndex();
 	QString tmp1 = lastUsedDir;
@@ -431,7 +442,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 	lastUsedDir = tmp1;
 	lastFileDir = tmp2;
 #endif
-
+*/
 }
 
 
@@ -1783,25 +1794,29 @@ void CsoundQt::play(bool realtime, int index)
         return;
     }
     curPage = index;
-    if (documentPages[curPage]->getFileName().isEmpty()) { // ask for if temporary file or serious work:
-        int answer = QMessageBox::question(this, tr("Run as temporary file?"),
-                    tr("press <b>OK</b>, if you don't care about this file in "
-                       "future.\n Press <b>Save</b>, if you want to save it with "
-                       "given name.\n You can always save the file with <b>Save As</b> "
-                       "also later, if you use the temporary file."),
-                    QMessageBox::Ok|QMessageBox::Save|QMessageBox::Cancel );
+    auto page = documentPages[index];
+
+    if (documentPages[curPage]->getFileName().isEmpty()) {
+        int answer;
+        if(!m_options->askIfTemporary)
+            answer= QMessageBox::Ok;
+        else
+            answer = QMessageBox::question(this, tr("Run as temporary file?"),
+                tr("press <b>OK</b>, if you don't care about this file in "
+                   "future.\n Press <b>Save</b>, if you want to save it with "
+                   "given name.\n You can always save the file with <b>Save As</b> "
+                   "also later, if you use the temporary file."),
+                QMessageBox::Ok|QMessageBox::Save|QMessageBox::Cancel );
         bool saved = false;
         if (answer==QMessageBox::Save) {
             saved = saveAs();
         } else if (answer==QMessageBox::Ok) {
-            QString tempPath =
-                    QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+            auto tempPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
             if (!tempPath.isEmpty() && saveFile(tempPath + "/csoundqt-temp.csd")) {
                 saved = true;
             } else {
                 QMessageBox::critical(this,tr("Save error"), tr("Could not save temporary file"));
             }
-
         }
         if (!saved) {
             if (curPage == oldPage) {
@@ -1811,7 +1826,7 @@ void CsoundQt::play(bool realtime, int index)
             return;
         }
     }
-    else if (documentPages[curPage]->isModified()) {
+    else if (page->isModified()) {
         if (m_options->saveChanges && !save()) {
             if (curPage == oldPage) {
                 runAct->setChecked(false);
@@ -1820,7 +1835,7 @@ void CsoundQt::play(bool realtime, int index)
             return;
         }
     }
-    QString fileName = documentPages[curPage]->getFileName();
+    QString fileName = page->getFileName();
     QString fileName2;
     QString msg = "__**__ " + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss");
     msg += " Play: " + fileName + "\n";
@@ -1862,7 +1877,7 @@ void CsoundQt::play(bool realtime, int index)
             //TODO: create empty score file
         }
         else
-            fileName2 = documentPages[curPage]->getCompanionFileName();
+            fileName2 = page->getCompanionFileName();
     }
     QString runFileName1, runFileName2;
     QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
@@ -1882,6 +1897,9 @@ void CsoundQt::play(bool realtime, int index)
                                       QMessageBox::Ok);
                 return;
             }
+            QString csdText = page->getBasicText();
+            csdFile.write(csdText.toLatin1());
+            /*
             // If example, just copy, since readonly anyway, otherwise get contents from editor.
             // Necessary since examples may contain <CsFileB> section with data.
             if (fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
@@ -1897,9 +1915,10 @@ void CsoundQt::play(bool realtime, int index)
                     qDebug()<<"Could not open file " << fileName;
                 }
             } else {
-                QString csdText = documentPages[curPage]->getBasicText();
+                QString csdText = page->getBasicText();
                 csdFile.write(csdText.toLatin1());
             }
+            */
             csdFile.flush();
             runFileName1 = csdFile.fileName();
         }
@@ -1907,7 +1926,7 @@ void CsoundQt::play(bool realtime, int index)
     else {
         runFileName1 = fileName;
     }
-    runFileName2 = documentPages[curPage]->getCompanionFileName();
+    runFileName2 = page->getCompanionFileName();
     m_options->fileName1 = runFileName1;
     m_options->fileName2 = runFileName2;
     m_options->rt = realtime;
@@ -1920,12 +1939,12 @@ void CsoundQt::play(bool realtime, int index)
     if (curPage == oldPage) {
         runAct->setChecked(true);  // In case the call comes from a button
     }
-    if (documentPages[curPage]->usesFltk() && m_options->terminalFLTK) {
+    if (page->usesFltk() && m_options->terminalFLTK) {
         runInTerm();
         curPage = oldPage;
         return;
     }
-    int ret = documentPages[curPage]->play(m_options);
+    int ret = page->play(m_options);
     if (ret == -1) {
         QMessageBox::critical(this,
                               tr("CsoundQt"),
@@ -1939,7 +1958,7 @@ void CsoundQt::play(bool realtime, int index)
     } else if (ret == 0) { // No problem
         if (m_options->enableWidgets && m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
 
-            if (!documentPages[curPage]->usesFltk()) {
+            if (!page->usesFltk()) {
                 // Don't bring up widget panel if there's an FLTK panel
                 if (!m_options->widgetsIndependent) {
                     if (widgetPanel->isFloating()) {
@@ -5022,6 +5041,7 @@ void CsoundQt::readSettings()
     m_options->autoJoin = settings.value("autoJoin", true).toBool();
     m_options->menuDepth = settings.value("menuDepth", 3).toInt();
     m_options->saveChanges = settings.value("savechanges", false).toBool();
+    m_options->askIfTemporary = settings.value("askIfTemporary", false).toBool();
     m_options->rememberFile = settings.value("rememberfile", true).toBool();
     m_options->saveWidgets = settings.value("savewidgets", true).toBool();
     m_options->widgetsIndependent = settings.value("widgetsIndependent", false).toBool();
@@ -5253,6 +5273,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("autoJoin", m_options->autoJoin);
         settings.setValue("menuDepth", m_options->menuDepth);
         settings.setValue("savechanges", m_options->saveChanges);
+        settings.setValue("askIfTemporary", m_options->askIfTemporary);
         settings.setValue("rememberfile", m_options->rememberFile);
         settings.setValue("savewidgets", m_options->saveWidgets);
         settings.setValue("widgetsIndependent", m_options->widgetsIndependent);
@@ -5578,34 +5599,30 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         QApplication::restoreOverrideCursor();
         return -1;
     }
+
     if (!m_options->autoJoin &&
             (fileName.endsWith(".sco") ||
              fileName.endsWith(".orc")) ) {
         // load companion, when the new page is made, otherwise isOpen works uncorrect
         loadCompanionFile(fileName);
     }
-    if (!m_options->autoJoin) {
+
+    if (m_options->autoJoin &&
+            (fileName.endsWith(".sco") || fileName.endsWith(".orc"))) {
+        fileName.chop(4);
+        fileName +=  ".csd";
+        documentPages[curPage]->setFileName(fileName);  // Must update internal name
+        setCurrentFile(fileName);
+        if (!QFile::exists(fileName))
+            save();
+        else
+            saveAs();
+    } else {
         documentPages[curPage]->setModified(false);
         setWindowModified(false);
         documentTabs->setTabIcon(curPage, QIcon());
     }
-    else {
-        if (fileName.endsWith(".sco") || fileName.endsWith(".orc")) {
-            fileName.chop(4);
-            fileName +=  ".csd";
-            documentPages[curPage]->setFileName(fileName);  // Must update internal name
-            setCurrentFile(fileName);
-            if (!QFile::exists(fileName))
-                save();
-            else
-                saveAs();
-        }
-        else {
-            documentPages[curPage]->setModified(false);
-            setWindowModified(false);
-            documentTabs->setTabIcon(curPage, QIcon());
-        }
-    }
+
     if (fileName.startsWith(m_options->csdocdir) && !m_options->csdocdir.isEmpty()) {
         documentPages[curPage]->readOnly = true;
     }

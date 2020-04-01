@@ -102,9 +102,10 @@ public:
     void setParsedUDOs(QStringList udos);
     Highlighter* getHighlighter() { return &m_highlighter; }
 
+
 public slots:
 	void setModified(bool mod = true);
-	void syntaxCheck();
+    void syntaxCheck();
 	void textChanged();
 	void escapePressed();
 	void finishParameterMode();

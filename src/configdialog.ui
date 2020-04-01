@@ -1706,30 +1706,32 @@
               <string>Behavior</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_24">
-              <item row="6" column="0">
-               <widget class="QLabel" name="toolbarIconSizeLabel">
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="toolbarCheckBox">
                 <property name="text">
-                 <string>Toolbar Icon Size</string>
+                 <string>Show Toolbars</string>
                 </property>
                </widget>
               </item>
-              <item row="10" column="1">
-               <widget class="QSpinBox" name="menusDepthSpinBox"/>
-              </item>
-              <item row="6" column="3">
-               <widget class="QCheckBox" name="autoJoinCheckBox">
-                <property name="text">
-                 <string>Automatically Join orc/sco files</string>
+              <item row="6" column="1">
+               <widget class="QSpinBox" name="toolbarIconSizeSpinBox">
+                <property name="minimumSize">
+                 <size>
+                  <width>80</width>
+                  <height>0</height>
+                 </size>
                 </property>
-               </widget>
-              </item>
-              <item row="3" column="3">
-               <widget class="QCheckBox" name="saveChangesCheckBox">
-                <property name="enabled">
-                 <bool>true</bool>
+                <property name="suffix">
+                 <string> px</string>
                 </property>
-                <property name="text">
-                 <string>Save changes automatically on run</string>
+                <property name="prefix">
+                 <string/>
+                </property>
+                <property name="minimum">
+                 <number>16</number>
+                </property>
+                <property name="maximum">
+                 <number>48</number>
                 </property>
                </widget>
               </item>
@@ -1743,10 +1745,47 @@
                 </property>
                </widget>
               </item>
-              <item row="4" column="3">
-               <widget class="QCheckBox" name="rememberFileCheckBox">
+              <item row="6" column="3">
+               <widget class="QCheckBox" name="autoJoinCheckBox">
                 <property name="text">
-                 <string>Remember open files from previous session</string>
+                 <string>Automatically Join orc/sco files</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="0">
+               <widget class="QLabel" name="label_35">
+                <property name="text">
+                 <string>Favorites/Scripts menus max. depth</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="1">
+               <widget class="QSpinBox" name="menusDepthSpinBox"/>
+              </item>
+              <item row="4" column="0">
+               <widget class="QCheckBox" name="lockToolbarCheckBox">
+                <property name="toolTip">
+                 <string>Lock the toolbars in place, remove handle</string>
+                </property>
+                <property name="text">
+                 <string>Lock Toolbars</string>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="toolbarIconSizeLabel">
+                <property name="text">
+                 <string>Toolbar Icon Size</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QCheckBox" name="iconTextCheckBox">
+                <property name="text">
+                 <string>Show text for toolbar icons</string>
                 </property>
                </widget>
               </item>
@@ -1776,59 +1815,27 @@
                 </property>
                </spacer>
               </item>
-              <item row="4" column="0">
-               <widget class="QCheckBox" name="lockToolbarCheckBox">
-                <property name="toolTip">
-                 <string>Lock the toolbars in place, remove handle</string>
-                </property>
+              <item row="3" column="3">
+               <widget class="QCheckBox" name="askIfTemporaryCheckBox">
                 <property name="text">
-                 <string>Lock Toolbars</string>
-                </property>
-                <property name="checked">
-                 <bool>false</bool>
+                 <string>Ask when playing a temporary file</string>
                 </property>
                </widget>
               </item>
-              <item row="10" column="0">
-               <widget class="QLabel" name="label_35">
+              <item row="10" column="3">
+               <widget class="QCheckBox" name="rememberFileCheckBox">
                 <property name="text">
-                 <string>Favorites/Scripts menus max. depth</string>
+                 <string>Remember open files from previous session</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="1">
-               <widget class="QSpinBox" name="toolbarIconSizeSpinBox">
-                <property name="minimumSize">
-                 <size>
-                  <width>80</width>
-                  <height>0</height>
-                 </size>
+              <item row="4" column="3">
+               <widget class="QCheckBox" name="saveChangesCheckBox">
+                <property name="enabled">
+                 <bool>true</bool>
                 </property>
-                <property name="suffix">
-                 <string> px</string>
-                </property>
-                <property name="prefix">
-                 <string/>
-                </property>
-                <property name="minimum">
-                 <number>16</number>
-                </property>
-                <property name="maximum">
-                 <number>48</number>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QCheckBox" name="iconTextCheckBox">
                 <property name="text">
-                 <string>Show text for toolbar icons</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QCheckBox" name="toolbarCheckBox">
-                <property name="text">
-                 <string>Show Toolbars</string>
+                 <string>Save changes automatically on run</string>
                 </property>
                </widget>
               </item>

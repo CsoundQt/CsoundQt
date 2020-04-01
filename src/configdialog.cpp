@@ -127,7 +127,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		midiInterfaceComboBox->setCurrentIndex(ifIndex);
 	} else {
 		qDebug()<< m_options->midiInterfaceName << "not found. Setting Midi In to None";
-		midiInterfaceComboBox->setCurrentIndex(midiInterfaceComboBox->findData(9999)); // set to none if not found
+        // set to none if not found
+        midiInterfaceComboBox->setCurrentIndex(midiInterfaceComboBox->findData(9999));
 	}
 	midiOutInterfaceComboBox->addItem(QString(tr(" None", "No MIDI Out interface")), QVariant(9999));
 
@@ -169,6 +170,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	autoJoinCheckBox->setChecked(m_options->autoJoin);
 	menusDepthSpinBox->setValue(m_options->menuDepth);
 	saveChangesCheckBox->setChecked(m_options->saveChanges);
+    askIfTemporaryCheckBox->setChecked(m_options->askIfTemporary);
 	rememberFileCheckBox->setChecked(m_options->rememberFile);
 	saveWidgetsCheckBox->setChecked(m_options->saveWidgets);
 	widgetsIndependentCheckBox->setChecked(m_options->widgetsIndependent);
@@ -422,6 +424,7 @@ void ConfigDialog::accept()
 	m_options->autoJoin = autoJoinCheckBox->isChecked();
 	m_options->menuDepth = menusDepthSpinBox->value();
 	m_options->saveChanges = saveChangesCheckBox->isChecked();
+    m_options->askIfTemporary = askIfTemporaryCheckBox->isChecked();
 	m_options->widgetsIndependent = widgetsIndependentCheckBox->isChecked();
 	m_options->rememberFile = rememberFileCheckBox->isChecked();
 	m_options->saveWidgets = saveWidgetsCheckBox->isChecked();

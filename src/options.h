@@ -50,6 +50,7 @@ public:
 	bool autoPlay;
 	bool autoJoin;
 	bool saveChanges;
+    bool askIfTemporary;
 	bool rememberFile;
 	bool saveWidgets;
 	bool iconText;

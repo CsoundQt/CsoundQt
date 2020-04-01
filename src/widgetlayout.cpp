@@ -42,16 +42,6 @@
 
 #include "qutecsound.h" // For passing the actions from button reserved channels
 
-#ifdef DEBUG
-#define MUTEX_LOCK(mutex) { qDebug() << __FUNCTION__ << #mutex << "locked"; \
-    mutex.lock(); }
-#define MUTEX_UNLOCK(mutex) { qDebug() << __FUNCTION__ << #mutex << "unlocked"; \
-    mutex.unlock(); }
-#else
-#define MUTEX_LOCK(mutex) mutex.lock();
-#define MUTEX_UNLOCK(mutex) mutex.unlock();
-#endif
-
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
     selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
@@ -215,9 +205,9 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 WidgetLayout::~WidgetLayout()
 {
     disconnect(this, 0,0,0);
-    MUTEX_LOCK(layoutMutex);
+    layoutMutex.lock();
     closing = 1;
-    MUTEX_UNLOCK(layoutMutex);
+    layoutMutex.unlock();
     while (closing == 1) {
         qApp->processEvents();
         QThread::usleep(10000);
@@ -1340,7 +1330,7 @@ void WidgetLayout::flushGraphBuffer()
         delete c;
     }
     curveUpdateBufferCount = 0;
-    MUTEX_UNLOCK(layoutMutex);
+    layoutMutex.unlock();
     m_updating = updating;
 }
 
@@ -3279,8 +3269,7 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
     //qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
     //qDebug() << "contained: " << m_contained;
     QWidget *w;
-    MUTEX_LOCK(layoutMutex);
-    // layoutMutex.lock();
+    layoutMutex.lock();
     w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget
 
     if (bg) // to get rid of pink backgrounds
@@ -3289,8 +3278,7 @@ void WidgetLayout::setBackground(bool bg, QColor bgColor)
         w->setPalette(QPalette());
     w->setBackgroundRole(QPalette::Window);
     w->setAutoFillBackground(bg);
-    MUTEX_UNLOCK(layoutMutex);
-    // layoutMutex.unlock();
+    layoutMutex.unlock();
     this->setProperty("QCS_bg", QVariant(bg));
     this->setProperty("QCS_bgcolor", QVariant(bgColor));
 }
@@ -3355,8 +3343,10 @@ void WidgetLayout::setModified(bool mod)
 {
     //  qDebug() << "WidgetLayout::setModified" << mod;
     m_modified = mod;
-    if (mod)
+    if (mod) {
+        // qDebug() << "WidgetLayout::setModified true, emiting changed()";
         emit changed();
+    }
 }
 
 void WidgetLayout::setMouseOffset(int x, int y)
@@ -4075,6 +4065,7 @@ void WidgetLayout::duplicate()
     }
     widgetsMutex.unlock();
     markHistory();
+    setModified(true);
 }
 
 void WidgetLayout::deleteSelected()
@@ -4089,6 +4080,7 @@ void WidgetLayout::deleteSelected()
     }
     widgetsMutex.unlock();
     markHistory();
+    setModified(true);
 }
 
 void WidgetLayout::moveSelected(int horiz, int vert, int grid) {
@@ -4113,6 +4105,7 @@ void WidgetLayout::moveSelected(int horiz, int vert, int grid) {
     }
     widgetsMutex.unlock();
     markHistory();
+    setModified(true);
 }
 
 void WidgetLayout::undo()
@@ -4185,8 +4178,7 @@ void WidgetLayout::updateData()
     for (int i = 0; i < scopeWidgets.size(); i++) {
         scopeWidgets[i]->updateData();
     }
-    MUTEX_UNLOCK(layoutMutex);
-    // layoutMutex.unlock();
+    layoutMutex.unlock();
     closing = 0;
     updateTimer.singleShot(msec, this, SLOT(updateData()));
 }

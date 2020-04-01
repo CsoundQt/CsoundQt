@@ -81,7 +81,8 @@ void Highlighter::setTheme(const QString &theme) {
         keywordFormat.setForeground(QColor("#E65100"));
         keywordFormat.setFontWeight(QFont::Bold);
 
-        headerFormat.setForeground(QColor("red"));
+        headerFormat.setForeground(QColor("brown"));
+        headerFormat.setFontWeight(QFont::Bold);
 
         opcodeFormat.setForeground(QColor("blue"));
         opcodeFormat.setFontWeight(QFont::Bold);

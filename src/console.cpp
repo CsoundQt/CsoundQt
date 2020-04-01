@@ -31,6 +31,7 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
 	error = false;
 	errorLine = false;
 	setReadOnly(true);
+    m_warningColor = QColor("orange");
 }
 
 Console::~Console()
@@ -90,10 +91,11 @@ void Console::appendMessage(QString msg)
                 || messageLine.contains("error", Qt::CaseInsensitive)
                 || messageLine.contains("Found:")
                 || messageLine.contains("Line:")) { // any error
-            setTextColor(QColor("FF4040"));
+            qDebug() << "Error found in console" << messageLine;
+            setTextColor(QColor("#FF4040"));
 		}
 		if (messageLine.contains("warning", Qt::CaseInsensitive)) {
-			setTextColor(QColor("orange"));
+            setTextColor(m_warningColor);
 		}
 		insertPlainText(messageLine);
 		setTextColor(m_textColor);
@@ -115,6 +117,13 @@ void Console::setColors(QColor textColor, QColor bgColor)
     this->setStyleSheet(sheet);
 	m_textColor = textColor;
 	m_bgColor = bgColor;
+    if(m_textColor.lightness() < m_bgColor.lightness()) {
+        // dark text on light background
+        m_warningColor = QColor("#AC7F00");
+    }
+    else {
+        m_warningColor = QColor("orange");
+    }
 }
 
 void Console::reset()
