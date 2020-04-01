@@ -91,7 +91,6 @@ void Console::appendMessage(QString msg)
                 || messageLine.contains("error", Qt::CaseInsensitive)
                 || messageLine.contains("Found:")
                 || messageLine.contains("Line:")) { // any error
-            qDebug() << "Error found in console" << messageLine;
             setTextColor(QColor("#FF4040"));
 		}
 		if (messageLine.contains("warning", Qt::CaseInsensitive)) {

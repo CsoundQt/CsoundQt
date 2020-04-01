@@ -1882,6 +1882,7 @@ void CsoundQt::play(bool realtime, int index)
     QString runFileName1, runFileName2;
     QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
     if (fileName.startsWith(":/examples/", Qt::CaseInsensitive) || !m_options->saveChanges) {
+
         QString tmpFileName = QDir::tempPath();
         if (!tmpFileName.endsWith("/") && !tmpFileName.endsWith("\\")) {
             tmpFileName += QDir::separator();
@@ -1897,28 +1898,31 @@ void CsoundQt::play(bool realtime, int index)
                                       QMessageBox::Ok);
                 return;
             }
-            QString csdText = page->getBasicText();
-            csdFile.write(csdText.toLatin1());
-            /*
+
             // If example, just copy, since readonly anyway, otherwise get contents from editor.
             // Necessary since examples may contain <CsFileB> section with data.
             if (fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
-                QFile file(fileName);
-                if (file.open(QFile::ReadOnly)) {
-                    int result = csdFile.write(file.readAll());
-                    file.close();
-                    if (result<=0) {
-                        qDebug()<< "Failed to copy to example to temporary location";
-                        return;
+                auto fullText = page->getView()->getFullText();
+                if(fullText.contains("<CsFileB")) {
+                    qDebug() << ">>>>>>>>>>>>>>> CsFileB";
+                    QFile file(fileName);
+                    if (file.open(QFile::ReadOnly)) {
+                        int result = csdFile.write(file.readAll());
+                        file.close();
+                        if (result<=0) {
+                            qDebug()<< "Failed to copy to example to temporary location";
+                            return;
+                        }
+                    } else {
+                        qDebug()<<"Could not open file " << fileName;
                     }
                 } else {
-                    qDebug()<<"Could not open file " << fileName;
+                    qDebug() << ">>>>>>>>>>>>>>> NO CsFileB";
+                    qDebug() << fullText;
+                    QString csdText = page->getBasicText();
+                    csdFile.write(csdText.toLatin1());
                 }
-            } else {
-                QString csdText = page->getBasicText();
-                csdFile.write(csdText.toLatin1());
             }
-            */
             csdFile.flush();
             runFileName1 = csdFile.fileName();
         }
