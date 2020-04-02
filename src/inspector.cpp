@@ -119,7 +119,8 @@ void Inspector::parseText(const QString &text)
 		}
         if (line.startsWith("instr")) {
             QString text = line.mid(line.indexOf("instr") + 6);
-			QStringList columnslist(QString("instr %1").arg(text).simplified());
+            // QStringList columnslist(QString("instr %1").arg(text).simplified());
+            QStringList columnslist(text.simplified());
 			TreeItem *newItem = new TreeItem(treeItem3, columnslist);
 			newItem->setLine(i + 1);
 			newItem->setForeground (0, QBrush(Qt::darkMagenta) );

@@ -1881,8 +1881,9 @@ void CsoundQt::play(bool realtime, int index)
     }
     QString runFileName1, runFileName2;
     QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
-    if (fileName.startsWith(":/examples/", Qt::CaseInsensitive) || !m_options->saveChanges) {
-
+    runFileName1 = fileName;
+    if(fileName.startsWith(":/examples/", Qt::CaseInsensitive) || !m_options->saveChanges) {
+        QDEBUG << "***** Using temporary file for filename" << fileName;
         QString tmpFileName = QDir::tempPath();
         if (!tmpFileName.endsWith("/") && !tmpFileName.endsWith("\\")) {
             tmpFileName += QDir::separator();
@@ -1892,43 +1893,36 @@ void CsoundQt::play(bool realtime, int index)
             csdFile.setFileTemplate(tmpFileName);
             if (!csdFile.open()) {
                 qDebug() << "Error creating temporary file " << tmpFileName;
-                QMessageBox::critical(this,
-                                      tr("CsoundQt"),
-                                      tr("Error creating temporary file."),
+                QMessageBox::critical(this, tr("CsoundQt"), tr("Error creating temporary file."),
                                       QMessageBox::Ok);
                 return;
             }
-
             // If example, just copy, since readonly anyway, otherwise get contents from editor.
             // Necessary since examples may contain <CsFileB> section with data.
-            if (fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
+            if (!fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
+                csdFile.write(page->getBasicText().toLatin1());
+            } else {
                 auto fullText = page->getView()->getFullText();
-                if(fullText.contains("<CsFileB")) {
-                    qDebug() << ">>>>>>>>>>>>>>> CsFileB";
-                    QFile file(fileName);
-                    if (file.open(QFile::ReadOnly)) {
-                        int result = csdFile.write(file.readAll());
-                        file.close();
-                        if (result<=0) {
-                            qDebug()<< "Failed to copy to example to temporary location";
-                            return;
-                        }
-                    } else {
-                        qDebug()<<"Could not open file " << fileName;
-                    }
+                if(!fullText.contains("<CsFileB")) {
+                    csdFile.write(fullText.toLatin1());
                 } else {
-                    qDebug() << ">>>>>>>>>>>>>>> NO CsFileB";
-                    qDebug() << fullText;
-                    QString csdText = page->getBasicText();
-                    csdFile.write(csdText.toLatin1());
+                    qDebug() << "File has embedded elements via <CsFileB> tag";
+                    QFile file(fileName);
+                    if(!file.open(QFile::ReadOnly)) {
+                        qDebug() << "Could not open file " << fileName;
+                        return;
+                    }
+                    int result = csdFile.write(file.readAll());
+                    file.close();
+                    if (result<=0) {
+                        qDebug()<< "*** ERROR: Failed to copy to example to temporary location ***";
+                        return;
+                    }
                 }
             }
             csdFile.flush();
             runFileName1 = csdFile.fileName();
         }
-    }
-    else {
-        runFileName1 = fileName;
     }
     runFileName2 = page->getCompanionFileName();
     m_options->fileName1 = runFileName1;
@@ -1950,18 +1944,18 @@ void CsoundQt::play(bool realtime, int index)
     }
     int ret = page->play(m_options);
     if (ret == -1) {
-        QMessageBox::critical(this,
-                              tr("CsoundQt"),
-                              tr("Internal error running Csound."),
+        QMessageBox::critical(this, tr("CsoundQt"), tr("Internal error running Csound."),
                               QMessageBox::Ok);
-    } else if (ret == -2) { // Error creating temporary file
+    } else if (ret == -2) {
+        // Error creating temporary file
         runAct->setChecked(false);
         qDebug() << "CsoundQt::play - Error creating temporary file";
-    } else if (ret == -3) { // Csound compilation failed
+    } else if (ret == -3) {
+        // Csound compilation failed
         runAct->setChecked(false);
-    } else if (ret == 0) { // No problem
+    } else if (ret == 0) {
+        // No problem
         if (m_options->enableWidgets && m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
-
             if (!page->usesFltk()) {
                 // Don't bring up widget panel if there's an FLTK panel
                 if (!m_options->widgetsIndependent) {
@@ -2063,9 +2057,6 @@ void CsoundQt::pause(int index)
     if (docIndex >= 0 && docIndex < documentPages.size()) {
         documentPages[docIndex]->pause();
     }
-    //  if (ud->isRunning()) {
-    //    perfThread->TogglePause();
-    //  }
 }
 
 void CsoundQt::stop(int index)
@@ -2195,8 +2186,7 @@ void CsoundQt::render()
             }
             auto outfile = m_options->fileOutputFilename;
             if (QFile::exists(outfile)) {
-                int ret = QMessageBox::warning(
-                            this, tr("CsoundQt"),
+                int ret = QMessageBox::warning(this, tr("CsoundQt"),
                             tr("The file %1 already exists.\n Do you want to overwrite it?")
                                .arg(outfile),
                             QMessageBox::Save|QMessageBox::Cancel, QMessageBox::Save);
@@ -2324,8 +2314,7 @@ void CsoundQt::setHelpEntry()
         helpPanel->focusText();
     }
     else {
-        QMessageBox::critical(this,
-                              tr("Error"),
+        QMessageBox::critical(this, tr("Error"),
                               tr("HTML Documentation directory not set!\n"
                                  "Please go to Edit->Options->Environment and select directory\n"));
     }
@@ -2466,7 +2455,8 @@ void CsoundQt::showVirtualKeyboard(bool show)
                 this, SLOT(virtualMidiIn(QVariant, QVariant, QVariant, QVariant)));
         connect(rootObject, SIGNAL(newCCvalue(int,int,int)), this, SLOT(virtualCCIn(int, int, int)));
         m_virtualKeyboard->setVisible(true);
-        connect(m_virtualKeyboard, SIGNAL(destroyed(QObject*)), this, SLOT(virtualKeyboardActOff(QObject*)));
+        connect(m_virtualKeyboard, SIGNAL(destroyed(QObject*)),
+                this, SLOT(virtualKeyboardActOff(QObject*)));
     } else if (!m_virtualKeyboardPointer.isNull()) { // check if object still existing (i.e not on exit)
         m_virtualKeyboard->setVisible(false);
         m_virtualKeyboard->close();
@@ -2518,7 +2508,8 @@ void CsoundQt::virtualKeyboardActOff(QObject *parent)
     (void) parent;
 #ifdef USE_QT_GT_53
     //qDebug()<<"VirtualKeyboard destroyed";
-    if (!m_virtualKeyboardPointer.isNull()) { // check if object still existing (i.e application not exiting)
+    if (!m_virtualKeyboardPointer.isNull()) {
+        // check if object still existing (i.e application not exiting)
         if (showVirtualKeyboardAct->isChecked()) {
             showVirtualKeyboardAct->setChecked(false);
         }
