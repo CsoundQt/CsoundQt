@@ -62,7 +62,7 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
     setProperty("QCS_randomizableMode", "both");
 
     setProperty("QCS_bordermode", "noborder");
-
+    setProperty("QCS_borderColor", "#00FF00");
 
 }
 
@@ -145,6 +145,7 @@ QString QuteMeter::getWidgetXmlText()
     s.writeEndElement();
 
     s.writeTextElement("bordermode", property("QCS_bordermode").toString());
+    s.writeTextElement("borderColor", property("QCS_borderColor").toString());
 
     QColor color = property("QCS_color").value<QColor>();
     s.writeStartElement("color");
@@ -349,13 +350,6 @@ void QuteMeter::createPropertiesDialog()
     colorButton->setColor(static_cast<MeterWidget *>(m_widget)->getColor());
     layout->addWidget(colorButton, 5,1, Qt::AlignLeft|Qt::AlignVCenter);
 
-    // QPixmap pixmap(64,64);
-    // pixmap.fill(static_cast<MeterWidget *>(m_widget)->getColor());
-    // colorButton->setIcon(pixmap);
-    // QPalette palette(static_cast<MeterWidget *>(m_widget)->getColor());
-    // palette.color(QPalette::Window);
-    // colorButton->setPalette(palette);
-
     bgColorCheckBox = new QCheckBox("Background", dialog);
     bgColorCheckBox->setChecked(property("QCS_bgcolormode").toBool());
     layout->addWidget(bgColorCheckBox, 5, 2, Qt::AlignVCenter);
@@ -370,6 +364,12 @@ void QuteMeter::createPropertiesDialog()
     borderCheckBox->setCheckState(
         property("QCS_bordermode").toString()=="border" ? Qt::Checked : Qt::Unchecked);
     layout->addWidget(borderCheckBox, 5, 4, Qt::AlignLeft|Qt::AlignVCenter);
+
+    borderColorButton = new SelectColorButton(dialog);
+    // qDebug() << "--------------- borderColor " << property(")
+    borderColorButton->setColor(QColor(property("QCS_borderColor").toString()));
+    layout->addWidget(borderColorButton, 5, 5, Qt::AlignLeft|Qt::AlignVCenter);
+
     label = new QLabel(dialog);
     label->setText("Type");
     label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
@@ -528,6 +528,7 @@ void QuteMeter::applyProperties()
     setProperty("QCS_yMin", m_yMinBox->value());
     setProperty("QCS_yMax", m_yMaxBox->value());
     setProperty("QCS_bordermode", borderCheckBox->checkState()?"border":"noborder");
+    setProperty("QCS_borderColor", borderColorButton->getColor().name());
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.unlock();
 #endif
@@ -558,6 +559,7 @@ void QuteMeter::applyInternalProperties()
                      property("QCS_yMin").toDouble(),
                      property("QCS_yMax").toDouble());
     meter->showBorder(property("QCS_bordermode").toString()=="border");
+    meter->setBorderColor(QColor(property("QCS_borderColor").toString()));
 
     m_value = property("QCS_xValue").toDouble();
     m_value2 = property("QCS_yValue").toDouble();
@@ -646,6 +648,11 @@ QColor MeterWidget::getColor()
 QColor MeterWidget::getBgColor()
 {
     return m_scene->backgroundBrush().color();
+}
+
+QColor MeterWidget::getBorderColor()
+{
+    return m_border->pen().color();
 }
 
 
@@ -843,12 +850,10 @@ void MeterWidget::setPointSize(int size)
 
 void MeterWidget::setColor(QColor color)
 {
-    //   qDebug("MeterWidget::setColor()");
     m_block->setBrush(QBrush(color));
-    // m_border->setPen(color.darker(150));
-    auto pen = m_border->pen();
-    pen.setColor(color);
-    m_border->setPen(pen);
+    // auto pen = m_border->pen();
+    // pen.setColor(color);
+    // m_border->setPen(pen);
     m_point->setPen(QPen(Qt::NoPen));
     m_point->setBrush(QBrush(color));
     m_vline->setPen(QPen(color));
@@ -858,6 +863,12 @@ void MeterWidget::setColor(QColor color)
 void MeterWidget::setBgColor(QColor color) {
     m_scene->setBackgroundBrush(color);
     m_bgcolor = color;
+}
+
+void MeterWidget::setBorderColor(QColor color) {
+    auto pen = m_border->pen();
+    pen.setColor(color);
+    m_border->setPen(pen);
 }
 
 void MeterWidget::showBackground(bool show) {

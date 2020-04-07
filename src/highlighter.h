@@ -122,6 +122,9 @@ private:
 	QTextCharFormat functionFormat;
     QTextCharFormat nameFormat;
     QTextCharFormat ioFormat;
+    QTextCharFormat deprecatedFormat;
+    QTextCharFormat operatorFormat;
+
 
 	QTextCharFormat labelFormat;
     QTextCharFormat csoundOptionFormat;
@@ -130,6 +133,10 @@ private:
     QStringList tagPatterns, headerPatterns, instPatterns,
                 keywordLiterals, htmlKeywords, javascriptKeywords,
                 csoundOptions, ioPatterns; //Csound
+    QStringList operatorPatterns;
+
+    QSet<QString> deprecatedOpcodes;
+
 
     QStringList pythonKeywords;  //Python
 	QTextCharFormat keywordFormat;

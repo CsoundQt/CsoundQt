@@ -86,6 +86,7 @@ void Highlighter::setTheme(const QString &theme) {
 
         opcodeFormat.setForeground(QColor("blue"));
         opcodeFormat.setFontWeight(QFont::Bold);
+        deprecatedFormat = opcodeFormat;
 
         singleLineCommentFormat.setForeground(QColor("green"));
         singleLineCommentFormat.setFontItalic(true);
@@ -119,6 +120,7 @@ void Highlighter::setTheme(const QString &theme) {
 
         ioFormat = opcodeFormat;
         udoFormat = opcodeFormat;
+        operatorFormat = defaultFormat;
     }
     else if(theme == "light") {
         defaultFormat.setForeground(QColor("#030303"));
@@ -138,6 +140,9 @@ void Highlighter::setTheme(const QString &theme) {
 
         opcodeFormat.setForeground(QColor("#303F9F"));
         opcodeFormat.setFontWeight(QFont::Bold);
+
+        deprecatedFormat.setForeground(QColor("#880000"));
+        deprecatedFormat.setFontUnderline(true);
 
         singleLineCommentFormat.setForeground(QColor("#8F8F7F"));
         singleLineCommentFormat.setFontItalic(true);
@@ -173,19 +178,22 @@ void Highlighter::setTheme(const QString &theme) {
         quotationFormat.setForeground(QColor("#827717"));
         multiLineCommentFormat.setForeground(quotationFormat.foreground());
 
-        ioFormat.setForeground(opcodeFormat.foreground().color().lighter(150));
+        ioFormat.setForeground(QColor("#8844BB"));
         ioFormat.setFontWeight(QFont::Bold);
-        ioFormat.setFontItalic(true);
+        // ioFormat.setFontItalic(true);
 
         udoFormat = opcodeFormat;
         udoFormat.setForeground(opcodeFormat.foreground().color().darker(150));
 
         csdtagFormat.setForeground(instFormat.foreground());
 
+        operatorFormat.setForeground(instFormat.foreground().color());
+
     }
     else if(theme == "dark") {
         defaultFormat.setForeground(QColor("#FBFBFB"));
         defaultFormat.setBackground(QColor("#161616"));
+
 
         // csdtagFormat.setFontWeight(QFont::Bold);
 
@@ -202,6 +210,11 @@ void Highlighter::setTheme(const QString &theme) {
         opcodeFormat.setForeground(QColor("#4FC3F7"));
         opcodeFormat.setFontWeight(QFont::Bold);
 
+        deprecatedFormat.setForeground(saturateColor(opcodeFormat.foreground().color(), 50));
+        deprecatedFormat.setUnderlineColor("#880000");
+        deprecatedFormat.setFontUnderline(true);
+
+
         // singleLineCommentFormat.setForeground(QColor("#9F9F8F"));
         singleLineCommentFormat.setForeground(QColor("#755CB0"));
         singleLineCommentFormat.setFontItalic(true);
@@ -211,7 +224,8 @@ void Highlighter::setTheme(const QString &theme) {
 
         pfieldFormat.setFontWeight(QFont::Bold);
 
-        krateFormat.setForeground(QColor("#EF9A9A"));
+        // krateFormat.setForeground(QColor("#EF9A9A"));
+        krateFormat.setForeground(QColor("#66EEBB"));
         irateFormat.setForeground(QColor("#FFFFFF"));
 
         // arateFormat.setForeground(QColor("#C62828"));
@@ -247,7 +261,7 @@ void Highlighter::setTheme(const QString &theme) {
 
         // ioFormat.setFontItalic(true);
         csdtagFormat.setForeground(instFormat.foreground());
-
+        operatorFormat.setForeground(nameFormat.foreground().color());
 
     }
     else {
@@ -347,6 +361,17 @@ Highlighter::Highlighter(QTextDocument *parent)
                     << "outvalue" << "invalue" << "chnget" << "chnset" << "chn_k" << "chn_a"
                     << "zaw" << "zar" << "zkw" << "zkr" << "zawm"
                     << "OSCsend" << "OSClisten" << "OSCraw" << "OSCinit";
+
+    deprecatedOpcodes << "array" << "compress" << "dcblock" << "diskin" << "flooper"
+                      << "fof" << "in32" << "inh" << "ino" << "inq" << "inrq" << "inx"
+                      << "loop_ge" << "loop_gt" << "loop_le" << "loop_lt"
+                      << "nlfilt" << "outc" << "outo" << "outq" << "outx" << "vco"
+                      << "vincr" << "vbap16" << "vbap4" << "vbap8"
+                      << "vbap4move" << "vbap8move" << "balance" << "changed"
+                      << "chani" << "chano" << "checkbox" << "cigoto" << "ckgoto"
+                      << "cngoto" << "control" << "setctrl" << "flashtxt";
+
+    operatorPatterns << "&&" << "||";
 
     csoundOptions << "-+rtaudio=" << "-+rtmidi=" << "--nodisplays" << "--nosound"
                   << "--syntax-check-only" << "--control-rate=" << "--messagelevel="
@@ -563,6 +588,16 @@ void Highlighter::highlightCsoundBlock(const QString &text)
         index += length;
     }
 
+
+    regexp = QRegExp(R"(&&|==|\|\||<|>|<=|>=|!=|\\)");
+    index = 0;
+    while ((index = regexp.indexIn(text, index)) != -1 && index < commentIndex) {
+        length = regexp.matchedLength();
+        setFormat(index, length, operatorFormat);
+        index += length;
+    }
+
+
     /*
     index = 0;
     while ((index = functionRegex.indexIn(text, index)) != -1 && index < commentIndex) {
@@ -582,12 +617,12 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 
 		if (index>0) {
 			auto prev = text.at(index - 1);
-			if (prev == '$' || prev == '#') {
-				// check if macro name - replacement for regexp solution which I could not find
-				wordStart--;
-				length++;
-				setFormat(wordStart, wordEnd - wordStart, macroDefineFormat);
-				index = text.indexOf(expression, wordEnd);
+            if (prev == '$' || prev == '#') {
+                // check if macro name - replacement for regexp solution which I could not find
+                wordStart--;
+                length++;
+                setFormat(wordStart, wordEnd - wordStart, macroDefineFormat);
+                index = text.indexOf(expression, wordEnd);
 				length = expression.matchedLength();
 				continue;
 			}
@@ -626,6 +661,9 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 		}
         else if (m_parsedUDOs.contains(word)) {
             setFormat(wordStart, wordEnd - wordStart, udoFormat);
+        }
+        else if (deprecatedOpcodes.contains(word)) {
+            setFormat(wordStart, wordEnd - wordStart, deprecatedFormat);
         }
         else if (findOpcode(word) >= 0) {
 			setFormat(wordStart, wordEnd - wordStart, opcodeFormat);

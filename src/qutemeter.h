@@ -68,6 +68,7 @@ private:
     SelectColorButton *colorButton;
     // QPushButton*  bgColorButton;
     SelectColorButton *bgColorButton;
+    SelectColorButton *borderColorButton;
 
 	QComboBox* typeComboBox;
 	QSpinBox* pointSizeSpinBox;
@@ -106,6 +107,7 @@ public:
 	void setPointSize(int size);
 	void setColor(QColor color);
     void setBgColor(QColor color);
+    void setBorderColor(QColor color);
     void showBackground(bool show);
     void showBorder(bool show) {
         if(show)
@@ -118,6 +120,7 @@ public:
 
 	QColor getColor();
     QColor getBgColor();
+    QColor getBorderColor();
 
 	QString getType() {return m_type;}
     MeterWidgetType getMeterType() { return m_metertype; }
@@ -138,6 +141,7 @@ private:
 	bool m_mouseDown;
     bool m_showBackground;
     QColor m_bgcolor;
+    QColor m_borderColor;
 
 	QGraphicsScene* m_scene;
 
