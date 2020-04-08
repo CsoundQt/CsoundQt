@@ -471,23 +471,42 @@ void QuteButton::refreshWidget()
 void QuteButton::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
-
+    qDebug() << "QuteButton::applyInternalProperties";
     m_value = property("QCS_pressedValue").toDouble();
 	//  m_value2 = property("QCS_value2").toDouble();
 	m_stringValue = property("QCS_stringvalue").toString();
 	QString type = property("QCS_type").toString();
-    static_cast<QPushButton *>(m_widget)->setCheckable(property("QCS_latch").toBool());
+    auto w = static_cast<QPushButton*>(m_widget);
+    w->setCheckable(property("QCS_latch").toBool());
     // Set icon here, because it can be overwritten if button is "pict"
     if (property("QCS_latch").toBool()) {
-        static_cast<QPushButton *>(m_widget)->setIcon(onIcon);
+        w->setIcon(onIcon);
     } else {
-        static_cast<QPushButton *>(m_widget)->setIcon(QIcon());
+        w->setIcon(QIcon());
     }
 
     if (type == "event" || type == "value") {
         icon = QIcon();
 		static_cast<QPushButton *>(m_widget)->setIcon(icon);
+        auto fontsizeProperty = property("QCS_fontsize");
+        if(!fontsizeProperty.isValid()) {
+            qDebug() << "Button: fontsize invalid / not present. Setting to default";
+        } else {
+            int fontsize = fontsizeProperty.toInt();
+            if(fontsize <= 0)
+                qDebug() << "Invalid font size for button, skipping";
+            else {
+
+                auto sheet = QString("QPushButton {font-size: %1pt; }").arg(fontsize);
+                w->setStyleSheet(sheet);
+            }
+        }
+        w->setText(property("QCS_text").toString());
+
     } else if (type == "pictevent" || type == "pictvalue" || type == "pict") {
+        qDebug() << "///////////////////////////";
+        w->setStyleSheet(nullptr);
+        w->setText("");
 		icon = QIcon(QPixmap(property("QCS_image").toString()));
 		static_cast<QPushButton *>(m_widget)->setIcon(icon);
 		static_cast<QPushButton *>(m_widget)->setIconSize(QSize(width(),height()));
@@ -496,28 +515,85 @@ void QuteButton::applyInternalProperties()
                  << type;
 	}
 
-    auto w = static_cast<QPushButton*>(m_widget);
-    w->setText(property("QCS_text").toString());
-
-    auto fontsizeProperty = property("QCS_fontsize");
-    if(!fontsizeProperty.isValid()) {
-        qDebug() << "Button: fontsize invalid / not present. Setting to default";
-    } else {
-        int fontsize = fontsizeProperty.toInt();
-        if(fontsize <= 0)
-            qDebug() << "Invalid font size for button, skipping";
-        else {
-            // auto font = w->font();
-            // font.setPointSize(fontsize);
-            // w->setFont(font);
-            auto sheet = QString("QPushButton {font-size: %1pt; }").arg(fontsize);
-            w->setStyleSheet(sheet);
-        }
-    }
 
     // Why is this here?
     // QString colorstr = property("QCS_color").value<QColor>().name();
     // m_widget->setStyleSheet("QPushButton { border-color:" + colorstr + "; }");
+}
+
+
+void QuteButton::performAction() {
+    QString type = property("QCS_type").toString();
+    QString eventLine = property("QCS_eventLine").toString();
+    QString name = m_channel;
+
+    if (type == "event" || type == "pictevent") {
+        if (property("QCS_latch").toBool() && eventLine.size() > 0) {
+            QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+            if (lineElements.size() > 0 && lineElements[0] == "i") {
+                lineElements.removeAt(0); // Remove first element if it is "i"
+            }
+            else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
+                lineElements[0] = lineElements[0].mid(1); // Remove "i" character
+            }
+            // If duration is negative, use button to turn note on and off
+            if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) {
+                if (m_currentValue == 0) { // Button has turned off. Turn off instrument
+                    if ( lineElements[0].startsWith("\"") || lineElements[0].startsWith("\'")  ) {
+                        //qDebug()<<"Stopping named instrument: " << lineElements[0];
+                        lineElements[0].insert(1,"-");
+                    }
+                    else {
+                        // NB! what if string? find out instrument number
+                        lineElements[0].prepend("-");
+                    }
+                    lineElements.prepend("i");
+                    setValue(1);
+                    emit(queueEventSignal(lineElements.join(" ")));
+                }
+                else { // Button has turned on. Turn on instrument
+                    setValue(0);
+                    emit(queueEventSignal(eventLine));
+                }
+            }
+            else {
+                emit(queueEventSignal(eventLine));
+            }
+        }
+        else {
+            emit(queueEventSignal(eventLine));
+        }
+    }
+    else if (type == "value" || type == "pictvalue") {
+        if (name == "_Play" &&  m_value == 1)
+            emit play();
+        else if (name == "_Play" && m_value == 0)
+            emit stop();
+        else if (name == "_Pause")
+            emit pause();
+        else if (name == "_Stop")
+            emit stop();
+        else if (name == "_Render")
+            emit render();
+        else if (name.startsWith("_Browse")) {
+            QString fileName = QFileDialog::getOpenFileName(this, tr("Select File"));
+            if (fileName != "") {
+                setProperty("QCS_stringvalue", fileName);
+                emit newValue(QPair<QString, QString>(name, fileName));
+            }
+        }
+        else if (name.startsWith("_MBrowse")) {
+            QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select File(s)"));
+            if (!fileNames.isEmpty()) {
+                QString joinedNames = fileNames.join("|");
+                setProperty("QCS_stringvalue", joinedNames);
+                emit newValue(QPair<QString, QString>(name, joinedNames));
+            }
+        }
+        else {
+            emit newValue(QPair<QString, double>(name, m_currentValue));
+        }
+    }
 }
 
 void QuteButton::buttonPressed()
@@ -525,26 +601,24 @@ void QuteButton::buttonPressed()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
-	if (m_channel.startsWith("_Browse") || m_channel.startsWith("_MBrowse")) {
-		return;
-	}
-	if (property("QCS_latch").toBool()) {
-		if (!static_cast<QPushButton *>(m_widget)->isChecked()) {
-			m_currentValue =m_value;
-		}
-		else {
-			m_currentValue = 0;
-		}
-	}
-	else {
-		m_currentValue = m_value;
-	}
 
-	QPair<QString, double> channelValue(m_channel, m_currentValue);
+    if (m_channel.startsWith("_Browse") || m_channel.startsWith("_MBrowse")) {
+		return;
+    }
+    auto w = static_cast<QPushButton *>(m_widget);
+    if (property("QCS_latch").toBool()) {
+        m_currentValue = !w->isChecked() ? m_value : 0;
+    } else {
+		m_currentValue = m_value;
+    }
+
+    QPair<QString, double> channelValue(m_channel, m_currentValue);
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-	emit newValue(channelValue);
+    // emit newValue(channelValue);
+    performAction();
+
 }
 
 void QuteButton::buttonReleased()
@@ -553,103 +627,21 @@ void QuteButton::buttonReleased()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
-	QString name = m_channel;
-	QString type = property("QCS_type").toString();
-	double value = m_value;
-	QString eventLine = property("QCS_eventLine").toString();
-	if (property("QCS_latch").toBool()) {
-		//    if (!static_cast<QPushButton *>(m_widget)->isChecked()) {
-		//      m_currentValue = 0;
-		//    }
-		//    else {
-		//      m_currentValue = value;
-		//    }
-	}
-	else {
-		m_currentValue = 0;
-	}
+    // QString name = m_channel;
+    // QString type = property("QCS_type").toString();
+    // double value = m_value;
+    // QString eventLine = property("QCS_eventLine").toString();
+
+    if (!property("QCS_latch").toBool()) {
+        m_currentValue = 0;
+    }
+
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-    if (type == "event" || type == "pictevent") {
-		if (property("QCS_latch").toBool() && eventLine.size() > 0) {
-			QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
-			if (lineElements.size() > 0 && lineElements[0] == "i") {
-				lineElements.removeAt(0); // Remove first element if it is "i"
-			}
-			else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
-				lineElements[0] = lineElements[0].mid(1); // Remove "i" character
-			}
-            // If duration is negative, use button to turn note on and off
-            if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) {
-				if (m_currentValue == 0) { // Button has turned off. Turn off instrument
-					if ( lineElements[0].startsWith("\"") || lineElements[0].startsWith("\'")  ) {
-						//qDebug()<<"Stopping named instrument: " << lineElements[0];
-						lineElements[0].insert(1,"-");
-                    }
-                    else {
-                        // NB! what if string? find out instrument number
-                        lineElements[0].prepend("-");
-					}
-					lineElements.prepend("i");
-					setValue(0);
-					emit(queueEventSignal(lineElements.join(" ")));
-                }
-                else { // Button has turned on. Turn on instrument
-					setValue(1);
-					emit(queueEventSignal(eventLine));
-				}
-            }
-            else {
-				emit(queueEventSignal(eventLine));
-			}
-		}
-		else {
-			emit(queueEventSignal(eventLine));
-		}
-	}
-    else if (type == "value" || type == "pictvalue") {
-		if (name == "_Play" &&  value == 1)
-			emit play();
-		else if (name == "_Play" && value == 0)
-			emit stop();
-		else if (name == "_Pause")
-			emit pause();
-		else if (name == "_Stop")
-			emit stop();
-		else if (name == "_Render")
-			emit render();
-		else if (name.startsWith("_Browse")) {
-			QString fileName = QFileDialog::getOpenFileName(this, tr("Select File"));
-			if (fileName != "") {
-#ifdef  USE_WIDGET_MUTEX
-				widgetLock.lockForWrite();
-#endif
-				setProperty("QCS_stringvalue", fileName);
-#ifdef  USE_WIDGET_MUTEX
-				widgetLock.unlock();
-#endif
-				emit newValue(QPair<QString, QString>(name, fileName));
-			}
-		}
-		else if (name.startsWith("_MBrowse")) {
-			QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select File(s)"));
-			if (!fileNames.isEmpty()) {
-				QString joinedNames = fileNames.join("|");
-#ifdef  USE_WIDGET_MUTEX
-				widgetLock.lockForWrite();
-#endif
-				setProperty("QCS_stringvalue", joinedNames);
-#ifdef  USE_WIDGET_MUTEX
-				widgetLock.unlock();
-#endif
-				emit newValue(QPair<QString, QString>(name, joinedNames));
-			}
-		}
-		else {
-			emit newValue(QPair<QString, double>(name, m_currentValue));
-		}
-	}
+    // performAction();
+    emit newValue(QPair<QString, double>(m_channel, m_currentValue));
+
 }
 
 void QuteButton::browseFile()

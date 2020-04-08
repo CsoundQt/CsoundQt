@@ -141,7 +141,6 @@ private:
 	bool m_mouseDown;
     bool m_showBackground;
     QColor m_bgcolor;
-    QColor m_borderColor;
 
 	QGraphicsScene* m_scene;
 

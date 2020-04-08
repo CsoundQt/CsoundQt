@@ -366,7 +366,6 @@ void QuteMeter::createPropertiesDialog()
     layout->addWidget(borderCheckBox, 5, 4, Qt::AlignLeft|Qt::AlignVCenter);
 
     borderColorButton = new SelectColorButton(dialog);
-    // qDebug() << "--------------- borderColor " << property(")
     borderColorButton->setColor(QColor(property("QCS_borderColor").toString()));
     layout->addWidget(borderColorButton, 5, 5, Qt::AlignLeft|Qt::AlignVCenter);
 

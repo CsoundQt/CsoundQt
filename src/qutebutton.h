@@ -74,7 +74,9 @@ private:
     QSpinBox  *fontSizeSpinBox;
 
 	QIcon icon;
-	QIcon onIcon;
+    QIcon onIcon;
+
+    void performAction();
 
 private slots:
 	void buttonPressed();
