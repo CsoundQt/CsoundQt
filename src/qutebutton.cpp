@@ -565,18 +565,22 @@ void QuteButton::performAction() {
         }
     }
     else if (type == "value" || type == "pictvalue") {
-        if (name == "_Play" &&  m_value == 1)
-            emit play();
-        else if (name == "_Play" && m_value == 0)
+        if(!name.startsWith("_")) {
+            emit newValue(QPair<QString, double>(name, m_currentValue));
+        }
+        else if (name == "_Play") {
+            if(m_value == 0)
+                emit stop();
+            else
+                emit play();
+        }
+        else if (name == "_Stop")
             emit stop();
         else if (name == "_Pause")
             emit pause();
-        else if (name == "_Stop")
-            emit stop();
         else if (name == "_Render")
             emit render();
         else if (name.startsWith("_Browse")) {
-            qDebug() << "------------ Browse!!";
             QString fileName = QFileDialog::getOpenFileName(this, tr("Select File"));
             if (fileName != "") {
                 setProperty("QCS_stringvalue", fileName);
@@ -593,6 +597,8 @@ void QuteButton::performAction() {
             }
         }
         else {
+            qDebug() << "Warning: Channel names starting with _ are reserved. This will "
+                        "be an error in a next release";
             emit newValue(QPair<QString, double>(name, m_currentValue));
         }
     }
@@ -617,8 +623,6 @@ void QuteButton::buttonPressed()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-    // QPair<QString, double> channelValue(m_channel, m_currentValue);
-    // emit newValue(channelValue);
     performAction();
 }
 
@@ -628,10 +632,6 @@ void QuteButton::buttonReleased()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
-    // QString name = m_channel;
-    // QString type = property("QCS_type").toString();
-    // double value = m_value;
-    // QString eventLine = property("QCS_eventLine").toString();
     if (m_channel.startsWith("_Browse") || m_channel.startsWith("_MBrowse")) {
         performAction();
         return;
@@ -643,15 +643,13 @@ void QuteButton::buttonReleased()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
-    // performAction();
     emit newValue(QPair<QString, double>(m_channel, m_currentValue));
 
 }
 
 void QuteButton::browseFile()
 {
-	//  qDebug() << "QuteButton::browseFile()";
-	QString file =  QFileDialog::getOpenFileName(this,tr("Select File"));
+    QString file =  QFileDialog::getOpenFileName(this,tr("Select File"));
 	if (file!="") {
 		filenameLineEdit->setText(file);
 	}
