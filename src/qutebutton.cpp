@@ -576,6 +576,7 @@ void QuteButton::performAction() {
         else if (name == "_Render")
             emit render();
         else if (name.startsWith("_Browse")) {
+            qDebug() << "------------ Browse!!";
             QString fileName = QFileDialog::getOpenFileName(this, tr("Select File"));
             if (fileName != "") {
                 setProperty("QCS_stringvalue", fileName);
@@ -583,6 +584,7 @@ void QuteButton::performAction() {
             }
         }
         else if (name.startsWith("_MBrowse")) {
+            // Browse multiple files
             QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Select File(s)"));
             if (!fileNames.isEmpty()) {
                 QString joinedNames = fileNames.join("|");
@@ -601,9 +603,9 @@ void QuteButton::buttonPressed()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
-
+    // open file browser on release
     if (m_channel.startsWith("_Browse") || m_channel.startsWith("_MBrowse")) {
-		return;
+        return;
     }
     auto w = static_cast<QPushButton *>(m_widget);
     if (property("QCS_latch").toBool()) {
@@ -612,13 +614,12 @@ void QuteButton::buttonPressed()
 		m_currentValue = m_value;
     }
 
-    QPair<QString, double> channelValue(m_channel, m_currentValue);
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
+    // QPair<QString, double> channelValue(m_channel, m_currentValue);
     // emit newValue(channelValue);
     performAction();
-
 }
 
 void QuteButton::buttonReleased()
@@ -631,7 +632,10 @@ void QuteButton::buttonReleased()
     // QString type = property("QCS_type").toString();
     // double value = m_value;
     // QString eventLine = property("QCS_eventLine").toString();
-
+    if (m_channel.startsWith("_Browse") || m_channel.startsWith("_MBrowse")) {
+        performAction();
+        return;
+    }
     if (!property("QCS_latch").toBool()) {
         m_currentValue = 0;
     }

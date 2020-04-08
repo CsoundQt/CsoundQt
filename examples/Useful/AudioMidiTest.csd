@@ -13,6 +13,18 @@ A4 = 442
 
 massign 0, 0
 
+opcode modified, k, k
+	kval xin
+	klast init -99999999
+	if kval != klast then
+		klast = kval
+		kout = 1
+	else
+		kout = 0
+	endif
+	xout kout
+endop
+
 instr AudioTest
 	;; kon1, kon2, kon3, kon4, kon5,kon6, kon7, kon8 init 0
 	ksignalFreq init A4
@@ -33,7 +45,7 @@ instr AudioTest
 	kdb = int(linlin(kleveldelta^ilevelExp, -60, 0, 0, 1))
 	kamp = ampdb(kdb)
 	ksignalOn = kamp > iminAmp ? 1 : 0
-	if changed(kdb) == 1 then
+	if modified(kdb) == 1 then
 		Sdisp = sprintfk("%d", kdb)
 		outvalue "dbdisp", Sdisp
 	endif
@@ -189,10 +201,11 @@ skipDisplay:
 		;; low shelf
 		aSpectrumOut pareq aSpectrumOut, 30, 0, 0.1, 1
 	endif
-	;; without this the cpu usage shoots to 100%
-	aSpectrumOut += rand:a(ampdb(-120))
+	;; without denorming the cpu usage shoots to 100% in some cases
+	denorm aSpectrumOut
+	
 	iWinType = 1 ;; 0=rect, 1=hanning
-	dispfft aSpectrumOut, 1/24, iSpectrumFFTSize, iWinType
+	dispfft aSpectrumOut, 0.04, iSpectrumFFTSize, iWinType
 
 endin
 
@@ -265,6 +278,7 @@ instr Setup
 	
 	outvalue "samplerate", sprintf("%d", sr)
 	outvalue "nchnls", sprintf("%d", nchnls)
+	
 
 	turnoff
 endin
@@ -272,9 +286,9 @@ endin
 
 </CsInstruments>
 <CsScore>
-i "AudioTest" 0 3600
-i "MidiIn"    0 3600
-i "Setup" 0.05 -1
+i "AudioTest" 0.0  3600
+i "MidiIn"    0.02 3600
+i "Setup"     0.2 -1
 e
 </CsScore>
 </CsoundSynthesizer>
@@ -283,8 +297,8 @@ e
  <objectName/>
  <x>0</x>
  <y>0</y>
- <width>707</width>
- <height>551</height>
+ <width>704</width>
+ <height>520</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -458,23 +472,25 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-0.05654466</yValue>
+  <yValue>-0.05161667</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
+  <borderColor>#272727</borderColor>
   <color>
    <r>85</r>
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -492,23 +508,25 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-0.07686389</yValue>
+  <yValue>0.13960935</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
+  <borderColor>#272727</borderColor>
   <color>
    <r>85</r>
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -563,7 +581,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>-51.00000000</value>
+  <value>-41.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -648,17 +666,19 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>76</g>
    <b>17</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>25</r>
    <g>25</g>
    <b>25</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>signaltype</objectName>
@@ -741,23 +761,25 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
+  <borderColor>#272727</borderColor>
   <color>
    <r>85</r>
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -775,23 +797,25 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
+  <borderColor>#262626</borderColor>
   <color>
    <r>85</r>
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -935,23 +959,25 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
+  <borderColor>#262626</borderColor>
   <color>
    <r>85</r>
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -969,23 +995,25 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
+  <borderColor>#272727</borderColor>
   <color>
    <r>85</r>
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1129,23 +1157,25 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
+  <borderColor>#272727</borderColor>
   <color>
    <r>85</r>
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
@@ -1163,23 +1193,25 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
+  <bordermode>border</bordermode>
+  <borderColor>#272727</borderColor>
   <color>
    <r>85</r>
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1379,17 +1411,19 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
+  <borderColor>#262626</borderColor>
   <color>
    <r>255</r>
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on2</objectName>
@@ -1433,17 +1467,19 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on3</objectName>
@@ -1487,17 +1523,19 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on4</objectName>
@@ -1541,17 +1579,19 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on5</objectName>
@@ -1595,17 +1635,19 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on6</objectName>
@@ -1649,17 +1691,19 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on7</objectName>
@@ -1703,17 +1747,19 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on8</objectName>
@@ -1757,17 +1803,19 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
    <b>39</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1874,17 +1922,19 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>154</g>
    <b>231</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>25</r>
    <g>25</g>
    <b>25</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1958,7 +2008,7 @@ e
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.28980000</value>
+  <value>0.28000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>

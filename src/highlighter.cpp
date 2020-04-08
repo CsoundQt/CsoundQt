@@ -367,7 +367,7 @@ Highlighter::Highlighter(QTextDocument *parent)
                       << "loop_ge" << "loop_gt" << "loop_le" << "loop_lt"
                       << "nlfilt" << "outc" << "outo" << "outq" << "outx" << "vco"
                       << "vincr" << "vbap16" << "vbap4" << "vbap8"
-                      << "vbap4move" << "vbap8move" << "balance" << "changed"
+                      << "vbap4move" << "vbap8move" << "balance"
                       << "chani" << "chano" << "checkbox" << "cigoto" << "ckgoto"
                       << "cngoto" << "control" << "setctrl" << "flashtxt";
 
