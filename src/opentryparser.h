@@ -47,6 +47,8 @@ public:
 	QList<Opcode> getOpcodeList(int index);
 	bool isOpcode(QString opcodeName);
 	bool getOpcodeArgNames(Node &node);
+    void setUdos(QHash<QString, Opcode>*udosMap) { m_udosMap = udosMap; }
+    Opcode findOpcode(QString opcodeName);
 
 private:
 	QString m_opcodeFile;
@@ -58,6 +60,8 @@ private:
 
 	void addOpcode(Opcode opcode);
     void addFlag(QString flag, QString description);
+
+    QHash<QString, Opcode>*m_udosMap;
 
 };
 

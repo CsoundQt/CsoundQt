@@ -26,6 +26,7 @@
 #include <QDockWidget>
 #include <QTreeWidget>
 #include <QMutex>
+#include "types.h"
 
 class TreeItem : public QTreeWidgetItem
 {
@@ -36,10 +37,15 @@ public:
 
 	int getLine() {return m_line;}
 	void setLine(int line) {m_line = line;}
+    void setInputArgs(QString args) { inargs = args; }
+    void setOutputArgs(QString args) { outargs = args; }
 
 private:
 	int m_line;
+    QString inargs;
+    QString outargs;
 };
+
 
 class Inspector : public QDockWidget
 {
@@ -50,6 +56,9 @@ public:
 	void parseText(const QString &text);
 	void parsePythonText(const QString &text);
     QStringList getParsedUDOs() { return m_opcodes; }
+    QVector<Opcode*> getUdosVector() { return udosVector; }
+    QHash<QString, Opcode>*getUdosMap() { return &udosMap; }
+
 
 protected:
 	virtual void focusInEvent (QFocusEvent * event);
@@ -67,6 +76,9 @@ private:
     // QVector<QString> m_opcodes;
     QStringList m_opcodes;
     QRegExp opcodeRegexp;
+    bool inspectLabels;
+    QHash<QString, Opcode>udosMap;
+    QVector<Opcode *>udosVector;
 
 private slots:
 	void itemActivated(QTreeWidgetItem * item, int column = 0);

@@ -71,8 +71,8 @@ void Console::appendMessage(QString msg)
 			lnr = lnr.trimmed();
 			errorLines.append(lnr.toInt());
 			qDebug() << "error line appended --- " << lnr.toInt();
-		}
-        if (messageLine.contains("Line:", Qt::CaseSensitive))  {
+        }
+        else if (messageLine.contains("Line:", Qt::CaseSensitive))  {
             // as in type erroris in csound6 like  'Line: 54 Loc: 1'
             errorTexts.append("Error");
             QStringList parts = messageLine.split(" ");  // get the line number
@@ -80,22 +80,25 @@ void Console::appendMessage(QString msg)
             errorLines.append(lnr.toInt());
             qDebug() << "error line appended --- " << lnr.toInt();
         }
-
-        if (messageLine.startsWith("B ")
+        else if (messageLine.startsWith("B ")
                 || messageLine.contains("rtevent", Qt::CaseInsensitive)
                 ||  messageLine.contains("evaluated", Qt::CaseInsensitive)) {
             setTextColor(QColor("#4040FF"));
 		}
-		if (messageLine.contains("overall samples out of range")
+        else if (messageLine.contains("overall samples out of range")
                 || messageLine.contains("disabled")
                 || messageLine.contains("error", Qt::CaseInsensitive)
                 || messageLine.contains("Found:")
                 || messageLine.contains("Line:")) { // any error
-            setTextColor(QColor("#FF4040"));
+            setTextColor(m_errorColor);
 		}
-		if (messageLine.contains("warning", Qt::CaseInsensitive)) {
+        else if (messageLine.contains("warning", Qt::CaseInsensitive)) {
             setTextColor(m_warningColor);
 		}
+        else if(messageLine.contains("sread: unexpected char")) {
+            // score error
+            setTextColor(m_errorColor);
+        }
 		insertPlainText(messageLine);
 		setTextColor(m_textColor);
 		moveCursor(QTextCursor::End);
@@ -119,9 +122,12 @@ void Console::setColors(QColor textColor, QColor bgColor)
     if(m_textColor.lightness() < m_bgColor.lightness()) {
         // dark text on light background
         m_warningColor = QColor("#AC7F00");
+        m_errorColor = QColor("#AC0000");
     }
     else {
+        // dark background
         m_warningColor = QColor("orange");
+        m_errorColor = QColor("#FF4040");
     }
 }
 

@@ -96,7 +96,7 @@
 #define DEFAULT_LOG_FILE ""
 #endif
 
-#define QCS_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n-odac -d\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 64\nnchnls = 2\n0dbfs = 1\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
+#define QCS_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n-odac\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 64\nnchnls = 2\n0dbfs = 1\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
 
 #define QDEBUG qDebug() << __FUNCTION__ << ":"
 
@@ -113,6 +113,7 @@ public:
 	QString opcodeName;
 	QString inArgs;
 	QString desc;
+    int isFlag;
 };
 
 class RingBuffer

@@ -296,6 +296,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
     fillScriptsMenu();  // Must be placed after readSettings to know directory
     m_opcodeTree = new OpEntryParser(":/opcodes.xml");
+    m_opcodeTree->setUdos(m_inspector->getUdosMap());
     LiveCodeEditor *liveeditor = new LiveCodeEditor(m_scratchPad, m_opcodeTree);
     liveeditor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     connect(liveeditor, SIGNAL(evaluate(QString)), this, SLOT(evaluate(QString)));

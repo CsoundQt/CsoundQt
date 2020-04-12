@@ -956,20 +956,22 @@ void CsoundEngine::stopCsound()
         }
     }
 
+
+
     if(pt->GetStatus() <= 0) {
         QDEBUG << "Csound's performance thread failed to stop, stopping csound";
         locker.unlock();
         csoundMutex.lock();
-        csoundStop(ud->csound);
-        QDEBUG << "Csound stopped";
-        ud->perfThread = nullptr;
         pt->SetProcessCallback(nullptr, nullptr);
-        delete pt;
+        QThread::msleep(200);
+        QDEBUG << "Destroying csound...";
+        // delete pt;
+        csoundDestroy(ud->csound);
+        QDEBUG << "Destroyed ok";
+        ud->perfThread = nullptr;
         csoundMutex.unlock();
-        this->cleanupCsound();
-        QDEBUG << "Cleaned up OK, emiting stop signal";
         emit stopSignal();
-        QDEBUG << "Stopped OK";
+        QDEBUG << "Stopped OK...";
         return;
     }
 

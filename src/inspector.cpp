@@ -21,6 +21,7 @@
 */
 
 #include "inspector.h"
+#include "types.h"
 
 #include <QtGui>
 
@@ -45,12 +46,13 @@ Inspector::Inspector(QWidget *parent)
 	treeItem4 = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
 	treeItem5 = new TreeItem(m_treeWidget, QStringList(tr("Score")));
 
-	m_treeWidget->expandItem(treeItem1);
-	m_treeWidget->expandItem(treeItem2);
-	m_treeWidget->expandItem(treeItem3);
-	m_treeWidget->expandItem(treeItem4);
-	m_treeWidget->expandItem(treeItem5);
+    m_treeWidget->expandItem(treeItem1);    // opcodes
+    m_treeWidget->collapseItem(treeItem2);  // macros
+    m_treeWidget->expandItem(treeItem3);    // instruments
+    m_treeWidget->collapseItem(treeItem4);  // ftables
+    m_treeWidget->collapseItem(treeItem5);    // score
     opcodeRegexp = QRegExp("\\bopcode\\s+(\\w+)\\b");
+    inspectLabels = false;
 }
 
 
@@ -63,6 +65,8 @@ void Inspector::parseText(const QString &text)
 {
 	//  qDebug() << "Inspector::parseText";
     // m_opcodes.clear();
+    udosMap.clear();
+    udosVector.clear();
 	inspectorMutex.lock();
 	bool treeItem1Expanded = true;
 	bool treeItem2Expanded = true;
@@ -98,11 +102,13 @@ void Inspector::parseText(const QString &text)
 	treeItem5->setLine(-1);  // This might be overridden below
 	treeItem5->setBackground(0, Qt::lightGray);
 	TreeItem *currentInstrument = treeItem3;
+    Opcode *currentOpcode = nullptr;
 	int commentIndex = 0;
     int index;
 	bool partOfComment = false;
 	QStringList lines = text.split(QRegExp("[\n\r]"));
     QString line;
+    auto xinRegexp = QRegExp("\\bxin\\b");
 	for (int i = 0; i< lines.size(); i++) {
         line = lines[i].trimmed();
 		if (!partOfComment && lines[i].indexOf("/*") != -1) {
@@ -119,7 +125,6 @@ void Inspector::parseText(const QString &text)
 		}
         if (line.startsWith("instr")) {
             QString text = line.mid(line.indexOf("instr") + 6);
-            // QStringList columnslist(QString("instr %1").arg(text).simplified());
             QStringList columnslist(text.simplified());
 			TreeItem *newItem = new TreeItem(treeItem3, columnslist);
 			newItem->setLine(i + 1);
@@ -137,6 +142,14 @@ void Inspector::parseText(const QString &text)
             // everything between instruments is placed in the main instrument menu
             currentInstrument = treeItem3;
 		}
+        else if (line.startsWith("endop")) {
+            if(currentOpcode != nullptr) {
+                udosMap.insert(currentOpcode->opcodeName, *currentOpcode);
+                udosVector << currentOpcode;
+                currentOpcode = nullptr;
+            }
+
+        }
         else if ((index = opcodeRegexp.indexIn(line, 0)) != -1) {
             auto opcodeName = opcodeRegexp.cap(1);
             QString text = line.simplified();
@@ -149,6 +162,26 @@ void Inspector::parseText(const QString &text)
             newItem->setLine(i + 1);
             currentInstrument = newItem;
             newItem->setBackground(0, QColor(240, 240, 240));
+            currentOpcode = new Opcode();
+            currentOpcode->opcodeName = opcodeName;
+        }
+        else if ((index = xinRegexp.indexIn(line, 0)) != -1
+                 && !partOfComment
+                 && currentOpcode != nullptr) {
+            currentOpcode->inArgs = line.mid(0, index).simplified();
+            QStringList columnslist(line.simplified());
+            TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
+            newItem->setLine(i + 1);
+            newItem->setForeground(0, QColor("darkBlue"));
+        }
+        else if ((index = QRegExp("\\bxout\\b").indexIn(line, 0)) != -1
+                 && !partOfComment
+                 && currentOpcode != nullptr) {
+            currentOpcode->outArgs = line.mid(0, index).simplified();
+            QStringList columnslist(line.simplified());
+            TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
+            newItem->setLine(i + 1);
+            newItem->setForeground(0, QColor("darkBlue"));
         }
         else if (line.startsWith("#define")) {
             QString text = line.simplified().mid(8);
@@ -178,7 +211,8 @@ void Inspector::parseText(const QString &text)
 			newItem->setLine(i + 1);
 		}
         // label
-        else if (line.contains(QRegExp("^\\s*\\b\\w+:"))
+        else if (inspectLabels
+                 && line.contains(QRegExp("^\\s*\\b\\w+:"))
 				 && (!partOfComment || commentIndex > lines[i].indexOf(":")) ) {
             QString text = line;
 			QStringList columnslist(text.simplified());
