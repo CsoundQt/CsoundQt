@@ -1068,34 +1068,45 @@ void WidgetLayout::showWidgetTooltips(bool show)
 void WidgetLayout::setWidgetToolTip(QuteWidget *widget, bool show)
 {
     // This function must be protected/locked by the caller
-    if (show) {
-        if (widget->getChannel2Name() != "") {
-            QString text = tr("ChannelH:") + widget->getChannelName()
-                    + "\n"+ tr("ChannelV:")+ widget->getChannel2Name();
-            widget->setToolTip(text);
-            if (getEditWidget(widget) != nullptr) {
-                getEditWidget(widget)->setToolTip(text);
-            }
-        }
-        else {
-            QString text = tr("Channel:") + widget->getChannelName() + "\n";
-            int midicc = widget->property("QCS_midicc").toInt();
-            int midichan = widget->property("QCS_midichan").toInt();
-            if (midichan > 0) {
-                text += QString(tr("MIDI chan: %1 CC: %2")).arg(midichan).arg(midicc);
-            }
-            widget->setToolTip(text);
-            if (getEditWidget(widget) != nullptr) {
-                getEditWidget(widget)->setToolTip(text);
-            }
-        }
-    }
-    else {
+    if(!show) {
         widget->setToolTip("");
         if (m_editMode && getEditWidget(widget) != nullptr) {
             getEditWidget(widget)->setToolTip("");
         }
+        return;
     }
+
+    QStringList lines;
+
+    auto description = widget->getDescription();
+    if(!description.isEmpty()) {
+        lines << description;
+        lines << " ";
+    }
+
+    auto channelName = widget->getChannelName();
+    auto channel2Name = widget->getChannel2Name();
+    if(!channelName.isEmpty() && channel2Name.isEmpty()) {
+        lines << tr("Channel: ") + channelName;
+    }
+    else if(!channel2Name.isEmpty()){
+        lines << tr("ChannelH: ") + channelName + ", "
+                 + tr("ChannelV: ")+ channel2Name;
+    }
+
+    int midichan = widget->property("QCS_midichan").toInt();
+    if(midichan > 0) {
+        int midicc = widget->property("QCS_midicc").toInt();
+        lines << QString(tr("MIDI chan: %1 CC: %2")).arg(midichan).arg(midicc);
+    }
+
+    auto tooltip = lines.join("\n");
+    widget->setToolTip(tooltip);
+
+    if (getEditWidget(widget) != nullptr) {
+        getEditWidget(widget)->setToolTip(tooltip);
+    }
+
 }
 
 void WidgetLayout::setContained(bool contained)

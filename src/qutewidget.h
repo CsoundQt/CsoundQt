@@ -69,6 +69,7 @@ public:
 	virtual double getValue();
 	virtual double getValue2();
 	virtual QString getStringValue();
+    virtual QString getDescription();
 
 	QString getUuid();
 	virtual QString getWidgetType() = 0;
@@ -113,6 +114,8 @@ protected:
 	QSpinBox *hSpinBox;
 	QLabel *channelLabel;
 	QLineEdit *nameLineEdit;
+    QLineEdit *descriptionLineEdit;
+
 	QSpinBox *midiccSpinBox;
 	QSpinBox *midichanSpinBox;
 	QPushButton *midiLearnButton;
@@ -125,6 +128,7 @@ protected:
 	int m_midicc, m_midichan;
 	bool m_locked; // Allow modification of widget (properties, alignment, etc.)
     CsoundUserData *m_csoundUserData;
+    QString m_description;
 
 
 #ifdef  USE_WIDGET_MUTEX

@@ -321,16 +321,16 @@ void QuteMeter::createPropertiesDialog()
     widgetLock.lockForRead();
 #endif
     dialog->setWindowTitle("Controller");
-    channelLabel->setText("Horizontal Channel name =");
+    channelLabel->setText(tr("Horizontal Channel ="));
     channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 
-    QLabel *label = new QLabel(dialog);
-    label->setText("Vertical Channel name =");
+    QLabel *label = new QLabel(tr("Vertical Channel ="), dialog);
     layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+
     name2LineEdit = new QLineEdit(dialog);
     name2LineEdit->setText(getChannel2Name());
-    name2LineEdit->setMinimumWidth(320);
-    layout->addWidget(name2LineEdit, 4,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
+    // name2LineEdit->setMinimumWidth(320);
+    layout->addWidget(name2LineEdit, 4, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
     //  if (static_cast<MeterWidget *>(m_widget)->getType() != "point" and ((MeterWidget *)m_widget)->getType() != "crosshair") {
     //    if (((MeterWidget *)m_widget)->m_vertical) {
     //      channelLabel->setEnabled(false);

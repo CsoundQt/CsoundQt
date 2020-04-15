@@ -40,6 +40,7 @@ QuteWidget::QuteWidget(QWidget *parent):
 	m_valueChanged = false;
 	m_value2Changed = false;
 	m_locked = false;
+    m_description = "";
     // used by all widgets which need access to the api (TableDisplay)
     // TODO: adapt Scope and Graph to use this instead of implementing their own
     m_csoundUserData = nullptr;
@@ -57,6 +58,7 @@ QuteWidget::QuteWidget(QWidget *parent):
 	setProperty("QCS_visible", true);
 	setProperty("QCS_midichan", 0);
 	setProperty("QCS_midicc", -3);
+    setProperty("QCS_description", "");
 }
 
 QuteWidget::~QuteWidget()
@@ -178,6 +180,7 @@ void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
 	s.writeTextElement("visible", property("QCS_visible").toBool() ? "true":"false");
 	s.writeTextElement("midichan", QString::number(property("QCS_midichan").toInt()));
 	s.writeTextElement("midicc", QString::number(property("QCS_midicc").toInt()));
+    s.writeTextElement("description", m_description);
 }
 
 double QuteWidget::getValue()
@@ -220,6 +223,11 @@ QString QuteWidget::getStringValue()
 	return value;
 }
 
+QString QuteWidget::getDescription()
+{
+    return m_description;
+}
+
 QString QuteWidget::getCsladspaLine()
 {
 	//Widgets return empty strings when not supported
@@ -258,6 +266,7 @@ void QuteWidget::applyInternalProperties()
 	m_midichan = property("QCS_midichan").toInt();
 	setVisible(property("QCS_visible").toBool());
 	m_valueChanged = true;
+    m_description = property("QCS_description").toString();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -291,7 +300,6 @@ void QuteWidget::updateDialogWindow(int cc, int channel) // to update values fro
 	if (dialog->isVisible() && acceptsMidi()) {
 		midiccSpinBox->setValue(cc);
 		midichanSpinBox->setValue(channel);
-		//qDebug()<<"Updated MIDI values in properties dialog"<<cc<<channel;
 	}
 }
 
@@ -302,14 +310,12 @@ void QuteWidget::contextMenuEvent(QContextMenuEvent *event)
 
 void QuteWidget::popUpMenu(QPoint pos)
 {
-	//  qDebug() << "QuteWidget::popUpMenu";
-	if (m_locked) {
+    if (m_locked) {
 		return;
 	}
 	QMenu menu(this);
 	menu.addAction(propertiesAct);
 	menu.addSeparator();
-
 
 	if (!m_channel.isEmpty() || !m_channel2.isEmpty()) {
 		menu.addAction(addChn_kAct);
@@ -423,66 +429,85 @@ void QuteWidget::createPropertiesDialog()
 {
     qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n"
              << dynamicPropertyNames ();
+    int footerRow = 20;
 	dialog = new QDialog(this);
-	dialog->resize(300, 300);
+    dialog->resize(360, 300);
 	//  dialog->setModal(true);
 	layout = new QGridLayout(dialog);
-	QLabel *label = new QLabel(dialog);
-	label->setText("X =");
-	layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
-	xSpinBox = new QSpinBox(dialog);
+    QLabel *label;
+
+    label = new QLabel("X =", dialog);
+    layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    xSpinBox = new QSpinBox(dialog);
 	xSpinBox->setMaximum(9999);
 	layout->addWidget(xSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
-	label->setText("Y =");
-	layout->addWidget(label, 0, 2, Qt::AlignRight|Qt::AlignVCenter);
-	ySpinBox = new QSpinBox(dialog);
+
+    label = new QLabel("Y =", dialog);
+    layout->addWidget(label, 0, 2, Qt::AlignRight|Qt::AlignVCenter);
+
+    ySpinBox = new QSpinBox(dialog);
 	ySpinBox->setMaximum(9999);
 	layout->addWidget(ySpinBox, 0, 3, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
-	label->setText(tr("Width ="));
-	layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
-	wSpinBox = new QSpinBox(dialog);
+
+    label = new QLabel(tr("Width ="), dialog);
+    layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    wSpinBox = new QSpinBox(dialog);
 	wSpinBox->setMaximum(9999);
 	layout->addWidget(wSpinBox, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	label = new QLabel(dialog);
-	label->setText(tr("Height ="));
-	layout->addWidget(label, 1, 2, Qt::AlignRight|Qt::AlignVCenter);
-	hSpinBox = new QSpinBox(dialog);
+
+    label = new QLabel(tr("Height ="), dialog);
+    layout->addWidget(label, 1, 2, Qt::AlignRight|Qt::AlignVCenter);
+
+    hSpinBox = new QSpinBox(dialog);
 	hSpinBox->setMaximum(9999);
 	layout->addWidget(hSpinBox, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
-	channelLabel = new QLabel(dialog);
-	channelLabel->setText(tr("Channel name ="));
-    // channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
+
+    channelLabel = new QLabel(tr("Channel ="), dialog);
     layout->addWidget(channelLabel, 3, 0, Qt::AlignRight|Qt::AlignVCenter);
-	nameLineEdit = new QLineEdit(dialog);
+
+    nameLineEdit = new QLineEdit(dialog);
 	nameLineEdit->setFocus(Qt::OtherFocusReason);
 	nameLineEdit->selectAll();
-	layout->addWidget(nameLineEdit, 3, 1, Qt::AlignLeft|Qt::AlignVCenter);
-	if (acceptsMidi()) { // only when MIDI-enabled widgets
-		label = new QLabel(dialog);
-		label->setText("MIDI CC =");
-		layout->addWidget(label, 14, 0, Qt::AlignRight|Qt::AlignVCenter);
-		midiccSpinBox = new QSpinBox(dialog);
+    layout->addWidget(nameLineEdit, 3, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel(tr("Description ="), dialog);
+    layout->addWidget(label, footerRow-2, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    descriptionLineEdit = new QLineEdit(dialog);
+    descriptionLineEdit->setMinimumWidth(300);
+    layout->addWidget(descriptionLineEdit, footerRow-2, 1, 1, 4, Qt::AlignLeft|Qt::AlignVCenter);
+
+
+    if (acceptsMidi()) { // only when MIDI-enabled widgets
+        int midiRow = footerRow - 1;
+        label = new QLabel("MIDI CC =", dialog);
+        layout->addWidget(label, midiRow, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+        midiccSpinBox = new QSpinBox(dialog);
 		midiccSpinBox->setRange(0,119);
-		layout->addWidget(midiccSpinBox, 14,1, Qt::AlignLeft|Qt::AlignVCenter);
-		label = new QLabel(dialog);
-		label->setText("MIDI Channel =");
-		layout->addWidget(label, 14, 2, Qt::AlignRight|Qt::AlignVCenter);
-		midichanSpinBox = new QSpinBox(dialog);
+        layout->addWidget(midiccSpinBox, midiRow, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+        label = new QLabel("MIDI Channel =", dialog);
+        layout->addWidget(label, midiRow, 2, Qt::AlignRight|Qt::AlignVCenter);
+
+        midichanSpinBox = new QSpinBox(dialog);
 		midichanSpinBox->setRange(0,127);
-		layout->addWidget(midichanSpinBox, 14,3, Qt::AlignLeft|Qt::AlignVCenter);
+        layout->addWidget(midichanSpinBox, midiRow,3, Qt::AlignLeft|Qt::AlignVCenter);
 
 		midiLearnButton = new QPushButton(tr("Midi learn"));
-		layout->addWidget(midiLearnButton,14,4, Qt::AlignLeft|Qt::AlignVCenter);
+        layout->addWidget(midiLearnButton, midiRow, 4, Qt::AlignLeft|Qt::AlignVCenter);
 	}
 	acceptButton = new QPushButton(tr("Ok"));
 	acceptButton->setDefault(true);
-	layout->addWidget(acceptButton, 15, 3, Qt::AlignCenter|Qt::AlignVCenter);
-	applyButton = new QPushButton(tr("Apply"));
-	layout->addWidget(applyButton, 15, 1, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(acceptButton, footerRow, 3, Qt::AlignCenter|Qt::AlignVCenter);
+
+    applyButton = new QPushButton(tr("Apply"));
+    layout->addWidget(applyButton, footerRow, 1, Qt::AlignCenter|Qt::AlignVCenter);
 	cancelButton = new QPushButton(tr("Cancel"));
-	layout->addWidget(cancelButton, 15, 2, Qt::AlignCenter|Qt::AlignVCenter);
+    layout->addWidget(cancelButton, footerRow, 2, Qt::AlignCenter|Qt::AlignVCenter);
+
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -491,10 +516,11 @@ void QuteWidget::createPropertiesDialog()
 	wSpinBox->setValue(this->width());
 	hSpinBox->setValue(this->height());
 	nameLineEdit->setText(getChannelName());
+    descriptionLineEdit->setText(getDescription());
 	if (acceptsMidi()) {
-		midiccSpinBox->setValue(this->m_midicc);
-		midichanSpinBox->setValue(this->m_midichan);
-	}
+        midiccSpinBox->setValue(this->m_midicc);
+        midichanSpinBox->setValue(this->m_midichan);
+    }
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -515,6 +541,7 @@ void QuteWidget::applyProperties()
 		setProperty("QCS_midicc", midiccSpinBox->value());
 		setProperty("QCS_midichan", midichanSpinBox->value());
 	}
+    setProperty("QCS_description", descriptionLineEdit->text());
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
