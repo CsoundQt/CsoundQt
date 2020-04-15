@@ -62,11 +62,12 @@ void QVdial::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     QPoint center = this->rect().center();
+    QColor bgcolor = m_color.darker(300);
     double r = qMin(this->rect().height(), this->rect().width()) / 2.0;
     r *= 0.75;
     int const penWidth = (int)(r * 0.5);
     QPen const fgPen(m_color, penWidth, Qt::SolidLine, Qt::FlatCap);
-    QPen const bgPen(m_color.darker(300),  penWidth, Qt::SolidLine, Qt::FlatCap);
+    QPen const bgPen(bgcolor,  penWidth, Qt::SolidLine, Qt::FlatCap);
     QRectF const rect(center.x() - r, center.y() - r, r * 2, r * 2);
     int const startAngle360 = 90 + (360 - m_degrees) / 2;
     int const startAngle = startAngle360 * 16;
@@ -76,6 +77,9 @@ void QVdial::paintEvent(QPaintEvent *event) {
     painter.drawArc(rect, -startAngle, -m_degrees * 16);
     painter.setPen(fgPen);
     painter.drawArc(rect, -startAngle, -steps);
+
+    // TODO: implement this using QPainterPath
+
     if(m_draw_value && r >= 8) {
         double display_value = ((double)this->value()/(double)this->maximum()) *
                              (m_display_max - m_display_min) + m_display_min;

@@ -213,6 +213,23 @@ void QuteGraph::setValue(double value)
 	m_value2 = getTableNumForIndex((int) value);
 }
 
+void QuteGraph::setValue(QString text)
+{
+    if(text.startsWith("@find")) {
+        auto pattern = text.mid(5).trimmed();
+        int index = findCurve(pattern);
+        if(index < 0) {
+            qDebug() << "@find: display/dispfft not found";
+            return;
+        }
+        qDebug() << "-------------- Command: " << text << "found index" << index;
+        this->setValue(index);
+    } else {
+        qDebug() << "Command" << text << "not found";
+    }
+}
+
+
 void QuteGraph::refreshWidget()
 {
     bool needsUpdate = false;
@@ -349,6 +366,18 @@ void QuteGraph::applyProperties()
 	QuteWidget::applyProperties();
 }
 
+int QuteGraph::findCurve(QString text) {
+    // returns the index or -1 if not found
+    for (int i = 0; i < curves.size(); i++) {
+        QString caption = curves[i]->get_caption();
+        if (caption.contains(text)) {
+            qDebug() << "finding" << text << "found: " << caption;
+            QStringList parts = text.split(QRegExp("[ :]"), QString::SkipEmptyParts);
+            return i;
+        }
+    }
+    return -1;
+}
 
 void QuteGraph::changeCurve(int index)
 {    

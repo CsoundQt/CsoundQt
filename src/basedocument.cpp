@@ -81,6 +81,7 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
 	}
 	if (!xmlPanels.isEmpty()) {
 		//FIXME allow multiple layouts
+        qDebug() << "parseAndRemove... calling loadXmlWidgets";
         m_widgetLayouts[0]->loadXmlWidgets(xmlPanels[0]);
 		m_widgetLayouts[0]->markHistory();
         if (text.contains("<bsbPresets>") && text.contains("</bsbPresets>")) {

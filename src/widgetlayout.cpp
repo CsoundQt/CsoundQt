@@ -139,29 +139,45 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     selectAllAct = new QAction(tr("Select all widgets"), this);
     connect(selectAllAct, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-    alignLeftAct = new QAction(tr("Align Left"), this);
+    alignLeftAct = new QAction(QIcon(":/themes/common/align-horizontal-left.svg"),
+                               tr("Align Left"), this);
     connect(alignLeftAct, SIGNAL(triggered()), this, SLOT(alignLeft()));
-    alignRightAct = new QAction(tr("Align Right"), this);
+
+    alignRightAct = new QAction(QIcon(":/themes/common/align-horizontal-right.svg"),
+                                tr("Align Right"), this);
     connect(alignRightAct, SIGNAL(triggered()), this, SLOT(alignRight()));
-    alignTopAct = new QAction(tr("Align Top"), this);
+
+    alignTopAct = new QAction(QIcon(":/themes/common/align-vertical-top.svg"),
+                              tr("Align Top"), this);
     connect(alignTopAct, SIGNAL(triggered()), this, SLOT(alignTop()));
-    alignBottomAct = new QAction(tr("Align Bottom"), this);
+
+    alignBottomAct = new QAction(QIcon(":/themes/common/align-vertical-bottom.svg"),
+                                 tr("Align Bottom"), this);
     connect(alignBottomAct, SIGNAL(triggered()), this, SLOT(alignBottom()));
-    sendToBackAct = new QAction(tr("Send to back"), this);
+
+    sendToBackAct = new QAction(QIcon(":/themes/common/object-order-back.svg"),
+                                tr("Send to back"), this);
     connect(sendToBackAct, SIGNAL(triggered()), this, SLOT(sendToBack()));
-    sendToFrontAct = new QAction(tr("Send to Front"), this);
+
+    sendToFrontAct = new QAction(QIcon(":/themes/common/object-order-front.svg"),
+                                 tr("Send to Front"), this);
     connect(sendToFrontAct, SIGNAL(triggered()), this, SLOT(sendToFront()));
 
     distributeHorizontalAct = new QAction(tr("Distribute Horizontally"), this);
     connect(distributeHorizontalAct, SIGNAL(triggered()),
             this, SLOT(distributeHorizontal()));
+
     distributeVerticalAct = new QAction(tr("Distribute Vertically"), this);
     connect(distributeVerticalAct, SIGNAL(triggered()),
             this, SLOT(distributeVertical()));
-    alignCenterHorizontalAct = new QAction(tr("Center Vertically"), this);
+
+    alignCenterHorizontalAct = new QAction(QIcon(":/themes/common/align-horizontal-center.svg"),
+                                           tr("Center Horizontally"), this);
     connect(alignCenterHorizontalAct, SIGNAL(triggered()),
             this, SLOT(alignCenterHorizontal()));
-    alignCenterVerticalAct = new QAction(tr("Center Horizontally"), this);
+
+    alignCenterVerticalAct = new QAction(QIcon(":/themes/common/align-vertical-center.svg"),
+                                         tr("Center Vertically"), this);
     connect(alignCenterVerticalAct, SIGNAL(triggered()),
             this, SLOT(alignCenterVertical()));
 
@@ -1087,7 +1103,7 @@ void WidgetLayout::setContained(bool contained)
     if (m_contained == contained) {
         return;
     }
-    //  qDebug() << "WidgetLayout::setContained " << contained;
+    qDebug() << "WidgetLayout::setContained " << contained;
     m_contained = contained;
     bool bg = this->property("QCS_bg").toBool();
     QColor bgColor = this->property("QCS_bgcolor").value<QColor>();
@@ -2169,8 +2185,7 @@ void WidgetLayout::propertiesDialog()
 void WidgetLayout::applyProperties()
 {
     QColor color = bgButton->property("QCS_color").value<QColor>();
-    // remove:
-    qDebug() << color;
+    qDebug() << "WidgetLayout::applyProperties";
     setBackground(bgCheckBox->isChecked(), color);
     widgetChanged();
     mouseBut2 = 0;  // Button un clicked is not propagated after opening the edit dialog. Do it artificially here
@@ -2451,7 +2466,7 @@ void WidgetLayout::distributeVertical()
     }
 }
 
-void WidgetLayout::alignCenterVertical()
+void WidgetLayout::alignCenterHorizontal()
 {
     if (m_editMode) {
         int center = 0, min = 9999;
@@ -2477,7 +2492,7 @@ void WidgetLayout::alignCenterVertical()
     }
 }
 
-void WidgetLayout::alignCenterHorizontal()
+void WidgetLayout::alignCenterVertical()
 {
     if (m_editMode) {
         int center = 0, min = 9999;
@@ -2755,15 +2770,18 @@ int WidgetLayout::parseXmlNode(QDomNode node)
     else if (name == "bgcolor") {
         bool bg = false;
         if (node.toElement().attribute("mode")== "background") {
+            qDebug() << "background true";
             bg = true;
         }
         QDomElement er = node.toElement().firstChildElement("r");
         QDomElement eg = node.toElement().firstChildElement("g");
         QDomElement eb = node.toElement().firstChildElement("b");
-
-        setBackground(bg, QColor(er.firstChild().nodeValue().toInt(),
-                                 eg.firstChild().nodeValue().toInt(),
-                                 eb.firstChild().nodeValue().toInt()) );
+        auto bgcolor = QColor(er.firstChild().nodeValue().toInt(),
+                              eg.firstChild().nodeValue().toInt(),
+                              eb.firstChild().nodeValue().toInt());
+        auto parent = node.parentNode().nodeName();
+        qDebug() << "setting background" << parent << bgcolor << node.toElement().text();
+        setBackground(bg, bgcolor);
     }
     else if (name == "bsbObject") {
         ret = newXmlWidget(node);
@@ -3266,8 +3284,8 @@ QString WidgetLayout::createTableDisplay(int x, int y, int width, int height, QS
 
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
-    //qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor;
-    //qDebug() << "contained: " << m_contained;
+    qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor
+             << "contained: " << m_contained;
     QWidget *w;
     layoutMutex.lock();
     w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget

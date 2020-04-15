@@ -89,6 +89,16 @@
         <file>themes/breeze/pyroom.png</file>
         <file>themes/breeze/midi_keyboard.png</file>
         <file>themes/breeze/hearing.svg</file>
-
+        <file>themes/common/align-horizontal-left.svg</file>
+        <file>themes/common/align-horizontal-right.svg</file>
+        <file>themes/common/align-vertical-top.svg</file>
+        <file>themes/common/align-vertical-bottom.svg</file>
+        <file>themes/common/align-vertical-center.svg</file>
+        <file>themes/common/align-horizontal-center.svg</file>
+        <file>themes/common/object-order-front.svg</file>
+        <file>themes/common/object-order-back.svg</file>
+                            
+                
+                
     </qresource>
 </RCC>

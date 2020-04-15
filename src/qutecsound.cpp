@@ -364,6 +364,17 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // them (does it actually work?)
     qApp->processEvents();
 
+    // This is a bad idea, breaks lots of subtle things, like background color
+    // on files loaded from command line
+#ifndef  Q_OS_MAC // a workaround for showing close buttons on close NB! disable later
+    auto originalStyleSheet = qApp->styleSheet();
+    QFile file(":/appstyle-white.css");
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+    originalStyleSheet += styleSheet;
+    qApp->setStyleSheet(originalStyleSheet);
+#endif
+
     if (lastTabIndex < documentPages.size() &&
             documentTabs->currentIndex() != lastTabIndex) {
         changePage(lastTabIndex);
@@ -375,6 +386,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // Open files passed in the command line. Here to make sure they are the active tab.
     foreach (QString fileName, fileNames) {
         if (QFile::exists(fileName)) {
+            qDebug() << "loading file " << fileName;
             loadFile(fileName, m_options->autoPlay);
         }
         else {
@@ -408,13 +420,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     //qDebug()<<"Max thread count: "<< QThreadPool::globalInstance()->maxThreadCount();
     QThreadPool::globalInstance()->setMaxThreadCount(MAX_THREAD_COUNT);
-
-#ifndef  Q_OS_MAC // a workaround for showing close buttons on close NB! disable later
-    QFile file(":/appstyle-white.css");
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QLatin1String(file.readAll());
-    qApp->setStyleSheet(styleSheet);
-#endif
 
     // Open files saved from last session
     if (!lastFiles.isEmpty()) {
@@ -3145,7 +3150,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     csladspaAct->setShortcut(tr(""));
     findAct->setShortcut(tr("Ctrl+F"));
     findAgainAct->setShortcut(tr("Ctrl+G"));
-    configureAct->setShortcut(tr(""));
+    configureAct->setShortcut(tr("Ctrl+,"));
     editAct->setShortcut(tr("CTRL+E"));
     runAct->setShortcut(tr("CTRL+R"));
     runTermAct->setShortcut(tr(""));
@@ -3531,7 +3536,7 @@ void CsoundQt::createActions()
     findAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(findAct, SIGNAL(triggered()), this, SLOT(findReplace()));
 
-    findAgainAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Find a&gain"), this);
+    findAgainAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Find again"), this);
     findAgainAct->setStatusTip(tr("Find next appearance of string"));
     //   findAct->setIconText(tr("Find"));
     findAgainAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -4058,6 +4063,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(csladspaAct);
     m_keyActions.append(cabbageAct);
     m_keyActions.append(findAct);
+    m_keyActions.append(findAgainAct);
     m_keyActions.append(configureAct);
     m_keyActions.append(editAct);
     m_keyActions.append(runAct);
@@ -5559,6 +5565,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     QString text;
+    QStringList lines;
     bool inEncFile = false;
     while (!file.atEnd()) {
         QByteArray line = file.readLine();
@@ -5568,17 +5575,20 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         if (!inEncFile) {
             changeNewLines(line);
             QTextDecoder decoder(QTextCodec::codecForLocale());
-            text = text + decoder.toUnicode(line);
+            // text = text + decoder.toUnicode(line);
             if (!line.endsWith("\n"))
                 text += "\n";
+            lines << text + decoder.toUnicode(line);
         }
         else {
-            text += line;
+            // text += line;
+            lines << line;
             if (line.contains("</CsFileB>" && !line.contains("<CsFileB " )) ) {
                 inEncFile = false;
             }
         }
     }
+    text = lines.join("");
     if (m_options->autoJoin) {
         // QString companionFileName = fileName;
         if (fileName.endsWith(".orc"))
@@ -5667,11 +5677,11 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
     //			this, SLOT(setCurrentAudioFile(QString)));
     //	connect(documentPages[curPage], SIGNAL(evaluatePythonSignal(QString)),
     //			this, SLOT(evaluatePython(QString)));
-
-    documentPages[curPage]->loadTextString(text);
+    auto page = documentPages[curPage];
+    page->loadTextString(text);
     if (m_options->widgetsIndependent) {
         //		documentPages[curPage]->setWidgetLayoutOuterGeometry(documentPages[curPage]->getWidgetLayoutOuterGeometry());
-        documentPages[curPage]->getWidgetLayout()->setGeometry(documentPages[curPage]->getWidgetLayoutOuterGeometry());
+        page->getWidgetLayout()->setGeometry(page->getWidgetLayoutOuterGeometry());
     }
     //	setWidgetPanelGeometry();
 
@@ -5685,13 +5695,13 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
             recentFiles.removeLast();
         fillFileMenu();
     }
-    documentTabs->insertTab(curPage, documentPages[curPage]->getView(),"");
+    documentTabs->insertTab(curPage, page->getView(),"");
     documentTabs->setCurrentIndex(curPage);
 
-    midiHandler->addListener(documentPages[curPage]);
-    documentPages[curPage]->getEngine()->setMidiHandler(midiHandler);
+    midiHandler->addListener(page);
+    page->getEngine()->setMidiHandler(midiHandler);
 
-    setCurrentOptionsForPage(documentPages[curPage]); // Redundant but does the trick of setting the font properly now that stylesheets are being used...
+    setCurrentOptionsForPage(page); // Redundant but does the trick of setting the font properly now that stylesheets are being used...
     // storeSettings(); // try: do not store on making new page still...
     return true;
 }

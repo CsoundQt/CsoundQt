@@ -324,7 +324,11 @@ void QuteWidget::popUpMenu(QPoint pos)
 	QList<QAction *> actionList = getParentActionList();
 
 	for (int i = 0; i < actionList.size(); i++) {
-		menu.addAction(actionList[i]);
+        auto action = actionList[i];
+        if(action == nullptr)
+            menu.addSeparator();
+        else
+            menu.addAction(action);
 	}
 
 	menu.addSeparator();
@@ -531,22 +535,27 @@ QList<QAction *> QuteWidget::getParentActionList()
 	// A bit of a kludge... Must get the Widget Panel, which is the parent to the widget which
 	// holds the actual QuteWidgets
 	WidgetLayout *layout = static_cast<WidgetLayout *>(this->parentWidget());
-	actionList.append(layout->copyAct);
-	actionList.append(layout->pasteAct);
-	actionList.append(layout->cutAct);
-	actionList.append(layout->deleteAct);
-	actionList.append(layout->duplicateAct);
-	actionList.append(layout->alignLeftAct);
+    actionList.append(layout->alignLeftAct);
 	actionList.append(layout->alignRightAct);
 	actionList.append(layout->alignTopAct);
 	actionList.append(layout->alignBottomAct);
-	actionList.append(layout->sendToBackAct);
-    actionList.append(layout->sendToFrontAct);
-	actionList.append(layout->distributeHorizontalAct);
-	actionList.append(layout->distributeVerticalAct);
-	actionList.append(layout->alignCenterHorizontalAct);
+    actionList.append(nullptr);
+    actionList.append(layout->alignCenterHorizontalAct);
 	actionList.append(layout->alignCenterVerticalAct);
-	// FIXME put edit action in menu
+    actionList.append(nullptr);
+    actionList.append(layout->sendToBackAct);
+    actionList.append(layout->sendToFrontAct);
+    actionList.append(nullptr);
+    actionList.append(layout->distributeHorizontalAct);
+    actionList.append(layout->distributeVerticalAct);
+    actionList.append(nullptr);
+    actionList.append(layout->copyAct);
+    actionList.append(layout->pasteAct);
+    actionList.append(layout->cutAct);
+    actionList.append(layout->deleteAct);
+    actionList.append(layout->duplicateAct);
+
+    // FIXME put edit action in menu
 	//  actionList.append(layout->editAct);
 	return actionList;
 }

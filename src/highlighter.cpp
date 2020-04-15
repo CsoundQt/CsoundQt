@@ -121,10 +121,11 @@ void Highlighter::setTheme(const QString &theme) {
         ioFormat = opcodeFormat;
         udoFormat = opcodeFormat;
         operatorFormat = defaultFormat;
+        importantCommentFormat = singleLineCommentFormat;
     }
     else if(theme == "light") {
         defaultFormat.setForeground(QColor("#030303"));
-        defaultFormat.setBackground(QColor("#FCFCFC"));
+        defaultFormat.setBackground(QColor("#F9F9F9"));
 
         // csdtagFormat.setFontWeight(QFont::Bold);
 
@@ -146,6 +147,12 @@ void Highlighter::setTheme(const QString &theme) {
 
         singleLineCommentFormat.setForeground(QColor("#8F8F7F"));
         singleLineCommentFormat.setFontItalic(true);
+
+
+        importantCommentFormat.setBackground(QColor("#FFFFA0"));
+        importantCommentFormat.setForeground(
+                    singleLineCommentFormat.foreground().color().darker(150));
+        // importantCommentFormat.setFontItalic(true);
 
         macroDefineFormat.setForeground(QColor("#00695C"));
         macroDefineFormat.setFontWeight(QFont::Bold);
@@ -218,6 +225,10 @@ void Highlighter::setTheme(const QString &theme) {
         // singleLineCommentFormat.setForeground(QColor("#9F9F8F"));
         singleLineCommentFormat.setForeground(QColor("#755CB0"));
         singleLineCommentFormat.setFontItalic(true);
+
+        importantCommentFormat.setBackground(defaultFormat.background().color().lighter(140));
+        importantCommentFormat.setForeground(
+                    singleLineCommentFormat.foreground().color().lighter(175));
 
         macroDefineFormat.setForeground(QColor("#F06292"));
         macroDefineFormat.setFontWeight(QFont::Bold);
@@ -522,21 +533,23 @@ void Highlighter::highlightBlock(const QString &text)
 }
 
 
-
-
 void Highlighter::highlightCsoundBlock(const QString &text)
 {
 	// text is processed one line at a time
     if(m_theme == "none")
         return;
 
-	int commentIndex = text.indexOf("//"); // try both comment markings
+    int commentIndex = text.indexOf(';'); // try both comment markings
 	if (commentIndex < 0) {
-		commentIndex = text.indexOf(';');
+        commentIndex = text.indexOf("//");
 	}
 	if (commentIndex >= 0) {
-		setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
-//		return;
+        // if(QRegExp("^\\s*;;").indexIn(text) != -1) {
+        if(text[commentIndex+1] == ';' && text.trimmed()[0] == ';') {
+            // ;; pattern, which is picked up by inspector
+            setFormat(commentIndex, text.size() - commentIndex, importantCommentFormat);
+        } else
+            setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
 	}
 	else {
 		commentIndex = text.size() + 1;

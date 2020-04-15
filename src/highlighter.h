@@ -116,7 +116,7 @@ private:
 	QTextCharFormat irateFormat, krateFormat, arateFormat, girateFormat, gkrateFormat, garateFormat;
 	QTextCharFormat stringVarFormat, gstringVarFormat, fsigFormat, gfsigFormat;
     QTextCharFormat opcodeFormat, udoFormat, macroDefineFormat, pfieldFormat;
-	QTextCharFormat singleLineCommentFormat;
+    QTextCharFormat singleLineCommentFormat, importantCommentFormat;
 	QTextCharFormat multiLineCommentFormat;
 	QTextCharFormat quotationFormat;
 	QTextCharFormat functionFormat;

@@ -1,18 +1,18 @@
 QMainWindow::separator {
-width: 4px; /* when vertical */
-height: 4px; /* when horizontal */
+    width: 4px; /* when vertical */
+    height: 4px; /* when horizontal */
 }
 
 QFrame {
     border: 0px solid green;
-    }
+}
 
 QMainWindow::separator:hover  {
     background: #696969;
 }
 QDockWidget::title  {
     text-align: center;
-    background: #D1D1D1;
+    /* background: #D1D1D1; */
     padding-left: 0px;
 }
 

@@ -50,6 +50,8 @@ public:
     virtual QString getWidgetType();
 	virtual void setWidgetGeometry(int x,int y,int width,int height);
 	void setValue(double value);
+    void setValue(QString text);
+
 	void clearCurves();
 	void addCurve(Curve *curve);
 	int getCurveIndex(Curve * curve);
@@ -66,6 +68,7 @@ public:
                 m_label->hide();
         }
     }
+    int findCurve(QString text);
 	virtual void applyInternalProperties();
 
 protected:

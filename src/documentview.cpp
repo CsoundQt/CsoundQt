@@ -1186,12 +1186,13 @@ void DocumentView::findString(QString query)
 			query = lastSearch;
 		}
 		bool found = false;
-		if (lastCaseSensitive) {
-			found = m_mainEditor->find(query,
+        if (lastCaseSensitive) {
+            found = m_mainEditor->find(query,
 									   QTextDocument::FindCaseSensitively);
 		}
 		else
 			found = m_mainEditor->find(query);
+
 		if (!found) {
 			int ret = QMessageBox::question(this, tr("Find and replace"),
 											tr("The string was not found.\n"
@@ -1203,7 +1204,7 @@ void DocumentView::findString(QString query)
 				m_mainEditor->moveCursor(QTextCursor::Start);
 				findString();
 			}
-		}
+        }
 	}
 	else { //  Split view
 		// TODO check properly for line number also from other editors
