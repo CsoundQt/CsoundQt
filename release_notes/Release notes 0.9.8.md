@@ -33,6 +33,7 @@ The source and binaries can be downloaded from: <https://github.com/CsoundQt/Cso
 * Checkbox can be resized if the platform allows this (works on linux and windows, macOS uses native checkboxes which are fixed in size)
 * Added a setting to control the update rate of the gui
 * Graph widget (Spectrogram) can control the zoom with keyboard shortcuts (+, -). Also scrollbars can be hidden (user can scroll with scrollwheel/arrow keys)
+* New action "goto line"
 
 ### Fixes
 
