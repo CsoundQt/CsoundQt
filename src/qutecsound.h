@@ -293,6 +293,7 @@ private slots:
             return nullptr;
         return documentPages[curPage];
     }
+    void gotoLineDialog();
 
 #ifdef QCS_DEBUGGER
 	void runDebugger();
@@ -482,6 +483,7 @@ private:
 	QAction *unindentAct;
 	QAction *killLineAct;
 	QAction *killToEndAct;
+    QAction *gotoLineAct;
 	QAction *aboutAct;
 	QAction *donateAct;
 	//    QAction *aboutQtAct;

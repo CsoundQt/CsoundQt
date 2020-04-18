@@ -1800,9 +1800,9 @@ void CsoundQt::play(bool realtime, int index)
         return;
     }
     curPage = index;
-    auto page = documentPages[index];
+    auto page = documentPages[curPage];
 
-    if (documentPages[curPage]->getFileName().isEmpty()) {
+    if (page->getFileName().isEmpty()) {
         int answer;
         if(!m_options->askIfTemporary)
             answer= QMessageBox::Ok;
@@ -1870,16 +1870,17 @@ void CsoundQt::play(bool realtime, int index)
         curPage = documentTabs->currentIndex();
         return;
     }
-    if (!fileName.endsWith(".csd",Qt::CaseInsensitive) && !fileName.endsWith(".py",Qt::CaseInsensitive))  {
-        if (documentPages[curPage]->askForFile)
+    if (!fileName.endsWith(".csd",Qt::CaseInsensitive)
+            && !fileName.endsWith(".py",Qt::CaseInsensitive))  {
+        if (page->askForFile)
             getCompanionFileName();
         // FIXME run orc file when sco companion is currently active
         if (fileName.endsWith(".sco",Qt::CaseInsensitive)) {
             //Must switch filename order when open file is a sco file
             fileName2 = fileName;
-            fileName = documentPages[curPage]->getCompanionFileName();
+            fileName = page->getCompanionFileName();
         } else if (fileName.endsWith(".orc",Qt::CaseInsensitive) &&
-                   documentPages[curPage]->getCompanionFileName().isEmpty()) {
+                   page->getCompanionFileName().isEmpty()) {
             //TODO: create empty score file
         }
         else
@@ -1950,7 +1951,7 @@ void CsoundQt::play(bool realtime, int index)
     }
     int ret = page->play(m_options);
     if (ret == -1) {
-        QMessageBox::critical(this, tr("CsoundQt"), tr("Internal error running Csound."),
+        QMessageBox::critical(this, "CsoundQt", tr("Internal error running Csound."),
                               QMessageBox::Ok);
     } else if (ret == -2) {
         // Error creating temporary file
@@ -1960,10 +1961,12 @@ void CsoundQt::play(bool realtime, int index)
         // Csound compilation failed
         runAct->setChecked(false);
     } else if (ret == 0) {
-        // No problem
+        // No problem: enable widgets
         if (m_options->enableWidgets && m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
-            if (!page->usesFltk()) {
+            if(page->usesFltk()) {
                 // Don't bring up widget panel if there's an FLTK panel
+                qDebug() << "Page uses FLTK, CsoundQt's widgets will not be shown";
+            } else {
                 if (!m_options->widgetsIndependent) {
                     if (widgetPanel->isFloating()) {
                         widgetPanel->setVisible(true);
@@ -1971,14 +1974,17 @@ void CsoundQt::play(bool realtime, int index)
                     }
                 }
                 else {
-                    documentPages[curPage]->widgetsVisible(true);
+                    page->widgetsVisible(true);
                     showWidgetsAct->setChecked(true);
                 }
                 widgetPanel->setFocus(Qt::OtherFocusReason);
-                documentPages[curPage]->showLiveEventControl(showLiveEventsAct->isChecked());
-                documentPages[curPage]->focusWidgets();
+                page->showLiveEventControl(showLiveEventsAct->isChecked());
+                page->focusWidgets();
             }
         }
+    } else {
+        qDebug() << "play: Return value not understood!";
+        return;
     }
 #if defined(QCS_QTHTML)
     if (!documentPages.isEmpty()) {
@@ -3211,6 +3217,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     raiseScratchPadAct->setShortcut(tr("Ctrl+8"));
     killLineAct->setShortcut(tr("Ctrl+K"));
     killToEndAct->setShortcut(tr("Shift+Alt+K"));
+    gotoLineAct->setShortcut(tr("Ctrl+L"));
     showOrcAct->setShortcut(tr("Shift+Alt+1"));
     showScoreAct->setShortcut(tr("Shift+Alt+2"));
     showOptionsAct->setShortcut(tr("Shift+Alt+3"));
@@ -3984,6 +3991,11 @@ void CsoundQt::createActions()
     killToEndAct->setStatusTip(tr("Delete everything from cursor to the end of the current line"));
     killToEndAct->setShortcutContext(Qt::ApplicationShortcut);
 
+    gotoLineAct = new QAction(tr("Goto Line"), this);
+    gotoLineAct->setStatusTip(tr("Go to a given line"));
+    gotoLineAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(gotoLineAct, SIGNAL(triggered()), this, SLOT(gotoLineDialog()));
+
     aboutAct = new QAction(tr("&About CsoundQt"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
     //   aboutAct->setIconText(tr("About"));
@@ -4117,6 +4129,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(midiLearnAct);
     m_keyActions.append(killLineAct);
     m_keyActions.append(killToEndAct);
+    m_keyActions.append(gotoLineAct);
     m_keyActions.append(evaluateAct);
     m_keyActions.append(evaluateSectionAct);
     m_keyActions.append(scratchPadCsdModeAct);
@@ -4142,6 +4155,7 @@ void CsoundQt::connectActions()
     disconnect(unindentAct, 0, 0, 0);
     disconnect(killLineAct, 0, 0, 0);
     disconnect(killToEndAct, 0, 0, 0);
+    // disconnect(gotoLineAct, 0, 0, 0);
     //  disconnect(findAct, 0, 0, 0);
     //  disconnect(findAgainAct, 0, 0, 0);
     connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
@@ -4150,7 +4164,7 @@ void CsoundQt::connectActions()
     connect(unindentAct, SIGNAL(triggered()), doc, SLOT(unindent()));
     connect(killLineAct, SIGNAL(triggered()), doc, SLOT(killLine()));
     connect(killToEndAct, SIGNAL(triggered()), doc, SLOT(killToEnd()));
-
+    // connect(gotoLineAct, SIGNAL(triggered()), doc, SLOT(gotoLineDialog()));
     //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
     //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
     //TODO put these back
@@ -4295,6 +4309,7 @@ void CsoundQt::createMenus()
     editMenu->addSeparator();
     editMenu->addAction(findAct);
     editMenu->addAction(findAgainAct);
+    editMenu->addAction(gotoLineAct);
     editMenu->addSeparator();
     editMenu->addAction(commentAct);
     //  editMenu->addAction(uncommentAct);
@@ -4920,7 +4935,8 @@ void CsoundQt::createToolBars()
     configureToolBar->addAction(showInspectorAct);
     // configureToolBar->addAction(showLiveEventsAct);
 #ifdef USE_QT5
-    configureToolBar->addAction(showVirtualKeyboardAct);
+    // Disable virtual keyboard until it is proven to work on all platforms
+    // configureToolBar->addAction(showVirtualKeyboardAct);
     //configureToolBar->addAction(showTableEditorAct);
 #endif
 #ifdef QCS_PYTHONQT
@@ -6579,4 +6595,9 @@ void CsoundQt::setParsedUDOs() {
     auto udos = m_inspector->getParsedUDOs();
     auto doc = documentPages[curPage];
     doc->setParsedUDOs(udos);
+}
+
+void CsoundQt::gotoLineDialog() {
+    auto doc = this->getCurrentDocumentPage();
+    doc->gotoLineDialog();
 }

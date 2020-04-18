@@ -101,7 +101,8 @@ public:
 	void createParenthesisSelection(int pos, bool paired=true);
     void setParsedUDOs(QStringList udos);
     Highlighter* getHighlighter() { return &m_highlighter; }
-
+    void gotoLine(int line);
+    void gotoLineDialog();
 
 public slots:
 	void setModified(bool mod = true);

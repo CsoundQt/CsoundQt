@@ -185,6 +185,8 @@ public:
     int widgetHistoryIndex; // Current point in history
     QString getQml();
     void parseUdos(bool force=false);
+    void gotoLine(int line);
+    void gotoLineDialog();
 
 public slots:
 	virtual int play(CsoundOptions *options);

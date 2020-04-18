@@ -888,6 +888,7 @@ void DocumentPage::gotoNextRow()
 	}
 }
 
+
 DocumentView *DocumentPage::getView()
 {
 	Q_ASSERT(m_view != 0);
@@ -1494,6 +1495,16 @@ void DocumentPage::killToEnd()
 void DocumentPage::killLine()
 {
 	m_view->killLine();
+}
+
+void DocumentPage::gotoLine(int line)
+{
+    m_view->gotoLine(line);
+}
+
+void DocumentPage::gotoLineDialog()
+{
+    m_view->gotoLineDialog();
 }
 
 void DocumentPage::setViewMode(int mode)

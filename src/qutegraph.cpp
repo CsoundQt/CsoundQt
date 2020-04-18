@@ -72,15 +72,21 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 	m_label->setPalette(palette);
 	m_label->setText("");
     m_label->setFont(QFont({"Helvetica", 7}));
-    m_label->move(110, -4);
+    m_label->move(120, -4);
 	m_label->resize(500, 25);
 	m_pageComboBox = new QComboBox(this);
-    m_pageComboBox->resize(104, 14);
+    m_pageComboBox->setMinimumWidth(120);
+    m_pageComboBox->setMaximumHeight(14);
+    // m_pageComboBox->resize(140, 14);
     m_pageComboBox->setFont(QFont({"Sans", 7}));
     m_pageComboBox->setFocusPolicy(Qt::NoFocus);
+    m_pageComboBox->setStyleSheet("QComboBox QAbstractItemView"
+                                  "{ min-width: 160px; }");
+    m_pageComboBox->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLength);
 	m_label->setFocusPolicy(Qt::NoFocus);
     m_drawGrid = true;
     m_drawTableInfo = true;
+    m_showScrollbars = true;
 	canFocus(false);
 	connect(m_pageComboBox, SIGNAL(currentIndexChanged(int)),
 			this, SLOT(indexChanged(int)));
@@ -102,6 +108,7 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
     setProperty("QCS_showSelector", true);
     setProperty("QCS_showGrid", true);
     setProperty("QCS_showTableInfo", true);
+    setProperty("QCS_showScrollbars", true);
 	setProperty("QCS_all", true);
 }
 
@@ -150,7 +157,11 @@ QString QuteGraph::getWidgetXmlText()
     s.writeTextElement("showSelector",
                        property("QCS_showSelector").toBool() ? "true" : "false");
     s.writeTextElement("showGrid", property("QCS_showGrid").toBool() ? "true" : "false");
-    s.writeTextElement("showTableInfo", property("QCS_showTableInfo").toBool()?"true":"false");
+    s.writeTextElement("showTableInfo",
+                       property("QCS_showTableInfo").toBool() ? "true" : "false");
+    s.writeTextElement("showScrollbars",
+                       property("QCS_showScrollbars").toBool() ? "true" : "false");
+
 	s.writeTextElement("all", property("QCS_all").toBool() ? "true" : "false");
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
@@ -202,6 +213,32 @@ void QuteGraph::keyPressEvent(QKeyEvent *event) {
             m_label->show();
         else
             m_label->hide();
+        event->accept();
+        break;
+    case Qt::Key_Plus:
+        setProperty("QCS_zoomx", property("QCS_zoomx").toDouble()*2);
+        applyInternalProperties();
+        event->accept();
+        break;
+    case Qt::Key_Minus:
+        setProperty("QCS_zoomx", qMax(1.0, property("QCS_zoomx").toDouble()*0.5));
+        applyInternalProperties();
+        event->accept();
+        break;
+    case Qt::Key_H:
+        QMessageBox mb;
+        mb.setText(tr("<span style=\"font-size : 12pt\">"
+                      "<ul>"
+                      "<li><code>S</code> : show Selector"
+                      "<li><code>G</code> : show Grid"
+                      "<li><code>C</code> : show table information"
+                      "<li><code>+</code> : zoom in"
+                      "<li><code>-</code> : zoom out"
+                      "</ul>"
+                      "</span>"
+                      ));
+        mb.setWindowTitle("Graph Shortcuts");
+        mb.exec();
         event->accept();
         break;
     }
@@ -316,20 +353,26 @@ void QuteGraph::createPropertiesDialog()
     showSelectorCheckBox->setText("Show Selector");
     showSelectorCheckBox->setCheckState(
                 property("QCS_showSelector").toBool()?Qt::Checked:Qt::Unchecked);
-    layout->addWidget(showSelectorCheckBox, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(showSelectorCheckBox, 9, 0, Qt::AlignLeft|Qt::AlignVCenter);
 
     showGridCheckBox = new QCheckBox(dialog);
     showGridCheckBox->setText("Show Grid");
     showGridCheckBox->setChecked(property("QCS_showGrid").toBool());
     showGridCheckBox->setToolTip("Show the grid. Has effect only for spectral graphs");
-    layout->addWidget(showGridCheckBox, 9, 1, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(showGridCheckBox, 9, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     showTableInfoCheckBox = new QCheckBox(dialog);
     showTableInfoCheckBox->setText("Show Table Information");
     showTableInfoCheckBox->setCheckState(
                 property("QCS_showTableInfo").toBool()?Qt::Checked:Qt::Unchecked);
     showTableInfoCheckBox->setToolTip("Show the grid. Has effect only for spectral graphs");
-    layout->addWidget(showTableInfoCheckBox, 9, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(showTableInfoCheckBox, 10, 0, Qt::AlignLeft|Qt::AlignVCenter);
+
+    showScrollbarsCheckBox = new QCheckBox(dialog);
+    showScrollbarsCheckBox->setText("Show Scrollbars");
+    showScrollbarsCheckBox->setCheckState(
+                property("QCS_showScrollbars").toBool()?Qt::Checked:Qt::Unchecked);
+    layout->addWidget(showScrollbarsCheckBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
@@ -351,13 +394,14 @@ void QuteGraph::applyProperties()
 	setProperty("QCS_objectName2", name2LineEdit->text());
 	setProperty("QCS_zoomx", zoomxBox->value());
 	setProperty("QCS_zoomy", zoomyBox->value());
-	setProperty("QCS_dispx", 1);
+    setProperty("QCS_dispx", 1);
 	setProperty("QCS_dispy", 1);
 	setProperty("QCS_modex", "lin");
 	setProperty("QCS_modey", "lin");
 	setProperty("QCS_all", true);
     setProperty("QCS_showSelector", showSelectorCheckBox->checkState());
     setProperty("QCS_showGrid", showGridCheckBox->checkState());
+    setProperty("QCS_showScrollbars", showScrollbarsCheckBox->isChecked());
     showTableInfo(showTableInfoCheckBox->checkState());
 
 #ifdef  USE_WIDGET_MUTEX
@@ -504,6 +548,9 @@ void QuteGraph::addCurve(Curve * curve)
 	view->setContextMenuPolicy(Qt::NoContextMenu);
     view->setScene(scene);
     view->setObjectName(curve->get_caption());
+    auto scrollbarPolicy = property("QCS_showScrollbars").toBool() ? Qt::ScrollBarAsNeeded
+                                                                   : Qt::ScrollBarAlwaysOff;
+    view->setHorizontalScrollBarPolicy(scrollbarPolicy);
     view->show();
     scene->setBackgroundBrush(QBrush(Qt::black));
     lines.append(QVector<QGraphicsLineItem *>());
@@ -519,6 +566,7 @@ void QuteGraph::addCurve(Curve * curve)
     auto gridpen = QPen(QColor(90, 90, 90));
     auto gridpen2 = QPen(QColor(60, 60, 60));
     gridpen.setCosmetic(true);
+    gridpen2.setCosmetic(true);
     QString caption = curve->get_caption();
     GraphType graphType;
     if(caption.contains("fft")) {
@@ -548,6 +596,7 @@ void QuteGraph::addCurve(Curve * curve)
             gridText->setVisible(false);
             scene->addItem(gridText);
             gridTextVectorY.append(gridText);
+
         }
 
         for (int i = 0; i < numTicksX; i++) {
@@ -576,8 +625,6 @@ void QuteGraph::addCurve(Curve * curve)
             scene->addItem(gridText);
             gridTextVectorX.append(gridText);
         }
-
-
     }
 
     m_gridlines.append(gridLinesVector);
@@ -660,13 +707,13 @@ void QuteGraph::setCurveData(Curve * curve)
         index != m_value) {
         return;
 	}
-    StackedLayoutWidget *widget_ = static_cast<StackedLayoutWidget *>(m_widget);
-	QGraphicsView *view = static_cast<QGraphicsView *>(widget_->widget(index));
-    // Refitting curves in view resets the scrollbar so we need the previous value
 
+    auto view = getView(index);
+
+    // Refitting curves in view resets the scrollbar so we need the previous value
     int viewPosx = view->horizontalScrollBar()->value();
 	int viewPosy = view->verticalScrollBar()->value();
-    // QString caption = curve->get_caption();
+
     drawGraph(curve, index);
     view->horizontalScrollBar()->setValue(viewPosx);
     view->verticalScrollBar()->setValue(viewPosy);
@@ -683,11 +730,14 @@ void QuteGraph::applyInternalProperties()
 	changeCurve(-2);  // Redraw
     m_drawGrid = property("QCS_showGrid").toBool();
     m_drawTableInfo = property("QCS_showTableInfo").toBool();
+
+    showScrollbars(property("QCS_showScrollbars").toBool());
 }
 
 void QuteGraph::drawFtablePath(Curve *curve, int index) {
     Q_ASSERT(index >= 0);
-    QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
+    QGraphicsScene *scene = this->getView(index)->scene();
+    // QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
     double max = curve->get_max();
     max = max == 0 ? 1: max;
     int curveSize = curve->get_size();
@@ -711,7 +761,7 @@ void QuteGraph::drawFtablePath(Curve *curve, int index) {
     }
     scene->clear();
     if(step > 1) {
-        pen.setWidth(0.05);
+        pen.setWidth(0);
     }
     scene->addPath(path, pen);
 }
@@ -812,6 +862,12 @@ void QuteGraph::drawSpectrumPath(Curve *curve, int index) {
         scene->addPath(gridPath, gridPen);
     }
     scene->addPath(path, pen);
+}
+
+void QuteGraph::spectrumGetPeak(Curve *curve, int index,
+                                double freq, double relativeBandwidth) {
+    qreal sr = this->getSr(44100.);
+    // TODO
 }
 
 
@@ -924,19 +980,22 @@ void QuteGraph::scaleGraph(int index)
 	//  double span = max - min;
     //  FIXME implement dispx, dispy and modex, modey
     int size = curve->get_size();
-    auto view = (QGraphicsView *) static_cast<StackedLayoutWidget *>(m_widget)->currentWidget();
-	//  view->setResizeAnchor(QGraphicsView::NoAnchor);
+    double sizef = (double)size;
+    auto view = getView(index);
+    //  view->setResizeAnchor(QGraphicsView::NoAnchor);
     auto graphType = graphtypes[index];
     if(graphType == GraphType::GRAPH_FTABLE && max != min) {
-        view->setSceneRect(0, -max*1.17, (double) size, (max - min)*1.17);
-        view->fitInView(0, -max*1.17/zoomy, (double) size/zoomx, (max - min)*1.17/zoomy);
+        double factor = 1.17;
+        view->setSceneRect(0, -max*factor - 0.05, sizef, (max - min)*factor);
+        view->fitInView(0, -max*factor/zoomy, sizef/zoomx, (max - min)*factor/zoomy);
     } else if(graphType == GraphType::GRAPH_SPECTRUM) {
-        view->setSceneRect (0, 0, size, 90.);
-        view->fitInView(0, 0, (double) size/zoomx, 90./zoomy);
+        double dbRange = 90.;
+        view->setSceneRect (0, -3, size, dbRange);
+        view->fitInView(0, -3/zoomy, sizef/zoomx, dbRange/zoomy);
     } else { //from display opcode
         view->setSceneRect (0, -1, size, 2);
         // view->fitInView(0, -10./zoomy, (double) size/zoomx, 10./zoomy);
-        view->fitInView(0, -2./zoomy, (double) size/zoomx, 2./zoomy);
+        view->fitInView(0, -2./zoomy, sizef/zoomx, 2./zoomy);
 	}
 
 }
@@ -978,6 +1037,15 @@ void QuteGraph::setInternalValue(double value)
 {
 	m_value = value;
 	m_valueChanged = true;
+}
+
+void QuteGraph::showScrollbars(bool show) {
+    auto policy = show ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff;
+    for(int i=0; i < this->curves.size(); i++) {
+        auto view = getView(i);
+        view->setHorizontalScrollBarPolicy(policy);
+    }
+    m_showScrollbars = show;
 }
 
 // ----------------------

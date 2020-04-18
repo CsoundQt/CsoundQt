@@ -70,6 +70,8 @@ public:
     }
     int findCurve(QString text);
 	virtual void applyInternalProperties();
+    void spectrumGetPeak(Curve *curve, int index,
+                         double freq, double relativeBandwidth);
 
 protected:
 	CsoundUserData *m_ud;
@@ -81,6 +83,8 @@ protected:
     QCheckBox *showSelectorCheckBox;
     QCheckBox *showGridCheckBox;
     QCheckBox *showTableInfoCheckBox;
+    QCheckBox *showScrollbarsCheckBox;
+
 	QVector<Curve *> curves;
 	QVector<QVector <QGraphicsLineItem *> > lines;
 	QVector<QGraphicsPolygonItem *> polygons;
@@ -118,6 +122,7 @@ private:
     int getIndexForTableNum(int GRAPH_FTABLE);
 	void setInternalValue(double value);
     void drawGraph(Curve *curve, int index);
+    void showScrollbars(bool show);
 
     QGraphicsView* getView(int index);
 
@@ -128,6 +133,7 @@ private:
     bool m_drawGrid;
     bool m_drawTableInfo;
     int m_numticksY;
+    bool m_showScrollbars;
 
 signals:
     void requestUpdateCurve(Curve *curve);
@@ -154,7 +160,7 @@ public:
 	{
 		QWidget *widget;
 		widget = currentWidget();
-		while (widget != 0) {
+        while (widget != nullptr) {
 			removeWidget(widget);
 			widget = currentWidget();
 		}

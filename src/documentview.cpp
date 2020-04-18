@@ -1087,6 +1087,33 @@ void DocumentView::findReplace()
 	}
 }
 
+void DocumentView::gotoLineDialog()
+{
+    auto dialog = new QDialog(this);
+    dialog->resize(300, 120);
+    dialog->setModal(true);
+    dialog->setWindowTitle(tr("Go to Line"));
+
+    auto layout = new QGridLayout(dialog);
+
+    auto label = new QLabel(tr("Go To Line: "));
+    layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    auto lineSpinBox = new QSpinBox(dialog);
+    lineSpinBox->setRange(0, 99999999);
+    layout->addWidget(lineSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    auto okButton = new QPushButton(tr("Ok"));
+    layout->addWidget(okButton, 10, 1, Qt::AlignCenter|Qt::AlignVCenter);
+    connect(okButton, &QPushButton::clicked,
+            [this, lineSpinBox](){ this->gotoLine(lineSpinBox->value()); });
+    connect(okButton, &QPushButton::clicked, [dialog](){ dialog->close(); });
+
+    lineSpinBox->setFocus();
+    lineSpinBox->selectAll();
+    dialog->show();
+}
+
 void DocumentView::getToIn()
 {
     // Change chnget/chnset to invalue/outvalue
@@ -1742,6 +1769,17 @@ void DocumentView::jumpToLine(int line)
 void DocumentView::gotoNextLine()
 {
 	m_mainEditor->moveCursor(QTextCursor::Down);
+}
+
+void DocumentView::gotoLine(int line)
+{
+    int maxlines = this->m_mainEditor->document()->blockCount();
+    if(line > maxlines)
+        line = maxlines;
+    QTextCursor cursor(m_mainEditor->document()->findBlockByLineNumber(line-1));
+    m_mainEditor->moveCursor(QTextCursor::End);
+    m_mainEditor->setTextCursor(cursor);
+
 }
 
 void DocumentView::opcodeFromMenu()

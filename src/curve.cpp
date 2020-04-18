@@ -180,7 +180,7 @@ void Curve::set_size(size_t size)
 
 void Curve::set_caption(QString caption)
 {
-	m_caption = caption;
+    m_caption = caption.trimmed();
 }
 
 void Curve::set_polarity(Polarity polarity)
