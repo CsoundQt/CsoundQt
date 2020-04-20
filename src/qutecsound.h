@@ -484,6 +484,7 @@ private:
 	QAction *killLineAct;
 	QAction *killToEndAct;
     QAction *gotoLineAct;
+    QAction *goBackAct;
 	QAction *aboutAct;
 	QAction *donateAct;
 	//    QAction *aboutQtAct;

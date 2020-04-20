@@ -3218,6 +3218,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     killLineAct->setShortcut(tr("Ctrl+K"));
     killToEndAct->setShortcut(tr("Shift+Alt+K"));
     gotoLineAct->setShortcut(tr("Ctrl+L"));
+    goBackAct->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Left));
     showOrcAct->setShortcut(tr("Shift+Alt+1"));
     showScoreAct->setShortcut(tr("Shift+Alt+2"));
     showOptionsAct->setShortcut(tr("Shift+Alt+3"));
@@ -3996,6 +3997,11 @@ void CsoundQt::createActions()
     gotoLineAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(gotoLineAct, SIGNAL(triggered()), this, SLOT(gotoLineDialog()));
 
+    goBackAct = new QAction(tr("Go Back"), this);
+    goBackAct->setStatusTip(tr("Go back to previous position"));
+    goBackAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(goBackAct, &QAction::triggered, [this]() { this->getCurrentDocumentPage()->goBackToPreviousPosition(); });
+
     aboutAct = new QAction(tr("&About CsoundQt"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
     //   aboutAct->setIconText(tr("About"));
@@ -4130,6 +4136,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(killLineAct);
     m_keyActions.append(killToEndAct);
     m_keyActions.append(gotoLineAct);
+    m_keyActions.append(goBackAct);
     m_keyActions.append(evaluateAct);
     m_keyActions.append(evaluateSectionAct);
     m_keyActions.append(scratchPadCsdModeAct);
@@ -4310,6 +4317,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(findAct);
     editMenu->addAction(findAgainAct);
     editMenu->addAction(gotoLineAct);
+    editMenu->addAction(goBackAct);
     editMenu->addSeparator();
     editMenu->addAction(commentAct);
     //  editMenu->addAction(uncommentAct);

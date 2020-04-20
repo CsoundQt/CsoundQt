@@ -1499,12 +1499,17 @@ void DocumentPage::killLine()
 
 void DocumentPage::gotoLine(int line)
 {
-    m_view->gotoLine(line);
+    m_view->jumpToLine(line);
+    // m_view->gotoLine(line);
 }
 
 void DocumentPage::gotoLineDialog()
 {
     m_view->gotoLineDialog();
+}
+
+void DocumentPage::goBackToPreviousPosition() {
+    m_view->goBackToPreviousPosition();
 }
 
 void DocumentPage::setViewMode(int mode)

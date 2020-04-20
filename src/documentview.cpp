@@ -119,6 +119,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	setAcceptDrops(true);
 
 	m_oldCursorPosition = -1; // 0 or positive, if cursor needs to be moved there
+    markCurrentPosition();
 
 }
 
@@ -130,6 +131,14 @@ DocumentView::~DocumentView()
 bool DocumentView::isModified()
 {
 	return m_isModified;
+}
+
+void DocumentView::markCurrentPosition() {
+    int pos = this->currentLine();
+    cursorPositions.push_back(pos);
+    if(cursorPositions.size() > 1000) {
+        cursorPositions.pop_front();
+    }
 }
 
 bool DocumentView::childHasFocus()
@@ -1106,7 +1115,7 @@ void DocumentView::gotoLineDialog()
     auto okButton = new QPushButton(tr("Ok"));
     layout->addWidget(okButton, 10, 1, Qt::AlignCenter|Qt::AlignVCenter);
     connect(okButton, &QPushButton::clicked,
-            [this, lineSpinBox](){ this->gotoLine(lineSpinBox->value()); });
+            [this, lineSpinBox](){ this->jumpToLine(lineSpinBox->value()); });
     connect(okButton, &QPushButton::clicked, [dialog](){ dialog->close(); });
 
     lineSpinBox->setFocus();
@@ -1737,49 +1746,39 @@ void DocumentView::unmarkErrorLines()
 	}
 }
 
-void DocumentView::jumpToLine(int line)
+
+void editorJumpToLine(TextEditor *editor, int line) {
+    int maxlines = editor->document()->blockCount();
+    if(line > maxlines)
+        line = maxlines;
+    QTextCursor cursor(editor->document()->findBlockByLineNumber(line-1));
+    editor->moveCursor(QTextCursor::End);
+    editor->setTextCursor(cursor);
+}
+
+void DocumentView::jumpToLine(int line, bool mark)
 {
+    if(mark)
+        markCurrentPosition();
 	// TODO implment for multiple views
-	if (m_viewMode < 2) {
-		int lineCount = 1;
-		QTextCursor cur = m_mainEditor->textCursor();
-		cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-		while (lineCount < line) {
-			lineCount++;
-			//       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
-			cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
-		}
-		m_mainEditor->moveCursor(QTextCursor::End); // go to end to make sure line is put at the top of text
-		m_mainEditor->setTextCursor(cur);
+    if (m_viewMode < 2) {
+        editorJumpToLine(m_mainEditor, line);
 	}
 	else {
-		int lineCount = 1;
-		QTextCursor cur = m_orcEditor->textCursor();
-		cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-		while (lineCount < line) {
-			lineCount++;
-			//       cur.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
-			cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
-		}
-		m_orcEditor->moveCursor(QTextCursor::End); // go to end to make sure line is put at the top of text
-		m_orcEditor->setTextCursor(cur);
+        editorJumpToLine(m_orcEditor, line);
 	}
+}
+
+void DocumentView::goBackToPreviousPosition() {
+    if(cursorPositions.isEmpty())
+        return;
+    int lastPos = cursorPositions.takeLast();
+    this->jumpToLine(lastPos, false);
 }
 
 void DocumentView::gotoNextLine()
 {
 	m_mainEditor->moveCursor(QTextCursor::Down);
-}
-
-void DocumentView::gotoLine(int line)
-{
-    int maxlines = this->m_mainEditor->document()->blockCount();
-    if(line > maxlines)
-        line = maxlines;
-    QTextCursor cursor(m_mainEditor->document()->findBlockByLineNumber(line-1));
-    m_mainEditor->moveCursor(QTextCursor::End);
-    m_mainEditor->setTextCursor(cursor);
-
 }
 
 void DocumentView::opcodeFromMenu()

@@ -101,8 +101,9 @@ public:
 	void createParenthesisSelection(int pos, bool paired=true);
     void setParsedUDOs(QStringList udos);
     Highlighter* getHighlighter() { return &m_highlighter; }
-    void gotoLine(int line);
     void gotoLineDialog();
+    void markCurrentPosition();
+
 
 public slots:
 	void setModified(bool mod = true);
@@ -150,9 +151,11 @@ public slots:
 
 	void markErrorLines(QList<QPair<int, QString> > lines);
 	void unmarkErrorLines();
-	void jumpToLine(int line);
+    void jumpToLine(int line, bool mark=true);
+    void goBackToPreviousPosition();
 	void gotoNextLine();
 	void opcodeFromMenu();
+
 
 	void insertChn_k(QString channel);
 
@@ -182,6 +185,8 @@ private:
 	QString lastReplace;
 	QStringList m_localVariables;
 	QStringList m_globalVariables;
+
+    QList<int> cursorPositions;
 
 	enum {
 		ORC_CONTEXT = 0,

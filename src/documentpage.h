@@ -187,6 +187,7 @@ public:
     void parseUdos(bool force=false);
     void gotoLine(int line);
     void gotoLineDialog();
+    void goBackToPreviousPosition();
 
 public slots:
 	virtual int play(CsoundOptions *options);
