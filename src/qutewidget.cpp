@@ -323,7 +323,7 @@ void QuteWidget::popUpMenu(QPoint pos)
 	}
 
 	if (acceptsMidi()) {
-        menu.addAction(tr("Midi learn"), this, SLOT(openMidiDialog)  ); //midi learn act
+        menu.addAction(tr("Midi learn"), this, SLOT(openMidiDialog()) );
 		menu.addSeparator();
 	}
 
