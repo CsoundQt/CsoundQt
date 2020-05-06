@@ -34,7 +34,7 @@ DockHelp::DockHelp(QWidget *parent)
 {
 	ui->setupUi(this);
 	findFlags = 0;
-    setWindowTitle("Opcode Help"); // titlebar and overall layout
+    setWindowTitle("Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
 
     connect(ui->toggleFindButton, SIGNAL(toggled(bool)), this, SLOT(toggleFindBarVisible(bool)));

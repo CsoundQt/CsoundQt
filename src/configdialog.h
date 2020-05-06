@@ -92,6 +92,7 @@ private slots:
 	void on_csoundMidiCheckBox_toggled(bool checked);
 	void checkRtMidiModule(QString module);
     void testAudioSetup();
+    void recommendEnvironmentSettings();
 
     void onRtModuleComboBoxChanged(int index);
 

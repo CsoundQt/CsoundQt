@@ -32,7 +32,7 @@
         <file>../examples/Miscellaneous/Rms.csd</file>
         <file>../examples/Miscellaneous/Reinit_Example.csd</file>
         <file>../examples/Miscellaneous/No_Reinit.csd</file>
-	<file>../examples/Miscellaneous/Matrix.csd</file>
+     	<file>../examples/Miscellaneous/Matrix.csd</file>
         <file>../examples/Miscellaneous/Mincer_Loop.csd</file>
         <file>../examples/Miscellaneous/Circle_Map.csd</file>
         <file>../examples/Miscellaneous/Binaural_Panning.csd</file>
@@ -161,5 +161,6 @@
         <file>appstyle-green.css</file>
         <file>appstyle-white.css</file>
         <file>../images/html5.png</file>
+        <file>../images/tools-wizard.svg</file>
     </qresource>
 </RCC>

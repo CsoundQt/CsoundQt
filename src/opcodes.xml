@@ -283,6 +283,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Generates random numbers with a user-defined limit and holds them for a period of time.</desc><synopsis>ares <opcodename>randomh</opcodename> kmin, kmax, xcps [,imode] [,ifirstval]</synopsis><synopsis>kres <opcodename>randomh</opcodename> kmin, kmax, kcps [,imode] [,ifirstval]</synopsis></opcode>
 <opcode><desc>Generates a user-controlled random number series with interpolation between each new number.</desc><synopsis>ares <opcodename>randomi</opcodename> kmin, kmax, xcps [,imode] [,ifirstval]</synopsis><synopsis>kres <opcodename>randomi</opcodename> kmin, kmax, kcps [,imode] [,ifirstval]</synopsis></opcode>
 <opcode><desc>31-bit bipolar random opcodes with controllable distribution.</desc><synopsis>ax <opcodename>rnd31</opcodename> kscl, krpow [, iseed]</synopsis><synopsis>ix <opcodename>rnd31</opcodename> iscl, irpow [, iseed]</synopsis><synopsis>kx <opcodename>rnd31</opcodename> kscl, krpow [, iseed]</synopsis></opcode>
+<opcode><desc>Sets the global rndseed value.</desc><synopsis><opcodename>seed</opcodename> ival</synopsis></opcode>
 <opcode><desc>Generate random spline curves.</desc><synopsis>ares <opcodename>rspline</opcodename> xrangeMin, xrangeMax, kcpsMin, kcpsMax</synopsis><synopsis>kres <opcodename>rspline</opcodename> krangeMin, krangeMax, kcpsMin, kcpsMax</synopsis></opcode>
 <opcode><desc>Sets the global seed value.</desc><synopsis><opcodename>seed</opcodename> ival</synopsis></opcode>
 <opcode><desc>Generates a controlled pseudo-random number series between min and max values according to a trigger.</desc><synopsis>kout <opcodename>trandom</opcodename> ktrig, kmin, kmax</synopsis></opcode>
@@ -510,7 +511,8 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <category name="Signal I/O:Software Bus">
 <opcode><desc>Reads data from the software bus</desc><synopsis>kval <opcodename>chani</opcodename> kchan</synopsis><synopsis>aval <opcodename>chani</opcodename> kchan</synopsis></opcode>
 <opcode><desc>Send data to the outwards software bus</desc><synopsis><opcodename>chano</opcodename> kval, kchan</synopsis><synopsis><opcodename>chano</opcodename> aval, kchan</synopsis></opcode>
-<opcode><desc>Declare a channel of the named software bus.</desc><synopsis> <opcodename>chn_k</opcodename> Sname, imode[, itype, idflt, imin, ima, ix, iy, iwidth, iheight, Sattributes]</synopsis><synopsis> <opcodename>chn_a</opcodename> Sname, imode</synopsis><synopsis> <opcodename>chn_S</opcodename> Sname, imode</synopsis></opcode>
+<opcode><desc>Declare a channel of the named software bus.</desc><synopsis> <opcodename>chn_k</opcodename> Sname, imode[, itype, idflt, imin, ima, ix, iy,
+      iwidth, iheight, Sattributes]</synopsis><synopsis> <opcodename>chn_a</opcodename> Sname, imode</synopsis><synopsis> <opcodename>chn_S</opcodename> Sname, imode</synopsis><synopsis> <opcodename>chn_S</opcodename> Sname, Smode</synopsis></opcode>
 <opcode><desc>Clears a number of audio output channel of the named software bus.</desc><synopsis><opcodename>chnclear</opcodename> Sname1[, Sname2,...]</synopsis></opcode>
 <opcode><desc>Export a global variable as a channel of the bus.</desc><synopsis>gival <opcodename>chnexport</opcodename> Sname, imode[, itype, idflt, imin, imax]</synopsis><synopsis>gkval <opcodename>chnexport</opcodename> Sname, imode[, itype, idflt, imin, imax]</synopsis><synopsis>gaval <opcodename>chnexport</opcodename> Sname, imode</synopsis><synopsis>gSval <opcodename>chnexport</opcodename> Sname, imode</synopsis></opcode>
 <opcode><desc>Reads data from the software bus.</desc><synopsis>ival <opcodename>chnget</opcodename> Sname</synopsis><synopsis>kval <opcodename>chnget</opcodename> Sname</synopsis><synopsis>aval <opcodename>chnget</opcodename> Sname</synopsis><synopsis>Sval <opcodename>chnget</opcodename> Sname</synopsis><synopsis>Sval <opcodename>chngetks</opcodename> Sname</synopsis><synopsis>ival[] <opcodename>chngeti</opcodename> Sname[]</synopsis><synopsis>kval[] <opcodename>chngetk</opcodename> Sname[]</synopsis><synopsis>aval[] <opcodename>chngeta</opcodename> Sname[]</synopsis><synopsis>Sval[] <opcodename>chngets</opcodename> Sname[]</synopsis></opcode>
@@ -533,7 +535,9 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Prints at k-rate using a printf() style syntax.</desc><synopsis><opcodename>printks</opcodename> &quot;string&quot;, itime [, xval1] [, xval2] [...]</synopsis></opcode>
 <opcode><desc>Prints a new value every time a control variable changes using a
       printf() style syntax.</desc><synopsis><opcodename>printks2</opcodename> &quot;string&quot;, kval</synopsis></opcode>
+<opcode><desc>Prints at k-rate using a printf() style syntax, appends a new line</desc><synopsis><opcodename>println</opcodename> &quot;string&quot;, [, xval1] [, xval2] [...]</synopsis></opcode>
 <opcode><desc>Prints at init-time using a printf() style syntax.</desc><synopsis><opcodename>prints</opcodename> &quot;string&quot; [, xval1] [, xval2] [...]</synopsis></opcode>
+<opcode><desc>Prints at k-rate using a printf() style syntax.</desc><synopsis><opcodename>printsk</opcodename> &quot;string&quot;, [, xval1] [, xval2] [...]</synopsis></opcode>
 </category>
 <category name="Signal I/O:Soundfile Queries">
 <opcode><desc>Returns the number of bits in each sample in a sound file.</desc><synopsis>ir <opcodename>filebit</opcodename> ifilcod [, iallowraw]</synopsis></opcode>
@@ -814,7 +818,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Waveshapes a signal by raising it to a variable exponent.</desc><synopsis>aout <opcodename>powershape</opcodename> ain, kShapeAmount [, ifullscale]</synopsis></opcode>
 </category>
 <category name="Signal Modifiers:Comparators and Accumulators">
-<opcode><desc>Compares audio signals or arrays</desc><synopsis>aout <opcodename>cmp</opcodename> a1, S_operator, a2</synopsis><synopsis>aout <opcodename>cmp</opcodename> a1, S_operator, kx</synopsis><synopsis>kOut[] <opcodename>cmp</opcodename> kA, S_operator, kB</synopsis><synopsis>kOut[] <opcodename>cmp</opcodename> k1, S_operator1, kIn[], S_operator2, k2</synopsis></opcode>
+<opcode><desc>Compares audio signals or arrays</desc><synopsis>aout <opcodename>cmp</opcodename> a1, S_operator, a2</synopsis><synopsis>aout <opcodename>cmp</opcodename> a1, S_operator, kb</synopsis><synopsis>kOut[] <opcodename>cmp</opcodename> kA[], S_operator, kb</synopsis><synopsis>kOut[] <opcodename>cmp</opcodename> kA[], S_operator, kB[]</synopsis><synopsis>kOut[] <opcodename>cmp</opcodename> k1, S_operator1, kIn[], S_operator2, k2</synopsis></opcode>
 <opcode><desc>Produces a signal that is the maximum of any number of input signals.</desc><synopsis>amax <opcodename>max</opcodename> ain1, ain2 [, ain3] [, ain4] [...]</synopsis><synopsis>kmax <opcodename>max</opcodename> kin1, kin2 [, kin3] [, kin4] [...]</synopsis><synopsis>imax <opcodename>max</opcodename> iin1, iin2 [, iin3] [, iin4] [...]</synopsis></opcode>
 <opcode><desc>Local maximum (or minimum) value of an incoming asig signal</desc><synopsis>knumkout <opcodename>max_k</opcodename> asig, ktrig, itype</synopsis></opcode>
 <opcode><desc>Produces a signal that is the maximum of the absolute values of any number of input signals.</desc><synopsis>amax <opcodename>maxabs</opcodename> ain1, ain2 [, ain3] [, ain4] [...]</synopsis><synopsis>kmax <opcodename>maxabs</opcodename> kin1, kin2 [, kin3] [, kin4] [...]</synopsis></opcode>
@@ -1050,6 +1054,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Reads a directory for sound files.</desc><synopsis>iNumberOfFile <opcodename>ftsamplebank</opcodename> SDirectory, iFirstTableNumber, iSkipTime, iFormat, iChannel,</synopsis><synopsis>kNumberOfFile <opcodename>ftsamplebank</opcodename> SDirectory, kFirstTableNumber, kTrigger, kSkipTime, kFormat, kChannel,</synopsis></opcode>
 <opcode><desc>Save a set of previously-allocated tables to a file.</desc><synopsis><opcodename>ftsave</opcodename> &quot;filename&quot;, iflag, ifn1 [, ifn2] [...]</synopsis></opcode>
 <opcode><desc>Save a set of previously-allocated tables to a file.</desc><synopsis><opcodename>ftsavek</opcodename> &quot;filename&quot;, ktrig, iflag, ifn1 [, ifn2] [...]</synopsis></opcode>
+<opcode><desc>Sets multiple elements of a table to a given value</desc><synopsis><opcodename>ftset</opcodename> ktablenum, kvalue [, kstart=0, kend=0, kstep=1 ]</synopsis><synopsis><opcodename>ftset</opcodename> itablenum, ivalue [, istart=0, iend=0, istep=1 ]</synopsis></opcode>
 <opcode><desc>Copy a slice from an f-table to another f-table</desc><synopsis><opcodename>ftslice</opcodename> ifnsource, ifndest [, kstart, kend, kstep ]</synopsis></opcode>
 <opcode><desc>Copy a row from a 2D array or table, with interpolation between rows</desc><synopsis>kOut[] <opcodename>getrowlin</opcodename> kMtx[], krow [, kstart, kend, kstep ]</synopsis><synopsis>kOut[] <opcodename>getrowlin</opcodename> krow, ifn, inumcols [, iskip, start, iend, istep ]</synopsis></opcode>
 <opcode><desc>Change the contents of existing function tables of any length.</desc><synopsis><opcodename>ptablew</opcodename> asig, andx, ifn [, ixmode] [, ixoff] [, iwgmode]</synopsis><synopsis><opcodename>ptablew</opcodename> isig, indx, ifn [, ixmode] [, ixoff] [, iwgmode]</synopsis><synopsis><opcodename>ptablew</opcodename> ksig, kndx, ifn [, ixmode] [, ixoff] [, iwgmode]</synopsis></opcode>
@@ -1369,7 +1374,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>Gets a MIDI note number value as octave-point-decimal value.</desc><synopsis><opcodename>midinoteonoct</opcodename> xoct, xvelocity</synopsis></opcode>
 <opcode><desc>Gets a MIDI note number as a pitch-class value.</desc><synopsis><opcodename>midinoteonpch</opcodename> xpch, xvelocity</synopsis></opcode>
 <opcode><desc>Gets a MIDI pitchbend value.</desc><synopsis><opcodename>midipitchbend</opcodename> xpitchbend [, ilow] [, ihigh]</synopsis></opcode>
-<opcode><desc>Gets a MIDI polyphonic aftertouch value.</desc><synopsis><opcodename>midipolyaftertouch</opcodename> xpolyaftertouch, xcontrollervalue [, ilow] [, ihigh]</synopsis></opcode>
+<opcode><desc>Gets a MIDI polyphonic aftertouch value.</desc><synopsis><opcodename>midipolyaftertouch</opcodename> xpolyaftertouch, xkey [, ilow] [, ihigh]</synopsis></opcode>
 <opcode><desc>Gets a MIDI program change value.</desc><synopsis><opcodename>midiprogramchange</opcodename> xprogram</synopsis></opcode>
 </category>
 <category name="Real-time MIDI:System Realtime">

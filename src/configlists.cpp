@@ -89,7 +89,7 @@ void ConfigLists::msgCallback(CSOUND *csound, int attr, const char *fmt, va_list
 
 void ConfigLists::refreshModules()
 {
-	rtMidiNames.clear();
+    rtMidiNames.clear();
 	rtAudioNames.clear();
 #ifdef CSOUND6
     CSOUND *csound = csoundCreate(nullptr);

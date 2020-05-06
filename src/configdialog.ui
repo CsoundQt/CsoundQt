@@ -116,7 +116,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -2403,55 +2403,80 @@
                 <property name="verticalSpacing">
                  <number>4</number>
                 </property>
-                <item row="11" column="0">
-                 <widget class="QLabel" name="label_28">
-                  <property name="text">
-                   <string>Favorite dir</string>
+                <item row="10" column="2">
+                 <widget class="QLineEdit" name="rawWaveLineEdit">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Used by the STK opcodes to find the raw wave files. Only relevant if you are using STK wrapper opcodes like STKBowed or STKBrass. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="14" column="0">
-                 <widget class="QLabel" name="label_36">
+                <item row="3" column="0">
+                 <widget class="QCheckBox" name="Opcodedir64CheckBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
+                  </property>
                   <property name="text">
-                   <string>Csound Executable</string>
+                   <string>OPCODEDIR64</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
-                <item row="7" column="2">
-                 <widget class="QLineEdit" name="SsdirLineEdit">
+                <item row="13" column="3">
+                 <widget class="QToolButton" name="pythonExecutableToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="2">
+                 <widget class="QLineEdit" name="SadirLineEdit">
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. May be used in conjunction with SFDIR to set separate input and output directories. Please note that MIDI files as well as audio files are also sought inside SSDIR. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>Default directory for analysis files. Used if no full path is given for analysis files. </string>
                   </property>
                  </widget>
                 </item>
-                <item row="15" column="2">
-                 <widget class="QLineEdit" name="logFileLineEdit">
+                <item row="2" column="2">
+                 <widget class="QLineEdit" name="OpcodedirLineEdit">
                   <property name="enabled">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="3">
-                 <widget class="QToolButton" name="incdirToolButton">
+                <item row="0" column="2">
+                 <widget class="QLineEdit" name="CsdocdirLineEdit">
+                  <property name="toolTip">
+                   <string>Path to the html folder with the manual</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="18" column="0">
+                 <spacer name="verticalSpacer_2">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_7">
+                  <property name="toolTip">
+                   <string>Selects the location of the html documentation</string>
+                  </property>
                   <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="11" column="2">
-                 <widget class="QLineEdit" name="favoriteLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="3">
-                 <widget class="QToolButton" name="ssdirToolButton">
-                  <property name="text">
-                   <string>...</string>
+                   <string>Html Doc Directory</string>
                   </property>
                  </widget>
                 </item>
@@ -2462,63 +2487,10 @@
                   </property>
                  </widget>
                 </item>
-                <item row="17" column="2">
-                 <widget class="QLineEdit" name="templateLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="11" column="3">
-                 <widget class="QToolButton" name="favoriteToolButton">
+                <item row="7" column="3">
+                 <widget class="QToolButton" name="ssdirToolButton">
                   <property name="text">
                    <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="2">
-                 <widget class="QLineEdit" name="IncdirLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Include directory. Specifies the location of files used by #include statements. </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="Opcode6dir64CheckBox">
-                  <property name="toolTip">
-                   <string>Defines the location of csound opcode plugins for the double precision float (64-bit) version. </string>
-                  </property>
-                  <property name="text">
-                   <string>OPCODE6DIR64</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="2">
-                 <widget class="QLineEdit" name="Opcodedir64LineEdit">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QCheckBox" name="OpcodedirCheckBox">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
-                  </property>
-                  <property name="text">
-                   <string>OPCODEDIR</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -2526,6 +2498,13 @@
                  <widget class="QToolButton" name="opcodedirToolButton">
                   <property name="text">
                    <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="13" column="2">
+                 <widget class="QLineEdit" name="pythonExecutableLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -2546,6 +2525,44 @@ Default directory for sound files. Used if no full path is given for sound files
                   </property>
                  </widget>
                 </item>
+                <item row="17" column="2">
+                 <widget class="QLineEdit" name="templateLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="13" column="0">
+                 <widget class="QLabel" name="label_29">
+                  <property name="text">
+                   <string>Python Executable</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="16" column="0">
+                 <widget class="QLabel" name="label_25">
+                  <property name="toolTip">
+                   <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
+                  </property>
+                  <property name="text">
+                   <string>QuteApp SDK Dir</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="17" column="3">
+                 <widget class="QToolButton" name="templateToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="11" column="0">
+                 <widget class="QLabel" name="label_28">
+                  <property name="text">
+                   <string>Favorite dir</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="15" column="0">
                  <widget class="QLabel" name="label_30">
                   <property name="text">
@@ -2555,6 +2572,58 @@ Default directory for sound files. Used if no full path is given for sound files
                 </item>
                 <item row="16" column="3">
                  <widget class="QToolButton" name="sdkToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="3">
+                 <widget class="QToolButton" name="rawWaveToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="12" column="2">
+                 <widget class="QLineEdit" name="pythonDirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="16" column="2">
+                 <widget class="QLineEdit" name="sdkLineEdit"/>
+                </item>
+                <item row="15" column="3">
+                 <widget class="QToolButton" name="logFileToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="3">
+                 <widget class="QToolButton" name="opcodedir64ToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QLineEdit" name="Opcode6dir64LineEdit">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Defines the location of csound plugins for the 64-bit precision version.&lt;/p&gt;&lt;p&gt;External plugins should be installed in this folder&lt;/p&gt;&lt;p&gt;Use the button &amp;quot;Recommend&amp;quot; to set this value to an appropriate default for your platform&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QLineEdit" name="Opcodedir64LineEdit">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="3">
+                 <widget class="QToolButton" name="incdirToolButton">
                   <property name="text">
                    <string>...</string>
                   </property>
@@ -2573,26 +2642,47 @@ Default directory for sound files. Used if no full path is given for sound files
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="3">
-                 <widget class="QToolButton" name="opcodedir64ToolButton">
+                <item row="17" column="0">
+                 <widget class="QLabel" name="label_39">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
+                  </property>
+                  <property name="text">
+                   <string>Template directory</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="14" column="0">
+                 <widget class="QLabel" name="label_36">
+                  <property name="text">
+                   <string>Csound Executable</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="2">
+                 <widget class="QLineEdit" name="SfdirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Default directory for sound files. Used if no full path is given for sound files. </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="3">
+                 <widget class="QToolButton" name="sfdirToolButton">
                   <property name="text">
                    <string>...</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0">
-                 <widget class="QCheckBox" name="Opcodedir64CheckBox">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
-                  </property>
+                <item row="0" column="3">
+                 <widget class="QToolButton" name="csdocdirToolButton">
                   <property name="text">
-                   <string>OPCODEDIR64</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
+                   <string>...</string>
                   </property>
                  </widget>
                 </item>
@@ -2603,64 +2693,43 @@ Default directory for sound files. Used if no full path is given for sound files
                   </property>
                  </widget>
                 </item>
-                <item row="14" column="2">
-                 <widget class="QLineEdit" name="csoundExecutableLineEdit">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QToolButton" name="opcode6dir64ToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="2">
-                 <widget class="QLineEdit" name="SadirLineEdit">
+                <item row="5" column="2">
+                 <widget class="QLineEdit" name="IncdirLineEdit">
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
                   <property name="toolTip">
-                   <string>Default directory for analysis files. Used if no full path is given for analysis files. </string>
+                   <string>Include directory. Specifies the location of files used by #include statements. </string>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="2">
-                 <widget class="QLineEdit" name="Opcode6dir64LineEdit">
-                  <property name="toolTip">
-                   <string>Defines the location of csound opcode plugins for the double precision float (64-bit) version. </string>
+                <item row="11" column="2">
+                 <widget class="QLineEdit" name="favoriteLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
-                <item row="17" column="3">
-                 <widget class="QToolButton" name="templateToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="0">
-                 <widget class="QCheckBox" name="SadirCheckBox">
+                <item row="7" column="0">
+                 <widget class="QCheckBox" name="SsdirCheckBox">
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
                   <property name="toolTip">
-                   <string>Default directory for analysis files. Used if no full path is given for analysis files. </string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. May be used in conjunction with SFDIR to set separate input and output directories. Please note that MIDI files as well as audio files are also sought inside SSDIR. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="text">
-                   <string>SADIR</string>
+                   <string>SSDIR</string>
                   </property>
                   <property name="checked">
                    <bool>true</bool>
                   </property>
                  </widget>
                 </item>
-                <item row="10" column="3">
-                 <widget class="QToolButton" name="rawWaveToolButton">
-                  <property name="text">
-                   <string>...</string>
+                <item row="15" column="2">
+                 <widget class="QLineEdit" name="logFileLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -2687,135 +2756,90 @@ Default directory for sound files. Used if no full path is given for sound files
                   </property>
                  </widget>
                 </item>
-                <item row="15" column="3">
-                 <widget class="QToolButton" name="logFileToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QToolButton" name="csdocdirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="17" column="0">
-                 <widget class="QLabel" name="label_39">
+                <item row="6" column="0">
+                 <widget class="QCheckBox" name="SadirCheckBox">
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
                   <property name="toolTip">
-                   <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
+                   <string>Default directory for analysis files. Used if no full path is given for analysis files. </string>
                   </property>
                   <property name="text">
-                   <string>Template directory</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="16" column="2">
-                 <widget class="QLineEdit" name="sdkLineEdit"/>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QLineEdit" name="CsdocdirLineEdit">
-                  <property name="toolTip">
-                   <string>Path to the html folder with the manual</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="10" column="2">
-                 <widget class="QLineEdit" name="rawWaveLineEdit">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Used by the STK opcodes to find the raw wave files. Only relevant if you are using STK wrapper opcodes like STKBowed or STKBrass. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="16" column="0">
-                 <widget class="QLabel" name="label_25">
-                  <property name="toolTip">
-                   <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
-                  </property>
-                  <property name="text">
-                   <string>QuteApp SDK Dir</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="2">
-                 <widget class="QLineEdit" name="OpcodedirLineEdit">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="13" column="3">
-                 <widget class="QToolButton" name="pythonExecutableToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="2">
-                 <widget class="QLineEdit" name="SfdirLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Default directory for sound files. Used if no full path is given for sound files. </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="3">
-                 <widget class="QToolButton" name="sfdirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="0">
-                 <widget class="QCheckBox" name="SsdirCheckBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. May be used in conjunction with SFDIR to set separate input and output directories. Please note that MIDI files as well as audio files are also sought inside SSDIR. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>SSDIR</string>
+                   <string>SADIR</string>
                   </property>
                   <property name="checked">
                    <bool>true</bool>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_7">
+                <item row="7" column="2">
+                 <widget class="QLineEdit" name="SsdirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
                   <property name="toolTip">
-                   <string>Selects the location of the html documentation</string>
-                  </property>
-                  <property name="text">
-                   <string>Html Doc Directory</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. May be used in conjunction with SFDIR to set separate input and output directories. Please note that MIDI files as well as audio files are also sought inside SSDIR. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="13" column="2">
-                 <widget class="QLineEdit" name="pythonExecutableLineEdit">
-                  <property name="enabled">
+                <item row="19" column="0">
+                 <widget class="QPushButton" name="envirRecommendButton">
+                  <property name="text">
+                   <string>Recommend</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="application.qrc">
+                    <normaloff>:/images/tools-wizard.svg</normaloff>:/images/tools-wizard.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="Opcode6dir64CheckBox">
+                  <property name="toolTip">
+                   <string>Defines the location of csound opcode plugins for the double precision float (64-bit) version. </string>
+                  </property>
+                  <property name="text">
+                   <string>OPCODE6DIR64</string>
+                  </property>
+                  <property name="checked">
                    <bool>true</bool>
                   </property>
                  </widget>
                 </item>
-                <item row="13" column="0">
-                 <widget class="QLabel" name="label_29">
+                <item row="2" column="0">
+                 <widget class="QCheckBox" name="OpcodedirCheckBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
+                  </property>
                   <property name="text">
-                   <string>Python Executable</string>
+                   <string>OPCODEDIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
-                <item row="12" column="2">
-                 <widget class="QLineEdit" name="pythonDirLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
+                <item row="1" column="3">
+                 <widget class="QToolButton" name="opcode6dir64ToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="14" column="2">
+                 <widget class="QLineEdit" name="csoundExecutableLineEdit">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="11" column="3">
+                 <widget class="QToolButton" name="favoriteToolButton">
+                  <property name="text">
+                   <string>...</string>
                   </property>
                  </widget>
                 </item>
@@ -3045,7 +3069,9 @@ Default directory for sound files. Used if no full path is given for sound files
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="application.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>okButton</sender>

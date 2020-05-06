@@ -17,8 +17,9 @@ cp -v *.xml $DESTDIR
 # Only update db if it already exists
 # packages will install into empty trees and
 # do not need to update
-if [ -f "$MIMEDIR/mime.cache" ] ; then
-	update-mime-database -V $MIMEDIR
-fi
+
+#if [ -f "$MIMEDIR/mime.cache" ] ; then
+#	update-mime-database -V $MIMEDIR
+#fi
 
 echo "You may need to log out and log in to make changes effective." 

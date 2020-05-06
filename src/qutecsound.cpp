@@ -3915,7 +3915,7 @@ void CsoundQt::createActions()
     connect(showWidgetEditAct, SIGNAL(toggled(bool)), this, SLOT(showWidgetEdit(bool)));
     connect(splitViewAct, SIGNAL(toggled(bool)), showWidgetEditAct, SLOT(setEnabled(bool)));
 
-    setHelpEntryAct = new QAction(QIcon(prefix + "gtk-info.png"), tr("Show Opcode Entry"), this);
+    setHelpEntryAct = new QAction(QIcon(prefix + "gtk-info.png"), tr("Opcode Entry"), this);
     setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
     setHelpEntryAct->setIconText(tr("Manual for opcode"));
     setHelpEntryAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -3931,17 +3931,17 @@ void CsoundQt::createActions()
     browseForwardAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(browseForwardAct, SIGNAL(triggered()), helpPanel, SLOT(browseForward()));
 
-    externalBrowserAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Show Opcode Entry in External Browser"), this);
+    externalBrowserAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Opcode Entry in External Browser"), this);
     externalBrowserAct->setStatusTip(tr("Show Opcode Entry in external browser"));
     externalBrowserAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(externalBrowserAct, SIGNAL(triggered()), this, SLOT(openExternalBrowser()));
 
-    openDocumentationAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Open online documentation"), this);
-    openDocumentationAct->setStatusTip(tr("Open online documentation"));
+    openDocumentationAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("CsoundQt Documentation (online)"), this);
+    openDocumentationAct->setStatusTip(tr("open CsoundQt Documentation in browser"));
     openDocumentationAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(openDocumentationAct, SIGNAL(triggered()), this, SLOT(openOnlineDocumentation()));
 
-    openQuickRefAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Open Quick Reference Guide"), this);
+    openQuickRefAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Quick Reference Guide"), this);
     openQuickRefAct->setStatusTip(tr("Open Quick Reference Guide in PDF viewer"));
     openQuickRefAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(openQuickRefAct, SIGNAL(triggered()), this, SLOT(openQuickRef()));
@@ -3954,7 +3954,7 @@ void CsoundQt::createActions()
     showUtilitiesAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showUtilitiesAct, SIGNAL(triggered(bool)), this, SLOT(showUtilities(bool)));
 
-    setShortcutsAct = new QAction(tr("Set Keyboard Shortcuts"), this);
+    setShortcutsAct = new QAction(tr("Keyboard Shortcuts"), this);
     setShortcutsAct->setStatusTip(tr("Set Keyboard Shortcuts"));
     setShortcutsAct->setIconText(tr("Set Shortcuts"));
     setShortcutsAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -4317,22 +4317,22 @@ void CsoundQt::createMenus()
     editMenu->addAction(findAct);
     editMenu->addAction(findAgainAct);
     editMenu->addAction(gotoLineAct);
-    editMenu->addAction(goBackAct);
+    // editMenu->addAction(goBackAct);
     editMenu->addSeparator();
     editMenu->addAction(commentAct);
     //  editMenu->addAction(uncommentAct);
     editMenu->addAction(indentAct);
     editMenu->addAction(unindentAct);
-    editMenu->addAction(killLineAct);
-    editMenu->addAction(killToEndAct);
+    // editMenu->addAction(killLineAct);
+    // editMenu->addAction(killToEndAct);
     editMenu->addAction(lineNumbersAct);
     editMenu->addAction(parameterModeAct);
     editMenu->addSeparator();
     editMenu->addAction(joinAct);
     editMenu->addAction(inToGetAct);
     editMenu->addAction(getToInAct);
-    editMenu->addAction(csladspaAct);
-    editMenu->addAction(cabbageAct);
+    // editMenu->addAction(csladspaAct);
+    // editMenu->addAction(cabbageAct);
     editMenu->addSeparator();
     editMenu->addAction(editAct);
     editMenu->addSeparator();
@@ -4352,7 +4352,6 @@ void CsoundQt::createMenus()
     controlMenu->addAction(externalPlayerAct);
     controlMenu->addSeparator();
     controlMenu->addAction(testAudioSetupAct);
-
 
     viewMenu = menuBar()->addMenu(tr("View"));
     viewMenu->addAction(focusEditorAct);
@@ -4693,25 +4692,25 @@ void CsoundQt::createMenus()
     helpMenu->addAction(openDocumentationAct);
     helpMenu->addAction(setHelpEntryAct);
     helpMenu->addAction(externalBrowserAct);
-    helpMenu->addSeparator();
-    helpMenu->addAction(browseBackAct);
-    helpMenu->addAction(browseForwardAct);
+    // helpMenu->addSeparator();
+    // helpMenu->addAction(browseBackAct);
+    // helpMenu->addAction(browseForwardAct);
     helpMenu->addSeparator();
     helpMenu->addAction(showManualAct);
     helpMenu->addAction(downloadManualAct);
     helpMenu->addAction(showOverviewAct);
-    helpMenu->addAction(showOpcodeQuickRefAct);
+    // helpMenu->addAction(showOpcodeQuickRefAct);
     helpMenu->addAction(showGenAct);
     // helpMenu->addAction(openQuickRefAct);
     helpMenu->addSeparator();
     helpMenu->addAction(resetPreferencesAct);
     helpMenu->addSeparator();
-    helpMenu->addAction(reportBugAct);
     // helpMenu->addAction(requestFeatureAct);
     // helpMenu->addAction(chatAct);
     helpMenu->addSeparator();
+    helpMenu->addAction(reportBugAct);
     helpMenu->addAction(aboutAct);
-    helpMenu->addAction(donateAct);
+    // helpMenu->addAction(donateAct);
     //  helpMenu->addAction(aboutQtAct);
 
 }

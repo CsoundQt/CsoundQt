@@ -354,15 +354,16 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(clearTemplatePushButton,SIGNAL(released()), this, SLOT(clearTemplate()));
 	connect(defaultTemplatePushButton,SIGNAL(released()), this, SLOT(defaultTemplate()));
 
-	connect(OpcodedirCheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
-	connect(Opcodedir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
-	connect(Opcode6dir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
+    // connect(OpcodedirCheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
+    // connect(Opcodedir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
+    connect(Opcode6dir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(uDir(bool)));
 
 	connect(csoundExecutableToolButton,SIGNAL(clicked()),this, SLOT(browseCsoundExecutable()));
     connect(pythonExecutableToolButton,SIGNAL(clicked()),this, SLOT(browsePythonExecutable()));
 
 
     connect(testAudioSetupButton, SIGNAL(released()), this, SLOT(testAudioSetup()));
+    connect(envirRecommendButton, SIGNAL(clicked()), this, SLOT(recommendEnvironmentSettings()));
 
 	//connect(RtMidiModuleComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(checkRtMidiModule(QString)) );
 
@@ -958,3 +959,56 @@ void ConfigDialog::testAudioSetup() {
     this->accept();
 }
 
+void ConfigDialog::recommendEnvironmentSettings() {
+#ifdef Q_OS_UNIX
+    QString default_opcodes64 = "/usr/local/lib/csound/plugins64-6.0:";
+#endif
+#ifdef Q_OS_WIN
+    // What's the default plugin folder in win?
+    QString default_opcodes64 = "";
+#endif
+    auto home = qgetenv("HOME");
+    auto dataLocationApp = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)[0];
+    auto dataLocation = QDir(dataLocationApp);
+    dataLocation.cdUp();
+    if(this->Opcode6dir64LineEdit->text().isEmpty()) {
+        auto opcdirenv = qgetenv("OPCODE6DIR64");
+        if(!opcdirenv.isEmpty()) {
+            // if the user already set OPCODE6DIR64 then leave it as is. This is probably
+            // an expert user
+            QDEBUG << "$OPCODE6DIR64 is already set to " << opcdirenv;
+            this->Opcode6dir64LineEdit->setText(opcdirenv);
+            this->Opcode6dir64CheckBox->setChecked(false);
+        } else {
+            // We set OPCODE6DIR64 to the default + a user writable location
+            auto opcdirstr = dataLocation.path() + "/csound6/plugins64";
+            auto opcdir = QDir(opcdirstr);
+            if(!opcdir.exists()) {
+                opcdir.mkpath(".");
+            }
+            if(!default_opcodes64.isEmpty())
+                opcdirstr = default_opcodes64 + opcdirstr;
+            this->Opcode6dir64LineEdit->setText(opcdirstr);
+            this->Opcode6dir64CheckBox->setChecked(true);
+        }
+    }
+    if(this->IncdirLineEdit->text().isEmpty()) {
+        auto incdirenv = qgetenv("INCDIR");
+        if(!incdirenv.isEmpty()) {
+            // if the user already set it, then leave it as is. This is probably
+            // an expert user
+            QDEBUG << "$INCDIR is already set to " << incdirenv;
+            this->IncdirLineEdit->setText(incdirenv);
+            this->IncdirCheckBox->setChecked(false);
+        } else {
+            // propose an include folder parallel to the plugins folder
+            auto incdirstr = dataLocation.path() + "/csound6/udos";
+            auto incdir = QDir(incdirstr);
+            if(!incdir.exists()) {
+                incdir.mkpath(".");
+            }
+            this->IncdirLineEdit->setText(incdirstr);
+            this->IncdirCheckBox->setChecked(true);
+        }
+    }
+}
