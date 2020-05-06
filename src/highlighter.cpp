@@ -543,13 +543,18 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 	if (commentIndex < 0) {
         commentIndex = text.indexOf("//");
 	}
-	if (commentIndex >= 0) {
+
+
+    if (commentIndex >= 0) {
         // if(QRegExp("^\\s*;;").indexIn(text) != -1) {
-        if(text[commentIndex+1] == ';' && text.trimmed()[0] == ';') {
-            // ;; pattern, which is picked up by inspector
-            setFormat(commentIndex, text.size() - commentIndex, importantCommentFormat);
-        } else
+        if (text.length()>commentIndex+1) {
+            if(text[commentIndex+1] == ';' && text.trimmed()[0] == ';') {
+                // ;; pattern, which is picked up by inspector
+                setFormat(commentIndex, text.size() - commentIndex, importantCommentFormat);
+            }
+        } else {
             setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
+        }
 	}
 	else {
 		commentIndex = text.size() + 1;
