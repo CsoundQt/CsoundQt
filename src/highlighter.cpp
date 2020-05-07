@@ -374,7 +374,7 @@ Highlighter::Highlighter(QTextDocument *parent)
                     << "OSCsend" << "OSClisten" << "OSCraw" << "OSCinit";
 
     deprecatedOpcodes << "array" << "compress" << "dcblock" << "diskin" << "flooper"
-                      << "fof" << "in32" << "inh" << "ino" << "inq" << "inrq" << "inx"
+                      << "in32" << "inh" << "ino" << "inq" << "inrq" << "inx"
                       << "loop_ge" << "loop_gt" << "loop_le" << "loop_lt"
                       << "nlfilt" << "outc" << "outo" << "outq" << "outx" << "vco"
                       << "vincr" << "vbap16" << "vbap4" << "vbap8"
@@ -535,6 +535,8 @@ void Highlighter::highlightBlock(const QString &text)
 
 void Highlighter::highlightCsoundBlock(const QString &text)
 {
+    // TODO: rewrite this using QRegularExpression
+
 	// text is processed one line at a time
     if(m_theme == "none")
         return;
@@ -544,16 +546,15 @@ void Highlighter::highlightCsoundBlock(const QString &text)
         commentIndex = text.indexOf("//");
 	}
 
-
     if (commentIndex >= 0) {
         // if(QRegExp("^\\s*;;").indexIn(text) != -1) {
-        if (text.length()>commentIndex+1) {
+        if (text.length() > commentIndex+1) {
             if(text[commentIndex+1] == ';' && text.trimmed()[0] == ';') {
                 // ;; pattern, which is picked up by inspector
                 setFormat(commentIndex, text.size() - commentIndex, importantCommentFormat);
+            } else {
+                setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
             }
-        } else {
-            setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
         }
 	}
 	else {
