@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -446,7 +446,7 @@
       <item row="9" column="0">
        <widget class="QLineEdit" name="hetStartLineEdit">
         <property name="text">
-         <string>0.0</string>
+         <string>100.0</string>
         </property>
        </widget>
       </item>
@@ -902,7 +902,7 @@
       <rect>
        <x>230</x>
        <y>100</y>
-       <width>171</width>
+       <width>174</width>
        <height>161</height>
       </rect>
      </property>

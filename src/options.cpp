@@ -131,7 +131,7 @@ Options::Options(ConfigLists *configlists) :
     hetChannel = "1";
     hetBeginTime = "0.0";
     hetDuration = "0.0";
-    hetStartFrequency = "0.0";
+    hetStartFrequency = "100.0";
     hetNumPartials = "10";
     hetMaxAmplitude = "32767";
     hetMinAplitude = "64";
