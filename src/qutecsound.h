@@ -232,6 +232,7 @@ private slots:
 	void setEditorFocus();
 	void setHelpEntry();
     void setFullScreen(bool full);
+    void checkFullScreen();
     void setEditorFullScreen(bool full);
     void setHtmlFullScreen(bool full);
     void setHelpFullScreen(bool full);
@@ -519,6 +520,7 @@ private:
 	MenuBarHandle menuBarHandle;
 #endif
     QByteArray pre_fullscreen_state;
+    QString m_fullScreenComponent;
 };
 
 class FileOpenEater : public QObject
