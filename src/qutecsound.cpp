@@ -2349,7 +2349,7 @@ void CsoundQt::setFullScreen(bool full)
 
 void CsoundQt::checkFullScreen() // checks if some component is already fullscreen and resets it
 {
-	qDebug()<< " fullScreenComponent: " << m_fullScreenComponent << "state bytes: " << pre_fullscreen_state.size();
+	qDebug()<< " fullScreenComponent: " << m_fullScreenComponent << "state bytes: " << m_preFullScreenState.size();
 	if ( !m_fullScreenComponent.isEmpty() ) {
 		if (m_fullScreenComponent == "mainwindow" ) {
 			viewFullScreenAct->setChecked(false);
@@ -2368,7 +2368,7 @@ void CsoundQt::setEditorFullScreen(bool full)
 {
 	if (full) {
 		checkFullScreen();
-        pre_fullscreen_state = this->saveState();
+		m_preFullScreenState = this->saveState();
         QList<QDockWidget *> dockWidgets = findChildren<QDockWidget *>();
         foreach (QDockWidget *dockWidget, dockWidgets) {
             dockWidget->hide();
@@ -2377,8 +2377,9 @@ void CsoundQt::setEditorFullScreen(bool full)
 		m_fullScreenComponent = "editor";
     }
     else {
-        this->restoreState(pre_fullscreen_state);
+		this->restoreState(m_preFullScreenState);
         this->showNormal(); // to restore titlebar etc
+		m_fullScreenComponent = "";
     }
 }
 
@@ -2388,16 +2389,16 @@ void CsoundQt::setHtmlFullScreen(bool full)
 #ifdef QCS_QTHTML
 	if (full) {
 		checkFullScreen();
-        qDebug()<<"Caused crash here. now commented out. Fullscreen";
-//        pre_fullscreen_state = this->saveState();
-//        this->csoundHtmlView->setFloating(true);
-//        this->csoundHtmlView->showFullScreen();
+		m_preFullScreenState = this->saveState();
+		this->csoundHtmlView->setFloating(true);
+		this->csoundHtmlView->showFullScreen();
 		m_fullScreenComponent = "html";
     }
     else {
-        qDebug()<<"Back from fullscreen";
-//        this->restoreState(pre_fullscreen_state);
-//        this->showNormal();
+		this->restoreState(m_preFullScreenState);
+		this->csoundHtmlView->setFloating(false);
+		//this->showNormal();
+		m_fullScreenComponent = "";
     }
 #endif
 }
@@ -2406,13 +2407,13 @@ void CsoundQt::setHelpFullScreen(bool full)
 {
 	if (full) {
 		checkFullScreen();
-		pre_fullscreen_state = this->saveState();
+		m_preFullScreenState = this->saveState();
         this->helpPanel->setFloating(true);
         this->helpPanel->showFullScreen();
 		m_fullScreenComponent = "help";
     }
     else {
-		this->restoreState(pre_fullscreen_state);
+		this->restoreState(m_preFullScreenState);
 		//this->showNormal();
 		m_fullScreenComponent = "";
     }
@@ -2422,7 +2423,7 @@ void CsoundQt::setWidgetsFullScreen(bool full)
 {
 	if (full) {
 		checkFullScreen();
-		pre_fullscreen_state = this->saveState();
+		m_preFullScreenState = this->saveState();
 		if (m_options->widgetsIndependent) {
             auto doc = getCurrentDocumentPage();
             if(doc == nullptr)
@@ -2444,7 +2445,7 @@ void CsoundQt::setWidgetsFullScreen(bool full)
             doc->getWidgetLayout()->showNormal();
 			m_fullScreenComponent = "";
         } else {
-			this->restoreState(pre_fullscreen_state);
+			this->restoreState(m_preFullScreenState);
 			//this->showNormal();
 			m_fullScreenComponent = "";
         }

@@ -1,3 +1,6 @@
+<CsVersion>
+After 6.13
+</CsVersion>
 <CsoundSynthesizer>
 <CsOptions>
 </CsOptions>

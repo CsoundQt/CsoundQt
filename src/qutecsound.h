@@ -519,7 +519,7 @@ private:
 #ifdef MACOSX_PRE_SNOW
 	MenuBarHandle menuBarHandle;
 #endif
-    QByteArray pre_fullscreen_state;
+    QByteArray m_preFullScreenState;
     QString m_fullScreenComponent;
 };
 
