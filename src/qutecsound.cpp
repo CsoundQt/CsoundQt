@@ -100,7 +100,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_options = new Options(&m_configlists);
 
 #ifdef Q_OS_MAC
-	this->setUnifiedTitleAndToolBarOnMac(true);
+    // this is the reason why toolbar turns black on Mac, comment out for now
+    //this->setUnifiedTitleAndToolBarOnMac(true);
 #endif
     // Create GUI panels
 
@@ -4957,7 +4958,7 @@ void CsoundQt::createToolBars()
     // configureToolBar->addAction(showLiveEventsAct);
 #ifdef USE_QT5
     // Disable virtual keyboard until it is proven to work on all platforms
-    // configureToolBar->addAction(showVirtualKeyboardAct);
+    configureToolBar->addAction(showVirtualKeyboardAct);
     //configureToolBar->addAction(showTableEditorAct);
 #endif
 #ifdef QCS_PYTHONQT
