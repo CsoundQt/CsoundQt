@@ -2966,8 +2966,14 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setLineEnding(m_options->lineEnding);
     p->setConsoleFont(QFont(m_options->consoleFont,
                             (int) m_options->consoleFontPointSize));
-    p->setConsoleColors(m_options->consoleFontColor,
-                        m_options->consoleBgColor);
+
+	//test (works fine):
+	QPalette palette = QGuiApplication::palette();
+	p->setConsoleColors(palette.color(QPalette::Text),
+							palette.color(QPalette::Window));
+	//original:
+//	p->setConsoleColors(m_options->consoleFontColor,
+//                        m_options->consoleBgColor);
     // p->setEditorBgColor(m_options->editorBgColor);
     p->setScriptDirectory(m_options->pythonDir);
     p->setPythonExecutable(m_options->pythonExecutable);
