@@ -116,7 +116,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>5</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -2541,6 +2541,9 @@ Default directory for sound files. Used if no full path is given for sound files
                 </item>
                 <item row="16" column="0">
                  <widget class="QLabel" name="label_25">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="toolTip">
                    <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
                   </property>
@@ -2572,6 +2575,9 @@ Default directory for sound files. Used if no full path is given for sound files
                 </item>
                 <item row="16" column="3">
                  <widget class="QToolButton" name="sdkToolButton">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>...</string>
                   </property>
@@ -2592,7 +2598,11 @@ Default directory for sound files. Used if no full path is given for sound files
                  </widget>
                 </item>
                 <item row="16" column="2">
-                 <widget class="QLineEdit" name="sdkLineEdit"/>
+                 <widget class="QLineEdit" name="sdkLineEdit">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
                 </item>
                 <item row="15" column="3">
                  <widget class="QToolButton" name="logFileToolButton">
@@ -2778,12 +2788,15 @@ Default directory for sound files. Used if no full path is given for sound files
                    <bool>true</bool>
                   </property>
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. May be used in conjunction with SFDIR to set separate input and output directories. Please note that MIDI files as well as audio files are also sought inside SSDIR. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. May be used in conjunction with SFDIR to set separate input and output directories. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                  </widget>
                 </item>
                 <item row="19" column="0">
                  <widget class="QPushButton" name="envirRecommendButton">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set recommended values for some of the environment variables, according to the platform used. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
                   <property name="text">
                    <string>Recommend</string>
                   </property>
