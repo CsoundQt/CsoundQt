@@ -1114,7 +1114,7 @@ void WidgetLayout::setContained(bool contained)
     if (m_contained == contained) {
         return;
     }
-    qDebug() << "WidgetLayout::setContained " << contained;
+//    qDebug() << "WidgetLayout::setContained " << contained;
     m_contained = contained;
     bool bg = this->property("QCS_bg").toBool();
     QColor bgColor = this->property("QCS_bgcolor").value<QColor>();
@@ -3295,8 +3295,8 @@ QString WidgetLayout::createTableDisplay(int x, int y, int width, int height, QS
 
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
-    qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor
-             << "contained: " << m_contained;
+//    qDebug() << "WidgetLayout::setBackground " << bg << "--" << bgColor
+//             << "contained: " << m_contained;
     QWidget *w;
     layoutMutex.lock();
     w = m_contained ?  this->parentWidget() : this;  // If contained, set background of parent widget

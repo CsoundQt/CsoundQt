@@ -261,7 +261,7 @@ void UtilitiesDialog::resetHetro()
 	hetChannelLineEdit->setText("1");
 	hetBeginLineEdit->setText("0.0");
 	hetDurationLineEdit->setText("0.0");
-	hetStartLineEdit->setText("0.0");
+	hetStartLineEdit->setText("100.0");
 	hetPartialsLineEdit->setText("10");
 	hetMaxLineEdit->setText("32767");
 	hetMinLineEdit->setText("64");

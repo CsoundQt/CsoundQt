@@ -87,6 +87,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     initialDir = QCoreApplication::applicationDirPath();
     setWindowTitle("CsoundQt[*]");
     // resize(780,550);
+	m_fullScreenComponent = QString();
 #ifdef QCS_USE_NEW_ICON
     // setWindowIcon(QIcon(":/images/qtcs-alt.svg"));
     setWindowIcon(QIcon(":/images/qtcs-alt.png"));
@@ -99,7 +100,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_options = new Options(&m_configlists);
 
 #ifdef Q_OS_MAC
-	this->setUnifiedTitleAndToolBarOnMac(true);
+    // this is the reason why toolbar turns black on Mac, comment out for now
+    //this->setUnifiedTitleAndToolBarOnMac(true);
 #endif
     // Create GUI panels
 
@@ -2332,36 +2334,53 @@ void CsoundQt::setHelpEntry()
     }
 }
 
+
 void CsoundQt::setFullScreen(bool full)
 {
-    if (full) {
+	if (full) {
+		checkFullScreen();
         this->showFullScreen();
+		m_fullScreenComponent = "mainwindow";
     }
     else {
         this->showNormal();
+		m_fullScreenComponent = "";
+    }
+}
+
+void CsoundQt::checkFullScreen() // checks if some component is already fullscreen and resets it
+{
+	qDebug()<< " fullScreenComponent: " << m_fullScreenComponent << "state bytes: " << m_preFullScreenState.size();
+	if ( !m_fullScreenComponent.isEmpty() ) {
+		if (m_fullScreenComponent == "mainwindow" ) {
+			viewFullScreenAct->setChecked(false);
+		} else if (m_fullScreenComponent == "help" ) {
+			viewHelpFullScreenAct->setChecked(false);
+		} else if (m_fullScreenComponent == "widgets") {
+			viewWidgetsFullScreenAct->setChecked(false);
+		} else if ( m_fullScreenComponent == "editor" ) {
+		} else if ( m_fullScreenComponent == "html" ) {
+			viewHtmlFullScreenAct->setChecked(false);
+		}
     }
 }
 
 void CsoundQt::setEditorFullScreen(bool full)
 {
-    if (full) {
-        /*if (this->helpPanel->isFullScreen()) {
-            setHelpFullScreen(false);
-        }
-        if (this->widgetPanel->isFullScreen()) {
-            setWidgetsFullScreen(false);
-        } */
-
-        pre_fullscreen_state = this->saveState();
+	if (full) {
+		checkFullScreen();
+		m_preFullScreenState = this->saveState();
         QList<QDockWidget *> dockWidgets = findChildren<QDockWidget *>();
         foreach (QDockWidget *dockWidget, dockWidgets) {
             dockWidget->hide();
         }
         this->showFullScreen();
+		m_fullScreenComponent = "editor";
     }
     else {
-        this->restoreState(pre_fullscreen_state);
+		this->restoreState(m_preFullScreenState);
         this->showNormal(); // to restore titlebar etc
+		m_fullScreenComponent = "";
     }
 }
 
@@ -2369,51 +2388,44 @@ void CsoundQt::setEditorFullScreen(bool full)
 void CsoundQt::setHtmlFullScreen(bool full)
 {
 #ifdef QCS_QTHTML
-    if (full) {
-        qDebug()<<"Caused crash here. now commented out. Fullscreen";
-//        pre_fullscreen_state = this->saveState();
-//        this->csoundHtmlView->setFloating(true);
-//        this->csoundHtmlView->showFullScreen();
+	if (full) {
+		checkFullScreen();
+		m_preFullScreenState = this->saveState();
+		this->csoundHtmlView->setFloating(true);
+		this->csoundHtmlView->showFullScreen();
+		m_fullScreenComponent = "html";
     }
     else {
-        qDebug()<<"Back from fullscreen";
-//        this->restoreState(pre_fullscreen_state);
-//        this->showNormal();
+		this->restoreState(m_preFullScreenState);
+		this->csoundHtmlView->setFloating(false);
+		//this->showNormal();
+		m_fullScreenComponent = "";
     }
 #endif
 }
 
 void CsoundQt::setHelpFullScreen(bool full)
 {
-    if (full) {
-        pre_fullscreen_state = this->saveState();
+	if (full) {
+		checkFullScreen();
+		m_preFullScreenState = this->saveState();
         this->helpPanel->setFloating(true);
         this->helpPanel->showFullScreen();
+		m_fullScreenComponent = "help";
     }
     else {
-        this->restoreState(pre_fullscreen_state);
-        // this->showNormal();
+		this->restoreState(m_preFullScreenState);
+		//this->showNormal();
+		m_fullScreenComponent = "";
     }
 }
 
 void CsoundQt::setWidgetsFullScreen(bool full)
 {
-    if (full) {
-        /*
-        if (this->helpPanel->isFullScreen()) {
-           setHelpFullScreen(false);
-        }
-        if (this->isFullScreen()) {
-            setFullScreen(false                         );
-        }
-#ifdef QCS_QTHTML
-        if (this->csoundHtmlView->isFullScreen()) {
-            this->csoundHtmlView->showNormal();
-        }
-#endif
-*/
-        pre_fullscreen_state = this->saveState();
-        if(m_options->widgetsIndependent) {
+	if (full) {
+		checkFullScreen();
+		m_preFullScreenState = this->saveState();
+		if (m_options->widgetsIndependent) {
             auto doc = getCurrentDocumentPage();
             if(doc == nullptr)
                 return;
@@ -2424,6 +2436,7 @@ void CsoundQt::setWidgetsFullScreen(bool full)
             this->widgetPanel->setFloating(true);
             this->widgetPanel->showFullScreen();
         }
+		m_fullScreenComponent = "widgets";
     }
     else {
         if(m_options->widgetsIndependent) {
@@ -2431,9 +2444,11 @@ void CsoundQt::setWidgetsFullScreen(bool full)
             if(doc == nullptr)
                 return;
             doc->getWidgetLayout()->showNormal();
+			m_fullScreenComponent = "";
         } else {
-            this->restoreState(pre_fullscreen_state);
-            // this->showNormal();
+			this->restoreState(m_preFullScreenState);
+			//this->showNormal();
+			m_fullScreenComponent = "";
         }
 
     }
@@ -2951,8 +2966,14 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setLineEnding(m_options->lineEnding);
     p->setConsoleFont(QFont(m_options->consoleFont,
                             (int) m_options->consoleFontPointSize));
-    p->setConsoleColors(m_options->consoleFontColor,
-                        m_options->consoleBgColor);
+
+	//test (works fine):
+	QPalette palette = QGuiApplication::palette();
+	p->setConsoleColors(palette.color(QPalette::Text),
+							palette.color(QPalette::Window));
+	//original:
+//	p->setConsoleColors(m_options->consoleFontColor,
+//                        m_options->consoleBgColor);
     // p->setEditorBgColor(m_options->editorBgColor);
     p->setScriptDirectory(m_options->pythonDir);
     p->setPythonExecutable(m_options->pythonExecutable);
@@ -4943,7 +4964,7 @@ void CsoundQt::createToolBars()
     // configureToolBar->addAction(showLiveEventsAct);
 #ifdef USE_QT5
     // Disable virtual keyboard until it is proven to work on all platforms
-    // configureToolBar->addAction(showVirtualKeyboardAct);
+    configureToolBar->addAction(showVirtualKeyboardAct);
     //configureToolBar->addAction(showTableEditorAct);
 #endif
 #ifdef QCS_PYTHONQT
