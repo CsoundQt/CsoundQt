@@ -411,6 +411,7 @@ void ConfigDialog::setCurrentTab(int index)
 void ConfigDialog::accept()
 {
 	m_options->theme = themeComboBox->currentText();
+	m_options->colorScheme = colorSchemeComboBox->currentText();
 	m_options->font = fontComboBox->currentText();
 	m_options->fontPointSize = fontSizeComboBox->currentText().toDouble();
 	m_options->showLineNumberArea = lineNumbersCheckBox->isChecked();

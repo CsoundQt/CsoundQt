@@ -36,7 +36,7 @@ Options::Options(ConfigLists *configlists) :
     font = "Monospace";
 #endif
     theme = "breeze";
-	colorTheme = "light";
+	colorScheme = "system";
     fontPointSize = 10;
     showLineNumberArea = true;
     lineEnding = 0; // 0=Unix (LF) 1=Windows(CR+LF)

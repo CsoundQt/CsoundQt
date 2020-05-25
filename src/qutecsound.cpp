@@ -1247,29 +1247,33 @@ void CsoundQt::setColors()
 {
 	QPalette palette = QGuiApplication::palette();
 	QColor color, bgColor;
+	QColor darkColor("#2b2b2b"), lightColor("#ececec");
 
-	if (m_options->colorTheme == "system") {
-		bgColor = palette.color(QPalette::Window );
-		color = palette.color(QPalette::Text );
-	} else {
-		if (m_options->colorTheme=="dark") {
-			bgColor = QColor(Qt::darkGray);
-			color = QColor(Qt::white);
+
+//	if (m_options->colorScheme == "system") {
+//		bgColor = palette.color(QPalette::Window );
+//		color = palette.color(QPalette::Text );
+//	} else {
+	    if (m_options->colorScheme=="dark" ||
+		        (m_options->colorScheme == "system" &&
+		         palette.color(QPalette::Text).lightness() >  palette.color(QPalette::Window).lightness() ) ) {
+			bgColor = darkColor;//QColor(Qt::darkGray);
+			color = lightColor;
 		} else {
 			bgColor = QColor(Qt::white);
-			color = QColor(Qt::darkGray);
+			color = QColor(Qt::black);
 		}
-	}
+//	}
 	m_options->commonFontColor = color;
 	m_options->commonBgColor = bgColor;
 	qDebug()<< "Common font, background color: " << color.name() << bgColor.name();
 
 	m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; color: %2}").arg(bgColor.name()).arg(color.name()));
-	m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name().arg(color.name())));
+	m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name()).arg(color.name()));
 
-#ifdef QCS_PYTHONQT
-	m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name().arg(color.name())));
-#endif
+//#ifdef QCS_PYTHONQT
+//	m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name()).arg(color.name()) );
+//#endif
 
 
 }
@@ -2888,6 +2892,10 @@ void CsoundQt::applySettings()
 {
     // This is called at initialization, when clicking "apply" in the settings dialog
     // and when closing it with "OK"
+
+
+	setColors();
+
     for (int i = 0; i < documentPages.size(); i++) {
         setCurrentOptionsForPage(documentPages[i]);
     }
@@ -2966,7 +2974,7 @@ void CsoundQt::applySettings()
     setupEnvironment();
 
 	// test
-	setColors();
+	//setColors();
 
 	// set editorBgColor also for inspector, codepad and python console.
     // Maybe the latter should use the same color as console?
