@@ -36,6 +36,7 @@ Options::Options(ConfigLists *configlists) :
     font = "Monospace";
 #endif
     theme = "breeze";
+	colorTheme = "light";
     fontPointSize = 10;
     showLineNumberArea = true;
     lineEnding = 0; // 0=Unix (LF) 1=Windows(CR+LF)
@@ -44,6 +45,9 @@ Options::Options(ConfigLists *configlists) :
     consoleFontColor = Qt::black;
     consoleBgColor = Qt::white;
     editorBgColor = Qt::white;
+	// add here:
+	commonBgColor = Qt::white;
+	commonBgColor = Qt::black;
 
     tabWidth = 4;
     colorVariables = true;

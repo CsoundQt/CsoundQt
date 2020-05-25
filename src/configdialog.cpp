@@ -356,7 +356,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
     // connect(OpcodedirCheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
     // connect(Opcodedir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
-    connect(Opcode6dir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(uDir(bool)));
+	connect(Opcode6dir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(browseOpcode6dir64(bool)));
 
 	connect(csoundExecutableToolButton,SIGNAL(clicked()),this, SLOT(browseCsoundExecutable()));
     connect(pythonExecutableToolButton,SIGNAL(clicked()),this, SLOT(browsePythonExecutable()));

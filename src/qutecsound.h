@@ -342,6 +342,7 @@ private:
 	void openLogFile();
 	void showNewFormatWarning();
 	void setupEnvironment();
+	void setColors();
 	ConfigLists m_configlists;
 	QTabWidget *documentTabs;
 	GraphicWindow *m_graphic;  // To display the code graph images
@@ -521,6 +522,7 @@ private:
 #endif
     QByteArray m_preFullScreenState;
     QString m_fullScreenComponent;
+
 };
 
 class FileOpenEater : public QObject

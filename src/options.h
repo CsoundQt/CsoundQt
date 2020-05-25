@@ -34,15 +34,21 @@ public:
 	~Options();
 
 	QString theme;  // Icon theme name
+	QString colorTheme; // system|dark|ligth
 	QString font;
 	float fontPointSize;
 	bool showLineNumberArea;
 	int lineEnding; // 0=Unix (LF) 1=Windows(CR+LF)
 	QString consoleFont;
 	float consoleFontPointSize;
+
 	QColor consoleFontColor;
 	QColor consoleBgColor;
 	QColor editorBgColor;
+	// later maybe remove consoleBgColor
+	QColor commonBgColor;
+	QColor commonFontColor;
+
 	int tabWidth;
 	bool tabIndents;
 	bool colorVariables;
