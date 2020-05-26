@@ -5043,6 +5043,18 @@ void CsoundQt::createToolBars()
     controlToolBar->setToolButtonStyle(toolButtonStyle);
     configureToolBar->setToolButtonStyle(toolButtonStyle);
     configureToolBar->setIconSize(QSize(iconSize, iconSize));
+    // test Mac
+#ifdef Q_OS_MAC
+
+    if (m_options->theme=="breeze-dark") {
+        QColor textColor = QGuiApplication::palette().color(QPalette::Text);
+        qDebug() << "Textcolor: " << textColor;
+        QString styleString = QString("color: %1").arg(textColor.name());
+        controlToolBar->setStyleSheet(styleString);
+        configureToolBar->setStyleSheet(styleString);
+
+    }
+#endif
 }
 
 void CsoundQt::setToolbarIconSize(int size) {
