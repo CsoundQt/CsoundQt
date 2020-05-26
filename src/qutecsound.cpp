@@ -2386,7 +2386,7 @@ void CsoundQt::setFullScreen(bool full)
 
 void CsoundQt::checkFullScreen() // checks if some component is already fullscreen and resets it
 {
-	qDebug()<< " fullScreenComponent: " << m_fullScreenComponent << "state bytes: " << m_preFullScreenState.size();
+    //qDebug()<< " fullScreenComponent: " << m_fullScreenComponent << "state bytes: " << m_preFullScreenState.size();
 	if ( !m_fullScreenComponent.isEmpty() ) {
 		if (m_fullScreenComponent == "mainwindow" ) {
 			viewFullScreenAct->setChecked(false);
@@ -2428,12 +2428,16 @@ void CsoundQt::setHtmlFullScreen(bool full)
 		checkFullScreen();
 		m_preFullScreenState = this->saveState();
 		this->csoundHtmlView->setFloating(true);
+#ifdef Q_OS_MAC
+        this->csoundHtmlView->showMaximized();
+#else
 		this->csoundHtmlView->showFullScreen();
+#endif
 		m_fullScreenComponent = "html";
     }
     else {
 		this->restoreState(m_preFullScreenState);
-		this->csoundHtmlView->setFloating(false);
+        this->csoundHtmlView->setFloating(false);
 		//this->showNormal();
 		m_fullScreenComponent = "";
     }
@@ -2446,8 +2450,12 @@ void CsoundQt::setHelpFullScreen(bool full)
 		checkFullScreen();
 		m_preFullScreenState = this->saveState();
         this->helpPanel->setFloating(true);
+#ifdef Q_OS_MAC
+        this->helpPanel->showMaximized();
+#else
         this->helpPanel->showFullScreen();
-		m_fullScreenComponent = "help";
+#endif
+        m_fullScreenComponent = "help";
     }
     else {
 		this->restoreState(m_preFullScreenState);
@@ -2467,10 +2475,18 @@ void CsoundQt::setWidgetsFullScreen(bool full)
                 return;
             auto wl = doc->getWidgetLayout();
             wl->setVisible(true);
+#ifdef Q_OS_MAC
+            wl->showMaximized();
+#else
             wl->showFullScreen();
+#endif
         } else {
             this->widgetPanel->setFloating(true);
+#ifdef Q_OS_MAC
+        this->widgetPanel->showMaximized();
+#else
             this->widgetPanel->showFullScreen();
+#endif
         }
 		m_fullScreenComponent = "widgets";
     }
