@@ -88,10 +88,10 @@
      <widget class="QWidget" name="scrollAreaWidgetContents">
       <property name="geometry">
        <rect>
-        <x>-194</x>
-        <y>-114</y>
-        <width>883</width>
-        <height>876</height>
+        <x>-225</x>
+        <y>0</y>
+        <width>917</width>
+        <height>861</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -1668,6 +1668,11 @@
                  <item>
                   <property name="text">
                    <string>breeze</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>breeze-dark</string>
                   </property>
                  </item>
                  <item>

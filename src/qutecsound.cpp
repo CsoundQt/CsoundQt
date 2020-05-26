@@ -224,6 +224,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
 
     focusMapper = new QSignalMapper(this);
+	setColors(); // not sure if it gets right colors though.. probably this does not
     createActions(); // Must be before readSettings: this sets default shortcuts
     createMenus();
     // TODO: take care that the position is stored when toolbars or panels are
@@ -1250,20 +1251,22 @@ void CsoundQt::setColors()
 	QColor darkColor("#2b2b2b"), lightColor("#ececec");
 
 
-//	if (m_options->colorScheme == "system") {
-//		bgColor = palette.color(QPalette::Window );
-//		color = palette.color(QPalette::Text );
-//	} else {
 	    if (m_options->colorScheme=="dark" ||
 		        (m_options->colorScheme == "system" &&
 		         palette.color(QPalette::Text).lightness() >  palette.color(QPalette::Window).lightness() ) ) {
-			bgColor = darkColor;//QColor(Qt::darkGray);
+			bgColor = darkColor;
 			color = lightColor;
+			// change icon theme to breeze-dark if breeze chosen but system or option is for dark
+			if (m_options->theme == "breeze") {
+				m_options->theme = "breeze-dark";
+			}
 		} else {
 			bgColor = QColor(Qt::white);
 			color = QColor(Qt::black);
+			if (m_options->theme == "breeze-dark") {
+				m_options->theme = "breeze";
+			}
 		}
-//	}
 	m_options->commonFontColor = color;
 	m_options->commonBgColor = bgColor;
 	qDebug()<< "Common font, background color: " << color.name() << bgColor.name();
