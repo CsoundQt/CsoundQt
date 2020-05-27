@@ -5043,10 +5043,9 @@ void CsoundQt::createToolBars()
     controlToolBar->setToolButtonStyle(toolButtonStyle);
     configureToolBar->setToolButtonStyle(toolButtonStyle);
     configureToolBar->setIconSize(QSize(iconSize, iconSize));
-    // test Mac
 #ifdef Q_OS_MAC
-
-    if (m_options->theme=="breeze-dark") {
+	//otherwise text is black on dark on toolbar:
+	if (m_options->theme=="breeze-dark") {
         QColor textColor = QGuiApplication::palette().color(QPalette::Text);
         qDebug() << "Textcolor: " << textColor;
         QString styleString = QString("color: %1").arg(textColor.name());
