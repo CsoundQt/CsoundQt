@@ -189,7 +189,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QSettings settings("csound", "qutecsound");
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "breeze").toString();
-    settings.endGroup();
+	m_options->colorScheme = settings.value("colorScheme", "system").toString();
+	settings.endGroup();
     settings.beginGroup("Options");
     settings.beginGroup("Editor");
     // necessary to get it before htmlview is created
@@ -1249,6 +1250,7 @@ void CsoundQt::setColors()
 	QPalette palette = QGuiApplication::palette();
 	QColor color, bgColor;
 	QColor darkColor("#2b2b2b"), lightColor("#ececec");
+	bool isLight = true;
 
 
 	    if (m_options->colorScheme=="dark" ||
@@ -1256,22 +1258,31 @@ void CsoundQt::setColors()
 		         palette.color(QPalette::Text).lightness() >  palette.color(QPalette::Window).lightness() ) ) {
 			bgColor = darkColor;
 			color = lightColor;
+			isLight = false;
 			// change icon theme to breeze-dark if breeze chosen but system or option is for dark
 			if (m_options->theme == "breeze") {
 				m_options->theme = "breeze-dark";
 			}
+//			if (m_options->colorScheme == "system") {
+//				m_options->highlightingTheme = "dark";
+//			} // - the idea was to change the editor highlighttheme also here, but better not. leave them separate for now.
 		} else {
 			bgColor = QColor(Qt::white);
 			color = QColor(Qt::black);
+			isLight = true;
 			if (m_options->theme == "breeze-dark") {
 				m_options->theme = "breeze";
 			}
+//			if (m_options->colorScheme == "system") {
+//				m_options->highlightingTheme = "classic"; // this is bad, maybe user wants light or none?
+//			} // -NO, this is bad
 		}
 	m_options->commonFontColor = color;
 	m_options->commonBgColor = bgColor;
 	qDebug()<< "Common font, background color: " << color.name() << bgColor.name();
 
 	m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; color: %2}").arg(bgColor.name()).arg(color.name()));
+	m_inspector->setColors(isLight);
 	m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name()).arg(color.name()));
 
 //#ifdef QCS_PYTHONQT
@@ -5086,7 +5097,8 @@ void CsoundQt::readSettings()
 
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "breeze").toString();
-    QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
+	m_options->colorScheme = settings.value("colorScheme", "system").toString();
+	QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(600, 500)).toSize();
     resize(size); // does not work here for MacOS Mojave
     move(pos);
@@ -5362,6 +5374,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         //  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
         settings.setValue("recentFiles", recentFiles);
         settings.setValue("theme", m_options->theme);
+		settings.setValue("colorScheme", m_options->colorScheme);
     }
     else {
         settings.remove("");

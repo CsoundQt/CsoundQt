@@ -141,6 +141,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	}
 
 	themeComboBox->setCurrentIndex(themeComboBox->findText(m_options->theme));
+	colorSchemeComboBox->setCurrentIndex(colorSchemeComboBox->findText(m_options->colorScheme));
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
 	fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
 	lineNumbersCheckBox->setChecked(m_options->showLineNumberArea);
