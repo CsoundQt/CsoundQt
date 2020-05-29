@@ -88,10 +88,10 @@
      <widget class="QWidget" name="scrollAreaWidgetContents">
       <property name="geometry">
        <rect>
-        <x>-225</x>
+        <x>-270</x>
         <y>0</y>
-        <width>917</width>
-        <height>869</height>
+        <width>959</width>
+        <height>930</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -1400,8 +1400,8 @@
                <rect>
                 <x>15</x>
                 <y>45</y>
-                <width>464</width>
-                <height>90</height>
+                <width>503</width>
+                <height>96</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_16">
@@ -1410,11 +1410,6 @@
                  <item>
                   <property name="text">
                    <string>breeze</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>breeze-dark</string>
                   </property>
                  </item>
                  <item>
@@ -1734,7 +1729,7 @@
                 <item>
                  <widget class="QRadioButton" name="ExternalRadioButton">
                   <property name="text">
-                   <string>External shell</string>
+                   <string>E&amp;xternal shell</string>
                   </property>
                   <property name="checked">
                    <bool>true</bool>

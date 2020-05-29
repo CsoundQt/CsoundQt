@@ -1251,33 +1251,26 @@ void CsoundQt::setColors()
 	QColor color, bgColor;
 	QColor darkColor("#2b2b2b"), lightColor("#ececec");
 	bool isLight = true;
+    bool systemIsDark = (palette.color(QPalette::Text).lightness() >  palette.color(QPalette::Window).lightness());
 
-
-	    if (m_options->colorScheme=="dark" ||
-		        (m_options->colorScheme == "system" &&
-		         palette.color(QPalette::Text).lightness() >  palette.color(QPalette::Window).lightness() ) ) {
-			bgColor = darkColor;
-			color = lightColor;
-			isLight = false;
-			// change icon theme to breeze-dark if breeze chosen but system or option is for dark
-			if (m_options->theme == "breeze") {
-				m_options->theme = "breeze-dark";
-			}
-//			if (m_options->colorScheme == "system") {
-//				m_options->highlightingTheme = "dark";
-//			} // - the idea was to change the editor highlighttheme also here, but better not. leave them separate for now.
-		} else {
-			bgColor = QColor(Qt::white);
-			color = QColor(Qt::black);
-			isLight = true;
-			if (m_options->theme == "breeze-dark") {
-				m_options->theme = "breeze";
-			}
-//			if (m_options->colorScheme == "system") {
-//				m_options->highlightingTheme = "classic"; // this is bad, maybe user wants light or none?
-//			} // -NO, this is bad
-		}
-	m_options->commonFontColor = color;
+    if (m_options->colorScheme=="dark" ||
+            (m_options->colorScheme == "system" && systemIsDark )) {
+        bgColor = darkColor;
+        color = lightColor;
+        isLight = false;
+        // change icon theme to breeze-dark if breeze chosen but system or option is for dark
+        if (systemIsDark && m_options->theme == "breeze") {
+            m_options->theme = "breeze-dark";
+        }
+    } else {
+        bgColor = QColor(240,240,240);
+        color = QColor(Qt::black);
+        isLight = true;
+        if (m_options->theme == "breeze-dark") {
+            m_options->theme = "breeze";
+        }
+    }
+    m_options->commonFontColor = color;
 	m_options->commonBgColor = bgColor;
 	qDebug()<< "Common font, background color: " << color.name() << bgColor.name();
 
@@ -1285,9 +1278,9 @@ void CsoundQt::setColors()
 	m_inspector->setColors(isLight);
 	m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name()).arg(color.name()));
 
-//#ifdef QCS_PYTHONQT
-//	m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name()).arg(color.name()) );
-//#endif
+#ifdef QCS_PYTHONQT
+    m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name()).arg(color.name()) );
+#endif
 
 
 }
@@ -3002,20 +2995,6 @@ void CsoundQt::applySettings()
         m_options->newParser = -1; // Don't use new parser flags
     }
     setupEnvironment();
-
-	// test
-	//setColors();
-
-	// set editorBgColor also for inspector, codepad and python console.
-    // Maybe the latter should use the same color as console?
-
-	//move these to setColors
-//	auto bgColor= m_options->commonBgColor.name(); //m_options->editorBgColor.name();
-//    m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(bgColor));
-//    m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(bgColor));
-//#ifdef QCS_PYTHONQT
-//    m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
-//#endif
 
 	this->setToolbarIconSize(m_options->toolbarIconSize);
 	//storeSettings(); // save always when something new is changed
