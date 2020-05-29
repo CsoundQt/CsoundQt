@@ -227,8 +227,14 @@ unix:!macx {
 	INSTALLS += examples
 
 	templates.path = $$SHARE_DIR/csoundqt/
-	templates.files = templates
+    templates.files = templates
 	INSTALLS += templates
+
+    pythonqt {
+        scripts.path = $$SHARE_DIR/csoundqt/
+        scripts.files = src/Scripts
+        INSTALLS += scripts
+    }
 
     # EXPERIMENTAL AppImage build  using linuxdeploy and linuxdeploy-plugin-qt
     # download linuxdeploy and its Qt plugin

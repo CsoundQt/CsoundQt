@@ -50,7 +50,7 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
 #define DEFAULT_DOT_EXECUTABLE "dot"
 #define DEFAULT_LOG_FILE ""
-#define DEFAULT_SCRIPT_DIR "../../csoundqt/src/Scripts"
+#define DEFAULT_SCRIPT_DIR "/usr/share/csoundqt/Scripts"
 #endif
 #ifdef Q_OS_SOLARIS
 #define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"
