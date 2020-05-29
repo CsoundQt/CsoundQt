@@ -58,7 +58,7 @@ void MidiLearnDialog::setMidiController(int channel, int cc)
 void MidiLearnDialog::on_setButton_clicked()
 {
 	if (m_cc<0 || m_channel<0 ) {
-		QMessageBox::warning(this, tr("Controller not set"), tr("Midi controller is not selected!"));
+        QMessageBox::warning(this, tr("Controller not set"), tr("MIDI controller is not selected!"));
 		return;
 	}
 	if (m_widget && m_widget->acceptsMidi()) {

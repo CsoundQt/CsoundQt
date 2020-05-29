@@ -126,7 +126,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	if (ifIndex>=0) {
 		midiInterfaceComboBox->setCurrentIndex(ifIndex);
 	} else {
-		qDebug()<< m_options->midiInterfaceName << "not found. Setting Midi In to None";
+        qDebug()<< m_options->midiInterfaceName << "not found. Setting MIDI In to None";
         // set to none if not found
         midiInterfaceComboBox->setCurrentIndex(midiInterfaceComboBox->findData(9999));
 	}
@@ -136,7 +136,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	if (ifIndex>=0) {
 		midiOutInterfaceComboBox->setCurrentIndex(ifIndex);
 	} else {
-		qDebug()<< m_options->midiOutInterfaceName << " not found. Setting Midi Out to None";
+        qDebug()<< m_options->midiOutInterfaceName << " not found. Setting MIDI Out to None";
 		midiOutInterfaceComboBox->setCurrentIndex(midiOutInterfaceComboBox->findData(9999));
 	}
 

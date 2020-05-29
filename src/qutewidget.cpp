@@ -323,7 +323,7 @@ void QuteWidget::popUpMenu(QPoint pos)
 	}
 
 	if (acceptsMidi()) {
-        menu.addAction(tr("Midi learn"), this, SLOT(openMidiDialog()) );
+        menu.addAction(tr("MIDI learn"), this, SLOT(openMidiDialog()) );
 		menu.addSeparator();
 	}
 
@@ -496,7 +496,7 @@ void QuteWidget::createPropertiesDialog()
 		midichanSpinBox->setRange(0,127);
         layout->addWidget(midichanSpinBox, midiRow,3, Qt::AlignLeft|Qt::AlignVCenter);
 
-		midiLearnButton = new QPushButton(tr("Midi learn"));
+        midiLearnButton = new QPushButton(tr("MIDI learn"));
         layout->addWidget(midiLearnButton, midiRow, 4, Qt::AlignLeft|Qt::AlignVCenter);
 	}
 	acceptButton = new QPushButton(tr("Ok"));
