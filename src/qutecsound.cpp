@@ -1258,21 +1258,23 @@ void CsoundQt::setColors()
         bgColor = darkColor;
         color = lightColor;
         isLight = false;
-        // change icon theme to breeze-dark if breeze chosen but system or option is for dark
-        if (systemIsDark && m_options->theme == "breeze") {
-            m_options->theme = "breeze-dark";
-        }
+
     } else {
         bgColor = QColor(240,240,240);
         color = QColor(Qt::black);
         isLight = true;
-        if (m_options->theme == "breeze-dark") {
-            m_options->theme = "breeze";
-        }
     }
+
+    // change icon theme to breeze-dark if breeze chosen but system or option is for dark
+    if (systemIsDark && m_options->theme == "breeze") {
+        m_options->theme = "breeze-dark";
+    } else if (!systemIsDark && m_options->theme == "breeze-dark") {
+        m_options->theme = "breeze";
+    }
+
     m_options->commonFontColor = color;
 	m_options->commonBgColor = bgColor;
-	qDebug()<< "Common font, background color: " << color.name() << bgColor.name();
+    //qDebug()<< "Common font, background color: " << color.name() << bgColor.name();
 
 	m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; color: %2}").arg(bgColor.name()).arg(color.name()));
 	m_inspector->setColors(isLight);
