@@ -251,7 +251,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     connect(RtModuleComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(onRtModuleComboBoxChanged(int)) );
 
-    RtInputLineEdit->setText(m_options->rtInputDevice);
+	RtInputLineEdit->setText(m_options->rtInputDevice);
 	RtOutputLineEdit->setText(m_options->rtOutputDevice);
     // useSystemSamplerateCheckBox->setChecked(m_options->useSystemSamplerate);
 
@@ -383,9 +383,9 @@ ConfigDialog::~ConfigDialog()
 {
 }
 
-void ConfigDialog::onRtModuleComboBoxChanged(int index) {
-    RtInputLineEdit->setText("");
-    RtOutputLineEdit->setText("");
+void ConfigDialog::onRtModuleComboBoxChanged(/*int index*/) {
+	RtInputLineEdit->setText("adc"); // was ""
+	RtOutputLineEdit->setText("dac"); // was ""
 }
 
 int ConfigDialog::currentTab()
