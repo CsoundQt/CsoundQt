@@ -30,7 +30,7 @@ kon	active 1		; check whether any instances of instr 1 are active
 ; there's no note overlap (if kon == 1) -- scale the velocity
 ; to a range of 0.2 - 1.0
 kvel init 0
-kstatus kchan kdata1 kdata2 midiin
+kstatus, kchan, kdata1, kdata2 midiin
 if kstatus == 144 && kdata2 != 0 && kon == 1 then
 	kvel = kdata2 * 0.006 + 0.2
 endif
