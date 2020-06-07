@@ -1241,38 +1241,6 @@ void CsoundQt::setupEnvironment()
 #endif
 }
 
-
-void CsoundQt::setColors()
-{
-	QPalette palette = QGuiApplication::palette();
-	QColor color, bgColor;
-
-	if (m_options->colorTheme == "system") {
-		bgColor = palette.color(QPalette::Window );
-		color = palette.color(QPalette::Text );
-	} else {
-		if (m_options->colorTheme=="dark") {
-			bgColor = QColor(Qt::darkGray);
-			color = QColor(Qt::white);
-		} else {
-			bgColor = QColor(Qt::white);
-			color = QColor(Qt::darkGray);
-		}
-	}
-	m_options->commonFontColor = color;
-	m_options->commonBgColor = bgColor;
-	qDebug()<< "Common font, background color: " << color.name() << bgColor.name();
-
-	m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; color: %2}").arg(bgColor.name()).arg(color.name()));
-	m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name().arg(color.name())));
-
-#ifdef QCS_PYTHONQT
-	m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name().arg(color.name())));
-#endif
-
-
-}
-
 void CsoundQt::onNewConnection()
 {
     qDebug()<<"NEW connection";
@@ -2980,22 +2948,16 @@ void CsoundQt::applySettings()
     }
     setupEnvironment();
 
-	// test
-	setColors();
-
-	// set editorBgColor also for inspector, codepad and python console.
+    // set editorBgColor also for inspector, codepad and python console.
     // Maybe the latter should use the same color as console?
-
-	//move these to setColors
-//	auto bgColor= m_options->commonBgColor.name(); //m_options->editorBgColor.name();
-//    m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(bgColor));
-//    m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(bgColor));
-//#ifdef QCS_PYTHONQT
-//    m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
-//#endif
-
-	this->setToolbarIconSize(m_options->toolbarIconSize);
-	//storeSettings(); // save always when something new is changed
+    auto bgColor= m_options->editorBgColor.name();
+    m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(bgColor));
+    m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(bgColor));
+    this->setToolbarIconSize(m_options->toolbarIconSize);
+#ifdef QCS_PYTHONQT
+    m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
+#endif
+    //storeSettings(); // save always when something new is changed
 }
 
 void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
@@ -3019,11 +2981,8 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setLineEnding(m_options->lineEnding);
     p->setConsoleFont(QFont(m_options->consoleFont,
                             (int) m_options->consoleFontPointSize));	
-//	p->setConsoleColors(m_options->consoleFontColor,
-//	                    m_options->consoleBgColor);
-	p->setConsoleColors(m_options->commonFontColor,
-	                    m_options->commonBgColor);
-
+	p->setConsoleColors(m_options->consoleFontColor,
+	                    m_options->consoleBgColor);
     // p->setEditorBgColor(m_options->editorBgColor);
     p->setScriptDirectory(m_options->pythonDir);
     p->setPythonExecutable(m_options->pythonExecutable);
