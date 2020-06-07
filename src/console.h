@@ -62,7 +62,6 @@ protected:
 	QColor m_bgColor;
     QColor m_warningColor;
     QColor m_errorColor;
-	QColor m_ampColor;
 
 	bool m_repeatKeys;
     QMutex consoleLock;

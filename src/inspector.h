@@ -55,7 +55,6 @@ public:
 	~Inspector();
 	void parseText(const QString &text);
 	void parsePythonText(const QString &text);
-	void setColors(bool light=true);
     QStringList getParsedUDOs() { return m_opcodes; }
     QVector<Opcode*> getUdosVector() { return udosVector; }
     QHash<QString, Opcode>*getUdosMap() { return &udosMap; }
@@ -80,10 +79,6 @@ private:
     bool inspectLabels;
     QHash<QString, Opcode>udosMap;
     QVector<Opcode *>udosVector;
-	QColor headingBgColor, instrColor, itemBgColor;
-	QColor commentColor, parameterColor;
-
-
 
 private slots:
 	void itemActivated(QTreeWidgetItem * item, int column = 0);

@@ -188,8 +188,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QSettings settings("csound", "qutecsound");
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "breeze").toString();
-	m_options->colorScheme = settings.value("colorScheme", "system").toString();
-	settings.endGroup();
+    settings.endGroup();
     settings.beginGroup("Options");
     settings.beginGroup("Editor");
     // necessary to get it before htmlview is created
@@ -224,7 +223,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
 
     focusMapper = new QSignalMapper(this);
-	setColors(); // not sure if it gets right colors though.. probably this does not
     createActions(); // Must be before readSettings: this sets default shortcuts
     createMenus();
     // TODO: take care that the position is stored when toolbars or panels are
@@ -1248,39 +1246,28 @@ void CsoundQt::setColors()
 {
 	QPalette palette = QGuiApplication::palette();
 	QColor color, bgColor;
-	QColor darkColor("#2b2b2b"), lightColor("#ececec");
-	bool isLight = true;
-    bool systemIsDark = (palette.color(QPalette::Text).lightness() >  palette.color(QPalette::Window).lightness());
 
-    if (m_options->colorScheme=="dark" ||
-            (m_options->colorScheme == "system" && systemIsDark )) {
-        bgColor = darkColor;
-        color = lightColor;
-        isLight = false;
-
-    } else {
-        bgColor = QColor(240,240,240);
-        color = QColor(Qt::black);
-        isLight = true;
-    }
-
-    // change icon theme to breeze-dark if breeze chosen but system or option is for dark
-    if (systemIsDark && m_options->theme == "breeze") {
-        m_options->theme = "breeze-dark";
-    } else if (!systemIsDark && m_options->theme == "breeze-dark") {
-        m_options->theme = "breeze";
-    }
-
-    m_options->commonFontColor = color;
+	if (m_options->colorTheme == "system") {
+		bgColor = palette.color(QPalette::Window );
+		color = palette.color(QPalette::Text );
+	} else {
+		if (m_options->colorTheme=="dark") {
+			bgColor = QColor(Qt::darkGray);
+			color = QColor(Qt::white);
+		} else {
+			bgColor = QColor(Qt::white);
+			color = QColor(Qt::darkGray);
+		}
+	}
+	m_options->commonFontColor = color;
 	m_options->commonBgColor = bgColor;
-    //qDebug()<< "Common font, background color: " << color.name() << bgColor.name();
+	qDebug()<< "Common font, background color: " << color.name() << bgColor.name();
 
 	m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; color: %2}").arg(bgColor.name()).arg(color.name()));
-	m_inspector->setColors(isLight);
-	m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name()).arg(color.name()));
+	m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name().arg(color.name())));
 
 #ifdef QCS_PYTHONQT
-    m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name()).arg(color.name()) );
+	m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; color:%2}").arg(bgColor.name().arg(color.name())));
 #endif
 
 
@@ -2916,10 +2903,6 @@ void CsoundQt::applySettings()
 {
     // This is called at initialization, when clicking "apply" in the settings dialog
     // and when closing it with "OK"
-
-
-	setColors();
-
     for (int i = 0; i < documentPages.size(); i++) {
         setCurrentOptionsForPage(documentPages[i]);
     }
@@ -2996,6 +2979,20 @@ void CsoundQt::applySettings()
         m_options->newParser = -1; // Don't use new parser flags
     }
     setupEnvironment();
+
+	// test
+	setColors();
+
+	// set editorBgColor also for inspector, codepad and python console.
+    // Maybe the latter should use the same color as console?
+
+	//move these to setColors
+//	auto bgColor= m_options->commonBgColor.name(); //m_options->editorBgColor.name();
+//    m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(bgColor));
+//    m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(bgColor));
+//#ifdef QCS_PYTHONQT
+//    m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
+//#endif
 
 	this->setToolbarIconSize(m_options->toolbarIconSize);
 	//storeSettings(); // save always when something new is changed
@@ -5034,9 +5031,10 @@ void CsoundQt::createToolBars()
     controlToolBar->setToolButtonStyle(toolButtonStyle);
     configureToolBar->setToolButtonStyle(toolButtonStyle);
     configureToolBar->setIconSize(QSize(iconSize, iconSize));
+    // test Mac
 #ifdef Q_OS_MAC
-	//otherwise text is black on dark on toolbar:
-	if (m_options->theme=="breeze-dark") {
+
+    if (m_options->theme=="breeze-dark") {
         QColor textColor = QGuiApplication::palette().color(QPalette::Text);
         qDebug() << "Textcolor: " << textColor;
         QString styleString = QString("color: %1").arg(textColor.name());
@@ -5077,8 +5075,7 @@ void CsoundQt::readSettings()
 
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "breeze").toString();
-	m_options->colorScheme = settings.value("colorScheme", "system").toString();
-	QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
+    QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(600, 500)).toSize();
     resize(size); // does not work here for MacOS Mojave
     move(pos);
@@ -5354,7 +5351,6 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         //  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
         settings.setValue("recentFiles", recentFiles);
         settings.setValue("theme", m_options->theme);
-		settings.setValue("colorScheme", m_options->colorScheme);
     }
     else {
         settings.remove("");

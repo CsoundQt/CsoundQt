@@ -32,7 +32,6 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
 	errorLine = false;
 	setReadOnly(true);
     m_warningColor = QColor("orange");
-	m_ampColor = QColor("#4040FF");
 }
 
 Console::~Console()
@@ -84,7 +83,7 @@ void Console::appendMessage(QString msg)
         else if (messageLine.startsWith("B ")
                 || messageLine.contains("rtevent", Qt::CaseInsensitive)
                 ||  messageLine.contains("evaluated", Qt::CaseInsensitive)) {
-			setTextColor(m_ampColor);
+            setTextColor(QColor("#4040FF"));
 		}
         else if (messageLine.contains("overall samples out of range")
                 || messageLine.contains("disabled")
@@ -124,13 +123,11 @@ void Console::setColors(QColor textColor, QColor bgColor)
         // dark text on light background
         m_warningColor = QColor("#AC7F00");
         m_errorColor = QColor("#AC0000");
-		m_ampColor = QColor("#4040FF");
     }
     else {
         // dark background
         m_warningColor = QColor("orange");
         m_errorColor = QColor("#FF4040");
-		m_ampColor = QColor("#a8abb0"); // sort of light grey//  try light blue: #44bdcc
     }
 }
 

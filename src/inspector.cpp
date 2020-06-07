@@ -53,11 +53,6 @@ Inspector::Inspector(QWidget *parent)
     m_treeWidget->collapseItem(treeItem5);    // score
     opcodeRegexp = QRegExp("\\bopcode\\s+(\\w+)\\b");
     inspectLabels = false;
-
-	QPalette palette = QGuiApplication::palette();
-	bool isLight =  (palette.color(QPalette::Text).lightness() <
-			palette.color(QPalette::Window).lightness());
-	setColors(isLight);
 }
 
 
@@ -95,17 +90,17 @@ void Inspector::parseText(const QString &text)
 	m_treeWidget->clear();
 	treeItem1 = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
 	treeItem1->setLine(-1);
-	treeItem1->setBackground(0, QBrush(headingBgColor));
+	treeItem1->setBackground(0, Qt::lightGray);
 	treeItem2 = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
 	treeItem2->setLine(-1);
 	treeItem3 = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
 	treeItem3->setLine(-1);
-	treeItem3->setBackground(0, QBrush(headingBgColor));
+	treeItem3->setBackground(0, Qt::lightGray);
 	treeItem4 = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
 	treeItem4->setLine(-1);
 	treeItem5 = new TreeItem(m_treeWidget, QStringList(tr("Score")));
 	treeItem5->setLine(-1);  // This might be overridden below
-	treeItem5->setBackground(0, QBrush(headingBgColor));
+	treeItem5->setBackground(0, Qt::lightGray);
 	TreeItem *currentInstrument = treeItem3;
     Opcode *currentOpcode = nullptr;
 	int commentIndex = 0;
@@ -133,14 +128,14 @@ void Inspector::parseText(const QString &text)
             QStringList columnslist(text.simplified());
 			TreeItem *newItem = new TreeItem(treeItem3, columnslist);
 			newItem->setLine(i + 1);
-			newItem->setForeground (0, QBrush(instrColor) );
-			newItem->setBackground(0, QBrush(itemBgColor));
+			newItem->setForeground (0, QBrush(Qt::darkMagenta) );
+			newItem->setBackground(0, QColor(240, 240, 240));
 			currentInstrument = newItem;
 		}
         else if (line.startsWith(";; ")) {
 			QStringList columnslist(lines[i].trimmed().remove(0,2));
 			TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
-			newItem->setForeground (0, QBrush(commentColor) );
+			newItem->setForeground (0, QBrush(Qt::darkGreen) );
 			newItem->setLine(i + 1);
 		}
         else if (line.startsWith("endin")) {
@@ -166,7 +161,7 @@ void Inspector::parseText(const QString &text)
             TreeItem *newItem = new TreeItem(treeItem1, columnslist);
             newItem->setLine(i + 1);
             currentInstrument = newItem;
-			newItem->setBackground(0, itemBgColor);
+            newItem->setBackground(0, QColor(240, 240, 240));
             currentOpcode = new Opcode();
             currentOpcode->opcodeName = opcodeName;
         }
@@ -177,7 +172,7 @@ void Inspector::parseText(const QString &text)
             QStringList columnslist(line.simplified());
             TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
             newItem->setLine(i + 1);
-			newItem->setForeground(0, parameterColor);
+            newItem->setForeground(0, QColor("darkBlue"));
         }
         else if ((index = QRegExp("\\bxout\\b").indexIn(line, 0)) != -1
                  && !partOfComment
@@ -186,7 +181,7 @@ void Inspector::parseText(const QString &text)
             QStringList columnslist(line.simplified());
             TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
             newItem->setLine(i + 1);
-			newItem->setForeground(0, parameterColor);
+            newItem->setForeground(0, QColor("darkBlue"));
         }
         else if (line.startsWith("#define")) {
             QString text = line.simplified().mid(8);
@@ -297,7 +292,7 @@ void Inspector::parsePythonText(const QString &text)
 		else if (lines[i].contains("##")) {
 			QStringList columnslist(lines[i].simplified());
 			TreeItem *newItem = new TreeItem(treeItem3, columnslist);
-			newItem->setForeground (0, QBrush(commentColor) );
+			newItem->setForeground (0, QBrush(Qt::darkGreen) );
 			newItem->setLine(i + 1);
 		}
 	}
@@ -317,25 +312,6 @@ void Inspector::closeEvent(QCloseEvent * /*event*/)
 {
 	//  qDebug() << "Inspector::closeEvent";
 	emit Close(false);
-}
-
-void Inspector::setColors(bool light)
-{
-	if (light) {
-		headingBgColor = QColor(Qt::lightGray);
-		instrColor = QColor(Qt::darkMagenta);
-		itemBgColor = QColor(240,240,240);
-		commentColor = QColor(Qt::darkGreen);
-		parameterColor = QColor(Qt::darkBlue);
-	} else {
-		headingBgColor = QColor(Qt::darkGray);
-		instrColor = QColor("#ff8ff4"); // #d298fb
-		itemBgColor = QColor(Qt::transparent); //QColor(15,15,15);
-		commentColor = QColor("#ae9ed6");
-		parameterColor = QColor("#45c6d6");
-
-	}
-	this->update();
 }
 
 void Inspector::itemActivated(QTreeWidgetItem * item, int /*column*/)
