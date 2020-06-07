@@ -73,6 +73,7 @@
 #define DEFAULT_DOT_EXECUTABLE "/usr/local/bin/dot"
 #define DEFAULT_LOG_FILE ""
 #define DEFAULT_SCRIPT_DIR qApp->applicationDirPath() + "/../Resources/Scripts"
+// for applications (on Catalina it is different) perhaps: QStandardPaths::standardLocations( QStandardPaths::ApplicationsLocation)
 #endif
 #ifdef Q_OS_WIN32
 #define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
