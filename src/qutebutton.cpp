@@ -548,11 +548,11 @@ void QuteButton::performAction() {
                         lineElements[0].prepend("-");
                     }
                     lineElements.prepend("i");
-                    setValue(1);
+					setValue(0); // was 1
                     emit(queueEventSignal(lineElements.join(" ")));
                 }
                 else { // Button has turned on. Turn on instrument
-                    setValue(0);
+					setValue(1); // was 0
                     emit(queueEventSignal(eventLine));
                 }
             }
