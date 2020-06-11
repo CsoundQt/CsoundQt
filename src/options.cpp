@@ -177,8 +177,8 @@ Options::Options(ConfigLists *configlists) :
     atsSmrThresh = "30";
     atsLastPkCon = "0.0";
     atsSmrContr = "0.5";
-    atsFileType = 0;
-    atsWindow = 0;
+    atsFileType = 3;
+    atsWindow = 1;
     }
 
 

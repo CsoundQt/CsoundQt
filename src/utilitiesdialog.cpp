@@ -98,7 +98,7 @@ UtilitiesDialog::UtilitiesDialog(QWidget *parent, Options *options/*, ConfigList
 	hetBreakpointsLineEdit->setText(options->hetNumBreakPoints);
 	hetCutoffLineEdit->setText(options->hetFilterCutoff),
 
-			lpInputLineEdit->setText(options->lpInputName);
+	lpInputLineEdit->setText(options->lpInputName);
 	lpOutputLineEdit->setText(options->lpOutputName);
 	lpSrLineEdit->setText(options->lpSampleRate);
 	lpChannelLineEdit->setText(options->lpChannel);
@@ -166,8 +166,8 @@ void UtilitiesDialog::resetAtsa()
 	atsaThresholdLineEdit->setText("30");
 	atsaLastPeakLineEdit->setText("0.0");
 	atsaSmrLineEdit->setText("0.5");
-	atsaFileTypeComboBox->setCurrentIndex(0);
-	atsaWindowComboBox->setCurrentIndex(0);
+	atsaFileTypeComboBox->setCurrentIndex(3);
+	atsaWindowComboBox->setCurrentIndex(1);
 }
 
 void UtilitiesDialog::setAtsaOutput(QString name)
