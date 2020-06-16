@@ -745,7 +745,8 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 		startIndex = text.indexOf(commentStartExpression);
 	}
 
-	while (startIndex >= 0 && startIndex < commentIndex) {
+    // while (startIndex >= 0 && startIndex < commentIndex) {
+    while (startIndex >= 0) {
 		int endIndex = text.indexOf(commentEndExpression, startIndex);
 		if (format(startIndex) == quotationFormat) {
 			startIndex = text.indexOf(commentStartExpression,
