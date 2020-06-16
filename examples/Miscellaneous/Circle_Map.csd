@@ -4,10 +4,10 @@
 <CsInstruments>
 
 ; C I R C L E   M A P   D E M O N S T R A T I O N
-; Copyright 2012 by Michae Gogins.
+; Copyright 2012 by Michael Gogins.
 ; This software is licesed under the terms of the Library GNU Public License verson 3.
 ;
-; With patience, quite an amazing zoo of sounds can be coaxed from thi instrument.
+; With patience, quite an amazing zoo of sounds can be coaxed from this instrument.
 ; There are fiddly places where the spinners not the sliders must be used. 
 ; There are gaps in the coupling parameter space where nothing happens. Be patient!
 ; 
@@ -102,7 +102,7 @@ f 0 36000
   <g>176</g>
   <b>227</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>10</y>
@@ -112,8 +112,10 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Circlemap  frequency</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -129,9 +131,9 @@ f 0 36000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>kin_frequency</objectName>
   <x>16</x>
   <y>34</y>
@@ -141,6 +143,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>20000.00000000</maximum>
   <value>16084.65608466</value>
@@ -149,7 +152,7 @@ f 0 36000
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>55</y>
@@ -159,8 +162,10 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Circlemap coupling</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -176,9 +181,9 @@ f 0 36000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>kin_coupling</objectName>
   <x>16</x>
   <y>79</y>
@@ -188,6 +193,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>10.00000000</maximum>
   <value>0.95560000</value>
@@ -196,7 +202,7 @@ f 0 36000
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>113</y>
@@ -206,8 +212,10 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Moog filter frequency</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -223,9 +231,9 @@ f 0 36000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>kin_filter_frequency</objectName>
   <x>16</x>
   <y>137</y>
@@ -235,6 +243,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>15000.00000000</maximum>
   <value>6904.76190476</value>
@@ -243,7 +252,7 @@ f 0 36000
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>158</y>
@@ -253,8 +262,10 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Moog filter Q</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -270,9 +281,9 @@ f 0 36000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>kin_filter_q</objectName>
   <x>16</x>
   <y>182</y>
@@ -282,6 +293,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.25000000</maximum>
   <value>0.84656085</value>
@@ -290,7 +302,7 @@ f 0 36000
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>215</y>
@@ -300,8 +312,10 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Reverberation feedback</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -317,9 +331,9 @@ f 0 36000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>kin_reverb_feedback</objectName>
   <x>16</x>
   <y>239</y>
@@ -329,6 +343,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.81481481</value>
@@ -337,7 +352,7 @@ f 0 36000
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>261</y>
@@ -347,8 +362,10 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Reverberation wet/dry</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -364,9 +381,9 @@ f 0 36000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>kin_reverb_wet</objectName>
   <x>16</x>
   <y>285</y>
@@ -376,6 +393,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.78306878</value>
@@ -384,7 +402,7 @@ f 0 36000
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>318</y>
@@ -394,8 +412,10 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Master output level</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -411,9 +431,9 @@ f 0 36000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>kin_master_level</objectName>
   <x>16</x>
   <y>342</y>
@@ -423,6 +443,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>10.00000000</maximum>
   <value>1.85185185</value>
@@ -431,7 +452,7 @@ f 0 36000
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>kin_coupling</objectName>
   <x>135</x>
   <y>57</y>
@@ -441,6 +462,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -460,7 +482,7 @@ f 0 36000
   <randomizable group="0">false</randomizable>
   <value>0.9556</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>kin_frequency</objectName>
   <x>135</x>
   <y>12</y>
@@ -470,6 +492,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
@@ -489,7 +512,7 @@ f 0 36000
   <randomizable group="0">false</randomizable>
   <value>16084.7</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>kin_filter_frequency</objectName>
   <x>135</x>
   <y>116</y>
@@ -499,6 +522,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -518,7 +542,7 @@ f 0 36000
   <randomizable group="0">false</randomizable>
   <value>6904.76</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>kin_master_level</objectName>
   <x>135</x>
   <y>321</y>
@@ -528,6 +552,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -547,7 +572,7 @@ f 0 36000
   <randomizable group="0">false</randomizable>
   <value>1.85185</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>kin_filter_q</objectName>
   <x>135</x>
   <y>161</y>
@@ -557,6 +582,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -576,7 +602,7 @@ f 0 36000
   <randomizable group="0">false</randomizable>
   <value>0.846561</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>kin_reverb_wet</objectName>
   <x>135</x>
   <y>263</y>
@@ -586,6 +612,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -605,7 +632,7 @@ f 0 36000
   <randomizable group="0">false</randomizable>
   <value>0.783069</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>kin_reverb_feedback</objectName>
   <x>135</x>
   <y>217</y>
@@ -615,6 +642,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -634,7 +662,7 @@ f 0 36000
   <randomizable group="0">false</randomizable>
   <value>0.814815</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>210</x>
   <y>10</y>
@@ -644,8 +672,10 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Phase increment</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -661,9 +691,9 @@ f 0 36000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>kphase_increment</objectName>
   <x>309</x>
   <y>13</y>
@@ -673,6 +703,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.365</label>
   <alignment>right</alignment>
   <font>Arial</font>
@@ -684,13 +715,13 @@ f 0 36000
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>240</r>
-   <g>235</g>
-   <b>226</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>210</x>
   <y>318</y>
@@ -700,8 +731,10 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Tracked frequency</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -717,9 +750,9 @@ f 0 36000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>kout_frequency</objectName>
   <x>309</x>
   <y>321</y>
@@ -729,7 +762,8 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>640.704</label>
+  <description/>
+  <label>640.791</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -740,13 +774,13 @@ f 0 36000
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>240</r>
-   <g>235</g>
-   <b>226</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>210</x>
   <y>345</y>
@@ -756,8 +790,10 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Tracked amplitude</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -773,9 +809,9 @@ f 0 36000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>kout_amplitude</objectName>
   <x>309</x>
   <y>348</y>
@@ -785,7 +821,8 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>-31.103</label>
+  <description/>
+  <label>-28.600</label>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -796,13 +833,13 @@ f 0 36000
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>240</r>
-   <g>235</g>
-   <b>226</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>218</x>
   <y>113</y>
@@ -812,6 +849,7 @@ f 0 36000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <value>-255.00000000</value>
   <type>lissajou</type>
   <zoomx>2.00000000</zoomx>

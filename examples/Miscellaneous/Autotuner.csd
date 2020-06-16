@@ -195,7 +195,7 @@ if (gkenable == 1) then
 		clear aout, aout2, aout3
 	endif
 
-	out(aout+aout2+aout3)*0.5*gklevel
+	out (aout+aout2+aout3)*0.5*gklevel
 else
 	out ain*gklevel
 endif
@@ -220,7 +220,8 @@ i10 0 -1 0    3   -5     4  ; C major 6-4 harmonies
 e 3600
 </CsScore>
 </CsoundSynthesizer>
-<CsoundSynthesizer><bsbPanel>
+<CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>808</x>
@@ -234,7 +235,7 @@ e 3600
   <g>0</g>
   <b>0</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>28</x>
   <y>180</y>
@@ -244,8 +245,10 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Transposition Interval 1</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -263,7 +266,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>interval1</objectName>
   <x>98</x>
   <y>206</y>
@@ -273,6 +276,7 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -292,7 +296,7 @@ e 3600
   <randomizable group="0">false</randomizable>
   <value>4</value>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>interval1_on</objectName>
   <x>76</x>
   <y>207</y>
@@ -302,12 +306,13 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>29</x>
   <y>244</y>
@@ -317,8 +322,10 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Output Level</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -334,9 +341,9 @@ e 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>level</objectName>
   <x>35</x>
   <y>265</y>
@@ -346,6 +353,7 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.47368421</value>
@@ -354,7 +362,7 @@ e 3600
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>enable</objectName>
   <x>202</x>
   <y>150</y>
@@ -364,12 +372,13 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>123</x>
   <y>147</y>
@@ -379,8 +388,10 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Enable</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -396,9 +407,9 @@ e 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
   <x>228</x>
   <y>18</y>
@@ -408,6 +419,7 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -415,9 +427,10 @@ e 3600
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
-  <latched>true</latched>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>56</x>
   <y>12</y>
@@ -427,8 +440,10 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Autotuner</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>28</fontsize>
   <precision>3</precision>
@@ -446,7 +461,7 @@ e 3600
   <borderradius>3</borderradius>
   <borderwidth>3</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>58</x>
   <y>9</y>
@@ -456,8 +471,10 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Autotuner</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>28</fontsize>
   <precision>3</precision>
@@ -475,7 +492,7 @@ e 3600
   <borderradius>3</borderradius>
   <borderwidth>4</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>60</x>
   <y>7</y>
@@ -485,8 +502,10 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Autotuner</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>28</fontsize>
   <precision>3</precision>
@@ -504,7 +523,7 @@ e 3600
   <borderradius>3</borderradius>
   <borderwidth>4</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>34</x>
   <y>109</y>
@@ -514,8 +533,10 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Transposition method</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -531,9 +552,9 @@ e 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>trans_method</objectName>
   <x>197</x>
   <y>108</y>
@@ -543,6 +564,7 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>delay line</name>
@@ -558,7 +580,7 @@ e 3600
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>33</x>
   <y>73</y>
@@ -568,8 +590,10 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Tracking opcode</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -585,9 +609,9 @@ e 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>track_opcode</objectName>
   <x>196</x>
   <y>72</y>
@@ -597,6 +621,7 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>pitch</name>
@@ -617,7 +642,7 @@ e 3600
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>195</x>
   <y>180</y>
@@ -627,8 +652,10 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Transposition Interval 2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -646,7 +673,7 @@ e 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>interval2</objectName>
   <x>265</x>
   <y>206</y>
@@ -656,6 +683,7 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -675,7 +703,7 @@ e 3600
   <randomizable group="0">false</randomizable>
   <value>7</value>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>interval2_on</objectName>
   <x>243</x>
   <y>207</y>
@@ -685,6 +713,7 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -693,36 +722,3 @@ e 3600
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {21845, 0, 0}
-ioText {28, 180} {163, 60} label 0.000000 0.00100 "" center "Arial" 14 {65280, 65280, 65280} {63232, 62720, 61952} nobackground noborder Transposition Interval 1
-ioText {98, 206} {51, 26} editnum 4.000000 1.000000 "interval1" left "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 4.000000
-ioCheckbox {76, 207} {20, 20} on interval1_on
-ioText {29, 244} {132, 28} label 0.000000 0.00100 "" right "Arial" 14 {65280, 65280, 65280} {63232, 62720, 61952} nobackground noborder Output Level
-ioSlider {35, 265} {323, 28} 0.000000 1.000000 0.473684 level
-ioCheckbox {202, 150} {20, 20} on enable
-ioText {123, 147} {80, 29} label 0.000000 0.00100 "" right "Arial" 14 {65280, 65280, 65280} {63232, 62720, 61952} nobackground noborder Enable
-ioButton {228, 18} {100, 30} value 1.000000 "_Play" "Start" "/" 
-ioText {56, 12} {166, 50} label 0.000000 0.00100 "" right "Arial" 28 {65280, 65280, 65280} {63232, 62720, 61952} nobackground noborder Autotuner
-ioText {58, 9} {166, 50} label 0.000000 0.00100 "" right "Arial" 28 {33024, 33024, 33024} {63232, 62720, 61952} nobackground noborder Autotuner
-ioText {60, 7} {166, 50} label 0.000000 0.00100 "" right "Arial" 28 {8704, 8704, 8704} {63232, 62720, 61952} nobackground noborder Autotuner
-ioText {34, 109} {162, 31} label 0.000000 0.00100 "" right "Arial" 14 {65280, 65280, 65280} {63232, 62720, 61952} nobackground noborder Transposition method
-ioMenu {197, 108} {158, 31} 1 303 "delay line,spectral" trans_method
-ioText {33, 73} {162, 31} label 0.000000 0.00100 "" right "Arial" 14 {65280, 65280, 65280} {63232, 62720, 61952} nobackground noborder Tracking opcode
-ioMenu {196, 72} {158, 31} 1 303 "pitch,ptrack,pitchamdf" track_opcode
-ioText {195, 180} {163, 60} label 0.000000 0.00100 "" center "Arial" 14 {65280, 65280, 65280} {63232, 62720, 61952} nobackground noborder Transposition Interval 2
-ioText {265, 206} {51, 26} editnum 7.000000 1.000000 "interval2" left "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 7.000000
-ioCheckbox {243, 207} {20, 20} on interval2_on
-</MacGUI>
