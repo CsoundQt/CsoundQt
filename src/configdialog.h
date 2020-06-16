@@ -94,7 +94,7 @@ private slots:
     void testAudioSetup();
     void recommendEnvironmentSettings();
 
-	void onRtModuleComboBoxChanged(/*int index*/);
+    void onRtModuleComboBoxChanged(int index);
 
 
 

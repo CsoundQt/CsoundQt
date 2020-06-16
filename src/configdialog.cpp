@@ -246,7 +246,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		index = 0;
 	}
     RtModuleComboBox->setCurrentIndex(index);
-
     connect(RtModuleComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(onRtModuleComboBoxChanged(int)) );
 
@@ -382,9 +381,25 @@ ConfigDialog::~ConfigDialog()
 {
 }
 
-void ConfigDialog::onRtModuleComboBoxChanged(/*int index*/) {
-	RtInputLineEdit->setText("adc"); // was ""
-	RtOutputLineEdit->setText("dac"); // was ""
+void ConfigDialog::onRtModuleComboBoxChanged(int index) {
+    // Todo: remember the settings for each backend in a hash table, and set it to the last
+    // known value when changed back. Otherwise set it to the default adc/dac
+    auto currentText = this->RtModuleComboBox->currentText();
+    if(currentText == "null") {
+        RtInputLineEdit->setText("");
+        RtOutputLineEdit->setText("");
+    } else if (currentText == "jack") {
+#ifdef Q_OS_LINUX
+        RtInputLineEdit->setText("adc:system:capture_");
+        RtOutputLineEdit->setText("dac:system:playback_");
+#else
+        RtInputLineEdit->setText("adc");
+        RtOutputLineEdit->setText("dac");
+#endif
+    } else {
+        RtInputLineEdit->setText("adc");
+        RtOutputLineEdit->setText("dac");
+    }
 }
 
 int ConfigDialog::currentTab()
