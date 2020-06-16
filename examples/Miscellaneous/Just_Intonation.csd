@@ -4,7 +4,7 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 256
+ksmps = 128
 nchnls = 2
 0dbfs = 1
 
@@ -82,7 +82,7 @@ e
   <g>162</g>
   <b>69</b>
  </bgcolor>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>9</x>
   <y>8</y>
@@ -92,6 +92,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>-255.00000000</value>
   <type>lissajou</type>
   <zoomx>2.00000000</zoomx>
@@ -100,7 +101,7 @@ e
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>310</x>
   <y>10</y>
@@ -110,10 +111,12 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>
-This file shows the difference for a few intervals with Equal temperament and Just Intonation. One note of the interval is placed on the left channel and the other note on the right. The lissajous scope on the left shows the correlation between the channels. Since just intonation intervals are more closely related the graphic dispay is cleaner.</label>
+This file shows the difference for a few intervals with Equal temperament and Just Intonation. One note of the interval is placed on the left channel and the other note on the right. The lissajous scope on the left shows the correlation between the channels. Since just intonation intervals are more closely related the graphic display is cleaner.</label>
   <alignment>center</alignment>
-  <font>Helvetica</font>
+  <valignment>top</valignment>
+  <font>TeX Gyre Heros</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -126,11 +129,11 @@ This file shows the difference for a few intervals with Equal temperament and Ju
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
   <x>310</x>
   <y>273</y>
@@ -140,6 +143,7 @@ This file shows the difference for a few intervals with Equal temperament and Ju
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -148,6 +152,7 @@ This file shows the difference for a few intervals with Equal temperament and Ju
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
