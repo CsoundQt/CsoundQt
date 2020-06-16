@@ -133,8 +133,8 @@ gifftsz	init		2048
 ; initialize globals for values from UI
 ;-------------------------------------------------------------------------
 
-gktbl	init		0
-gkbase	init		0
+gktbl	init		1
+gkbase	init		440
 
 ;---------------------------------------------------------------------------
 ; orchestra macros
