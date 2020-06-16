@@ -254,7 +254,12 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     // useSystemSamplerateCheckBox->setChecked(m_options->useSystemSamplerate);
 
     if(m_options->useSystemSamplerate) {
-        samplerateComboBox->setCurrentText("System");
+        if(RtModuleComboBox->currentText() == "pulse") {
+            // pulseaudio backend has no system sample rate, so we default to the orchestra
+            samplerateComboBox->setCurrentText("Orchestra");
+        } else {
+            samplerateComboBox->setCurrentText("System");
+        }
     } else if (m_options->samplerate == 0) {
         samplerateComboBox->setCurrentText("Orchestra");
     } else {
@@ -396,6 +401,14 @@ void ConfigDialog::onRtModuleComboBoxChanged(int index) {
         RtInputLineEdit->setText("adc");
         RtOutputLineEdit->setText("dac");
 #endif
+    } else if (currentText == "pulse") {
+        RtInputLineEdit->setText("adc");
+        RtOutputLineEdit->setText("dac");
+        if(m_options->useSystemSamplerate || this->samplerateComboBox->currentText() == "System") {
+            this->samplerateComboBox->setCurrentText("Orchestra");
+            m_options->useSystemSamplerate = false;
+            m_options->samplerate = 0;
+        }
     } else {
         RtInputLineEdit->setText("adc");
         RtOutputLineEdit->setText("dac");
