@@ -110,6 +110,10 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
     setProperty("QCS_showTableInfo", true);
     setProperty("QCS_showScrollbars", true);
 	setProperty("QCS_all", true);
+
+    m_showPeak = false;
+    m_showPeakCenterFrequency = 1000.0;
+    m_showPeakRelativeBandwidth = 0.25;
 }
 
 QuteGraph::~QuteGraph()
@@ -187,6 +191,58 @@ void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)
     // changeCurve(index);
 }
 
+void QuteGraph::mousePressEvent(QMouseEvent *event) {
+    int index = (int)m_value;
+    switch(graphtypes[index]) {
+    case GraphType::GRAPH_SPECTRUM: {
+        if(event->button() & Qt::LeftButton) {
+            // turn on peak detection
+            m_showPeakTemp = true;
+            m_spectrumPeakMarkers[index]->setVisible(true);
+            m_spectrumPeakTexts[index]->setVisible(true);
+            m_mouseDragging = true;
+            auto view = getView(index);
+            auto peakIndex = view->mapToScene(event->x(), 0).x();
+            auto curve = curves[index];
+            auto freq = peakIndex / curve->get_size() * this->m_ud->sampleRate*0.5;
+            m_showPeakTempFrequency = freq;
+            return;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void QuteGraph::mouseReleased() {
+    m_mouseDragging = false;
+    m_showPeakTemp = false;
+    int index = (int)m_value;
+    m_spectrumPeakTexts[index]->setVisible(m_showPeak);
+    auto scene = getView(index)->scene();
+    m_spectrumPeakMarkers[index]->setVisible(m_showPeak);
+}
+
+/*
+void QuteGraph::mouseMoveEvent(QMouseEvent *event) {
+    int index = (int)m_value;
+    switch(graphtypes[index]) {
+    case GraphType::GRAPH_SPECTRUM: {
+        if(!m_mouseDragging)
+            return;
+        auto peakIndex = getView(index)->mapToScene(event->x(), 0).x();
+        auto curveSize = curves[index]->get_size();
+        m_showPeakTempFrequency = peakIndex / curveSize * this->m_ud->sampleRate*0.5;
+        return;
+    }
+    default:
+        break;
+    }
+}
+*/
+
+
 void QuteGraph::keyPressEvent(QKeyEvent *event) {
     bool flag;
     switch(event->key()) {
@@ -252,7 +308,8 @@ void QuteGraph::setValue(double value)
 
 void QuteGraph::setValue(QString text)
 {
-    if(text.startsWith("@find")) {
+    auto parts = text.splitRef(' ', QString::SkipEmptyParts);
+    if(parts[0] == "@find") {
         auto pattern = text.mid(5).trimmed();
         int index = findCurve(pattern);
         if(index < 0) {
@@ -261,7 +318,56 @@ void QuteGraph::setValue(QString text)
         }
         qDebug() << "-------------- Command: " << text << "found index" << index;
         this->setValue(index);
-    } else {
+    }
+    else if (parts[0] == "@showPeak") {
+        if(parts.size() == 2) {
+            if(parts[1] == "true" || parts[1] == "1") {
+                m_showPeak = true;
+            }
+            else if (parts[1] == "false" || parts[1] == "0") {
+                m_showPeak = false;
+            } else {
+                bool ok;
+                double freq = parts[1].toDouble(&ok);
+                if(!ok) {
+                    qDebug() << "@showPeak: expected a frequency, got" << parts[1];
+                    return;
+                }
+                m_showPeak = true;
+                m_showPeakCenterFrequency = freq;
+            }
+        }
+        else if (parts.size() == 3) {
+            // @showPeak freq bw
+            bool ok;
+            double freq = parts[1].toDouble(&ok);
+            if(!ok) {
+                qDebug() << "@showPeak: expected a frequency, got" << parts[1];
+                return;
+            }
+            double bw = parts[2].toDouble(&ok);
+            if(!ok) {
+                qDebug() << "@showPeak: expected a bandwidth as third arg, got" << parts[2];
+                return;
+            }
+            m_showPeak = true;
+            if(freq > 0)
+                m_showPeakCenterFrequency = freq;
+            m_showPeakRelativeBandwidth = bw;
+        }
+        else {
+            qDebug() << "@showPeak syntax:";
+            qDebug() << "   @showPeak false : turn off peak display";
+            qDebug() << "   @showPeak 0     : turn off peak display";
+            qDebug() << "   @showPeak true  : turn on peak display";
+            qDebug() << "   @showPeak 1     : turn on peak display";
+            qDebug() << "   @showPeak <freq:double> : turn on peak display, set freq";
+            qDebug() << "   @showPeak <freq:double> <bandwidth:double>";
+            qDebug() << "      (use freq=0 to only set bandwidth)";
+            return;
+        }
+    }
+    else {
         qDebug() << "Command" << text << "not found";
     }
 }
@@ -537,14 +643,35 @@ void QuteGraph::clearCurves()
 	m_gridlines.clear();
     m_gridTextsX.clear();
     m_gridTextsY.clear();
+    m_spectrumPeakTexts.clear();
+    m_spectrumPeakMarkers.clear();
+    m_showPeak = false;
+    m_showPeakTemp = false;
+    m_showPeakCenterFrequency = 1000;
 	//  curveLock.unlock();
 }
 
 void QuteGraph::addCurve(Curve * curve)
 {
     Q_ASSERT(curve != nullptr);
-	QGraphicsView *view = new QGraphicsView(m_widget);
-	QGraphicsScene *scene = new QGraphicsScene(view);
+    GraphType graphType;
+    QGraphicsView *view;
+    QString caption = curve->get_caption();
+    if(caption.contains("fft")) {
+        graphType = GraphType::GRAPH_SPECTRUM;
+        auto spectralView = new SpectralView(m_widget);
+        connect(spectralView, SIGNAL(mouseReleased()), this, SLOT(mouseReleased()));
+        view = static_cast<QGraphicsView*>(spectralView);
+        view->setRenderHint(QPainter::Antialiasing);
+    } else if(caption.contains("ftable")) {
+        graphType = GraphType::GRAPH_FTABLE;
+        view = new QGraphicsView(m_widget);
+        view->setRenderHint(QPainter::Antialiasing);
+    } else {
+        graphType = GraphType::GRAPH_AUDIOSIGNAL;
+        view = new QGraphicsView(m_widget);
+    }
+    QGraphicsScene *scene = new QGraphicsScene(view);
 	view->setContextMenuPolicy(Qt::NoContextMenu);
     view->setScene(scene);
     view->setObjectName(curve->get_caption());
@@ -567,8 +694,6 @@ void QuteGraph::addCurve(Curve * curve)
     auto gridpen2 = QPen(QColor(60, 60, 60));
     gridpen.setCosmetic(true);
     gridpen2.setCosmetic(true);
-    QString caption = curve->get_caption();
-    GraphType graphType;
     if(caption.contains("fft")) {
         graphType = GraphType::GRAPH_SPECTRUM;
         view->setRenderHint(QPainter::Antialiasing);
@@ -578,6 +703,23 @@ void QuteGraph::addCurve(Curve * curve)
     } else {
         graphType = GraphType::GRAPH_AUDIOSIGNAL;
     }
+
+    auto marker = new QGraphicsRectItem();
+    marker->setVisible(false);
+    auto markerpen = QPen(QColor(250, 250, 250));
+    markerpen.setCosmetic(true);
+    marker->setPen(markerpen);
+    marker->setBrush(QBrush(QColor(255, 255, 255, 100)));
+    m_spectrumPeakMarkers.append(marker);
+    scene->addItem(marker);
+    auto markerText = new QGraphicsTextItem();
+    markerText->setDefaultTextColor(markerpen.color());
+    markerText->setVisible(false);
+    markerText->setFlags(QGraphicsItem::ItemIgnoresTransformations);
+    markerText->setFont(QFont("Sans", 8));
+    scene->addItem(markerText);
+    m_spectrumPeakTexts.append(markerText);
+    m_dbRange = 100;
 
     if(graphType == GraphType::GRAPH_SPECTRUM) {
         for (int i = 0 ; i < numTicksY; i++) {
@@ -864,28 +1006,105 @@ void QuteGraph::drawSpectrumPath(Curve *curve, int index) {
     scene->addPath(path, pen);
 }
 
-void QuteGraph::spectrumGetPeak(Curve *curve, int index,
-                                double freq, double relativeBandwidth) {
+size_t QuteGraph::spectrumGetPeak(Curve *curve, double freq, double relativeBandwidth) {
     qreal sr = this->getSr(44100.);
-    // TODO
+    qreal nyquist = sr * 0.5;
+    size_t curveSize = curve->get_size();
+    qreal minfreq = freq * (1 - relativeBandwidth*0.5);
+    qreal maxfreq = freq * (1 + relativeBandwidth*0.5);
+    minfreq = qMax(1.0, minfreq);
+    maxfreq = qMax(minfreq, maxfreq);
+    size_t index0 = (size_t)(minfreq / nyquist * curveSize);
+    index0 = index0 < curveSize - 1 ? index0 : curveSize - 1;
+    size_t index1 = (size_t)(maxfreq / nyquist * curveSize);
+    index1 = index1 < curveSize - 1 ? index1 : curveSize - 1;
+    qreal maxvalue = 0;
+    size_t maxindex = 0;
+    for(int i=index0; i<index1; i++) {
+        auto data = curve->get_data(i);
+        if (data > maxvalue) {
+            maxvalue = data;
+            maxindex = i;
+        }
+    }
+    if(maxindex > curveSize - 1 || maxindex < 0) {
+        qDebug() << "spectrum peak: wrong index " << maxindex;
+        return 0;
+    }
+    return maxindex;
+}
+
+QString mton(double midinote) {
+    //                                C  C# D D#  E  F  F# G G# A Bb B
+    static const int _pc2idx[] = {2, 2, 3, 3, 4, 5, 5, 6, 6, 0, 1, 1};
+    static const int _pc2alt[] = {0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 2, 0};
+    static const char _alts[] = " #b";
+
+    QString dst = "";
+    double m = midinote;
+
+    int octave = (int) (m / 12 - 1);
+    int pc = (int)m % 12;
+    int cents = round((m - floor(m)) * 100.0);
+    int sign;
+
+    if (cents == 0) {
+        sign = 0;
+    } else if (cents <= 50) {
+        sign = 1;
+    } else {
+        cents = 100 - cents;
+        sign = -1;
+        pc += 1;
+        if (pc == 12) {
+            pc = 0;
+            octave += 1;
+        }
+    }
+    if(octave >= 0) {
+        dst.append('0' + octave);
+    } else {
+        dst.append('-');
+        dst.append('0' - octave);
+    }
+    dst.append('A' + _pc2idx[pc]);
+    int32_t alt = _pc2alt[pc];
+    if(alt > 0) {
+        dst.append(_alts[alt]);
+    }
+    if(sign == 1) {
+        dst.append('+');
+        if(cents != 50) {
+            dst += QString::number(cents);
+        }
+    } else if(sign == -1) {
+        dst.append('-');
+        if(cents != 50) {
+            dst += QString::number(cents);
+        }
+    }
+    return dst;
 }
 
 
 void QuteGraph::drawSpectrum(Curve *curve, int index) {
     int curveSize = curve->get_size();
+    auto scene = getView(index)->scene();
+    // QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
     QVector<QPointF> polygonPoints;
     polygonPoints.resize(curveSize + 2);
-    polygonPoints[0] = QPointF(0,110);
+    double dbRange = m_dbRange;
+    polygonPoints[0] = QPointF(0, dbRange);
     double db0 = m_ud->zerodBFS;
 
     for (int i = 0; i < (int) curveSize; i++) {
         auto data = curve->get_data(i);
-        double db = data > 0.000001 ? 20.0*log10(data/db0) : -120;
+        double db = data > 0.000001 ? 20.0*log10(data/db0) : -dbRange;
         // double value = 20.0*log10(fabs(curve->get_data(i))/db0);
         polygonPoints[i+1] = QPointF(i, -db); //skip first item, which is base line
     }
 
-    polygonPoints.back() = QPointF(curveSize - 1,110);
+    polygonPoints.back() = QPointF(curveSize - 1, dbRange);
     polygons[index]->setPolygon(QPolygonF(polygonPoints));
 
     // m_pageComboBox->setItemText(index, curve->get_caption());
@@ -902,7 +1121,7 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
     if(m_drawGrid) {
         gridtextvecy[0]->setVisible(true);
         for (int i = 1; i < numTicksY; i++) {
-            int y = float(i)/(numTicksY) * 100.0;
+            int y = float(i)/(numTicksY) * dbRange;
             gridlinesvec[i]->setLine(0, y, curveSize, y);
             gridlinesvec[i]->setVisible(true);
             gridtextvecy[i]->setPos(0, y);
@@ -914,7 +1133,7 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
             qreal freq = i * freqStep;
             qreal x = freq/nyquist * curveSize;
             int idx = i + m_numticksY;
-            gridlinesvec[idx]->setLine(x, 0, x, 120);
+            gridlinesvec[idx]->setLine(x, 0, x, dbRange);
             gridlinesvec[idx]->setVisible(true);
             gridtextvecx[i]->setPos(x, 0);
             gridtextvecx[i]->setVisible(true);
@@ -928,6 +1147,32 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
             gridlinesvec[i+m_numticksY]->setVisible(false);
             gridtextvecx[i]->setVisible(false);
         }
+    }
+
+    if(m_showPeak || m_showPeakTemp) {
+        auto freq = m_showPeakTemp ? m_showPeakTempFrequency : m_showPeakCenterFrequency;
+        size_t peakIndex = this->spectrumGetPeak(curve, freq, m_showPeakRelativeBandwidth);
+        auto data = curve->get_data(peakIndex);
+        double db = data > 0.000001 ? 20.0*log10(data/db0) : -dbRange;
+        auto marker = m_spectrumPeakMarkers[index];
+        auto view = this->getView(index);
+        auto vcenter = view->mapFromScene(QPointF(peakIndex, -db));
+        auto markerLeftTop = view->mapToScene(QPoint(vcenter.x() - 4, vcenter.y()-4));
+        auto markerRightBottom = view->mapToScene(vcenter.x() + 4, vcenter.y()+4);
+        auto textPos = view->mapToScene(vcenter.x() + 8, vcenter.y() - 12);
+        marker->setVisible(true);
+        marker->setRect(markerLeftTop.x(), markerLeftTop.y(),
+                        markerRightBottom.x()-markerLeftTop.x(),
+                        markerRightBottom.y() - markerLeftTop.y());
+        auto markerText = m_spectrumPeakTexts[index];
+        markerText->setVisible(true);
+        markerText->setPos(textPos);
+        double peakFreq = qreal(peakIndex) / curveSize * nyquist;
+        double a4 = csoundGetA4(this->m_ud->csound);
+        double midinote = 12.0 * log2(peakFreq / a4) + 69.0;
+        QString notename = mton(midinote);
+        markerText->setPlainText(QString("%1 Hz (%2)").arg((int)peakFreq).arg(notename));
+
     }
 }
 
@@ -989,7 +1234,7 @@ void QuteGraph::scaleGraph(int index)
         view->setSceneRect(0, -max*factor - 0.05, sizef, (max - min)*factor);
         view->fitInView(0, -max*factor/zoomy, sizef/zoomx, (max - min)*factor/zoomy);
     } else if(graphType == GraphType::GRAPH_SPECTRUM) {
-        double dbRange = 90.;
+        double dbRange = m_dbRange;
         view->setSceneRect (0, -3, size, dbRange);
         view->fitInView(0, -3/zoomy, sizef/zoomx, dbRange/zoomy);
     } else { //from display opcode
@@ -1439,4 +1684,11 @@ void QuteTable::setValue(QString s) {
         setValue(-1);
     } else
         qDebug() << "Message not supported:" << s;
+}
+
+SpectralView::~SpectralView() {};
+
+void SpectralView::mouseReleaseEvent(QMouseEvent *ev) {
+    emit mouseReleased();
+    QGraphicsView::mouseReleaseEvent(ev);
 }

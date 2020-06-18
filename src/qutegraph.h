@@ -70,8 +70,7 @@ public:
     }
     int findCurve(QString text);
 	virtual void applyInternalProperties();
-    void spectrumGetPeak(Curve *curve, int index,
-                         double freq, double relativeBandwidth);
+    size_t spectrumGetPeak(Curve *curve, double freq, double relativeBandwidth);
 
 protected:
 	CsoundUserData *m_ud;
@@ -95,6 +94,10 @@ protected:
     QVector<QVector <QGraphicsTextItem *> > m_gridTextsX;
     QVector<QVector <QGraphicsTextItem *> > m_gridTextsY;
 
+    // speactrum peak
+    QVector<QGraphicsTextItem*> m_spectrumPeakTexts;
+    QVector<QGraphicsRectItem*> m_spectrumPeakMarkers;
+
 
     QPainterPath *gridPath;
 
@@ -102,10 +105,14 @@ protected:
 	virtual void createPropertiesDialog();
 	virtual void applyProperties();
     virtual void keyPressEvent(QKeyEvent *ev);
+    virtual void mousePressEvent(QMouseEvent *ev);
+    // virtual void mouseReleaseEvent(QMouseEvent *ev);
+    // virtual void mouseMoveEvent(QMouseEvent *ev);
 
 public slots:
 	void changeCurve(int index);
 	void indexChanged(int index);
+    void mouseReleased();
 
 private:
 	void drawFtable(Curve * curve, int index);
@@ -134,6 +141,13 @@ private:
     bool m_drawTableInfo;
     int m_numticksY;
     bool m_showScrollbars;
+    double m_showPeakCenterFrequency;
+    double m_showPeakRelativeBandwidth;
+    bool m_showPeak;
+    bool m_showPeakTemp;
+    bool m_mouseDragging;
+    double m_showPeakTempFrequency;
+    double m_dbRange;
 
 signals:
     void requestUpdateCurve(Curve *curve);
@@ -267,6 +281,22 @@ protected:
 
 };
 
+class SpectralView : public QGraphicsView {
+    Q_OBJECT
+
+public:
+
+    SpectralView(QWidget *parent) : QGraphicsView(parent) {}
+
+    ~SpectralView();
+    // virtual void mousePressEvent(QMouseEvent *ev);
+    virtual void mouseReleaseEvent(QMouseEvent *ev);
+    // virtual void mouseMoveEvent(QMouseEvent *ev);
+
+signals:
+    void mouseReleased();
+
+};
 
 
 #endif
