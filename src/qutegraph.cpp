@@ -77,7 +77,6 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 	m_pageComboBox = new QComboBox(this);
     m_pageComboBox->setMinimumWidth(120);
     m_pageComboBox->setMaximumHeight(14);
-    // m_pageComboBox->resize(140, 14);
     m_pageComboBox->setFont(QFont({"Sans", 7}));
     m_pageComboBox->setFocusPolicy(Qt::NoFocus);
     m_pageComboBox->setStyleSheet("QComboBox QAbstractItemView"
@@ -109,11 +108,14 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
     setProperty("QCS_showGrid", true);
     setProperty("QCS_showTableInfo", true);
     setProperty("QCS_showScrollbars", true);
+    setProperty("QCS_enableTables", true);
+    m_enableTables = true;
 	setProperty("QCS_all", true);
 
     m_showPeak = false;
     m_showPeakCenterFrequency = 1000.0;
     m_showPeakRelativeBandwidth = 0.25;
+    m_lastPeakFreq = 0;
 }
 
 QuteGraph::~QuteGraph()
@@ -165,6 +167,8 @@ QString QuteGraph::getWidgetXmlText()
                        property("QCS_showTableInfo").toBool() ? "true" : "false");
     s.writeTextElement("showScrollbars",
                        property("QCS_showScrollbars").toBool() ? "true" : "false");
+    s.writeTextElement("enableTables",
+                       property("QCS_enableTables").toBool() ? "true" : "false");
 
 	s.writeTextElement("all", property("QCS_all").toBool() ? "true" : "false");
 	s.writeEndElement();
@@ -217,6 +221,10 @@ void QuteGraph::mousePressEvent(QMouseEvent *event) {
 
 void QuteGraph::mouseReleased() {
     m_mouseDragging = false;
+    if(!m_showPeak ) {
+        m_lastPeakFreq = 0;
+        m_lastTextMarkerY = 0;
+    }
     m_showPeakTemp = false;
     int index = (int)m_value;
     m_spectrumPeakTexts[index]->setVisible(m_showPeak);
@@ -281,15 +289,22 @@ void QuteGraph::keyPressEvent(QKeyEvent *event) {
         applyInternalProperties();
         event->accept();
         break;
+    case Qt::Key_Z:
+        flag = !property("QCS_showScrollbars").toBool();
+        setProperty("QCS_showScrollbars", flag);
+        showScrollbars(flag);
+        event->accept();
+        break;
     case Qt::Key_H:
         QMessageBox mb;
         mb.setText(tr("<span style=\"font-size : 12pt\">"
                       "<ul>"
-                      "<li><code>S</code> : show Selector"
-                      "<li><code>G</code> : show Grid"
-                      "<li><code>C</code> : show table information"
                       "<li><code>+</code> : zoom in"
                       "<li><code>-</code> : zoom out"
+                      "<li><code>S</code> : toggle Selector"
+                      "<li><code>G</code> : toggle Grid"
+                      "<li><code>C</code> : toggle table information"
+                      "<li><code>Z</code> : toggle Scrollbars"
                       "</ul>"
                       "</span>"
                       ));
@@ -455,30 +470,39 @@ void QuteGraph::createPropertiesDialog()
 	zoomyBox->setSingleStep(0.1);
 	layout->addWidget(zoomyBox, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
+    acceptTablesCheckBox = new QCheckBox(dialog);
+    acceptTablesCheckBox->setText("Enable tables");
+    acceptTablesCheckBox->setToolTip("Enable the display of tables. Each time a table is "
+                                     "creted it will be made available to be selected. "
+                                     "NB: modifications to a table will not be shown in the "
+                                     "graph, use a TablePlot widget for that.\n"
+                                     "NB2: If you plan to use the Graph widget to display"
+                                     "spectra or signals, uncheck this option");
+    acceptTablesCheckBox->setChecked(property("QCS_enableTables").toBool());
+    layout->addWidget(acceptTablesCheckBox, 9, 0, Qt::AlignLeft|Qt::AlignVCenter);
+
     showSelectorCheckBox = new QCheckBox(dialog);
     showSelectorCheckBox->setText("Show Selector");
-    showSelectorCheckBox->setCheckState(
-                property("QCS_showSelector").toBool()?Qt::Checked:Qt::Unchecked);
-    layout->addWidget(showSelectorCheckBox, 9, 0, Qt::AlignLeft|Qt::AlignVCenter);
+    showSelectorCheckBox->setChecked(property("QCS_showSelector").toBool());
+    layout->addWidget(showSelectorCheckBox, 10, 0, Qt::AlignLeft|Qt::AlignVCenter);
 
     showGridCheckBox = new QCheckBox(dialog);
     showGridCheckBox->setText("Show Grid");
     showGridCheckBox->setChecked(property("QCS_showGrid").toBool());
     showGridCheckBox->setToolTip("Show the grid. Has effect only for spectral graphs");
-    layout->addWidget(showGridCheckBox, 9, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(showGridCheckBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     showTableInfoCheckBox = new QCheckBox(dialog);
     showTableInfoCheckBox->setText("Show Table Information");
     showTableInfoCheckBox->setCheckState(
                 property("QCS_showTableInfo").toBool()?Qt::Checked:Qt::Unchecked);
     showTableInfoCheckBox->setToolTip("Show the grid. Has effect only for spectral graphs");
-    layout->addWidget(showTableInfoCheckBox, 10, 0, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(showTableInfoCheckBox, 11, 0, Qt::AlignLeft|Qt::AlignVCenter);
 
     showScrollbarsCheckBox = new QCheckBox(dialog);
     showScrollbarsCheckBox->setText("Show Scrollbars");
-    showScrollbarsCheckBox->setCheckState(
-                property("QCS_showScrollbars").toBool()?Qt::Checked:Qt::Unchecked);
-    layout->addWidget(showScrollbarsCheckBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    showScrollbarsCheckBox->setChecked(property("QCS_showScrollbars").toBool());
+    layout->addWidget(showScrollbarsCheckBox, 11, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
@@ -508,6 +532,8 @@ void QuteGraph::applyProperties()
     setProperty("QCS_showSelector", showSelectorCheckBox->checkState());
     setProperty("QCS_showGrid", showGridCheckBox->checkState());
     setProperty("QCS_showScrollbars", showScrollbarsCheckBox->isChecked());
+    setProperty("QCS_enableTables", acceptTablesCheckBox->isChecked());
+    m_enableTables = acceptTablesCheckBox->isChecked();
     showTableInfo(showTableInfoCheckBox->checkState());
 
 #ifdef  USE_WIDGET_MUTEX
@@ -664,6 +690,8 @@ void QuteGraph::addCurve(Curve * curve)
         view = static_cast<QGraphicsView*>(spectralView);
         view->setRenderHint(QPainter::Antialiasing);
     } else if(caption.contains("ftable")) {
+        if(!m_enableTables)
+            return;
         graphType = GraphType::GRAPH_FTABLE;
         view = new QGraphicsView(m_widget);
         view->setRenderHint(QPainter::Antialiasing);
@@ -850,6 +878,11 @@ void QuteGraph::setCurveData(Curve * curve)
         return;
 	}
 
+    /*
+    if(!m_enableTables && graphtypes[index] == GraphType::GRAPH_FTABLE)
+        return;
+    */
+
     auto view = getView(index);
 
     // Refitting curves in view resets the scrollbar so we need the previous value
@@ -1006,12 +1039,12 @@ void QuteGraph::drawSpectrumPath(Curve *curve, int index) {
     scene->addPath(path, pen);
 }
 
-size_t QuteGraph::spectrumGetPeak(Curve *curve, double freq, double relativeBandwidth) {
+size_t QuteGraph::spectrumGetPeak(Curve *curve, double freq, double bandwidth) {
     qreal sr = this->getSr(44100.);
     qreal nyquist = sr * 0.5;
     size_t curveSize = curve->get_size();
-    qreal minfreq = freq * (1 - relativeBandwidth*0.5);
-    qreal maxfreq = freq * (1 + relativeBandwidth*0.5);
+    qreal minfreq = freq - bandwidth*0.5;
+    qreal maxfreq = freq + bandwidth*0.5;
     minfreq = qMax(1.0, minfreq);
     maxfreq = qMax(minfreq, maxfreq);
     size_t index0 = (size_t)(minfreq / nyquist * curveSize);
@@ -1087,9 +1120,17 @@ QString mton(double midinote) {
 }
 
 
+QPoint quantizePoint(int x, int y, int resx, int resy) {
+    x = static_cast<int>(round((double)x / resx) * resx);
+    y = static_cast<int>(round((double)y / resy) * resy);
+    return QPoint(x, y);
+}
+
+
 void QuteGraph::drawSpectrum(Curve *curve, int index) {
     int curveSize = curve->get_size();
-    auto scene = getView(index)->scene();
+    auto view = getView(index);
+    auto scene = view->scene();
     // QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
     QVector<QPointF> polygonPoints;
     polygonPoints.resize(curveSize + 2);
@@ -1151,7 +1192,16 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
 
     if(m_showPeak || m_showPeakTemp) {
         auto freq = m_showPeakTemp ? m_showPeakTempFrequency : m_showPeakCenterFrequency;
-        size_t peakIndex = this->spectrumGetPeak(curve, freq, m_showPeakRelativeBandwidth);
+        double bandwidth;
+        if(m_showPeakTemp) {
+            // if using the mouth to point at a near peak, we take zoom into account and
+            // the bandwidth is a fraction of the displayed frequency range.
+            auto zoomx = property("QCS_zoomx").toDouble();
+            bandwidth = nyquist / zoomx / 8.0;
+        }
+        else
+            bandwidth = freq * m_showPeakRelativeBandwidth;
+        size_t peakIndex = this->spectrumGetPeak(curve, freq, bandwidth);
         auto data = curve->get_data(peakIndex);
         double db = data > 0.000001 ? 20.0*log10(data/db0) : -dbRange;
         auto marker = m_spectrumPeakMarkers[index];
@@ -1159,20 +1209,41 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
         auto vcenter = view->mapFromScene(QPointF(peakIndex, -db));
         auto markerLeftTop = view->mapToScene(QPoint(vcenter.x() - 4, vcenter.y()-4));
         auto markerRightBottom = view->mapToScene(vcenter.x() + 4, vcenter.y()+4);
-        auto textPos = view->mapToScene(vcenter.x() + 8, vcenter.y() - 12);
-        marker->setVisible(true);
         marker->setRect(markerLeftTop.x(), markerLeftTop.y(),
                         markerRightBottom.x()-markerLeftTop.x(),
                         markerRightBottom.y() - markerLeftTop.y());
         auto markerText = m_spectrumPeakTexts[index];
-        markerText->setVisible(true);
-        markerText->setPos(textPos);
-        double peakFreq = qreal(peakIndex) / curveSize * nyquist;
+        auto textPos = view->mapToScene(vcenter.x() + 10, vcenter.y() - 12);
+        auto markerY = m_lastTextMarkerY <= 0 ? textPos.y() :
+                                                textPos.y() * 0.2 + m_lastTextMarkerY * 0.8;
+        m_lastTextMarkerY = markerY;
+        markerText->setPos(textPos.x(), markerY);
+        double factor = nyquist / curveSize;
+        double peakFreq;
+        if(peakIndex == 0 || peakIndex >= curveSize - 2) {
+            peakFreq = factor * peakIndex;
+        }
+        else {
+            double freq0 = qreal(peakIndex-1)*factor;
+            double freq1 = qreal(peakIndex)*factor;
+            double freq2 = qreal(peakIndex+1)*factor;
+            double amp0 = curve->get_data(peakIndex-1);
+            double amp1 = data;
+            double amp2 = curve->get_data(peakIndex+1);
+            amp1 *= amp1;
+            amp0 *= amp0;
+            amp2 *= amp2;
+            peakFreq = (freq0*amp0 + freq1*amp1 + freq2*amp2) / (amp0+amp1+amp2);
+        }
+        peakFreq = m_lastPeakFreq <= 0 ? peakFreq : peakFreq * 0.2 + m_lastPeakFreq * 0.8;
+        m_lastPeakFreq = peakFreq;
         double a4 = csoundGetA4(this->m_ud->csound);
         double midinote = 12.0 * log2(peakFreq / a4) + 69.0;
         QString notename = mton(midinote);
-        markerText->setPlainText(QString("%1 Hz (%2)").arg((int)peakFreq).arg(notename));
+        markerText->setPlainText(QString("%1 Hz (%2)").arg((int)(peakFreq+0.5)).arg(notename));
 
+        marker->setVisible(true);
+        markerText->setVisible(true);
     }
 }
 
@@ -1230,9 +1301,10 @@ void QuteGraph::scaleGraph(int index)
     //  view->setResizeAnchor(QGraphicsView::NoAnchor);
     auto graphType = graphtypes[index];
     if(graphType == GraphType::GRAPH_FTABLE && max != min) {
+        double yrange = max - min;
         double factor = 1.17;
-        view->setSceneRect(0, -max*factor - 0.05, sizef, (max - min)*factor);
-        view->fitInView(0, -max*factor/zoomy, sizef/zoomx, (max - min)*factor/zoomy);
+        view->setSceneRect(0, -max*factor - 0.05, sizef, yrange*factor);
+        view->fitInView(0, -max*factor/zoomy, sizef/zoomx, yrange*factor/zoomy);
     } else if(graphType == GraphType::GRAPH_SPECTRUM) {
         double dbRange = m_dbRange;
         view->setSceneRect (0, -3, size, dbRange);

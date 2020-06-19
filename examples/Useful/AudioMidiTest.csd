@@ -15,40 +15,39 @@ A4 = 442
 ; -------------------------------------------------
 
 massign 0, 0
+gaSpectrumOut init 0
+gkSpectrumFFTSize init 4096
 
-opcode modified, k, k
-	kval xin
-	klast init -99999999
-	if kval != klast then
-		klast = kval
-		kout = 1
-	else
-		kout = 0
-	endif
-	xout kout
-endop
+giFFTSizes[] fillarray 2048,4096,8192
 
 instr AudioTest
 	;; kon1, kon2, kon3, kon4, kon5,kon6, kon7, kon8 init 0
 	ksignalFreq init A4
 	ilevelExp = 0.33
 	iuiRefreshRate = 24
-	iSpectrumFFTSize = 2048
 	irange = 48
 	iminAmp = ampdb(-60)
 	imeterUpLag   = 0.01
 	imeterDownLag = 0.1
+	kdb init -999999
 		
 	kSpectrumSelect init 1
 	
 	;; ----- UI input -----
 	ktrig metro iuiRefreshRate
 	ksignal invalue "signaltype"
+	kfftSizeIndex invalue "fftsize"
+	kfftSize = giFFTSizes[kfftSizeIndex]
+	if kfftSize != gkSpectrumFFTSize then
+		gkSpectrumFFTSize = kfftSize
+		reinit resetFFT
+	endif
+	
 	kleveldelta  invalue "leveldelta"
 	kdb = int(linlin(kleveldelta^ilevelExp, -60, 0, 0, 1))
 	kamp = ampdb(kdb)
 	ksignalOn = kamp > iminAmp ? 1 : 0
-	if modified(kdb) == 1 then
+	if changed(kdb) == 1 then
 		Sdisp = sprintfk("%d", kdb)
 		outvalue "dbdisp", Sdisp
 	endif
@@ -207,10 +206,13 @@ skipDisplay:
 	;; without denorming the cpu usage shoots to 100% in some cases
 	denorm aSpectrumOut
 	
-	iWinType = 1 ;; 0=rect, 1=hanning
-	dispfft aSpectrumOut, 0.04, iSpectrumFFTSize, iWinType
-
+	; gaSpectrumOut += aSpectrumOut
+resetFFT:
+	prints "fft size: %d \n", i(gkSpectrumFFTSize)
+	dispfft aSpectrumOut, 0.04, i(gkSpectrumFFTSize), 1
+	
 endin
+
 
 instr MidiNote  ; midi note input
 	ichn, ikey, ivel passign 4
@@ -289,9 +291,9 @@ endin
 
 </CsInstruments>
 <CsScore>
-i "AudioTest" 0.0  3600
-i "MidiIn"    0.02 3600
-i "Setup"     0.2 -1
+i "AudioTest"   0.0  3600
+i "MidiIn"      0.02 3600
+i "Setup"       0.2  -1
 e
 </CsScore>
 </CsoundSynthesizer>
@@ -301,7 +303,7 @@ e
  <x>0</x>
  <y>0</y>
  <width>704</width>
- <height>520</height>
+ <height>590</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -319,6 +321,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Audio Output</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
@@ -349,6 +352,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>-20</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
@@ -379,6 +383,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>MIDI I/O</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
@@ -409,6 +414,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Audio / MIDI Test</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
@@ -439,6 +445,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Audio Input</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
@@ -469,13 +476,14 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>in2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-0.05161667</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -487,7 +495,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -505,13 +513,14 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>in1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.13960935</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -523,7 +532,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -541,6 +550,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>1</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
@@ -571,6 +581,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>11</fontsize>
@@ -584,7 +595,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>-41.00000000</value>
+  <value>0.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -604,6 +615,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>11</fontsize>
@@ -617,7 +629,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>-50.00000000</value>
+  <value>0.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -637,6 +649,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -657,6 +670,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>notein</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -675,7 +689,7 @@ e
    <g>76</g>
    <b>17</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>25</r>
    <g>25</g>
@@ -693,6 +707,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>whitenoise</name>
@@ -715,7 +730,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -728,6 +743,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>2</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
@@ -758,6 +774,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>in4</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -776,7 +793,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -794,6 +811,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>in3</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -812,7 +830,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -830,6 +848,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>3</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
@@ -860,6 +879,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>11</fontsize>
@@ -893,6 +913,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>11</fontsize>
@@ -926,6 +947,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>4</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
@@ -956,6 +978,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>in6</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -974,7 +997,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -992,6 +1015,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>in5</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1010,7 +1034,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1028,6 +1052,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>5</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
@@ -1058,6 +1083,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>11</fontsize>
@@ -1091,6 +1117,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>11</fontsize>
@@ -1124,6 +1151,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>6</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
@@ -1154,6 +1182,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>in8</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1172,7 +1201,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1190,6 +1219,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>in7</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1208,7 +1238,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1226,6 +1256,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>7</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
@@ -1256,6 +1287,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>11</fontsize>
@@ -1289,6 +1321,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>11</fontsize>
@@ -1322,6 +1355,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>8</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
@@ -1352,6 +1386,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1372,6 +1407,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Level (dB)</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
@@ -1402,13 +1438,14 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vu1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>-94.27334484</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1420,7 +1457,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1438,6 +1475,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1458,6 +1496,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vu2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1476,7 +1515,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1494,6 +1533,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1514,6 +1554,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vu3</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1532,7 +1573,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1550,6 +1591,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1570,6 +1612,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vu4</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1588,7 +1631,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1606,6 +1649,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1626,6 +1670,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vu5</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1644,7 +1689,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1662,6 +1707,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1682,6 +1728,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vu6</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1700,7 +1747,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1718,6 +1765,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1738,6 +1786,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vu7</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1756,7 +1805,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1774,6 +1823,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1794,6 +1844,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vu8</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1812,7 +1863,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1830,6 +1881,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Note received</label>
   <alignment>left</alignment>
   <valignment>bottom</valignment>
@@ -1860,6 +1912,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
@@ -1871,6 +1924,8 @@ e
   <showSelector>false</showSelector>
   <showGrid>true</showGrid>
   <showTableInfo>false</showTableInfo>
+  <showScrollbars>true</showScrollbars>
+  <enableTables>true</enableTables>
   <all>true</all>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -1883,6 +1938,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>...</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
@@ -1913,6 +1969,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>ccin</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1931,7 +1988,7 @@ e
    <g>154</g>
    <b>231</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>25</r>
    <g>25</g>
@@ -1949,6 +2006,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>CC received</label>
   <alignment>left</alignment>
   <valignment>bottom</valignment>
@@ -1979,6 +2037,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>...</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
@@ -2009,9 +2068,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.28000000</value>
+  <value>0.29000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -2036,6 +2096,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>44100</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
@@ -2066,6 +2127,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>2</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
@@ -2096,6 +2158,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Sample Rate</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
@@ -2126,6 +2189,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Channels</label>
   <alignment>right</alignment>
   <valignment>center</valignment>
@@ -2151,11 +2215,12 @@ e
   <x>6</x>
   <y>390</y>
   <width>698</width>
-  <height>130</height>
+  <height>200</height>
   <uuid>{a99a03fb-0336-41b5-99f4-bc12ec8036c3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>1</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
@@ -2167,18 +2232,21 @@ e
   <showSelector>false</showSelector>
   <showGrid>true</showGrid>
   <showTableInfo>true</showTableInfo>
+  <showScrollbars>true</showScrollbars>
+  <enableTables>true</enableTables>
   <all>true</all>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>spmenu</objectName>
-  <x>613</x>
-  <y>392</y>
+  <x>614</x>
+  <y>391</y>
   <width>90</width>
   <height>28</height>
   <uuid>{a8934883-bf45-4155-be13-834e1b5f9a9b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>None</name>
@@ -2239,6 +2307,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Signal Type</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
@@ -2269,6 +2338,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>11</fontsize>
@@ -2302,6 +2372,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Hz</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
@@ -2321,6 +2392,37 @@ e
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDropdown" version="2">
+  <objectName>fftsize</objectName>
+  <x>614</x>
+  <y>420</y>
+  <width>90</width>
+  <height>28</height>
+  <uuid>{13bbe66e-eb51-4cd5-b44e-59eb1ee3e6dd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description>FFT size</description>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>2048</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>4096</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>8192</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>0</selectedIndex>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

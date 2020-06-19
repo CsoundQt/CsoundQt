@@ -79,6 +79,7 @@ protected:
 	QLineEdit* name2LineEdit;
 	QDoubleSpinBox *zoomxBox;
 	QDoubleSpinBox *zoomyBox;
+    QCheckBox *acceptTablesCheckBox;
     QCheckBox *showSelectorCheckBox;
     QCheckBox *showGridCheckBox;
     QCheckBox *showTableInfoCheckBox;
@@ -145,9 +146,12 @@ private:
     double m_showPeakRelativeBandwidth;
     bool m_showPeak;
     bool m_showPeakTemp;
+    double m_lastPeakFreq;
+    double m_lastTextMarkerY;
     bool m_mouseDragging;
     double m_showPeakTempFrequency;
     double m_dbRange;
+    bool m_enableTables;
 
 signals:
     void requestUpdateCurve(Curve *curve);
