@@ -77,22 +77,24 @@ instr	10	;GUI
 		Sfile_old		strcpyk	Sfile_new
 		Sfile_new		strcpyk	gSfile
 		gkfile 		strcmpk	Sfile_new, Sfile_old
+		
+	endif
 
 ;A MACRO IS DEFINE TO PREVENT CODE REPETITION
-#define CONTROLLER(NAME'NUMBER')
+#define CONTROLLER(NAME'NUMBER)
 		#	;START OF MACRO
-		k$NAME_M			ctrl7	1,$NUMBER,0,1   									;READ MIDI CONTROLLER ON CHANNEL 1
-		ktrig$NAME		changed	k$NAME_M                								;CREATE A TRIGGER PULSE IF MIDI CONTROLLER IS MOVED
+		k$NAME			ctrl7	1,$NUMBER,0,1   									;READ MIDI CONTROLLER ON CHANNEL 1
+		ktrig$NAME		changed	k$NAME                								;CREATE A TRIGGER PULSE IF MIDI CONTROLLER IS MOVED
 		if ktrig$NAME=1	then														;IF MIDI SLIDER HAS BEEN MOVED
-			outvalue	"$NAME", k$NAME_M												;UPDATE LINEAR SLIDER
+			outvalue	"$NAME", k$NAME												;UPDATE LINEAR SLIDER
 		endif																	;END OF THIS CONDITIONAL BRANCH			
 		#	;END OF MACRO
 	
 		;           NAME  NUM
-		$CONTROLLER(X_Frequency'    1')												;EXPAND MACRO
-		$CONTROLLER(Y_Bandwidth'    2')												;EXPAND MACRO
-		$CONTROLLER(Playback_Speed' 3')												;EXPAND MACRO
-	endif
+		$CONTROLLER(X_Frequency'    1)												;EXPAND MACRO
+		$CONTROLLER(Y_Bandwidth'    2)												;EXPAND MACRO
+		$CONTROLLER(Playback_Speed' 3)												;EXPAND MACRO
+
 endin
 
 instr	1
@@ -167,6 +169,7 @@ i   2      0.1       0		;INIT
 </CsScore>
 </CsoundSynthesizer>
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -191,8 +194,10 @@ i   2      0.1       0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Bandpass</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -220,8 +225,10 @@ i   2      0.1       0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Bandpass</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -249,9 +256,11 @@ i   2      0.1       0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>-------------------------------------------------------------------------------
 This example is an implementation of a bandpass filter using Csound's butterworth bandpass filter (butterbp/butbp) but with some extra options added. Cutoff frequency and bandwidth can be controlled via the on-screen x-y panel. The actual value used for bandwidth is proportional to the current value of the cutoff frequency, this gives a slightly more musical response. The normal cutoff slope for a butterworth bandpass filter is 24 decibels per octave (dB/oct). By activating the slope switch the steepness of this slope is doubled to 48dB/oct by engaging another iteration of the butbp opcode. Activating the 'Balance' switch applies Csound's 'balance' opcode to the output of the filter, this opcode modifies the dynamics of the signal given to it to match those of the signal pre-filtering. The half-point of the smoothing of its response - effectively the response speed - can be adjusted. This is an i-rate variable so realtime adjustments causes discontinuities in the realtime audio output. Cutoff frequency, bandwidth and playback speed of the input sound file can also be modulated using MIDI controllers 1, 2 and 3 respectively. MIDI controller modulation is  reflected in the on screen sliders. If the instrument is activated by MIDI notes, MIDI pitch is interpretted as cutoff frequency, in this mode the GUI and MIDI controller assignment for cutoff frequency is ignored.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -267,7 +276,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -279,6 +288,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -287,6 +297,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Input_Gain</objectName>
@@ -298,8 +309,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -315,7 +328,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Input_Gain</objectName>
@@ -327,6 +340,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -345,8 +359,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Live Input Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -362,7 +378,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Browse</objectName>
@@ -374,6 +390,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>SynthPad.wav</stringvalue>
@@ -382,6 +399,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <eventLine/>
   <latch>false</latch>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse</objectName>
@@ -393,6 +411,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>SynthPad.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
@@ -404,9 +423,9 @@ This example is an implementation of a bandpass filter using Csound's butterwort
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -420,8 +439,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Audio File</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -437,7 +458,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -449,8 +470,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Balance Half Point (Hz)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -466,7 +489,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Balance_Half_Point</objectName>
@@ -478,6 +501,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.69400000</value>
@@ -496,8 +520,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>7.997</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -513,7 +539,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>Slope</objectName>
@@ -525,6 +551,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -533,6 +560,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>Balance</objectName>
@@ -544,6 +572,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -552,6 +581,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <eventLine/>
   <latch>true</latch>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>Input</objectName>
@@ -563,6 +593,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Audio File</name>
@@ -588,8 +619,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Input</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -605,7 +638,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>X_Frequency</objectName>
@@ -617,6 +650,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>Y_Bandwidth</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -628,6 +662,8 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -639,6 +675,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Playback_Speed_Value</objectName>
@@ -650,8 +687,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -667,7 +706,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Playback_Speed</objectName>
@@ -679,6 +718,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.75000000</value>
@@ -697,8 +737,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Playback Speed (CC#3)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -714,7 +756,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -726,8 +768,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>X - Frequency (CC#1) Y - Bandwidth (CC#2)</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -743,7 +787,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Y_Bandwidth_Value</objectName>
@@ -755,8 +799,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.224</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -784,8 +830,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Bandwidth</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -801,7 +849,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -813,8 +861,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Frequency</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -830,7 +880,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>X_Frequency_Value</objectName>
@@ -842,8 +892,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>547.721</label>
+  <description/>
+  <label>547.723</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -871,8 +923,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.160</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -888,7 +942,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Amplitude</objectName>
@@ -900,6 +954,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
   <value>1.16000000</value>
@@ -918,8 +973,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Output Amplitude Scaling</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -935,7 +992,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Release</objectName>
@@ -947,8 +1004,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>4.154</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -964,7 +1023,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Release</objectName>
@@ -976,6 +1035,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.05000000</minimum>
   <maximum>10.00000000</maximum>
   <value>4.15437500</value>
@@ -994,8 +1054,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>1</midichan>
   <midicc>1</midicc>
+  <description/>
   <label>Release</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1011,7 +1073,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1023,8 +1085,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Attack Time</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1040,7 +1104,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Attack_Time</objectName>
@@ -1052,6 +1116,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.05000000</minimum>
   <maximum>10.00000000</maximum>
   <value>0.05000000</value>
@@ -1070,8 +1135,10 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.050</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -1087,7 +1154,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
