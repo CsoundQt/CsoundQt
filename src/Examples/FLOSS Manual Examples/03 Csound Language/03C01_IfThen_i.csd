@@ -10,7 +10,7 @@ nchnls = 2
 0dbfs = 1
 
   instr 1
-Sfile     =          "/my/file.wav" ;your soundfile path here
+Sfile     =          "ClassGuit.wav" ;your soundfile path here
 ifilchnls filenchnls Sfile
  if ifilchnls == 1 then ;mono
 aL        soundin    Sfile
@@ -26,3 +26,20 @@ aL, aR    soundin    Sfile
 i 1 0 5
 </CsScore>
 </CsoundSynthesizer>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
