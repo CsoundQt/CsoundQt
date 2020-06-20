@@ -116,6 +116,7 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
     m_showPeakCenterFrequency = 1000.0;
     m_showPeakRelativeBandwidth = 0.25;
     m_lastPeakFreq = 0;
+    m_frozen = false;
 }
 
 QuteGraph::~QuteGraph()
@@ -224,6 +225,7 @@ void QuteGraph::mouseReleased() {
     if(!m_showPeak ) {
         m_lastPeakFreq = 0;
         m_lastTextMarkerY = 0;
+        m_lastTextMarkerX = 0;
     }
     m_showPeakTemp = false;
     int index = (int)m_value;
@@ -253,7 +255,15 @@ void QuteGraph::mouseMoveEvent(QMouseEvent *event) {
 
 void QuteGraph::keyPressEvent(QKeyEvent *event) {
     bool flag;
+    int index = m_value;
+    auto graphtype = graphtypes[index];
     switch(event->key()) {
+    case Qt::Key_F:
+        if(graphtype != GraphType::GRAPH_SPECTRUM)
+            return;
+        freezeSpectrum(!m_frozen);
+        event->accept();
+        break;
     case Qt::Key_S:
         flag = !property("QCS_showSelector").toBool();
         setProperty("QCS_showSelector", flag?"true":"false");
@@ -297,10 +307,11 @@ void QuteGraph::keyPressEvent(QKeyEvent *event) {
         break;
     case Qt::Key_H:
         QMessageBox mb;
-        mb.setText(tr("<span style=\"font-size : 12pt\">"
+        mb.setText(tr("<span style=\"font-size : 11pt\">"
                       "<ul>"
                       "<li><code>+</code> : zoom in"
                       "<li><code>-</code> : zoom out"
+                      "<li><code>F</code> : toggle freeze (spectrum)"
                       "<li><code>S</code> : toggle Selector"
                       "<li><code>G</code> : toggle Grid"
                       "<li><code>C</code> : toggle table information"
@@ -351,6 +362,18 @@ void QuteGraph::setValue(QString text)
                 m_showPeak = true;
                 m_showPeakCenterFrequency = freq;
             }
+        }
+        else if (parts[0] == "@freeze") {
+            int index = m_value;
+            if(graphtypes[index] != GraphType::GRAPH_SPECTRUM)
+                return;
+            bool ok;
+            int status = parts[1].toInt(&ok);
+            if(status != 0 && status && 1) {
+                qDebug() << "@freeze syntax: @freeze status (status is 0 or 1)";
+                return;
+            }
+            freezeSpectrum(status);
         }
         else if (parts.size() == 3) {
             // @showPeak freq bw
@@ -1053,11 +1076,22 @@ size_t QuteGraph::spectrumGetPeak(Curve *curve, double freq, double bandwidth) {
     index1 = index1 < curveSize - 1 ? index1 : curveSize - 1;
     qreal maxvalue = 0;
     size_t maxindex = 0;
-    for(int i=index0; i<index1; i++) {
-        auto data = curve->get_data(i);
-        if (data > maxvalue) {
-            maxvalue = data;
-            maxindex = i;
+    if(!m_frozen) {
+        for(int i=index0; i<index1; i++) {
+            auto data = curve->get_data(i);
+            if (data > maxvalue) {
+                maxvalue = data;
+                maxindex = i;
+            }
+        }
+    }
+    else {
+        for(int i=index0; i<index1; i++) {
+            auto data = frozenCurve[i];
+            if (data > maxvalue) {
+                maxvalue = data;
+                maxindex = i;
+            }
         }
     }
     if(maxindex > curveSize - 1 || maxindex < 0) {
@@ -1126,11 +1160,26 @@ QPoint quantizePoint(int x, int y, int resx, int resy) {
     return QPoint(x, y);
 }
 
+void QuteGraph::freezeSpectrum(bool status) {
+    int index = m_value;
+    auto curve = curves[index];
+    if(status) {
+        m_frozen = true;
+        frozenCurve.resize(curve->get_size());
+        for(int i=0; i < curve->get_size(); i++) {
+            frozenCurve[i] = curve->get_data(i);
+        }
+    } else {
+        m_frozen = false;
+    }
+
+}
 
 void QuteGraph::drawSpectrum(Curve *curve, int index) {
     int curveSize = curve->get_size();
+    if(curveSize != frozenCurve.size() && graphtypes[index] == GraphType::GRAPH_SPECTRUM)
+        freezeSpectrum(false);
     auto view = getView(index);
-    auto scene = view->scene();
     // QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
     QVector<QPointF> polygonPoints;
     polygonPoints.resize(curveSize + 2);
@@ -1138,11 +1187,20 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
     polygonPoints[0] = QPointF(0, dbRange);
     double db0 = m_ud->zerodBFS;
 
-    for (int i = 0; i < (int) curveSize; i++) {
-        auto data = curve->get_data(i);
-        double db = data > 0.000001 ? 20.0*log10(data/db0) : -dbRange;
-        // double value = 20.0*log10(fabs(curve->get_data(i))/db0);
-        polygonPoints[i+1] = QPointF(i, -db); //skip first item, which is base line
+    if(!m_frozen) {
+        for (int i = 0; i < (int) curveSize; i++) {
+            auto data = curve->get_data(i);
+            double db = data > 0.000001 ? 20.0*log10(data/db0) : -dbRange;
+            // double value = 20.0*log10(fabs(curve->get_data(i))/db0);
+            polygonPoints[i+1] = QPointF(i, -db); //skip first item, which is base line
+        }
+    } else {
+        for (int i = 0; i < frozenCurve.size(); i++) {
+            auto data = frozenCurve[i];
+            double db = data > 0.000001 ? 20.0*log10(data/db0) : -dbRange;
+            // double value = 20.0*log10(fabs(curve->get_data(i))/db0);
+            polygonPoints[i+1] = QPointF(i, -db); //skip first item, which is base line
+        }
     }
 
     polygonPoints.back() = QPointF(curveSize - 1, dbRange);
@@ -1202,7 +1260,7 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
         else
             bandwidth = freq * m_showPeakRelativeBandwidth;
         size_t peakIndex = this->spectrumGetPeak(curve, freq, bandwidth);
-        auto data = curve->get_data(peakIndex);
+        auto data = m_frozen ? frozenCurve[peakIndex] : curve->get_data(peakIndex);
         double db = data > 0.000001 ? 20.0*log10(data/db0) : -dbRange;
         auto marker = m_spectrumPeakMarkers[index];
         auto view = this->getView(index);
@@ -1216,8 +1274,11 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
         auto textPos = view->mapToScene(vcenter.x() + 10, vcenter.y() - 12);
         auto markerY = m_lastTextMarkerY <= 0 ? textPos.y() :
                                                 textPos.y() * 0.2 + m_lastTextMarkerY * 0.8;
+        auto markerX = m_lastTextMarkerX <= 0 ? textPos.x() :
+                                                textPos.x() * 0.3 + m_lastTextMarkerX * 0.7;
         m_lastTextMarkerY = markerY;
-        markerText->setPos(textPos.x(), markerY);
+        m_lastTextMarkerX = markerX;
+        markerText->setPos(markerX, markerY);
         double factor = nyquist / curveSize;
         double peakFreq;
         if(peakIndex == 0 || peakIndex >= curveSize - 2) {
@@ -1227,9 +1288,15 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
             double freq0 = qreal(peakIndex-1)*factor;
             double freq1 = qreal(peakIndex)*factor;
             double freq2 = qreal(peakIndex+1)*factor;
-            double amp0 = curve->get_data(peakIndex-1);
             double amp1 = data;
-            double amp2 = curve->get_data(peakIndex+1);
+            double amp0, amp2;
+            if(!m_frozen) {
+                amp0 = curve->get_data(peakIndex-1);
+                amp2 = curve->get_data(peakIndex+1);
+            } else {
+                amp0 = frozenCurve[peakIndex-1];
+                amp2 = frozenCurve[peakIndex+1];
+            }
             amp1 *= amp1;
             amp0 *= amp0;
             amp2 *= amp2;

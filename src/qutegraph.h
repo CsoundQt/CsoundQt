@@ -131,6 +131,9 @@ private:
 	void setInternalValue(double value);
     void drawGraph(Curve *curve, int index);
     void showScrollbars(bool show);
+    void freezeSpectrum(bool status);
+
+    QVector<double> frozenCurve;
 
     QGraphicsView* getView(int index);
 
@@ -146,8 +149,10 @@ private:
     double m_showPeakRelativeBandwidth;
     bool m_showPeak;
     bool m_showPeakTemp;
+    bool m_frozen;
     double m_lastPeakFreq;
     double m_lastTextMarkerY;
+    double m_lastTextMarkerX;
     bool m_mouseDragging;
     double m_showPeakTempFrequency;
     double m_dbRange;
