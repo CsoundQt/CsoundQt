@@ -135,9 +135,10 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 			if (rtJackName != "" && rtAudioModule == "jack") {
 				QString jackName = rtJackName;
 				if (jackName.contains("*")) {
-                    auto base = fileName1.mid(fileName1.lastIndexOf(QDir::separator())+1);
+                    // auto base = fileName1.mid(fileName1.lastIndexOf(QDir::separator())+1);
+                    auto base = docName.mid(docName.lastIndexOf(QDir::separator())+1);
                     jackName.replace("*", base);
-                    jackName.replace(" ","_");
+                    jackName.replace(" ", "_");
 				}
 				if (jackName.size() > m_jackNameSize) {
 					jackName = jackName.left(m_jackNameSize);

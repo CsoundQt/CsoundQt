@@ -1349,7 +1349,6 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
         marker->setVisible(true);
         markerText->setVisible(true);
         if(m_peakChannelPtr != nullptr) {
-            qDebug() << "Emiting " << m_getPeakChannel << " -> " << peakFreq;
             *m_peakChannelPtr = peakFreq;
         }
     }

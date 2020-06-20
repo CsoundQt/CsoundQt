@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 #ifndef USE_QT_LT_50
     // Set a global template for ALL qDebug messages.
 	qSetMessagePattern("[%{if-debug}D%{endif}%{if-info}I%{endif}%{if-warning}W%{endif}%{if-critical}C%{endif}%{if-fatal}F%{endif}][%{file}:%{line} %{function}] %{message}");
-    qDebug();
+
 #endif
 #ifdef USE_QT_GT_55
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling); // TO test if this solved hight DPI problems
@@ -76,18 +76,35 @@ int main(int argc, char *argv[])
        }
 #endif
 
-
-	QStringList args = qapp.arguments();
+    bool autoplay = false;
+    QStringList args = qapp.arguments();
     args.removeAt(0); // Remove program name
+    for(int i=0; i < args.size(); i++) {
+        auto arg = args[i];
+        if(arg == "--help") {
+            QTextStream out(stdout);
+            out << "\n\n";
+            out << "Options:" << endl;
+            out << "   --play        Autoplay the last file passed via command line" << endl;
+            out << "   --help        This message" << endl;
+            out << endl;
+            exit(0);
+        }
+        if(arg == "--play") {
+            autoplay = true;
+        }
+    }
+
     foreach (QString arg, args) {
-        if (!arg.startsWith("-p")) {// avoid OS X arguments
+        if (!arg.startsWith("-")) {// avoid OS X arguments
             fileNames.append(arg);
         }
     }
     // check if another instance is already running. If yes, ask it to open the file in new tab and quit
     QLocalSocket * socket = new QLocalSocket();
     socket->connectToServer("csoundqt");
-    if (socket->waitForConnected(500)) { // wait for max 0.5 seconds, returns true if the server in other instance is listening
+    if (socket->waitForConnected(500)) {
+        // wait for max 0.5 seconds, returns true if the server in other instance is listening
         if (!fileNames.isEmpty()) {
             qDebug()<<"Opening file(s) in already running instance";
             QString message = "open ***" + fileNames.join("***"); // use a separator that is probably not in the file name
@@ -98,7 +115,12 @@ int main(int argc, char *argv[])
         } else {
             socket->close();
             //qDebug()<<"Another instance already running.";
-            int answer = QMessageBox::warning(NULL, QObject::tr("CsoundQt"), QObject::tr("Another instance is already running. Are you sure you want to open a new window?"),  QMessageBox::Open|QMessageBox::Cancel, QMessageBox::Cancel);
+            int answer = QMessageBox::warning(NULL, QObject::tr("CsoundQt"),
+                                              QObject::tr("Another instance is already running. "
+                                                          "Are you sure you want to open a new"
+                                                          " window?"),
+                                              QMessageBox::Open|QMessageBox::Cancel,
+                                              QMessageBox::Cancel);
             if (answer==QMessageBox::Cancel) {
                 return 0;
             }
@@ -133,6 +155,8 @@ int main(int argc, char *argv[])
     splash->finish(csoundQt);
     delete splash;
     csoundQt->show();
+    if(autoplay && !fileNames.isEmpty())
+        csoundQt->play();
     filterObj.setMainWindow(csoundQt);
     result = qapp.exec();
     return result;

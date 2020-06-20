@@ -38,6 +38,9 @@ public:
 
 	void setJackNameSize(int size);
 
+    // this is used to identify a document indenpendently of its filename (which might
+    // be a temporary name)
+    QString docName;
 	QString fileName1;
 	QString fileName2;
 	bool rt; //FIXME make sure this is set!

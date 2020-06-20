@@ -84,7 +84,7 @@ class CsoundQt:public QMainWindow
 	friend class WidgetPanel; //to pass ud
 	friend class FileOpenEater; //to pass curPage
 public:
-	CsoundQt(QStringList fileNames);
+    CsoundQt(QStringList fileNames);
 	~CsoundQt();
 	static void utilitiesMessageCallback(CSOUND *csound,
 										 int /*attr*/,
@@ -185,6 +185,7 @@ public slots:
 	void evaluateCsound(QString code = QString());
 	void breakpointReached();
     void setParsedUDOs();
+
 
 protected:
 	virtual void closeEvent(QCloseEvent *event);

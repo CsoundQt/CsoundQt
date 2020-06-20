@@ -1933,6 +1933,8 @@ void CsoundQt::play(bool realtime, int index)
         }
     }
     runFileName2 = page->getCompanionFileName();
+    m_options->docName = fileName;
+    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>< docName: " << fileName;
     m_options->fileName1 = runFileName1;
     m_options->fileName2 = runFileName2;
     m_options->rt = realtime;
