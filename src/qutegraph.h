@@ -153,6 +153,8 @@ private:
     double m_lastPeakFreq;
     double m_lastTextMarkerY;
     double m_lastTextMarkerX;
+    QString m_getPeakChannel;
+    MYFLT *m_peakChannelPtr;
     bool m_mouseDragging;
     double m_showPeakTempFrequency;
     double m_dbRange;

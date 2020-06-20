@@ -117,6 +117,8 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
     m_showPeakRelativeBandwidth = 0.25;
     m_lastPeakFreq = 0;
     m_frozen = false;
+    m_getPeakChannel = "";
+    m_peakChannelPtr = nullptr;
 }
 
 QuteGraph::~QuteGraph()
@@ -345,6 +347,44 @@ void QuteGraph::setValue(QString text)
         qDebug() << "-------------- Command: " << text << "found index" << index;
         this->setValue(index);
     }
+    else if(parts[0] == "@set") {
+        bool ok;
+        int index = parts[1].toInt(&ok);
+        if(!ok) {
+            qDebug() << "@set syntax: @set <curveindex:int>";
+            return;
+        }
+        if(index >= 0 && index < curves.size())
+            this->setValue(index);
+    }
+    else if(parts[0] == "@setTable") {
+        if(!m_enableTables) {
+            qDebug() << "QuteGraph: asked to set table as active view, but tables are"
+                     << "not enabled";
+            return;
+        }
+        bool ok;
+        int tableNum = parts[1].toInt(&ok);
+        if(!ok) {
+            qDebug()<<"@setTable syntax: @setTable <tablenumber:int>";
+            return;
+        }
+        int index = this->getIndexForTableNum(tableNum);
+        if(index >= 0 && index < curves.size())
+            this->setValue(index);
+    }
+    else if(parts[0] == "@freeze") {
+        int index = m_value;
+        if(graphtypes[index] != GraphType::GRAPH_SPECTRUM)
+            return;
+        bool ok;
+        int status = parts[1].toInt(&ok);
+        if(status != 0 && status && 1) {
+            qDebug() << "@freeze syntax: @freeze status (status is 0 or 1)";
+            return;
+        }
+        freezeSpectrum(status);
+    }
     else if (parts[0] == "@showPeak") {
         if(parts.size() == 2) {
             if(parts[1] == "true" || parts[1] == "1") {
@@ -362,18 +402,6 @@ void QuteGraph::setValue(QString text)
                 m_showPeak = true;
                 m_showPeakCenterFrequency = freq;
             }
-        }
-        else if (parts[0] == "@freeze") {
-            int index = m_value;
-            if(graphtypes[index] != GraphType::GRAPH_SPECTRUM)
-                return;
-            bool ok;
-            int status = parts[1].toInt(&ok);
-            if(status != 0 && status && 1) {
-                qDebug() << "@freeze syntax: @freeze status (status is 0 or 1)";
-                return;
-            }
-            freezeSpectrum(status);
         }
         else if (parts.size() == 3) {
             // @showPeak freq bw
@@ -404,6 +432,15 @@ void QuteGraph::setValue(QString text)
             qDebug() << "      (use freq=0 to only set bandwidth)";
             return;
         }
+    }
+    else if(parts[0] == "@getPeak") {
+        m_getPeakChannel = parts[1].toString();
+        qDebug() << "@getPeak channel: " << m_getPeakChannel;
+        MYFLT *ptr;
+        csoundGetChannelPtr(m_ud->csound, &ptr,
+                            m_getPeakChannel.toLocal8Bit().constData(),
+                            CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL);
+        m_peakChannelPtr = ptr;
     }
     else {
         qDebug() << "Command" << text << "not found";
@@ -663,7 +700,7 @@ void QuteGraph::indexChanged(int index)
 		QPair<QString, double> channelValue(m_channel, index);
 		emit newValue(channelValue);
 	}
-	if (m_channel2 == "") {
+    if (m_channel2 == "") {
 		setValue2(getTableNumForIndex(index));
 	}
 	else {
@@ -1311,6 +1348,15 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
 
         marker->setVisible(true);
         markerText->setVisible(true);
+        if(m_peakChannelPtr != nullptr) {
+            qDebug() << "Emiting " << m_getPeakChannel << " -> " << peakFreq;
+            *m_peakChannelPtr = peakFreq;
+        }
+    }
+    else {
+        if(m_getPeakChannel != nullptr) {
+            *m_peakChannelPtr = 0;
+        }
     }
 }
 

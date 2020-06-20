@@ -977,7 +977,7 @@ void CsoundQt::evaluateString(QString evalCode)
                 qDebug() << "Not Csound code or cannot compile";
             }
         }
-        if (testTree) { // the problem is, when the code is csound code, but with errors, it will be sent to python interpreter too
+        if (testTree) { // when the code is csound code, but with errors, it will be sent to python interpreter too
             evaluateCsound(evalCode);
             return;
         }
@@ -1070,10 +1070,6 @@ void CsoundQt::createQuickRefPdf()
 {
     QString tempFileName(QDir::tempPath() + QDir::separator() +
                          "QuteCsound Quick Reference.pdf");
-    //  if (QFile::exists(tempFileName))
-    //  {
-    //
-    //  }
     QString internalFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
     internalFileName += m_configlists.languageCodes[m_options->language];
     internalFileName += ".pdf";
@@ -1095,7 +1091,6 @@ void CsoundQt::deleteTab(int index)
     if (index == -1) {
         index = curPage;
     }
-    //  qDebug() << "CsoundQt::deleteCurrentTab()";
     disconnect(showLiveEventsAct, 0,0,0);
     DocumentPage *d = documentPages[index];
     d->stop();
@@ -1199,7 +1194,8 @@ void CsoundQt::setupEnvironment()
         qDebug() << "CsoundEngine::runCsound() Error setting RAWWAVE_PATH";
     }
 #ifdef Q_OS_UNIX
-    setenv("RAWWAVE_PATH",rawWavePath.toLocal8Bit(),1); // make sure the the environment variable is set for stk opcodes
+    // make sure the the environment variable is set for stk opcodes
+    setenv("RAWWAVE_PATH",rawWavePath.toLocal8Bit(),1);
 #endif
 #ifdef Q_OS_WIN
     QString envString = "RAWWAVE_PATH="+rawWavePath;
@@ -1351,7 +1347,8 @@ void CsoundQt::focusToTab(int tab) {
     if(!panel)
         return;
 
-    if (panel->isFloating() && panel->isVisible()) { // if as separate window, close it shortcut activated again
+    if (panel->isFloating() && panel->isVisible()) {
+        // if as separate window, close it shortcut activated again
         QDEBUG << "panel is floating, hiding";
         panel->setVisible(false);
         action->setChecked(false);
@@ -1752,9 +1749,12 @@ void CsoundQt::updateCabbageText()
     QString scoreText = documentPages[curPage]->getSco();
     if (scoreText.simplified().isEmpty()) {
         int answer = QMessageBox::question(this, tr("Insert scorelines for Cabbage?"),
-                                           tr("The score is empty. Cabbage needs some lines to work.\n Do you want to insert it?"), QMessageBox::Yes|QMessageBox::No );
+                                           tr("The score is empty. Cabbage needs some lines "
+                                              "to work.\n Do you want to insert it?"),
+                                           QMessageBox::Yes|QMessageBox::No );
         if (answer==QMessageBox::Yes) {
-            documentPages[curPage]->setSco("f 0 3600\n;i 1 0 3600 ; don't forget to start your instrument if you are using it as an effect!");
+            documentPages[curPage]->setSco("f 0 3600\n"
+                                           ";i 1 0 3600 ; don't forget to start your instrument if you are using it as an effect!");
         }
     }
 }
@@ -2779,7 +2779,7 @@ void CsoundQt::about()
     About *msgBox = new About(this);
     msgBox->setWindowFlags(msgBox->windowFlags() | Qt::FramelessWindowHint);
     QString text ="<h1>";
-    text += tr("by: Andres Cabrera, Tarmo Johannes and others") +"</h1><h2>",
+    text += tr("by: Andres Cabrera, Tarmo Johannes, Eduardo Moguillansky and others") +"</h1><h2>",
             text += tr("Version %1").arg(QCS_VERSION) + "</h2><h2>";
     text += tr("Released under the LGPLv2 or GPLv3") + "</h2>";
     text += tr("Using Csound version:") + QString::number(csoundGetVersion()) + " ";
@@ -2980,7 +2980,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
                          (int) m_options->fontPointSize));
     p->setLineEnding(m_options->lineEnding);
     p->setConsoleFont(QFont(m_options->consoleFont,
-                            (int) m_options->consoleFontPointSize));	
+                            (int) m_options->consoleFontPointSize));
 	p->setConsoleColors(m_options->consoleFontColor,
 	                    m_options->consoleBgColor);
     // p->setEditorBgColor(m_options->editorBgColor);
@@ -4442,11 +4442,10 @@ void CsoundQt::createMenus()
     QList<QStringList> subMenus;
     QStringList subMenuNames;
 
-
-    livecollFiles.append(":/examples/Live Collection/Live_Accordizer.csd");
-    livecollFiles.append(":/examples/Live Collection/Live_Delay_Feedback.csd");
-    livecollFiles.append(":/examples/Live Collection/Live_Granular.csd");
-    livecollFiles.append(":/examples/Live Collection/Live_RM_AM.csd");
+    livecollFiles << ":/examples/Live Collection/Live_Accordizer.csd"
+                  << ":/examples/Live Collection/Live_Delay_Feedback.csd"
+                  << ":/examples/Live Collection/Live_Granular.csd"
+                  << ":/examples/Live Collection/Live_RM_AM.csd";
 
     subMenus << livecollFiles;
     subMenuNames << tr("Live Collection");
@@ -4501,6 +4500,7 @@ void CsoundQt::createMenus()
     subMenus << musicFiles;
     subMenuNames << tr("Music");
 
+    usefulFiles.append(":/examples/Useful/SpectrumAnalyzer.csd");
     usefulFiles.append(":/examples/Useful/IO_Test.csd");
     usefulFiles.append(":/examples/Useful/MIDI_IO_Test.csd");
     usefulFiles.append(":/examples/Useful/Audio_Input_Test.csd");
@@ -4978,7 +4978,7 @@ void CsoundQt::createToolBars()
 #endif
 #ifdef QCS_PYTHONQT
     configureToolBar->addAction(showPythonConsoleAct);
-#endif    
+#endif
     // configureToolBar->addAction(showScratchPadAct);
     // configureToolBar->addAction(showUtilitiesAct);
     configureToolBar->setFloatable(false);

@@ -589,7 +589,6 @@ double WidgetLayout::getValueForChannel(QString channelName, bool *modified)
     (void) modified;
     //  widgetsMutex.lock();
     for (int i = 0; i < m_activeWidgets ; i++) {
-        //    qDebug() << "WidgetLayout::getValueForChannel " << i << "  " << m_widgets[i]->getChannelName();
         if (m_widgets[i]->getChannelName() == channelName) {
             double value = m_widgets[i]->getValue();
             //      widgetsMutex.unlock();
