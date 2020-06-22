@@ -26,6 +26,7 @@
 #include "qutewidget.h"
 #include "csoundengine.h"  //necessary for the CsoundUserData struct
 #include "selectcolorbutton.h"
+#include "curve.h"         // necessary for CurveType
 
 class Curve;
 
@@ -68,7 +69,7 @@ public:
                 m_label->hide();
         }
     }
-    int findCurve(QString text);
+    int findCurve(CurveType type, QString text);
 	virtual void applyInternalProperties();
     size_t spectrumGetPeak(Curve *curve, double freq, double relativeBandwidth);
 
@@ -80,6 +81,7 @@ protected:
 	QDoubleSpinBox *zoomxBox;
 	QDoubleSpinBox *zoomyBox;
     QCheckBox *acceptTablesCheckBox;
+    QCheckBox *acceptDisplaysCheckBox;
     QCheckBox *showSelectorCheckBox;
     QCheckBox *showGridCheckBox;
     QCheckBox *showTableInfoCheckBox;
@@ -137,7 +139,7 @@ private:
 
     QGraphicsView* getView(int index);
 
-	//    QMutex curveLock;
+    QMutex curveLock;
 	bool m_grid;
 	bool m_logx;
 	bool m_logy;
@@ -159,6 +161,8 @@ private:
     double m_showPeakTempFrequency;
     double m_dbRange;
     bool m_enableTables;
+    bool m_enableDisplays;
+
 
 signals:
     void requestUpdateCurve(Curve *curve);

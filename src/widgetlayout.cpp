@@ -42,6 +42,7 @@
 
 #include "qutecsound.h" // For passing the actions from button reserved channels
 
+
 WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 {
     selectionFrame = new QRubberBand(QRubberBand::Rectangle, this);
@@ -768,7 +769,6 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                 this, SLOT(newValue(QPair<QString,double>)));
         connect(w, SIGNAL(requestUpdateCurve(Curve*)),
                 this, SLOT(processUpdateCurve(Curve*)));
-
         for (int i = 0; i < curves.size(); i++) {
             w->addCurve(curves[i]);
         }
@@ -1247,7 +1247,7 @@ void WidgetLayout::killCurve(WINDAT *windat)
 
 void WidgetLayout::newCurve(Curve* curve)
 {
-    //  qDebug() << "WidgetPanel::newCurve" << curve;
+    qDebug() << "WidgetPanel::newCurve" << curve << curve->get_caption();
     //  FIXME check if curve is a new curve for a old ftable
     //  for (int i = 0; i < curves.size(); i++) {
     //    if (curves[i]->get_caption() == curve->get_caption()) {
@@ -2006,8 +2006,6 @@ QString WidgetLayout::createNewConsole(int x, int y, QString channel)
 
 QString WidgetLayout::createNewGraph(int x, int y, QString channel)
 {
-    qDebug() << ">>>>>>>> createNewGraph";
-
     QString uuid;
     bool dialog;
     int posx = x >= 0 ? x : currentPosition.x();
@@ -2195,7 +2193,6 @@ void WidgetLayout::propertiesDialog()
 void WidgetLayout::applyProperties()
 {
     QColor color = bgButton->property("QCS_color").value<QColor>();
-    qDebug() << "WidgetLayout::applyProperties";
     setBackground(bgCheckBox->isChecked(), color);
     widgetChanged();
     mouseBut2 = 0;  // Button un clicked is not propagated after opening the edit dialog. Do it artificially here
@@ -2563,7 +2560,6 @@ void WidgetLayout::keyPressEvent(QKeyEvent *event)
             event->accept();
             return;
         case Qt::Key_A:
-            qDebug() << event->modifiers();
             if(event->modifiers() & Qt::ControlModifier) {
                 this->selectAll();
                 event->accept();
@@ -2667,7 +2663,6 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
 
 void WidgetLayout::mousePressEvent(QMouseEvent *event)
 {
-    //  qDebug() << "WidgetLayout::mousePressEvent";
     if (m_editMode && (event->button() & Qt::LeftButton)) {
         this->setFocus(Qt::MouseFocusReason);
         selectionFrame->show();
@@ -2705,7 +2700,6 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
         selectionFrame->setGeometry(x, y, width, height);
         selectionChanged(QRect(x - xOffset, y - yOffset, width, height));
     }
-    //  qDebug() << "WidgetPanel::mouseMoveEvent " << event->y();
     mouseLock.lockForWrite();
     mouseX = event->globalX();
     mouseY = event->globalY();
@@ -2719,7 +2713,6 @@ void WidgetLayout::mouseReleaseEvent(QMouseEvent *event)
     if (event->button() & Qt::LeftButton) {
         selectionFrame->hide();
     }
-    //  qDebug() << "WidgetPanel::mouseMoveEvent " << event->x();
     mouseLock.lockForWrite();
     if (event->button() == Qt::LeftButton)
         mouseBut1 = 0;
@@ -4164,6 +4157,7 @@ void WidgetLayout::redo()
         loadMacWidgets(m_history[m_historyIndex]);
 }
 
+
 void WidgetLayout::updateData()
 {
     if (closing == 1) {
@@ -4192,7 +4186,9 @@ void WidgetLayout::updateData()
         if (curve != nullptr && curveData != nullptr) {
             curve->set_size(curveData->npts);    // number of points
             curve->set_data(curveData->fdata);
-            curve->set_caption(QString(curveData->caption));
+            // QString caption = parseCaption(curveData->caption);
+            curve->set_caption(curveData->caption);
+                // curve->set_caption(QString(curveData->caption));
             // curve->set_polarity(windat->polarity);
             curve->set_max(curveData->max);
             curve->set_min(curveData->min);

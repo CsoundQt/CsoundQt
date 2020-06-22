@@ -11,17 +11,12 @@ nchnls = 4
 
 chn_k "peak", "r"
 
-
+gifoo ftgen 0, 0, 1024, 10, 1
 gi_fftSizes[] fillarray 2048, 4096, 8192, 16384
 gk_fftSize init 4096
 gk_peakFreq init 0
 gk_peakGain init 0
 
-instr Setup
-	outvalue "spectrum", "@set 0"
-	outvalue "spectrum", "@getPeak peak"
-	turnoff
-endin
 
 instr PlayPeak
 	kamp = ampdb(gk_peakGain)
@@ -78,12 +73,23 @@ instr Spectrum
 	aspectrum pareq amix, 30, 0, 0.05, 1
 	denorm aspectrum
 dispReset:
+	display aspectrum, iperiod
 	dispfft aspectrum, iperiod, i(gk_fftSize)
 	
 endin
 
-schedule "Setup", 0, -1
+instr PostInit
+	; this needs to run at a point where the fft curve already 
+	; exists, which, depending on gk_fftSize, is, at the latest,
+	; 16384 / sr (16384 / 44100 = 0.37...)
+  outvalue "spectrum", "@find fft aspectrum"
+	outvalue "spectrum", "@getPeak peak"
+	turnoff
+endin
+
+
 schedule "Spectrum", 0, -1
+; schedule "PostInit", 0.4, -1
 
 </CsInstruments>
 <CsScore>
@@ -115,7 +121,7 @@ schedule "Spectrum", 0, -1
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description>Spectrum</description>
-  <value>0</value>
+  <value>1</value>
   <objectName2/>
   <zoomx>4.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -227,7 +233,7 @@ schedule "Spectrum", 0, -1
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>2</selectedIndex>
+  <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">

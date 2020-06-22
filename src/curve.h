@@ -35,6 +35,13 @@ enum Polarity {
 	POLARITY_BIPOL
 };
 
+enum CurveType {
+    CURVE_FTABLE=1,
+    CURVE_AUDIOSIGNAL=2,
+    CURVE_SPECTRUM=3
+};
+
+
 class Curve
 {
 public:
@@ -47,19 +54,20 @@ public:
 	//     MYFLT *get_data() const;
 	MYFLT get_data(int index);
 	size_t get_size() const;      // number of points
-	QString get_caption() const; // title of curve
-	Polarity get_polarity() const; // polarity
+    QString get_caption() const; // original caption of curve
+    Polarity get_polarity() const; // polarity
 	MYFLT get_max() const;        // curve max
 	MYFLT get_min() const;        // curve min
 	MYFLT get_absmax() const;     // abs max of above
 	MYFLT get_y_scale() const;    // Y axis scaling factor
+    CurveType get_type() const;
 	WINDAT * getOriginal();
 
 	//    void set_id(uintptr_t id);
 	void set_data(MYFLT * data);
 	void set_size(size_t size);      // number of points
 	void set_caption(QString caption); // title of curve
-	void set_polarity(Polarity polarity); // polarity
+    void set_polarity(Polarity polarity); // polarity
 	void set_max(MYFLT max);        // curve max
 	void set_min(MYFLT min);        // curve min
 	void set_absmax(MYFLT absmax);     // abs max of above
@@ -74,11 +82,13 @@ private:
 	WINDAT *m_original;
 	size_t m_size;
 	QString m_caption;
-	Polarity m_polarity;
+    QString m_title;
+    Polarity m_polarity;
 	MYFLT m_max, m_min, m_absmax, m_y_scale;
 	bool m_dotted_divider;
 	void copy(size_t, MYFLT *);
 	void destroy();
+    CurveType m_curveType;
 
 	QMutex mutex;
 };

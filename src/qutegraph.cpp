@@ -80,8 +80,9 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
     m_pageComboBox->setFont(QFont({"Sans", 7}));
     m_pageComboBox->setFocusPolicy(Qt::NoFocus);
     m_pageComboBox->setStyleSheet("QComboBox QAbstractItemView"
-                                  "{ min-width: 160px; }");
-    m_pageComboBox->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLength);
+                                  "{ min-width: 150px; }");
+    // m_pageComboBox->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLength);
+    m_pageComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 	m_label->setFocusPolicy(Qt::NoFocus);
     m_drawGrid = true;
     m_drawTableInfo = true;
@@ -109,7 +110,9 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
     setProperty("QCS_showTableInfo", true);
     setProperty("QCS_showScrollbars", true);
     setProperty("QCS_enableTables", true);
+    setProperty("QCS_enableDisplays", true);
     m_enableTables = true;
+    m_enableDisplays = true;
 	setProperty("QCS_all", true);
 
     m_showPeak = false;
@@ -172,7 +175,7 @@ QString QuteGraph::getWidgetXmlText()
                        property("QCS_showScrollbars").toBool() ? "true" : "false");
     s.writeTextElement("enableTables",
                        property("QCS_enableTables").toBool() ? "true" : "false");
-
+    s.writeTextElement("enableDisplays", m_enableDisplays ? "true" : "false");
 	s.writeTextElement("all", property("QCS_all").toBool() ? "true" : "false");
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
@@ -336,51 +339,67 @@ void QuteGraph::setValue(double value)
 
 void QuteGraph::setValue(QString text)
 {
+    bool ok;
     auto parts = text.splitRef(' ', QString::SkipEmptyParts);
-    if(parts[0] == "@find") {
-        auto pattern = text.mid(5).trimmed();
-        int index = findCurve(pattern);
-        if(index < 0) {
-            qDebug() << "@find: display/dispfft not found";
-            return;
-        }
-        qDebug() << "-------------- Command: " << text << "found index" << index;
-        this->setValue(index);
-    }
-    else if(parts[0] == "@set") {
+    if(parts[0] == "@set") {
         bool ok;
         int index = parts[1].toInt(&ok);
-        if(!ok) {
+        if(parts.size() != 2 || !ok) {
+            qDebug() << "@set: value error";
             qDebug() << "@set syntax: @set <curveindex:int>";
             return;
         }
         if(index >= 0 && index < curves.size())
             this->setValue(index);
     }
-    else if(parts[0] == "@setTable") {
-        if(!m_enableTables) {
-            qDebug() << "QuteGraph: asked to set table as active view, but tables are"
-                     << "not enabled";
+    else if(parts[0] == "@find") {
+        // @find type text
+        // type: one of fft, audio, ftable
+        // Example: @find fft asignal
+        qDebug() << "@find " << parts;
+        if(parts.size() != 3) {
+            qDebug() << "@find: Wrong number of arguments";
+            qDebug() << "syntax: @find <kind:str> <text:str>";
+            qDebug() << "    * kind: one of fft, audio, ftable";
+            qDebug() << "    * text: a text to match against the caption";
             return;
         }
-        bool ok;
-        int tableNum = parts[1].toInt(&ok);
-        if(!ok) {
-            qDebug()<<"@setTable syntax: @setTable <tablenumber:int>";
+        int index;
+        if(parts[1] == "fft") {
+            qDebug() << ">>>>>>>>>>>>>>>> spectrum";
+            index = findCurve(CURVE_SPECTRUM, parts[2].toString());
+        }
+        else if (parts[1] == "audio") {
+            index = findCurve(CURVE_AUDIOSIGNAL, parts[2].toString());
+        }
+        else if (parts[1] == "table") {
+            int tabnum = parts[2].toInt(&ok);
+            if(!ok) {
+                qDebug()<<"@set table syntax: @set table <tablenumber:int>";
+                return;
+            }
+            index = this->getIndexForTableNum(tabnum);
+        }
+        else {
+            qDebug() << "@find: graph type should be one of 'table', 'fft' or 'audio', got"
+                     << parts[1];
             return;
         }
-        int index = this->getIndexForTableNum(tableNum);
         if(index >= 0 && index < curves.size())
             this->setValue(index);
-    }
+        else {
+            qDebug() << "@find: graph not found";
+            return;
+        }
+    }    
     else if(parts[0] == "@freeze") {
         int index = m_value;
         if(graphtypes[index] != GraphType::GRAPH_SPECTRUM)
             return;
         bool ok;
         int status = parts[1].toInt(&ok);
-        if(status != 0 && status && 1) {
-            qDebug() << "@freeze syntax: @freeze status (status is 0 or 1)";
+        if(status != 0 && status != 1) {
+            qDebug() << "Syntax: @freeze <status:int> (0 or 1)";
             return;
         }
         freezeSpectrum(status);
@@ -533,13 +552,21 @@ void QuteGraph::createPropertiesDialog()
     acceptTablesCheckBox = new QCheckBox(dialog);
     acceptTablesCheckBox->setText("Enable tables");
     acceptTablesCheckBox->setToolTip("Enable the display of tables. Each time a table is "
-                                     "creted it will be made available to be selected. "
+                                     "creted it will be made available to be selected.\n"
                                      "NB: modifications to a table will not be shown in the "
                                      "graph, use a TablePlot widget for that.\n"
                                      "NB2: If you plan to use the Graph widget to display"
                                      "spectra or signals, uncheck this option");
     acceptTablesCheckBox->setChecked(property("QCS_enableTables").toBool());
     layout->addWidget(acceptTablesCheckBox, 9, 0, Qt::AlignLeft|Qt::AlignVCenter);
+
+    acceptDisplaysCheckBox = new QCheckBox(dialog);
+    acceptDisplaysCheckBox->setText("Enable Displays");
+    acceptDisplaysCheckBox->setToolTip("Enable displaying audio signals/spectra. Check this"
+                                       "if you plan to use the graph widget to display audio"
+                                       "signals and spectra using the opcodes display/dispfft");
+    acceptDisplaysCheckBox->setChecked(property("QCS_enableDisplays").toBool());
+    layout->addWidget(acceptDisplaysCheckBox, 9, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     showSelectorCheckBox = new QCheckBox(dialog);
     showSelectorCheckBox->setText("Show Selector");
@@ -592,8 +619,12 @@ void QuteGraph::applyProperties()
     setProperty("QCS_showSelector", showSelectorCheckBox->checkState());
     setProperty("QCS_showGrid", showGridCheckBox->checkState());
     setProperty("QCS_showScrollbars", showScrollbarsCheckBox->isChecked());
-    setProperty("QCS_enableTables", acceptTablesCheckBox->isChecked());
+    setProperty("QCS_enableTables", acceptTablesCheckBox->isChecked());   
+    setProperty("QCS_enableDisplays", acceptDisplaysCheckBox->isChecked());
+
     m_enableTables = acceptTablesCheckBox->isChecked();
+    m_enableDisplays = acceptDisplaysCheckBox->isChecked();
+
     showTableInfo(showTableInfoCheckBox->checkState());
 
 #ifdef  USE_WIDGET_MUTEX
@@ -602,17 +633,21 @@ void QuteGraph::applyProperties()
 	QuteWidget::applyProperties();
 }
 
-int QuteGraph::findCurve(QString text) {
+
+int QuteGraph::findCurve(CurveType type, QString text) {
     // returns the index or -1 if not found
+    int index = -1;
     for (int i = 0; i < curves.size(); i++) {
+        if(curves[i]->get_type() != type)
+            continue;
         QString caption = curves[i]->get_caption();
         if (caption.contains(text)) {
-            qDebug() << "finding" << text << "found: " << caption;
-            QStringList parts = text.split(QRegExp("[ :]"), QString::SkipEmptyParts);
-            return i;
+            index = i;
+            break;
         }
     }
-    return -1;
+    qDebug() << "findCurve: curve not found" << type << text;
+    return index;
 }
 
 void QuteGraph::changeCurve(int index)
@@ -724,6 +759,7 @@ void QuteGraph::clearCurves()
 	m_pageComboBox->clear();
 	m_pageComboBox->blockSignals(false);
 	curves.clear();
+    graphtypes.clear();
 	lines.clear();
 	polygons.clear();
 	m_gridlines.clear();
@@ -739,23 +775,28 @@ void QuteGraph::clearCurves()
 
 void QuteGraph::addCurve(Curve * curve)
 {
+    QMutexLocker locker(&curveLock);
     Q_ASSERT(curve != nullptr);
     GraphType graphType;
     QGraphicsView *view;
-    QString caption = curve->get_caption();
-    if(caption.contains("fft")) {
+    CurveType type = curve->get_type();
+    if(type == CURVE_SPECTRUM) {
+        if(!m_enableDisplays)
+            return;
         graphType = GraphType::GRAPH_SPECTRUM;
         auto spectralView = new SpectralView(m_widget);
-        connect(spectralView, SIGNAL(mouseReleased()), this, SLOT(mouseReleased()));
         view = static_cast<QGraphicsView*>(spectralView);
+        connect(spectralView, SIGNAL(mouseReleased()), this, SLOT(mouseReleased()));
         view->setRenderHint(QPainter::Antialiasing);
-    } else if(caption.contains("ftable")) {
+    } else if(type == CURVE_FTABLE) {
         if(!m_enableTables)
             return;
         graphType = GraphType::GRAPH_FTABLE;
         view = new QGraphicsView(m_widget);
         view->setRenderHint(QPainter::Antialiasing);
     } else {
+        if(!m_enableDisplays)
+            return;
         graphType = GraphType::GRAPH_AUDIOSIGNAL;
         view = new QGraphicsView(m_widget);
     }
@@ -782,15 +823,6 @@ void QuteGraph::addCurve(Curve * curve)
     auto gridpen2 = QPen(QColor(60, 60, 60));
     gridpen.setCosmetic(true);
     gridpen2.setCosmetic(true);
-    if(caption.contains("fft")) {
-        graphType = GraphType::GRAPH_SPECTRUM;
-        view->setRenderHint(QPainter::Antialiasing);
-    } else if(caption.contains("ftable")) {
-        graphType = GraphType::GRAPH_FTABLE;
-        view->setRenderHint(QPainter::Antialiasing);
-    } else {
-        graphType = GraphType::GRAPH_AUDIOSIGNAL;
-    }
 
     auto marker = new QGraphicsRectItem();
     marker->setVisible(false);
@@ -873,7 +905,11 @@ void QuteGraph::addCurve(Curve * curve)
     view->setResizeAnchor (QGraphicsView::NoAnchor);
     // view->setFocusPolicy(Qt::NoFocus);
 	m_pageComboBox->blockSignals(true);
-	m_pageComboBox->addItem(curve->get_caption());
+    QString curveTitle = curve->get_caption().trimmed();
+    if(curveTitle.endsWith(":"))
+        curveTitle = curveTitle.mid(0, curveTitle.size()-1);
+    m_pageComboBox->addItem(curveTitle);
+    // m_pageComboBox->addItem(curve->get_title());
 	m_pageComboBox->blockSignals(false);
 	//  curveLock.lock();
 	static_cast<StackedLayoutWidget *>(m_widget)->addWidget(view);
@@ -906,20 +942,22 @@ QGraphicsView * QuteGraph::getView(int index) {
 void QuteGraph::drawGraph(Curve *curve, int index) {
     // QString caption = curve->get_caption();
     // auto view = getView(index);
-
-    switch(graphtypes[index]) {
-    case GraphType::GRAPH_FTABLE:
+    // switch(graphtypes[index]) {
+    switch(curve->get_type()) {
+    // case GraphType::GRAPH_FTABLE:
+    case CurveType::CURVE_FTABLE:
         // drawFtable(curve, index);
         // view->setRenderHint(QPainter::Antialiasing);
-
         drawFtablePath(curve, index);
         break;
-    case GraphType::GRAPH_SPECTRUM:
+    // case GraphType::GRAPH_SPECTRUM:
+    case CurveType::CURVE_SPECTRUM:
         // view->setRenderHint(QPainter::Antialiasing);
         drawSpectrum(curve, index);
         // drawSpectrumPath(curve, index);
         break;
-    case GraphType::GRAPH_AUDIOSIGNAL:
+    case CurveType::CURVE_AUDIOSIGNAL:
+    // case GraphType::GRAPH_AUDIOSIGNAL:
         // drawSignal(curve, index);
         drawSignalPath(curve, index);
         break;
@@ -1007,7 +1045,6 @@ void QuteGraph::drawFtable(Curve * curve, int index)
 	//  bool live = curve->getOriginal() != 0;
 	Q_ASSERT(index >= 0);
     QString caption = curve->get_caption();
-    //  qDebug() << "QuteGraph::drawCurve" << caption << curve->getOriginal() << curve->get_size() << curve->getOriginal()->npts << curve->get_max() << curve->get_min();
     if (caption.isEmpty()) {
         return;
     }
@@ -1213,6 +1250,8 @@ void QuteGraph::freezeSpectrum(bool status) {
 }
 
 void QuteGraph::drawSpectrum(Curve *curve, int index) {
+    if(!curveLock.tryLock())
+        return;
     int curveSize = curve->get_size();
     if(curveSize != frozenCurve.size() && graphtypes[index] == GraphType::GRAPH_SPECTRUM)
         freezeSpectrum(false);
@@ -1357,6 +1396,7 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
             *m_peakChannelPtr = 0;
         }
     }
+    curveLock.unlock();
 }
 
 void QuteGraph::drawSignalPath(Curve *curve, int index) {
@@ -1794,7 +1834,6 @@ void QuteTable::onStop() {
 }
 
 void QuteTable::setCsoundUserData(CsoundUserData *ud) {
-    qDebug()<<"QuteTable::setCsoundUserData" << ud;
     if(ud == nullptr) {
         qDebug()<<"CsoundUserData is null";
         return;

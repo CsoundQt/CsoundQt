@@ -55,7 +55,16 @@ Curve::Curve(MYFLT *data, size_t size, const QString& caption,
 	m_y_scale = y_scale;
 	m_dotted_divider = dotted_divider;
 	m_original = original;
+    if(m_caption.contains("fft")) {
+        m_curveType = CURVE_SPECTRUM;
+    } else if(m_caption.contains("ftable")) {
+        m_curveType = CURVE_FTABLE;
+    } else {
+        m_curveType = CURVE_AUDIOSIGNAL;
+    }
 	mutex.unlock();
+    qDebug() << "Curve " << m_curveType;
+
 }
 
 Curve::Curve(const Curve& curve)
@@ -220,4 +229,28 @@ bool Curve::is_divider_dotted() const
 bool Curve::has_same_caption(Curve *curve) const
 {
 	return curve && m_caption == curve->m_caption;
+}
+
+CurveType Curve::get_type() const
+{
+    return m_curveType;
+}
+
+QStringList parseCaption(QString caption) {
+    QStringList out;
+    if(caption.contains("fft")) {
+        auto parts = caption.splitRef(", ", QString::SkipEmptyParts);
+        auto p1 = parts[0].mid(6);  // skip "instr"
+        auto signal = parts[1].mid(7);
+        auto ffttype = parts[2].mid(5, parts[2].trimmed().size() - 2);
+        out.append("fft");
+        out.append(p1.toString());
+        out.append(signal.toString());
+        out.append(ffttype.toString());
+        return out;
+    }
+    else {
+        out.append(caption);
+        return out;
+    }
 }

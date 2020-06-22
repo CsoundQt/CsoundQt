@@ -1923,7 +1923,8 @@ void CsoundQt::play(bool realtime, int index)
                     int result = csdFile.write(file.readAll());
                     file.close();
                     if (result<=0) {
-                        qDebug()<< "*** ERROR: Failed to copy to example to temporary location ***";
+                        qDebug()<< "*** ERROR: Failed to copy to example to temporary "
+                                   "location ***";
                         return;
                     }
                 }
