@@ -34,6 +34,11 @@ The source and binaries can be downloaded from: <https://github.com/CsoundQt/Cso
 * Added a setting to control the update rate of the gui
 * Graph widget (Spectrogram) can control the zoom with keyboard shortcuts (+, -). Also scrollbars can be hidden (user can scroll with scrollwheel/arrow keys)
 * New action "goto line"
+* Spectrum graph: a graph can bow be frozen; clicking on a peak will show the peaks frequency 
+    with resolution independent of the fft size of the corresponding dispfft 
+* New "Spectrum Analyzer" utility example
+* Initial support for color schemes, allowing csoundqt to use a dark theme matching the shell. 
+
 
 ### Fixes
 
@@ -57,5 +62,13 @@ The source and binaries can be downloaded from: <https://github.com/CsoundQt/Cso
 * native toolbar in macOS
 * Less instrusive line numbers, adjust colors to the color theme
 * Each platform has own defaults for fonts, sizes, etc., resulting in a better first time experience
+* Lots of fixes in syntax highlighting
+* Audio device is reset to default whenever the audio backend is modified
+* Fullscreen issues have been mostly resolved. Window state is remembered.
+* Graph widget would cause a crash when adding a new table if a spectrum display was selected. This was fixed.
+* Atsa defaults were corrected
+* Latched button acting wrong on event with negarive duration fixed
+* Application paths were fixed for macOS
+* Toolbar rendering problems in mac were fixed, reverting back from using mac's unified toolbar. 
 
 Eduardo Moguillansky

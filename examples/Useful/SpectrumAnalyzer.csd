@@ -10,7 +10,7 @@ ksmps = 64
 nchnls = 4
 0dbfs = 1
 
-chn_k "peak", "r"   ; Channel to get peak information from graph
+chn_k "peak", 1   ; Channel to get peak information from graph
 
 gi_fftSizes[] fillarray 2048, 4096, 8192, 16384
 gk_fftSize init 4096
@@ -21,20 +21,10 @@ gk_peakGain init 0
 instr PlayPeak
 	; play the detected peak frequency
 	kamp = ampdb(gk_peakGain)
-	apeak oscili kamp, lag(gk_peakFreq, 0.1)
+	apeak oscili kamp, sc_lag(gk_peakFreq, 0.1)
 	apeak *= linsegr:a(0, 0.1, 1, 0.1, 0)
 	outch 1, apeak
 endin
-
-opcode start, 0, S
-	Sinstr xin
-	schedulek(Sinstr, 0, -1)
-endop
-
-opcode stop, 0, S
-	Sinstr xin
-	turnoff2(Sinstr, 0, 1)
-endop
 
 instr Spectrum
 	k0 invalue "ch1"
@@ -54,10 +44,9 @@ instr Spectrum
 	
 	if kplayPeak == 1 && changed(khasPeak) == 1 then
 		if khasPeak == 1 then
-			start("PlayPeak")
+			schedulek("PlayPeak", 0, -1)
 		else
-			stop("PlayPeak")
-			; turnoff2("PlayPeak", 0, 1)
+			turnoff2("PlayPeak", 0, 1)
 		endif
 	endif
 	
@@ -94,7 +83,6 @@ instr Spectrum
 	
 	denorm aspectrum
 dispReset:
-	; display aspectrum, iperiod
 	dispfft aspectrum, iperiod, i(gk_fftSize)
 	
 endin
@@ -144,7 +132,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <description>Spectrum</description>
   <value>0</value>
   <objectName2/>
-  <zoomx>4.00000000</zoomx>
+  <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
@@ -380,7 +368,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <description>Input Gain (dB)</description>
   <minimum>-24.00000000</minimum>
   <maximum>24.00000000</maximum>
-  <value>22.22880000</value>
+  <value>0.89280000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -531,6 +519,37 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>166</x>
+  <y>641</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{fde6acde-2c76-4c66-8cd2-06ca9c02ffa3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>label16</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Arial</font>
+  <fontsize>10</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
