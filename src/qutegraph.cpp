@@ -375,7 +375,7 @@ void QuteGraph::setValue(QString text)
         else if (parts[1] == "table") {
             int tabnum = parts[2].toInt(&ok);
             if(!ok) {
-                qDebug()<<"@set table syntax: @set table <tablenumber:int>";
+                qDebug()<<"@find table syntax: @find table <tablenumber:int>";
                 return;
             }
             index = this->getIndexForTableNum(tabnum);
@@ -1357,7 +1357,7 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
         markerText->setPos(markerX, markerY);
         double factor = nyquist / curveSize;
         double peakFreq;
-        if(peakIndex == 0 || peakIndex >= curveSize - 2) {
+        if(peakIndex <= 1 || peakIndex >= curveSize - 2) {
             peakFreq = factor * peakIndex;
         }
         else {
@@ -1381,8 +1381,16 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
         peakFreq = m_lastPeakFreq <= 0 ? peakFreq : peakFreq * 0.2 + m_lastPeakFreq * 0.8;
         m_lastPeakFreq = peakFreq;
         double a4 = csoundGetA4(this->m_ud->csound);
-        double midinote = 12.0 * log2(peakFreq / a4) + 69.0;
-        QString notename = mton(midinote);
+        double midinote;
+        QString notename;
+        if(peakFreq > 10) {
+            midinote = 12.0 * log2(peakFreq / a4) + 69.0;
+            notename = mton(midinote);
+        }
+        else {
+            midinote = 0;
+            notename = "LOW";
+        }
         markerText->setPlainText(QString("%1 Hz (%2)").arg((int)(peakFreq+0.5)).arg(notename));
 
         marker->setVisible(true);

@@ -102,6 +102,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #ifdef Q_OS_MAC
 	this->setUnifiedTitleAndToolBarOnMac(true);
 #endif
+
+
     // Create GUI panels
 
     helpPanel = new DockHelp(this);
@@ -185,10 +187,16 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_scratchPad->setWindowTitle(tr("Interactive Code Pad"));
     m_scratchPad->hide();
     connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
+
     QSettings settings("csound", "qutecsound");
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "breeze").toString();
+    if(settings.contains("windowState")) {
+        restoreState(settings.value("windowState").toByteArray());
+    }
     settings.endGroup();
+
+
     settings.beginGroup("Options");
     settings.beginGroup("Editor");
     // necessary to get it before htmlview is created
@@ -642,7 +650,7 @@ void CsoundQt::closeEvent(QCloseEvent *event)
 {
     qDebug() ;
     m_closing = true;
-    this->showNormal();  // Don't store full screen size in preferences
+    // this->showNormal();  // Don't store full screen size in preferences
     qApp->processEvents();
     storeSettings();
 #ifdef USE_QT_GT_53
@@ -653,10 +661,12 @@ void CsoundQt::closeEvent(QCloseEvent *event)
         showTableEditor(false);
     }
 #endif
-    // These two give faster shutdown times as the panels don't have to be called up as the tabs close
+    // These two give faster shutdown times as the panels don't have to be
+    // called up as the tabs close
     showWidgetsAct->setChecked(false);
     showLiveEventsAct->setChecked(false);
-// Using this block this causes HTML5 performance to leave a zombie, not using it causes a crash on exit.
+    // Using this block this causes HTML5 performance to leave a zombie,
+    // not using it causes a crash on exit.
     while (!documentPages.isEmpty()) {
         if (!closeTab(true)) { // Don't ask for closing app
             event->ignore();
@@ -5313,6 +5323,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         //  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
         settings.setValue("recentFiles", recentFiles);
         settings.setValue("theme", m_options->theme);
+        settings.setValue("windowState", saveState());
+        settings.setValue("windowGeometry", saveGeometry());
     }
     else {
         settings.remove("");

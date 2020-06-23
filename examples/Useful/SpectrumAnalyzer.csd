@@ -1,6 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 -odac 
+--messagelevel=134
 </CsOptions>
 <CsInstruments>
 
@@ -9,9 +10,8 @@ ksmps = 64
 nchnls = 4
 0dbfs = 1
 
-chn_k "peak", "r"
+chn_k "peak", "r"   ; Channel to get peak information from graph
 
-gifoo ftgen 0, 0, 1024, 10, 1
 gi_fftSizes[] fillarray 2048, 4096, 8192, 16384
 gk_fftSize init 4096
 gk_peakFreq init 0
@@ -19,11 +19,22 @@ gk_peakGain init 0
 
 
 instr PlayPeak
+	; play the detected peak frequency
 	kamp = ampdb(gk_peakGain)
 	apeak oscili kamp, lag(gk_peakFreq, 0.1)
 	apeak *= linsegr:a(0, 0.1, 1, 0.1, 0)
 	outch 1, apeak
 endin
+
+opcode start, 0, S
+	Sinstr xin
+	schedulek(Sinstr, 0, -1)
+endop
+
+opcode stop, 0, S
+	Sinstr xin
+	turnoff2(Sinstr, 0, 1)
+endop
 
 instr Spectrum
 	k0 invalue "ch1"
@@ -31,18 +42,22 @@ instr Spectrum
 	k2 invalue "ch3"
 	k3 invalue "ch4"
 	kfftSizeIndex invalue "fftsize"
-	kplayPeak invalue "playpeak"
-	kinGain invalue "ingain"
-	gk_peakGain invalue "peakgain"
+	kplayPeak     invalue "playpeak"
+	kfilterlow    invalue "filterlow"
+	kinGain       invalue "ingain"
+	gk_peakGain   invalue "peakgain"
+	
+	; We need to use chnget to receive the peak information
 	kpeak chnget "peak"
 	khasPeak = kpeak > 0 ? 1:0
 	gk_peakFreq samphold kpeak, khasPeak
 	
 	if kplayPeak == 1 && changed(khasPeak) == 1 then
 		if khasPeak == 1 then
-			schedulek("PlayPeak", 0, -1)
+			start("PlayPeak")
 		else
-			turnoff2("PlayPeak", 0, 1)
+			stop("PlayPeak")
+			; turnoff2("PlayPeak", 0, 1)
 		endif
 	endif
 	
@@ -70,7 +85,13 @@ instr Spectrum
 	amix *= ampdb(kinGain)
 	 
 	iperiod = 0.05
-	aspectrum pareq amix, 30, 0, 0.05, 1
+	; filter low frequencies from spectrum
+	if kfilterlow == 1 then
+		aspectrum pareq amix, 30, 0, 0.05, 1
+	else
+		aspectrum = amix
+	endif
+	
 	denorm aspectrum
 dispReset:
 	; display aspectrum, iperiod
@@ -102,7 +123,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
  <x>0</x>
  <y>0</y>
  <width>1010</width>
- <height>577</height>
+ <height>576</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -110,7 +131,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <g>22</g>
   <b>22</b>
  </bgcolor>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName>spectrum</objectName>
   <x>10</x>
   <y>9</y>
@@ -121,7 +142,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description>Spectrum</description>
-  <value>1</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>4.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -137,10 +158,10 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch1</objectName>
   <x>10</x>
-  <y>522</y>
+  <y>520</y>
   <width>30</width>
   <height>30</height>
   <uuid>{5aae7b7e-875a-492f-89cb-dbb779039dbe}</uuid>
@@ -153,10 +174,10 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch2</objectName>
   <x>40</x>
-  <y>522</y>
+  <y>520</y>
   <width>30</width>
   <height>30</height>
   <uuid>{00c02e40-ab30-4c76-8737-0f1c375df75a}</uuid>
@@ -169,10 +190,10 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch3</objectName>
   <x>70</x>
-  <y>522</y>
+  <y>520</y>
   <width>30</width>
   <height>30</height>
   <uuid>{cb2805f4-c9ec-4a28-ba5c-459a2e3cec59}</uuid>
@@ -185,10 +206,10 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch4</objectName>
   <x>100</x>
-  <y>522</y>
+  <y>520</y>
   <width>30</width>
   <height>30</height>
   <uuid>{2192eed2-7818-45d5-8593-200cb766966c}</uuid>
@@ -201,10 +222,10 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>fftsize</objectName>
   <x>145</x>
-  <y>522</y>
+  <y>520</y>
   <width>80</width>
   <height>30</height>
   <uuid>{e3a55dea-950a-4c43-a7ef-50f107379f17}</uuid>
@@ -237,10 +258,10 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>30</x>
-  <y>552</y>
+  <y>550</y>
   <width>80</width>
   <height>25</height>
   <uuid>{342a2cbb-91b5-413b-9de1-aa82f1d74a0d}</uuid>
@@ -268,10 +289,10 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>145</x>
-  <y>552</y>
+  <y>550</y>
   <width>80</width>
   <height>25</height>
   <uuid>{09805d02-0ae6-4f4c-9c39-6b7e61fb1356}</uuid>
@@ -299,10 +320,10 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>playpeak</objectName>
-  <x>265</x>
-  <y>522</y>
+  <x>360</x>
+  <y>520</y>
   <width>30</width>
   <height>30</height>
   <uuid>{f8803c6a-6fba-459f-a113-0e33c0ff19d1}</uuid>
@@ -315,10 +336,10 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>240</x>
-  <y>552</y>
+  <x>335</x>
+  <y>550</y>
   <width>80</width>
   <height>25</height>
   <uuid>{67e8666d-183c-491d-b465-61d7a1a218d5}</uuid>
@@ -346,20 +367,20 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>ingain</objectName>
-  <x>390</x>
+  <x>485</x>
   <y>515</y>
   <width>56</width>
   <height>54</height>
   <uuid>{ce2ca6ad-fa91-4b89-a2eb-7c092f529f22}</uuid>
   <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
+  <midichan>1</midichan>
+  <midicc>7</midicc>
   <description>Input Gain (dB)</description>
   <minimum>-24.00000000</minimum>
   <maximum>24.00000000</maximum>
-  <value>0.88320000</value>
+  <value>22.22880000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -374,9 +395,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <flatstyle>true</flatstyle>
   <integerMode>true</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>310</x>
+  <x>405</x>
   <y>530</y>
   <width>80</width>
   <height>25</height>
@@ -405,9 +426,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>peakgain</objectName>
-  <x>530</x>
+  <x>625</x>
   <y>515</y>
   <width>56</width>
   <height>54</height>
@@ -433,9 +454,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <flatstyle>true</flatstyle>
   <integerMode>true</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>450</x>
+  <x>545</x>
   <y>530</y>
   <width>80</width>
   <height>25</height>
@@ -463,6 +484,53 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>240</x>
+  <y>550</y>
+  <width>100</width>
+  <height>26</height>
+  <uuid>{d9b44e66-bfec-4a49-ba48-e52e29d1e889}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Filter low freqs</label>
+  <alignment>center</alignment>
+  <valignment>top</valignment>
+  <font>Arial</font>
+  <fontsize>13</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>239</r>
+   <g>240</g>
+   <b>241</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBCheckBox" version="2">
+  <objectName>filterlow</objectName>
+  <x>275</x>
+  <y>520</y>
+  <width>30</width>
+  <height>30</height>
+  <uuid>{761ac268-c49b-4473-a0df-c045ea9fdaa4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description>Play the peak frequency</description>
+  <selected>true</selected>
+  <label/>
+  <pressedValue>1</pressedValue>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
