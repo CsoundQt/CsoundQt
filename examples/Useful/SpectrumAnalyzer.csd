@@ -73,7 +73,7 @@ instr Spectrum
 	aspectrum pareq amix, 30, 0, 0.05, 1
 	denorm aspectrum
 dispReset:
-	display aspectrum, iperiod
+	; display aspectrum, iperiod
 	dispfft aspectrum, iperiod, i(gk_fftSize)
 	
 endin
@@ -89,7 +89,7 @@ endin
 
 
 schedule "Spectrum", 0, -1
-; schedule "PostInit", 0.4, -1
+schedule "PostInit", 16384/sr + 0.01, -1
 
 </CsInstruments>
 <CsScore>
@@ -110,7 +110,7 @@ schedule "Spectrum", 0, -1
   <g>22</g>
   <b>22</b>
  </bgcolor>
- <bsbObject type="BSBGraph" version="2">
+ <bsbObject version="2" type="BSBGraph">
   <objectName>spectrum</objectName>
   <x>10</x>
   <y>9</y>
@@ -134,9 +134,10 @@ schedule "Spectrum", 0, -1
   <showTableInfo>false</showTableInfo>
   <showScrollbars>false</showScrollbars>
   <enableTables>false</enableTables>
+  <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject type="BSBCheckBox" version="2">
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>ch1</objectName>
   <x>10</x>
   <y>522</y>
@@ -152,7 +153,7 @@ schedule "Spectrum", 0, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBCheckBox" version="2">
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>ch2</objectName>
   <x>40</x>
   <y>522</y>
@@ -168,7 +169,7 @@ schedule "Spectrum", 0, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBCheckBox" version="2">
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>ch3</objectName>
   <x>70</x>
   <y>522</y>
@@ -184,7 +185,7 @@ schedule "Spectrum", 0, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBCheckBox" version="2">
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>ch4</objectName>
   <x>100</x>
   <y>522</y>
@@ -200,7 +201,7 @@ schedule "Spectrum", 0, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBDropdown" version="2">
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>fftsize</objectName>
   <x>145</x>
   <y>522</y>
@@ -236,7 +237,7 @@ schedule "Spectrum", 0, -1
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>30</x>
   <y>552</y>
@@ -267,7 +268,7 @@ schedule "Spectrum", 0, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>145</x>
   <y>552</y>
@@ -298,7 +299,7 @@ schedule "Spectrum", 0, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBCheckBox" version="2">
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>playpeak</objectName>
   <x>265</x>
   <y>522</y>
@@ -314,7 +315,7 @@ schedule "Spectrum", 0, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>240</x>
   <y>552</y>
@@ -345,7 +346,7 @@ schedule "Spectrum", 0, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBKnob" version="2">
+ <bsbObject version="2" type="BSBKnob">
   <objectName>ingain</objectName>
   <x>390</x>
   <y>515</y>
@@ -373,7 +374,7 @@ schedule "Spectrum", 0, -1
   <flatstyle>true</flatstyle>
   <integerMode>true</integerMode>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>310</x>
   <y>530</y>
@@ -404,7 +405,7 @@ schedule "Spectrum", 0, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBKnob" version="2">
+ <bsbObject version="2" type="BSBKnob">
   <objectName>peakgain</objectName>
   <x>530</x>
   <y>515</y>
@@ -432,7 +433,7 @@ schedule "Spectrum", 0, -1
   <flatstyle>true</flatstyle>
   <integerMode>true</integerMode>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>450</x>
   <y>530</y>
