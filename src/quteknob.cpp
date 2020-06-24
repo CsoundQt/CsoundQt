@@ -133,14 +133,14 @@ void QVdial::paintEvent(QPaintEvent *event) {
         double numChars = static_cast<double>( strValue.size() );
         if(decimals > 0) {
             // do not account for decimal .
-            numChars -= 0.2;
+            numChars -= 0.4;
         }
         if(display_value < 0) {
             numChars -= 0.5;
         }
         numChars = numChars > 4 ? numChars : 4;
-        double fontScale = 0.42 * 4/numChars;
-        int fontSize = (int) (r * fontScale);
+        double fontScale = 0.40 * 4/numChars;
+        int fontSize = (int) ((r - m_border) * fontScale);
         if(fontSize >= 6) {
             painter.setFont({"Helvetica", fontSize});
             painter.setPen(m_textcolor);
