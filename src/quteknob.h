@@ -44,6 +44,8 @@ public:
     , m_display_max(1.0)
     , m_color(QColor(245, 124, 0))
     , m_textcolor(QColor(81, 41, 0))
+    , m_bordercolor(QColor(245, 124, 0))
+    , m_border(0)
     , m_flat(true)
     , m_degrees(300)
     , m_intDisplay(true)
@@ -76,6 +78,10 @@ public:
 
     void setFlatStyle(bool enable) { m_flat = enable; }
     void setIntegerMode(bool enable) { m_intDisplay = enable; }
+    void setBorder(int width, QColor color) {
+        m_border = width;
+        m_bordercolor = color;
+    }
 
     void setValueFromDisplayValue(double display_value) {
         double delta = (display_value - m_display_min) / (m_display_max-m_display_min);
@@ -87,6 +93,9 @@ public:
     double displayValue() {
         return ((double)this->value()/(double)this->maximum()) *
                 (m_display_max - m_display_min) + m_display_min;
+    }
+    int getDegreeRange() {
+        return m_degrees;
     }
 
 protected:
@@ -108,6 +117,8 @@ private:
     double m_display_max;
     QColor m_color;
     QColor m_textcolor;
+    QColor m_bordercolor;
+    int    m_border;
     bool   m_flat;
     int    m_degrees;
     bool   m_intDisplay;
@@ -162,6 +173,8 @@ private:
     SelectColorButton *knobColorButton;
     SelectColorButton *knobTextColorButton;
     QCheckBox      *intModeCheckBox;
+    QSpinBox  *borderWidthSpinBox;
+    SelectColorButton *borderColorButton;
 
 };
 

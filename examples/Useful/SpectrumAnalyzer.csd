@@ -119,7 +119,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <g>22</g>
   <b>22</b>
  </bgcolor>
- <bsbObject type="BSBGraph" version="2">
+ <bsbObject version="2" type="BSBGraph">
   <objectName>spectrum</objectName>
   <x>10</x>
   <y>9</y>
@@ -146,7 +146,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject type="BSBCheckBox" version="2">
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>ch1</objectName>
   <x>10</x>
   <y>520</y>
@@ -162,7 +162,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBCheckBox" version="2">
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>ch2</objectName>
   <x>40</x>
   <y>520</y>
@@ -178,7 +178,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBCheckBox" version="2">
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>ch3</objectName>
   <x>70</x>
   <y>520</y>
@@ -194,7 +194,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBCheckBox" version="2">
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>ch4</objectName>
   <x>100</x>
   <y>520</y>
@@ -210,7 +210,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBDropdown" version="2">
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>fftsize</objectName>
   <x>145</x>
   <y>520</y>
@@ -246,7 +246,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>30</x>
   <y>550</y>
@@ -277,7 +277,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>145</x>
   <y>550</y>
@@ -308,7 +308,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBCheckBox" version="2">
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>playpeak</objectName>
   <x>360</x>
   <y>520</y>
@@ -324,7 +324,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>335</x>
   <y>550</y>
@@ -355,7 +355,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBKnob" version="2">
+ <bsbObject version="2" type="BSBKnob">
   <objectName>ingain</objectName>
   <x>485</x>
   <y>515</y>
@@ -368,7 +368,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <description>Input Gain (dB)</description>
   <minimum>-24.00000000</minimum>
   <maximum>24.00000000</maximum>
-  <value>0.89280000</value>
+  <value>0.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -379,11 +379,13 @@ schedule "PostInit", 16384/sr + 0.01, -1
    <b>0</b>
   </color>
   <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#000000</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>true</integerMode>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>405</x>
   <y>530</y>
@@ -414,7 +416,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBKnob" version="2">
+ <bsbObject version="2" type="BSBKnob">
   <objectName>peakgain</objectName>
   <x>625</x>
   <y>515</y>
@@ -438,11 +440,13 @@ schedule "PostInit", 16384/sr + 0.01, -1
    <b>0</b>
   </color>
   <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>true</integerMode>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>545</x>
   <y>530</y>
@@ -473,7 +477,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>240</x>
   <y>550</y>
@@ -504,7 +508,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBCheckBox" version="2">
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>filterlow</objectName>
   <x>275</x>
   <y>520</y>
@@ -519,37 +523,6 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject type="BSBLabel" version="2">
-  <objectName/>
-  <x>166</x>
-  <y>641</y>
-  <width>80</width>
-  <height>25</height>
-  <uuid>{fde6acde-2c76-4c66-8cd2-06ca9c02ffa3}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <label>label16</label>
-  <alignment>left</alignment>
-  <valignment>top</valignment>
-  <font>Arial</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

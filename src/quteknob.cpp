@@ -55,37 +55,82 @@ void QVdial::mouseDoubleClickEvent (QMouseEvent *event) {
         this->QDial::mouseDoubleClickEvent(event);
 }
 
+QPointF find_ellipse_coords(const QRectF &r, qreal angle) {
+  QPainterPath path;
+  path.arcMoveTo(r, angle);
+  return path.currentPosition();
+}
+
+void drawKnob(QPainter &painter, QVdial *knob, int border, QColor fg, QColor bg, QColor borderColor) {
+    int totaldegrees = knob->getDegreeRange();
+    double relvalue = (double)knob->value() / knob->maximum();
+    int steps = (int)(relvalue * totaldegrees);
+
+    int const startAngle360 = 90 + (360 - totaldegrees) / 2;
+    int const startAngle = startAngle360;
+    QPoint center = knob->rect().center();
+
+    // fgPen.setCosmetic(true);
+    double r = qMin(knob->rect().height(), knob->rect().width()) / 2.0;
+    r = r * 0.97 - border;
+    double inner_r = r*0.67;
+    QRectF const rect(center.x() - r, center.y() - r, r * 2, r * 2);
+    QRectF outer_rect(center.x() - r, center.y() - r, r * 2, r * 2);
+    QRectF inner_rect(center.x() - inner_r, center.y() - inner_r, inner_r*2, inner_r*2);
+
+    // background
+    // this could be cached, since it only changes when the knob is resized
+    QPainterPath bgpath;
+
+    bgpath.arcMoveTo(outer_rect, -startAngle);
+    bgpath.arcTo(outer_rect, -startAngle, -totaldegrees);
+    bgpath.lineTo(find_ellipse_coords(inner_rect, -startAngle - totaldegrees));
+    bgpath.arcTo(inner_rect, -startAngle-totaldegrees, totaldegrees);
+    bgpath.closeSubpath();
+    painter.fillPath(bgpath, bg);
+
+    // foreground
+    QPainterPath path;
+    path.arcMoveTo(outer_rect, -startAngle);
+    path.arcTo(outer_rect, -startAngle, -steps);
+    path.lineTo(find_ellipse_coords(inner_rect, -startAngle - steps));
+    path.arcTo(inner_rect, -startAngle-steps, steps);
+    path.closeSubpath();
+
+    painter.fillPath(path, fg);
+
+    // border at the end
+    if(border) {
+        QPen borderPen(borderColor, border, Qt::SolidLine, Qt::FlatCap);
+        if(border == 1) {
+            borderPen.setWidth(0);
+            borderPen.setCosmetic(true);
+        }
+        painter.setPen(borderPen);
+        painter.drawPath(bgpath);
+    }
+
+    return ;
+
+}
+
 void QVdial::paintEvent(QPaintEvent *event) {
     if(!m_flat)
         return this->QDial::paintEvent(event);
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    QPoint center = this->rect().center();
-    QColor bgcolor = m_color.darker(300);
+    QColor bgcolor = m_color.darker(330);
     double r = qMin(this->rect().height(), this->rect().width()) / 2.0;
-    r *= 0.75;
-    int const penWidth = (int)(r * 0.5);
-    QPen const fgPen(m_color, penWidth, Qt::SolidLine, Qt::FlatCap);
-    QPen const bgPen(bgcolor,  penWidth, Qt::SolidLine, Qt::FlatCap);
-    QRectF const rect(center.x() - r, center.y() - r, r * 2, r * 2);
-    int const startAngle360 = 90 + (360 - m_degrees) / 2;
-    int const startAngle = startAngle360 * 16;
-    double relvalue = (double)this->value() / this->maximum();
-    int steps = (int)(relvalue * 16 * m_degrees);
-    painter.setPen(bgPen);
-    painter.drawArc(rect, -startAngle, -m_degrees * 16);
-    painter.setPen(fgPen);
-    painter.drawArc(rect, -startAngle, -steps);
-
-    // TODO: implement this using QPainterPath
+    drawKnob(painter, this, m_border, m_color, bgcolor, m_bordercolor);
 
     if(m_draw_value && r >= 8) {
-        double display_value = ((double)this->value()/(double)this->maximum()) *
-                             (m_display_max - m_display_min) + m_display_min;
+        double fvalue = static_cast<double>(this->value());
+        double display_value = (fvalue/this->maximum()) *
+                               (m_display_max - m_display_min) + m_display_min;
         int decimals = m_intDisplay ? 0 : m_decimals;
-        QString strValue = QString::number((double)display_value, 'f', decimals);
-        double numChars = (double)strValue.size();
+        QString strValue = QString::number(display_value, 'f', decimals);
+        double numChars = static_cast<double>( strValue.size() );
         if(decimals > 0) {
             // do not account for decimal .
             numChars -= 0.2;
@@ -94,9 +139,9 @@ void QVdial::paintEvent(QPaintEvent *event) {
             numChars -= 0.5;
         }
         numChars = numChars > 4 ? numChars : 4;
-        double fontScale = 0.46 * 4/numChars;
+        double fontScale = 0.42 * 4/numChars;
         int fontSize = (int) (r * fontScale);
-        if(fontSize >= 6.0) {
+        if(fontSize >= 6) {
             painter.setFont({"Helvetica", fontSize});
             painter.setPen(m_textcolor);
             painter.drawText(this->rect(), Qt::AlignCenter, strValue);
@@ -133,9 +178,12 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_resolution", 0.01);
 	setProperty("QCS_randomizable", false);
 	setProperty("QCS_randomizableGroup", 0);
-
     setColor(QColor(245, 124, 0));
     setTextColor(QColor(81, 41, 0));
+    auto borderColor = QColor(81, 41, 0);
+    setProperty("QCS_borderColor", borderColor.name());
+    setProperty("QCS_border", 0);
+    w->setBorder(0, borderColor);
 
     setProperty("QCS_showvalue", true);
     setProperty("QCS_flatstyle", true);
@@ -209,6 +257,7 @@ void QuteKnob::applyInternalProperties()
     w->setIntegerMode(property("QCS_integerMode").toBool());
     w->setDisplayRange(property("QCS_minimum").toDouble(),
                        property("QCS_maximum").toDouble());
+    w->setBorder(property("QCS_border").toInt(), property("QCS_borderColor").toString());
 }
 
 void QuteKnob::setWidgetGeometry(int x, int y, int width, int height)
@@ -333,6 +382,8 @@ QString QuteKnob::getWidgetXmlText()
     // representation, which can be used to create a QColor also
     QColor textcolor = static_cast<QVdial*>(m_widget)->getTextColor();
     s.writeTextElement("textcolor", textcolor.name());
+    s.writeTextElement("border", QString::number(property("QCS_border").toInt()));
+    s.writeTextElement("borderColor", property("QCS_borderColor").toString());
     s.writeTextElement("showvalue",
                        property("QCS_showvalue").toBool() ? "true" : "false");
     s.writeTextElement("flatstyle",
@@ -382,19 +433,21 @@ void QuteKnob::createPropertiesDialog()
 	widgetLock.lockForRead();
 #endif
 	dialog->setWindowTitle("Knob");
-	QLabel *label = new QLabel(dialog);
+    QLabel *label;
 
-	label->setText("Min =");
+    label = new QLabel("Min =", dialog);
 	layout->addWidget(label, 2, 0, Qt::AlignRight|Qt::AlignVCenter);
+
 	minSpinBox = new QDoubleSpinBox(dialog);
     minSpinBox->setDecimals(4);
 	minSpinBox->setRange(-99999.0, 99999.0);
 	minSpinBox->setValue(property("QCS_minimum").toDouble());
 	layout->addWidget(minSpinBox, 2,1, Qt::AlignLeft|Qt::AlignVCenter);
-    label = new QLabel(dialog);
-	label->setText("Max =");
-	layout->addWidget(label, 2, 2, Qt::AlignRight|Qt::AlignVCenter);
-	maxSpinBox = new QDoubleSpinBox(dialog);
+
+    label = new QLabel("Max =", dialog);
+    layout->addWidget(label, 2, 2, Qt::AlignRight|Qt::AlignVCenter);
+
+    maxSpinBox = new QDoubleSpinBox(dialog);
     maxSpinBox->setDecimals(4);
 	maxSpinBox->setRange(-99999.0, 99999.0);
 	maxSpinBox->setValue(property("QCS_maximum").toDouble());
@@ -403,43 +456,57 @@ void QuteKnob::createPropertiesDialog()
     // label->setText("Resolution");
     // layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
 
-    flatStyleCheckBox = new QCheckBox(dialog);
-    flatStyleCheckBox->setText("Flat style");
+    flatStyleCheckBox = new QCheckBox("Flat style", dialog);
     flatStyleCheckBox->setToolTip("If checked, knob is drawn in a flat style. "
                                   "Otherwise, the native Qt look is used");
     flatStyleCheckBox->setCheckState(
                 property("QCS_flatstyle").toBool()?Qt::Checked:Qt::Unchecked);
     layout->addWidget(flatStyleCheckBox, 5, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-    displayValueCheckBox = new QCheckBox(dialog);
-    displayValueCheckBox->setText("Display value");
+    displayValueCheckBox = new QCheckBox("Show value", dialog);
     displayValueCheckBox->setToolTip("Show value as text inside the knob");
     displayValueCheckBox->setCheckState(
                 property("QCS_showvalue").toBool()?Qt::Checked:Qt::Unchecked);
     layout->addWidget(displayValueCheckBox, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-    intModeCheckBox = new QCheckBox(dialog);
-    intModeCheckBox->setText("Integer");
+    intModeCheckBox = new QCheckBox("Integer", dialog);
     intModeCheckBox->setToolTip("Constrain displayed value to nearest integer");
     intModeCheckBox->setCheckState(
                 property("QCS_integerMode").toBool()?Qt::Checked:Qt::Unchecked);
     layout->addWidget(intModeCheckBox, 6, 2, Qt::AlignLeft|Qt::AlignVCenter);
 
-    label = new QLabel(dialog);
-    label->setText("Color");
+    // Color
+    label = new QLabel("Color", dialog);
     layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     knobColorButton = new SelectColorButton(dialog);
     knobColorButton->setColor(property("QCS_color").value<QColor>());
     layout->addWidget(knobColorButton, 7, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
-    label = new QLabel(dialog);
-    label->setText("Text Color");
+    // Text Color
+    label = new QLabel("Text Color", dialog);
     layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     knobTextColorButton = new SelectColorButton(dialog);
     knobTextColorButton->setColor(QColor(property("QCS_textcolor").toString()));
     layout->addWidget(knobTextColorButton, 7, 3, Qt::AlignLeft | Qt::AlignVCenter);
+
+    // Border
+    label = new QLabel("Border", dialog);
+    layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    borderWidthSpinBox = new QSpinBox(dialog);
+    borderWidthSpinBox->setValue(property("QCS_border").toInt());
+    borderWidthSpinBox->setRange(0, 8);
+    borderWidthSpinBox->setToolTip("Set to 1 or more to draw a border around the knob in flat mode");
+    layout->addWidget(borderWidthSpinBox, 8, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+    label = new QLabel("Border Color", dialog);
+    layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
+
+    borderColorButton = new SelectColorButton(dialog);
+    borderColorButton->setColor(property("QCS_borderColor").value<QColor>());
+    layout->addWidget(borderColorButton, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
     connect(flatStyleCheckBox, SIGNAL(toggled(bool)),
             displayValueCheckBox, SLOT(setEnabled(bool)));
@@ -493,6 +560,12 @@ void QuteKnob::applyProperties()
     bool intmode = intModeCheckBox->checkState();
     setProperty("QCS_integerMode", intmode);
     w->setIntegerMode(intmode);
+
+    QColor bordercolor = borderColorButton->getColor();
+    setProperty("QCS_borderColor", bordercolor.name());
+    int borderwidth = borderWidthSpinBox->value();
+    setProperty("QCS_border", borderwidth);
+    w->setBorder(borderwidth, bordercolor);
 
 #ifdef  USE_WIDGET_MUTEX
     widgetLock.unlock();

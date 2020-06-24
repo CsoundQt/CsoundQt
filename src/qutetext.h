@@ -78,11 +78,13 @@ protected:
     // QCheckBox *border;
 	QSpinBox *borderRadius;
 	QSpinBox *borderWidth;
+    QSpinBox *precisionSpinBox;
 	QFontComboBox  *font;
 	QSpinBox * fontSize;
 	QComboBox * alignment;
     QComboBox * vertAlignmentComboBox;
     QHash<QString, QLabel *>labelPtrs;
+    int m_precision;
 
 private slots:
     // void selectTextColor();

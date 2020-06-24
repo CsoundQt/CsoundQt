@@ -41,8 +41,7 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_label", "");
 	setProperty("QCS_alignment", "left");
     setProperty("QCS_valignment", "top");
-	setProperty("QCS_precision", 3);
-	setProperty("QCS_font", "Arial");
+    setProperty("QCS_font", "Arial");
 	setProperty("QCS_fontsize", 12.0);
 	setProperty("QCS_bgcolor", QColor());
 	setProperty("QCS_bgcolormode", false);
@@ -54,6 +53,9 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	m_fontScaling = 1.0;
 	m_fontOffset = 1.0;
 	m_type = "display";
+    m_precision = 3;
+    setProperty("QCS_precision", m_precision);
+
 }
 
 QuteText::~QuteText()
@@ -66,8 +68,8 @@ void QuteText::setValue(double value)
 	widgetLock.lockForWrite();
 #endif
 	m_value = value;
-	m_stringValue = QString::number(value, 'f', property("QCS_precision").toInt());
-	m_valueChanged = true;
+    m_stringValue = QString::number(value, 'f', m_precision);
+    m_valueChanged = true;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -187,9 +189,11 @@ void QuteText::applyInternalProperties()
 	widgetLock.lockForWrite();
 #endif
     static_cast<QLabel*>(m_widget)->setText(property("QCS_label").toString());
-	m_stringValue = property("QCS_label").toString();
+    m_precision = property("QCS_precision").toInt();
+    m_stringValue = property("QCS_label").toString();
 	m_value = m_stringValue.toDouble();
 	m_valueChanged = true;
+
     Qt::Alignment align;
     QString horizontalAlignment = property("QCS_alignment").toString();
     QString verticalAlignment = property("QCS_valignment").toString();
@@ -474,66 +478,74 @@ void QuteText::createPropertiesDialog()
     bgColor->setColor(property("QCS_bgcolor").value<QColor>());
     layout->addWidget(bgColor, 6,3, Qt::AlignLeft|Qt::AlignVCenter);
 
+    label = new QLabel("Precision", dialog);
+    layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+    precisionSpinBox = new QSpinBox(dialog);
+    precisionSpinBox->setValue(property("QCS_precision").toInt());
+    layout->addWidget(precisionSpinBox, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+
+
     // border = new QCheckBox("Border", dialog);
     // layout->addWidget(border, 7,2, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
 	label->setText(tr("Font"));
-	layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["font"] = label;
 
     font = new QFontComboBox(dialog);
     font->setMaximumWidth(200);
-    layout->addWidget(font, 7, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(font, 8, 1, 1, 2, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
 	label->setText(tr("Font Size"));
-	layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["fontSize"] = label;
 
     fontSize = new QSpinBox(dialog);
 	fontSize->setMaximum(999); // allow also very big fonts
-	layout->addWidget(fontSize,8, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(fontSize,9, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
 	label->setText(tr("Border Radius"));
-	layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 9, 2, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["borderRadius"] = label;
 
     borderRadius = new QSpinBox(dialog);
-	layout->addWidget(borderRadius, 8, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(borderRadius, 9, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
 	label->setText(tr("Border Width"));
-	layout->addWidget(label, 9, 2, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 10, 2, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["borderWidth"] = label;
 
     borderWidth = new QSpinBox(dialog);
     borderWidth->setMinimum(0);
     borderWidth->setToolTip(tr("Set the width to 0 disable the border"));
-    layout->addWidget(borderWidth, 9, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(borderWidth, 10, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
     label->setText(tr("Horiz. Align"));
-	layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 10, 0, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["horizAlign"] = label;
 
     alignment = new QComboBox(dialog);
 	alignment->addItem(tr("Left", "Alignment"));
 	alignment->addItem(tr("Center", "Alignment"));
 	alignment->addItem(tr("Right", "Alignment"));
-	layout->addWidget(alignment,9, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(alignment, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
     label->setText(tr("Vert. Align"));
-    layout->addWidget(label, 10, 0, Qt::AlignRight|Qt::AlignVCenter);
+    layout->addWidget(label, 11, 0, Qt::AlignRight|Qt::AlignVCenter);
     labelPtrs["vertAlign"] = label;
 
     vertAlignmentComboBox = new QComboBox(dialog);
     vertAlignmentComboBox->addItem(tr("Top", "Alignment"));
     vertAlignmentComboBox->addItem(tr("Center", "Alignment"));
     vertAlignmentComboBox->addItem(tr("Bottom", "Alignment"));
-    layout->addWidget(vertAlignmentComboBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(vertAlignmentComboBox, 11, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
     // connect(bgColor, SIGNAL(released()), this, SLOT(selectBgColor()));
 #ifdef  USE_WIDGET_MUTEX
@@ -633,6 +645,9 @@ void QuteText::applyProperties()
     setProperty("QCS_bordermode", borderWidth->value() > 0);
     setProperty("QCS_borderradius", borderRadius->value());
 	setProperty("QCS_borderwidth", borderWidth->value());
+    m_precision = precisionSpinBox->value();
+    setProperty("QCS_precision", m_precision);
+
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
