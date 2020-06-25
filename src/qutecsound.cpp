@@ -3140,7 +3140,9 @@ void CsoundQt::updateCurrentPageTask() {
     }
     Q_ASSERT(documentPages.size() > curPage);
     auto currentPage = documentPages[curPage];
-    currentPage->parseUdos();
+    if ( !currentPage->getFileName().toLower().endsWith(".udo")  ) { // otherwise this marks an unedited .udo file as edited
+        currentPage->parseUdos();
+    }
     QTimer::singleShot(INSPECTOR_UPDATE_PERIOD_MS, this, SLOT(updateCurrentPageTask()));
 }
 
