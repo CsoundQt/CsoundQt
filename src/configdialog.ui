@@ -955,7 +955,7 @@
              <x>20</x>
              <y>20</y>
              <width>551</width>
-             <height>291</height>
+             <height>301</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -968,20 +968,30 @@
             <property name="spacing">
              <number>6</number>
             </property>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="HwBufferSizeLineEdit">
+            <item row="11" column="0">
+             <widget class="QCheckBox" name="daemonCheckBox">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Daemon mode. Do not exit if CSD/orchestra is not given, is empty or does not compile. &lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NB&lt;/span&gt;: use with care. In the case of syntax errors csound will keep execution in at times undefined state, causing crashes and possibly bringing CsoundQt down with it. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NB2&lt;/span&gt;: in the absense of a score or of any events within the &amp;lt;CsScore&amp;gt; tag csound goes into daemon mode by default. &lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Daemon</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="BufferSizeLineEdit">
               <property name="enabled">
                <bool>false</bool>
               </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
               <property name="maximumSize">
                <size>
-                <width>80</width>
+                <width>100</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -989,11 +999,132 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>512</string>
+               <string>256</string>
               </property>
              </widget>
             </item>
-            <item row="7" column="1">
+            <item row="2" column="0">
+             <widget class="QCheckBox" name="BufferSizeCheckBox">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Buffer Size (-b)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="0" colspan="3">
+             <widget class="QCheckBox" name="checkSyntaxBeforeRunCheckBox">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;In some cases csound might crash (and CsoundQt might crash with it) before any debugging information is visible in the CsoundQt console (during compilation). For such cases turn on this option to do a syntax check prior to running csound with full communication with widgets, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Check syntax before running</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QSpinBox" name="numThreadsSpinBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Number of threads when using multicore</string>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>12</number>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Jack Client Name</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QCheckBox" name="HwBufferSizeCheckBox">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>HW Buffer Size (-B)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QCheckBox" name="sampleAccurateCheckBox">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable sample-accurate mode. In this mode rendering is not quantized to performance cycles but starts at the specified sample corresponding to the start time of an event. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Sample-accurate</string>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="2">
+             <widget class="QLineEdit" name="JackNameLineEdit">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use * for current filename. &lt;/p&gt;&lt;p&gt;This setting is used only when jack is selected as the RT audio module. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="frame">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QCheckBox" name="multicoreCheckBox">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="toolTip">
+               <string>Use multiple cores when running Csound</string>
+              </property>
+              <property name="text">
+               <string>Multicore</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="0">
+             <widget class="QCheckBox" name="realtimeCheckBox">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Realtime priority mode. In this mode all initialization (loading of buffers, etc) is done in a background thread. The scheduled instrument starts executing when these background tasks are finished. This can help to eliminate dropouts (but might have a negative effect in scheduling accuracy). &lt;span style=&quot; font-weight:600;&quot;&gt;NB: in realtime mode all printing is done to stderr&lt;/span&gt;. In order to see the effect of any printing opcodes open CsoundQt from the command line. All printing will be visible at the terminal. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Realtime</string>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="0">
+             <widget class="QCheckBox" name="AdditionalFlagsCheckBox">
+              <property name="toolTip">
+               <string>Extra command line flags passed to Csound</string>
+              </property>
+              <property name="text">
+               <string>Additional flags</string>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="2">
              <widget class="QLineEdit" name="AdditionalFlagsLineEdit">
               <property name="enabled">
                <bool>false</bool>
@@ -1021,14 +1152,20 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="BufferSizeLineEdit">
+            <item row="3" column="2">
+             <widget class="QLineEdit" name="HwBufferSizeLineEdit">
               <property name="enabled">
                <bool>false</bool>
               </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="maximumSize">
                <size>
-                <width>80</width>
+                <width>100</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -1036,128 +1173,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>256</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
-             <widget class="QCheckBox" name="daemonCheckBox">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Daemon mode. Do not exit if CSD/orchestra is not given, is empty or does not compile&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Daemon</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <widget class="QCheckBox" name="AdditionalFlagsCheckBox">
-              <property name="toolTip">
-               <string>Extra command line flags passed to Csound</string>
-              </property>
-              <property name="text">
-               <string>Additional flags</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QSpinBox" name="numThreadsSpinBox">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>80</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Number of threads when using multicore</string>
-              </property>
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>12</number>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="1">
-             <widget class="QLineEdit" name="JackNameLineEdit">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use * for current filename. &lt;/p&gt;&lt;p&gt;This setting is used only when jack is selected as the RT audio module. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="frame">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QCheckBox" name="BufferSizeCheckBox">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Buffer Size (-b)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QCheckBox" name="multicoreCheckBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="toolTip">
-               <string>Use multiple cores when running Csound</string>
-              </property>
-              <property name="text">
-               <string>Multicore</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QCheckBox" name="realtimeCheckBox">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Realtime priority mode. In this mode all initialization (loading of buffers, etc) is done in a background thread. The scheduled instrument starts executing when these background tasks are finished. This can help to eliminate dropouts (but might have a negative effect in scheduling accuracy)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Realtime</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="0">
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>Jack Client Name</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="HwBufferSizeCheckBox">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. For &lt;span style=&quot; font-weight:600;&quot;&gt;portaudio&lt;/span&gt;, -B suggests a latency, -b is used to set the buffersize.&lt;/p&gt;&lt;p&gt;2. For &lt;span style=&quot; font-weight:600;&quot;&gt;coreaudio&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the size of the internal buffer, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is used for the actual IO buffer size.&lt;/p&gt;&lt;p&gt;3. For &lt;span style=&quot; font-weight:600;&quot;&gt;jack&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is used to determine the number of buffers used in conjunction with -b , num = (N + M + 1) / M. &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the size of each buffer.&lt;/p&gt;&lt;p&gt;4. For &lt;span style=&quot; font-weight:600;&quot;&gt;alsa&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is the buffer size, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the period size&lt;/p&gt;&lt;p&gt;5. For &lt;span style=&quot; font-weight:600;&quot;&gt;pulse&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;-b&lt;/span&gt; is the actual buffersize passed to the device, &lt;span style=&quot; font-weight:600;&quot;&gt;-B&lt;/span&gt; is not used.&lt;/p&gt;&lt;p&gt;Use power-of-two values for &lt;span style=&quot; font-weight:600;&quot;&gt;ksmps&lt;/span&gt; (which is the same as &amp;quot;block size&amp;quot; in PureData or &amp;quot;vector size&amp;quot; in Max). Make sure  ksmps divides buffer size with no remainder. So, for -b 128, use ksmps = 128, 64, 32, 16, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>HW Buffer Size (-B)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QCheckBox" name="sampleAccurateCheckBox">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable sample-accurate mode. In this mode rendering is not quantized to performance cycles but starts at the specified sample corresponding to the start time of an event. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Sample-accurate</string>
+               <string>512</string>
               </property>
              </widget>
             </item>

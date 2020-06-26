@@ -60,6 +60,7 @@ void KeyboardShortcuts::refreshTable()
 		name->setText(m_keyActions[i]->text().remove("&"));
 		key->setText(m_keyActions[i]->shortcut().toString());
 	}
+    tableWidget->sortItems(0);
 }
 
 bool KeyboardShortcuts::shortcutTaken(QString shortcut)

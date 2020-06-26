@@ -82,6 +82,8 @@ public:
 	QString rtMidiInputDevice;
 	QString rtMidiOutputDevice;
     bool useSystemSamplerate;
+    bool checkSyntaxOnly;
+    bool checkSyntaxBeforeRun;
     int samplerate;
     bool overrideNumChannels;
     int numChannels;

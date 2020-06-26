@@ -235,12 +235,14 @@ public slots:
 	void setFlags(PerfFlags flags) {ud->flags = flags;}
 
 	void evaluate(QString code);
+
 public:
     QVector<ConsoleWidget *> consoles;  // Consoles registered for message printing
     int runCsound();
 	void stopCsound();
-
 	void cleanupCsound();
+    int checkSyntax();
+
 private:
 	void setupChannels();
 	QList <int> getAnsiKeySequence(int key);

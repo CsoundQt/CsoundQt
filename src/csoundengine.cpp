@@ -709,6 +709,18 @@ int CsoundEngine::play(CsoundOptions *options)
         m_options = *options;
     }
     locker.unlock();
+    if(options->checkSyntaxOnly) {
+        return checkSyntax();
+    }
+    if(options->checkSyntaxBeforeRun) {
+        QDEBUG << "Checking Syntax";
+        int ret = checkSyntax();
+        if(ret != 0) {
+            QDEBUG << "Syntax check failed with return code:" << ret;
+            return ret;
+        }
+        QDEBUG << "Syntax check ok, running csound";
+    }
     return runCsound();
 }
 
@@ -777,6 +789,58 @@ void CsoundEngine::queueEvent(QString eventLine, int delay)
     }
 }
 
+int CsoundEngine::checkSyntax() {
+    QDEBUG << "$$$ checkSyntax 0";
+    QMutexLocker locker(&m_playMutex);
+    QDEBUG << "$$$ checkSyntax 1";
+
+    CsoundOptions options(m_options);
+    options.checkSyntaxOnly = true;
+
+    ud->csound = csoundCreate((void *) ud);
+    QDEBUG << "$$$ checkSyntax 2";
+
+    eventQueueSize = 0;
+    ud->msgRefreshTime = m_refreshTime*1000;
+    QDir::setCurrent(m_options.fileName1);
+    for (int i = 0; i < consoles.size(); i++) {
+        consoles[i]->reset();
+    }
+    csoundCreateMessageBuffer(ud->csound, 0);
+
+    char const **argv;// since there was change in Csound API
+    argv = (const char **) calloc(33, sizeof(char*));
+
+    int argc = options.generateCmdLine((char **)argv);
+
+    ud->result = csoundCompile(ud->csound, argc, argv);
+
+    for (int i = 0; i < argc; i++) {
+        qDebug()  << argv[i];
+        free((char *) argv[i]);
+    }
+    free(argv);
+    int out;
+    if (ud->result != 256) {
+        qDebug()  << "Csound syntax check failed! "  << ud->result;
+        flushQueues();
+        locker.unlock(); // otherwise csoundStop will freeze
+        stop();
+        emit (errorLines(getErrorLines()));
+
+        out = -3;  // compilation error
+    } else {
+        // this might still have failed...
+        QDEBUG << "Syntax check ok, return code: " << ud->result;
+        out = 0;   // OK
+    }
+    // csoundDestroyMessageBuffer(ud->csound);
+    // csoundCleanup(ud->csound);
+    // csoundReset(ud->csound);
+    return out;
+}
+
+
 int CsoundEngine::runCsound()
 {
     QMutexLocker locker(&m_playMutex);
@@ -835,6 +899,7 @@ int CsoundEngine::runCsound()
         csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
     }
     csoundCreateMessageBuffer(ud->csound, 0);
+
     if (m_options.enableFLTK) {
         // Disable FLTK graphs, but allow FLTK widgets.
         int *var = (int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags");
@@ -889,7 +954,10 @@ int CsoundEngine::runCsound()
         char **argv;
         argv = (char **) calloc(33, sizeof(char*));
 #endif
+
         int argc = m_options.generateCmdLine((char **)argv);
+
+        qDebug() << "------------ Compiling csd...";
         ud->result=csoundCompile(ud->csound,argc,argv);
         for (int i = 0; i < argc; i++) {
             qDebug()  << argv[i];
@@ -907,7 +975,10 @@ int CsoundEngine::runCsound()
             emit (errorLines(getErrorLines()));
             return -3;
         }
+        qDebug() << "------- Compiling ok";
     }
+    qDebug() << "------- 2";
+
     ud->zerodBFS = csoundGet0dBFS(ud->csound);
     ud->sampleRate = csoundGetSr(ud->csound);
     ud->numChnls = csoundGetNchnls(ud->csound);

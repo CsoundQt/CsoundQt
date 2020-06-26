@@ -290,6 +290,8 @@ private slots:
     void focusToTab(int tab);
     void ambiguosShortcut();
     void testAudioSetup();
+    void checkSyntaxMenuAction();
+
     DocumentPage *getCurrentDocumentPage() {
         if(curPage >= documentPages.size())
             return nullptr;
@@ -421,6 +423,7 @@ private:
 	QAction *editAct;
 	QAction *runAct;
     QAction *testAudioSetupAct;
+    QAction *checkSyntaxAct;
 	QAction *runTermAct;
 	QAction *pauseAct;
 	QAction *stopAct;

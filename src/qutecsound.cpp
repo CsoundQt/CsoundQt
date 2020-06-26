@@ -1022,7 +1022,14 @@ void CsoundQt::testAudioSetup()
     widgetPanel->setVisible(true);
     widgetPanel->setFocus();
     play();
+}
 
+void CsoundQt::checkSyntaxMenuAction()
+{
+    bool prev = m_options->checkSyntaxOnly;
+    m_options->checkSyntaxOnly = true;
+    play();
+    m_options->checkSyntaxOnly = prev;
 }
 
 QString CsoundQt::getSaveFileName()
@@ -1945,7 +1952,6 @@ void CsoundQt::play(bool realtime, int index)
     }
     runFileName2 = page->getCompanionFileName();
     m_options->docName = fileName;
-    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>< docName: " << fileName;
     m_options->fileName1 = runFileName1;
     m_options->fileName2 = runFileName2;
     m_options->rt = realtime;
@@ -1976,6 +1982,9 @@ void CsoundQt::play(bool realtime, int index)
         runAct->setChecked(false);
     } else if (ret == 0) {
         // No problem: enable widgets
+        if(m_options->checkSyntaxOnly) {
+            return;
+        }
         if (m_options->enableWidgets && m_options->showWidgetsOnRun && fileName.endsWith(".csd")) {
             if(page->usesFltk()) {
                 // Don't bring up widget panel if there's an FLTK panel
@@ -3274,6 +3283,8 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     cabbageAct->setShortcut(tr("Shift+Ctrl+C"));
     //	showParametersAct->setShortcut(tr("Alt+P"));
     showInspectorAct->setShortcut(tr("F5"));
+
+    checkSyntaxAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
     storeSettings();
 }
 
@@ -3654,6 +3665,10 @@ void CsoundQt::createActions()
     testAudioSetupAct = new QAction(QIcon(prefix+"hearing.svg"),
                                     tr("Test Audio Setup"), this);
     connect(testAudioSetupAct, SIGNAL(triggered(bool)), this, SLOT(testAudioSetup()));
+
+    checkSyntaxAct = new QAction(QIcon(prefix + "scratchpad.png"), tr("Check Syntax"), this);
+    checkSyntaxAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(checkSyntaxAct, SIGNAL(triggered()), this, SLOT(checkSyntaxMenuAction()));
 
     externalPlayerAct = new QAction(QIcon(prefix + "playfile.png"), tr("Play Rendered Audiofile"), this);
     externalPlayerAct->setStatusTip(tr("Play rendered audiofile in external application"));
@@ -4153,6 +4168,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(showUtilitiesAct);
     m_keyActions.append(showVirtualKeyboardAct);
     m_keyActions.append(showTableEditorAct);
+    m_keyActions.append(checkSyntaxAct);
 #if defined(QCS_QTHTML)
     m_keyActions.append(raiseHtml5Act);
 #endif
@@ -4393,8 +4409,10 @@ void CsoundQt::createMenus()
     controlMenu->addSeparator();
     controlMenu->addAction(externalEditorAct);
     controlMenu->addAction(externalPlayerAct);
+    controlMenu->addAction(checkSyntaxAct);
     controlMenu->addSeparator();
     controlMenu->addAction(testAudioSetupAct);
+
 
     viewMenu = menuBar()->addMenu(tr("View"));
     viewMenu->addAction(focusEditorAct);
@@ -5062,6 +5080,7 @@ void CsoundQt::readSettings()
         m_options->language = 0;
     recentFiles.clear();
     recentFiles = settings.value("recentFiles").toStringList();
+    setDefaultKeyboardShortcuts();
     QHash<QString, QVariant> actionList = settings.value("shortcuts").toHash();
     if (actionList.count() != 0) {
         QHashIterator<QString, QVariant> i(actionList);
@@ -5076,9 +5095,9 @@ void CsoundQt::readSettings()
             }
         }
     }
-    else { // No shortcuts are stored
-        setDefaultKeyboardShortcuts();
-    }
+    // else { // No shortcuts are stored
+    //     setDefaultKeyboardShortcuts();
+    // }
     settings.endGroup();
     settings.beginGroup("Options");
     settings.beginGroup("Editor");
@@ -5152,6 +5171,7 @@ void CsoundQt::readSettings()
     m_options->keyRepeat = settings.value("keyRepeat", false).toBool();
     m_options->debugLiveEvents = settings.value("debugLiveEvents", false).toBool();
     m_options->consoleBufferSize = settings.value("consoleBufferSize", 1024).toInt();
+    m_options->checkSyntaxBeforeRun = settings.value("checkSyntaxBeforeRun", false).toBool();
     m_options->midiInterface = settings.value("midiInterface", 9999).toInt();
     m_options->midiInterfaceName = settings.value("midiInterfaceName", "None").toString();
     m_options->midiOutInterface = settings.value("midiOutInterface", 9999).toInt();
@@ -5438,6 +5458,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("useCsoundMidi", m_options->useCsoundMidi);
         settings.setValue("simultaneousRun", m_options->simultaneousRun);
         settings.setValue("sampleFormat", m_options->sampleFormat);
+        settings.setValue("checkSyntaxBeforeRun", m_options->checkSyntaxBeforeRun);
     }
     else {
         settings.remove("");

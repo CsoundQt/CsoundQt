@@ -214,6 +214,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	}
 	consoleBufferComboBox->setCurrentIndex(bufferIndex);
 
+    checkSyntaxBeforeRunCheckBox->setChecked(m_options->checkSyntaxBeforeRun);
+
+
+
 	BufferSizeLineEdit->setText(QString::number(m_options->bufferSize));
 	BufferSizeCheckBox->setChecked(m_options->bufferSizeActive);
 	BufferSizeLineEdit->setEnabled(m_options->bufferSizeActive);
@@ -273,6 +277,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
     realtimeCheckBox->setChecked(m_options->realtimeFlag);
     sampleAccurateCheckBox->setChecked(m_options->sampleAccurateFlag);
+
 
 	JackNameLineEdit->setText(m_options->rtJackName);
 	RtMidiModuleComboBox->setCurrentIndex(RtMidiModuleComboBox->findData(m_options->rtMidiModule));
@@ -360,11 +365,10 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
     // connect(OpcodedirCheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
     // connect(Opcodedir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(warnOpcodeDir(bool)));
-    connect(Opcode6dir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(uDir(bool)));
+    // connect(Opcode6dir64CheckBox, SIGNAL(toggled(bool)), this, SLOT(uDir(bool)));
 
 	connect(csoundExecutableToolButton,SIGNAL(clicked()),this, SLOT(browseCsoundExecutable()));
     connect(pythonExecutableToolButton,SIGNAL(clicked()),this, SLOT(browsePythonExecutable()));
-
 
     connect(testAudioSetupButton, SIGNAL(released()), this, SLOT(testAudioSetup()));
     connect(envirRecommendButton, SIGNAL(clicked()), this, SLOT(recommendEnvironmentSettings()));
@@ -580,6 +584,7 @@ void ConfigDialog::accept()
 	m_options->language = languageComboBox->currentIndex();
 
 	m_options->csdTemplate = templateTextEdit->toPlainText();
+    m_options->checkSyntaxBeforeRun = checkSyntaxBeforeRunCheckBox->isChecked();
 
 	//  emit(changeFont());
 	QDialog::accept();

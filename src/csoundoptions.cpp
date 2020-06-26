@@ -76,6 +76,8 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
     numChannels = 2;
 	useCsoundMidi = false;
 	simultaneousRun = true; // Allow running various instances (tabs) simultaneously.
+    checkSyntaxOnly = false;
+    checkSyntaxBeforeRun = false;
 
 	csdocdir = "";
 	opcodedir = "";
@@ -92,7 +94,6 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	sfdirActive = false;
 	incdir = "";
 	incdirActive = false;
-
 }
 
 QString CsoundOptions::generateCmdLineFlags()
@@ -122,6 +123,8 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
         opts << "--realtime";
     if (sampleAccurateFlag)
         opts << "--sample-accurate";
+    if (checkSyntaxOnly)
+        opts << "--syntax-check-only";
     if (rt && rtUseOptions) {
 		if (rtOverrideOptions)
             opts << "-+ignore_csopts=1";
