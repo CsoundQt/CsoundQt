@@ -384,14 +384,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     qApp->setStyleSheet(originalStyleSheet);
 #endif
 
-    if (lastTabIndex < documentPages.size() &&
-            documentTabs->currentIndex() != lastTabIndex) {
-        changePage(lastTabIndex);
-        documentTabs->setCurrentIndex(lastTabIndex);
-    }
-    else {
-        changePage(documentTabs->currentIndex());
-    }
     // Open files passed in the command line. Here to make sure they are the active tab.
     foreach (QString fileName, fileNames) {
         if (QFile::exists(fileName)) {
@@ -437,6 +429,16 @@ CsoundQt::CsoundQt(QStringList fileNames)
                 loadFile(lastFile);
             }
         }
+    }
+
+    // restore last index after opening the documents
+    if (lastTabIndex < documentPages.size() &&
+            documentTabs->currentIndex() != lastTabIndex) {
+        changePage(lastTabIndex);
+        documentTabs->setCurrentIndex(lastTabIndex);
+    }
+    else {
+        changePage(documentTabs->currentIndex());
     }
 
 /*
@@ -3149,7 +3151,9 @@ void CsoundQt::updateCurrentPageTask() {
     }
     Q_ASSERT(documentPages.size() > curPage);
     auto currentPage = documentPages[curPage];
-    currentPage->parseUdos();
+    if ( !currentPage->getFileName().toLower().endsWith(".udo")  ) { // otherwise this marks an unedited .udo file as edited
+        currentPage->parseUdos();
+    }
     QTimer::singleShot(INSPECTOR_UPDATE_PERIOD_MS, this, SLOT(updateCurrentPageTask()));
 }
 
