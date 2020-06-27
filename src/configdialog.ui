@@ -116,7 +116,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -2810,6 +2810,9 @@ Default directory for sound files. Used if no full path is given for sound files
                 </item>
                 <item row="19" column="0">
                  <widget class="QPushButton" name="envirRecommendButton">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="toolTip">
                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set recommended values for some of the environment variables, according to the platform used. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
