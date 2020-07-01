@@ -100,7 +100,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_options = new Options(&m_configlists);
 
 #ifdef Q_OS_MAC
-	this->setUnifiedTitleAndToolBarOnMac(true);
+    // this->setUnifiedTitleAndToolBarOnMac(true);
+    // The unified toolbar has rendering problems if opengl is used, which happens
+    // when any QtQuick widget is in use - that is the case with the MIDI keyboard widget
 #endif
 
 
