@@ -49,7 +49,6 @@ inline CsoundEngineStatus csoundEngineStatus(CsoundUserData *ud) {
         return CsoundEngineStatus::EngineNotSet;
     }
     if(!ud->csEngine->isRunning()) {
-        // qDebug() << "csound not running";
         return CsoundEngineStatus::NotRunning;
     }
     return CsoundEngineStatus::Running;
@@ -331,10 +330,21 @@ void QuteGraph::keyPressEvent(QKeyEvent *event) {
     }
 }
 
+
 void QuteGraph::setValue(double value)
 {
-	QuteWidget::setValue(value);
-	m_value2 = getTableNumForIndex((int) value);
+    QuteWidget::setValue(value);
+    // m_value2 = this->getTableNumForIndex(value);
+    /*
+    if(value < 0) {
+        int tabnum = -((int)value);
+        int index = this->getIndexForTableNum(tabnum);
+        QuteWidget::setValue(index);
+    } else {
+        QuteWidget::setValue(value);
+    }
+    */
+
 }
 
 void QuteGraph::setValue(QString text)
@@ -366,7 +376,6 @@ void QuteGraph::setValue(QString text)
         }
         int index;
         if(parts[1] == "fft") {
-            qDebug() << ">>>>>>>>>>>>>>>> spectrum";
             index = findCurve(CURVE_SPECTRUM, parts[2].toString());
         }
         else if (parts[1] == "audio") {
@@ -476,8 +485,12 @@ void QuteGraph::refreshWidget()
 	int index = 0;
 	if (m_valueChanged) {
         index = (int) m_value;
-        m_value2 = getTableNumForIndex(index);
-		m_value2Changed = false;
+        if(index < 0) {
+            m_value2 = -index;
+        } else {
+            m_value2 = getTableNumForIndex(index);
+        }
+        m_value2Changed = false;
 		m_valueChanged = false;
 		needsUpdate = true;
 	}
@@ -636,18 +649,15 @@ void QuteGraph::applyProperties()
 
 int QuteGraph::findCurve(CurveType type, QString text) {
     // returns the index or -1 if not found
-    int index = -1;
     for (int i = 0; i < curves.size(); i++) {
         if(curves[i]->get_type() != type)
             continue;
         QString caption = curves[i]->get_caption();
         if (caption.contains(text)) {
-            index = i;
-            break;
+            return i;
         }
     }
-    qDebug() << "findCurve: curve not found" << type << text;
-    return index;
+    return -1;
 }
 
 void QuteGraph::changeCurve(int index)
@@ -665,15 +675,13 @@ void QuteGraph::changeCurve(int index)
 			index = getIndexForTableNum(-m_value);
         else
 			index = (int) m_value;
-	}
-    else if (stacked->currentIndex() == index) {
-        return;
     } else if (index >= stacked->count()) {
         qDebug() << "changeCurve: index out of range. Num indices:"<<stacked->size();
         return;
+    }
+    else if (stacked->currentIndex() == index) {
+        return;
     } else {
-        qDebug()<<"changeCurve"<<index;
-
         // change curve
         auto view = stacked->currentWidget();
         view->hide();
@@ -685,9 +693,10 @@ void QuteGraph::changeCurve(int index)
         m_pageComboBox->blockSignals(false);
     }
 
-    if (index < 0  || index >= curves.size())  // Invalid index
+    if (index < 0  || index >= curves.size()) { // Invalid index
+        QDEBUG << "Invalid index" << index;
         return;
-
+    }
     m_value = index;
     switch(graphtypes[index]) {
     case GraphType::GRAPH_FTABLE: {
@@ -705,8 +714,9 @@ void QuteGraph::changeCurve(int index)
             m_label->setText(text);
             m_label->show();
         }
-        if(origRequest >= 0)
+        if(origRequest != -2) {
             drawGraph(curves[index], index);
+        }
         break;
     }
     case GraphType::GRAPH_SPECTRUM:
@@ -719,11 +729,11 @@ void QuteGraph::changeCurve(int index)
         break;
     }
     scaleGraph(index);
+
 }
 
 void QuteGraph::indexChanged(int index)
 {
-    qDebug()<<"indexChanged"<<index<<"\n";
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -731,8 +741,7 @@ void QuteGraph::indexChanged(int index)
 		setInternalValue(index);
 	}
 	else {
-        qDebug() << "channel value" << m_channel << index << "\n";
-		QPair<QString, double> channelValue(m_channel, index);
+        QPair<QString, double> channelValue(m_channel, index);
 		emit newValue(channelValue);
 	}
     if (m_channel2 == "") {
@@ -752,7 +761,7 @@ void QuteGraph::indexChanged(int index)
 void QuteGraph::clearCurves()
 {
 	//  curveLock.lock();
-	m_widget->blockSignals(true);
+    m_widget->blockSignals(true);
 	static_cast<StackedLayoutWidget *>(m_widget)->clearCurves();
 	m_widget->blockSignals(false);
 	m_pageComboBox->blockSignals(true);
@@ -770,7 +779,7 @@ void QuteGraph::clearCurves()
     m_showPeak = false;
     m_showPeakTemp = false;
     m_showPeakCenterFrequency = 1000;
-	//  curveLock.unlock();
+    //  curveLock.unlock();
 }
 
 void QuteGraph::addCurve(Curve * curve)
@@ -949,20 +958,22 @@ void QuteGraph::drawGraph(Curve *curve, int index) {
         // drawFtable(curve, index);
         // view->setRenderHint(QPainter::Antialiasing);
         drawFtablePath(curve, index);
+        scaleGraph(index);
         break;
     // case GraphType::GRAPH_SPECTRUM:
     case CurveType::CURVE_SPECTRUM:
         // view->setRenderHint(QPainter::Antialiasing);
         drawSpectrum(curve, index);
         // drawSpectrumPath(curve, index);
+        changeCurve(-2); //update curve
         break;
     case CurveType::CURVE_AUDIOSIGNAL:
     // case GraphType::GRAPH_AUDIOSIGNAL:
         // drawSignal(curve, index);
         drawSignalPath(curve, index);
+        changeCurve(-2); //update curve
         break;
     }
-    changeCurve(-2); //update curve
 }
 
 void QuteGraph::setCurveData(Curve * curve)
@@ -1011,6 +1022,7 @@ void QuteGraph::drawFtablePath(Curve *curve, int index) {
     Q_ASSERT(index >= 0);
     QGraphicsScene *scene = this->getView(index)->scene();
     // QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
+
     double max = curve->get_max();
     max = max == 0 ? 1: max;
     int curveSize = curve->get_size();
@@ -1638,6 +1650,7 @@ void QuteTableWidget::updatePath() {
     auto height = rect.height() - margin*2;
     double maxy = this->m_maxy;
     double newmaxy = maxy;
+    double newminy = -maxy;
     double xscale = width / (double)m_tabsize;
     double yscale = height * 0.5 / maxy;
     double y0 = rect.y() + margin;
@@ -1650,16 +1663,18 @@ void QuteTableWidget::updatePath() {
     double ydata = m_data[0];
     path->moveTo(x0, (ydata+maxy)*yscale+y0);
     for(int i=0; i < m_tabsize; i+=step) {
-        ydata = m_data[i];
+        ydata = -m_data[i];
         double x2 = i*xscale + x0;
         double y2 = (ydata+maxy)*yscale + y0;
         path->lineTo(x2, y2);
         if(ydata > newmaxy)
             newmaxy = ydata;
+        else if (ydata < newminy)
+            newminy = ydata;
     }
     mutex.lock();
     if(m_autorange) {
-        m_maxy = ceil(newmaxy);
+        m_maxy = newmaxy > -newminy ? ceil(newmaxy) : floor(-newminy);
     }
     if(m_path != nullptr)
         delete m_path;
