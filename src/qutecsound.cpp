@@ -4778,7 +4778,7 @@ void CsoundQt::createMenus()
     helpMenu->addAction(reportBugAct);
     helpMenu->addAction(aboutAct);
     // helpMenu->addAction(donateAct);
-    //  helpMenu->addAction(aboutQtAct);
+    // helpMenu->addAction(aboutQtAct);
 
 }
 
@@ -4981,8 +4981,6 @@ void CsoundQt::createToolBars()
     //	addDockWidget(Qt::AllDockWidgetAreas, toolWidget);
     //	toolWidget->show();
     const int iconSize = this->m_options->toolbarIconSize;
-    printf(">>>>>>>>>>>>>>>>>>>>>>> iconSize: %d\n", iconSize);
-
     controlToolBar = addToolBar(tr("Control"));
     controlToolBar->setObjectName("controlToolBar");
     controlToolBar->addAction(runAct);
@@ -5008,11 +5006,9 @@ void CsoundQt::createToolBars()
     configureToolBar->addAction(showConsoleAct);
     configureToolBar->addAction(showInspectorAct);
     // configureToolBar->addAction(showLiveEventsAct);
-#ifdef USE_QT5
-    // Disable virtual keyboard until it is proven to work on all platforms
-    // configureToolBar->addAction(showVirtualKeyboardAct);
+    configureToolBar->addAction(showVirtualKeyboardAct);
     //configureToolBar->addAction(showTableEditorAct);
-#endif
+
 #ifdef QCS_PYTHONQT
     configureToolBar->addAction(showPythonConsoleAct);
 #endif
@@ -5036,16 +5032,14 @@ void CsoundQt::createToolBars()
         QString styleString = QString("color: %1").arg(textColor.name());
         controlToolBar->setStyleSheet(styleString);
         configureToolBar->setStyleSheet(styleString);
-
     }
 #endif
 }
 
 void CsoundQt::setToolbarIconSize(int size) {
     controlToolBar->setIconSize(QSize(size, size));
-    controlToolBar->setStyleSheet("QToolBar { padding: 0 5px }");
+    controlToolBar->setStyleSheet("QToolBar { padding: 0 3px }");
     configureToolBar->setIconSize(QSize(size, size));
-
 }
 
 void CsoundQt::createStatusBar()
