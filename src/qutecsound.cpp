@@ -102,7 +102,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #ifdef Q_OS_MAC
     // this->setUnifiedTitleAndToolBarOnMac(true);
     // The unified toolbar has rendering problems if opengl is used, which happens
-    // when any QtQuick widget is in use - that is the case with the MIDI keyboard widget
+    // when any QtQuick widget is in use - that is the case with the MIDI keyboard widgetu
 #endif
 
 
@@ -5043,6 +5043,7 @@ void CsoundQt::createToolBars()
 
 void CsoundQt::setToolbarIconSize(int size) {
     controlToolBar->setIconSize(QSize(size, size));
+    controlToolBar->setStyleSheet("QToolBar { padding: 0 5px }");
     configureToolBar->setIconSize(QSize(size, size));
 
 }
