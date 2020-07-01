@@ -10,6 +10,7 @@ bin/old
 
 Makefile
 build/
+.mypy_cache
 
 src/Examples/McCurdy Collection/Modulation/test.wav
 
