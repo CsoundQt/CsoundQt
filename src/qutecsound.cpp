@@ -3221,7 +3221,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     editAct->setShortcut(tr("CTRL+E"));
     runAct->setShortcut(tr("CTRL+R"));
     runTermAct->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
-    pauseAct->setShortcut(tr("Ctrl+,"));
+    pauseAct->setShortcut(tr("Ctrl+Shift+M"));
 
     stopAct->setShortcut(tr("Ctrl+."));
     stopAllAct->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_Period));
@@ -3265,16 +3265,10 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Ctrl+9"));
     
-#ifdef Q_OS_MACOS
-    setHelpEntryAct->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F1));
-    externalBrowserAct->setShortcut(tr("Alt+Ctrl+H"));
-    showInspectorAct->setShortcut(tr("Ctrl+Shift+B"));
-#else
     setHelpEntryAct->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F1));
     externalBrowserAct->setShortcut(tr("Shift+Alt+F1"));
     showInspectorAct->setShortcut(tr("F5"));
 
-#endif
     browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
     browseForwardAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
     openQuickRefAct->setShortcut(tr(""));

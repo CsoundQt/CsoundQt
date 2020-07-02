@@ -66,7 +66,7 @@
 #ifdef Q_OS_MAC
 #define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib64.framework/Resources/Manual"
 #define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
-#define DEFAULT_BROWSER_EXECUTABLE "/Applications/Firefox.app"
+#define DEFAULT_BROWSER_EXECUTABLE "/Applications/Safary.app"  // Safary is installed by default so let's use that
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime Player.app"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/Applications/Preview.app"
