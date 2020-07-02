@@ -2801,7 +2801,7 @@ void CsoundQt::downloadManual()
     openExternalBrowser(QUrl("https://github.com/csound/csound/releases/download/6.14.0/Csound6.14.0_manual_html.zip"));
     QMessageBox::information(this, tr("Set manual path"),
                              tr("Unzip the manual to any location and set that path"
-                                " in Configure/Enviromnent/Html doc directory"));
+                                " in Configure/Enviromnent/Html doc directory"));u
 }
 
 void CsoundQt::about()
@@ -3266,8 +3266,8 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Ctrl+9"));
 #ifdef Q_OS_MAC
-    setHelpEntryAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
-    externalBrowserAct->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_H));
+    setHelpEntryAct->setShortcut(tr("Shift+Alt+H"));
+    externalBrowserAct->setShortcut(tr("Alt+Ctrl+H"));
     showInspectorAct->setShortcut(tr("Ctrl+Shift+B"));
 #else
     setHelpEntryAct->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F1));
