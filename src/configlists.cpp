@@ -91,7 +91,6 @@ void ConfigLists::refreshModules()
 {
     rtMidiNames.clear();
 	rtAudioNames.clear();
-#ifdef CSOUND6
     CSOUND *csound = csoundCreate(nullptr);
 	char *name, *type;
 	int n = 0;
@@ -111,35 +110,6 @@ void ConfigLists::refreshModules()
         rtMidiNames <<  "jack";
 	}
     rtMidiNames << "virtual" << "none";
-#else
-#ifdef Q_OS_LINUX
-	rtAudioNames << "portaudio" << "alsa" << "jack" << "pulse" << "none";
-#endif
-#ifdef Q_OS_SOLARIS
-	rtAudioNames << "portaudio" << "pulse" << "none";
-#endif
-#ifdef Q_OS_MAC
-	rtAudioNames << "coreaudio" << "portaudio" << "auhal" << "jack" << "none";
-#endif
-#ifdef Q_OS_WIN32
-	rtAudioNames << "portaudio" << "winmm" << "jack" <<  "none";
-#endif
-#ifdef Q_OS_HAIKU
-	rtAudioNames << "haiku" << "none";
-#endif
-#ifdef Q_OS_LINUX
-	rtMidiNames << "none" << "alsa" << "alsaseq" << "jack" << "portmidi" << "virtual";
-#endif
-#ifdef Q_OS_SOLARIS
-	rtMidiNames << "none" << "portmidi"<< "virtual";
-#endif
-#ifdef Q_OS_MAC
-	rtMidiNames << "none" << "coremidi" << "portmidi" << "jack" << "virtual";
-#endif
-#ifdef Q_OS_WIN32
-	rtMidiNames << "none" << "winmm" << "portmidi" << "virtual";
-#endif
-#endif
     csoundDestroy(csound);
 }
 

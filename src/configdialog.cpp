@@ -51,9 +51,20 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
                                 "or the configuration dialog."));
 	}
 	QHash<QString, QString> audioModNames;
-	audioModNames["pa_bl"] = "portaudio (blocking)";
-	audioModNames["pa_cb"] = "portaudio (callback)";
-	audioModNames["auhal"] = "coreaudio (auhal)";
+    audioModNames["pa_cb"] = "portaudio (callback)";
+    audioModNames["pa_bl"] = "portaudio (blocking)";
+    audioModNames["auhal"] = "coreaudio (auhal)";
+
+    QHash<QString, int> audioPriorities;
+    audioPriorities["jack"] = 0;
+    audioPriorities["pa_cb"] = 1;
+    audioPriorities["auhal"] = 2;
+    std::sort(m_configlists->rtAudioNames.begin(),
+              m_configlists->rtAudioNames.end(),
+              [&audioPriorities](const QString &mod1, const QString &mod2) {
+        return audioPriorities.value(mod1, 10) < audioPriorities.value(mod2, 10);
+    });
+
     if(m_configlists->rtAudioNames.contains("jack")) {
         if(!m_configlists->isJackRunning()) {
             audioModNames["jack"] = "jack (not running)";
@@ -763,7 +774,7 @@ void ConfigDialog::selectAudioInput()
         deviceList.prepend(QStringPair("Default", "adc"));
     }
 
-    deviceList.append(QStringPair("No Input", ""));
+    deviceList.prepend(QStringPair("No Input", ""));
 
     auto currentSelection = RtInputLineEdit->text();
 	for (int i = 0; i < deviceList.size(); i++) {

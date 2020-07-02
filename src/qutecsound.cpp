@@ -2743,7 +2743,8 @@ void CsoundQt::openOnlineDocumentation()
 void CsoundQt::resetPreferences()
 {
     int ret = QMessageBox::question (this, tr("Reset Preferences"),
-                                     tr("Are you sure you want to revert CsoundQt's preferences\nto their initial default values? "),
+                                     tr("Are you sure you want to revert CsoundQt's "
+                                        "preferences\nto their initial default values? "),
                                      QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
     if (ret ==  QMessageBox::Ok) {
         m_resetPrefs = true;
@@ -2796,8 +2797,11 @@ void CsoundQt::openShortcutDialog()
 
 void CsoundQt::downloadManual()
 {
-    QMessageBox::information(this, tr("Set manual path"), tr("Don't forget to set the path to manual in Configure -> Enviromnent -> Html doc directory"));
-    openExternalBrowser(QUrl("https://github.com/csound/csound/releases/latest")); // NB! must be updated when new manual comes out!
+    // NB! must be updated when new manual comes out!
+    openExternalBrowser(QUrl("https://github.com/csound/csound/releases/download/6.14.0/Csound6.14.0_manual_html.zip"));
+    QMessageBox::information(this, tr("Set manual path"),
+                             tr("Unzip the manual to any location and set that path"
+                                " in Configure/Enviromnent/Html doc directory"));
 }
 
 void CsoundQt::about()
@@ -3192,7 +3196,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     //   m_keyActions.append(createCodeGraphAct);
     newAct->setShortcut(tr("Ctrl+N"));
     openAct->setShortcut(tr("Ctrl+O"));
-    reloadAct->setShortcut(tr(""));
+    reloadAct->setShortcut(tr("Alt+R"));
     saveAct->setShortcut(tr("Ctrl+S"));
     saveAsAct->setShortcut(tr("Shift+Ctrl+S"));
     createAppAct->setShortcut(tr(""));
@@ -3217,10 +3221,12 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     configureAct->setShortcut(tr("Ctrl+,"));
     editAct->setShortcut(tr("CTRL+E"));
     runAct->setShortcut(tr("CTRL+R"));
-    runTermAct->setShortcut(tr(""));
-    stopAct->setShortcut(tr("Alt+S"));
-    pauseAct->setShortcut(tr(""));
-    stopAllAct->setShortcut(tr("Ctrl+."));
+    runTermAct->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
+    pauseAct->setShortcut(tr("Ctrl+,"));
+
+    stopAct->setShortcut(tr("Ctrl+."));
+    stopAllAct->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_Period));
+
     recAct->setShortcut(tr("Ctrl+Space"));
     renderAct->setShortcut(tr("Alt+F"));
     externalPlayerAct->setShortcut(tr(""));
@@ -3232,7 +3238,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showOverviewAct->setShortcut(tr(""));
     raiseConsoleAct->setShortcut(tr("Ctrl+3"));
 #ifdef Q_OS_MAC
-    viewFullScreenAct->setShortcut(tr("Ctrl+Alt+F"));
+    viewFullScreenAct->setShortcut(tr("Ctrl+Shift+F"));
 #else
     viewFullScreenAct->setShortcut(tr("F11"));
 #endif
@@ -3247,7 +3253,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showDebugAct->setShortcut(tr("F5"));
 #endif
     showVirtualKeyboardAct->setShortcut(tr("Ctrl+Shift+V"));
-    showTableEditorAct->setShortcut(tr("Ctrl+Shift+T"));
+    showTableEditorAct->setShortcut(tr(""));
     splitViewAct->setShortcut(tr("Ctrl+Shift+A"));
     midiLearnAct->setShortcut(tr("Ctrl+Shift+M"));
     createCodeGraphAct->setShortcut(tr("")); // was Ctr +4 save it for html view
@@ -3259,10 +3265,18 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #endif
     openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Ctrl+9"));
+#ifdef Q_OS_MAC
+    setHelpEntryAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+    externalBrowserAct->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_H));
+    showInspectorAct->setShortcut(tr("Ctrl+Shift+B"));
+#else
     setHelpEntryAct->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F1));
+    externalBrowserAct->setShortcut(tr("Shift+Alt+F1"));
+    showInspectorAct->setShortcut(tr("F5"));
+
+#endif
     browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
     browseForwardAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
-    externalBrowserAct->setShortcut(tr("Shift+Alt+F1"));
     openQuickRefAct->setShortcut(tr(""));
     commentAct->setShortcut(tr("Ctrl+/"));
     //  uncommentAct->setShortcut(tr("Shift+Ctrl+/"));
@@ -3288,9 +3302,9 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     parameterModeAct->setShortcut(tr("Shift+Alt+P"));
     cabbageAct->setShortcut(tr("Shift+Ctrl+C"));
     //	showParametersAct->setShortcut(tr("Alt+P"));
-    showInspectorAct->setShortcut(tr("F5"));
 
-    checkSyntaxAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+    checkSyntaxAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
+
     storeSettings();
 }
 
@@ -3911,6 +3925,7 @@ void CsoundQt::createActions()
     splitViewAct->setStatusTip(tr("Toggle between full csd and split text display"));
     splitViewAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(splitViewAct, SIGNAL(toggled(bool)), this, SLOT(splitView(bool)));
+
     midiLearnAct = new QAction(/*QIcon(prefix + "gksu-root-terminal.png"),*/ tr("MIDI Learn"), this);
     midiLearnAct->setStatusTip(tr("Show MIDI Learn Window for widgets"));
     midiLearnAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -5228,8 +5243,8 @@ void CsoundQt::readSettings()
     m_options->fileOutputFilename = settings.value("fileOutputFilename", "").toString();
     m_options->rtUseOptions = settings.value("rtUseOptions", true).toBool();
     m_options->rtOverrideOptions = settings.value("rtOverrideOptions", false).toBool();
-    m_options->rtAudioModule = settings.value("rtAudioModule", "pa_bl").toString();
-    if (m_options->rtAudioModule.isEmpty()) { m_options->rtAudioModule = "pa_bl"; }
+    m_options->rtAudioModule = settings.value("rtAudioModule", "pa_cb").toString();
+    if (m_options->rtAudioModule.isEmpty()) { m_options->rtAudioModule = "pa_cb"; }
     m_options->rtInputDevice = settings.value("rtInputDevice", "adc").toString();
     m_options->rtOutputDevice = settings.value("rtOutputDevice", "dac").toString();
     m_options->rtJackName = settings.value("rtJackName", "").toString();
@@ -5312,12 +5327,12 @@ void CsoundQt::storeSettings()
             files.append(documentPages[i]->getFileName());
         }
     }
-
-    int lastIndex = (documentPages.size()==0) ? 0 : documentTabs->currentIndex(); // sometimes settings are stored in startup when there is no pages open
+    // sometimes settings are stored in startup when there is no pages open
+    int lastIndex = (documentPages.size()==0) ? 0 : documentTabs->currentIndex();
     if (documentPages.size() > 0) {
         writeSettings(files, lastIndex);
     } else {
-        qDebug() << "No files open. Will not store settings (for any case - testing)"; // this is just for testing
+        qDebug() << "No files open. Will not store settings (for any case - testing)";
     }
 }
 

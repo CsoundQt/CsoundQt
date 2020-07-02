@@ -116,7 +116,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -171,7 +171,7 @@
                    </sizepolicy>
                   </property>
                   <property name="toolTip">
-                   <string>Audio backend used when running Csound in realtime</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Backend used for realtime audio&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;* portaudio&lt;/span&gt;: if in doubt, &lt;span style=&quot; font-weight:600;&quot;&gt;use the callback version&lt;/span&gt;. It performs much better, allowing lower latency.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">padding-right: 6</string>
@@ -450,7 +450,7 @@
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>Audio backend used when running Csound in realtime</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Backend used for realtime audio&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;* portaudio&lt;/span&gt;: if in doubt, &lt;span style=&quot; font-weight:600;&quot;&gt;use the callback version&lt;/span&gt;. It performs much better, allowing lower latency.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                  </widget>
                 </item>
