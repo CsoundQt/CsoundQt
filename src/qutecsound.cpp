@@ -203,7 +203,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     settings.beginGroup("Editor");
     // necessary to get it before htmlview is created
     m_options->debugPort = settings.value("debugPort", 34711).toInt();
-    m_options->highlightingTheme = settings.value("higlightingTheme", "classic").toString();
+    m_options->highlightingTheme = settings.value("higlightingTheme", "light").toString();
     settings.endGroup();
 
     m_server = new QLocalServer();
@@ -3259,7 +3259,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #endif
     openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Ctrl+9"));
-    setHelpEntryAct->setShortcut(tr("Shift+F1"));
+    setHelpEntryAct->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F1));
     browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
     browseForwardAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
     externalBrowserAct->setShortcut(tr("Shift+Alt+F1"));
@@ -4778,7 +4778,7 @@ void CsoundQt::createMenus()
     helpMenu->addAction(reportBugAct);
     helpMenu->addAction(aboutAct);
     // helpMenu->addAction(donateAct);
-    // helpMenu->addAction(aboutQtAct);
+    // uhelpMenu->addAction(aboutQtAct);
 
 }
 
@@ -5135,7 +5135,7 @@ void CsoundQt::readSettings()
     m_options->tabWidth = settings.value("tabWidth", 24).toInt();
     m_options->tabIndents = settings.value("tabIndents", false).toBool();
     // m_options->colorVariables = settings.value("colorvariables", true).toBool();
-    m_options->highlightingTheme = settings.value("highlightingTheme", "classic").toString();
+    m_options->highlightingTheme = settings.value("highlightingTheme", "light").toString();
     m_options->colorVariables = m_options->highlightingTheme != "none";
     m_options->autoPlay = settings.value("autoplay", false).toBool();
     m_options->autoJoin = settings.value("autoJoin", true).toBool();
@@ -5145,7 +5145,7 @@ void CsoundQt::readSettings()
     m_options->rememberFile = settings.value("rememberfile", true).toBool();
     m_options->saveWidgets = settings.value("savewidgets", true).toBool();
     m_options->widgetsIndependent = settings.value("widgetsIndependent", false).toBool();
-    m_options->iconText = settings.value("iconText", true).toBool();
+    m_options->iconText = settings.value("iconText", false).toBool();
     m_options->showToolbar = settings.value("showToolbar", true).toBool();
     m_options->lockToolbar = settings.value("lockToolbar", true).toBool();
     m_options->toolbarIconSize = settings.value("toolbarIconSize", 20).toInt();

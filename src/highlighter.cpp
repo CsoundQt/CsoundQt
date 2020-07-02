@@ -379,8 +379,10 @@ Highlighter::Highlighter(QTextDocument *parent)
                       << "nlfilt" << "outc" << "outo" << "outq" << "outx" << "vco"
                       << "vincr" << "vbap16" << "vbap4" << "vbap8"
                       << "vbap4move" << "vbap8move" << "balance"
-                      << "chani" << "chano" << "checkbox" << "cigoto" << "ckgoto"
-                      << "cngoto" << "control" << "setctrl" << "flashtxt";
+                      << "chani" << "chano" << "cigoto" << "ckgoto"
+                      << "cngoto" << "control" << "setctrl" << "flashtxt"
+                      << "vaset" << "vaget"
+                      << "button" << "checkbox";
 
     operatorPatterns << "&&" << "||";
 
