@@ -198,7 +198,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     }
     settings.endGroup();
 
-
     settings.beginGroup("Options");
     settings.beginGroup("Editor");
     // necessary to get it before htmlview is created
@@ -336,7 +335,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
         QString programFilesPathx86 = QDir::fromNativeSeparators(getenv("PROGRAMFILES(X86)"));
         possibleDirectories << initialDir +"/doc/manual/" << programFilesPath + "/Csound6/doc/manual/" << programFilesPathx86 + "/Csound6/doc/manual/" <<  programFilesPath + "/Csound6_x64/doc/manual/";
 #endif
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
      possibleDirectories <<  initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/") <<  "/Library/Frameworks/CsoundLib64.framework/Resources/Manual/";
 #endif
     if (m_options->csdocdir.isEmpty() ||
@@ -357,7 +356,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     applySettings();
     createQuickRefPdf();
 
-#ifdef Q_OS_MAC // workaround to set resotre window size for Mac. Does not work within readSettings()
+#ifdef Q_OS_MACOS // workaround to set resotre window size for Mac. Does not work within readSettings()
     QSettings settings2("csound", "qutecsound");
     QSize size = settings2.value("GUI/size", QSize(800, 600)).toSize();
     resize(size);
@@ -377,7 +376,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     // This is a bad idea, breaks lots of subtle things, like background color
     // on files loaded from command line
-#ifndef  Q_OS_MAC // a workaround for showing close buttons on close NB! disable later
+#ifndef  Q_OS_MACOS // a workaround for showing close buttons on close NB! disable later
     auto originalStyleSheet = qApp->styleSheet();
     QFile file(":/appstyle-white.css");
     file.open(QFile::ReadOnly);
@@ -1233,7 +1232,7 @@ void CsoundQt::setupEnvironment()
     if (m_options->opcode6dir64Active) {
         csoundSetGlobalEnv("OPCODE6DIR64", m_options->opcode6dir64.toLatin1().constData());
     }
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
     // Use bundled opcodes if available
 #ifdef USE_DOUBLE
     QString opcodedir = initialDir + "/../Frameworks/CsoundLib64.framework/Resources/Opcodes64";
@@ -1439,7 +1438,7 @@ void CsoundQt::createApp()
 #endif
 #ifdef Q_OS_WIN32
 #endif
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
         opcodeDir = "/Library/Frameworks/CsoundLib64.framework/Resources/Opcodes";
         //    opcodeDir = initialDir + "/CsoundQt.app/Contents/Frameworks/CsoundLib64.framework/Resources/Opcodes";
 #endif
@@ -1451,7 +1450,7 @@ void CsoundQt::createApp()
 #endif
 #ifdef Q_OS_WIN32
 #endif
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 #ifdef USE_DOUBLE
         opcodeDir = "/Library/Frameworks/CsoundLib.framework/Resources/Opcodes";
 #else
@@ -1506,7 +1505,7 @@ void CsoundQt::createApp()
                 wizard.setField("opcodeDir", "");
             }
 #endif
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
             wizard.setField("libDir", "/Library/Frameworks");
 #endif
         }
@@ -2070,7 +2069,7 @@ void CsoundQt::runInTerm(bool realtime)
 #ifdef Q_OS_SOLARIS
     options = "-e " + scriptFileName;
 #endif
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
     options = scriptFileName;
 #endif
 #ifdef Q_OS_WIN32
@@ -2417,7 +2416,7 @@ void CsoundQt::setHtmlFullScreen(bool full)
 		checkFullScreen();
 		m_preFullScreenState = this->saveState();
 		this->csoundHtmlView->setFloating(true);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
         this->csoundHtmlView->showMaximized();
 #else
 		this->csoundHtmlView->showFullScreen();
@@ -2439,7 +2438,7 @@ void CsoundQt::setHelpFullScreen(bool full)
 		checkFullScreen();
 		m_preFullScreenState = this->saveState();
         this->helpPanel->setFloating(true);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
         this->helpPanel->showMaximized();
 #else
         this->helpPanel->showFullScreen();
@@ -2464,14 +2463,14 @@ void CsoundQt::setWidgetsFullScreen(bool full)
                 return;
             auto wl = doc->getWidgetLayout();
             wl->setVisible(true);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
             wl->showMaximized();
 #else
             wl->showFullScreen();
 #endif
         } else {
             this->widgetPanel->setFloating(true);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
         this->widgetPanel->showMaximized();
 #else
             this->widgetPanel->showFullScreen();
@@ -2708,7 +2707,7 @@ void CsoundQt::openExternalBrowser(QUrl url)
 void CsoundQt::openPdfFile(QString name)
 {
     if (!m_options->pdfviewer.isEmpty()) {
-#ifndef Q_OS_MAC
+#ifndef Q_OS_MACOS
         if (!QFile::exists(m_options->pdfviewer)) {
             QMessageBox::critical(this,
                                   tr("Error"),
@@ -3113,7 +3112,7 @@ void CsoundQt::runUtility(QString flags)
         // Only OPCODEDIR left here as it must be present before csound initializes
 
         script += "cd " + QFileInfo(documentPages[curPage]->getFileName()).absolutePath() + "\n";
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
         script += "/usr/local/bin/csound " + flags + "\n";
 #else
         script += "csound " + flags + "\n";
@@ -3140,7 +3139,7 @@ void CsoundQt::runUtility(QString flags)
 #ifdef Q_OS_SOLARIS
         options = "-e " + SCRIPT_NAME;
 #endif
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
         options = SCRIPT_NAME;
 #endif
 #ifdef Q_OS_WIN32
@@ -3237,7 +3236,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showGenAct->setShortcut(tr(""));
     showOverviewAct->setShortcut(tr(""));
     raiseConsoleAct->setShortcut(tr("Ctrl+3"));
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
     viewFullScreenAct->setShortcut(tr("Ctrl+Shift+F"));
 #else
     viewFullScreenAct->setShortcut(tr("F11"));
@@ -3265,8 +3264,9 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #endif
     openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Ctrl+9"));
-#ifdef Q_OS_MAC
-    setHelpEntryAct->setShortcut(tr("Shift+Alt+H"));
+    
+#ifdef Q_OS_MACOS
+    setHelpEntryAct->setShortcut(QKeySequence(Qt::ALT+Qt::SHIU  tr("Shift+Alt+H"));
     externalBrowserAct->setShortcut(tr("Alt+Ctrl+H"));
     showInspectorAct->setShortcut(tr("Ctrl+Shift+B"));
 #else
@@ -4134,6 +4134,7 @@ void CsoundQt::createActions()
     //	connect(showParametersAct,SIGNAL(triggered()), this, SLOT(showParametersInEditor()));
 
     setKeyboardShortcutsList();
+    setDefaultKeyboardShortcuts();
 }
 
 void CsoundQt::setKeyboardShortcutsList()
@@ -5117,7 +5118,7 @@ void CsoundQt::readSettings()
     settings.endGroup();
     settings.beginGroup("Options");
     settings.beginGroup("Editor");
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
     m_options->font = settings.value("font", "Menlo").toString();
     m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
 #endif
