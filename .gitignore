@@ -25,3 +25,5 @@ doc/QuteCsound Quick Reference (0.9).odt
 __pycache__
 *.pyc
 util/opcodes.xml
+*.dmg
+.DS_Store

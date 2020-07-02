@@ -3266,7 +3266,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showUtilitiesAct->setShortcut(tr("Ctrl+9"));
     
 #ifdef Q_OS_MACOS
-    setHelpEntryAct->setShortcut(QKeySequence(Qt::ALT+Qt::SHIU  tr("Shift+Alt+H"));
+    setHelpEntryAct->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F1));
     externalBrowserAct->setShortcut(tr("Alt+Ctrl+H"));
     showInspectorAct->setShortcut(tr("Ctrl+Shift+B"));
 #else
