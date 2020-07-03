@@ -5291,6 +5291,13 @@ void CsoundQt::readSettings()
     settings.endGroup();
     settings.beginGroup("External");
     m_options->terminal = settings.value("terminal", DEFAULT_TERM_EXECUTABLE).toString();
+#ifdef Q_OS_MACOS
+    if (m_options->terminal == "/Applications/Utilities/Terminal.app" &&
+            QOperatingSystemVersion::current() >  QOperatingSystemVersion::MacOSMojave ) {
+        qDebug() << "Changing terminal  to /System/Applications/Utilities/Terminal.app";
+        m_options->terminal = "/System/Applications/Utilities/Terminal.app";
+    }
+#endif
     m_options->browser = settings.value("browser", DEFAULT_BROWSER_EXECUTABLE).toString();
     m_options->dot = settings.value("dot", DEFAULT_DOT_EXECUTABLE).toString();
     m_options->waveeditor = settings.value("waveeditor",
