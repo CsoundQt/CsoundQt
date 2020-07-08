@@ -406,7 +406,8 @@ void CsoundEngine::csThread(void *data)
     CsoundUserData* udata = (CsoundUserData*)data;
     if (!(udata->flags & QCS_NO_COPY_BUFFER)) {
         MYFLT *outputBuffer = csoundGetSpout(udata->csound);
-        long numSamples = udata->outputBufferSize*udata->numChnls;
+        // outputBufferSize == ksmps
+        long numSamples = udata->outputBufferSize * udata->numChnls;
         udata->audioOutputBuffer.putManyScaled(outputBuffer, numSamples,
                                                1.0/udata->zerodBFS);
         // for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
@@ -975,9 +976,7 @@ int CsoundEngine::runCsound()
             emit (errorLines(getErrorLines()));
             return -3;
         }
-        qDebug() << "------- Compiling ok";
     }
-    qDebug() << "------- 2";
 
     ud->zerodBFS = csoundGet0dBFS(ud->csound);
     ud->sampleRate = csoundGetSr(ud->csound);
@@ -993,6 +992,7 @@ int CsoundEngine::runCsound()
         ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
         ud->perfThread->Play();
     }
+    ud->audioOutputBuffer.resize(ud->numChnls * 2048);
     return 0;
 }
 

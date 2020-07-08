@@ -121,8 +121,8 @@ class RingBuffer
 {
 public:
     RingBuffer() {
-        // size = 8192*4;
-        size = 1024 * 4;
+        // size = 2048*4;
+        size = 4096 * 4;
 		resize(size);
 		currentPos = 0;
 		currentReadPos = 0;
@@ -145,7 +145,7 @@ public:
 	}
 
     long availableWriteSpace() {
-        if(currentReadPos < currentPos)
+        if(currentReadPos <= currentPos)
             return size - currentPos + currentReadPos;
         return currentReadPos - currentPos;
     }
@@ -192,9 +192,16 @@ public:
         }
         mutex.lock();
         for(int i=0; i<dataSize; i++) {
-            buffer[currentPos] = data[i] * scaleFactor;
-            currentPos = (currentPos + 1) % size;
+            int idx = (currentPos + i) % size;
+            buffer[idx] = data[i] * scaleFactor;
         }
+        auto previousPos = currentPos;
+        currentPos += dataSize;
+        currentPos %= size;
+        if(currentPos > currentReadPos && previousPos < currentReadPos)
+            currentReadPos = currentPos;
+        else if(currentPos < currentReadPos && previousPos >= currentReadPos)
+            currentReadPos = currentPos;
         mutex.unlock();
     }
 
@@ -218,13 +225,15 @@ public:
 		return true;
 	}
 
-	void resize(int size) {
-		mutex.lock();
+    void resize(int newsize) {
+        qDebug("Resizing scope: %d to %d", buffer.size(), newsize);
+        mutex.lock();
 		buffer.clear();
-		for (int i = 0; i< size; i++) {
+        for (int i = 0; i< newsize; i++) {
 			buffer.append(0.0);
 		}
 		currentPos = 0;
+        size = newsize;
 		mutex.unlock();
 	}
 

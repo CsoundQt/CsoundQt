@@ -220,15 +220,14 @@ void QuteScope::createPropertiesDialog()
 	layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
 	channelBox = new QComboBox(dialog);
 	channelBox->addItem("all", QVariant((int) -255));
-	channelBox->addItem("Ch.1",QVariant((int) 1));
-	channelBox->addItem("Ch.2",QVariant((int) 2));
-	channelBox->addItem("Ch.3",QVariant((int) 3));
-	channelBox->addItem("Ch.4",QVariant((int) 4));
-	channelBox->addItem("Ch.5",QVariant((int) 5));
-	channelBox->addItem("Ch.6",QVariant((int) 6));
-	channelBox->addItem("Ch.7",QVariant((int) 7));
-	channelBox->addItem("Ch.8",QVariant((int) 8));
-	channelBox->addItem("none", QVariant((int) 0));
+    int maxChannels = 16;
+    if(m_params->ud != nullptr && m_params->ud->csEngine->isRunning()) {
+        maxChannels = m_params->ud->numChnls;
+    }
+    for(int i=1; i <= maxChannels; i++) {
+        channelBox->addItem(QString::number(i), QVariant((int) i));
+    }
+    channelBox->addItem("none", QVariant((int) 0));
 	layout->addWidget(channelBox, 6, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText("Zoom X");
@@ -385,7 +384,9 @@ void ScopeData::updateData(int channel, double zoomx, double zoomy, bool freeze)
     } else {
         dataToRead = buffer->currentPos + (buffer->size - buffer->currentReadPos);
     }
-    long offset = buffer->currentReadPos;
+    // long offset = buffer->currentReadPos;
+    long offset = buffer->currentPos;
+    dataToRead = width;
     // search for trig
     long trigOffset = 0;
     double lastValue = 1.0;
