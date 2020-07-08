@@ -377,30 +377,41 @@ void ScopeData::updateData(int channel, double zoomx, double zoomy, bool freeze)
 	QList<MYFLT> list = buffer->buffer;
 	buffer->unlock();
 	long listSize = list.size();
-    // long offset = buffer->currentPos;
-    long dataToRead;
-    if (buffer->currentPos > buffer->currentReadPos) {
-        dataToRead = buffer->currentPos - buffer->currentReadPos;
-    } else {
-        dataToRead = buffer->currentPos + (buffer->size - buffer->currentReadPos);
-    }
-    // long offset = buffer->currentReadPos;
     long offset = buffer->currentPos;
-    dataToRead = width;
+    long dataToRead = width;
     // search for trig
     long trigOffset = 0;
     double lastValue = 1.0;
     long maxFrames = width < dataToRead ? width: dataToRead;
 
-    if(m_params->triggerMode == TriggerMode::TriggerUp && channel >= 0) {
-        for(int i=0; i < maxFrames; i++) {
-            int idx = (int)((offset + (int)(i*numChnls*zoomx) + channel) % listSize);
-            double value = list[idx];
-            if(value >= 0 && lastValue < 0) {
-                trigOffset = idx - offset - channel;
-                break;
+    if(m_params->triggerMode == TriggerMode::TriggerUp) {
+        if(channel >= 0) {
+            for(int i=0; i < maxFrames; i++) {
+                int idx = (int)((offset + (int)(i*numChnls*zoomx) + channel) % listSize);
+                double value = list[idx];
+                if(value >= 0 && lastValue < 0) {
+                    trigOffset = idx - offset - channel;
+                    break;
+                }
+                lastValue = value;
             }
-            lastValue = value;
+        }
+        else {
+            for(int i=0; i < maxFrames; i++) {
+                int baseidx = (int)((offset + (int)(i*numChnls*zoomx)) % listSize);
+                double value = 0;
+                for(int chan = 0; chan < numChnls; chan++) {
+                    double newValue = list[baseidx+chan];
+                    if(fabs(newValue) > fabs(value))
+                        value = newValue;
+                }
+                if(value >= 0 && lastValue < 0) {
+                    trigOffset = baseidx - offset;
+                    break;
+                }
+                lastValue = value;
+            }
+
         }
         offset += trigOffset;
     }
