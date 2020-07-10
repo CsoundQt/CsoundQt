@@ -471,7 +471,7 @@ void QuteButton::refreshWidget()
 void QuteButton::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
-    qDebug() << "QuteButton::applyInternalProperties";
+    //qDebug() << "QuteButton::applyInternalProperties";
     m_value = property("QCS_pressedValue").toDouble();
 	//  m_value2 = property("QCS_value2").toDouble();
 	m_stringValue = property("QCS_stringvalue").toString();

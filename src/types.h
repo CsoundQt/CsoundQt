@@ -29,7 +29,7 @@
 #include <csound.h>
 
 
-#define QCS_VERSION "0.9.8.1"
+#define QCS_VERSION "0.9.8.2"
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_DEFAULT_TIME 50
@@ -66,14 +66,13 @@
 #ifdef Q_OS_MAC
 #define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib64.framework/Resources/Manual"
 #define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
-#define DEFAULT_BROWSER_EXECUTABLE "/Applications/Safary.app"  // Safary is installed by default so let's use that
+#define DEFAULT_BROWSER_EXECUTABLE "/Applications/Safari.app"  // Safary is installed by default so let's use that
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/Applications/QuickTime Player.app"
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/Applications/Preview.app"
 #define DEFAULT_DOT_EXECUTABLE "/usr/local/bin/dot"
 #define DEFAULT_LOG_FILE ""
 #define DEFAULT_SCRIPT_DIR qApp->applicationDirPath() + "/../Resources/Scripts"
-// for applications (on Catalina it is different) perhaps: QStandardPaths::standardLocations( QStandardPaths::ApplicationsLocation)
 #endif
 #ifdef Q_OS_WIN32
 #define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
@@ -121,8 +120,8 @@ class RingBuffer
 {
 public:
     RingBuffer() {
-        // size = 8192*4;
-        size = 1024 * 4;
+        // size = 2048*4;
+        size = 4096 * 4;
 		resize(size);
 		currentPos = 0;
 		currentReadPos = 0;
@@ -145,7 +144,7 @@ public:
 	}
 
     long availableWriteSpace() {
-        if(currentReadPos < currentPos)
+        if(currentReadPos <= currentPos)
             return size - currentPos + currentReadPos;
         return currentReadPos - currentPos;
     }
@@ -192,9 +191,16 @@ public:
         }
         mutex.lock();
         for(int i=0; i<dataSize; i++) {
-            buffer[currentPos] = data[i] * scaleFactor;
-            currentPos = (currentPos + 1) % size;
+            int idx = (currentPos + i) % size;
+            buffer[idx] = data[i] * scaleFactor;
         }
+        auto previousPos = currentPos;
+        currentPos += dataSize;
+        currentPos %= size;
+        if(currentPos > currentReadPos && previousPos < currentReadPos)
+            currentReadPos = currentPos;
+        else if(currentPos < currentReadPos && previousPos >= currentReadPos)
+            currentReadPos = currentPos;
         mutex.unlock();
     }
 
@@ -218,13 +224,15 @@ public:
 		return true;
 	}
 
-	void resize(int size) {
-		mutex.lock();
+    void resize(int newsize) {
+        qDebug("Resizing scope: %d to %d", buffer.size(), newsize);
+        mutex.lock();
 		buffer.clear();
-		for (int i = 0; i< size; i++) {
+        for (int i = 0; i< newsize; i++) {
 			buffer.append(0.0);
 		}
 		currentPos = 0;
+        size = newsize;
 		mutex.unlock();
 	}
 

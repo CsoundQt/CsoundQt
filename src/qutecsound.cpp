@@ -5294,13 +5294,6 @@ void CsoundQt::readSettings()
     settings.endGroup();
     settings.beginGroup("External");
     m_options->terminal = settings.value("terminal", DEFAULT_TERM_EXECUTABLE).toString();
-#ifdef Q_OS_MACOS
-    if (m_options->terminal == "/Applications/Utilities/Terminal.app" &&
-            QOperatingSystemVersion::current() >  QOperatingSystemVersion::MacOSMojave ) {
-        qDebug() << "Changing terminal  to /System/Applications/Utilities/Terminal.app";
-        m_options->terminal = "/System/Applications/Utilities/Terminal.app";
-    }
-#endif
     m_options->browser = settings.value("browser", DEFAULT_BROWSER_EXECUTABLE).toString();
     m_options->dot = settings.value("dot", DEFAULT_DOT_EXECUTABLE).toString();
     m_options->waveeditor = settings.value("waveeditor",
@@ -5312,6 +5305,25 @@ void CsoundQt::readSettings()
     m_options->pdfviewer = settings.value("pdfviewer",
                                           DEFAULT_PDFVIEWER_EXECUTABLE
                                           ).toString();
+#ifdef Q_OS_MACOS
+    if (QOperatingSystemVersion::current() >  QOperatingSystemVersion::MacOSMojave )  { // fix path change to /System/Applications on MacOS Catalina
+
+        QList <QString *> apps;
+        apps << &m_options->terminal << &m_options->browser << &m_options->waveplayer << &m_options->pdfviewer;
+        // not sure about  &m_options->waveeditor (Audacity) -  where is this installed on Catalina
+        // no correctrion for waveeditor now
+
+        foreach (QString * app, apps) {
+            if (app->startsWith("/Applications")) {
+                app->prepend("/System");
+            }
+        }
+
+        if (m_options->browser.contains("Safary")) { // fix for typo in 0.9.8.1
+            m_options->browser.replace("Safary", "Safari");
+        }
+    }
+#endif
     settings.endGroup();
     settings.beginGroup("Template");
     m_options->csdTemplate = settings.value("csdTemplate", QCS_DEFAULT_TEMPLATE).toString();
