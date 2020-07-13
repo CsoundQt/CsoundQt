@@ -4486,6 +4486,7 @@ void CsoundQt::createMenus()
     QStringList usefulFiles;
     QStringList exampleFiles;
     QStringList htmlFiles;
+    QStringList pluginExamples;
     QList<QStringList> subMenus;
     QStringList subMenuNames;
 
@@ -4680,6 +4681,12 @@ void CsoundQt::createMenus()
         newAction->setData(fileName);
         connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
     }
+
+    pluginExamples << ":/examples/Plugins/CircularBuffer.csd";
+
+    subMenus << pluginExamples;
+    subMenuNames << tr("Plugins");
+
 
     //FLOSS Manual Examples
     QString flossManPath = getExamplePath("FLOSS Manual Examples");
