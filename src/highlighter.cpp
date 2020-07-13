@@ -369,11 +369,11 @@ Highlighter::Highlighter(QTextDocument *parent)
                     << "passign";
 
     ioPatterns      << "in" << "ins" << "inch" << "out" << "outs" << "outch"
-                    << "outvalue" << "invalue" << "chnget" << "chnset" << "chn_k" << "chn_a"
-                    << "zaw" << "zar" << "zkw" << "zkr" << "zawm"
+                    << "outvalue" << "invalue" << "chnget" << "chngetk", "chnset" << "chn_k" 
+                    << "chn_a" << "chn_S" << "zaw" << "zar" << "zkw" << "zkr" << "zawm"
                     << "OSCsend" << "OSClisten" << "OSCraw" << "OSCinit";
 
-    deprecatedOpcodes << "array" << "compress" << "dcblock" << "diskin" << "flooper"
+    deprecatedOpcodes << "array" << "compress" << "flooper"
                       << "in32" << "inh" << "ino" << "inq" << "inrq" << "inx"
                       << "loop_ge" << "loop_gt" << "loop_le" << "loop_lt"
                       << "nlfilt" << "outc" << "outo" << "outq" << "outx" << "vco"
