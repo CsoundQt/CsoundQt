@@ -849,6 +849,7 @@ void DocumentView::textChanged()
 //			}
 			cursor.select(QTextCursor::WordUnderCursor);
 			QString word = cursor.selectedText();
+            QString wordlow = word.toLower();
 			if (word == ",") {
 				cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
 				cursor.movePosition(QTextCursor::StartOfWord);
@@ -895,17 +896,14 @@ void DocumentView::textChanged()
 					if (word.size() > 2) {
 						// check for autcompletion from all words in text editor
 						QString wholeText = editor->toPlainText();
-						foreach (QString s, QStringList()<<"+" << "-" << "*" << "/" <<"="<<"#"<<"&"<<","
-								 << "\""<<"\'"<<"|" << "[" << "]" << "(" << ")" << "<" << ">"
-								 << "." << ";") // get rid of specific symbols
-							wholeText.replace(s," ");
-						QStringList allWords = wholeText.simplified().split(" ");
+                        wholeText.replace(QRegularExpression("[" + QRegularExpression::escape("+-*/=#&,\"\'|[]()<>.;0123456789:") + "]"), " ");
+                        QStringList allWords = wholeText.simplified().split(" ");
 						QStringList menuWords;
 						allWords.removeDuplicates();
-						allWords.replaceInStrings(QRegExp("^\\d*$"),""); // remove numbers - not good enough regexp, '.' stays
+                        // allWords.replaceInStrings(QRegExp("^\\d*$"),""); // remove numbers - not good enough regexp, '.' stays
 						allWords.removeAll("");
 						foreach(QString theWord, allWords) {
-							if (theWord.toLower().startsWith(word.toLower()) && word != theWord) {
+                            if (theWord.toLower().startsWith(wordlow) && word != theWord) {
 								menuWords << theWord;
 							}
 						}

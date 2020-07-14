@@ -356,7 +356,8 @@ Highlighter::Highlighter(QTextDocument *parent)
 				<< "<csLADSPA>" << "</csLADSPA>"
                 << "<Cabbage>" << "</Cabbage>"
 				<< "<CsHtml5>" << "</CsHtml5>"
-                << "<CsFileB>" << "</CsFileB>";
+                << "<CsFileB>" << "</CsFileB>"
+                << "<CsLicense>" << "</CsLincense>";
 
     instPatterns << "instr" << "endin" << "opcode" << "endop";
     headerPatterns << "sr" << "kr" << "ksmps" << "nchnls" << "nchnls_i" << "0dbfs" << "A4"
@@ -369,7 +370,7 @@ Highlighter::Highlighter(QTextDocument *parent)
                     << "passign";
 
     ioPatterns      << "in" << "ins" << "inch" << "out" << "outs" << "outch"
-                    << "outvalue" << "invalue" << "chnget" << "chngetk", "chnset" << "chn_k" 
+                    << "outvalue" << "invalue" << "chnget" << "chngetk" << "chnset" << "chn_k"
                     << "chn_a" << "chn_S" << "zaw" << "zar" << "zkw" << "zkr" << "zawm"
                     << "OSCsend" << "OSClisten" << "OSCraw" << "OSCinit";
 
