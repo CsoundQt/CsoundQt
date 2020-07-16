@@ -2175,6 +2175,7 @@ void CsoundQt::record(bool rec)
     }
     else {
         documentPages[curPage]->stopRecording();
+        QMessageBox::information(nullptr, tr("Record"), tr("Recorded to audiofile ") + this->currentAudioFile);
     }
 }
 

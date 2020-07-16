@@ -8,7 +8,10 @@ fi
 ICONDIR=$SHAREDIR/icons/hicolor/128x128/mimetypes
 mkdir -v -p $ICONDIR
 # cp -v csound-light-128.png $ICONDIR/csound.png
-cp -v csound-dark-128.png $ICONDIR/csound.png
+# cp -v csound-dark-128.png $ICONDIR/csound.png
+cp -v csound.png $ICONDIR/csound.png
+# cp -v application-x-csound.svg $ICONDIR/csound.svg
+
 
 #create and register mimetype
 MIMEDIR=$SHAREDIR/mime # or /usr/share/mime

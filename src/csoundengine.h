@@ -94,6 +94,7 @@ struct CsoundUserData {
 	QList<QString> outputStringChannelNames;
 	QList<QVariant> previousOutputValues;
 	QList<QVariant> previousStringOutputValues;
+    QString lastRecordingOutfile;
 
 	void *midiBuffer; //Csound Circular Buffer
 	void *virtualMidiBuffer; //Csound Circular Buffer

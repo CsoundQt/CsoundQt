@@ -749,6 +749,7 @@ int CsoundEngine::startRecording(int sampleformat, QString fileName)
 #ifdef PERFTHREAD_RECORD
     // perfthread record API is only available with csound >= 6.04
     if (ud->perfThread) {
+        ud->lastRecordingOutfile = fileName;
         m_recording = true;
         ud->perfThread->Record(fileName.toLocal8Bit().constData(),
                                (sampleformat + 2) * 8);
@@ -763,7 +764,7 @@ void CsoundEngine::stopRecording()
 
 #ifdef	PERFTHREAD_RECORD
     if (ud->perfThread) {
-        ud->perfThread->StopRecord();
+        ud->perfThread->StopRecord();            
     }
     //qDebug("Recording stopped.");
 #endif
