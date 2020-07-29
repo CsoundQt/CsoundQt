@@ -2773,7 +2773,7 @@ int WidgetLayout::parseXmlNode(QDomNode node)
     else if (name == "bgcolor") {
         bool bg = false;
         if (node.toElement().attribute("mode")== "background") {
-            qDebug() << "background true";
+            //qDebug() << "background true";
             bg = true;
         }
         QDomElement er = node.toElement().firstChildElement("r");
@@ -2783,7 +2783,7 @@ int WidgetLayout::parseXmlNode(QDomNode node)
                               eg.firstChild().nodeValue().toInt(),
                               eb.firstChild().nodeValue().toInt());
         auto parent = node.parentNode().nodeName();
-        qDebug() << "setting background" << parent << bgcolor << node.toElement().text();
+        //qDebug() << "setting background" << parent << bgcolor << node.toElement().text();
         setBackground(bg, bgcolor);
     }
     else if (name == "bsbObject") {

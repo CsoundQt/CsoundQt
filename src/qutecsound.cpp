@@ -5303,7 +5303,7 @@ void CsoundQt::readSettings()
                                           DEFAULT_PDFVIEWER_EXECUTABLE
                                           ).toString();
 #ifdef Q_OS_MACOS
-    if (QOperatingSystemVersion::current() >=  QOperatingSystemVersion::MacOSMojave )  { // fix path change to /System/Applications on MacOS Catalina
+    if (QOperatingSystemVersion::current() >  QOperatingSystemVersion::MacOSMojave )  { // fix path change to /System/Applications on MacOS Catalina
 
         QList <QString *> apps;
         apps << &m_options->terminal << &m_options->browser << &m_options->waveplayer << &m_options->pdfviewer;
