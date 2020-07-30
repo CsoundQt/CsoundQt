@@ -236,27 +236,6 @@ unix:!macx {
         INSTALLS += scripts
     }
 
-    # EXPERIMENTAL AppImage build  using linuxdeploy and linuxdeploy-plugin-qt
-    # download linuxdeploy and its Qt plugin
-    #wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-    #wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
-
-    # make them executableappImage
-    #chmod +x linuxdeploy*.AppImage
-
-    appImage.path = $$OUT_PWD/$$DESTDIR/AppDir
-    appImage.files = icon.files
-    # rather: make install with desktop etc to some local folder and compress that: #appImage.commands = cd $$OUT_PWD/$$DESTDIR/; ln -sf $$TARGET csoundqt
-    #appImage.files += $$PWD/csoundqt.desktop
-    #TODO: examples
-
-    appImage.commands += export VERSION=0.9.8.1; export QML_SOURCES_PATHS=$$PWD/src/QML;
-    #TODO: kas dekstop failis vaja seada käivitatav $$TARGETiks või siis bianry oleks csounqt. praegu nimetan käsitisi ümber AppDir/usr/bin juures
-    appImage.commands += linuxdeploy --appdir AppDir --executable=$$OUT_PWD/$$DESTDIR/$$TARGET  --desktop-file=$$PWD/csoundqt.desktop  -i $$PWD/images/csoundqt.svg  --plugin=qt #  --output appimage
-    #appImage.commands = cd $$OUT_PWD/$$DESTDIR/AppDir/usr/bin; ln -sf $$TARGET csoundqt
-# move and remove what necessary here:
-    #  appImage.commands += linuxdeploy --appdir AppDir  --output appimage
-        INSTALLS += appImage
 }
 
 # for OSX add Scripts and Examples to be bundle in Contents->Resources
