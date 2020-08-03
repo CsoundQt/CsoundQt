@@ -23,6 +23,7 @@
         <file>../examples/Miscellaneous/Score_Tricks.csd</file>
         <file>../examples/Miscellaneous/Simple_Convolution.csd</file>
         <file>../examples/Miscellaneous/Universal_Convolution.csd</file>
+        <file>../examples/Miscellaneous/IR_Creator.csd</file>
         <file>../examples/Miscellaneous/Cross_Synthesis.csd</file>
         <file>../examples/Miscellaneous/SF_Granular.csd</file>
         <file>../examples/Miscellaneous/Oscillator_Aliasing.csd</file>
