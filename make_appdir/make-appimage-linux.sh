@@ -18,6 +18,7 @@ CSOUND_PLUGINS_DIR="$CSOUND_PREFIX/lib/csound/plugins64-6.0/"
 CSOUND_MANUAL_HTML_DIR="$HOME/src/csound-manual/html"
 BUNDLE_CSOUND=true # for now: always bundle Csound
 SRC_DIR="../" #CsoundQt root
+LIB_DIR="/usr/lib/"
 APP_DIR="AppDir" #"$BUILD_DIR/AppDir"
 
 
@@ -41,7 +42,10 @@ sed "s/Exec=csoundqt/Exec=$BINARY/g" $SRC_DIR/csoundqt.desktop > csoundqt.deskto
 
 #2 create initial AppDir with linuxdeploy
 #TODO: cannot blacklist csound libs.blacklist nor -blacklist flag work...
-$LINUXDEPLOY --appdir $APP_DIR --executable=$EXECUTABLE --desktop-file=csoundqt.desktop -i $SRC_DIR/images/csoundqt.svg   --plugin=qt
+$LINUXDEPLOY --appdir $APP_DIR --executable=$EXECUTABLE --desktop-file=csoundqt.desktop --icon-file=$SRC_DIR/images/csoundqt.svg --library=$LIB_DIR/libportmidi.so --library=$LIB_DIR/x86_64-linux-gnu/liblo.so --library=$LIB_DIR/x86_64-linux-gnu/libstk.so   --plugin=qt
+
+
+#libraries still missing: libstk-4.5.0.so libfltk.so.1.1
 
 
 # copy Examples and templates
