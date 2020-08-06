@@ -27,6 +27,7 @@
 # OS X only OPTIONS:
 # CONFIG+=universal  #  To build i386/ppc version. Default is x86_64
 # CONFIG+=i386  #  To build i386 version. Default is x86_64
+# CONFIG+=bundle_csound # to make a package that incudes Csound in the bundle with make install
 # LINUX ONLY:
 # To install CsoundQt and its dekstop file and icons somewhere else than /usr/local/bin and /usr/share
 # use variables INSTALL_DIR (default /usr/local) and SHARE_DIR (default /usr/share).
@@ -289,12 +290,24 @@ macx {
 
     }
 
-    final.commands = rm -rf  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework ;
-    final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
-    final.commands += install_name_tool -change  @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
-    #final.commands += $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML -dmg # nb! -dmg only for local build, do not commit to git!
-    final.commands += hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname CsoundQt $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg # untested!
+    bundle_csound {
+        # Nothing special to do for that, just don't delete, leave the links to @rpath
+        message("Bundle Csound into  the package")
+        csound.path= $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/
+        csound.files = /Library/Frameworks/CsoundLib64.framework
+        INSTALLS+=csound
+        final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib @rpath/CsoundLib64.framework/Versions/6.0/libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        final.commands += install_name_tool -change  CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+
+    } else {
+        final.path = $$PWD
+        final.commands = rm -rf  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework ;
+        final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        final.commands += install_name_tool -change  @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+    }
+
     final.path = $$PWD
+    final.commands += hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname CsoundQt $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg # untested!
     INSTALLS += cocoa printsupport pythonlinks final
 
 }

@@ -24,15 +24,15 @@ exists(config.user.pri) {
 	message(... config.user.pri found)
 }
 !no_messages {
-	message()
+    message(" ")
 	build32:message(Building CsoundQt for the single precision version of Csound.)
 	build64:message(Building CsoundQt for the double precision version of Csound.)
 	CONFIG(debug, debug|release):message(Building debug version.)
 	CONFIG(release, debug|release):message(Building release version.)
-	message()
+    message(" ")
 	message(CONFIG ...)
 	for(flag, CONFIG):message(+ $$flag)
-	message()
+    message(" ")
 }
 isEmpty(CSOUND_API_INCLUDE_DIR) {
     !isEmpty(CSOUND_INCLUDE_DIR):CSOUND_API_INCLUDE_DIR = $${CSOUND_INCLUDE_DIR}
@@ -150,7 +150,7 @@ isEmpty(RTMIDI_DIR) {
         exists($${dir}) {
             !no_messages {
                 message(RTMIDI_DIR set to $${dir})
-                message( )
+                message(" ")
             }
 			RTMIDI_DIR = $${dir}
             break()

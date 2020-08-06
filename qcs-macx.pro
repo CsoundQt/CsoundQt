@@ -1,7 +1,7 @@
 
 !macx: error(This project file is only for Macintosh OS X systems.)
 !no_messages {
-	message()
+    message(" ")
 	message(Building CsoundQt for Macintosh OS X.)
 }
 
