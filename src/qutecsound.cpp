@@ -1235,6 +1235,22 @@ void CsoundQt::setupEnvironment()
     if (m_options->opcode6dir64Active) {
         csoundSetGlobalEnv("OPCODE6DIR64", m_options->opcode6dir64.toLatin1().constData());
     }
+#ifdef Q_OS_WIN32
+	// if opcodes are in the same directory or in ./plugins64, then set OPCODE6DIR64 to the bundled plugins
+	// no need to support 32-opcodes any more, set only OPCODE6DIR64
+	QString opcodedir;
+	if (QFile::exists(initialDir+"/rtpa.dll" )) {
+		opcodedir = initialDir;
+	} else if (QFile::exists(initialDir+"/plugins64/rtpa.dll" )) {
+		opcodedir = initialDir+"/plugins64/";
+	} else {
+		opcodedir = QString();
+	}
+	if (!opcodedir.isEmpty()) {
+		qDebug() << "Setting OPCODE6DIR64 to: " << opcodedir;
+		csoundSetGlobalEnv("OPCODE6DIR64", opcodedir.toLocal8Bit().constData());
+	}
+#endif
 #ifdef Q_OS_MACOS
     // Use bundled opcodes if available
 #ifdef USE_DOUBLE
