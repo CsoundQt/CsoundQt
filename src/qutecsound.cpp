@@ -5982,8 +5982,21 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
 #endif
 
     if (executable.isEmpty()) {
-        cmdLine = m_options->csoundExecutable+ " ";
-        qDebug()<<cmdLine;
+
+		//test if csound is present in the same folder as CsoundQt, then Csound is bundled. Try to copy it to temporary location and run it from there
+		// TODO: condition on csound.exe for windows, don't copy but set
+#ifdef Q_OS_WIN32
+		QString csoundExecutable = "/csound.exe";
+#else
+		QString csoundExecutable = "/csound";
+#endif
+		if (QFile::exists(initialDir+csoundExecutable) && !initialDir.startsWith("/usr")) { // if starts with /usr then probably normal install on Linux
+			qDebug() << "Using bundled Csound to run in terminal";
+			cmdLine = initialDir+csoundExecutable + " ";
+		} else {
+			cmdLine = m_options->csoundExecutable+ " ";
+		}
+		qDebug()<<"Command line: " << cmdLine;
         //#ifdef Q_OS_MAC
         //		cmdLine = "/usr/local/bin/csound ";
         //#else
