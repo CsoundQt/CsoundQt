@@ -89,7 +89,7 @@ void PyQcsObject::setDocument(int index)
 	PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
 	QString path = name.left(name.lastIndexOf("/"));
 	mainContext.call("os.chdir", QVariantList() << path );
-	mainContext.evalScript("print 'cd \"" + path + "\"'");
+	mainContext.evalScript("print('cd \"" + path + "\"')");
 }
 
 int PyQcsObject::loadDocument(QString name, bool runNow)
@@ -99,7 +99,7 @@ int PyQcsObject::loadDocument(QString name, bool runNow)
 	qDebug() << d.absolutePath();
 	if (!QFile::exists(d.absolutePath())) {
 		PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
-		mainContext.evalScript("print 'File not found.'");
+		mainContext.evalScript("print('File not found.')");
 		return -1;
 	} else {
 		return m_qcs->loadFile(d.absolutePath(), runNow);
@@ -156,18 +156,18 @@ int PyQcsObject::newDocument(QString name)
 	PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
 
 	if (name.isEmpty()) {
-		mainContext.evalScript("print 'Please specify a filename'");
+		mainContext.evalScript("print('Please specify a filename')");
 		return -1;
 	}
 	QDir d(name);
 	qDebug() << d;
 	if (QFile::exists(d.absolutePath())) {
-		mainContext.evalScript("print 'File already exists. Use loadDocument()'");
+		mainContext.evalScript("print('File already exists. Use loadDocument()')");
 		return -1;
 	}
 	m_qcs->newFile();
 	if (!m_qcs->saveFile(d.absolutePath())) {
-		mainContext.evalScript("print 'Error saving file.'");
+		mainContext.evalScript("print('Error saving file.')");
 	}
 	return m_qcs->getDocument(name);
 }
@@ -273,7 +273,7 @@ void PyQcsObject::setCsChannel(QString channel, double value, int index)
 
 	QString message="Channel '" + channel + "' does not exist or is not exposed with chn_k.";
 	PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
-	mainContext.evalScript("print \'"+message+"\'");
+	mainContext.evalScript("print(\'"+message+"\')");
 }
 
 void PyQcsObject::setCsChannel(QString channel, QString stringValue, int index)
@@ -290,7 +290,7 @@ void PyQcsObject::setCsChannel(QString channel, QString stringValue, int index)
 	}
 	QString message="Could not set string into channel "+ channel;
 	PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
-	mainContext.evalScript("print \'"+message+"\'");
+	mainContext.evalScript("print(\'"+message+"\')");
 }
 
 
@@ -310,7 +310,7 @@ double PyQcsObject::getCsChannel(QString channel, int index)
 
 	QString message="Could not read from channel "+channel;
 	PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
-	mainContext.evalScript("print \'"+message+"\'");
+	mainContext.evalScript("print(\'"+message+"\')");
 	return 0;//m_qcs->getCsChannel(channel, index);
 }
 
@@ -338,7 +338,7 @@ QString PyQcsObject::getCsStringChannel(QString channel, int index)
 	}
 	QString message="Could not read from channel "+channel;
 	PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
-	mainContext.evalScript("print \'"+message+"\'");
+	mainContext.evalScript("print(\'"+message+"\')");
 	return QString();//m_qcs->getCsChannel(channel, index);
 
 }
@@ -359,7 +359,7 @@ QVariant PyQcsObject::getWidgetProperty(QString widgetid, QString property, int 
 
 		QString message="Widget "+widgetid+" does not have property "+property+" available properties are: "+properties.join(", ")+".";
 		PythonQtObjectPtr mainContext = PythonQt::self()->getMainModule();
-		mainContext.evalScript("print \'"+message+"\'");
+		mainContext.evalScript("print(\'"+message+"\')");
 	}
 	return (int) -1;
 }
