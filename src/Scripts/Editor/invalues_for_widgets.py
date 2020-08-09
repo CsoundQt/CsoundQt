@@ -34,7 +34,7 @@ out_text = ''
 
 # Now make the text to be inserted
 for channel in channel_list:
-    print channel
+    print(channel)
     out_text += 'k%s invalue "%s"\n'%(channel, channel)
 
 # and insert it

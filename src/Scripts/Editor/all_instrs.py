@@ -10,8 +10,8 @@ for line in lines:
     els = line.split()
     if els and els[0] == "instr":
        allinstrs = "%s %s" % (allinstrs, els[1])
-print "instruments in this csd:"
-print '"' + allinstrs[1:] + '"'
+print("instruments in this csd:")
+print('"' + allinstrs[1:] + '"')
 q.insertText('"' + allinstrs[1:] + '"')
 
 
