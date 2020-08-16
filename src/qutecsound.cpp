@@ -5992,7 +5992,7 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
 #endif
 		if (QFile::exists(initialDir+csoundExecutable) && !initialDir.startsWith("/usr")) { // if starts with /usr then probably normal install on Linux
 			qDebug() << "Using bundled Csound to run in terminal";
-			cmdLine = initialDir+csoundExecutable + " ";
+			cmdLine = "\"" + initialDir+csoundExecutable + "\" ";
 		} else {
 			cmdLine = m_options->csoundExecutable+ " ";
 		}
