@@ -49,9 +49,9 @@ To change between the branches use command *git checkout <branchname \>*
 Building 
 -----
 
-To build **CsoundQt**, you must have installed [**Csound**](https://csound.com/download.html) first. On OSX and Windows you can use the prebuilt installers, for Linux it is mostly preferable to build it yourself.  See <https://github.com/csound/csound/blob/develop/BUILD.md> for instructions.
+Before building **CsoundQt**, you must first install [**Csound**](https://csound.com/download.html). On OSX and Windows you can use a prebuilt, platform-specific installer; for Linux you should probably build Csound yourself. See <https://github.com/csound/csound/blob/develop/BUILD.md> for instructions. If you install Csound per these instructions, you will automatically install the [**libsndfile**](http://www.mega-nerd.com/libsndfile/) library, which allows recording the realtime output of Csound to a file.
 
-To build **CsoundQt** you need [**Qt**](http://qt-project.org/) (version 4.8 or 5.0+). The [**libsndfile**](http://www.mega-nerd.com/libsndfile/) library will allow recording the realtime output of Csound to a file. From version 0.7 onwards, CsoundQt can be built with [PythonQt](http://pythonqt.sourceforge.net/) support. Global MIDI I/O and control of the CsoundQt widgets can also be enabled through the [RtMidi](http://www.music.mcgill.ca/~gary/rtmidi/) library.
+To build **CsoundQt** you need [**Qt**](http://qt-project.org/) (version 4.8 or 5.0+).  From version 0.7 onwards, CsoundQt can be built with [PythonQt](http://pythonqt.sourceforge.net/) support. Global MIDI I/O and control of the CsoundQt widgets can also be enabled through the [RtMidi](http://www.music.mcgill.ca/~gary/rtmidi/) library.
 
 The easiest way to build CsoundQt is to open its qcs.pro file in **QtCreator** and build it there (A step-by-step instruction [**here**](https://github.com/CsoundQt/CsoundQt/wiki)). You can download and install Qt development kit (including QtCreator and all necessary libraries) from [QT page](http://www.qt.io/download-open-source/). It is recommended to use **Qt 5.3 or newer**, to be able to use CsoundQt's **Virtual Midi Keyboard**.
 
