@@ -51,11 +51,11 @@ Building
 
 To build **CsoundQt**, you must have installed [**Csound**](https://csound.com/download.html) first. On OSX and Windows you can use the prebuilt installers, for Linux it is mostly preferable to build it yourself.  See <https://github.com/csound/csound/blob/develop/BUILD.md> for instructions.
 
-To build **CsoundQt** you need [**Qt**](http://qt-project.org/) (version 4.8 or 5.0+). The [**libsndfile**](http://www.mega-nerd.com/libsndfile/) library will allow recording the realtime output of Csound to a file. From version 0.7 onwards, CsoundQt can be built with [PythonQt](http://pythonqt.sourceforge.net/) support. Global MIDI I/O and control of the CsoundQt widgets can also be enabled through the [RtMidi](http://www.music.mcgill.ca/~gary/rtmidi/) library.
+To build **CsoundQt** you need [**Qt**](http://qt-project.org/) (version 4.8 or 5.0+). The [**libsndfile**](http://www.mega-nerd.com/libsndfile/) library will allow recording the realtime output of Csound to a file. From version 0.7 onwards, CsoundQt can be built with [PythonQt](https://github.com/MeVisLab/pythonqt) support. Global MIDI I/O and control of the CsoundQt widgets can also be enabled through the [RtMidi](http://www.music.mcgill.ca/~gary/rtmidi/) library.
 
 The easiest way to build CsoundQt is to open its qcs.pro file in **QtCreator** and build it there (A step-by-step instruction [**here**](https://github.com/CsoundQt/CsoundQt/wiki)). You can download and install Qt development kit (including QtCreator and all necessary libraries) from [QT page](http://www.qt.io/download-open-source/). It is recommended to use **Qt 5.3 or newer**, to be able to use CsoundQt's **Virtual Midi Keyboard**.
 
-_NB! A word about Qt versions: PythonQt does not support Qt 5.6 yet. If you want to build with PythonQt support, use **Qt 5.5.1** on Linux and Windows, **Qt 5.4.2** on OSX (5.5 has a bug for OSX that does not let resize floating panels (like widgets' panel))._
+_[This is probably wrong: NB! A word about Qt versions: PythonQt does not support Qt 5.6 yet. If you want to build with PythonQt support, use **Qt 5.5.1** on Linux and Windows, **Qt 5.4.2** on OSX (5.5 has a bug for OSX that does not let resize floating panels (like widgets' panel)).]_
 
 CsoundQt uses qmake to build, so you can build on the **command line** with:
 
@@ -89,7 +89,7 @@ You can build optional support for **PythonQt**:
 
 PythonQt support gives you many extended possibilities to interact with CsoundQt and running Csound instances from the python console, from scripts or from python code in your csound code. Read more in chapter [12C](http://floss.booktype.pro/csound/c-python-in-csoundqt/) in the [Csound FLOSS Manual](http://floss.booktype.pro/csound/).
  
-The [PythonQt sources](http://sourceforge.net/projects/pythonqt/files/) should be put in the same base directory as the CsoundQt sources, where they will be found and used. You must build and install the PythonQt libraries before using them. CsoundQt currently requires PythonQt >= 2.0.1; to build against **Qt5**, it requires **PythonQt >= 3.0**
+The [PythonQt sources](https://github.com/MeVisLab/pythonqt) should be put in the same base directory as the CsoundQt sources, where they will be found and used. You must build and install the PythonQt libraries before using them. CsoundQt currently requires PythonQt >= 2.0.1; to build against **Qt5**, it requires **PythonQt >= 3.0**
 
 To build PythonQt you need to edit first file *build/python.prf* in the PythonQt source directory (in QtCreator project tree  *src->python->python.prf*). Change it to the python version you have, for instance:
 
