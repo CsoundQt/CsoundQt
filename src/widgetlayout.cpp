@@ -1371,7 +1371,7 @@ void WidgetLayout::refreshWidgets()
             int channel = (status ^ 176) + 1;
             for (int i = 0; i < registeredControllers.size(); i++) {
                 if (registeredControllers[i].cc == midiQueue[index][1]) {
-                    if (/*registeredControllers[i].chan == 0 || */ channel == registeredControllers[i].chan) { // not sure if this comment-out will not break anything but likely not. tarmo.
+					if ( channel == registeredControllers[i].chan) {
                         registeredControllers[i].widget->setMidiValue(midiQueue[index][2]);
                     }
                 }

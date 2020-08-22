@@ -562,6 +562,19 @@ void CsoundQt::changePage(int index)
     }
 #endif
     m_inspectorNeedsUpdate = true;
+
+	// set acceptsMidiCC for pages -  either all true, or only currrentPage true
+	for (int i=0; i<documentPages.size(); i++ ) {
+		if ( m_options->midiCcToCurrentPageOnly ) {
+			if (i==curPage) {
+				documentPages[i]->acceptsMidiCC = true;
+			} else {
+				documentPages[i]->acceptsMidiCC = false;
+			}
+		} else {
+			documentPages[i]->acceptsMidiCC = true;
+		}
+	}
 }
 
 void CsoundQt::pageLeft()
@@ -5082,7 +5095,7 @@ void CsoundQt::createStatusBar()
 void CsoundQt::readSettings()
 {
     QSettings settings("csound", "qutecsound");
-    int settingsVersion = settings.value("settingsVersion", 0).toInt();
+	int settingsVersion = settings.value("settingsVersion", 4).toInt();
     // Version 1 to remove "-d" from additional command line flags
     // Version 2 to save default keyboard shortcuts (weren't saved previously)
     // Version 2 to add "*" to jack client name
@@ -5174,6 +5187,7 @@ void CsoundQt::readSettings()
     m_options->askIfTemporary = settings.value("askIfTemporary", false).toBool();
     m_options->rememberFile = settings.value("rememberfile", true).toBool();
     m_options->saveWidgets = settings.value("savewidgets", true).toBool();
+	m_options->midiCcToCurrentPageOnly = settings.value("midiCcToActivePageOnly", false).toBool();
     m_options->widgetsIndependent = settings.value("widgetsIndependent", false).toBool();
     m_options->iconText = settings.value("iconText", false).toBool();
     m_options->showToolbar = settings.value("showToolbar", true).toBool();
@@ -5428,6 +5442,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("askIfTemporary", m_options->askIfTemporary);
         settings.setValue("rememberfile", m_options->rememberFile);
         settings.setValue("savewidgets", m_options->saveWidgets);
+		settings.setValue("midiCcToActivePageOnly", m_options->midiCcToCurrentPageOnly);
         settings.setValue("widgetsIndependent", m_options->widgetsIndependent);
         settings.setValue("iconText", m_options->iconText);
         settings.setValue("showToolbar", m_options->showToolbar);

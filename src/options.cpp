@@ -50,6 +50,7 @@ Options::Options(ConfigLists *configlists) :
     highlightingTheme = "classic";
     autoPlay = true;
     autoJoin = false;
+	midiCcToCurrentPageOnly = false;
     saveChanges = false;
     askIfTemporary = false;
     rememberFile = true;

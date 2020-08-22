@@ -1183,7 +1183,7 @@ void DocumentPage::queueMidiIn(std::vector< unsigned char > *message)
         qDebug() << "MIDI message ignored. nBytes=" << nBytes << " status =" << (int)message->at(0);
         return;
     }
-    if ( ((d->midiWriteCounter + 1) % QCS_MAX_MIDI_QUEUE) != d->midiReadCounter) {
+	if ( (((d->midiWriteCounter + 1) % QCS_MAX_MIDI_QUEUE) != d->midiReadCounter) && acceptsMidiCC) {
         int index = d->midiWriteCounter;
         for (unsigned int i = 0; i < nBytes; i++) {
             d->midiQueue[index][i] = (int)message->at(i);

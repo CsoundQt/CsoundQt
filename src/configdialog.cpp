@@ -193,6 +193,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	autoCompleteCheckBox->setChecked(m_options->autoComplete);
 	autoParameterModeCheckBox->setChecked(m_options->autoParameterMode);
 	widgetsCheckBox->setChecked(m_options->enableWidgets);
+	midiCcToCurrentPageOnlyCheckBox->setChecked(m_options->midiCcToCurrentPageOnly);
 	showWidgetsOnRunCheckBox->setChecked(m_options->showWidgetsOnRun);
 	showTooltipsCheckBox->setChecked(m_options->showTooltips);
     graphUpdateRateSpinBox->setValue(m_options->graphUpdateRate);
@@ -480,6 +481,7 @@ void ConfigDialog::accept()
 	m_options->autoComplete = autoCompleteCheckBox->isChecked();
 	m_options->autoParameterMode = autoParameterModeCheckBox->isChecked();
 	m_options->enableWidgets = widgetsCheckBox->isChecked();
+	m_options->midiCcToCurrentPageOnly = midiCcToCurrentPageOnlyCheckBox->isChecked();
 	m_options->showWidgetsOnRun = showWidgetsOnRunCheckBox->isChecked();
 	m_options->showTooltips = showTooltipsCheckBox->isChecked();
 	m_options->enableFLTK = enableFLTKCheckBox->isChecked();
