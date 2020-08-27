@@ -184,6 +184,7 @@ public:
 	QVector<QString> widgetHistory;  // Undo/ Redo history
     int widgetHistoryIndex; // Current point in history
     QString getQml();
+	QString getMidiControllerInstrument();
     void parseUdos(bool force=false);
     void gotoLine(int line);
     void gotoLineDialog();

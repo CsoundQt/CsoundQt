@@ -739,7 +739,12 @@ void DocumentPage::updateCsLadspaText()
 QString DocumentPage::getQml()
 {
     QString qml = m_widgetLayouts[0]->getQml();
-    return qml;
+	return qml;
+}
+
+QString DocumentPage::getMidiControllerInstrument()
+{
+	return m_widgetLayouts[0]->getMidiControllerInstrument();
 }
 
 void DocumentPage::updateCabbageText()

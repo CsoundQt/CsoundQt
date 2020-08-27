@@ -1030,7 +1030,44 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
     m_activeWidgets++;
     widgetsMutex.unlock();
     adjustLayoutSize();
-    widget->show();
+	widget->show();
+}
+
+QString WidgetLayout::getMidiControllerInstrument()
+{
+	// return either full Csound instrument text or channelName - channel - CC or
+	// or just a list of registered controllers. The first is easier
+	QString instrString = "instr MidiController\n";
+	for (int i = 0; i < registeredControllers.size(); i++) {
+		if (registeredControllers[i].cc >= 0 && registeredControllers[i].chan>0) {
+			QuteWidget * widget = registeredControllers[i].widget;
+			qDebug() << "Found MIDI bindig for " << registeredControllers[i].widget->getChannelName() << ": " << registeredControllers[i].chan << " " << registeredControllers[i].cc;
+			if (widget->getWidgetType()=="BSBButton" ) {
+				QString type = widget->property("QCS_type").toString();
+				qDebug() << "Button of type: " << type;
+				if (type == "event" || type == "pictevent" ) {
+					QString eventLine = widget->property("QCS_eventLine").toString();
+					qDebug() << eventLine;
+					instrString += QString(R"(
+	if (trigger:k(ctrl7:k(1,64,0,1),0.9, 0) == 1) then
+		scoreline {{ %1 }}
+	endif			)").arg(eventLine);
+					//TODO: latched and button and indefinite duration
+				}
+			}
+
+			instrString += QString ("\t chnset ctrl7:k(%1, %2, %3, %4), \"%5\"\n")
+					.arg(registeredControllers[i].chan)
+					.arg(registeredControllers[i].cc)
+					.arg( widget->property("QCS_minimum").toDouble() )
+					.arg( widget->property("QCS_maximum").toDouble() )
+					.arg(widget->getChannelName() );
+		}
+	}
+	//TODO: if button & event, call an instrument
+	// see latched button
+	instrString +="endin\n";
+	return instrString;
 }
 
 void WidgetLayout::appendMessage(QString message)

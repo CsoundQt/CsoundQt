@@ -1815,6 +1815,10 @@ void CsoundQt::saveWidgetsToQml()
 {
     QString qml = documentPages[curPage]->getQml();
 
+	//test:
+	QString ms = documentPages[curPage]->getMidiControllerInstrument();
+	qDebug() << ms;
+
     //QString dir = lastUsedDir;
     QString name = documentPages[curPage]->getFileName();
     name.replace(".csd", ".qml");
@@ -1853,7 +1857,7 @@ void CsoundQt::play(bool realtime, int index)
         return;
     }
     curPage = index;
-    auto page = documentPages[curPage];
+    auto page = documentPages[curPage];	
 
     if (page->getFileName().isEmpty()) {
         int answer;

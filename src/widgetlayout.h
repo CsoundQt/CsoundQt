@@ -119,6 +119,9 @@ public:
 	QString newMacWidget(QString widgetLine, bool offset = false);  // Offset is used when pasting duplicated widgets
 	void registerWidget(QuteWidget *widget);
 
+	// TEST: try to get midiBingins info
+	QString getMidiControllerInstrument();
+
 	QVector<QVector<int> > midiQueue;
 	int midiWriteCounter;
 	int midiReadCounter;

@@ -441,7 +441,7 @@ void QuteButton::setMidiValue(int value)
                                                      << "_Render" << "_Browse1"
                                                      << "_Browse2" << "_MBrowse";
         if (reservedChannels.contains(m_channel))
-            buttonReleased();
+			buttonReleased(); // TODO: test this, maybe now buttonReleased has changed!!
 	}
 	QPair<QString, double> channelValue(m_channel, newval);
 	emit newValue(channelValue);
