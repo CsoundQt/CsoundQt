@@ -152,6 +152,21 @@ QString QuteComboBox::getQml()
 	return qml;
 }
 
+void QuteComboBox::setMidiValue(int value)
+{
+	QComboBox * cb = static_cast<QComboBox *>(m_widget);
+
+	int index = int (value/127.0 * (cb->count()-1));
+	cb->setCurrentIndex(index);
+
+	// not sure if this is necessary
+	double newval = static_cast<double>(index);
+	setValue( newval );
+	QPair<QString, double> channelValue(m_channel, newval);
+	emit newValue(channelValue);
+
+}
+
 QString QuteComboBox::itemList()
 {
 	// For old format
