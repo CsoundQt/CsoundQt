@@ -1035,9 +1035,14 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
 
 QString WidgetLayout::getMidiControllerInstrument()
 {
-	// return either full Csound instrument text or channelName - channel - CC or
-	// or just a list of registered controllers. The first is easier
-	QString instrString = "instr MidiController\n";
+	// returns full Csound instrument to pass CC values to channels
+	// and/or start events (if on eventButton)
+	if (registeredControllers.isEmpty()) {
+		qDebug() << "There are no registered controllers!";
+	}
+
+
+	QString instrLines ;
 	for (int i = 0; i < registeredControllers.size(); i++) {
 		if (registeredControllers[i].cc >= 0 && registeredControllers[i].chan>0) {
 			QuteWidget * widget = registeredControllers[i].widget;
@@ -1048,25 +1053,48 @@ QString WidgetLayout::getMidiControllerInstrument()
 				if (type == "event" || type == "pictevent" ) {
 					QString eventLine = widget->property("QCS_eventLine").toString();
 					qDebug() << eventLine;
-					instrString += QString(R"(
+					instrLines += QString(R"(
 	if (trigger:k(ctrl7:k(1,64,0,1),0.9, 0) == 1) then
-		scoreline {{ %1 }}
-	endif			)").arg(eventLine);
-					//TODO: latched and button and indefinite duration
-				}
-			}
+		scoreline {{ %1 }}, 1
+	endif)").arg(eventLine) + "\n";
+					// find out if it is latched button and event is negative
+					if ( widget->property("QCS_latch").toBool() ) {
+						QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+						if (lineElements.size() > 0 && lineElements[0] == "i") {
+							// Remove first element if it is "i"
+							lineElements.removeAt(0);
+						}
+						else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
+							lineElements[0] = lineElements[0].mid(1); // Remove "i" character
+						}
 
-			instrString += QString ("\t chnset ctrl7:k(%1, %2, %3, %4), \"%5\"\n")
-					.arg(registeredControllers[i].chan)
-					.arg(registeredControllers[i].cc)
-					.arg( widget->property("QCS_minimum").toDouble() )
-					.arg( widget->property("QCS_maximum").toDouble() )
-					.arg(widget->getChannelName() );
+						if (lineElements.size() > 2 &&
+						        lineElements[2].toDouble() < 0 ) {
+
+							lineElements[0].prepend("-");
+							lineElements.prepend("i");
+							instrLines +=
+							        QString(R"(
+	if (trigger:k(ctrl7:k(1,64,0,1),0.1, 1) == 1) then
+		scoreline {{ %1 }}, 1
+	endif)").arg( lineElements.join(" ") ) + "\n";
+						}
+					}
+
+
+				}
+			} else {
+				instrLines += QString ("\t chnset ctrl7:k(%1, %2, %3, %4), \"%5\"\n")
+				        .arg(registeredControllers[i].chan)
+				        .arg(registeredControllers[i].cc)
+				        .arg( widget->property("QCS_minimum").toDouble() )
+				        .arg( widget->property("QCS_maximum").toDouble() )
+				        .arg(widget->getChannelName() );
+			}
 		}
 	}
-	//TODO: if button & event, call an instrument
-	// see latched button
-	instrString +="endin\n";
+
+	QString instrString = instrLines.isEmpty() ? "" :  "instr MidiController\n" + instrLines + "endin\n";
 	return instrString;
 }
 

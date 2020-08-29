@@ -1816,8 +1816,10 @@ void CsoundQt::saveWidgetsToQml()
     QString qml = documentPages[curPage]->getQml();
 
 	//test:
+	// later put it into separate action "Insert MIDI bindings" in Edit Menu
 	QString ms = documentPages[curPage]->getMidiControllerInstrument();
 	qDebug() << ms;
+	insertText("\n" + ms + "\n");
 
     //QString dir = lastUsedDir;
     QString name = documentPages[curPage]->getFileName();
