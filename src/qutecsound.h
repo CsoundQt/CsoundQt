@@ -224,6 +224,7 @@ private slots:
 	void showUtilities(bool);
 	void getToIn();
 	void inToGet();
+	void insertMidiControlInstrument();
 	void updateCsladspaText();
 	void updateCabbageText();
     void saveWidgetsToQml();
@@ -413,6 +414,7 @@ private:
 	QAction *scratchPadCsdModeAct;
 	QAction *getToInAct;
 	QAction *inToGetAct;
+	QAction *midiControlAct;
 	QAction *csladspaAct;
 	QAction *cabbageAct;
     QAction *qmlAct;

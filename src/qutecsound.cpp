@@ -1769,7 +1769,21 @@ void CsoundQt::showUtilities(bool show)
 
 void CsoundQt::inToGet()
 {
-    documentPages[curPage]->inToGet();
+	documentPages[curPage]->inToGet();
+}
+
+void CsoundQt::insertMidiControlInstrument()
+{
+
+	QString instrument = documentPages[curPage]->getMidiControllerInstrument();
+	qDebug() << instrument;
+	int ret = QMessageBox::information(nullptr, tr("Insert"),
+		tr("This function generates a Csound instrument from the MIDI bindings of your widgets (if thre is any) and inserts to the text editor at the current cursor position\n"
+		"It can be useful if you want to run the csd outside of CsoundQt with your MIDI controller.\n"				"Rembember to add -Ma or similar MIDI options to the CsOptions."),   QMessageBox::Cancel |QMessageBox::Ok);
+	if (ret==QMessageBox::Ok) {
+		insertText("\n" + instrument + "\n");
+	}
+
 }
 
 void CsoundQt::getToIn()
@@ -1814,12 +1828,6 @@ void CsoundQt::updateCabbageText()
 void CsoundQt::saveWidgetsToQml()
 {
     QString qml = documentPages[curPage]->getQml();
-
-	//test:
-	// later put it into separate action "Insert MIDI bindings" in Edit Menu
-	QString ms = documentPages[curPage]->getMidiControllerInstrument();
-	qDebug() << ms;
-	insertText("\n" + ms + "\n");
 
     //QString dir = lastUsedDir;
     QString name = documentPages[curPage]->getFileName();
@@ -3252,7 +3260,8 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     joinAct->setShortcut(tr(""));
     inToGetAct->setShortcut(tr(""));
     getToInAct->setShortcut(tr(""));
-    csladspaAct->setShortcut(tr(""));
+	midiControlAct->setShortcut(tr(""));
+	csladspaAct->setShortcut(tr(""));
     findAct->setShortcut(tr("Ctrl+F"));
     findAgainAct->setShortcut(tr("Ctrl+G"));
     configureAct->setShortcut(tr("Ctrl+,"));
@@ -3628,6 +3637,11 @@ void CsoundQt::createActions()
     getToInAct->setStatusTip(tr("Convert chnget/chnset to invalue/outvalue"));
     getToInAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(getToInAct, SIGNAL(triggered()), this, SLOT(getToIn()));
+
+	midiControlAct = new QAction(tr("Insert MidiControl instrument"), this);
+	midiControlAct->setStatusTip(tr("Generate instrument according to MIDI bindings of widgets"));
+	midiControlAct->setShortcutContext(Qt::ApplicationShortcut);
+	connect(midiControlAct, SIGNAL(triggered()), this, SLOT(insertMidiControlInstrument()));
 
     csladspaAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Insert/Update CsLADSPA text"), this);
     csladspaAct->setStatusTip(tr("Insert/Update CsLADSPA section to csd file"));
@@ -4444,6 +4458,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(joinAct);
     editMenu->addAction(inToGetAct);
     editMenu->addAction(getToInAct);
+	editMenu->addAction(midiControlAct);
     // editMenu->addAction(csladspaAct);
     // editMenu->addAction(cabbageAct);
     editMenu->addSeparator();

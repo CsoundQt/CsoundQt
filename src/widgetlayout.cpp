@@ -1046,55 +1046,69 @@ QString WidgetLayout::getMidiControllerInstrument()
 	for (int i = 0; i < registeredControllers.size(); i++) {
 		if (registeredControllers[i].cc >= 0 && registeredControllers[i].chan>0) {
 			QuteWidget * widget = registeredControllers[i].widget;
-			qDebug() << "Found MIDI bindig for " << registeredControllers[i].widget->getChannelName() << ": " << registeredControllers[i].chan << " " << registeredControllers[i].cc;
-			if (widget->getWidgetType()=="BSBButton" ) {
-				QString type = widget->property("QCS_type").toString();
-				qDebug() << "Button of type: " << type;
-				if (type == "event" || type == "pictevent" ) {
-					QString eventLine = widget->property("QCS_eventLine").toString();
-					qDebug() << eventLine;
-					instrLines += QString(R"(
-	if (trigger:k(ctrl7:k(1,64,0,1),0.9, 0) == 1) then
-		scoreline {{ %1 }}, 1
-	endif)").arg(eventLine) + "\n";
-					// find out if it is latched button and event is negative
-					if ( widget->property("QCS_latch").toBool() ) {
-						QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
-						if (lineElements.size() > 0 && lineElements[0] == "i") {
-							// Remove first element if it is "i"
-							lineElements.removeAt(0);
-						}
-						else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
-							lineElements[0] = lineElements[0].mid(1); // Remove "i" character
-						}
-
-						if (lineElements.size() > 2 &&
-						        lineElements[2].toDouble() < 0 ) {
-
-							lineElements[0].prepend("-");
-							lineElements.prepend("i");
-							instrLines +=
-							        QString(R"(
-	if (trigger:k(ctrl7:k(1,64,0,1),0.1, 1) == 1) then
-		scoreline {{ %1 }}, 1
-	endif)").arg( lineElements.join(" ") ) + "\n";
-						}
+			//qDebug() << "Found MIDI bindig for " << registeredControllers[i].widget->getChannelName() << ": " << registeredControllers[i].chan << " " << registeredControllers[i].cc;
+			bool isEventButton = (widget->getWidgetType()=="BSBButton"  && widget->property("QCS_type").toString().contains("event") ); // type "event" or "pictevent"
+			if ( isEventButton) {
+				QString eventLine = widget->property("QCS_eventLine").toString();
+				qDebug() << eventLine;
+				instrLines += QString(R"(
+	if (trigger:k(ctrl7:k(%1,%2,0,1),0.9, 0) == 1) then
+		scoreline {{ %3 }}, 1 ; start
+	endif)")
+						.arg(registeredControllers[i].chan)
+						.arg(registeredControllers[i].cc)
+						.arg(eventLine) + "\n";
+				// find out if it is latched button and event is negative
+				if ( widget->property("QCS_latch").toBool() ) {
+					QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+					if (lineElements.size() > 0 && lineElements[0] == "i") {
+						// Remove first element if it is "i"
+						lineElements.removeAt(0);
+					}
+					else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
+						lineElements[0] = lineElements[0].mid(1); // Remove "i" character
 					}
 
+					if (lineElements.size() > 2 &&
+							lineElements[2].toDouble() < 0 ) {
 
+
+						QString newEventLine = QString("event \"i\", -nstrnum(%1), ").arg(lineElements[0]);
+						lineElements.removeFirst();
+						newEventLine += lineElements.join(",");
+						qDebug() << "line to stop the instrument: " << newEventLine;
+						instrLines +=
+								QString(R"(
+	if (trigger:k(ctrl7:k(%1,%2,0,1),0.1, 1) == 1) then
+		%3 ; stop
+	endif)")
+								.arg(registeredControllers[i].chan)
+								.arg(registeredControllers[i].cc)
+								.arg( newEventLine ) + "\n";
+					}
 				}
 			} else {
-				instrLines += QString ("\t chnset ctrl7:k(%1, %2, %3, %4), \"%5\"\n")
+				if (widget->getWidgetType()=="BSBButton" &&
+						widget->property("QCS_type").toString().contains("value")) {
+					instrLines += QString ("\tchnset ctrl7:k(%1, %2, 0, %3), \"%4\"\n") //NB! this does not work when pressed value is negative...
+							.arg(registeredControllers[i].chan)
+							.arg(registeredControllers[i].cc)
+							.arg( widget->property("QCS_pressedValue").toDouble() )
+							.arg(widget->getChannelName() );
+				} else {
+				instrLines += QString ("\tchnset ctrl7:k(%1, %2, %3, %4), \"%5\"\n")
 				        .arg(registeredControllers[i].chan)
 				        .arg(registeredControllers[i].cc)
 				        .arg( widget->property("QCS_minimum").toDouble() )
 				        .arg( widget->property("QCS_maximum").toDouble() )
 				        .arg(widget->getChannelName() );
+				}
 			}
 		}
 	}
 
-	QString instrString = instrLines.isEmpty() ? "" :  "instr MidiController\n" + instrLines + "endin\n";
+	QString instrString = instrLines.isEmpty() ? "" :
+			"alwayson \"MidiControl\"\ninstr MidiControl\n" + instrLines + "endin\n";
 	return instrString;
 }
 
