@@ -491,10 +491,10 @@ void QuteButton::performAction() {
     QString type = property("QCS_type").toString();
     QString eventLine = property("QCS_eventLine").toString();
     QString name = m_channel;
+	bool isLatch = property("QCS_latch").toBool();
 
 	if (type.contains("event") && !eventLine.isEmpty()) {
-		if ( hasIndefiniteDuration() ) {
-			bool isLatch = property("QCS_latch").toBool();
+		if ( hasIndefiniteDuration() ) {		
 			if ((isLatch && m_currentValue == 0)  || (!isLatch && m_isPlaying)) { // turn off
 				QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
 				if (lineElements.size() > 0 && lineElements[0] == "i") {
@@ -520,7 +520,9 @@ void QuteButton::performAction() {
 				emit(queueEventSignal(eventLine));
 			}
 		} else { // if not negative p3 then just fire the event
-			emit(queueEventSignal(eventLine));
+			if (!(isLatch && m_currentValue == 0)) { //do not fire the event if latched && m_value==0 && is positive p3
+				emit(queueEventSignal(eventLine));
+			}
 		}
     }
     else if (type == "value" || type == "pictvalue") {
