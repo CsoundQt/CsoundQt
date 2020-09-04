@@ -4,8 +4,6 @@
 # -*- coding: utf-8 -*-
 
 import PythonQt.QtGui as pqt
-from string import replace
-
       
 def remNewline():
     selection = q.getSelectedText()

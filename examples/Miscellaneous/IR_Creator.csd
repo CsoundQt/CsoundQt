@@ -141,7 +141,7 @@ schedule("Run",0,-1)
  <x>1040</x>
  <y>192</y>
  <width>652</width>
- <height>432</height>
+ <height>529</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -416,7 +416,7 @@ schedule("Run",0,-1)
   <minimum>0.001</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2</value>
+  <value>1</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>curve</objectName>
@@ -638,7 +638,7 @@ schedule("Run",0,-1)
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -675,7 +675,7 @@ schedule("Run",0,-1)
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -712,7 +712,7 @@ schedule("Run",0,-1)
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -749,7 +749,7 @@ schedule("Run",0,-1)
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -803,6 +803,42 @@ schedule("Run",0,-1)
   <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>70</x>
+  <y>384</y>
+  <width>529</width>
+  <height>125</height>
+  <uuid>{7c91b32e-f024-4869-99be-d42ddc332dde}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>0. run the csd
+1. adjust the params on the left side
+2. push Listen and change the params until you are fine
+3. push Write Out to write the IR file
+4. Open File to load any of your sound files
+5. push Start/Stop </label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>

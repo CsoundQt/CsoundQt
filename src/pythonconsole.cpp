@@ -61,7 +61,7 @@ void PythonConsole::evaluate(QString evalCode, bool notify)
 	//  PythonQtObjectPtr  mainContext = m_pqcs->getMainModule();
 	mainContext.evalScript(evalCode.trimmed() + "\n");
 	if (notify) {
-		QString printScript = "print 'Evaluated " + QString::number(countLines(evalCode)) + " lines.'";
+		QString printScript = "print('Evaluated " + QString::number(countLines(evalCode)) + " lines.')";
 		mainContext.evalScript(printScript);
 		m_console->appendCommandPrompt();
 	}
@@ -78,7 +78,7 @@ void PythonConsole::runScript(QString fileName)
 	//  PythonQtObjectPtr  mainContext = m_pqcs->getMainModule();
 	QFile file(fileName);
 	if (!file.open(QIODevice::ReadOnly)) {
-		QString printScript = "print 'Error opening file: " + fileName + "'";
+		QString printScript = "print('Error opening file: " + fileName + "')";
 		mainContext.evalScript(printScript);
 	}
 	QString evalCode = QString(file.readAll());

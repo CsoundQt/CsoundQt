@@ -15,7 +15,7 @@ def getColors(currentColor): # write the current RGB values as floats 0..1 to ac
 cdia = QColorDialog() #create QColorDiaog object
 csd=q.loadDocument("rgb-widgets.csd") # get the index of csd. Returns the index if already open. 
 if ( csd == -1): # report error, if opening failed
-    print "Could not find rgb-widgets.csd. Exiting"
+    print("Could not find rgb-widgets.csd. Exiting")
     exit(-1)
 q.setDocument(csd)# set focus to the csd
 cdia.connect(SIGNAL("currentColorChanged(QColor)"),getColors) # create connection between  color changes in the dialog window and function getColors
