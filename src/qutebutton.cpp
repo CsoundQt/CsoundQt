@@ -52,6 +52,8 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 	onIcon.addPixmap(p, QIcon::Normal, QIcon::On);
 	p.fill(QColor(Qt::black));
 	onIcon.addPixmap(p, QIcon::Normal, QIcon::Off);
+
+	m_isPlaying = false; // used for non-latched eventButton to turn the instrument off on second press
 }
 
 QuteButton::~QuteButton()
@@ -406,46 +408,14 @@ void QuteButton::popUpMenu(QPoint pos)
 
 void QuteButton::setMidiValue(int value)
 {
-	double pressedVal = property("QCS_pressedValue").toDouble();
-	double newval= value == 0 ? 0 : pressedVal;
-	setValue(newval);
-	QString type = property("QCS_type").toString();
-    // if event type, start/stop event on MIDI button press/release
-    if (m_valueChanged && (type == "event" || type == "pictevent") ) {
-		QString eventLine = property("QCS_eventLine").toString();
-		if (newval==1) {
-			emit(queueEventSignal(eventLine));
-		}
-		// on release check if event was with indefinite duration, then turn it off
-		if (newval==0 && eventLine.size() > 0) {
-			QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
-			if (lineElements.size() > 0 && lineElements[0] == "i") {
-                // Remove first element if it is "i"
-                lineElements.removeAt(0);
-			}
-			else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
-				lineElements[0] = lineElements[0].mid(1); // Remove "i" character
-			}
-			//bool test = property("QCS_latch").toBool();
-            if (lineElements.size() > 2 &&
-                    lineElements[2].toDouble() < 0 &&
-                    property("QCS_latch").toBool() ) {
-                // If duration is negative, turn it off. But not when it is not a latched button!
-				lineElements[0].prepend("-");
-				lineElements.prepend("i");
-				emit(queueEventSignal(lineElements.join(" ")));
-			}
-		}
-	} else if ((type == "value" || type == "pictvalue") && newval == pressedVal) {
-        QStringList reservedChannels = QStringList() << "_Play" <<"_Stop" << "_Pause"
-                                                     << "_Render" << "_Browse1"
-                                                     << "_Browse2" << "_MBrowse";
-        if (reservedChannels.contains(m_channel))
-			buttonReleased(); // TODO: test this, maybe now buttonReleased has changed!!
+	//double pressedVal = property("QCS_pressedValue").toDouble();
+	//double newval= value == 0 ? 0 : pressedVal;
+	//setValue(newval);
+	if (value>0) {
+		buttonPressed();
+	} else {
+		buttonReleased();
 	}
-	QPair<QString, double> channelValue(m_channel, newval);
-	emit newValue(channelValue);
-
 }
 
 void QuteButton::refreshWidget()
@@ -514,11 +484,6 @@ void QuteButton::applyInternalProperties()
         qDebug() << "Warning! QuteButton::applyInternalProperties() unrecognized type:"
                  << type;
 	}
-
-
-    // Why is this here?
-    // QString colorstr = property("QCS_color").value<QColor>().name();
-    // m_widget->setStyleSheet("QPushButton { border-color:" + colorstr + "; }");
 }
 
 
@@ -527,42 +492,36 @@ void QuteButton::performAction() {
     QString eventLine = property("QCS_eventLine").toString();
     QString name = m_channel;
 
-    if (type == "event" || type == "pictevent") {
-        if (property("QCS_latch").toBool() && eventLine.size() > 0) {
-            QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
-            if (lineElements.size() > 0 && lineElements[0] == "i") {
-                lineElements.removeAt(0); // Remove first element if it is "i"
-            }
-            else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
-                lineElements[0] = lineElements[0].mid(1); // Remove "i" character
-            }
-            // If duration is negative, use button to turn note on and off
-            if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) {
-                if (m_currentValue == 0) { // Button has turned off. Turn off instrument
-                    if ( lineElements[0].startsWith("\"") || lineElements[0].startsWith("\'")  ) {
-                        //qDebug()<<"Stopping named instrument: " << lineElements[0];
-                        lineElements[0].insert(1,"-");
-                    }
-                    else {
-                        // NB! what if string? find out instrument number
-                        lineElements[0].prepend("-");
-                    }
-                    lineElements.prepend("i");
-					setValue(0); // was 1
-                    emit(queueEventSignal(lineElements.join(" ")));
-                }
-                else { // Button has turned on. Turn on instrument
-					setValue(1); // was 0
-                    emit(queueEventSignal(eventLine));
-                }
-            }
-            else {
-                emit(queueEventSignal(eventLine));
-            }
-        }
-        else {
-            emit(queueEventSignal(eventLine));
-        }
+	if (type.contains("event") && !eventLine.isEmpty()) {
+		if ( hasIndefiniteDuration() ) {
+			bool isLatch = property("QCS_latch").toBool();
+			if ((isLatch && m_currentValue == 0)  || (!isLatch && m_isPlaying)) { // turn off
+				QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+				if (lineElements.size() > 0 && lineElements[0] == "i") {
+					lineElements.removeAt(0); // Remove first element if it is "i"
+				}
+				else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
+					lineElements[0] = lineElements[0].mid(1); // Remove "i" character
+				}
+				if ( lineElements[0].startsWith("\"") || lineElements[0].startsWith("\'")  ) {
+					//qDebug()<<"Stopping named instrument: " << lineElements[0];
+					lineElements[0].insert(1,"-");
+				}
+				else {
+					lineElements[0].prepend("-");
+				}
+				lineElements.prepend("i");
+				setValue(0);
+				m_isPlaying = false;
+				emit(queueEventSignal(lineElements.join(" ")));
+			} else {
+				setValue( property("QCS_pressedValue").toDouble()  ); // was 1
+				m_isPlaying = true;
+				emit(queueEventSignal(eventLine));
+			}
+		} else { // if not negative p3 then just fire the event
+			emit(queueEventSignal(eventLine));
+		}
     }
     else if (type == "value" || type == "pictvalue") {
         if(!name.startsWith("_")) {
@@ -601,7 +560,26 @@ void QuteButton::performAction() {
                         "be an error in a next release";
             emit newValue(QPair<QString, double>(name, m_currentValue));
         }
-    }
+	}
+}
+
+bool QuteButton::hasIndefiniteDuration()
+{
+	QString eventLine = property("QCS_eventLine").toString();
+	if ( !eventLine.isEmpty()) {
+		QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+		if (lineElements.size() > 0 && lineElements[0] == "i") {
+			lineElements.removeAt(0); // Remove first element if it is "i"
+		}
+		else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
+			lineElements[0] = lineElements[0].mid(1); // Remove "i" character
+		}
+		// If duration is negative, use button to turn note on and off
+		if (lineElements.size() > 2 && lineElements[2].toDouble() < 0) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void QuteButton::buttonPressed()
@@ -620,6 +598,8 @@ void QuteButton::buttonPressed()
 		m_currentValue = m_value;
     }
 
+
+
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -636,9 +616,13 @@ void QuteButton::buttonReleased()
         performAction();
         return;
     }
-    if (!property("QCS_latch").toBool()) {
+	if (!property("QCS_latch").toBool()) {
         m_currentValue = 0;
+		if (  property("QCS_type").toString().contains("event") && hasIndefiniteDuration() ) {
+			performAction(); // to stop the playing instrument
+		}
     }
+
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
