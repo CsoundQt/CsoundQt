@@ -292,6 +292,7 @@ private slots:
     void ambiguosShortcut();
     void testAudioSetup();
     void checkSyntaxMenuAction();
+    void tabMoved(int to, int from);
 
     DocumentPage *getCurrentDocumentPage() {
         if(curPage >= documentPages.size())

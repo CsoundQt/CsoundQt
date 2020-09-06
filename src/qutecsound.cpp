@@ -261,11 +261,14 @@ CsoundQt::CsoundQt(QStringList fileNames)
         m_scratchPad->hide();  // Hide until CsoundQt has finished loading
     documentTabs = new QTabWidget (this);
     documentTabs->setTabsClosable(true);
+    documentTabs->setMovable(true);
     connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
     // To force changing to clicked tab before closing
     connect(documentTabs, SIGNAL(tabCloseRequested(int)),
             documentTabs, SLOT(setCurrentIndex(int)));
     connect(documentTabs, SIGNAL(tabCloseRequested(int)), closeTabAct, SLOT(trigger()));
+    connect(documentTabs->tabBar(), SIGNAL(tabMoved(int, int)), this, SLOT(tabMoved(int, int)));
+
     setCentralWidget(documentTabs);
     documentTabs->setDocumentMode(true);
     modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
@@ -1049,6 +1052,18 @@ void CsoundQt::checkSyntaxMenuAction()
     m_options->checkSyntaxOnly = true;
     play();
     m_options->checkSyntaxOnly = prev;
+}
+
+void CsoundQt::tabMoved(int to, int from)  // arguments should be from, but probably the other (counter-)moving tab is reported here, not the one that is dragged
+{
+    qDebug() << "Tab moved from " << from << " to: " << to;
+    if (to<0 || to>=documentPages.count() || from<0 || from>=documentPages.count() ) {
+        qDebug() << "Tab index out of range";
+        return;
+    }
+    std::swap( documentPages[to], documentPages[from] );
+    curPage = to;
+    changePage(to);
 }
 
 QString CsoundQt::getSaveFileName()
