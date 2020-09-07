@@ -36,6 +36,11 @@
 ################################################################################
 
 
+#Support for Qt4 dropped from v0.9.8 de facto, v1.0.0 declaring it here:
+lessThan(QT_MAJOR_VERSION,5): error("Qt5 or higher required. Use CsoundQt 0.9.7 or earlier to build for Qt4.")
+
+csound5: error("Building for Csound5 nont supported.")
+
 DEFINES += NOMINMAX
 # DEFINES += USE_WIDGET_MUTEX
 
@@ -44,34 +49,26 @@ csound6 {
 }
 
 # Add C++11 support since version 0.9.4
-greaterThan(QT_MAJOR_VERSION, 4){
 CONFIG += c++11
-} else {
-QMAKE_CXXFLAGS += -std=c++0x
-}
 
-!csound5 {
-    DEFINES += CSOUND6
-    CONFIG += csound6
-    debugger {
-        DEFINES += QCS_DEBUGGER
-        message("Building debugger.")
-    }
-    message("Building for Csound 6.")
-} else {
-    message("Building for Csound 5 (unsupported).")
+#for csound6 (may need extra conditions for csound7 later:
+DEFINES += CSOUND6
+CONFIG += csound6
+debugger {
+    DEFINES += QCS_DEBUGGER
+    message("Building debugger.")
 }
+message("Building for Csound 6.")
 
-QT += concurrent network
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-    QT += widgets
-    QT += printsupport
-    DEFINES += USE_QT5
-    CONFIG += QCS_QT5
-} else {
-    DEFINES += USE_QT_LT_50
-}
+QT += concurrent network widgets printsupport
+DEFINES += USE_QT5
+CONFIG += QCS_QT5
+
+
+
+# check for this in the code to remove old parts:   DEFINES += USE_QT_LT_50
+
 
 greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 2) {
     QT += quickwidgets
@@ -116,12 +113,12 @@ record_support|perfThread_build {
     message("Building recording support.")
 }
 
-!csound5 {
-    debugger {
-        DEFINES += QCS_DEBUGGER
-        message("Building debugger.")
-    }
+
+debugger {
+    DEFINES += QCS_DEBUGGER
+    message("Building debugger.")
 }
+
 
 include(src/src.pri)
 TRANSLATIONS = "src/translations/qutecsound_en.ts" \
