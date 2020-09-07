@@ -254,12 +254,7 @@ void PyQcsObject::setCsChannel(QString channel, double value, int index)
 	MYFLT *p;
 	if (e != NULL) {
 		CSOUND *cs = e->getCsound();
-#ifndef CSOUND6
-        if (cs != NULL && !(csoundGetChannelPtr(cs, &p, channel.toLocal8Bit(), CSOUND_CONTROL_CHANNEL | CSOUND_INPUT_CHANNEL))) {
-            *p = (MYFLT) value;
-            return;
-        }
-#else
+
         if (cs) {
             controlChannelHints_t hints;  // this does not work with csound5
 			int ret = csoundGetControlChannelHints(cs, channel.toLocal8Bit(), &hints);
@@ -268,7 +263,6 @@ void PyQcsObject::setCsChannel(QString channel, double value, int index)
 				return;
 			}
 		}
-#endif
     }
 
 	QString message="Channel '" + channel + "' does not exist or is not exposed with chn_k.";
@@ -324,11 +318,7 @@ QString PyQcsObject::getCsStringChannel(QString channel, int index)
 		CSOUND *cs = e->getCsound();
 
 		if (cs != NULL) {
-#ifdef CSOUND6
 			int maxlen = csoundGetChannelDatasize(cs, channel.toLocal8Bit());
-#else
-			int maxlen = csoundGetStrVarMaxLen(cs);
-#endif
 			char *value = new char[maxlen];
 			if ( !( csoundGetChannelPtr(cs,(MYFLT **) &value,channel.toLocal8Bit(),
 										CSOUND_STRING_CHANNEL | CSOUND_OUTPUT_CHANNEL))) {
@@ -568,12 +558,12 @@ MYFLT *PyQcsObject::getTableArray(int ftable, int index)
 	return *m_tablePtr;
 }
 
-#ifdef CSOUND6
+
 void PyQcsObject::evaluateCsound(QString code)
 {
 	m_qcs->evaluateCsound(code);
 }
-#endif
+
 
 //void PyQcsObject::writeListToTable(int ftable, QVariantList values, int offset, int count)
 //{

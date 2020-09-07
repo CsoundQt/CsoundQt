@@ -965,11 +965,7 @@ void CsoundQt::evaluate(QString code)
 
 void CsoundQt::evaluateCsound(QString code)
 {
-#ifdef CSOUND6
     documentPages[curPage]->sendCodeToEngine(code);
-#else
-    qDebug() << "evaluateCsound only available in Csound6";
-#endif
 }
 
 void CsoundQt::breakpointReached()
@@ -994,7 +990,6 @@ void CsoundQt::evaluatePython(QString code)
 
 void CsoundQt::evaluateString(QString evalCode)
 {
-#ifdef CSOUND6
     TREE *testTree = NULL;
     if  (scratchPadCsdModeAct->isChecked()) {
         // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
@@ -1016,7 +1011,6 @@ void CsoundQt::evaluateString(QString evalCode)
     } else {
         evaluatePython(evalCode);
     }
-#endif
 }
 
 void CsoundQt::setScratchPadMode(bool csdMode)
@@ -1287,18 +1281,10 @@ void CsoundQt::setupEnvironment()
     QString opcodedir = initialDir + "/../Frameworks/CsoundLib.framework/Resources/Opcodes";
 #endif
     if (QFile::exists(opcodedir)) {
-#ifdef CSOUND6
 #ifdef USE_DOUBLE
         csoundSetGlobalEnv("OPCODE6DIR64", opcodedir.toLocal8Bit().constData());
 #else
         csoundSetGlobalEnv("OPCODE6DIR", opcodedir.toLocal8Bit().constData());
-#endif
-#else
-#ifdef USE_DOUBLE
-        csoundSetGlobalEnv("OPCODEDIR64", opcodedir.toLocal8Bit().constData());
-#else
-        csoundSetGlobalEnv("OPCODEDIR", opcodedir.toLocal8Bit().constData());
-#endif
 #endif
     }
 #endif

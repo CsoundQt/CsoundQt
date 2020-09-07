@@ -28,9 +28,7 @@
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
 #endif
 
-#ifdef CSOUND6
 #include "csound_standard_types.h"
-#endif
 
 #include "csoundengine.h"
 #include "widgetlayout.h"
@@ -62,10 +60,8 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
     m_recording = false;
 #ifndef QCS_DESTROY_CSOUND
     ud->csound=csoundCreate( (void *) ud);
-#ifdef CSOUND6
     ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
     Q_ASSERT(ud->midiBuffer);
-#endif
 #endif
     eventQueue.resize(QCS_MAX_EVENTS);
     eventTimeStamps.resize(QCS_MAX_EVENTS);
@@ -93,89 +89,7 @@ CsoundEngine::~CsoundEngine()
     delete ud;
 }
 
-#ifndef CSOUND6
 
-void CsoundEngine::messageCallbackThread(CSOUND *csound,
-                                         int /*attr*/,
-                                         const char *fmt,
-                                         va_list args)
-{
-
-    CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-    qDebug() << msg;
-    if (!(ud->flags & QCS_NO_CONSOLE_MESSAGES)) {
-        QString msg;
-        msg = msg.vsprintf(fmt, args);
-        if (msg.isEmpty()) {
-            return;
-        }
-        ud->csEngine->queueMessage(msg);
-    }
-}
-#endif
-
-#ifndef CSOUND6
-void CsoundEngine::outputValueCallback (CSOUND *csound,
-                                        const char *channelName,
-                                        MYFLT value)
-{
-    // Called by the csound running engine when 'outvalue' opcode is used
-    // To pass data from Csound to CsoundQt
-    CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-    QString name = QString(channelName);
-    if (name.startsWith('$')) {
-        QString channelName = name;
-        channelName.chop(name.size() - (int) value + 1);
-        QString sValue = name;
-        sValue = sValue.right(name.size() - (int) value);
-        channelName.remove(0,1);
-        ud->csEngine->passOutString(channelName, sValue);
-    }
-    else {
-        ud->csEngine->passOutValue(name, value);
-    }
-}
-
-void CsoundEngine::inputValueCallback(CSOUND *csound,
-                                      const char *channelName,
-                                      MYFLT *value)
-{
-    // Called by the csound running engine when 'invalue' opcode is used
-    // To pass data from qutecsound to Csound
-    CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-    QString name = QString(channelName);
-    if (name.startsWith('$')) { // channel is a string channel
-        char *string = (char *) value;
-        QString newValue = ud->wl->getStringForChannel(name.mid(1));
-        int maxlen = csoundGetStrVarMaxLen(csound);
-        strncpy(string, newValue.toLocal8Bit(), maxlen);
-    }
-    else {  // Not a string channel
-        //FIXME check if mouse tracking is active, and move this from here
-        if (name == "_MouseX") {
-            *value = (MYFLT) ud->mouseValues[0];
-        }
-        else if (name == "_MouseY") {
-            *value = (MYFLT) ud->mouseValues[1];
-        }
-        else if(name == "_MouseRelX") {
-            *value = (MYFLT) ud->mouseValues[2];
-        }
-        else if(name == "_MouseRelY") {
-            *value = (MYFLT) ud->mouseValues[3];
-        }
-        else if(name == "_MouseBut1") {
-            *value = (MYFLT) ud->mouseValues[4];
-        }
-        else if(name == "_MouseBut2") {
-            *value = (MYFLT) ud->mouseValues[5];
-        }
-        else {
-            *value = (MYFLT) ud->wl->getValueForChannel(name);
-        }
-    }
-}
-#else
 void CsoundEngine::outputValueCallback (CSOUND *csound,
                                         const char *channelName,
                                         void *channelValuePtr,
@@ -344,7 +258,6 @@ void CsoundEngine::sendMidiOut(QVector<unsigned char> &message)
     (void) message;
 }
 
-#endif
 
 void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char * /*name*/)
 {
