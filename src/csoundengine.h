@@ -184,6 +184,7 @@ public:
 
 	bool isRunning();
 	bool isRecording();
+	bool isPaused() {return m_paused; }
 
 	// To pass to parent document for access from python scripting
 	CSOUND * getCsound();
@@ -262,6 +263,7 @@ private:
 	QList <int> keyReleaseBuffer; // protected by keyMutex
 
 	bool m_recording;
+	bool m_paused;
     // To prevent from starting a Csound instance while another is starting or closing
     QMutex m_playMutex;
 	QMutex eventMutex;

@@ -2045,7 +2045,11 @@ void CsoundQt::play(bool realtime, int index)
         // Csound compilation failed
         runAct->setChecked(false);
     } else if (ret == 0) {
-        // No problem: enable widgets
+		// No problem:
+		// set playing icon on tab
+		documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/gtk-media-play-ltr.png").arg(m_options->theme )));
+
+		// enable widgets
         if(m_options->checkSyntaxOnly) {
             return;
         }
@@ -2155,6 +2159,11 @@ void CsoundQt::pause(int index)
     }
     if (docIndex >= 0 && docIndex < documentPages.size()) {
         documentPages[docIndex]->pause();
+		if (documentPages[docIndex]->getEngine()->isPaused() ) {
+			documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/gtk-media-pause.png").arg(m_options->theme )));
+		} else {
+			documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/gtk-media-play-ltr.png").arg(m_options->theme )));
+		}
     }
 }
 
@@ -2173,10 +2182,11 @@ void CsoundQt::stop(int index)
         qDebug() << "CsoundQt::stop : document index" << docIndex
                  << "out of range (max=" << documentPages.size() << ")";
         markStopped();
-        return;
+		return;
     }
     if (documentPages[docIndex]->isRunning()) {
         documentPages[docIndex]->stop();
+		documentTabs->setTabIcon(docIndex, QIcon());
 
 #ifdef Q_OS_WIN
         // necessary since sometimes fltk plugin closes the OLE/COM connection on csoundCleanup
@@ -2194,6 +2204,7 @@ void CsoundQt::stopAll()
 {
     for (int i = 0; i < documentPages.size(); i++) {
         documentPages[i]->stop();
+		documentTabs->setTabIcon(i, QIcon());
     }
     markStopped();
 }
@@ -2204,6 +2215,7 @@ void CsoundQt::stopAllOthers()
         if (i != curPage) {
             DocumentPage *documentPage = documentPages[i];
             documentPage->stop();
+			documentTabs->setTabIcon(i, QIcon());
         }
     }
     //	markStopped();
@@ -2230,12 +2242,15 @@ void CsoundQt::record(bool rec)
             play();
         }
         int ret = documentPages[curPage]->record(m_options->sampleFormat);
-        if (ret != 0) {
+		documentTabs->setTabIcon(curPage, QIcon(QString(":/themes/%1/gtk-media-record.png").arg(m_options->theme )));
+		if (ret != 0) {
             recAct->setChecked(false);
+			documentTabs->setTabIcon(curPage, QIcon());
         }
     }
     else {
         documentPages[curPage]->stopRecording();
+		documentTabs->setTabIcon(curPage, QIcon());
     }
 }
 

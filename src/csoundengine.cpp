@@ -734,9 +734,11 @@ void CsoundEngine::stop()
 void CsoundEngine::pause()
 {
     QMutexLocker locker(&m_playMutex);
-    if (ud->perfThread && (ud->perfThread->GetStatus() == 0))  {
-        //ud->perfThread->Pause();
-        ud->perfThread->TogglePause();
+    if (ud->perfThread && (ud->perfThread->GetStatus() == 0))  {		
+		//ud->perfThread->Pause();
+		ud->perfThread->TogglePause();
+		m_paused = !m_paused;
+		qDebug() << "Paused: " << m_paused;
     }
 }
 
@@ -745,6 +747,7 @@ int CsoundEngine::startRecording(int sampleformat, QString fileName)
     qDebug("start recording (%i-bit samples): %s",
            (sampleformat + 2) * 8,
            fileName.toLocal8Bit().constData());
+	m_paused = false;
     // clip instead of wrap when converting floats to ints
 #ifdef PERFTHREAD_RECORD
     // perfthread record API is only available with csound >= 6.04
@@ -760,6 +763,7 @@ int CsoundEngine::startRecording(int sampleformat, QString fileName)
 void CsoundEngine::stopRecording()
 {
     m_recording = false;
+	m_paused = false;
 
 #ifdef	PERFTHREAD_RECORD
     if (ud->perfThread) {
@@ -991,6 +995,7 @@ int CsoundEngine::runCsound()
         ud->perfThread = new CsoundPerformanceThread(ud->csound);
         ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
         ud->perfThread->Play();
+		m_paused = false;
     }
     ud->audioOutputBuffer.resize(ud->numChnls * 2048);
     return 0;
@@ -1007,6 +1012,7 @@ void CsoundEngine::stopCsound()
     CsoundPerformanceThread *pt = ud->perfThread;
 
     pt->Stop();
+	m_paused = false;
 
     unsigned int waitTime = 100;
 
