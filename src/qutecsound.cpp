@@ -321,7 +321,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_scratchPad->setFocusProxy(liveeditor->getDocumentView());
     scratchPadCsdModeAct->setChecked(true);
 
-    if (documentPages.size() == 0) { // No files yet open. Open default
+	if (documentPages.size() == 0 ) { // No files yet open. Open default
         newFile();
     }
 
@@ -431,6 +431,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     // Open files saved from last session
     if (!lastFiles.isEmpty()) {
+		// close the first, default page.
+		//qDebug() << " First page: " << documentPages[0]->getFileName() << lastFiles.count();
+		if (documentPages[0]->getFileName().isEmpty() && lastFiles.count()>0) { // first empty page
+			deleteTab(0);
+		}
         foreach (QString lastFile, lastFiles) {
             if (lastFile!="" && !lastFile.startsWith("untitled")) {
                 loadFile(lastFile);
