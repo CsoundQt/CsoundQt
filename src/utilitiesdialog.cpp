@@ -20,11 +20,7 @@
 	02111-1307 USA
 */
 
-#ifdef USE_QT5
 #include <QtWidgets>
-#else
-#include <QtGui>
-#endif
 
 #include "utilitiesdialog.h"
 #include "options.h"

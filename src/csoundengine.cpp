@@ -20,10 +20,8 @@
     02111-1307 USA
 */
 
-#ifdef USE_QT5
-#include <QtConcurrent>
-#endif
 
+#include <QtConcurrent>
 #include <QThread>
 
 #ifdef Q_OS_WIN

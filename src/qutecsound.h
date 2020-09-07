@@ -23,16 +23,12 @@
 #ifndef QUTECSOUND_H
 #define QUTECSOUND_H
 
-#ifdef USE_QT5
 #include <QtWidgets>
 #ifdef USE_QT_GT_53
 #include <QQuickWidget>
 #include <QQuickItem>
 #endif
-#else
-#include <QtGui>
-#include <QDesktopServices>
-#endif
+
 #include <QLocalServer>
 #include <QLocalSocket>
 

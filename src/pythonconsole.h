@@ -23,11 +23,8 @@
 #ifndef PYTHONCONSOLE_H
 #define PYTHONCONSOLE_H
 
-#ifdef USE_QT5
 #include <QtWidgets>
-#else
-#include <QtGui>
-#endif
+
 
 class PyQcsObject;
 class PythonQtScriptingConsole;

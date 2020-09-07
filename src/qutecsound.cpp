@@ -4534,10 +4534,8 @@ void CsoundQt::createMenus()
     viewMenu->addAction(showDebugAct);
 #endif
     viewMenu->addAction(midiLearnAct);
-#ifdef USE_QT5
     viewMenu->addAction(showVirtualKeyboardAct);
     viewMenu->addAction(showTableEditorAct);
-#endif
     viewMenu->addSeparator();
     viewMenu->addAction(viewFullScreenAct);
     viewMenu->addAction(viewEditorFullScreenAct);
@@ -6158,13 +6156,8 @@ void CsoundQt::getCompanionFileName()
         QString companion = "";
         if (documentPages[curPage]->getFileName().endsWith(".orc")) {
             // create an empty score file to run the orchestra scorelessly
-
-#ifdef USE_QT5
-            companion = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/empty.sco"; // QT >5.0
+			companion = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/empty.sco";
             QFile f(companion); // does it create it here
-#else
-            companion = QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/empty.sco";
-#endif
             f.open(QIODevice::ReadWrite | QIODevice::Text);
             f.close();
             qDebug() << "Created empty score file as companion: " << companion;
