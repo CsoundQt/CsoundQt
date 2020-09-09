@@ -4481,7 +4481,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(getToInAct);
 	editMenu->addAction(midiControlAct);
     // editMenu->addAction(csladspaAct);
-    // editMenu->addAction(cabbageAct);
+    editMenu->addAction(cabbageAct);
     editMenu->addSeparator();
     editMenu->addAction(editAct);
     editMenu->addSeparator();
