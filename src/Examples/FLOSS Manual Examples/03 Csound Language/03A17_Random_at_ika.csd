@@ -1,0 +1,1 @@
+kFadeIn linseg 0, .003, 1

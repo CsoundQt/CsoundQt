@@ -1,0 +1,1 @@
+kPointer = kPhasor*iSampleLen + rnd31:k(iPointerRndDev,0)

@@ -1,21 +1,17 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials </CsOptions>
+</CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
-
 sr = 44100
 nchnls = 2
 0dbfs = 1
 ksmps = 8
 
-giSine    ftgen     0, 0, 2^10, 10, 1
-
 instr 1
 kFreq     invalue   "freq"
 kAmp      invalue   "amp"
-aSin      oscili    kAmp, kFreq, giSine
-          outs      aSin, aSin
+aSin      poscil    kAmp, kFreq
+          out       aSin, aSin
 endin
 
 </CsInstruments>
@@ -23,3 +19,4 @@ endin
 i 1 0 10000
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

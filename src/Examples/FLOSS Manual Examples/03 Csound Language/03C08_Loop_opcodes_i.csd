@@ -1,6 +1,8 @@
 <CsoundSynthesizer>
+<CsOptions>
+-odac
+</CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 
   instr 1 ;loop_lt: counts from 1 upwards and checks if < 10
 icount    =         1
@@ -42,3 +44,4 @@ i 3 0 0
 i 4 0 0
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

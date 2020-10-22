@@ -1,25 +1,19 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac ;activates real time sound output
+-odac ;activates real time sound output
 </CsOptions>
-
 <CsInstruments>
-;Example by Iain McCurdy
-
 sr = 44100
 ksmps = 32
-nchnls = 1
+nchnls = 2
 0dbfs = 1
-
-giSine   ftgen   0, 0, 2^12, 10, 1  ; a sine wave
 
   instr 1
 ; -- create an input signal: short 'blip' sounds --
 kEnv    loopseg  0.5,0,0,0,0.0005,1,0.1,0,1.9,0,0 ; repeating envelope
 kCps    randomh  400, 600, 0.5                    ; 'held' random values
 aEnv    interp   kEnv                             ; a-rate envelope
-aSig    poscil   aEnv, kCps, giSine               ; generate audio
+aSig    poscil   aEnv, kCps                       ; generate audio
 
 ; -- create a delay buffer --
 iFdback =        0.7                    ; feedback ratio
@@ -28,14 +22,13 @@ aBufOut delayr   0.3                    ; read audio from end of buffer
         delayw   aSig+(aBufOut*iFdback)
 
 ; send audio to output (mix the input signal with the delayed signal)
-        out      aSig + (aBufOut*0.4)
+aOut    =        aSig + (aBufOut*0.4)
+        out      aOut/2, aOut/2
   endin
 
 </CsInstruments>
-
 <CsScore>
 i 1 0 25
-e
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

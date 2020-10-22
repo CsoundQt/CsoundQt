@@ -1,22 +1,19 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -o dac -Ma
+-o dac -m0
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
 0dbfs = 1
+seed 0
 
 ;frequency and amplitude multipliers for 11 partials of Risset's bell
-giFqs     ftgen     0, 0, -11, -2, .56,.563,.92,.923,1.19,1.7,2,2.74,3,\
-                    3.74,4.07
-giAmps    ftgen     0, 0, -11, -2, 1, 2/3, 1, 1.8, 8/3, 1.46, 4/3, 4/3, 1,\
-                    4/3
-giSine    ftgen     0, 0, 2^10, 10, 1
-          seed      0
-          massign   0, 1 ;all midi channels to instr 1
+giFqs[] fillarray  .56, .563, .92, .923, 1.19, 1.7, 2, 2.74, 3, 3.74, 4.07
+giAmps[] fillarray 1, 2/3, 1, 1.8, 8/3, 5/3, 1.46, 4/3, 4/3, 1, 4/3
+
+massign 0, 1 ;all midi channels to instr 1
 
 instr 1 ;master instrument
 ;;scale desired deviations for maximum velocity
@@ -27,21 +24,22 @@ imxampdv  =         12
 ;duration (%)
 imxdurdv  =         100
 ;;get midi values
-ibasfreq  cpsmidi	;base frequency
+ibasfreq  cpsmidi       ;base frequency
 iampmid   ampmidi   1 ;receive midi-velocity and scale 0-1
 ;;calculate maximum deviations depending on midi-velocity
 ifqdev    =         imxfqdv * iampmid
 iampdev   =         imxampdv * iampmid
 idurdev   =         imxdurdv * iampmid
 ;;trigger subinstruments
-indx      =         0 ;count variable for loop
-loop:
-ifqmult   tab_i     indx, giFqs ;get frequency multiplier from table
-ifreq     =         ibasfreq * ifqmult
-iampmult  tab_i     indx, giAmps ;get amp multiplier
-iamp      =         iampmult / 20 ;scale
+indx      =          0
+while indx < 11 do
+ ifqmult   =         giFqs[indx]
+ ifreq     =         ibasfreq * ifqmult
+ iampmult  =         giAmps[indx]
+ iamp      =         iampmult / 20 ;scale
           event_i   "i", 10, 0, 3, ifreq, iamp, ifqdev, iampdev, idurdev
-          loop_lt   indx, 1, 11, loop
+ indx      +=        1
+od
 endin
 
 instr 10 ;subinstrument for playing one partial
@@ -63,12 +61,13 @@ iptdur    =         p3 * 2^(idurperc/100)
 p3        =         iptdur ;set p3 to the calculated value
 ;play partial
 aenv      transeg   0, .01, 0, iamp, p3-.01, -10, 0
-apart     poscil    aenv, ifreq, giSine
+apart     poscil    aenv, ifreq
           outs      apart, apart
 endin
 
 </CsInstruments>
 <CsScore>
-f 0 3600
+
 </CsScore>
-</CsoundSynthesizer> 
+</CsoundSynthesizer>
+;example by joachim heintz

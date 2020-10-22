@@ -1,13 +1,12 @@
 <CsoundSynthesizer>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
 0dbfs = 1
 
 giWave    ftgen     1, 0, 2^7, 10, 1; sine with 128 points
-giControl ftgen     2, 0, -kr, 2, 0; size for 1 second of recording control data
+giControl ftgen 2, 0, -kr, 2, 0; size for 1 second of recording control data
           seed      0
 
   instr 1; saving giWave at i-time
@@ -30,3 +29,4 @@ i 2 0 1
 i 3 1 .1
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

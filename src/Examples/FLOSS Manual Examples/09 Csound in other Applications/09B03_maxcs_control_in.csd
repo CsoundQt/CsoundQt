@@ -1,6 +1,5 @@
 <CsoundSynthesizer>
 <CsInstruments>
-;Example by Davis Pyon
 sr     = 44100
 ksmps  = 32
 nchnls = 2
@@ -21,3 +20,4 @@ i1 0 86400
 e
 </CsScore>
 </CsoundSynthesizer>
+;example by Davis Pyon

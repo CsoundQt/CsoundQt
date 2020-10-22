@@ -1,18 +1,15 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
-
 <CsInstruments>
-
 sr      =       44100
 ksmps   =       32
 nchnls  =       2
 0dbfs   =       1
         seed    0
 
-gisine  ftgen	0,0,4096,10,1
+gisine  ftgen   0,0,4096,10,1
 
 gaSendL,gaSendR init 0
 
@@ -28,12 +25,12 @@ kvibf    =        4.5
 kvibamp  =        0
 iminfreq =        20
 ; call the wgbow opcode
-aSigL	 wgbow    kamp,kfreq,kpres,krat,kvibf,kvibamp,gisine,iminfreq
+aSigL    wgbow    kamp,kfreq,kpres,krat,kvibf,kvibamp,gisine,iminfreq
 ; modulating delay time
 kdel     rspline  0.01,0.1,0.1,0.5
 ; bow pressure parameter delayed by a varying time in the right channel
 kpres    vdel_k   kpres,kdel,0.2,2
-aSigR	 wgbow	  kamp,kfreq,kpres,krat,kvibf,kvibamp,gisine,iminfreq
+aSigR    wgbow    kamp,kfreq,kpres,krat,kvibf,kvibamp,gisine,iminfreq
          outs     aSigL,aSigR
 ; send some audio to the reverb
 gaSendL  =        gaSendL + aSigL/3
@@ -47,7 +44,6 @@ aRvbL,aRvbR reverbsc gaSendL,gaSendR,0.9,7000
  endin
 
 </CsInstruments>
-
 <CsScore>
 ; instr. 1
 ;  p4 = pitch (hz.)
@@ -64,5 +60,5 @@ i 1  0 480 233 0.05 0.11
 ; reverb instrument
 i 2 0 480
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

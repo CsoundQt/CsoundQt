@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -d -odac -m0
+-odac -m0
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -32,7 +32,6 @@ iTwo       random     iMin, iMax
 iRnd       =          iOne > iTwo ? iOne : iTwo
            xout       iRnd
 endop
-
 
 ;****INSTRUMENTS FOR THE DIFFERENT DISTRIBUTIONS****
 
@@ -94,7 +93,6 @@ p3         =          iStart + 2
  ;call instr to exit csound
            event_i    "i", "exit", p3+1, 1
 endin
-
 
 ;****INSTRUMENTS TO PLAY THE SOUNDS AND TO EXIT CSOUND****
 

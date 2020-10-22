@@ -1,6 +1,8 @@
 <CsoundSynthesizer>
+<CsOptions>
+-odac
+</CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 
   instr 1 ;i-time loop: counts from 1 until 10 has been reached
 icount    =         1
@@ -31,3 +33,4 @@ i 1 0 0
 i 2 0 1
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

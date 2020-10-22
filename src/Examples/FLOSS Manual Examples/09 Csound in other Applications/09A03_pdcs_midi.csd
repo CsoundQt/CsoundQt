@@ -1,6 +1,8 @@
+<CsOptions>
+-+rtmidi=null -M0
+</CsOptions>
 <CsoundSynthesizer>
 <CsInstruments>
-;Example by Joachim Heintz
 sr      =  44100
 ksmps   =  8
 nchnls  =  2
@@ -23,3 +25,4 @@ f 0 36000; play for 10 hours
 e
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

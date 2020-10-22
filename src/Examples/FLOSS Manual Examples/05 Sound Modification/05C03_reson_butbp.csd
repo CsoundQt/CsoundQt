@@ -1,11 +1,8 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac ; activates real time sound output
+-odac ; activates real time sound output
 </CsOptions>
-
 <CsInstruments>
-; Example by Iain McCurdy
 
 sr = 44100
 ksmps = 32
@@ -45,7 +42,6 @@ aSig    butbp        aSig, 5000, kbw    ; filter audio signal
   endin
 
 </CsInstruments>
-
 <CsScore>
 i 1 0  3 ; reson - cutoff frequency rising
 i 2 4  3 ; butbp - cutoff frequency rising
@@ -53,5 +49,5 @@ i 3 8  6 ; reson - bandwidth increasing
 i 4 15 6 ; butbp - bandwidth increasing
 e
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

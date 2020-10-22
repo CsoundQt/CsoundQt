@@ -1,0 +1,1 @@
+puts S_array[1], 1

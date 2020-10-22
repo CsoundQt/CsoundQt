@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -9,7 +9,8 @@ ksmps = 32
 0dbfs = 1
 
 instr 1
-out poscil(linseg(0, p3/2, 1, p3/2, 0), expseg(400, p3/2, random(700, 1400), p3/2, 600))
+ out(poscil(linseg(0,p3/2,.2,p3/2,0),
+     expseg(400,p3/2,random(700,1400),p3/2,600)))
 endin
 
 </CsInstruments>

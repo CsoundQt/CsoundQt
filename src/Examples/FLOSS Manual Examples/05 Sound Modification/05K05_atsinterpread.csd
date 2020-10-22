@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+=../SourceMaterials -o dac
+-o dac
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -8,7 +8,7 @@ ksmps = 32
 nchnls = 1
 0dbfs = 1
 
-instr 1	
+instr 1
 
 iamp =      p4                  ;amplitude scaler
 ifreq =     p5                  ;frequency scaler
@@ -19,11 +19,11 @@ ipars   ATSinfo iatsfile, 3     ;how many partials
 idur    ATSinfo iatsfile, 7     ;get duration
 ktime   line    0, p3, idur     ;time pointer
 
-        ATSbufread ktime, ifreqscal, iatsfile, ipars ;reads an ATS buffer		
+        ATSbufread ktime, ifreqscal, iatsfile, ipars ;reads an ATS buffer
 kamp    ATSinterpread ifreq         ;get the amp values according to freq
 aamp    interp kamp                               ;interpolate amp values
 aout    oscil3 aamp, ifreq, itab                  ;synthesize
-	
+
         out aout*iamp
 endin
 
@@ -43,20 +43,3 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ;example by Oscar Pablo Di Liscia
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
