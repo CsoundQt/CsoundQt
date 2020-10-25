@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
@@ -15,11 +14,11 @@ giTone    ftgen     0, 0, 2^10, 10, 1, .5, .3, .1
   instr 1
 
 ; move between 0 and 1 (3 new values per second)
-kGate     randomi   0, 1, 3
+kGate     randomi   0, 1, 3, 3
 ; move between 300 and 800 hz (1 new value per sec)
-kFreq     randomi   300, 800, 1
+kFreq     randomi   300, 800, 1, 3
 ; move between -12 and 0 dB (5 new values per sec)
-kdB       randomi   -12, 0, 5
+kdB       randomi   -12, 0, 5, 3
 aSig      oscil3    1, kFreq, giTone
 kVol      init      0
  if kGate > 0.5 then; if kGate is larger than 0.5
@@ -37,3 +36,4 @@ aOut      =         aSig * kVol
 i 1 0 30
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

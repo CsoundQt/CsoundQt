@@ -1,12 +1,8 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac ; activates real time sound output
+-odac ; activates real time sound output
 </CsOptions>
-
 <CsInstruments>
-; Example by Iain McCurdy
-
 sr = 44100
 ksmps = 32
 nchnls = 1
@@ -37,13 +33,11 @@ aSig    bqrez        aSig, kcf, 30, 1  ; filter audio signal
   endin
 
 </CsInstruments>
-
 <CsScore>
 ; 3 notes to demonstrate each filter in turn
 i 1 0  3 ; atone
 i 2 5  3 ; buthp
 i 3 10 3 ; bqrez(mode 1)
-e
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

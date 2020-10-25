@@ -1,10 +1,8 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials ; amend device number accordingly
+; amend device number accordingly
 -Q999
 </CsOptions>
-
 <CsInstruments>
 ksmps = 32 ; no audio so sr and nchnls irrelevant
 
@@ -28,18 +26,17 @@ krelease  release       ; normally zero, on final k pass this will output 1
 iCCnum    =         p7
 kCCval    line      0, p3, 127.1  ; continuous controller data function
 kCCval    =         int(kCCval)   ; convert data function to integers
-ktrig     changed   kCCval        ; generate a trigger each time kCCval changes
+ktrig     changed   kCCval      ; generate a trigger each time kCCval changes
  if ktrig=1 then                  ; if kCCval has changed...
           midiout   176, ichan, iCCnum, kCCval  ; ...send a controller message
  endif
   endin
 
 </CsInstruments>
-
 <CsScore>
 ;p1 p2 p3   p4 p5 p6  p7
 i 1 0  5    1  60 100 1
 f 0 7 ; extending performance time prevents note-offs from being lost
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

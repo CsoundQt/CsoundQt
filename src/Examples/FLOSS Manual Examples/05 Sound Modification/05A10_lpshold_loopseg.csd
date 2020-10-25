@@ -1,13 +1,11 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac ;activates real time sound output
+-odac ;activates real time sound output
 </CsOptions>
 <CsInstruments>
-; Example by Iain McCurdy
-
 sr = 44100
 ksmps = 4
-nchnls = 1
+nchnls = 2
 0dbfs = 1
 
 seed 0; seed random number generators from system clock
@@ -36,13 +34,13 @@ kOn   lpshold kPhFreq, 0, 0,1,   1,1,  1,1,  1,1,  1,1,  1,1,  1,0,  1,1,  \
                        1,1,  1,1,  1,1,  1,1,  1,1,  1,1,  1,0,  1,1,  1
 kHold lpshold kPhFreq, 0, 0,0,   1,1,  1,1,  1,0,  1,0,  1,0,  1,0,  1,1,  \
                        1,0,  1,0,  1,1,  1,1,  1,1,  1,1,  1,0,  1,0,  1
-kHold     vdel_k       kHold, 1/kBtFreq, 1 ; offset hold by 1/2 note duration
-kNum      portk        kNum, (0.01*kHold)  ; apply portamento to pitch changes
-                                           ; if note is not held: no portamento
-kCps      =            cpsmidinn(kNum)     ; convert note number to cps
-kOct      =            octcps(kCps)        ; convert cps to oct format
+kHold     vdel_k       kHold, 1/kBtFreq, 1; offset hold by 1/2 note duration
+kNum      portk        kNum, (0.01*kHold) ; apply portamento to pitch changes
+                                          ; if note is not held: no portamento
+kCps      =            cpsmidinn(kNum)    ; convert note number to cps
+kOct      =            octcps(kCps)       ; convert cps to oct format
 ; amplitude envelope                  attack    sustain       decay  gap
-kAmpEnv   loopseg      kBtFreq, 0, 0, 0,0.1, 1, 55/kTempo, 1, 0.1,0, 5/kTempo,0,0
+kAmpEnv loopseg kBtFreq, 0, 0, 0,0.1, 1, 55/kTempo, 1, 0.1,0, 5/kTempo,0,0
 kAmpEnv   =            (kHold=0?kAmpEnv:1)  ; if a held note, ignore envelope
 kAmpEnv   port         kAmpEnv,0.001
 
@@ -52,18 +50,19 @@ kCfOct    looptseg      kBtFreq,0,0,kCfBase+kCfEnv+kOct,kDecay,1,kCfBase+kOct
 kCfOct    =             (kHold=0?kCfOct:kCfBase+kOct)
 kCfOct    limit        kCfOct, 4, 14 ; limit the cutoff frequency (oct format)
 aSig      vco2         0.4, kCps, i(kWaveform)*2, 0.5 ; VCO-style oscillator
-aFilt      lpf18        aSig, cpsoct(kCfOct), kRes, (kDist^2)*10 ; filter audio
+aFilt lpf18 aSig, cpsoct(kCfOct), kRes, (kDist^2)*10 ; filter audio
 aSig      balance       aFilt,aSig             ; balance levels
 kOn       port         kOn, 0.006              ; smooth on/off switching
 ; audio sent to output, apply amp. envelope,
 ; volume control and note On/Off status
 aAmpEnv   interp       kAmpEnv*kOn*kVol
-          out          aSig * aAmpEnv
+aOut      =            aSig * aAmpEnv
+          out          aOut, aOut
   endin
 
 </CsInstruments>
 <CsScore>
 i 1 0 3600 ; instr 1 plays for 1 hour
-e
 </CsScore>
 </CsoundSynthesizer>
+;example by Iain McCurdy

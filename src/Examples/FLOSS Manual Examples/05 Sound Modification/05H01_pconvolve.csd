@@ -20,17 +20,17 @@ gasig           diskin2   p4,1,0,1
  instr 2 ; convolution reverb
 ; Define partion size.
 ; Larger values require less CPU but result in more latency.
-; Smaller values produce lower latency but may cause -
-; - realtime performance issues
-ipartitionsize	=	  256
-aconv	        pconvolve gasig, p4,ipartitionsize
-; create a delayed version of the input signal that will sync -
-; - with convolution output
-adel            delay     gasig,ipartitionsize/sr
+; Smaller values produce lower latency but may cause
+; realtime performance issues
+ipartitionsize  =     256
+aconv           pconvolve gasig, p4,ipartitionsize
+; create a delayed version of the input signal that will sync
+; with convolution output
+adel            delay     gasig, ipartitionsize/sr
 ; create a dry/wet mix
-aMix           ntrpol    adel,aconv*0.1,p5
+aMix           ntrpol    adel, aconv*0.1, p5
                outs      aMix ,aMix
-gasig	        =         0
+gasig           =         0
  endin
 
 </CsInstruments>
@@ -51,20 +51,4 @@ e
 </CsScore>
 
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+;example by Iain McCurdy

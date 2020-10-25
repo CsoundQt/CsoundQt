@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -o dac -d
+-o dac -d
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -39,3 +39,4 @@ endin
 i1 0 1
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

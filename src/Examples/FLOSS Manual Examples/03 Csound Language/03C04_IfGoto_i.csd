@@ -1,13 +1,15 @@
 <CsoundSynthesizer>
+<CsOptions>
+--env:SSDIR+=../SourceMaterials -odac
+</CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
 0dbfs = 1
 
   instr 1
-Sfile     = "/Joachim/Materialien/SamplesKlangbearbeitung/Kontrabass.aif"
+Sfile     = "ClassGuit.wav"
 ifilchnls filenchnls Sfile
 if ifilchnls == 1 igoto mono; condition if true
  igoto stereo; else condition
@@ -24,3 +26,4 @@ continue:
 i 1 0 0
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

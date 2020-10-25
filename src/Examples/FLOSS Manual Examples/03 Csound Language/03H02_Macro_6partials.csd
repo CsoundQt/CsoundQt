@@ -1,14 +1,12 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
-
 <CsInstruments>
-sr 	= 	44100
-ksmps 	= 	16
-nchnls 	= 	1
-0dbfs	=	1
+sr      =       44100
+ksmps   =       16
+nchnls  =       1
+0dbfs   =       1
 
 gisine  ftgen  0,0,2^10,10,1
 
@@ -43,7 +41,6 @@ $ADDITIVE_TONE(p4'1'3.997'9.469'15.566'20.863'29.440)
  endin
 
 </CsInstruments>
-
 <CsScore>
 i 1 0  1 200
 i 1 1  2 150
@@ -55,4 +52,3 @@ e
 </CsScore>
 </CsoundSynthesizer>
 ; example written by Iain McCurdy
-

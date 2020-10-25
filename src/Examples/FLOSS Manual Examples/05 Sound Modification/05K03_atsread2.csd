@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+=../SourceMaterials -o dac
+-o dac
 </CsOptions>
 <CsInstruments>
 sr      = 44100
@@ -10,7 +10,6 @@ nchnls  = 1
 
 gS_ATS_file =         "flute-A5.ats" ;ats file
 giSine     ftgen      0, 0, 16384, 10, 1 ; sine wave table
-
 
 instr Master ;call instr "Play" for each partial
 iNumParts  =          p4 ;how many partials to synthesize
@@ -37,7 +36,7 @@ idur       =          p6 ;ats file duration
 
 ktime      line       0, p3, idur ;time pointer
 
-kfreq, kamp ATSread   ktime, gS_ATS_file, ipar ;get frequency and amplitude values
+kfreq, kamp ATSread ktime, gS_ATS_file, ipar
 aamp       interp     kamp ;interpolate amplitude values
 afreq      interp     kfreq ;interpolate frequency values
 aout       oscil3     aamp*iamp, afreq, giSine ;synthesize with amp scaling
@@ -53,20 +52,3 @@ i .         +    .   10
 </CsScore>
 </CsoundSynthesizer>
 ;example by Oscar Pablo Di Liscia and Joachim Heintz
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -1,20 +1,11 @@
-<CsoundSynthesizer>
-<CsInstruments>
-sr = 44100
-ksmps = 4410
-
-instr 1
-iCount    init      0          ; set icount to 0 first
-          reinit    new        ; reinit the section each k-pass
-new:
-iCount    =         iCount + 1 ; increase
-          print     iCount     ; print the value
-          rireturn
-endin
-
-</CsInstruments>
-<CsScore>
-i 1 0 1
-</CsScore>
-</CsoundSynthesizer>
-;example by joachim heintz
+instr 1:  iCount = 1.000
+instr 1:  iCount = 2.000
+instr 1:  iCount = 3.000
+instr 1:  iCount = 4.000
+instr 1:  iCount = 5.000
+instr 1:  iCount = 6.000
+instr 1:  iCount = 7.000
+instr 1:  iCount = 8.000
+instr 1:  iCount = 9.000
+instr 1:  iCount = 10.000
+instr 1:  iCount = 11.000

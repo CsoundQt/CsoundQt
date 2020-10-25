@@ -1,6 +1,8 @@
 <CsoundSynthesizer>
+<CsOptions>
+-nm0
+</CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 44100 ;very high because of printing
 
@@ -19,3 +21,4 @@ Faster ;print 10 times per second because of local ksmps
 i 1 0 2
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

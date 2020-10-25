@@ -1,23 +1,11 @@
-<CsoundSynthesizer>
-<CsOptions>
---env:SSDIR+=../SourceMaterials -o dac -d -L stdin -Ma
-</CsOptions>
-<CsInstruments>
-sr = 44100
-nchnls = 2
-ksmps = 32
-0dbfs = 1
-
-massign 0, 9999
-
-instr 9999
-ires compileorc "to_recompile.orc"
-print ires ; 0 if compiled successfully
-event_i "i", 1, 0, 3 ;send event
-endin
-
-</CsInstruments>
-<CsScore>
-i 9999 0 1
-</CsScore>
-</CsoundSynthesizer>
+SECTION 1:
+new alloc for instr 9999:
+instr 9999:  ires = 0.000
+new alloc for instr 1:
+B  0.000 ..  1.000 T  1.000 TT  1.000 M:  0.20000  0.20000
+B  1.000 ..  3.000 T  3.000 TT  3.000 M:  0.20000  0.20000
+Score finished in csoundPerform().
+inactive allocs returned to freespace
+end of score.           overall amps:  0.20000  0.20000
+       overall samples out of range:        0        0
+0 errors in performance

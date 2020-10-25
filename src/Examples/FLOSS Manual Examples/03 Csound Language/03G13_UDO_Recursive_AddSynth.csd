@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
@@ -28,7 +27,7 @@ ifreq     =         ifreqgen + (ifreqdev*ifreqgen)/100; real frequency
 ixtratim1 random    0, p3; calculate additional time for this partial
 imaxamp   =         1/inumparts; maximum amplitude
 idbdev    random    -6, 0; random deviation in dB for this partial
-iamp      =        imaxamp * ampdb(idbdev-ipartnum); higher partials are softer
+iamp = imaxamp * ampdb(idbdev-ipartnum); higher partials are softer
 ipandev   random    -.1, .1; panning deviation
 ipan      =         ipan + ipandev
 aEnv      transeg   0, .005, 0, iamp, p3+ixtratim1-.005, -10, 0; envelope
@@ -71,3 +70,4 @@ aL, aR    PlayPartials p4, p5, p6
 i 1 0 300
 </CsScore>
 </CsoundSynthesizer>
+;Example by Joachim Heintz

@@ -1,9 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials </CsOptions>
+</CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
-
 sr = 44100
 nchnls = 2
 0dbfs = 1
@@ -20,4 +18,5 @@ endin
 <CsScore>
 i 1 0 30
 </CsScore>
-</CsoundSynthesizer> 
+</CsoundSynthesizer>
+;example by joachim heintz

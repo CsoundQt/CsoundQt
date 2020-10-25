@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
@@ -11,7 +10,8 @@ nchnls = 2
 
       ; -- create a FLTK panel --
           FLpanel   "Trigger By FLTK Button", 300, 100, 100, 100
-      ; -- trigger instr 1 (equivalent to the score line "i 1 0 1")k1, ih1   FLbutton  "Push me!", 0, 0, 1, 150, 40, 10, 25, 0, 1, 0, 1
+      ; -- trigger instr 1 (equivalent to the score line "i 1 0 1")
+k1, ih1   FLbutton  "Push me!", 0, 0, 1, 150, 40, 10, 25, 0, 1, 0, 1
       ; -- trigger instr 2
 k2, ih2   FLbutton  "Quit", 0, 0, 1, 80, 40, 200, 25, 0, 2, 0, 1
           FLpanelEnd; end of the FLTK panel section
@@ -38,3 +38,4 @@ f 0 36000
 e
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

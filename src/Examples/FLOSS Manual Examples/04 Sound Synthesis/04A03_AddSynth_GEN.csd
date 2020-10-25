@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -o dac
+-o dac
 </CsOptions>
 <CsInstruments>
-;example by Andrés Cabrera and Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
@@ -41,3 +40,4 @@ i . 6 9    7.01      -12       .          .
 i . 7 10   6.00      -10       .          .
 </CsScore>
 </CsoundSynthesizer>
+;example by Andrés Cabrera and Joachim Heintz

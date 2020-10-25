@@ -1,63 +1,10 @@
-<CsoundSynthesizer>
-<CsOptions>
---env:SSDIR+=../SourceMaterials -n
-</CsOptions>
-<CsInstruments>
-sr = 44100
-ksmps = 32
-nchnls = 1
-0dbfs = 1
-
-  opcode KS, 0, ii
-  ;performs the karplus-strong algorithm
-iTab, iTbSiz xin
-;calculate the mean of the last two values
-iUlt      tab_i     iTbSiz-1, iTab
-iPenUlt   tab_i     iTbSiz-2, iTab
-iNewVal   =         (iUlt + iPenUlt) / 2
-;shift values one position to the right
-indx      =         iTbSiz-2
-loop:
-iVal      tab_i     indx, iTab
-          tabw_i    iVal, indx+1, iTab
-          loop_ge   indx, 1, 0, loop
-;fill the new value at the beginning of the table
-          tabw_i    iNewVal, 0, iTab
-  endop
-
-  opcode PrintTab, 0, iiS
-  ;prints table content, with a starting string
-iTab, iTbSiz, Sin xin
-indx      =         0
-Sout      strcpy    Sin
-loop:
-iVal      tab_i     indx, iTab
-Snew      sprintf   "%8.3f", iVal
-Sout      strcat    Sout, Snew
-          loop_lt   indx, 1, iTbSiz, loop
-          puts      Sout, 1
-  endop
-
-instr ShowBuffer
-;fill the function table
-iTab      ftgen     0, 0, -5, -2, 1, -1, 1, 1, -1
-iTbLen    tableng   iTab
-;loop cycles (five states)
-iCycle    =         0
-cycle:
-Scycle    sprintf   "Cycle %d:", iCycle
-          PrintTab  iTab, iTbLen, Scycle
-;loop states
-iState    =         0
-state:
-          KS        iTab, iTbLen
-          loop_lt   iState, 1, iTbLen, state
-          loop_lt   iCycle, 1, 10, cycle
-endin
-
-</CsInstruments>
-<CsScore>
-i "ShowBuffer" 0 1
-</CsScore>
-</CsoundSynthesizer>
-;example by joachim heintz
+Cycle 0:   1.000  -1.000   1.000   1.000  -1.000
+Cycle 1:   0.500   0.000   0.000   1.000   0.000
+Cycle 2:   0.500   0.250   0.000   0.500   0.500
+Cycle 3:   0.500   0.375   0.125   0.250   0.500
+Cycle 4:   0.438   0.438   0.250   0.188   0.375
+Cycle 5:   0.359   0.438   0.344   0.219   0.281
+Cycle 6:   0.305   0.398   0.391   0.281   0.250
+Cycle 7:   0.285   0.352   0.395   0.336   0.266
+Cycle 8:   0.293   0.318   0.373   0.365   0.301
+Cycle 9:   0.313   0.306   0.346   0.369   0.333

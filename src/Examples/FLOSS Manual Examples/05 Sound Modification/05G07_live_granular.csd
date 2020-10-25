@@ -1,0 +1,1 @@
+kPointer = k(gaWritePointer)-giDelay/1000

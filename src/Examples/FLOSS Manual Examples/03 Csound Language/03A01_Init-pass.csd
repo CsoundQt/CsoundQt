@@ -1,22 +1,5 @@
-<CsoundSynthesizer>
-<CsInstruments>
-
-giGlobal   =          1/2
-
-instr 1
-iLocal     =          1/4
-           print      giGlobal, iLocal
-endin
-
-instr 2
-iLocal     =          1/5
-           print      giGlobal, iLocal
-endin
-
-</CsInstruments>
-<CsScore>
-i 1 0 0
-i 2 0 0
-</CsScore>
-</CsoundSynthesizer>
-;example by joachim heintz
+SECTION 1:
+new alloc for instr 1:
+instr 1:  giGlobal = 0.500  iLocal = 0.250
+new alloc for instr 2:
+instr 2:  giGlobal = 0.500  iLocal = 0.200

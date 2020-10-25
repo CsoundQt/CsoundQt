@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -L stdin -odac
+-L stdin -odac
 </CsOptions>
 <CsInstruments>
 ;Example by Joachim Heintz

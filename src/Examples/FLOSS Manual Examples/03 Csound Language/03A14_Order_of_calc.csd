@@ -1,31 +1,25 @@
-<CsoundSynthesizer>
-<CsInstruments>
-sr = 44100
-ksmps = 4410
-
-instr 1
-gkcount   init      0 ;set gkcount to 0 first
-gkcount   =         gkcount + 1 ;increase
-endin
-
-instr 10
-          printk    0, gkcount ;print the value
-endin
-
-instr 100
-gkcount   init      0 ;set gkcount to 0 first
-gkcount   =         gkcount + 1 ;increase
-endin
-
-
-</CsInstruments>
-<CsScore>
-;first i1 and i10
-i 1 0 1
-i 10 0 1
-;then i100 and i10
-i 100 1 1
-i 10 1 1
-</CsScore>
-</CsoundSynthesizer>
-;Example by Joachim Heintz
+new alloc for instr 1:
+new alloc for instr 10:
+ i  10 time     0.10000:     1.00000
+ i  10 time     0.20000:     2.00000
+ i  10 time     0.30000:     3.00000
+ i  10 time     0.40000:     4.00000
+ i  10 time     0.50000:     5.00000
+ i  10 time     0.60000:     6.00000
+ i  10 time     0.70000:     7.00000
+ i  10 time     0.80000:     8.00000
+ i  10 time     0.90000:     9.00000
+ i  10 time     1.00000:    10.00000
+B  0.000 ..  1.000 T  1.000 TT  1.000 M:      0.0
+new alloc for instr 100:
+ i  10 time     1.10000:     0.00000
+ i  10 time     1.20000:     1.00000
+ i  10 time     1.30000:     2.00000
+ i  10 time     1.40000:     3.00000
+ i  10 time     1.50000:     4.00000
+ i  10 time     1.60000:     5.00000
+ i  10 time     1.70000:     6.00000
+ i  10 time     1.80000:     7.00000
+ i  10 time     1.90000:     8.00000
+ i  10 time     2.00000:     9.00000
+B  1.000 ..  2.000 T  2.000 TT  2.000 M:      0.0

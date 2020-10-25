@@ -1,6 +1,5 @@
 <CsoundSynthesizer>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 4410; very high because of printing
 nchnls = 2
@@ -18,3 +17,4 @@ kSum      =         kSum + kAdd; new sum in each k-cycle
 i 1 0 1
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

@@ -1,13 +1,13 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -iadc -odac
+-iadc -odac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
 0dbfs = 1
+
 ; -- size for 5 seconds of recording control data
 giControl ftgen     0, 0, -5*kr, 2, 0
 ; -- size for 5 seconds of recording audio data
@@ -68,3 +68,4 @@ i 3 12 7
 i 4 20 5
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

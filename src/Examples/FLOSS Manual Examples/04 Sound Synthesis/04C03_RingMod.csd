@@ -4,23 +4,33 @@
 </CsOptions>
 <CsInstruments>
 
-sr = 48000
+sr = 44100
 ksmps = 32
-nchnls = 1
+nchnls = 2
 0dbfs = 1
 
-instr 1   ; Ring-Modulation (no DC-Offset)
-aSine1 poscil 0.3, 200, 2 ; -> [200, 400, 600] Hz
-aSine2 poscil 0.3, 600, 1
-out aSine1*aSine2
+instr Carrier
+ aPartial_1 poscil .2, 400
+ aPartial_2 poscil .2, 800
+ aPartial_3 poscil .2, 1200
+ gaCarrier sum aPartial_1, aPartial_2, aPartial_3
+ ;only output this signal if RM is not playing
+ if (active:k("RM") == 0) then
+  out gaCarrier, gaCarrier
+ endif
+endin
+
+instr RM
+ iModFreq = p4
+ aRM = gaCarrier * poscil:a(1,iModFreq)
+ out aRM, aRM
 endin
 
 </CsInstruments>
 <CsScore>
-f 1 0 1024 10 1 ; sine
-f 2 0 1024 10 1 1 1; 3 harmonics
-i 1 0 5
-e
+i "Carrier" 0 14
+i "RM" 3 3 100
+i "RM" 9 3 50
 </CsScore>
 </CsoundSynthesizer>
-; written by Alex Hofmann (Mar. 2011)
+;example by joachim heintz

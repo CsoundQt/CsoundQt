@@ -3,7 +3,6 @@
 --env:SSDIR+=../SourceMaterials -o dac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 0dbfs = 1
@@ -38,10 +37,11 @@ aVar      =          aVar1 + aVar3; audio variables can also be added
 iMyVar    random     0, 10; one random value per note
 kMyVar    random     0, 10; one random value per each control-cycle
  ;S-variable updated just at init-time
-SMyVar1   sprintf   "This string is updated just at init-time: kMyVar = %d\n", iMyVar
+SMyVar1 sprintf "This string is updated just at init-time: kMyVar = %d\n",
+                iMyVar
           printf_i  "%s", 1, SMyVar1
  ;S-variable updates at each control-cycle
-          printks   "This string is updated at k-time: kMyVar = %.3f\n", .1, kMyVar
+printks   "This string is updated at k-time: kMyVar = %.3f\n", .1, kMyVar
   endin
 
   instr 5; f-variables
@@ -65,20 +65,4 @@ i 4     3     1
 i 5     4     1
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+;example by joachim heintz

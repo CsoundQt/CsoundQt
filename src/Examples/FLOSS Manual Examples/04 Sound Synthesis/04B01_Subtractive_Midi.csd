@@ -1,9 +1,7 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac -Ma
+-odac -Ma
 </CsOptions>
-
 <CsInstruments>
 sr = 44100
 ksmps = 4
@@ -11,7 +9,6 @@ nchnls = 2
 0dbfs = 1
 
 initc7 1,1,0.8                 ;set initial controller position
-
 prealloc 1, 10
 
    instr 1
@@ -85,7 +82,7 @@ endif
 ;mix oscillators
 aMix       sum          aSig1,aSig2
 ;lowpass filter
-kFiltEnv   expsegr      0.0001,iFAtt,iCPS*iCF,iFDec,iCPS*iCF*iFSus,iFRel,0.0001
+kFiltEnv expsegr 0.0001,iFAtt,iCPS*iCF,iFDec,iCPS*iCF*iFSus,iFRel,0.0001
 aOut       moogladder   aMix, kFiltEnv, kRes
 
 ;amplitude envelope
@@ -139,5 +136,5 @@ i 1  +  10  50 1   2  .01  -2 0   .2  3   0.5 0   \
 f 0 3600
 e
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

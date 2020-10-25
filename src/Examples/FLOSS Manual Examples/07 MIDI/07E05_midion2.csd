@@ -1,12 +1,9 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials ; amend device number accordingly
+; amend device number accordingly
 -Q999
 </CsOptions>
-
 <CsInstruments>
-; Example by Iain McCurdy
 
 ksmps = 32 ; no audio so sr and nchnls irrelevant
 
@@ -21,10 +18,9 @@ ktrig   metro    krate^2   ; 'new note' trigger
   endin
 
 </CsInstruments>
-
 <CsScore>
 i 1 0 20 1
 f 0 21 ; extending performance time prevents the final note-off being lost
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy
