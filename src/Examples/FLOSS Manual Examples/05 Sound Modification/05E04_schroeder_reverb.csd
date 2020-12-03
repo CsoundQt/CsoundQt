@@ -57,6 +57,7 @@ aSig        buthp       aSig,          12000 ; -and again to sharpen cutoff
 gaRvbSend   =           gaRvbSend + (aSig * giRvbSendAmt) ; add to send
   endin
 
+
   instr 5 ; schroeder reverb - always on
 ; read in variables from the score
 kRvt        =           p4

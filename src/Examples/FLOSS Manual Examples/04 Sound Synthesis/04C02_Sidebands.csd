@@ -16,6 +16,7 @@ instr AM1
  out aCarrier, aCarrier
 endin
 
+
 instr AM2
  aDC_Offset linseg 0.2, 1, 0.2, 5, 0.4, 3, 0
  aModulator poscil 0.4, 40

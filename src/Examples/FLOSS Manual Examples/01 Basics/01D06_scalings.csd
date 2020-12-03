@@ -9,6 +9,7 @@ nchnls = 2
 0dbfs = 1
 seed 0
 
+
 ;****POSSIBLE DURATIONS AS ARRAY****
 giDurs[]   array      3/2, 1, 2/3, 1/2, 1/3, 1/4
 giLenDurs  lenarray   giDurs
@@ -148,6 +149,7 @@ giSeqIndx += 1
            event_i    "i", "exit", p3, 1
  endif
 endin
+
 
 ;****INSTRUMENTS TO PLAY THE SOUNDS AND EXIT CSOUND****
 instr play

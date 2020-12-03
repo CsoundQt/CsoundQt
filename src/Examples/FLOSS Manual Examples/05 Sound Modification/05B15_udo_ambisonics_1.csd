@@ -82,6 +82,7 @@ isin_2az = sin(2*iaz)
 icos_2el = cos(2*iel)
 isin_2el = sin(2*iel)
 
+
 i4 = ic2*icos_el_p2*isin_2az    ; V = Y(2,-2)
 i5      = ic2*isin_2el*isin_az          ; S = Y(2,-1)
 i6 = .5*(3*isin_el_p2 - 1)              ; R = Y(2,0)
@@ -127,6 +128,7 @@ ao1,ao2,ao3     ambi_decode     2,17
                 outvalue "sp3", downsamp(ao3)
                 zacl    0,8
 endin
+
 
 </CsInstruments>
 <CsScore>

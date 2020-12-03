@@ -4,10 +4,10 @@
 </CsOptions>
 <CsInstruments>
 
-sr  = 44100
+sr	= 44100
 ksmps = 32
-nchnls  = 2
-0dbfs   = 1
+nchnls	= 2
+0dbfs	= 1
 
 ;create IR table
 giIR_record ftgen 0, 0, 131072, 2, 0
@@ -43,14 +43,14 @@ instr Record_IR
  ktrig = 0
 
  ;output the IR for reference
-    outch 1, asnd
+	outch 1, asnd
 
 endin
 
 instr Convolver
 
  ;receive information about updating the table
- kupdate    chnget "conv_update"
+ kupdate	chnget "conv_update"
 
  ;different dB values for the different IR
  kdB[] fillarray -34, -35, -40, -28, -40, -40, -40
@@ -62,9 +62,10 @@ instr Convolver
  ;apply live convolution
  ain chnget "input"
  aconv liveconv ain, giIR_record, 2048, kupdate, 0
-    outch 2, aconv*ampdb(kdB[kindx])
+	outch 2, aconv*ampdb(kdB[kindx])
 
 endin
+
 
 </CsInstruments>
 <CsScore>
@@ -82,7 +83,7 @@ i .          12 .  2.06  0.12
 i .          14 .  2.37  0.27
 
 ;convolve continuously
-i "Convolver"   2   13.65
+i "Convolver" 	2	13.65
 </CsScore>
 </CsoundSynthesizer>
 ;example by Oeyving Brandtsegg and Sigurd Saue

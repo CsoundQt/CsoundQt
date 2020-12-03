@@ -11,6 +11,7 @@ nchnls  = 1
 gS_ATS_file =         "flute-A5.ats" ;ats file
 giSine     ftgen      0, 0, 16384, 10, 1 ; sine wave table
 
+
 instr Master ;call instr "Play" for each partial
 iNumParts  =          p4 ;how many partials to synthesize
 idur       ATSinfo    gS_ATS_file, 7 ;get ats file duration

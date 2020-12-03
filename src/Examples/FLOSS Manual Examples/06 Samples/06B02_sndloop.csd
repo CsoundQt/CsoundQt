@@ -1,4 +1,4 @@
-<CsoundSynthesize>
+<CsoundSynthesizer>
 <CsOptions>
 ; real-time audio in and out are both activated
 -iadc -odac

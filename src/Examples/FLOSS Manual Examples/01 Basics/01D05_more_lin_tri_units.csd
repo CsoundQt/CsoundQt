@@ -134,6 +134,7 @@ giSeqIndx  +=         1
  endif
 endin
 
+
 ;****INSTRUMENTS TO PLAY THE SOUNDS AND EXIT CSOUND****
 instr play
  ;increase duration in random range

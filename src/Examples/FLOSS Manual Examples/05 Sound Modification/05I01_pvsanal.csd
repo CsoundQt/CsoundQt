@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 -i adc -o dac
---env:SSDIR+=/home/hlolli/forks/csound_floss/resources/SourceMaterials
+--env:SSDIR+=../resources/SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr = 44100

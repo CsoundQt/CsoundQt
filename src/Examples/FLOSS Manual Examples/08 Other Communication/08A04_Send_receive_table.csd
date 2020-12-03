@@ -4,16 +4,17 @@
 </CsOptions>
 <CsInstruments>
 
-sr  = 44100
+sr	= 44100
 ksmps = 32
-nchnls  = 2
-0dbfs   = 1
+nchnls	= 2
+0dbfs	= 1
 
 giPortHandle OSCinit 47120
 
 giTable_1 ftgen 0, 0, 1024, 10, 1
 giTable_2 ftgen 0, 0, 1024, 10, 1, 1, 1, 1, 1
 giTable_3 ftgen 0, 0, 1024, 10, 1, .5, 3, .1
+
 
 instr Send
  kSendTrigger init 1

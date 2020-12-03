@@ -1,6 +1,57 @@
-8 2 1 7 4 11 5 12 10 6 9 3
-7 5 3 2 11 12 9 8 1 10 6 4
-7 9 6 2 5 3 12 8 10 1 11 4
-1 12 10 11 9 5 4 8 6 7 2 3
-7 12 8 2 10 4 5 1 11 3 6 9
-1 2 3 4 5 6 7 8 9 10 11 12
+<CsoundSynthesizer>
+<CsOptions>
+-nm0
+</CsOptions>
+<CsInstruments>
+ksmps = 32
+seed 0
+
+opcode ArrPermRnd, i[], i[]
+ iInArr[]     xin
+ iLen         =        lenarray(iInArr)
+ ;create output array and set index
+ iOutArr[]    init     iLen
+ iWriteIndx   =        0
+ iReadLen     =        iLen
+ ;for all elements:
+ while iWriteIndx < iLen do
+  ;get one random element and put it in iOutArr
+  iRndIndx    =        int(random:i(0, iReadLen-.0001))
+  iOutArr[iWriteIndx] = iInArr[iRndIndx]
+  ;shift the elements after this one to the left
+  while iRndIndx < iReadLen-1 do
+   iInArr[iRndIndx] =  iInArr[iRndIndx+1]
+   iRndIndx   +=       1
+  od
+  ;decrease length to read in and increase write index
+  iReadLen    -=       1
+  iWriteIndx  +=       1
+  od
+              xout     iOutArr
+  endop
+
+;create i-array as 1, 2, 3, ... 12
+giArr[] genarray 1, 12
+
+;permutation of giArr ...
+instr Permut
+ iPermut[] ArrPermRnd giArr
+ printarray iPermut, "%d"
+endin
+
+;... which has not been touched by these operations
+instr Print
+ printarray giArr, "%d"
+endin
+
+</CsInstruments>
+<CsScore>
+i "Permut" 0  .01
+i "Permut" +  .
+i "Permut" +  .
+i "Permut" +  .
+i "Permut" +  .
+i "Print" .05 .01
+</CsScore>
+</CsoundSynthesizer>
+;example by joachim heintz

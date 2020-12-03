@@ -1,27 +1,28 @@
-// Example written by Matt Ingalls
-// ARDUINO CODE:
+<CsoundSynthesizer>
+<CsOptions>
+-o dac
+</CsOptions>
+<CsInstruments>
+sr = 44100
+ksmps = 8
+nchnls = 1
+0dbfs = 1
 
-void setup()  {
-  // enable serial communication
-  Serial.begin(9600);
+; handle used to reference osc stream
+gihandle OSCinit 12001
 
-  // declare pin 9 to be an output:
-  pinMode(9, OUTPUT);
-}
+ instr 1
+; initialise variable used for analog values
+gkana0      init       0
+; read in OSC channel '/analog/0'
+gktrigana0  OSClisten  gihandle, "/analog/0", "i", gkana0
+; print changed values to terminal
+            printk2    gkana0
+ endin
 
-void loop()
-{
-  // only do something if we received something
-  // (this should be at csound's k-rate)
-  if (Serial.available())
-  {
-
-     // set the brightness of LED (connected to pin 9) to our input value
-     int brightness = Serial.read();
-     analogWrite(9, brightness);
-
-     // while we are here, get our knob value and send it to csound
-     int sensorValue = analogRead(A0);
-     Serial.write(sensorValue/4); // scale to 1-byte range (0-255)
-  }
-}
+</CsInstruments>
+<CsScore>
+i 1 0 3600
+</CsScore>
+</CsoundSynthesizer>
+;example by Iain McCurdy

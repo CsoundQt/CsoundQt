@@ -51,15 +51,15 @@ instr Blur_var
 endin
 
 instr SmoothBlur
-    iacf = p4
-    ifcf = p5
-    iblurtime = p6
-    fanal pvstanal 1/10, 1, 1, gifil, 0
-    fsmot pvsmooth fanal, iacf, ifcf
-    fblur pvsblur fsmot, iblurtime, 1
-    a_smt pvsynth fblur
-    aOut linenr a_smt, 0, iblurtime*2, .01
-    out aOut, aOut
+	iacf = p4
+	ifcf = p5
+	iblurtime = p6
+	fanal pvstanal 1/10, 1, 1, gifil, 0
+	fsmot pvsmooth fanal, iacf, ifcf
+	fblur pvsblur fsmot, iblurtime, 1
+	a_smt pvsynth fblur
+	aOut linenr a_smt, 0, iblurtime*2, .01
+	out aOut, aOut
 endin
 
 </CsInstruments>

@@ -9,6 +9,7 @@ ksmps = 32
 nchnls = 1
 0dbfs = 1
 
+
 ;Some macros
 #define ATS_NP # 3 #    ;number of Partials
 #define ATS_DU # 7 #    ;duration
@@ -43,7 +44,7 @@ igatefn =      p10               ;amplitude scaling table
 
 ktime   linseg 0, p3, i_duration
 asig ATSadd ktime, ifreqdev, iatsfile, itable, inpars, ipofst, ipincr, igatefn
-
+       
  out    asig*iamp
 endin
 

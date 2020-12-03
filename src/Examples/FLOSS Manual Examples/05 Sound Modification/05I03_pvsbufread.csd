@@ -17,9 +17,9 @@ opcode FileToPvsBuf, iik, kSooop
  iWinsize = (iWinsize == 0) ? iFFTsize : iWinsize
   ;fill buffer
  if kTrig == 1 then
-  ilen  filelen Sfile
-  kNumCycles    = ilen * kr
-  kcycle        init        0
+  ilen 	filelen Sfile
+  kNumCycles	= ilen * kr
+  kcycle		init		0
   while kcycle < kNumCycles do
    ain soundin Sfile
    fftin pvsanal ain, iFFTsize, iOverlap, iWinsize, iWinshape

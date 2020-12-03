@@ -3,40 +3,31 @@
 -odac ; activates real time sound output
 </CsOptions>
 <CsInstruments>
+
 sr = 44100
 ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-instr CustomDelayLine
+giLFOShape  ftgen   0, 0, 2^12, 19, 0.5, 1, 180, 1
 
-  ;; 0.25 second delay
-  idel_size = 0.25 * sr
-  kdelay_line[] init idel_size
-  kread_ptr init 1
-  kwrite_ptr init 0
+  instr 1
+aSig    pinkish  0.1
 
-  asig = vco2(0.3, 220 * (1 + int(lfo:k(3, 2, 2))) * expon(1, p3, 4), 10)
-  asig = zdf_ladder(asig, 2000, 4)
+aMod    poscil   0.005, 0.05, giLFOShape
+iOffset =        ksmps/sr
+kFdback linseg   0.8,(p3/2)-0.5,0.95,1,-0.95
 
-  kindx = 0
-  while (kindx < ksmps) do
-    kdelay_line[kwrite_ptr] = asig[kindx]
-    adel[kindx] = kdelay_line[kread_ptr]
+aDelay  init     0
+aDelay  vdelayx  aSig+aDelay*kFdback, aMod+iOffset, 0.5, 128
 
-    kwrite_ptr = (kwrite_ptr + 1) % idel_size
-    kread_ptr = (kread_ptr + 1) % idel_size
-
-    kindx += 1
-  od
-
-  out(linen:a(asig,0,p3,1),linen:a(adel,0,p3,1))
-
-endin
+aOut    linen    (aSig+aDelay)/2, .1, p3, 1
+        out      aOut, aOut
+  endin
 
 </CsInstruments>
 <CsScore>
-i "CustomDelayLine" 0 10
+i 1 0 25
 </CsScore>
 </CsoundSynthesizer>
-;example by Steven Yi
+;example by Iain McCurdy and joachim heintz

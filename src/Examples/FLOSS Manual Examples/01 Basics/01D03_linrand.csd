@@ -33,6 +33,7 @@ iRnd       =          iOne > iTwo ? iOne : iTwo
            xout       iRnd
 endop
 
+
 ;****INSTRUMENTS FOR THE DIFFERENT DISTRIBUTIONS****
 
 instr notes_uniform
@@ -93,6 +94,7 @@ p3         =          iStart + 2
  ;call instr to exit csound
            event_i    "i", "exit", p3+1, 1
 endin
+
 
 ;****INSTRUMENTS TO PLAY THE SOUNDS AND TO EXIT CSOUND****
 

@@ -15,6 +15,7 @@ giWindow ftgen 0, 0, 1024, -19, 1, 0.5, 270, 0.5
 giWave ftgen 0, 0, 262144, 9, 100,1.000,0, 278,0.500,0, 518,0.250,0,
      816,0.125,0, 1166,0.062,0, 1564,0.031,0, 1910,0.016,0
 
+
 instr 1 ; demonstration of hsboscil
 kAmp = 0.3
 kTone rspline -1,1,0.05,0.2 ; randomly shift spectrum up and down

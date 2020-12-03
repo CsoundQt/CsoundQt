@@ -8,7 +8,7 @@ giFt ftgen 0, 0, 12, 2, 0
 
 instr 1; calculates first 12 fibonacci values and writes them to giFt
  istart = 1
- inext =     2
+ inext =	 2
  indx = 0
  while indx < 12 do
   tableiw istart, indx, giFt ;writes istart to table

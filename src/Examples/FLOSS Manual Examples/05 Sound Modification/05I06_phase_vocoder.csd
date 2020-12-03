@@ -12,6 +12,7 @@ nchnls = 1
 gifilA    ftgen     0, 0, 0, 1, "fox.wav", 0, 0, 1
 gifilB    ftgen     0, 0, 0, 1, "ClassGuit.wav", 0, 0, 1
 
+
 ;general values for the pvstanal opcode
 giamp     =         1 ;amplitude scaling
 gipitch   =         1 ;pitch scaling

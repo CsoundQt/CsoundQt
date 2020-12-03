@@ -1,7 +1,7 @@
+<CsoundSynthesizer>
 <CsOptions>
 -+rtmidi=null -M0
 </CsOptions>
-<CsoundSynthesizer>
 <CsInstruments>
 sr      =  44100
 ksmps   =  8
