@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
@@ -17,7 +16,7 @@ kTrig     metro     2; outputs "1" twice a second
   endin
 
   instr 2; triggered instrument
-aSig      oscils    .2, 400, 0
+aSig      poscil    .2, 400
 aEnv      transeg   1, p3, -10, 0
           outs      aSig*aEnv, aSig*aEnv
   endin
@@ -27,3 +26,4 @@ aEnv      transeg   1, p3, -10, 0
 i 1 0 10
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

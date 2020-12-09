@@ -56,11 +56,10 @@ int main(int argc, char *argv[])
 {
     int result = 0;
 
-#ifndef USE_QT_LT_50
     // Set a global template for ALL qDebug messages.
 	qSetMessagePattern("[%{if-debug}D%{endif}%{if-info}I%{endif}%{if-warning}W%{endif}%{if-critical}C%{endif}%{if-fatal}F%{endif}][%{file}:%{line} %{function}] %{message}");
 
-#endif
+
 #ifdef USE_QT_GT_55
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling); // TO test if this solved hight DPI problems
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);

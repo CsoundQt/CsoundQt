@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -n
+-n
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -12,17 +12,17 @@ nchnls = 1
   ;performs the karplus-strong algorithm
 iTab, iTbSiz xin
 ;calculate the mean of the last two values
-iUlt      tab_i     iTbSiz-1, iTab
-iPenUlt   tab_i     iTbSiz-2, iTab
+iUlt      tab\_i     iTbSiz-1, iTab
+iPenUlt   tab\_i     iTbSiz-2, iTab
 iNewVal   =         (iUlt + iPenUlt) / 2
 ;shift values one position to the right
 indx      =         iTbSiz-2
 loop:
-iVal      tab_i     indx, iTab
-          tabw_i    iVal, indx+1, iTab
-          loop_ge   indx, 1, 0, loop
+iVal      tab\_i     indx, iTab
+          tabw\_i    iVal, indx+1, iTab
+          loop\_ge   indx, 1, 0, loop
 ;fill the new value at the beginning of the table
-          tabw_i    iNewVal, 0, iTab
+          tabw\_i    iNewVal, 0, iTab
   endop
 
   opcode PrintTab, 0, iiS
@@ -34,7 +34,7 @@ loop:
 iVal      tab_i     indx, iTab
 Snew      sprintf   "%8.3f", iVal
 Sout      strcat    Sout, Snew
-          loop_lt   indx, 1, iTbSiz, loop
+          loop\_lt   indx, 1, iTbSiz, loop
           puts      Sout, 1
   endop
 
@@ -51,8 +51,8 @@ Scycle    sprintf   "Cycle %d:", iCycle
 iState    =         0
 state:
           KS        iTab, iTbLen
-          loop_lt   iState, 1, iTbLen, state
-          loop_lt   iCycle, 1, 10, cycle
+          loop\_lt   iState, 1, iTbLen, state
+          loop\_lt   iCycle, 1, 10, cycle
 endin
 
 </CsInstruments>

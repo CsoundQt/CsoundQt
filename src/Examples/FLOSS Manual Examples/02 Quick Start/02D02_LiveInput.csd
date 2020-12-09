@@ -1,10 +1,9 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials ;CHANGE YOUR INPUT AND OUTPUT DEVICE NUMBER HERE IF NECESSARY!
--iadc0 -odac0 -B512 -b128
+;CHANGE YOUR INPUT AND OUTPUT DEVICE NUMBER HERE IF NECESSARY!
+-iadc -odac -B512 -b128
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100 ;set sample rate to 44100 Hz
 ksmps = 32 ;number of samples per control cycle
 nchnls = 2 ;use two audio channels
@@ -26,3 +25,4 @@ endin
 i 1 0 3600
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

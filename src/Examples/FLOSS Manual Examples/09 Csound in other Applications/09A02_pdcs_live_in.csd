@@ -1,8 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials </CsOptions>
+</CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 0dbfs = 1
 ksmps = 8
@@ -26,3 +25,4 @@ endin
 i 1 0 10000
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

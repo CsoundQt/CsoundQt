@@ -42,6 +42,8 @@ public:
 	virtual QString getWidgetXmlText();
 	virtual QString getWidgetType();
     virtual QString getQml();
+	virtual void setMidiValue(int value);
+	virtual bool acceptsMidi() {return true;}
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();

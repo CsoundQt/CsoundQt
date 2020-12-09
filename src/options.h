@@ -49,6 +49,7 @@ public:
     QString highlightingTheme;
 	bool autoPlay;
 	bool autoJoin;
+	bool midiCcToCurrentPageOnly;
 	bool saveChanges;
     bool askIfTemporary;
 	bool rememberFile;

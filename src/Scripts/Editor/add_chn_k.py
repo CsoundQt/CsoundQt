@@ -8,7 +8,7 @@ newlines = [ 'chn_k "%s", 1'%s for s in channels]
 newtext = '\n'.join(newlines)
 q.insertText(newtext)
 
-print "%i lines inserted"%len(newlines)
+print("%i lines inserted"%len(newlines))
 
 #for (i, chn) in enumerate(channels):
     #q.createNewSlider(i*30, 40, chn)

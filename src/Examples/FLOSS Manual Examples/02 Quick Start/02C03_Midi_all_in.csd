@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -+rtmidi=portmidi -Ma -odac
+-+rtmidi=portmidi -Ma -odac
 </CsOptions>
 <CsInstruments>
 ;Example by Andrés Cabrera
@@ -25,6 +25,5 @@ endin
 </CsInstruments>
 <CsScore>
 i1 0 3600
-e
 </CsScore>
 </CsoundSynthesizer>

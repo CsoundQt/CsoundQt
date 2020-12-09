@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -i adc
+-i adc
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
@@ -30,23 +29,16 @@ aindx     phasor    1/5
   endin
 
   instr 2; write the giAudio table to a soundfile
-Soutname  =         "testwrite.wav"; name of the output file
-iformat   =         14; write as 16 bit wav file
-itablen   =         ftlen(giAudio); length of the table in samples
-
-kcnt      init      0; set the counter to 0 at start
-loop:
-kcnt      =         kcnt+ksmps; next value (e.g. 10 if ksmps=10)
-andx      interp    kcnt-1; calculate audio index (e.g. from 0 to 9)
-asig      tab       andx, giAudio; read the table values as audio signal
-          fout      Soutname, iformat, asig; write asig to a file
- if kcnt <= itablen-ksmps kgoto loop; go back as long there is something to do
-          turnoff   ; terminate the instrument
+iDone  ftaudio giAudio, "testwrite.wav", -1
+if iDone==1 then
+ prints "FUNCTION TABLE WRITTEN TO FILE 'testwrite.wav'!%n"
+endif
   endin
 
 </CsInstruments>
 <CsScore>
 i 1 0 7
-i 2 7 .1
+i 2 7 0
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

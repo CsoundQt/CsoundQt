@@ -157,6 +157,15 @@ QString QuteCheckBox::getQml()
 
 }
 
+void QuteCheckBox::setMidiValue(int value)
+{
+	double pressedVal = property("QCS_pressedValue").toDouble();
+	double newval= value == 0 ? 0 : pressedVal;
+	setValue(newval);
+	QPair<QString, double> channelValue(m_channel, newval);
+	emit newValue(channelValue);
+}
+
 QString QuteCheckBox::getWidgetXmlText()
 {
 	xmlText = "";

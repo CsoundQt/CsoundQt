@@ -90,8 +90,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>711</width>
-        <height>687</height>
+        <width>917</width>
+        <height>836</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -2218,6 +2218,13 @@
                   </property>
                   <property name="checked">
                    <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="midiCcToCurrentPageOnlyCheckBox">
+                  <property name="text">
+                   <string>MIDI CC to current page only</string>
                   </property>
                  </widget>
                 </item>

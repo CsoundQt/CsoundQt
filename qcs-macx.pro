@@ -1,7 +1,7 @@
 
 !macx: error(This project file is only for Macintosh OS X systems.)
 !no_messages {
-	message()
+    message(" ")
 	message(Building CsoundQt for Macintosh OS X.)
 }
 
@@ -41,7 +41,7 @@ DEFAULT_PYTHON_INCLUDE_DIR = /usr/local/include \
 DEFAULT_PYTHONQT_LIBRARY_DIRS = /usr/local/lib \
         /usr/lib
 
-PYTHONQT_VARIANTS =  "PythonQt3.2" "PythonQt3.1" "PythonQt3.0" "PythonQt" "PythonQt2.0.1"
+PYTHONQT_VARIANTS = "pythonqt" "PythonQt3.2" "PythonQt3.1" "PythonQt3.0" "PythonQt" "PythonQt2.0.1"
 for (pyqtdir, PYTHONQT_VARIANTS) {
 	DEFAULT_PYTHONQT_SRC_DIRS += ../../../$$pyqtdir \
 		../$$pyqtdir \

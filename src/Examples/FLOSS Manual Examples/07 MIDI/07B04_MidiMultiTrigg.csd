@@ -1,19 +1,18 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -Ma
+-Ma
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz, using code of Victor Lazzarini
 sr = 44100
 ksmps = 32
 nchnls = 1
 0dbfs = 1
 
           massign   0, 1 ;assign all incoming midi to instr 1
-giInstrs  ftgen     0, 0, -5, -2, 2, 3, 4, 10, 100 ;instruments to be triggered
+giInstrs ftgen 0, 0, -5, -2, 2, 3, 4, 10, 100 ;instruments to be triggered
 
  opcode MidiTrig, 0, io
-;triggers the first inum instruments in the function table ifn by a midi event,
+;triggers the first inum instruments in the function table ifn by a midi event
 ; with fractional numbers containing channel and note number information
 
 ; -- if inum=0 or not given, all instrument numbers in ifn are triggered
@@ -61,10 +60,8 @@ inote     =         round(frac(frac(p1)*100)*1000)
          printks   "instr %f playing!%n", 1, p1
  endin
 
-
 </CsInstruments>
 <CsScore>
-f 0 36000
-e
 </CsScore>
 </CsoundSynthesizer>
+;Example by Joachim Heintz, using code of Victor Lazzarini

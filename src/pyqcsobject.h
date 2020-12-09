@@ -144,9 +144,8 @@ public slots:
 	int getNumChannels(int index = -1);
 	MYFLT *getTableArray(int ftable, int index = -1);
 
-#ifdef CSOUND6
 	void evaluateCsound(QString code=QString());
-#endif
+
 	// TODO implement these!
 	//    getTablePointer(fn, index = -1)
 	//    copyTableToList(fn, index = -1, offset = 0, number = -1)

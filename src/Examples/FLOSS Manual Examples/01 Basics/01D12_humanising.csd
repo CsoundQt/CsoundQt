@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -22,7 +22,7 @@ aSig  poscil  aEnv,cpsmidinn(inote),giWave
 inote   =       p4
 
 ; generate some i-time 'static' random paramters
-iRndAmp random	-3,3   ; amp. will be offset by a random number of decibels
+iRndAmp random  -3,3   ; amp. will be offset by a random number of decibels
 iRndNte random  -5,5   ; note will be offset by a random number of cents
 
 ; generate some k-rate random functions
@@ -36,13 +36,12 @@ kcps    =        cpsmidinn(inote+(iRndNte*0.01)+(kNteWob*0.01))
 aEnv    linen   0.1*ampdb(iRndAmp+kAmpWob),0.01+rnd(0.03),p3,0.01
 aSig    poscil  aEnv,kcps,giWave
         outs    aSig,aSig
-  endin
+endin
 
 </CsInstruments>
-
 <CsScore>
 t 0 80
-#define SCORE(i) #
+\#define SCORE(i) \#
 i $i 0 1   60
 i .  + 2.5 69
 i .  + 0.5 67
@@ -54,10 +53,10 @@ i .  + 2.5 70
 i .  + 0.5 69
 i .  + 0.5 67
 i .  + 0.5 65
-i .  + 3   64 #
-$SCORE(1)  ; play melody without humanising
+i .  + 3   64 \#
+$$SCORE(1)  ; play melody without humanising
 b 17
-$SCORE(2)  ; play melody with humanising
+$$SCORE(2)  ; play melody with humanising
 e
 </CsScore>
 </CsoundSynthesizer>

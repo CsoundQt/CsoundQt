@@ -18,4 +18,3 @@ i1 0 86400
 e
 </CsScore>
 </CsoundSynthesizer>
-    

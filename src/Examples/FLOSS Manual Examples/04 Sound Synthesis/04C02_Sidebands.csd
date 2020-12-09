@@ -4,24 +4,31 @@
 </CsOptions>
 <CsInstruments>
 
-sr = 48000
+sr = 44100
 ksmps = 32
-nchnls = 1
+nchnls = 2
 0dbfs = 1
 
-instr 1
-aOffset linseg 0, 1, 0, 5, 0.6, 3, 0
-aSine1 poscil 0.3, 40 , 1
-aSine2 poscil 0.3, 440, 1
-out (aSine1+aOffset)*aSine2
+instr AM1
+ aDC_Offset linseg 0.2, 1, 0.2, 5, 0.4, 3, 0
+ aModulator poscil 0.4, 40
+ aCarrier poscil aDC_Offset+aModulator, 440
+ out aCarrier, aCarrier
 endin
 
 
+instr AM2
+ aDC_Offset linseg 0.2, 1, 0.2, 5, 0.4, 3, 0
+ aModulator poscil 0.4, 40
+ aCarrier poscil 1, 440
+ aAM = aCarrier * (aModulator+aDC_Offset)
+ out aAM, aAM
+endin
+
 </CsInstruments>
 <CsScore>
-f 1 0 1024 10 1
-i 1 0 10
-e
+i "AM1" 0 10
+i "AM2" 11 10
 </CsScore>
 </CsoundSynthesizer>
-; written by Alex Hofmann (Mar. 2011)
+; example by Alex Hofmann and joachim heintz

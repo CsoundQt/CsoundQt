@@ -23,11 +23,7 @@
 #ifndef QUTEWIDGET_H
 #define QUTEWIDGET_H
 
-#ifdef USE_QT5
 #include <QtWidgets>
-#else
-#include <QtGui>
-#endif
 #include <QtXml>
 
 #define QCS_CURRENT_XML_VERSION "2"

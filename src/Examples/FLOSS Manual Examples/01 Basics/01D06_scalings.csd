@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -d -odac -m0
+-odac -m0
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -103,23 +103,23 @@ iPrint     =          1
 
   ;calculate iMidiPch and iDur depending on type
   if iDistrib == 0 then
-           printf_i   "%s", iPrint, "... uniform distribution:\n"
-           printf_i   "%s", iPrint, "EQUAL LIKELINESS OF ALL PITCHES AND DURATIONS\n"
+printf_i   "%s", iPrint, "... uniform distribution:\n"
+printf_i   "%s", iPrint, "EQUAL LIKELINESS OF ALL PITCHES AND DURATIONS\n"
 iScaleIndx random     0, giLenScale-.0001 ;midi note
 iDurIndx   random     0, giLenDurs-.0001 ;duration
   elseif iDistrib == 1 then
-           printf_i   "... linear low distribution with %d units:\n", iPrint, iUnits
-           printf_i   "%s", iPrint, "LOWER NOTES AND LONGER DURATIONS PREFERRED\n"
+printf_i   "... linear low distribution with %d units:\n", iPrint, iUnits
+printf_i   "%s", iPrint, "LOWER NOTES AND LONGER DURATIONS PREFERRED\n"
 iScaleIndx linrnd_low 0, giLenScale-.0001, iUnits
 iDurIndx   linrnd_low 0, giLenDurs-.0001, iUnits
   elseif iDistrib == 2 then
-           printf_i   "... linear high distribution with %d units:\n", iPrint, iUnits
-           printf_i   "%s", iPrint, "HIGHER NOTES AND SHORTER DURATIONS PREFERRED\n"
+printf_i   "... linear high distribution with %d units:\n", iPrint, iUnits
+printf_i   "%s", iPrint, "HIGHER NOTES AND SHORTER DURATIONS PREFERRED\n"
 iScaleIndx linrnd_high 0, giLenScale-.0001, iUnits
 iDurIndx   linrnd_high 0, giLenDurs-.0001, iUnits
            else
-           printf_i   "... triangular distribution with %d units:\n", iPrint, iUnits
-           printf_i   "%s", iPrint, "MEDIUM NOTES AND DURATIONS PREFERRED\n"
+printf_i   "... triangular distribution with %d units:\n", iPrint, iUnits
+printf_i   "%s", iPrint, "MEDIUM NOTES AND DURATIONS PREFERRED\n"
 iScaleIndx trirnd     0, giLenScale-.0001, iUnits
 iDurIndx   trirnd     0, giLenDurs-.0001, iUnits
   endif

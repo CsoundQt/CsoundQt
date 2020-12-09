@@ -115,22 +115,6 @@ public:
 	CsoundEngine(ConfigLists *configlists);
 	~CsoundEngine();
 
-#ifndef CSOUND6
-	static void messageCallbackNoThread(CSOUND *csound,
-										int attr,
-										const char *fmt,
-										va_list args);
-	static void messageCallbackThread(CSOUND *csound,
-									  int attr,
-									  const char *fmt,
-									  va_list args);
-	static void outputValueCallback (CSOUND *csound,
-									 const char *channelName,
-									 MYFLT value);
-	static void inputValueCallback (CSOUND *csound,
-									const char *channelName,
-									MYFLT *value);
-#else
 	static void outputValueCallback (CSOUND *csound,
 									 const char *channelName,
 									 void *channelValuePtr,
@@ -140,7 +124,6 @@ public:
 									void *channelValuePtr,
 									const void *channelType);
 
-#endif
 	static int midiInOpenCb(CSOUND *csound, void **ud, const char *devName);
 	static int midiReadCb(CSOUND *csound, void *ud_, unsigned char *buf, int nBytes);
 	static int midiInCloseCb(CSOUND *csound, void *ud);
@@ -185,6 +168,7 @@ public:
 
 	bool isRunning();
 	bool isRecording();
+	bool isPaused() {return m_paused; }
 
 	// To pass to parent document for access from python scripting
 	CSOUND * getCsound();
@@ -263,6 +247,7 @@ private:
 	QList <int> keyReleaseBuffer; // protected by keyMutex
 
 	bool m_recording;
+	bool m_paused;
     // To prevent from starting a Csound instance while another is starting or closing
     QMutex m_playMutex;
 	QMutex eventMutex;

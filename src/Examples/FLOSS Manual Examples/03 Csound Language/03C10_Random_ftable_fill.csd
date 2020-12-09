@@ -1,6 +1,8 @@
 <CsoundSynthesizer>
+<CsOptions>
+-nm0
+</CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 
 giTable   ftgen     0, 0, -20, -2, 0; empty function table with 20 points
           seed      0; each time different seed
@@ -29,3 +31,4 @@ i 1 0 0
 i 2 0 0
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

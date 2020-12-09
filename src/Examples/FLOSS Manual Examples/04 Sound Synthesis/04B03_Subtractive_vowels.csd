@@ -1,12 +1,8 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
-
 <CsInstruments>
-;example by Iain McCurdy
-
 sr = 44100
 ksmps = 16
 nchnls = 2
@@ -21,11 +17,11 @@ giBF3 ftgen 0, 0, -5, -2, 2250, 2400, 2600, 2400, 2400
 giBF4 ftgen 0, 0, -5, -2, 2450, 2800, 3050, 2600, 2675
 giBF5 ftgen 0, 0, -5, -2, 2750, 3100, 3340, 2900, 2950
 
-giBDb1 ftgen 0, 0, -5, -2,   0,	  0,   0,   0,   0
-giBDb2 ftgen 0, 0, -5, -2,  -7,	-12, -30, -11, -20
-giBDb3 ftgen 0, 0, -5, -2,  -9,	 -9, -16, -21, -32
-giBDb4 ftgen 0, 0, -5, -2,  -9,	-12, -22, -20, -28
-giBDb5 ftgen 0, 0, -5, -2, -20,	-18, -28, -40, -36
+giBDb1 ftgen 0, 0, -5, -2,   0,   0,   0,   0,   0
+giBDb2 ftgen 0, 0, -5, -2,  -7, -12, -30, -11, -20
+giBDb3 ftgen 0, 0, -5, -2,  -9,  -9, -16, -21, -32
+giBDb4 ftgen 0, 0, -5, -2,  -9, -12, -22, -20, -28
+giBDb5 ftgen 0, 0, -5, -2, -20, -18, -28, -40, -36
 
 giBBW1 ftgen 0, 0, -5, -2,  60,  40,  60,  40,  40
 giBBW2 ftgen 0, 0, -5, -2,  70,  80,  90,  80,  80
@@ -36,9 +32,9 @@ giBBW5 ftgen 0, 0, -5, -2, 130, 120, 120, 120, 120
 ;TENOR
 giTF1 ftgen 0, 0, -5, -2,  650,  400,  290,  400,  350
 giTF2 ftgen 0, 0, -5, -2, 1080, 1700, 1870,  800,  600
-giTF3 ftgen 0, 0, -5, -2, 2650,	2600, 2800, 2600, 2700
-giTF4 ftgen 0, 0, -5, -2, 2900,	3200, 3250, 2800, 2900
-giTF5 ftgen 0, 0, -5, -2, 3250,	3580, 3540, 3000, 3300
+giTF3 ftgen 0, 0, -5, -2, 2650, 2600, 2800, 2600, 2700
+giTF4 ftgen 0, 0, -5, -2, 2900, 3200, 3250, 2800, 2900
+giTF5 ftgen 0, 0, -5, -2, 3250, 3580, 3540, 3000, 3300
 
 giTDb1 ftgen 0, 0, -5, -2,   0,   0,   0,   0,   0
 giTDb2 ftgen 0, 0, -5, -2,  -6, -14, -15, -10, -20
@@ -46,11 +42,11 @@ giTDb3 ftgen 0, 0, -5, -2,  -7, -12, -18, -12, -17
 giTDb4 ftgen 0, 0, -5, -2,  -8, -14, -20, -12, -14
 giTDb5 ftgen 0, 0, -5, -2, -22, -20, -30, -26, -26
 
-giTBW1 ftgen 0, 0, -5, -2,  80,	 70,  40,  40,  40
-giTBW2 ftgen 0, 0, -5, -2,  90,	 80,  90,  80,  60
-giTBW3 ftgen 0, 0, -5, -2, 120,	100, 100, 100, 100
-giTBW4 ftgen 0, 0, -5, -2, 130,	120, 120, 120, 120
-giTBW5 ftgen 0, 0, -5, -2, 140,	120, 120, 120, 120
+giTBW1 ftgen 0, 0, -5, -2,  80,  70,  40,  40,  40
+giTBW2 ftgen 0, 0, -5, -2,  90,  80,  90,  80,  60
+giTBW3 ftgen 0, 0, -5, -2, 120, 100, 100, 100, 100
+giTBW4 ftgen 0, 0, -5, -2, 130, 120, 120, 120, 120
+giTBW5 ftgen 0, 0, -5, -2, 140, 120, 120, 120, 120
 
 ;COUNTER TENOR
 giCTF1 ftgen 0, 0, -5, -2,  660,  440,  270,  430,  370
@@ -145,14 +141,15 @@ instr 1
   aForm4   reson     aInput, kCF4, kBW4*kBW, 1     ; formant 4
   aForm5   reson     aInput, kCF5, kBW5*kBW, 1     ; formant 5
 
-  ; formants are mixed and multiplied both by intensity values derived from tables and by the on-screen gain controls for each formant
-  aMix     sum       aForm1*ampdbfs(kDB1),aForm2*ampdbfs(kDB2),aForm3*ampdbfs(kDB3),aForm4*ampdbfs(kDB4),aForm5*ampdbfs(kDB5)
+  ; formants are mixed and multiplied both by intensity values derived 
+  ; from tables and by the on-screen gain controls for each formant
+  aMix     sum     aForm1*ampdbfs(kDB1), aForm2*ampdbfs(kDB2),
+       aForm3*ampdbfs(kDB3), aForm4*ampdbfs(kDB4), aForm5*ampdbfs(kDB5)
   kEnv     linseg    0,3,1,p3-6,1,3,0     ; an amplitude envelope
            outs      aMix*kEnv, aMix*kEnv ; send audio to outputs
 endin
 
 </CsInstruments>
-
 <CsScore>
 ; p4 = fundemental begin value (c.p.s.)
 ; p5 = fundemental end value
@@ -172,5 +169,5 @@ i 1 24 .  200 220 1   0   0.2 0  3   1    0
 i 1 32 .  400 800 0   1   0.2 0  4   0    1
 e
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

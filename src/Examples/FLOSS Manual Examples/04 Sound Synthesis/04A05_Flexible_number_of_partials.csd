@@ -1,15 +1,12 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -o dac
+-o dac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
 0dbfs = 1
-
-giSine    ftgen     0, 0, 2^10, 10, 1
 
 instr 1 ;master instrument
 inumparts =         p4 ;number of partials
@@ -28,7 +25,7 @@ instr 10 ;subinstrument for playing one partial
 ifreq     =         p4 ;frequency of this partial
 iamp      =         p5 ;amplitude of this partial
 aenv      transeg   0, .01, 0, iamp, p3-0.1, -10, 0
-apart     poscil    aenv, ifreq, giSine
+apart     poscil    aenv, ifreq
           outs      apart, apart
 endin
 
@@ -40,3 +37,4 @@ i 1 3 3   20
 i 1 6 3   2
 </CsScore>
 </CsoundSynthesizer>
+;Example by joachim heintz

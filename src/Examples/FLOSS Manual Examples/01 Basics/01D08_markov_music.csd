@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -dnm128 -odac
+-m128 -odac
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -46,7 +46,7 @@ giBasFreq  =          330
   ;sixth -> mostly to seventh
   ;seventh -> mostly to sixth
 giProbNotes[][] init  7, 7
-giProbNotes array     0.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0,
+giProbNotes fillarray 0.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0,
                       0.2, 0.0, 0.2, 0.2, 0.2, 0.1, 0.1,
                       0.1, 0.1, 0.5, 0.1, 0.1, 0.1, 0.0,
                       0.0, 0.1, 0.1, 0.5, 0.1, 0.1, 0.1,
@@ -110,4 +110,4 @@ aL, aR     pan2       aOut, iPan
 i "trigger_note" 0 100
 </CsScore>
 </CsoundSynthesizer>
-;example by joachim heintz 
+;example by joachim heintz

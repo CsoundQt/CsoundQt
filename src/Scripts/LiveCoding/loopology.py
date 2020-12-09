@@ -36,4 +36,4 @@ while time < enddur :
     q.refresh()
 
 q.sendEvent(sco)
-print "done."
+print("done.")

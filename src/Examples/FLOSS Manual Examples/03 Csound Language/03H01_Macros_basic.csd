@@ -1,14 +1,12 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
-
 <CsInstruments>
-sr 	= 	44100
-ksmps 	= 	16
-nchnls 	= 	1
-0dbfs	=	1
+sr      =       44100
+ksmps   =       16
+nchnls  =       1
+0dbfs   =       1
 
 ; define the macro
 #define SOUNDFILE # "loop.wav" #
@@ -26,7 +24,6 @@ a1  diskin2  $SOUNDFILE,1
  endin
 
 </CsInstruments>
-
 <CsScore>
 i 1 0 0.01
 e

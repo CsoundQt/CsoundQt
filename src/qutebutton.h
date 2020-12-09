@@ -76,7 +76,10 @@ private:
 	QIcon icon;
     QIcon onIcon;
 
+	bool m_isPlaying;
+
     void performAction();
+	bool hasIndefiniteDuration();
 
 private slots:
 	void buttonPressed();

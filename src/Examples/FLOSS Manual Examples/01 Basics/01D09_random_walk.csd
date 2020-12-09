@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -dnm128 -odac
+-m128 -odac
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -73,12 +73,13 @@ kDens *= kDensMult
 kDens     =         kDens > giHighestDens*1.5 ? giHighestDens*1.5 : kDens
 kDens     =         kDens < giLowestDens/1.5 ? giLowestDens/1.5 : kDens
    ;change direction if maxima are crossed
-  if (kDens > giHighestDens && gkDensDir > 0) || (kDens < giLowestDens && gkDensDir < 0) then
+  if (kDens > giHighestDens && gkDensDir > 0) || 
+      (kDens < giLowestDens && gkDensDir < 0) then
 gkDensDir =         -gkDensDir
    if kDens > giHighestDens then
-          printks   " Density touched upper border - now becoming less dense.\n", 0
+printks   " Density touched upper border - now becoming less dense.\n", 0
           else
-          printks   " Density touched lower border - now becoming more dense.\n", 0
+printks   " Density touched lower border - now becoming more dense.\n", 0
    endif
   endif
  endif
@@ -105,4 +106,4 @@ aL, aR     pan2       aOut, iPan
 i "walk" 0 999
 </CsScore>
 </CsoundSynthesizer>
-;example by joachim heintz 
+;example by joachim heintz

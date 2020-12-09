@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 441
 nchnls = 2
@@ -34,3 +33,4 @@ asig      poscil    .2, 400, giSine
 i 1 0 10
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

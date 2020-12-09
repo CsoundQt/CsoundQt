@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac -dm0
+-odac -dm0
 </CsOptions>
 <CsInstruments>
 
@@ -47,10 +47,10 @@ instr 1  ;Markov chain reader and note spawner
 ;p4 = frequency of note generation
 ;p5 = octave
 ioct init p5
-klastnote init 0 ;Used to remember last note played (start at first note of scale)
+klastnote init 0 ;Used to remember last note played
 ktrig metro p4 ;generate a trigger with frequency p4
 knewnote pycall1t ktrig, "get_new_note", klastnote ;get new note from chain
-schedkwhen ktrig, 0, 10, 2, 0, 0.2, knewnote, ioct ;launch note on instrument 2
+schedkwhen ktrig, 0, 10, 2, 0, 0.2, knewnote, ioct ;launch note on instr 2
 klastnote = knewnote ;New note is now the old note
 endin
 
@@ -77,20 +77,3 @@ i 1 15 15     1               8
 </CsScore>
 </CsoundSynthesizer>
 ;Example by Andrés Cabrera
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>

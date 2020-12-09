@@ -1,12 +1,8 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac ; activates real time sound output
+-odac ; activates real time sound output
 </CsOptions>
-
 <CsInstruments>
-;Example by Iain McCurdy
-
 sr =  44100
 ksmps = 32
 nchnls = 2
@@ -19,7 +15,7 @@ kEnv         loopseg   0.5,0,0,1,0.003,1,0.0001,0,0.9969,0,0; amp. env.
 aSig         pinkish   kEnv              ; noise pulses
              outs      aSig, aSig        ; audio to outs
 iRvbSendAmt  =         0.8               ; reverb send amount (0 - 1)
-; add some of the audio from this instrument to the global reverb send variable
+;add some of the audio from this instrument to the global reverb send variable
 gaRvbSend    =         gaRvbSend + (aSig * iRvbSendAmt)
   endin
 
@@ -33,11 +29,9 @@ aRvbL,aRvbR  freeverb  gaRvbSend, gaRvbSend,kroomsize,kHFDamp
   endin
 
 </CsInstruments>
-
 <CsScore>
 i 1 0 300 ; noise pulses (input sound)
 i 5 0 300 ; start reverb
-e
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

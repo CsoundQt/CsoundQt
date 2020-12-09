@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -o dac
+-o dac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 4410; very high because of printing
             ;(change to 441 to see the difference)
@@ -27,3 +26,4 @@ kmax      max_k     aSum, 1, 1; calculate maximum
 i 1 0 1
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

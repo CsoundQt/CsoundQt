@@ -20,19 +20,15 @@
     02111-1307 USA
 */
 
-#ifdef USE_QT5
-#include <QtConcurrent>
-#endif
 
+#include <QtConcurrent>
 #include <QThread>
 
 #ifdef Q_OS_WIN
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
 #endif
 
-#ifdef CSOUND6
 #include "csound_standard_types.h"
-#endif
 
 #include "csoundengine.h"
 #include "widgetlayout.h"
@@ -64,10 +60,8 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
     m_recording = false;
 #ifndef QCS_DESTROY_CSOUND
     ud->csound=csoundCreate( (void *) ud);
-#ifdef CSOUND6
     ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
     Q_ASSERT(ud->midiBuffer);
-#endif
 #endif
     eventQueue.resize(QCS_MAX_EVENTS);
     eventTimeStamps.resize(QCS_MAX_EVENTS);
@@ -95,89 +89,7 @@ CsoundEngine::~CsoundEngine()
     delete ud;
 }
 
-#ifndef CSOUND6
 
-void CsoundEngine::messageCallbackThread(CSOUND *csound,
-                                         int /*attr*/,
-                                         const char *fmt,
-                                         va_list args)
-{
-
-    CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-    qDebug() << msg;
-    if (!(ud->flags & QCS_NO_CONSOLE_MESSAGES)) {
-        QString msg;
-        msg = msg.vsprintf(fmt, args);
-        if (msg.isEmpty()) {
-            return;
-        }
-        ud->csEngine->queueMessage(msg);
-    }
-}
-#endif
-
-#ifndef CSOUND6
-void CsoundEngine::outputValueCallback (CSOUND *csound,
-                                        const char *channelName,
-                                        MYFLT value)
-{
-    // Called by the csound running engine when 'outvalue' opcode is used
-    // To pass data from Csound to CsoundQt
-    CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-    QString name = QString(channelName);
-    if (name.startsWith('$')) {
-        QString channelName = name;
-        channelName.chop(name.size() - (int) value + 1);
-        QString sValue = name;
-        sValue = sValue.right(name.size() - (int) value);
-        channelName.remove(0,1);
-        ud->csEngine->passOutString(channelName, sValue);
-    }
-    else {
-        ud->csEngine->passOutValue(name, value);
-    }
-}
-
-void CsoundEngine::inputValueCallback(CSOUND *csound,
-                                      const char *channelName,
-                                      MYFLT *value)
-{
-    // Called by the csound running engine when 'invalue' opcode is used
-    // To pass data from qutecsound to Csound
-    CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-    QString name = QString(channelName);
-    if (name.startsWith('$')) { // channel is a string channel
-        char *string = (char *) value;
-        QString newValue = ud->wl->getStringForChannel(name.mid(1));
-        int maxlen = csoundGetStrVarMaxLen(csound);
-        strncpy(string, newValue.toLocal8Bit(), maxlen);
-    }
-    else {  // Not a string channel
-        //FIXME check if mouse tracking is active, and move this from here
-        if (name == "_MouseX") {
-            *value = (MYFLT) ud->mouseValues[0];
-        }
-        else if (name == "_MouseY") {
-            *value = (MYFLT) ud->mouseValues[1];
-        }
-        else if(name == "_MouseRelX") {
-            *value = (MYFLT) ud->mouseValues[2];
-        }
-        else if(name == "_MouseRelY") {
-            *value = (MYFLT) ud->mouseValues[3];
-        }
-        else if(name == "_MouseBut1") {
-            *value = (MYFLT) ud->mouseValues[4];
-        }
-        else if(name == "_MouseBut2") {
-            *value = (MYFLT) ud->mouseValues[5];
-        }
-        else {
-            *value = (MYFLT) ud->wl->getValueForChannel(name);
-        }
-    }
-}
-#else
 void CsoundEngine::outputValueCallback (CSOUND *csound,
                                         const char *channelName,
                                         void *channelValuePtr,
@@ -346,7 +258,6 @@ void CsoundEngine::sendMidiOut(QVector<unsigned char> &message)
     (void) message;
 }
 
-#endif
 
 void CsoundEngine::makeGraphCallback(CSOUND *csound, WINDAT *windat, const char * /*name*/)
 {
@@ -734,9 +645,11 @@ void CsoundEngine::stop()
 void CsoundEngine::pause()
 {
     QMutexLocker locker(&m_playMutex);
-    if (ud->perfThread && (ud->perfThread->GetStatus() == 0))  {
-        //ud->perfThread->Pause();
-        ud->perfThread->TogglePause();
+    if (ud->perfThread && (ud->perfThread->GetStatus() == 0))  {		
+		//ud->perfThread->Pause();
+		ud->perfThread->TogglePause();
+		m_paused = !m_paused;
+		qDebug() << "Paused: " << m_paused;
     }
 }
 
@@ -745,6 +658,7 @@ int CsoundEngine::startRecording(int sampleformat, QString fileName)
     qDebug("start recording (%i-bit samples): %s",
            (sampleformat + 2) * 8,
            fileName.toLocal8Bit().constData());
+	m_paused = false;
     // clip instead of wrap when converting floats to ints
 #ifdef PERFTHREAD_RECORD
     // perfthread record API is only available with csound >= 6.04
@@ -761,6 +675,7 @@ int CsoundEngine::startRecording(int sampleformat, QString fileName)
 void CsoundEngine::stopRecording()
 {
     m_recording = false;
+	m_paused = false;
 
 #ifdef	PERFTHREAD_RECORD
     if (ud->perfThread) {
@@ -992,6 +907,7 @@ int CsoundEngine::runCsound()
         ud->perfThread = new CsoundPerformanceThread(ud->csound);
         ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
         ud->perfThread->Play();
+		m_paused = false;
     }
     ud->audioOutputBuffer.resize(ud->numChnls * 2048);
     return 0;
@@ -1008,6 +924,7 @@ void CsoundEngine::stopCsound()
     CsoundPerformanceThread *pt = ud->perfThread;
 
     pt->Stop();
+	m_paused = false;
 
     unsigned int waitTime = 100;
 

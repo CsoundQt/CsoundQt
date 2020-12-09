@@ -23,11 +23,8 @@
 #include "dockhelp.h"
 #include "ui_dockhelp.h"
 
-#ifdef USE_QT5
 #include <QtWidgets>
-#else
-#include <QtGui>
-#endif
+
 
 DockHelp::DockHelp(QWidget *parent)
 	: QDockWidget(parent), ui(new Ui::DockHelp)

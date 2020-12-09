@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -iadc -odac
+-iadc -odac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
@@ -67,3 +66,4 @@ i 3 12 7 ; record 5 seconds of live audio to a table
 i 4 20 5 ; play back the recording of live audio
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz
