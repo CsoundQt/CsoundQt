@@ -1547,8 +1547,10 @@ void QuteTableWidget::reset() {
     m_running = false;
     m_data = nullptr;
     m_tabsize = 0;
-    if(m_autorange)
+    if(m_autorange) {
         m_maxy = 1.0;
+        m_miny = -1.0;
+    }
     if(m_path != nullptr) {
         delete m_path;
         m_path = nullptr;
@@ -1557,20 +1559,49 @@ void QuteTableWidget::reset() {
 
 void QuteTableWidget::paintGrid(QPainter *painter) {
     int margin = m_margin;
-    QString maxystr;
+    QString maxystr, minystr;
+    double newmaxy = m_maxy;
+    double newminy = m_miny;
+    auto rect = this->rect();
+    auto width = rect.width() - margin*2;
+    int step = m_tabsize / width;
+    if (step == 0)
+        step = 1;
+
+    if(m_autorange) {
+        for(int i=0; i < m_tabsize; i+=step) {
+            double y = m_data[i];
+            if(y > newmaxy)
+                newmaxy = y;
+            else if (y < newminy)
+                newminy = y;
+        }
+        m_maxy = ceil(newmaxy);
+        m_miny = floor(newminy);
+    }
+
     if(m_maxy >= 10)
         maxystr = QString::number((int)m_maxy);
     else if(m_maxy >= 1)
         maxystr = QString::number(m_maxy, 'f', 1);
     else
         maxystr = QString::number(m_maxy, 'f', 2);
-    auto rect = this->rect();
+    double absminy = abs(m_miny);
+    if(absminy >= 10)
+        minystr = QString::number((int)m_miny);
+    else if(absminy >= 1)
+        minystr = QString::number(m_miny, 'f', 1);
+    else
+        minystr = QString::number(m_miny, 'f', 2);
+
     const int yoffset = 0;
     auto x0 = rect.x() + margin;
     auto x1 = rect.x() + rect.width() - margin + 1;
     auto y0 = rect.y() + margin + yoffset;
     auto y1 = rect.y() + rect.height() - margin + yoffset ;
-    auto ycenter = (y0+y1) / 2;
+    auto height = rect.height() - margin*2;
+    double yscale = -height / (m_maxy - m_miny);
+
 
     auto font = QFont({"Sans", 8});
     QFontMetrics fm(font);
@@ -1578,16 +1609,28 @@ void QuteTableWidget::paintGrid(QPainter *painter) {
     const int textMargin = 4;
     painter->setBrush(Qt::NoBrush);
     painter->setPen(QPen(QColor(96, 96, 96), 0));
+
+    // upper line
     painter->drawLine(rect.x() + fm.boundingRect(maxystr).width()+textMargin*2, y0, x1, y0);
-    painter->drawLine(x0, ycenter, x1, ycenter);
+    // lower line
     painter->drawLine(x0, y1, x1 - fm.boundingRect(tabsizestr).width() - 2, y1);
-    painter->setPen(QColor(48, 48, 48));
-    painter->drawLine(x0, (y0+ycenter)/2, x1, (y0+ycenter)/2);
-    painter->drawLine(x0, (y1+ycenter)/2, x1, (y1+ycenter)/2);
+
+    // 0 line
+    if (m_maxy > 0 && m_miny < 0) {
+        int yzero = static_cast<int>(-m_miny * yscale + (y0+height));
+        QDEBUG << yzero << y0 << y1;
+        painter->drawLine(x0, yzero, x1, yzero);
+
+        painter->setPen(QColor(200, 200, 200));
+        painter->drawText(rect.x(), yzero, "0");
+    }
 
     painter->setPen(QColor(200, 200, 200));
     painter->setFont(font);
     painter->drawText(rect.x()+textMargin, y0+textMargin, maxystr);
+    painter->drawText(rect, Qt::AlignLeft|Qt::AlignBottom, minystr);
+
+
     // right padding
     rect.setWidth(rect.width() - textMargin);
     painter->drawText(rect, Qt::AlignRight|Qt::AlignBottom, tabsizestr);
@@ -1636,6 +1679,7 @@ void QuteTableWidget::setRange(double maxy) {
     } else {
         m_autorange = false;
         m_maxy = maxy;
+        m_miny = -maxy;
     }
 }
 
@@ -1649,10 +1693,8 @@ void QuteTableWidget::updatePath() {
     auto width = rect.width() - margin*2;
     auto height = rect.height() - margin*2;
     double maxy = this->m_maxy;
-    double newmaxy = maxy;
-    double newminy = -maxy;
+    double miny = this->m_miny;
     double xscale = width / (double)m_tabsize;
-    double yscale = height * 0.5 / maxy;
     double y0 = rect.y() + margin;
     double x0 = rect.x() + margin;
     int step = m_tabsize / width;
@@ -1660,26 +1702,18 @@ void QuteTableWidget::updatePath() {
         step = 1;
 
     auto path = new QPainterPath();
-    double ydata = m_data[0];
-    if(m_autorange) {
-        for(int i=0; i < m_tabsize; i+=step) {
-            ydata = -m_data[i];
-            if(ydata > newmaxy)
-                newmaxy = ydata;
-            else if (ydata < newminy)
-                newminy = ydata;
-        }
-        newminy = -newminy;
-        m_maxy = newmaxy > newminy ? ceil(newmaxy) : ceil(newminy);
-    }
+    // double yscale = ((y0 - (y0+height)) / (maxy-miny));
+    double yscale = -height / (maxy-miny);
 
-    path->moveTo(x0, (ydata+maxy)*yscale+y0);
-    double miny = -maxy;
-    double yfactor = (y0+height) / (maxy - miny);
-    for(int i=0; i < m_tabsize; i+=step) {
-        ydata = -m_data[i];
+    // y2 = (ydata - miny) / (maxy-miny) * (j1-j0) + j0
+    // j0 = y0 + height; j1 = y0
+    // move to first point
+    double ydata = m_data[0];
+    path->moveTo(x0, (ydata-miny)*yscale+y0+height);
+    for(int i=1; i < m_tabsize; i+=step) {
+        ydata = m_data[i];
         double x2 = i*xscale + x0;
-        double y2 = (ydata - miny) * yfactor + y0;
+        double y2 = (ydata - miny) * yscale + (y0+height);
         path->lineTo(x2, y2);
     }
     mutex.lock();
@@ -1716,6 +1750,7 @@ void QuteTableWidget::updateData(int tabnum, bool check) {
     m_tabsize = tabsize;
     if(m_autorange && m_tabnum != tabnum) {
         m_maxy = 1.0;
+        m_miny = 0;
     }
     m_tabnum = tabnum;
     mutex.unlock();
