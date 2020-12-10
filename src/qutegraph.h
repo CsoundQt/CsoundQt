@@ -221,6 +221,7 @@ public:
         , m_tabsize(0)
         , m_margin(8)
         , m_maxy(1.0)
+        , m_miny(-1.0)
         , m_autorange(true)
         , m_path(nullptr)
         , m_showGrid(true)
@@ -248,6 +249,7 @@ private:
     int m_tabsize;
     int m_margin;
     double m_maxy;
+    double m_miny;
     bool m_autorange;
     QPainterPath *m_path;
     QMutex mutex;

@@ -1661,21 +1661,28 @@ void QuteTableWidget::updatePath() {
 
     auto path = new QPainterPath();
     double ydata = m_data[0];
+    if(m_autorange) {
+        for(int i=0; i < m_tabsize; i+=step) {
+            ydata = -m_data[i];
+            if(ydata > newmaxy)
+                newmaxy = ydata;
+            else if (ydata < newminy)
+                newminy = ydata;
+        }
+        newminy = -newminy;
+        m_maxy = newmaxy > newminy ? ceil(newmaxy) : ceil(newminy);
+    }
+
     path->moveTo(x0, (ydata+maxy)*yscale+y0);
+    double miny = -maxy;
+    double yfactor = (y0+height) / (maxy - miny);
     for(int i=0; i < m_tabsize; i+=step) {
         ydata = -m_data[i];
         double x2 = i*xscale + x0;
-        double y2 = (ydata+maxy)*yscale + y0;
+        double y2 = (ydata - miny) * yfactor + y0;
         path->lineTo(x2, y2);
-        if(ydata > newmaxy)
-            newmaxy = ydata;
-        else if (ydata < newminy)
-            newminy = ydata;
     }
     mutex.lock();
-    if(m_autorange) {
-        m_maxy = newmaxy > -newminy ? ceil(newmaxy) : floor(-newminy);
-    }
     if(m_path != nullptr)
         delete m_path;
     m_path = path;
@@ -1775,7 +1782,7 @@ void QuteTable::createPropertiesDialog() {
     rangeSpinBox->setSingleStep(0.1);
     rangeSpinBox->setToolTip("Sets the max. range to plot. Disable this to use autorange"
                              "With a fixed range, values outside the range will not be "
-                             "visiable");
+                             "visible");
     rangeSpinBox->setValue(range > 0 ? range : 1.0);
     layout->addWidget(rangeSpinBox, 5, 2, Qt::AlignLeft|Qt::AlignVCenter);
     connect(rangeCheckBox, SIGNAL(toggled(bool)), rangeSpinBox, SLOT(setEnabled(bool)));
