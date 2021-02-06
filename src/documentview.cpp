@@ -530,7 +530,7 @@ QString DocumentView::getWidgetsText()
 	// With tags including presets, in new xml format. For text that is being edited in the text editor
 	// Includes presets text
 	qDebug() << "Not implemented and will crash!";
-    return "Not implemeneted.";
+    return "Not implemented.";
 }
 
 int DocumentView::getViewMode()
