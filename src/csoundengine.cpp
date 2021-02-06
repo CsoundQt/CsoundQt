@@ -986,7 +986,7 @@ void CsoundEngine::stopCsound()
     // Put menu bar back
     SetMenuBar(menuBarHandle);
 #endif
-    QDEBUG << "emiting stopSignal...";
+    QDEBUG << "emitting stopSignal...";
 
     locker.unlock();
     emit stopSignal();

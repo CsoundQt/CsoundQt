@@ -974,7 +974,7 @@
                <bool>true</bool>
               </property>
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Daemon mode. Do not exit if CSD/orchestra is not given, is empty or does not compile. &lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NB&lt;/span&gt;: use with care. In the case of syntax errors csound will keep execution in at times undefined state, causing crashes and possibly bringing CsoundQt down with it. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NB2&lt;/span&gt;: in the absense of a score or of any events within the &amp;lt;CsScore&amp;gt; tag csound goes into daemon mode by default. &lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Daemon mode. Do not exit if CSD/orchestra is not given, is empty or does not compile. &lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NB&lt;/span&gt;: use with care. In the case of syntax errors csound will keep execution in at times undefined state, causing crashes and possibly bringing CsoundQt down with it. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;NB2&lt;/span&gt;: in the absence of a score or of any events within the &amp;lt;CsScore&amp;gt; tag csound goes into daemon mode by default. &lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="styleSheet">
                <string notr="true"/>
