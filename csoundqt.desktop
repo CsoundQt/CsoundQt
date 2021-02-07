@@ -9,3 +9,5 @@ MimeType=text/x-csound-sco;text/x-csound-orc;text/x-csound-csd;text/x-csound-udo
 Name[en_US]=CsoundQt
 Name=CsoundQt
 Type=Application
+Comment=CsoundQt is a frontend for Csound featuring a highlighting editor with autocomplete, interactive widgets and integrated help.
+Keywords=audio;sound
