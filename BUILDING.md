@@ -45,7 +45,7 @@ To change between the branches use command *git checkout <branchname \>*
 
 
 <a name="building"> 
-
+   
 Building 
 -----
 
