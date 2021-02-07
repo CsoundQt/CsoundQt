@@ -49,6 +49,8 @@ BaseDocument::BaseDocument(QWidget *parent, OpEntryParser *opcodeTree, ConfigLis
 			m_csEngine, SLOT(keyPressForCsound(int)));
 	connect(m_console, SIGNAL(keyReleased(int)),
 			m_csEngine, SLOT(keyReleaseForCsound(int)));
+
+	acceptsMidiCC = true;
 }
 
 BaseDocument::~BaseDocument()

@@ -495,7 +495,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -532,7 +532,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -595,7 +595,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>0.00000000</value>
+  <value>-51.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -629,7 +629,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>0.00000000</value>
+  <value>-52.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -689,7 +689,7 @@ e
    <g>76</g>
    <b>17</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>25</r>
    <g>25</g>
@@ -781,7 +781,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -793,7 +793,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -818,7 +818,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -830,7 +830,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -985,7 +985,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -997,7 +997,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1022,7 +1022,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1034,7 +1034,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1189,7 +1189,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1201,7 +1201,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1226,7 +1226,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1238,7 +1238,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1445,7 +1445,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-94.27334484</yValue>
+  <yValue>-17.98972116</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1457,7 +1457,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1503,7 +1503,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>-28.40241999</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1515,7 +1515,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1561,7 +1561,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1573,7 +1573,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1619,7 +1619,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1631,7 +1631,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1677,7 +1677,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1689,7 +1689,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1735,7 +1735,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1747,7 +1747,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1793,7 +1793,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1805,7 +1805,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1851,7 +1851,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1863,7 +1863,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1924,8 +1924,9 @@ e
   <showSelector>false</showSelector>
   <showGrid>true</showGrid>
   <showTableInfo>false</showTableInfo>
-  <showScrollbars>true</showScrollbars>
-  <enableTables>true</enableTables>
+  <showScrollbars>false</showScrollbars>
+  <enableTables>false</enableTables>
+  <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
@@ -1988,7 +1989,7 @@ e
    <g>154</g>
    <b>231</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>25</r>
    <g>25</g>
@@ -2082,6 +2083,8 @@ e
    <b>0</b>
   </color>
   <textcolor>#f57c00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
   <showvalue>false</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -2128,7 +2131,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>2</label>
+  <label>8</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
   <font>Arial</font>
@@ -2232,8 +2235,9 @@ e
   <showSelector>false</showSelector>
   <showGrid>true</showGrid>
   <showTableInfo>true</showTableInfo>
-  <showScrollbars>true</showScrollbars>
-  <enableTables>true</enableTables>
+  <showScrollbars>false</showScrollbars>
+  <enableTables>false</enableTables>
+  <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">

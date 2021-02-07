@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -15,7 +15,7 @@ instr 1
 aAmp      poscil    1, 400, giSine
 aIndx     =         (aAmp + 1) / 2
 aWavShp   tablei    aIndx, giTrnsFnc, 1
-          outs      aWavShp, aWavShp
+          out       aWavShp, aWavShp
 endin
 
 </CsInstruments>
@@ -23,3 +23,4 @@ endin
 i 1 0 10
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

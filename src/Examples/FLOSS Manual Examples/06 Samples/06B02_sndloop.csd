@@ -1,18 +1,15 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials ; real-time audio in and out are both activated
+; real-time audio in and out are both activated
 -iadc -odac
 </CsOptions>
-
 <CsInstruments>
-;example written by Iain McCurdy
+sr      =       44100
+ksmps   =       32
+nchnls  =       2
+0dbfs   =       1
 
-sr 	= 	44100
-ksmps 	= 	32
-nchnls 	= 	1	
-
-  instr	1
+  instr 1
 ; PRINT INSTRUCTIONS
            prints  "Press 'r' to record, 's' to stop playback, "
            prints  "'+' to increase pitch, '-' to decrease pitch.\\n"
@@ -33,13 +30,12 @@ kPitch     =       kPitch - 0.02 ; decrement pitch parameter
  endif                           ; end of conditional branches
 ; CREATE SNDLOOP INSTANCE
 aOut, kRec sndloop aIn, kPitch, kTrig, iDur, iFade ; (kRec output is not used)
-           out     aOut          ; send audio to output
+           out     aOut, aOut    ; send audio to output
   endin
 
 </CsInstruments>
-
 <CsScore>
 i 1 0 3600 ; instr 1 plays for 1 hour
 </CsScore>
-
 </CsoundSynthesizer>
+;example written by Iain McCurdy

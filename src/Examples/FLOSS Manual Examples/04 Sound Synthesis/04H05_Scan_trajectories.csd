@@ -1,12 +1,10 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -o dac
+-o dac
 </CsOptions>
 <CsInstruments>
-
 sr=44100
-kr=4410
-ksmps=10
+ksmps=32
 nchnls=2
 0dbfs=1
 
@@ -17,9 +15,8 @@ outs a1*.2, a1*.2
 endin
 </CsInstruments>
 <CsScore>
-
 f1 0 8192 10 1
 i 1 0 4
 </CsScore>
 </CsoundSynthesizer>
-;Example by Christopher Saunders
+;example by Christopher Saunders

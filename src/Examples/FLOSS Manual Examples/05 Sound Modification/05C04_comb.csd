@@ -1,11 +1,8 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac ;activates real time sound output
+-odac ;activates real time sound output
 </CsOptions>
-
 <CsInstruments>
-;Example by Iain McCurdy
 
 sr = 44100
 ksmps = 32
@@ -26,10 +23,8 @@ aRes    vcomb   aSig, krvt, alpt, 0.1               ; comb filter
   endin
 
 </CsInstruments>
-
 <CsScore>
 i 1 0 25
-e
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

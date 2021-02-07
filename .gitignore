@@ -1,4 +1,4 @@
-
+.directory
 rtmidi*
 config.user.pri
 qcs.pro.user
@@ -10,6 +10,7 @@ bin/old
 
 Makefile
 build/
+.mypy_cache
 
 src/Examples/McCurdy Collection/Modulation/test.wav
 
@@ -24,3 +25,5 @@ doc/QuteCsound Quick Reference (0.9).odt
 __pycache__
 *.pyc
 util/opcodes.xml
+*.dmg
+.DS_Store

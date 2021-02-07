@@ -91,7 +91,6 @@ void ConfigLists::refreshModules()
 {
     rtMidiNames.clear();
 	rtAudioNames.clear();
-#ifdef CSOUND6
     CSOUND *csound = csoundCreate(nullptr);
 	char *name, *type;
 	int n = 0;
@@ -111,35 +110,6 @@ void ConfigLists::refreshModules()
         rtMidiNames <<  "jack";
 	}
     rtMidiNames << "virtual" << "none";
-#else
-#ifdef Q_OS_LINUX
-	rtAudioNames << "portaudio" << "alsa" << "jack" << "pulse" << "none";
-#endif
-#ifdef Q_OS_SOLARIS
-	rtAudioNames << "portaudio" << "pulse" << "none";
-#endif
-#ifdef Q_OS_MAC
-	rtAudioNames << "coreaudio" << "portaudio" << "auhal" << "jack" << "none";
-#endif
-#ifdef Q_OS_WIN32
-	rtAudioNames << "portaudio" << "winmm" << "jack" <<  "none";
-#endif
-#ifdef Q_OS_HAIKU
-	rtAudioNames << "haiku" << "none";
-#endif
-#ifdef Q_OS_LINUX
-	rtMidiNames << "none" << "alsa" << "alsaseq" << "jack" << "portmidi" << "virtual";
-#endif
-#ifdef Q_OS_SOLARIS
-	rtMidiNames << "none" << "portmidi"<< "virtual";
-#endif
-#ifdef Q_OS_MAC
-	rtMidiNames << "none" << "coremidi" << "portmidi" << "jack" << "virtual";
-#endif
-#ifdef Q_OS_WIN32
-	rtMidiNames << "none" << "winmm" << "portmidi" << "virtual";
-#endif
-#endif
     csoundDestroy(csound);
 }
 
@@ -147,7 +117,7 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 {
 	// based on code by Steven Yi
     QHash<QString,QString> deviceList;
-#ifdef CSOUND6
+
     CSOUND *cs = csoundCreate(nullptr);
 	if (module=="jack") {
         csoundSetOption(cs, "-+rtaudio=jack");
@@ -177,98 +147,7 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 	}
 	free(devs);
     csoundDestroy(cs);
-#else
-	if (module == "none") {
-		return deviceList;
-	}
-	if (module == "alsa") {
-		QProcess amidi;
-		amidi.start("amidi", QStringList() << "-l");
-		if (!amidi.waitForFinished())
-			return deviceList;
 
-		QByteArray result = amidi.readAllStandardOutput();
-		QString values = QString(result);
-		QStringList st = values.split("\n");
-		st.takeFirst(); // Remove first column lines
-		for (int i = 0; i < st.size(); i++){
-			QStringList parts = st[i].split(" ", QString::SkipEmptyParts);
-			if (parts.size() > 0 && parts[0].contains("I")) {
-				QString devname = parts[1]; // Devce name
-				parts.takeFirst(); // Remove IO flags
-				QString fullname = parts.join(" ") ; // Full name with description
-				deviceList.insert(fullname, devname);
-			}
-		}
-		deviceList.insert("All available devices ", "a");
-	}
-	else if (module == "virtual") {
-		QString name = qApp->translate("Enabled", "Virtual MIDI keyboard Enabled");
-		deviceList.insert(name, "0");
-	}
-	else { // if not alsa (i.e. winmm or portmidi)
-		QFile file(":/test.csd");
-		if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-			return deviceList;
-		QString jackCSD = QString(file.readAll());
-		QString tempText = jackCSD;
-		tempText.replace("$SR", "441000");
-		QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
-		tempFile.open();
-		QTextStream out(&tempFile);
-		out << tempText;
-		tempFile.close();
-		tempFile.open();
-
-		QStringList flags;
-		QString rtMidiFlag = "-+rtmidi=" + module;
-		flags << "-+msg_color=false" << rtMidiFlag << "-otest"  << "-n"  << "-M999" << tempFile.fileName();
-		QStringList messages = runCsoundInternally(flags);
-
-		QString startText, endText;
-		if (module == "portmidi") {
-			startText = "The available MIDI";
-			endText = "*** PortMIDI";
-		}
-		else if (module == "winmm") {
-			startText = "The available MIDI";
-			endText = "rtmidi: input device number is out of range";
-		}
-		else if (module == "coremidi") {
-			int index = messages.indexOf(QRegExp("[0-9]{1,1} MIDI sources in system\\s*"));
-            if (index >= 0) {
-                for (int i = 0; i < messages[index].split(" ")[0].toInt(); i++) {
-                    deviceList.insert(QString::number(i), QString::number(i));
-                }
-            }
-		}
-		else if (module == "alsaseq") {
-			//FIXME parse alsaseq devices
-		}
-		if (startText == "" && endText == "") {
-			return deviceList;
-		}
-		bool collect = false;
-		foreach (QString line, messages) {
-			if (collect) {
-				if (endText.length() > 0 && line.indexOf(endText) >= 0) {
-					collect = false;
-				}
-				else {
-					if (line.indexOf(":") >= 0) {
-//						qDebug()  << line;
-						QString fullname = line.mid(line.indexOf(":") + 1).trimmed();
-						QString devname = line.mid(0,line.indexOf(":")).trimmed();
-						deviceList.insert(fullname, devname);
-					}
-				}
-			}
-			else if (line.indexOf(startText) >= 0) {
-				collect = true;
-			}
-		}
-	}
-#endif
 	qDebug()<<"Devices found: "<<deviceList;
 	return deviceList;
 }
@@ -276,7 +155,7 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(QString module)
 {
 	QList<QPair<QString, QString> > deviceList;
-#ifdef CSOUND6
+
     CSOUND *cs = csoundCreate(nullptr);
 	if (module=="jack") {
         csoundSetOption(cs, "-+rtaudio=jack");
@@ -307,93 +186,13 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(QString module
 	}
 	free(devs);
     csoundDestroy(cs);
-#else
-	if (module == "none") {
-		return deviceList;
-	}
-	if (module == "alsa") {
-		QProcess amidi;
-		amidi.start("amidi", QStringList() << "-l");
-		if (!amidi.waitForFinished())
-			return deviceList;
 
-		QByteArray result = amidi.readAllStandardOutput();
-		QString values = QString(result);
-		QStringList st = values.split("\n");
-		st.takeFirst(); // Remove first column lines
-		for (int i = 0; i < st.size(); i++){
-			QStringList parts = st[i].split(" ", QString::SkipEmptyParts);
-			if (parts.size() > 0 && parts[0].contains("O")) {
-				QPair<QString, QString> device;
-				device.second = parts[1]; // Devce name
-				parts.takeFirst(); // Remove IO flags
-				device.first = parts.join(" ") ; // Full name with description
-				deviceList.append(device);
-			}
-		}
-	}
-	else if (module == "virtual") {
-		// do nothing
-	}
-	else { // if not alsa (i.e. winmm or portmidi)
-		QFile file(":/test.csd");
-		if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-			return deviceList;
-		QString jackCSD = QString(file.readAll());
-		QString tempText = jackCSD;
-		tempText.replace("$SR", "441000");
-		QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
-		tempFile.open();
-		QTextStream out(&tempFile);
-		out << tempText;
-		tempFile.close();
-		tempFile.open();
-
-		QStringList flags;
-		flags << "-+msg_color=false" << "-otest"  << "-n"   << "-Q999" << tempFile.fileName();
-		QStringList messages = runCsoundInternally(flags);
-
-		QString startText, endText;
-		if (module == "portmidi") {
-			startText = "The available MIDI";
-			endText = "*** PortMIDI";
-		}
-		else if (module == "winmm") {
-			startText = "The available MIDI";
-			endText = "rtmidi: output device number is out of range";
-		}
-		if (startText == "" && endText == "") {
-			return deviceList;
-		}
-		bool collect = false;
-		foreach (QString line, messages) {
-			if (collect) {
-				if (endText.length() > 0 && line.indexOf(endText) >= 0) {
-					collect = false;
-				}
-				else {
-					if (line.indexOf(":") >= 0) {
-						qDebug("%s", line.toLocal8Bit().constData());
-						QPair<QString, QString> device;
-						device.first = line.mid(line.indexOf(":") + 1).trimmed();
-						device.second = line.mid(0,line.indexOf(":")).trimmed();
-						deviceList.append(device);
-					}
-				}
-			}
-			else if (line.indexOf(startText) >= 0) {
-				collect = true;
-			}
-		}
-	}
-#endif
 	return deviceList;
 }
 
 QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(QString module)
 {
     QList<QStringPair> deviceList;
-#ifdef CSOUND6
     CSOUND *cs = csoundCreate(nullptr);
 	csoundSetRTAudioModule(cs, module.toLatin1().data());
     int i,newn, n = csoundGetAudioDevList(cs, nullptr, 0);
@@ -409,155 +208,6 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(QString module
 	}
 	free(devs);
     csoundDestroy(cs);
-#else
-	if (module == "none") {
-		return deviceList;
-	}
-	if (module == "alsa") {
-		QFile f("/proc/asound/pcm");
-		f.open(QIODevice::ReadOnly | QIODevice::Text);
-		QString values = QString(f.readAll());
-		QStringList st = values.split("\n");
-		foreach (QString line, st) {
-			if (line.indexOf("capture") >= 0) {
-				QStringList parts = line.split(":");
-
-				QStringList cardId = parts[0].split("-");
-				QString buffer = "";
-				buffer.append(parts[1]).append(" : ").append(parts[2]);
-
-				QPair<QString, QString> device;
-				device.first = buffer;
-				device.second = "adc:hw:" + QString::number(cardId[0].toInt()) + "," + QString::number(cardId[1].toInt());
-				deviceList.append(device);
-			}
-		}
-	}
-	else if (module == "jack") {
-		QFile file(":/test.csd");
-		if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-			return deviceList;
-		QString jackCSD = QString(file.readAll());
-		QString tempText = jackCSD;
-		tempText.replace("$SR", "1000");
-		QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
-		tempFile.open();
-		QTextStream out(&tempFile);
-		out << tempText;
-		tempFile.close();
-		tempFile.open();
-
-		QStringList flags;
-		QString previousLine = "";
-		// -odac is needed otherwise csound segfaults
-		flags << "-+msg_color=false" << "-+rtaudio=jack" << "-iadc:xxx" << "-odac:xxx" << "-B2048" <<  tempFile.fileName();
-		QStringList messages = runCsoundInternally(flags);
-
-		QString sr = "";
-		foreach (QString line, messages) { // Need to run again if sample rate does not match...
-			if (line.indexOf("does not match JACK sample rate") >= 0) {
-				sr = line.mid(line.lastIndexOf(" ") + 1);
-			}
-			if (line.endsWith("channel)\n") || line.endsWith("channels)\n")) {
-				QStringList parts = previousLine.split("\"");
-				QPair<QString, QString> device;
-				device.first = parts[1];
-				device.second = "adc:" + parts[1];
-				deviceList.append(device);
-			}
-			previousLine = line;
-		}
-		if (sr == "") {
-			return deviceList;
-		}
-
-		tempText = jackCSD;
-		tempText.replace("$SR", sr);
-		out << tempText;
-		tempFile.close();
-		tempFile.open();
-
-		messages = runCsoundInternally(flags); // run with same flags as before
-
-		foreach (QString line, messages) {
-			if (line.endsWith("channel)\n") || line.endsWith("channels)\n")) {
-				QStringList parts = previousLine.split("\"");
-				QPair<QString, QString> device;
-				device.first = parts[1];
-				device.second = "adc:" + parts[1];
-				deviceList.append(device);
-			}
-			previousLine = line;
-		}
-	}  //ends if (module=="jack")
-	else { // if not alsa or jack (i.e. coreaudio or portaudio)
-		QFile file(":/test.csd");
-		if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-			return deviceList;
-		QString jackCSD = QString(file.readAll());
-		QString tempText = jackCSD;
-		tempText.replace("$SR", "1000");
-		QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
-		tempFile.open();
-		QTextStream out(&tempFile);
-		out << tempText;
-		tempFile.close();
-		tempFile.open();
-
-		QStringList flags;
-		QString rtAudioFlag = "-+rtaudio=" + module + " ";
-		flags << "-+msg_color=false" << rtAudioFlag << "-iadc999" << "-odac999" << "-d" << tempFile.fileName();
-		QStringList messages = runCsoundInternally(flags);
-
-		QString startText, endText;
-		if (module=="portaudio") {
-			startText = "PortAudio: available";
-			endText = "error:";
-		}
-		else if (module=="winmm" || module=="mme") {
-			startText = "The available input devices are:";
-			endText = "device number is out of range";
-		}
-		else if (module=="coreaudio") {
-			startText = "CoreAudio Module: found";
-			endText = "";
-		}
-		if (startText == "" && endText == "") {
-			return deviceList;
-		}
-		bool collect = false;
-		foreach (QString line, messages) {
-			if (collect) {
-				if (endText.length() > 0 && line.indexOf(endText) >= 0) {
-					collect = false;
-				}
-				else {
-					if (module == "coreaudio") {
-						QString coreAudioMatch = "=> CoreAudio device";
-
-						if (line.indexOf(coreAudioMatch) >= 0) {
-							line = line.mid(coreAudioMatch.length()).trimmed();
-
-							QPair<QString, QString> device;
-							device.first = line.mid(line.indexOf(":")).trimmed();
-							device.second = "adc" + line.left(line.indexOf(":"));
-							deviceList.append(device);
-						}
-					} // if not coreaudio, i.e. portaudio
-					else if (line.indexOf(":") >= 0) {
-						QPair<QString, QString> device;
-						device.first = line.mid(line.indexOf(":") + 1).trimmed();
-						device.second = "adc" + line.left(line.indexOf(":")).trimmed();
-						deviceList.append(device);
-					}
-				}
-			}
-			else if (line.indexOf(startText) >= 0) {
-				collect = true;
-			}
-		}
-	}
-#endif
 	return deviceList;
 }
 
@@ -565,7 +215,7 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(QString module
 QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(QString module)
 {
     QList<QPair<QString, QString> > deviceList;
-#ifdef CSOUND6
+
     CSOUND *cs = csoundCreate(nullptr);
 	csoundSetRTAudioModule(cs, module.toLatin1().data());
     int i,newn, n = csoundGetAudioDevList(cs, nullptr, 1);
@@ -581,154 +231,7 @@ QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(QString modul
 	}
 	free(devs);
     csoundDestroy(cs);
-#else
-	if (module == "none") {
-		return deviceList;
-	}
-	if (module == "alsa") {
-		QFile f("/proc/asound/pcm");
-		f.open(QIODevice::ReadOnly | QIODevice::Text);
-		QString values = QString(f.readAll());
-		QStringList st = values.split("\n");
-		foreach (QString line, st) {
-			if (line.indexOf("playback") >= 0) {
-				QStringList parts = line.split(":");
 
-				QStringList cardId = parts[0].split("-");
-				QString buffer = "";
-				buffer.append(parts[1]).append(" : ").append(parts[2]);
-
-				QPair<QString, QString> device;
-				device.first = buffer;
-				device.second = "dac:hw:" + QString::number(cardId[0].toInt()) + "," + QString::number(cardId[1].toInt());
-				deviceList.append(device);
-			}
-		}
-	}
-	else if (module=="jack") {
-		QFile file(":/test.csd");
-		if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-			return deviceList;
-		QString jackCSD = QString(file.readAll());
-		QString tempText = jackCSD;
-		tempText.replace("$SR", "1000");
-		QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
-		tempFile.open();
-		QTextStream out(&tempFile);
-		out << tempText;
-		tempFile.close();
-		tempFile.open();
-
-		QStringList flags;
-		QString previousLine = "";
-		flags << "-+msg_color=false" << "-+rtaudio=jack" << "-odac:xxx" << "-B2048" <<  tempFile.fileName();
-		QStringList messages = runCsoundInternally(flags);
-
-		QString sr = "";
-		foreach (QString line, messages) {
-			if (line.indexOf("does not match JACK sample rate") >= 0) {
-				sr = line.mid(line.lastIndexOf(" ") + 1);
-			}
-			if (line.endsWith("channel)\n") || line.endsWith("channels)\n")) {
-				QStringList parts = previousLine.split("\"");
-				QPair<QString, QString> device;
-				device.first = parts[1];
-				device.second = "dac:" + parts[1];
-				deviceList.append(device);
-			}
-			previousLine = line;
-		}
-		if (sr == "") {
-			return deviceList;
-		}
-
-		tempText = jackCSD;
-		tempText.replace("$SR", sr);
-		out << tempText;
-		tempFile.close();
-		tempFile.open();
-
-		messages = runCsoundInternally(flags); // run with same flags as before
-
-		foreach (QString line, messages) {
-			if (line.endsWith("channel)\n") || line.endsWith("channels)\n")) {
-				QStringList parts = previousLine.split("\"");
-				QPair<QString, QString> device;
-				device.first = parts[1];
-				device.second = "dac:" + parts[1];
-				deviceList.append(device);
-			}
-			previousLine = line;
-		}
-	}  //ends if (module=="jack")
-	else { // if not alsa or jack (i.e. coreaudio or portaudio)
-		QFile file(":/test.csd");
-		if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-			return deviceList;
-		QString jackCSD = QString(file.readAll());
-		QString tempText = jackCSD;
-		tempText.replace("$SR", "1000");
-		QTemporaryFile tempFile(QDir::tempPath() + QDir::separator() + "testcsdCsoundQtXXXXXX.csd");
-		tempFile.open();
-		QTextStream out(&tempFile);
-		out << tempText;
-		tempFile.close();
-		tempFile.open();
-
-		QStringList flags;
-		QString rtAudioFlag = "-+rtaudio=" + module + " ";
-		flags << "-+msg_color=false" << rtAudioFlag << "-odac999" << tempFile.fileName();
-		QStringList messages = runCsoundInternally(flags);
-
-		QString startText, endText;
-		if (module=="portaudio") {
-			startText = "PortAudio: available";
-			endText = "error:";
-		}
-		else if (module=="winmm" || module=="mme") {
-			startText = "The available output devices are:";
-			endText = "device number is out of range";
-		}
-		else if (module=="coreaudio") {
-			startText = "CoreAudio Module: found";
-			endText = "";
-		}
-		if (startText == "" && endText == "") {
-			return deviceList;
-		}
-		bool collect = false;
-		foreach (QString line, messages) {
-			if (collect) {
-				if (endText.length() > 0 && line.indexOf(endText) >= 0) {
-					collect = false;
-				}
-				else {
-					if (module == "coreaudio") {
-						QString coreAudioMatch = "=> CoreAudio device";
-
-						if (line.indexOf(coreAudioMatch) >= 0) {
-							line = line.mid(coreAudioMatch.length()).trimmed();
-
-							QPair<QString, QString> device;
-							device.first = line.mid(line.indexOf(":")).trimmed();
-							device.second = "dac" + line.left(line.indexOf(":"));
-							deviceList.append(device);
-						}
-					} // if not coreaudio, i.e. portaudio
-					else if (line.indexOf(":") >= 0) {
-						QPair<QString, QString> device;
-						device.first = line.mid(line.indexOf(":") + 1).trimmed();
-						device.second = "dac" + line.left(line.indexOf(":")).trimmed();
-						deviceList.append(device);
-					}
-				}
-			}
-			else if (line.indexOf(startText) >= 0) {
-				collect = true;
-			}
-		}
-	}
-#endif
 	return deviceList;
 }
 

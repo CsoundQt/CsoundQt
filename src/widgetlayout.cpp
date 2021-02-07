@@ -1030,7 +1030,108 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
     m_activeWidgets++;
     widgetsMutex.unlock();
     adjustLayoutSize();
-    widget->show();
+	widget->show();
+}
+
+QString WidgetLayout::getMidiControllerInstrument()
+{
+	// returns full Csound instrument to pass CC values to channels
+	// and/or start events (if eventButton)
+	if (registeredControllers.isEmpty()) {
+		qDebug() << "There are no registered controllers!";
+	}
+
+	QString instrLines ;
+	for (int i = 0; i < registeredControllers.size(); i++) {
+		if (registeredControllers[i].cc >= 0 && registeredControllers[i].chan>0) {
+			QuteWidget * widget = registeredControllers[i].widget;
+
+			bool isEventButton = (widget->getWidgetType()=="BSBButton"  && widget->property("QCS_type").toString().contains("event") ); // type "event" or "pictevent"
+			if ( isEventButton) {
+				QString eventLine = widget->property("QCS_eventLine").toString();
+
+				// find out if event has negative p3
+				QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+				if (lineElements.size() > 0 && lineElements[0] == "i") {
+					// Remove first element if it is "i"
+					lineElements.removeAt(0);
+				}
+				else if (lineElements.size() > 0 && lineElements[0][0] == 'i') {
+					lineElements[0] = lineElements[0].mid(1); // Remove "i" character
+				}
+
+				QString instrNo = lineElements[0].startsWith("\"") ?
+							QString("nstrnum(%1)").arg(lineElements[0]) : lineElements[0];
+
+				bool negative_p3;
+				if (lineElements.size() > 2 && lineElements[2].toDouble() < 0 ) {
+					negative_p3 = true;
+				} else {
+					negative_p3 = false;
+				}
+
+				if (!negative_p3) {
+					instrLines += QString(R"(
+	if (trigger:k(ctrl7:k(%1,%2,0,1),0.9, 0) == 1) then
+		scoreline {{ %3 }}, 1 ; start
+	endif)")
+							.arg(registeredControllers[i].chan)
+							.arg(registeredControllers[i].cc)
+							.arg(eventLine) + "\n";
+				} else {
+					if (widget->property("QCS_latch").toBool()) {
+						// toggle button -  turn off on second press
+						instrLines += QString(R"(
+	if (trigger:k(ctrl7:k(%1,%2,0,1),0.9, 0)==1) then
+		if (active:k(%3)>0) then
+			turnoff2 %3, 4, 1 ; stop
+		else
+			scoreline {{ %4 }}, 1 ; start
+		endif
+	endif)")
+							.arg(registeredControllers[i].chan)
+							.arg(registeredControllers[i].cc)
+							.arg(lineElements[0]) // lineElements[0] holds p1 (instrument name/number)
+							.arg( eventLine )	+ "\n";
+					} else { // pushbutton - turn off when released
+						instrLines +=
+								QString(R"(
+	if (trigger:k(ctrl7:k(%1,%2,0,1),0.9, 0) == 1) then
+		scoreline {{ %4 }}, 1 ; start
+	endif
+
+	if (trigger:k(ctrl7:k(%1,%2,0,1),0.1, 1) == 1) then
+		turnoff2 %3, 4, 1 ; stop
+	endif)")
+								.arg(registeredControllers[i].chan)
+								.arg(registeredControllers[i].cc)
+								.arg( instrNo )
+								.arg( eventLine ) + "\n";
+					}
+				}
+			} else {
+				if (widget->getWidgetType()=="BSBButton" &&
+						widget->property("QCS_type").toString().contains("value")) {
+					instrLines += QString ("\tchnset ctrl7:k(%1, %2, 0, %3), \"%4\"\n")
+							.arg(registeredControllers[i].chan)
+							.arg(registeredControllers[i].cc)
+							.arg( widget->property("QCS_pressedValue").toDouble() )
+							.arg(widget->getChannelName() );
+				} else {
+				instrLines += QString ("\tchnset ctrl7:k(%1, %2, %3, %4), \"%5\"\n")
+				        .arg(registeredControllers[i].chan)
+				        .arg(registeredControllers[i].cc)
+				        .arg( widget->property("QCS_minimum").toDouble() )
+				        .arg( widget->property("QCS_maximum").toDouble() )
+				        .arg(widget->getChannelName() );
+				}
+			}
+		}
+	}
+
+	QString instrString = instrLines.isEmpty() ? "" :
+			"alwayson \"MidiControl\"\ninstr MidiControl\n" + instrLines + "endin\n";
+	return instrString;
 }
 
 void WidgetLayout::appendMessage(QString message)
@@ -1371,7 +1472,7 @@ void WidgetLayout::refreshWidgets()
             int channel = (status ^ 176) + 1;
             for (int i = 0; i < registeredControllers.size(); i++) {
                 if (registeredControllers[i].cc == midiQueue[index][1]) {
-                    if (/*registeredControllers[i].chan == 0 || */ channel == registeredControllers[i].chan) { // not sure if this comment-out will not break anything but likely not. tarmo.
+					if ( channel == registeredControllers[i].chan) {
                         registeredControllers[i].widget->setMidiValue(midiQueue[index][2]);
                     }
                 }
@@ -2773,7 +2874,7 @@ int WidgetLayout::parseXmlNode(QDomNode node)
     else if (name == "bgcolor") {
         bool bg = false;
         if (node.toElement().attribute("mode")== "background") {
-            qDebug() << "background true";
+            //qDebug() << "background true";
             bg = true;
         }
         QDomElement er = node.toElement().firstChildElement("r");
@@ -2783,7 +2884,7 @@ int WidgetLayout::parseXmlNode(QDomNode node)
                               eg.firstChild().nodeValue().toInt(),
                               eb.firstChild().nodeValue().toInt());
         auto parent = node.parentNode().nodeName();
-        qDebug() << "setting background" << parent << bgcolor << node.toElement().text();
+        //qDebug() << "setting background" << parent << bgcolor << node.toElement().text();
         setBackground(bg, bgcolor);
     }
     else if (name == "bsbObject") {

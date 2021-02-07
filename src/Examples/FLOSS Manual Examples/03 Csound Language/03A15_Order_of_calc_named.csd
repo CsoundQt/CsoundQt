@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -nd
+-nd
 </CsOptions>
 <CsInstruments>
 

@@ -65,7 +65,7 @@ void MidiHandler::passMidiMessage(std::vector<unsigned char> *message)
 		qDebug() << "MidiHandler::passMidiMessage Error: message is NULL";
 		return;
 	}
-	foreach(DocumentPage *page, m_listeners) {
+	foreach(DocumentPage *page, m_listeners) {		
 		page->queueMidiIn(message);
 	}
 	if (m_midiLearnDialog) {

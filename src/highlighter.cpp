@@ -356,7 +356,8 @@ Highlighter::Highlighter(QTextDocument *parent)
 				<< "<csLADSPA>" << "</csLADSPA>"
                 << "<Cabbage>" << "</Cabbage>"
 				<< "<CsHtml5>" << "</CsHtml5>"
-                << "<CsFileB>" << "</CsFileB>";
+                << "<CsFileB>" << "</CsFileB>"
+                << "<CsLicense>" << "</CsLincense>";
 
     instPatterns << "instr" << "endin" << "opcode" << "endop";
     headerPatterns << "sr" << "kr" << "ksmps" << "nchnls" << "nchnls_i" << "0dbfs" << "A4"
@@ -369,18 +370,20 @@ Highlighter::Highlighter(QTextDocument *parent)
                     << "passign";
 
     ioPatterns      << "in" << "ins" << "inch" << "out" << "outs" << "outch"
-                    << "outvalue" << "invalue" << "chnget" << "chnset" << "chn_k" << "chn_a"
-                    << "zaw" << "zar" << "zkw" << "zkr" << "zawm"
+                    << "outvalue" << "invalue" << "chnget" << "chngetk" << "chnset" << "chn_k"
+                    << "chn_a" << "chn_S" << "zaw" << "zar" << "zkw" << "zkr" << "zawm"
                     << "OSCsend" << "OSClisten" << "OSCraw" << "OSCinit";
 
-    deprecatedOpcodes << "array" << "compress" << "dcblock" << "diskin" << "flooper"
+    deprecatedOpcodes << "array" << "compress" << "flooper"
                       << "in32" << "inh" << "ino" << "inq" << "inrq" << "inx"
                       << "loop_ge" << "loop_gt" << "loop_le" << "loop_lt"
                       << "nlfilt" << "outc" << "outo" << "outq" << "outx" << "vco"
                       << "vincr" << "vbap16" << "vbap4" << "vbap8"
                       << "vbap4move" << "vbap8move" << "balance"
-                      << "chani" << "chano" << "checkbox" << "cigoto" << "ckgoto"
-                      << "cngoto" << "control" << "setctrl" << "flashtxt";
+                      << "chani" << "chano" << "cigoto" << "ckgoto"
+                      << "cngoto" << "control" << "setctrl" << "flashtxt"
+                      << "vaset" << "vaget"
+                      << "button" << "checkbox";
 
     operatorPatterns << "&&" << "||";
 

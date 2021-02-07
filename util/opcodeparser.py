@@ -134,7 +134,7 @@ for i, filename in enumerate(files):
             entries[j].append([entry, description])
             match = True
     if not match:
-        print(filename + "---- WARNING! No Category Match!")
+        print(str(filename) + "---- WARNING! No Category Match!")
 
 for i in range(len(categories)):
     if (len(entries[i])==0):

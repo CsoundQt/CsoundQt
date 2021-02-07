@@ -7,7 +7,7 @@ text = q.getFullText()
 # This will print the number 4 on the Python Console,
 # which is where you will see output from Python commands
 index = text.index('_Text')
-print 'Position of "_T":', index
+print('Position of "_T":', index)
 
 # Now we will load a csd file and look at its orchestra and score
 # Notice that paths are relative to the python file being executed
@@ -19,9 +19,9 @@ sco = q.getSco()
 
 index1 = text.index('instr 1')
 index2 = orc.index('instr 1')
-print '"instr 1" in text and orc:', index1, index2
+print('"instr 1" in text and orc:', index1, index2)
 
-print "Score is: ", sco
+print("Score is: ", sco)
 
 # Make sure this is visible after running the script
 q.loadDocument("02_Text.py") # This will switch back to this file
@@ -30,4 +30,4 @@ q.loadDocument("02_Text.py") # This will switch back to this file
 doc = q.getDocument("basic.csd") # get document index without switching to it
 sco = q.getSco(doc) # Will get the score, even though this file is currently selected!
 
-print "Score from other file: ", sco
+print("Score from other file: ", sco)

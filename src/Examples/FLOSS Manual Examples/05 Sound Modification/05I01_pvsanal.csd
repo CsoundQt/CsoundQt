@@ -1,10 +1,9 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -i adc -o dac
+-i adc -o dac
+--env:SSDIR+=../resources/SourceMaterials
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
-;uses the file "fox.wav" (distributed with the Csound Manual)
 sr = 44100
 ksmps = 32
 nchnls = 2
@@ -35,4 +34,5 @@ endin
 i 1 0 3
 i 2 3 10
 </CsScore>
-</CsoundSynthesizer> 
+</CsoundSynthesizer>
+;example by joachim heintz

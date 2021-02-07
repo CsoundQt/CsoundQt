@@ -9,7 +9,7 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-giSine         ftgen       0, 0, 2^12, 10, 1             ; sine wave
+giSine         ftgen       0, 0, 2\^12, 10, 1             ; sine wave
 giLFOShape     ftgen       0, 0, 131072, 19, 0.5,1,180,1 ; U-shape parabola
 
 gS_HRTF_left   =           "hrtf-44100-left.dat"
@@ -37,21 +37,4 @@ endin
 i 1 0 24 ; instr 1 plays a note for 24 seconds
 </CsScore>
 </CsoundSynthesizer>
-;example by iain mccurdy
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+;example by Iain McCurdy

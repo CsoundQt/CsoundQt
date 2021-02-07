@@ -1,10 +1,7 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials </CsOptions>
-
+</CsOptions>
 <CsInstruments>
-
 sr = 44100
 nchnls = 2
 0dbfs = 1
@@ -18,13 +15,11 @@ kctrl2  invalue  "ctrl2"
 koct    =        (kctrl2*4)+7
 ; create an oscillator
 a1      vco2     kctrl1,cpsoct(koct),4,0.1
-        outs     a1,a1	
+        outs     a1,a1
  endin
 </CsInstruments>
-
 <CsScore>
 i 1 0 10000
-e
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+=../SourceMaterials --env:SSDIR+=../SourceMaterials -o dac
+-o dac
 </CsOptions>
 <CsInstruments>
 
@@ -14,14 +14,14 @@ nchnls = 1
 #define ats2 #"oboe-A5.ats"#
 
 
-instr 1	
+instr 1
 iamp    = p4            ;general amplitude scaler
 
 ilev1   = p5            ;level of iats1 partials
 ifd1    = 2^(p6/12)     ;frequency deviation for iats1 partials
 
 ilev2   = p7            ;level of ats2 partials
-ifd2    = 2^(p8/12)     ;frequency deviation for iats2 partials	
+ifd2    = 2^(p8/12)     ;frequency deviation for iats2 partials
 
 itau    = p9            ;audio table
 
@@ -45,10 +45,10 @@ endin
 <CsScore>
 
 ; sine wave for the audio table
-f1 	0 	16384 	10 	1
+f1      0       16384   10      1
 
 ;  start dur amp lev1 f1  lev2 f2 table
-i1 0     2.3 .75 0    0   1    0  1     ;original oboe	
+i1 0     2.3 .75 0    0   1    0  1     ;original oboe
 i1 +     .   .   0.25 .   .75  .  .     ;oboe 75%, flute 25%
 i1 +     .   .   0.5  .   0.5  .  .     ;oboe 50%, flute 50%
 i1 +     .   .   .75  .   .25  .  .     ;oboe 25%, flute 75%
@@ -57,21 +57,4 @@ i1 +     .   .   1    .   0    .  .     ;oboe partials with flute's amplitudes
 e
 </CsScore>
 </CsoundSynthesizer>
-;example by Oscar Pablo Di Liscia  
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+;example by Oscar Pablo Di Liscia

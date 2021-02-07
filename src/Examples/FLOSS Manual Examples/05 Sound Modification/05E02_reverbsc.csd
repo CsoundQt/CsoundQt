@@ -1,12 +1,8 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac ; activates real time sound output
+-odac ; activates real time sound output
 </CsOptions>
-
 <CsInstruments>
-; Example by Iain McCurdy
-
 sr =  44100
 ksmps = 32
 nchnls = 2
@@ -36,11 +32,9 @@ aRvbL,aRvbR  reverbsc  aInSig, aInSig, kFblvl, kFco
   endin
 
 </CsInstruments>
-
 <CsScore>
 i 1 0 10 ; noise pulses (input sound)
 i 5 0 12 ; start reverb
-e
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

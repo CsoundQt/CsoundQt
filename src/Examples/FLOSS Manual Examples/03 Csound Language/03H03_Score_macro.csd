@@ -1,24 +1,21 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
-
 <CsInstruments>
-sr 	= 	44100
-ksmps 	= 	16
-nchnls 	= 	1
-0dbfs	=	1
+sr      =       44100
+ksmps   =       16
+nchnls  =       1
+0dbfs   =       1
 
 
  instr  1 ; bass guitar
 a1   wgpluck2 0.98, 0.4, cpsmidinn(p4), 0.1, 0.6
 aenv linseg   1,p3-0.1,1,0.1,0
- out	a1*aenv
+ out    a1*aenv
  endin
 
 </CsInstruments>
-
 <CsScore>
 ; p4 = pitch as a midi note number
 #define RIFF_1(Start'Trans)

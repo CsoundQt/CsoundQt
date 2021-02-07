@@ -1,6 +1,5 @@
 <CsoundSynthesizer>
 <CsInstruments>
-;Example by Davis Pyon
 sr     = 44100
 ksmps  = 32
 nchnls = 2
@@ -19,7 +18,6 @@ aFM    foscil .2, iPitch, 2, kMod, 1.5, giSine
 endin
 </CsInstruments>
 <CsScore>
-f0 86400
-e
 </CsScore>
 </CsoundSynthesizer>
+;example by Davis Pyon

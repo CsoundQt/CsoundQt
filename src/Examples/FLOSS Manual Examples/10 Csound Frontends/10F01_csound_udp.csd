@@ -1,0 +1,9 @@
+<CsoundSynthesizer>
+<CsOptions>
+--port=1234
+</CsOptions>
+<CsInstruments>
+</CsInstruments>
+<CsScore>
+</CsScore>
+</CsoundSynthesizer>

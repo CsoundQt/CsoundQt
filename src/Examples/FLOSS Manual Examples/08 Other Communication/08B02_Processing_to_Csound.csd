@@ -1,11 +1,8 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -o dac
+-o dac
 </CsOptions>
-
 <CsInstruments>
-
 sr = 44100
 ksmps = 8
 nchnls = 1
@@ -24,10 +21,8 @@ gktrigana0  OSClisten  gihandle, "/analog/0", "i", gkana0
  endin
 
 </CsInstruments>
-
 <CsScore>
 i 1 0 3600
-e
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

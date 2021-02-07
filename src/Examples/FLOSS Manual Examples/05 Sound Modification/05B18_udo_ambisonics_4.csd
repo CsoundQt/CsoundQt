@@ -6,9 +6,9 @@
 sr      =  44100
 ksmps   =  32
 nchnls  =  8
-0dbfs 	 = 1
+0dbfs      = 1
 
-zakinit 16, 1	
+zakinit 16, 1
 
 #include "../SourceMaterials/ambisonics_udos.txt"
 #include "../SourceMaterials/ambisonics_utilities.txt"
@@ -20,7 +20,7 @@ kaz,kel,kdist xyz_to_aed 10*sin(kt),10*sin(.78*kt),10*sin(.43*kt)
 adop Doppler asnd,kdist
         ambi_enc_dist adop,3,kaz,kel,kdist
 a1,a2,a3,a4,a5,a6,a7,a8 ambi_decode 3,17
-;k0		ambi_write_B	"B_form.wav",8,14
+;k0        ambi_write_B    "B_form.wav",8,14
         outc    a1,a2,a3,a4,a5,a6,a7,a8
         zacl    0,15
 endin
@@ -28,26 +28,9 @@ endin
 </CsInstruments>
 <CsScore>
 f1 0 32768 10 1
-f17 0 64 -2 0 -45 35.2644  45 35.2644  135 35.2644  225 35.2644  -45 -35.2644  .7854 -35.2644  135 -35.2644  225 -35.2644
+f17 0 64 -2 0 -45 35.2644  45 35.2644  135 35.2644  225 35.2644  \
+   -45 -35.2644  .7854 -35.2644  135 -35.2644  225 -35.2644
 i1 0 40 .5 300 40
 </CsScore>
 </CsoundSynthesizer>
 ;example by martin neukom
-
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>

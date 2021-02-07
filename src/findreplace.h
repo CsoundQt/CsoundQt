@@ -23,11 +23,7 @@
 #ifndef FINDREPLACE_H
 #define FINDREPLACE_H
 
-#ifdef USE_QT5
 #include <QtWidgets>
-#else
-#include <QtGui>
-#endif
 
 #include "ui_findreplace.h"
 

@@ -1,0 +1,25 @@
+{
+    "app-id": "org.flatpak.CsoundQt",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "18.08",
+    "sdk": "org.freedesktop.Sdk",
+    "command": "CsoundQt-d-cs6",
+    "modules": [
+        {
+            "name": "csoundqt",
+            "buildsystem": "qmake",
+            "build-commands": [
+                "qmake CONFIG+=rtmidi qcs.pro",
+                "make",
+                "make install"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/CsoundQt/CsoundQt",
+                    "tag": "v0.9.8.1"
+                }
+            ]
+        }
+    ]
+}

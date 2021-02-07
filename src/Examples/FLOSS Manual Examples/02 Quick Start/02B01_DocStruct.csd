@@ -1,24 +1,25 @@
-<CsoundSynthesizer>; START OF A CSOUND FILE
+<CsoundSynthesizer>     ; START OF CSOUND FILE
 
-<CsOptions> ; CSOUND CONFIGURATION
---env:SSDIR+=../SourceMaterials -odac
-</CsOptions>
+<CsOptions>             ; START OF CSOUND CONFIGURATION
+ -odac ; realtime audio output
+</CsOptions>            ; END OF CSOUND CONFIGURATION
 
-<CsInstruments> ; INSTRUMENT DEFINITIONS GO HERE
+<CsInstruments>         ; START OF INSTRUMENT DEFINITIONS
 
-; Set the audio sample rate to 44100 Hz
-sr = 44100
+sr = 44100 ; set audio sample rate to 44100 Hz
+ksmps = 64 ; set audio vector size to 64 samples
+nchnls = 2 ; set number of channels to 2 (stereo)
+0dbfs = 1  ; set zero dB full scale as 1
 
-instr 1
-; a 440 Hz Sine Wave
-aSin      oscils    0dbfs/4, 440, 0
-          out       aSin
+instr 1 ; play a 440 Hz Sine Wave
+ aSin  poscil  0dbfs/4, 440
+       out  aSin
 endin
-</CsInstruments>
 
-<CsScore> ; SCORE EVENTS GO HERE
-i 1 0 1
+</CsInstruments>        ; END OF INSTRUMENT DEFINITIONS
+
+<CsScore>               ; START OF SCORE EVENTS
+i 1 0 1 ; start instrument 1 at time 0 for 1 second
 </CsScore>
 
-</CsoundSynthesizer> ; END OF THE CSOUND FILE
-; Anything after a semicolon is ignored by Csound
+</CsoundSynthesizer>    ; END OF THE CSOUND FILE

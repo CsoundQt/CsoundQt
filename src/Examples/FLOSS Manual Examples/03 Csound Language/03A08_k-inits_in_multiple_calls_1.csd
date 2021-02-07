@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -nm0
+-nm0
 </CsOptions>
 <CsInstruments>
 ksmps = 32
@@ -17,8 +17,10 @@ endif
  instr Called
 iNumCall = p4
 kRndVal random 0, 10
-prints "Initialization value of kRnd in call %d = %.3f\n", iNumCall, i(kRndVal)
-printks "  New random value of kRnd generated in call %d = %.3f\n", 0, iNumCall, kRndVal
+prints "Initialization value of kRnd in call %d = %.3f\n", 
+       iNumCall, i(kRndVal)
+printks "  New random value of kRnd generated in call %d = %.3f\n",
+        0, iNumCall, kRndVal
 turnoff
  endin
 

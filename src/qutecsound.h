@@ -23,16 +23,12 @@
 #ifndef QUTECSOUND_H
 #define QUTECSOUND_H
 
-#ifdef USE_QT5
 #include <QtWidgets>
 #ifdef USE_QT_GT_53
 #include <QQuickWidget>
 #include <QQuickItem>
 #endif
-#else
-#include <QtGui>
-#include <QDesktopServices>
-#endif
+
 #include <QLocalServer>
 #include <QLocalSocket>
 
@@ -224,6 +220,7 @@ private slots:
 	void showUtilities(bool);
 	void getToIn();
 	void inToGet();
+	void insertMidiControlInstrument();
 	void updateCsladspaText();
 	void updateCabbageText();
     void saveWidgetsToQml();
@@ -291,6 +288,7 @@ private slots:
     void ambiguosShortcut();
     void testAudioSetup();
     void checkSyntaxMenuAction();
+    void tabMoved(int to, int from);
 
     DocumentPage *getCurrentDocumentPage() {
         if(curPage >= documentPages.size())
@@ -413,6 +411,7 @@ private:
 	QAction *scratchPadCsdModeAct;
 	QAction *getToInAct;
 	QAction *inToGetAct;
+	QAction *midiControlAct;
 	QAction *csladspaAct;
 	QAction *cabbageAct;
     QAction *qmlAct;

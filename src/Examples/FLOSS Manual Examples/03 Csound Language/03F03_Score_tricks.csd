@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
@@ -35,7 +34,7 @@ i    1.2  ^+2  -10  .2   700 ;another instance of instr 1
 i   -1.2  ^+2  0             ;turn off 1.2
 ; -- turn off 1.1 (dot = same as the same p-field above)
 i   -1.1  ^+1  .
-s                            ;end of a section, so time begins from new at zero
+s                            ;end of a section, so time again starts at zero
 i    1    1    1    .2   800
 r 5                          ;repeats the following line (until the next "s")
 i    1   .25  .25   .2   900
@@ -60,3 +59,4 @@ i    1    [2 + 4 * $LOOP.]    1    .    [1200 - $LOOP. * 300]
 e
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

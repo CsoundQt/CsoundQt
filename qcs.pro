@@ -27,6 +27,7 @@
 # OS X only OPTIONS:
 # CONFIG+=universal  #  To build i386/ppc version. Default is x86_64
 # CONFIG+=i386  #  To build i386 version. Default is x86_64
+# CONFIG+=bundle_csound # to make a package that incudes Csound in the bundle with make install
 # LINUX ONLY:
 # To install CsoundQt and its dekstop file and icons somewhere else than /usr/local/bin and /usr/share
 # use variables INSTALL_DIR (default /usr/local) and SHARE_DIR (default /usr/share).
@@ -34,6 +35,11 @@
 # qmake qcs.pro INSTALL_DIR=~ SHARE_DIR=~/.local/share
 ################################################################################
 
+
+#Support for Qt4 dropped from v0.9.8 de facto, v1.0.0 declaring it here:
+lessThan(QT_MAJOR_VERSION,5): error("Qt5 or higher required. Use CsoundQt 0.9.7 or earlier to build for Qt4.")
+
+csound5: error("Building for Csound5 nont supported.")
 
 DEFINES += NOMINMAX
 # DEFINES += USE_WIDGET_MUTEX
@@ -43,34 +49,21 @@ csound6 {
 }
 
 # Add C++11 support since version 0.9.4
-greaterThan(QT_MAJOR_VERSION, 4){
 CONFIG += c++11
-} else {
-QMAKE_CXXFLAGS += -std=c++0x
-}
 
-!csound5 {
-    DEFINES += CSOUND6
-    CONFIG += csound6
-    debugger {
-        DEFINES += QCS_DEBUGGER
-        message("Building debugger.")
-    }
-    message("Building for Csound 6.")
-} else {
-    message("Building for Csound 5 (unsupported).")
+#for csound6 (may need extra conditions for csound7 later:
+DEFINES += CSOUND6
+CONFIG += csound6
+debugger {
+    DEFINES += QCS_DEBUGGER
+    message("Building debugger.")
 }
+message("Building for Csound 6.")
 
-QT += concurrent network
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-    QT += widgets
-    QT += printsupport
-    DEFINES += USE_QT5
-    CONFIG += QCS_QT5
-} else {
-    DEFINES += USE_QT_LT_50
-}
+QT += concurrent network widgets printsupport
+DEFINES += USE_QT5
+CONFIG += QCS_QT5
 
 greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 2) {
     QT += quickwidgets
@@ -115,12 +108,12 @@ record_support|perfThread_build {
     message("Building recording support.")
 }
 
-!csound5 {
-    debugger {
-        DEFINES += QCS_DEBUGGER
-        message("Building debugger.")
-    }
+
+debugger {
+    DEFINES += QCS_DEBUGGER
+    message("Building debugger.")
 }
+
 
 include(src/src.pri)
 TRANSLATIONS = "src/translations/qutecsound_en.ts" \
@@ -209,12 +202,12 @@ unix:!macx {
 	INSTALLS += postInstall
 
 	# see comments: https://github.com/CsoundQt/CsoundQt/issues/258
-    desktop.path=$$SHARE_DIR/applications
+        desktop.path=$$SHARE_DIR/applications
 	desktop.files = $$PWD/csoundqt.desktop
 	INSTALLS += desktop
 
 	icon.path=$$SHARE_DIR/icons/hicolor/scalable/apps
-    icon.files=images/csoundqt.svg
+        icon.files=images/csoundqt.svg
 	INSTALLS += icon
 
 	mimetypes.path=$$INSTALL_DIR # in some reason path must be set to create install target in Makefile
@@ -236,25 +229,6 @@ unix:!macx {
         INSTALLS += scripts
     }
 
-    # EXPERIMENTAL AppImage build  using linuxdeploy and linuxdeploy-plugin-qt
-    # download linuxdeploy and its Qt plugin
-    #wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-    #wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
-
-    # make them executableappImage
-    #chmod +x linuxdeploy*.AppImage
-
-    appImage.path = $$OUT_PWD/$$DESTDIR/
-    appImage.files = icon.files
-    #appImage.files += $$PWD/csoundqt.desktop
-    #TODO: examples
-	#appImage.commands = cd $$OUT_PWD/$$DESTDIR/; ln -sf $$TARGET csoundqt
-    appImage.commands += export VERSION=0.9.7-beta; export QML_SOURCES_PATHS=$$PWD/src/QML;
-    #TODO: kas dekstop failis vaja seada käivitatav $$TARGETiks või siis bianry oleks csounqt. praegu nimetan käsitisi ümber AppDir/usr/bin juures
-    appImage.commands += linuxdeploy --appdir AppDir --executable=$$TARGET  --desktop-file=$$PWD/csoundqt.desktop  -i $$PWD/images/csoundqt.svg  --plugin=qt #  --output appimage
-    # move and remove what necessary here:
-    #  appImage.commands += linuxdeploy --appdir AppDir  --output appimage
-	#INSTALLS += appImage
 }
 
 # for OSX add Scripts and Examples to be bundle in Contents->Resources
@@ -308,12 +282,24 @@ macx {
 
     }
 
-    final.commands = rm -rf  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework ;
-    final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
-    final.commands += install_name_tool -change  @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
-    #final.commands += $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML -dmg # nb! -dmg only for local build, do not commit to git!
-    final.commands += hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname CsoundQt $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg # untested!
+    bundle_csound {
+        # Nothing special to do for that, just don't delete, leave the links to @rpath
+        message("Bundle Csound into  the package")
+        csound.path= $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/
+        csound.files = /Library/Frameworks/CsoundLib64.framework
+        INSTALLS+=csound
+        final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib @rpath/CsoundLib64.framework/Versions/6.0/libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        final.commands += install_name_tool -change  CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+
+    } else {
+        final.path = $$PWD
+        final.commands = rm -rf  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework ;
+        final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        final.commands += install_name_tool -change  @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+    }
+
     final.path = $$PWD
+    final.commands += hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname CsoundQt $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg # untested!
     INSTALLS += cocoa printsupport pythonlinks final
 
 }

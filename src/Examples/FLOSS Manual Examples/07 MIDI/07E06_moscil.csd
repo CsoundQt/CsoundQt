@@ -1,10 +1,8 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials ; amend device number accordingly
+; amend device number accordingly
 -Q999
 </CsOptions>
-
 <CsInstruments>
 ; Example by Iain McCurdy
 
@@ -23,11 +21,10 @@ kpause  random    0, 0.4    ; pauses betw. notes chosen randomly from 0 to 0.4
   endin
 
 </CsInstruments>
-
 <CsScore>
 ;p1 p2 p3 p4
 i 1 0  20 1
 f 0 21 ; extending performance time prevents final note-off from being lost
 </CsScore>
-
 </CsoundSynthesizer>
+;example by Iain McCurdy

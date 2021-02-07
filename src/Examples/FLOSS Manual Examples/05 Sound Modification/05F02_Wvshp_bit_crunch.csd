@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -14,7 +14,7 @@ instr 1
 aAmp      soundin   "fox.wav"
 aIndx     =         (aAmp + 1) / 2
 aWavShp   table     aIndx, giTrnsFnc, 1
-          outs      aWavShp, aWavShp
+          out       aWavShp, aWavShp
 endin
 
 </CsInstruments>

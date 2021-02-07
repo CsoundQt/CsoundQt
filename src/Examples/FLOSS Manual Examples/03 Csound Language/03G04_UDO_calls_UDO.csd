@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
@@ -41,7 +40,7 @@ aSnd      =         aSnd * ampdb(kdB); applied as dB to noise
 kFiltFq   randomi   100, 1000, 1; random movement between 100 and 1000
 iQ        =         5
 iFb       =         .7; feedback multiplier
-aDelTm    randomi   .1, .8, .2; random movement between .1 and .8 as delay time
+aDelTm randomi .1, .8, .2; random movement between .1 and .8 as delay time
 aFilt, aDel FiltFb    aSnd, iFb, kFiltFq, iQ, 1, aDelTm
 kdbFilt   randomi   -12, 0, 1; two random movements between -12 and 0 (dB) ...
 kdbDel    randomi   -12, 0, 1; ... for the noise and the delay signal
@@ -56,7 +55,7 @@ aSnd      =         aSnd * ampdb(kdB); applied as dB to noise
 kFiltFq   randomi   100, 1000, 1; random movement between 100 and 1000
 iQ        =         5
 iFb       =         .7; feedback multiplier
-aDelTm    randomi   .1, .8, .2; random movement between .1 and .8 as delay time
+aDelTm randomi .1, .8, .2; random movement between .1 and .8 as delay time
 aFilt, aDel FiltFb    aSnd, iFb, kFiltFq, iQ, 1, aDelTm
 kdbFilt   randomi   -12, 0, 1; two random movements between -12 and 0 (dB) ...
 kdbDel    randomi   -12, 0, 1; ... for the noise and the delay signal
@@ -94,3 +93,4 @@ i 2 31 30
 i 3 62 120
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

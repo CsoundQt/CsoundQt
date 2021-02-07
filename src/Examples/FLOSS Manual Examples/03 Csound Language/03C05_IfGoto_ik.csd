@@ -1,26 +1,22 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
 <CsInstruments>
-;Example by Joachim Heintz
 sr = 44100
 ksmps = 32
 nchnls = 2
 0dbfs = 1
 
   instr 1
-Sfile     =          "my/file.wav"
+Sfile     =          "ClassGuit.wav"
 ifilchnls filenchnls Sfile
- if ifilchnls == 1 kgoto mono
-  kgoto stereo
- if ifilchnls == 1 igoto mono; condition if true
-  igoto stereo; else condition
+ if ifilchnls == 1 goto mono
+  goto stereo
 mono:
 aL        soundin    Sfile
 aR        =          aL
-          igoto      continue
-          kgoto      continue
+          goto      continue
 stereo:
 aL, aR    soundin    Sfile
 continue:
@@ -32,3 +28,4 @@ continue:
 i 1 0 5
 </CsScore>
 </CsoundSynthesizer>
+;example by joachim heintz

@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -ndm0
+-ndm0
 </CsOptions>
 <CsInstruments>
 sr = 44100
@@ -18,7 +18,7 @@ iIndex     =          0
 iIndex     +=         1
 iAccum     +=         iLine[iIndex]
  enduntil
-           printf_i   "Random number = %.3f, next element = %c!\n", 1, iVal, iIndex+97
+printf_i "Random number = %.3f, next element = %c!\n", 1, iVal, iIndex+97
 endin
 </CsInstruments>
 <CsScore>

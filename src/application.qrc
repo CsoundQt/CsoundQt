@@ -23,6 +23,7 @@
         <file>../examples/Miscellaneous/Score_Tricks.csd</file>
         <file>../examples/Miscellaneous/Simple_Convolution.csd</file>
         <file>../examples/Miscellaneous/Universal_Convolution.csd</file>
+        <file>../examples/Miscellaneous/IR_Creator.csd</file>
         <file>../examples/Miscellaneous/Cross_Synthesis.csd</file>
         <file>../examples/Miscellaneous/SF_Granular.csd</file>
         <file>../examples/Miscellaneous/Oscillator_Aliasing.csd</file>
@@ -141,6 +142,7 @@
 		<file>../examples/Html5 Support/Minimal_Html_Example.csd</file>
 		<file>../examples/Html5 Support/Styled_Sliders.csd</file>
 		<file>../examples/Html5 Support/Html_file_in_CsoundQt.html</file>
+		<file>../examples/Plugins/CircularBuffer.csd</file>
 		<file>translations/qutecsound_en.qm</file>
         <file>translations/qutecsound_es.qm</file>
         <file>translations/qutecsound_de.qm</file>

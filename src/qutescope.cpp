@@ -29,7 +29,8 @@
 QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
 {
 	QGraphicsScene *m_scene = new QGraphicsScene(this);
-	m_scene->setBackgroundBrush(QBrush(Qt::black));
+    // m_scene->setBackgroundBrush(QBrush(Qt::black));
+    m_scene->setBackgroundBrush(QBrush(QColor("#161616")));
 	m_widget = new ScopeWidget(this);
 	m_widget->show();
 	m_widget->setAutoFillBackground(true);
@@ -58,6 +59,7 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
                                &scopeLock,
                                this->width(),
                                this->height());
+    m_params->triggerMode = TriggerMode::NoTrigger;
 
     m_scopeData    = new ScopeData(m_params);
 	m_lissajouData = new LissajouData(m_params);
@@ -73,6 +75,7 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_dispx", 1.0);
 	setProperty("QCS_dispy", 1.0);
 	setProperty("QCS_mode", "lin");
+    setProperty("QCS_triggermode", "NoTrigger");
 }
 
 QuteScope::~QuteScope()
@@ -82,6 +85,23 @@ QuteScope::~QuteScope()
 	delete m_scopeData;
 	delete m_params;
 }
+
+TriggerMode triggerNameToMode(QString s) {
+    if(s == "NoTrigger")
+        return TriggerMode::NoTrigger;
+    else if(s =="TriggerUp")
+        return TriggerMode::TriggerUp;
+    else
+        return TriggerMode::NoTrigger;
+}
+
+QString triggerModeToName(TriggerMode t) {
+    if(t == TriggerMode::NoTrigger)
+        return "NoTrigger";
+    else if(t == TriggerMode::TriggerUp)
+        return "TriggerUp";
+}
+
 
 QString QuteScope::getWidgetLine()
 {
@@ -116,7 +136,7 @@ QString QuteScope::getWidgetXmlText()
 	s.writeTextElement("dispx", QString::number(property("QCS_dispx").toDouble(), 'f', 8));
 	s.writeTextElement("dispy", QString::number(property("QCS_dispy").toDouble(), 'f', 8));
     s.writeTextElement("mode",  QString::number(property("QCS_mode").toDouble(), 'f', 8));
-
+    s.writeTextElement("triggermode", property("QCS_triggermode").toString());
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -171,11 +191,13 @@ void QuteScope::updateLabel()
 	m_label->setText(tr("Scope ch:") + chan);
 }
 
+
 void QuteScope::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
 	setType(property("QCS_type").toString());
 	setValue(property("QCS_value").toDouble());
+    m_params->triggerMode = triggerNameToMode(property("QCS_triggermode").toString());
 }
 
 void QuteScope::createPropertiesDialog()
@@ -198,15 +220,14 @@ void QuteScope::createPropertiesDialog()
 	layout->addWidget(label, 6, 2, Qt::AlignRight|Qt::AlignVCenter);
 	channelBox = new QComboBox(dialog);
 	channelBox->addItem("all", QVariant((int) -255));
-	channelBox->addItem("Ch.1",QVariant((int) 1));
-	channelBox->addItem("Ch.2",QVariant((int) 2));
-	channelBox->addItem("Ch.3",QVariant((int) 3));
-	channelBox->addItem("Ch.4",QVariant((int) 4));
-	channelBox->addItem("Ch.5",QVariant((int) 5));
-	channelBox->addItem("Ch.6",QVariant((int) 6));
-	channelBox->addItem("Ch.7",QVariant((int) 7));
-	channelBox->addItem("Ch.8",QVariant((int) 8));
-	channelBox->addItem("none", QVariant((int) 0));
+    int maxChannels = 16;
+    if(m_params->ud != nullptr && m_params->ud->csEngine->isRunning()) {
+        maxChannels = m_params->ud->numChnls;
+    }
+    for(int i=1; i <= maxChannels; i++) {
+        channelBox->addItem(QString::number(i), QVariant((int) i));
+    }
+    channelBox->addItem("none", QVariant((int) 0));
 	layout->addWidget(channelBox, 6, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText("Zoom X");
@@ -227,6 +248,14 @@ void QuteScope::createPropertiesDialog()
 	channelBox->setCurrentIndex(channelBox->findData(QVariant((int) m_value)));
 	zoomxBox->setValue(property("QCS_zoomx").toDouble());
 	zoomyBox->setValue(property("QCS_zoomy").toDouble());
+
+    label = new QLabel("Trigger");
+    layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
+    triggerBox = new QComboBox(dialog);
+    triggerBox->addItem("No Trigger", "NoTrigger");
+    triggerBox->addItem("Trigger Up", "TriggerUp");
+    triggerBox->setCurrentIndex(triggerBox->findData(property("QCS_triggermode").toString()));
+    layout->addWidget(triggerBox, 9, 1, Qt::AlignLeft|Qt::AlignVCenter);
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -241,6 +270,9 @@ void QuteScope::applyProperties()
 	setProperty("QCS_zoomx", zoomxBox->value());
 	setProperty("QCS_zoomy", zoomyBox->value());
 	setProperty("QCS_value", channelBox->itemData(channelBox->currentIndex()).toInt());
+    auto triggerModeStr = triggerBox->currentData().toString();
+    setProperty("QCS_triggermode", triggerModeStr);
+    m_params->triggerMode = triggerNameToMode(triggerModeStr);
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -306,6 +338,8 @@ ScopeData::ScopeData(ScopeParams *params) : DataDisplay(params)
 	curveData.resize(m_params->width + 2);
 	curve = new QGraphicsPolygonItem(/*&curveData*/);
     curve->setPen(QPen(Qt::green, 0));
+    curve->setPen(QPen(QColor("#40FF40"), 0));
+
 	curve->hide();
 	m_params->scene->addItem(curve);
 }
@@ -343,9 +377,69 @@ void ScopeData::updateData(int channel, double zoomx, double zoomy, bool freeze)
 	QList<MYFLT> list = buffer->buffer;
 	buffer->unlock();
 	long listSize = list.size();
-    // long offset = buffer->currentPos;
-    long offset = buffer->currentReadPos;
-	for (int i = 0; i < width; i++) {
+    long offset = buffer->currentPos;
+    long dataToRead = width;
+    // search for trig
+    long trigOffset = 0;
+    double lastValue = 1.0;
+    long maxFrames = width < dataToRead ? width: dataToRead;
+
+    if(m_params->triggerMode == TriggerMode::TriggerUp) {
+        if(channel >= 0) {
+            for(int i=0; i < maxFrames; i++) {
+                int idx = (int)((offset + (int)(i*numChnls*zoomx) + channel) % listSize);
+                double value = list[idx];
+                if(value >= 0 && lastValue < 0) {
+                    trigOffset = idx - offset - channel;
+                    break;
+                }
+                lastValue = value;
+            }
+        }
+        else {
+            for(int i=0; i < maxFrames; i++) {
+                int baseidx = (int)((offset + (int)(i*numChnls*zoomx)) % listSize);
+                double value = 0;
+                for(int chan = 0; chan < numChnls; chan++) {
+                    double newValue = list[baseidx+chan];
+                    if(fabs(newValue) > fabs(value))
+                        value = newValue;
+                }
+                if(value >= 0 && lastValue < 0) {
+                    trigOffset = baseidx - offset;
+                    break;
+                }
+                lastValue = value;
+            }
+
+        }
+        offset += trigOffset;
+    }
+    double factor = numChnls * zoomx;
+    int halfheight = height/2;
+    if(channel >= 0) {
+        for(int i = 0; i < maxFrames; i++) {
+            int idx = (int)((offset+channel+ (int)(i*factor)) % listSize);
+            value = (double) list[idx];
+            curveData[i+1] = QPoint(i, -zoomy*value*halfheight);
+        }
+    } else {
+        for(int i = 0; i < maxFrames; i++) {
+            value = 0;
+            for(int chan = 0; chan < numChnls; chan++) {
+                int idx = (int)((offset+chan+ (int)(i*factor)) % listSize);
+                newValue = (double) list[idx];
+                if(fabs(newValue) > fabs(value))
+                    value = newValue;
+            }
+            curveData[i+1] = QPoint(i, -zoomy*value*halfheight);
+        }
+
+    }
+
+
+    /*
+    for (int i = 0; i < width; i++) {
 		value = 0;
         for (int j = 0; j < (int) zoomx; j++) {
 			if (channel == -1) {
@@ -367,7 +461,9 @@ void ScopeData::updateData(int channel, double zoomx, double zoomy, bool freeze)
 		}
         curveData[i+1] = QPoint(i, zoomy*value*height/2);
 	}
-    buffer->currentReadPos += width;
+    */
+    // buffer->currentReadPos += width;
+    buffer->currentReadPos = (offset + dataToRead) % buffer->size;
 	m_params->widget->setSceneRect(0, -height/2, width, height );
 	curveData.last() = QPoint(width-4, 0);
 	curveData.first() = QPoint(0, 0);
@@ -437,8 +533,8 @@ void LissajouData::updateData(int channel, double zoomx, double zoomy, bool free
 	for (int i = 0; i < curveData.size(); i++) {
 		int bufferIndex = (int)((i*numChnls) + offset + channel) % listSize;
 		x = (double)list[bufferIndex];
-		bufferIndex = (bufferIndex + 1) % listSize;
-		y = (double) -list[bufferIndex];
+        bufferIndex = (bufferIndex + 1) % listSize;
+        y = (double) -list[bufferIndex];
 		curveData[i] = QPoint(x*width*zoomx/4, y*height*zoomy/4);
 	}
 	m_params->widget->setSceneRect(-width/2, -height/2, width, height );

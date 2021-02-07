@@ -130,6 +130,7 @@ public:
 	virtual QString getWidgetType();
 	virtual void setValue(double value);
 	virtual void setMidiValue(int value);
+	virtual bool acceptsMidi() {return true;}
 
 	virtual void applyInternalProperties();
 	virtual QString getCabbageLine();

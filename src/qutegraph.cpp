@@ -49,7 +49,6 @@ inline CsoundEngineStatus csoundEngineStatus(CsoundUserData *ud) {
         return CsoundEngineStatus::EngineNotSet;
     }
     if(!ud->csEngine->isRunning()) {
-        // qDebug() << "csound not running";
         return CsoundEngineStatus::NotRunning;
     }
     return CsoundEngineStatus::Running;
@@ -331,10 +330,21 @@ void QuteGraph::keyPressEvent(QKeyEvent *event) {
     }
 }
 
+
 void QuteGraph::setValue(double value)
 {
-	QuteWidget::setValue(value);
-	m_value2 = getTableNumForIndex((int) value);
+    QuteWidget::setValue(value);
+    // m_value2 = this->getTableNumForIndex(value);
+    /*
+    if(value < 0) {
+        int tabnum = -((int)value);
+        int index = this->getIndexForTableNum(tabnum);
+        QuteWidget::setValue(index);
+    } else {
+        QuteWidget::setValue(value);
+    }
+    */
+
 }
 
 void QuteGraph::setValue(QString text)
@@ -366,7 +376,6 @@ void QuteGraph::setValue(QString text)
         }
         int index;
         if(parts[1] == "fft") {
-            qDebug() << ">>>>>>>>>>>>>>>> spectrum";
             index = findCurve(CURVE_SPECTRUM, parts[2].toString());
         }
         else if (parts[1] == "audio") {
@@ -476,8 +485,12 @@ void QuteGraph::refreshWidget()
 	int index = 0;
 	if (m_valueChanged) {
         index = (int) m_value;
-        m_value2 = getTableNumForIndex(index);
-		m_value2Changed = false;
+        if(index < 0) {
+            m_value2 = -index;
+        } else {
+            m_value2 = getTableNumForIndex(index);
+        }
+        m_value2Changed = false;
 		m_valueChanged = false;
 		needsUpdate = true;
 	}
@@ -636,18 +649,15 @@ void QuteGraph::applyProperties()
 
 int QuteGraph::findCurve(CurveType type, QString text) {
     // returns the index or -1 if not found
-    int index = -1;
     for (int i = 0; i < curves.size(); i++) {
         if(curves[i]->get_type() != type)
             continue;
         QString caption = curves[i]->get_caption();
         if (caption.contains(text)) {
-            index = i;
-            break;
+            return i;
         }
     }
-    qDebug() << "findCurve: curve not found" << type << text;
-    return index;
+    return -1;
 }
 
 void QuteGraph::changeCurve(int index)
@@ -665,15 +675,13 @@ void QuteGraph::changeCurve(int index)
 			index = getIndexForTableNum(-m_value);
         else
 			index = (int) m_value;
-	}
-    else if (stacked->currentIndex() == index) {
-        return;
     } else if (index >= stacked->count()) {
         qDebug() << "changeCurve: index out of range. Num indices:"<<stacked->size();
         return;
+    }
+    else if (stacked->currentIndex() == index) {
+        return;
     } else {
-        qDebug()<<"changeCurve"<<index;
-
         // change curve
         auto view = stacked->currentWidget();
         view->hide();
@@ -685,9 +693,10 @@ void QuteGraph::changeCurve(int index)
         m_pageComboBox->blockSignals(false);
     }
 
-    if (index < 0  || index >= curves.size())  // Invalid index
+    if (index < 0  || index >= curves.size()) { // Invalid index
+        QDEBUG << "Invalid index" << index;
         return;
-
+    }
     m_value = index;
     switch(graphtypes[index]) {
     case GraphType::GRAPH_FTABLE: {
@@ -705,8 +714,9 @@ void QuteGraph::changeCurve(int index)
             m_label->setText(text);
             m_label->show();
         }
-        if(origRequest >= 0)
+        if(origRequest != -2) {
             drawGraph(curves[index], index);
+        }
         break;
     }
     case GraphType::GRAPH_SPECTRUM:
@@ -719,11 +729,11 @@ void QuteGraph::changeCurve(int index)
         break;
     }
     scaleGraph(index);
+
 }
 
 void QuteGraph::indexChanged(int index)
 {
-    qDebug()<<"indexChanged"<<index<<"\n";
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -731,8 +741,7 @@ void QuteGraph::indexChanged(int index)
 		setInternalValue(index);
 	}
 	else {
-        qDebug() << "channel value" << m_channel << index << "\n";
-		QPair<QString, double> channelValue(m_channel, index);
+        QPair<QString, double> channelValue(m_channel, index);
 		emit newValue(channelValue);
 	}
     if (m_channel2 == "") {
@@ -752,7 +761,7 @@ void QuteGraph::indexChanged(int index)
 void QuteGraph::clearCurves()
 {
 	//  curveLock.lock();
-	m_widget->blockSignals(true);
+    m_widget->blockSignals(true);
 	static_cast<StackedLayoutWidget *>(m_widget)->clearCurves();
 	m_widget->blockSignals(false);
 	m_pageComboBox->blockSignals(true);
@@ -770,7 +779,7 @@ void QuteGraph::clearCurves()
     m_showPeak = false;
     m_showPeakTemp = false;
     m_showPeakCenterFrequency = 1000;
-	//  curveLock.unlock();
+    //  curveLock.unlock();
 }
 
 void QuteGraph::addCurve(Curve * curve)
@@ -949,20 +958,22 @@ void QuteGraph::drawGraph(Curve *curve, int index) {
         // drawFtable(curve, index);
         // view->setRenderHint(QPainter::Antialiasing);
         drawFtablePath(curve, index);
+        scaleGraph(index);
         break;
     // case GraphType::GRAPH_SPECTRUM:
     case CurveType::CURVE_SPECTRUM:
         // view->setRenderHint(QPainter::Antialiasing);
         drawSpectrum(curve, index);
         // drawSpectrumPath(curve, index);
+        changeCurve(-2); //update curve
         break;
     case CurveType::CURVE_AUDIOSIGNAL:
     // case GraphType::GRAPH_AUDIOSIGNAL:
         // drawSignal(curve, index);
         drawSignalPath(curve, index);
+        changeCurve(-2); //update curve
         break;
     }
-    changeCurve(-2); //update curve
 }
 
 void QuteGraph::setCurveData(Curve * curve)
@@ -1011,6 +1022,7 @@ void QuteGraph::drawFtablePath(Curve *curve, int index) {
     Q_ASSERT(index >= 0);
     QGraphicsScene *scene = this->getView(index)->scene();
     // QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
+
     double max = curve->get_max();
     max = max == 0 ? 1: max;
     int curveSize = curve->get_size();
@@ -1535,8 +1547,10 @@ void QuteTableWidget::reset() {
     m_running = false;
     m_data = nullptr;
     m_tabsize = 0;
-    if(m_autorange)
+    if(m_autorange) {
         m_maxy = 1.0;
+        m_miny = -1.0;
+    }
     if(m_path != nullptr) {
         delete m_path;
         m_path = nullptr;
@@ -1545,20 +1559,49 @@ void QuteTableWidget::reset() {
 
 void QuteTableWidget::paintGrid(QPainter *painter) {
     int margin = m_margin;
-    QString maxystr;
+    QString maxystr, minystr;
+    double newmaxy = m_maxy;
+    double newminy = m_miny;
+    auto rect = this->rect();
+    auto width = rect.width() - margin*2;
+    int step = m_tabsize / width;
+    if (step == 0)
+        step = 1;
+
+    if(m_autorange) {
+        for(int i=0; i < m_tabsize; i+=step) {
+            double y = m_data[i];
+            if(y > newmaxy)
+                newmaxy = y;
+            else if (y < newminy)
+                newminy = y;
+        }
+        m_maxy = ceil(newmaxy);
+        m_miny = floor(newminy);
+    }
+
     if(m_maxy >= 10)
         maxystr = QString::number((int)m_maxy);
     else if(m_maxy >= 1)
         maxystr = QString::number(m_maxy, 'f', 1);
     else
         maxystr = QString::number(m_maxy, 'f', 2);
-    auto rect = this->rect();
+    double absminy = abs(m_miny);
+    if(absminy >= 10)
+        minystr = QString::number((int)m_miny);
+    else if(absminy >= 1)
+        minystr = QString::number(m_miny, 'f', 1);
+    else
+        minystr = QString::number(m_miny, 'f', 2);
+
     const int yoffset = 0;
     auto x0 = rect.x() + margin;
     auto x1 = rect.x() + rect.width() - margin + 1;
     auto y0 = rect.y() + margin + yoffset;
     auto y1 = rect.y() + rect.height() - margin + yoffset ;
-    auto ycenter = (y0+y1) / 2;
+    auto height = rect.height() - margin*2;
+    double yscale = -height / (m_maxy - m_miny);
+
 
     auto font = QFont({"Sans", 8});
     QFontMetrics fm(font);
@@ -1566,16 +1609,28 @@ void QuteTableWidget::paintGrid(QPainter *painter) {
     const int textMargin = 4;
     painter->setBrush(Qt::NoBrush);
     painter->setPen(QPen(QColor(96, 96, 96), 0));
+
+    // upper line
     painter->drawLine(rect.x() + fm.boundingRect(maxystr).width()+textMargin*2, y0, x1, y0);
-    painter->drawLine(x0, ycenter, x1, ycenter);
+    // lower line
     painter->drawLine(x0, y1, x1 - fm.boundingRect(tabsizestr).width() - 2, y1);
-    painter->setPen(QColor(48, 48, 48));
-    painter->drawLine(x0, (y0+ycenter)/2, x1, (y0+ycenter)/2);
-    painter->drawLine(x0, (y1+ycenter)/2, x1, (y1+ycenter)/2);
+
+    // 0 line
+    if (m_maxy > 0 && m_miny < 0) {
+        int yzero = static_cast<int>(-m_miny * yscale + (y0+height));
+        QDEBUG << yzero << y0 << y1;
+        painter->drawLine(x0, yzero, x1, yzero);
+
+        painter->setPen(QColor(200, 200, 200));
+        painter->drawText(rect.x(), yzero, "0");
+    }
 
     painter->setPen(QColor(200, 200, 200));
     painter->setFont(font);
     painter->drawText(rect.x()+textMargin, y0+textMargin, maxystr);
+    painter->drawText(rect, Qt::AlignLeft|Qt::AlignBottom, minystr);
+
+
     // right padding
     rect.setWidth(rect.width() - textMargin);
     painter->drawText(rect, Qt::AlignRight|Qt::AlignBottom, tabsizestr);
@@ -1624,6 +1679,7 @@ void QuteTableWidget::setRange(double maxy) {
     } else {
         m_autorange = false;
         m_maxy = maxy;
+        m_miny = -maxy;
     }
 }
 
@@ -1637,9 +1693,8 @@ void QuteTableWidget::updatePath() {
     auto width = rect.width() - margin*2;
     auto height = rect.height() - margin*2;
     double maxy = this->m_maxy;
-    double newmaxy = maxy;
+    double miny = this->m_miny;
     double xscale = width / (double)m_tabsize;
-    double yscale = height * 0.5 / maxy;
     double y0 = rect.y() + margin;
     double x0 = rect.x() + margin;
     int step = m_tabsize / width;
@@ -1647,20 +1702,21 @@ void QuteTableWidget::updatePath() {
         step = 1;
 
     auto path = new QPainterPath();
+    // double yscale = ((y0 - (y0+height)) / (maxy-miny));
+    double yscale = -height / (maxy-miny);
+
+    // y2 = (ydata - miny) / (maxy-miny) * (j1-j0) + j0
+    // j0 = y0 + height; j1 = y0
+    // move to first point
     double ydata = m_data[0];
-    path->moveTo(x0, (ydata+maxy)*yscale+y0);
-    for(int i=0; i < m_tabsize; i+=step) {
+    path->moveTo(x0, (ydata-miny)*yscale+y0+height);
+    for(int i=1; i < m_tabsize; i+=step) {
         ydata = m_data[i];
         double x2 = i*xscale + x0;
-        double y2 = (ydata+maxy)*yscale + y0;
+        double y2 = (ydata - miny) * yscale + (y0+height);
         path->lineTo(x2, y2);
-        if(ydata > newmaxy)
-            newmaxy = ydata;
     }
     mutex.lock();
-    if(m_autorange) {
-        m_maxy = ceil(newmaxy);
-    }
     if(m_path != nullptr)
         delete m_path;
     m_path = path;
@@ -1694,6 +1750,7 @@ void QuteTableWidget::updateData(int tabnum, bool check) {
     m_tabsize = tabsize;
     if(m_autorange && m_tabnum != tabnum) {
         m_maxy = 1.0;
+        m_miny = 0;
     }
     m_tabnum = tabnum;
     mutex.unlock();
@@ -1760,7 +1817,7 @@ void QuteTable::createPropertiesDialog() {
     rangeSpinBox->setSingleStep(0.1);
     rangeSpinBox->setToolTip("Sets the max. range to plot. Disable this to use autorange"
                              "With a fixed range, values outside the range will not be "
-                             "visiable");
+                             "visible");
     rangeSpinBox->setValue(range > 0 ? range : 1.0);
     layout->addWidget(rangeSpinBox, 5, 2, Qt::AlignLeft|Qt::AlignVCenter);
     connect(rangeCheckBox, SIGNAL(toggled(bool)), rangeSpinBox, SLOT(setEnabled(bool)));

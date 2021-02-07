@@ -1,12 +1,8 @@
 <CsoundSynthesizer>
-
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac
+-odac
 </CsOptions>
-
 <CsInstruments>
-;Example written by Iain McCurdy
-
 sr = 44100
 ksmps = 16
 nchnls = 2
@@ -21,10 +17,10 @@ schedkwhen ktrig,0,0,2,0,kdur,cpsoct(koct) ;trigger a note in instrument 2
   endin
 
   instr 2 ; subtractive synthesis instrument
-aNoise  pinkish  1                  ;a noise source sound: pink noise
-kGap    rspline  0.3,0.05,0.2,2     ;time gap between impulses
-aPulse  mpulse   15, kGap           ;a train of impulses
-kCFade  rspline  0,1,0.1,1          ;crossfade point between noise and impulses
+aNoise  pinkish  1                ;a noise source sound: pink noise
+kGap    rspline  0.3,0.05,0.2,2   ;time gap between impulses
+aPulse  mpulse   15, kGap         ;a train of impulses
+kCFade  rspline  0,1,0.1,1        ;crossfade point between noise and impulses
 aInput  ntrpol   aPulse,aNoise,kCFade;implement crossfade
 
 ; cutoff frequencies for low and highpass filters
@@ -38,7 +34,7 @@ aInput    buthp    aInput, cpsoct(kHPF_CF)
 aInput    buthp    aInput, cpsoct(kHPF_CF)
 
 kcf     rspline  p4*1.05,p4*0.95,0.01,0.1 ; fundemental
-; bandwidth for each filter is created individually as a random spline function
+;bandwidth for each filter is created individually as a random spline function
 kbw1    rspline  0.00001,10,0.2,1
 kbw2    rspline  0.00001,10,0.2,1
 kbw3    rspline  0.00001,10,0.2,1
@@ -122,10 +118,9 @@ outs   (aMixL*kEnv*0.00008), (aMixR*kEnv*0.00008) ; audio sent to outputs
   endin
 
 </CsInstruments>
-
 <CsScore>
 i 1 0 3600  ; instrument 1 (note generator) plays for 1 hour
 e
 </CsScore>
-
 </CsoundSynthesizer>
+;example written by Iain McCurdy

@@ -1,9 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -+rtmidi=virtual -M1 -odac
+-+rtmidi=virtual -M1 -odac
 </CsOptions>
 <CsInstruments>
-;Example by Andrés Cabrera
 
 sr = 44100
 ksmps = 32
@@ -20,6 +19,6 @@ endin
 </CsInstruments>
 <CsScore>
 i 1 0 60
-e
 </CsScore>
 </CsoundSynthesizer>
+;Example by Andrés Cabrera

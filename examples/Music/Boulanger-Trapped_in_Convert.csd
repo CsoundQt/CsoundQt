@@ -687,12 +687,12 @@ e
  <height>363</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="nobackground" >
+ <bgcolor mode="nobackground">
   <r>230</r>
   <g>221</g>
   <b>213</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>4</x>
   <y>6</y>
@@ -702,6 +702,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>;                            == TRAPPED IN CONVERT ==                        ;
 ;                                Richard Boulanger                           ;
 ;============================================================================;
@@ -719,6 +720,7 @@ e
 ;============================================================================;
 ;============================================================================;</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -727,7 +729,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -736,7 +738,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Play</objectName>
   <x>69</x>
   <y>282</y>
@@ -745,17 +747,19 @@ e
   <uuid>{192c01d7-a5de-4662-b202-1603730eb47c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>Start/Resume</text>
+  <text>Start</text>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Pause</objectName>
   <x>189</x>
   <y>282</y>
@@ -764,33 +768,18 @@ e
   <uuid>{c4002dba-d687-4354-b91a-67822e7777c7}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>Pause</text>
+  <text>Pause/Resume</text>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 588 168 385 363
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-<MacGUI>
-ioView nobackground {59110, 56797, 54741}
-ioText {4, 6} {362, 262} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder ;                            == TRAPPED IN CONVERT ==                        ;Â¬;                                Richard Boulanger                           ;Â¬;============================================================================;Â¬;============================================================================;Â¬;                                   ORCHESTRA                                ;Â¬;============================================================================;Â¬;============================================================================;Â¬;============================================================================;Â¬;                            written July 1979 in music11                    ;Â¬;                          M.I.T. Experimental Music Studio                  ;Â¬;                            revised June 1986 in Csound                     ;Â¬;                                M.I.T. Media Lab                            ;Â¬;                          revised July 1996 in SHARCsound                   ;Â¬;                                Analog Devices Inc.                         ;Â¬;============================================================================;Â¬;============================================================================;
-ioButton {69, 282} {100, 30} value 1.000000 "_Play" "Start/Resume" "/" i1 0 10
-ioButton {189, 282} {100, 30} value 1.000000 "_Pause" "Pause" "/" i1 0 10
-</MacGUI>

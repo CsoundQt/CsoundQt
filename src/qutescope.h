@@ -32,6 +32,12 @@ class ScopeData;
 class LissajouData;
 class PoincareData;
 
+
+enum TriggerMode {
+    NoTrigger = 0,
+    TriggerUp = 1
+};
+
 //
 // To add a new kind of display you have to derive a class from the abstract
 // class DataDisplay. This new class will be created in the constructor of
@@ -68,6 +74,7 @@ protected:
 	QLabel * m_label;
 	QComboBox *typeComboBox;
 	QComboBox *channelBox;
+    QComboBox *triggerBox;
 	QDoubleSpinBox *zoomxBox;
 	QDoubleSpinBox *zoomyBox;
 	ScopeParams *m_params;
@@ -119,6 +126,7 @@ protected:
 };
 
 
+
 //
 // This class encapsulates data common to all types of displays
 // ie ud (user data), scene, widget, mutex, width and height
@@ -135,6 +143,7 @@ public:
 		this->mutex = mutex;
 		this->width = width;
 		this->height = height;
+        this->triggerMode = TriggerMode::NoTrigger;
 	}
 	void setWidth(int width)
 	{
@@ -151,6 +160,7 @@ public:
 	QReadWriteLock *mutex;
 	int width;
 	int height;
+    TriggerMode triggerMode;
 };
 
 
@@ -190,7 +200,7 @@ public:
 		m_params = params;
 	}
 	virtual void resize() = 0;
-	virtual void updateData(int channel, double zoomx, double zoomy, bool freeze) = 0;
+    virtual void updateData(int channel, double zoomx, double zoomy, bool freeze) = 0;
 	virtual void show() = 0;
 	virtual void hide() = 0;
 
@@ -205,16 +215,18 @@ protected:
 class ScopeData : public DataDisplay
 {
 public:
-	ScopeData(ScopeParams *params);
+    ScopeData(ScopeParams *params);
 	virtual ~ScopeData() {}
 	virtual void resize();
 	virtual void updateData(int channel, double zoomx, double zoomy, bool freeze);
 	virtual void show();
 	virtual void hide();
 
+
 protected:
 	QPolygonF curveData;
 	QGraphicsPolygonItem *curve;
+
 };
 
 

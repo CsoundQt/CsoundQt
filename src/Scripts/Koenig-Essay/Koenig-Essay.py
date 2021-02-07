@@ -30,7 +30,7 @@ def renderFile(csdFile):
     sr = srBox.currentText
     ret = os.system("csound " + csdFile + " -d -r" + sr + " -k" + sr )
     if ret != 0:
-        print "Error! File: " + csdFile + " returned: " + str(ret)
+        print("Error! File: " + csdFile + " returned: " + str(ret))
     return ret
 
 def renderFiles():
@@ -45,7 +45,7 @@ def renderFiles():
     for csdFile in csdFiles:
         counter += 1
         statusLabel.setText("Rendering:" + csdFile)
-        print "Rendering (" + str(counter) + "/" + str(number) + "):" + csdFile
+        print("Rendering (" + str(counter) + "/" + str(number) + "):" + csdFile)
         renderFile(csdFile)
         pqtc.QCoreApplication.instance().processEvents() # Needed to avoid blocking the application
         if running == 0:
@@ -74,7 +74,7 @@ def edit():
     else:
         ret = os.system("audacity " + name + "&")
         if ret != 0:
-            print "Error opening audacity"
+            print("Error opening audacity")
 
 q.loadDocument("Koenig-Essay.py")
 filepath = q.getFilePath()
