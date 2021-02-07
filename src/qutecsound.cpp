@@ -1385,7 +1385,7 @@ void CsoundQt::focusToTab(int tab) {
     // 6 is  Live events that is independent window
 
     case 7:
-        qDebug()<<"Raise Pyton Console";
+        qDebug()<<"Raise Python Console";
     #ifdef QCS_PYTHONQT
         panel = m_pythonConsole;
         action = showPythonConsoleAct;

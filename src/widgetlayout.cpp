@@ -3466,7 +3466,7 @@ void WidgetLayout::setModified(bool mod)
     //  qDebug() << "WidgetLayout::setModified" << mod;
     m_modified = mod;
     if (mod) {
-        // qDebug() << "WidgetLayout::setModified true, emiting changed()";
+        // qDebug() << "WidgetLayout::setModified true, emitting changed()";
         emit changed();
     }
 }
