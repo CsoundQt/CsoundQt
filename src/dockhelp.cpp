@@ -79,16 +79,20 @@ void DockHelp::loadFile(QString fileName)
 		ui->text->setText(tr("Not Found! Make sure the documentation path is set in the Configuration Dialog."));
 		return;
 	}
-#ifdef Q_OS_WIN32
-	QStringList searchPaths;
-	searchPaths << docDir;
-	ui->text->setSearchPaths(searchPaths);
-	QTextStream in(&file);
-	in.setAutoDetectUnicode(true);
-	ui->text->setHtml(in.readAll());
-#else
-	ui->text->setSource(QUrl::fromLocalFile(fileName));
-#endif
+    // seems that setSource work now for Windows too. Needs testing
+    ui->text->setSource(QUrl::fromLocalFile(fileName));
+
+//#ifdef Q_OS_WIN32
+//	QStringList searchPaths;
+//	searchPaths << docDir;
+//	ui->text->setSearchPaths(searchPaths);
+//	QTextStream in(&file);
+//	in.setAutoDetectUnicode(true);
+//	ui->text->setHtml(in.readAll());
+
+//#else
+//	ui->text->setSource(QUrl::fromLocalFile(fileName));
+//#endif
 
 }
 
