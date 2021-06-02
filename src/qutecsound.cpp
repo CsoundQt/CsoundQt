@@ -321,7 +321,19 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_scratchPad->setFocusProxy(liveeditor->getDocumentView());
     scratchPadCsdModeAct->setChecked(true);
 
-	if (documentPages.size() == 0 ) { // No files yet open. Open default
+    // Open files passed in the command line. Here to make sure they are the active tab.
+    foreach (QString fileName, fileNames) {
+        if (QFile::exists(fileName)) {
+            qDebug() << "loading file " << fileName;
+            loadFile(fileName, m_options->autoPlay);
+        }
+        else {
+            qDebug() << "CsoundQt::CsoundQt could not open file:" << fileName;
+        }
+    }
+
+    if (documentPages.size() == 0 ) { // No files yet open. Open default
+        QDEBUG << "No open files, opening default";
         newFile();
     }
 
@@ -330,10 +342,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QString index = docDir + QString("/index.html");
     QStringList possibleDirectories;
 #ifdef Q_OS_LINUX
-        possibleDirectories  << "/usr/share/doc/csound-manual/html/"
-                             << "/usr/share/doc/csound-doc/html/"
-                             << QCoreApplication::applicationDirPath() + "/../share/doc/csound-manual/html/"   // for transportable apps like AppImage and perhas others
-                             << QCoreApplication::applicationDirPath() + "/../share/doc/csound-doc/html/"   ;
+    possibleDirectories  << "/usr/share/doc/csound-manual/html/"
+                         << "/usr/share/doc/csound-doc/html/"
+                         << QCoreApplication::applicationDirPath() + "/../share/doc/csound-manual/html/"   // for transportable apps like AppImage and perhas others
+                         << QCoreApplication::applicationDirPath() + "/../share/doc/csound-doc/html/"   ;
 #endif
 #ifdef Q_OS_WIN
         QString programFilesPath = QDir::fromNativeSeparators(getenv("PROGRAMFILES"));
@@ -391,17 +403,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     qApp->setStyleSheet(originalStyleSheet);
 #endif
 
-    // Open files passed in the command line. Here to make sure they are the active tab.
-    foreach (QString fileName, fileNames) {
-        if (QFile::exists(fileName)) {
-            qDebug() << "loading file " << fileName;
-            loadFile(fileName, m_options->autoPlay);
-        }
-        else {
-            qDebug() << "CsoundQt::CsoundQt could not open file:" << fileName;
-        }
-    }
-
     m_closing = false;
     updateInspector(); //Starts update inspector thread
 
@@ -452,6 +453,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     else {
         changePage(documentTabs->currentIndex());
     }
+
+    // Make sure that we do have an open file
+    if(documentPages.size() < 1)
+        newFile();
 
 /*
 #ifdef Q_OS_LINUX
@@ -5764,10 +5769,12 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     }
     int index = isOpen(fileName);
     if (index != -1) {
+        QDEBUG << "File " << fileName << "already open, switching to index " << index;
         documentTabs->setCurrentIndex(index);
         changePage(index);
         return index;
     }
+    QDEBUG << "loading file" << fileName;
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly)) {
         QMessageBox::warning(this, tr("CsoundQt"),
@@ -5815,10 +5822,12 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         fileName = QString("");
     }
 
+    QDEBUG << "makeNewPage" << fileName << "curPage: " << curPage;
     if (!makeNewPage(fileName, text)) {
         QApplication::restoreOverrideCursor();
         return -1;
     }
+    QDEBUG << "makeNewPage returned, curPage: " << curPage;
 
     if (!m_options->autoJoin &&
             (fileName.endsWith(".sco") ||
@@ -5853,6 +5862,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     if (runNow) {
         play();
     }
+    QDEBUG << "loadFile "  << fileName << "finished, curPage " << curPage;
     return curPage;
 }
 
