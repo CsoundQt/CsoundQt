@@ -135,7 +135,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
                                 Qt::BottomDockWidgetArea |
                                 Qt::LeftDockWidgetArea);
     widgetPanel->setObjectName("widgetPanel");
-    widgetPanel->show();
+    // Hide until CsoundQt has finished loading
+    widgetPanel->hide();
+    // widgetPanel->show();
+
     addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
     tabifyDockWidget(helpPanel, widgetPanel);
 
@@ -253,8 +256,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     bool widgetsVisible = !widgetPanel->isHidden();
     // To avoid showing and reshowing panels during initial load
     showWidgetsAct->setChecked(false);
-    // Hide until CsoundQt has finished loading
-    widgetPanel->hide();
     // Must be after readSettings() to save last state
     bool scratchPadVisible = !m_scratchPad->isHidden();
     if (scratchPadVisible)
@@ -372,7 +373,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     helpPanel->loadFile(docDir + "/index.html");
 
     applySettings();
-    createQuickRefPdf();
+    // createQuickRefPdf();
 
 #ifdef Q_OS_MACOS // workaround to set resotre window size for Mac. Does not work within readSettings()
     QSettings settings2("csound", "qutecsound");
