@@ -74,6 +74,8 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
     useSystemSamplerate = false;
     overrideNumChannels = false;
     numChannels = 2;
+    numInputChannels = 2;
+
 	useCsoundMidi = false;
 	simultaneousRun = true; // Allow running various instances (tabs) simultaneously.
     checkSyntaxOnly = false;
@@ -168,6 +170,13 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
                 qDebug("Setting nchnls, but numChannels is invalid: %d", numChannels);
             } else
                 opts << ("--nchnls=" + QString::number(numChannels));
+            if(numInputChannels < 0) {
+                qDebug("Setting nchnls_i, but numInputChannels is invalid: %d", numInputChannels);
+            } else {
+                QDEBUG << "nchnls_i" << numInputChannels;
+                opts << ("--nchnls_i=" + QString::number(numInputChannels));
+            }
+
         }
 	}
 	else {

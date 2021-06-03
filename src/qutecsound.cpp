@@ -5308,7 +5308,9 @@ void CsoundQt::readSettings()
     m_options->useSystemSamplerate = settings.value("useSystemSamplerate", false).toBool();
     m_options->samplerate = settings.value("overrideSamplerate", 0).toInt();
     m_options->overrideNumChannels = settings.value("overrideNumChannels", false).toBool();
-    m_options->numChannels = settings.value("numChannels", 0).toInt();
+    m_options->numChannels = settings.value("numChannels", 2).toInt();
+    m_options->numInputChannels = settings.value("numInputChannels", 2).toInt();
+
     m_options->realtimeFlag = settings.value("realtimeFlag", false).toBool();
     m_options->sampleAccurateFlag = settings.value("sampleAccurateFlag", false).toBool();
     if (settingsVersion < 1)
@@ -5552,6 +5554,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("overrideSamplerate", m_options->samplerate);
         settings.setValue("overrideNumChannels", m_options->overrideNumChannels);
         settings.setValue("numChannels", m_options->numChannels);
+        settings.setValue("numInputChannels", m_options->numInputChannels);
 
         settings.setValue("additionalFlags", m_options->additionalFlags);
         settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);

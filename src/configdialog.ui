@@ -90,8 +90,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>917</width>
-        <height>836</height>
+        <width>711</width>
+        <height>687</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -135,8 +135,21 @@
               <string>Realtime Audio</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_21">
-              <item row="0" column="0">
+              <item row="0" column="0" colspan="3">
                <layout class="QGridLayout" name="gridLayout_19">
+                <property name="verticalSpacing">
+                 <number>6</number>
+                </property>
+                <item row="2" column="4">
+                 <widget class="QCheckBox" name="numChannelsCheckBox">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If active, overrides the number of channels set in the orchestra via the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls &lt;/span&gt;variable. To set a different number of input channels, set the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls_i &lt;/span&gt;variable in the orchestra, or use the &lt;span style=&quot; font-weight:600;&quot;&gt;--nchnls_i&lt;/span&gt; flag&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Channels</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="2" column="0">
                  <widget class="QLabel" name="label_4">
                   <property name="sizePolicy">
@@ -162,6 +175,110 @@
                   </property>
                  </widget>
                 </item>
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="RtUseOptionsCheckBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Override</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_5">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">padding-right: 6</string>
+                  </property>
+                  <property name="text">
+                   <string>Output device (-o)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLineEdit" name="RtOutputLineEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>100</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="5">
+                 <widget class="QLabel" name="numInputChannelsLabel">
+                  <property name="text">
+                   <string>Input</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="6">
+                 <widget class="QSpinBox" name="numInputChannelsSpinBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If active, overrides the number of input channels (corresponds to the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls_i &lt;/span&gt;variable). To use 0 input channels, set input device to &amp;quot;No Input&amp;quot;. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1" colspan="2">
+                 <widget class="QCheckBox" name="RtOverrideCheckBox">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If checked, the options set within the tag &lt;span style=&quot; font-weight:600;&quot;&gt;CsOptions&lt;/span&gt; in the .csd file are ignored&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Ignore CsOptions</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1" colspan="3">
+                 <widget class="QComboBox" name="RtModuleComboBox">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Backend used for realtime audio&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;* portaudio&lt;/span&gt;: if in doubt, &lt;span style=&quot; font-weight:600;&quot;&gt;use the callback version&lt;/span&gt;. It performs much better, allowing lower latency.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QToolButton" name="audioInputToolButton">
+                  <property name="toolTip">
+                   <string>Browse a list of input devices</string>
+                  </property>
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="1" column="0">
                  <widget class="QLabel" name="label_3">
                   <property name="sizePolicy">
@@ -181,46 +298,11 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="4">
-                 <widget class="QCheckBox" name="numChannelsCheckBox">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If active, overrides the number of channels set in the orchestra via the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls &lt;/span&gt;variable. To set a different number of input channels, set the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls_i &lt;/span&gt;variable in the orchestra, or use the &lt;span style=&quot; font-weight:600;&quot;&gt;--nchnls_i&lt;/span&gt; flag&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Channels</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="5">
-                 <widget class="QSpinBox" name="numChannelsSpinBox">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>120</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If active, overrides the number of channels set in the orchestra via the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls &lt;/span&gt;variable. To set a different number of input channels, set the &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls_i &lt;/span&gt;variable in the orchestra, or use the &lt;span style=&quot; font-weight:600;&quot;&gt;--nchnls_i&lt;/span&gt; flag&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="5">
+                <item row="1" column="5" colspan="2">
                  <widget class="QComboBox" name="samplerateComboBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -235,7 +317,7 @@
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>120</width>
+                    <width>140</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -284,36 +366,94 @@
                   </item>
                  </widget>
                 </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_5">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
+                <item row="3" column="5" colspan="2">
+                 <layout class="QHBoxLayout" name="horizontalLayout_3">
+                  <item>
+                   <widget class="QLabel" name="numChannelsLabel">
+                    <property name="text">
+                     <string>Output</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="numChannelsSpinBox">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>120</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If active, overrides the number of output channels (corresponds to the  &lt;span style=&quot; font-weight:600;&quot;&gt;nchnls &lt;/span&gt;variable) &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLineEdit" name="RtInputLineEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>0</height>
+                   </size>
                   </property>
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">padding-right: 6</string>
-                  </property>
-                  <property name="text">
-                   <string>Output device (-o)</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for input. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1" colspan="2">
-                 <widget class="QCheckBox" name="RtOverrideCheckBox">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If checked, the options set within the tag &lt;span style=&quot; font-weight:600;&quot;&gt;CsOptions&lt;/span&gt; in the .csd file are ignored&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <item row="1" column="4">
+                 <widget class="QLabel" name="samplerateLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>100</width>
+                    <height>16777215</height>
+                   </size>
                   </property>
                   <property name="text">
-                   <string>Ignore CsOptions</string>
+                   <string>Samplerate</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="4" colspan="2">
+                <item row="2" column="3">
+                 <spacer name="horizontalSpacer_8">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Minimum</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>24</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="4" colspan="3">
                  <widget class="QPushButton" name="testAudioSetupButton">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -338,51 +478,6 @@
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="4">
-                 <widget class="QLabel" name="samplerateLabel">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>100</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Samplerate</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="2">
-                 <widget class="QToolButton" name="audioInputToolButton">
-                  <property name="toolTip">
-                   <string>Browse a list of input devices</string>
-                  </property>
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="3">
-                 <spacer name="horizontalSpacer_8">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeType">
-                   <enum>QSizePolicy::Minimum</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>24</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                 <item row="3" column="2">
                  <widget class="QToolButton" name="audioOutputToolButton">
                   <property name="toolTip">
@@ -393,81 +488,23 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="1">
-                 <widget class="QLineEdit" name="RtOutputLineEdit">
-                  <property name="minimumSize">
+                <item row="2" column="7">
+                 <spacer name="horizontalSpacer_10">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Expanding</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
                    <size>
-                    <width>100</width>
-                    <height>0</height>
+                    <width>40</width>
+                    <height>20</height>
                    </size>
                   </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for output. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QLineEdit" name="RtInputLineEdit">
-                  <property name="minimumSize">
-                   <size>
-                    <width>150</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio device used for input. Use the &amp;quot;...&amp;quot; button to select one of the audio devices available (select the realtime audio module first)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="RtUseOptionsCheckBox">
-                  <property name="minimumSize">
-                   <size>
-                    <width>150</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Override</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1" colspan="3">
-                 <widget class="QComboBox" name="RtModuleComboBox">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>150</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Backend used for realtime audio&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;* portaudio&lt;/span&gt;: if in doubt, &lt;span style=&quot; font-weight:600;&quot;&gt;use the callback version&lt;/span&gt;. It performs much better, allowing lower latency.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
+                 </spacer>
                 </item>
                </layout>
-              </item>
-              <item row="0" column="1">
-               <spacer name="horizontalSpacer_10">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
               </item>
              </layout>
             </widget>
@@ -2426,57 +2463,10 @@
                 <property name="verticalSpacing">
                  <number>4</number>
                 </property>
-                <item row="10" column="2">
-                 <widget class="QLineEdit" name="rawWaveLineEdit">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Used by the STK opcodes to find the raw wave files. Only relevant if you are using STK wrapper opcodes like STKBowed or STKBrass. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QCheckBox" name="Opcodedir64CheckBox">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
-                  </property>
-                  <property name="text">
-                   <string>OPCODEDIR64</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="13" column="3">
-                 <widget class="QToolButton" name="pythonExecutableToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="2">
-                 <widget class="QLineEdit" name="SadirLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Default directory for analysis files. Used if no full path is given for analysis files. </string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="2" column="2">
                  <widget class="QLineEdit" name="OpcodedirLineEdit">
                   <property name="enabled">
                    <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QLineEdit" name="CsdocdirLineEdit">
-                  <property name="toolTip">
-                   <string>Path to the html folder with the manual</string>
                   </property>
                  </widget>
                 </item>
@@ -2493,208 +2483,6 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_7">
-                  <property name="toolTip">
-                   <string>Selects the location of the html documentation</string>
-                  </property>
-                  <property name="text">
-                   <string>Html Doc Directory</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="14" column="3">
-                 <widget class="QToolButton" name="csoundExecutableToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="3">
-                 <widget class="QToolButton" name="ssdirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="3">
-                 <widget class="QToolButton" name="opcodedirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="13" column="2">
-                 <widget class="QLineEdit" name="pythonExecutableLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="0">
-                 <widget class="QCheckBox" name="SfdirCheckBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>
-Default directory for sound files. Used if no full path is given for sound files. </string>
-                  </property>
-                  <property name="text">
-                   <string>SFDIR</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="17" column="2">
-                 <widget class="QLineEdit" name="templateLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="13" column="0">
-                 <widget class="QLabel" name="label_29">
-                  <property name="text">
-                   <string>Python Executable</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="16" column="0">
-                 <widget class="QLabel" name="label_25">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
-                  </property>
-                  <property name="text">
-                   <string>QuteApp SDK Dir</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="17" column="3">
-                 <widget class="QToolButton" name="templateToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="11" column="0">
-                 <widget class="QLabel" name="label_28">
-                  <property name="text">
-                   <string>Favorite dir</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="15" column="0">
-                 <widget class="QLabel" name="label_30">
-                  <property name="text">
-                   <string>Log file</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="16" column="3">
-                 <widget class="QToolButton" name="sdkToolButton">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="10" column="3">
-                 <widget class="QToolButton" name="rawWaveToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="12" column="2">
-                 <widget class="QLineEdit" name="pythonDirLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="16" column="2">
-                 <widget class="QLineEdit" name="sdkLineEdit">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="15" column="3">
-                 <widget class="QToolButton" name="logFileToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="3">
-                 <widget class="QToolButton" name="opcodedir64ToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QLineEdit" name="Opcode6dir64LineEdit">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Defines the location of csound plugins for the 64-bit precision version.&lt;/p&gt;&lt;p&gt;External plugins should be installed in this folder&lt;/p&gt;&lt;p&gt;Use the button &amp;quot;Recommend&amp;quot; to set this value to an appropriate default for your platform&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="2">
-                 <widget class="QLineEdit" name="Opcodedir64LineEdit">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="3">
-                 <widget class="QToolButton" name="incdirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="10" column="0">
-                 <widget class="QCheckBox" name="rawWaveCheckBox">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Used by the STK opcodes to find the raw wave files. Only relevant if you are using STK wrapper opcodes like STKBowed or STKBrass. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>RAWWAVE_PATH</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="17" column="0">
-                 <widget class="QLabel" name="label_39">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
-                  </property>
-                  <property name="text">
-                   <string>Template directory</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="14" column="0">
-                 <widget class="QLabel" name="label_36">
-                  <property name="text">
-                   <string>Csound Executable</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="8" column="2">
                  <widget class="QLineEdit" name="SfdirLineEdit">
                   <property name="enabled">
@@ -2705,140 +2493,13 @@ Default directory for sound files. Used if no full path is given for sound files
                   </property>
                  </widget>
                 </item>
-                <item row="8" column="3">
-                 <widget class="QToolButton" name="sfdirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QToolButton" name="csdocdirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="3">
-                 <widget class="QToolButton" name="sadirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="2">
-                 <widget class="QLineEdit" name="IncdirLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
+                <item row="10" column="0">
+                 <widget class="QCheckBox" name="rawWaveCheckBox">
                   <property name="toolTip">
-                   <string>Include directory. Specifies the location of files used by #include statements. </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="11" column="2">
-                 <widget class="QLineEdit" name="favoriteLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="0">
-                 <widget class="QCheckBox" name="SsdirCheckBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. May be used in conjunction with SFDIR to set separate input and output directories. Please note that MIDI files as well as audio files are also sought inside SSDIR. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Used by the STK opcodes to find the raw wave files. Only relevant if you are using STK wrapper opcodes like STKBowed or STKBrass. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="text">
-                   <string>SSDIR</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="15" column="2">
-                 <widget class="QLineEdit" name="logFileLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="12" column="3">
-                 <widget class="QToolButton" name="pythonDirToolButton">
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QCheckBox" name="IncdirCheckBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Include directory. Specifies the location of files used by #include statements. </string>
-                  </property>
-                  <property name="text">
-                   <string>INCDIR</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="0">
-                 <widget class="QCheckBox" name="SadirCheckBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>Default directory for analysis files. Used if no full path is given for analysis files. </string>
-                  </property>
-                  <property name="text">
-                   <string>SADIR</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="2">
-                 <widget class="QLineEdit" name="SsdirLineEdit">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. May be used in conjunction with SFDIR to set separate input and output directories. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="19" column="0">
-                 <widget class="QPushButton" name="envirRecommendButton">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set recommended values for some of the environment variables, according to the platform used. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Recommend</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="application.qrc">
-                    <normaloff>:/images/tools-wizard.svg</normaloff>:/images/tools-wizard.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="Opcode6dir64CheckBox">
-                  <property name="toolTip">
-                   <string>Defines the location of csound opcode plugins for the double precision float (64-bit) version. </string>
-                  </property>
-                  <property name="text">
-                   <string>OPCODE6DIR64</string>
+                   <string>RAWWAVE_PATH</string>
                   </property>
                   <property name="checked">
                    <bool>true</bool>
@@ -2861,10 +2522,271 @@ Default directory for sound files. Used if no full path is given for sound files
                   </property>
                  </widget>
                 </item>
+                <item row="1" column="2">
+                 <widget class="QLineEdit" name="Opcode6dir64LineEdit">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Defines the location of csound plugins for the 64-bit precision version.&lt;/p&gt;&lt;p&gt;External plugins should be installed in this folder&lt;/p&gt;&lt;p&gt;Use the button &amp;quot;Recommend&amp;quot; to set this value to an appropriate default for your platform&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="Opcode6dir64CheckBox">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Defines the location of csound opcode plugins for the double precision (64-bit) version. &lt;span style=&quot; font-weight:600;&quot;&gt;WARNING&lt;/span&gt;: use only for the case were multiple installations of csound coexist. Otherwise csound should be able to find its own builtin plugins without this variable being set. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>OPCODE6DIR64</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="3">
+                 <widget class="QToolButton" name="rawWaveToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QToolButton" name="csdocdirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QCheckBox" name="Opcodedir64CheckBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Select the location of the csound opcode plugin  directory (usually set by the installer)</string>
+                  </property>
+                  <property name="text">
+                   <string>OPCODEDIR64</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="12" column="3">
+                 <widget class="QToolButton" name="pythonDirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="11" column="2">
+                 <widget class="QLineEdit" name="favoriteLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QCheckBox" name="SadirCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Default directory for analysis files. Used if no full path is given for analysis files. </string>
+                  </property>
+                  <property name="text">
+                   <string>SADIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="17" column="3">
+                 <widget class="QToolButton" name="templateToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="13" column="3">
+                 <widget class="QToolButton" name="pythonExecutableToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QCheckBox" name="SsdirCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. May be used in conjunction with SFDIR to set separate input and output directories. Please note that MIDI files as well as audio files are also sought inside SSDIR. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>SSDIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="17" column="2">
+                 <widget class="QLineEdit" name="templateLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="2">
+                 <widget class="QLineEdit" name="SadirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Default directory for analysis files. Used if no full path is given for analysis files. </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QToolButton" name="opcodedirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="0">
+                 <widget class="QCheckBox" name="SfdirCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>
+Default directory for sound files. Used if no full path is given for sound files. </string>
+                  </property>
+                  <property name="text">
+                   <string>SFDIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="2">
+                 <widget class="QLineEdit" name="rawWaveLineEdit">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Used by the STK opcodes to find the raw wave files. Only relevant if you are using STK wrapper opcodes like STKBowed or STKBrass. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QLineEdit" name="Opcodedir64LineEdit">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_7">
+                  <property name="toolTip">
+                   <string>Selects the location of the html documentation</string>
+                  </property>
+                  <property name="text">
+                   <string>Html Doc Directory</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="16" column="3">
+                 <widget class="QToolButton" name="sdkToolButton">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="15" column="0">
+                 <widget class="QLabel" name="label_30">
+                  <property name="text">
+                   <string>Log file</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="3">
+                 <widget class="QToolButton" name="sadirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="3">
+                 <widget class="QToolButton" name="opcodedir64ToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QLineEdit" name="CsdocdirLineEdit">
+                  <property name="toolTip">
+                   <string>Path to the html folder with the manual</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="14" column="3">
+                 <widget class="QToolButton" name="csoundExecutableToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="16" column="2">
+                 <widget class="QLineEdit" name="sdkLineEdit">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="15" column="3">
+                 <widget class="QToolButton" name="logFileToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="17" column="0">
+                 <widget class="QLabel" name="label_39">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
+                  </property>
+                  <property name="text">
+                   <string>Template directory</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="13" column="0">
+                 <widget class="QLabel" name="label_29">
+                  <property name="text">
+                   <string>Python Executable</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="1" column="3">
                  <widget class="QToolButton" name="opcode6dir64ToolButton">
                   <property name="text">
                    <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="12" column="2">
+                 <widget class="QLineEdit" name="pythonDirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -2875,6 +2797,37 @@ Default directory for sound files. Used if no full path is given for sound files
                   </property>
                  </widget>
                 </item>
+                <item row="11" column="0">
+                 <widget class="QLabel" name="label_28">
+                  <property name="text">
+                   <string>Favorite dir</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="3">
+                 <widget class="QToolButton" name="sfdirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="15" column="2">
+                 <widget class="QLineEdit" name="logFileLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="2">
+                 <widget class="QLineEdit" name="SsdirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default directory for input (source) audio and MIDI files. Used if no full path is given for sound files. May be used in conjunction with SFDIR to set separate input and output directories. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="11" column="3">
                  <widget class="QToolButton" name="favoriteToolButton">
                   <property name="text">
@@ -2882,10 +2835,77 @@ Default directory for sound files. Used if no full path is given for sound files
                   </property>
                  </widget>
                 </item>
+                <item row="5" column="3">
+                 <widget class="QToolButton" name="incdirToolButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="13" column="2">
+                 <widget class="QLineEdit" name="pythonExecutableLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
                 <item row="12" column="0">
                  <widget class="QLabel" name="pythonDirlabel">
                   <property name="text">
                    <string>Python Script Dir </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QCheckBox" name="IncdirCheckBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Include directory. Specifies the location of files used by #include statements. </string>
+                  </property>
+                  <property name="text">
+                   <string>INCDIR</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="16" column="0">
+                 <widget class="QLabel" name="label_25">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Select the directory of the QuteApp SDK to enable building of cross platform standalone applications.</string>
+                  </property>
+                  <property name="text">
+                   <string>QuteApp SDK Dir</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="2">
+                 <widget class="QLineEdit" name="IncdirLineEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string>Include directory. Specifies the location of files used by #include statements. </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="14" column="0">
+                 <widget class="QLabel" name="label_36">
+                  <property name="text">
+                   <string>Csound Executable</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="3">
+                 <widget class="QToolButton" name="ssdirToolButton">
+                  <property name="text">
+                   <string>...</string>
                   </property>
                  </widget>
                 </item>
@@ -3108,9 +3128,7 @@ Default directory for sound files. Used if no full path is given for sound files
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="application.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>okButton</sender>
@@ -3547,22 +3565,6 @@ Default directory for sound files. Used if no full path is given for sound files
   <connection>
    <sender>RtUseOptionsCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>numChannelsSpinBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>107</x>
-     <y>97</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>507</x>
-     <y>197</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RtUseOptionsCheckBox</sender>
-   <signal>toggled(bool)</signal>
    <receiver>label_4</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -3829,6 +3831,86 @@ Default directory for sound files. Used if no full path is given for sound files
     <hint type="destinationlabel">
      <x>281</x>
      <y>422</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>numChannelsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>numInputChannelsSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>440</x>
+     <y>158</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>560</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>numInputChannelsSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>94</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>560</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>numChannelsLabel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>94</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>193</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>numInputChannelsLabel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>94</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RtUseOptionsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>numChannelsSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>94</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>559</x>
+     <y>193</y>
     </hint>
    </hints>
   </connection>

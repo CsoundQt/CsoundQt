@@ -87,6 +87,8 @@ public:
     int samplerate;
     bool overrideNumChannels;
     int numChannels;
+    int numInputChannels;
+
 	bool useCsoundMidi;
 	bool simultaneousRun; // Allow running various instances (tabs) simultaneously.
 
