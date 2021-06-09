@@ -281,6 +281,16 @@ instr Setup
 	outvalue "vu7",0
 	outvalue "vu8",0
 	
+	outvalue "in1", 0
+	outvalue "in2", 0
+	outvalue "in3", 0
+	outvalue "in4", 0
+	outvalue "in5", 0
+	outvalue "in6", 0
+	outvalue "in7", 0
+	outvalue "in8", 0
+	
+	
 	outvalue "samplerate", sprintf("%d", sr)
 	outvalue "nchnls", sprintf("%d", nchnls)
 	
@@ -483,7 +493,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.44537286</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -495,7 +505,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -520,7 +530,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.43983804</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -532,7 +542,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -595,7 +605,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>-51.00000000</value>
+  <value>-27.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -629,7 +639,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>-52.00000000</value>
+  <value>-26.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -689,7 +699,7 @@ e
    <g>76</g>
    <b>17</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>25</r>
    <g>25</g>
@@ -781,7 +791,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -793,7 +803,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -818,7 +828,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -830,7 +840,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -985,7 +995,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -997,7 +1007,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1022,7 +1032,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1034,7 +1044,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1189,7 +1199,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1201,7 +1211,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1226,7 +1236,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1238,7 +1248,7 @@ e
    <g>255</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1445,7 +1455,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-17.98972116</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1457,7 +1467,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1503,7 +1513,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-28.40241999</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1515,7 +1525,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1561,7 +1571,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1573,7 +1583,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1619,7 +1629,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1631,7 +1641,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1677,7 +1687,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1689,7 +1699,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1735,7 +1745,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1747,7 +1757,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1793,7 +1803,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1805,7 +1815,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1851,7 +1861,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1863,7 +1873,7 @@ e
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>39</r>
    <g>39</g>
@@ -1989,7 +1999,7 @@ e
    <g>154</g>
    <b>231</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>25</r>
    <g>25</g>
@@ -2131,7 +2141,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>8</label>
+  <label>2</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
   <font>Arial</font>

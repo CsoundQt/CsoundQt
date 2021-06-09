@@ -374,16 +374,23 @@ Highlighter::Highlighter(QTextDocument *parent)
                     << "chn_a" << "chn_S" << "zaw" << "zar" << "zkw" << "zkr" << "zawm"
                     << "OSCsend" << "OSClisten" << "OSCraw" << "OSCinit";
 
-    deprecatedOpcodes << "array" << "compress" << "flooper"
+    deprecatedOpcodes << "array" 
+                      << "balance" << "button" 
+                      << "checkbox" << "chani" << "chano" << "cigoto" << "ckgoto" << "cngoto"  
+                      << "compress" << "control" 
+                      << "dcblock"
+                      << "flashtxt" << "flooper" << "follow"
                       << "in32" << "inh" << "ino" << "inq" << "inrq" << "inx"
                       << "loop_ge" << "loop_gt" << "loop_le" << "loop_lt"
-                      << "nlfilt" << "outc" << "outo" << "outq" << "outx" << "vco"
-                      << "vincr" << "vbap16" << "vbap4" << "vbap8"
-                      << "vbap4move" << "vbap8move" << "balance"
-                      << "chani" << "chano" << "cigoto" << "ckgoto"
-                      << "cngoto" << "control" << "setctrl" << "flashtxt"
+                      << "moogvcf" << "nlfilt" 
+                      << "outc" << "outo" << "outq" << "outx" 
+                      << "setctrl"
+                      << "s16b14" << "s32b14" << "slider16" << "slider16f" << "slider32f" << "slider64" << "slider64f"
+                      << "slider8" << "slider8f" 
                       << "vaset" << "vaget"
-                      << "button" << "checkbox";
+                      << "vco" << "vincr" << "vbap16" << "vbap4" << "vbap8"
+                      << "vbap4move" << "vbap8move" 
+                      ;
 
     operatorPatterns << "&&" << "||";
 
@@ -393,6 +400,7 @@ Highlighter::Highlighter(QTextDocument *parent)
                   << "--smacro:" << "--verbose" << "--sample-accurate" << "--realtime"
                   << "--nchnls=" << "--nchnls_i=" << "--sinesize" << "--daemon"
                   << "--port=" << "--use-system-sr" << "--ksmps=" << "-+jack_client="
+                  << "--limiter" << "--udp-echo" << "--opcode-dir="
                   ;
 
     csoundOptionsRx = QRegExp("--(env|nodisplays|nosound|control-rate|messagelevel=|"
