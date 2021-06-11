@@ -17,6 +17,9 @@ gk_fftSize init 4096
 gk_peakFreq init 0
 gk_peakGain init 0
 
+gi_refreshRates[] fillarray 10,12,15,18,20,24,30
+gk_refreshRate init 20
+
 
 instr PlayPeak
 	; play the detected peak frequency
@@ -36,6 +39,7 @@ instr Spectrum
 	kfilterlow    invalue "filterlow"
 	kinGain       invalue "ingain"
 	gk_peakGain   invalue "peakgain"
+	krefreshRateIdx invalue "refreshrateidx"
 	
 	; We need to use chnget to receive the peak information
 	kpeak chnget "peak"
@@ -51,8 +55,11 @@ instr Spectrum
 	endif
 	
 	kfftSize = gi_fftSizes[kfftSizeIndex]
-	if kfftSize != gk_fftSize then 
+	krefreshRate = gi_refreshRates[krefreshRateIdx]
+	
+	if kfftSize != gk_fftSize || krefreshRate != gk_refreshRate then 
 		gk_fftSize = kfftSize
+		gk_refreshRate = krefreshRate
 		reinit dispReset
 	endif 
 	
@@ -65,15 +72,15 @@ instr Spectrum
 	if nchnls > 2 then
 		a2 inch 3
 		a2 *= k2
+		if nchnls > 3 then
+			a3 inch 4
+			a3 *= k3
+		endif
 	endif
-	if nchnls > 3 then
-		a3 inch 4
-		a3 *= k3
-	endif
+	
 	amix = sum(a0, a1, a2, a3)
 	amix *= ampdb(kinGain)
 	 
-	iperiod = 0.05
 	; filter low frequencies from spectrum
 	if kfilterlow == 1 then
 		aspectrum pareq amix, 30, 0, 0.05, 1
@@ -82,7 +89,10 @@ instr Spectrum
 	endif
 	
 	denorm aspectrum
+	
 dispReset:
+	iperiod = 1/i(gk_refreshRate)
+	print iperiod
 	dispfft aspectrum, iperiod, i(gk_fftSize)
 	
 endin
@@ -91,7 +101,7 @@ instr PostInit
 	; this needs to run at a point where the fft curve already 
 	; exists, which, depending on gk_fftSize, is, at the latest,
 	; 16384 / sr (16384 / 44100 = 0.37...)
-  outvalue "spectrum", "@find fft aspectrum"
+	outvalue "spectrum", "@find fft aspectrum"
 	outvalue "spectrum", "@getPeak peak"
 	turnoff
 endin
@@ -119,7 +129,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <g>22</g>
   <b>22</b>
  </bgcolor>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName>spectrum</objectName>
   <x>10</x>
   <y>9</y>
@@ -146,7 +156,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch1</objectName>
   <x>10</x>
   <y>520</y>
@@ -162,7 +172,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch2</objectName>
   <x>40</x>
   <y>520</y>
@@ -178,7 +188,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch3</objectName>
   <x>70</x>
   <y>520</y>
@@ -194,7 +204,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch4</objectName>
   <x>100</x>
   <y>520</y>
@@ -210,9 +220,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>fftsize</objectName>
-  <x>145</x>
+  <x>150</x>
   <y>520</y>
   <width>80</width>
   <height>30</height>
@@ -246,7 +256,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>30</x>
   <y>550</y>
@@ -277,7 +287,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>145</x>
   <y>550</y>
@@ -308,9 +318,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>playpeak</objectName>
-  <x>360</x>
+  <x>460</x>
   <y>520</y>
   <width>30</width>
   <height>30</height>
@@ -324,9 +334,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>335</x>
+  <x>435</x>
   <y>550</y>
   <width>80</width>
   <height>25</height>
@@ -355,9 +365,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>ingain</objectName>
-  <x>485</x>
+  <x>585</x>
   <y>515</y>
   <width>56</width>
   <height>54</height>
@@ -385,9 +395,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <flatstyle>true</flatstyle>
   <integerMode>true</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>405</x>
+  <x>505</x>
   <y>530</y>
   <width>80</width>
   <height>25</height>
@@ -416,9 +426,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>peakgain</objectName>
-  <x>625</x>
+  <x>720</x>
   <y>515</y>
   <width>56</width>
   <height>54</height>
@@ -446,9 +456,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <flatstyle>true</flatstyle>
   <integerMode>true</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>545</x>
+  <x>640</x>
   <y>530</y>
   <width>80</width>
   <height>25</height>
@@ -477,9 +487,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>240</x>
+  <x>340</x>
   <y>550</y>
   <width>100</width>
   <height>26</height>
@@ -508,9 +518,9 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>filterlow</objectName>
-  <x>275</x>
+  <x>375</x>
   <y>520</y>
   <width>30</width>
   <height>30</height>
@@ -523,6 +533,88 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBDropdown" version="2">
+  <objectName>refreshrateidx</objectName>
+  <x>250</x>
+  <y>520</y>
+  <width>80</width>
+  <height>30</height>
+  <uuid>{6aab35af-5577-4c32-a245-d69c50b0dfcd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description>Refresh Rate</description>
+  <bsbDropdownItemList>
+   <bsbDropdownItem>
+    <name>10</name>
+    <value>0</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>12</name>
+    <value>1</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>15</name>
+    <value>2</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>18</name>
+    <value>3</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>20</name>
+    <value>4</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>24</name>
+    <value>5</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+   <bsbDropdownItem>
+    <name>30</name>
+    <value>6</value>
+    <stringvalue/>
+   </bsbDropdownItem>
+  </bsbDropdownItemList>
+  <selectedIndex>4</selectedIndex>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>250</x>
+  <y>550</y>
+  <width>84</width>
+  <height>25</height>
+  <uuid>{432a9bd1-1587-40a7-a618-e256a453b4e4}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Refresh Rate</label>
+  <alignment>center</alignment>
+  <valignment>top</valignment>
+  <font>Arial</font>
+  <fontsize>13</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>241</r>
+   <g>241</g>
+   <b>241</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

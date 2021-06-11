@@ -1,13 +1,13 @@
 Build instructions for CsoundQt
 ===============================
 
--       [Getting the Sources](#sources)     
--       [Building](#building)        
--       [RtMidi support](#rtmidi)        
--       [Building with PythonQt support](#pythonqt)     
--       [Notes for OSX](#osx)
--       [Notes for Linux](#linux)
--       [Notes for Windows](#windows)
+- [Getting the Sources](#sources)     
+- [Building](#building)        
+- [RtMidi support](#rtmidi)        
+- [Building with PythonQt support](#pythonqt)     
+- [Notes for OSX](#osx)
+- [Notes for Linux](#linux)
+- [Notes for Windows](#windows)
 
 
 

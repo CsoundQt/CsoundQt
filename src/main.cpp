@@ -1,4 +1,4 @@
-/*
+﻿/*
     Copyright (C) 2008, 2009 Andres Cabrera
     mantaraya36@gmail.com
 
@@ -156,7 +156,9 @@ int main(int argc, char *argv[])
     csoundQt->show();
     if(autoplay && !fileNames.isEmpty())
         csoundQt->play();
+
     filterObj.setMainWindow(csoundQt);
+    QDEBUG << "Starting qapp exec";
     result = qapp.exec();
     return result;
 }
