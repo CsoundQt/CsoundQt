@@ -563,7 +563,7 @@ void QuteButton::performAction() {
 				emit(queueEventSignal(eventLine));
 			}
 		} else { // if not negative p3 then just fire the event
-			if (!(isLatch && m_currentValue == 0)) { //do not fire the event if latched && m_value==0 && is positive p3
+			if (!isLatch && m_currentValue>0) { //do not fire the event if latched && m_value==0 && is positive p3
 				emit(queueEventSignal(eventLine));
 			}
 		}
