@@ -27,3 +27,4 @@ __pycache__
 util/opcodes.xml
 *.dmg
 .DS_Store
+*~

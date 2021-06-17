@@ -9,8 +9,8 @@
  
 Dependencies: 
   csound >= 6.15
-  CsoundQt >= 0.9.8
-  plugins: klib (risset install klib)
+  CsoundQt >= 1.0.0
+  plugins: klib>=1.5, else>=1.5
 */
 
 sr = 44100
@@ -18,12 +18,14 @@ ksmps = 64
 nchnls = 2
 0dbfs = 1
 
+gi_refreshRate = 20
+
 opcode makeCircBuffer, i, i
   idur xin
   ; quantize table length to ksmps
   inumsamples = ceil(sr*idur / ksmps) * ksmps
   itable = ftgen(0, 0, inumsamples, 2, 0)
-  iobj = dict_new("*str:float", "table", itable, "writePointer", 0, "readPointer", 0, "recDur", 0)
+  iobj = dict_new("str:float", "table", itable, "writePointer", 0, "readPointer", 0, "recDur", 0)
   xout iobj 
 endop
 
@@ -84,7 +86,7 @@ instr main
   toggleInstr "recCircBuffer",  krec,  0,    ibuf, 1
   toggleInstr "playCircBuffer", kplay, 0.01, ibuf, /*speed*/ 1, /*outchannel*/ 1
   
-  if metro(20) == 1 then
+  if metro(gi_refreshRate) == 1 then
     outvalue "plot", "@update"
   endif 
 endin

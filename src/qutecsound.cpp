@@ -135,7 +135,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
                                 Qt::BottomDockWidgetArea |
                                 Qt::LeftDockWidgetArea);
     widgetPanel->setObjectName("widgetPanel");
-    widgetPanel->show();
+    // Hide until CsoundQt has finished loading
+    widgetPanel->hide();
+    // widgetPanel->show();
+
     addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
     tabifyDockWidget(helpPanel, widgetPanel);
 
@@ -253,8 +256,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     bool widgetsVisible = !widgetPanel->isHidden();
     // To avoid showing and reshowing panels during initial load
     showWidgetsAct->setChecked(false);
-    // Hide until CsoundQt has finished loading
-    widgetPanel->hide();
     // Must be after readSettings() to save last state
     bool scratchPadVisible = !m_scratchPad->isHidden();
     if (scratchPadVisible)
@@ -321,7 +322,19 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_scratchPad->setFocusProxy(liveeditor->getDocumentView());
     scratchPadCsdModeAct->setChecked(true);
 
-	if (documentPages.size() == 0 ) { // No files yet open. Open default
+    // Open files passed in the command line. Here to make sure they are the active tab.
+    foreach (QString fileName, fileNames) {
+        if (QFile::exists(fileName)) {
+            qDebug() << "loading file " << fileName;
+            loadFile(fileName, m_options->autoPlay);
+        }
+        else {
+            qDebug() << "CsoundQt::CsoundQt could not open file:" << fileName;
+        }
+    }
+
+    if (documentPages.size() == 0 ) { // No files yet open. Open default
+        QDEBUG << "No open files, opening default";
         newFile();
     }
 
@@ -330,10 +343,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QString index = docDir + QString("/index.html");
     QStringList possibleDirectories;
 #ifdef Q_OS_LINUX
-        possibleDirectories  << "/usr/share/doc/csound-manual/html/"
-                             << "/usr/share/doc/csound-doc/html/"
-                             << QCoreApplication::applicationDirPath() + "/../share/doc/csound-manual/html/"   // for transportable apps like AppImage and perhas others
-                             << QCoreApplication::applicationDirPath() + "/../share/doc/csound-doc/html/"   ;
+    possibleDirectories  << "/usr/share/doc/csound-manual/html/"
+                         << "/usr/share/doc/csound-doc/html/"
+                         << QCoreApplication::applicationDirPath() + "/../share/doc/csound-manual/html/"   // for transportable apps like AppImage and perhas others
+                         << QCoreApplication::applicationDirPath() + "/../share/doc/csound-doc/html/"   ;
 #endif
 #ifdef Q_OS_WIN
         QString programFilesPath = QDir::fromNativeSeparators(getenv("PROGRAMFILES"));
@@ -360,7 +373,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     helpPanel->loadFile(docDir + "/index.html");
 
     applySettings();
-    createQuickRefPdf();
+    // createQuickRefPdf();
 
 #ifdef Q_OS_MACOS // workaround to set resotre window size for Mac. Does not work within readSettings()
     QSettings settings2("csound", "qutecsound");
@@ -390,17 +403,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     originalStyleSheet += styleSheet;
     qApp->setStyleSheet(originalStyleSheet);
 #endif
-
-    // Open files passed in the command line. Here to make sure they are the active tab.
-    foreach (QString fileName, fileNames) {
-        if (QFile::exists(fileName)) {
-            qDebug() << "loading file " << fileName;
-            loadFile(fileName, m_options->autoPlay);
-        }
-        else {
-            qDebug() << "CsoundQt::CsoundQt could not open file:" << fileName;
-        }
-    }
 
     m_closing = false;
     updateInspector(); //Starts update inspector thread
@@ -452,6 +454,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     else {
         changePage(documentTabs->currentIndex());
     }
+
+    // Make sure that we do have an open file
+    if(documentPages.size() < 1)
+        newFile();
 
 /*
 #ifdef Q_OS_LINUX
@@ -5302,7 +5308,9 @@ void CsoundQt::readSettings()
     m_options->useSystemSamplerate = settings.value("useSystemSamplerate", false).toBool();
     m_options->samplerate = settings.value("overrideSamplerate", 0).toInt();
     m_options->overrideNumChannels = settings.value("overrideNumChannels", false).toBool();
-    m_options->numChannels = settings.value("numChannels", 0).toInt();
+    m_options->numChannels = settings.value("numChannels", 2).toInt();
+    m_options->numInputChannels = settings.value("numInputChannels", 2).toInt();
+
     m_options->realtimeFlag = settings.value("realtimeFlag", false).toBool();
     m_options->sampleAccurateFlag = settings.value("sampleAccurateFlag", false).toBool();
     if (settingsVersion < 1)
@@ -5546,6 +5554,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("overrideSamplerate", m_options->samplerate);
         settings.setValue("overrideNumChannels", m_options->overrideNumChannels);
         settings.setValue("numChannels", m_options->numChannels);
+        settings.setValue("numInputChannels", m_options->numInputChannels);
 
         settings.setValue("additionalFlags", m_options->additionalFlags);
         settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);
@@ -5764,10 +5773,12 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     }
     int index = isOpen(fileName);
     if (index != -1) {
+        QDEBUG << "File " << fileName << "already open, switching to index " << index;
         documentTabs->setCurrentIndex(index);
         changePage(index);
         return index;
     }
+    QDEBUG << "loading file" << fileName;
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly)) {
         QMessageBox::warning(this, tr("CsoundQt"),
@@ -5815,10 +5826,12 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         fileName = QString("");
     }
 
+    QDEBUG << "makeNewPage" << fileName << "curPage: " << curPage;
     if (!makeNewPage(fileName, text)) {
         QApplication::restoreOverrideCursor();
         return -1;
     }
+    QDEBUG << "makeNewPage returned, curPage: " << curPage;
 
     if (!m_options->autoJoin &&
             (fileName.endsWith(".sco") ||
@@ -5853,6 +5866,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     if (runNow) {
         play();
     }
+    QDEBUG << "loadFile "  << fileName << "finished, curPage " << curPage;
     return curPage;
 }
 

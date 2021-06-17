@@ -228,8 +228,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
     checkSyntaxBeforeRunCheckBox->setChecked(m_options->checkSyntaxBeforeRun);
 
-
-
 	BufferSizeLineEdit->setText(QString::number(m_options->bufferSize));
 	BufferSizeCheckBox->setChecked(m_options->bufferSizeActive);
 	BufferSizeLineEdit->setEnabled(m_options->bufferSizeActive);
@@ -284,12 +282,15 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
     numChannelsCheckBox->setChecked(m_options->overrideNumChannels);
     numChannelsSpinBox->setValue(m_options->numChannels);
-    numChannelsSpinBox->setMinimum(0);
+    numChannelsSpinBox->setMinimum(1);
     numChannelsSpinBox->setMaximum(64);
+
+    numInputChannelsSpinBox->setValue(m_options->numInputChannels);
+    numInputChannelsSpinBox->setMinimum(1);
+    numInputChannelsSpinBox->setMaximum(64);
 
     realtimeCheckBox->setChecked(m_options->realtimeFlag);
     sampleAccurateCheckBox->setChecked(m_options->sampleAccurateFlag);
-
 
 	JackNameLineEdit->setText(m_options->rtJackName);
 	RtMidiModuleComboBox->setCurrentIndex(RtMidiModuleComboBox->findData(m_options->rtMidiModule));
@@ -383,7 +384,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     connect(pythonExecutableToolButton,SIGNAL(clicked()),this, SLOT(browsePythonExecutable()));
 
     connect(testAudioSetupButton, SIGNAL(released()), this, SLOT(testAudioSetup()));
-    connect(envirRecommendButton, SIGNAL(clicked()), this, SLOT(recommendEnvironmentSettings()));
+    // connect(envirRecommendButton, SIGNAL(clicked()), this, SLOT(recommendEnvironmentSettings()));
 
 	//connect(RtMidiModuleComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(checkRtMidiModule(QString)) );
 
@@ -550,8 +551,11 @@ void ConfigDialog::accept()
     }
     m_options->overrideNumChannels = numChannelsCheckBox->isChecked();
     m_options->numChannels = numChannelsSpinBox->value();
+
+    m_options->numInputChannels = numInputChannelsSpinBox->value();
     m_options->realtimeFlag = realtimeCheckBox->isChecked();
     m_options->sampleAccurateFlag = sampleAccurateCheckBox->isChecked();
+
 
 	m_options->rtMidiModule = RtMidiModuleComboBox->currentText();
 	m_options->rtMidiInputDevice = RtMidiInputLineEdit->text();
