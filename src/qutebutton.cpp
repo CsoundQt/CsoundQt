@@ -429,14 +429,35 @@ void QuteButton::popUpMenu(QPoint pos)
 
 void QuteButton::setMidiValue(int value)
 {
-	//double pressedVal = property("QCS_pressedValue").toDouble();
-	//double newval= value == 0 ? 0 : pressedVal;
-	//setValue(newval);
-	if (value>0) {
-		buttonPressed();
+	double pressedValue = property("QCS_pressedValue").toDouble();
+	double newValue = 0;
+
+	bool isLatch = property("QCS_latch").toBool();
+	bool useMomentaryMidiButton = property("QCS_momentaryMidiButton").toBool();
+
+	if (isLatch && useMomentaryMidiButton) {
+			if (value >0 ) {
+				if (m_isPlaying) {
+					//qDebug() << "Toggle playing off from MIDI";
+					newValue = 0;
+				} else {
+					newValue = pressedValue;
+					//qDebug() << "Toggle playing on from MIDI";
+				}
+
+
+			} else {
+				qDebug() << "Ignore button release of momentary button";
+				return;
+			}
+
 	} else {
-		buttonReleased();
+		newValue = (value > 0) ? pressedValue : 0;
 	}
+
+	setValue(newValue);
+	performAction();
+
 }
 
 void QuteButton::refreshWidget()
@@ -517,7 +538,7 @@ void QuteButton::performAction() {
 
 	if (type.contains("event") && !eventLine.isEmpty()) {
 		if ( hasIndefiniteDuration() ) {		
-			if ((isLatch && m_currentValue == 0)  || (!useMomentaryMidiButton && m_isPlaying) ) { // turn off
+			if ( m_currentValue == 0  /*|| (!useMomentaryMidiButton && m_isPlaying)*/ ) { // turn off
 				QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
 				if (lineElements.size() > 0 && lineElements[0] == "i") {
 					lineElements.removeAt(0); // Remove first element if it is "i"
@@ -641,9 +662,8 @@ void QuteButton::buttonReleased()
         return;
     }
 	bool isLatch = property("QCS_latch").toBool();
-	bool useMomentaryMidiButton = property("QCS_momentaryMidiButton").toBool();
-	qDebug() << isLatch << useMomentaryMidiButton;
-	if (!isLatch || (isLatch && !useMomentaryMidiButton) ) {
+
+	if (!isLatch ) {
         m_currentValue = 0;
 		if (  property("QCS_type").toString().contains("event") && hasIndefiniteDuration() ) {
 			performAction(); // to stop the playing instrument
