@@ -429,7 +429,7 @@ void QuteWidget::createPropertiesDialog()
 {
     qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n"
              << dynamicPropertyNames ();
-    int footerRow = 20;
+	int footerRow = 20;
 	dialog = new QDialog(this);
     dialog->resize(360, 300);
 	//  dialog->setModal(true);
@@ -497,7 +497,7 @@ void QuteWidget::createPropertiesDialog()
         layout->addWidget(midichanSpinBox, midiRow,3, Qt::AlignLeft|Qt::AlignVCenter);
 
         midiLearnButton = new QPushButton(tr("MIDI learn"));
-        layout->addWidget(midiLearnButton, midiRow, 4, Qt::AlignLeft|Qt::AlignVCenter);
+		layout->addWidget(midiLearnButton, midiRow, 4, Qt::AlignLeft|Qt::AlignVCenter);
 	}
 	acceptButton = new QPushButton(tr("Ok"));
 	acceptButton->setDefault(true);

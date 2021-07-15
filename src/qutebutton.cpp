@@ -44,6 +44,7 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 	setProperty("QCS_image", "");
 	setProperty("QCS_eventLine", "");
 	setProperty("QCS_latch", false);
+	setProperty("QCS_momentaryMidiButton", false); // used for latched button if bound to MIDI controller
     setProperty("QCS_latched", false);
     setProperty("QCS_fontsize", 10);
     
@@ -274,6 +275,7 @@ QString QuteButton::getWidgetXmlText()
 	s.writeTextElement("image", property("QCS_image").toString());
 	s.writeTextElement("eventLine", property("QCS_eventLine").toString());
 	s.writeTextElement("latch", property("QCS_latch").toString());
+	s.writeTextElement("momentaryMidiButton", property("QCS_momentaryMidiButton").toString());
 	s.writeTextElement("latched", property("QCS_latched").toString());
     s.writeTextElement("fontsize", QString::number(property("QCS_fontsize").toInt()));
 	s.writeEndElement();
@@ -304,6 +306,7 @@ void QuteButton::applyProperties()
 	setProperty("QCS_type", typeComboBox->currentText());
 	setProperty("QCS_pressedValue", valueBox->value());
 	setProperty("QCS_latch", latchCheckBox->isChecked());
+	setProperty("QCS_momentaryMidiButton", useMomentaryMidiButtonCheckBox->isChecked());
     setProperty("QCS_fontsize", fontSizeSpinBox->value());
 
 #ifdef  USE_WIDGET_MUTEX
@@ -347,7 +350,10 @@ void QuteButton::createPropertiesDialog()
 	valueBox->setDecimals(6);
 	valueBox->setRange(-9999999.0, 9999999.0);
 	valueBox->setValue(m_value);
+	valueBox->setMaximumWidth(100);
+	valueBox->setDecimals(4);
 	layout->addWidget(valueBox, 4, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
 
     label = new QLabel(dialog);
 	label->setText("Text:");
@@ -378,7 +384,7 @@ void QuteButton::createPropertiesDialog()
 
 	QPushButton *browseButton = new QPushButton(dialog);
     browseButton->setText("Browse");
-    layout->addWidget(browseButton, 8, 4, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(browseButton, 8, 4, Qt::AlignLeft|Qt::AlignVCenter);
 	connect(browseButton, SIGNAL(released()), this, SLOT(browseFile()));
 
 	label = new QLabel(dialog);
@@ -389,6 +395,21 @@ void QuteButton::createPropertiesDialog()
     layout->addWidget(line, 9,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
 	line->setMinimumWidth(320);
 	line->setText(property("QCS_eventLine").toString());
+
+	useMomentaryMidiButtonCheckBox = new QCheckBox(dialog);
+	useMomentaryMidiButtonCheckBox->setText(tr("Momentary"));
+	useMomentaryMidiButtonCheckBox->setWhatsThis(tr("Check if you use MIDI push button (momentary button) to toggle the latch - \nFirst push switches on, second off."));
+	// TODO: enabling/disabling needs some signal->slot connection
+	//useMomentaryMidiButtonCheckBox->setEnabled( latchCheckBox->isChecked() );
+	useMomentaryMidiButtonCheckBox->setChecked(property("QCS_momentaryMidiButton").toBool());
+
+	const int midiRow = layout->rowCount()-2;
+	layout->removeWidget(midiLearnButton);
+	layout->addWidget(useMomentaryMidiButtonCheckBox, midiRow, 4, Qt::AlignLeft|Qt::AlignVCenter);
+	layout->addWidget(midiLearnButton, midiRow, 5, Qt::AlignLeft|Qt::AlignVCenter);
+
+
+
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -408,14 +429,35 @@ void QuteButton::popUpMenu(QPoint pos)
 
 void QuteButton::setMidiValue(int value)
 {
-	//double pressedVal = property("QCS_pressedValue").toDouble();
-	//double newval= value == 0 ? 0 : pressedVal;
-	//setValue(newval);
-	if (value>0) {
-		buttonPressed();
+	double pressedValue = property("QCS_pressedValue").toDouble();
+	double newValue = 0;
+
+	bool isLatch = property("QCS_latch").toBool();
+	bool useMomentaryMidiButton = property("QCS_momentaryMidiButton").toBool();
+
+	if (isLatch && useMomentaryMidiButton) {
+			if (value >0 ) {
+				if (m_isPlaying) {
+					//qDebug() << "Toggle playing off from MIDI";
+					newValue = 0;
+				} else {
+					newValue = pressedValue;
+					//qDebug() << "Toggle playing on from MIDI";
+				}
+
+
+			} else {
+				qDebug() << "Ignore button release of momentary button";
+				return;
+			}
+
 	} else {
-		buttonReleased();
+		newValue = (value > 0) ? pressedValue : 0;
 	}
+
+	setValue(newValue);
+	performAction();
+
 }
 
 void QuteButton::refreshWidget()
@@ -492,10 +534,11 @@ void QuteButton::performAction() {
     QString eventLine = property("QCS_eventLine").toString();
     QString name = m_channel;
 	bool isLatch = property("QCS_latch").toBool();
+	bool useMomentaryMidiButton = property("QCS_momentaryMidiButton").toBool();
 
 	if (type.contains("event") && !eventLine.isEmpty()) {
 		if ( hasIndefiniteDuration() ) {		
-			if ((isLatch && m_currentValue == 0)  || (!isLatch && m_isPlaying)) { // turn off
+			if ( m_currentValue == 0  /*|| (!useMomentaryMidiButton && m_isPlaying)*/ ) { // turn off
 				QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
 				if (lineElements.size() > 0 && lineElements[0] == "i") {
 					lineElements.removeAt(0); // Remove first element if it is "i"
@@ -520,7 +563,7 @@ void QuteButton::performAction() {
 				emit(queueEventSignal(eventLine));
 			}
 		} else { // if not negative p3 then just fire the event
-			if (!(isLatch && m_currentValue == 0)) { //do not fire the event if latched && m_value==0 && is positive p3
+			if (!isLatch && m_currentValue>0) { //do not fire the event if latched && m_value==0 && is positive p3
 				emit(queueEventSignal(eventLine));
 			}
 		}
@@ -618,12 +661,14 @@ void QuteButton::buttonReleased()
         performAction();
         return;
     }
-	if (!property("QCS_latch").toBool()) {
+	bool isLatch = property("QCS_latch").toBool();
+
+	if (!isLatch ) {
         m_currentValue = 0;
 		if (  property("QCS_type").toString().contains("event") && hasIndefiniteDuration() ) {
 			performAction(); // to stop the playing instrument
 		}
-    }
+	}
 
 
 #ifdef  USE_WIDGET_MUTEX
