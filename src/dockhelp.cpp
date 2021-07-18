@@ -103,6 +103,7 @@ void DockHelp::showManual()
 	this->loadFile(docDir + "/index.html");
 }
 
+
 void DockHelp::showGen()
 {
 	this->setVisible(true);

@@ -2813,6 +2813,12 @@ void CsoundQt::openOnlineDocumentation()
      openExternalBrowser(QUrl("http://csoundqt.github.io/pages/documentation.html"));
 }
 
+
+void CsoundQt::showManualOnline()
+{
+	openExternalBrowser(QUrl("http://csound.com/manual/index.html"));
+}
+
 void CsoundQt::resetPreferences()
 {
     int ret = QMessageBox::question (this, tr("Reset Preferences"),
@@ -2871,7 +2877,7 @@ void CsoundQt::openShortcutDialog()
 void CsoundQt::downloadManual()
 {
     // NB! must be updated when new manual comes out!
-    openExternalBrowser(QUrl("https://github.com/csound/csound/releases/download/6.14.0/Csound6.14.0_manual_html.zip"));
+	openExternalBrowser(QUrl("https://github.com/csound/csound/releases/download/6.16.0/Csound6.16.0_manual_html.zip"));
     QMessageBox::information(this, tr("Set manual path"),
                              tr("Unzip the manual to any location and set that path"
                                 " in Configure/Enviromnent/Html doc directory"));
@@ -3878,6 +3884,11 @@ void CsoundQt::createActions()
     showManualAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showManualAct, SIGNAL(triggered()), helpPanel, SLOT(showManual()));
 
+	showManualOnlineAct = new QAction(tr("Csound Manual Online"), this);
+	showManualOnlineAct->setStatusTip(tr("Show the Csound manual online"));
+	showManualOnlineAct->setShortcutContext(Qt::ApplicationShortcut);
+	connect(showManualOnlineAct, SIGNAL(triggered()), this, SLOT(showManualOnline()));
+
     downloadManualAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("Download Csound Manual"), this);
     downloadManualAct->setStatusTip(tr("Download latest Csound manual"));
     downloadManualAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -4861,6 +4872,7 @@ void CsoundQt::createMenus()
     // helpMenu->addAction(browseForwardAct);
     helpMenu->addSeparator();
     helpMenu->addAction(showManualAct);
+	helpMenu->addAction(showManualOnlineAct);
     helpMenu->addAction(downloadManualAct);
     helpMenu->addAction(showOverviewAct);
     // helpMenu->addAction(showOpcodeQuickRefAct);

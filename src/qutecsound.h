@@ -252,6 +252,7 @@ private slots:
 	void openFLOSSManual();
 	void openQuickRef();
 	void openOnlineDocumentation();
+	void showManualOnline();
 	void resetPreferences();
 	void reportBug();
 	void requestFeature();
@@ -435,6 +436,7 @@ private:
 	QAction *showHelpAct;
     QAction *raiseHelpAct;
 	QAction *showManualAct;
+	QAction *showManualOnlineAct;
 	QAction *downloadManualAct;
 	QAction *showGenAct;
 	QAction *showOverviewAct;
