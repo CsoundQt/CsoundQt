@@ -2194,6 +2194,7 @@ void CsoundQt::stop(int index)
 #endif
 
     }
+    documentTabs->setTabIcon(docIndex, QIcon());
     markStopped();
 }
 
@@ -2220,6 +2221,13 @@ void CsoundQt::stopAllOthers()
 
 void CsoundQt::markStopped()
 {
+    DocumentPage * senderPage = dynamic_cast<DocumentPage *>(sender());
+    if (senderPage) {
+        int index = documentPages.indexOf(senderPage);
+        //qDebug() << "Stop was sent from: " << index;
+        documentTabs->setTabIcon(index, QIcon());
+    }
+    documentTabs->setTabIcon(curPage, QIcon());
     runAct->setChecked(false);
     recAct->setChecked(false);
 #ifdef QCS_DEBUGGER
