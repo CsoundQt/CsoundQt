@@ -2498,7 +2498,7 @@ void CsoundQt::setHtmlFullScreen(bool full)
 		checkFullScreen();
 		m_preFullScreenState = this->saveState();
 		this->csoundHtmlView->setFloating(true);
-#ifdef Q_OS_MACOS
+#ifndef Q_OS_WIN // this was Q_OS_MACOS before -  try now showMaximized for all expect Windows
         this->csoundHtmlView->showMaximized();
 #else
 		this->csoundHtmlView->showFullScreen();
@@ -2520,7 +2520,7 @@ void CsoundQt::setHelpFullScreen(bool full)
 		checkFullScreen();
 		m_preFullScreenState = this->saveState();
         this->helpPanel->setFloating(true);
-#ifdef Q_OS_MACOS
+#ifndef Q_OS_WIN
         this->helpPanel->showMaximized();
 #else
         this->helpPanel->showFullScreen();
@@ -2545,14 +2545,14 @@ void CsoundQt::setWidgetsFullScreen(bool full)
                 return;
             auto wl = doc->getWidgetLayout();
             wl->setVisible(true);
-#ifdef Q_OS_MACOS
+#ifndef Q_OS_WIN
             wl->showMaximized();
 #else
             wl->showFullScreen();
 #endif
         } else {
             this->widgetPanel->setFloating(true);
-#ifdef Q_OS_MACOS
+#ifndef Q_OS_WIN
         this->widgetPanel->showMaximized();
 #else
             this->widgetPanel->showFullScreen();
