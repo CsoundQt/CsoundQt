@@ -410,7 +410,7 @@ void ConfigDialog::onRtModuleComboBoxChanged(int index) {
     // known value when changed back. Otherwise set it to the default adc/dac
     auto currentText = this->RtModuleComboBox->currentText();
 	auto currentOperatingSystem = QOperatingSystemVersion::current();
-	qDebug() << "module: " << currentText << "Op.system type is: " << currentOperatingSystem.type() << currentOperatingSystem.name();
+    //qDebug() << "module: " << currentText << "Op.system type is: " << currentOperatingSystem.type() << currentOperatingSystem.name();
     if(currentText == "null") {
         RtInputLineEdit->setText("");
         RtOutputLineEdit->setText("");
@@ -430,7 +430,7 @@ void ConfigDialog::onRtModuleComboBoxChanged(int index) {
             m_options->useSystemSamplerate = false;
             m_options->samplerate = 0;
         }
-	} else if (currentText.startsWith("portaudio") && currentOperatingSystem.type()==QOperatingSystemVersion::Unknown ) { // on newer Mac's the internal microphone has 1 channel and that causes problems for portaudio. Disable input by default
+    } else if (currentText.startsWith("portaudio") && currentOperatingSystem.type()==QOperatingSystemVersion::MacOS ) { // on newer Mac's the internal microphone has 1 channel and that causes problems for portaudio. Disable input by default
 			qDebug() << "Set audio input to none for portaudio on MacOS";
 			RtInputLineEdit->setText("");
 			RtOutputLineEdit->setText("dac");
