@@ -5323,6 +5323,9 @@ void CsoundQt::readSettings()
     m_options->numChannels = settings.value("numChannels", 2).toInt();
     m_options->numInputChannels = settings.value("numInputChannels", 2).toInt();
 
+    m_options->useLimiter = settings.value("useLimiter", csoundGetVersion()>=6160).toBool();
+    m_options->limitValue = settings.value("limitValue", 1.0).toDouble();
+
     m_options->realtimeFlag = settings.value("realtimeFlag", false).toBool();
     m_options->sampleAccurateFlag = settings.value("sampleAccurateFlag", false).toBool();
     if (settingsVersion < 1)
@@ -5567,6 +5570,9 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("overrideNumChannels", m_options->overrideNumChannels);
         settings.setValue("numChannels", m_options->numChannels);
         settings.setValue("numInputChannels", m_options->numInputChannels);
+
+        settings.setValue("useLimiter", m_options->useLimiter);
+        settings.setValue("limitValue", m_options->limitValue);
 
         settings.setValue("additionalFlags", m_options->additionalFlags);
         settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);

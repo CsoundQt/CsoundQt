@@ -294,6 +294,15 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     realtimeCheckBox->setChecked(m_options->realtimeFlag);
     sampleAccurateCheckBox->setChecked(m_options->sampleAccurateFlag);
 
+    //limiter
+    bool limiterAvailable = csoundGetVersion()>=6160;
+    limiterCheckBox->setEnabled(limiterAvailable);
+    limiterSpinBox->setEnabled(limiterAvailable);
+    if (limiterAvailable) {
+        limiterCheckBox->setChecked(m_options->useLimiter);
+        limiterSpinBox->setValue(m_options->limitValue);
+    }
+
 	JackNameLineEdit->setText(m_options->rtJackName);
 	RtMidiModuleComboBox->setCurrentIndex(RtMidiModuleComboBox->findData(m_options->rtMidiModule));
 	RtMidiInputLineEdit->setText(m_options->rtMidiInputDevice);
@@ -522,8 +531,10 @@ void ConfigDialog::accept()
 	m_options->HwBufferSize = HwBufferSizeLineEdit->text().toInt();
 	m_options->HwBufferSizeActive = HwBufferSizeCheckBox->isChecked();
     // m_options->dither = DitherCheckBox->isChecked();
-    m_options->realtimeFlag =
+    m_options->realtimeFlag = realtimeCheckBox->isChecked(); // this was empty after = ?
     // m_options->newParser = newParserCheckBox->isChecked() ? 1 : 0;
+    m_options->useLimiter = limiterCheckBox->isEnabled() && limiterCheckBox->isChecked();
+    m_options->limitValue = limiterSpinBox->value();
 	m_options->multicore = multicoreCheckBox->isChecked();
 	m_options->numThreads = numThreadsSpinBox->value();
 	m_options->additionalFlags = AdditionalFlagsLineEdit->text();
