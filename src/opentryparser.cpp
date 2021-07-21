@@ -65,7 +65,7 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
 				QDomElement elem = node.toElement();
 				if (elem.tagName()=="opcodename") {
 					op.opcodeName = elem.text().simplified();
-					op.inArgs = node.nextSibling().toText().data();
+                    op.inArgs = node.nextSibling().toText().data().simplified();
 				}
 				else {
 					op.outArgs = node.toText().data().simplified();
@@ -75,19 +75,31 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
 					if (!node.isNull())
 						op.inArgs = node.toText().data().simplified();
 				}
+                // check if several parenthesis ie description added to inArgs like "(MidiNoteNumber)  (init- or control-rate args only)"
+                // remove, if existing
+                if (op.inArgs.count("(")>1) {
+                    //qDebug()<< op.opcodeName << "has extra description: " << op.inArgs;
+                    QString inArgs = op.inArgs;
+                    int lastIndex = inArgs.lastIndexOf("(");
+                    if (lastIndex>0) {
+                        inArgs = inArgs.left(lastIndex-1);
+                        //qDebug() << "inArgs now: " << inArgs.simplified();
+                        op.inArgs = inArgs;
+                    }
+                }
 				if (op.opcodeName != "" && excludedOpcodes.count(op.opcodeName) == 0
 						&& catName !="Utilities") {
 					addOpcode(op);
 					opcodesInCategoryList << op;
 				}
-				synop = synop.nextSiblingElement("synopsis");
+                synop = synop.nextSiblingElement("synopsis");
 			}
 			opcode = opcode.nextSiblingElement("opcode");
 		}
 		QPair<QString, QList<Opcode> > newCategory(catName, opcodesInCategoryList);
 		opcodeListCategory.append(opcodesInCategoryList);
 		categoryList.append(catName);
-		// 	qDebug() << "Category: " << categoryList.last();
+        // 	qDebug() << "Category: " << categoryList.last();
 		opcodeCategoryList.append(newCategory);
 		cat = cat.nextSiblingElement("category");
 	}
