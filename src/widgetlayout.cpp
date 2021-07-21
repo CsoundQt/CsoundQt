@@ -1734,6 +1734,10 @@ void WidgetLayout::widgetMoved(QPair<int, int> delta)
             int newy = m_widgets[i]->y() + delta.second;
             m_widgets[i]->move(newx, newy);
             editWidgets[i]->move(newx, newy);
+			// set the position to properties otherwis MidiLearn -> applyInetrnalProperties sets it to wrong (old) position
+			m_widgets[i]->setProperty("QCS_x", newx);
+			m_widgets[i]->setProperty("QCS_y", newy);
+
         }
     }
     widgetsMutex.unlock();
@@ -1752,6 +1756,9 @@ void WidgetLayout::widgetResized(QPair<int, int> delta)
             newh = newh > 5 ? newh : 5;
             m_widgets[i]->setWidgetGeometry(m_widgets[i]->x(), m_widgets[i]->y(), neww, newh);
             editWidgets[i]->resize(neww, newh);
+			// set the position to properties otherwis MidiLearn -> applyInetrnalProperties sets it to wrong (old) position
+			m_widgets[i]->setProperty("QCS_width", neww);
+			m_widgets[i]->setProperty("QCS_height", newh);
         }
     }
     widgetsMutex.unlock();
