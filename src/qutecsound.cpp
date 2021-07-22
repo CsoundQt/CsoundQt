@@ -2240,21 +2240,26 @@ void CsoundQt::perfEnded()
     runAct->setChecked(false);
 }
 
-void CsoundQt::record(bool rec)
+void CsoundQt::record(bool rec) {
+	record(rec, curPage);
+}
+
+void CsoundQt::record(bool rec, int index=-1)
 {
-    if (rec) {
-        if (!documentPages[curPage]->isRunning()) {
+	if (index==-1) index=curPage;
+	if (rec) {
+		if (!documentPages[index]->isRunning()) {
             play();
         }
-        int ret = documentPages[curPage]->record(m_options->sampleFormat);
-		documentTabs->setTabIcon(curPage, QIcon(QString(":/themes/%1/gtk-media-record.png").arg(m_options->theme )));
+		int ret = documentPages[index]->record(m_options->sampleFormat);
+		documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/gtk-media-record.png").arg(m_options->theme )));
 		if (ret != 0) {
             recAct->setChecked(false);
-			documentTabs->setTabIcon(curPage, QIcon());
+			documentTabs->setTabIcon(index, QIcon());
         }
     }
     else {
-        documentPages[curPage]->stopRecording();
+		documentPages[index]->stopRecording();
         QMessageBox::information(nullptr, tr("Record"), tr("Recorded to audiofile ") + this->currentAudioFile);
 		// documentTabs->setTabIcon(curPage, QIcon());
     }

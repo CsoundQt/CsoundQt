@@ -164,6 +164,7 @@ public slots:
 	void perfEnded();
 	void render();
 	void record(bool);
+	void record(bool, int index);
 	void sendEvent(QString eventLine, double delay = 0);
 	void sendEvent(int index, QString line, double delay = 0);
 	void changePage(int index);
