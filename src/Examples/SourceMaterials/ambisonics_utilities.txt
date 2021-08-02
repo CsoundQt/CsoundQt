@@ -1,0 +1,525 @@
+opcode absorb, a, ak  
+asnd,kdist	xin
+aabs 		tone 		5*asnd,20000*exp(-.1*kdist)	
+			xout 		aabs
+endop
+
+opcode dist, k, kkk  
+kx,ky,kz		xin
+kdist =		sqrt(kx*kx+ky*ky+kz*kz)+0.00001
+				xout		kdist
+endop
+
+opcode dist, k, kk  
+kx,ky		xin
+kdist =		sqrt(kx*kx+ky*ky)+0.00001
+				xout		kdist
+endop
+
+opcode Doppler, a, ak  
+asnd,kdist	xin
+abuf		delayr 	.5
+adop		deltapi	interp(kdist)*0.0029137529 + .01 ; 1/343.2
+			delayw 	asnd 	
+			xout		adop
+endop
+
+; converts spherical coordinates (azimuth, elevation, distance) 
+; to Cartesian coordionates (x, y, z) in k-rate
+opcode	aed_to_xyz, kkk, kkk
+kaz,kel,kdist	 xin 
+		xout	kdist*cos(kel)*cos(kaz),kdist*cos(kel)*sin(kaz),kdist*sin(kel)
+endop
+
+; converts spherical coordinates (azimuth, elevation, distance) 
+; to Cartesian coordionates (x, y, z) in i-rate
+opcode	aed_to_xyz, iii, iii		; 
+iaz,iel,idist	 xin 
+		xout	idist*cos(iel)*cos(iaz),idist*cos(iel)*sin(iaz),idist*sin(iel)
+endop
+
+; convert degrees to radian
+opcode	radian, a, a		
+afi		xin	
+		xout	$M_PI*afi/180
+endop
+opcode	radian, k, k		
+kfi		xin	
+		xout	$M_PI*kfi/180
+endop
+opcode	radiani, i, i		
+ifi		xin	
+		xout	$M_PI*ifi/180
+endop
+
+; convert radian to degrees
+opcode	degree, a, a		
+afi		xin	
+		xout	180*afi/$M_PI
+endop
+opcode	degree, k, k		
+kfi		xin	
+		xout	180*kfi/$M_PI
+endop
+opcode	degreei, i, i		
+ifi		xin	
+		xout	180*ifi/$M_PI
+endop
+
+;;;;;;;;;;
+
+opcode		dist_corr,	 a,ai
+a1,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+a1		delay	a1,(imax-id1)*icinv
+		xout	id1*a1/imax
+endop
+
+opcode		dist_corr,	 aa,aai
+a1,a2,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+		xout	id1*a1/imax,id2*a2/imax
+endop
+
+opcode		dist_corr,	 aaa,aaai
+a1,a2,a3,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax
+endop
+
+opcode		dist_corr,	 aaaa,aaaai
+a1,a2,a3,a4,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax
+endop
+
+opcode		dist_corr,	 aaaaa,aaaaai
+a1,a2,a3,a4,a5,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax
+endop
+
+opcode		dist_corr,	 aaaaaa,aaaaaai
+a1,a2,a3,a4,a5,a6,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+id6	=	table(6,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+a6		delay	a6,(imax-id6)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax,id6*a6/imax
+endop
+
+opcode		dist_corr,	 aaaaaaa,aaaaaaai
+a1,a2,a3,a4,a5,a6,a7,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+id6	=	table(6,ifn)
+id7=	table(7,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+a6		delay	a6,(imax-id6)*icinv
+a7		delay	a7,(imax-id7)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax,id6*a6/imax,id7*a7/imax
+endop
+
+opcode		dist_corr,	 aaaaaaaa,aaaaaaaai
+a1,a2,a3,a4,a5,a6,a7,a8,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+id6	=	table(6,ifn)
+id7=	table(7,ifn)
+id8	=	table(8,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+a6		delay	a6,(imax-id6)*icinv
+a7		delay	a7,(imax-id7)*icinv
+a8		delay	a8,(imax-id8)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax,id6*a6/imax,id7*a7/imax,id8*a8/imax
+endop
+
+opcode		dist_corr,	 aaaaaaaaa,aaaaaaaaai
+a1,a2,a3,a4,a5,a6,a7,a8,a9,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+id6	=	table(6,ifn)
+id7=	table(7,ifn)
+id8	=	table(8,ifn)
+id9	=	table(9,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+a6		delay	a6,(imax-id6)*icinv
+a7		delay	a7,(imax-id7)*icinv
+a8		delay	a8,(imax-id8)*icinv
+a9		delay	a9,(imax-id9)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax,id6*a6/imax,id7*a7/imax,id8*a8/imax,
+		id9*a9/imax
+endop
+
+opcode		dist_corr,	 aaaaaaaaaa,aaaaaaaaaai
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+id6	=	table(6,ifn)
+id7=	table(7,ifn)
+id8	=	table(8,ifn)
+id9	=	table(9,ifn)
+id10=	table(10,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+a6		delay	a6,(imax-id6)*icinv
+a7		delay	a7,(imax-id7)*icinv
+a8		delay	a8,(imax-id8)*icinv
+a9		delay	a9,(imax-id9)*icinv
+a10		delay	a10,(imax-id10)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax,id6*a6/imax,id7*a7/imax,id8*a8/imax,
+		id9*a9/imax,id10*a10/imax
+endop
+
+opcode		dist_corr,	 aaaaaaaaaaa,aaaaaaaaaaai
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+id6	=	table(6,ifn)
+id7=	table(7,ifn)
+id8	=	table(8,ifn)
+id9	=	table(9,ifn)
+id10=	table(10,ifn)
+id11=	table(11,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+a6		delay	a6,(imax-id6)*icinv
+a7		delay	a7,(imax-id7)*icinv
+a8		delay	a8,(imax-id8)*icinv
+a9		delay	a9,(imax-id9)*icinv
+a10		delay	a10,(imax-id10)*icinv
+a11		delay	a11,(imax-id11)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax,id6*a6/imax,id7*a7/imax,id8*a8/imax,
+		id9*a9/imax,id10*a10/imax,id11*a11/imax
+endop
+
+opcode		dist_corr,	 aaaaaaaaaaaa,aaaaaaaaaaaai
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+id6	=	table(6,ifn)
+id7=	table(7,ifn)
+id8	=	table(8,ifn)
+id9	=	table(9,ifn)
+id10=	table(10,ifn)
+id11=	table(11,ifn)
+id12=	table(12,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+a6		delay	a6,(imax-id6)*icinv
+a7		delay	a7,(imax-id7)*icinv
+a8		delay	a8,(imax-id8)*icinv
+a9		delay	a9,(imax-id9)*icinv
+a10		delay	a10,(imax-id10)*icinv
+a11		delay	a11,(imax-id11)*icinv
+a12		delay	a12,(imax-id12)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax,id6*a6/imax,id7*a7/imax,id8*a8/imax,
+		id9*a9/imax,id10*a10/imax,id11*a11/imax,id12*a12/imax
+endop
+
+opcode		dist_corr,	 aaaaaaaaaaaaa,aaaaaaaaaaaaai
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+id6	=	table(6,ifn)
+id7=	table(7,ifn)
+id8	=	table(8,ifn)
+id9	=	table(9,ifn)
+id10=	table(10,ifn)
+id11=	table(11,ifn)
+id12=	table(12,ifn)
+id13=	table(13,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+a6		delay	a6,(imax-id6)*icinv
+a7		delay	a7,(imax-id7)*icinv
+a8		delay	a8,(imax-id8)*icinv
+a9		delay	a9,(imax-id9)*icinv
+a10		delay	a10,(imax-id10)*icinv
+a11		delay	a11,(imax-id11)*icinv
+a12		delay	a12,(imax-id12)*icinv
+a13		delay	a13,(imax-id13)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax,id6*a6/imax,id7*a7/imax,id8*a8/imax,
+		id9*a9/imax,id10*a10/imax,id11*a11/imax,id12*a12/imax,
+		id13*a13/imax
+endop
+
+opcode		dist_corr,	 aaaaaaaaaaaaaa,aaaaaaaaaaaaaai
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+id6	=	table(6,ifn)
+id7=	table(7,ifn)
+id8	=	table(8,ifn)
+id9	=	table(9,ifn)
+id10=	table(10,ifn)
+id11=	table(11,ifn)
+id12=	table(12,ifn)
+id13=	table(13,ifn)
+id14=	table(14,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+a6		delay	a6,(imax-id6)*icinv
+a7		delay	a7,(imax-id7)*icinv
+a8		delay	a8,(imax-id8)*icinv
+a9		delay	a9,(imax-id9)*icinv
+a10		delay	a10,(imax-id10)*icinv
+a11		delay	a11,(imax-id11)*icinv
+a12		delay	a12,(imax-id12)*icinv
+a13		delay	a13,(imax-id13)*icinv
+a14		delay	a14,(imax-id14)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax,id6*a6/imax,id7*a7/imax,id8*a8/imax,
+		id9*a9/imax,id10*a10/imax,id11*a11/imax,id12*a12/imax,
+		id13*a13/imax,id14*a14/imax
+endop
+
+opcode		dist_corr,	 aaaaaaaaaaaaaaa,aaaaaaaaaaaaaaai
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+id6	=	table(6,ifn)
+id7=	table(7,ifn)
+id8	=	table(8,ifn)
+id9	=	table(9,ifn)
+id10=	table(10,ifn)
+id11=	table(11,ifn)
+id12=	table(12,ifn)
+id13=	table(13,ifn)
+id14=	table(14,ifn)
+id15=	table(15,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+a6		delay	a6,(imax-id6)*icinv
+a7		delay	a7,(imax-id7)*icinv
+a8		delay	a8,(imax-id8)*icinv
+a9		delay	a9,(imax-id9)*icinv
+a10		delay	a10,(imax-id10)*icinv
+a11		delay	a11,(imax-id11)*icinv
+a12		delay	a12,(imax-id12)*icinv
+a13		delay	a13,(imax-id13)*icinv
+a14		delay	a14,(imax-id14)*icinv
+a15		delay	a15,(imax-id15)*icinv
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax,id6*a6/imax,id7*a7/imax,id8*a8/imax,
+		id9*a9/imax,id10*a10/imax,id11*a11/imax,id12*a12/imax,
+		id13*a13/imax,id14*a14/imax,id15*a15/imax
+endop
+
+; stürzt ab, funktioniert mit ....aaaki als input
+opcode		dist_corr,	 aaaaaaaaaaaaaaaa,aaaaaaaaaaaaaaaai
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+id6	=	table(6,ifn)
+id7=	table(7,ifn)
+id8	=	table(8,ifn)
+id9	=	table(9,ifn)
+id10=	table(10,ifn)
+id11=	table(11,ifn)
+id12=	table(12,ifn)
+id13=	table(13,ifn)
+id14=	table(14,ifn)
+id15=	table(15,ifn)
+id16=	table(16,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+a6		delay	a6,(imax-id6)*icinv
+a7		delay	a7,(imax-id7)*icinv
+a8		delay	a8,(imax-id8)*icinv
+a9		delay	a9,(imax-id9)*icinv
+a10		delay	a10,(imax-id10)*icinv
+a11		delay	a11,(imax-id11)*icinv
+a12		delay	a12,(imax-id12)*icinv
+a13		delay	a13,(imax-id13)*icinv
+a14		delay	a14,(imax-id14)*icinv
+a15		delay	a15,(imax-id15)*icinv
+a16		delay	a16,(imax-id16)*icinv
+
+		xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax,id6*a6/imax,id7*a7/imax,id8*a8/imax,
+		id9*a9/imax,id10*a10/imax,id11*a11/imax,id12*a12/imax,
+		id13*a13/imax,id14*a14/imax,id15*a15/imax,id16*a16/imax
+endop
+
+opcode		dist_corr,	 aaaaaaaaaaaaaaaaa,aaaaaaaaaaaaaaaaai
+a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,ifn	xin
+icinv = 0.0029137529
+imax= 	table(0,ifn)
+id1	=	table(1,ifn)
+id2	=	table(2,ifn)
+id3=	table(3,ifn)
+id4	=	table(4,ifn)
+id5	=	table(5,ifn)
+id6	=	table(6,ifn)
+id7=	table(7,ifn)
+id8	=	table(8,ifn)
+id9	=	table(9,ifn)
+id10=	table(10,ifn)
+id11=	table(11,ifn)
+id12=	table(12,ifn)
+id13=	table(13,ifn)
+id14=	table(14,ifn)
+id15=	table(15,ifn)
+id16=	table(16,ifn)
+id17=	table(17,ifn)
+a1		delay	a1,(imax-id1)*icinv
+a2		delay	a2,(imax-id2)*icinv
+a3		delay	a3,(imax-id3)*icinv
+a4		delay	a4,(imax-id4)*icinv
+a5		delay	a5,(imax-id5)*icinv
+a6		delay	a6,(imax-id6)*icinv
+a7		delay	a7,(imax-id7)*icinv
+a8		delay	a8,(imax-id8)*icinv
+a9		delay	a9,(imax-id9)*icinv
+a10		delay	a10,(imax-id10)*icinv
+a11		delay	a11,(imax-id11)*icinv
+a12		delay	a12,(imax-id12)*icinv
+a13		delay	a13,(imax-id13)*icinv
+a14		delay	a14,(imax-id14)*icinv
+a15		delay	a15,(imax-id15)*icinv
+a16		delay	a16,(imax-id16)*icinv
+a17		delay	a17,(imax-id17)*icinv
+	xout	id1*a1/imax,id2*a2/imax,id3*a3/imax,id4*a4/imax,
+		id5*a5/imax,id6*a6/imax,id7*a7/imax,id8*a8/imax,
+		id9*a9/imax,id10*a10/imax,id11*a11/imax,id12*a12/imax,
+id13*a13/imax,id14*a14/imax,id15*a15/imax,id16*a16/imax,id17*a17/imax
+endop
+
+
