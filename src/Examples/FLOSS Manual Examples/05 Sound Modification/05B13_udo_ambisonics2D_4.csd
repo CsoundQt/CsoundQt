@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac -m0
+--env:SSDIR+=../../SourceMaterials -odac -m0
 </CsOptions>
 <CsInstruments>
 
@@ -9,7 +9,7 @@ ksmps   =  32
 nchnls  =  8
 0dbfs      = 1
 
-#include "../SourceMaterials/ambisonics2D_udos.txt"
+#include "../../SourceMaterials/ambisonics2D_udos.txt"
 
 ; distance encoding
 ; with any distance (includes zero and negative distance)

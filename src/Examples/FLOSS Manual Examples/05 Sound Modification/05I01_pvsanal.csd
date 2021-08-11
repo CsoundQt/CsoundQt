@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 -i adc -o dac
---env:SSDIR+=../resources/SourceMaterials
+--env:SSDIR+=../resourc../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr = 44100

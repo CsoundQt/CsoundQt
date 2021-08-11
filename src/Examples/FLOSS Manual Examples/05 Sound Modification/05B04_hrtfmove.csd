@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+=../SourceMaterials
+--env:SADIR+=../../SourceMaterials
 -odac
 </CsOptions>
 <CsInstruments>

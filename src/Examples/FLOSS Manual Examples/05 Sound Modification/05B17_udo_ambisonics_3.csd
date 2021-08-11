@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac -m0
+--env:SSDIR+=../../SourceMaterials -odac -m0
 </CsOptions>
 <CsInstruments>
 sr      =  44100
@@ -10,7 +10,7 @@ nchnls  =  2
 
 zakinit 81, 1        ; zak space with the 11 channels of the B-format
 
-#include "../SourceMaterials/ambisonics_udos.txt"
+#include "../../SourceMaterials/ambisonics_udos.txt"
 
 opcode    ambi3D_enc_dist1, 0, aikkk
 asnd,iorder,kaz,kel,kdist    xin

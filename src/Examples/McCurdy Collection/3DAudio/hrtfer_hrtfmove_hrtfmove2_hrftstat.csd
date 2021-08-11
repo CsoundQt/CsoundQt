@@ -13,7 +13,7 @@
 ;my flags on Ubuntu  -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials
+--env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr 		= 44100	;SAMPLE RATE
@@ -22,7 +22,7 @@ nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1		;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
 
-#define PATH_HRTF #../SourceMaterials#
+#define PATH_HRTF #../../SourceMaterials#
 
 
 opcode FilePlay2, aa, Skoo		; Credit to Joachim Heintz 

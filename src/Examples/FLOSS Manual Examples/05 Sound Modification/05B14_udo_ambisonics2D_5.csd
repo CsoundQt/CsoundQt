@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac -m0
+--env:SSDIR+=../../SourceMaterials -odac -m0
 </CsOptions>
 <CsInstruments>
 sr      =  44100
@@ -8,8 +8,8 @@ ksmps   =  32
 nchnls  =  8
 0dbfs      = 1
 
-#include "../SourceMaterials/ambisonics2D_udos.txt"
-#include "../SourceMaterials/ambisonics_utilities.txt" ;Absorb and Doppler
+#include "../../SourceMaterials/ambisonics2D_udos.txt"
+#include "../../SourceMaterials/ambisonics_utilities.txt" ;Absorb and Doppler
 
 /* these opcodes are included in "ambisonics2D_udos.txt"
 opcode xy_to_ad, kk, kk

@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac -m0
+--env:SSDIR+=../../SourceMaterials -odac -m0
 </CsOptions>
 <CsInstruments>
 sr      =  44100
@@ -11,7 +11,7 @@ nchnls  =  1
 zakinit 81, 1 ; zak space for up to 81 channels of the 8th order B-format
 
 ; the opcodes used below are safed in "ambisonics_udos.txt"
-#include "../SourceMaterials/ambisonics_udos.txt"
+#include "../../SourceMaterials/ambisonics_udos.txt"
 
 ; in-phase decoding up to third order for one speaker
 opcode    ambi_dec1_inph3, a, iii

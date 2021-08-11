@@ -12,7 +12,7 @@
 ;my flags on Ubuntu: -dm0 -iadc:system:capture_ -odac:system:playback_ -+rtaudio=jack  -b16 -B4096 -+rtmidi=alsa -Ma
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials
+--env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr 		= 44100	;SAMPLE RATE

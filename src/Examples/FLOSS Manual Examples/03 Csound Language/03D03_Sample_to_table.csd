@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac --env:SSDIR=../SourceMaterials
+-odac --env:SSDIR=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr = 44100
