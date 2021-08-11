@@ -4462,6 +4462,8 @@ QString CsoundQt::getExamplePath(QString dir)
     return examplePath;
 }
 
+
+
 void CsoundQt::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("File"));
@@ -4792,9 +4794,11 @@ void CsoundQt::createMenus()
 //    subMenus << pluginExamples;
 //	subMenuNames << tr("Plugins");
 
+        //-----
+/*
 	QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
 	QAction *newAction;
-	QMenu *submenu;
+        QMenu *submenu;
 
 	QList<QStringList> subMenus; // should get rid of those  as :examples/ is not needed any more
 	QStringList subMenuNames;
@@ -4808,7 +4812,6 @@ void CsoundQt::createMenus()
 		foreach (QString subDir, subDirs) {
 			QString dirName = subDir.mid(subDir.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
 			submenu = mainExamplesMenu->addMenu(dirName);
-			// TODO: "Getting Started has also submenus take care how they are organized
 			QStringList filters;
 			filters << "*.csd";
 			QStringList mainExamplesFiles = QDir(mainExamplesPath + "/" + subDir).entryList(filters,QDir::Files);
@@ -4818,6 +4821,7 @@ void CsoundQt::createMenus()
 				newAction->setData(mainExamplesPath + "/" + subDir + "/" + fileName);
 				connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
 			}
+            // TODO: "Getting Started has also submenus take care how they are organized <- bad code, must be rewritten
 		}
 	} else {
 		qDebug() << "Warning: Could not find CsoundQt main examples.";
@@ -4900,6 +4904,10 @@ void CsoundQt::createMenus()
             }
         }
     }
+*/
+
+
+    fillExampleMenu();
 
 
     favoriteMenu = menuBar()->addMenu(tr("Favorites"));
@@ -4937,6 +4945,60 @@ void CsoundQt::createMenus()
     // uhelpMenu->addAction(aboutQtAct);
 
 }
+
+
+void CsoundQt::fillExampleMenu()
+{
+    QString examplePath = getExamplePath("");
+    qDebug() << examplePath;
+    if (examplePath.isEmpty() ) {
+        qDebug() << "examplePath not set";
+        return;
+    }
+
+    QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
+
+    QDir dir(examplePath);
+    if (dir.count() > 0) {
+        fillExampleSubmenu(dir.absolutePath(), examplesMenu, 0);
+    }
+}
+
+void CsoundQt::fillExampleSubmenu(QDir dir, QMenu *m, int depth)
+{
+    // add extra entry for FLOSS manual
+    if (dir.dirName().startsWith("FLOSS")) {
+        m->addAction(tr("Read FLOSS Manual Online"),this, SLOT(openFLOSSManual()));
+        m->addSeparator();
+    }
+
+    QStringList filters;
+    filters << "*.csd" << "*.pdf" << "*.html";
+    dir.setNameFilters(filters);
+    QStringList files = dir.entryList(QDir::Files,QDir::Name);
+    QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
+    if (depth > m_options->menuDepth)
+        return;
+    for (int i = 0; i < dirs.size() && i < 64; i++) {
+        QDir newDir(dir.absolutePath() + "/" + dirs[i]);
+        newDir.setNameFilters(filters);
+        QStringList newFiles = dir.entryList(QDir::Files,QDir::Name);
+        QStringList newDirs = dir.entryList(QDir::AllDirs,QDir::Name);
+        if (newFiles.size() > 0 ||  newDirs.size() > 0) {
+            if (dirs[i] != "." && dirs[i] != "..") {
+                QMenu *menu = m->addMenu(dirs[i]);
+                fillExampleSubmenu(newDir.absolutePath(), menu, depth + 1);
+            }
+        }
+    }
+    for (int i = 0; i < files.size() &&  i < 64; i++) {
+        QAction *newAction = m->addAction(files[i],
+                                          this, SLOT(openExample()));
+        qDebug() << "filename for action: "  << dir.absoluteFilePath(files[i]);
+        newAction->setData(dir.absoluteFilePath(files[i]));
+    }
+}
+
 
 void CsoundQt::fillFileMenu()
 {

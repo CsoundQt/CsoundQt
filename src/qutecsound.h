@@ -315,6 +315,8 @@ private:
 	void connectActions();
 	QString getExamplePath(QString dir);
 	void createMenus();
+	void fillExampleMenu();
+    void fillExampleSubmenu(QDir dir, QMenu *m, int depth);
 	void fillFileMenu();
 	void fillFavoriteMenu();
 	void fillFavoriteSubMenu(QDir dir, QMenu *m, int depth);

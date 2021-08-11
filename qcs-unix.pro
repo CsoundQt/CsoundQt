@@ -1,6 +1,6 @@
 !unix:error(This project file is only for Unix-based systems.)
 !no_messages {
-	message()
+        message(" ")
 	message(Building CsoundQt for Unix-based system.)
 }
 
