@@ -4966,6 +4966,12 @@ void CsoundQt::fillExampleMenu()
 
 void CsoundQt::fillExampleSubmenu(QDir dir, QMenu *m, int depth)
 {
+    QString test = dir.dirName();
+    //qDebug() << "dirName: " << test;
+    if (depth > m_options->menuDepth) {
+        return;
+    }
+
     // add extra entry for FLOSS manual
     if (dir.dirName().startsWith("FLOSS")) {
         m->addAction(tr("Read FLOSS Manual Online"),this, SLOT(openFLOSSManual()));
@@ -4977,15 +4983,13 @@ void CsoundQt::fillExampleSubmenu(QDir dir, QMenu *m, int depth)
     dir.setNameFilters(filters);
     QStringList files = dir.entryList(QDir::Files,QDir::Name);
     QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
-    if (depth > m_options->menuDepth)
-        return;
     for (int i = 0; i < dirs.size() && i < 64; i++) {
         QDir newDir(dir.absolutePath() + "/" + dirs[i]);
         newDir.setNameFilters(filters);
         QStringList newFiles = dir.entryList(QDir::Files,QDir::Name);
         QStringList newDirs = dir.entryList(QDir::AllDirs,QDir::Name);
         if (newFiles.size() > 0 ||  newDirs.size() > 0) {
-            if (dirs[i] != "." && dirs[i] != "..") {
+            if (dirs[i] != "." && dirs[i] != ".." && dirs[i]!="SourceMaterials") {
                 QMenu *menu = m->addMenu(dirs[i]);
                 fillExampleSubmenu(newDir.absolutePath(), menu, depth + 1);
             }
@@ -4994,7 +4998,6 @@ void CsoundQt::fillExampleSubmenu(QDir dir, QMenu *m, int depth)
     for (int i = 0; i < files.size() &&  i < 64; i++) {
         QAction *newAction = m->addAction(files[i],
                                           this, SLOT(openExample()));
-        qDebug() << "filename for action: "  << dir.absoluteFilePath(files[i]);
         newAction->setData(dir.absoluteFilePath(files[i]));
     }
 }
