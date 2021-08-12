@@ -98,6 +98,7 @@ public:
 	QString opcodexmldir;
 	bool opcodexmldirActive;
 	QString favoriteDir;
+    QString examplePath;
 	QString pythonDir;
 	QString pythonExecutable;
 	QString csoundExecutable;

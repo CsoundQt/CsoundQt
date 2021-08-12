@@ -91,6 +91,7 @@ Options::Options(ConfigLists *configlists) :
     opcodexmldir = "";
     opcodexmldirActive = false;
     favoriteDir = "";
+    examplePath = "";
     pythonDir = "";
     pythonExecutable = "python";
 #ifdef Q_OS_MAC

@@ -334,6 +334,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	//  defaultCsdLineEdit->setText(m_options->defaultCsd);
 	//  defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
 	favoriteLineEdit->setText(m_options->favoriteDir);
+    examplePathlineEdit->setText(m_options->examplePath);
 	pythonDirLineEdit->setText(m_options->pythonDir);
 	pythonExecutableLineEdit->setText(m_options->pythonExecutable);
 	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
@@ -364,7 +365,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(rawWaveToolButton, SIGNAL(clicked()), this, SLOT(browseRawWaveDir()));
 	//  connect(defaultCsdToolButton, SIGNAL(clicked()), this, SLOT(browseDefaultCsd()));
 	connect(favoriteToolButton, SIGNAL(clicked()), this, SLOT(browseFavorite()));
-	connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
+    connect(examplePathToolButton, SIGNAL(clicked()), this, SLOT(browseExamplePath()) );
+    connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
 	connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
 	connect(dotToolButton, SIGNAL(clicked()), this, SLOT(browseDot()));
 	connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
@@ -604,6 +606,7 @@ void ConfigDialog::accept()
 	//  m_options->defaultCsdActive = defaultCsdCheckBox->isChecked();
 	//  m_options->defaultCsd = defaultCsdLineEdit->text();
 	m_options->favoriteDir = favoriteLineEdit->text();
+    m_options->examplePath = examplePathlineEdit->text();
 	m_options->pythonDir = pythonDirLineEdit->text();
 	m_options->pythonExecutable = pythonExecutableLineEdit->text();
 	m_options->csoundExecutable = csoundExecutableLineEdit->text();
@@ -720,6 +723,12 @@ void ConfigDialog::browseFavorite()
 {
 	browseDir(m_options->favoriteDir);
 	favoriteLineEdit->setText(m_options->favoriteDir);
+}
+
+void ConfigDialog::browseExamplePath()
+{
+    browseDir(m_options->examplePath);
+    examplePathlineEdit->setText(m_options->examplePath);
 }
 
 void ConfigDialog::browseTerminal()

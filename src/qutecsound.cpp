@@ -236,12 +236,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     focusMapper = new QSignalMapper(this);
     createActions(); // Must be before readSettings: this sets default shortcuts
-    createMenus();
-    // TODO: take care that the position is stored when toolbars or panels are
-    // moved/resized. maybe.
     createStatusBar();
     createToolBars();
     readSettings();
+    createMenus(); // creating menu must be after readSettings. probably create Status- and toolbars, too?
     this->setToolbarIconSize(m_options->toolbarIconSize);
 
     // this section was above before, check that it does not create problems...
@@ -4413,6 +4411,12 @@ void CsoundQt::connectActions()
 QString CsoundQt::getExamplePath(QString dir)
 {
     QString examplePath;
+
+    if (!m_options->examplePath.isEmpty() && QDir(m_options->examplePath + dir).exists()) {
+        examplePath = m_options->examplePath + dir;
+        return examplePath;
+    }
+
 #ifdef Q_OS_WIN32
     examplePath = qApp->applicationDirPath() + "/Examples/" + dir;
     if (!QDir(examplePath).exists()) {
@@ -5497,6 +5501,7 @@ void CsoundQt::readSettings()
     m_options->defaultCsd = settings.value("defaultCsd","").toString();
     m_options->defaultCsdActive = settings.value("defaultCsdActive","").toBool();
     m_options->favoriteDir = settings.value("favoriteDir","").toString();
+    m_options->examplePath = settings.value("examplePath", "").toString();
     m_options->pythonDir = settings.value("pythonDir","").toString();
     m_options->pythonExecutable = settings.value("pythonExecutable","python").toString();
     m_options->csoundExecutable = settings.value("csoundExecutable","csound").toString();
@@ -5738,6 +5743,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("defaultCsd",m_options->defaultCsd);
         settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
         settings.setValue("favoriteDir",m_options->favoriteDir);
+        settings.setValue("examplePath", m_options->examplePath);
         settings.setValue("pythonDir",m_options->pythonDir);
         settings.setValue("pythonExecutable",m_options->pythonExecutable);
         settings.setValue("csoundExecutable", m_options->csoundExecutable);

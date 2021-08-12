@@ -67,6 +67,7 @@ private slots:
 	void browseRawWaveDir();
 	//    void browseDefaultCsd();
 	void browseFavorite();
+    void browseExamplePath();
 	void browsePythonDir();
 	void browseCsoundExecutable();
     void browsePythonExecutable();
