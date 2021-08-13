@@ -16,7 +16,7 @@
 </CsOptions>
 <CsInstruments>
 sr 		= 44100	;SAMPLE RATE
-ksmps 	= 100	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps 	= 64	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls 	= 2		;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1
 
@@ -158,8 +158,10 @@ i 11 0 0.01	;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>bbcutm / bbcuts </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -187,6 +189,7 @@ i 11 0 0.01	;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -194,7 +197,9 @@ i 11 0 0.01	;INIT
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -206,8 +211,10 @@ i 11 0 0.01	;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>bbcutm / bbcuts </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -235,10 +242,12 @@ i 11 0 0.01	;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>------------------------------------------------------------------------------------------------------------------------------------------------
 bbcutm/bbcuts performs break-beat style cut-ups upon an input audio signal. (bbcutm/bbcuts represents mono and stereo versions of the same basic algorithm.) In order to create rhythmically precise cut-ups it is necessary for the input audio loop to begin at the same time that the opcode is triggered and for the tempo argument given to the bbcuts/bbcutm opcode to correspond to that of the input loop audio. This requires some planning and in this example this is implemented by playing the audio loop using the tablei opcode.
 Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered sound material or even a live input signal. This example also provides the option of selecting the computer's live input as the sound source. If the live input is used then the results can be more aleatoric than rhymical. Bbcuts/bbcutm takes a variety of input arguments that determine the precise nature of the cut-ups executed. 'Sub-division' determines the note duration used as the base unit in  cut-ups. For example a value of 8 represents quavers (eighth notes), 16 represents semiquavers (sixteenth notes) and so on. 'Bar Length' represents the number of beats per bar. For example, a value of 4 represents a 4/4 bar and so on. 'Phrase' defines the number of bars that will elapse before the cutting up pattern restarts from the beginning. 'Stutter' is a separate cut-up process which occasionally will take a very short fragment of the input audio and repeat it many times. 'Stutter Speed' defines the duration of each stutter in relation to 'Sub-division'. If subdivision is 8 (quavers / eighth notes) and 'Stutter Speed' is 2 then each stutter will be a semiquaver / sixteenth note. 'Stutter Chance' defines the frequency of stutter moments. The range for this parameter is 0 to 1. Zero means stuttering will be very unlikely, 1 means it will be very likely. 'Repeats' defines the number of repeats that will be employed in normal cut-up events. When processing non-rhythmical, unmetered material it may be be more interesting to employ non-whole numbers for parameters such as 'Sub-division', 'Phrase' and 'Stutter Speed'. Additionally in this example a randomly moving band-pass filter has been implemented. 'Filter Mix' crossfades between the unfiltered bbcut signal and the filtered bbcut signal. 'Cutoff Freq.' consists of two small sliders which determine the range from which random cutoff values are derived. 'Interpolate&lt;=>S&amp;H' fades continuously between an interpolated random function and a sample and hold type random function. 'Filter Div.' controls the frequency subdivision with which new random cutoff frequency values are generated - a value of '1' means that new values are generated once every bar.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -254,7 +263,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -266,8 +275,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Filter Mix</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -283,7 +294,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>FiltMix</objectName>
@@ -295,6 +306,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.89999998</value>
@@ -313,8 +325,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.900</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -330,7 +344,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -342,8 +356,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Bandwidth</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -359,7 +375,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Bandwidth</objectName>
@@ -371,6 +387,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.01000000</minimum>
   <maximum>10.00000000</maximum>
   <value>0.30000001</value>
@@ -389,8 +406,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.300</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -406,7 +425,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -418,8 +437,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Sub-division</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -435,7 +456,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -447,8 +468,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Dry Signal Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -464,7 +487,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>DryGain</objectName>
@@ -476,6 +499,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -494,8 +518,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -511,7 +537,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -523,8 +549,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>BBCut Signal Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -540,7 +568,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>WetGain</objectName>
@@ -552,6 +580,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -570,8 +599,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -587,7 +618,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>Input</objectName>
@@ -599,6 +630,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Audio File</name>
@@ -624,8 +656,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Input</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -641,7 +675,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Browse</objectName>
@@ -653,6 +687,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>loop.wav</stringvalue>
@@ -660,7 +695,9 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse</objectName>
@@ -672,6 +709,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>loop.wav</label>
   <alignment>left</alignment>
   <font>Liberation Sans</font>
@@ -683,9 +721,9 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>229</r>
-   <g>229</g>
-   <b>229</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -699,6 +737,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -728,8 +767,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Bar Length</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -745,7 +786,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>BarLength</objectName>
@@ -757,6 +798,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -786,8 +828,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Phrase</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -803,7 +847,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>Phrase</objectName>
@@ -815,6 +859,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -844,8 +889,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Repeats</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -861,7 +908,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>Repeats</objectName>
@@ -873,6 +920,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -902,8 +950,10 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Stutter Speed</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -919,7 +969,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>StutSpeed</objectName>
@@ -931,6 +981,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -960,9 +1011,11 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Stutter
 Chance</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -978,7 +1031,7 @@ Chance</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>StutChance</objectName>
@@ -990,6 +1043,7 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -1019,8 +1073,10 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>BPM</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1036,7 +1092,7 @@ Chance</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>BPM</objectName>
@@ -1048,6 +1104,7 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -1077,8 +1134,10 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Filter Div</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1094,7 +1153,7 @@ Chance</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>FilDiv</objectName>
@@ -1106,6 +1165,7 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -1135,6 +1195,7 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2/>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1146,6 +1207,8 @@ Chance</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1157,6 +1220,7 @@ Chance</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1168,8 +1232,10 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Cuttoff Frequency min / max</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1185,7 +1251,7 @@ Chance</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>FreqMax</objectName>
@@ -1197,6 +1263,7 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2/>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1208,6 +1275,8 @@ Chance</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1219,6 +1288,7 @@ Chance</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>FreqMin_Value</objectName>
@@ -1230,8 +1300,10 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>400.122</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -1247,7 +1319,7 @@ Chance</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>FreqMax_Value</objectName>
@@ -1259,8 +1331,10 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>5006.802</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -1276,7 +1350,7 @@ Chance</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1288,8 +1362,10 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Interpolate&lt;=>S&amp;H</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1305,7 +1381,7 @@ Chance</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Interp_SH</objectName>
@@ -1317,6 +1393,7 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
@@ -1335,8 +1412,10 @@ Chance</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -1352,7 +1431,7 @@ Chance</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
