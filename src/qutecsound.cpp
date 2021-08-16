@@ -4987,7 +4987,7 @@ void CsoundQt::fillExampleSubmenu(QDir dir, QMenu *m, int depth)
     dir.setNameFilters(filters);
     QStringList files = dir.entryList(QDir::Files,QDir::Name);
     QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
-    for (int i = 0; i < dirs.size() && i < 64; i++) {
+    for (int i = 0; i < dirs.size() && i < 256; i++) {
         QDir newDir(dir.absolutePath() + "/" + dirs[i]);
         newDir.setNameFilters(filters);
         QStringList newFiles = dir.entryList(QDir::Files,QDir::Name);
@@ -4999,7 +4999,7 @@ void CsoundQt::fillExampleSubmenu(QDir dir, QMenu *m, int depth)
             }
         }
     }
-    for (int i = 0; i < files.size() &&  i < 64; i++) {
+    for (int i = 0; i < files.size() &&  i < 256; i++) {
         QAction *newAction = m->addAction(files[i],
                                           this, SLOT(openExample()));
         newAction->setData(dir.absoluteFilePath(files[i]));
