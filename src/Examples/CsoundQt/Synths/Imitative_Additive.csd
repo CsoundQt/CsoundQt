@@ -1112,9 +1112,9 @@ i 1 0 36000
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>10</x>
-  <y>71</y>
+  <y>221</y>
   <width>255</width>
-  <height>555</height>
+  <height>405</height>
   <uuid>{d56a8527-e63b-4d47-9cfc-2f4d90bdcb24}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -1132,7 +1132,7 @@ EXPORT:
 When the "Print current values" button is activated, the analyzed partials are shown at the right side.  For writing the values to a file, you have three different options: export in the same was the values are shown, as war amplitude-frequency values, or as function tables with amplitudes and frequency multipliers. Whenever the "Now!" button is pressed, the current values are written to the text file selected by the "To..." button.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -1145,7 +1145,7 @@ When the "Print current values" button is activated, the analyzed partials are s
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
@@ -1160,40 +1160,7 @@ When the "Print current values" button is activated, the analyzed partials are s
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>File 'AkkordeonMono.aiff' at position 3.869760 seconds:
-01) amp = 0.201054, freq = 353.815704, bin = 8
-02) amp = 0.167349, freq = 375.565918, bin = 9
-03) amp = 0.145980, freq = 263.803345, bin = 6
-04) amp = 0.138418, freq = 750.416138, bin = 17
-05) amp = 0.132345, freq = 746.453491, bin = 18
-06) amp = 0.130291, freq = 661.426147, bin = 15
-07) amp = 0.104767, freq = 297.529205, bin = 7
-08) amp = 0.098296, freq = 996.457703, bin = 23
-09) amp = 0.094052, freq = 127.866997, bin = 3
-10) amp = 0.078126, freq = 645.441589, bin = 16
-11) amp = 0.064262, freq = 259.581818, bin = 5
-12) amp = 0.057785, freq = 1000.420349, bin = 24
-13) amp = 0.049922, freq = 391.110840, bin = 10
-14) amp = 0.049305, freq = 122.518654, bin = 2
-15) amp = 0.046323, freq = 129.231964, bin = 4
-16) amp = 0.044392, freq = 652.065308, bin = 14
-17) amp = 0.042691, freq = 2235.219971, bin = 52
-18) amp = 0.040154, freq = 994.840271, bin = 22
-19) amp = 0.038057, freq = 1110.487305, bin = 26
-20) amp = 0.035998, freq = 1328.607178, bin = 31
-21) amp = 0.035739, freq = 888.275269, bin = 19
-22) amp = 0.030104, freq = 1246.978638, bin = 29
-23) amp = 0.028209, freq = 1996.460327, bin = 46
-24) amp = 0.027992, freq = 1495.683960, bin = 35
-25) amp = 0.027586, freq = 1850.747681, bin = 43
-26) amp = 0.027172, freq = 496.493713, bin = 12
-27) amp = 0.025627, freq = 2232.075684, bin = 51
-28) amp = 0.025251, freq = 1490.341797, bin = 34
-29) amp = 0.024329, freq = 2000.207153, bin = 47
-30) amp = 0.022566, freq = 2124.844727, bin = 49
-31) amp = 0.021643, freq = 837.938721, bin = 20
-32) amp = 0.020550, freq = 2229.399658, bin = 53
-</label>
+  <label/>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Arial</font>
@@ -1260,8 +1227,8 @@ When the "Print current values" button is activated, the analyzed partials are s
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.17537738</xValue>
-  <yValue>0.17537738</yValue>
+  <xValue>0.47826087</xValue>
+  <yValue>0.47826087</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1700,7 +1667,7 @@ L = Live Input,
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>fox.wav</label>
+  <label>fox.wav|bell.aiff|BratscheMono.wav|Wood.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -1730,7 +1697,7 @@ L = Live Input,
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>fox.wav</stringvalue>
+  <stringvalue>fox.wav|bell.aiff|BratscheMono.wav|Wood.wav</stringvalue>
   <text>Select Files</text>
   <image>/</image>
   <eventLine/>
@@ -1755,8 +1722,8 @@ L = Live Input,
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.25612472</xValue>
-  <yValue>0.25612472</yValue>
+  <xValue>0.05345212</xValue>
+  <yValue>0.05345212</yValue>
   <type>line</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1818,7 +1785,7 @@ L = Live Input,
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>3.870</label>
+  <label>0.147</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Arial</font>
@@ -1849,7 +1816,7 @@ L = Live Input,
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <value>0</value>
+  <value>7</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -1877,7 +1844,7 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <label>File selected:
-'AkkordeonMono.aiff'</label>
+'fox.wav'</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Arial</font>
@@ -3582,7 +3549,7 @@ L = Live Input,
   <minimum>0</minimum>
   <maximum>1</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.256125</value>
+  <value>0.0534521</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3612,6 +3579,73 @@ L = Live Input,
    <b>255</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>10</x>
+  <y>71</y>
+  <width>255</width>
+  <height>150</height>
+  <uuid>{b8f46405-6cc4-4b7d-a2da-13890ad2864c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>QUICK START</label>
+  <alignment>center</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>30</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>10</x>
+  <y>111</y>
+  <width>255</width>
+  <height>110</height>
+  <uuid>{998837f8-1449-4aa2-b0c7-66677e5ba65b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>1. Analysis Source = Sample
+2. Analysis Parameters = Pointer
+3. Export Parameters = Print
+4. Select ftable 1 (2, 3, ...)
+5. Output = play
+6. Click position pointer below ftable</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>16</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>

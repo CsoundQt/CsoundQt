@@ -1,5 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
+--env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 
@@ -278,7 +279,8 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>/home/jh/Desktop/BratscheStereo.aiff|/home/jh/Desktop/chirp40-1300Hz.wav|/home/jh/Desktop/SpracheStereo.aiff</label>
+  <description/>
+  <label>fox.wav|bell.aiff|808loop.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -289,9 +291,9 @@ i 1 0 10000
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>35</r>
-   <g>35</g>
-   <b>35</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -305,14 +307,17 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/jh/Desktop/BratscheStereo.aiff|/home/jh/Desktop/chirp40-1300Hz.wav|/home/jh/Desktop/SpracheStereo.aiff</stringvalue>
+  <stringvalue>fox.wav|bell.aiff|808loop.wav</stringvalue>
   <text>Select Files</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>next</objectName>
@@ -324,6 +329,7 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff</stringvalue>
@@ -331,7 +337,9 @@ i 1 0 10000
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>messages</objectName>
@@ -343,9 +351,11 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Playing file number 3:
-'SpracheStereo.aiff'.</label>
+'808loop.wav'.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -373,6 +383,7 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>outL</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -384,6 +395,8 @@ i 1 0 10000
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -395,6 +408,7 @@ i 1 0 10000
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>outLover</objectName>
@@ -406,6 +420,7 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>outLover</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -417,6 +432,8 @@ i 1 0 10000
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -428,6 +445,7 @@ i 1 0 10000
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>outR</objectName>
@@ -439,6 +457,7 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>outR</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -450,6 +469,8 @@ i 1 0 10000
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -461,6 +482,7 @@ i 1 0 10000
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>outRover</objectName>
@@ -472,6 +494,7 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>outRover</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -483,6 +506,8 @@ i 1 0 10000
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -494,6 +519,7 @@ i 1 0 10000
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>nextfil</objectName>
@@ -505,6 +531,7 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -522,7 +549,7 @@ i 1 0 10000
   <minimum>1</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>4</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -534,8 +561,10 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Play next file</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -551,7 +580,7 @@ i 1 0 10000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -563,8 +592,10 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Next file</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -580,7 +611,7 @@ i 1 0 10000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -592,8 +623,10 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>SOUNDFILE SNIPPETS PLAYER</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
@@ -609,7 +642,7 @@ i 1 0 10000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -621,8 +654,10 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Load the sound snippets. Press START. Push the NEXT! button or the space bar (make sure the focus is in this panel). You can reset the number of the next file by typing in the spin box, or by the 'p'/'n' keys.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -638,7 +673,7 @@ i 1 0 10000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Play</objectName>
@@ -650,6 +685,7 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff</stringvalue>
@@ -657,7 +693,9 @@ i 1 0 10000
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Stop</objectName>
@@ -669,6 +707,7 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/BratscheStereo.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/EineWelleMono.aiff|/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/Glocke_Ganze1.aiff</stringvalue>
@@ -676,7 +715,9 @@ i 1 0 10000
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>gaindb</objectName>
@@ -688,6 +729,7 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>-12.00000000</minimum>
   <maximum>12.00000000</maximum>
   <value>-2.04545455</value>
@@ -706,8 +748,10 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Gain</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -723,7 +767,7 @@ i 1 0 10000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -735,8 +779,10 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>dB</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -752,7 +798,7 @@ i 1 0 10000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>gaindb</objectName>
@@ -764,8 +810,10 @@ i 1 0 10000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>-2.045</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -781,7 +829,7 @@ i 1 0 10000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

@@ -1,6 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac
+--env:SSDIR+=../../SourceMaterials
+-m 128
 </CsOptions>
 <CsInstruments>
 
@@ -119,7 +120,8 @@ iplen		=		p4; partitionsize of convolution
 iskpsmps	=		p5; how many samples to skip
 iirlen		=		p6; length of selection for impulse response in samples
 kwdmix		invalue	"wdmix"; 0 = dry (just playback stream), 1 = wet (just convoluted signal)
-kgain		invalue	"gain"
+kgaindb		invalue	"gaindb"
+kgain = ampdb(kgaindb)
 ;;performing convolution
 acvL		ftconv  	gaL, giftL, iplen, iskpsmps, iirlen
 acvR		ftconv  	gaR, giftR, iplen, iskpsmps, iirlen
@@ -152,10 +154,10 @@ e
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>286</x>
- <y>79</y>
+ <x>605</x>
+ <y>171</y>
  <width>532</width>
- <height>703</height>
+ <height>741</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -173,8 +175,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>UNIVERSAL CONVOLUTION</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
@@ -190,11 +194,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>23</x>
+  <x>20</x>
   <y>91</y>
   <width>472</width>
   <height>141</height>
@@ -202,8 +206,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -223,7 +229,7 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>23</x>
+  <x>20</x>
   <y>468</y>
   <width>474</width>
   <height>209</height>
@@ -231,8 +237,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -252,7 +260,7 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>23</x>
+  <x>20</x>
   <y>237</y>
   <width>474</width>
   <height>223</height>
@@ -260,8 +268,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -281,7 +291,7 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
-  <x>39</x>
+  <x>36</x>
   <y>134</y>
   <width>346</width>
   <height>25</height>
@@ -289,7 +299,8 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <description/>
+  <label>ClassicalGuitar.wav</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -300,15 +311,15 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Browse1</objectName>
-  <x>389</x>
+  <x>386</x>
   <y>133</y>
   <width>100</width>
   <height>30</height>
@@ -316,18 +327,21 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>ClassicalGuitar.wav</stringvalue>
   <text>Open File 1</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>150</x>
+  <x>147</x>
   <y>96</y>
   <width>192</width>
   <height>29</height>
@@ -335,8 +349,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Soundfile 1 for Playback</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -352,11 +368,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>55</x>
+  <x>52</x>
   <y>162</y>
   <width>63</width>
   <height>27</height>
@@ -364,8 +380,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>speed</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -381,11 +399,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>skip</objectName>
-  <x>172</x>
+  <x>169</x>
   <y>199</y>
   <width>80</width>
   <height>25</height>
@@ -393,6 +411,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -414,7 +433,7 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>166</x>
+  <x>163</x>
   <y>163</y>
   <width>85</width>
   <height>27</height>
@@ -422,8 +441,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>skiptime</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -439,11 +460,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>295</x>
+  <x>292</x>
   <y>165</y>
   <width>85</width>
   <height>27</height>
@@ -451,8 +472,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>loop</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -468,11 +491,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>loop</objectName>
-  <x>312</x>
+  <x>309</x>
   <y>199</y>
   <width>56</width>
   <height>22</height>
@@ -480,6 +503,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>no</name>
@@ -497,7 +521,7 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>speed</objectName>
-  <x>49</x>
+  <x>46</x>
   <y>197</y>
   <width>80</width>
   <height>25</height>
@@ -505,6 +529,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -526,15 +551,16 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse2</objectName>
-  <x>39</x>
-  <y>280</y>
+  <x>32</x>
+  <y>269</y>
   <width>348</width>
   <height>25</height>
   <uuid>{732ed584-df46-47ed-b98d-239c33707191}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <description/>
+  <label>fox.wav</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -545,15 +571,15 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Browse2</objectName>
-  <x>393</x>
+  <x>390</x>
   <y>279</y>
   <width>100</width>
   <height>30</height>
@@ -561,18 +587,21 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>fox.wav</stringvalue>
   <text>Open File 2</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>147</x>
+  <x>144</x>
   <y>242</y>
   <width>192</width>
   <height>29</height>
@@ -580,8 +609,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Soundfile 2 for Convolution</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -597,20 +628,22 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>25</x>
-  <y>331</y>
+  <x>21</x>
+  <y>294</y>
   <width>280</width>
   <height>29</height>
   <uuid>{f96477f6-1a88-4eb4-99aa-2b3d85b02539}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Selection in Soundfile 2 for Convolution</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -626,11 +659,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>78</x>
+  <x>75</x>
   <y>372</y>
   <width>63</width>
   <height>27</height>
@@ -638,8 +671,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>start</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -655,11 +690,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>250</x>
+  <x>247</x>
   <y>370</y>
   <width>63</width>
   <height>27</height>
@@ -667,8 +702,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>length</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -684,11 +721,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>344</x>
+  <x>341</x>
   <y>333</y>
   <width>105</width>
   <height>29</height>
@@ -696,8 +733,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Partitionsize</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -713,11 +752,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>partsiz</objectName>
-  <x>357</x>
+  <x>354</x>
   <y>370</y>
   <width>84</width>
   <height>24</height>
@@ -725,6 +764,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>256</name>
@@ -757,7 +797,7 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>startabs</objectName>
-  <x>34</x>
+  <x>31</x>
   <y>397</y>
   <width>156</width>
   <height>29</height>
@@ -765,9 +805,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.20512800</value>
+  <value>0.03846154</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -775,7 +816,7 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>irlen</objectName>
-  <x>204</x>
+  <x>201</x>
   <y>396</y>
   <width>156</width>
   <height>29</height>
@@ -783,9 +824,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.08333300</value>
+  <value>0.02564103</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -793,7 +835,7 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>start</objectName>
-  <x>84</x>
+  <x>81</x>
   <y>430</y>
   <width>62</width>
   <height>34</height>
@@ -801,8 +843,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>1.1627</label>
+  <description/>
+  <label>0.106</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -818,11 +862,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>irlen</objectName>
-  <x>229</x>
+  <x>226</x>
   <y>429</y>
   <width>55</width>
   <height>28</height>
@@ -830,8 +874,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>0.0833</label>
+  <description/>
+  <label>0.026</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -847,11 +893,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>284</x>
+  <x>281</x>
   <y>429</y>
   <width>212</width>
   <height>29</height>
@@ -859,8 +905,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>0 = take the whole file length</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -876,11 +924,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>wdmix</objectName>
-  <x>113</x>
+  <x>110</x>
   <y>521</y>
   <width>282</width>
   <height>29</height>
@@ -888,9 +936,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.74822700</value>
+  <value>0.80141844</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -898,7 +947,7 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>191</x>
+  <x>188</x>
   <y>483</y>
   <width>130</width>
   <height>30</height>
@@ -906,8 +955,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Wet-Dry Mix</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -923,11 +974,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>73</x>
+  <x>70</x>
   <y>521</y>
   <width>34</width>
   <height>27</height>
@@ -935,8 +986,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Dry</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -952,11 +1005,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>402</x>
+  <x>399</x>
   <y>522</y>
   <width>34</width>
   <height>27</height>
@@ -964,8 +1017,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Wet</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -981,11 +1036,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>308</x>
+  <x>305</x>
   <y>570</y>
   <width>130</width>
   <height>28</height>
@@ -993,8 +1048,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Output Gain</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1010,29 +1067,30 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
-  <objectName>gain</objectName>
-  <x>102</x>
+  <objectName>gaindb</objectName>
+  <x>99</x>
   <y>566</y>
   <width>201</width>
   <height>34</height>
   <uuid>{1eef7045-2e40-475c-9543-8bbb1b26235d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <minimum>0.10000000</minimum>
-  <maximum>2.00000000</maximum>
-  <value>0.54427900</value>
+  <midicc>0</midicc>
+  <description/>
+  <minimum>-50.00000000</minimum>
+  <maximum>0.00000000</maximum>
+  <value>-21.39303483</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
-  <objectName>gain</objectName>
-  <x>36</x>
+  <objectName>gaindb</objectName>
+  <x>33</x>
   <y>566</y>
   <width>62</width>
   <height>34</height>
@@ -1040,9 +1098,11 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>0.5537</label>
+  <description/>
+  <label>-21.393</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <valignment>top</valignment>
+  <font>Bitstream Vera Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1055,13 +1115,13 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>wdmix</objectName>
-  <x>325</x>
+  <x>322</x>
   <y>481</y>
   <width>62</width>
   <height>34</height>
@@ -1069,8 +1129,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>0.7553</label>
+  <description/>
+  <label>0.801</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1086,11 +1148,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>outL</objectName>
-  <x>124</x>
+  <x>121</x>
   <y>614</y>
   <width>250</width>
   <height>19</height>
@@ -1098,17 +1160,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out1_post</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.10908000</xValue>
+  <xValue>0.09971676</xValue>
   <yValue>0.57894700</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1120,10 +1185,11 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>outLover</objectName>
-  <x>371</x>
+  <x>368</x>
   <y>614</y>
   <width>21</width>
   <height>19</height>
@@ -1131,6 +1197,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>outLover</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1142,6 +1209,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1153,10 +1222,11 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>outR</objectName>
-  <x>124</x>
+  <x>121</x>
   <y>641</y>
   <width>250</width>
   <height>19</height>
@@ -1164,17 +1234,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out2_post</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.10908000</xValue>
+  <xValue>0.07993188</xValue>
   <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1186,10 +1259,11 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>outRover</objectName>
-  <x>371</x>
+  <x>368</x>
   <y>641</y>
   <width>21</width>
   <height>19</height>
@@ -1197,6 +1271,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>outRover</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1208,6 +1283,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1219,20 +1296,23 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>23</x>
   <y>49</y>
-  <width>472</width>
-  <height>47</height>
+  <width>468</width>
+  <height>37</height>
   <uuid>{1812f769-c632-4bc3-9080-c213690435d4}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>You can convolve here any file with any other (or usually a selection of it). </label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <valignment>top</valignment>
+  <font>Bitstream Vera Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1245,63 +1325,41 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>22</x>
+  <y>323</y>
+  <width>280</width>
+  <height>47</height>
+  <uuid>{107a5b8a-97f4-413f-a9f1-d207027795ec}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Move the "start" slider to use different positions in the sample.</label>
+  <alignment>center</alignment>
+  <valignment>top</valignment>
+  <font>Bitstream Vera Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 286 79 532 703
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioText {68, 6} {398, 43} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {65280, 65280, 65280} nobackground noborder UNIVERSAL CONVOLUTION
-ioText {23, 91} {472, 141} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {23, 468} {474, 209} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {23, 237} {474, 223} label 0.000000 0.00100 "" left "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {39, 134} {346, 25} edit 0.000000 0.00100 "_Browse1"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
-ioButton {389, 133} {100, 30} value 1.000000 "_Browse1" "Open File 1" "/" 
-ioText {150, 96} {192, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Soundfile 1 for Playback
-ioText {55, 162} {63, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder speed
-ioText {172, 199} {80, 25} editnum 0.000000 0.001000 "skip" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.000000
-ioText {166, 163} {85, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder skiptime
-ioText {295, 165} {85, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder loop
-ioMenu {312, 199} {56, 22} 1 303 "no,yes" loop
-ioText {49, 197} {80, 25} editnum 1.000000 0.001000 "speed" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
-ioText {39, 280} {348, 25} edit 0.000000 0.00100 "_Browse2"  "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder 
-ioButton {393, 279} {100, 30} value 1.000000 "_Browse2" "Open File 2" "/" 
-ioText {147, 242} {192, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Soundfile 2 for Convolution
-ioText {25, 331} {280, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Selection in Soundfile 2 for Convolution
-ioText {78, 372} {63, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder start
-ioText {250, 370} {63, 27} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder length
-ioText {344, 333} {105, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Partitionsize
-ioMenu {357, 370} {84, 24} 2 303 "256,512,1024,2048,4096" partsiz
-ioSlider {34, 397} {156, 29} 0.000000 1.000000 0.205128 startabs
-ioSlider {204, 396} {156, 29} 0.000000 1.000000 0.083333 irlen
-ioText {84, 430} {62, 34} display 1.162700 0.00100 "start" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.1627
-ioText {229, 429} {55, 28} display 0.083300 0.00100 "irlen" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.0833
-ioText {284, 429} {212, 29} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0 = take the whole file length
-ioSlider {113, 521} {282, 29} 0.000000 1.000000 0.748227 wdmix
-ioText {191, 483} {130, 30} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Wet-Dry Mix
-ioText {73, 521} {34, 27} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Dry
-ioText {402, 522} {34, 27} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Wet
-ioText {308, 570} {130, 28} label 0.000000 0.00100 "" center "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Output Gain
-ioSlider {102, 566} {201, 34} 0.100000 2.000000 0.544279 gain
-ioText {36, 566} {62, 34} display 0.553700 0.00100 "gain" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.5537
-ioText {325, 481} {62, 34} display 0.755300 0.00100 "wdmix" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.7553
-ioMeter {124, 614} {250, 19} {0, 59904, 0} "outL" 0.109080 "out1_post" 0.578947 fill 1 0 mouse
-ioMeter {371, 614} {21, 19} {50176, 3584, 3072} "outLover" 0.000000 "outLover" 0.000000 fill 1 0 mouse
-ioMeter {124, 641} {250, 19} {0, 59904, 0} "outR" 0.109080 "out2_post" 1.000000 fill 1 0 mouse
-ioMeter {371, 641} {21, 19} {50176, 3584, 3072} "outRover" 0.000000 "outRover" 0.000000 fill 1 0 mouse
-ioText {23, 49} {472, 47} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder You can convolve here any file with any other (or usually a selection of it). 
-</MacGUI>
