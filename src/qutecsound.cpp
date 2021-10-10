@@ -5365,7 +5365,7 @@ void CsoundQt::readSettings()
     m_options->autoPlay = settings.value("autoplay", false).toBool();
     m_options->autoJoin = settings.value("autoJoin", true).toBool();
     m_options->menuDepth = settings.value("menuDepth", 3).toInt();
-    m_options->saveChanges = settings.value("savechanges", false).toBool();
+    m_options->saveChanges = settings.value("savechanges", true).toBool();
     m_options->askIfTemporary = settings.value("askIfTemporary", false).toBool();
     m_options->rememberFile = settings.value("rememberfile", true).toBool();
     m_options->saveWidgets = settings.value("savewidgets", true).toBool();

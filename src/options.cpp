@@ -51,7 +51,7 @@ Options::Options(ConfigLists *configlists) :
     autoPlay = true;
     autoJoin = false;
 	midiCcToCurrentPageOnly = false;
-    saveChanges = false;
+    saveChanges = true;
     askIfTemporary = false;
     rememberFile = true;
     saveWidgets = true;
