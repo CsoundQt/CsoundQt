@@ -1966,7 +1966,7 @@ void CsoundQt::play(bool realtime, int index)
     QString runFileName1, runFileName2;
     QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
     runFileName1 = fileName;
-    if(fileName.startsWith(":/examples/", Qt::CaseInsensitive) || !m_options->saveChanges) {
+    if(fileName.startsWith(":/", Qt::CaseInsensitive) || !m_options->saveChanges) {
         QDEBUG << "***** Using temporary file for filename" << fileName;
         QString tmpFileName = QDir::tempPath();
         if (!tmpFileName.endsWith("/") && !tmpFileName.endsWith("\\")) {
