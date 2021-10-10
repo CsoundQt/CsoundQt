@@ -256,6 +256,7 @@ private slots:
 	void showManualOnline();
 	void resetPreferences();
 	void reportBug();
+    void reportCsoundBug();
 	void requestFeature();
 	void chat();
 	void openShortcutDialog();
@@ -499,6 +500,7 @@ private:
 	//    QAction *aboutQtAct;
 	QAction *resetPreferencesAct;
 	QAction *reportBugAct;
+    QAction *reportCsoundBugAct;
 	QAction *requestFeatureAct;
 	QAction *chatAct;
 	QAction *lineNumbersAct;

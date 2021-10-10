@@ -1043,7 +1043,7 @@ void CsoundQt::duplicate()
 void CsoundQt::testAudioSetup()
 {
     qDebug() << "CsoundQt::testAudioSetup";
-    loadFile(":/examples/Useful/AudioMidiTest.csd");
+    loadFile(":/AudioMidiTest.csd");
     widgetPanel->setVisible(true);
     widgetPanel->setFocus();
     play();
@@ -2856,6 +2856,17 @@ void CsoundQt::reportBug()
     }
 }
 
+void CsoundQt::reportCsoundBug()
+{
+    QUrl url("https://github.com/csound/csound/issues/new");
+    if (!m_options->browser.isEmpty()) {
+        execute(m_options->browser,"\"" + url.toString() + "\"");
+    }
+    else {
+        QDesktopServices::openUrl(url);
+    }
+}
+
 void CsoundQt::requestFeature()
 {
     QUrl url("https://github.com/CsoundQt/CsoundQt/issues/new");
@@ -4200,10 +4211,15 @@ void CsoundQt::createActions()
     resetPreferencesAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(resetPreferencesAct, SIGNAL(triggered()), this, SLOT(resetPreferences()));
 
-    reportBugAct = new QAction(tr("Report a Bug"), this);
-    reportBugAct->setStatusTip(tr("Report a bug in CsoundQt's Bug Tracker"));
+    reportBugAct = new QAction(tr("Report a CsoundQt Bug"), this);
+    reportBugAct->setStatusTip(tr("Report a CsoundQt bug that is clearly related to the front-end"));
     reportBugAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(reportBugAct, SIGNAL(triggered()), this, SLOT(reportBug()));
+
+    reportCsoundBugAct = new QAction(tr("Report a Csound Bug"), this);
+    reportCsoundBugAct->setStatusTip(tr("Report a bug that is caused by the core Csound -  when the same problem occurs also with \"Run in Terminal\""));
+    reportCsoundBugAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(reportCsoundBugAct, SIGNAL(triggered()), this, SLOT(reportCsoundBug()));
 
     requestFeatureAct = new QAction(tr("Request a Feature (please add label \'Enhancement\')"), this);
     requestFeatureAct->setStatusTip(tr("Request a feature in CsoundQt's Feature Tracker"));
@@ -4944,6 +4960,7 @@ void CsoundQt::createMenus()
     // helpMenu->addAction(chatAct);
     helpMenu->addSeparator();
     helpMenu->addAction(reportBugAct);
+    helpMenu->addAction(reportCsoundBugAct);
     helpMenu->addAction(aboutAct);
     // helpMenu->addAction(donateAct);
     // uhelpMenu->addAction(aboutQtAct);
@@ -5238,7 +5255,7 @@ void CsoundQt::createToolBars()
     configureToolBar->addAction(showPythonConsoleAct);
 #endif
     // configureToolBar->addAction(showScratchPadAct);
-    // configureToolBar->addAction(showUtilitiesAct);
+    configureToolBar->addAction(showUtilitiesAct);
     configureToolBar->setFloatable(false);
 
     Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
