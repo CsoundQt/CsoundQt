@@ -4442,7 +4442,7 @@ QString CsoundQt::getExamplePath(QString dir)
     }
 #endif
 #ifdef Q_OS_MAC
-    examplePath = qApp->applicationDirPath() + "/../Resources/" + dir;
+    examplePath = qApp->applicationDirPath() + "/../Resources/Examples/" + dir;
     qDebug() << examplePath;
 #endif
 #ifdef Q_OS_LINUX

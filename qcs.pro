@@ -238,10 +238,8 @@ macx {
         scripts.files = src/Scripts
         QMAKE_BUNDLE_DATA += scripts        
     }
-    examples.path = Contents/Resources
-    examples.files = "src/Examples/FLOSS Manual Examples"
-    examples.files += "src/Examples/McCurdy Collection"
-    examples.files += "src/Examples/Stria Synth"
+    examples.path = Contents/Resources/Examples
+    examples.files = "src/Examples/"
     QMAKE_BUNDLE_DATA += examples
 
     templates.path = Contents
