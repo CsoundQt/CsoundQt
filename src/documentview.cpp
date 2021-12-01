@@ -30,7 +30,7 @@
 #include "texteditor.h"
 
 
-
+static const QStringList tagWords = {"CsInstruments", "CsScore", "CsoundSynthesizer", "CsOptions"};
 
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	BaseView(parent,opcodeTree)
@@ -893,7 +893,8 @@ void DocumentView::textChanged()
 							syntaxMenu->setDefaultAction(a);
 						}
 					}
-					if (word.size() > 2) {
+                    if (word.size() > 2) {
+                        // qDebug() << "word: " << word << "\n";
 						// check for autcompletion from all words in text editor
 						QString wholeText = editor->toPlainText();
                         wholeText.replace(QRegularExpression("[" + QRegularExpression::escape("+-*/=#&,\"\'|[]()<>.;0123456789:") + "]"), " ");
@@ -907,7 +908,13 @@ void DocumentView::textChanged()
 								menuWords << theWord;
 							}
 						}
-						foreach(QString theWord, menuWords) {
+                        foreach(QString tag, tagWords) {
+                            if(tag.toLower().startsWith(wordlow) && word != tag) {
+                                menuWords << tag;
+                            }
+
+                        }
+                        foreach(QString theWord, menuWords) {
 							QAction *a = syntaxMenu->addAction(theWord,
 															   this, SLOT(insertAutoCompleteText()));
 							a->setData(theWord);

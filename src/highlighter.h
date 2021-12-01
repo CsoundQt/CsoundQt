@@ -97,7 +97,7 @@ protected:
 	void highlightPythonBlock(const QString &text);
 	void highlightXmlBlock(const QString &text);
 	void highlightHtmlBlock(const QString &text);
-    void highlightScore(const QString &text);
+    void highlightScore(const QString &text, int start, int end);
 	int findOpcode(QString opcodeName, int start = 0, int end = -1);
 
 private:
@@ -129,6 +129,7 @@ private:
     QTextCharFormat ioFormat;
     QTextCharFormat deprecatedFormat;
     QTextCharFormat operatorFormat;
+    QTextCharFormat scoreLetterFormat;
 
 
 	QTextCharFormat labelFormat;

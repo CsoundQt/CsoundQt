@@ -124,6 +124,7 @@ void Highlighter::setTheme(const QString &theme) {
         udoFormat = opcodeFormat;
         operatorFormat = defaultFormat;
         importantCommentFormat = singleLineCommentFormat;
+        scoreLetterFormat = opcodeFormat;
     }
     else if(theme == "light") {
         defaultFormat.setForeground(QColor("#030303"));
@@ -197,6 +198,9 @@ void Highlighter::setTheme(const QString &theme) {
         csdtagFormat.setForeground(instFormat.foreground());
 
         operatorFormat.setForeground(instFormat.foreground().color());
+
+        scoreLetterFormat.setForeground(opcodeFormat.foreground());
+        scoreLetterFormat.setFontWeight(QFont::Bold);
 
     }
     else if(theme == "dark") {
@@ -275,6 +279,10 @@ void Highlighter::setTheme(const QString &theme) {
         // ioFormat.setFontItalic(true);
         csdtagFormat.setForeground(instFormat.foreground());
         operatorFormat.setForeground(nameFormat.foreground().color());
+
+        scoreLetterFormat.setForeground(opcodeFormat.foreground());
+        scoreLetterFormat.setFontWeight(QFont::Bold);
+
 
     }
     else {
@@ -501,6 +509,9 @@ void Highlighter::setColorVariables(bool color)
 
 void Highlighter::highlightBlock(const QString &text)
 {
+    if(m_theme == "none")
+        return;
+
     // for parenthesis
     // auto *data = static_cast<TextBlockData*>(currentBlockUserData());
     auto data = new TextBlockData;
@@ -568,8 +579,38 @@ void Highlighter::highlightBlock(const QString &text)
 }
 
 
-void Highlighter::highlightScore(const QString &text) {
-    return;
+void Highlighter::highlightScore(const QString &text, int start, int end) {
+    // things to highlight:
+    // 1) score command (i, f, e, etc)
+    // 2) strings
+    // 3) macros: $foo
+    // qDebug() << "highlighting score text: " << text << "\n";
+    QRegularExpression rx;
+    rx.setPattern("^\\s*(i|f|e|d|s)");
+    QRegularExpressionMatch match;
+    match = rx.match(text, start);
+    if(match.hasMatch()) {
+
+        setFormat(match.capturedStart(1), 1, scoreLetterFormat);
+    }
+    rx.setPattern("\"[^\"]*\"");
+    int pos = start;
+    while(pos < end) {
+        match = rx.match(text, pos);
+        if(!match.hasMatch())
+            break;
+        setFormat(match.capturedStart(), match.capturedLength(), quotationFormat);
+        pos = match.capturedEnd() + 1;
+    }
+    pos = start;
+    rx.setPattern("\\$[a-zA-Z_]\\w+");
+    while(pos < end) {
+        match = rx.match(text, pos);
+        if(!match.hasMatch())
+            break;
+        setFormat(match.capturedStart(), match.capturedLength(), macroDefineFormat);
+        pos = match.capturedEnd() + 1;
+    }
 }
 
 
@@ -597,38 +638,12 @@ void Highlighter::highlightCsoundBlock(const QString &text)
         } else {
             setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
         }
-        /*
-        if (QRegExp("^\\s*;;").indexIn(text) >= 0) {
-            setFormat(commentIndex, text.size() - commentIndex, importantCommentFormat);
-            return;
-        } else {
-            setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
-        }
-        */
     } else {
         commentIndex = text.size() + 1;
     }
 
-    /*
-    if (commentIndex >= 0) {
-        // if(QRegExp("^\\s*;;").indexIn(text) != -1) {
-        if (text.length() > commentIndex+1) {
-            if(text[commentIndex+1] == ';' && text.trimmed()[0] == ';') {
-                // ;; pattern, which is picked up by inspector
-                setFormat(commentIndex, text.size() - commentIndex, importantCommentFormat);
-            } else {
-                setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
-            }
-            return;
-        }
-	}
-	else {
-		commentIndex = text.size() + 1;
-    }
-    */
-
     QRegExp regexp;
-    int index = 0, indexpre = 0;
+    int index = 0;
     int length;
 
     auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
@@ -636,16 +651,12 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 
     // string
     rx.setPattern("\"[^\"]*\"");
-
-    regexp = QRegExp("\"[^\"]*\"");
-
     while (index < commentIndex) {
         rxmatch = rx.match(text, index);
         if(!rxmatch.hasMatch())
             break;
         setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), quotationFormat);
         index = rxmatch.capturedEnd()+1;
-        qDebug() << "index" << index << "\n";
     }
 
     /*
@@ -674,7 +685,14 @@ void Highlighter::highlightCsoundBlock(const QString &text)
     }
 
     if(blockdata->section == ScoreSection) {
-        // highlightScore(text);
+        highlightScore(text, 0, commentIndex);
+        return;
+    } else if(blockdata->section == OptionsSection) {
+        while ((index = csoundOptionsRx.indexIn(text, index)) != -1 && index < commentIndex) {
+            length = csoundOptionsRx.matchedLength();
+            setFormat(index, length, csoundOptionFormat);
+            index += length;
+        }
         return;
     }
 
@@ -700,25 +718,6 @@ void Highlighter::highlightCsoundBlock(const QString &text)
         return;
         // index += length;
     }
-
-    index = indexpre = 0;
-    while ((index = csoundOptionsRx.indexIn(text, index)) != -1 && index < commentIndex) {
-        length = csoundOptionsRx.matchedLength();
-        setFormat(index, length, csoundOptionFormat);
-        index += length;
-    }
-    // exit early if we found options in this line, since there is nothing else to highlight
-    if(index > indexpre) return;
-
-    /*
-    // not needed anymore, included in csoundOptionsRx
-    index = 0;
-    while ((index = csoundOptionsRx2.indexIn(text, index)) != -1 && index < commentIndex) {
-        length = csoundOptionsRx2.matchedLength();
-        setFormat(index, length, csoundOptionFormat);
-        index += length;
-    }
-    */
 
     regexp = QRegExp(R"(&&|==|\|\||<|>|<=|>=|!=|\\)");
     index = 0;
