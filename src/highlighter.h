@@ -31,6 +31,8 @@
 
 #include <QTextDocument>
 
+enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection };
+
 struct ParenthesisInfo
 {
 	char character;
@@ -44,9 +46,11 @@ public:
 
 	QVector<ParenthesisInfo *> parentheses();
 	void insert(ParenthesisInfo *info);
+    CsdSection section;
 
 private:
 	QVector<ParenthesisInfo *> m_parentheses;
+
 };
 
 class Highlighter : public QSyntaxHighlighter
@@ -93,6 +97,7 @@ protected:
 	void highlightPythonBlock(const QString &text);
 	void highlightXmlBlock(const QString &text);
 	void highlightHtmlBlock(const QString &text);
+    void highlightScore(const QString &text);
 	int findOpcode(QString opcodeName, int start = 0, int end = -1);
 
 private:
@@ -108,7 +113,7 @@ private:
 	QRegExp commentStartExpression;
 	QRegExp commentEndExpression;
     QRegExp functionRegex;
-	//    QRegExp b64encStartExpression;
+    //    QRegExp b64encStartExpression;
 	//    QRegExp b64encEndExpression;
 
 

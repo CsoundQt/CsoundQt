@@ -23,10 +23,13 @@
 #include "highlighter.h"
 
 #include <QDebug>
+#include <QRegularExpression>
+
 
 TextBlockData::TextBlockData()
 {
 	// Nothing to do
+    section = UnknownSection;
 }
 
 QVector<ParenthesisInfo *> TextBlockData::parentheses()
@@ -65,7 +68,6 @@ void Highlighter::setTheme(const QString &theme) {
         opcodeFormat = defaultFormat;
         singleLineCommentFormat  = defaultFormat;
         */
-
 
     }
     else if(theme == "classic") {
@@ -403,11 +405,17 @@ Highlighter::Highlighter(QTextDocument *parent)
                   << "--limiter" << "--udp-echo" << "--opcode-dir="
                   ;
 
+    csoundOptionsRx = QRegExp("-(-(env|nodisplays|nosound|control-rate|messagelevel="
+                              "|dither|sched|omacro:|smacro:|verbose|sample-accurate|"
+                              "realtime|nchnls|nchnls_i|sinesize=|daemon|port=|use-system-sr|"
+                              "ksmps|midi-key-cps=|midi-velocity=)|"
+                              "\\+(rtaudio=|rtmidi=|jack_client=))");
+    /*
     csoundOptionsRx = QRegExp("--(env|nodisplays|nosound|control-rate|messagelevel=|"
                               "dither|sched|omacro:|smacro:|verbose|sample-accurate|"
                               "realtime|nchnls|nchnls_i|sinesize=|daemon|port=|"
                               "use-system-sr|ksmps|midi-key-cps=|midi-velocity=)");
-
+    */
     csoundOptionsRx2 = QRegExp("-+(rtaudio=|rtmidi=|jack_client=)");
 
     functionRegex = QRegExp("\\b\\w+(\\:a|\\:k|\\:i)?(?=\\()");
@@ -493,6 +501,46 @@ void Highlighter::setColorVariables(bool color)
 
 void Highlighter::highlightBlock(const QString &text)
 {
+    // for parenthesis
+    // auto *data = static_cast<TextBlockData*>(currentBlockUserData());
+    auto data = new TextBlockData;
+
+    int leftPos = text.indexOf('(');
+    while (leftPos != -1) {
+        ParenthesisInfo *info = new ParenthesisInfo;
+        info->character = '(';
+        info->position = leftPos;
+
+        data->insert(info);
+        leftPos = text.indexOf('(', leftPos + 1);
+    }
+
+    int rightPos = text.indexOf(')');
+    while (rightPos != -1) {
+        ParenthesisInfo *info = new ParenthesisInfo;
+        info->character = ')';
+        info->position = rightPos;
+
+        data->insert(info);
+
+        rightPos = text.indexOf(')', rightPos +1);
+    }
+    auto *olddata = static_cast<TextBlockData*>(currentBlockUserData());
+    if(olddata != nullptr) {
+        data->section = olddata->section;
+    } else if (m_theme != "none") {
+        // find previous valid block
+        auto block = currentBlock().previous();
+        while (block.isValid()) {
+            auto userData = static_cast<TextBlockData*>(block.userData());
+            if(userData != nullptr) {
+                data->section = userData->section;
+                break;
+            }
+        }
+    }
+    setCurrentBlockUserData(data);
+
 	switch (m_mode) {
 	case 0:  // Csound mode
 		highlightCsoundBlock(text);
@@ -516,37 +564,20 @@ void Highlighter::highlightBlock(const QString &text)
 		highlightHtmlBlock(text);
 		break;
 	}
-	// for parenthesis
-	TextBlockData *data = new TextBlockData;
 
-	int leftPos = text.indexOf('(');
-	while (leftPos != -1) {
-		ParenthesisInfo *info = new ParenthesisInfo;
-		info->character = '(';
-		info->position = leftPos;
+}
 
-		data->insert(info);
-		leftPos = text.indexOf('(', leftPos + 1);
-	}
 
-	int rightPos = text.indexOf(')');
-	while (rightPos != -1) {
-		ParenthesisInfo *info = new ParenthesisInfo;
-		info->character = ')';
-		info->position = rightPos;
-
-		data->insert(info);
-
-		rightPos = text.indexOf(')', rightPos +1);
-	}
-
-	setCurrentBlockUserData(data);
+void Highlighter::highlightScore(const QString &text) {
+    return;
 }
 
 
 void Highlighter::highlightCsoundBlock(const QString &text)
 {
     // TODO: rewrite this using QRegularExpression
+    QRegularExpression rx;
+    QRegularExpressionMatch rxmatch;
 
 	// text is processed one line at a time
     if(m_theme == "none")
@@ -557,6 +588,28 @@ void Highlighter::highlightCsoundBlock(const QString &text)
         commentIndex = text.indexOf("//");
 	}
 
+    if(commentIndex >= 0) {
+        rx.setPattern("^\\s*;;");
+        rxmatch = rx.match(text);
+        if(rxmatch.hasMatch()) {
+            setFormat(commentIndex, text.size() - commentIndex, importantCommentFormat);
+            return;
+        } else {
+            setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
+        }
+        /*
+        if (QRegExp("^\\s*;;").indexIn(text) >= 0) {
+            setFormat(commentIndex, text.size() - commentIndex, importantCommentFormat);
+            return;
+        } else {
+            setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
+        }
+        */
+    } else {
+        commentIndex = text.size() + 1;
+    }
+
+    /*
     if (commentIndex >= 0) {
         // if(QRegExp("^\\s*;;").indexIn(text) != -1) {
         if (text.length() > commentIndex+1) {
@@ -566,24 +619,63 @@ void Highlighter::highlightCsoundBlock(const QString &text)
             } else {
                 setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
             }
+            return;
         }
 	}
 	else {
 		commentIndex = text.size() + 1;
     }
+    */
 
     QRegExp regexp;
-    int index = 0;
+    int index = 0, indexpre = 0;
     int length;
 
+    auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
+
+
     // string
+    rx.setPattern("\"[^\"]*\"");
+
     regexp = QRegExp("\"[^\"]*\"");
 
+    while (index < commentIndex) {
+        rxmatch = rx.match(text, index);
+        if(!rxmatch.hasMatch())
+            break;
+        setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), quotationFormat);
+        index = rxmatch.capturedEnd()+1;
+        qDebug() << "index" << index << "\n";
+    }
+
+    /*
     index = text.indexOf(regexp);
     while (index >= 0 && index < commentIndex) {
         length = regexp.matchedLength();
         setFormat(index, length, quotationFormat);
         index = text.indexOf(regexp, index + length);
+    }
+    */
+
+    QRegularExpression tagRegex("<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|)>");
+    QRegularExpressionMatch match = tagRegex.match(text);
+    if(match.hasMatch()) {
+        if(match.captured(1) == "CsInstruments") {
+            blockdata->section = OrchestraSection;
+        } else if(match.captured(1) == "CsScore") {
+            blockdata->section = ScoreSection;
+        } else if(match.captured(1) == "CsOptions") {
+            blockdata->section = OptionsSection;
+        } else {
+            blockdata->section = UnknownSection;
+        }
+        setFormat(match.capturedStart(), match.capturedLength(), csdtagFormat);
+        return;
+    }
+
+    if(blockdata->section == ScoreSection) {
+        // highlightScore(text);
+        return;
     }
 
     // define
@@ -592,32 +684,41 @@ void Highlighter::highlightCsoundBlock(const QString &text)
     if(index >= 0 && index < commentIndex) {
         int length = regexp.matchedLength();
         setFormat(index, length, macroDefineFormat);
-        index = text.indexOf(regexp,index+length);
+        return;
+        // index = text.indexOf(regexp,index+length);
     }
 
-    regexp = QRegExp("\\b(instr|opcode)\\s+(\\w+)\\b");
-    index = 0;
-    while ((index = regexp.indexIn(text, index)) != -1) {
+    //regexp = QRegExp("\\b(instr|opcode)\\s+(\\w+)\\b");
+    regexp = QRegExp("^\\s*\\b(instr|opcode)\\s+(\\w+)\\b");
+
+    // while ((index = regexp.indexIn(text, index)) != -1) {
+    if((regexp.indexIn(text, 0)) >= 0) {
         auto group = regexp.cap(2);
         length = regexp.matchedLength();
+        setFormat(regexp.pos(1), regexp.cap(1).length(), instFormat);
         setFormat(regexp.pos(2), group.length(), nameFormat);
-        index += length;
+        return;
+        // index += length;
     }
 
-    index = 0;
+    index = indexpre = 0;
     while ((index = csoundOptionsRx.indexIn(text, index)) != -1 && index < commentIndex) {
         length = csoundOptionsRx.matchedLength();
         setFormat(index, length, csoundOptionFormat);
         index += length;
     }
+    // exit early if we found options in this line, since there is nothing else to highlight
+    if(index > indexpre) return;
 
+    /*
+    // not needed anymore, included in csoundOptionsRx
     index = 0;
     while ((index = csoundOptionsRx2.indexIn(text, index)) != -1 && index < commentIndex) {
         length = csoundOptionsRx2.matchedLength();
         setFormat(index, length, csoundOptionFormat);
         index += length;
     }
-
+    */
 
     regexp = QRegExp(R"(&&|==|\|\||<|>|<=|>=|!=|\\)");
     index = 0;
@@ -626,7 +727,6 @@ void Highlighter::highlightCsoundBlock(const QString &text)
         setFormat(index, length, operatorFormat);
         index += length;
     }
-
 
     /*
     index = 0;
@@ -749,15 +849,15 @@ void Highlighter::highlightCsoundBlock(const QString &text)
         }
     }
 
-	setCurrentBlockState(0);
+    setCurrentBlockState(0);
 
 	int startIndex = 0;
-	if (previousBlockState() != 1) {
+    if (previousBlockState() != 1) {
 		startIndex = text.indexOf(commentStartExpression);
 	}
 
-    // while (startIndex >= 0 && startIndex < commentIndex) {
-    while (startIndex >= 0) {
+    while (startIndex >= 0 && startIndex < commentIndex) {
+    // while (startIndex >= 0) {
 		int endIndex = text.indexOf(commentEndExpression, startIndex);
 		if (format(startIndex) == quotationFormat) {
 			startIndex = text.indexOf(commentStartExpression,
@@ -766,7 +866,7 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 		}
 		int commentLength;
 		if (endIndex == -1) {
-			setCurrentBlockState(1);
+            setCurrentBlockState(1);
 			commentLength = text.length() - startIndex;
 		} else {
 			commentLength = endIndex - startIndex
@@ -889,9 +989,9 @@ void Highlighter::highlightHtmlBlock(const QString &text)
 		commentIndex = text.size() + 1;
 	}
 
-	// multiline
-	setCurrentBlockState(0);
-	QRegExp htmlCommentStartExpression = QRegExp("<!--");
+    // multiline
+    setCurrentBlockState(0);
+    QRegExp htmlCommentStartExpression = QRegExp("<!--");
 	QRegExp htmlCommentEndExpression = QRegExp("-->");
 
 
@@ -909,7 +1009,7 @@ void Highlighter::highlightHtmlBlock(const QString &text)
 		}
 		int commentLength;
 		if (endIndex == -1) {
-			setCurrentBlockState(1);
+            setCurrentBlockState(1);
 			commentLength = text.length() - startIndex;
 		} else {
 			commentLength = endIndex - startIndex
