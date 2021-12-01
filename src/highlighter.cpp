@@ -318,7 +318,7 @@ void Highlighter::setTheme(const QString &theme) {
     jsKeywordFormat = keywordFormat;
 
     m_theme = theme;
-    emit this->rehighlight();
+    // emit this->rehighlight();
 }
 
 QTextCharFormat Highlighter::getFormat(QString tag) {
@@ -521,7 +521,6 @@ void Highlighter::highlightBlock(const QString &text)
     auto data = static_cast<TextBlockData*>(currentBlockUserData());
     if(data == nullptr) {
         data = new TextBlockData;
-        setCurrentBlockUserData(data);
     }
 
     int leftPos = text.indexOf('(');
@@ -544,6 +543,8 @@ void Highlighter::highlightBlock(const QString &text)
 
         rightPos = text.indexOf(')', rightPos +1);
     }
+    setCurrentBlockUserData(data);
+
     if (m_theme != "none") {
         // find previous valid block
         auto block = currentBlock().previous();

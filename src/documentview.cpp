@@ -160,6 +160,9 @@ void DocumentView::print(QPrinter *printer)
 
 void DocumentView::updateContext()
 {
+    // this code is too expensive to be run at EACH keystroke. We need to think of something better
+    // Until then I am disabling it (EM, Nov. 21)
+    return;
 	QStringList contextStart;
 	contextStart << "<CsInstruments>" << "<CsScore" << "<CsOptions>";
 	QTextCursor cursor = m_mainEditor->textCursor();
@@ -192,7 +195,7 @@ void DocumentView::updateContext()
 			linecursor.movePosition(QTextCursor::EndOfLine);
 		}
 		QString orc = cursor.selection().toPlainText();
-		updateOrcContext(orc);
+        updateOrcContext(orc);
 	}
 }
 
