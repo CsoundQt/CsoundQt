@@ -28,6 +28,7 @@
 #include <QHash>
 #include <QTextCharFormat>
 #include <QStringList>
+#include <QRegularExpression>
 
 #include <QTextDocument>
 
@@ -67,6 +68,9 @@ public:
 	void setColorVariables(bool color);
 	void setMode(int mode);
     void setTheme(const QString &theme);
+    void enableScoreSyntaxHighlighting(bool status) {
+        m_scoreSyntaxHighlighting = status;
+    }
     QTextCharFormat getFormat(QString tag);
 
 	// for html
@@ -113,6 +117,9 @@ private:
 	QRegExp commentStartExpression;
 	QRegExp commentEndExpression;
     QRegExp functionRegex;
+
+    QRegularExpression rxScoreLetter;
+    QRegularExpression rxQuotation;
     //    QRegExp b64encStartExpression;
 	//    QRegExp b64encEndExpression;
 
@@ -155,6 +162,8 @@ private:
 	bool colorVariables;
 	// TODO this is duplicated in documentview class. Should it be unified?
 	int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
+
+    bool m_scoreSyntaxHighlighting;
 
     QString m_theme;
 

@@ -63,6 +63,8 @@ public:
 	bool autoParameterMode;
     bool tabShortcutActive;
 
+    bool highlightScore;
+
 	bool showWidgetsOnRun;
 	bool showTooltips;
     int graphUpdateRate;

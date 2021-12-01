@@ -157,6 +157,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
 	fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
 	lineNumbersCheckBox->setChecked(m_options->showLineNumberArea);
+
 	lineEndingComboBox->setCurrentIndex(m_options->lineEnding);
 	consoleFontComboBox->setCurrentIndex(consoleFontComboBox->findText(m_options->consoleFont) );
 	consoleFontSizeComboBox->setCurrentIndex(consoleFontSizeComboBox->findText(QString::number((int) m_options->consoleFontPointSize)));
@@ -207,6 +208,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	fontScalingSpinBox->setValue(m_options->fontScaling);
 	fontOffsetSpinBox->setValue(m_options->fontOffset);
     tabShortcutActiveCheckBox->setChecked(m_options->tabShortcutActive);
+    highlightScoreCheckBox->setChecked(m_options->highlightScore);
 
 	if (m_options->useAPI)
 		ApiRadioButton->setChecked(true);
@@ -624,6 +626,7 @@ void ConfigDialog::accept()
 
 	m_options->csdTemplate = templateTextEdit->toPlainText();
     m_options->checkSyntaxBeforeRun = checkSyntaxBeforeRunCheckBox->isChecked();
+    m_options->highlightScore = highlightScoreCheckBox->isChecked();
 
 	//  emit(changeFont());
 	QDialog::accept();

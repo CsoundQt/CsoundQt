@@ -119,6 +119,9 @@ public:
 
         }
     }
+    void enableScoreSyntaxHighlighting(bool state) {
+        m_highlighter.enableScoreSyntaxHighlighting(state);
+    }
 
     QTextCharFormat getDefaultFormat() {
         return m_highlighter.getFormat("default");

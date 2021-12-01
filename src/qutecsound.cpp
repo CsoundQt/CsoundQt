@@ -3121,6 +3121,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setConsoleBufferSize(m_options->consoleBufferSize);
     p->showLineNumbers(m_options->showLineNumberArea);
     p->setHighlightingTheme(m_options->highlightingTheme);
+    p->enableScoreSyntaxHighlighting(m_options->highlightScore);
 
     int flags = m_options->noBuffer ? QCS_NO_COPY_BUFFER : 0;
     flags |= m_options->noPython ? QCS_NO_PYTHON_CALLBACK : 0;
@@ -5409,6 +5410,9 @@ void CsoundQt::readSettings()
     lastTabIndex = settings.value("lasttabindex", "").toInt();
     m_options->debugPort = settings.value("debugPort",34711).toInt();
     m_options->tabShortcutActive = settings.value("tabShortcutActive", true).toBool();
+    m_options->highlightScore = settings.value("highlightScore", false).toBool();
+
+
     settings.endGroup();
     settings.beginGroup("Run");
     m_options->useAPI = settings.value("useAPI", true).toBool();
@@ -5670,6 +5674,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("lasttabindex", lastIndex);
         settings.setValue("debugPort", m_options->debugPort);
         settings.setValue("tabShortcutActive", m_options->tabShortcutActive);
+        settings.setValue("highlightScore", m_options->highlightScore);
     }
     else {
         settings.remove("");

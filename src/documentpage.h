@@ -67,6 +67,7 @@ public:
 	void showParametersInEditor();
     void setHighlightingTheme(QString theme);
     void setParsedUDOs(QStringList udos);
+    void enableScoreSyntaxHighlighting(bool status);
     virtual QString getFullText();
 	QString getDotText();
 	QString getMacWidgetsText();

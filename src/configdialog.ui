@@ -88,10 +88,10 @@
      <widget class="QWidget" name="scrollAreaWidgetContents">
       <property name="geometry">
        <rect>
-        <x>-195</x>
+        <x>0</x>
         <y>0</y>
-        <width>883</width>
-        <height>876</height>
+        <width>711</width>
+        <height>687</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -116,7 +116,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>5</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -1986,6 +1986,16 @@
                  <widget class="QCheckBox" name="lineNumbersCheckBox">
                   <property name="text">
                    <string>Show line numbers</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="highlightScoreCheckBox">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apply syntax highlighting to the score. In very long scores,  deactivating syntax highlighting can reduce loading time significantly&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Score syntax highlighting</string>
                   </property>
                  </widget>
                 </item>

@@ -9,6 +9,7 @@ sr = 44100
 ksmps = 64
 nchnls = 4
 0dbfs = 1
+A4 = 442-
 
 chn_k "peak", 1   ; Channel to get peak information from graph
 
@@ -253,7 +254,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
+  <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -439,7 +440,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <description>Input Gain (dB)</description>
   <minimum>-80.00000000</minimum>
   <maximum>0.00000000</maximum>
-  <value>-26.69600000</value>
+  <value>-14.84800000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>

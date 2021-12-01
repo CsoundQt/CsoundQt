@@ -1706,6 +1706,10 @@ void DocumentPage::setHighlightingTheme(QString theme) {
 
 }
 
+void DocumentPage::enableScoreSyntaxHighlighting(bool status) {
+    m_view->enableScoreSyntaxHighlighting(status);
+}
+
 void DocumentPage::setParsedUDOs(QStringList udos) {
     m_view->setParsedUDOs(udos);
 }
