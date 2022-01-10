@@ -40,7 +40,7 @@ public:
 	~DockHelp();
 
 	bool hasFocus();
-	void loadFile(QString fileName);
+    void loadFile(QString fileName, QString anchor="");
 	bool externalBrowser;
 	QString docDir;
 

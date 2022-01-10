@@ -22,59 +22,56 @@
 
 #include "opentryparser.h"
 #include "types.h"
+#include "algorithm"
 
 #include <QFile>
 
+void OpEntryParser::parseOpcodesXml(QString opcodeFile) {
+    QDomDocument m_doc("opcodes");
+    QFile file(opcodeFile);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "OpEntryParser::OpEntryParser could not find opcode file:" << opcodeFile;
+        return;
+    }
+    if (!m_doc.setContent(&file)) {
+        qDebug() << "OpEntryParser::OpEntryParser set content";
+        file.close();
+        return;
+    }
+    file.close();
+    excludedOpcodes << "|" << "||" << "^" << "+" << "*" << "-" << "/";
+    //      << "instr" << "endin" << "opcode" << "endop"
+    //      << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs";
+    QDomElement docElem = m_doc.documentElement();
+    QList<Opcode> opcodesInCategoryList;
 
-OpEntryParser::OpEntryParser(QString opcodeFile)
-	: m_opcodeFile(opcodeFile)
-{
-    m_udosMap = nullptr;
-	QDomDocument m_doc("opcodes");
-	QFile file(m_opcodeFile);
-	if (!file.open(QIODevice::ReadOnly)) {
-		qDebug() << "OpEntryParser::OpEntryParser could not find opcode file:" << opcodeFile;
-		return;
-	}
-	if (!m_doc.setContent(&file)) {
-		qDebug() << "OpEntryParser::OpEntryParser set content";
-		file.close();
-		return;
-	}
-	file.close();
-	excludedOpcodes << "|" << "||" << "^" << "+" << "*" << "-" << "/";
-	//      << "instr" << "endin" << "opcode" << "endop"
-	//      << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs";
-	QDomElement docElem = m_doc.documentElement();
-	QList<Opcode> opcodesInCategoryList;
-
-	QDomElement cat = docElem.firstChildElement("category");
-	while(!cat.isNull()) {
-		QString catName = cat.attribute("name", "Miscellaneous");
-		opcodesInCategoryList.clear();
-		QDomElement opcode = cat.firstChildElement("opcode");
-		while(!opcode.isNull()) {
-			QDomElement desc = opcode.firstChildElement("desc");
-			QString description = desc.text();
-			QDomElement synop = opcode.firstChildElement("synopsis");
-			while(!synop.isNull()) {
-				Opcode op;
-				op.desc = description;
-				QDomElement s = synop.toElement();
-				QDomNode node = s.firstChild();
-				QDomElement elem = node.toElement();
-				if (elem.tagName()=="opcodename") {
-					op.opcodeName = elem.text().simplified();
+    QDomElement cat = docElem.firstChildElement("category");
+    while(!cat.isNull()) {
+        QString catName = cat.attribute("name", "Miscellaneous");
+        opcodesInCategoryList.clear();
+        QDomElement opcode = cat.firstChildElement("opcode");
+        while(!opcode.isNull()) {
+            QDomElement desc = opcode.firstChildElement("desc");
+            QString description = desc.text();
+            QDomElement synop = opcode.firstChildElement("synopsis");
+            while(!synop.isNull()) {
+                Opcode op;
+                op.desc = description;
+                QDomElement s = synop.toElement();
+                QDomNode node = s.firstChild();
+                QDomElement elem = node.toElement();
+                if (elem.tagName()=="opcodename") {
+                    op.opcodeName = elem.text().simplified();
                     op.inArgs = node.nextSibling().toText().data().simplified();
-				}
-				else {
-					op.outArgs = node.toText().data().simplified();
-					node = node.nextSibling();
-					op.opcodeName = node.toElement().text().simplified();
-					node = node.nextSibling();
-					if (!node.isNull())
-						op.inArgs = node.toText().data().simplified();
-				}
+                }
+                else {
+                    op.outArgs = node.toText().data().simplified();
+                    node = node.nextSibling();
+                    op.opcodeName = node.toElement().text().simplified();
+                    node = node.nextSibling();
+                    if (!node.isNull())
+                        op.inArgs = node.toText().data().simplified();
+                }
                 // check if several parenthesis ie description added to inArgs like "(MidiNoteNumber)  (init- or control-rate args only)"
                 // remove, if existing
                 if (op.inArgs.count("(")>1) {
@@ -87,22 +84,33 @@ OpEntryParser::OpEntryParser(QString opcodeFile)
                         op.inArgs = inArgs;
                     }
                 }
-				if (op.opcodeName != "" && excludedOpcodes.count(op.opcodeName) == 0
-						&& catName !="Utilities") {
-					addOpcode(op);
-					opcodesInCategoryList << op;
-				}
+                if (op.opcodeName != "" && excludedOpcodes.count(op.opcodeName) == 0
+                        && catName !="Utilities") {
+                    addOpcode(op);
+                    opcodesInCategoryList << op;
+
+                }
                 synop = synop.nextSiblingElement("synopsis");
-			}
-			opcode = opcode.nextSiblingElement("opcode");
-		}
-		QPair<QString, QList<Opcode> > newCategory(catName, opcodesInCategoryList);
-		opcodeListCategory.append(opcodesInCategoryList);
-		categoryList.append(catName);
-        // 	qDebug() << "Category: " << categoryList.last();
-		opcodeCategoryList.append(newCategory);
-		cat = cat.nextSiblingElement("category");
-	}
+            }
+            opcode = opcode.nextSiblingElement("opcode");
+        }
+        QPair<QString, QList<Opcode> > newCategory(catName, opcodesInCategoryList);
+        opcodeListCategory.append(opcodesInCategoryList);
+        categoryList.append(catName);
+        opcodeCategoryList.append(newCategory);
+        cat = cat.nextSiblingElement("category");
+    }
+    // print list
+    // qDebug() << "opcodeList:";
+    // foreach(auto &x, opcodeList)
+    //    qDebug() << x.opcodeName;
+}
+
+OpEntryParser::OpEntryParser(QString opcodeFile)
+	: m_opcodeFile(opcodeFile)
+{
+    m_udosMap = nullptr;
+    parseOpcodesXml(opcodeFile);
 	addExtraOpcodes();
 }
 
@@ -124,6 +132,12 @@ void OpEntryParser::addExtraOpcodes()
 
 }
 
+void OpEntryParser::sortOpcodes()
+{
+    std::sort(opcodeList.begin(), opcodeList.end(),
+              [](const Opcode &a, const Opcode &b) -> bool { return a.opcodeName < b.opcodeName; });
+}
+
 QStringList OpEntryParser::opcodeNameList()
 {
 	QStringList list;
@@ -136,11 +150,14 @@ QStringList OpEntryParser::opcodeNameList()
 
 void OpEntryParser::addOpcode(Opcode opcode)
 {
+    /*
 	int i = 0;
 	int size = opcodeList.size();
 	while (i<size && opcodeList[i].opcodeName < opcode.opcodeName)
 		i++;
 	opcodeList.insert(i, opcode);
+    */
+    opcodeList.append(opcode);
 }
 
 void OpEntryParser::addFlag(QString flag, QString desc) {

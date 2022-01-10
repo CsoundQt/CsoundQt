@@ -72,8 +72,7 @@ bool DockHelp::hasFocus()
            || ui->findLine->hasFocus();
 }
 
-void DockHelp::loadFile(QString fileName)
-{
+void DockHelp::loadFile(QString fileName, QString anchor) {
 	QFile file(fileName);
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		ui->text->setText(tr("Not Found! Make sure the documentation path is set in the Configuration Dialog."));
@@ -87,7 +86,14 @@ void DockHelp::loadFile(QString fileName)
 	in.setAutoDetectUnicode(true);
 	ui->text->setHtml(in.readAll());
 #else
-	ui->text->setSource(QUrl::fromLocalFile(fileName));
+    QUrl url = QUrl::fromLocalFile(fileName);
+    if(!anchor.isEmpty()) {
+        url.setUrl(url.toString() + "#" + anchor);
+    }
+    // QUrl url("file:///home/em/.local/share/risset/man/site/opcodes/atstop.html#atstop");
+    // url.setPath(url.toString() + "#abstract");
+    qDebug() << "url:" << url << url.toString();
+    ui->text->setSource(url);
 #endif
 
 }

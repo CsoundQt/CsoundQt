@@ -41,6 +41,7 @@
 #include "midilearndialog.h"
 #include "livecodeeditor.h"
 #include "csoundhtmlview.h"
+#include "risset.h"
 #include <thread>
 
 
@@ -307,7 +308,26 @@ CsoundQt::CsoundQt(QStringList fileNames)
     fillFileMenu();     // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
     fillScriptsMenu();  // Must be placed after readSettings to know directory
+    risset = new Risset(m_options->pythonExecutable);
+    /*
+#if defined(Q_OS_LINUX)
+    m_rissetDataPath.setPath(QDir::home().filePath(".local/share/risset"));
+#elif defined(Q_OS_MACOS)
+    m_rissetDataPath.setPath(QDir::home().filePath("Library/Application Support/risset"));
+#elif defined(Q_OS_WIN)
+    m_rissetDataPath.setPath(QDir(QProcessEnvironment::systemEnvironment().value("LOCALAPPDATA")).filePath("risset"));
+#endif
+    */
     m_opcodeTree = new OpEntryParser(":/opcodes.xml");
+    QString rissetOpcodesXml = risset->rissetOpcodesXml;
+    // QString rissetOpcodesXml = m_rissetDataPath.filePath("opcodes.xml");
+    if(QFile::exists(rissetOpcodesXml)) {
+        qDebug() << "Parsing risset's opcodes.xml:" << rissetOpcodesXml;
+        m_opcodeTree->parseOpcodesXml(rissetOpcodesXml);
+        m_opcodeTree->sortOpcodes();
+    } else {
+        qDebug() << "Risset's opcodes.xml not found: " << rissetOpcodesXml;
+    }
     m_opcodeTree->setUdos(m_inspector->getUdosMap());
     LiveCodeEditor *liveeditor = new LiveCodeEditor(m_scratchPad, m_opcodeTree);
     liveeditor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -2407,40 +2427,96 @@ void CsoundQt::setEditorFocus()
     this->raise();
 }
 
-void CsoundQt::setHelpEntry()
-{
-    QString text = documentPages[curPage]->wordUnderCursor();
-    if (text.startsWith('#')) { // For #define and friends
-        text.remove(0,1);
+
+/**
+ * @brief CsoundQt::helpForEntry open help for given entry
+ * @param entry - The entry to find help for (normally an opcode)
+ * @param external - If true, open in an external browser (default=false)
+ */
+void CsoundQt::helpForEntry(QString entry, bool external) {
+    if (entry.startsWith('#')) { // For #define and friends
+        entry.remove(0,1);
     }
     QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
-    if (text.startsWith("http://")) {
-        openExternalBrowser(QUrl(text));
+    bool found = false;
+    QString errmsg;
+
+    if (entry.startsWith("http://")) {
+        openExternalBrowser(QUrl(entry));
+        return;
     }
-    else if (!dir.isEmpty()) {
-        if (text == "0dbfs")
-            text = "Zerodbfs";
-        else if (text.contains("CsOptions"))
-            text = "CommandUnifile";
-        else if (text.startsWith("chn_"))
-            text = "chn";
-        helpPanel->docDir = dir;
-        QString fileName = dir + "/" + text + ".html";
-        if (QFile::exists(fileName)) {
-            helpPanel->loadFile(fileName);
+    if(risset->isInstalled && risset->opcodeNames.contains(entry)) {
+        // Check external help sources
+        QString fileName = risset->htmlManpage(entry);
+        if(!fileName.isEmpty()) {
+            // load manpage at anchor
+            if(external) {
+                openExternalBrowser(fileName);
+            } else {
+                helpPanel->loadFile(fileName, entry);
+            }
+            found = true;
         }
-        //    else {
-        //        helpPanel->loadFile(dir + "/index.html");
-        //    }
+        else {
+            auto reply = QMessageBox::question(this, "Risset",
+                                               "Risset documentation not found. Do you want to fetch it?",
+                                               QMessageBox::Yes|QMessageBox::No);
+            if(reply == QMessageBox::Yes) {
+                errmsg = risset->generateDocumentation();
+                if(!errmsg.isEmpty()) {
+                    QMessageBox::critical(this, tr("Error"), errmsg);
+                }
+                else {
+                    helpForEntry(entry, external);
+                }
+            }
+            return;
+        }
+    }
+    else if (dir.isEmpty()) {
+        errmsg = tr("HTML Documentation directory not set!\n"
+                    "Please go to Edit->Options->Environment and select directory\n");
+    }
+    else {
+        if (entry == "0dbfs")
+            entry = "Zerodbfs";
+        else if (entry.contains("CsOptions"))
+            entry = "CommandUnifile";
+        else if (entry.startsWith("chn_"))
+            entry = "chn";
+        helpPanel->docDir = dir;
+        QString fileName = dir + "/" + entry + ".html";
+        // Check if this an existing opcode
+        if (QFile::exists(fileName)) {
+            if(external) {
+                openExternalBrowser(fileName);
+            } else {
+                helpPanel->loadFile(fileName, entry);
+            }
+            found = true;
+        }
+        else {
+            // not a known opcode, don't do anything
+            errmsg = "";
+        }
+    }
+
+    if(found && !external) {
         helpPanel->show();
         helpPanel->raise();
         helpPanel->focusText();
     }
     else {
-        QMessageBox::critical(this, tr("Error"),
-                              tr("HTML Documentation directory not set!\n"
-                                 "Please go to Edit->Options->Environment and select directory\n"));
+        if(!errmsg.isEmpty()) {
+            QMessageBox::critical(this, tr("Error"), errmsg);
+        }
     }
+}
+
+void CsoundQt::setHelpEntry()
+{
+    QString text = documentPages[curPage]->wordUnderCursor();
+    return helpForEntry(text);
 }
 
 
@@ -2754,38 +2830,21 @@ void CsoundQt::openManualExample(QString fileName)
 
 void CsoundQt::openExternalBrowser(QUrl url)
 {
-    if (!url.isEmpty()) {
-        if (!m_options->browser.isEmpty()) {
-            if (QFile::exists(m_options->browser)) {
-                execute(m_options->browser,"\"" + url.toString() + "\"");
-            }
-            else {
-                QMessageBox::critical(this, tr("Error"),
-                                      tr("Could not open external browser:\n%1\nPlease check preferences.").arg(m_options->browser));
-            }
+    if(url.isEmpty()) {
+        QMessageBox::critical(this, tr("Error"), tr("No url provided"));
+        return;
+    }
+    if (!m_options->browser.isEmpty()) {
+        if (QFile::exists(m_options->browser)) {
+            execute(m_options->browser,"\"" + url.toString() + "\"");
         }
         else {
-            QDesktopServices::openUrl(url);
+            QMessageBox::critical(this, tr("Error"),
+                                  tr("Could not open external browser:\n%1\nPlease check preferences.").arg(m_options->browser));
         }
     }
     else {
-        QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
-        if (!dir.isEmpty()) {
-            url = QUrl ("file://" + dir + "/"
-                        + documentPages[curPage]->wordUnderCursor() + ".html");
-            if (!m_options->browser.isEmpty()) {
-                execute(m_options->browser, "\"" + url.toString() + "\"");
-            }
-            else {
-                QDesktopServices::openUrl(url);
-            }
-        }
-        else {
-            QMessageBox::critical(this,
-                                  tr("Error"),
-                                  tr("HTML Documentation directory not set!\n"
-                                     "Please go to Edit->Options->Environment and select directory\n"));
-        }
+        QDesktopServices::openUrl(url);
     }
 }
 
@@ -2801,7 +2860,6 @@ void CsoundQt::openPdfFile(QString name)
         }
 #endif
         QString arg = "\"" + name + "\"";
-        //    qDebug() << arg;
         execute(m_options->pdfviewer, arg);
     }
     else {
@@ -4121,7 +4179,9 @@ void CsoundQt::createActions()
     externalBrowserAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Opcode Entry in External Browser"), this);
     externalBrowserAct->setStatusTip(tr("Show Opcode Entry in external browser"));
     externalBrowserAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(externalBrowserAct, SIGNAL(triggered()), this, SLOT(openExternalBrowser()));
+
+    connect(externalBrowserAct, &QAction::triggered, this,
+            [this](){this->helpForEntry(documentPages[curPage]->wordUnderCursor(), true);});
 
     openDocumentationAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("CsoundQt Documentation (online)"), this);
     openDocumentationAct->setStatusTip(tr("open CsoundQt Documentation in browser"));

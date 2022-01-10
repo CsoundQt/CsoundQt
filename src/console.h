@@ -101,7 +101,7 @@ public:
 	{
 		setReadOnly(true);
 		setFontItalic(false);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
         document()->setDefaultFont(QFont("Courier New", 10));
 #else
         document()->setDefaultFont(QFont("Courier New", 7));

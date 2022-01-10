@@ -36,6 +36,8 @@ public:
 
 	~OpEntryParser();
 
+    void parseOpcodesXml(QString opcodeFile);
+    void sortOpcodes();
 	void addExtraOpcodes();
 	QStringList opcodeNameList();
 	QString getSyntax(QString opcodeName);

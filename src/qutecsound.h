@@ -35,6 +35,8 @@
 #include "types.h"
 #include "configlists.h"
 
+#include "risset.h"
+
 #ifdef MACOSX_PRE_SNOW
 // Needed to be able to grab menus back from FLTK
 #include <Carbon/Carbon.h>
@@ -142,6 +144,7 @@ public:
 	// Engine
 	CsoundEngine *getEngine(int index = -1);
 	OpEntryParser *m_opcodeTree;
+    Risset *risset;
 	void stkCheck();
 	// localServer
 	bool startServer();
@@ -230,6 +233,7 @@ private slots:
 	void openExternalPlayer();
 	void setEditorFocus();
 	void setHelpEntry();
+    void helpForEntry(QString text, bool external=false);
     void setFullScreen(bool full);
     void checkFullScreen();
     void setEditorFullScreen(bool full);
@@ -531,6 +535,7 @@ private:
 #endif
     QByteArray m_preFullScreenState;
     QString m_fullScreenComponent;
+    QDir m_rissetDataPath;
 };
 
 class FileOpenEater : public QObject
