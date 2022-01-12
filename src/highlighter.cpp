@@ -686,22 +686,18 @@ void Highlighter::highlightCsoundBlock(const QString &text)
     rx.setPattern("\"[^\"]*\"");
     while (index < commentIndex) {
         rxmatch = rx.match(text, index);
-        if(!rxmatch.hasMatch())
+        if(!rxmatch.hasMatch() or rxmatch.capturedStart() >= commentIndex)
             break;
         setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), quotationFormat);
         index = rxmatch.capturedEnd()+1;
     }
 
-
     // define
-    // regexp = QRegExp("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
     rx.setPattern("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
     rxmatch = rx.match(text);
-    // index = text.indexOf(regexp);
     if(rxmatch.hasMatch() && rxmatch.capturedStart() < commentIndex) {
         setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), macroDefineFormat);
         return;
-        // index = text.indexOf(regexp,index+length);
     }
 
     rx.setPattern("^\\s*\\b(instr|opcode)\\s+(\\w+)\\b");
@@ -717,7 +713,7 @@ void Highlighter::highlightCsoundBlock(const QString &text)
     index = 0;
     while(index < commentIndex) {
         rxmatch = rx.match(text, index);
-        if(!rxmatch.hasMatch())
+        if(!rxmatch.hasMatch() or rxmatch.capturedStart() >= commentIndex)
             break;
         length = rxmatch.capturedLength();
         setFormat(rxmatch.capturedStart(), length, operatorFormat);
@@ -853,8 +849,7 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 	}
 
     while (startIndex >= 0 && startIndex < commentIndex) {
-    // while (startIndex >= 0) {
-		int endIndex = text.indexOf(commentEndExpression, startIndex);
+        int endIndex = text.indexOf(commentEndExpression, startIndex);
 		if (format(startIndex) == quotationFormat) {
 			startIndex = text.indexOf(commentStartExpression,
 									  startIndex + 1);

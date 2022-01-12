@@ -15,6 +15,7 @@ public:
     QString generateDocumentation();
     bool downloadDocumentation();
     QString findHtmlDocumentation();
+    QString markdownManpage(QString opcodeName);
 
     bool isInstalled;
     QString rissetVersion;
@@ -22,6 +23,7 @@ public:
     QString rissetOpcodesXml;
     QDir rissetHtmlDocs;
     QDir rissetDocsRepoPath;
+    QDir rissetManpages;
     QStringList installedPlugins;
     QDir csoundqtDataRoot;
     QStringList opcodeNames;

@@ -116,7 +116,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -1755,6 +1755,11 @@
                 </item>
                 <item>
                  <property name="text">
+                  <string>breeze-dark</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
                   <string>boring</string>
                  </property>
                 </item>
@@ -1764,19 +1769,6 @@
                  </property>
                 </item>
                </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_20">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
               </item>
              </layout>
             </widget>

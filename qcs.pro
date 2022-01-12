@@ -320,3 +320,4 @@ message(TARGET is:      $${TARGET})
 
 DISTFILES += \
     config.user.pri
+

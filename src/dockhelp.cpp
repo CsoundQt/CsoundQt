@@ -59,6 +59,93 @@ DockHelp::DockHelp(QWidget *parent)
     ui->label->setVisible(false);
     ui->nextFindButton->setVisible(false);
     ui->previousFindButton->setVisible(false);
+
+    styleSheetLight = (
+      "body {                                                                      "
+      "    background-color: #f8f8f8 !important;                                   "
+      "    color: #101010;                                                         "
+      "}                                                                           "
+      "a { text-decoration: none; }                                                "
+      "td.linenos { background-color: #f0f0f0; padding-right: 10px; }              "
+      "span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }            "
+      "pre  { line-height: 100%;                                                   "
+      "       background-color: #f2f2f2 !important;                                "
+      "       font-size: 92% !important;}                                          "
+      "code {                                                                      "
+      "    color: #202020 !important;                                              "
+      "    font-size: 92% !important;                                              "
+      "    border: none !important;                                                "
+      "}                                                                           "
+      "body .hll { background-color: #ffffcc }                                     "
+      "body .c { color: #408080; font-style: italic } /* Comment */                "
+      "body .err { border: 1px solid #FF0000 } /* Error */                         "
+      "body .k { color: #008000; font-weight: bold } /* Keyword */                 "
+      "body .o { color: #666666 } /* Operator */                                   "
+      "body .ch { color: #408080; font-style: italic } /* Comment.Hashbang */      "
+      "body .cm { color: #408080; font-style: italic } /* Comment.Multiline */     "
+      "body .cp { color: #BC7A00 } /* Comment.Preproc */                           "
+      "body .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */  "
+      "body .c1 { color: #408080; font-style: italic } /* Comment.Single */        "
+      "body .cs { color: #408080; font-style: italic } /* Comment.Special */       "
+      "body .gd { color: #A00000 } /* Generic.Deleted */                           "
+      "body .ge { font-style: italic } /* Generic.Emph */                          "
+      "body .gr { color: #FF0000 } /* Generic.Error */                             "
+      "body .gh { color: #000080; font-weight: bold } /* Generic.Heading */        "
+      "body .gi { color: #00A000 } /* Generic.Inserted */                          "
+      "body .go { color: #888888 } /* Generic.Output */                            "
+      "body .gp { color: #000080; font-weight: bold } /* Generic.Prompt */         "
+      "body .gs { font-weight: bold } /* Generic.Strong */                         "
+      "body .gu { color: #800080; font-weight: bold } /* Generic.Subheading */     "
+      "body .gt { color: #0044DD } /* Generic.Traceback */                         "
+      "body .kc { color: #008000; font-weight: bold } /* Keyword.Constant */       "
+      "body .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */    "
+      "body .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */      "
+      "body .kp { color: #008000 } /* Keyword.Pseudo */                            "
+      "body .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */       "
+      "body .kt { color: #B00040 } /* Keyword.Type */                              "
+      "body .m { color: #666666 } /* Literal.Number */                             "
+      "body .s { color: #BA2121 } /* Literal.String */                             "
+      "body .na { color: #7D9029 } /* Name.Attribute */                            "
+      "body .nb { color: #008000 } /* Name.Builtin */                              "
+      "body .nc { color: #0000FF; font-weight: bold } /* Name.Class */             "
+      "body .no { color: #880000 } /* Name.Constant */                             "
+      "body .nd { color: #AA22FF } /* Name.Decorator */                            "
+      "body .ni { color: #999999; font-weight: bold } /* Name.Entity */            "
+      "body .ne { color: #D2413A; font-weight: bold } /* Name.Exception */         "
+      "body .nf { color: #0000FF } /* Name.Function */                             "
+      "body .nl { color: #A0A000 } /* Name.Label */                                "
+      "body .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */         "
+      "body .nt { color: #008000; font-weight: bold } /* Name.Tag */               "
+      "body .nv { color: #19177C } /* Name.Variable */                             "
+      "body .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */          "
+      "body .w { color: #bbbbbb } /* Text.Whitespace */                            "
+      "body .mb { color: #666666 } /* Literal.Number.Bin */                        "
+      "body .mf { color: #666666 } /* Literal.Number.Float */                      "
+      "body .mh { color: #666666 } /* Literal.Number.Hex */                        "
+      "body .mi { color: #666666 } /* Literal.Number.Integer */                    "
+      "body .mo { color: #666666 } /* Literal.Number.Oct */                        "
+      "body .sa { color: #BA2121 } /* Literal.String.Affix */                      "
+      "body .sb { color: #BA2121 } /* Literal.String.Backtick */                   "
+      "body .sc { color: #BA2121 } /* Literal.String.Char */                       "
+      "body .dl { color: #BA2121 } /* Literal.String.Delimiter */                  "
+      "body .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */    "
+      "body .s2 { color: #BA2121 } /* Literal.String.Double */                     "
+      "body .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */  "
+      "body .sh { color: #BA2121 } /* Literal.String.Heredoc */                    "
+      "body .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */"
+      "body .sx { color: #008000 } /* Literal.String.Other */                      "
+      "body .sr { color: #BB6688 } /* Literal.String.Regex */                      "
+      "body .s1 { color: #BA2121 } /* Literal.String.Single */                     "
+      "body .ss { color: #19177C } /* Literal.String.Symbol */                     "
+      "body .bp { color: #008000 } /* Name.Builtin.Pseudo */                       "
+      "body .fm { color: #0000FF } /* Name.Function.Magic */                       "
+      "body .vc { color: #19177C } /* Name.Variable.Class */                       "
+      "body .vg { color: #19177C } /* Name.Variable.Global */                      "
+      "body .vi { color: #19177C } /* Name.Variable.Instance */                    "
+      "body .vm { color: #19177C } /* Name.Variable.Magic */                       "
+      "body .il { color: #666666 } /* Literal.Number.Integer.Long */               "
+    );
+    ui->text->document()->setDefaultStyleSheet(styleSheetLight);
 }
 
 DockHelp::~DockHelp()
@@ -73,9 +160,8 @@ bool DockHelp::hasFocus()
 }
 
 void DockHelp::loadFile(QString fileName, QString anchor) {
-	QFile file(fileName);
-	if (!file.open(QFile::ReadOnly | QFile::Text)) {
-		ui->text->setText(tr("Not Found! Make sure the documentation path is set in the Configuration Dialog."));
+    if(!QFile::exists(fileName)) {
+        ui->text->setText(tr("Not Found! Make sure the documentation path is set in the Configuration Dialog."));
 		return;
 	}
 #ifdef Q_OS_WIN32
@@ -86,14 +172,24 @@ void DockHelp::loadFile(QString fileName, QString anchor) {
 	in.setAutoDetectUnicode(true);
 	ui->text->setHtml(in.readAll());
 #else
-    QUrl url = QUrl::fromLocalFile(fileName);
-    if(!anchor.isEmpty()) {
-        url.setUrl(url.toString() + "#" + anchor);
+
+    if(QFileInfo(fileName).suffix() == ".md") {
+        QFile file(fileName);
+        QTextStream md(&file);
+        ui->text->document()->setMarkdown(md.readAll());
+        ui->text->setHtml(ui->text->document()->toHtml());
     }
-    // QUrl url("file:///home/em/.local/share/risset/man/site/opcodes/atstop.html#atstop");
-    // url.setPath(url.toString() + "#abstract");
-    qDebug() << "url:" << url << url.toString();
-    ui->text->setSource(url);
+    else {
+        QStringList searchPaths = {"/home/em/.local/share/risset/man/site/css", "/home/em/.local/share/risset/man/site"};
+        ui->text->setSearchPaths(searchPaths);
+        QUrl url = QUrl::fromLocalFile(fileName);
+        if(!anchor.isEmpty()) {
+            url.setUrl(url.toString() + "#" + anchor);
+        }
+        qDebug() << "url:" << url << url.toString();
+        ui->text->setSource(url);
+    }
+
 #endif
 
 }

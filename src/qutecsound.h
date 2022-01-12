@@ -261,9 +261,7 @@ private slots:
 	void resetPreferences();
 	void reportBug();
     void reportCsoundBug();
-	void requestFeature();
-	void chat();
-	void openShortcutDialog();
+    void openShortcutDialog();
 	void downloadManual();
 	void about();
 	void donate();
@@ -335,7 +333,7 @@ private:
 	void writeSettings(QStringList openFiles=QStringList(), int lastIndex = 0);
 	void clearSettings();
     void setToolbarIconSize(int size);
-	int execute(QString executable, QString options);
+    int execute(QString executable, QString options);
 	//    bool saveCurrent();
 	bool makeNewPage(QString fileName, QString text);
 	bool loadCompanionFile(const QString &fileName);
@@ -505,9 +503,7 @@ private:
 	QAction *resetPreferencesAct;
 	QAction *reportBugAct;
     QAction *reportCsoundBugAct;
-	QAction *requestFeatureAct;
-	QAction *chatAct;
-	QAction *lineNumbersAct;
+    QAction *lineNumbersAct;
 	QAction *parameterModeAct;
 //	QAction *showParametersAct;
     QSignalMapper *focusMapper;

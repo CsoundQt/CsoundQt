@@ -80,6 +80,8 @@ public slots:
 private:
 	Ui::DockHelp *ui;
 
+    QString styleSheetLight;
+
 signals:
 	void Close(bool visible);
 	void openManualExample(QString fileName);

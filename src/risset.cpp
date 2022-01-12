@@ -111,6 +111,7 @@ Risset::Risset(QString pythonExe)
         rissetRoot.setPath(root.value("rissetroot").toString());
         rissetHtmlDocs.setPath(root.value("htmldocs").toString());
         rissetOpcodesXml = root.value("opcodesxml").toString();
+        rissetManpages.setPath(root.value("manpages").toString());
         qDebug() << "Risset opcodes.xml: " << rissetOpcodesXml;
 
         this->opcodeNames.clear();
@@ -131,6 +132,23 @@ Risset::Risset(QString pythonExe)
         }
     }
     opcodeIndexDone = true;
+}
+
+
+QString Risset::markdownManpage(QString opcodeName) {
+    if(!rissetManpages.exists()) {
+        qDebug() << "Risset markdown root not set";
+        return "";
+    }
+    QString path = rissetManpages.filePath(opcodeName + ".md");
+    if(QFile::exists(path))
+        return path;
+    else {
+        qDebug() << "Did not find markdown manpage for opcode" << opcodeName;
+        qDebug() << "... Searched: " << path;
+        return "";
+    }
+
 }
 
 

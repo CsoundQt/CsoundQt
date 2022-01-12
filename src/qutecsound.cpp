@@ -111,8 +111,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     helpPanel = new DockHelp(this);
     helpPanel->setAllowedAreas(Qt::RightDockWidgetArea |
-                              Qt::BottomDockWidgetArea |
-                              Qt::LeftDockWidgetArea);
+                               Qt::BottomDockWidgetArea |
+                               Qt::LeftDockWidgetArea);
     helpPanel->setObjectName("helpPanel");
 
     // QLabel *helpTitle = new QLabel("Help", helpPanel);
@@ -2448,6 +2448,7 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
     if(risset->isInstalled && risset->opcodeNames.contains(entry)) {
         // Check external help sources
         QString fileName = risset->htmlManpage(entry);
+        // QString fileName = risset->markdownManpage(entry);
         if(!fileName.isEmpty()) {
             // load manpage at anchor
             if(external) {
@@ -2830,22 +2831,15 @@ void CsoundQt::openManualExample(QString fileName)
 
 void CsoundQt::openExternalBrowser(QUrl url)
 {
-    if(url.isEmpty()) {
-        QMessageBox::critical(this, tr("Error"), tr("No url provided"));
-        return;
-    }
-    if (!m_options->browser.isEmpty()) {
-        if (QFile::exists(m_options->browser)) {
-            execute(m_options->browser,"\"" + url.toString() + "\"");
-        }
-        else {
-            QMessageBox::critical(this, tr("Error"),
-                                  tr("Could not open external browser:\n%1\nPlease check preferences.").arg(m_options->browser));
-        }
+    if (!m_options->browser.isEmpty() && QFile::exists(m_options->browser)) {
+        execute(m_options->browser, "\"" + url.toString() + "\"");
     }
     else {
-        QDesktopServices::openUrl(url);
+        QMessageBox::critical(this, tr("Error"),
+                              tr("Could not open external browser:\n%1\n"
+                                 "Please check preferences.").arg(m_options->browser));
     }
+    QDesktopServices::openUrl(url);
 }
 
 void CsoundQt::openPdfFile(QString name)
@@ -2905,46 +2899,12 @@ void CsoundQt::resetPreferences()
 
 void CsoundQt::reportBug()
 {
-    QUrl url("https://github.com/CsoundQt/CsoundQt/issues/new");
-    if (!m_options->browser.isEmpty()) {
-        execute(m_options->browser,"\"" + url.toString() + "\"");
-    }
-    else {
-        QDesktopServices::openUrl(url);
-    }
+    openExternalBrowser(QUrl("https://github.com/CsoundQt/CsoundQt/issues/new"));
 }
 
 void CsoundQt::reportCsoundBug()
 {
-    QUrl url("https://github.com/csound/csound/issues/new");
-    if (!m_options->browser.isEmpty()) {
-        execute(m_options->browser,"\"" + url.toString() + "\"");
-    }
-    else {
-        QDesktopServices::openUrl(url);
-    }
-}
-
-void CsoundQt::requestFeature()
-{
-    QUrl url("https://github.com/CsoundQt/CsoundQt/issues/new");
-    if (!m_options->browser.isEmpty()) {
-        execute(m_options->browser,"\"" + url.toString() + "\"");
-    }
-    else {
-        QDesktopServices::openUrl(url);
-    }
-}
-
-void CsoundQt::chat()
-{
-    QUrl url("http://webchat.freenode.net/?channels=#csound");
-    if (!m_options->browser.isEmpty()) {
-        execute(m_options->browser,"\"" + url.toString() + "\"");
-    }
-    else {
-        QDesktopServices::openUrl(url);
-    }
+    openExternalBrowser(QUrl("https://github.com/csound/csound/issues/new"));
 }
 
 void CsoundQt::openShortcutDialog()
@@ -3837,7 +3797,8 @@ void CsoundQt::createActions()
     recAct->setChecked(false);
     connect(recAct, SIGNAL(toggled(bool)), this, SLOT(record(bool)));
 
-    renderAct = new QAction(QIcon(prefix + "render.png"), tr("Render to file"), this);
+    // renderAct = new QAction(QIcon(prefix + "render.png"), tr("Render to file"), this);
+    renderAct = new QAction(QIcon(prefix + "render.svg"), tr("Render to file"), this);
     renderAct->setStatusTip(tr("Render to file"));
     renderAct->setIconText(tr("Render"));
     renderAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -4281,16 +4242,6 @@ void CsoundQt::createActions()
     reportCsoundBugAct->setStatusTip(tr("Report a bug that is caused by the core Csound -  when the same problem occurs also with \"Run in Terminal\""));
     reportCsoundBugAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(reportCsoundBugAct, SIGNAL(triggered()), this, SLOT(reportCsoundBug()));
-
-    requestFeatureAct = new QAction(tr("Request a Feature (please add label \'Enhancement\')"), this);
-    requestFeatureAct->setStatusTip(tr("Request a feature in CsoundQt's Feature Tracker"));
-    requestFeatureAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(requestFeatureAct, SIGNAL(triggered()), this, SLOT(requestFeature()));
-
-    chatAct = new QAction(tr("Csound IRC Chat"), this);
-    chatAct->setStatusTip(tr("Open the IRC chat channel #csound in your browser"));
-    chatAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(chatAct, SIGNAL(triggered()), this, SLOT(chat()));
 
     duplicateAct = new QAction(tr("Duplicate Widgets"), this);
     duplicateAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -5017,8 +4968,6 @@ void CsoundQt::createMenus()
     helpMenu->addSeparator();
     helpMenu->addAction(resetPreferencesAct);
     helpMenu->addSeparator();
-    // helpMenu->addAction(requestFeatureAct);
-    // helpMenu->addAction(chatAct);
     helpMenu->addSeparator();
     helpMenu->addAction(reportBugAct);
     helpMenu->addAction(reportCsoundBugAct);
@@ -7021,6 +6970,7 @@ void CsoundQt::loadPreset(int preSetIndex, int index) {
     if (index == -1) {
         index = curPage;
     }
+
     if (index < documentTabs->count() && index >= 0) {
         return documentPages[index]->loadPreset(preSetIndex);
     }
