@@ -32,6 +32,7 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
 	errorLine = false;
 	setReadOnly(true);
     m_warningColor = QColor("orange");
+    rxerr.setPattern("^\\s*error:\\.+line\\ ");
 }
 
 Console::~Console()
@@ -44,6 +45,7 @@ void Console::appendMessage(QString msg)
     QMutexLocker locker(&consoleLock);
 	logMessage(msg);
 
+    /*
     // Filter unnecessary messages
     if (msg.startsWith("libsndfile-1")
             || msg.startsWith("UnifiedCSD: ")
@@ -51,6 +53,8 @@ void Console::appendMessage(QString msg)
             || msg.startsWith("scorename: ")) {
         return;
 	}
+    */
+
 	setTextColor(m_textColor);
     // if "unexpected token error", remove this newline, otherwise line number stays
     // in next messageLine
@@ -58,10 +62,10 @@ void Console::appendMessage(QString msg)
 		msg.remove("\n");
 	messageLine.append(msg);
 
-    if (messageLine.contains("\n")) {
+    // if (msg.contains("\n")) {
+    if(msg.lastIndexOf(QChar('\n')) >= 0) {
         // line finished, analyze it now
-        if (messageLine.contains("error:", Qt::CaseInsensitive)
-                && messageLine.contains("line ")) {
+        if(rxerr.match(messageLine).hasMatch()) {
             errorTexts.append(messageLine);
 			errorTexts.last().remove("\n");
 
@@ -114,8 +118,8 @@ void Console::setDefaultFont(QFont font)
 void Console::setColors(QColor textColor, QColor bgColor)
 {
     // before it was setPalette, but that does not work runtime.
-    auto sheet = QString("QTextEdit { color: %1; background-color: %2 }")
-            .arg(textColor.name(), bgColor.name());
+    auto sheet = QString("QTextEdit { color: %1; background-color: %2 }"
+                         ).arg(textColor.name(), bgColor.name());
     this->setStyleSheet(sheet);
 	m_textColor = textColor;
 	m_bgColor = bgColor;

@@ -34,7 +34,8 @@ endin
 <CsScore>
 i 1 0 3600
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>292</x>
@@ -44,9 +45,9 @@ i 1 0 3600
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>138</r>
-  <g>149</g>
-  <b>156</b>
+  <r>195</r>
+  <g>210</g>
+  <b>220</b>
  </bgcolor>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -58,8 +59,10 @@ i 1 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Display Widget</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
@@ -75,7 +78,7 @@ i 1 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -87,9 +90,11 @@ i 1 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Display widgets are labels whose value can be set from Csound through channels. The Display Widget can display both numbers and text.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -98,13 +103,13 @@ i 1 0 3600
    <b>0</b>
   </color>
   <bgcolor mode="background">
-   <r>191</r>
-   <g>204</g>
-   <b>234</b>
+   <r>184</r>
+   <g>195</g>
+   <b>200</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -116,8 +121,10 @@ i 1 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Time elapsed:</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -133,7 +140,7 @@ i 1 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>tempo</objectName>
@@ -145,9 +152,10 @@ i 1 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>30.00000000</minimum>
   <maximum>180.00000000</maximum>
-  <value>103.49397590</value>
+  <value>93.25301205</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -163,8 +171,10 @@ i 1 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Tempo</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -180,7 +190,7 @@ i 1 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -192,8 +202,10 @@ i 1 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>bpm</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -209,7 +221,7 @@ i 1 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>time</objectName>
@@ -221,9 +233,11 @@ i 1 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>3.396</label>
+  <description/>
+  <label>14.721</label>
   <alignment>center</alignment>
-  <font>Courier New</font>
+  <valignment>center</valignment>
+  <font>Liberation Mono</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
@@ -232,13 +246,13 @@ i 1 0 3600
    <b>0</b>
   </color>
   <bgcolor mode="background">
-   <r>195</r>
+   <r>221</r>
    <g>240</g>
-   <b>206</b>
+   <b>226</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>location</objectName>
@@ -250,24 +264,26 @@ i 1 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>Bar:Beat - 1:3</label>
+  <description/>
+  <label>Bar:Beat - 5:2</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>255</r>
+   <r>170</r>
    <g>255</g>
-   <b>255</b>
+   <b>127</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>106</r>
-   <g>106</g>
-   <b>106</b>
+  <bgcolor mode="background">
+   <r>50</r>
+   <g>55</g>
+   <b>60</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>3</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>tempo</objectName>
@@ -279,8 +295,10 @@ i 1 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>131.205</label>
+  <description/>
+  <label>93.253</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -296,32 +314,8 @@ i 1 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {35466, 38293, 40092}
-ioText {82, 5} {211, 40} label 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Display Widget
-ioText {6, 45} {362, 58} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Display widgets are labels whose value can be set from Csound through channels. The Display Widget can display both numbers and text.
-ioText {87, 117} {116, 29} label 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Time elapsed:
-ioSlider {6, 153} {249, 26} 30.000000 180.000000 103.493976 tempo
-ioText {117, 178} {80, 25} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Tempo
-ioText {326, 153} {49, 25} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {61440, 60160, 57856} nobackground noborder bpm
-ioText {203, 111} {166, 35} display 3.396000 0.00100 "time" center "Courier New" 20 {0, 0, 0} {49920, 61440, 52736} nobackground noborder 3.396
-ioText {10, 205} {367, 48} display 0.000000 0.00100 "location" center "Arial" 24 {65280, 65280, 65280} {61440, 60160, 57856} nobackground noborder Bar:Beat - 1:3
-ioText {259, 153} {68, 26} display 131.205000 0.00100 "tempo" right "Arial" 12 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 131.205
-</MacGUI>

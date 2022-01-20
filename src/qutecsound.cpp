@@ -74,7 +74,7 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 
 #define MAX_THREAD_COUNT 32 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
 
-#define INSPECTOR_UPDATE_PERIOD_MS 2000
+#define INSPECTOR_UPDATE_PERIOD_MS 2500
 
 
 CsoundQt::CsoundQt(QStringList fileNames)
@@ -156,8 +156,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     addDockWidget(Qt::RightDockWidgetArea, m_console);
 
     m_inspector = new Inspector(this);
-    m_inspector->parseText(QString());
     m_inspector->setObjectName("Inspector");
+    m_inspector->parseText(QString());
     addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
     m_inspector->hide();
 
@@ -197,6 +197,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QSettings settings("csound", "qutecsound");
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "breeze").toString();
+    helpPanel->setTheme(m_options->theme);
+
     if(settings.contains("windowState")) {
         restoreState(settings.value("windowState").toByteArray());
     }
@@ -373,7 +375,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
 #ifdef Q_OS_MACOS
      possibleDirectories <<  initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/") <<  "/Library/Frameworks/CsoundLib64.framework/Resources/Manual/";
-#endif    
+#endif
      if (m_options->csdocdir.isEmpty() ||
             !QFile::exists(m_options->csdocdir+"/index.html") ) {
         foreach (QString dir, possibleDirectories) {
@@ -414,8 +416,18 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // This is a bad idea, breaks lots of subtle things, like background color
     // on files loaded from command line
 #ifndef  Q_OS_MACOS // a workaround for showing close buttons on close NB! disable later
+    auto palette = qApp->palette();
+    // the palette is dark (dark "theme") if the background is darker than the text
+    isDarkPalette = palette.text().color().lightness() > palette.window().color().lightness();
+
     auto originalStyleSheet = qApp->styleSheet();
-    QFile file(":/appstyle-white.css");
+    QFile file;
+    if (isDarkPalette) {
+        file.setFileName(":/appstyle-dark.css");
+    }
+    else {
+        file.setFileName(":/appstyle-white.css");
+    }
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
     originalStyleSheet += styleSheet;
@@ -1897,7 +1909,7 @@ void CsoundQt::play(bool realtime, int index)
         return;
     }
     curPage = index;
-    auto page = documentPages[curPage];	
+    auto page = documentPages[curPage];
 
     if (page->getFileName().isEmpty()) {
         int answer;
@@ -2062,7 +2074,7 @@ void CsoundQt::play(bool realtime, int index)
     } else if (ret == 0) {
 		// No problem:
 		// set playing icon on tab
-		documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/gtk-media-play-ltr.png").arg(m_options->theme )));
+        documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme )));
 
 		// enable widgets
         if(m_options->checkSyntaxOnly) {
@@ -2175,9 +2187,9 @@ void CsoundQt::pause(int index)
     if (docIndex >= 0 && docIndex < documentPages.size()) {
         documentPages[docIndex]->pause();
 		if (documentPages[docIndex]->getEngine()->isPaused() ) {
-			documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/gtk-media-pause.png").arg(m_options->theme )));
+            documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/media-pause.png").arg(m_options->theme )));
 		} else {
-			documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/gtk-media-play-ltr.png").arg(m_options->theme )));
+            documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme )));
 		}
     }
 }
@@ -2270,7 +2282,7 @@ void CsoundQt::record(bool rec, int index=-1)
             play();
         }
 		int ret = documentPages[index]->record(m_options->sampleFormat);
-		documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/gtk-media-record.png").arg(m_options->theme )));
+        documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/media-record.png").arg(m_options->theme )));
 		if (ret != 0) {
             recAct->setChecked(false);
 			documentTabs->setTabIcon(index, QIcon());
@@ -2439,44 +2451,50 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
     }
     QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
     bool found = false;
-    QString errmsg;
 
     if (entry.startsWith("http://")) {
         openExternalBrowser(QUrl(entry));
         return;
     }
+    QString errmsg;
     if(risset->isInstalled && risset->opcodeNames.contains(entry)) {
         // Check external help sources
         QString fileName = risset->htmlManpage(entry);
-        // QString fileName = risset->markdownManpage(entry);
         if(!fileName.isEmpty()) {
+            found = true;
             // load manpage at anchor
             if(external) {
                 openExternalBrowser(fileName);
             } else {
                 helpPanel->loadFile(fileName, entry);
             }
-            found = true;
         }
         else {
             auto reply = QMessageBox::question(this, "Risset",
-                                               "Risset documentation not found. Do you want to fetch it?",
+                                               "Risset documentation not found. Do you want to fetch it? "
+                                               " (it may take a few seconds)",
                                                QMessageBox::Yes|QMessageBox::No);
             if(reply == QMessageBox::Yes) {
-                errmsg = risset->generateDocumentation();
-                if(!errmsg.isEmpty()) {
-                    QMessageBox::critical(this, tr("Error"), errmsg);
-                }
-                else {
-                    helpForEntry(entry, external);
-                }
+                risset->generateDocumentation([=](int exitCode) {
+                    if(exitCode==0) {
+                        QMessageBox::information(this, "Risset", "Fetched documentation");
+                        helpForEntry(entry, external);
+                    }
+                    else {
+                        qDebug() << "Generate documentation exit code: " << exitCode;
+                        QMessageBox::warning(this, "Risset",
+                                             "Failed to fetch documentation");
+                    }
+                });
             }
             return;
         }
     }
     else if (dir.isEmpty()) {
-        errmsg = tr("HTML Documentation directory not set!\n"
-                    "Please go to Edit->Options->Environment and select directory\n");
+        QMessageBox::critical(this, tr("Error"),
+            tr("HTML Documentation directory not set!\n"
+               "Please go to Edit->Options->Environment and select directory\n"));
+        return;
     }
     else {
         if (entry == "0dbfs")
@@ -2496,23 +2514,16 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
             }
             found = true;
         }
-        else {
-            // not a known opcode, don't do anything
-            errmsg = "";
-        }
+        else
+            return;
     }
-
     if(found && !external) {
         helpPanel->show();
         helpPanel->raise();
         helpPanel->focusText();
     }
-    else {
-        if(!errmsg.isEmpty()) {
-            QMessageBox::critical(this, tr("Error"), errmsg);
-        }
-    }
 }
+
 
 void CsoundQt::setHelpEntry()
 {
@@ -3099,14 +3110,16 @@ void CsoundQt::applySettings()
 
     // set editorBgColor also for inspector, codepad and python console.
     // Maybe the latter should use the same color as console?
-    auto bgColor= m_options->editorBgColor.name();
-    m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(bgColor));
-    m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(bgColor));
+    // auto bgColor= m_options->editorBgColor.name();
+    // m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(bgColor));
+    // m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(bgColor));
     this->setToolbarIconSize(m_options->toolbarIconSize);
 #ifdef QCS_PYTHONQT
     m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
 #endif
     //storeSettings(); // save always when something new is changed
+
+    this->helpPanel->setTheme(m_options->theme);
 }
 
 void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
@@ -3132,7 +3145,6 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
                             (int) m_options->consoleFontPointSize));
 	p->setConsoleColors(m_options->consoleFontColor,
 	                    m_options->consoleBgColor);
-    // p->setEditorBgColor(m_options->editorBgColor);
     p->setScriptDirectory(m_options->pythonDir);
     p->setPythonExecutable(m_options->pythonExecutable);
     p->useOldFormat(m_options->oldFormat);
@@ -3146,6 +3158,7 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     flags |= m_options->noMessages ? QCS_NO_CONSOLE_MESSAGES : 0;
     flags |= m_options->noEvents ? QCS_NO_RT_EVENTS : 0;
     p->setFlags(flags);
+
 }
 
 void CsoundQt::runUtility(QString flags)
@@ -3386,7 +3399,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #endif
     openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Ctrl+9"));
-    
+
     setHelpEntryAct->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F1));
     externalBrowserAct->setShortcut(tr("Shift+Alt+F1"));
     showInspectorAct->setShortcut(tr("F5"));
@@ -3569,25 +3582,25 @@ void CsoundQt::createActions()
     // connected with connectActions() and are changed when the document changes.
     QString theme = m_options->theme;
     QString prefix = ":/themes/" + theme + "/";
-    newAct = new QAction(QIcon(prefix + "gtk-new.png"), tr("&New"), this);
+    newAct = new QAction(QIcon(prefix + "edit-new.png"), tr("&New"), this);
     newAct->setStatusTip(tr("Create a new file"));
     newAct->setIconText(tr("New"));
     newAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
 
-    openAct = new QAction(QIcon(prefix + "gnome-folder.png"), tr("&Open..."), this);
+    openAct = new QAction(QIcon(prefix + "folder.png"), tr("&Open..."), this);
     openAct->setStatusTip(tr("Open an existing file"));
     openAct->setIconText(tr("Open"));
     openAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
-    reloadAct = new QAction(QIcon(prefix + "gtk-reload.png"), tr("Reload"), this);
+    reloadAct = new QAction(QIcon(prefix + "reload.png"), tr("Reload"), this);
     reloadAct->setStatusTip(tr("Reload file from disk, discarding changes"));
     //   reloadAct->setIconText(tr("Reload"));
     reloadAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(reloadAct, SIGNAL(triggered()), this, SLOT(reload()));
 
-    saveAct = new QAction(QIcon(prefix + "gnome-dev-floppy.png"), tr("&Save"), this);
+    saveAct = new QAction(QIcon(prefix + "floppy.png"), tr("&Save"), this);
     saveAct->setStatusTip(tr("Save the document to disk"));
     saveAct->setIconText(tr("Save"));
     saveAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -3613,7 +3626,7 @@ void CsoundQt::createActions()
     closeTabAct = new QAction(tr("Close current tab"), this);
     closeTabAct->setStatusTip(tr("Close current tab"));
     //   closeTabAct->setIconText(tr("Close"));
-    closeTabAct->setIcon(QIcon(prefix + "gtk-close.png"));
+    closeTabAct->setIcon(QIcon(prefix + "edit-close.png"));
     closeTabAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(closeTabAct, SIGNAL(triggered()), this, SLOT(closeTab()));
 
@@ -3648,33 +3661,33 @@ void CsoundQt::createActions()
     createCodeGraphAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(createCodeGraphAct, SIGNAL(triggered()), this, SLOT(createCodeGraph()));
 
-    undoAct = new QAction(QIcon(prefix + "gtk-undo.png"), tr("Undo"), this);
+    undoAct = new QAction(QIcon(prefix + "edit-undo.png"), tr("Undo"), this);
     undoAct->setStatusTip(tr("Undo last action"));
     undoAct->setIconText(tr("Undo"));
     undoAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
 
-    redoAct = new QAction(QIcon(prefix + "gtk-redo.png"), tr("Redo"), this);
+    redoAct = new QAction(QIcon(prefix + "edit-redo.png"), tr("Redo"), this);
     redoAct->setStatusTip(tr("Redo last action"));
     redoAct->setIconText(tr("Redo"));
     redoAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
 
-    cutAct = new QAction(QIcon(prefix + "gtk-cut.png"), tr("Cu&t"), this);
+    cutAct = new QAction(QIcon(prefix + "edit-cut.png"), tr("Cu&t"), this);
     cutAct->setStatusTip(tr("Cut the current selection's contents to the "
                             "clipboard"));
     cutAct->setIconText(tr("Cut"));
     cutAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
 
-    copyAct = new QAction(QIcon(prefix + "gtk-copy.png"), tr("&Copy"), this);
+    copyAct = new QAction(QIcon(prefix + "edit-copy.png"), tr("&Copy"), this);
     copyAct->setStatusTip(tr("Copy the current selection's contents to the "
                              "clipboard"));
     copyAct->setIconText(tr("Copy"));
     copyAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
 
-    pasteAct = new QAction(QIcon(prefix + "gtk-paste.png"), tr("&Paste"), this);
+    pasteAct = new QAction(QIcon(prefix + "edit-paste.png"), tr("&Paste"), this);
     pasteAct->setStatusTip(tr("Paste the clipboard's contents into the current "
                               "selection"));
     pasteAct->setIconText(tr("Paste"));
@@ -3745,7 +3758,7 @@ void CsoundQt::createActions()
     findAgainAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(findAgainAct, SIGNAL(triggered()), this, SLOT(findString()));
 
-    configureAct = new QAction(QIcon(prefix + "control-center2.png"), tr("Configuration"), this);
+    configureAct = new QAction(QIcon(prefix + "settings.png"), tr("Configuration"), this);
     configureAct->setStatusTip(tr("Open configuration dialog"));
     configureAct->setIconText(tr("Configure"));
     configureAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -3758,38 +3771,38 @@ void CsoundQt::createActions()
     editAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(editAct, SIGNAL(triggered(bool)), this, SLOT(setWidgetEditMode(bool)));
 
-    runAct = new QAction(QIcon(prefix + "gtk-media-play-ltr.png"), tr("Run Csound"), this);
+    runAct = new QAction(QIcon(prefix + "media-play.png"), tr("Run Csound"), this);
     runAct->setStatusTip(tr("Run current file"));
     runAct->setIconText(tr("Run"));
     runAct->setCheckable(true);
     runAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(runAct, SIGNAL(triggered()), this, SLOT(play()));
 
-    runTermAct = new QAction(QIcon(prefix + "gtk-media-play-ltr2.png"), tr("Run in Terminal"), this);
+    runTermAct = new QAction(QIcon(prefix + "terminal.png"), tr("Run in Terminal"), this);
     runTermAct->setStatusTip(tr("Run in external shell"));
     runTermAct->setIconText(tr("Run in Term"));
     runTermAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(runTermAct, SIGNAL(triggered()), this, SLOT(runInTerm()));
 
-    stopAct = new QAction(QIcon(prefix + "gtk-media-stop.png"), tr("Stop"), this);
+    stopAct = new QAction(QIcon(prefix + "media-stop.png"), tr("Stop"), this);
     stopAct->setStatusTip(tr("Stop"));
     stopAct->setIconText(tr("Stop"));
     stopAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
 
-    pauseAct = new QAction(QIcon(prefix + "gtk-media-pause.png"), tr("Pause"), this);
+    pauseAct = new QAction(QIcon(prefix + "media-pause.png"), tr("Pause"), this);
     pauseAct->setStatusTip(tr("Pause"));
     pauseAct->setIconText(tr("Pause"));
     pauseAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(pauseAct, SIGNAL(triggered()), this, SLOT(pause()));
 
-    stopAllAct = new QAction(QIcon(prefix + "gtk-media-stop.png"), tr("Stop All"), this);
+    stopAllAct = new QAction(QIcon(prefix + "media-stop.png"), tr("Stop All"), this);
     stopAllAct->setStatusTip(tr("Stop all running documents"));
     stopAllAct->setIconText(tr("Stop All"));
     stopAllAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(stopAllAct, SIGNAL(triggered()), this, SLOT(stopAll()));
 
-    recAct = new QAction(QIcon(prefix + "gtk-media-record.png"), tr("Record"), this);
+    recAct = new QAction(QIcon(prefix + "media-record.png"), tr("Record"), this);
     recAct->setStatusTip(tr("Record"));
     recAct->setIconText(tr("Record"));
     recAct->setCheckable(true);
@@ -3824,7 +3837,7 @@ void CsoundQt::createActions()
     externalEditorAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(externalEditorAct, SIGNAL(triggered()), this, SLOT(openExternalEditor()));
 
-    showWidgetsAct = new QAction(QIcon(prefix + "gnome-mime-application-x-diagram.png"),
+    showWidgetsAct = new QAction(QIcon(prefix + "widgets.png"),
                                  tr("Widgets"), this);
     showWidgetsAct->setCheckable(true);
     //showWidgetsAct->setChecked(true);
@@ -3860,7 +3873,7 @@ void CsoundQt::createActions()
     focusEditorAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(focusEditorAct, SIGNAL(triggered()), this, SLOT(setEditorFocus()));
 
-    showHelpAct = new QAction(QIcon(prefix + "gtk-info.png"), tr("Help Panel"), this);
+    showHelpAct = new QAction(QIcon(prefix + "info.png"), tr("Help Panel"), this);
     showHelpAct->setCheckable(true);
     showHelpAct->setChecked(true);
     showHelpAct->setStatusTip(tr("Show the Csound Manual Panel"));
@@ -3952,7 +3965,7 @@ void CsoundQt::createActions()
     showOpcodeQuickRefAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showOpcodeQuickRefAct, SIGNAL(triggered()), helpPanel, SLOT(showOpcodeQuickRef()));
 
-    showConsoleAct = new QAction(QIcon(prefix + "gksu-root-terminal.png"), tr("Output Console"), this);
+    showConsoleAct = new QAction(QIcon(prefix + "terminal.png"), tr("Output Console"), this);
     showConsoleAct->setCheckable(true);
     showConsoleAct->setChecked(true);
     showConsoleAct->setStatusTip(tr("Show Csound's message console"));
@@ -4012,7 +4025,7 @@ void CsoundQt::createActions()
     showDebugAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showDebugAct, SIGNAL(toggled(bool)), this, SLOT(showDebugger(bool)));
 #endif
-    showVirtualKeyboardAct = new QAction(QIcon(prefix + "midi_keyboard.png"), tr("Show Virtual Keyboard"), this);
+    showVirtualKeyboardAct = new QAction(QIcon(prefix + "midi-keyboard.png"), tr("Show Virtual Keyboard"), this);
     showVirtualKeyboardAct->setCheckable(true);
     showVirtualKeyboardAct->setChecked(false);
     showVirtualKeyboardAct->setStatusTip(tr("Show the Virtual MIDI Keyboard"));
@@ -4121,7 +4134,7 @@ void CsoundQt::createActions()
     connect(showWidgetEditAct, SIGNAL(toggled(bool)), this, SLOT(showWidgetEdit(bool)));
     connect(splitViewAct, SIGNAL(toggled(bool)), showWidgetEditAct, SLOT(setEnabled(bool)));
 
-    setHelpEntryAct = new QAction(QIcon(prefix + "gtk-info.png"), tr("Opcode Entry"), this);
+    setHelpEntryAct = new QAction(QIcon(prefix + "info.png"), tr("Opcode Entry"), this);
     setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
     setHelpEntryAct->setIconText(tr("Manual for opcode"));
     setHelpEntryAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -4154,7 +4167,7 @@ void CsoundQt::createActions()
     openQuickRefAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(openQuickRefAct, SIGNAL(triggered()), this, SLOT(openQuickRef()));
 
-    showUtilitiesAct = new QAction(QIcon(prefix + "gnome-devel.png"), tr("Utilities"), this);
+    showUtilitiesAct = new QAction(QIcon(prefix + "devel.png"), tr("Utilities"), this);
     showUtilitiesAct->setCheckable(true);
     showUtilitiesAct->setChecked(false);
     showUtilitiesAct->setStatusTip(tr("Show the Csound Utilities dialog"));
@@ -5381,8 +5394,8 @@ void CsoundQt::readSettings()
                                                  QVariant(QColor(Qt::black))).value<QColor>();
     m_options->consoleBgColor = settings.value("consoleBgColor",
                                                QVariant(QColor(Qt::white))).value<QColor>();
-    m_options->editorBgColor = settings.value("editorBgColor",
-                                              QVariant(QColor(Qt::white))).value<QColor>();
+    // m_options->editorBgColor = settings.value("editorBgColor",
+    //                                           QVariant(QColor(Qt::white))).value<QColor>();
 
     m_options->tabWidth = settings.value("tabWidth", 24).toInt();
     m_options->tabIndents = settings.value("tabIndents", false).toBool();
@@ -5648,7 +5661,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("consolefontsize", m_options->consoleFontPointSize);
         settings.setValue("consoleFontColor", QVariant(m_options->consoleFontColor));
         settings.setValue("consoleBgColor", QVariant(m_options->consoleBgColor));
-        settings.setValue("editorBgColor", QVariant(m_options->editorBgColor));
+        // settings.setValue("editorBgColor", QVariant(m_options->editorBgColor));
         settings.setValue("tabWidth", m_options->tabWidth );
         settings.setValue("tabIndents", m_options->tabIndents);
         settings.setValue("colorvariables", m_options->colorVariables);
@@ -5837,6 +5850,7 @@ void CsoundQt::clearSettings()
     settings.sync();
 }
 
+
 int CsoundQt::execute(QString executable, QString options)
 {
     int ret = 0;
@@ -5869,8 +5883,7 @@ int CsoundQt::execute(QString executable, QString options)
     QProcess *p = new QProcess(this);
     p->setWorkingDirectory(path);
     p->start(commandLine);
-    Q_PID id = p->pid();
-    qDebug() << "Launched external program with id:" << id;
+    qDebug() << "Launched external program with id:" << p->processId();
     ret = !p->waitForStarted() ? 1 : 0;
 #endif
     return ret;
@@ -6511,6 +6524,11 @@ int CsoundQt::getDocument(QString name)
         }
     }
     return index;
+}
+
+QString CsoundQt::getTheme()
+{
+    return m_options->theme;
 }
 
 QString CsoundQt::getSelectedText(int index, int section)

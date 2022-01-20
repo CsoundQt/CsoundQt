@@ -348,10 +348,10 @@ QTextCharFormat Highlighter::getFormat(QString tag) {
 Highlighter::Highlighter(QTextDocument *parent)
 	: QSyntaxHighlighter(parent)
 {
-	commentStartExpression = QRegExp("/\\*");
-	commentEndExpression = QRegExp("\\*/");
+    commentStartExpression.setPattern("/\\*");
+    commentEndExpression.setPattern("\\*/");
 
-	//  b64encStartExpression = QRegExp("<CsFileB .*>");
+    //  b64encStartExpression = QRegExp("<CsFileB .*>");
 	//  b64encEndExpression = QRegExp("<CsFileB>");
 	colorVariables = true;
 	m_mode = 0; // default to Csound mode
@@ -414,18 +414,19 @@ Highlighter::Highlighter(QTextDocument *parent)
                   << "--limiter" << "--udp-echo" << "--opcode-dir="
                   ;
 
-    csoundOptionsRx = QRegExp("-(-(env|nodisplays|nosound|control-rate|messagelevel="
-                              "|dither|sched|omacro:|smacro:|verbose|sample-accurate|"
-                              "realtime|nchnls|nchnls_i|sinesize=|daemon|port=|use-system-sr|"
-                              "ksmps|midi-key-cps=|midi-velocity=)|"
-                              "\\+(rtaudio=|rtmidi=|jack_client=))");
+    csoundOptionsRx = QRegularExpression(
+                        "-(-(env|nodisplays|nosound|control-rate|messagelevel="
+                        "|dither|sched|omacro:|smacro:|verbose|sample-accurate|"
+                        "realtime|nchnls|nchnls_i|sinesize=|daemon|port=|use-system-sr|"
+                        "ksmps|midi-key-cps=|midi-velocity=)|"
+                        "\\+(rtaudio=|rtmidi=|jack_client=))");
     /*
     csoundOptionsRx = QRegExp("--(env|nodisplays|nosound|control-rate|messagelevel=|"
                               "dither|sched|omacro:|smacro:|verbose|sample-accurate|"
                               "realtime|nchnls|nchnls_i|sinesize=|daemon|port=|"
                               "use-system-sr|ksmps|midi-key-cps=|midi-velocity=)");
     */
-    csoundOptionsRx2 = QRegExp("-+(rtaudio=|rtmidi=|jack_client=)");
+    csoundOptionsRx2 = QRegularExpression("-+(rtaudio=|rtmidi=|jack_client=)");
 
     functionRegex = QRegExp("\\b\\w+(\\:a|\\:k|\\:i)?(?=\\()");
 
@@ -545,7 +546,7 @@ void Highlighter::highlightBlock(const QString &text)
     }
     setCurrentBlockUserData(data);
 
-    if (m_theme != "none") {
+    if(m_theme != "none") {
         // find previous valid block
         auto block = currentBlock().previous();
         while (block.isValid()) {
@@ -621,7 +622,7 @@ void Highlighter::highlightScore(const QString &text, int start, int end) {
 }
 
 
-void Highlighter::highlightCsoundBlock(const QString &text)
+void Highlighter::highlightCsoundBlock(const QString &line)
 {
     // TODO: rewrite this using QRegularExpression
     QRegularExpression rx;
@@ -631,30 +632,30 @@ void Highlighter::highlightCsoundBlock(const QString &text)
     if(m_theme == "none")
         return;
 
-    int commentIndex = text.indexOf(';'); // try both comment markings
+    int commentIndex = line.indexOf(';'); // try both comment markings
 	if (commentIndex < 0) {
-        commentIndex = text.indexOf("//");
+        commentIndex = line.indexOf("//");
 	}
 
     if(commentIndex >= 0) {
-        if(text[commentIndex] == ';' && text.size() > commentIndex+1 && text[commentIndex+1] == ';') {
-            setFormat(commentIndex, text.size() - commentIndex, importantCommentFormat);
+        if(line[commentIndex] == ';' && line.size() > commentIndex+1 && line[commentIndex+1] == ';') {
+            setFormat(commentIndex, line.size() - commentIndex, importantCommentFormat);
             return;
         } else {
-            setFormat(commentIndex, text.size() - commentIndex, singleLineCommentFormat);
+            setFormat(commentIndex, line.size() - commentIndex, singleLineCommentFormat);
         }
     } else {
-        commentIndex = text.size() + 1;
+        commentIndex = line.size() + 1;
     }
+    // auto text = line.mid(0, commentIndex);
 
-    // QRegExp regexp;
     int index = 0;
     int length;
 
     auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
 
     rx.setPattern("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|)>");
-    rxmatch = rx.match(text);
+    rxmatch = rx.match(line);
     if(rxmatch.hasMatch()) {
         if(rxmatch.captured(1) == "CsInstruments") {
             blockdata->section = OrchestraSection;
@@ -670,32 +671,27 @@ void Highlighter::highlightCsoundBlock(const QString &text)
     }
 
     if(blockdata->section == ScoreSection) {
-        if(m_scoreSyntaxHighlighting)
-            highlightScore(text, 0, commentIndex);
+        if(m_scoreSyntaxHighlighting) {
+            highlightScore(line, 0, commentIndex);
+        }
         return;
-    } else if(blockdata->section == OptionsSection) {
-        while ((index = csoundOptionsRx.indexIn(text, index)) != -1 && index < commentIndex) {
-            length = csoundOptionsRx.matchedLength();
-            setFormat(index, length, csoundOptionFormat);
+    }
+    else if(blockdata->section == OptionsSection) {
+        index = 0;
+        while((rxmatch = csoundOptionsRx.match(line, index)).hasMatch()) {
+            length = rxmatch.capturedLength();
+            setFormat(rxmatch.capturedStart(), length, csoundOptionFormat);
             index += length;
         }
         return;
     }
+    auto text = QStringRef(&line, 0, commentIndex);
 
-    // string
-    rx.setPattern("\"[^\"]*\"");
-    while (index < commentIndex) {
-        rxmatch = rx.match(text, index);
-        if(!rxmatch.hasMatch() or rxmatch.capturedStart() >= commentIndex)
-            break;
-        setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), quotationFormat);
-        index = rxmatch.capturedEnd()+1;
-    }
 
     // define
     rx.setPattern("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
     rxmatch = rx.match(text);
-    if(rxmatch.hasMatch() && rxmatch.capturedStart() < commentIndex) {
+    if(rxmatch.hasMatch()) {
         setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), macroDefineFormat);
         return;
     }
@@ -711,10 +707,7 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 
     rx.setPattern(R"(&&|==|\|\||<|>|<=|>=|!=|\\)");
     index = 0;
-    while(index < commentIndex) {
-        rxmatch = rx.match(text, index);
-        if(!rxmatch.hasMatch() or rxmatch.capturedStart() >= commentIndex)
-            break;
+    while((rxmatch=rx.match(text, index)).hasMatch()) {
         length = rxmatch.capturedLength();
         setFormat(rxmatch.capturedStart(), length, operatorFormat);
         index = rxmatch.capturedEnd()+1;
@@ -728,52 +721,48 @@ void Highlighter::highlightCsoundBlock(const QString &text)
         index += length;
     }
     */
+    QRegularExpression expressionRx("\\b[\\w:]+\\b");
+    index = 0;
+    while((rxmatch = expressionRx.match(text, index)).hasMatch()) {
+        int wordStart = rxmatch.capturedStart();
+        int wordEnd = rxmatch.capturedEnd();
+        index = wordEnd;
 
-    QRegExp expression("\\b[\\w:]+\\b");
-    index = text.indexOf(expression, 0);
-    length = expression.matchedLength();
-
-	while (index >= 0 && index < commentIndex) {
-		int wordStart = index;
-		int wordEnd = wordStart + length;
-
-		if (index>0) {
-			auto prev = text.at(index - 1);
-            if (prev == '$' || prev == '#') {
-                // check if macro name - replacement for regexp solution which I could not find
+        if(wordStart > 0) {
+            auto prev = text.at(wordStart - 1);
+            if(prev == '$' || prev == '#') {
+                // check if macro name - replacement for regexp solution
                 wordStart--;
                 length++;
-                setFormat(wordStart, wordEnd - wordStart, macroDefineFormat);
-                index = text.indexOf(expression, wordEnd);
-				length = expression.matchedLength();
-				continue;
+                setFormat(wordStart-1, wordEnd - wordStart + 1, macroDefineFormat);
+                index = wordEnd;
+                continue;
 			}
         }
 		wordEnd = (wordEnd > 0 ? wordEnd : text.size());
-		QString word = text.mid(wordStart, length);
-        if (word.indexOf(QRegExp("p[\\d]+\\b")) != -1) {
+        QString word = rxmatch.captured();
+        if(word.indexOf(QRegularExpression("p[\\d]+\\b")) != -1) {
 			setFormat(wordStart, wordEnd - wordStart, pfieldFormat);
 		}
-		if (instPatterns.contains(word)) {
+        else if(instPatterns.contains(word)) {
 			setFormat(wordStart, wordEnd - wordStart, instFormat);
-			break; // was: return. FOr any case, to go through lines after while loop
+            break; // was: return. For any case, to go through lines after while loop
 		}
-		else if (tagPatterns.contains("<" + word + ">") && wordStart > 0) {
+        else if(tagPatterns.contains("<" + word + ">") && wordStart > 0) {
             setFormat(wordStart - (text[wordStart - 1] == '/'? 2: 1),
                       wordEnd - wordStart + (text[wordStart - 1] == '/'? 3: 2),
                       csdtagFormat);
 		}
-		else if (headerPatterns.contains(word)) {
+        else if(headerPatterns.contains(word)) {
             setFormat(wordStart, wordEnd - wordStart, headerFormat);
 		}
-        else if (keywordLiterals.contains(word)) {
+        else if(keywordLiterals.contains(word)) {
             setFormat(wordStart, wordEnd - wordStart, keywordFormat);
 		}
-        else if (ioPatterns.contains(word)) {
+        else if(ioPatterns.contains(word)) {
             setFormat(wordStart, wordEnd - wordStart, ioFormat);
         }
-
-		else if (word.contains(":")) {
+        else if(word.contains(":")) {
 			QStringList parts = word.split(":");
 			if (parts.size() == 2) {
 				if (findOpcode(parts[0]) >= 0) {
@@ -781,92 +770,98 @@ void Highlighter::highlightCsoundBlock(const QString &text)
 				}
 			}
 		}
-        else if (m_parsedUDOs.contains(word)) {
+        else if(m_parsedUDOs.contains(word)) {
             setFormat(wordStart, wordEnd - wordStart, udoFormat);
         }
-        else if (deprecatedOpcodes.contains(word)) {
+        else if(deprecatedOpcodes.contains(word)) {
             setFormat(wordStart, wordEnd - wordStart, deprecatedFormat);
         }
-        else if (findOpcode(word) >= 0) {
+        else if(findOpcode(word) >= 0) {
 			setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
 		}
-		else if (word.startsWith('a') && colorVariables) {
-			setFormat(wordStart, wordEnd - wordStart, arateFormat);
-		}
-        else if (word.startsWith('k') && colorVariables) {
-			setFormat(wordStart, wordEnd - wordStart, krateFormat);
-		}
-        else if (word.startsWith('i') && colorVariables) {
-            setFormat(wordStart, wordEnd - wordStart, irateFormat);
-        }
-		else if (word.startsWith("ga")  && colorVariables) {
-			setFormat(wordStart, wordEnd - wordStart, garateFormat);
-		}
-        else if (word.startsWith("gk")  && colorVariables) {
-			setFormat(wordStart, wordEnd - wordStart, gkrateFormat);
-		}
-        else if (word.startsWith("gi")  && colorVariables) {
-            setFormat(wordStart, wordEnd - wordStart, girateFormat);
-        }
-		else if (word.startsWith("S")  && colorVariables) {
-			setFormat(wordStart, wordEnd - wordStart, stringVarFormat);
-		}
-		else if (word.startsWith("gS")  && colorVariables) {
-			setFormat(wordStart, wordEnd - wordStart, gstringVarFormat);
-		}
-		else if (word.startsWith("f") && colorVariables) {
-			setFormat(wordStart, wordEnd - wordStart, fsigFormat);
-		}
-		else if (word.startsWith("gf") && colorVariables) {
-			setFormat(wordStart, wordEnd - wordStart, gfsigFormat);
-		}
-		index = text.indexOf(expression, wordEnd);
-		length = expression.matchedLength();
-	}
-	//last rules
-    for (int i = 0; i < lastHighlightingRules.size(); i++) {
-        QRegExp expression(lastHighlightingRules[i].pattern);
-        int index = 0, length;
-        while((index = expression.indexIn(text, index)) != -1 && index < commentIndex) {
-            int group = lastHighlightingRules[i].group;
-            if(group == 0) {
-                length = expression.matchedLength();
-                setFormat(index, length, lastHighlightingRules[i].format);
-            } else {
-                auto capture = expression.cap(group);
-                length = expression.matchedLength();
-                setFormat(expression.pos(group), capture.length(), lastHighlightingRules[i].format);
+        else if(colorVariables) {
+            if(word.startsWith('a')) {
+                setFormat(wordStart, wordEnd - wordStart, arateFormat);
             }
-            index += length;
+            else if(word.startsWith('k')) {
+                setFormat(wordStart, wordEnd - wordStart, krateFormat);
+            }
+            else if(word.startsWith('i')) {
+                setFormat(wordStart, wordEnd - wordStart, irateFormat);
+            }
+            else if(word.startsWith("ga")) {
+                setFormat(wordStart, wordEnd - wordStart, garateFormat);
+            }
+            else if(word.startsWith("gk")) {
+                setFormat(wordStart, wordEnd - wordStart, gkrateFormat);
+            }
+            else if(word.startsWith("gi")) {
+                setFormat(wordStart, wordEnd - wordStart, girateFormat);
+            }
+            else if(word.startsWith("S")) {
+                setFormat(wordStart, wordEnd - wordStart, stringVarFormat);
+            }
+            else if(word.startsWith("gS")) {
+                setFormat(wordStart, wordEnd - wordStart, gstringVarFormat);
+            }
+            else if(word.startsWith("f")) {
+                setFormat(wordStart, wordEnd - wordStart, fsigFormat);
+            }
+            else if(word.startsWith("gf")) {
+                setFormat(wordStart, wordEnd - wordStart, gfsigFormat);
+            }
+        }
+
+    }
+
+    // string
+    rx.setPattern("\"[^\"]*\"");
+    index = 0;
+    while ((rxmatch = rx.match(text, index)).hasMatch()) {
+        setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), quotationFormat);
+        index = rxmatch.capturedEnd();
+    }
+
+    //last rules
+    for(auto rule: lastHighlightingRules) {
+        index = 0;
+        while((rxmatch = rule.pattern.match(text, index)).hasMatch()) {
+            int group = rule.group;
+            qDebug() << "last rule matched: " << rule.pattern.pattern();
+            setFormat(rxmatch.capturedLength(group), rxmatch.capturedStart(group), rule.format);
+            index = rxmatch.capturedEnd();
         }
     }
 
     setCurrentBlockState(0);
 
 	int startIndex = 0;
-    if (previousBlockState() != 1) {
-		startIndex = text.indexOf(commentStartExpression);
-	}
+    if(previousBlockState() != 1) {
+        rxmatch = commentStartExpression.match(text, 0);
+        startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
+    }
+
+    QRegularExpressionMatch endMatch;
 
     while (startIndex >= 0 && startIndex < commentIndex) {
-        int endIndex = text.indexOf(commentEndExpression, startIndex);
-		if (format(startIndex) == quotationFormat) {
-			startIndex = text.indexOf(commentStartExpression,
-									  startIndex + 1);
-			continue;
+        endMatch = commentEndExpression.match(text, startIndex);
+        int endIndex = endMatch.hasMatch() ? endMatch.capturedStart() : -1;
+        if (format(startIndex) == quotationFormat) {
+            rxmatch = commentStartExpression.match(text, startIndex+1);
+            startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
+            continue;
 		}
 		int commentLength;
 		if (endIndex == -1) {
             setCurrentBlockState(1);
 			commentLength = text.length() - startIndex;
 		} else {
-			commentLength = endIndex - startIndex
-					+ commentEndExpression.matchedLength();
+            commentLength = endIndex - startIndex + endMatch.capturedLength();
 		}
 		setFormat(startIndex, commentLength, multiLineCommentFormat);
-		startIndex = text.indexOf(commentStartExpression,
-								  startIndex + commentLength);
-	}
+        rxmatch = commentStartExpression.match(text, startIndex + commentLength);
+        startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
+    }
 }
 
 
@@ -1021,20 +1016,22 @@ void Highlighter::setLastRules()
 {
 	HighlightingRule rule;
 
-    rule = {QRegExp("^\\s*([a-zA-Z]\\w*):\\s*"), labelFormat, 1};
+    // labels
+    rule = {QRegularExpression("^\\s*([a-zA-Z]\\w*):\\s*$"), labelFormat, 1};
     lastHighlightingRules.append(rule);
 
     // strings
-    rule = {QRegExp("\"[^\"]*\""), quotationFormat, 0};
-    lastHighlightingRules.append(rule);
+    // lastHighlightingRules.append({QRegularExpression("\"[^\"]*\""), quotationFormat, 0});
 
+    // NB: multiline strings should be implemented like multi-line comments
+    // NB2: qt does syntax highlighting on a line-per-line basis
     // multi line strings
-    rule = {QRegExp("\\{\\{.*"), quotationFormat, 0};
-	lastHighlightingRules.append(rule);
+    // rule = {QRegularExpression("\\{\\{.*"), quotationFormat, 0};
+    // lastHighlightingRules.append(rule);
 
     // end multi line strings
-    rule = {QRegExp(".*\\}\\}"), quotationFormat, 0};
-	lastHighlightingRules.append(rule);
+    // rule = {QRegularExpression(".*\\}\\}"), quotationFormat, 0};
+    // lastHighlightingRules.append(rule);
 }
 
 int Highlighter::findOpcode(QString opcodeName, int start, int end)
@@ -1047,11 +1044,11 @@ int Highlighter::findOpcode(QString opcodeName, int start, int end)
 	int pos = ((end - start)/2) + start;
 	if (opcodeName == m_opcodeList[pos])
 		return pos;
-	else if (start == end)
+    else if(start == end)
 		return -1;
-	else if (opcodeName < m_opcodeList[pos])
+    else if(opcodeName < m_opcodeList[pos])
 		return findOpcode(opcodeName, start, pos);
-	else if (opcodeName > m_opcodeList[pos])
+    else if(opcodeName > m_opcodeList[pos])
 		return findOpcode(opcodeName, pos + 1, end);
 	return -1;
 }

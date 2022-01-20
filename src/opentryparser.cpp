@@ -40,8 +40,6 @@ void OpEntryParser::parseOpcodesXml(QString opcodeFile) {
     }
     file.close();
     excludedOpcodes << "|" << "||" << "^" << "+" << "*" << "-" << "/";
-    //      << "instr" << "endin" << "opcode" << "endop"
-    //      << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs";
     QDomElement docElem = m_doc.documentElement();
     QList<Opcode> opcodesInCategoryList;
 
@@ -75,12 +73,10 @@ void OpEntryParser::parseOpcodesXml(QString opcodeFile) {
                 // check if several parenthesis ie description added to inArgs like "(MidiNoteNumber)  (init- or control-rate args only)"
                 // remove, if existing
                 if (op.inArgs.count("(")>1) {
-                    //qDebug()<< op.opcodeName << "has extra description: " << op.inArgs;
                     QString inArgs = op.inArgs;
                     int lastIndex = inArgs.lastIndexOf("(");
                     if (lastIndex>0) {
                         inArgs = inArgs.left(lastIndex-1);
-                        //qDebug() << "inArgs now: " << inArgs.simplified();
                         op.inArgs = inArgs;
                     }
                 }
@@ -100,10 +96,6 @@ void OpEntryParser::parseOpcodesXml(QString opcodeFile) {
         opcodeCategoryList.append(newCategory);
         cat = cat.nextSiblingElement("category");
     }
-    // print list
-    // qDebug() << "opcodeList:";
-    // foreach(auto &x, opcodeList)
-    //    qDebug() << x.opcodeName;
 }
 
 OpEntryParser::OpEntryParser(QString opcodeFile)
@@ -120,11 +112,7 @@ OpEntryParser::~OpEntryParser()
 
 void OpEntryParser::addExtraOpcodes()
 {
-    Opcode opcode;
-	opcode.outArgs = "";
-	opcode.opcodeName = "then";
-	opcode.inArgs ="";
-	addOpcode(opcode);
+    addOpcode(Opcode("then"));
 
     addFlag("use-system-sr", "Use the samplerate defined by the realtime audio backend");
     addFlag("omacro", "--omacro:XXX=YYY set orchestra macro XXX to value YYY");
@@ -141,8 +129,7 @@ void OpEntryParser::sortOpcodes()
 QStringList OpEntryParser::opcodeNameList()
 {
 	QStringList list;
-	//   qDebug("OpEntryParser::opcodeNameList() opcodeList.size() = %i",opcodeList.size());
-	for (int i = 0; i<opcodeList.size();i++)  {
+    for (int i = 0; i<opcodeList.size();i++)  {
 		list.append(opcodeList[i].opcodeName);
 	}
 	return list;
@@ -150,22 +137,12 @@ QStringList OpEntryParser::opcodeNameList()
 
 void OpEntryParser::addOpcode(Opcode opcode)
 {
-    /*
-	int i = 0;
-	int size = opcodeList.size();
-	while (i<size && opcodeList[i].opcodeName < opcode.opcodeName)
-		i++;
-	opcodeList.insert(i, opcode);
-    */
     opcodeList.append(opcode);
 }
 
 void OpEntryParser::addFlag(QString flag, QString desc) {
-    Opcode opcode;
+    Opcode opcode(flag);
     opcode.desc = desc;
-    opcode.opcodeName = flag;
-    opcode.inArgs = "";
-    opcode.outArgs = "";
     opcode.isFlag = 1;
     opcodeList.append(opcode);
 }
@@ -180,7 +157,7 @@ Opcode OpEntryParser::findOpcode(QString opcodeName) {
         return m_udosMap->value(opcodeName);
     }
     qDebug() << "OpEntryParser::findOpcode: opcode " << opcodeName << "not found";
-    return Opcode();
+    return Opcode("");
 }
 
 QString opcodeSyntax(Opcode opc) {
@@ -234,8 +211,7 @@ QList< QPair<QString, QList<Opcode> > > OpEntryParser::getOpcodesByCategory()
 
 int OpEntryParser::getCategoryCount()
 {
-	// qDebug("OpEntryParser::getCategoryCount()");
-	return categoryList.size();
+    return categoryList.size();
 }
 
 QString OpEntryParser::getCategory(int index)
@@ -290,18 +266,17 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
             return false;
     }
     QString inArgs = opcode.inArgs;
-    // QString inArgs = opcodeList[idx].inArgs;
     QString inArgsOpt = "";
     if (inArgs.contains("["))
         inArgsOpt = inArgs.mid(inArgs.indexOf("["));
     inArgs.remove(inArgsOpt);
-    QStringList args = inArgs.split(QRegExp("[,\\\"]+"), QString::SkipEmptyParts);
+    QStringList args = inArgs.split(QRegExp("[,\\\"]+"), Qt::SkipEmptyParts);
     for (int count = 0; count < args.size(); count ++) {
         args[count] = args[count].trimmed();
         if (args[count] == "")
             args.removeAt(count);
     }
-    QStringList argsOpt = inArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]+"), QString::SkipEmptyParts);
+    QStringList argsOpt = inArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]+"), Qt::SkipEmptyParts);
     for (int j = 0; j < inputs.size(); j++) {
         if (j < args.size()) {
             inputs[j].argName = args[j];
@@ -318,27 +293,26 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
                     inputs[j].argName = "";
                 }
                 inputs[j].optional = true;
-                //             qDebug() << "OpEntryParser::getOpcodeArgNames " <<  inputs[j].argName ;
             }
             else {
                 qDebug("OpEntryParser::getOpcodeArgNames: Error too many inargs");
             }
         }
     }
-    // QString outArgs = opcodeList[i].outArgs;
     QString outArgs = opcode.outArgs;
     QString outArgsOpt = "";
     if (outArgs.contains("["))
         outArgsOpt = outArgs.mid(outArgs.indexOf("["));
     outArgs.remove(outArgsOpt);
-    args = outArgs.split(QRegExp("[,\\s]+"), QString::SkipEmptyParts);
-    argsOpt = outArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]"), QString::SkipEmptyParts);
+    args = outArgs.split(QRegExp("[,\\s]+"), Qt::SkipEmptyParts);
+    argsOpt = outArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]"), Qt::SkipEmptyParts);
     for (int j = 0; j < outputs.size(); j++) {
         if (j < args.size()) {
             outputs[j].argName = args[j];
             outputs[j].optional = false;
         }
-        else { //optional parameter
+        else {
+            //optional parameter
             int index = j - args.size();
             if (index < inArgsOpt.size()) {
                 if (index < argsOpt.size()) {

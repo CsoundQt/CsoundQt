@@ -56,7 +56,7 @@ i 1 0 1
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>184</x>
   <y>4</y>
@@ -66,8 +66,10 @@ i 1 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Bidirectional</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -85,7 +87,7 @@ i 1 0 1
   <borderradius>4</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>4</y>
@@ -95,8 +97,10 @@ i 1 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>From Csound</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -114,7 +118,7 @@ i 1 0 1
   <borderradius>4</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName>text</objectName>
   <x>23</x>
   <y>28</y>
@@ -124,8 +128,10 @@ i 1 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>32</fontsize>
   <precision>3</precision>
@@ -143,7 +149,7 @@ i 1 0 1
   <borderradius>10</borderradius>
   <borderwidth>5</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
   <x>30</x>
   <y>98</y>
@@ -153,6 +159,7 @@ i 1 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -160,9 +167,11 @@ i 1 0 1
   <image>/</image>
   <eventLine>i1 0 1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>newtext</objectName>
   <x>197</x>
   <y>36</y>
@@ -172,9 +181,10 @@ i 1 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Type something</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -189,7 +199,7 @@ i 1 0 1
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>197</x>
   <y>73</y>
@@ -199,6 +209,7 @@ i 1 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -206,9 +217,11 @@ i 1 0 1
   <image>/</image>
   <eventLine>i5 0 1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>newtext2</objectName>
   <x>198</x>
   <y>109</y>
@@ -218,8 +231,10 @@ i 1 0 1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>

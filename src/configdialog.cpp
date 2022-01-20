@@ -173,9 +173,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	consoleBgColorPushButton->setPalette(palette);
 
 	pixmap.fill(m_options->editorBgColor);
-	editorBgColorButton->setIcon(pixmap);
+    // editorBgColorButton->setIcon(pixmap);
 	palette = QPalette(m_options->editorBgColor);
-	editorBgColorButton->setPalette(palette);
+    // editorBgColorButton->setPalette(palette);
 
 	tabWidthSpinBox->setValue(m_options->tabWidth);
 	tabIndentCheckBox->setChecked(m_options->tabIndents);
@@ -386,7 +386,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(midiOutputToolButton, SIGNAL(released()), this, SLOT(selectMidiOutput()));
 	connect(consoleFontColorPushButton, SIGNAL(released()), this, SLOT(selectTextColor()));
 	connect(consoleBgColorPushButton, SIGNAL(released()), this, SLOT(selectBgColor()));
-	connect(editorBgColorButton, SIGNAL(released()), this, SLOT(selectEditorBgColor()));
+    // connect(editorBgColorButton, SIGNAL(released()), this, SLOT(selectEditorBgColor()));
 
 	connect(clearTemplatePushButton,SIGNAL(released()), this, SLOT(clearTemplate()));
 	connect(defaultTemplatePushButton,SIGNAL(released()), this, SLOT(defaultTemplate()));
@@ -984,9 +984,9 @@ void ConfigDialog::selectEditorBgColor()
 		m_options->editorBgColor = color;
 		QPixmap pixmap (64,64);
 		pixmap.fill(m_options->editorBgColor);
-		editorBgColorButton->setIcon(pixmap);
+        // editorBgColorButton->setIcon(pixmap);
 		QPalette palette(m_options->editorBgColor);
-		editorBgColorButton->setPalette(palette);
+        // editorBgColorButton->setPalette(palette);
 	}
 }
 

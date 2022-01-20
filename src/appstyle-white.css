@@ -16,3 +16,9 @@ QDockWidget::title  {
     padding-left: 0px;
 }
 
+QTextEdit {
+    background-color: #f0f0f0;
+    color: #202020;
+    border-radius: 4px;
+    border: 1px solid #455364;
+}

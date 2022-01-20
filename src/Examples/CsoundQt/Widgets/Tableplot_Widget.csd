@@ -1,5 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
+-odac
 
 </CsOptions>
 <CsInstruments>
@@ -22,47 +23,46 @@ via "@set tablenumber" and it can be updated via "@update"
 
 */
 
-;; Create two empty tables
+; Create two empty tables
 gi1 ftgen 0, 0, 1024, 2, 0
-gi2 ftgen 0, 0,  512, 2, 0   
+gi2 ftgen 0, 0,  512, 2, 0  
+
+chn_k "plot1", "w" 
+chn_k "plot2", "w"
 
 instr 1
-	;; Here we just set the table number for each plot
-	;; The table number can be either set via a number...
-	outvalue "plot1", p4
-	;; or via the command "@set"
-	outvalue "plot2", sprintf("@set %d", p5)
+	ktab1 init gi1
+	ktab2 init gi2
 	
-	;; Schedule the tables to be switched in 5 seconds
-	schedule 1, 5, -1, p5, p4
-	turnoff
-endin
-
-instr 2
-	;; Here we modify the tables
+	; switch tables every five seconds
+	if metro(1/2) == 1 then
+		ktab1, ktab2 = ktab2, ktab1
+	endif
+	
+	; Modify the tables
 	ilen = ftlen(gi1)
 	
-	;; We fill a table with an aplitude varying sine wave
+	; We fill a table with an aplitude varying sine wave at k-rate
 	kamp = linlin(oscil:k(1, 0.1), 1, 8, -1, 1)
-	; kamp linseg 0.5, 4, 10, 4, 0.5
-	kval oscil kamp, 10
+	kval oscil kamp, 15
 	kidx = timeinstk() % ilen
 	tablew kval, kidx, gi1
 	
-	;; The second table is filled with realtime audio input
+	; The second table is filled with realtime audio input
 	aidx phasor sr/ftlen(gi2)
-	tablew inch(1), aidx, gi2, 1 
+	tablew inch(1)*2, aidx, gi2, 1 
 	
-	if metro(24) == 1 then
-		;; the "k" is necessary to make outvalue a k-time opcode
-		;; the -1 sent at k-time will update the current table
-		outvalue "plot1", k(-1)
-		outvalue "plot2", "@update"
-	endif
+	; Update rate of the plots. NB: the widget update rate in
+	; CsoundQt is limited to 30 fps, so any update faster than
+	; than will have no effect other than time aliasing
+	ktrig metro 24
+	
+	chnset ktrig == 1 ? -1 : ktab1, "plot1"
+	chnset ktrig == 1 ? -1 : ktab2, "plot2"
+	
 endin
 
-schedule 1, 0, -1, gi1, gi2
-schedule 2, 0.001, 3600
+schedule 1, 0.1, 3600, gi1, gi2
 
 </CsInstruments>
 <CsScore>
@@ -78,12 +78,12 @@ schedule 2, 0.001, 3600
  <height>149</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
+ <bgcolor mode="background">
+  <r>240</r>
+  <g>240</g>
+  <b>240</b>
  </bgcolor>
- <bsbObject type="BSBTableDisplay" version="2">
+ <bsbObject version="2" type="BSBTableDisplay">
   <objectName>plot2</objectName>
   <x>370</x>
   <y>74</y>
@@ -93,6 +93,7 @@ schedule 2, 0.001, 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <color>
    <r>255</r>
    <g>193</g>
@@ -100,7 +101,7 @@ schedule 2, 0.001, 3600
   </color>
   <range>0.00</range>
  </bsbObject>
- <bsbObject type="BSBTableDisplay" version="2">
+ <bsbObject version="2" type="BSBTableDisplay">
   <objectName>plot1</objectName>
   <x>8</x>
   <y>74</y>
@@ -110,6 +111,7 @@ schedule 2, 0.001, 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <color>
    <r>255</r>
    <g>153</g>
@@ -117,7 +119,7 @@ schedule 2, 0.001, 3600
   </color>
   <range>0.00</range>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>7</x>
   <y>11</y>
@@ -127,6 +129,7 @@ schedule 2, 0.001, 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Table Plot Widget</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
@@ -147,24 +150,25 @@ schedule 2, 0.001, 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>11</x>
   <y>354</y>
-  <width>360</width>
-  <height>114</height>
+  <width>460</width>
+  <height>127</height>
   <uuid>{ce9539a1-5f6f-4a93-8e67-2e45899088cb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>This widget allows to visualize the contents of a table in real-time. To set the table number to plot send the table number to its channel. To update the plot just send -1 and the last set table will be updated. 
 
-The widget also accepts string values. The table can be set via "@set tablenumber" and it can be updated via "@update"
+The widget also accepts string values. The table can be set with 'outvalue "@set &lt;tablenumber>"' and it can be updated via 'outvalue "@update"'
 </label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
-  <fontsize>13</fontsize>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>52</r>
@@ -180,7 +184,7 @@ The widget also accepts string values. The table can be set via "@set tablenumbe
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>11</x>
   <y>320</y>
@@ -190,6 +194,7 @@ The widget also accepts string values. The table can be set via "@set tablenumbe
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Description</label>
   <alignment>left</alignment>
   <valignment>top</valignment>

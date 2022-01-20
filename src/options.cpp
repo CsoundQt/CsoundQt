@@ -47,7 +47,7 @@ Options::Options(ConfigLists *configlists) :
 
     tabWidth = 4;
     colorVariables = true;
-    highlightingTheme = "classic";
+    highlightingTheme = "light";
     autoPlay = true;
     autoJoin = false;
 	midiCcToCurrentPageOnly = false;

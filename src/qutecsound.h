@@ -100,7 +100,8 @@ public:
 	void setPresetsText(QString text, int index = -1);
 	void setOptionsText(QString text, int index = -1);
 	int getDocument(QString name = ""); // Returns document index. -1 if not current open
-	QString getSelectedText(int index = -1, int section = 0);
+    QString getTheme();
+    QString getSelectedText(int index = -1, int section = 0);
 	QString getCsd(int index);
 	QString getFullText(int index);
 	QString getOrc(int index);
@@ -334,7 +335,7 @@ private:
 	void clearSettings();
     void setToolbarIconSize(int size);
     int execute(QString executable, QString options);
-	//    bool saveCurrent();
+    //    bool saveCurrent();
 	bool makeNewPage(QString fileName, QString text);
 	bool loadCompanionFile(const QString &fileName);
 	void setCurrentFile(const QString &fileName);
@@ -532,6 +533,7 @@ private:
     QByteArray m_preFullScreenState;
     QString m_fullScreenComponent;
     QDir m_rissetDataPath;
+    bool isDarkPalette;
 };
 
 class FileOpenEater : public QObject
@@ -543,7 +545,7 @@ public:
 		m_mw = mainWindow;
 		while (!fileEventQueue.isEmpty()) {
 			QString fileName = fileEventQueue.takeFirst();
-			qDebug() << "FileOpenEater::setMainWindow  opening file " << fileName << endl;
+            qDebug() << "FileOpenEater::setMainWindow  opening file" << fileName << Qt::endl;
 			m_mw->loadFileFromSystem(fileName);
 		}
 	}

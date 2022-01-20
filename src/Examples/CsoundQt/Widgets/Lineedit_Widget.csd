@@ -49,78 +49,52 @@ e
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>170</r>
-  <g>161</g>
-  <b>169</b>
+  <r>194</r>
+  <g>204</g>
+  <b>210</b>
  </bgcolor>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>7</x>
-  <y>220</y>
-  <width>277</width>
-  <height>213</height>
-  <uuid>{085c635a-66f9-4532-8df3-1dfcf28600cb}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label/>
-  <alignment>left</alignment>
-  <font>Helvetica</font>
-  <fontsize>6</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>87</r>
-   <g>89</g>
-   <b>78</b>
-  </color>
-  <bgcolor mode="background">
-   <r>194</r>
-   <g>203</g>
-   <b>197</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>14</x>
-  <y>226</y>
-  <width>264</width>
+  <x>8</x>
+  <y>225</y>
+  <width>276</width>
   <height>199</height>
   <uuid>{b37e9f05-df2d-4a31-ab50-f93173624086}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The Line Edit Widget can also be used to receive strings from Csound. Put the keyboard focus on the line edit widget below and type on the ASCII keyboard.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>85</g>
-   <b>127</b>
+   <r>42</r>
+   <g>46</g>
+   <b>50</b>
   </color>
   <bgcolor mode="background">
-   <r>194</r>
-   <g>197</g>
-   <b>214</b>
+   <r>166</r>
+   <g>176</g>
+   <b>180</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>lineedit</objectName>
-  <x>188</x>
-  <y>306</y>
+  <x>205</x>
+  <y>305</y>
   <width>25</width>
   <height>25</height>
   <uuid>{eca8b99c-5d0e-4bd0-adb5-199c226b5305}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>-</label>
   <alignment>left</alignment>
   <font>Arial</font>
@@ -148,27 +122,41 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.05000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.21363636</value>
+  <value>0.23198000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>45</x>
+  <x>44</x>
   <y>306</y>
-  <width>146</width>
-  <height>25</height>
+  <width>156</width>
+  <height>26</height>
   <uuid>{f9f54980-38ff-4721-97d6-8afa7a524711}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>Put keyboard focus here --></label>
+  <description/>
+  <label>Put keyboard focus here >>></label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -181,9 +169,9 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -195,8 +183,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Level</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -212,7 +202,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>dur</objectName>
@@ -224,9 +214,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.20000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>1.12477064</value>
+  <value>1.30642202</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -242,8 +233,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>duration</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -259,7 +252,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -271,24 +264,26 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The Line Edit Widget can be used to pass strings from the widget panel to the csound program.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>85</g>
-   <b>127</b>
+   <r>28</r>
+   <g>29</g>
+   <b>30</b>
   </color>
   <bgcolor mode="background">
-   <r>194</r>
-   <g>197</g>
-   <b>214</b>
+   <r>166</r>
+   <g>176</g>
+   <b>180</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>instring</objectName>
@@ -300,7 +295,8 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <description/>
+  <label>bar</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -327,24 +323,26 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <description/>
+  <label>bar</label>
   <alignment>left</alignment>
-  <font>Courier New</font>
+  <valignment>top</valignment>
+  <font>Liberation Mono</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>85</r>
-   <g>255</g>
-   <b>255</b>
+   <r>230</r>
+   <g>230</g>
+   <b>230</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>42</r>
+   <g>46</g>
+   <b>50</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>2</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -356,8 +354,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Line Edit Widget</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
@@ -373,7 +373,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

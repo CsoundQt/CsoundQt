@@ -1542,7 +1542,7 @@ QuteTableWidget::~QuteTableWidget() {
 };
 
 void QuteTableWidget::reset() {
-    QMutexLocker locker(&mutex);
+    // This needs to be called with the lock
     m_tabnum = 0;
     m_running = false;
     m_data = nullptr;
@@ -1551,34 +1551,14 @@ void QuteTableWidget::reset() {
         m_maxy = 1.0;
         m_miny = -1.0;
     }
-    if(m_path != nullptr) {
-        delete m_path;
-        m_path = nullptr;
-    }
+    m_path.clear();
 }
+
 
 void QuteTableWidget::paintGrid(QPainter *painter) {
     int margin = m_margin;
     QString maxystr, minystr;
-    double newmaxy = m_maxy;
-    double newminy = m_miny;
     auto rect = this->rect();
-    auto width = rect.width() - margin*2;
-    int step = m_tabsize / width;
-    if (step == 0)
-        step = 1;
-
-    if(m_autorange) {
-        for(int i=0; i < m_tabsize; i+=step) {
-            double y = m_data[i];
-            if(y > newmaxy)
-                newmaxy = y;
-            else if (y < newminy)
-                newminy = y;
-        }
-        m_maxy = ceil(newmaxy);
-        m_miny = floor(newminy);
-    }
 
     if(m_maxy >= 10)
         maxystr = QString::number((int)m_maxy);
@@ -1602,34 +1582,28 @@ void QuteTableWidget::paintGrid(QPainter *painter) {
     auto height = rect.height() - margin*2;
     double yscale = -height / (m_maxy - m_miny);
 
-
-    auto font = QFont({"Sans", 8});
-    QFontMetrics fm(font);
     auto tabsizestr = QString::number(m_tabsize);
     const int textMargin = 4;
     painter->setBrush(Qt::NoBrush);
     painter->setPen(QPen(QColor(96, 96, 96), 0));
 
     // upper line
-    painter->drawLine(rect.x() + fm.boundingRect(maxystr).width()+textMargin*2, y0, x1, y0);
+    painter->drawLine(rect.x() + gridFontMetrics.boundingRect(maxystr).width()+textMargin*2, y0, x1, y0);
     // lower line
-    painter->drawLine(x0, y1, x1 - fm.boundingRect(tabsizestr).width() - 2, y1);
+    painter->drawLine(x0, y1, x1 - gridFontMetrics.boundingRect(tabsizestr).width() - 2, y1);
 
     // 0 line
     if (m_maxy > 0 && m_miny < 0) {
         int yzero = static_cast<int>(-m_miny * yscale + (y0+height));
-        QDEBUG << yzero << y0 << y1;
         painter->drawLine(x0, yzero, x1, yzero);
-
         painter->setPen(QColor(200, 200, 200));
         painter->drawText(rect.x(), yzero, "0");
     }
 
     painter->setPen(QColor(200, 200, 200));
-    painter->setFont(font);
+    painter->setFont(gridFont);
     painter->drawText(rect.x()+textMargin, y0+textMargin, maxystr);
     painter->drawText(rect, Qt::AlignLeft|Qt::AlignBottom, minystr);
-
 
     // right padding
     rect.setWidth(rect.width() - textMargin);
@@ -1637,12 +1611,12 @@ void QuteTableWidget::paintGrid(QPainter *painter) {
 
 }
 
+
 void QuteTableWidget::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::NoPen);
-    bool running = csoundEngineStatus(m_ud) == CsoundEngineStatus::Running;
-    if(!running) {
+    if(!m_running) {
         painter.setBrush(QColor(176, 0, 32));
         painter.drawRect(this->rect());
         painter.setPen(Qt::white);
@@ -1661,16 +1635,15 @@ void QuteTableWidget::paintEvent(QPaintEvent *event) {
     painter.setBrush(QColor(24, 24, 24));
     painter.drawRect(this->rect());
     painter.setBrush(Qt::NoBrush);
-    if(m_path == nullptr)
-        return;
+    blockSignals(true);
     mutex.lock();
     if(m_showGrid) {
         this->paintGrid(&painter);
     }
     painter.setPen(QPen(m_color, 0));
-    painter.drawPath(*m_path);
-
+    painter.drawPath(m_path);
     mutex.unlock();
+    blockSignals(false);
 }
 
 void QuteTableWidget::setRange(double maxy) {
@@ -1684,76 +1657,79 @@ void QuteTableWidget::setRange(double maxy) {
 }
 
 void QuteTableWidget::updatePath() {
-    if(m_tabnum <= 0 && m_data == nullptr)
+    if(!m_running || m_tabnum <= 0) {
         return;
-    if(csoundEngineStatus(m_ud) != CsoundEngineStatus::Running)
+    }
+
+    MYFLT *data;
+    int tabsize = csoundGetTable(m_ud->csound, &data, m_tabnum);
+    if(tabsize == 0 || data == nullptr) {
+        QDEBUG << "Table not found" << m_tabnum;
         return;
+    }
+
+    m_tabsize = tabsize;
     int margin = m_margin;
+
     auto rect = this->rect();
     auto width = rect.width() - margin*2;
     auto height = rect.height() - margin*2;
-    double maxy = this->m_maxy;
-    double miny = this->m_miny;
-    double xscale = width / (double)m_tabsize;
+
+
+    double xscale = width / (double)tabsize;
     double y0 = rect.y() + margin;
     double x0 = rect.x() + margin;
-    int step = m_tabsize / width;
+
+    int step = tabsize / width;
     if(step == 0)
         step = 1;
 
-    auto path = new QPainterPath();
-    // double yscale = ((y0 - (y0+height)) / (maxy-miny));
+    double maxy = m_maxy;
+    double miny = m_miny;
+
+    if(m_autorange) {
+        double newmaxy = m_maxy;
+        double newminy = m_miny;
+        for(int i=0; i < tabsize; i += step) {
+            double y = data[i];
+            if(y > newmaxy)
+                newmaxy = y;
+            else if (y < newminy)
+                newminy = y;
+        }
+        maxy = m_maxy = ceil(newmaxy);
+        miny = m_miny = floor(newminy);
+    }
+
+    m_path.clear();
+    QPolygonF poly;
     double yscale = -height / (maxy-miny);
 
-    // y2 = (ydata - miny) / (maxy-miny) * (j1-j0) + j0
-    // j0 = y0 + height; j1 = y0
-    // move to first point
-    double ydata = m_data[0];
-    path->moveTo(x0, (ydata-miny)*yscale+y0+height);
-    for(int i=1; i < m_tabsize; i+=step) {
-        ydata = m_data[i];
+    double ydata = data[0];
+    poly.append(QPoint(x0, (ydata-miny)*yscale+y0+height));
+
+    for(int i=1; i < tabsize; i+=step) {
+        ydata = data[i];
         double x2 = i*xscale + x0;
         double y2 = (ydata - miny) * yscale + (y0+height);
-        path->lineTo(x2, y2);
+        // path->lineTo(x2, y2);
+        poly.append(QPointF(x2, y2));
     }
-    mutex.lock();
-    if(m_path != nullptr)
-        delete m_path;
-    m_path = path;
-    mutex.unlock();
+    m_path.addPolygon(poly);
 }
 
-void QuteTableWidget::updateData(int tabnum, bool check) {
-    if(check && csoundEngineStatus(m_ud) != CsoundEngineStatus::Running) {
-        m_tabnum = 0;
+void QuteTableWidget::updateData(int tabnum) {
+    QMutexLocker locker(&mutex);
+    if(!m_running) {
         return;
     }
-    if(tabnum == -1 || tabnum == m_tabnum ) {
-        if(m_tabnum == 0 || m_data == nullptr || m_tabsize == 0) {
-            qDebug() << "Table not set, can't update";
-            return;
+    else if(tabnum >= 0 && tabnum != m_tabnum) {
+        if(m_autorange) {
+            m_maxy = 1.0;
+            m_miny = 0;
         }
-        this->updatePath();
-        this->update();
-        return;
+        m_tabnum = tabnum;
     }
-    // Asked to change table ( or set for the first time )
-    MYFLT *data;
-    int tabsize = csoundGetTable(m_ud->csound, &data, tabnum);
-    if(tabsize == 0 || data == nullptr) {
-        qDebug() << "Table" << tabnum << "not found";
-        this->reset();
-        return;
-    }
-    mutex.lock();
-    m_data = data;
-    m_tabsize = tabsize;
-    if(m_autorange && m_tabnum != tabnum) {
-        m_maxy = 1.0;
-        m_miny = 0;
-    }
-    m_tabnum = tabnum;
-    mutex.unlock();
     this->updatePath();
     this->update();
 }
@@ -1850,16 +1826,17 @@ void QuteTable::applyProperties() {
 }
 
 void QuteTable::refreshWidget() {
-    Q_ASSERT(m_valueChanged);
+    // Q_ASSERT(m_valueChanged);
     QMutexLocker locker(&mutex);
     m_valueChanged = false;
-    if(csoundEngineStatus(m_csoundUserData) != CsoundEngineStatus::Running)
-        return;
+    auto status = csoundEngineStatus(m_csoundUserData);
+    m_csoundRunning = status == CsoundEngineStatus::Running;
     auto w = static_cast<QuteTableWidget*>(m_widget);
-    int tabnum = (int)m_value;
-    w->blockSignals(true);
-    w->updateData(tabnum, true);
-    w->blockSignals(false);
+    w->setRunningStatus(m_csoundRunning);
+    if(status != CsoundEngineStatus::Running) {
+        return;
+    }
+    w->updateData(m_tabnum);
 }
 
 QString QuteTable::getWidgetXmlText() {
@@ -1882,20 +1859,16 @@ QString QuteTable::getWidgetXmlText() {
 }
 
 void QuteTable::onStop() {
+    // this->blockSignals(true);
     mutex.lock();
-    this->blockSignals(true);
     m_tabnum = 0;
     m_value = 0;
     m_valueChanged = true;
 
-    auto w = static_cast<QuteTableWidget*>(m_widget);
-    w->setUserData(m_csoundUserData);
-    w->blockSignals(true);
-    w->reset();
-    w->blockSignals(false);
-    // this->applyInternalProperties();
-    this->blockSignals(false);
+    static_cast<QuteTableWidget*>(m_widget)->stop(m_csoundUserData);
     mutex.unlock();
+    // this->applyInternalProperties();
+    // this->blockSignals(false);
 }
 
 void QuteTable::setCsoundUserData(CsoundUserData *ud) {
@@ -1903,7 +1876,6 @@ void QuteTable::setCsoundUserData(CsoundUserData *ud) {
         qDebug()<<"CsoundUserData is null";
         return;
     }
-    QMutexLocker locker(&mutex);
     m_csoundUserData = ud;
     auto w = static_cast<QuteTableWidget*>(m_widget);
     if(w == nullptr) {
@@ -1924,54 +1896,62 @@ void QuteTable::setWidgetGeometry(int x, int y, int width, int height) {
 }
 */
 
-void QuteTable::setValue(double value) {
-    if(m_value == value) {
+void QuteTable::setTableNumber(int tabnum) {
+    if(tabnum == m_tabnum)
         return;
-    }
-
-#ifdef USE_WIDGET_MUTEX
-    widgetLock.lockForWrite();
-#endif
-    mutex.lock();
-    if(value == -1 && m_tabnum > 0) {
-        // update data, don't change table number
-        m_valueChanged = false;
-        auto w = static_cast<QuteTableWidget*>(m_widget);
-        w->blockSignals(true);
-        w->updateData(m_tabnum);
-        w->blockSignals(false);
-        mutex.unlock();
-        return;
-    }
-    m_value = value;
     m_valueChanged = true;
-    m_tabnum = (int)value;
-    mutex.unlock();
-    static_cast<QuteTableWidget*>(m_widget)->updateData(m_tabnum);
+    m_value = tabnum;
+    m_tabnum = tabnum;
+    auto w = static_cast<QuteTableWidget*>(m_widget);
+    w->updateData(m_tabnum);
+}
 
-#ifdef USE_WIDGET_MUTEX
-    widgetLock.unlock();
-#endif
-
+void QuteTable::setValue(double value) {
+    if(value == 0) {
+        m_value = m_tabnum;
+        return;
+    }
+    else if(value == -1) {
+        if(m_tabnum <= 0) {
+            QDEBUG << "Table number not set, can't update";
+            return;
+        }
+        // update data, don't change table number
+        m_valueChanged = true;
+        // auto w = static_cast<QuteTableWidget*>(m_widget);
+        // w->updateData(m_tabnum);
+        return;
+    }
+    else if(m_value == value) {
+        return;
+    }
+    else if(value > 0) {
+        setTableNumber(static_cast<int>(value));
+    }
+    else {
+        qDebug() << "Invalid value for TablePlot:" << value;
+        return;
+    }
 };
 
 void QuteTable::setValue(QString s) {
-    if(s.isEmpty())
+    auto parts = s.splitRef(' ', Qt::SkipEmptyParts);
+    if(parts.size() == 0) {
+        qWarning() << "TablePLot: Message not understood, expected @set <tabnum> "
+                    "or @update";
         return;
-    auto parts = s.splitRef(' ', QString::SkipEmptyParts);
-    if(parts.size() == 0)
-        return;
+    }
     if(parts[0] == "@set") {
         if(parts.size() != 2) {
-            qDebug() << "@set message expects a table number (example: @set 103)";
+            qWarning() << "@set message expects a table number (example: @set 103)";
             return;
         }
         int tabnum = parts[1].toInt();
-        setValue((double)tabnum);
-    } else if (parts[0] == "@update") {
+        setTableNumber(tabnum);
+    } else if (parts[0] == "@update" && m_tabnum > 0) {
         setValue(-1);
     } else
-        qDebug() << "Message not supported:" << s;
+        qWarning() << "Message not supported:" << s;
 }
 
 SpectralView::~SpectralView() {};

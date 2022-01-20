@@ -76,9 +76,16 @@ private:
     // QVector<QString> m_opcodes;
     QStringList m_opcodes;
     QRegExp opcodeRegexp;
+    QRegularExpression rxOpcode;
     bool inspectLabels;
     QHash<QString, Opcode>udosMap;
     QVector<Opcode *>udosVector;
+
+    QRegularExpression xinRx;
+    QRegularExpression xoutRx;
+    QRegularExpression ftableRx1;
+    QRegularExpression ftableRx2;
+
 
 private slots:
 	void itemActivated(QTreeWidgetItem * item, int column = 0);

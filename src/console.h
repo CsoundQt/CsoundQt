@@ -66,6 +66,8 @@ protected:
 	bool m_repeatKeys;
     QMutex consoleLock;
 
+    QRegularExpression rxerr;
+
 signals:
 	void keyPressed(int key);
 	void keyReleased(int key);

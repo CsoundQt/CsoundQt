@@ -142,20 +142,19 @@ void BaseDocument::setAppProperties(AppProperties properties)
 
 QString BaseDocument::getFullText()
 {
-	QString fullText;
-	fullText = m_view->getFullText();
-	//  if (!fullText.endsWith("\n"))
-	//    fullText += "\n";
+    QStringList parts;
+    parts << m_view->getFullText();
     if (fileName.endsWith(".csd",Qt::CaseInsensitive) || fileName == "") {
-		fullText += getWidgetsText() ;
-		fullText += getPresetsText() + "\n";
+        parts << getWidgetsText() ;
+        parts << getPresetsText() << "\n";
 	}
 	else { // Not a csd file
-		foreach (WidgetLayout * wl, m_widgetLayouts) {
+        for(auto wl: m_widgetLayouts) {
+        // foreach (WidgetLayout * wl, m_widgetLayouts) {
 			wl->clearWidgets(); // make sure no widgets are used.
 		}
 	}
-	return fullText;
+    return parts.join("");
 }
 
 QString BaseDocument::getBasicText()

@@ -4,6 +4,7 @@
 #include <QString>
 #include <QJsonDocument>
 #include <QDir>
+#include <QProcess>
 
 
 class Risset
@@ -12,10 +13,11 @@ public:
     Risset(QString pythonExe);
 
     QString htmlManpage(QString opcodeName);
-    QString generateDocumentation();
+    int generateDocumentation(std::function<void(int)> callback=nullptr);
     bool downloadDocumentation();
     QString findHtmlDocumentation();
     QString markdownManpage(QString opcodeName);
+    void cleanupProcesses();
 
     bool isInstalled;
     QString rissetVersion;
@@ -33,8 +35,10 @@ private:
     QString m_pythonExe;
     QJsonDocument m_jsonInfo;
     bool opcodeIndexDone;
+    QList<QProcess*> runningProcesses;
 
     void initIndex();
+
 
 };
 

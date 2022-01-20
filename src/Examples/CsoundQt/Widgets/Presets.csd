@@ -8,7 +8,8 @@
 <CsScore>
 
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>613</x>
@@ -17,12 +18,12 @@
  <height>432</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background" >
-  <r>202</r>
-  <g>202</g>
-  <b>151</b>
+ <bgcolor mode="background">
+  <r>200</r>
+  <g>200</g>
+  <b>200</b>
  </bgcolor>
- <bsbObject version="2" type="BSBVSlider" >
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>slider1</objectName>
   <x>29</x>
   <y>75</y>
@@ -32,15 +33,16 @@
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1000.00000000</maximum>
   <value>1000.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob" >
+ <bsbObject type="BSBKnob" version="2">
   <objectName>knob1</objectName>
   <x>69</x>
   <y>85</y>
@@ -49,45 +51,58 @@
   <uuid>{088e0989-51c6-459f-9367-5de9207fb81f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1000.00000000</maximum>
   <value>1000.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#b45a00</textcolor>
+  <border>1</border>
+  <borderColor>#4a2600</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>spinbox1</objectName>
-  <x>161</x>
-  <y>109</y>
+  <x>160</x>
+  <y>100</y>
   <width>80</width>
   <height>25</height>
   <uuid>{7f11964b-c55f-4334-a22b-d12eb00d2c20}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>30</r>
+   <g>30</g>
+   <b>30</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>230</r>
+   <g>230</g>
+   <b>230</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>100</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>lineedit1</objectName>
   <x>73</x>
   <y>177</y>
@@ -97,36 +112,39 @@
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>MAX</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>30</r>
+   <g>30</g>
+   <b>30</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>230</r>
-   <g>221</g>
-   <b>213</b>
+   <g>230</g>
+   <b>230</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>slider1</objectName>
-  <x>161</x>
-  <y>141</y>
+  <x>160</x>
+  <y>130</y>
   <width>80</width>
   <height>25</height>
   <uuid>{63f00456-87b4-4cb8-bac0-418dda9f54f3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>1000.000</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -134,16 +152,16 @@
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>255</x>
   <y>87</y>
@@ -153,26 +171,28 @@
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>&lt;- A bunch of miscellaneous widgets</label>
+  <description/>
+  <label>&lt;&lt;&lt;  A bunch of miscellaneous widgets</label>
   <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>18</fontsize>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>62</x>
   <y>3</y>
@@ -182,28 +202,30 @@
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Widget Presets</label>
   <alignment>center</alignment>
-  <font>Arial</font>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
   <fontsize>36</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>15</r>
+   <g>15</g>
+   <b>15</b>
   </color>
-  <bgcolor mode="background" >
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
+  <bgcolor mode="background">
+   <r>162</r>
+   <g>162</g>
+   <b>162</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>18</x>
+  <x>12</x>
   <y>212</y>
   <width>364</width>
   <height>64</height>
@@ -211,29 +233,31 @@
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Widget presets can be saved and recalled by right clicking on the widget panel.
 Try it!</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>58</r>
+   <g>15</g>
+   <b>15</b>
   </color>
-  <bgcolor mode="background" >
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
+  <bgcolor mode="background">
+   <r>162</r>
+   <g>162</g>
+   <b>162</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>18</x>
+  <x>12</x>
   <y>290</y>
   <width>364</width>
   <height>86</height>
@@ -241,89 +265,88 @@ Try it!</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Widget presets can also be used through some reserved channels as the widgets here:</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>25</r>
+   <g>35</g>
+   <b>44</b>
   </color>
-  <bgcolor mode="background" >
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
+  <bgcolor mode="background">
+   <r>153</r>
+   <g>153</g>
+   <b>153</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>_SetPresetIndex</objectName>
-  <x>58</x>
-  <y>337</y>
+  <x>60</x>
+  <y>340</y>
   <width>47</width>
-  <height>26</height>
+  <height>30</height>
   <uuid>{b00b7ada-e33c-40f3-985c-02844e9bb94f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>15</r>
+   <g>15</g>
+   <b>15</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>240</r>
+   <g>240</g>
+   <b>240</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
   <maximum>3</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>3</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay" >
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>_GetPresetName</objectName>
-  <x>108</x>
-  <y>338</y>
+  <x>120</x>
+  <y>340</y>
   <width>83</width>
-  <height>26</height>
+  <height>30</height>
   <uuid>{63ef1797-ed71-4fea-b7f3-0faf78a0e28a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Max</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>27</r>
+   <g>30</g>
+   <b>32</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>108</r>
+   <g>120</g>
+   <b>128</b>
   </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <bordermode>false</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <objectName/>
- <x>613</x>
- <y>178</y>
- <width>408</width>
- <height>432</height>
- <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 <preset name="Default" number="0" >
@@ -359,17 +382,3 @@ Try it!</label>
 <value id="{63f00456-87b4-4cb8-bac0-418dda9f54f3}" mode="4" >1000.000</value>
 </preset>
 </bsbPresets>
-<MacGUI>
-ioView background {51914, 51914, 38807}
-ioSlider {29, 75} {20, 100} 0.000000 1000.000000 1000.000000 slider1
-ioKnob {69, 85} {80, 80} 1000.000000 0.000000 0.010000 1000.000000 knob1
-ioText {264, 87} {80, 25} editnum 100.000000 0.001000 "spinbox1" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 100.000000
-ioText {73, 177} {100, 25} edit 0.000000 0.00100 "lineedit1"  "Arial" 10 {0, 0, 0} {65280, 65280, 65280} falsenoborder MAX
-ioText {161, 141} {80, 25} display 1000.000000 0.00100 "slider1" left "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 1000.000
-ioText {302, 90} {80, 25} label 0.000000 0.00100 "" left "Arial" 18 {0, 0, 0} {58880, 56576, 54528} nobackground noborder <- A bunch of miscellaneous widgets
-ioText {62, 3} {265, 59} label 0.000000 0.00100 "" center "Arial" 36 {0, 0, 0} {43520, 43520, 32512} nobackground noborder Widget Presets
-ioText {21, 207} {362, 55} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {43520, 43520, 32512} nobackground noborder Widget presets can be saved and recalled by right clicking on the widget panel.Â¬Try it!
-ioText {18, 302} {364, 64} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {43520, 43520, 32512} nobackground noborder Widget presets can also be used through some reserved channels as the widgets here:
-ioText {33, 337} {68, 27} editnum 3.000000 1.000000 "_SetPresetIndex" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 3.000000
-ioText {106, 338} {80, 25} display 0.000000 0.00100 "_GetPresetName" left "Arial" 14 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Max
-</MacGUI>

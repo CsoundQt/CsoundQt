@@ -17,11 +17,9 @@ endin
 
 </CsInstruments>
 <CsScore>
-f 1 0 4096 10 1 ;Sine wave
 i 1 0 1000
 </CsScore>
 </CsoundSynthesizer>
-
 
 
 
@@ -36,22 +34,24 @@ i 1 0 1000
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>138</r>
-  <g>149</g>
-  <b>156</b>
+  <r>230</r>
+  <g>230</g>
+  <b>230</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>102</x>
-  <y>4</y>
+  <x>90</x>
+  <y>5</y>
   <width>202</width>
   <height>41</height>
   <uuid>{c5f4063e-4a46-4f9d-96db-839bea9a983f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Slider Widget</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
@@ -67,22 +67,24 @@ i 1 0 1000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>7</x>
+  <x>5</x>
   <y>45</y>
-  <width>376</width>
-  <height>66</height>
+  <width>373</width>
+  <height>78</height>
   <uuid>{7650f5b0-e83a-46a4-ba7f-45a47f71997e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Sliders are used to send and receive data from the running Csound using channels. If a slider's width is greater than its height it becomes a horizontal slider. You can set a slider's range in it's properties.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
-  <fontsize>12</fontsize>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -94,58 +96,62 @@ i 1 0 1000
    <g>204</g>
    <b>234</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>amp</objectName>
   <x>40</x>
-  <y>126</y>
+  <y>155</y>
   <width>20</width>
   <height>100</height>
   <uuid>{a99d91b7-f92c-4044-a927-70a2943b968e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.23500000</value>
+  <value>0.21000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>freq</objectName>
-  <x>66</x>
-  <y>126</y>
+  <x>65</x>
+  <y>155</y>
   <width>313</width>
   <height>23</height>
   <uuid>{dfc109a0-ff5a-40e4-9a56-bb67e10acb6a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>100.00000000</minimum>
   <maximum>1000.00000000</maximum>
-  <value>689.45686901</value>
+  <value>703.83386581</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>139</x>
-  <y>142</y>
+  <x>140</x>
+  <y>175</y>
   <width>198</width>
   <height>41</height>
   <uuid>{6b918bc4-f76f-460e-8f7b-5054495f2143}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Frequency (from 100 to 1000 transmitting on channel 'freq'</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -161,20 +167,22 @@ i 1 0 1000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>9</x>
-  <y>231</y>
+  <x>10</x>
+  <y>260</y>
   <width>86</width>
   <height>86</height>
   <uuid>{baae2608-4500-4d99-99f3-941f5e2b5a84}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Amplitude (transmitting from 0 to 0.5 on channel 'amp'</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -190,18 +198,19 @@ i 1 0 1000
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
-  <x>99</x>
-  <y>186</y>
+  <x>100</x>
+  <y>215</y>
   <width>281</width>
   <height>130</height>
   <uuid>{9d18e25d-d310-4e60-9109-541fdad0d7df}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>-1.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -209,17 +218,8 @@ i 1 0 1000
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacGUI>
-ioView background {35466, 38293, 40092}
-ioText {102, 4} {202, 41} label 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Slider Widget
-ioText {7, 45} {377, 56} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {48896, 52224, 59904} nobackground noborder Sliders are used to send and receive data from the running Csound using channels. If a slider's width is greater than its height it becomes a horizontal slider. You can set a slider's range in it's properties.
-ioSlider {40, 126} {20, 100} 0.000000 0.500000 0.235000 amp
-ioSlider {66, 126} {313, 23} 100.000000 1000.000000 689.456869 freq
-ioText {140, 125} {198, 41} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequency (from 100 to 1000 transmitting on channel 'freq'
-ioText {10, 214} {86, 86} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amplitude (transmitting from 0 to 0.5 on channel 'amp'
-ioGraph {99, 186} {281, 130} scope 2.000000 -1 
-</MacGUI>

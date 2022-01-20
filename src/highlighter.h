@@ -107,15 +107,15 @@ protected:
 private:
 	struct HighlightingRule
 	{
-		QRegExp pattern;
+        QRegularExpression pattern;
 		QTextCharFormat format;
         int group;
 	};
 	QVector<HighlightingRule> highlightingRules;
 	QVector<HighlightingRule> lastHighlightingRules;
 
-	QRegExp commentStartExpression;
-	QRegExp commentEndExpression;
+    QRegularExpression commentStartExpression;
+    QRegularExpression commentEndExpression;
     QRegExp functionRegex;
 
     QRegularExpression rxScoreLetter;
@@ -153,7 +153,7 @@ private:
 
     QStringList pythonKeywords;  //Python
 	QTextCharFormat keywordFormat;
-    QRegExp csoundOptionsRx, csoundOptionsRx2;
+    QRegularExpression csoundOptionsRx, csoundOptionsRx2;
 
 	//     void setFirstRules();
 	void setLastRules();

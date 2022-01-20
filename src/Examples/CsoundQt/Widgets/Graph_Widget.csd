@@ -56,7 +56,9 @@ gisqr  ftgen 0, 0, 1024, 7, 1, 512, 1, 0, -1, 512, -1
 gisaw  ftgen 0, 0, 1024, 7, 1, 1024, -1
 
 instr Oscil
+
 	itables[] fillarray gisin1, gisin2, gisin3, gisqr, gisaw 
+	kindex init -1
 	kindex invalue "tabindex"
 	kindex = limit:k(kindex, 0, lenarray(itables)-1)
 	ktab = itables[kindex]
@@ -70,7 +72,7 @@ instr Oscil
 	adisp = asig*5
 	display adisp, 0.01
 	
-	if changed(kindex) == 1 then
+	if timeinstk() == 1 || changed(kindex) == 1 then
 		; A numeric value sent to the graph widget sets it to display graph 
 		; at that index. In this case, the graph is only enabled for tables,
 		; so that the index corresponds to the index of the itables array
@@ -90,6 +92,7 @@ instr SetupGraphs
 	
 	outvalue "graph2", "@find fft asig"
 	outvalue "graph3", "@find audio adisp"
+	; outvalue "plot1", gisin1
 	
 	; To select a table by number: 
 	; outvalue "graph1", sprintf("@find table %d", itabnum) 
@@ -97,7 +100,7 @@ instr SetupGraphs
 endin
 
 ; If started too early, the table display will fail
-schedule "Oscil", 0.1, -1
+schedule "Oscil", 0.3, -1
 
 ; setup the display graphs. Notice that we need to schedule this in the
 ; future since audio and fft graphs start existing when the first
@@ -105,7 +108,7 @@ schedule "Oscil", 0.1, -1
 ; window has been filled (delay = winsize/sr) and in the case of audio
 ; signals is the period itself
 
-schedule "SetupGraphs", 0.3, 1
+schedule "SetupGraphs", 0.5, 1
 
 </CsInstruments>
 <CsScore>
@@ -115,18 +118,18 @@ f0 3600
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
+ <x>0</x>
+ <y>0</y>
+ <width>730</width>
+ <height>739</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
+ <bgcolor mode="background">
+  <r>212</r>
+  <g>221</g>
+  <b>230</b>
  </bgcolor>
- <bsbObject type="BSBGraph" version="2">
+ <bsbObject version="2" type="BSBGraph">
   <objectName>graph1</objectName>
   <x>5</x>
   <y>65</y>
@@ -137,7 +140,7 @@ f0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>1</value>
+  <value>2</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -153,10 +156,10 @@ f0 3600
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject type="BSBSpinBox" version="2">
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>tabindex</objectName>
   <x>90</x>
-  <y>260</y>
+  <y>262</y>
   <width>50</width>
   <height>40</height>
   <uuid>{12cab531-987e-41ac-9262-d5f71c064805}</uuid>
@@ -165,28 +168,28 @@ f0 3600
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>16</fontsize>
   <color>
    <r>85</r>
    <g>0</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>0</r>
-   <g>85</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>218</r>
+   <g>218</g>
+   <b>218</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
   <maximum>4</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>2</value>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>5</x>
-  <y>265</y>
+  <y>267</y>
   <width>85</width>
   <height>30</height>
   <uuid>{d70336af-31c0-46c6-8288-9113647dfccf}</uuid>
@@ -214,10 +217,10 @@ f0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBGraph" version="2">
+ <bsbObject version="2" type="BSBGraph">
   <objectName>graph2</objectName>
   <x>5</x>
-  <y>335</y>
+  <y>350</y>
   <width>570</width>
   <height>189</height>
   <uuid>{23c327bd-bf0d-492b-90dd-e6536e96ae62}</uuid>
@@ -225,7 +228,7 @@ f0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>0</value>
+  <value>5</value>
   <objectName2/>
   <zoomx>4.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -233,7 +236,7 @@ f0 3600
   <dispy>1.00000000</dispy>
   <modex>lin</modex>
   <modey>lin</modey>
-  <showSelector>false</showSelector>
+  <showSelector>true</showSelector>
   <showGrid>true</showGrid>
   <showTableInfo>true</showTableInfo>
   <showScrollbars>false</showScrollbars>
@@ -241,10 +244,10 @@ f0 3600
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject type="BSBGraph" version="2">
+ <bsbObject version="2" type="BSBGraph">
   <objectName>graph3</objectName>
   <x>5</x>
-  <y>550</y>
+  <y>560</y>
   <width>570</width>
   <height>189</height>
   <uuid>{43a72640-7329-4222-abdb-bbd4584d49c0}</uuid>
@@ -268,7 +271,7 @@ f0 3600
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject type="BSBKnob" version="2">
+ <bsbObject version="2" type="BSBKnob">
   <objectName>freq</objectName>
   <x>210</x>
   <y>255</y>
@@ -281,7 +284,7 @@ f0 3600
   <description/>
   <minimum>20.00000000</minimum>
   <maximum>1000.00000000</maximum>
-  <value>298.71200000</value>
+  <value>743.73000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -293,15 +296,15 @@ f0 3600
   </color>
   <textcolor>#4a2600</textcolor>
   <border>1</border>
-  <borderColor>#000000</borderColor>
+  <borderColor>#4a2600</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>145</x>
-  <y>265</y>
+  <y>267</y>
   <width>64</width>
   <height>30</height>
   <uuid>{e0e7e340-f91d-4b1a-83f7-99afd9b06fec}</uuid>
@@ -329,7 +332,7 @@ f0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>6</x>
   <y>1</y>
@@ -360,7 +363,7 @@ f0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBTableDisplay" version="2">
+ <bsbObject version="2" type="BSBTableDisplay">
   <objectName>plot1</objectName>
   <x>370</x>
   <y>65</y>
@@ -378,7 +381,7 @@ f0 3600
   </color>
   <range>0.00</range>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>5</x>
   <y>45</y>
@@ -409,7 +412,7 @@ f0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>370</x>
   <y>44</y>
@@ -420,10 +423,10 @@ f0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Table Plot widget shows changes in tables also</label>
+  <label>Table Plot widget would show changes in a table</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
   <color>
@@ -440,21 +443,22 @@ f0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>5</x>
+  <x>4</x>
   <y>310</y>
-  <width>211</width>
-  <height>24</height>
+  <width>303</width>
+  <height>38</height>
   <uuid>{9a77618a-96c8-4a63-b6a7-74e9af0b3ee2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Spectrum graph widget, driven by dispfft</label>
+  <label>Spectrum graph widget, driven by dispfft
+Click on a peak to display its frequency</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
   <color>
@@ -471,10 +475,10 @@ f0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>5</x>
-  <y>530</y>
+  <y>540</y>
   <width>238</width>
   <height>23</height>
   <uuid>{95516290-ec6d-42db-aea9-418260ff1003}</uuid>

@@ -42,10 +42,11 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	m_hoverText->show();
 	m_hoverText->setStyleSheet(
 				"QLabel {"
-				"border: 1px solid black;"
-//				"border-radius: 4px;"
-				"padding: 2px;"
-				"background-color: #eaeac5;"
+                "  border: 1px solid black;"
+                "  border-radius: 4px;"
+                "  padding: 2px;"
+                "  background-color: #eaeac5;"
+                "  color: #202020; "
 				"};");
 	m_hoverText->setWordWrap(true);
 	m_hoverWidget->hide();
@@ -107,10 +108,10 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	syntaxMenu = new MySyntaxMenu(m_mainEditor);
 	//  syntaxMenu->setFocusPolicy(Qt::NoFocus);
 	syntaxMenu->setAutoFillBackground(true);
-    QPalette p = syntaxMenu->palette();
-	p.setColor(QPalette::WindowText, Qt::blue);
-	p.setColor(static_cast<QPalette::ColorRole>(9), QColor("#eaeac5")); // was: Qt::yellow
-	syntaxMenu->setPalette(p);
+    // QPalette p = syntaxMenu->palette();
+    // p.setColor(QPalette::WindowText, Qt::blue);
+    // p.setColor(static_cast<QPalette::ColorRole>(9), QColor("#eaeac5")); // was: Qt::yellow
+    // syntaxMenu->setPalette(p);
 	connect(syntaxMenu,SIGNAL(keyPressed(QString)),
 			m_mainEditor, SLOT(insertPlainText(QString)));
 
@@ -870,7 +871,8 @@ void DocumentView::textChanged()
 				if (commentIndex < curIndex)
 					return;
 			}
-			if (line.contains("opcode") || line.contains("instr")) { // Don't pop menu in these cases.
+            if(line.indexOf(QRegExp("^\\s*(opcode|instr)")) >= 0) {
+            // if (line.contains("opcode") || line.contains("instr")) { // Don't pop menu in these cases.
 				return;
 			}
 			if (line.indexOf(QRegExp("\\s*\\w+\\s+\\w+\\s+")) >= 0) {
@@ -889,8 +891,8 @@ void DocumentView::textChanged()
 						}
 					}
 					foreach(QString var, vars) {
-						QAction *a = syntaxMenu->addAction(var,
-														   this, SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
+                        QAction *a = syntaxMenu->addAction(var, this,
+                                                           SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
 						a->setData(var);
 						if(vars.indexOf(var) == 0) {
 							syntaxMenu->setDefaultAction(a);
@@ -1925,7 +1927,14 @@ void DocumentView::setParsedUDOs(QStringList udos) {
 
 MySyntaxMenu::MySyntaxMenu(QWidget * parent) :
 	QMenu(parent)
+
 {
+    this->setStyleSheet("QMenu {"
+                        "  background-color: #f8f8f8;"
+                        "  color: #5050A0 !important; "
+                        "  border-radius: 4px; "
+                        "  line-height: 95%; "
+                        "}");
 
 }
 

@@ -36,13 +36,14 @@ class DockHelp : public QDockWidget
 {
 	Q_OBJECT
 public:
-	explicit DockHelp(QWidget *parent = 0);
+    explicit DockHelp(QWidget *parent);
 	~DockHelp();
 
 	bool hasFocus();
     void loadFile(QString fileName, QString anchor="");
 	bool externalBrowser;
 	QString docDir;
+    void setTheme(QString theme);
 
 private:
 	QTextDocument::FindFlags findFlags;

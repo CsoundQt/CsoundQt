@@ -17,7 +17,8 @@ endin
 f 0 3600
 e
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>308</x>
@@ -26,42 +27,45 @@ e
  <height>551</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background" >
-  <r>218</r>
-  <g>218</g>
-  <b>163</b>
+ <bgcolor mode="background">
+  <r>212</r>
+  <g>224</g>
+  <b>230</b>
  </bgcolor>
- <bsbObject version="2" type="BSBVSlider" >
+ <bsbObject version="2" type="BSBVSlider">
   <objectName>slider1</objectName>
-  <x>17</x>
-  <y>219</y>
-  <width>17</width>
-  <height>128</height>
+  <x>15</x>
+  <y>261</y>
+  <width>25</width>
+  <height>90</height>
   <uuid>{5491438a-64c2-4645-943c-964c1a77396d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>100.00000000</maximum>
-  <value>39.84375000</value>
+  <value>53.33333333</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
-  <randomizable group="0" >true</randomizable>
+  <randomizable group="0">true</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>16</x>
-  <y>55</y>
-  <width>273</width>
-  <height>155</height>
+  <x>15</x>
+  <y>57</y>
+  <width>274</width>
+  <height>151</height>
   <uuid>{e2d67816-aec0-4d10-9c1c-91e0aff6a55a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The widget panel contains widgets which can interact with Csound. It has two modes: an action mode and an edit mode. In the action mode widgets are used to send and receive values from Csound channels and can be modified using the mouse or the keyboard. In edit mode the widgets can be moved resized copied dupicated and pasted.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -69,16 +73,16 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>184</r>
+   <g>195</g>
+   <b>200</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>162</x>
   <y>218</y>
@@ -88,9 +92,11 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The modes are toggled using Ctrl+E or Command+E. When in edit mode red frames appear around every widget. Using these frames widgets can be moved and resized. You can also copy paste and duplicate widgets.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -98,72 +104,86 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>183</r>
+   <g>194</g>
+   <b>199</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob" >
+ <bsbObject version="2" type="BSBKnob">
   <objectName>knob3</objectName>
-  <x>297</x>
-  <y>49</y>
-  <width>51</width>
-  <height>53</height>
+  <x>315</x>
+  <y>57</y>
+  <width>60</width>
+  <height>60</height>
   <uuid>{b7fdac27-8f78-4a58-a7cc-2a8442859b2c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.26262626</value>
+  <value>0.56660000</value>
   <mode>lin</mode>
-  <mouseControl act="jump" >continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName/>
-  <x>298</x>
-  <y>109</y>
+  <x>296</x>
+  <y>119</y>
   <width>100</width>
-  <height>26</height>
+  <height>28</height>
   <uuid>{d64e707e-94a6-4d6f-91fa-96a6281b0653}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>15</r>
+   <g>15</g>
+   <b>15</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>240</r>
+   <g>240</g>
+   <b>240</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
-  <randomizable group="0" >false</randomizable>
-  <value>4502.01</value>
+  <randomizable group="0">false</randomizable>
+  <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject version="2" type="BSBButton">
   <objectName>button1</objectName>
-  <x>298</x>
-  <y>140</y>
+  <x>295</x>
+  <y>150</y>
   <width>100</width>
-  <height>30</height>
+  <height>28</height>
   <uuid>{2a151994-be4c-43b0-aa83-3e5d9b4eead4}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -171,18 +191,21 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>menu6</objectName>
-  <x>298</x>
-  <y>176</y>
-  <width>80</width>
-  <height>26</height>
+  <x>295</x>
+  <y>181</y>
+  <width>100</width>
+  <height>28</height>
   <uuid>{cff4de90-d3d2-4b91-a46f-3bd89cf01ce9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>item1</name>
@@ -200,88 +223,95 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>1</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <selectedIndex>2</selectedIndex>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber" >
+ <bsbObject version="2" type="BSBScrollNumber">
   <objectName>scroll1</objectName>
   <x>42</x>
   <y>219</y>
   <width>105</width>
-  <height>43</height>
+  <height>36</height>
   <uuid>{935af565-14cd-47de-bdb0-b4721b5a2377}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
-  <font>Courier New</font>
-  <fontsize>40</fontsize>
+  <font>Liberation Mono</font>
+  <fontsize>32</fontsize>
   <color>
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+   <r>230</r>
+   <g>230</g>
+   <b>230</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>40</r>
    <g>79</g>
    <b>49</b>
   </bgcolor>
-  <value>55.00000000</value>
+  <value>37.00000000</value>
   <resolution>1.00000000</resolution>
-  <minimum>-999999999999.00000000</minimum>
-  <maximum>99999999999999.00000000</maximum>
-  <bordermode>border</bordermode>
-  <borderradius>6</borderradius>
-  <borderwidth>4</borderwidth>
-  <randomizable group="0" >false</randomizable>
-  <mouseControl act="" />
+  <minimum>0.00000000</minimum>
+  <maximum>100.00000000</maximum>
+  <bordermode>false</bordermode>
+  <borderradius>5</borderradius>
+  <borderwidth>0</borderwidth>
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBController" >
+ <bsbObject version="2" type="BSBController">
   <objectName>scroll1</objectName>
   <x>41</x>
-  <y>269</y>
-  <width>107</width>
-  <height>73</height>
+  <y>266</y>
+  <width>109</width>
+  <height>80</height>
   <uuid>{36487753-397c-4830-bd3b-687a703c7d1f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <objectName2>slider1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>100.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>100.00000000</yMax>
-  <xValue>55.00000000</xValue>
-  <yValue>39.84375000</yValue>
+  <xValue>37.00000000</xValue>
+  <yValue>53.33333333</yValue>
   <type>crosshair</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press" >jump</mouseControl>
+  <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#505050</borderColor>
   <color>
-   <r>0</r>
-   <g>234</g>
+   <r>85</r>
+   <g>255</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0" >false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>30</r>
+   <g>30</g>
+   <b>30</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>16</x>
-  <y>356</y>
-  <width>297</width>
-  <height>99</height>
+  <x>15</x>
+  <y>360</y>
+  <width>300</width>
+  <height>100</height>
   <uuid>{39cc7164-674c-412c-b9d2-b4f7e2c9fec2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Widget properties can be accessed by right clicking on the widget and selecting 'Properties'. This works on both modes. Properties are different for every widget. If you right click where there are no widgets, you can set the Widget Panel's background color.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -289,43 +319,45 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>183</r>
+   <g>194</g>
+   <b>199</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox" >
+ <bsbObject version="2" type="BSBCheckBox">
   <objectName>checkbox10</objectName>
-  <x>321</x>
-  <y>362</y>
+  <x>320</x>
+  <y>360</y>
   <width>20</width>
   <height>20</height>
   <uuid>{a55de8f0-2955-43ea-934b-14f624928a0b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName/>
-  <x>319</x>
-  <y>387</y>
+  <x>320</x>
+  <y>390</y>
   <width>87</width>
   <height>25</height>
   <uuid>{4f65c81a-84db-465e-b856-65cbd3aacb73}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Type here</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -333,94 +365,75 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>230</r>
-   <g>221</g>
-   <b>213</b>
+  <bgcolor mode="nobackground">
+   <r>240</r>
+   <g>240</g>
+   <b>240</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>14</x>
-  <y>462</y>
-  <width>388</width>
-  <height>41</height>
+  <x>15</x>
+  <y>465</y>
+  <width>390</width>
+  <height>42</height>
   <uuid>{2528f251-f1cd-4b35-a099-65e0f983ffce}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Note that none of the widgets shown here have effect since their channels are not being used by Csound.</label>
   <alignment>left</alignment>
-  <font>Times New Roman</font>
-  <fontsize>12</fontsize>
+  <valignment>top</valignment>
+  <font>Liberation Serif</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>183</r>
+   <g>194</g>
+   <b>199</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>75</x>
-  <y>4</y>
-  <width>237</width>
-  <height>38</height>
+  <x>15</x>
+  <y>7</y>
+  <width>390</width>
+  <height>42</height>
   <uuid>{72622cd0-4b49-49ee-92ae-ab788d0c3051}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The Widget Panel</label>
   <alignment>center</alignment>
-  <font>Helvetica</font>
+  <valignment>center</valignment>
+  <font>Nimbus Sans [urw]</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>30</r>
+   <g>30</g>
+   <b>30</b>
   </color>
-  <bgcolor mode="background" >
-   <r>170</r>
-   <g>170</g>
-   <b>127</b>
+  <bgcolor mode="background">
+   <r>184</r>
+   <g>195</g>
+   <b>200</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <objectName/>
- <x>308</x>
- <y>167</y>
- <width>428</width>
- <height>551</height>
- <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacGUI>
-ioView background {56026, 56026, 41891}
-ioSlider {17, 219} {17, 128} 0.000000 100.000000 39.843750 slider1
-ioText {16, 55} {273, 155} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder The widget panel contains widgets which can interact with Csound. It has two modes: an action mode and an edit mode. In the action mode widgets are used to send and receive values from Csound channels and can be modified using the mouse or the keyboard. In edit mode the widgets can be moved resized copied dupicated and pasted.
-ioText {162, 218} {243, 126} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder The modes are toggled using Ctrl+E or Command+E. When in edit mode red frames appear around every widget. Using these frames widgets can be moved and resized. You can also copy paste and duplicate widgets.
-ioKnob {297, 49} {51, 53} 1.000000 0.000000 0.010000 0.262626 knob3
-ioText {298, 109} {100, 26} editnum 4502.010000 0.001000 "" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 4502.010000
-ioButton {298, 140} {100, 30} event 1.000000 "button1" "New Button" "/" i1 0 10
-ioMenu {298, 176} {80, 26} 1 303 "item1,item2,item3" menu6
-ioText {42, 219} {105, 43} scroll 55.000000 1.000000 "scroll1" center "Courier New" 40 {65280, 65280, 65280} {10240, 20224, 12544} background noborder 
-ioMeter {41, 269} {107, 73} {0, 59904, 0} "scroll1" 55.000000 "slider1" 39.843750 crosshair 1 0 mouse
-ioText {16, 356} {297, 99} display 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Widget properties can be accessed by right clicking on the widget and selecting 'Properties'. This works on both modes. Properties are different for every widget. If you right click where there are no widgets, you can set the Widget Panel's background color.
-ioCheckbox {321, 362} {20, 20} on checkbox10
-ioText {319, 387} {87, 25} edit 0.000000 0.00100 ""  "Arial" 12 {0, 0, 0} {59392, 59392, 59392} falsenoborder Type here
-ioText {14, 462} {388, 41} display 0.000000 0.00100 "" left "Times New Roman" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Note that none of the widgets shown here have effect since their channels are not being used by Csound.
-ioText {75, 4} {237, 38} display 0.000000 0.00100 "" center "Helvetica" 24 {0, 0, 0} {43520, 43520, 32512} nobackground noborder The Widget Panel
-</MacGUI>

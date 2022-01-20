@@ -109,11 +109,15 @@ enum viewMode {
 class Opcode
 {
 public:
-	QString outArgs;
-	QString opcodeName;
-	QString inArgs;
-	QString desc;
+    QString opcodeName;
+    QString outArgs;
+    QString inArgs;
+    QString desc;
     int isFlag;
+
+    Opcode() {};
+    Opcode(QString name, QString outs="", QString ins=""): opcodeName(name), outArgs(outs), inArgs(ins) {}
+
 };
 
 class RingBuffer

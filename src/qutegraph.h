@@ -223,12 +223,15 @@ public:
         , m_maxy(1.0)
         , m_miny(-1.0)
         , m_autorange(true)
-        , m_path(nullptr)
         , m_showGrid(true)
+        , gridFont(QFont("Sans", 8))
+        , gridFontMetrics(QFont("Sans", 8))
     {}
     virtual ~QuteTableWidget() override;
-    void setUserData(CsoundUserData *ud) { m_ud = ud; }
-    void updateData(int tabnum, bool check=true);
+    void setUserData(CsoundUserData *ud) {
+        mutex.lock(); m_ud = ud; mutex.unlock(); }
+    void updateData(int tabnum);
+    void setRunningStatus(int csoundRunning) { m_running = csoundRunning; }
     int currentTableNumber() { return m_tabnum; }
     void updatePath();
     void setColor(QColor color) { m_color = color; }
@@ -236,6 +239,12 @@ public:
     void showGrid(bool show) { m_showGrid = show; }
     void reset();
     void paintGrid(QPainter *painter);
+    void stop(CsoundUserData *ud) {
+        mutex.lock();
+        m_ud = ud;
+        reset();
+        mutex.unlock();
+    }
 
 protected:
     virtual void paintEvent(QPaintEvent *event) override;
@@ -251,9 +260,12 @@ private:
     double m_maxy;
     double m_miny;
     bool m_autorange;
-    QPainterPath *m_path;
+    QPainterPath m_path;
+    // QPainterPath *m_path;
     QMutex mutex;
     bool m_showGrid;
+    QFont gridFont;
+    QFontMetrics gridFontMetrics;
 
 // public slot:
 
@@ -278,6 +290,7 @@ public:
     virtual void setValue(double value);
     virtual void setValue(QString s);
     virtual void setColor(QColor color);
+    void setTableNumber(int tabnum);
 
 public slots:
     void onStop();
@@ -295,6 +308,7 @@ protected:
     QDoubleSpinBox *rangeSpinBox;
     QCheckBox *gridCheckBox;
     QMutex mutex;
+    bool m_csoundRunning;
 
 };
 

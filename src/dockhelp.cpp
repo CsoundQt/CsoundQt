@@ -34,6 +34,9 @@ DockHelp::DockHelp(QWidget *parent)
     setWindowTitle("Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
 
+    ui->backButton->setIcon(QIcon(":/themes/breeze/br_prev.png"));
+    ui->forwardButton->setIcon(QIcon(":/themes/breeze/br_next.png"));
+
     connect(ui->toggleFindButton, SIGNAL(toggled(bool)), this, SLOT(toggleFindBarVisible(bool)));
     connect(ui->backButton, SIGNAL(released()), this, SLOT(browseBack()));
 	connect(ui->forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
@@ -146,6 +149,13 @@ DockHelp::DockHelp(QWidget *parent)
       "body .il { color: #666666 } /* Literal.Number.Integer.Long */               "
     );
     ui->text->document()->setDefaultStyleSheet(styleSheetLight);
+    ui->text->setStyleSheet(
+        "QTextEdit {                      "
+        "    background-color: #f0f0f0;   "
+        "    color: #202020;              "
+        "}                                "
+
+    );
 }
 
 DockHelp::~DockHelp()
@@ -180,8 +190,6 @@ void DockHelp::loadFile(QString fileName, QString anchor) {
         ui->text->setHtml(ui->text->document()->toHtml());
     }
     else {
-        QStringList searchPaths = {"/home/em/.local/share/risset/man/site/css", "/home/em/.local/share/risset/man/site"};
-        ui->text->setSearchPaths(searchPaths);
         QUrl url = QUrl::fromLocalFile(fileName);
         if(!anchor.isEmpty()) {
             url.setUrl(url.toString() + "#" + anchor);
@@ -192,6 +200,16 @@ void DockHelp::loadFile(QString fileName, QString anchor) {
 
 #endif
 
+}
+
+void DockHelp::setTheme(QString theme)
+{
+    ui->backButton->setIcon(QIcon(QString(":/themes/%1/browse-prev.png").arg(theme)));
+    ui->forwardButton->setIcon(QIcon(QString(":/themes/%1/browse-next.png").arg(theme)));
+    ui->homeToolButton->setIcon(QIcon(QString(":/themes/%1/home.png").arg(theme)));
+    ui->toggleFindButton->setIcon(QIcon(QString(":/themes/%1/edit-find.png").arg(theme)));
+    ui->previousFindButton->setIcon(QIcon(QString(":/themes/%1/browse-prev.png").arg(theme)));
+    ui->nextFindButton->setIcon(QIcon(QString(":/themes/%1/browse-next.png").arg(theme)));
 }
 
 void DockHelp::closeEvent(QCloseEvent * /*event*/)

@@ -27,7 +27,8 @@ endin
 f 1 0 1024 10 1
 i 1 0 3600  ;turn on instr 1 for 3600 seconds
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>692</x>
@@ -36,12 +37,12 @@ i 1 0 3600  ;turn on instr 1 for 3600 seconds
  <height>719</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background" >
+ <bgcolor mode="background">
   <r>97</r>
   <g>136</g>
   <b>103</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>11</y>
@@ -51,28 +52,30 @@ i 1 0 3600  ;turn on instr 1 for 3600 seconds
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Some channel names are reserved for special operations inside CsoundQt. These channel names send information to CsoundQt instead of to Csound allowing you to control certain aspects of CsoundQt from the Widget Panel.
 
 NOTE: Buttons must be of "value" type for this to work!</label>
-  <alignment>center</alignment>
-  <font>Arial</font>
-  <fontsize>12</fontsize>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>20</r>
    <g>52</g>
    <b>6</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>244</r>
    <g>248</g>
    <b>200</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>315</y>
@@ -82,8 +85,10 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>File browsing</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -92,7 +97,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -101,7 +106,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>327</x>
   <y>325</y>
@@ -111,16 +116,19 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>/home/em/dev/forks/CsoundQt/src/Examples/CsoundQt/Widgets/Display_Widget.csd</stringvalue>
   <text>Browse A</text>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>204</x>
   <y>326</y>
@@ -130,8 +138,10 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_Browse1 channel -></label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -140,16 +150,16 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>327</x>
   <y>359</y>
@@ -159,16 +169,19 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>/home/em/dev/forks/CsoundQt/src/Examples/CsoundQt/Widgets/Menu_Widget.csd</stringvalue>
   <text>Browse B</text>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>204</x>
   <y>360</y>
@@ -178,8 +191,10 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_Browse2 channel -></label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -188,16 +203,16 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>22</x>
   <y>390</y>
@@ -207,7 +222,8 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <description/>
+  <label>/home/em/dev/forks/CsoundQt/src/Examples/CsoundQt/Widgets/Display_Widget.csd</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -217,14 +233,14 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>230</r>
    <g>221</g>
    <b>213</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>22</x>
   <y>445</y>
@@ -234,7 +250,8 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <description/>
+  <label>/home/em/dev/forks/CsoundQt/src/Examples/CsoundQt/Widgets/Menu_Widget.csd</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -244,14 +261,14 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>230</r>
    <g>221</g>
    <b>213</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>22</x>
   <y>362</y>
@@ -261,8 +278,10 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>File A:</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -271,16 +290,16 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>22</x>
   <y>419</y>
@@ -290,8 +309,10 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>File B:</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -300,27 +321,29 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
-  <y>123</y>
+  <y>122</y>
   <width>418</width>
   <height>184</height>
   <uuid>{474ddc50-8726-482c-a758-b314f7a5acde}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Transport</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -329,7 +352,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -338,16 +361,17 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
-  <x>316</x>
-  <y>137</y>
+  <x>315</x>
+  <y>140</y>
   <width>78</width>
   <height>26</height>
   <uuid>{f29385c0-ccc3-42a0-a0a0-ec9f708e63a4}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>1</stringvalue>
@@ -355,18 +379,21 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Stop</objectName>
-  <x>316</x>
-  <y>204</y>
+  <x>315</x>
+  <y>205</y>
   <width>80</width>
-  <height>25</height>
+  <height>26</height>
   <uuid>{32f3dc8e-90b5-4f9e-8022-7bae21b5ea44}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>1</stringvalue>
@@ -374,21 +401,25 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>211</x>
-  <y>138</y>
+  <x>210</x>
+  <y>140</y>
   <width>101</width>
   <height>24</height>
   <uuid>{e8e89a83-2bb8-4a66-a4f9-2b21a9229b54}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>_Play channel -></label>
+  <description/>
+  <label>_Play channel</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -396,28 +427,30 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>211</x>
-  <y>203</y>
+  <x>210</x>
+  <y>205</y>
   <width>101</width>
   <height>24</height>
   <uuid>{c2b21ba5-15a9-4a20-a2eb-415285fdac1f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>_Stop channel -></label>
+  <description/>
+  <label>_Stop channel</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -425,25 +458,26 @@ NOTE: Buttons must be of "value" type for this to work!</label>
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Render</objectName>
-  <x>316</x>
-  <y>237</y>
+  <x>315</x>
+  <y>250</y>
   <width>80</width>
   <height>25</height>
   <uuid>{24796cb7-0ffe-49bf-8f77-277e8ea029d2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>1</stringvalue>
@@ -451,9 +485,11 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>186</x>
   <y>237</y>
@@ -463,11 +499,13 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>_Render channel ->
+  <description/>
+  <label>_Render channel
 Run offline
 (non-realtime)</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -475,16 +513,16 @@ Run offline
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName>counter</objectName>
   <x>21</x>
   <y>175</y>
@@ -494,8 +532,10 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>0</label>
+  <description/>
+  <label>20</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Courier New</font>
   <fontsize>80</fontsize>
   <precision>3</precision>
@@ -504,7 +544,7 @@ Run offline
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>166</r>
    <g>232</g>
    <b>171</b>
@@ -513,7 +553,7 @@ Run offline
   <borderradius>10</borderradius>
   <borderwidth>5</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>43</x>
   <y>149</y>
@@ -523,8 +563,10 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Playback counter</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -533,18 +575,18 @@ Run offline
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Pause</objectName>
-  <x>316</x>
+  <x>315</x>
   <y>170</y>
   <width>78</width>
   <height>26</height>
@@ -552,6 +594,7 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>1</stringvalue>
@@ -559,21 +602,26 @@ Run offline
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>211</x>
-  <y>171</y>
+  <x>210</x>
+  <y>170</y>
   <width>101</width>
   <height>24</height>
   <uuid>{1396d5e8-585a-46c9-bd76-b12d218261bf}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>_Pause channel -></label>
+  <description/>
+  <label>_Pause channel
+</label>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -581,16 +629,16 @@ Run offline
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton" >
+ <bsbObject type="BSBButton" version="2">
   <objectName>_MBrowse</objectName>
   <x>284</x>
   <y>483</y>
@@ -600,6 +648,7 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -607,9 +656,11 @@ Run offline
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>156</x>
   <y>484</y>
@@ -619,8 +670,10 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_MBrowse channel -></label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -629,16 +682,16 @@ Run offline
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit" >
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_MBrowse</objectName>
   <x>22</x>
   <y>512</y>
@@ -648,6 +701,7 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
   <font>Arial</font>
@@ -658,14 +712,14 @@ Run offline
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>230</r>
    <g>221</g>
    <b>213</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>556</y>
@@ -675,8 +729,10 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Presets</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -685,7 +741,7 @@ Run offline
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -694,7 +750,7 @@ Run offline
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName>_GetPresetName</objectName>
   <x>170</x>
   <y>604</y>
@@ -704,8 +760,10 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Clear</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -714,7 +772,7 @@ Run offline
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -723,7 +781,7 @@ Run offline
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>15</x>
   <y>633</y>
@@ -733,8 +791,10 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_GetPresetNumber channel -></label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -743,16 +803,16 @@ Run offline
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>15</x>
   <y>605</y>
@@ -762,8 +822,10 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_GetPresetName channel -></label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -772,16 +834,16 @@ Run offline
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber" >
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>_GetPresetNumber</objectName>
   <x>169</x>
   <y>632</y>
@@ -791,6 +853,7 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -799,7 +862,7 @@ Run offline
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -811,10 +874,10 @@ Run offline
   <bordermode>border</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
-  <randomizable group="0" >false</randomizable>
-  <mouseControl act="" />
+  <randomizable group="0">false</randomizable>
+  <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox" >
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>_SetPreset</objectName>
   <x>293</x>
   <y>589</y>
@@ -823,27 +886,28 @@ Run offline
   <uuid>{20d9fb5d-ca06-4568-a17f-9edf28ff2d2a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>30</r>
+   <g>30</g>
+   <b>30</b>
   </color>
-  <bgcolor mode="nobackground" >
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>230</r>
+   <g>230</g>
+   <b>230</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
   <maximum>100</maximum>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>272</x>
   <y>566</y>
@@ -853,8 +917,10 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_SetPreset channel:</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -863,16 +929,16 @@ Run offline
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>249</x>
   <y>615</y>
@@ -882,8 +948,10 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_SetPresetIndex channel:</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -892,16 +960,16 @@ Run offline
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>255</r>
    <g>255</g>
    <b>255</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown" >
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>_SetPresetIndex</objectName>
   <x>270</x>
   <y>637</y>
@@ -911,6 +979,7 @@ Run offline
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Preset 1</name>
@@ -934,14 +1003,8 @@ Run offline
    </bsbDropdownItem>
   </bsbDropdownItemList>
   <selectedIndex>1</selectedIndex>
-  <randomizable group="0" >false</randomizable>
+  <randomizable group="0">false</randomizable>
  </bsbObject>
- <objectName/>
- <x>692</x>
- <y>38</y>
- <width>451</width>
- <height>719</height>
- <visible>true</visible>
 </bsbPanel>
 <bsbPresets>
 <preset name="Preset 1" number="1" >
@@ -993,39 +1056,3 @@ Run offline
 <value id="{b8e0ccf4-85f9-4796-9daf-ed969397268f}" mode="4" >Files From Preset 9</value>
 </preset>
 </bsbPresets>
-<MacGUI>
-ioView background {24929, 34952, 26471}
-ioText {6, 11} {418, 106} label 0.000000 0.00100 "" center "Arial" 12 {5120, 13312, 1536} {62464, 63488, 51200} nobackground noborder Some channel names are reserved for special operations inside CsoundQt. These channel names send information to CsoundQt instead of to Csound allowing you to control certain aspects of CsoundQt from the Widget Panel.Â¬Â¬NOTE: Buttons must be of "value" type for this to work!
-ioText {7, 315} {418, 234} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder File browsing
-ioButton {327, 325} {80, 25} value 1.000000 "_Browse1" "Browse A" "/" i1 0 10
-ioText {204, 326} {118, 24} label 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Browse1 channel ->
-ioButton {327, 359} {80, 25} value 1.000000 "_Browse2" "Browse B" "/" i1 0 10
-ioText {204, 360} {118, 24} label 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Browse2 channel ->
-ioText {22, 390} {387, 25} edit 0.000000 0.00100 "_Browse1"  "Arial" 10 {0, 0, 0} {58880, 56576, 54528} falsenoborder 
-ioText {22, 445} {387, 25} edit 0.000000 0.00100 "_Browse2"  "Arial" 10 {0, 0, 0} {58880, 56576, 54528} falsenoborder 
-ioText {22, 362} {118, 24} label 0.000000 0.00100 "" left "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder File A:
-ioText {22, 419} {118, 24} label 0.000000 0.00100 "" left "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder File B:
-ioText {6, 123} {418, 184} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Transport
-ioButton {316, 137} {78, 26} value 1.000000 "_Play" "Play" "/" i1 0 10
-ioButton {316, 204} {80, 25} value 1.000000 "_Stop" "Stop" "/" i1 0 10
-ioText {211, 138} {101, 24} label 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Play channel ->
-ioText {211, 203} {101, 24} label 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Stop channel ->
-ioButton {316, 237} {80, 25} value 1.000000 "_Render" "Render" "/" i1 0 10
-ioText {186, 237} {126, 53} label 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Render channel ->Â¬Run offlineÂ¬(non-realtime)
-ioText {21, 175} {161, 115} label 0.000000 0.00100 "counter" center "Courier New" 80 {0, 0, 0} {42496, 59392, 43776} nobackground noborder 0
-ioText {43, 149} {115, 23} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Playback counter
-ioButton {316, 170} {78, 26} value 1.000000 "_Pause" "Pause" "/" i1 0 10
-ioText {211, 171} {101, 24} label 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _Pause channel ->
-ioButton {284, 483} {124, 25} value 1.000000 "_MBrowse" "Browse Multiple" "/" i1 0 10
-ioText {156, 484} {123, 24} label 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _MBrowse channel ->
-ioText {22, 512} {387, 25} edit 0.000000 0.00100 "_MBrowse"  "Arial" 10 {0, 0, 0} {58880, 56576, 54528} falsenoborder 
-ioText {7, 556} {418, 113} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Presets
-ioText {170, 604} {66, 25} label 0.000000 0.00100 "_GetPresetName" left "Arial" 10 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Clear
-ioText {15, 633} {155, 24} label 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _GetPresetNumber channel ->
-ioText {15, 605} {155, 24} label 0.000000 0.00100 "" right "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _GetPresetName channel ->
-ioText {169, 632} {66, 25} scroll 0.000000 1.000000 "_GetPresetNumber" center "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioText {293, 589} {65, 25} editnum 0.000000 1.000000 "_SetPreset" left "" 0 {0, 0, 0} {58880, 56576, 54528} nobackground noborder 0.000000
-ioText {272, 566} {105, 24} label 0.000000 0.00100 "" center "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _SetPreset channel:
-ioText {249, 615} {152, 24} label 0.000000 0.00100 "" center "Arial" 10 {65280, 65280, 65280} {58880, 56576, 54528} nobackground noborder _SetPresetIndex channel:
-ioMenu {270, 637} {112, 25} 1 303 "Preset 1,Clear,Preset 2,Last Preset" _SetPresetIndex
-</MacGUI>
