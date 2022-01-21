@@ -1445,14 +1445,14 @@ Snapshot!</text>
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1496,7 +1496,7 @@ Snapshot!</text>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>sampnr</objectName>
-  <x>802</x>
+  <x>801</x>
   <y>147</y>
   <width>40</width>
   <height>27</height>
@@ -1506,14 +1506,14 @@ Snapshot!</text>
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1816,7 +1816,7 @@ L = Live Input,
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <value>7</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -2300,7 +2300,7 @@ L = Live Input,
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>fast</objectName>
   <x>458</x>
-  <y>405</y>
+  <y>404</y>
   <width>50</width>
   <height>25</height>
   <uuid>{22a49672-685f-4628-8c6f-6fe2e09a6a9c}</uuid>
@@ -2309,14 +2309,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2325,12 +2325,12 @@ L = Live Input,
   <minimum>0.1</minimum>
   <maximum>1</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.1</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>354</x>
-  <y>404</y>
+  <y>403</y>
   <width>102</width>
   <height>27</height>
   <uuid>{599be8ec-f1b9-434a-b229-1f693270447d}</uuid>
@@ -2360,8 +2360,8 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>numpartsana</objectName>
-  <x>463</x>
-  <y>370</y>
+  <x>462</x>
+  <y>371</y>
   <width>46</width>
   <height>26</height>
   <uuid>{caec7ed3-498b-4458-ac4e-57fac52c4df9}</uuid>
@@ -2370,14 +2370,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2412,7 +2412,7 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>373</x>
+  <x>380</x>
   <y>435</y>
   <width>68</width>
   <height>27</height>
@@ -2443,8 +2443,8 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>hopmovsiz</objectName>
-  <x>451</x>
-  <y>435</y>
+  <x>450</x>
+  <y>437</y>
   <width>58</width>
   <height>26</height>
   <uuid>{f7598ae6-c54e-438f-94c2-b29d932ee539}</uuid>
@@ -2453,14 +2453,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2469,7 +2469,7 @@ L = Live Input,
   <minimum>-1</minimum>
   <maximum>1</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.08</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>manpos</objectName>
@@ -2495,8 +2495,8 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>numpartspl</objectName>
-  <x>696</x>
-  <y>371</y>
+  <x>695</x>
+  <y>369</y>
   <width>50</width>
   <height>25</height>
   <uuid>{19be0852-85d9-4ae7-8506-e9b0d40d6dda}</uuid>
@@ -2505,14 +2505,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2525,8 +2525,8 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>refpch</objectName>
-  <x>696</x>
-  <y>425</y>
+  <x>695</x>
+  <y>432</y>
   <width>50</width>
   <height>25</height>
   <uuid>{68269bfd-79e9-4749-a934-2187c48d3734}</uuid>
@@ -2535,14 +2535,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2555,8 +2555,8 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>528</x>
-  <y>424</y>
+  <x>529</x>
+  <y>432</y>
   <width>139</width>
   <height>27</height>
   <uuid>{05fccea2-ecb7-4fdc-ae15-062016397ad8}</uuid>
@@ -2586,8 +2586,8 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>stcent</objectName>
-  <x>696</x>
-  <y>449</y>
+  <x>695</x>
+  <y>464</y>
   <width>50</width>
   <height>25</height>
   <uuid>{b16b9f6e-73f5-4c22-83a7-c47d8f0a68da}</uuid>
@@ -2596,14 +2596,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2617,7 +2617,7 @@ L = Live Input,
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>528</x>
-  <y>449</y>
+  <y>463</y>
   <width>156</width>
   <height>27</height>
   <uuid>{e35d6aaa-3dcb-4e83-882d-0d51db0d867e}</uuid>
@@ -2678,8 +2678,8 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>shiftpl</objectName>
-  <x>696</x>
-  <y>398</y>
+  <x>695</x>
+  <y>400</y>
   <width>50</width>
   <height>25</height>
   <uuid>{5b84e7d0-0c82-45e2-aca9-f2d1f982970a}</uuid>
@@ -2688,14 +2688,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2709,7 +2709,7 @@ L = Live Input,
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>528</x>
-  <y>397</y>
+  <y>399</y>
   <width>149</width>
   <height>27</height>
   <uuid>{b4cef0ea-2ef0-4c9d-ade1-702aea738fd8}</uuid>
@@ -2740,7 +2740,7 @@ L = Live Input,
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>rndfqdv</objectName>
   <x>695</x>
-  <y>509</y>
+  <y>528</y>
   <width>50</width>
   <height>25</height>
   <uuid>{d09928e9-5e05-4ba0-bd7d-94f92a0630d4}</uuid>
@@ -2749,14 +2749,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2770,7 +2770,7 @@ L = Live Input,
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>527</x>
-  <y>500</y>
+  <y>518</y>
   <width>167</width>
   <height>40</height>
   <uuid>{8b426732-b781-4659-a813-de60b04656ac}</uuid>
@@ -2801,7 +2801,7 @@ L = Live Input,
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>rndampdv</objectName>
   <x>695</x>
-  <y>548</y>
+  <y>560</y>
   <width>50</width>
   <height>25</height>
   <uuid>{34535596-8d50-43f6-908c-58a524740c90}</uuid>
@@ -2810,14 +2810,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2831,7 +2831,7 @@ L = Live Input,
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>527</x>
-  <y>539</y>
+  <y>552</y>
   <width>162</width>
   <height>39</height>
   <uuid>{32f46896-8772-4e3c-b3d6-730806ad9ca4}</uuid>
@@ -2862,7 +2862,7 @@ L = Live Input,
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>rnddurdv</objectName>
   <x>695</x>
-  <y>584</y>
+  <y>592</y>
   <width>50</width>
   <height>25</height>
   <uuid>{f20eb136-d9d2-4559-9fbc-6c44e6864afa}</uuid>
@@ -2871,14 +2871,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2892,7 +2892,7 @@ L = Live Input,
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>527</x>
-  <y>577</y>
+  <y>586</y>
   <width>158</width>
   <height>41</height>
   <uuid>{40a78d4c-b76c-4fa9-a75a-8baa76abcea9}</uuid>
@@ -2923,7 +2923,7 @@ L = Live Input,
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>maxdur</objectName>
   <x>695</x>
-  <y>475</y>
+  <y>496</y>
   <width>50</width>
   <height>25</height>
   <uuid>{10a57f16-265b-4774-a0d6-26c3c629bf77}</uuid>
@@ -2932,14 +2932,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2948,12 +2948,12 @@ L = Live Input,
   <minimum>0.1</minimum>
   <maximum>2000</maximum>
   <randomizable group="0">false</randomizable>
-  <value>3</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>527</x>
-  <y>475</y>
+  <y>495</y>
   <width>156</width>
   <height>27</height>
   <uuid>{ffe891f4-df20-436c-b300-6ab71182168d}</uuid>
@@ -3004,7 +3004,7 @@ L = Live Input,
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#00ff00</borderColor>
   <color>
    <r>255</r>
    <g>170</g>
@@ -3012,9 +3012,9 @@ L = Live Input,
   </color>
   <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>42</r>
+   <g>46</g>
+   <b>50</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -3041,7 +3041,7 @@ L = Live Input,
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#00ff00</borderColor>
   <color>
    <r>255</r>
    <g>170</g>
@@ -3049,9 +3049,9 @@ L = Live Input,
   </color>
   <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>42</r>
+   <g>46</g>
+   <b>50</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -3078,7 +3078,7 @@ L = Live Input,
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#00ff00</borderColor>
   <color>
    <r>255</r>
    <g>170</g>
@@ -3086,15 +3086,15 @@ L = Live Input,
   </color>
   <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>42</r>
+   <g>46</g>
+   <b>50</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>rel</objectName>
-  <x>290</x>
+  <x>291</x>
   <y>598</y>
   <width>176</width>
   <height>17</height>
@@ -3115,7 +3115,7 @@ L = Live Input,
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#00ff00</borderColor>
   <color>
    <r>255</r>
    <g>170</g>
@@ -3123,9 +3123,9 @@ L = Live Input,
   </color>
   <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>42</r>
+   <g>46</g>
+   <b>50</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -3379,8 +3379,8 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>355</x>
-  <y>468</y>
+  <x>350</x>
+  <y>470</y>
   <width>60</width>
   <height>28</height>
   <uuid>{6fdc67be-6b4e-4f62-99ab-fa4ed69aff12}</uuid>
@@ -3432,8 +3432,8 @@ L = Live Input,
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>rndpos1</objectName>
-  <x>413</x>
-  <y>470</y>
+  <x>410</x>
+  <y>471</y>
   <width>50</width>
   <height>25</height>
   <uuid>{ddedf240-0604-49f7-9f8c-880d31f26d17}</uuid>
@@ -3442,14 +3442,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -3458,12 +3458,12 @@ L = Live Input,
   <minimum>0</minimum>
   <maximum>0.99</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.4</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>rndpos2</objectName>
-  <x>461</x>
-  <y>470</y>
+  <x>458</x>
+  <y>471</y>
   <width>50</width>
   <height>25</height>
   <uuid>{b73dfa9b-7dfb-488c-ab7f-be3d165a31b4}</uuid>
@@ -3472,14 +3472,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>right</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -3488,7 +3488,7 @@ L = Live Input,
   <minimum>0.1</minimum>
   <maximum>0.99</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.6</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>vol</objectName>
@@ -3533,14 +3533,14 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -3549,7 +3549,7 @@ L = Live Input,
   <minimum>0</minimum>
   <maximum>1</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.0534521</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>

@@ -493,7 +493,6 @@ void WidgetLayout::setValue(QString channelName, double value)
         if (m_widgets[i]->getUuid() == channelName) {
             m_widgets[i]->setValue(value);
             qDebug() << "Setting channel via UUID" << channelName;
-            1/0;
             break;
         }
         else if (m_widgets[i]->getChannelName() == channelName) {

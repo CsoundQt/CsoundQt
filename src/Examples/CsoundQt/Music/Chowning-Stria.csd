@@ -243,6 +243,15 @@ instr 999                                       ;  global amplitude shaping enve
 
 
 endin
+
+; spectrogram for gui display in csoundqt
+instr 2000
+	amon1, amon2 monitor
+	dispfft amon1, 1/12, 4096, 1
+endin
+
+alwayson 2000
+
 </CsInstruments>
 <CsScore>
 
@@ -700,29 +709,86 @@ e
 </CsScore>
 
 </CsoundSynthesizer>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 247
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-<MacGUI>
-ioView nobackground {59624, 59624, 59624}
-ioText {5, 3} {374, 196} label 0.000000 0.00100 "" left "DejaVu Sans" 12 {0, 0, 0} {65280, 65280, 65280} background border ;;; StriaÂ¬;;; by John ChowningÂ¬;;; Reconstruction - ORChestra csound codeÂ¬;;; Kevin Dahan 2007Â¬;;; kevin.dahan@wanadoo.frÂ¬;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Â¬The basis for this code was the original MUS10 orchestra fileÂ¬with modifications by John Chowning and Kevin Dahan
-</MacGUI>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>72</x>
+ <y>179</y>
+ <width>400</width>
+ <height>247</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>232</r>
+  <g>232</g>
+  <b>232</b>
+ </bgcolor>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>6</x>
+  <y>5</y>
+  <width>379</width>
+  <height>143</height>
+  <uuid>{33a86a23-e29a-4833-8f9c-c1fdaa9f1752}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Stria
 
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" name="" x="480" y="302" width="596" height="322"> 
+by John Chowning
 
+Reconstruction - ORChestra csound code Kevin Dahan 2007
+kevin.dahan@wanadoo.fr
 
-
-
-
-
-
-
-</EventPanel>
+The basis for this code was the original MUS10 orchestra file with modifications by John Chowning and Kevin Dahan</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>DejaVu Sans</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>203</r>
+   <g>215</g>
+   <b>220</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>3</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBGraph" version="2">
+  <objectName>graph1</objectName>
+  <x>6</x>
+  <y>153</y>
+  <width>744</width>
+  <height>437</height>
+  <uuid>{38315abe-d31c-48f2-8280-3b86eb15f50f}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <value>0</value>
+  <objectName2/>
+  <zoomx>2.00000000</zoomx>
+  <zoomy>1.00000000</zoomy>
+  <dispx>1.00000000</dispx>
+  <dispy>1.00000000</dispy>
+  <modex>lin</modex>
+  <modey>lin</modey>
+  <showSelector>false</showSelector>
+  <showGrid>true</showGrid>
+  <showTableInfo>false</showTableInfo>
+  <showScrollbars>false</showScrollbars>
+  <enableTables>false</enableTables>
+  <enableDisplays>true</enableDisplays>
+  <all>true</all>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="480" y="302" width="596" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

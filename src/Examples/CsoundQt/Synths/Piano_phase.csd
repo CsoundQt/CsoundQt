@@ -113,42 +113,25 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00100000</minimum>
   <maximum>8.00000000</maximum>
   <value>0.00200000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Index1_Attack</objectName>
-  <x>9</x>
-  <y>156</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{a5d4c849-c12d-4e5a-8d5d-045323befbb2}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0.002</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
+   <r>245</r>
+   <g>124</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -160,8 +143,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Attack</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -177,7 +162,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -189,8 +174,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Decay</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -206,36 +193,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Index1_Decay</objectName>
-  <x>69</x>
-  <y>156</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{cbceed7f-0b37-4f62-b2a7-220715ec2f1f}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>5.000</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Index1_Decay</objectName>
@@ -247,13 +205,25 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
   <value>5.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -265,8 +235,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Sustain</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -282,36 +254,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Index1_Sustain</objectName>
-  <x>129</x>
-  <y>156</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{a983e860-c424-411d-bca5-59897e532f6f}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0.000</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Index1_Sustain</objectName>
@@ -323,13 +266,25 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -341,8 +296,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Release</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -358,36 +315,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Index1_Release</objectName>
-  <x>189</x>
-  <y>156</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{50cefbf4-8496-4375-834d-09fb831197ab}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0.100</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Index1_Release</objectName>
@@ -398,14 +326,26 @@ i 3 1 0		;init
   <uuid>{642a7b5c-0b16-4551-afd2-d3a781a77c3b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
   <value>0.10000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -417,8 +357,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Index 1 Envelope</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -434,7 +376,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -446,8 +388,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Two phase Modulators with envelopes</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
@@ -475,8 +419,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Index 2 Envelope</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -492,7 +438,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Index2_Release</objectName>
@@ -504,42 +450,25 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
   <value>0.10000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Index2_Release</objectName>
-  <x>441</x>
-  <y>156</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{e8d72b75-8bdd-4ab3-84c5-2ad86caa0c99}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0.100</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
+   <r>245</r>
+   <g>124</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -551,8 +480,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Release</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -568,7 +499,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Index2_Sustain</objectName>
@@ -580,42 +511,25 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Index2_Sustain</objectName>
-  <x>381</x>
-  <y>156</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{92cb2604-5353-4eeb-b9d7-e6ae62bb4818}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0.000</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
+   <r>245</r>
+   <g>124</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -627,8 +541,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Sustain</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -644,7 +560,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Index2_Decay</objectName>
@@ -656,42 +572,25 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
   <value>5.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Index2_Decay</objectName>
-  <x>321</x>
-  <y>156</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{4b715a02-4450-4a6c-a9a9-cb0b799d29d0}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>5.000</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
+   <r>245</r>
+   <g>124</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -703,8 +602,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Decay</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -720,7 +621,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -732,8 +633,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Attack</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -749,7 +652,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Index2_Attack</objectName>
@@ -761,8 +664,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.002</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -776,9 +681,9 @@ i 3 1 0		;init
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Index2_Attack</objectName>
@@ -790,13 +695,25 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00100000</minimum>
-  <maximum>8.00000000</maximum>
+  <maximum>4.00000000</maximum>
   <value>0.00200000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -808,8 +725,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Amp Envelope</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -825,7 +744,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Amp_Release</objectName>
@@ -837,42 +756,25 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
   <value>0.10000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Amp_Release</objectName>
-  <x>694</x>
-  <y>156</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{ba833a58-cf55-40c8-ab76-23f2ccd0851d}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0.100</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
+   <r>245</r>
+   <g>124</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -884,8 +786,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Release</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -901,7 +805,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Amp_Sustain</objectName>
@@ -913,42 +817,25 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Amp_Sustain</objectName>
-  <x>634</x>
-  <y>156</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{07bc3bc9-a4f0-4430-bb4f-042b712113e3}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0.000</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
+   <r>245</r>
+   <g>124</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -960,8 +847,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Sustain</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -977,7 +866,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Amp_Decay</objectName>
@@ -989,42 +878,25 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
   <value>6.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Amp_Decay</objectName>
-  <x>574</x>
-  <y>156</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{727311df-702e-484b-8bcc-ce01e34a8ecb}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>6.000</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
+   <r>245</r>
+   <g>124</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1036,8 +908,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Decay</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1053,7 +927,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1065,8 +939,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Attack</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1082,7 +958,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Amp_Attack</objectName>
@@ -1094,8 +970,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.002</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1109,9 +987,9 @@ i 3 1 0		;init
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Amp_Attack</objectName>
@@ -1123,13 +1001,25 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00100000</minimum>
   <maximum>8.00000000</maximum>
   <value>0.00200000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1141,8 +1031,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>New Label</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1158,7 +1050,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1170,8 +1062,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>New Label</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1187,7 +1081,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1199,8 +1093,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>New Label</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1216,7 +1112,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Filter_Cutoff</objectName>
@@ -1227,43 +1123,26 @@ i 3 1 0		;init
   <uuid>{7a5e84b3-d6b9-41ed-86e6-430837e87446}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>100.00000000</minimum>
   <maximum>8000.00000000</maximum>
   <value>6000.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Filter_Cutoff</objectName>
-  <x>381</x>
-  <y>262</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{52b4801c-4f5f-4079-a340-5c6f999b031a}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>6000.000</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
+   <r>245</r>
+   <g>124</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1275,8 +1154,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Filter Cutoff</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1292,7 +1173,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1304,8 +1185,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Filter Reso</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1321,36 +1204,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Filter_Reso</objectName>
-  <x>441</x>
-  <y>262</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{3dcc8136-2128-46c2-a421-4f60a71e0a27}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>1.000</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Filter_Reso</objectName>
@@ -1361,14 +1215,26 @@ i 3 1 0		;init
   <uuid>{2ae12c59-ee34-4824-8e24-d2d559fe7210}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>100.00000000</maximum>
   <value>1.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1380,8 +1246,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Pan</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1397,36 +1265,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Pan</objectName>
-  <x>515</x>
-  <y>262</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{4c135605-eba5-498c-bda1-a8c7d1e114b9}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0.500</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Pan</objectName>
@@ -1437,14 +1276,26 @@ i 3 1 0		;init
   <uuid>{6fd29d18-2365-4e34-ad60-90651072c64e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1456,8 +1307,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Chorus</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1473,36 +1326,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Chorus</objectName>
-  <x>575</x>
-  <y>262</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{f6908231-9775-4518-861a-82e1e79aa2c7}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>0.333</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>255</r>
-   <g>170</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Chorus</objectName>
@@ -1513,14 +1337,26 @@ i 3 1 0		;init
   <uuid>{3132eb42-d99e-43e9-9957-22c978ba67a9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.33300000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>Mod_ratio1</objectName>
@@ -1532,6 +1368,7 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -1540,10 +1377,10 @@ i 3 1 0		;init
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>222</r>
+   <g>113</g>
+   <b>0</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0.005</minimum>
@@ -1561,8 +1398,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Mod ratio 1</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1578,7 +1417,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1590,8 +1429,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Mod index 1</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1607,7 +1448,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>Mod_index1</objectName>
@@ -1619,6 +1460,7 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -1627,10 +1469,10 @@ i 3 1 0		;init
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>226</r>
+   <g>114</g>
+   <b>0</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0.005</minimum>
@@ -1648,6 +1490,7 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -1656,10 +1499,10 @@ i 3 1 0		;init
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>232</r>
+   <g>117</g>
+   <b>0</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0.005</minimum>
@@ -1677,8 +1520,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Mod index 2</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1694,7 +1539,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1706,8 +1551,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Mod ratio 2</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1723,7 +1570,7 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>Mod_ratio2</objectName>
@@ -1735,6 +1582,7 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
@@ -1743,10 +1591,10 @@ i 3 1 0		;init
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>232</r>
+   <g>117</g>
+   <b>0</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0.005</minimum>
@@ -1763,43 +1611,26 @@ i 3 1 0		;init
   <uuid>{2bda857d-4de6-40eb-8db7-698052bd6bfa}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>Volume</objectName>
-  <x>693</x>
-  <y>262</y>
-  <width>60</width>
-  <height>25</height>
-  <uuid>{ee9b59e3-ed41-4770-9936-b2659d531349}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <label>1.000</label>
-  <alignment>center</alignment>
-  <font>Liberation Sans</font>
-  <fontsize>10</fontsize>
-  <precision>3</precision>
   <color>
-   <r>255</r>
-   <g>170</g>
+   <r>245</r>
+   <g>124</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <textcolor>#e87500</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1811,8 +1642,10 @@ i 3 1 0		;init
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Volume</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1828,18 +1661,19 @@ i 3 1 0		;init
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBScope">
   <objectName/>
   <x>6</x>
   <y>295</y>
-  <width>748</width>
-  <height>50</height>
+  <width>745</width>
+  <height>90</height>
   <uuid>{076a9f0e-162d-4c3d-91c7-05091e2c7425}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -1847,6 +1681,7 @@ i 3 1 0		;init
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
@@ -1908,85 +1743,3 @@ i 3 1 0		;init
 <value id="{ee9b59e3-ed41-4770-9936-b2659d531349}" mode="4" >1.000</value>
 </preset>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 72 179 400 200
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {29555, 14649, 0}
-ioKnob {9, 80} {60, 60} 8.000000 0.001000 0.010000 0.002000 Index1_Attack
-ioText {9, 156} {60, 25} display 0.002000 0.00100 "Index1_Attack" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 0.002
-ioText {9, 135} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Attack
-ioText {69, 135} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Decay
-ioText {69, 156} {60, 25} display 5.000000 0.00100 "Index1_Decay" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 5.000
-ioKnob {69, 80} {60, 60} 15.000000 0.000000 0.010000 5.000000 Index1_Decay
-ioText {129, 135} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Sustain
-ioText {129, 156} {60, 25} display 0.000000 0.00100 "Index1_Sustain" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 0.000
-ioKnob {129, 80} {60, 60} 1.000000 0.000000 0.010000 0.000000 Index1_Sustain
-ioText {189, 135} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Release
-ioText {189, 156} {60, 25} display 0.100000 0.00100 "Index1_Release" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 0.100
-ioKnob {189, 80} {60, 60} 15.000000 0.000000 0.010000 0.100000 Index1_Release
-ioText {55, 50} {150, 25} label 0.000000 0.00100 "" center "Liberation Sans" 14 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Index 1 Envelope
-ioText {162, 2} {460, 38} label 0.000000 0.00100 "" center "Liberation Sans" 24 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Two phase Modulators with envelopes
-ioText {307, 50} {150, 25} label 0.000000 0.00100 "" center "Liberation Sans" 14 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Index 2 Envelope
-ioKnob {441, 80} {60, 60} 15.000000 0.000000 0.010000 0.100000 Index2_Release
-ioText {441, 156} {60, 25} display 0.100000 0.00100 "Index2_Release" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 0.100
-ioText {441, 135} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Release
-ioKnob {381, 80} {60, 60} 1.000000 0.000000 0.010000 0.000000 Index2_Sustain
-ioText {381, 156} {60, 25} display 0.000000 0.00100 "Index2_Sustain" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 0.000
-ioText {381, 135} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Sustain
-ioKnob {321, 80} {60, 60} 15.000000 0.000000 0.010000 5.000000 Index2_Decay
-ioText {321, 156} {60, 25} display 5.000000 0.00100 "Index2_Decay" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 5.000
-ioText {321, 135} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Decay
-ioText {261, 135} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Attack
-ioText {261, 156} {60, 25} display 0.002000 0.00100 "Index2_Attack" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 0.002
-ioKnob {261, 80} {60, 60} 8.000000 0.001000 0.010000 0.002000 Index2_Attack
-ioText {560, 50} {150, 25} label 0.000000 0.00100 "" center "Liberation Sans" 14 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Amp Envelope
-ioKnob {694, 80} {60, 60} 15.000000 0.000000 0.010000 0.100000 Amp_Release
-ioText {694, 156} {60, 25} display 0.100000 0.00100 "Amp_Release" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 0.100
-ioText {694, 135} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Release
-ioKnob {634, 80} {60, 60} 1.000000 0.000000 0.010000 0.000000 Amp_Sustain
-ioText {634, 156} {60, 25} display 0.000000 0.00100 "Amp_Sustain" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 0.000
-ioText {634, 135} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Sustain
-ioKnob {574, 80} {60, 60} 15.000000 0.000000 0.010000 6.000000 Amp_Decay
-ioText {574, 156} {60, 25} display 6.000000 0.00100 "Amp_Decay" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 6.000
-ioText {574, 135} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Decay
-ioText {514, 135} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Attack
-ioText {514, 156} {60, 25} display 0.002000 0.00100 "Amp_Attack" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 0.002
-ioKnob {514, 80} {60, 60} 8.000000 0.001000 0.010000 0.002000 Amp_Attack
-ioText {261, 74} {240, 2} label 0.000000 0.00100 "" left "Liberation Sans" 10 {0, 0, 0} {65280, 43520, 0} nobackground noborder New Label
-ioText {514, 74} {240, 2} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65280, 43520, 0} nobackground noborder New Label
-ioText {10, 74} {240, 2} label 0.000000 0.00100 "" left "Liberation Sans" 10 {0, 0, 0} {65280, 43520, 0} nobackground noborder New Label
-ioKnob {381, 187} {60, 60} 8000.000000 100.000000 0.010000 6000.000000 Filter_Cutoff
-ioText {381, 262} {60, 25} display 6000.000000 0.00100 "Filter_Cutoff" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 6000.000
-ioText {376, 242} {70, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Filter Cutoff
-ioText {438, 242} {70, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Filter Reso
-ioText {441, 262} {60, 25} display 1.000000 0.00100 "Filter_Reso" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 1.000
-ioKnob {441, 187} {60, 60} 100.000000 1.000000 0.010000 1.000000 Filter_Reso
-ioText {513, 242} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Pan
-ioText {515, 262} {60, 25} display 0.500000 0.00100 "Pan" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 0.500
-ioKnob {515, 187} {60, 60} 1.000000 0.000000 0.010000 0.500000 Pan
-ioText {574, 242} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Chorus
-ioText {575, 262} {60, 25} display 0.333000 0.00100 "Chorus" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 0.333
-ioKnob {575, 187} {60, 60} 1.000000 0.000000 0.010000 0.333000 Chorus
-ioText {80, 208} {80, 30} editnum 1.000000 0.001000 "Mod_ratio1" center "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 1.000000
-ioText {0, 210} {80, 30} label 0.000000 0.00100 "" right "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Mod ratio 1
-ioText {0, 246} {80, 30} label 0.000000 0.00100 "" right "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Mod index 1
-ioText {80, 244} {80, 30} editnum 3.000000 0.001000 "Mod_index1" center "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 3.000000
-ioText {255, 245} {80, 30} editnum 2.000000 0.001000 "Mod_index2" center "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 2.000000
-ioText {175, 246} {80, 30} label 0.000000 0.00100 "" right "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Mod index 2
-ioText {175, 210} {80, 30} label 0.000000 0.00100 "" right "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Mod ratio 2
-ioText {255, 209} {80, 30} editnum 2.000000 0.001000 "Mod_ratio2" center "" 0 {0, 0, 0} {63232, 62720, 61952} nobackground noborder 2.000000
-ioKnob {693, 187} {60, 60} 1.000000 0.000000 0.010000 1.000000 Volume
-ioText {693, 262} {60, 25} display 1.000000 0.00100 "Volume" center "Liberation Sans" 10 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder 1.000
-ioText {691, 242} {60, 25} label 0.000000 0.00100 "" center "Liberation Sans" 12 {65280, 43520, 0} {63232, 62720, 61952} nobackground noborder Volume
-ioGraph {6, 295} {748, 50} scope 2.000000 -255 
-</MacGUI>

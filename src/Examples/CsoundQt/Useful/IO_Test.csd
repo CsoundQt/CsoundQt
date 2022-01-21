@@ -109,8 +109,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>I/O Test</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
@@ -138,8 +140,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Audio Output</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -167,8 +171,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Signal generator</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -196,8 +202,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Audio Input</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -225,6 +233,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>in2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -236,6 +245,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>62</r>
    <g>255</g>
@@ -247,6 +258,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor2</objectName>
@@ -258,6 +270,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>in1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -269,6 +282,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>62</r>
    <g>255</g>
@@ -280,6 +295,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -291,8 +307,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>1</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -308,7 +326,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -320,8 +338,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>2</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -337,7 +357,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBScrollNumber">
   <objectName>indb1</objectName>
@@ -348,27 +368,28 @@ e
   <uuid>{557e7fb7-3fab-45bd-b4ea-cbe3fd20a92a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
-  <font>Helvetica</font>
-  <fontsize>10</fontsize>
+  <font>Nimbus Sans [urw]</font>
+  <fontsize>13</fontsize>
   <color>
-   <r>62</r>
+   <r>162</r>
    <g>255</g>
-   <b>51</b>
+   <b>155</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>42</r>
+   <g>46</g>
+   <b>50</b>
   </bgcolor>
   <value>-54.89196014</value>
   <resolution>0.10000000</resolution>
   <minimum>-999999999999.00000000</minimum>
-  <maximum>99999999999999.00000000</maximum>
-  <bordermode>border</bordermode>
+  <maximum>999999999999.00000000</maximum>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -381,27 +402,28 @@ e
   <uuid>{38bd1f5e-dcf7-4897-a5c6-565e19983e63}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
-  <font>Helvetica</font>
-  <fontsize>10</fontsize>
+  <font>Nimbus Sans [urw]</font>
+  <fontsize>13</fontsize>
   <color>
-   <r>62</r>
+   <r>162</r>
    <g>255</g>
-   <b>51</b>
+   <b>155</b>
   </color>
   <bgcolor mode="background">
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>42</r>
+   <g>46</g>
+   <b>50</b>
   </bgcolor>
   <value>-84.28839874</value>
   <resolution>0.10000000</resolution>
   <minimum>-999999999999.00000000</minimum>
-  <maximum>99999999999999.00000000</maximum>
-  <bordermode>border</bordermode>
+  <maximum>999999999999.00000000</maximum>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -415,8 +437,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>MIDI note IO</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -444,8 +468,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Note in</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -461,7 +487,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>button1</objectName>
@@ -473,14 +499,17 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue> </stringvalue>
+  <stringvalue/>
   <text>Generate note</text>
   <image>/</image>
   <eventLine>i3 0 0.5</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor21</objectName>
@@ -492,6 +521,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>notein</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -503,6 +533,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -514,6 +546,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>signal</objectName>
@@ -525,6 +558,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>none</name>
@@ -555,8 +589,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>1</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -572,7 +608,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -584,8 +620,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>2</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -601,7 +639,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>on1</objectName>
@@ -613,6 +651,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -628,6 +667,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -643,6 +683,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Helvetica</font>
   <fontsize>11</fontsize>
@@ -676,8 +717,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Level</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -693,7 +736,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

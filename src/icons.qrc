@@ -55,6 +55,7 @@
         <file>themes/breeze/media-pause.png</file>
         <file>themes/breeze/info.png</file>
         <file>themes/breeze/note.png</file>
+		<file>themes/breeze/media-play.png</file>
         <file>themes/breeze/media-stop.png</file>
         <file>themes/breeze/pyroom.png</file>
         <file>themes/breeze/midi-keyboard.png</file>

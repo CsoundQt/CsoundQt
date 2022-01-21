@@ -120,8 +120,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Filter</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -149,13 +151,25 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>100.00000000</minimum>
   <maximum>5000.00000000</maximum>
   <value>495.95959600</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -167,8 +181,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Cut Freq</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -184,7 +200,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>fres</objectName>
@@ -196,13 +212,25 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.42424200</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -214,8 +242,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Resonance</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -231,18 +261,19 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>ftype</objectName>
   <x>339</x>
   <y>67</y>
   <width>110</width>
-  <height>25</height>
+  <height>30</height>
   <uuid>{6fbb28f4-5242-4967-ac09-2e2f8a9f296e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>moogladder</name>
@@ -278,8 +309,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Opcode </label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -295,7 +328,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>fatt</objectName>
@@ -307,6 +340,7 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
   <value>0.27000100</value>
@@ -325,6 +359,7 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
   <value>0.24000100</value>
@@ -343,6 +378,7 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.28000000</value>
@@ -361,6 +397,7 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
   <value>0.02000100</value>
@@ -379,8 +416,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>A</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -396,7 +435,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -408,8 +447,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>D</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -425,7 +466,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -437,8 +478,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>S</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -454,7 +497,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -466,8 +509,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>R</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -483,7 +528,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -495,8 +540,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Amp Env</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -524,8 +571,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Oscillator</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -548,11 +597,12 @@ i 99 0 3600
   <x>18</x>
   <y>70</y>
   <width>154</width>
-  <height>24</height>
+  <height>30</height>
   <uuid>{174520cb-035b-421b-935b-dcf96933287e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Saw</name>
@@ -588,6 +638,7 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000100</value>
@@ -606,6 +657,7 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000100</value>
@@ -624,6 +676,7 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.52000000</value>
@@ -642,6 +695,7 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
   <value>0.10000100</value>
@@ -660,8 +714,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>A</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -677,7 +733,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -689,8 +745,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>D</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -706,7 +764,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -718,8 +776,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>S</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -735,7 +795,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -747,8 +807,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>R</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -764,7 +826,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -776,8 +838,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Simple subtractive synth</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -793,7 +857,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -805,6 +869,7 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -812,7 +877,9 @@ i 99 0 3600
   <image>/</image>
   <eventLine>i98 0 3</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>oscfreq</objectName>
@@ -824,13 +891,25 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>110.00000000</minimum>
   <maximum>880.00000000</maximum>
   <value>366.66666700</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -842,8 +921,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Hz</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -859,7 +940,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>lvl</objectName>
@@ -871,13 +952,25 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.57575800</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -889,8 +982,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Level</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -906,7 +1001,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBScrollNumber">
   <objectName>oscfreq</objectName>
@@ -918,6 +1013,7 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
@@ -937,9 +1033,9 @@ i 99 0 3600
   <maximum>99999999999999.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
-  <mouseControl act="continuous"/>
+  <mouseControl act=""/>
  </bsbObject>
  <bsbObject version="2" type="BSBScope">
   <objectName/>
@@ -951,6 +1047,7 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>1.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -958,6 +1055,7 @@ i 99 0 3600
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>fenvamt</objectName>
@@ -969,13 +1067,25 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>4.00000000</maximum>
   <value>4.00000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -987,8 +1097,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Env Amount</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1004,7 +1116,7 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBCheckBox">
   <objectName>cont</objectName>
@@ -1016,7 +1128,8 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <selected>false</selected>
+  <description/>
+  <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
@@ -1031,8 +1144,10 @@ i 99 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Continuous notes</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1048,60 +1163,8 @@ i 99 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 502 203 613 433
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {32125, 41634, 41120}
-ioText {216, 38} {243, 189} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Filter
-ioKnob {228, 52} {56, 49} 5000.000000 100.000000 0.010000 495.959596 ffreq
-ioText {232, 89} {58, 26} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Cut Freq
-ioKnob {230, 117} {55, 48} 1.000000 0.000000 0.010000 0.424242 fres
-ioText {220, 154} {77, 24} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Resonance
-ioMenu {339, 67} {110, 25} 1 303 "moogladder, moogvcf2, rezzy, lowresx" ftype
-ioText {292, 63} {53, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Opcode 
-ioSlider {331, 100} {20, 100} 0.000001 1.000000 0.270001 fatt
-ioSlider {358, 100} {20, 100} 0.000001 1.000000 0.240001 fdec
-ioSlider {383, 100} {20, 100} 0.000000 1.000000 0.280000 fsus
-ioSlider {410, 100} {20, 100} 0.000001 1.000000 0.020001 frel
-ioText {331, 194} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder A
-ioText {359, 194} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder D
-ioText {384, 194} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder S
-ioText {410, 193} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder R
-ioText {465, 38} {124, 189} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Amp Env
-ioText {9, 38} {200, 189} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Oscillator
-ioMenu {18, 70} {154, 24} 2 303 "Saw,Square,Band-Lim. Saw,Band-lim Square" osctype
-ioSlider {479, 65} {20, 100} 0.000001 1.000000 0.000001 aatt
-ioSlider {506, 65} {20, 100} 0.000001 1.000000 0.000001 adec
-ioSlider {531, 65} {20, 100} 0.000000 1.000000 0.520000 asus
-ioSlider {558, 65} {20, 100} 0.000001 1.000000 0.100001 arel
-ioText {480, 158} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder A
-ioText {508, 158} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder D
-ioText {533, 158} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder S
-ioText {559, 157} {18, 24} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder R
-ioText {7, 1} {583, 29} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 0} {49152, 59136, 65280} nobackground noborder Simple subtractive synth
-ioButton {19, 124} {93, 28} event 1.000000 "" "Note" "/" i98 0 3
-ioKnob {111, 110} {83, 50} 880.000000 110.000000 0.010000 366.666667 oscfreq
-ioText {160, 154} {35, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Hz
-ioKnob {529, 183} {56, 50} 1.000000 0.000000 0.010000 0.575758 lvl
-ioText {485, 192} {45, 26} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Level
-ioText {112, 165} {49, 23} scroll 374.400000 0.100000 "oscfreq" right "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-ioGraph {9, 241} {580, 148} scope 2.000000 1 
-ioKnob {286, 188} {47, 38} 4.000000 0.000000 0.010000 4.000000 fenvamt
-ioText {219, 190} {77, 24} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Env Amount
-ioCheckbox {23, 192} {20, 20} off cont
-ioText {36, 185} {80, 25} label 0.000000 0.00100 "" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Continuous notes
-</MacGUI>

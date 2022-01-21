@@ -1126,6 +1126,7 @@ i 12 0 3600		;Keyboard input
 
 
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -1150,8 +1151,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1179,8 +1182,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>OP 1</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1196,18 +1201,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP1_A</objectName>
   <x>49</x>
   <y>8</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{9e13da35-ce6a-4581-abec-2c5395a24f1f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
   <value>0.26794010</value>
@@ -1226,8 +1232,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>A</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1243,7 +1251,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1255,8 +1263,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>D</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1272,18 +1282,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP1_D</objectName>
   <x>71</x>
   <y>9</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{a92533d8-c015-4de0-a136-76bc296de24d}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
   <value>0.00784610</value>
@@ -1302,8 +1313,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>S</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1319,18 +1332,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP1_S</objectName>
   <x>93</x>
   <y>9</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{6b7dcbf2-c631-415b-9bfd-5d1f108316d9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00781716</value>
@@ -1349,8 +1363,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>R</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1366,18 +1382,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP1_R</objectName>
   <x>114</x>
   <y>9</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{e5c6b99d-3423-4958-864e-bbffe3d7fafe}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
   <value>1.41834235</value>
@@ -1396,8 +1413,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1425,8 +1444,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>OP 2</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1442,18 +1463,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP2_A</objectName>
   <x>49</x>
   <y>141</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{871077d5-13ce-4ad8-a12a-ebc4180b0c86}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
   <value>0.15406355</value>
@@ -1472,8 +1494,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>A</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1489,7 +1513,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1501,8 +1525,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>D</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1518,18 +1544,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP2_D</objectName>
   <x>71</x>
   <y>142</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{05ec1dfd-fdaf-4381-8048-ae47a50cf679}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
   <value>0.00825546</value>
@@ -1548,8 +1575,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>S</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1565,18 +1594,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP2_S</objectName>
   <x>93</x>
   <y>142</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{36e27d45-a162-4fd9-9d98-2e439b3f91ec}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00134029</value>
@@ -1595,8 +1625,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>R</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1612,18 +1644,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP2_R</objectName>
   <x>114</x>
   <y>142</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{2c345a9a-0d6e-4381-aeee-d4b74b2316cf}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
   <value>0.68942636</value>
@@ -1642,8 +1675,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1671,8 +1706,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1700,8 +1737,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>OP 3</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1717,18 +1756,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP3_A</objectName>
   <x>49</x>
   <y>277</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{33f07b85-57c7-4dac-aecd-8a88397672a2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
   <value>0.11952523</value>
@@ -1747,8 +1787,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>A</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1764,7 +1806,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1776,8 +1818,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>D</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1793,18 +1837,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP3_D</objectName>
   <x>71</x>
   <y>278</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{d37dc860-9122-4463-941a-baf3d9964fb7}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
   <value>0.00428255</value>
@@ -1823,8 +1868,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>S</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1840,18 +1887,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP3_S</objectName>
   <x>93</x>
   <y>278</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{f72b09db-2caa-4461-825b-62ec9795be78}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00911442</value>
@@ -1870,8 +1918,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>R</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1887,18 +1937,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP3_R</objectName>
   <x>114</x>
   <y>278</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{0325a2d5-bbc5-4209-809b-f3882f92c49a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
   <value>0.21356234</value>
@@ -1917,8 +1968,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>OP 4</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1934,18 +1987,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP4_A</objectName>
   <x>308</x>
   <y>11</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{27f72d99-dcf9-41eb-957f-b961a831e299}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00030442</value>
@@ -1964,8 +2018,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>A</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1981,7 +2037,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1993,8 +2049,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>D</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2010,18 +2068,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP4_D</objectName>
   <x>330</x>
   <y>12</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{a46c3e5c-a08b-430b-b712-eca9cdeafb6f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
   <value>0.00177382</value>
@@ -2040,8 +2099,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>S</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2057,18 +2118,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP4_S</objectName>
   <x>352</x>
   <y>12</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{a77c4ed0-b2d4-460a-9364-8960bc569e44}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.36083108</value>
@@ -2087,8 +2149,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>R</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2104,18 +2168,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP4_R</objectName>
   <x>373</x>
   <y>12</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{95170189-8693-4ad0-8208-2e11a78f0c92}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
   <value>0.11849165</value>
@@ -2134,8 +2199,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2163,8 +2230,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2192,8 +2261,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>OP 5</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2209,18 +2280,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP5_A</objectName>
   <x>308</x>
   <y>147</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{00476cf1-49a1-443c-b2d0-e5a58fffb07b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00048555</value>
@@ -2239,8 +2311,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>A</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2256,7 +2330,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2268,8 +2342,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>D</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2285,18 +2361,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP5_D</objectName>
   <x>330</x>
   <y>148</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{de3ea287-8def-4d60-ab7f-227e03a58b89}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
   <value>0.00556565</value>
@@ -2315,8 +2392,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>S</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2332,18 +2411,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP5_S</objectName>
   <x>352</x>
   <y>148</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{68f9c5c8-0c0e-44b9-a40f-5513b3ea32c7}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.03035997</value>
@@ -2362,8 +2442,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>R</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2379,18 +2461,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP5_R</objectName>
   <x>373</x>
   <y>148</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{aef1719c-c106-4de5-8877-a83bcb0e303a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
   <value>2.75318646</value>
@@ -2409,8 +2492,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>OP 6</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2426,18 +2511,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP6_A</objectName>
   <x>308</x>
   <y>280</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{1cb2460b-4f1e-4960-9e4d-bb8b12b2fe3a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000100</minimum>
   <maximum>1.00000000</maximum>
   <value>0.34034353</value>
@@ -2456,8 +2542,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>A</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2473,7 +2561,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2485,8 +2573,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>D</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2502,18 +2592,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP6_D</objectName>
   <x>330</x>
   <y>281</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{39bbe82d-bf66-4390-af28-728bf48bf553}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
   <value>0.00144197</value>
@@ -2532,8 +2623,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>S</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2549,18 +2642,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP6_S</objectName>
   <x>352</x>
   <y>281</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{8175dd03-fb0b-4510-95a1-5e64decf4956}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00835408</value>
@@ -2579,8 +2673,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>R</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2596,18 +2692,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP6_R</objectName>
   <x>373</x>
   <y>281</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{14a72510-ba4d-4aaa-8abe-af9434462a84}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
   <value>2.70617104</value>
@@ -2626,8 +2723,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2655,8 +2754,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Lev</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2672,18 +2773,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP1_Lev</objectName>
   <x>143</x>
   <y>9</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{0b032eae-9a65-4ae9-9c6a-35c7d53551bc}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.69100642</value>
@@ -2702,6 +2804,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -2710,7 +2813,7 @@ i 12 0 3600		;Keyboard input
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2731,8 +2834,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Ratio</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2748,7 +2853,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>OP1_Inv</objectName>
@@ -2760,6 +2865,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -2767,7 +2873,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2779,8 +2887,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2808,6 +2918,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -2815,7 +2926,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2827,8 +2940,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Ratio</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2844,7 +2959,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>OP2_Ratio</objectName>
@@ -2856,6 +2971,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -2864,10 +2980,10 @@ i 12 0 3600		;Keyboard input
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>230</r>
+   <g>230</g>
+   <b>230</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
@@ -2879,12 +2995,13 @@ i 12 0 3600		;Keyboard input
   <objectName>OP2_Lev</objectName>
   <x>143</x>
   <y>143</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{52cdd897-93c5-4ce6-8363-2f1b80beffab}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.35206032</value>
@@ -2903,8 +3020,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Lev</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2920,7 +3039,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2932,8 +3051,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2961,8 +3082,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2990,8 +3113,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3019,8 +3144,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3048,8 +3175,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Lev</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3065,18 +3194,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP3_Lev</objectName>
   <x>143</x>
   <y>279</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{8af14ba4-ad9f-4ba8-85ec-45a83238fdbb}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.48741713</value>
@@ -3094,25 +3224,26 @@ i 12 0 3600		;Keyboard input
   <uuid>{6fd61b15-bc21-41f0-888d-526675b6ec12}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>230</r>
+   <g>230</g>
+   <b>230</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
   <maximum>6</maximum>
   <randomizable group="0">false</randomizable>
-  <value>5</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3124,8 +3255,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Ratio</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3141,7 +3274,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>OP3_Inv</objectName>
@@ -3153,6 +3286,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3160,7 +3294,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3172,8 +3308,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Lev</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3189,18 +3327,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP4_Lev</objectName>
   <x>402</x>
   <y>12</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{546eff0f-e7a8-40f3-9450-9fffe360958f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.60054684</value>
@@ -3219,6 +3358,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -3227,10 +3367,10 @@ i 12 0 3600		;Keyboard input
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>230</r>
+   <g>230</g>
+   <b>230</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
@@ -3248,8 +3388,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Ratio</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3265,7 +3407,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>OP4_Inv</objectName>
@@ -3277,6 +3419,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3284,7 +3427,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3296,8 +3441,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Lev</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3313,18 +3460,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP5_Lev</objectName>
   <x>403</x>
   <y>148</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{37c7aa17-e643-4e75-bf58-6969b2ed6c31}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.82928985</value>
@@ -3343,6 +3491,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -3351,10 +3500,10 @@ i 12 0 3600		;Keyboard input
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>230</r>
+   <g>230</g>
+   <b>230</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
@@ -3372,8 +3521,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Ratio</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3389,7 +3540,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>OP5_Inv</objectName>
@@ -3401,6 +3552,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3408,7 +3560,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3420,8 +3574,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Lev</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3437,18 +3593,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBVSlider">
   <objectName>OP6_Lev</objectName>
   <x>403</x>
   <y>281</y>
-  <width>17</width>
+  <width>20</width>
   <height>100</height>
   <uuid>{9f825ec8-2820-4a22-b358-03e0db0f6f49}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.81146699</value>
@@ -3459,32 +3616,33 @@ i 12 0 3600		;Keyboard input
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>OP6_Ratio</objectName>
-  <x>429</x>
+  <x>430</x>
   <y>298</y>
   <width>62</width>
   <height>25</height>
   <uuid>{04bcd67b-1f71-4738-a580-5d34453e3158}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>230</r>
+   <g>230</g>
+   <b>230</b>
   </bgcolor>
   <resolution>0.00100000</resolution>
   <minimum>0</minimum>
   <maximum>6</maximum>
   <randomizable group="0">false</randomizable>
-  <value>2.5</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3496,8 +3654,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Ratio</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3513,7 +3673,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>OP6_Inv</objectName>
@@ -3525,6 +3685,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3532,7 +3693,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3544,8 +3707,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Transform</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
@@ -3573,6 +3738,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3580,7 +3746,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i3 0 0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3592,6 +3760,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3599,7 +3768,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i2 0 0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3611,6 +3782,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3618,7 +3790,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i6 0 0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3630,6 +3804,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3637,7 +3812,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i7 0 0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3649,6 +3826,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3656,7 +3834,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i4 0 0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3668,6 +3848,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3675,7 +3856,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i5 0 0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3687,6 +3870,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3694,7 +3878,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i8 0 0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -3706,6 +3892,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -3713,7 +3900,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i9 0 0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3725,8 +3914,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3754,8 +3945,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Algorithm</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
@@ -3783,9 +3976,11 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Diffamator
 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
@@ -3813,8 +4008,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Notes</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
@@ -3842,8 +4039,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Presets</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
@@ -3871,6 +4070,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.04375662</value>
@@ -3889,6 +4089,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Arial Black</font>
   <fontsize>16</fontsize>
@@ -3897,10 +4098,10 @@ i 12 0 3600		;Keyboard input
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
+  <bgcolor mode="background">
+   <r>230</r>
+   <g>230</g>
+   <b>230</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>1</minimum>
@@ -3918,8 +4119,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Algo Nb</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3935,7 +4138,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -3947,8 +4150,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Feedback</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -3964,18 +4169,19 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>_SetPresetIndex</objectName>
   <x>700</x>
   <y>178</y>
   <width>119</width>
-  <height>25</height>
+  <height>30</height>
   <uuid>{f2e13afc-4068-4d76-90c2-2765a4b0bede}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>P00 - Algo 13</name>
@@ -4152,6 +4358,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -4159,7 +4366,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -4171,6 +4380,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -4178,7 +4388,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i17 0 0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBScrollNumber">
   <objectName>midinote</objectName>
@@ -4190,6 +4402,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -4223,6 +4436,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -4256,8 +4470,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>MIDI note</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -4273,7 +4489,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -4285,8 +4501,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>MIDI velocity</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -4302,7 +4520,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -4314,6 +4532,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -4321,7 +4540,9 @@ i 12 0 3600		;Keyboard input
   <image>/</image>
   <eventLine>i18 0 0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBScrollNumber">
   <objectName>mididur</objectName>
@@ -4333,6 +4554,7 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -4366,8 +4588,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Duration</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -4383,7 +4607,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -4395,8 +4619,10 @@ i 12 0 3600		;Keyboard input
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>An FM synthesizer emulating the DX7's operator algorithm chains</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -4412,7 +4638,7 @@ i 12 0 3600		;Keyboard input
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
