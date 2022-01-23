@@ -202,7 +202,7 @@ void DockHelp::loadFile(QString fileName, QString anchor) {
 
 }
 
-void DockHelp::setTheme(QString theme)
+void DockHelp::setIconTheme(QString theme)
 {
     ui->backButton->setIcon(QIcon(QString(":/themes/%1/browse-prev.png").arg(theme)));
     ui->forwardButton->setIcon(QIcon(QString(":/themes/%1/browse-next.png").arg(theme)));

@@ -31,9 +31,9 @@ TextEditor::TextEditor(QWidget *parent) :
 {
 	setAcceptDrops(true);
 	setAcceptRichText(false);
-	m_parameterMode = false;
-	m_commaTyped = false;
-	//  qDebug() << "TextEditor::TextEditor" << acceptDrops();
+    m_parameterMode = false;
+    m_commaTyped = false;
+    //  qDebug() << "TextEditor::TextEditor" << acceptDrops();
 }
 
 void TextEditor::keyPressEvent (QKeyEvent * event)
@@ -129,6 +129,8 @@ TextEditLineNumbers::TextEditLineNumbers(QWidget *parent)
 	connect(this,SIGNAL(cursorPositionChanged()),this,SLOT(updateLineArea()));
     lineNumberArea->setLineNumberSizeScaling(0.8);
     m_editorPadding = 6;
+    this->setStyleSheet("QTextEdit { border: none !important; }");
+
 }
 
 int TextEditLineNumbers::getAreaWidth()

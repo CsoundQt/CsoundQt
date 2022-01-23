@@ -197,7 +197,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QSettings settings("csound", "qutecsound");
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "breeze").toString();
-    helpPanel->setTheme(m_options->theme);
+    helpPanel->setIconTheme(m_options->theme);
 
     if(settings.contains("windowState")) {
         restoreState(settings.value("windowState").toByteArray());
@@ -423,15 +423,19 @@ CsoundQt::CsoundQt(QStringList fileNames)
     auto originalStyleSheet = qApp->styleSheet();
     QFile file;
     if (isDarkPalette) {
+        QDEBUG << "Using dark palette";
         file.setFileName(":/appstyle-dark.css");
     }
     else {
+        QDEBUG << "Using light palette";
         file.setFileName(":/appstyle-white.css");
     }
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
-    originalStyleSheet += styleSheet;
-    qApp->setStyleSheet(originalStyleSheet);
+    // originalStyleSheet += styleSheet;
+    // qApp->setStyleSheet(originalStyleSheet);
+    qApp->setStyleSheet(styleSheet);
+
 #endif
 
     m_closing = false;
@@ -3119,7 +3123,7 @@ void CsoundQt::applySettings()
 #endif
     //storeSettings(); // save always when something new is changed
 
-    this->helpPanel->setTheme(m_options->theme);
+    this->helpPanel->setIconTheme(m_options->theme);
 }
 
 void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)

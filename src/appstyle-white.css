@@ -4,21 +4,20 @@ QMainWindow::separator {
 }
 
 QFrame {
-    border: 0px solid green;
+    /* border: 0px solid green; */
 }
 
 QMainWindow::separator:hover  {
     background: #696969;
 }
+
 QDockWidget::title  {
     text-align: center;
-    /* background: #D1D1D1; */
     padding-left: 0px;
 }
 
 QTextEdit {
     background-color: #f0f0f0;
     color: #202020;
-    border-radius: 4px;
-    border: 1px solid #455364;
+    border: none;
 }

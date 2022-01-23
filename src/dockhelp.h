@@ -43,7 +43,7 @@ public:
     void loadFile(QString fileName, QString anchor="");
 	bool externalBrowser;
 	QString docDir;
-    void setTheme(QString theme);
+    void setIconTheme(QString theme);
 
 private:
 	QTextDocument::FindFlags findFlags;
