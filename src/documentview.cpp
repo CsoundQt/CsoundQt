@@ -821,7 +821,10 @@ void DocumentView::createParenthesisSelection(int pos, bool paired)
 
 	QTextEdit::ExtraSelection selection;
 	QTextCharFormat format = selection.format;
-	format.setBackground( (paired) ? Qt::lightGray: Qt::magenta); // if single parenthesis, mark with magenta
+    auto palette = qApp->palette();
+    auto bgcolor = (paired) ? palette.highlight() : palette.midlight();
+    // format.setBackground( (paired) ? Qt::lightGray: Qt::magenta); // if single parenthesis, mark with magenta
+    format.setBackground(bgcolor);
 	selection.format = format;
 
 	QTextCursor cursor = editor->textCursor();

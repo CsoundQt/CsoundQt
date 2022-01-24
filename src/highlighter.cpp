@@ -41,8 +41,7 @@ QVector<ParenthesisInfo *> TextBlockData::parentheses()
 void TextBlockData::insert(ParenthesisInfo *info)
 {
 	int i = 0;
-	while (i < m_parentheses.size() &&
-		info->position > m_parentheses.at(i)->position)
+    while (i < m_parentheses.size() && info->position > m_parentheses.at(i)->position)
 		++i;
 
 	m_parentheses.insert(i, info);
@@ -60,15 +59,6 @@ void Highlighter::setTheme(const QString &theme) {
     if(theme == "none") {
         defaultFormat.setForeground(QColor("black"));
         defaultFormat.setBackground(QColor(250, 250, 250));
-        /*
-        csdtagFormat = defaultFormat;
-        instFormat = defaultFormat;
-        keywordFormat = defaultFormat;
-        headerFormat = defaultFormat;
-        opcodeFormat = defaultFormat;
-        singleLineCommentFormat  = defaultFormat;
-        */
-
     }
     else if(theme == "classic") {
         defaultFormat.setForeground(QColor("black"));
@@ -518,7 +508,6 @@ void Highlighter::highlightBlock(const QString &text)
         return;
 
     // for parenthesis
-    // auto *data = static_cast<TextBlockData*>(currentBlockUserData());
     auto data = static_cast<TextBlockData*>(currentBlockUserData());
     if(data == nullptr) {
         data = new TextBlockData;
@@ -654,7 +643,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
 
     auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
 
-    rx.setPattern("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|)>");
+    rx.setPattern("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>");
     rxmatch = rx.match(line);
     if(rxmatch.hasMatch()) {
         if(rxmatch.captured(1) == "CsInstruments") {
@@ -685,8 +674,11 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         }
         return;
     }
-    auto text = QStringRef(&line, 0, commentIndex);
+    else if(blockdata->section == UnknownSection) {
+        return;
+    }
 
+    auto text = QStringRef(&line, 0, commentIndex);
 
     // define
     rx.setPattern("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
