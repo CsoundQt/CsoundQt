@@ -545,7 +545,7 @@ public:
 		m_mw = mainWindow;
 		while (!fileEventQueue.isEmpty()) {
 			QString fileName = fileEventQueue.takeFirst();
-            qDebug() << "FileOpenEater::setMainWindow  opening file" << fileName << Qt::endl;
+            qDebug() << "FileOpenEater::setMainWindow  opening file" << fileName << ENDL; // use macro for Qt version compatibility
 			m_mw->loadFileFromSystem(fileName);
 		}
 	}

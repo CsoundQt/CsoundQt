@@ -270,13 +270,13 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
     if (inArgs.contains("["))
         inArgsOpt = inArgs.mid(inArgs.indexOf("["));
     inArgs.remove(inArgsOpt);
-    QStringList args = inArgs.split(QRegExp("[,\\\"]+"), Qt::SkipEmptyParts);
+    QStringList args = inArgs.split(QRegExp("[,\\\"]+"), SKIP_EMPTY_PARTS);
     for (int count = 0; count < args.size(); count ++) {
         args[count] = args[count].trimmed();
         if (args[count] == "")
             args.removeAt(count);
     }
-    QStringList argsOpt = inArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]+"), Qt::SkipEmptyParts);
+    QStringList argsOpt = inArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]+"), SKIP_EMPTY_PARTS);
     for (int j = 0; j < inputs.size(); j++) {
         if (j < args.size()) {
             inputs[j].argName = args[j];
@@ -304,8 +304,8 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
     if (outArgs.contains("["))
         outArgsOpt = outArgs.mid(outArgs.indexOf("["));
     outArgs.remove(outArgsOpt);
-    args = outArgs.split(QRegExp("[,\\s]+"), Qt::SkipEmptyParts);
-    argsOpt = outArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]"), Qt::SkipEmptyParts);
+    args = outArgs.split(QRegExp("[,\\s]+"), SKIP_EMPTY_PARTS);
+    argsOpt = outArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]"), SKIP_EMPTY_PARTS);
     for (int j = 0; j < outputs.size(); j++) {
         if (j < args.size()) {
             outputs[j].argName = args[j];

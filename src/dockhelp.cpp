@@ -186,8 +186,12 @@ void DockHelp::loadFile(QString fileName, QString anchor) {
     if(QFileInfo(fileName).suffix() == ".md") {
         QFile file(fileName);
         QTextStream md(&file);
-        ui->text->document()->setMarkdown(md.readAll());
-        ui->text->setHtml(ui->text->document()->toHtml());
+#if QT_VERSION >= 0x051400
+    ui->text->document()->setMarkdown(md.readAll());
+    ui->text->setHtml(ui->text->document()->toHtml());
+#else
+    ui->text->document()->setPlainText(md.readAll());
+#endif
     }
     else {
         QUrl url = QUrl::fromLocalFile(fileName);

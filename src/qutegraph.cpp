@@ -1551,7 +1551,11 @@ void QuteTableWidget::reset() {
         m_maxy = 1.0;
         m_miny = -1.0;
     }
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     m_path.clear();
+#else
+    m_path = QPainterPath(); // not sure if it works
+#endif
 }
 
 
@@ -1701,7 +1705,11 @@ void QuteTableWidget::updatePath() {
         miny = m_miny = floor(newminy);
     }
 
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     m_path.clear();
+#else
+    m_path = QPainterPath(); // not sure if it works
+#endif
     QPolygonF poly;
     double yscale = -height / (maxy-miny);
 
@@ -1935,7 +1943,7 @@ void QuteTable::setValue(double value) {
 };
 
 void QuteTable::setValue(QString s) {
-    auto parts = s.splitRef(' ', Qt::SkipEmptyParts);
+    auto parts = s.splitRef(' ', SKIP_EMPTY_PARTS);
     if(parts.size() == 0) {
         qWarning() << "TablePLot: Message not understood, expected @set <tabnum> "
                     "or @update";

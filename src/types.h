@@ -29,7 +29,7 @@
 #include <csound.h>
 
 
-#define QCS_VERSION "1.1.0"
+#define QCS_VERSION "1.1.0-rc2"
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_DEFAULT_TIME 50
@@ -99,6 +99,16 @@
 #define QCS_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n-odac\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 64\nnchnls = 2\n0dbfs = 1\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
 
 #define QDEBUG qDebug() << __FUNCTION__ << ":"
+
+// macros for compatibility problems befor and after Qt 5.14
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+    #define ENDL Qt::endl
+    #define SKIP_EMPTY_PARTS Qt::SkipEmptyParts
+#else
+    #define ENDL endl
+    #define SKIP_EMPTY_PARTS QString::SkipEmptyParts
+#endif
 
 
 enum viewMode {
