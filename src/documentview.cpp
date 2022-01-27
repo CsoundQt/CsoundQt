@@ -53,7 +53,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 
 	for (int i = 0; i < editors.size(); i++) {
 		if (editors[i]!=m_filebEditor) { // FilebEditor does not have this slot
-            connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
+            // to fix always marked as modified, comment it out and handle setModified in this->textChanged slot
+            //connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
 		}
 		splitter->addWidget(editors[i]);
 		editors[i]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -376,10 +377,12 @@ void DocumentView::updateHoverText(int x, int y, QString text)
 
 void DocumentView::setModified(bool mod)
 {
-    // auto sender = static_cast<QTextEdit*>(this->sender());
-    // auto senderName = sender != nullptr ? sender->property("name").toString() : "";
-    // QDEBUG << "sender: " << senderName << "modified:"<<mod;
-    emit contentsChanged();
+//    auto sender = static_cast<QTextEdit*>(this->sender());
+//    auto senderName = sender != nullptr ? sender->property("name").toString() : "";
+//    qDebug() << "sender: " << senderName << "modified:"<<mod;
+    if (mod) {
+        emit contentsChanged();
+    }
 	m_isModified = mod;
 }
 
@@ -840,12 +843,18 @@ void DocumentView::createParenthesisSelection(int pos, bool paired)
 
 void DocumentView::textChanged()
 {
-	if (internalChange) {
+
+    if (internalChange) {
         internalChange = false;
 		return;
 	}
 	TextEditor *editor = m_mainEditor;
 	unmarkErrorLines();
+
+    //test: seems to do the trick and solve "always modified bug
+    //qDebug() << "Editor modified: " <<  m_mainEditor->document()->isModified();
+    bool modified = m_mainEditor->document()->isModified();
+    setModified(modified);
 
 	if (m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {  // CSD or ORC mode
 		if (m_autoComplete) {

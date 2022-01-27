@@ -102,7 +102,7 @@ public:
 
 
 public slots:
-	void setModified(bool mod = true);
+    void setModified(bool mod = true);
     void syntaxCheck();
 	void textChanged();
 	void escapePressed();
