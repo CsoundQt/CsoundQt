@@ -4477,13 +4477,15 @@ QString CsoundQt::getExamplePath(QString dir)
 #ifdef Q_OS_LINUX
     examplePath = QString(); //qApp->applicationDirPath() + "/Examples/" + dir;
     QStringList possiblePaths;
-    possiblePaths << qApp->applicationDirPath() + "/Examples/" << "~/.local/share/csoundqt/Examples/"
-                  << "/usr/share/csoundqt/Examples/" << qApp->applicationDirPath() + "/../src/Examples/"
+    possiblePaths << qApp->applicationDirPath() + "/Examples/"
+                  << qApp->applicationDirPath() + "/../src/Examples/"
                   << qApp->applicationDirPath() + "/../../csoundqt/src/Examples/"
-				  << qApp->applicationDirPath() + "/../../CsoundQt/src/Examples/"
+                  << qApp->applicationDirPath() + "/../../CsoundQt/src/Examples/"
+                  << qApp->applicationDirPath() + "/../share/csoundqt/Examples/"
                   <<  "/../../qutecsound/src/Examples/"
                   << "~/.local/share/qutecsound/Examples/" << "/usr/share/qutecsound/Examples/"
-                  << qApp->applicationDirPath() + "/../share/csoundqt/Examples/";
+                  << "~/.local/share/csoundqt/Examples/"
+                  << "/usr/share/csoundqt/Examples/";
 
     foreach (QString path, possiblePaths) {
         path += dir;
