@@ -127,6 +127,7 @@ void Inspector::parseText(const QString &text)
         }
     }
 
+    // Parsing orchestra
     for (; i< lines.size(); i++) {
         if (partOfComment) {
             if (lines[i].indexOf("*/") != -1)

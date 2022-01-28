@@ -99,6 +99,7 @@ public:
     Highlighter* getHighlighter() { return &m_highlighter; }
     void gotoLineDialog();
     void markCurrentPosition();
+    const QStringList getAllWords();
 
 
 public slots:
@@ -181,6 +182,9 @@ private:
 	QString lastReplace;
 	QStringList m_localVariables;
 	QStringList m_globalVariables;
+    QTime m_lastWordsUpdate;
+    QStringList m_allWords;
+    // QTime m_lastContextUpdate;
 
     QList<int> cursorPositions;
 

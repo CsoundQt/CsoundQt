@@ -282,7 +282,8 @@ signals:
 	void setCurrentAudioFile(QString name);
 	void liveEventsVisible(bool);  // To change the action in the main window
 	void modified();  // Triggered whenever the children change
-	void stopSignal(); // To tell main application that running has stopped
+    void unmodified();
+    void stopSignal(); // To tell main application that running has stopped
 	void setHelpSignal(); // Propagated from view
 	void setWidgetClipboardSignal(QString text);
 	void evaluatePythonSignal(QString code);

@@ -311,6 +311,7 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
     //		this->resize(m_w, m_h);
     //		//    setOuterGeometry();
     //	}
+    qDebug() << "Finished loading xml widsgets";
 }
 
 void WidgetLayout::loadXmlPresets(QString xmlPresets)

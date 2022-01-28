@@ -769,7 +769,7 @@ void CsoundQt::newFile()
     documentPages[curPage]->loadTextString(m_options->csdTemplate);
     documentPages[curPage]->setFileName("");
     setWindowModified(false);
-    documentTabs->setTabIcon(curPage, modIcon);
+    // documentTabs->setTabIcon(curPage, modIcon);
     documentTabs->setTabText(curPage, "default.csd");
     //   documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
     connectActions();
@@ -3004,11 +3004,16 @@ void CsoundQt::donate()
     openExternalBrowser(QUrl("http://sourceforge.net/donate/index.php?group_id=227265"));
 }
 
-void CsoundQt::documentWasModified()
+void CsoundQt::documentWasModified(bool status)
 {
-    setWindowModified(true);
-    //  qDebug() << "CsoundQt::documentWasModified()";
-    documentTabs->setTabIcon(curPage, modIcon);
+    if(status) {
+        setWindowModified(true);
+        documentTabs->setTabIcon(curPage, modIcon);
+    }
+    else {
+        setWindowModified(false);
+        documentTabs->setTabIcon(curPage, QIcon());
+    }
 }
 
 void CsoundQt::configure()
@@ -4431,6 +4436,8 @@ void CsoundQt::connectActions()
             this, SLOT(statusBarMessage(QString)));
 
     connect(doc, SIGNAL(modified()), this, SLOT(documentWasModified()));
+    connect(doc, &DocumentPage::unmodified, [this](){this->documentWasModified(false);});
+
     //  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
     //          this, SLOT(setWidgetClipboard(QString)));
     connect(doc, SIGNAL(setCurrentAudioFile(QString)),
@@ -6010,12 +6017,10 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         fileName = QString("");
     }
 
-    QDEBUG << "makeNewPage" << fileName << "curPage: " << curPage;
     if (!makeNewPage(fileName, text)) {
         QApplication::restoreOverrideCursor();
         return -1;
     }
-    QDEBUG << "makeNewPage returned, curPage: " << curPage;
 
     if (!m_options->autoJoin &&
             (fileName.endsWith(".sco") ||
@@ -6050,7 +6055,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     if (runNow) {
         play();
     }
-    QDEBUG << "loadFile "  << fileName << "finished, curPage " << curPage;
+    QDEBUG << "loadFile" << fileName << "finished, curPage:" << curPage;
     return curPage;
 }
 

@@ -202,6 +202,7 @@ void DocumentView::updateContext()
 
 void DocumentView::updateOrcContext(QString orc)
 {
+    // This is disabled at the moment since updateContext is itself disabled
     (void) orc;
 	// TODO: add string as context
 	QStringList innerContextStart;
@@ -235,31 +236,24 @@ void DocumentView::updateOrcContext(QString orc)
 		linecursor.movePosition(QTextCursor::EndOfLine);
 	}
 	QString instr = cursor.selection().toPlainText();
-	QStringList lines = instr.split("\n", QString::SkipEmptyParts);
+    auto lines = instr.splitRef("\n", Qt::SkipEmptyParts);
 
+    auto rxWordSplit = QRegularExpression("[\\s,+-/\\*\\.\\^\\(\\)\\[\\]$]");
 	m_localVariables.clear();
-	foreach(QString line, lines) {
-		if (line.trimmed().startsWith(";")) {
+    QSet<QString> seen;
+    for(auto line: lines) {
+        line = line.trimmed();
+        if (line.isEmpty() || line.startsWith(";")) {
 			continue;
 		}
-		QStringList words = line.split(QRegExp("[\\s,]"), QString::SkipEmptyParts);
-		int opcodeIndex = -1;
-		foreach(QString word, words) {
-			if (m_opcodeTree->isOpcode(word)) {
-				opcodeIndex = words.indexOf(word);
-			}
-		}
-		if(opcodeIndex > 0) {
-			words = words.mid(0, opcodeIndex);
-			foreach(QString word, words) {
-				if (word.at(0).isLetter()) {
-					m_localVariables << word.remove(QRegExp("[\\(\\)]"));
-				}
-			}
+        auto words = line.toString().split(rxWordSplit, Qt::SkipEmptyParts);
+        for(auto word: words) {
+            if(!seen.contains(word) && !m_opcodeTree->isOpcode(word)) {
+                seen.insert(word);
+            }
 		}
 	}
-	m_localVariables.removeDuplicates();
-	m_localVariables.sort();
+    m_localVariables = QStringList(seen.begin(), seen.end());
 }
 
 void DocumentView::nextParameter()
@@ -376,9 +370,6 @@ void DocumentView::updateHoverText(int x, int y, QString text)
 
 void DocumentView::setModified(bool mod)
 {
-    // auto sender = static_cast<QTextEdit*>(this->sender());
-    // auto senderName = sender != nullptr ? sender->property("name").toString() : "";
-    // QDEBUG << "sender: " << senderName << "modified:"<<mod;
     emit contentsChanged();
 	m_isModified = mod;
 }
@@ -837,6 +828,21 @@ void DocumentView::createParenthesisSelection(int pos, bool paired)
 	editor->setExtraSelections(selections);
 }
 
+const QStringList DocumentView::getAllWords() {
+    // All words are parsed at max. each 4 seconds
+    const int minMsecsFromLastParsing = 4000;
+    auto now = QTime::currentTime();
+    int msecs = m_lastWordsUpdate.msecsTo(now);
+    if(m_allWords.isEmpty() || msecs > minMsecsFromLastParsing) {
+        QDEBUG << "Updating all words, time since last update: " << msecs << "msecs";
+        TextEditor *editor = m_mainEditor;
+        QString wholeText = editor->toPlainText();
+        auto allWords = wholeText.split(QRegularExpression("[" + QRegularExpression::escape("+-*/=#&,\"\'|[]()<>.;:^") + "\\s]"), Qt::SkipEmptyParts);
+        m_lastWordsUpdate = now;
+        m_allWords = allWords;
+    }
+    return m_allWords;
+}
 
 void DocumentView::textChanged()
 {
@@ -885,7 +891,7 @@ void DocumentView::textChanged()
 				if (word.size() > 0 && !word.startsWith("\"")) {
 					QStringList vars;
 					syntaxMenu->clear();
-					foreach(QString var, m_localVariables) {
+                    foreach(QString var, m_localVariables) {
 						if (var.endsWith(',')) {
 							var.chop(1);
 						}
@@ -902,16 +908,11 @@ void DocumentView::textChanged()
 						}
 					}
                     if (word.size() > 2) {
-                        // qDebug() << "word: " << word << "\n";
-						// check for autcompletion from all words in text editor
-						QString wholeText = editor->toPlainText();
-                        wholeText.replace(QRegularExpression("[" + QRegularExpression::escape("+-*/=#&,\"\'|[]()<>.;0123456789:") + "]"), " ");
-                        QStringList allWords = wholeText.simplified().split(" ");
-						QStringList menuWords;
+                        // check for autcompletion from ALL words in text editor
+                        auto allWords = getAllWords();
+                        QStringList menuWords;
 						allWords.removeDuplicates();
-                        // allWords.replaceInStrings(QRegExp("^\\d*$"),""); // remove numbers - not good enough regexp, '.' stays
-						allWords.removeAll("");
-						foreach(QString theWord, allWords) {
+                        foreach(QString theWord, allWords) {
                             if (theWord.toLower().startsWith(wordlow) && word != theWord) {
 								menuWords << theWord;
 							}
@@ -920,7 +921,6 @@ void DocumentView::textChanged()
                             if(tag.toLower().startsWith(wordlow) && word != tag) {
                                 menuWords << tag;
                             }
-
                         }
                         foreach(QString theWord, menuWords) {
 							QAction *a = syntaxMenu->addAction(theWord,

@@ -266,8 +266,8 @@ private slots:
 	void downloadManual();
 	void about();
 	void donate();
-	void documentWasModified();
-	void configure();
+    void documentWasModified(bool status=true);
+    void configure();
 	void applySettings();
 	void setCurrentOptionsForPage(DocumentPage *p);
 	void runUtility(QString flags);

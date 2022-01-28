@@ -229,7 +229,11 @@ int DocumentPage::setTextString(QString &text)
     //  }
     // This must be last as some of the text has been removed along the way
     m_view->setFullText(text,true);
-	m_view->setModified(false);
+    m_view->setModified(false);
+    // This ensures that modifications triggered later by the maineditor
+    // do not set the modified status of the page when a file is first
+    // loaded
+    QTimer::singleShot(1000, this, [this](){this->setModified(false);});
 	return ret;
 }
 
@@ -672,6 +676,7 @@ void DocumentPage::setModified(bool mod)
         emit modified();
 	}
 	else {
+        emit unmodified();
 		m_view->setModified(false);
 		foreach (WidgetLayout  *wl, m_widgetLayouts) {
 			wl->setModified(false);
@@ -1728,7 +1733,6 @@ void DocumentPage::parseUdos(bool force) {
     }
     auto highlighter = m_view->getHighlighter();
     highlighter->setUDOs(m_parsedUdos);
-    // qDebug() << "Parsed UDOs in " << mytimer.elapsed() << "ms";
     if(numUdos != m_parsedUdos.size()) {
         highlighter->rehighlight();
     }
