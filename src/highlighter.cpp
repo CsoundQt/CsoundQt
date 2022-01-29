@@ -301,6 +301,9 @@ void Highlighter::setTheme(const QString &theme) {
     gstringVarFormat.setFontWeight(QFont::Bold);
     gstringVarFormat.setFontItalic(true);
 
+    errorFormat.setForeground(deprecatedFormat.foreground().color());
+    errorFormat.setFontStrikeOut(true);
+
     // ioFormat.setFontItalic(true);
 
     QColor color = saturateColor(headerFormat.foreground().color().lighter(150), 150);
@@ -754,13 +757,17 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         else if(ioPatterns.contains(word)) {
             setFormat(wordStart, wordEnd - wordStart, ioFormat);
         }
-        else if(word.contains(":")) {
-			QStringList parts = word.split(":");
+        else if(word[word.size()-1] != ':' && word.contains(":")) {
+            // functional style opcode:k(...)
+            auto parts = word.split(":");
 			if (parts.size() == 2) {
-				if (findOpcode(parts[0]) >= 0) {
+                if (isOpcode(parts[0])) {
 					setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
 				}
 			}
+            else {
+                setFormat(wordStart, wordEnd - wordStart, errorFormat);
+            }
 		}
         else if(m_parsedUDOs.contains(word)) {
             setFormat(wordStart, wordEnd - wordStart, udoFormat);

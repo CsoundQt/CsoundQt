@@ -138,6 +138,7 @@ private:
     QTextCharFormat deprecatedFormat;
     QTextCharFormat operatorFormat;
     QTextCharFormat scoreLetterFormat;
+    QTextCharFormat errorFormat;
 
 
 	QTextCharFormat labelFormat;
