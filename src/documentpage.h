@@ -203,7 +203,7 @@ public slots:
 	void showMidiLearn(QuteWidget *widget);
 	void applyMacOptions(QStringList options);
 	void setMacOption(QString option, QString newValue);
-	void setModified(bool mod = true);
+    void setModified(bool mod = true);
 	// For Csound Engine
 	void sendCodeToEngine(QString code);
 	//Passed directly to widget layout

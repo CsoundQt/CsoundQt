@@ -96,6 +96,7 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
     Pal.setColor(QPalette::Background, Qt::black);
     this->setAutoFillBackground(true);
     this->setPalette(Pal);
+    this->setStyleSheet("QFrame { border: 0px; }");
 
 	// Default properties
 	setProperty("QCS_zoomx", 1.0);
@@ -350,7 +351,7 @@ void QuteGraph::setValue(double value)
 void QuteGraph::setValue(QString text)
 {
     bool ok;
-    auto parts = text.splitRef(' ', QString::SkipEmptyParts);
+    auto parts = text.splitRef(' ', Qt::SkipEmptyParts);
     if(parts[0] == "@set") {
         bool ok;
         int index = parts[1].toInt(&ok);
@@ -528,6 +529,7 @@ void QuteGraph::refreshWidget()
 
 void QuteGraph::createPropertiesDialog()
 {
+    QLabel *label;
 	QuteWidget::createPropertiesDialog();
 	dialog->setWindowTitle("Graph");
 
@@ -535,27 +537,23 @@ void QuteGraph::createPropertiesDialog()
 	channelLabel->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 	//  nameLineEdit->setText(getChannelName());
 
-	QLabel *label = new QLabel(dialog);
-	label = new QLabel(dialog);
-	label->setText("F-table Channel name =");
-	layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
+    label = new QLabel("F-table Channel name =", dialog);
+    layout->addWidget(label, 4, 0, Qt::AlignRight|Qt::AlignVCenter);
 	name2LineEdit = new QLineEdit(dialog);
 	name2LineEdit->setText(getChannel2Name());
 	name2LineEdit->setMinimumWidth(320);
 	layout->addWidget(name2LineEdit, 4,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
 
-	label = new QLabel(dialog);
-	label->setText("Zoom X");
-	layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
+    label = new QLabel("Zoom X", dialog);
+    layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
 	zoomxBox = new QDoubleSpinBox(dialog);
 	zoomxBox->setRange(0.1, 10.0);
 	zoomxBox->setDecimals(1);
 	zoomxBox->setSingleStep(0.1);
 	layout->addWidget(zoomxBox, 8, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-	label = new QLabel(dialog);
-	label->setText("Zoom Y");
-	layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
+    label = new QLabel("Zoom Y", dialog);
+    layout->addWidget(label, 8, 2, Qt::AlignRight|Qt::AlignVCenter);
 	zoomyBox = new QDoubleSpinBox(dialog);
 	zoomyBox->setRange(0.1, 10.0);
 	zoomyBox->setDecimals(1);
@@ -581,26 +579,22 @@ void QuteGraph::createPropertiesDialog()
     acceptDisplaysCheckBox->setChecked(property("QCS_enableDisplays").toBool());
     layout->addWidget(acceptDisplaysCheckBox, 9, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-    showSelectorCheckBox = new QCheckBox(dialog);
-    showSelectorCheckBox->setText("Show Selector");
+    showSelectorCheckBox = new QCheckBox("Show Selector", dialog);
     showSelectorCheckBox->setChecked(property("QCS_showSelector").toBool());
     layout->addWidget(showSelectorCheckBox, 10, 0, Qt::AlignLeft|Qt::AlignVCenter);
 
-    showGridCheckBox = new QCheckBox(dialog);
-    showGridCheckBox->setText("Show Grid");
+    showGridCheckBox = new QCheckBox("Show Grid", dialog);
     showGridCheckBox->setChecked(property("QCS_showGrid").toBool());
     showGridCheckBox->setToolTip("Show the grid. Has effect only for spectral graphs");
     layout->addWidget(showGridCheckBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-    showTableInfoCheckBox = new QCheckBox(dialog);
-    showTableInfoCheckBox->setText("Show Table Information");
+    showTableInfoCheckBox = new QCheckBox("Show Table Information", dialog);
     showTableInfoCheckBox->setCheckState(
                 property("QCS_showTableInfo").toBool()?Qt::Checked:Qt::Unchecked);
     showTableInfoCheckBox->setToolTip("Show the grid. Has effect only for spectral graphs");
     layout->addWidget(showTableInfoCheckBox, 11, 0, Qt::AlignLeft|Qt::AlignVCenter);
 
-    showScrollbarsCheckBox = new QCheckBox(dialog);
-    showScrollbarsCheckBox->setText("Show Scrollbars");
+    showScrollbarsCheckBox = new QCheckBox("Show Scrollbars", dialog);
     showScrollbarsCheckBox->setChecked(property("QCS_showScrollbars").toBool());
     layout->addWidget(showScrollbarsCheckBox, 11, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -1031,7 +1025,8 @@ void QuteGraph::drawFtablePath(Curve *curve, int index) {
     if (decimate == 0) {
         decimate = 1;
     }
-    auto pen = QPen(QColor(255, 45, 7), 0);
+    auto pen = QPen(QColor(255, 255, 50), 0);
+    // auto pen = QPen(QColor(255, 45, 7), 0);
 
     auto rect = this->rect();
     int width = rect.width();
@@ -1267,7 +1262,7 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
     int curveSize = curve->get_size();
     if(curveSize != frozenCurve.size() && graphtypes[index] == GraphType::GRAPH_SPECTRUM)
         freezeSpectrum(false);
-    auto view = getView(index);
+    // auto view = getView(index);
     // QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
     QVector<QPointF> polygonPoints;
     polygonPoints.resize(curveSize + 2);
@@ -1400,7 +1395,7 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
             notename = mton(midinote);
         }
         else {
-            midinote = 0;
+            // midinote = 0;
             notename = "LOW";
         }
         markerText->setPlainText(QString("%1 Hz (%2)").arg((int)(peakFreq+0.5)).arg(notename));
@@ -1551,7 +1546,11 @@ void QuteTableWidget::reset() {
         m_maxy = 1.0;
         m_miny = -1.0;
     }
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     m_path.clear();
+#else
+    m_path = QPainterPath(); // not sure if it works
+#endif
 }
 
 
@@ -1701,7 +1700,11 @@ void QuteTableWidget::updatePath() {
         miny = m_miny = floor(newminy);
     }
 
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     m_path.clear();
+#else
+    m_path = QPainterPath(); // not sure if it works
+#endif
     QPolygonF poly;
     double yscale = -height / (maxy-miny);
 
@@ -1935,7 +1938,7 @@ void QuteTable::setValue(double value) {
 };
 
 void QuteTable::setValue(QString s) {
-    auto parts = s.splitRef(' ', Qt::SkipEmptyParts);
+    auto parts = s.splitRef(' ', SKIP_EMPTY_PARTS);
     if(parts.size() == 0) {
         qWarning() << "TablePLot: Message not understood, expected @set <tabnum> "
                     "or @update";

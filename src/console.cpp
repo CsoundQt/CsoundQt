@@ -117,6 +117,10 @@ void Console::setDefaultFont(QFont font)
 
 void Console::setColors(QColor textColor, QColor bgColor)
 {
+    // Sets the colors of the csound console. Colors for warnings
+    // and errors are set depending on these colors (is it dark
+    // foreground on light background or the other way around)
+
     // before it was setPalette, but that does not work runtime.
     auto sheet = QString("QTextEdit { color: %1; background-color: %2 }"
                          ).arg(textColor.name(), bgColor.name());

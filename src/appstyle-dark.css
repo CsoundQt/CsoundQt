@@ -1,9 +1,8 @@
-/*
+
 QMainWindow::separator {
     width: 2px; 
     height: 2px; 
 }
-*/
 
 QFrame {
     border: none;

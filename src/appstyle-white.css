@@ -1,6 +1,6 @@
 QMainWindow::separator {
-    width: 4px; /* when vertical */
-    height: 4px; /* when horizontal */
+    width: 2px; /* when vertical */
+    height: 2px; /* when horizontal */
 }
 
 QFrame {

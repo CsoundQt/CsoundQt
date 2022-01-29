@@ -42,7 +42,8 @@ public:
 	bool insertComplete; // Whether to insert full text or only opcode name
 
 protected:
-	virtual void keyPressEvent(QKeyEvent * event);
+    virtual void keyPressEvent(QKeyEvent * event);
+
 signals:
 	void keyPressed(QString text); // Used to send both pressed keys and full opcode text to be pasted
 };
@@ -103,7 +104,7 @@ public:
 
 
 public slots:
-	void setModified(bool mod = true);
+    void setModified(bool mod = true);
     void syntaxCheck();
 	void textChanged();
 	void escapePressed();
@@ -172,7 +173,7 @@ private:
 
 	bool m_isModified;
 	bool m_autoComplete;
-	bool m_autoParameterMode;
+    bool m_autoParameterMode;
 	bool errorMarked;
 	bool internalChange;  // to let popoup opcode completion know if text change was internal
 	QTextEdit * m_currentEditor;

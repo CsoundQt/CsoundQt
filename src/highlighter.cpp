@@ -484,6 +484,7 @@ Highlighter::~Highlighter()
 void Highlighter::setOpcodeNameList(QStringList list)
 {
 	m_opcodeList = list;
+    m_opcodesSet = QSet<QString>(list.begin(), list.end());
 	//   setFirstRules();
 	setLastRules();
 }
@@ -639,7 +640,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     // auto text = line.mid(0, commentIndex);
 
     int index = 0;
-    int length;
+    int length = 0;
 
     auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
 
@@ -714,6 +715,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     }
     */
     QRegularExpression expressionRx("\\b[\\w:]+\\b");
+    QRegularExpression pfieldRx("\\bp[\\d]+\\b");
     index = 0;
     while((rxmatch = expressionRx.match(text, index)).hasMatch()) {
         int wordStart = rxmatch.capturedStart();
@@ -724,8 +726,6 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             auto prev = text.at(wordStart - 1);
             if(prev == '$' || prev == '#') {
                 // check if macro name - replacement for regexp solution
-                wordStart--;
-                length++;
                 setFormat(wordStart-1, wordEnd - wordStart + 1, macroDefineFormat);
                 index = wordEnd;
                 continue;
@@ -733,7 +733,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         }
 		wordEnd = (wordEnd > 0 ? wordEnd : text.size());
         QString word = rxmatch.captured();
-        if(word.indexOf(QRegularExpression("p[\\d]+\\b")) != -1) {
+        if(pfieldRx.match(word).hasMatch()) {
 			setFormat(wordStart, wordEnd - wordStart, pfieldFormat);
 		}
         else if(instPatterns.contains(word)) {
@@ -768,7 +768,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         else if(deprecatedOpcodes.contains(word)) {
             setFormat(wordStart, wordEnd - wordStart, deprecatedFormat);
         }
-        else if(findOpcode(word) >= 0) {
+        else if(isOpcode(word)) {
 			setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
 		}
         else if(colorVariables) {
@@ -1024,6 +1024,11 @@ void Highlighter::setLastRules()
     // end multi line strings
     // rule = {QRegularExpression(".*\\}\\}"), quotationFormat, 0};
     // lastHighlightingRules.append(rule);
+}
+
+bool Highlighter::isOpcode(QString name) {
+    // Returns true if name is a known opcode
+    return m_opcodesSet.contains(name);
 }
 
 int Highlighter::findOpcode(QString opcodeName, int start, int end)

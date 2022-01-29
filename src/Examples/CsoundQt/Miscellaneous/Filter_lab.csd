@@ -249,7 +249,7 @@ else
 	afilt = anoise
 endif
 
-dispfft afilt, 0.5, 4096
+dispfft afilt, 0.1, 4096
 aout = afilt*0.02
 aout clip aout, 0, 0.3 ; For ear and speaker protection from unstable filters
 outs aout, aout
@@ -262,7 +262,6 @@ i 1 0 3600
 e
 </CsScore>
 </CsoundSynthesizer>
-
 
 
 
@@ -302,9 +301,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>22050.00000000</maximum>
-  <value>7029.31311707</value>
+  <value>11631.92524683</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -313,13 +313,14 @@ e
  <bsbObject version="2" type="BSBGraph">
   <objectName/>
   <x>8</x>
-  <y>263</y>
-  <width>713</width>
-  <height>213</height>
+  <y>262</y>
+  <width>709</width>
+  <height>386</height>
   <uuid>{8dcfe636-a222-4950-9553-5dd30cd898c0}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
@@ -328,6 +329,12 @@ e
   <dispy>1.00000000</dispy>
   <modex>lin</modex>
   <modey>lin</modey>
+  <showSelector>true</showSelector>
+  <showGrid>true</showGrid>
+  <showTableInfo>true</showTableInfo>
+  <showScrollbars>true</showScrollbars>
+  <enableTables>true</enableTables>
+  <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -340,8 +347,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Hz</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -357,7 +366,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName>freq</objectName>
@@ -369,11 +378,13 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>7029.313</label>
+  <description/>
+  <label>11631.9</label>
   <alignment>right</alignment>
-  <font>Helvetica</font>
+  <valignment>top</valignment>
+  <font>Nimbus Sans [urw]</font>
   <fontsize>12</fontsize>
-  <precision>3</precision>
+  <precision>1</precision>
   <color>
    <r>0</r>
    <g>0</g>
@@ -384,9 +395,9 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -398,8 +409,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Biquad Coefficients</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -415,18 +428,19 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>type</objectName>
   <x>213</x>
   <y>121</y>
   <width>176</width>
-  <height>25</height>
+  <height>30</height>
   <uuid>{0479174b-721c-44ca-9e46-0bc62bc7ebe2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>2nd order low-pass</name>
@@ -481,14 +495,26 @@ e
   <uuid>{3d171c0d-cb02-4d2c-8388-0961068b8e4e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>-20.00000000</minimum>
-  <maximum>20.00000000</maximum>
-  <value>9.20000000</value>
+  <maximum>36.00000000</maximum>
+  <value>25.29840000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -500,8 +526,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -517,7 +545,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName>gain</objectName>
@@ -529,8 +557,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>9.200</label>
+  <description/>
+  <label>25.298</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -546,7 +576,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -558,8 +588,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Frequency</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -575,7 +607,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBKnob">
   <objectName>Q</objectName>
@@ -586,14 +618,26 @@ e
   <uuid>{ddba3cab-bc78-416b-b421-8fb9d8b845b1}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <minimum>0.10000000</minimum>
-  <maximum>10.00000000</maximum>
-  <value>5.74300000</value>
+  <maximum>20.00000000</maximum>
+  <value>14.69665000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -605,8 +649,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Q</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -622,7 +668,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName>Q</objectName>
@@ -634,8 +680,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>5.743</label>
+  <description/>
+  <label>14.697</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -651,7 +699,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -663,8 +711,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Filter type</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -680,7 +730,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -692,9 +742,11 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Biquad Filter Lab</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <valignment>center</valignment>
+  <font>Noto Sans</font>
   <fontsize>28</fontsize>
   <precision>3</precision>
   <color>
@@ -707,9 +759,9 @@ e
    <g>179</g>
    <b>179</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>coef</objectName>
@@ -721,10 +773,12 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>b0=0.144      b1=0.289      b2=0.144
+  <description/>
+  <label>b0=0.319      b1=0.637      b2=0.319
 
-a1=-0.676      a2=0.253</label>
+a1=0.101      a2=0.173</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -745,34 +799,4 @@ a1=-0.676      a2=0.253</label>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 808 138 755 510
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {52428, 52428, 52428}
-ioSlider {9, 205} {709, 35} 1.000000 22050.000000 7029.313117 freq
-ioGraph {8, 263} {713, 213} table 0.000000 1.000000 
-ioText {393, 234} {41, 24} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Hz
-ioText {327, 234} {69, 24} label 7029.313117 0.00100 "freq" right "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7029.313
-ioText {411, 67} {130, 25} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Biquad Coefficients
-ioMenu {213, 121} {176, 25} 0 303 "2nd order low-pass,2nd order hi-pass,2nd order low shelving,2nd order high shelving,Parametric eq,First order All Pass,Second Order All Pass,Bypass" type
-ioKnob {12, 87} {80, 80} 20.000000 -20.000000 0.010000 9.200000 gain
-ioText {14, 59} {80, 25} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Gain
-ioText {18, 171} {69, 24} label 9.200000 0.00100 "gain" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 9.200
-ioText {341, 180} {80, 25} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Frequency
-ioKnob {102, 88} {80, 80} 10.000000 0.100000 0.010000 5.743000 Q
-ioText {104, 60} {80, 25} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Q
-ioText {108, 172} {69, 24} label 5.743000 0.00100 "Q" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 5.743
-ioText {213, 94} {130, 25} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Filter type
-ioText {13, 5} {709, 49} label 0.000000 0.00100 "" left "Lucida Grande" 28 {0, 0, 0} {45824, 45824, 45824} nobackground noborder Biquad Filter Lab
-ioText {410, 91} {310, 80} display 0.000000 0.00100 "coef" left "Arial" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder b0=0.144      b1=0.289      b2=0.144Â¬Â¬a1=-0.676      a2=0.253
-</MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="557" y="270" width="608" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="557" y="270" width="608" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

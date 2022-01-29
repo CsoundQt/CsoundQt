@@ -51,10 +51,12 @@ public:
 	bool getOpcodeArgNames(Node &node);
     void setUdos(QHash<QString, Opcode>*udosMap) { m_udosMap = udosMap; }
     Opcode findOpcode(QString opcodeName);
+    bool isKnownOpcode(QString name);
 
 private:
 	QString m_opcodeFile;
 	QList<Opcode> opcodeList;
+    QHash<QString, Opcode> opcodeMap;
 	QList< QPair<QString, QList<Opcode> > > opcodeCategoryList;
 	QVector<QList<Opcode> > opcodeListCategory;
 	QStringList categoryList;

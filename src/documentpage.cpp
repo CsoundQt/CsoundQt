@@ -1708,7 +1708,10 @@ void DocumentPage::setHighlightingTheme(QString theme) {
     auto defaultFormat = m_view->getDefaultFormat();
     this->setEditorColors(defaultFormat.foreground().color(),
                           defaultFormat.background().color());
-
+    /*
+    m_console->setColors(defaultFormat.foreground().color(),
+                         defaultFormat.background().color());
+    */
 }
 
 void DocumentPage::enableScoreSyntaxHighlighting(bool status) {

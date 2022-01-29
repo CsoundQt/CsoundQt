@@ -494,7 +494,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.99009986</yValue>
+  <yValue>0.34431883</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -531,7 +531,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.99618963</yValue>
+  <yValue>0.34610065</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -606,7 +606,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>-1.00000000</value>
+  <value>-32.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -640,7 +640,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>-3.00000000</value>
+  <value>-32.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -793,7 +793,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.34431883</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -830,7 +830,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.34610065</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -905,7 +905,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>0.00000000</value>
+  <value>-32.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -939,7 +939,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>0.00000000</value>
+  <value>-32.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -997,7 +997,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1034,7 +1034,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.34431633</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1109,7 +1109,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>0.00000000</value>
+  <value>-32.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -1201,7 +1201,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.34431883</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1238,7 +1238,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>0.34610065</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1313,7 +1313,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>0.00000000</value>
+  <value>-32.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -1347,7 +1347,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>0.00000000</value>
+  <value>-32.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -1458,7 +1458,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>-38.81269085</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1517,7 +1517,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>-inf</yValue>
+  <yValue>-33.35237183</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1576,7 +1576,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1635,7 +1635,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1694,7 +1694,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1753,7 +1753,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1812,7 +1812,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1871,7 +1871,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2059,7 +2059,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>CC 3: 0 (chan=1)</label>
+  <label>...</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Arial</font>
@@ -2151,7 +2151,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>2</label>
+  <label>8</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
   <font>Arial</font>

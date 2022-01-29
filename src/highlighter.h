@@ -103,6 +103,7 @@ protected:
 	void highlightHtmlBlock(const QString &text);
     void highlightScore(const QString &text, int start, int end);
 	int findOpcode(QString opcodeName, int start = 0, int end = -1);
+    bool isOpcode(QString name);
 
 private:
 	struct HighlightingRule
@@ -159,6 +160,8 @@ private:
 	void setLastRules();
 
 	QStringList m_opcodeList;
+    QSet<QString> m_opcodesSet;
+
 	bool colorVariables;
 	// TODO this is duplicated in documentview class. Should it be unified?
 	int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else

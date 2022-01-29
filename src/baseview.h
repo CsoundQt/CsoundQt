@@ -127,6 +127,10 @@ public:
         return m_highlighter.getFormat("default");
     }
 
+    QTextCharFormat getHighlighterFormat(QString format) {
+        return m_highlighter.getFormat(format);
+    }
+
 	QString getFullText();
 	QString getOrc();  // Without tags
 	QString getSco();  // Without tags

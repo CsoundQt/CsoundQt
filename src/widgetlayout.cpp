@@ -361,7 +361,7 @@ void WidgetLayout::loadMacWidgets(QString macWidgets)
 {
     //  m_xmlFormat = false;
     clearWidgetLayout();
-    QStringList widgetLines = macWidgets.split(QRegExp("[\n\r]"), Qt::SkipEmptyParts);
+    QStringList widgetLines = macWidgets.split(QRegExp("[\n\r]"), SKIP_EMPTY_PARTS);
     foreach (QString line, widgetLines) {
         if (line.startsWith("i")) {
             if (newMacWidget(line) == "") {
@@ -929,7 +929,7 @@ bool WidgetLayout::uuidFree(QString uuid)
 QString WidgetLayout::newMacWidget(QString widgetLine, bool offset)
 {
     // This function returns -1 on error, 0 when no widget was created and 1 if widget was created
-    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QStringList quoteParts = widgetLine.split('"');
     if (parts.size()<5)
         return "";
@@ -1047,7 +1047,7 @@ QString WidgetLayout::getMidiControllerInstrument()
 				QString eventLine = widget->property("QCS_eventLine").toString();
 
 				// find out if event has negative p3
-                QStringList lineElements = eventLine.split(QRegExp("\\s"),Qt::SkipEmptyParts);
+                QStringList lineElements = eventLine.split(QRegExp("\\s"),SKIP_EMPTY_PARTS);
 				if (lineElements.size() > 0 && lineElements[0] == "i") {
 					// Remove first element if it is "i"
 					lineElements.removeAt(0);
@@ -2909,7 +2909,7 @@ int WidgetLayout::parseXmlNode(QDomNode node)
 QString WidgetLayout::createSlider(int x, int y, int width, int height, QString widgetLine)
 {
     //   qDebug("ioSlider x=%i y=%i w=%i h=%i", x,y, width, height);
-    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QuteSlider *widget= new QuteSlider(this);
     widget->setProperty("QCS_x",x);
     widget->setProperty("QCS_y",y);
@@ -2938,11 +2938,11 @@ QString WidgetLayout::createSlider(int x, int y, int width, int height, QString 
 
 QString WidgetLayout::createText(int x, int y, int width, int height, QString widgetLine)
 {
-    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QStringList quoteParts = widgetLine.split('"');
     if (parts.size()<20 || quoteParts.size()<5)
         return "";
-    QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     if (lastParts.size() < 9)
         return "";
     QuteText *widget= new QuteText(this);
@@ -2981,11 +2981,11 @@ QString WidgetLayout::createText(int x, int y, int width, int height, QString wi
 
 QString WidgetLayout::createScrollNumber(int x, int y, int width, int height, QString widgetLine)
 {
-    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QStringList quoteParts = widgetLine.split('"');
     if (parts.size()<20 || quoteParts.size()<5)
         return "";
-    QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     if (lastParts.size() < 9)
         return "";
     QuteScrollNumber *widget= new QuteScrollNumber(this);
@@ -3030,11 +3030,11 @@ QString WidgetLayout::createScrollNumber(int x, int y, int width, int height, QS
 QString WidgetLayout::createLineEdit(int x, int y, int width, int height, QString widgetLine)
 {
     qDebug() << "createLineEdit";
-    auto parts = widgetLine.splitRef(QRegularExpression("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    auto parts = widgetLine.splitRef(QRegularExpression("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QStringList quoteParts = widgetLine.split('"');
     if (parts.size()<20 || quoteParts.size()<5)
         return "";
-    QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     if (lastParts.size() < 9)
         return "";
     QuteLineEdit *widget= new QuteLineEdit(this);
@@ -3068,11 +3068,11 @@ QString WidgetLayout::createLineEdit(int x, int y, int width, int height, QStrin
 
 QString WidgetLayout::createSpinBox(int x, int y, int width, int height, QString widgetLine)
 {
-    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QStringList quoteParts = widgetLine.split('"');
     if (parts.size()<20 || quoteParts.size()<5)
         return "";
-    QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     if (lastParts.size() < 9)
         return "";
     QuteSpinBox *widget= new QuteSpinBox(this);
@@ -3113,11 +3113,11 @@ QString WidgetLayout::createSpinBox(int x, int y, int width, int height, QString
 QString WidgetLayout::createButton(int x, int y, int width, int height, QString widgetLine)
 {
     qDebug("WidgetPanel::createButton");
-    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QStringList quoteParts = widgetLine.split('"');
     //   if (parts.size()<20 || quoteParts.size()>5)
     //     return -1;
-    QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList lastParts = quoteParts[4].split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     //   if (lastParts.size() < 9)
     //     return -1;
     QuteButton *widget= new QuteButton(this);
@@ -3147,8 +3147,8 @@ QString WidgetLayout::createButton(int x, int y, int width, int height, QString 
 
 QString WidgetLayout::createKnob(int x, int y, int width, int height, QString widgetLine)
 {
-    auto parts = widgetLine.splitRef(QRegularExpression("[\\{\\}, ]"), Qt::SkipEmptyParts);
-    // QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    auto parts = widgetLine.splitRef(QRegularExpression("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
+    // QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QuteKnob *widget= new QuteKnob(this);
     widget->setProperty("QCS_x",x);
     widget->setProperty("QCS_y",y);
@@ -3176,7 +3176,7 @@ QString WidgetLayout::createKnob(int x, int y, int width, int height, QString wi
 
 QString WidgetLayout::createCheckBox(int x, int y, int width, int height, QString widgetLine)
 {
-    auto parts = widgetLine.splitRef(QRegularExpression("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    auto parts = widgetLine.splitRef(QRegularExpression("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QuteCheckBox *widget= new QuteCheckBox(this);
     widget->setProperty("QCS_x",x);
     widget->setProperty("QCS_y",y);
@@ -3201,7 +3201,7 @@ QString WidgetLayout::createCheckBox(int x, int y, int width, int height, QStrin
 
 QString WidgetLayout::createMenu(int x, int y, int width, int height, QString widgetLine)
 {
-    auto parts = widgetLine.splitRef(QRegularExpression("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    auto parts = widgetLine.splitRef(QRegularExpression("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     auto quoteParts = widgetLine.splitRef('"');
     QuteComboBox *widget= new QuteComboBox(this);
     widget->setProperty("QCS_x",x);
@@ -3222,13 +3222,13 @@ QString WidgetLayout::createMenu(int x, int y, int width, int height, QString wi
 
 QString WidgetLayout::createMeter(int x, int y, int width, int height, QString widgetLine)
 {
-    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QStringList quoteParts = widgetLine.split('"');
     if (quoteParts.size() < 5) {
         qDebug("WidgetPanel::createMeter ERROR parsing widget line!");
         return 0;
     }
-    QStringList parts2 = quoteParts[4].split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList parts2 = quoteParts[4].split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     if (parts2.size() < 5) {
         qDebug("WidgetPanel::createMeter ERROR parsing widget line!");
         return 0;
@@ -3263,7 +3263,7 @@ QString WidgetLayout::createMeter(int x, int y, int width, int height, QString w
 QString WidgetLayout::createConsole(int x, int y, int width, int height, QString widgetLine)
 {
     //    qDebug("ioListing x=%i y=%i w=%i h=%i", x,y, width, height);
-    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QuteConsole *widget= new QuteConsole(this);
     widget->setProperty("QCS_x",x);
     widget->setProperty("QCS_y",y);
@@ -3278,7 +3278,7 @@ QString WidgetLayout::createConsole(int x, int y, int width, int height, QString
 
 QString WidgetLayout::createGraph(int x, int y, int width, int height, QString widgetLine)
 {
-    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QuteGraph *widget= new QuteGraph(this);
     widget->setProperty("QCS_x",x);
     widget->setProperty("QCS_y",y);
@@ -3320,7 +3320,7 @@ QString WidgetLayout::createScope(int x, int y, int width, int height, QString w
     widget->setProperty("QCS_y",y);
     widget->setProperty("QCS_width",width);
     widget->setProperty("QCS_height",height);
-    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), Qt::SkipEmptyParts);
+    QStringList parts = widgetLine.split(QRegExp("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     if (parts.size() > 5) {
         widget->setProperty("QCS_type",parts[5]);
     }
