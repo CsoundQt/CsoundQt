@@ -238,7 +238,7 @@ void DocumentView::updateOrcContext(QString orc)
 		linecursor.movePosition(QTextCursor::EndOfLine);
 	}
 	QString instr = cursor.selection().toPlainText();
-    auto lines = instr.splitRef("\n", Qt::SkipEmptyParts);
+    auto lines = instr.splitRef("\n", SKIP_EMPTY_PARTS);
 
     auto rxWordSplit = QRegularExpression("[\\s,+-/\\*\\.\\^\\(\\)\\[\\]$]");
 	m_localVariables.clear();
@@ -248,14 +248,16 @@ void DocumentView::updateOrcContext(QString orc)
         if (line.isEmpty() || line.startsWith(";")) {
 			continue;
 		}
-        auto words = line.toString().split(rxWordSplit, Qt::SkipEmptyParts);
+        auto words = line.toString().split(rxWordSplit, SKIP_EMPTY_PARTS);
         for(auto word: words) {
             if(!seen.contains(word) && !m_opcodeTree->isOpcode(word)) {
                 seen.insert(word);
             }
 		}
 	}
-    m_localVariables = QStringList(seen.begin(), seen.end());
+    //m_localVariables = QStringList(seen.begin(), seen.end());
+    m_localVariables = seen.toList();
+
 }
 
 void DocumentView::nextParameter()
@@ -722,7 +724,7 @@ void DocumentView::syntaxCheck()
 	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
 	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
 	QStringList words = cursor.selectedText().split(QRegExp("\\b"),
-                                                    Qt::SkipEmptyParts);
+                                                    SKIP_EMPTY_PARTS);
 	bool showHover = false;
 	for(int i = 0; i < words.size(); i++) {
 		QString word = words[words.size() - i - 1];
@@ -844,7 +846,7 @@ const QStringList DocumentView::getAllWords() {
         QDEBUG << "Updating all words, time since last update: " << msecs << "msecs";
         TextEditor *editor = m_mainEditor;
         QString wholeText = editor->toPlainText();
-        auto allWords = wholeText.split(QRegularExpression("[" + QRegularExpression::escape("+-*/=#&,\"\'|[]()<>.;:^") + "\\s]"), Qt::SkipEmptyParts);
+        auto allWords = wholeText.split(QRegularExpression("[" + QRegularExpression::escape("+-*/=#&,\"\'|[]()<>.;:^") + "\\s]"), SKIP_EMPTY_PARTS);
         allWords.removeDuplicates();
         m_lastWordsUpdate = now;
         m_allWords = allWords;
