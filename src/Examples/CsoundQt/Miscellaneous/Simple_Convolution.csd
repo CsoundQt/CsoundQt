@@ -12,7 +12,7 @@ nchnls = 2
 /*****Simple convolution*****/
 ;example for CsoundQt
 ;written by joachim heintz
-;apr 2009
+;apr 2009 / jan 2022
 ;using the code from matt ingalls (manual for pconvolve)
 ;please send bug reports and suggestions
 ;to jh at joachimheintz.de
@@ -43,18 +43,22 @@ opcode CsQtMeter, 0, SSak
  kTim += ksmps/sr
 endop
 
-;declare software channels for it
+;declare software channels
 chn_k "outL", 2
 chn_k "outL_clip", 2
 chn_k "outR", 2
 chn_k "outR_clip", 2
+chn_S "_Browse1", 1
+chn_S "_Browse2", 1
+chn_k "wdmix", 1
+chn_k "gaindb", 1
 
 
 instr 1
-Sfile		invalue	"_Browse1"
-Simpulse	invalue	"_Browse2"
-kwdmix		invalue	"wdmix"
-kgaindb		invalue	"gaindb"
+Sfile		chnget	"_Browse1"
+Simpulse	chnget	"_Browse2"
+kwdmix		chnget	"wdmix"
+kgaindb		chnget	"gaindb"
 ilenfil	filelen	Sfile
 ilenimp	filelen	Simpulse
 inchnfil	filenchnls	Sfile
@@ -88,7 +92,7 @@ awetR	  	pconvolve  	kwet * a2, Simpulse, ipart, 2
 adryL		delay		kdry * a1, idel
 adryR		delay		kdry * a2, idel
 
-kcount		=		kcount - 1
+kcount		-=		1
   if kcount > 0 kgoto loop
 
   aL = (awetL + adryL) * kgain
@@ -104,7 +108,6 @@ endin
 </CsInstruments>
 <CsScore>
 i 1 0 1; plays the whole soundfile
-e
 </CsScore>
 </CsoundSynthesizer>
 <bsbPanel>
@@ -112,8 +115,8 @@ e
  <objectName/>
  <x>669</x>
  <y>224</y>
- <width>454</width>
- <height>394</height>
+ <width>460</width>
+ <height>389</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -134,8 +137,8 @@ e
   <description/>
   <label>fox.wav</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <font>Bitstream Vera Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -162,7 +165,7 @@ e
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>fox.wav</stringvalue>
   <text>Browse Soundfile</text>
   <image>/</image>
   <eventLine/>
@@ -215,8 +218,8 @@ e
   <description/>
   <label>impulse_big_hall.wav</label>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
-  <fontsize>10</fontsize>
+  <font>Bitstream Vera Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -243,7 +246,7 @@ e
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>impulse_big_hall.wav</stringvalue>
   <text>Browse Impulse Response File</text>
   <image>/</image>
   <eventLine/>
@@ -265,7 +268,7 @@ e
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.25886525</value>
+  <value>0.39007092</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -380,8 +383,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-0.53710505</xValue>
-  <yValue>-0.53710505</yValue>
+  <xValue>0.87634494</xValue>
+  <yValue>0.87634494</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -454,8 +457,8 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-0.52046397</xValue>
-  <yValue>-0.52046397</yValue>
+  <xValue>0.80310404</xValue>
+  <yValue>0.80310404</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
