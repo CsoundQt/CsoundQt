@@ -3188,8 +3188,8 @@ void CsoundQt::runUtility(QString flags)
         QString name = "";
         QString fileFlags = flags.mid(flags.indexOf("\""));
         flags.remove(fileFlags);
-        QStringList indFlags= flags.split(" ", Qt::SkipEmptyParts);
-        QStringList files = fileFlags.split("\"", Qt::SkipEmptyParts);
+        QStringList indFlags= flags.split(" ", SKIP_EMPTY_PARTS);
+        QStringList files = fileFlags.split("\"", SKIP_EMPTY_PARTS);
         if (indFlags.size() < 2) {
             qDebug("CsoundQt::runUtility: Error: empty flags");
             return;
