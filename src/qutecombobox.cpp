@@ -28,11 +28,9 @@ QuteComboBox::QuteComboBox(QWidget *parent) : QuteWidget(parent)
     auto w = static_cast<QComboBox*>(m_widget);
     // Since combobox menus use native widgets we should not mess with
     // styling and let the underlying engine handle that.
-    /*
 #ifdef Q_OS_LINUX
     w->setStyleSheet("padding-left: 2px;");
 #endif
-*/
     m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 	//  canFocus(false);

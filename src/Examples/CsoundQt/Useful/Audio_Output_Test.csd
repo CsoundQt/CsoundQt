@@ -183,6 +183,8 @@ e
 </CsScore>
 </CsoundSynthesizer>
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -207,8 +209,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>first channel</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -224,7 +228,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -236,8 +240,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>last channel</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -253,7 +259,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -265,8 +271,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>volume (dB)</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -282,20 +290,21 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBScrollNumber">
   <objectName>vol</objectName>
-  <x>166</x>
-  <y>114</y>
+  <x>168</x>
+  <y>110</y>
   <width>52</width>
-  <height>25</height>
+  <height>30</height>
   <uuid>{c0cebb18-2f97-4efc-9a26-30b337278cb0}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
-  <font>Lucida Grande</font>
+  <font>Noto Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
@@ -310,8 +319,8 @@ e
   <value>-20.00000000</value>
   <resolution>0.10000000</resolution>
   <minimum>-999999999999.00000000</minimum>
-  <maximum>99999999999999.00000000</maximum>
-  <bordermode>border</bordermode>
+  <maximum>999999999999.00000000</maximum>
+  <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
   <randomizable group="0">false</randomizable>
@@ -327,8 +336,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>signal type</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -344,18 +355,19 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>signal</objectName>
-  <x>220</x>
-  <y>114</y>
-  <width>112</width>
-  <height>27</height>
+  <x>230</x>
+  <y>110</y>
+  <width>111</width>
+  <height>30</height>
   <uuid>{a01428ab-46ca-40ec-813e-c76935e30df9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>white noise</name>
@@ -396,9 +408,11 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>This file tests whether your outputs are working. 
 Make sure the nchnls (number of channels) parameter in the orchestra header is adjusted correctly, and the audio device is chosen in the configuration dialog.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -414,7 +428,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -426,8 +440,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>OUTPUT TESTER</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
@@ -443,7 +459,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -455,6 +471,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -466,6 +483,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -477,6 +496,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -488,6 +508,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out1over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -499,6 +520,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -510,6 +533,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -521,6 +545,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -532,6 +557,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -543,6 +570,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -554,6 +582,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out2over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -565,6 +594,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -576,6 +607,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -587,6 +619,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out3</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -598,6 +631,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -609,6 +644,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -620,6 +656,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out3over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -631,6 +668,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -642,6 +681,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -653,6 +693,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out4</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -664,6 +705,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -675,6 +718,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -686,6 +730,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out4over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -697,6 +742,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -708,6 +755,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -719,6 +767,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out5</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -730,6 +779,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -741,6 +792,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -752,6 +804,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out5over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -763,6 +816,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -774,6 +829,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -785,6 +841,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out6</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -796,6 +853,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -807,6 +866,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -818,6 +878,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out6over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -829,6 +890,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -840,6 +903,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -851,6 +915,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out7</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -862,6 +927,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -873,6 +940,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -884,6 +952,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out7over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -895,6 +964,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -906,6 +977,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -917,6 +989,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out8</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -928,6 +1001,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -939,6 +1014,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -950,6 +1026,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out8over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -961,6 +1038,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -972,6 +1051,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -983,6 +1063,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out9</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -994,6 +1075,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1005,6 +1088,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1016,6 +1100,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out9over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1027,6 +1112,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1038,6 +1125,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1049,6 +1137,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out10</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1060,6 +1149,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1071,6 +1162,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1082,6 +1174,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out10over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1093,6 +1186,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1104,6 +1199,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1115,6 +1211,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out11</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1126,6 +1223,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1137,6 +1236,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1148,6 +1248,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out11over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1159,6 +1260,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1170,6 +1273,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1181,6 +1285,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out12</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1192,6 +1297,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1203,6 +1310,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1214,6 +1322,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out12over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1225,6 +1334,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1236,6 +1347,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1247,6 +1359,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out13</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1258,6 +1371,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1269,6 +1384,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1280,6 +1396,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out13over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1291,6 +1408,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1302,6 +1421,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1313,6 +1433,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out14</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1324,6 +1445,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1335,6 +1458,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1346,6 +1470,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out14over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1357,6 +1482,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1368,6 +1495,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1379,6 +1507,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out15</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1390,6 +1519,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1401,6 +1532,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1412,6 +1544,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out15over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1423,6 +1556,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1434,6 +1569,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1445,6 +1581,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out16</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1456,6 +1593,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1467,6 +1606,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1478,6 +1618,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out16over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1489,6 +1630,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1500,6 +1643,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1511,6 +1655,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out17</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1522,6 +1667,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1533,6 +1680,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1544,6 +1692,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out17over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1555,6 +1704,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1566,6 +1717,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1577,6 +1729,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out18</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1588,6 +1741,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1599,6 +1754,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1610,6 +1766,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out18over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1621,6 +1778,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1632,6 +1791,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1643,6 +1803,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out19</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1654,6 +1815,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1665,6 +1828,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1676,6 +1840,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out19over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1687,6 +1852,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1698,6 +1865,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1709,6 +1877,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out20</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1720,6 +1889,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1731,6 +1902,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1742,6 +1914,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out20over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1753,6 +1926,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1764,6 +1939,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1775,6 +1951,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out21</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1786,6 +1963,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1797,6 +1976,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1808,6 +1988,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out21over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1819,6 +2000,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1830,6 +2013,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1841,6 +2025,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out22</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1852,6 +2037,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1863,6 +2050,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1874,6 +2062,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out22over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1885,6 +2074,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1896,6 +2087,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1907,6 +2099,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out23</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1918,6 +2111,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1929,6 +2124,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -1940,6 +2136,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out23over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1951,6 +2148,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -1962,6 +2161,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>hor8</objectName>
@@ -1973,6 +2173,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out24</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1984,6 +2185,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1995,6 +2198,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>DelayMute</objectName>
@@ -2006,6 +2210,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out24over</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -2017,6 +2222,8 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -2028,6 +2235,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2039,8 +2247,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>1</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2056,7 +2266,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2068,8 +2278,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2085,7 +2297,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2097,8 +2309,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>3</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2114,7 +2328,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2126,8 +2340,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>4</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2143,7 +2359,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2155,8 +2371,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>5</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2172,7 +2390,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2184,8 +2402,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>6</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2201,7 +2421,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2213,8 +2433,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>7</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2230,7 +2452,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2242,8 +2464,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>8</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2259,7 +2483,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2271,8 +2495,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>9</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2288,7 +2514,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2300,8 +2526,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>10</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2317,7 +2545,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2329,8 +2557,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>11</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2346,7 +2576,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2358,8 +2588,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>12</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2375,7 +2607,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2387,8 +2619,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>13</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2404,7 +2638,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2416,8 +2650,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>14</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2433,7 +2669,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2445,8 +2681,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>15</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2462,7 +2700,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2474,8 +2712,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>16</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2491,7 +2731,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2503,8 +2743,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>17</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2520,7 +2762,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2532,8 +2774,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>18</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2549,7 +2793,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2561,8 +2805,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>19</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2578,7 +2824,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2590,8 +2836,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>20</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2607,7 +2855,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2619,8 +2867,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>21</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2636,7 +2886,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2648,8 +2898,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>22</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2665,7 +2917,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2677,8 +2929,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>23</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2694,7 +2948,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2706,8 +2960,10 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>24</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -2723,27 +2979,28 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>chnA</objectName>
-  <x>30</x>
-  <y>114</y>
+  <x>32</x>
+  <y>110</y>
   <width>50</width>
-  <height>24</height>
+  <height>30</height>
   <uuid>{a1a30d49-0926-48ff-9f69-6134c5398f7f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Noto Sans</font>
   <fontsize>12</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2756,23 +3013,24 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>chnZ</objectName>
-  <x>98</x>
-  <y>114</y>
+  <x>100</x>
+  <y>110</y>
   <width>50</width>
-  <height>24</height>
+  <height>30</height>
   <uuid>{1a617cb1-0312-43c6-820f-6aa779b9f4ca}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Noto Sans</font>
   <fontsize>12</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2793,6 +3051,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -2808,9 +3067,11 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>signal to 
 all channels</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2826,27 +3087,28 @@ all channels</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>sigdur</objectName>
   <x>344</x>
-  <y>114</y>
+  <y>110</y>
   <width>50</width>
-  <height>24</height>
+  <height>30</height>
   <uuid>{4efdf128-b777-468e-b5ef-7a026cdd856a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Noto Sans</font>
   <fontsize>12</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2855,7 +3117,7 @@ all channels</label>
   <minimum>0.1</minimum>
   <maximum>10</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2867,8 +3129,10 @@ all channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>signal duration</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2884,27 +3148,28 @@ all channels</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>pausdur</objectName>
   <x>421</x>
-  <y>114</y>
+  <y>110</y>
   <width>50</width>
-  <height>24</height>
+  <height>30</height>
   <uuid>{f296adcf-e3ba-4b4a-9386-9c6fb3c8f0b3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Noto Sans</font>
   <fontsize>12</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2913,7 +3178,7 @@ all channels</label>
   <minimum>0.001</minimum>
   <maximum>10</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -2925,8 +3190,10 @@ all channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>pause duration</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -2942,7 +3209,7 @@ all channels</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

@@ -199,13 +199,18 @@ e
 </CsoundSynthesizer>
 
 
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>0</x>
- <y>0</y>
- <width>898</width>
- <height>635</height>
+ <x>146</x>
+ <y>65</y>
+ <width>903</width>
+ <height>657</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -1171,12 +1176,12 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <objectName>winshape</objectName>
   <x>682</x>
   <y>414</y>
-  <width>144</width>
-  <height>24</height>
+  <width>140</width>
+  <height>26</height>
   <uuid>{35980021-56da-4027-841b-abf660393ab2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>

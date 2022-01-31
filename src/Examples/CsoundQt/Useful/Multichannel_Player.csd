@@ -227,6 +227,8 @@ i 1 0 36000
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -250,16 +252,17 @@ e
   <uuid>{cb3713f7-e95e-4e71-b4a6-3b0c4e9b85cc}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Noto Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -272,17 +275,18 @@ e
  </bsbObject>
  <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
-  <x>13</x>
-  <y>137</y>
+  <x>15</x>
+  <y>135</y>
   <width>297</width>
-  <height>27</height>
+  <height>28</height>
   <uuid>{195c15e5-027a-464a-9a32-1b22bd86be73}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Noto Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -291,9 +295,9 @@ e
    <b>0</b>
   </color>
   <bgcolor mode="nobackground">
-   <r>35</r>
-   <g>35</g>
-   <b>35</b>
+   <r>228</r>
+   <g>228</g>
+   <b>228</b>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
@@ -307,8 +311,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Skiptime (sec)</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -324,18 +330,19 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Browse1</objectName>
-  <x>309</x>
-  <y>135</y>
+  <x>313</x>
+  <y>134</y>
   <width>100</width>
   <height>30</height>
   <uuid>{560e2167-ad1b-4b82-bc09-cd3212457222}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>/Joachim/Csound/Hui/8kanaltest/7chnls.aiff</stringvalue>
@@ -343,7 +350,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Play</objectName>
@@ -355,6 +364,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -362,7 +372,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Stop</objectName>
@@ -374,6 +386,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -381,7 +394,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -393,9 +408,11 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>MULTI CHANNEL
 SOUNDFILE PLAYER</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
@@ -411,7 +428,7 @@ SOUNDFILE PLAYER</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -423,9 +440,11 @@ SOUNDFILE PLAYER</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Here you can play 3- to 8-channel (intervleaved) files.
 For mono files, see the Mixdown_Player example.</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -441,7 +460,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>over8</objectName>
@@ -453,6 +472,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over8</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -464,6 +484,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -475,6 +497,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>out8</objectName>
@@ -486,6 +509,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out8</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -497,6 +521,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -508,6 +534,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>over7</objectName>
@@ -519,6 +546,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over7</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -530,6 +558,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -541,6 +571,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>out7</objectName>
@@ -552,6 +583,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out7</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -563,6 +595,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -574,6 +608,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>over6</objectName>
@@ -585,6 +620,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over6</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -596,6 +632,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -607,6 +645,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>out6</objectName>
@@ -618,6 +657,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out6</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -629,6 +669,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -640,6 +682,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>over5</objectName>
@@ -651,6 +694,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over5</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -662,6 +706,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -673,6 +719,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>out5</objectName>
@@ -684,6 +731,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out5</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -695,6 +743,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -706,6 +756,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>over4</objectName>
@@ -717,6 +768,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over4</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -728,6 +780,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -739,6 +793,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>out4</objectName>
@@ -750,6 +805,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out4</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -761,6 +817,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -772,6 +830,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>over3</objectName>
@@ -783,6 +842,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over3</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -794,6 +854,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -805,6 +867,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>out3</objectName>
@@ -816,6 +879,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out3</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -827,6 +891,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -838,6 +904,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>over2</objectName>
@@ -849,6 +916,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -860,6 +928,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -871,6 +941,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>out2</objectName>
@@ -882,6 +953,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -893,6 +965,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -904,6 +978,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>over1</objectName>
@@ -915,6 +990,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -926,6 +1002,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -937,6 +1015,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>out1</objectName>
@@ -948,6 +1027,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -959,6 +1039,8 @@ For mono files, see the Mixdown_Player example.</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -970,6 +1052,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>db</objectName>
@@ -981,6 +1064,7 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>-12.00000000</minimum>
   <maximum>12.00000000</maximum>
   <value>0.00000000</value>
@@ -999,8 +1083,10 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1016,7 +1102,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1028,8 +1114,10 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>dB</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1045,7 +1133,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1057,8 +1145,10 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Gain</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1074,7 +1164,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1086,8 +1176,10 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Time</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1103,7 +1195,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>min</objectName>
@@ -1115,8 +1207,10 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>00</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1132,7 +1226,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>sec</objectName>
@@ -1144,8 +1238,10 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>00</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1161,7 +1257,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1173,8 +1269,10 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>:</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1190,7 +1288,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1202,8 +1300,10 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>min</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1219,7 +1319,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1231,8 +1331,10 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>sec</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1248,7 +1350,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1260,8 +1362,10 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1289,9 +1393,11 @@ For mono files, see the Mixdown_Player example.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Route Output
 Channels</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1307,7 +1413,7 @@ Channels</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBScrollNumber">
   <objectName>chn1</objectName>
@@ -1319,6 +1425,7 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -1352,6 +1459,7 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -1385,6 +1493,7 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -1418,6 +1527,7 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -1451,6 +1561,7 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -1484,6 +1595,7 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -1517,6 +1629,7 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -1550,6 +1663,7 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
@@ -1583,8 +1697,10 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>No messages yet ...</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1612,6 +1728,7 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -1627,8 +1744,10 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Loop</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1644,7 +1763,7 @@ Channels</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>len</objectName>
@@ -1656,8 +1775,10 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1673,7 +1794,7 @@ Channels</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1685,8 +1806,10 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>File Length</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1702,7 +1825,7 @@ Channels</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>_Pause</objectName>
@@ -1714,6 +1837,7 @@ Channels</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1721,7 +1845,9 @@ Channels</label>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
