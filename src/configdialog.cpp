@@ -21,7 +21,8 @@
 */
 
 #include <QDir>
-#include <QOperatingSystemVersion>
+//#include <QOperatingSystemVersion> // not present before Qt 5.9
+#include <QSysInfo>
 
 #include "qutecsound.h"
 #include "configdialog.h"
@@ -422,8 +423,8 @@ void ConfigDialog::onRtModuleComboBoxChanged(int index) {
     // Todo: remember the settings for each backend in a hash table, and set it to the last
     // known value when changed back. Otherwise set it to the default adc/dac
     auto currentText = this->RtModuleComboBox->currentText();
-	auto currentOperatingSystem = QOperatingSystemVersion::current();
-    //qDebug() << "module: " << currentText << "Op.system type is: " << currentOperatingSystem.type() << currentOperatingSystem.name();
+    //auto currentOperatingSystem = QOperatingSystemVersion::current();
+    //qDebug() << "module: " << currentText << "Op.system type is: " << QSysInfo::productType() ;
     if(currentText == "null") {
         RtInputLineEdit->setText("");
         RtOutputLineEdit->setText("");
@@ -443,7 +444,7 @@ void ConfigDialog::onRtModuleComboBoxChanged(int index) {
             m_options->useSystemSamplerate = false;
             m_options->samplerate = 0;
         }
-    } else if (currentText.startsWith("portaudio") && currentOperatingSystem.type()==QOperatingSystemVersion::MacOS ) { // on newer Mac's the internal microphone has 1 channel and that causes problems for portaudio. Disable input by default
+    } else if (currentText.startsWith("portaudio") && QSysInfo::productType()=="osx" ) { // on newer Mac's the internal microphone has 1 channel and that causes problems for portaudio. Disable input by default
 			qDebug() << "Set audio input to none for portaudio on MacOS";
 			RtInputLineEdit->setText("");
 			RtOutputLineEdit->setText("dac");

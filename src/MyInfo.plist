@@ -42,7 +42,7 @@
     <key>NSMicrophoneUsageDescription</key>
     <string>Used for audio input of Csound files</string>
     <key>NSRequiresAquaSystemAppearance</key>
-	<string>True</string>
+	<string>False</string>
     <key>LSEnvironment</key>
     <array>
     <dict>

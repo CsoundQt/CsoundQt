@@ -434,18 +434,19 @@ void QuteButton::setMidiValue(int value)
 
 	bool isLatch = property("QCS_latch").toBool();
 	bool useMomentaryMidiButton = property("QCS_momentaryMidiButton").toBool();
+    QString type = property("QCS_type").toString();
+
+    qDebug () << "Playing: " << m_isPlaying << type;
 
 	if (isLatch && useMomentaryMidiButton) {
 			if (value >0 ) {
-				if (m_isPlaying) {
-					//qDebug() << "Toggle playing off from MIDI";
+                if ( (type.contains("event") && m_isPlaying) ||  (type.contains("value") && m_currentValue > 0) ) {
+                    qDebug() << "Toggle value to 0 / playing off from MIDI";
 					newValue = 0;
 				} else {
 					newValue = pressedValue;
-					//qDebug() << "Toggle playing on from MIDI";
+                    qDebug() << "Toggle value 1 / playing on from MIDI";
 				}
-
-
 			} else {
 				qDebug() << "Ignore button release of momentary button";
 				return;
@@ -534,12 +535,12 @@ void QuteButton::performAction() {
     QString eventLine = property("QCS_eventLine").toString();
     QString name = m_channel;
 	bool isLatch = property("QCS_latch").toBool();
-	bool useMomentaryMidiButton = property("QCS_momentaryMidiButton").toBool();
+    //bool useMomentaryMidiButton = property("QCS_momentaryMidiButton").toBool();
 
 	if (type.contains("event") && !eventLine.isEmpty()) {
 		if ( hasIndefiniteDuration() ) {		
-			if ( m_currentValue == 0  /*|| (!useMomentaryMidiButton && m_isPlaying)*/ ) { // turn off
-				QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+            if ( m_currentValue == 0 ) { // turn off
+                QStringList lineElements = eventLine.split(QRegExp("\\s"),SKIP_EMPTY_PARTS);
 				if (lineElements.size() > 0 && lineElements[0] == "i") {
 					lineElements.removeAt(0); // Remove first element if it is "i"
 				}

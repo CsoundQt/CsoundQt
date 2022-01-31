@@ -427,8 +427,8 @@ void QuteWidget::addChn_k()
 
 void QuteWidget::createPropertiesDialog()
 {
-    qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n"
-             << dynamicPropertyNames ();
+//    qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n"
+//             << dynamicPropertyNames ();
 	int footerRow = 20;
 	dialog = new QDialog(this);
     dialog->resize(360, 300);

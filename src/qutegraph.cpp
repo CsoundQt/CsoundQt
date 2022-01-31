@@ -351,7 +351,7 @@ void QuteGraph::setValue(double value)
 void QuteGraph::setValue(QString text)
 {
     bool ok;
-    auto parts = text.splitRef(' ', Qt::SkipEmptyParts);
+    auto parts = text.splitRef(' ', SKIP_EMPTY_PARTS);
     if(parts[0] == "@set") {
         bool ok;
         int index = parts[1].toInt(&ok);
