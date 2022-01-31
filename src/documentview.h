@@ -85,9 +85,10 @@ public:
 	int getViewMode();
 
 	QString wordUnderCursor();
+    QString lineUnderCursor();
 	QString getActiveSection();
 	QString getActiveText();
-	int currentLine();
+    int currentLineNumber();
 	bool isModified();
 	bool childHasFocus();
 	void print(QPrinter *printer);
@@ -185,6 +186,17 @@ private:
 	QStringList m_globalVariables;
     QTime m_lastWordsUpdate;
     QStringList m_allWords;
+    int m_lastCursorPosition;
+    QStringList m_longOptions = {
+        "syntax-check-only", "control-rate=", "messagelevel=",
+        "env:", "dither", "sched", "omacro:", "smacro:",
+        "verbose", "sample-accurate", "realtime",
+        "nchnls=", "nchnls_i=", "sinesize", "daemon",
+        "port=", "use-system-sr", "ksmps=",
+        "limiter", "udp-echo", "opcode-dir="
+    };
+    QStringList m_longOptions2 = {"rtmidi", "rtaudio"};
+
     // QTime m_lastContextUpdate;
 
     QList<int> cursorPositions;

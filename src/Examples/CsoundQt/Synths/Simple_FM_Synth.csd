@@ -55,29 +55,29 @@ turnoff
 endin
 
 instr 99 ;Always on instrument
-; This instrument updates the modulator's frequencies
-; which depend on the base frequency and the freq.
-; factors.
-kfreq invalue "freq"
-kmodfactor invalue "modfactor"
-outvalue "mod1freq", kfreq*kmodfactor
-
-; Display spectrum
-aoutl, aoutr monitor
-dispfft aoutl, 1/18, 4096
-
-;Turn on or off according to checkbox
-
-kon invalue "on"
-ktrig changed kon
-
-if ktrig == 1 then
-	if kon == 1 then
-		event "i", 1, 0, -1, kfreq
-	elseif kon == 0 then
-		turnoff2 1, 0, 1
+	; This instrument updates the modulator's frequencies
+	; which depend on the base frequency and the freq.
+	; factors.
+	kfreq invalue "freq"
+	kmodfactor invalue "modfactor"
+	outvalue "mod1freq", kfreq*kmodfactor
+	
+	; Display spectrum
+	aoutl, aoutr monitor
+	dispfft aoutl, 1/18, 4096
+	
+	;Turn on or off according to checkbox
+	
+	kon invalue "on"
+	ktrig changed kon
+	
+	if ktrig == 1 then
+		if kon == 1 then
+			event "i", 1, 0, -1, kfreq
+		elseif kon == 0 then
+			turnoff2 1, 0, 1
+		endif
 	endif
-endif
 
 endin
 
@@ -96,13 +96,14 @@ e
 </CsoundSynthesizer>
 
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>458</x>
- <y>188</y>
- <width>434</width>
- <height>497</height>
+ <x>0</x>
+ <y>0</y>
+ <width>707</width>
+ <height>667</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -917,7 +918,7 @@ e
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>5.00000000</maximum>
-  <value>4.14000000</value>
+  <value>1.88500000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -978,7 +979,7 @@ e
   <description/>
   <value>1.00000000</value>
   <type>scope</type>
-  <zoomx>4.00000000</zoomx>
+  <zoomx>8.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
@@ -996,7 +997,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>0</value>
+  <value>1</value>
   <objectName2/>
   <zoomx>2.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -1023,7 +1024,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>4.140</label>
+  <label>1.885</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>DejaVu Sans</font>

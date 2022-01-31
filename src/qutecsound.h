@@ -351,7 +351,9 @@ private:
 	void openLogFile();
 	void showNewFormatWarning();
 	void setupEnvironment();
-	ConfigLists m_configlists;
+    void openHtmlHelp(QString fileName, QString entry, bool external);
+
+    ConfigLists m_configlists;
 	QTabWidget *documentTabs;
 	GraphicWindow *m_graphic;  // To display the code graph images
 	QVector<DocumentPage *> documentPages;
@@ -534,6 +536,15 @@ private:
     QString m_fullScreenComponent;
     QDir m_rissetDataPath;
     bool isDarkPalette;
+    QStringList m_longOptions = {
+        "--syntax-check-only", "--control-rate=", "--messagelevel=",
+        "--env:", "--dither", "--sched", "--omacro:", "--smacro:",
+        "--verbose", "--sample-accurate", "--realtime",
+        "--nchnls=", "--nchnls_i=", "--sinesize", "--daemon",
+        "--port=", "--use-system-sr", "--ksmps=",
+        "--limiter", "--udp-echo", "--opcode-dir=", "-+rtmidi", "-+rtaudio",
+        "--format"
+    };
 };
 
 class FileOpenEater : public QObject

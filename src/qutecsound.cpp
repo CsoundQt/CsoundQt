@@ -2454,8 +2454,6 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
         entry.remove(0,1);
     }
     QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
-    bool found = false;
-
     if (entry.startsWith("http://")) {
         openExternalBrowser(QUrl(entry));
         return;
@@ -2465,13 +2463,7 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
         // Check external help sources
         QString fileName = risset->htmlManpage(entry);
         if(!fileName.isEmpty()) {
-            found = true;
-            // load manpage at anchor
-            if(external) {
-                openExternalBrowser(fileName);
-            } else {
-                helpPanel->loadFile(fileName, entry);
-            }
+            openHtmlHelp(fileName, entry, external);
         }
         else {
             auto reply = QMessageBox::question(this, "Risset",
@@ -2500,28 +2492,33 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
                "Please go to Edit->Options->Environment and select directory\n"));
         return;
     }
+    else if(entry.startsWith("--") || entry.startsWith("-+")) {
+        openHtmlHelp(dir+"/CommandFlagsCategory.html", "", external);
+    }
     else {
-        if (entry == "0dbfs")
-            entry = "Zerodbfs";
-        else if (entry.contains("CsOptions"))
-            entry = "CommandUnifile";
-        else if (entry.startsWith("chn_"))
-            entry = "chn";
         helpPanel->docDir = dir;
-        QString fileName = dir + "/" + entry + ".html";
-        // Check if this an existing opcode
-        if (QFile::exists(fileName)) {
-            if(external) {
-                openExternalBrowser(fileName);
-            } else {
-                helpPanel->loadFile(fileName, entry);
-            }
-            found = true;
+        QString fileName;
+        if (entry == "0dbfs")
+            fileName = dir + "/Zerodbfs.html";
+        else if (entry.contains("CsOptions"))
+            fileName = dir + "/CommandUnifile.html";
+        else if (entry.startsWith("chn_"))
+            fileName = dir + "/chn.html";
+        else if(QFile::exists(dir + "/" + entry + ".html")) {
+            fileName = dir + "/" + entry + ".html";
         }
         else
             return;
+        openHtmlHelp(fileName, entry, external);
     }
-    if(found && !external) {
+}
+
+
+void CsoundQt::openHtmlHelp(QString fileName, QString entry, bool external) {
+    if(external) {
+        openExternalBrowser(fileName);
+    } else {
+        helpPanel->loadFile(fileName, entry);
         helpPanel->show();
         helpPanel->raise();
         helpPanel->focusText();
@@ -2531,8 +2528,16 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
 
 void CsoundQt::setHelpEntry()
 {
-    QString text = documentPages[curPage]->wordUnderCursor();
-    return helpForEntry(text);
+    QString line = documentPages[curPage]->lineUnderCursor();
+    auto match = QRegularExpression("-[-\\+][a-zA-Z-_]+").match(line);
+    if(match.hasMatch()) {
+        auto capt = match.captured();
+        if(m_longOptions.contains(capt)) {
+            return helpForEntry(capt);
+        }
+    }
+    QString word = documentPages[curPage]->wordUnderCursor();
+    return helpForEntry(word);
 }
 
 
@@ -3183,8 +3188,8 @@ void CsoundQt::runUtility(QString flags)
         QString name = "";
         QString fileFlags = flags.mid(flags.indexOf("\""));
         flags.remove(fileFlags);
-        QStringList indFlags= flags.split(" ",QString::SkipEmptyParts);
-        QStringList files = fileFlags.split("\"", QString::SkipEmptyParts);
+        QStringList indFlags= flags.split(" ", Qt::SkipEmptyParts);
+        QStringList files = fileFlags.split("\"", Qt::SkipEmptyParts);
         if (indFlags.size() < 2) {
             qDebug("CsoundQt::runUtility: Error: empty flags");
             return;
@@ -6068,6 +6073,7 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
                              tr("Please close a document before opening another."));
         return false;
     }
+    auto t0 = std::chrono::high_resolution_clock::now();
     DocumentPage *newPage = new DocumentPage(this, m_opcodeTree, &m_configlists, m_midiLearn);
     int insertPoint = curPage + 1;
     curPage += 1;
@@ -6121,7 +6127,9 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
     page->getEngine()->setMidiHandler(midiHandler);
 
     setCurrentOptionsForPage(page); // Redundant but does the trick of setting the font properly now that stylesheets are being used...
-    // storeSettings(); // try: do not store on making new page still...
+    auto t1 = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration<double, std::milli>(t1-t0).count();
+    QDEBUG << "makeNewPage finished in (ms)" << elapsed;
     return true;
 }
 

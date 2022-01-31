@@ -80,6 +80,7 @@ public:
 	int getViewMode();
 	QString getLiveEventsText();
 	QString wordUnderCursor();
+    QString lineUnderCursor();
 	QRect getWidgetLayoutOuterGeometry();
 	void setWidgetLayoutOuterGeometry(QRect r);
 	void setLineEnding(int lineEndingMode);

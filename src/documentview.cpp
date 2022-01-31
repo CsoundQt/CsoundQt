@@ -55,7 +55,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	for (int i = 0; i < editors.size(); i++) {
         if (editors[i]!=m_filebEditor && editors[i] != m_mainEditor) { // FilebEditor does not have this slot
             // to fix always marked as modified, comment it out and handle setModified in this->textChanged slot
-            connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
+            // connect(editors[i], SIGNAL(textChanged()), this, SLOT(setModified()));
 		}
 		splitter->addWidget(editors[i]);
         editors[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -63,19 +63,19 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 		connect(editors[i], SIGNAL(customContextMenuRequested(QPoint)),
 				this, SLOT(createContextMenu(QPoint)));
 	}
-	connect(m_orcEditor, SIGNAL(textChanged()), this, SLOT(textChanged()));
+    connect(m_orcEditor, SIGNAL(textChanged()), this, SLOT(textChanged()));
 	connect(m_orcEditor, SIGNAL(cursorPositionChanged()),
             this, SLOT(syntaxCheck()));
 	setFocusProxy(m_mainEditor);  // for comment action from main application
 	internalChange = false;
 
     //  m_highlighter = new Highlighter();
-	connect(m_mainEditor, SIGNAL(textChanged()),
-			this, SLOT(textChanged()));
-	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
-			this, SLOT(updateContext()));
-	connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
-			this, SLOT(syntaxCheck()));
+    connect(m_mainEditor, SIGNAL(textChanged()),
+            this, SLOT(textChanged()));
+    connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
+            this, SLOT(updateContext()));
+    connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
+            this, SLOT(syntaxCheck()));
 	connect(m_mainEditor, SIGNAL(escapePressed()),
 			this, SLOT(escapePressed()));
 	connect(m_mainEditor, SIGNAL(newLine()),
@@ -137,7 +137,7 @@ bool DocumentView::isModified()
 }
 
 void DocumentView::markCurrentPosition() {
-    int pos = this->currentLine();
+    int pos = this->currentLineNumber();
     cursorPositions.push_back(pos);
     if(cursorPositions.size() > 1000) {
         cursorPositions.pop_front();
@@ -540,7 +540,7 @@ int DocumentView::getViewMode()
 	return m_viewMode;
 }
 
-int DocumentView::currentLine()
+int DocumentView::currentLineNumber()
 {
 	// Returns text without tags
 	int line = -1;
@@ -560,6 +560,17 @@ int DocumentView::currentLine()
 		}
 	}
 	return line;
+}
+
+QString DocumentView::lineUnderCursor() {
+    if(m_viewMode >= 2) {
+        QDEBUG << "Not implemented";
+        return "";
+    }
+    QTextCursor cursor = m_mainEditor->textCursor();
+    cursor.select(QTextCursor::LineUnderCursor);
+    auto line = cursor.selectedText();
+    return line;
 }
 
 QString DocumentView::wordUnderCursor()
@@ -676,15 +687,8 @@ void DocumentView::syntaxCheck()
 	// TODO implment for multiple views
 
 	TextEditor *editor;
-	if (m_viewMode < 2) {
-		// TODO rather than check this, store the current active one?
-		editor = m_mainEditor;
-	}
-	else { //  Split view
-		editor = (TextEditor *) sender();
-	}
-
-	m_currentEditor = editor ; // for parenthesis functions
+    editor = m_viewMode < 2 ? m_mainEditor : (TextEditor *) sender();
+    m_currentEditor = editor ; // for parenthesis functions
 
 	QTextCursor cursor = editor->textCursor();
 
@@ -721,20 +725,18 @@ void DocumentView::syntaxCheck()
 	// syntax check
 	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
 	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-	QStringList words = cursor.selectedText().split(QRegExp("\\b"),
-                                                    Qt::SkipEmptyParts);
+    auto words = cursor.selectedText().splitRef(QRegExp("\\b"),
+                                                Qt::SkipEmptyParts);
 	bool showHover = false;
 	for(int i = 0; i < words.size(); i++) {
-		QString word = words[words.size() - i - 1];
+        auto word = words[words.size() - i - 1].toString();
 		if (m_opcodeTree->isOpcode(word)) {
-			QString syntax = m_opcodeTree->getSyntax(word);
+            QString syntax = m_opcodeTree->getSyntax(word);
 			if(!syntax.isEmpty()) {
 				emit(opcodeSyntaxSignal(syntax));
 				m_currentOpcodeText = syntax;
-				if (i == 0 && editor->textCursor().hasSelection()) {
-					showHover = true;
-				}
-				break;
+                showHover = i == 0 && editor->textCursor().hasSelection();
+                break;
 			}
 		}
 	}
@@ -858,19 +860,38 @@ void DocumentView::textChanged() {
 		return;
 	}
 	TextEditor *editor = m_mainEditor;
-    unmarkErrorLines();
 
     //test: seems to do the trick and solve "always modified bug
-    //qDebug() << "Editor modified: " <<  m_mainEditor->document()->isModified();
     bool modified = m_mainEditor->document()->isModified();
     setModified(modified);
+    if(!modified)
+        return;
 
+    // This should go somewhere else, maybe when escape is pressed?
+    unmarkErrorLines();
+
+    /*
+    auto sender = static_cast<QTextEdit*>(this->sender());
+    auto senderName = sender != nullptr ? sender->property("name").toString() : "";
+    qDebug() << "sender: " << senderName << "modified:" << modified;
+    */
     if((m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) && m_autoComplete) {
         // TODO: replace all this with QCompleter
         QTextCursor cursor = editor->textCursor();
         int curIndex = cursor.position();
+        // Sometimes this function is called multiple times without real
+        // changes, resulting in superfluous work. This catches those
+        // situations but it would be much nicer if we were not called
+        // in the first place!
+        if(curIndex == m_lastCursorPosition)
+            return;
+
+        m_lastCursorPosition = curIndex;
+
         cursor.select(QTextCursor::WordUnderCursor);
         QString word = cursor.selectedText();
+        if(word.isEmpty())
+            return;
         QString wordlow = word.toLower();
         if (word == ",") {
             cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
@@ -881,6 +902,7 @@ void DocumentView::textChanged() {
         QTextCursor lineCursor = editor->textCursor();
         lineCursor.select(QTextCursor::LineUnderCursor);
         QString line = lineCursor.selectedText();
+        QSet<QString>menuWordsSeen;
 
         int commentIndex = -1;
         bool useFunction = false;
@@ -892,10 +914,23 @@ void DocumentView::textChanged() {
         if(QRegularExpression("^\\s*(opcode|instr)").match(line).hasMatch()) {
             return;
         }
-        if(!QRegularExpression("\\s*\\w+\\s+\\w+\\s+").match(line).hasMatch()) {
+        if(!QRegularExpression("\\s*\\w+\\s+\\w+").match(line).hasMatch()) {
             useFunction = true;
         }
-        if (cursor.position() > cursor.anchor() && word.size() > 2 && !word.startsWith("\"")) { // Only at the end of the word
+        QRegularExpressionMatch rxmatch;
+        if((rxmatch=QRegularExpression("\\s*-([+-])(\\w*)").match(line)).hasMatch()) {
+            syntaxMenu->clear();
+            auto capt = rxmatch.captured(2);
+            auto options = rxmatch.captured(1)=="-"? m_longOptions: m_longOptions2;
+            for(auto option: options) {
+                if(option.startsWith(capt)) {
+                    QAction *a = syntaxMenu->addAction(option, this,
+                                                       SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
+                    a->setData(option);
+                }
+            }
+        }
+        else if (cursor.position() > cursor.anchor() && word.size() > 2 && !word.startsWith("\"")) { // Only at the end of the word
             syntaxMenu->clear();
             foreach(QString var, m_localVariables) {
                 if (var.endsWith(',')) {
@@ -918,14 +953,18 @@ void DocumentView::textChanged() {
             }
             if (syntax.size() > 0 && !allEqual) {
                 for(int i = 0; i < syntax.size(); i++) {
-                    QString text = syntax[i].opcodeName.leftJustified(14);
-                    QString outArgs = syntax[i].outArgs.trimmed();
+                    QString opcodeName = syntax[i].opcodeName;
+                    QString text = opcodeName.size() < 14 ?
+                               opcodeName.leftJustified(14) :
+                               opcodeName + " ";
+
+                    QString outArgs = syntax[i].outArgs;
                     auto inArgs = syntax[i].inArgs;
                     if(!inArgs.isEmpty()) {
-                        text += inArgs.size()<=26 ? inArgs : inArgs.mid(0, 25)+"…";
+                        text += inArgs.size()<=28 ? inArgs : inArgs.mid(0, 27)+"…";
                     }
-                    if(text.size() < 40) {
-                        text = text.leftJustified(40);
+                    if(text.size() < 42) {
+                        text = text.leftJustified(42);
                     }
                     switch(outArgs[0].toLatin1()) {
                     case 'a':
@@ -963,6 +1002,7 @@ void DocumentView::textChanged() {
                     auto a = syntaxMenu->addAction(text, this, SLOT(insertAutoCompleteText()));
                     a->setData(syntaxText);
                     a->setToolTip(syntaxText);
+                    menuWordsSeen.insert(opcodeName);
                 }
                 syntaxMenu->addSeparator();
             }
@@ -972,30 +1012,27 @@ void DocumentView::textChanged() {
             for(auto theWord: allWords) {
                 if (word != theWord &&
                         theWord.toLower().startsWith(wordlow) &&
-                        !menuWords.contains(theWord) &&
+                        !menuWordsSeen.contains(theWord) &&
                         QRegularExpression("\\b[akigp]").match(word).hasMatch()) {
-                    menuWords << theWord;
+                    auto a = syntaxMenu->addAction(theWord, this, SLOT(insertAutoCompleteText()));
+                    a->setData(theWord);
+                    menuWordsSeen.insert(theWord);
                 }
             }
             for(auto tag: tagWords) {
                 if(tag.toLower().startsWith(wordlow) && word != tag) {
-                    menuWords << tag;
+                    auto a = syntaxMenu->addAction(tag, this, SLOT(insertAutoCompleteText()));
+                    a->setData(tag);
                 }
             }
-            for(auto theWord: menuWords) {
-                auto a = syntaxMenu->addAction(theWord, this, SLOT(insertAutoCompleteText()));
-                a->setData(theWord);
-            }
-
-            auto actions = syntaxMenu->actions();
-            if(!actions.isEmpty()) {
-                QRect r =  editor->cursorRect();
-                QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-                QPoint globalPoint = editor->mapToGlobal(p);
-                syntaxMenu->setDefaultAction(actions[0]);
-                syntaxMenu->move(globalPoint);
-                syntaxMenu->show();
-            }
+        }
+        auto actions = syntaxMenu->actions();
+        if(!actions.isEmpty()) {
+            QRect r =  editor->cursorRect();
+            QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+            syntaxMenu->setDefaultAction(actions[0]);
+            syntaxMenu->move(editor->mapToGlobal(p));
+            syntaxMenu->show();
         }
         else {
             destroySyntaxMenu();

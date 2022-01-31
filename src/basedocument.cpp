@@ -69,6 +69,24 @@ BaseDocument::~BaseDocument()
 int BaseDocument::parseAndRemoveWidgetText(QString &text)
 {
 	QStringList xmlPanels;
+    while(true) {
+        auto panelStart = text.indexOf("<bsbPanel");
+        if(panelStart < 0) {
+            QDEBUG "Didn't find any more panels";
+            break;
+        }
+        auto panelEnd = text.indexOf("</bsbPanel>", panelStart);
+        if(panelEnd < 0) {
+            QDEBUG << "Did not find matching </bsbPanel> tag";
+            return 0;
+        }
+        auto panel = text.mid(panelStart, panelEnd+11-panelStart);
+        xmlPanels << panel;
+        text.remove(panelStart, panelEnd+11-panelStart);
+        // QDEBUG << "panel: \n" << panel;
+
+    }
+    /*
     while (text.contains("<bsbPanel") && text.contains("</bsbPanel>")) {
 		QString panel = text.right(text.size()-text.indexOf("<bsbPanel"));
 		panel.resize(panel.indexOf("</bsbPanel>") + 11);
@@ -81,11 +99,25 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
 		xmlPanels << panel;
 		// TODO enable creation of several panels
 	}
+    */
 	if (!xmlPanels.isEmpty()) {
 		//FIXME allow multiple layouts
-        qDebug() << "parseAndRemove... calling loadXmlWidgets";
         m_widgetLayouts[0]->loadXmlWidgets(xmlPanels[0]);
 		m_widgetLayouts[0]->markHistory();
+        auto presetsStart = text.indexOf("<bsbPresets>");
+        if(presetsStart >= 0) {
+            auto presetsEnd = text.indexOf("</bsbPresets>", presetsStart);
+            if(presetsEnd < 0) {
+                QDEBUG << "Missing </bsbPresets> tag";
+            }
+            else {
+                auto presetsSize = presetsEnd - presetsStart + 13;
+                auto presets = text.mid(presetsStart, presetsSize);
+                m_widgetLayouts[0]->loadXmlPresets(presets);
+                text.remove(presetsStart, presetsSize);
+            }
+        }
+        /*
         if (text.contains("<bsbPresets>") && text.contains("</bsbPresets>")) {
 			QString presets = text.right(text.size()-text.indexOf("<bsbPresets>"));
 			presets.resize(presets.indexOf("</bsbPresets>") + 13);
@@ -103,7 +135,9 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
             // FIXME allow multiple
 			m_widgetLayouts[0]->loadXmlPresets(presets);
 		}
-	} else {
+        */
+    }
+    else {
         QString defaultPanel = "<bsbPanel><visible>true</visible><x>100</x><y>100</y>"
                                "<width>320</width><height>240</height></bsbPanel>";
 		m_widgetLayouts[0]->loadXmlWidgets(defaultPanel);

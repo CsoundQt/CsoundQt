@@ -34,7 +34,8 @@ f 1 0 1024 10 1
 i 1 0 200
 e
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>166</x>
@@ -58,8 +59,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>243.000</label>
+  <description/>
+  <label>966.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -87,8 +90,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>227.000</label>
+  <description/>
+  <label>133.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -116,8 +121,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>77.000</label>
+  <description/>
+  <label>0.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -145,8 +152,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>15.000</label>
+  <description/>
+  <label>35.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -174,8 +183,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_MouseX</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -191,7 +202,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -203,8 +214,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_MouseY</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -220,7 +233,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -232,8 +245,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_MouseRelX</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -249,7 +264,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -261,8 +276,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_MouseRelY</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -278,7 +295,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -290,8 +307,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Chan. name</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -307,7 +326,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>_MouseBut1</objectName>
@@ -319,8 +338,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -348,8 +369,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>1.000</label>
+  <description/>
+  <label>0.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -377,8 +400,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_MouseBut1</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -394,7 +419,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -406,8 +431,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>_MouseBut2</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -423,7 +450,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName/>
@@ -435,8 +462,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -452,7 +481,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -464,8 +493,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>The reserved mouse channels receive the mouse position and button state within the widget panel, even while Csound is not running.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -486,33 +517,3 @@ e
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 166 212 666 326
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-
-<MacGUI>
-ioView background {48059, 65535, 42662}
-ioText {70, 43} {59, 25} display 243.000000 0.00100 "_MouseX" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 243.000
-ioText {70, 71} {59, 25} display 227.000000 0.00100 "_MouseY" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 227.000
-ioText {71, 100} {59, 25} display 77.000000 0.00100 "_MouseRelX" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 77.000
-ioText {71, 128} {59, 25} display 15.000000 0.00100 "_MouseRelY" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 15.000
-ioText {7, 43} {64, 25} label 0.000000 0.00100 "" right "Lucida Grande" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder _MouseX
-ioText {7, 71} {64, 25} label 0.000000 0.00100 "" right "Lucida Grande" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder _MouseY
-ioText {7, 100} {64, 25} label 0.000000 0.00100 "" right "Lucida Grande" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder _MouseRelX
-ioText {7, 128} {64, 25} label 0.000000 0.00100 "" right "Lucida Grande" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder _MouseRelY
-ioText {7, 18} {80, 25} label 0.000000 0.00100 "" center "DejaVu Sans" 14 {0, 0, 0} {61440, 60160, 57856} nobackground noborder Chan. name
-ioText {71, 157} {59, 25} display 0.000000 0.00100 "_MouseBut1" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.000
-ioText {71, 185} {59, 25} display 1.000000 0.00100 "_MouseBut2" left "DejaVu Sans" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000
-ioText {7, 157} {64, 25} label 0.000000 0.00100 "" right "Lucida Grande" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder _MouseBut1
-ioText {7, 185} {64, 25} label 0.000000 0.00100 "" right "Lucida Grande" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder _MouseBut2
-ioText {525, 272} {80, 25} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {61440, 60160, 57856} nobackground noborder 
-ioText {139, 42} {245, 165} label 0.000000 0.00100 "" left "Arial" 14 {0, 0, 0} {43520, 65280, 32512} nobackground noborder The reserved mouse channels receive the mouse position and button state within the widget panel, even while Csound is not running.
-</MacGUI>

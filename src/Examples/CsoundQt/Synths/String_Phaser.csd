@@ -168,6 +168,8 @@ e
 </CsScore>
 </CsoundSynthesizer>
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -280,11 +282,11 @@ e
   <x>14</x>
   <y>70</y>
   <width>112</width>
-  <height>24</height>
+  <height>28</height>
   <uuid>{3dd45672-e874-4f17-af99-0d7f46ee1043}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
@@ -965,7 +967,7 @@ e
   <uuid>{54d46c69-3b11-4f33-934f-e487e18fb8d5}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <objectName2>Vcf2</objectName2>
   <xMin>100.00000000</xMin>
@@ -979,17 +981,17 @@ e
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
   <bordermode>noborder</bordermode>
-  <borderColor>#00FF00</borderColor>
+  <borderColor>#00ff00</borderColor>
   <color>
    <r>255</r>
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
+   <r>42</r>
+   <g>46</g>
+   <b>50</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
@@ -1058,7 +1060,7 @@ e
 </preset>
 </bsbPresets>
 <EventPanel name="Theme 1" tempo="90.00000000" loop="8.00000000" x="586" y="279" width="680" height="492" visible="false" loopStart="2" loopEnd="8">    
-;type       ;inst       ;start       ;dur       ;note       ;veloc 
+;type        ;inst        ;start        ;dur        ;note        ;veloc 
 i 1 0 1.25 57 100 
 i 1 1 1.5 47 100 
 i 1 2 1 35 100 

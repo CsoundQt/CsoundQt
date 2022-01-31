@@ -198,13 +198,14 @@ e
 </CsScore>
 </CsoundSynthesizer>
 
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>146</x>
- <y>65</y>
- <width>903</width>
- <height>657</height>
+ <x>0</x>
+ <y>0</y>
+ <width>898</width>
+ <height>635</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -222,8 +223,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>LIVE GRANULAR SYNTHESIS</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
@@ -239,7 +242,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -251,10 +254,12 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Granulates a (mono) input stream, with optional freezing at a certain point.
 If you want to reduce the delay of the granulated output, set giMaxGrLen in the orc header to a lower value (the delay also depends on your -B and -b size).
 </label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -270,7 +275,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -282,8 +287,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label> INPUT</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -311,6 +318,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out1_post</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -322,6 +330,8 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -333,6 +343,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>LiveInPreOver</objectName>
@@ -344,6 +355,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>outLover</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -355,6 +367,8 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -366,6 +380,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>LiveInPost</objectName>
@@ -377,6 +392,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out2_post</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -388,6 +404,8 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -399,6 +417,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>LiveInPostOver</objectName>
@@ -410,6 +429,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>outRover</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -421,6 +441,8 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -432,6 +454,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -443,8 +466,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Live in Pre</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -460,7 +485,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -472,8 +497,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Live in Post</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -489,7 +516,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -501,8 +528,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Input Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -518,7 +547,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>ingaindb</objectName>
@@ -530,6 +559,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>-12.00000000</minimum>
   <maximum>12.00000000</maximum>
   <value>-7.47692308</value>
@@ -548,8 +578,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label> OUTPUT</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -577,6 +609,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -588,6 +621,8 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -599,6 +634,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName>outover</objectName>
@@ -610,6 +646,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>outRover</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -621,6 +658,8 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
@@ -632,6 +671,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBScope">
   <objectName/>
@@ -643,6 +683,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -650,6 +691,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -661,8 +703,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>GRANULAR</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -690,8 +734,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Output Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -707,7 +753,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>outgaindb</objectName>
@@ -719,6 +765,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>-12.00000000</minimum>
   <maximum>12.00000000</maximum>
   <value>-2.55483871</value>
@@ -737,8 +784,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Grains per Second</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -754,7 +803,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -766,8 +815,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Transposition (Cent)</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -783,7 +834,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>transp</objectName>
@@ -795,6 +846,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>-1200.00000000</minimum>
   <maximum>1200.00000000</maximum>
   <value>0.00000000</value>
@@ -813,8 +865,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Grainsize (ms)</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -830,7 +884,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>grainsize</objectName>
@@ -842,6 +896,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>100.00000000</maximum>
   <value>1.00000000</value>
@@ -860,6 +915,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>200.00000000</maximum>
   <value>1.00000000</value>
@@ -878,8 +934,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Distribution</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -895,7 +953,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>dist</objectName>
@@ -907,6 +965,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
@@ -925,8 +984,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Position Randomness (ms)</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -942,7 +1003,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>posrand</objectName>
@@ -954,6 +1015,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>100.00000000</maximum>
   <value>1.88679245</value>
@@ -972,6 +1034,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>100.00000000</maximum>
   <value>0.00000000</value>
@@ -990,8 +1053,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Transposition Randomness (Cent)</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1007,7 +1072,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1019,8 +1084,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>periodic</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1036,7 +1103,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1048,8 +1115,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>scattered</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1065,7 +1134,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1077,8 +1146,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Window Shape</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1094,7 +1165,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>winshape</objectName>
@@ -1106,6 +1177,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Hamming</name>
@@ -1166,6 +1238,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
@@ -1174,6 +1247,12 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <dispy>1.00000000</dispy>
   <modex>auto</modex>
   <modey>auto</modey>
+  <showSelector>true</showSelector>
+  <showGrid>true</showGrid>
+  <showTableInfo>true</showTableInfo>
+  <showScrollbars>true</showScrollbars>
+  <enableTables>true</enableTables>
+  <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -1186,8 +1265,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>... and see its shape</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1203,7 +1284,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1215,8 +1296,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Select window function ...</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1232,7 +1315,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1244,8 +1327,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>dB</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1261,7 +1346,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>ingaindb</objectName>
@@ -1273,15 +1358,16 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1290,7 +1376,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>-7.47692</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1302,8 +1388,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>dB</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1319,7 +1407,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>outgaindb</objectName>
@@ -1331,15 +1419,16 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1348,7 +1437,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <minimum>-1e+12</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>-2.55484</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>grainrate</objectName>
@@ -1360,15 +1449,16 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1377,7 +1467,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <minimum>1</minimum>
   <maximum>1000</maximum>
   <randomizable group="0">false</randomizable>
-  <value>151.829</value>
+  <value>152</value>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>freeze</objectName>
@@ -1389,6 +1479,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1396,7 +1487,9 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>grainsize</objectName>
@@ -1408,15 +1501,16 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1437,15 +1531,16 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1454,7 +1549,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <minimum>0</minimum>
   <maximum>1000</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1.88679</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBSpinBox">
   <objectName>transp</objectName>
@@ -1466,15 +1561,16 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1495,15 +1591,16 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1523,16 +1620,17 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <uuid>{81528aba-64e8-4dc7-b127-daa1434195a2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
-  <font>Lucida Grande</font>
+  <font>Noto Sans</font>
   <fontsize>14</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1541,7 +1639,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <minimum>1</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>50</value>
+  <value>0</value>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1553,8 +1651,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>dB-Range</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Nimbus Sans L</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1570,7 +1670,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -1582,8 +1682,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Show LED's as</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Nimbus Sans L</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1599,7 +1701,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDropdown">
   <objectName>showdb</objectName>
@@ -1611,6 +1713,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>raw amps</name>
@@ -1636,6 +1739,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
@@ -1644,7 +1748,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1665,8 +1769,10 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Input Channel</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Nimbus Sans L</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1682,7 +1788,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

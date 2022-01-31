@@ -149,7 +149,7 @@ schedule("Run",0,-1)
   <g>185</g>
   <b>110</b>
  </bgcolor>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Browse</objectName>
   <x>415</x>
   <y>129</y>
@@ -167,10 +167,11 @@ schedule("Run",0,-1)
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>12</fontsize>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>51</x>
   <y>79</y>
@@ -201,10 +202,10 @@ schedule("Run",0,-1)
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>65</x>
-  <y>124</y>
+  <x>60</x>
+  <y>125</y>
   <width>82</width>
   <height>33</height>
   <uuid>{62bb7b54-093d-4892-a684-65c92556f17d}</uuid>
@@ -232,10 +233,10 @@ schedule("Run",0,-1)
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>63</x>
-  <y>162</y>
+  <x>60</x>
+  <y>165</y>
   <width>106</width>
   <height>31</height>
   <uuid>{805a8d92-e4a5-425c-85f4-84df0d507493}</uuid>
@@ -263,10 +264,10 @@ schedule("Run",0,-1)
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>62</x>
-  <y>242</y>
+  <x>60</x>
+  <y>245</y>
   <width>106</width>
   <height>31</height>
   <uuid>{4f34fa28-fabb-4ac5-b0e1-8fed507fbfc0}</uuid>
@@ -294,7 +295,7 @@ schedule("Run",0,-1)
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName/>
   <x>65</x>
   <y>290</y>
@@ -312,10 +313,11 @@ schedule("Run",0,-1)
   <image>/</image>
   <eventLine>i "Listen" 0 1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>14</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName/>
   <x>65</x>
   <y>337</y>
@@ -333,10 +335,11 @@ schedule("Run",0,-1)
   <image>/</image>
   <eventLine>i "WriteOut" 0 1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>14</fontsize>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>358</x>
   <y>80</y>
@@ -367,7 +370,7 @@ schedule("Run",0,-1)
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>play</objectName>
   <x>382</x>
   <y>170</y>
@@ -385,13 +388,14 @@ schedule("Run",0,-1)
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>14</fontsize>
  </bsbObject>
- <bsbObject type="BSBSpinBox" version="2">
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>dur</objectName>
-  <x>162</x>
-  <y>125</y>
+  <x>159</x>
+  <y>127</y>
   <width>91</width>
   <height>29</height>
   <uuid>{42b969dd-827f-4d4c-b8fc-4dbec755bfb4}</uuid>
@@ -407,7 +411,7 @@ schedule("Run",0,-1)
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -416,12 +420,12 @@ schedule("Run",0,-1)
   <minimum>0.001</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>0</value>
  </bsbObject>
- <bsbObject type="BSBSpinBox" version="2">
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>curve</objectName>
-  <x>163</x>
-  <y>164</y>
+  <x>159</x>
+  <y>166</y>
   <width>91</width>
   <height>29</height>
   <uuid>{0c9a6bce-e4ab-404a-ba52-5fbbbde09167}</uuid>
@@ -437,7 +441,7 @@ schedule("Run",0,-1)
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -446,12 +450,12 @@ schedule("Run",0,-1)
   <minimum>-10</minimum>
   <maximum>10</maximum>
   <randomizable group="0">false</randomizable>
-  <value>-6</value>
+  <value>0</value>
  </bsbObject>
- <bsbObject type="BSBSpinBox" version="2">
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>q</objectName>
-  <x>162</x>
-  <y>243</y>
+  <x>159</x>
+  <y>245</y>
   <width>91</width>
   <height>29</height>
   <uuid>{02bf057b-f5e2-4536-9ffe-7667da55d6ee}</uuid>
@@ -467,7 +471,7 @@ schedule("Run",0,-1)
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -476,9 +480,9 @@ schedule("Run",0,-1)
   <minimum>0.1</minimum>
   <maximum>10</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.3</value>
+  <value>0</value>
  </bsbObject>
- <bsbObject type="BSBHSlider" version="2">
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>voldb</objectName>
   <x>448</x>
   <y>222</y>
@@ -497,7 +501,7 @@ schedule("Run",0,-1)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>359</x>
   <y>221</y>
@@ -528,7 +532,7 @@ schedule("Run",0,-1)
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBHSlider" version="2">
+ <bsbObject version="2" type="BSBHSlider">
   <objectName>wdmix</objectName>
   <x>447</x>
   <y>261</y>
@@ -547,7 +551,7 @@ schedule("Run",0,-1)
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>338</x>
   <y>261</y>
@@ -578,7 +582,7 @@ schedule("Run",0,-1)
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>51</x>
   <y>10</y>
@@ -609,7 +613,7 @@ schedule("Run",0,-1)
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBController" version="2">
+ <bsbObject version="2" type="BSBController">
   <objectName>outL</objectName>
   <x>325</x>
   <y>301</y>
@@ -625,14 +629,14 @@ schedule("Run",0,-1)
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.65805605</xValue>
-  <yValue>0.65805605</yValue>
+  <xValue>0.54393305</xValue>
+  <yValue>0.54393305</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
-  <borderColor>#00ff00</borderColor>
+  <bordermode>border</bordermode>
+  <borderColor>#2a2e32</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -646,7 +650,7 @@ schedule("Run",0,-1)
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject type="BSBController" version="2">
+ <bsbObject version="2" type="BSBController">
   <objectName>clipL</objectName>
   <x>560</x>
   <y>301</y>
@@ -683,7 +687,7 @@ schedule("Run",0,-1)
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject type="BSBController" version="2">
+ <bsbObject version="2" type="BSBController">
   <objectName>outR</objectName>
   <x>325</x>
   <y>328</y>
@@ -699,14 +703,14 @@ schedule("Run",0,-1)
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.62888056</xValue>
-  <yValue>0.62888056</yValue>
+  <xValue>0.64016736</xValue>
+  <yValue>0.64016736</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
-  <bordermode>noborder</bordermode>
-  <borderColor>#00ff00</borderColor>
+  <bordermode>border</bordermode>
+  <borderColor>#2a2e32</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -720,7 +724,7 @@ schedule("Run",0,-1)
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject type="BSBController" version="2">
+ <bsbObject version="2" type="BSBController">
   <objectName>clipR</objectName>
   <x>560</x>
   <y>328</y>
@@ -757,10 +761,10 @@ schedule("Run",0,-1)
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject type="BSBSpinBox" version="2">
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>beta</objectName>
-  <x>160</x>
-  <y>201</y>
+  <x>159</x>
+  <y>205</y>
   <width>91</width>
   <height>29</height>
   <uuid>{393a2fcd-5942-4be0-945e-63b2d447dbfe}</uuid>
@@ -776,7 +780,7 @@ schedule("Run",0,-1)
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -785,12 +789,12 @@ schedule("Run",0,-1)
   <minimum>0</minimum>
   <maximum>0.99</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.8</value>
+  <value>0</value>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
-  <x>61</x>
-  <y>201</y>
+  <x>60</x>
+  <y>205</y>
   <width>109</width>
   <height>31</height>
   <uuid>{6cc3ac03-1544-406b-b980-f3151b991a6f}</uuid>
@@ -818,7 +822,7 @@ schedule("Run",0,-1)
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>70</x>
   <y>384</y>
