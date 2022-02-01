@@ -3299,7 +3299,7 @@ void CsoundQt::runUtility(QString flags)
 
 
 void CsoundQt::updateCurrentPageTask() {
-    if (m_closing) {
+    if (m_closing || curPage >= documentPages.size() ) {
         return;  // And don't call this again from the timer
     }
     Q_ASSERT(documentPages.size() > curPage);
@@ -3313,7 +3313,7 @@ void CsoundQt::updateCurrentPageTask() {
 
 void CsoundQt::updateInspector()
 {
-    if (m_closing) {
+    if (m_closing  || curPage >= documentPages.size()) {
         return;  // And don't call this again from the timer
     }
     Q_ASSERT(documentPages.size() > curPage);
