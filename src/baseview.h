@@ -119,9 +119,16 @@ public:
 
         }
     }
+    void enableScoreSyntaxHighlighting(bool state) {
+        m_highlighter.enableScoreSyntaxHighlighting(state);
+    }
 
     QTextCharFormat getDefaultFormat() {
         return m_highlighter.getFormat("default");
+    }
+
+    QTextCharFormat getHighlighterFormat(QString format) {
+        return m_highlighter.getFormat(format);
     }
 
 	QString getFullText();

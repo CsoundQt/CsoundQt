@@ -62,7 +62,7 @@ gkMORPH_FLAG		init 0
 gifreq				init 1
 gipitchspace		init 2048	;frequency lookup table (pitchspace)
 gispace				init 128
-gind 				init 0		;table index (pitchspace)
+gind 				init 0		;table index (pitchspace
 girecompile_G  	init 0
 giSEQ 				init 0
 giPrn 				init 1
@@ -6951,6 +6951,8 @@ i 1002  0.1 36000
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -6975,8 +6977,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -7004,7 +7008,8 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>65</value>
+  <description/>
+  <value>0</value>
   <objectName2>dispSHAPE</objectName2>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -7012,6 +7017,12 @@ e
   <dispy>1.00000000</dispy>
   <modex>lin</modex>
   <modey>lin</modey>
+  <showSelector>true</showSelector>
+  <showGrid>true</showGrid>
+  <showTableInfo>true</showTableInfo>
+  <showScrollbars>true</showScrollbars>
+  <enableTables>true</enableTables>
+  <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
@@ -7024,8 +7035,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -7053,8 +7066,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -7082,8 +7097,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -7111,8 +7128,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -7140,8 +7159,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -7169,8 +7190,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -7198,8 +7221,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -7227,8 +7252,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -7256,6 +7283,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.25000000</value>
@@ -7274,17 +7302,20 @@ e
   <visible>true</visible>
   <midichan>1</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>pad_Y1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.18750000</xValue>
-  <yValue>0.84375000</yValue>
+  <xValue>0.10000000</xValue>
+  <yValue>0.90000000</yValue>
   <type>point</type>
   <pointsize>12</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>102</r>
    <g>255</g>
@@ -7296,6 +7327,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>pad_X2</objectName>
@@ -7307,6 +7339,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>pad_Y2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -7318,6 +7351,8 @@ e
   <pointsize>12</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>128</g>
@@ -7329,6 +7364,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_ON1</objectName>
@@ -7340,6 +7376,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -7347,7 +7384,9 @@ e
   <image>/</image>
   <eventLine>i2 0 1 1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>ran1vel</objectName>
@@ -7359,6 +7398,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.01000000</minimum>
   <maximum>4.00000000</maximum>
   <value>0.10400000</value>
@@ -7377,6 +7417,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00100000</minimum>
   <maximum>0.20000000</maximum>
   <value>0.00100000</value>
@@ -7395,6 +7436,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>4.00000000</maximum>
   <value>1.00000000</value>
@@ -7413,6 +7455,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.36718800</value>
@@ -7431,6 +7474,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -7438,7 +7482,9 @@ e
   <image>/</image>
   <eventLine>i2 0 -1 2</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_RAND2</objectName>
@@ -7450,6 +7496,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -7457,7 +7504,9 @@ e
   <image>/</image>
   <eventLine>i22 0 -1 </eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Rand_1</objectName>
@@ -7469,6 +7518,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -7476,7 +7526,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor98</objectName>
@@ -7488,6 +7540,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert98</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -7499,6 +7552,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -7510,6 +7565,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Lev_1</objectName>
@@ -7521,8 +7577,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.250</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -7538,7 +7596,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -7550,8 +7608,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Focused-----------------Diffuse</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -7567,7 +7627,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -7579,8 +7639,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Long ---------------------Short</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -7596,7 +7658,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>rate</objectName>
@@ -7608,6 +7670,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.17000000</minimum>
   <maximum>0.50000000</maximum>
   <value>0.20000000</value>
@@ -7626,8 +7689,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Fast -----------------------Slow</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -7643,7 +7708,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>SHAPE</objectName>
@@ -7655,6 +7720,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>FLAT</name>
@@ -7715,8 +7781,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -7744,6 +7812,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>1.01100000</minimum>
   <maximum>2.00000000</maximum>
   <value>1.01100000</value>
@@ -7762,8 +7831,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>USER RATIO</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -7779,7 +7850,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -7791,8 +7862,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>DEN</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -7808,7 +7881,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -7820,8 +7893,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>NUM</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -7837,7 +7912,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -7849,8 +7924,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>FREQ_REF(Hz)</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -7866,7 +7943,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_GEO</objectName>
@@ -7878,6 +7955,7 @@ e
   <visible>true</visible>
   <midichan>1</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -7885,7 +7963,9 @@ e
   <image>/</image>
   <eventLine>i10 0 -1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>last_freq</objectName>
@@ -7897,8 +7977,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>22061.979</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -7914,7 +7996,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -7926,8 +8008,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Last_FREQ</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -7943,7 +8027,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>max_index</objectName>
@@ -7955,8 +8039,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>502.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -7972,7 +8058,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -7984,8 +8070,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>#of_FREQS</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -8001,7 +8089,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -8013,8 +8101,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -8042,9 +8132,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>400.00000000</maximum>
-  <value>56.41666700</value>
+  <value>1.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -8060,8 +8151,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>FUND FREQ (Hz)</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -8077,7 +8170,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>menu146</objectName>
@@ -8089,6 +8182,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>UP</name>
@@ -8114,6 +8208,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>-0.01000000</minimum>
   <maximum>0.01000000</maximum>
   <value>0.00098600</value>
@@ -8132,8 +8227,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>INHARM</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -8149,7 +8246,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>maxharm</objectName>
@@ -8161,6 +8258,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -8190,6 +8288,7 @@ e
   <visible>true</visible>
   <midichan>1</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -8197,7 +8296,9 @@ e
   <image>/</image>
   <eventLine>i12 0 -1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -8209,8 +8310,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>#of FREQS</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -8226,7 +8329,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -8238,8 +8341,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -8267,8 +8372,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -8296,8 +8403,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -8325,6 +8434,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>01</name>
@@ -8580,6 +8690,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -8587,7 +8698,9 @@ e
   <image>/</image>
   <eventLine>i100 0 3600</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>read_snap</objectName>
@@ -8599,6 +8712,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -8606,7 +8720,9 @@ e
   <image>/</image>
   <eventLine>i91 0 0.1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -8618,6 +8734,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -8625,7 +8742,9 @@ e
   <image>/</image>
   <eventLine>i300 0 10</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -8637,6 +8756,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -8644,7 +8764,9 @@ e
   <image>/</image>
   <eventLine>i301 0 10</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
@@ -8656,6 +8778,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>/Users/eug/Documents/CSD/Stria/Chop_test.txt</label>
   <alignment>left</alignment>
   <font>Arial</font>
@@ -8683,8 +8806,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>CAR Min</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -8700,7 +8825,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -8712,8 +8837,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>CAR Max</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -8729,7 +8856,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>MOD_min</objectName>
@@ -8741,6 +8868,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>14.00000000</maximum>
   <value>1.00000000</value>
@@ -8759,8 +8887,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>MOD Min</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -8776,7 +8906,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -8788,8 +8918,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>MOD Max</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -8805,7 +8937,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -8817,8 +8949,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>            StriaCSO v. 3.0a -Multilevel Interactive Sound Synthesizer - E.G.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Papyrus</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
@@ -8846,6 +8980,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>8.00000000</maximum>
   <value>1.00000000</value>
@@ -8864,6 +8999,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.01000000</minimum>
   <maximum>4.00000000</maximum>
   <value>0.10400000</value>
@@ -8882,6 +9018,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.01000000</minimum>
   <maximum>0.20000000</maximum>
   <value>0.01000000</value>
@@ -8900,6 +9037,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.36718800</value>
@@ -8918,6 +9056,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -8925,7 +9064,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor98</objectName>
@@ -8937,6 +9078,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert98</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -8948,6 +9090,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -8959,6 +9103,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>disppad_Y1</objectName>
@@ -8970,8 +9115,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.844</label>
+  <description/>
+  <label>0.900</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -8987,7 +9134,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>menu146</objectName>
@@ -8999,6 +9146,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>UP</name>
@@ -9024,6 +9172,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>240.00000000</maximum>
   <value>6.85714286</value>
@@ -9042,6 +9191,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>-5.00000000</minimum>
   <maximum>5.00000000</maximum>
   <value>0.85714286</value>
@@ -9060,8 +9210,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Morph Time</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -9077,7 +9229,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -9089,8 +9241,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Transition Type</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -9106,7 +9260,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>TYPE</objectName>
@@ -9118,8 +9272,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.857</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -9135,7 +9291,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>dur</objectName>
@@ -9147,6 +9303,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.20000000</minimum>
   <maximum>3.00000000</maximum>
   <value>0.47000000</value>
@@ -9165,6 +9322,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00010000</minimum>
   <maximum>400.00000000</maximum>
   <value>0.10000000</value>
@@ -9183,17 +9341,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>led</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.70000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -9205,6 +9366,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>mode_in</objectName>
@@ -9216,6 +9378,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>User Ratio</name>
@@ -9241,8 +9404,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.224</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -9258,7 +9423,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -9270,8 +9435,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>NUM/DEM</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -9287,7 +9454,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>over</objectName>
@@ -9299,6 +9466,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -9317,6 +9485,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -9324,7 +9493,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Rand_1</objectName>
@@ -9336,6 +9507,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -9343,7 +9515,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor98</objectName>
@@ -9355,6 +9529,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert98</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -9366,6 +9541,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -9377,6 +9554,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor98</objectName>
@@ -9388,6 +9566,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert98</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -9399,6 +9578,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -9410,6 +9591,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>disppad_X1</objectName>
@@ -9421,8 +9603,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.188</label>
+  <description/>
+  <label>0.100</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -9438,7 +9622,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>grid_index</objectName>
@@ -9450,8 +9634,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>93.938</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -9467,7 +9653,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -9479,8 +9665,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>INDEX</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -9496,7 +9684,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -9508,8 +9696,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>DHz</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -9525,7 +9715,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>Fun_1</objectName>
@@ -9537,8 +9727,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.100</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -9554,7 +9746,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>indx1</objectName>
@@ -9566,8 +9758,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -9583,7 +9777,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -9595,8 +9789,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>IM1</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -9612,7 +9808,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -9624,8 +9820,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>F1</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -9641,7 +9839,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -9653,8 +9851,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>LEV_1</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -9670,7 +9870,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -9682,8 +9882,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>RAN AMP 1 -></label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -9699,7 +9901,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -9711,8 +9913,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>RAN RATE 1 -></label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -9728,7 +9932,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>led2</objectName>
@@ -9740,6 +9944,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>led</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -9751,6 +9956,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>102</r>
    <g>255</g>
@@ -9762,6 +9969,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor153</objectName>
@@ -9773,6 +9981,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>rms_L</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -9784,6 +9993,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>102</r>
    <g>255</g>
@@ -9795,6 +10006,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor153</objectName>
@@ -9806,6 +10018,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>rms_R</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -9817,6 +10030,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>102</r>
    <g>255</g>
@@ -9828,6 +10043,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -9839,8 +10055,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -9868,8 +10086,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>256.995</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -9897,8 +10117,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>256.995</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -9926,8 +10148,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>259.822</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -9955,8 +10179,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>262.680</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -9984,8 +10210,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>169.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -10013,8 +10241,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>273.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -10042,8 +10272,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>442.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -10071,8 +10303,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>715.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -10100,8 +10334,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>-47.136</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -10117,7 +10353,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>status</objectName>
@@ -10129,8 +10365,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -10146,7 +10384,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>6</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>chan</objectName>
@@ -10158,8 +10396,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -10175,7 +10415,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>6</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>data1</objectName>
@@ -10187,8 +10427,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -10204,7 +10446,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>6</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>data2</objectName>
@@ -10216,8 +10458,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -10233,7 +10477,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>6</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor156</objectName>
@@ -10245,6 +10489,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>metervoi</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -10256,6 +10501,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>102</r>
    <g>102</g>
@@ -10267,6 +10514,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -10278,8 +10526,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>STATUS</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -10295,7 +10545,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>ROOM</objectName>
@@ -10307,6 +10557,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.99000000</maximum>
   <value>0.95000000</value>
@@ -10325,6 +10576,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -10343,6 +10595,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.70000000</value>
@@ -10361,8 +10614,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>HF</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -10378,7 +10633,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -10390,8 +10645,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>MIXTURE Shape</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -10407,7 +10664,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -10419,8 +10676,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>MIXTURE  [Hz]</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -10436,7 +10695,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>REVLEV</objectName>
@@ -10448,6 +10707,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
@@ -10466,8 +10726,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>REV LEV</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -10483,7 +10745,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -10495,8 +10757,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Geometric Spectra Compiler</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -10512,7 +10776,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -10524,8 +10788,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label> Harmonic Spectra Compiler</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -10541,7 +10807,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>MUTE1</objectName>
@@ -10553,6 +10819,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -10568,17 +10835,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vert180</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -10590,6 +10860,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>led_ADSYN</objectName>
@@ -10601,6 +10872,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>led</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -10612,6 +10884,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -10623,6 +10897,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>led_FM</objectName>
@@ -10634,6 +10909,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>led</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -10645,6 +10921,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>128</g>
@@ -10656,6 +10934,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -10667,8 +10946,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>FM</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -10684,7 +10965,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -10696,8 +10977,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>WS</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -10713,7 +10996,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>G_key</objectName>
@@ -10725,6 +11008,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>C</name>
@@ -10800,6 +11084,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>0</name>
@@ -10860,8 +11145,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Octave</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -10877,7 +11164,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -10889,8 +11176,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Key</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -10906,7 +11195,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>G_fund</objectName>
@@ -10918,6 +11207,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -10933,8 +11223,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>91.900</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -10950,7 +11242,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>H_key</objectName>
@@ -10962,6 +11254,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>C</name>
@@ -11037,6 +11330,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>0</name>
@@ -11097,8 +11391,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Octave</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -11114,7 +11410,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -11126,8 +11422,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Key</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -11143,7 +11441,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>H_fund</objectName>
@@ -11155,6 +11453,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -11170,8 +11469,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -11187,7 +11488,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor198</objectName>
@@ -11199,6 +11500,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert198</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -11210,6 +11512,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -11221,6 +11525,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>led_G</objectName>
@@ -11232,39 +11537,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <objectName2>vert199</objectName2>
-  <xMin>0.00000000</xMin>
-  <xMax>1.00000000</xMax>
-  <yMin>0.00000000</yMin>
-  <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
-  <yValue>0.00000000</yValue>
-  <type>fill</type>
-  <pointsize>1</pointsize>
-  <fadeSpeed>0.00000000</fadeSpeed>
-  <mouseControl act="press">jump</mouseControl>
-  <color>
-   <r>0</r>
-   <g>234</g>
-   <b>0</b>
-  </color>
-  <randomizable group="0" mode="both">false</randomizable>
-  <bgcolor>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </bgcolor>
- </bsbObject>
- <bsbObject type="BSBController" version="2">
-  <objectName>led_H</objectName>
-  <x>956</x>
-  <y>50</y>
-  <width>117</width>
-  <height>10</height>
-  <uuid>{09302ca8-823c-4001-b332-9b4e1a832616}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <description/>
   <objectName2>vert199</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -11276,6 +11549,45 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable group="0" mode="both">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bgcolor>
+  <bgcolormode>true</bgcolormode>
+ </bsbObject>
+ <bsbObject type="BSBController" version="2">
+  <objectName>led_H</objectName>
+  <x>956</x>
+  <y>50</y>
+  <width>117</width>
+  <height>10</height>
+  <uuid>{09302ca8-823c-4001-b332-9b4e1a832616}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <objectName2>vert199</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>255</g>
@@ -11287,6 +11599,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>active</objectName>
@@ -11298,8 +11611,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>15.000</label>
+  <description/>
+  <label>0.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
@@ -11315,7 +11630,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -11327,8 +11642,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>ATK2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -11344,7 +11661,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -11356,8 +11673,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>REL_2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -11373,7 +11692,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>AT2</objectName>
@@ -11385,6 +11704,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.05000000</minimum>
   <maximum>0.90000000</maximum>
   <value>0.90000000</value>
@@ -11403,6 +11723,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.05000000</minimum>
   <maximum>0.90000000</maximum>
   <value>0.90000000</value>
@@ -11421,6 +11742,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
@@ -11439,8 +11761,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>REVS2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -11456,7 +11780,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -11468,8 +11792,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>STEP</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -11485,7 +11811,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -11497,8 +11823,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label># VOI</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -11514,7 +11842,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -11526,8 +11854,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>ATK1</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -11543,7 +11873,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -11555,8 +11885,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>REL_1</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -11572,7 +11904,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>vox</objectName>
@@ -11584,6 +11916,7 @@ e
   <visible>true</visible>
   <midichan>1</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>8.00000000</maximum>
   <value>4.00000000</value>
@@ -11602,6 +11935,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>9.00000000</maximum>
   <value>1.00000000</value>
@@ -11620,8 +11954,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>4.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -11637,7 +11973,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>knob154</objectName>
@@ -11649,8 +11985,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -11666,7 +12004,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>AT1</objectName>
@@ -11678,6 +12016,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.05000000</minimum>
   <maximum>0.90000000</maximum>
   <value>0.90000000</value>
@@ -11696,6 +12035,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.05000000</minimum>
   <maximum>0.90000000</maximum>
   <value>0.90000000</value>
@@ -11714,6 +12054,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
@@ -11732,8 +12073,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>REVS1</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -11749,7 +12092,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>Lev_2</objectName>
@@ -11761,6 +12104,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -11779,6 +12123,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>4.00000000</maximum>
   <value>1.00000000</value>
@@ -11797,8 +12142,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -11814,7 +12161,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>indx2</objectName>
@@ -11826,8 +12173,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -11843,7 +12192,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -11855,8 +12204,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>IM2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -11872,7 +12223,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -11884,8 +12235,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>LEV_2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -11901,7 +12254,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>Fun_2</objectName>
@@ -11913,6 +12266,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>8.00000000</maximum>
   <value>1.00000000</value>
@@ -11931,8 +12285,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -11948,7 +12304,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -11960,8 +12316,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>F2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -11977,7 +12335,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>MUTE2</objectName>
@@ -11989,6 +12347,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -12004,17 +12363,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vert180</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>1.00000000</xValue>
+  <xValue>0.00000000</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -12026,6 +12388,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>cm</objectName>
@@ -12037,6 +12400,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -12052,6 +12416,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>led</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -12063,6 +12428,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>128</g>
@@ -12074,6 +12441,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>led_INT</objectName>
@@ -12085,6 +12453,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>led</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -12096,6 +12465,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>128</g>
@@ -12107,6 +12478,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -12118,8 +12490,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>INT</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -12135,7 +12509,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -12147,8 +12521,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>FLOAT</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -12164,7 +12540,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>XFADE</objectName>
@@ -12176,6 +12552,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -12194,8 +12571,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>XFADE</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -12211,7 +12590,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>XFADE</objectName>
@@ -12223,8 +12602,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -12240,7 +12621,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor220</objectName>
@@ -12252,17 +12633,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>disp_G2LEV</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.80000000</xValue>
-  <yValue>0.50000000</yValue>
+  <yValue>0.23735213</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>128</g>
@@ -12274,6 +12658,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor220</objectName>
@@ -12285,17 +12670,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>disp_G1LEV</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.80000000</xValue>
-  <yValue>0.50000000</yValue>
+  <yValue>0.76264787</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>102</r>
    <g>204</g>
@@ -12307,6 +12695,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>disp_rand2</objectName>
@@ -12318,8 +12707,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>24.422</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -12335,7 +12726,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -12347,8 +12738,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>New Label</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -12364,7 +12757,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>MIDIVAR_8</objectName>
@@ -12376,6 +12769,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>nul</name>
@@ -12486,8 +12880,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>6.863</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -12503,7 +12899,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName/>
@@ -12515,6 +12911,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -12522,7 +12919,9 @@ e
   <image>/</image>
   <eventLine>i14 0 1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -12534,8 +12933,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Volume</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -12551,7 +12952,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>ABOUT</objectName>
@@ -12563,6 +12964,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>About:   Stria is written by Eugenio Giordani as a tribute to prof. John Chowning - Ver. 3.0a  - 27 Nov 2019</name>
@@ -12603,8 +13005,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -12632,6 +13036,7 @@ e
   <visible>true</visible>
   <midichan>1</midichan>
   <midicc>15</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -12639,7 +13044,9 @@ e
   <image>/</image>
   <eventLine>i13 0 -1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -12651,8 +13058,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1st </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -12668,7 +13077,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor267</objectName>
@@ -12680,6 +13089,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert267</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -12691,6 +13101,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -12702,6 +13114,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>led_F</objectName>
@@ -12713,6 +13126,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vert268</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -12724,6 +13138,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>0</g>
@@ -12735,6 +13151,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -12746,8 +13163,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Fund</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -12763,7 +13182,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>progress</objectName>
@@ -12775,6 +13194,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>progress</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -12786,6 +13206,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>128</g>
@@ -12797,6 +13219,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -12808,8 +13231,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>-- Lin</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -12825,7 +13250,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -12837,8 +13262,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Exp</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -12854,7 +13281,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -12866,8 +13293,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Log</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -12883,7 +13312,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>AT1</objectName>
@@ -12895,8 +13324,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.900</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -12912,7 +13343,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>RE1</objectName>
@@ -12924,8 +13355,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.900</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -12941,7 +13374,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>REVSEND1</objectName>
@@ -12953,8 +13386,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -12970,7 +13405,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>AT2</objectName>
@@ -12982,8 +13417,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.900</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -12999,7 +13436,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>RE2</objectName>
@@ -13011,8 +13448,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.900</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -13028,7 +13467,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>REVSEND2</objectName>
@@ -13040,8 +13479,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -13057,7 +13498,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>ran1amp</objectName>
@@ -13069,8 +13510,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.001</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -13086,7 +13529,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>ran1vel</objectName>
@@ -13098,8 +13541,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.104</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -13115,7 +13560,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13127,8 +13572,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>RAN AMP 2 -></label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13144,7 +13591,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>ran2amp</objectName>
@@ -13156,8 +13603,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.001</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -13173,7 +13622,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13185,8 +13634,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>RAN RATE 2 -></label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13202,7 +13653,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>ran2vel</objectName>
@@ -13214,8 +13665,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.104</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -13231,7 +13684,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>4</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>STOP</objectName>
@@ -13243,6 +13696,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -13250,7 +13704,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L01</objectName>
@@ -13262,6 +13718,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -13273,6 +13730,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -13284,6 +13743,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>clear_snap</objectName>
@@ -13295,6 +13755,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -13302,7 +13763,9 @@ e
   <image>/</image>
   <eventLine>i71 0 3600</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13314,8 +13777,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>01 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13331,7 +13796,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13343,8 +13808,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>02 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13360,7 +13827,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13372,8 +13839,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>03</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13389,7 +13858,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13401,8 +13870,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>04</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13418,7 +13889,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13430,8 +13901,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>05</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13447,7 +13920,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13459,8 +13932,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>06</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13476,7 +13951,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13488,8 +13963,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>07 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13505,7 +13982,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13517,8 +13994,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>08 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13534,7 +14013,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13546,8 +14025,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>09 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13563,7 +14044,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13575,8 +14056,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>10 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13592,7 +14075,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13604,8 +14087,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>11</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13621,7 +14106,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -13633,8 +14118,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>12 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -13650,7 +14137,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L02</objectName>
@@ -13662,6 +14149,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -13673,6 +14161,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -13684,6 +14174,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L03</objectName>
@@ -13695,6 +14186,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -13706,6 +14198,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -13717,6 +14211,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L04</objectName>
@@ -13728,6 +14223,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -13739,6 +14235,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -13750,6 +14248,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L05</objectName>
@@ -13761,6 +14260,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -13772,6 +14272,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -13783,6 +14285,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L06</objectName>
@@ -13794,6 +14297,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -13805,6 +14309,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -13816,6 +14322,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L07</objectName>
@@ -13827,6 +14334,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -13838,6 +14346,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -13849,6 +14359,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L08</objectName>
@@ -13860,6 +14371,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -13871,6 +14383,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -13882,6 +14396,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L09</objectName>
@@ -13893,6 +14408,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -13904,6 +14420,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -13915,6 +14433,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L10</objectName>
@@ -13926,6 +14445,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -13937,6 +14457,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -13948,6 +14470,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L11</objectName>
@@ -13959,6 +14482,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -13970,6 +14494,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -13981,6 +14507,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L12</objectName>
@@ -13992,6 +14519,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14003,6 +14531,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14014,6 +14544,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L13</objectName>
@@ -14025,6 +14556,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14036,6 +14568,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14047,6 +14581,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14058,8 +14593,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>13 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14075,7 +14612,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14087,8 +14624,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>14 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14104,7 +14643,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14116,8 +14655,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>15 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14133,7 +14674,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14145,8 +14686,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>16 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14162,7 +14705,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14174,8 +14717,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>17 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14191,7 +14736,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14203,8 +14748,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>18</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14220,7 +14767,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14232,8 +14779,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>19 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14249,7 +14798,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14261,8 +14810,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>20 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14278,7 +14829,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14290,8 +14841,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>21 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14307,7 +14860,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14319,8 +14872,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>22 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14336,7 +14891,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14348,8 +14903,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>23 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14365,7 +14922,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14377,8 +14934,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>24 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14394,7 +14953,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L14</objectName>
@@ -14406,6 +14965,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14417,6 +14977,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14428,6 +14990,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L15</objectName>
@@ -14439,6 +15002,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14450,6 +15014,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14461,6 +15027,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L16</objectName>
@@ -14472,6 +15039,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14483,6 +15051,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14494,6 +15064,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L17</objectName>
@@ -14505,6 +15076,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14516,6 +15088,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14527,6 +15101,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L18</objectName>
@@ -14538,6 +15113,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14549,6 +15125,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14560,6 +15138,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L19</objectName>
@@ -14571,6 +15150,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14582,6 +15162,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14593,6 +15175,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L20</objectName>
@@ -14604,6 +15187,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14615,6 +15199,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14626,6 +15212,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L21</objectName>
@@ -14637,6 +15224,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14648,6 +15236,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14659,6 +15249,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L22</objectName>
@@ -14670,6 +15261,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14681,6 +15273,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14692,6 +15286,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L23</objectName>
@@ -14703,6 +15298,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14714,6 +15310,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14725,6 +15323,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L24</objectName>
@@ -14736,6 +15335,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14747,6 +15347,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14758,6 +15360,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L25</objectName>
@@ -14769,6 +15372,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -14780,6 +15384,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -14791,6 +15397,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14802,8 +15409,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>25</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14819,7 +15428,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14831,8 +15440,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>26</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14848,7 +15459,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14860,8 +15471,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>27</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14877,7 +15490,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14889,8 +15502,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>28</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14906,7 +15521,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14918,8 +15533,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>29 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14935,7 +15552,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14947,8 +15564,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>30</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14964,7 +15583,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -14976,8 +15595,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>31 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -14993,7 +15614,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15005,8 +15626,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>32</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15022,7 +15645,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15034,8 +15657,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>33 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15051,7 +15676,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15063,8 +15688,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>34 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15080,7 +15707,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15092,8 +15719,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>35</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15109,7 +15738,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15121,8 +15750,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>36</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15138,7 +15769,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L26</objectName>
@@ -15150,6 +15781,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15161,6 +15793,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15172,6 +15806,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L27</objectName>
@@ -15183,6 +15818,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15194,6 +15830,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15205,6 +15843,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L28</objectName>
@@ -15216,6 +15855,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15227,6 +15867,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15238,6 +15880,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L29</objectName>
@@ -15249,6 +15892,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15260,6 +15904,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15271,6 +15917,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L30</objectName>
@@ -15282,6 +15929,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15293,6 +15941,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15304,6 +15954,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L31</objectName>
@@ -15315,6 +15966,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15326,6 +15978,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15337,6 +15991,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L32</objectName>
@@ -15348,6 +16003,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15359,6 +16015,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15370,6 +16028,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L33</objectName>
@@ -15381,6 +16040,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15392,6 +16052,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15403,6 +16065,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L34</objectName>
@@ -15414,6 +16077,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15425,6 +16089,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15436,6 +16102,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L35</objectName>
@@ -15447,6 +16114,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15458,6 +16126,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15469,6 +16139,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L36</objectName>
@@ -15480,6 +16151,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15491,6 +16163,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15502,6 +16176,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L37</objectName>
@@ -15513,6 +16188,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15524,6 +16200,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15535,6 +16213,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15546,8 +16225,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>37 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15563,7 +16244,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15575,8 +16256,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>38 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15592,7 +16275,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15604,8 +16287,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>39 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15621,7 +16306,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15633,8 +16318,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>40</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15650,7 +16337,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15662,8 +16349,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>41</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15679,7 +16368,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15691,8 +16380,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>42 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15708,7 +16399,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15720,8 +16411,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>43</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15737,7 +16430,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15749,8 +16442,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>44</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15766,7 +16461,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15778,8 +16473,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>45</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15795,7 +16492,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15807,8 +16504,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>46</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15824,7 +16523,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15836,8 +16535,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>47 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15853,7 +16554,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -15865,8 +16566,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>48 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -15882,7 +16585,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L38</objectName>
@@ -15894,6 +16597,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15905,6 +16609,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15916,6 +16622,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L39</objectName>
@@ -15927,6 +16634,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15938,6 +16646,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15949,6 +16659,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L40</objectName>
@@ -15960,6 +16671,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -15971,6 +16683,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -15982,6 +16696,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L41</objectName>
@@ -15993,6 +16708,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -16004,6 +16720,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -16015,6 +16733,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L42</objectName>
@@ -16026,6 +16745,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -16037,6 +16757,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -16048,6 +16770,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L43</objectName>
@@ -16059,6 +16782,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -16070,6 +16794,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -16081,6 +16807,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L44</objectName>
@@ -16092,6 +16819,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -16103,6 +16831,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -16114,6 +16844,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L45</objectName>
@@ -16125,6 +16856,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -16136,6 +16868,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -16147,6 +16881,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L46</objectName>
@@ -16158,6 +16893,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -16169,6 +16905,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -16180,6 +16918,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L47</objectName>
@@ -16191,6 +16930,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -16202,6 +16942,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -16213,6 +16955,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>L48</objectName>
@@ -16224,6 +16967,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert273</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -16235,6 +16979,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -16246,6 +16992,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -16257,8 +17004,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Sequencer</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -16274,7 +17023,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>BYSTTIME</objectName>
@@ -16286,6 +17035,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -16301,8 +17051,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>MIDI</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -16318,7 +17070,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
@@ -16330,6 +17082,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -16337,7 +17090,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>ROOM</objectName>
@@ -16349,8 +17104,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.950</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -16366,7 +17123,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>HF</objectName>
@@ -16378,8 +17135,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.700</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -16395,7 +17154,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>REVLEV</objectName>
@@ -16407,8 +17166,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -16424,7 +17185,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>RAN1MUTE</objectName>
@@ -16436,6 +17197,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -16451,6 +17213,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -16466,8 +17229,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>MUTE</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -16483,7 +17248,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -16495,8 +17260,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Ignore Saved Time</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -16512,7 +17279,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -16524,8 +17291,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>  L   R</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -16541,7 +17310,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -16553,8 +17322,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Fibonacci Spectra Compiler</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -16570,7 +17341,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>strout</objectName>
@@ -16582,8 +17353,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>/Users/eug/Documents/CSD/Stria/Chop_test.txt-> Loaded !</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -16599,7 +17372,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
@@ -16611,6 +17384,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>/Users/eug/Documents/CSD/Stria/Chop_test.txt</stringvalue>
@@ -16618,7 +17392,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>clear_snap</objectName>
@@ -16630,6 +17406,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -16637,7 +17414,9 @@ e
   <image>/</image>
   <eventLine>i72 0 3600</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>MIDIsave</objectName>
@@ -16649,6 +17428,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -16664,8 +17444,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Associate to BANK---></label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -16681,7 +17463,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>TIME</objectName>
@@ -16693,6 +17475,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -16712,7 +17495,7 @@ e
   <maximum>999999999999.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -16726,8 +17509,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>SNAP Status</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -16743,7 +17528,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>6</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -16755,9 +17540,11 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Main
 </label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
@@ -16773,7 +17560,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -16785,6 +17572,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -16792,7 +17580,9 @@ e
   <image>/</image>
   <eventLine>i950 0 -1 </eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>mins</objectName>
@@ -16804,8 +17594,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Eurostile</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -16821,7 +17613,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -16833,8 +17625,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>:</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -16850,7 +17644,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>grid_morph</objectName>
@@ -16862,6 +17656,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -16877,8 +17672,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Slide Grid</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -16894,7 +17691,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -16906,8 +17703,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Voices On</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -16923,7 +17722,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>secs</objectName>
@@ -16935,8 +17734,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Eurostile</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -16952,7 +17753,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -16964,8 +17765,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Grid</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -16981,7 +17784,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>grid_XFREQ</objectName>
@@ -16993,8 +17796,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>256.995</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -17010,7 +17815,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -17022,8 +17827,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Hz</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -17039,7 +17846,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -17051,8 +17858,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Sine</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -17068,7 +17877,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -17080,8 +17889,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Sine</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -17097,7 +17908,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>warn</objectName>
@@ -17109,8 +17920,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -17126,7 +17939,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -17138,8 +17951,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>FREQ. SPREAD</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -17155,7 +17970,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -17167,8 +17982,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>DURATION</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -17184,7 +18001,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -17196,8 +18013,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>RATE</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -17213,7 +18032,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>band</objectName>
@@ -17225,8 +18044,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.100</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -17242,7 +18063,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>dur</objectName>
@@ -17254,8 +18075,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.470</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -17271,7 +18094,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>rate</objectName>
@@ -17283,8 +18106,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.200</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -17300,7 +18125,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>MIDIVAR_1</objectName>
@@ -17312,6 +18137,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>N/A</name>
@@ -17482,6 +18308,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>14.00000000</maximum>
   <value>1.00000000</value>
@@ -17500,6 +18327,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>14.00000000</maximum>
   <value>1.00000000</value>
@@ -17518,6 +18346,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -17536,6 +18365,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.78000000</value>
@@ -17554,6 +18384,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
@@ -17572,6 +18403,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.62000000</value>
@@ -17590,6 +18422,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
@@ -17608,6 +18441,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
@@ -17626,6 +18460,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
@@ -17644,6 +18479,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.44000000</value>
@@ -17662,6 +18498,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>1.00000000</value>
@@ -17680,6 +18517,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -17699,7 +18537,7 @@ e
   <maximum>99999999999999.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -17713,6 +18551,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -17732,7 +18571,7 @@ e
   <maximum>99999999999999.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -17746,6 +18585,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -17765,7 +18605,7 @@ e
   <maximum>99999999999999.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -17779,6 +18619,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -17798,7 +18639,7 @@ e
   <maximum>99999999999999.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -17812,6 +18653,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -17831,7 +18673,7 @@ e
   <maximum>99999999999999.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -17845,6 +18687,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -17864,7 +18707,7 @@ e
   <maximum>99999999999999.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -17878,6 +18721,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -17897,7 +18741,7 @@ e
   <maximum>99999999999999.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -17911,6 +18755,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -17926,6 +18771,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -17941,6 +18787,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -17956,6 +18803,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -17971,6 +18819,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -17986,6 +18835,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -18001,6 +18851,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -18016,6 +18867,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -18031,8 +18883,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>inv</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -18048,7 +18902,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>4</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>slider25</objectName>
@@ -18060,6 +18914,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.36718800</value>
@@ -18078,6 +18933,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -18085,7 +18941,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor98</objectName>
@@ -18097,6 +18955,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert98</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -18108,6 +18967,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -18119,6 +18980,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>menu146</objectName>
@@ -18130,6 +18992,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>UP</name>
@@ -18155,6 +19018,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.36718800</value>
@@ -18173,6 +19037,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -18180,7 +19045,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor98</objectName>
@@ -18192,6 +19059,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert98</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -18203,6 +19071,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -18214,6 +19084,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>menu146</objectName>
@@ -18225,6 +19096,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>UP</name>
@@ -18250,6 +19122,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -18257,7 +19130,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>Rand_1</objectName>
@@ -18269,6 +19144,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -18276,7 +19152,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor98</objectName>
@@ -18288,6 +19166,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert98</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -18299,6 +19178,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -18310,6 +19191,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor98</objectName>
@@ -18321,6 +19203,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert98</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -18332,6 +19215,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -18343,6 +19228,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>slider165</objectName>
@@ -18354,6 +19240,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -18372,8 +19259,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>ROOM</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -18389,7 +19278,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -18401,8 +19290,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>FM Control</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -18418,7 +19309,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>hor198</objectName>
@@ -18430,6 +19321,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert198</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -18441,6 +19333,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -18452,6 +19346,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -18463,8 +19358,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>New Label</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -18480,7 +19377,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>MIDIVAR_8</objectName>
@@ -18492,6 +19389,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>nul</name>
@@ -18602,6 +19500,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert267</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -18613,6 +19512,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -18624,6 +19525,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -18635,8 +19537,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>MUTE</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -18652,7 +19556,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>slider434</objectName>
@@ -18664,6 +19568,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -18682,6 +19587,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -18689,7 +19595,9 @@ e
   <image>/</image>
   <eventLine>i960 0 1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>rectime</objectName>
@@ -18701,6 +19609,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -18734,6 +19643,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>LED_WRITE</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -18745,6 +19655,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -18756,6 +19668,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>DisplayTime</objectName>
@@ -18767,8 +19680,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>19.992</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -18796,6 +19711,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>vert499</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -18807,6 +19723,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -18818,6 +19736,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -18829,6 +19748,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -18836,7 +19756,9 @@ e
   <image>/</image>
   <eventLine>i961 0 1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -18848,8 +19770,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>sec</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -18865,7 +19789,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -18877,8 +19801,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>RecTime</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -18894,7 +19820,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -18906,6 +19832,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -18913,7 +19840,9 @@ e
   <image>/</image>
   <eventLine>i970 0 3600</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>ledseq</objectName>
@@ -18925,6 +19854,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vert505</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -18936,6 +19866,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -18947,6 +19879,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>ledton</objectName>
@@ -18958,6 +19891,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vert505</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -18969,6 +19903,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -18980,6 +19916,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -18991,6 +19928,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -18998,7 +19936,9 @@ e
   <image>/</image>
   <eventLine>i971 0 1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -19010,6 +19950,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -19017,7 +19958,9 @@ e
   <image>/</image>
   <eventLine>i972 0 1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -19029,6 +19972,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -19036,7 +19980,9 @@ e
   <image>/</image>
   <eventLine>i973 0 1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -19048,6 +19994,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -19055,7 +20002,9 @@ e
   <image>/</image>
   <eventLine>i980 0 1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBCheckBox" version="2">
   <objectName>ADSYN</objectName>
@@ -19067,6 +20016,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -19082,6 +20032,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>/Users/eug/Documents/CSD/Stria/EUGSEQ_new.txt</stringvalue>
@@ -19089,7 +20040,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>readend</objectName>
@@ -19101,8 +20054,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -19118,7 +20073,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>readton</objectName>
@@ -19130,8 +20085,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -19147,7 +20104,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>readsnap</objectName>
@@ -19159,8 +20116,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -19176,7 +20135,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>readttran</objectName>
@@ -19188,8 +20147,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -19205,7 +20166,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>readindex</objectName>
@@ -19217,6 +20178,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -19246,8 +20208,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -19263,7 +20227,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -19275,8 +20239,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Run/Stop</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -19292,7 +20258,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -19304,8 +20270,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Hold</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -19321,7 +20289,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -19333,8 +20301,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Snap</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -19350,7 +20320,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -19362,8 +20332,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Tmrph</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -19379,7 +20351,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -19391,8 +20363,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Type</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -19408,7 +20382,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>ratio</objectName>
@@ -19420,6 +20394,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19449,6 +20424,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19478,6 +20454,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19507,6 +20484,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19536,6 +20514,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>50.00000000</minimum>
   <maximum>400.00000000</maximum>
   <value>91.90000000</value>
@@ -19554,6 +20533,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19583,6 +20563,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19612,6 +20593,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue>/Users/eug/Documents/CSD/recordSTRIA.wav</stringvalue>
@@ -19619,7 +20601,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>in_readend</objectName>
@@ -19631,6 +20615,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19664,6 +20649,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19697,6 +20683,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19730,6 +20717,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19763,6 +20751,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19796,6 +20785,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19825,6 +20815,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19854,6 +20845,7 @@ e
   <visible>true</visible>
   <midichan>1</midichan>
   <midicc>99</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -19861,7 +20853,9 @@ e
   <image>/</image>
   <eventLine>i3 0 0.1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button495</objectName>
@@ -19873,6 +20867,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -19880,7 +20875,9 @@ e
   <image>/</image>
   <eventLine>i5 0 -1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>band</objectName>
@@ -19892,6 +20889,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19921,6 +20919,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -19950,6 +20949,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>/Users/eug/Documents/CSD/Stria/EUGSEQ_new.txt</label>
   <alignment>left</alignment>
   <font>Arial</font>
@@ -19977,6 +20977,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>/Users/eug/Documents/CSD/recordSTRIA.wav</label>
   <alignment>left</alignment>
   <font>Arial</font>
@@ -20004,6 +21005,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>seq</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -20015,6 +21017,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -20026,6 +21030,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -20037,8 +21042,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Reverb</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -20054,7 +21061,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>6</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -20066,8 +21073,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Record</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -20083,7 +21092,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>6</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>progress_lin</objectName>
@@ -20095,6 +21104,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>progress_lin</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -20106,6 +21116,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>34</r>
    <g>255</g>
@@ -20117,6 +21129,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>mpercent</objectName>
@@ -20128,8 +21141,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>11</fontsize>
   <precision>3</precision>
@@ -20145,7 +21160,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>6</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -20157,8 +21172,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>%</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -20174,7 +21191,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
   <objectName/>
@@ -20186,6 +21203,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <value>-255.00000000</value>
   <type>poincare</type>
   <zoomx>18.00000000</zoomx>
@@ -20193,6 +21211,7 @@ e
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>Get</objectName>
@@ -20204,6 +21223,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>0</fontsize>
@@ -20233,8 +21253,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>G1_grid</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -20250,7 +21272,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -20262,8 +21284,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>G2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -20279,7 +21303,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBGraph" version="2">
   <objectName>disptab</objectName>
@@ -20291,6 +21315,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <value>89</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
@@ -20299,6 +21324,12 @@ e
   <dispy>1.00000000</dispy>
   <modex>lin</modex>
   <modey>lin</modey>
+  <showSelector>true</showSelector>
+  <showGrid>true</showGrid>
+  <showTableInfo>true</showTableInfo>
+  <showScrollbars>true</showScrollbars>
+  <enableTables>true</enableTables>
+  <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
@@ -20311,6 +21342,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20318,7 +21350,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>F1_SW</objectName>
@@ -20330,6 +21364,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20337,7 +21372,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>X1_SW</objectName>
@@ -20349,6 +21386,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20356,7 +21394,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>X2_SW</objectName>
@@ -20368,6 +21408,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20375,7 +21416,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>VOI_SW</objectName>
@@ -20387,6 +21430,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20394,7 +21438,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>STEP_SW</objectName>
@@ -20406,6 +21452,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20413,7 +21460,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>AT1_SW</objectName>
@@ -20425,6 +21474,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20432,7 +21482,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>REL1_SW</objectName>
@@ -20444,6 +21496,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20451,7 +21504,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>REV1_SW</objectName>
@@ -20463,6 +21518,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20470,7 +21526,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>AT2_SW</objectName>
@@ -20482,6 +21540,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20489,7 +21548,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>REL2_SW</objectName>
@@ -20501,6 +21562,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20508,7 +21570,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>REV2_SW</objectName>
@@ -20520,6 +21584,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20527,7 +21592,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>IM2_SW</objectName>
@@ -20539,6 +21606,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20546,7 +21614,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>LEV2_SW</objectName>
@@ -20558,6 +21628,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20565,7 +21636,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>F2_SW</objectName>
@@ -20577,6 +21650,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20584,7 +21658,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>SHAPE_SW</objectName>
@@ -20596,6 +21672,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20603,7 +21680,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>RATE_SW</objectName>
@@ -20615,6 +21694,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20622,7 +21702,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>DUR_SW</objectName>
@@ -20634,6 +21716,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20641,7 +21724,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>BAND_SW</objectName>
@@ -20653,6 +21738,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20660,7 +21746,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>LEV1_SW</objectName>
@@ -20672,6 +21760,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20679,7 +21768,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>CARMIN_SW</objectName>
@@ -20691,6 +21782,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20698,7 +21790,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>CARMAX_SW</objectName>
@@ -20710,6 +21804,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20717,7 +21812,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>MODMIN_SW</objectName>
@@ -20729,6 +21826,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20736,7 +21834,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>MODMAX_SW</objectName>
@@ -20748,6 +21848,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20755,7 +21856,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>FADE_SW</objectName>
@@ -20767,6 +21870,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -20774,7 +21878,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -20786,8 +21892,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>min</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -20803,7 +21911,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -20815,8 +21923,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>secs</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -20832,7 +21942,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>led_TIMER1</objectName>
@@ -20844,6 +21954,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>led_TIMER1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -20855,6 +21966,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>255</g>
@@ -20866,6 +21979,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>led_TIMER2</objectName>
@@ -20877,6 +21991,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>led_TIMER2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -20888,6 +22003,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>128</g>
@@ -20899,6 +22016,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>max_index_FI</objectName>
@@ -20910,8 +22028,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>15.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -20927,7 +22047,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -20939,8 +22059,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>#of_FREQS</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -20956,7 +22078,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>timelaps</objectName>
@@ -20968,8 +22090,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -20997,8 +22121,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -21026,6 +22152,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>timeline</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -21037,6 +22164,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>252</r>
    <g>1</g>
@@ -21048,6 +22177,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>over</objectName>
@@ -21059,8 +22189,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -21076,7 +22208,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -21088,6 +22220,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -21095,7 +22228,9 @@ e
   <image>/</image>
   <eventLine>i981 0 1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
@@ -21107,6 +22242,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -21114,7 +22250,9 @@ e
   <image>/</image>
   <eventLine>i982 0 1</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -21126,8 +22264,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -21143,7 +22283,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -21155,8 +22295,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -21172,7 +22314,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -21184,8 +22326,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Event #</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -21201,7 +22345,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -21213,8 +22357,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Total Dur</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -21230,7 +22376,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -21242,8 +22388,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Curr Time</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -21259,7 +22407,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -21271,8 +22419,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Time</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -21288,7 +22438,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>fftONOFF</objectName>
@@ -21300,6 +22450,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -21307,7 +22458,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button548</objectName>
@@ -21319,6 +22472,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -21326,7 +22480,9 @@ e
   <image>/</image>
   <eventLine>i969 0 3600  </eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -21338,8 +22494,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -21355,7 +22513,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -21367,8 +22525,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -21384,7 +22544,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -21396,8 +22556,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -21413,7 +22575,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>REVLEV_SW</objectName>
@@ -21425,6 +22587,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -21432,7 +22595,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>ROOM_SW</objectName>
@@ -21444,6 +22609,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -21451,7 +22617,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>HF_SW</objectName>
@@ -21463,6 +22631,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -21470,7 +22639,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -21482,9 +22653,11 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Snap Morph
 </label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -21500,7 +22673,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>keyb_SW</objectName>
@@ -21512,6 +22685,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -21519,7 +22693,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>direction</objectName>
@@ -21531,6 +22707,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>--></name>
@@ -21556,8 +22733,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>4.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>13</fontsize>
   <precision>3</precision>
@@ -21573,7 +22752,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>seqblink</objectName>
@@ -21585,6 +22764,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>seqblink</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -21596,6 +22776,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -21607,6 +22789,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>seqran</objectName>
@@ -21618,6 +22801,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>seqran</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -21629,6 +22813,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -21640,6 +22826,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>startcont</objectName>
@@ -21651,6 +22838,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -21680,8 +22868,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Stable</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -21697,7 +22887,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -21709,8 +22899,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Transition</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -21726,7 +22918,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>midi_1</objectName>
@@ -21738,6 +22930,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -21745,7 +22938,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>MIDIVAR_2</objectName>
@@ -21757,6 +22952,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>N/A</name>
@@ -21922,6 +23118,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>N/A</name>
@@ -22087,6 +23284,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>N/A</name>
@@ -22252,6 +23450,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>N/A</name>
@@ -22417,6 +23616,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>N/A</name>
@@ -22582,6 +23782,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>N/A</name>
@@ -22747,6 +23948,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>N/A</name>
@@ -22912,6 +24114,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -22919,7 +24122,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>cc_A</objectName>
@@ -22931,6 +24136,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -22950,7 +24156,7 @@ e
   <maximum>127.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -22964,6 +24170,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -22983,7 +24190,7 @@ e
   <maximum>50.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -22997,6 +24204,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -23016,7 +24224,7 @@ e
   <maximum>50.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -23030,6 +24238,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -23049,7 +24258,7 @@ e
   <maximum>50.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -23063,6 +24272,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -23082,7 +24292,7 @@ e
   <maximum>50.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -23096,6 +24306,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -23115,7 +24326,7 @@ e
   <maximum>50.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -23129,6 +24340,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -23148,7 +24360,7 @@ e
   <maximum>50.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -23162,6 +24374,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -23181,7 +24394,7 @@ e
   <maximum>50.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -23195,6 +24408,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -23202,7 +24416,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>midi_5</objectName>
@@ -23214,6 +24430,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -23221,7 +24438,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>midi_6</objectName>
@@ -23233,6 +24452,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -23240,7 +24460,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>midi_7</objectName>
@@ -23252,6 +24474,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -23259,7 +24482,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>midi_8</objectName>
@@ -23271,6 +24496,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -23278,7 +24504,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName/>
@@ -23290,8 +24518,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Gain</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -23307,7 +24537,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName/>
@@ -23319,6 +24549,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -23326,7 +24557,9 @@ e
   <image>/</image>
   <eventLine>i919 0 0.2</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName/>
@@ -23338,6 +24571,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -23345,7 +24579,9 @@ e
   <image>/</image>
   <eventLine>i920 0 0.2</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>Lev_1_cc</objectName>
@@ -23357,17 +24593,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>Lev_1_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23379,6 +24618,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>AT1_cc</objectName>
@@ -23390,17 +24630,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>AT1_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23412,6 +24655,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>indx1_cc</objectName>
@@ -23423,17 +24667,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>indx1_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23445,6 +24692,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>ran1vel_cc</objectName>
@@ -23456,17 +24704,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>ran1vel_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23478,6 +24729,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>pad_Y1_cc</objectName>
@@ -23489,17 +24741,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>pad_Y1_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23511,6 +24766,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>ran1amp_cc</objectName>
@@ -23522,17 +24778,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>ran1amp_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23544,6 +24803,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>pad_Y2_cc</objectName>
@@ -23555,6 +24815,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>pad_Y2_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -23566,6 +24827,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23577,6 +24840,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>REVSEND2_cc</objectName>
@@ -23588,17 +24852,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>REVSEND2_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23610,6 +24877,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>pad_X1_cc</objectName>
@@ -23621,17 +24889,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>pad_X1_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23643,6 +24914,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>RE1_cc</objectName>
@@ -23654,17 +24926,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>RE1_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23676,6 +24951,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>XFADE_cc</objectName>
@@ -23687,17 +24963,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>XFADE_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23709,6 +24988,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>ran2vel_cc</objectName>
@@ -23720,17 +25000,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>ran2vel_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23742,6 +25025,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>SHAPE_cc</objectName>
@@ -23753,17 +25037,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>SHAPE_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23775,6 +25062,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>ran2amp_cc</objectName>
@@ -23786,17 +25074,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>ran2amp_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23808,6 +25099,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>Fun_1_cc</objectName>
@@ -23819,17 +25111,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>Fun_1_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23841,6 +25136,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>REVSEND1_cc</objectName>
@@ -23852,17 +25148,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>REVSEND1_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23874,6 +25173,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>rate_cc</objectName>
@@ -23885,17 +25185,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>rate_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23907,6 +25210,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>indx2_cc</objectName>
@@ -23918,17 +25222,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>indx2_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23940,6 +25247,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>dur_cc</objectName>
@@ -23951,17 +25259,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>dur_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -23973,6 +25284,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>Fun_2_cc</objectName>
@@ -23984,17 +25296,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>Fun_2_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -24006,6 +25321,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>knob154_cc</objectName>
@@ -24017,17 +25333,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>knob154_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -24039,6 +25358,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>Lev_2_cc</objectName>
@@ -24050,17 +25370,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>Lev_2_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -24072,6 +25395,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>vox_cc</objectName>
@@ -24083,17 +25407,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>vox_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -24105,6 +25432,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>MOD_max_cc</objectName>
@@ -24116,17 +25444,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>MOD_max_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -24138,6 +25469,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>CAR_min_cc</objectName>
@@ -24149,17 +25481,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>CAR_min_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -24171,6 +25506,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>over_cc</objectName>
@@ -24182,17 +25518,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>over_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -24204,6 +25543,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>MOD_min_cc</objectName>
@@ -24215,17 +25555,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>MOD_min_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -24237,6 +25580,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>pad_X2_cc</objectName>
@@ -24248,17 +25592,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>pad_X2_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -24270,6 +25617,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>CAR_max_cc</objectName>
@@ -24281,17 +25629,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>CAR_max_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -24303,6 +25654,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>band_cc</objectName>
@@ -24314,17 +25666,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>band_cc</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>1.00000000</xValue>
+  <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>255</r>
    <g>0</g>
@@ -24336,6 +25691,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>cc9_lev</objectName>
@@ -24347,6 +25703,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.78000000</value>
@@ -24365,6 +25722,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -24384,7 +25742,7 @@ e
   <maximum>99999999999999.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -24398,6 +25756,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -24413,6 +25772,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>N/A</name>
@@ -24578,6 +25938,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -24597,7 +25958,7 @@ e
   <maximum>50.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -24611,6 +25972,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -24618,7 +25980,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>cc10_lev</objectName>
@@ -24630,6 +25994,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.96700000</value>
@@ -24648,6 +26013,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -24667,7 +26033,7 @@ e
   <maximum>999999999999.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -24681,6 +26047,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
@@ -24696,6 +26063,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>N/A</name>
@@ -24861,6 +26229,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -24880,7 +26249,7 @@ e
   <maximum>50.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -24894,6 +26263,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -24901,7 +26271,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>cc10_lev</objectName>
@@ -24913,6 +26285,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -24932,7 +26305,7 @@ e
   <maximum>999999999999.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -24946,8 +26319,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>CHAN</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -24963,7 +26338,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -24975,8 +26350,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>DATA1</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -24992,7 +26369,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -25004,8 +26381,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>DATA2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -25021,7 +26400,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>midi_3</objectName>
@@ -25033,6 +26412,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -25040,7 +26420,9 @@ e
   <image>/</image>
   <eventLine/>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -25052,8 +26434,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>minSNP</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -25069,7 +26453,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -25081,8 +26465,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>maxSNP</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>8</fontsize>
   <precision>3</precision>
@@ -25098,7 +26484,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>minSNAP</objectName>
@@ -25110,6 +26496,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -25129,7 +26516,7 @@ e
   <maximum>48.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -25143,6 +26530,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -25162,7 +26550,7 @@ e
   <maximum>48.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -25176,6 +26564,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -25183,7 +26572,9 @@ e
   <image>/</image>
   <eventLine>i968 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>MSC2</objectName>
@@ -25195,6 +26586,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -25202,7 +26594,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>MSC1</objectName>
@@ -25214,6 +26608,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -25221,7 +26616,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -25233,8 +26630,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>A / S</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -25250,7 +26649,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -25262,8 +26661,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Z / X</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -25279,7 +26680,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -25291,8 +26692,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>--- KBD ---</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -25308,7 +26711,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -25320,8 +26723,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Active Oscils</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -25337,7 +26742,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>nchn</objectName>
@@ -25349,6 +26754,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>Stereo</name>
@@ -25384,8 +26790,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Channels</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -25401,7 +26809,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>_datares</objectName>
@@ -25413,6 +26821,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
     <name>16 bit</name>
@@ -25438,8 +26847,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Bit Depth</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -25455,7 +26866,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>rec_atk</objectName>
@@ -25467,13 +26878,25 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.22000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>rec_rel</objectName>
@@ -25485,13 +26908,25 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.02000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.33360000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -25503,8 +26938,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Fade In</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -25520,7 +26957,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -25532,8 +26969,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Fade Out</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -25549,7 +26988,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>rec_atk</objectName>
@@ -25561,6 +27000,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -25580,7 +27020,7 @@ e
   <maximum>1.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -25594,6 +27034,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -25613,7 +27054,7 @@ e
   <maximum>1.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -25627,6 +27068,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -25634,7 +27076,9 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -25646,8 +27090,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>RecFade</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -25663,7 +27109,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -25675,8 +27121,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Dens</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -25692,7 +27140,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>chop_dens</objectName>
@@ -25704,6 +27152,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -25723,7 +27172,7 @@ e
   <maximum>50.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -25737,9 +27186,11 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Rand
 Dens</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -25755,7 +27206,7 @@ Dens</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>rand_dens_amt</objectName>
@@ -25767,6 +27218,7 @@ Dens</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -25786,7 +27238,7 @@ Dens</label>
   <maximum>1.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -25800,9 +27252,11 @@ Dens</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Dur
 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -25818,7 +27272,7 @@ Dens</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>chop_dur</objectName>
@@ -25830,6 +27284,7 @@ Dens</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -25849,7 +27304,7 @@ Dens</label>
   <maximum>0.30000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -25863,10 +27318,12 @@ Dens</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Grain
 Win
 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -25882,7 +27339,7 @@ Win
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>grwin</objectName>
@@ -25894,6 +27351,7 @@ Win
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -25913,7 +27371,7 @@ Win
   <maximum>3.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -25927,8 +27385,10 @@ Win
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Chop/Grain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -25944,7 +27404,7 @@ Win
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>6</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -25956,8 +27416,10 @@ Win
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Mix</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -25973,7 +27435,7 @@ Win
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>MIXGRAN</objectName>
@@ -25985,6 +27447,7 @@ Win
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -26004,7 +27467,7 @@ Win
   <maximum>1.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -26018,9 +27481,11 @@ Win
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Fmod
 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -26036,7 +27501,7 @@ Win
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>fmod_range</objectName>
@@ -26048,6 +27513,7 @@ Win
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -26067,7 +27533,7 @@ Win
   <maximum>1000.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -26081,6 +27547,7 @@ Win
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.50000000</minimum>
   <maximum>50.00000000</maximum>
   <value>7.46093800</value>
@@ -26099,6 +27566,7 @@ Win
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.34375000</value>
@@ -26117,6 +27585,7 @@ Win
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.01000000</minimum>
   <maximum>0.30000000</maximum>
   <value>0.01000000</value>
@@ -26135,6 +27604,7 @@ Win
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>100.00000000</minimum>
   <maximum>1000.00000000</maximum>
   <value>226.56250000</value>
@@ -26153,6 +27623,7 @@ Win
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
   <value>0.00000000</value>
@@ -26171,6 +27642,7 @@ Win
   <visible>true</visible>
   <midichan>1</midichan>
   <midicc>29</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -26189,10 +27661,12 @@ Win
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Rev
 Send
 </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -26208,7 +27682,7 @@ Send
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>REVSEND3</objectName>
@@ -26220,6 +27694,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -26239,7 +27714,7 @@ Send
   <maximum>1.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -26253,6 +27728,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.34375000</value>
@@ -26271,6 +27747,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -26278,7 +27755,9 @@ Send
   <image>/</image>
   <eventLine>i15 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>harm_grid_cont</objectName>
@@ -26290,6 +27769,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -26297,7 +27777,9 @@ Send
   <image>/</image>
   <eventLine>i16 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>fibo_grid_cont</objectName>
@@ -26309,6 +27791,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -26316,7 +27799,9 @@ Send
   <image>/</image>
   <eventLine>i17 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>SHAPE</objectName>
@@ -26328,6 +27813,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>15</fontsize>
@@ -26361,6 +27847,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -26368,7 +27855,9 @@ Send
   <image>/</image>
   <eventLine>i21 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Stop</objectName>
@@ -26380,6 +27869,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -26387,7 +27877,9 @@ Send
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>CAR_min</objectName>
@@ -26399,6 +27891,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -26418,9 +27911,9 @@ Send
   <maximum>14.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
-  <mouseControl act="continuous"/>
+  <mouseControl act=""/>
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>CAR_max</objectName>
@@ -26432,6 +27925,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -26451,7 +27945,7 @@ Send
   <maximum>14.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -26465,6 +27959,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -26484,7 +27979,7 @@ Send
   <maximum>14.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -26498,6 +27993,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>center</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -26517,7 +28013,7 @@ Send
   <maximum>14.00000000</maximum>
   <bordermode>noborder</bordermode>
   <borderradius>3</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
@@ -26531,6 +28027,7 @@ Send
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>1.00000000</minimum>
   <maximum>14.00000000</maximum>
   <value>1.00000000</value>

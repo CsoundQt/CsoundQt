@@ -63,6 +63,8 @@ public:
 	bool autoParameterMode;
     bool tabShortcutActive;
 
+    bool highlightScore;
+
 	bool showWidgetsOnRun;
 	bool showTooltips;
     int graphUpdateRate;
@@ -98,6 +100,7 @@ public:
 	QString opcodexmldir;
 	bool opcodexmldirActive;
 	QString favoriteDir;
+    QString examplePath;
 	QString pythonDir;
 	QString pythonExecutable;
 	QString csoundExecutable;

@@ -76,6 +76,9 @@ CsoundOptions::CsoundOptions(ConfigLists *configlists) :
     numChannels = 2;
     numInputChannels = 2;
 
+    useLimiter = csoundGetVersion() >= 6160;
+    limitValue = 1.0;
+
 	useCsoundMidi = false;
 	simultaneousRun = true; // Allow running various instances (tabs) simultaneously.
     checkSyntaxOnly = false;
@@ -177,6 +180,9 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
                 opts << ("--nchnls_i=" + QString::number(numInputChannels));
             }
 
+        }
+        if (useLimiter) {
+            opts << "--limiter="+QString::number(limitValue);
         }
 	}
 	else {

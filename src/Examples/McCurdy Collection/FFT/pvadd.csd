@@ -11,7 +11,7 @@
 ;my flags on Ubuntu: -iadc -odac -b1024 -B2048 -+rtaudio=alsa -+rtmidi=null -m0
 <CsoundSynthesizer>
 <CsOptions>
---env:SADIR+=../SourceMaterials
+--env:SADIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 sr 		= 44100	;SAMPLE RATE

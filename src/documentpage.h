@@ -67,6 +67,7 @@ public:
 	void showParametersInEditor();
     void setHighlightingTheme(QString theme);
     void setParsedUDOs(QStringList udos);
+    void enableScoreSyntaxHighlighting(bool status);
     virtual QString getFullText();
 	QString getDotText();
 	QString getMacWidgetsText();
@@ -79,6 +80,7 @@ public:
 	int getViewMode();
 	QString getLiveEventsText();
 	QString wordUnderCursor();
+    QString lineUnderCursor();
 	QRect getWidgetLayoutOuterGeometry();
 	void setWidgetLayoutOuterGeometry(QRect r);
 	void setLineEnding(int lineEndingMode);
@@ -202,7 +204,7 @@ public slots:
 	void showMidiLearn(QuteWidget *widget);
 	void applyMacOptions(QStringList options);
 	void setMacOption(QString option, QString newValue);
-	void setModified(bool mod = true);
+    void setModified(bool mod = true);
 	// For Csound Engine
 	void sendCodeToEngine(QString code);
 	//Passed directly to widget layout
@@ -281,7 +283,8 @@ signals:
 	void setCurrentAudioFile(QString name);
 	void liveEventsVisible(bool);  // To change the action in the main window
 	void modified();  // Triggered whenever the children change
-	void stopSignal(); // To tell main application that running has stopped
+    void unmodified();
+    void stopSignal(); // To tell main application that running has stopped
 	void setHelpSignal(); // Propagated from view
 	void setWidgetClipboardSignal(QString text);
 	void evaluatePythonSignal(QString code);

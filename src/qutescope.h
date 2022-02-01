@@ -103,7 +103,8 @@ public:
 		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		freeze = false;
-	}
+        setStyleSheet("QGraphicsView { border-style: none; }");
+    }
 	~ScopeWidget() {}
 
 	bool freeze;

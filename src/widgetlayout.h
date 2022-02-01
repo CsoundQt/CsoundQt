@@ -80,7 +80,7 @@ public:
 	void setValue(int index, double value);
 	void setValue(int index, QString value);
 	QString getStringForChannel(QString channelName, bool *modified = 0);
-	double getValueForChannel(QString channelName, bool *modified = 0);
+    double getValueForChannel(QString channelName, bool *modified = 0, double notfound = 0.0);
 	void getMouseValues(QVector<double> *values);
 	int getMouseX();
 	int getMouseY();
@@ -369,7 +369,7 @@ private:
 
 	// Contained Widgets
 	QVector<QuteWidget *> m_widgets;
-	QVector<FrameWidget *> editWidgets;
+    QVector<FrameWidget *> editWidgets;
 	// These vectors must be used with care since they are not reentrant and will
 	// cause problems when accessed simultaneously
 	// They are pointers to widgets already in widgets vector

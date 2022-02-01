@@ -78,6 +78,11 @@ void PyQcsObject::stopAll()
 	m_qcs->stopAll();
 }
 
+void PyQcsObject::record(int index)
+{
+	m_qcs->record(true, index); // recording must be stoppend via q.stop()
+}
+
 bool PyQcsObject::opcodeExists(QString opcodeName)
 {
 	return m_qcs->m_opcodeTree->isOpcode(opcodeName);

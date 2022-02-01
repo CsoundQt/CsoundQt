@@ -1,94 +1,86 @@
-QFrame {
 
-    border: 0px;
-    border-radius: 0px;
-    padding: 0px;
+QMainWindow::separator {
+    width: 2px; 
+    height: 2px; 
 }
 
-    QTabWidget::pane  { /* The tab widget frame */
-        /* border-top: 2px solid #C2C7CB;*/
-        background: lightgray;
-    }
+QFrame {
+    border: none;
+    /*
+    border-radius: 0px;
+    padding: 0px;
+    */
+}
 
-    QTabWidget::tab-bar  {
-        /* left: 5px; */  /* move to the right by 5px */
-    }
+QMainWindow::separator:hover  {
+    background: #696969;
+}
 
-    /* Style the tab using the tab sub-control. Note that
-        it reads QTabBar _not_ QTabWidget */
-    QTabBar::tab  {
-        /* background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                    stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
-                                    stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3); */
-        /* border: 0px solid #C4C4C3;
-        border-bottom-color: #C2C7CB; */ /* same as the pane color */
-        background: darkgrey;
-        border-right: 2px solid lightgray;
-        border-top-left-radius: 0px;
-        border-top-right-radius: 0px;
-        min-width: 8ex;
-        padding: 4px;
-    }
-
-     QTabBar::tab:selected {
-      /*  background:  qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                    stop: 0 #fafafa, stop: 0.4 #f4f4f4,
-                                    stop: 0.5 #e7e7e7, stop: 1.0 #fafafa); */
-          background: lightgray;
-    }
-
-    QTabBar::tab:selected  {
-        /*border-color: #9B9B9B;
-        border-bottom-color: #C2C7CB;*/ /* same as pane color */
-    }
-
-    QTabBar::tab:!selected  {
-        /* margin-top: 2px; */ /* make non-selected tabs look smaller */
-    }
-
-    /* make use of negative margins for overlapping tabs */
-    QTabBar::tab:selected  {
-        /* expand/overlap to the left and right by 4px */
-        /* margin-left: -4px;
-        margin-right: -4px; */
-    }
-
-    QTabBar::tab:first:selected  {
-        margin-left: 0; /* the first selected tab has nothing to overlap with on the left */
-    }
-
-    QTabBar::tab:last:selected  {
-        margin-right: 0; /* the last selected tab has nothing to overlap with on the right */
-    }
-
-    QTabBar::tab:only-one  {
-        margin: 0; /* if there is only one tab, we don't want overlapping margins */
-    }
+QDockWidget::title  {
+    text-align: center;
+    padding-left: 0px;
+}
 
 
-QDockWidget  {
-      /*  border: 1px solid lightgray;
-        titlebar-close-icon: url(close.png);
-        titlebar-normal-icon: url(undock.png); */
-    }
+QTabWidget::pane  { 
+    /* The tab widget frame */
+}
 
-    QDockWidget::title  {
-        text-align: left; /* align the text to the left */
-        background: darkgrey;
-        padding-left: 5px;
-    }
+QTabWidget::tab-bar  {
+}
 
- /*   QDockWidget::close-button, QDockWidget::float-button  {
-        border: 1px solid transparent;
-        background: darkgray;
-        padding: 0px;
-    }
+/* Style the tab using the tab sub-control. Note that
+    it reads QTabBar _not_ QTabWidget */
 
-    QDockWidget::close-button:hover, QDockWidget::float-button:hover  {
-        background: gray;
-    }
+QTabBar::tab  {
+/*    
+    background: darkgrey;
+    border-right: 2px solid lightgray;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    min-width: 8ex;
+    padding: 4px;
+*/
+}
 
-    QDockWidget::close-button:pressed, QDockWidget::float-button:pressed  {
-        padding: 1px -1px -1px 1px;
-    }
+QTabBar::tab:selected {
+}
+
+QTabBar::tab:selected  {
+    /*border-color: #9B9B9B;
+    border-bottom-color: #C2C7CB;*/ /* same as pane color */
+}
+
+QTabBar::tab:!selected  {
+    /* margin-top: 2px; */ /* make non-selected tabs look smaller */
+}
+
+/* make use of negative margins for overlapping tabs */
+QTabBar::tab:selected  {
+    /* expand/overlap to the left and right by 4px */
+    /* margin-left: -4px;
+    margin-right: -4px; */
+}
+
+
+/* QTextEdit --------------------------------------------------------------
+
+https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-specific-widgets
+
+--------------------------------------------------------------------------- */
+
+QTextEdit {
+    background-color: #19232D;
+    color: #E0E1E3;
+}
+
+/*
+QTextEdit:focus {
+  border: 1px solid #1A72BB;
+}
+
+QTextEdit:selected {
+  background: #346792;
+  color: #455364;
+}
 */

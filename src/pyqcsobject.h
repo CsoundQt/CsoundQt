@@ -64,6 +64,8 @@ public slots:
 	void pause(int index = -1);
 	void stop(int index = -1);
 	void stopAll();
+	void record(int index = -1);
+	//void recordAll();
 	void setCsChannel(QString channel, double value, int index = -1); // sends value directly to Csound channel
 	void setCsChannel(QString channel, QString value, int index = -1);
 	double getCsChannel(QString channel, int index = -1);

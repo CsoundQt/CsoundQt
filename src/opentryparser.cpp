@@ -22,75 +22,87 @@
 
 #include "opentryparser.h"
 #include "types.h"
+#include "algorithm"
 
 #include <QFile>
 
+void OpEntryParser::parseOpcodesXml(QString opcodeFile) {
+    QDomDocument m_doc("opcodes");
+    QFile file(opcodeFile);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "OpEntryParser::OpEntryParser could not find opcode file:" << opcodeFile;
+        return;
+    }
+    if (!m_doc.setContent(&file)) {
+        qDebug() << "OpEntryParser::OpEntryParser set content";
+        file.close();
+        return;
+    }
+    file.close();
+    excludedOpcodes << "|" << "||" << "^" << "+" << "*" << "-" << "/";
+    QDomElement docElem = m_doc.documentElement();
+    QList<Opcode> opcodesInCategoryList;
+
+    QDomElement cat = docElem.firstChildElement("category");
+    while(!cat.isNull()) {
+        QString catName = cat.attribute("name", "Miscellaneous");
+        opcodesInCategoryList.clear();
+        QDomElement opcode = cat.firstChildElement("opcode");
+        while(!opcode.isNull()) {
+            QDomElement desc = opcode.firstChildElement("desc");
+            QString description = desc.text();
+            QDomElement synop = opcode.firstChildElement("synopsis");
+            while(!synop.isNull()) {
+                Opcode op;
+                op.desc = description;
+                QDomElement s = synop.toElement();
+                QDomNode node = s.firstChild();
+                QDomElement elem = node.toElement();
+                if (elem.tagName()=="opcodename") {
+                    op.opcodeName = elem.text().simplified();
+                    op.inArgs = node.nextSibling().toText().data().simplified();
+                }
+                else {
+                    op.outArgs = node.toText().data().simplified();
+                    node = node.nextSibling();
+                    op.opcodeName = node.toElement().text().simplified();
+                    node = node.nextSibling();
+                    if (!node.isNull())
+                        op.inArgs = node.toText().data().simplified();
+                }
+                // check if several parenthesis ie description added to inArgs like "(MidiNoteNumber)  (init- or control-rate args only)"
+                // remove, if existing
+                if (op.inArgs.count("(")>1) {
+                    QString inArgs = op.inArgs;
+                    int lastIndex = inArgs.lastIndexOf("(");
+                    if (lastIndex>0) {
+                        inArgs = inArgs.left(lastIndex-1);
+                        op.inArgs = inArgs;
+                    }
+                }
+                if (op.opcodeName != "" && excludedOpcodes.count(op.opcodeName) == 0
+                        && catName !="Utilities") {
+                    addOpcode(op);
+                    opcodesInCategoryList << op;
+
+                }
+                synop = synop.nextSiblingElement("synopsis");
+            }
+            opcode = opcode.nextSiblingElement("opcode");
+        }
+        QPair<QString, QList<Opcode> > newCategory(catName, opcodesInCategoryList);
+        opcodeListCategory.append(opcodesInCategoryList);
+        categoryList.append(catName);
+        opcodeCategoryList.append(newCategory);
+        cat = cat.nextSiblingElement("category");
+    }
+}
 
 OpEntryParser::OpEntryParser(QString opcodeFile)
 	: m_opcodeFile(opcodeFile)
 {
     m_udosMap = nullptr;
-	QDomDocument m_doc("opcodes");
-	QFile file(m_opcodeFile);
-	if (!file.open(QIODevice::ReadOnly)) {
-		qDebug() << "OpEntryParser::OpEntryParser could not find opcode file:" << opcodeFile;
-		return;
-	}
-	if (!m_doc.setContent(&file)) {
-		qDebug() << "OpEntryParser::OpEntryParser set content";
-		file.close();
-		return;
-	}
-	file.close();
-	excludedOpcodes << "|" << "||" << "^" << "+" << "*" << "-" << "/";
-	//      << "instr" << "endin" << "opcode" << "endop"
-	//      << "sr" << "kr" << "ksmps" << "nchnls" << "0dbfs";
-	QDomElement docElem = m_doc.documentElement();
-	QList<Opcode> opcodesInCategoryList;
-
-	QDomElement cat = docElem.firstChildElement("category");
-	while(!cat.isNull()) {
-		QString catName = cat.attribute("name", "Miscellaneous");
-		opcodesInCategoryList.clear();
-		QDomElement opcode = cat.firstChildElement("opcode");
-		while(!opcode.isNull()) {
-			QDomElement desc = opcode.firstChildElement("desc");
-			QString description = desc.text();
-			QDomElement synop = opcode.firstChildElement("synopsis");
-			while(!synop.isNull()) {
-				Opcode op;
-				op.desc = description;
-				QDomElement s = synop.toElement();
-				QDomNode node = s.firstChild();
-				QDomElement elem = node.toElement();
-				if (elem.tagName()=="opcodename") {
-					op.opcodeName = elem.text().simplified();
-					op.inArgs = node.nextSibling().toText().data();
-				}
-				else {
-					op.outArgs = node.toText().data().simplified();
-					node = node.nextSibling();
-					op.opcodeName = node.toElement().text().simplified();
-					node = node.nextSibling();
-					if (!node.isNull())
-						op.inArgs = node.toText().data().simplified();
-				}
-				if (op.opcodeName != "" && excludedOpcodes.count(op.opcodeName) == 0
-						&& catName !="Utilities") {
-					addOpcode(op);
-					opcodesInCategoryList << op;
-				}
-				synop = synop.nextSiblingElement("synopsis");
-			}
-			opcode = opcode.nextSiblingElement("opcode");
-		}
-		QPair<QString, QList<Opcode> > newCategory(catName, opcodesInCategoryList);
-		opcodeListCategory.append(opcodesInCategoryList);
-		categoryList.append(catName);
-		// 	qDebug() << "Category: " << categoryList.last();
-		opcodeCategoryList.append(newCategory);
-		cat = cat.nextSiblingElement("category");
-	}
+    parseOpcodesXml(opcodeFile);
 	addExtraOpcodes();
 }
 
@@ -100,11 +112,7 @@ OpEntryParser::~OpEntryParser()
 
 void OpEntryParser::addExtraOpcodes()
 {
-    Opcode opcode;
-	opcode.outArgs = "";
-	opcode.opcodeName = "then";
-	opcode.inArgs ="";
-	addOpcode(opcode);
+    addOpcode(Opcode("then"));
 
     addFlag("use-system-sr", "Use the samplerate defined by the realtime audio backend");
     addFlag("omacro", "--omacro:XXX=YYY set orchestra macro XXX to value YYY");
@@ -112,11 +120,16 @@ void OpEntryParser::addExtraOpcodes()
 
 }
 
+void OpEntryParser::sortOpcodes()
+{
+    std::sort(opcodeList.begin(), opcodeList.end(),
+              [](const Opcode &a, const Opcode &b) -> bool { return a.opcodeName < b.opcodeName; });
+}
+
 QStringList OpEntryParser::opcodeNameList()
 {
 	QStringList list;
-	//   qDebug("OpEntryParser::opcodeNameList() opcodeList.size() = %i",opcodeList.size());
-	for (int i = 0; i<opcodeList.size();i++)  {
+    for (int i = 0; i<opcodeList.size();i++)  {
 		list.append(opcodeList[i].opcodeName);
 	}
 	return list;
@@ -124,34 +137,30 @@ QStringList OpEntryParser::opcodeNameList()
 
 void OpEntryParser::addOpcode(Opcode opcode)
 {
-	int i = 0;
-	int size = opcodeList.size();
-	while (i<size && opcodeList[i].opcodeName < opcode.opcodeName)
-		i++;
-	opcodeList.insert(i, opcode);
+    opcodeList.append(opcode);
+    opcodeMap.insert(opcode.opcodeName, opcode);
 }
 
 void OpEntryParser::addFlag(QString flag, QString desc) {
-    Opcode opcode;
+    Opcode opcode(flag);
     opcode.desc = desc;
-    opcode.opcodeName = flag;
-    opcode.inArgs = "";
-    opcode.outArgs = "";
     opcode.isFlag = 1;
     opcodeList.append(opcode);
 }
 
+
+bool OpEntryParser::isKnownOpcode(QString name) {
+    return opcodeMap.contains(name) || m_udosMap->contains(name);
+}
+
 Opcode OpEntryParser::findOpcode(QString opcodeName) {
-    for (int i = 0; i < opcodeList.size(); i++) {
-        if (opcodeList[i].opcodeName == opcodeName) {
-            return opcodeList[i];
-        }
-    }
+    if(opcodeMap.contains(opcodeName))
+        return opcodeMap.value(opcodeName);
     if(m_udosMap->contains(opcodeName)) {
         return m_udosMap->value(opcodeName);
     }
     qDebug() << "OpEntryParser::findOpcode: opcode " << opcodeName << "not found";
-    return Opcode();
+    return Opcode("");
 }
 
 QString opcodeSyntax(Opcode opc) {
@@ -205,8 +214,7 @@ QList< QPair<QString, QList<Opcode> > > OpEntryParser::getOpcodesByCategory()
 
 int OpEntryParser::getCategoryCount()
 {
-	// qDebug("OpEntryParser::getCategoryCount()");
-	return categoryList.size();
+    return categoryList.size();
 }
 
 QString OpEntryParser::getCategory(int index)
@@ -261,18 +269,17 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
             return false;
     }
     QString inArgs = opcode.inArgs;
-    // QString inArgs = opcodeList[idx].inArgs;
     QString inArgsOpt = "";
     if (inArgs.contains("["))
         inArgsOpt = inArgs.mid(inArgs.indexOf("["));
     inArgs.remove(inArgsOpt);
-    QStringList args = inArgs.split(QRegExp("[,\\\"]+"), QString::SkipEmptyParts);
+    QStringList args = inArgs.split(QRegExp("[,\\\"]+"), SKIP_EMPTY_PARTS);
     for (int count = 0; count < args.size(); count ++) {
         args[count] = args[count].trimmed();
         if (args[count] == "")
             args.removeAt(count);
     }
-    QStringList argsOpt = inArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]+"), QString::SkipEmptyParts);
+    QStringList argsOpt = inArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]+"), SKIP_EMPTY_PARTS);
     for (int j = 0; j < inputs.size(); j++) {
         if (j < args.size()) {
             inputs[j].argName = args[j];
@@ -289,27 +296,26 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
                     inputs[j].argName = "";
                 }
                 inputs[j].optional = true;
-                //             qDebug() << "OpEntryParser::getOpcodeArgNames " <<  inputs[j].argName ;
             }
             else {
                 qDebug("OpEntryParser::getOpcodeArgNames: Error too many inargs");
             }
         }
     }
-    // QString outArgs = opcodeList[i].outArgs;
     QString outArgs = opcode.outArgs;
     QString outArgsOpt = "";
     if (outArgs.contains("["))
         outArgsOpt = outArgs.mid(outArgs.indexOf("["));
     outArgs.remove(outArgsOpt);
-    args = outArgs.split(QRegExp("[,\\s]+"), QString::SkipEmptyParts);
-    argsOpt = outArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]"), QString::SkipEmptyParts);
+    args = outArgs.split(QRegExp("[,\\s]+"), SKIP_EMPTY_PARTS);
+    argsOpt = outArgsOpt.split(QRegExp("[,\\\\\\s\\[\\]]"), SKIP_EMPTY_PARTS);
     for (int j = 0; j < outputs.size(); j++) {
         if (j < args.size()) {
             outputs[j].argName = args[j];
             outputs[j].optional = false;
         }
-        else { //optional parameter
+        else {
+            //optional parameter
             int index = j - args.size();
             if (index < inArgsOpt.size()) {
                 if (index < argsOpt.size()) {

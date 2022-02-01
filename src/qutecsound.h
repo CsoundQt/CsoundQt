@@ -35,6 +35,8 @@
 #include "types.h"
 #include "configlists.h"
 
+#include "risset.h"
+
 #ifdef MACOSX_PRE_SNOW
 // Needed to be able to grab menus back from FLTK
 #include <Carbon/Carbon.h>
@@ -98,7 +100,8 @@ public:
 	void setPresetsText(QString text, int index = -1);
 	void setOptionsText(QString text, int index = -1);
 	int getDocument(QString name = ""); // Returns document index. -1 if not current open
-	QString getSelectedText(int index = -1, int section = 0);
+    QString getTheme();
+    QString getSelectedText(int index = -1, int section = 0);
 	QString getCsd(int index);
 	QString getFullText(int index);
 	QString getOrc(int index);
@@ -142,6 +145,7 @@ public:
 	// Engine
 	CsoundEngine *getEngine(int index = -1);
 	OpEntryParser *m_opcodeTree;
+    Risset *risset;
 	void stkCheck();
 	// localServer
 	bool startServer();
@@ -164,6 +168,7 @@ public slots:
 	void perfEnded();
 	void render();
 	void record(bool);
+	void record(bool, int index);
 	void sendEvent(QString eventLine, double delay = 0);
 	void sendEvent(int index, QString line, double delay = 0);
 	void changePage(int index);
@@ -229,6 +234,7 @@ private slots:
 	void openExternalPlayer();
 	void setEditorFocus();
 	void setHelpEntry();
+    void helpForEntry(QString text, bool external=false);
     void setFullScreen(bool full);
     void checkFullScreen();
     void setEditorFullScreen(bool full);
@@ -252,16 +258,16 @@ private slots:
 	void openFLOSSManual();
 	void openQuickRef();
 	void openOnlineDocumentation();
+	void showManualOnline();
 	void resetPreferences();
 	void reportBug();
-	void requestFeature();
-	void chat();
-	void openShortcutDialog();
+    void reportCsoundBug();
+    void openShortcutDialog();
 	void downloadManual();
 	void about();
 	void donate();
-	void documentWasModified();
-	void configure();
+    void documentWasModified(bool status=true);
+    void configure();
 	void applySettings();
 	void setCurrentOptionsForPage(DocumentPage *p);
 	void runUtility(QString flags);
@@ -313,6 +319,8 @@ private:
 	void connectActions();
 	QString getExamplePath(QString dir);
 	void createMenus();
+	void fillExampleMenu();
+    void fillExampleSubmenu(QDir dir, QMenu *m, int depth);
 	void fillFileMenu();
 	void fillFavoriteMenu();
 	void fillFavoriteSubMenu(QDir dir, QMenu *m, int depth);
@@ -326,8 +334,8 @@ private:
 	void writeSettings(QStringList openFiles=QStringList(), int lastIndex = 0);
 	void clearSettings();
     void setToolbarIconSize(int size);
-	int execute(QString executable, QString options);
-	//    bool saveCurrent();
+    int execute(QString executable, QString options);
+    //    bool saveCurrent();
 	bool makeNewPage(QString fileName, QString text);
 	bool loadCompanionFile(const QString &fileName);
 	void setCurrentFile(const QString &fileName);
@@ -343,7 +351,9 @@ private:
 	void openLogFile();
 	void showNewFormatWarning();
 	void setupEnvironment();
-	ConfigLists m_configlists;
+    void openHtmlHelp(QString fileName, QString entry, bool external);
+
+    ConfigLists m_configlists;
 	QTabWidget *documentTabs;
 	GraphicWindow *m_graphic;  // To display the code graph images
 	QVector<DocumentPage *> documentPages;
@@ -435,6 +445,7 @@ private:
 	QAction *showHelpAct;
     QAction *raiseHelpAct;
 	QAction *showManualAct;
+	QAction *showManualOnlineAct;
 	QAction *downloadManualAct;
 	QAction *showGenAct;
 	QAction *showOverviewAct;
@@ -494,9 +505,8 @@ private:
 	//    QAction *aboutQtAct;
 	QAction *resetPreferencesAct;
 	QAction *reportBugAct;
-	QAction *requestFeatureAct;
-	QAction *chatAct;
-	QAction *lineNumbersAct;
+    QAction *reportCsoundBugAct;
+    QAction *lineNumbersAct;
 	QAction *parameterModeAct;
 //	QAction *showParametersAct;
     QSignalMapper *focusMapper;
@@ -524,6 +534,17 @@ private:
 #endif
     QByteArray m_preFullScreenState;
     QString m_fullScreenComponent;
+    QDir m_rissetDataPath;
+    bool isDarkPalette;
+    QStringList m_longOptions = {
+        "--syntax-check-only", "--control-rate=", "--messagelevel=",
+        "--env:", "--dither", "--sched", "--omacro:", "--smacro:",
+        "--verbose", "--sample-accurate", "--realtime",
+        "--nchnls=", "--nchnls_i=", "--sinesize", "--daemon",
+        "--port=", "--use-system-sr", "--ksmps=",
+        "--limiter", "--udp-echo", "--opcode-dir=", "-+rtmidi", "-+rtaudio",
+        "--format"
+    };
 };
 
 class FileOpenEater : public QObject
@@ -535,7 +556,7 @@ public:
 		m_mw = mainWindow;
 		while (!fileEventQueue.isEmpty()) {
 			QString fileName = fileEventQueue.takeFirst();
-			qDebug() << "FileOpenEater::setMainWindow  opening file " << fileName << endl;
+            qDebug() << "FileOpenEater::setMainWindow  opening file" << fileName << ENDL; // use macro for Qt version compatibility
 			m_mw->loadFileFromSystem(fileName);
 		}
 	}

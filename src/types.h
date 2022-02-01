@@ -29,7 +29,7 @@
 #include <csound.h>
 
 
-#define QCS_VERSION "1.0.0-beta2"
+#define QCS_VERSION "1.1.0-rc2"
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_DEFAULT_TIME 50
@@ -100,6 +100,16 @@
 
 #define QDEBUG qDebug() << __FUNCTION__ << ":"
 
+// macros for compatibility problems befor and after Qt 5.14
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+    #define ENDL Qt::endl
+    #define SKIP_EMPTY_PARTS Qt::SkipEmptyParts
+#else
+    #define ENDL endl
+    #define SKIP_EMPTY_PARTS QString::SkipEmptyParts
+#endif
+
 
 enum viewMode {
 	VIEW_CSD,
@@ -109,11 +119,15 @@ enum viewMode {
 class Opcode
 {
 public:
-	QString outArgs;
-	QString opcodeName;
-	QString inArgs;
-	QString desc;
+    QString opcodeName;
+    QString outArgs;
+    QString inArgs;
+    QString desc;
     int isFlag;
+
+    Opcode() {}
+    Opcode(QString name, QString outs="", QString ins=""): opcodeName(name), outArgs(outs), inArgs(ins) {}
+
 };
 
 class RingBuffer

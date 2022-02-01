@@ -72,6 +72,7 @@ private:
 	QLineEdit *filenameLineEdit;
 	QLineEdit *line;
     QSpinBox  *fontSizeSpinBox;
+	QCheckBox * useMomentaryMidiButtonCheckBox;
 
 	QIcon icon;
     QIcon onIcon;

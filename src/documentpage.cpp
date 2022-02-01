@@ -111,7 +111,12 @@ int DocumentPage::setTextString(QString &text)
 		m_view->setModified(false);
 		return ret;
 	}
+    auto t0 = std::chrono::high_resolution_clock::now();
 	int baseRet = parseAndRemoveWidgetText(text);
+    auto t1 = std::chrono::high_resolution_clock::now();
+    auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
+    QDEBUG << "parseAndRemoveWidgetText:" << diff << "ms";
+    /*
     if (text.contains("<MacOptions>") && text.contains("</MacOptions>")) {
 		QString options = text.right(text.size()-text.indexOf("<MacOptions>"));
 		options.resize(options.indexOf("</MacOptions>") + 13);
@@ -155,7 +160,7 @@ int DocumentPage::setTextString(QString &text)
 	else {
 		m_macGUI = "";
 	}
-	if (baseRet != 1) {  // Use the old options only if the new ones are not present
+    if (baseRet != 1) {  // Use the old options only if the new ones are not present
         // This here is for compatibility with MacCsound (copy output filename from
         // <MacOptions> to <CsOptions>)
 		QString optionsText = getMacOptions("Options:");
@@ -184,6 +189,7 @@ int DocumentPage::setTextString(QString &text)
 		applyMacOptions(m_macOptions);
 		qDebug("<MacOptions> loaded.");
 	}
+    */
 	// Load Live Event Panels ------------------------
     while (text.indexOf("<EventPanel") != -1
            && text.indexOf("<EventPanel") < text.indexOf("</EventPanel>")) {
@@ -229,7 +235,14 @@ int DocumentPage::setTextString(QString &text)
     //  }
     // This must be last as some of the text has been removed along the way
     m_view->setFullText(text,true);
-	m_view->setModified(false);
+    m_view->setModified(false);
+    // This ensures that modifications triggered later by the maineditor
+    // do not set the modified status of the page when a file is first
+    // loaded
+    auto t2 = std::chrono::high_resolution_clock::now();
+    QDEBUG << "finished parsing in (ms)" <<
+              std::chrono::duration<double, std::milli>(t2-t1).count();
+    // QTimer::singleShot(1000, this, [this](){this->setModified(false);});
 	return ret;
 }
 
@@ -413,6 +426,10 @@ QString DocumentPage::getLiveEventsText()
 QString DocumentPage::wordUnderCursor()
 {
 	return m_view->wordUnderCursor();
+}
+
+QString DocumentPage::lineUnderCursor() {
+    return m_view->lineUnderCursor();
 }
 
 QRect DocumentPage::getWidgetLayoutOuterGeometry()
@@ -672,6 +689,7 @@ void DocumentPage::setModified(bool mod)
         emit modified();
 	}
 	else {
+        emit unmodified();
 		m_view->setModified(false);
 		foreach (WidgetLayout  *wl, m_widgetLayouts) {
 			wl->setModified(false);
@@ -1620,8 +1638,9 @@ void DocumentPage::deleteLiveEventPanel(LiveEventFrame *frame)
 
 void DocumentPage::textChanged()
 {
-    setModified(true);
+    // setModified(true);
     m_parseUdosNeeded = true;
+    // This signal triggers an inspector update
 	emit currentTextUpdated();
 }
 
@@ -1703,7 +1722,14 @@ void DocumentPage::setHighlightingTheme(QString theme) {
     auto defaultFormat = m_view->getDefaultFormat();
     this->setEditorColors(defaultFormat.foreground().color(),
                           defaultFormat.background().color());
+    /*
+    m_console->setColors(defaultFormat.foreground().color(),
+                         defaultFormat.background().color());
+    */
+}
 
+void DocumentPage::enableScoreSyntaxHighlighting(bool status) {
+    m_view->enableScoreSyntaxHighlighting(status);
 }
 
 void DocumentPage::setParsedUDOs(QStringList udos) {
@@ -1724,7 +1750,6 @@ void DocumentPage::parseUdos(bool force) {
     }
     auto highlighter = m_view->getHighlighter();
     highlighter->setUDOs(m_parsedUdos);
-    // qDebug() << "Parsed UDOs in " << mytimer.elapsed() << "ms";
     if(numUdos != m_parsedUdos.size()) {
         highlighter->rehighlight();
     }

@@ -28,7 +28,7 @@
 Options::Options(ConfigLists *configlists) :
     CsoundOptions(configlists)
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
     font = "Menlo";
 #elif defined(Q_OS_WIN)
     font = "Consolas";
@@ -47,11 +47,11 @@ Options::Options(ConfigLists *configlists) :
 
     tabWidth = 4;
     colorVariables = true;
-    highlightingTheme = "classic";
+    highlightingTheme = "light";
     autoPlay = true;
     autoJoin = false;
 	midiCcToCurrentPageOnly = false;
-    saveChanges = false;
+    saveChanges = true;
     askIfTemporary = false;
     rememberFile = true;
     saveWidgets = true;
@@ -91,9 +91,10 @@ Options::Options(ConfigLists *configlists) :
     opcodexmldir = "";
     opcodexmldirActive = false;
     favoriteDir = "";
+    examplePath = "";
     pythonDir = "";
-    pythonExecutable = "python";
-#ifdef Q_OS_MAC
+    pythonExecutable = "python3";
+#ifdef Q_OS_MACOS
     csoundExecutable = "/usr/local/bin/csound ";
 #else
     csoundExecutable = "csound ";

@@ -1,0 +1,1 @@
+Examples/CsoundQt/Useful/AudioMidiTest.csd

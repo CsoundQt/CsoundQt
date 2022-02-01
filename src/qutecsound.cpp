@@ -41,6 +41,7 @@
 #include "midilearndialog.h"
 #include "livecodeeditor.h"
 #include "csoundhtmlview.h"
+#include "risset.h"
 #include <thread>
 
 
@@ -73,7 +74,7 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 
 #define MAX_THREAD_COUNT 32 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
 
-#define INSPECTOR_UPDATE_PERIOD_MS 2000
+#define INSPECTOR_UPDATE_PERIOD_MS 2500
 
 
 CsoundQt::CsoundQt(QStringList fileNames)
@@ -110,8 +111,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     helpPanel = new DockHelp(this);
     helpPanel->setAllowedAreas(Qt::RightDockWidgetArea |
-                              Qt::BottomDockWidgetArea |
-                              Qt::LeftDockWidgetArea);
+                               Qt::BottomDockWidgetArea |
+                               Qt::LeftDockWidgetArea);
     helpPanel->setObjectName("helpPanel");
 
     // QLabel *helpTitle = new QLabel("Help", helpPanel);
@@ -155,8 +156,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     addDockWidget(Qt::RightDockWidgetArea, m_console);
 
     m_inspector = new Inspector(this);
-    m_inspector->parseText(QString());
     m_inspector->setObjectName("Inspector");
+    m_inspector->parseText(QString());
     addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
     m_inspector->hide();
 
@@ -196,6 +197,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     QSettings settings("csound", "qutecsound");
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "breeze").toString();
+    helpPanel->setIconTheme(m_options->theme);
+
     if(settings.contains("windowState")) {
         restoreState(settings.value("windowState").toByteArray());
     }
@@ -236,12 +239,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     focusMapper = new QSignalMapper(this);
     createActions(); // Must be before readSettings: this sets default shortcuts
-    createMenus();
-    // TODO: take care that the position is stored when toolbars or panels are
-    // moved/resized. maybe.
     createStatusBar();
     createToolBars();
     readSettings();
+    createMenus(); // creating menu must be after readSettings. probably create Status- and toolbars, too?
     this->setToolbarIconSize(m_options->toolbarIconSize);
 
     // this section was above before, check that it does not create problems...
@@ -309,7 +310,26 @@ CsoundQt::CsoundQt(QStringList fileNames)
     fillFileMenu();     // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
     fillScriptsMenu();  // Must be placed after readSettings to know directory
+    risset = new Risset(m_options->pythonExecutable);
+    /*
+#if defined(Q_OS_LINUX)
+    m_rissetDataPath.setPath(QDir::home().filePath(".local/share/risset"));
+#elif defined(Q_OS_MACOS)
+    m_rissetDataPath.setPath(QDir::home().filePath("Library/Application Support/risset"));
+#elif defined(Q_OS_WIN)
+    m_rissetDataPath.setPath(QDir(QProcessEnvironment::systemEnvironment().value("LOCALAPPDATA")).filePath("risset"));
+#endif
+    */
     m_opcodeTree = new OpEntryParser(":/opcodes.xml");
+    QString rissetOpcodesXml = risset->rissetOpcodesXml;
+    // QString rissetOpcodesXml = m_rissetDataPath.filePath("opcodes.xml");
+    if(QFile::exists(rissetOpcodesXml)) {
+        qDebug() << "Parsing risset's opcodes.xml:" << rissetOpcodesXml;
+        m_opcodeTree->parseOpcodesXml(rissetOpcodesXml);
+        m_opcodeTree->sortOpcodes();
+    } else {
+        qDebug() << "Risset's opcodes.xml not found: " << rissetOpcodesXml;
+    }
     m_opcodeTree->setUdos(m_inspector->getUdosMap());
     LiveCodeEditor *liveeditor = new LiveCodeEditor(m_scratchPad, m_opcodeTree);
     liveeditor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -355,7 +375,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
 #ifdef Q_OS_MACOS
      possibleDirectories <<  initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/") <<  "/Library/Frameworks/CsoundLib64.framework/Resources/Manual/";
-#endif    
+#endif
      if (m_options->csdocdir.isEmpty() ||
             !QFile::exists(m_options->csdocdir+"/index.html") ) {
         foreach (QString dir, possibleDirectories) {
@@ -396,12 +416,26 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // This is a bad idea, breaks lots of subtle things, like background color
     // on files loaded from command line
 #ifndef  Q_OS_MACOS // a workaround for showing close buttons on close NB! disable later
+    auto palette = qApp->palette();
+    // the palette is dark (dark "theme") if the background is darker than the text
+    isDarkPalette = palette.text().color().lightness() > palette.window().color().lightness();
+
     auto originalStyleSheet = qApp->styleSheet();
-    QFile file(":/appstyle-white.css");
+    QFile file;
+    if (isDarkPalette) {
+        QDEBUG << "Using dark palette";
+        file.setFileName(":/appstyle-dark.css");
+    }
+    else {
+        QDEBUG << "Using light palette";
+        file.setFileName(":/appstyle-white.css");
+    }
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
-    originalStyleSheet += styleSheet;
-    qApp->setStyleSheet(originalStyleSheet);
+    // originalStyleSheet += styleSheet;
+    // qApp->setStyleSheet(originalStyleSheet);
+    qApp->setStyleSheet(styleSheet);
+
 #endif
 
     m_closing = false;
@@ -735,7 +769,7 @@ void CsoundQt::newFile()
     documentPages[curPage]->loadTextString(m_options->csdTemplate);
     documentPages[curPage]->setFileName("");
     setWindowModified(false);
-    documentTabs->setTabIcon(curPage, modIcon);
+    // documentTabs->setTabIcon(curPage, modIcon);
     documentTabs->setTabText(curPage, "default.csd");
     //   documentPages[curPage]->setTabStopWidth(m_options->tabWidth);
     connectActions();
@@ -1045,7 +1079,7 @@ void CsoundQt::duplicate()
 void CsoundQt::testAudioSetup()
 {
     qDebug() << "CsoundQt::testAudioSetup";
-    loadFile(":/examples/Useful/AudioMidiTest.csd");
+    loadFile(":/AudioMidiTest.csd");
     widgetPanel->setVisible(true);
     widgetPanel->setFocus();
     play();
@@ -1879,7 +1913,7 @@ void CsoundQt::play(bool realtime, int index)
         return;
     }
     curPage = index;
-    auto page = documentPages[curPage];	
+    auto page = documentPages[curPage];
 
     if (page->getFileName().isEmpty()) {
         int answer;
@@ -1968,7 +2002,7 @@ void CsoundQt::play(bool realtime, int index)
     QString runFileName1, runFileName2;
     QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
     runFileName1 = fileName;
-    if(fileName.startsWith(":/examples/", Qt::CaseInsensitive) || !m_options->saveChanges) {
+    if(fileName.startsWith(":/", Qt::CaseInsensitive) || !m_options->saveChanges) {
         QDEBUG << "***** Using temporary file for filename" << fileName;
         QString tmpFileName = QDir::tempPath();
         if (!tmpFileName.endsWith("/") && !tmpFileName.endsWith("\\")) {
@@ -2044,7 +2078,7 @@ void CsoundQt::play(bool realtime, int index)
     } else if (ret == 0) {
 		// No problem:
 		// set playing icon on tab
-		documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/gtk-media-play-ltr.png").arg(m_options->theme )));
+        documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme )));
 
 		// enable widgets
         if(m_options->checkSyntaxOnly) {
@@ -2157,9 +2191,9 @@ void CsoundQt::pause(int index)
     if (docIndex >= 0 && docIndex < documentPages.size()) {
         documentPages[docIndex]->pause();
 		if (documentPages[docIndex]->getEngine()->isPaused() ) {
-			documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/gtk-media-pause.png").arg(m_options->theme )));
+            documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/media-pause.png").arg(m_options->theme )));
 		} else {
-			documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/gtk-media-play-ltr.png").arg(m_options->theme )));
+            documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme )));
 		}
     }
 }
@@ -2194,6 +2228,7 @@ void CsoundQt::stop(int index)
 #endif
 
     }
+    documentTabs->setTabIcon(docIndex, QIcon());
     markStopped();
 }
 
@@ -2220,6 +2255,13 @@ void CsoundQt::stopAllOthers()
 
 void CsoundQt::markStopped()
 {
+    DocumentPage * senderPage = dynamic_cast<DocumentPage *>(sender());
+    if (senderPage) {
+        int index = documentPages.indexOf(senderPage);
+        //qDebug() << "Stop was sent from: " << index;
+        documentTabs->setTabIcon(index, QIcon());
+    }
+    documentTabs->setTabIcon(curPage, QIcon());
     runAct->setChecked(false);
     recAct->setChecked(false);
 #ifdef QCS_DEBUGGER
@@ -2232,21 +2274,26 @@ void CsoundQt::perfEnded()
     runAct->setChecked(false);
 }
 
-void CsoundQt::record(bool rec)
+void CsoundQt::record(bool rec) {
+	record(rec, curPage);
+}
+
+void CsoundQt::record(bool rec, int index=-1)
 {
-    if (rec) {
-        if (!documentPages[curPage]->isRunning()) {
+	if (index==-1) index=curPage;
+	if (rec) {
+		if (!documentPages[index]->isRunning()) {
             play();
         }
-        int ret = documentPages[curPage]->record(m_options->sampleFormat);
-		documentTabs->setTabIcon(curPage, QIcon(QString(":/themes/%1/gtk-media-record.png").arg(m_options->theme )));
+		int ret = documentPages[index]->record(m_options->sampleFormat);
+        documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/media-record.png").arg(m_options->theme )));
 		if (ret != 0) {
             recAct->setChecked(false);
-			documentTabs->setTabIcon(curPage, QIcon());
+			documentTabs->setTabIcon(index, QIcon());
         }
     }
     else {
-        documentPages[curPage]->stopRecording();
+		documentPages[index]->stopRecording();
         QMessageBox::information(nullptr, tr("Record"), tr("Recorded to audiofile ") + this->currentAudioFile);
 		// documentTabs->setTabIcon(curPage, QIcon());
     }
@@ -2396,40 +2443,101 @@ void CsoundQt::setEditorFocus()
     this->raise();
 }
 
-void CsoundQt::setHelpEntry()
-{
-    QString text = documentPages[curPage]->wordUnderCursor();
-    if (text.startsWith('#')) { // For #define and friends
-        text.remove(0,1);
+
+/**
+ * @brief CsoundQt::helpForEntry open help for given entry
+ * @param entry - The entry to find help for (normally an opcode)
+ * @param external - If true, open in an external browser (default=false)
+ */
+void CsoundQt::helpForEntry(QString entry, bool external) {
+    if (entry.startsWith('#')) { // For #define and friends
+        entry.remove(0,1);
     }
     QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
-    if (text.startsWith("http://")) {
-        openExternalBrowser(QUrl(text));
+    if (entry.startsWith("http://")) {
+        openExternalBrowser(QUrl(entry));
+        return;
     }
-    else if (!dir.isEmpty()) {
-        if (text == "0dbfs")
-            text = "Zerodbfs";
-        else if (text.contains("CsOptions"))
-            text = "CommandUnifile";
-        else if (text.startsWith("chn_"))
-            text = "chn";
-        helpPanel->docDir = dir;
-        QString fileName = dir + "/" + text + ".html";
-        if (QFile::exists(fileName)) {
-            helpPanel->loadFile(fileName);
+    QString errmsg;
+    if(risset->isInstalled && risset->opcodeNames.contains(entry)) {
+        // Check external help sources
+        QString fileName = risset->htmlManpage(entry);
+        if(!fileName.isEmpty()) {
+            openHtmlHelp(fileName, entry, external);
         }
-        //    else {
-        //        helpPanel->loadFile(dir + "/index.html");
-        //    }
+        else {
+            auto reply = QMessageBox::question(this, "Risset",
+                                               "Risset documentation not found. Do you want to fetch it? "
+                                               " (it may take a few seconds)",
+                                               QMessageBox::Yes|QMessageBox::No);
+            if(reply == QMessageBox::Yes) {
+                risset->generateDocumentation([=](int exitCode) {
+                    if(exitCode==0) {
+                        QMessageBox::information(this, "Risset", "Fetched documentation");
+                        helpForEntry(entry, external);
+                    }
+                    else {
+                        qDebug() << "Generate documentation exit code: " << exitCode;
+                        QMessageBox::warning(this, "Risset",
+                                             "Failed to fetch documentation");
+                    }
+                });
+            }
+            return;
+        }
+    }
+    else if (dir.isEmpty()) {
+        QMessageBox::critical(this, tr("Error"),
+            tr("HTML Documentation directory not set!\n"
+               "Please go to Edit->Options->Environment and select directory\n"));
+        return;
+    }
+    else if(entry.startsWith("--") || entry.startsWith("-+")) {
+        openHtmlHelp(dir+"/CommandFlagsCategory.html", "", external);
+    }
+    else {
+        helpPanel->docDir = dir;
+        QString fileName;
+        if (entry == "0dbfs")
+            fileName = dir + "/Zerodbfs.html";
+        else if (entry.contains("CsOptions"))
+            fileName = dir + "/CommandUnifile.html";
+        else if (entry.startsWith("chn_"))
+            fileName = dir + "/chn.html";
+        else if(QFile::exists(dir + "/" + entry + ".html")) {
+            fileName = dir + "/" + entry + ".html";
+        }
+        else
+            return;
+        openHtmlHelp(fileName, entry, external);
+    }
+}
+
+
+void CsoundQt::openHtmlHelp(QString fileName, QString entry, bool external) {
+    if(external) {
+        openExternalBrowser(fileName);
+    } else {
+        helpPanel->loadFile(fileName, entry);
         helpPanel->show();
         helpPanel->raise();
         helpPanel->focusText();
     }
-    else {
-        QMessageBox::critical(this, tr("Error"),
-                              tr("HTML Documentation directory not set!\n"
-                                 "Please go to Edit->Options->Environment and select directory\n"));
+}
+
+
+void CsoundQt::setHelpEntry()
+{
+    QString line = documentPages[curPage]->lineUnderCursor();
+    auto match = QRegularExpression("-[-\\+][a-zA-Z-_]+").match(line);
+    if(match.hasMatch()) {
+        auto capt = match.captured();
+        if(m_longOptions.contains(capt)) {
+            return helpForEntry(capt);
+        }
     }
+    QString word = documentPages[curPage]->wordUnderCursor();
+    return helpForEntry(word);
 }
 
 
@@ -2490,7 +2598,7 @@ void CsoundQt::setHtmlFullScreen(bool full)
 		checkFullScreen();
 		m_preFullScreenState = this->saveState();
 		this->csoundHtmlView->setFloating(true);
-#ifdef Q_OS_MACOS
+#ifndef Q_OS_WIN // this was Q_OS_MACOS before -  try now showMaximized for all expect Windows
         this->csoundHtmlView->showMaximized();
 #else
 		this->csoundHtmlView->showFullScreen();
@@ -2512,7 +2620,7 @@ void CsoundQt::setHelpFullScreen(bool full)
 		checkFullScreen();
 		m_preFullScreenState = this->saveState();
         this->helpPanel->setFloating(true);
-#ifdef Q_OS_MACOS
+#ifndef Q_OS_WIN
         this->helpPanel->showMaximized();
 #else
         this->helpPanel->showFullScreen();
@@ -2537,14 +2645,14 @@ void CsoundQt::setWidgetsFullScreen(bool full)
                 return;
             auto wl = doc->getWidgetLayout();
             wl->setVisible(true);
-#ifdef Q_OS_MACOS
+#ifndef Q_OS_WIN
             wl->showMaximized();
 #else
             wl->showFullScreen();
 #endif
         } else {
             this->widgetPanel->setFloating(true);
-#ifdef Q_OS_MACOS
+#ifndef Q_OS_WIN
         this->widgetPanel->showMaximized();
 #else
             this->widgetPanel->showFullScreen();
@@ -2743,39 +2851,15 @@ void CsoundQt::openManualExample(QString fileName)
 
 void CsoundQt::openExternalBrowser(QUrl url)
 {
-    if (!url.isEmpty()) {
-        if (!m_options->browser.isEmpty()) {
-            if (QFile::exists(m_options->browser)) {
-                execute(m_options->browser,"\"" + url.toString() + "\"");
-            }
-            else {
-                QMessageBox::critical(this, tr("Error"),
-                                      tr("Could not open external browser:\n%1\nPlease check preferences.").arg(m_options->browser));
-            }
-        }
-        else {
-            QDesktopServices::openUrl(url);
-        }
+    if (!m_options->browser.isEmpty() && QFile::exists(m_options->browser)) {
+        execute(m_options->browser, "\"" + url.toString() + "\"");
     }
     else {
-        QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
-        if (!dir.isEmpty()) {
-            url = QUrl ("file://" + dir + "/"
-                        + documentPages[curPage]->wordUnderCursor() + ".html");
-            if (!m_options->browser.isEmpty()) {
-                execute(m_options->browser, "\"" + url.toString() + "\"");
-            }
-            else {
-                QDesktopServices::openUrl(url);
-            }
-        }
-        else {
-            QMessageBox::critical(this,
-                                  tr("Error"),
-                                  tr("HTML Documentation directory not set!\n"
-                                     "Please go to Edit->Options->Environment and select directory\n"));
-        }
+        QMessageBox::critical(this, tr("Error"),
+                              tr("Could not open external browser:\n%1\n"
+                                 "Please check preferences.").arg(m_options->browser));
     }
+    QDesktopServices::openUrl(url);
 }
 
 void CsoundQt::openPdfFile(QString name)
@@ -2790,7 +2874,6 @@ void CsoundQt::openPdfFile(QString name)
         }
 #endif
         QString arg = "\"" + name + "\"";
-        //    qDebug() << arg;
         execute(m_options->pdfviewer, arg);
     }
     else {
@@ -2813,6 +2896,12 @@ void CsoundQt::openOnlineDocumentation()
      openExternalBrowser(QUrl("http://csoundqt.github.io/pages/documentation.html"));
 }
 
+
+void CsoundQt::showManualOnline()
+{
+	openExternalBrowser(QUrl("http://csound.com/manual/index.html"));
+}
+
 void CsoundQt::resetPreferences()
 {
     int ret = QMessageBox::question (this, tr("Reset Preferences"),
@@ -2830,35 +2919,12 @@ void CsoundQt::resetPreferences()
 
 void CsoundQt::reportBug()
 {
-    QUrl url("https://github.com/CsoundQt/CsoundQt/issues/new");
-    if (!m_options->browser.isEmpty()) {
-        execute(m_options->browser,"\"" + url.toString() + "\"");
-    }
-    else {
-        QDesktopServices::openUrl(url);
-    }
+    openExternalBrowser(QUrl("https://github.com/CsoundQt/CsoundQt/issues/new"));
 }
 
-void CsoundQt::requestFeature()
+void CsoundQt::reportCsoundBug()
 {
-    QUrl url("https://github.com/CsoundQt/CsoundQt/issues/new");
-    if (!m_options->browser.isEmpty()) {
-        execute(m_options->browser,"\"" + url.toString() + "\"");
-    }
-    else {
-        QDesktopServices::openUrl(url);
-    }
-}
-
-void CsoundQt::chat()
-{
-    QUrl url("http://webchat.freenode.net/?channels=#csound");
-    if (!m_options->browser.isEmpty()) {
-        execute(m_options->browser,"\"" + url.toString() + "\"");
-    }
-    else {
-        QDesktopServices::openUrl(url);
-    }
+    openExternalBrowser(QUrl("https://github.com/csound/csound/issues/new"));
 }
 
 void CsoundQt::openShortcutDialog()
@@ -2871,7 +2937,7 @@ void CsoundQt::openShortcutDialog()
 void CsoundQt::downloadManual()
 {
     // NB! must be updated when new manual comes out!
-    openExternalBrowser(QUrl("https://github.com/csound/csound/releases/download/6.14.0/Csound6.14.0_manual_html.zip"));
+	openExternalBrowser(QUrl("https://github.com/csound/csound/releases/download/6.16.0/Csound6.16.0_manual_html.zip"));
     QMessageBox::information(this, tr("Set manual path"),
                              tr("Unzip the manual to any location and set that path"
                                 " in Configure/Enviromnent/Html doc directory"));
@@ -2943,11 +3009,16 @@ void CsoundQt::donate()
     openExternalBrowser(QUrl("http://sourceforge.net/donate/index.php?group_id=227265"));
 }
 
-void CsoundQt::documentWasModified()
+void CsoundQt::documentWasModified(bool status)
 {
-    setWindowModified(true);
-    //  qDebug() << "CsoundQt::documentWasModified()";
-    documentTabs->setTabIcon(curPage, modIcon);
+    if(status) {
+        setWindowModified(true);
+        documentTabs->setTabIcon(curPage, modIcon);
+    }
+    else {
+        setWindowModified(false);
+        documentTabs->setTabIcon(curPage, QIcon());
+    }
 }
 
 void CsoundQt::configure()
@@ -3053,14 +3124,16 @@ void CsoundQt::applySettings()
 
     // set editorBgColor also for inspector, codepad and python console.
     // Maybe the latter should use the same color as console?
-    auto bgColor= m_options->editorBgColor.name();
-    m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(bgColor));
-    m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(bgColor));
+    // auto bgColor= m_options->editorBgColor.name();
+    // m_inspector->setStyleSheet(QString("QTreeWidget { background-color: %1; }").arg(bgColor));
+    // m_scratchPad->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(bgColor));
     this->setToolbarIconSize(m_options->toolbarIconSize);
 #ifdef QCS_PYTHONQT
     m_pythonConsole->setStyleSheet(QString("QTextEdit { background-color: %1; }").arg(m_options->editorBgColor.name()));
 #endif
     //storeSettings(); // save always when something new is changed
+
+    this->helpPanel->setIconTheme(m_options->theme);
 }
 
 void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
@@ -3086,19 +3159,20 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
                             (int) m_options->consoleFontPointSize));
 	p->setConsoleColors(m_options->consoleFontColor,
 	                    m_options->consoleBgColor);
-    // p->setEditorBgColor(m_options->editorBgColor);
     p->setScriptDirectory(m_options->pythonDir);
     p->setPythonExecutable(m_options->pythonExecutable);
     p->useOldFormat(m_options->oldFormat);
     p->setConsoleBufferSize(m_options->consoleBufferSize);
     p->showLineNumbers(m_options->showLineNumberArea);
     p->setHighlightingTheme(m_options->highlightingTheme);
+    p->enableScoreSyntaxHighlighting(m_options->highlightScore);
 
     int flags = m_options->noBuffer ? QCS_NO_COPY_BUFFER : 0;
     flags |= m_options->noPython ? QCS_NO_PYTHON_CALLBACK : 0;
     flags |= m_options->noMessages ? QCS_NO_CONSOLE_MESSAGES : 0;
     flags |= m_options->noEvents ? QCS_NO_RT_EVENTS : 0;
     p->setFlags(flags);
+
 }
 
 void CsoundQt::runUtility(QString flags)
@@ -3114,8 +3188,8 @@ void CsoundQt::runUtility(QString flags)
         QString name = "";
         QString fileFlags = flags.mid(flags.indexOf("\""));
         flags.remove(fileFlags);
-        QStringList indFlags= flags.split(" ",QString::SkipEmptyParts);
-        QStringList files = fileFlags.split("\"", QString::SkipEmptyParts);
+        QStringList indFlags= flags.split(" ", SKIP_EMPTY_PARTS);
+        QStringList files = fileFlags.split("\"", SKIP_EMPTY_PARTS);
         if (indFlags.size() < 2) {
             qDebug("CsoundQt::runUtility: Error: empty flags");
             return;
@@ -3339,7 +3413,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
 #endif
     openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Ctrl+9"));
-    
+
     setHelpEntryAct->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F1));
     externalBrowserAct->setShortcut(tr("Shift+Alt+F1"));
     showInspectorAct->setShortcut(tr("F5"));
@@ -3522,25 +3596,25 @@ void CsoundQt::createActions()
     // connected with connectActions() and are changed when the document changes.
     QString theme = m_options->theme;
     QString prefix = ":/themes/" + theme + "/";
-    newAct = new QAction(QIcon(prefix + "gtk-new.png"), tr("&New"), this);
+    newAct = new QAction(QIcon(prefix + "edit-new.png"), tr("&New"), this);
     newAct->setStatusTip(tr("Create a new file"));
     newAct->setIconText(tr("New"));
     newAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
 
-    openAct = new QAction(QIcon(prefix + "gnome-folder.png"), tr("&Open..."), this);
+    openAct = new QAction(QIcon(prefix + "folder.png"), tr("&Open..."), this);
     openAct->setStatusTip(tr("Open an existing file"));
     openAct->setIconText(tr("Open"));
     openAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
-    reloadAct = new QAction(QIcon(prefix + "gtk-reload.png"), tr("Reload"), this);
+    reloadAct = new QAction(QIcon(prefix + "reload.png"), tr("Reload"), this);
     reloadAct->setStatusTip(tr("Reload file from disk, discarding changes"));
     //   reloadAct->setIconText(tr("Reload"));
     reloadAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(reloadAct, SIGNAL(triggered()), this, SLOT(reload()));
 
-    saveAct = new QAction(QIcon(prefix + "gnome-dev-floppy.png"), tr("&Save"), this);
+    saveAct = new QAction(QIcon(prefix + "floppy.png"), tr("&Save"), this);
     saveAct->setStatusTip(tr("Save the document to disk"));
     saveAct->setIconText(tr("Save"));
     saveAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -3566,7 +3640,7 @@ void CsoundQt::createActions()
     closeTabAct = new QAction(tr("Close current tab"), this);
     closeTabAct->setStatusTip(tr("Close current tab"));
     //   closeTabAct->setIconText(tr("Close"));
-    closeTabAct->setIcon(QIcon(prefix + "gtk-close.png"));
+    closeTabAct->setIcon(QIcon(prefix + "edit-close.png"));
     closeTabAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(closeTabAct, SIGNAL(triggered()), this, SLOT(closeTab()));
 
@@ -3601,33 +3675,33 @@ void CsoundQt::createActions()
     createCodeGraphAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(createCodeGraphAct, SIGNAL(triggered()), this, SLOT(createCodeGraph()));
 
-    undoAct = new QAction(QIcon(prefix + "gtk-undo.png"), tr("Undo"), this);
+    undoAct = new QAction(QIcon(prefix + "edit-undo.png"), tr("Undo"), this);
     undoAct->setStatusTip(tr("Undo last action"));
     undoAct->setIconText(tr("Undo"));
     undoAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
 
-    redoAct = new QAction(QIcon(prefix + "gtk-redo.png"), tr("Redo"), this);
+    redoAct = new QAction(QIcon(prefix + "edit-redo.png"), tr("Redo"), this);
     redoAct->setStatusTip(tr("Redo last action"));
     redoAct->setIconText(tr("Redo"));
     redoAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
 
-    cutAct = new QAction(QIcon(prefix + "gtk-cut.png"), tr("Cu&t"), this);
+    cutAct = new QAction(QIcon(prefix + "edit-cut.png"), tr("Cu&t"), this);
     cutAct->setStatusTip(tr("Cut the current selection's contents to the "
                             "clipboard"));
     cutAct->setIconText(tr("Cut"));
     cutAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(cutAct, SIGNAL(triggered()), this, SLOT(cut()));
 
-    copyAct = new QAction(QIcon(prefix + "gtk-copy.png"), tr("&Copy"), this);
+    copyAct = new QAction(QIcon(prefix + "edit-copy.png"), tr("&Copy"), this);
     copyAct->setStatusTip(tr("Copy the current selection's contents to the "
                              "clipboard"));
     copyAct->setIconText(tr("Copy"));
     copyAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
 
-    pasteAct = new QAction(QIcon(prefix + "gtk-paste.png"), tr("&Paste"), this);
+    pasteAct = new QAction(QIcon(prefix + "edit-paste.png"), tr("&Paste"), this);
     pasteAct->setStatusTip(tr("Paste the clipboard's contents into the current "
                               "selection"));
     pasteAct->setIconText(tr("Paste"));
@@ -3698,7 +3772,7 @@ void CsoundQt::createActions()
     findAgainAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(findAgainAct, SIGNAL(triggered()), this, SLOT(findString()));
 
-    configureAct = new QAction(QIcon(prefix + "control-center2.png"), tr("Configuration"), this);
+    configureAct = new QAction(QIcon(prefix + "settings.png"), tr("Configuration"), this);
     configureAct->setStatusTip(tr("Open configuration dialog"));
     configureAct->setIconText(tr("Configure"));
     configureAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -3711,38 +3785,38 @@ void CsoundQt::createActions()
     editAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(editAct, SIGNAL(triggered(bool)), this, SLOT(setWidgetEditMode(bool)));
 
-    runAct = new QAction(QIcon(prefix + "gtk-media-play-ltr.png"), tr("Run Csound"), this);
+    runAct = new QAction(QIcon(prefix + "media-play.png"), tr("Run Csound"), this);
     runAct->setStatusTip(tr("Run current file"));
     runAct->setIconText(tr("Run"));
     runAct->setCheckable(true);
     runAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(runAct, SIGNAL(triggered()), this, SLOT(play()));
 
-    runTermAct = new QAction(QIcon(prefix + "gtk-media-play-ltr2.png"), tr("Run in Terminal"), this);
+    runTermAct = new QAction(QIcon(prefix + "terminal.png"), tr("Run in Terminal"), this);
     runTermAct->setStatusTip(tr("Run in external shell"));
     runTermAct->setIconText(tr("Run in Term"));
     runTermAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(runTermAct, SIGNAL(triggered()), this, SLOT(runInTerm()));
 
-    stopAct = new QAction(QIcon(prefix + "gtk-media-stop.png"), tr("Stop"), this);
+    stopAct = new QAction(QIcon(prefix + "media-stop.png"), tr("Stop"), this);
     stopAct->setStatusTip(tr("Stop"));
     stopAct->setIconText(tr("Stop"));
     stopAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(stopAct, SIGNAL(triggered()), this, SLOT(stop()));
 
-    pauseAct = new QAction(QIcon(prefix + "gtk-media-pause.png"), tr("Pause"), this);
+    pauseAct = new QAction(QIcon(prefix + "media-pause.png"), tr("Pause"), this);
     pauseAct->setStatusTip(tr("Pause"));
     pauseAct->setIconText(tr("Pause"));
     pauseAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(pauseAct, SIGNAL(triggered()), this, SLOT(pause()));
 
-    stopAllAct = new QAction(QIcon(prefix + "gtk-media-stop.png"), tr("Stop All"), this);
+    stopAllAct = new QAction(QIcon(prefix + "media-stop.png"), tr("Stop All"), this);
     stopAllAct->setStatusTip(tr("Stop all running documents"));
     stopAllAct->setIconText(tr("Stop All"));
     stopAllAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(stopAllAct, SIGNAL(triggered()), this, SLOT(stopAll()));
 
-    recAct = new QAction(QIcon(prefix + "gtk-media-record.png"), tr("Record"), this);
+    recAct = new QAction(QIcon(prefix + "media-record.png"), tr("Record"), this);
     recAct->setStatusTip(tr("Record"));
     recAct->setIconText(tr("Record"));
     recAct->setCheckable(true);
@@ -3750,7 +3824,8 @@ void CsoundQt::createActions()
     recAct->setChecked(false);
     connect(recAct, SIGNAL(toggled(bool)), this, SLOT(record(bool)));
 
-    renderAct = new QAction(QIcon(prefix + "render.png"), tr("Render to file"), this);
+    // renderAct = new QAction(QIcon(prefix + "render.png"), tr("Render to file"), this);
+    renderAct = new QAction(QIcon(prefix + "render.svg"), tr("Render to file"), this);
     renderAct->setStatusTip(tr("Render to file"));
     renderAct->setIconText(tr("Render"));
     renderAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -3776,7 +3851,7 @@ void CsoundQt::createActions()
     externalEditorAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(externalEditorAct, SIGNAL(triggered()), this, SLOT(openExternalEditor()));
 
-    showWidgetsAct = new QAction(QIcon(prefix + "gnome-mime-application-x-diagram.png"),
+    showWidgetsAct = new QAction(QIcon(prefix + "widgets.png"),
                                  tr("Widgets"), this);
     showWidgetsAct->setCheckable(true);
     //showWidgetsAct->setChecked(true);
@@ -3812,7 +3887,7 @@ void CsoundQt::createActions()
     focusEditorAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(focusEditorAct, SIGNAL(triggered()), this, SLOT(setEditorFocus()));
 
-    showHelpAct = new QAction(QIcon(prefix + "gtk-info.png"), tr("Help Panel"), this);
+    showHelpAct = new QAction(QIcon(prefix + "info.png"), tr("Help Panel"), this);
     showHelpAct->setCheckable(true);
     showHelpAct->setChecked(true);
     showHelpAct->setStatusTip(tr("Show the Csound Manual Panel"));
@@ -3878,6 +3953,11 @@ void CsoundQt::createActions()
     showManualAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showManualAct, SIGNAL(triggered()), helpPanel, SLOT(showManual()));
 
+	showManualOnlineAct = new QAction(tr("Csound Manual Online"), this);
+	showManualOnlineAct->setStatusTip(tr("Show the Csound manual online"));
+	showManualOnlineAct->setShortcutContext(Qt::ApplicationShortcut);
+	connect(showManualOnlineAct, SIGNAL(triggered()), this, SLOT(showManualOnline()));
+
     downloadManualAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("Download Csound Manual"), this);
     downloadManualAct->setStatusTip(tr("Download latest Csound manual"));
     downloadManualAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -3899,7 +3979,7 @@ void CsoundQt::createActions()
     showOpcodeQuickRefAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showOpcodeQuickRefAct, SIGNAL(triggered()), helpPanel, SLOT(showOpcodeQuickRef()));
 
-    showConsoleAct = new QAction(QIcon(prefix + "gksu-root-terminal.png"), tr("Output Console"), this);
+    showConsoleAct = new QAction(QIcon(prefix + "terminal.png"), tr("Output Console"), this);
     showConsoleAct->setCheckable(true);
     showConsoleAct->setChecked(true);
     showConsoleAct->setStatusTip(tr("Show Csound's message console"));
@@ -3959,7 +4039,7 @@ void CsoundQt::createActions()
     showDebugAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showDebugAct, SIGNAL(toggled(bool)), this, SLOT(showDebugger(bool)));
 #endif
-    showVirtualKeyboardAct = new QAction(QIcon(prefix + "midi_keyboard.png"), tr("Show Virtual Keyboard"), this);
+    showVirtualKeyboardAct = new QAction(QIcon(prefix + "midi-keyboard.png"), tr("Show Virtual Keyboard"), this);
     showVirtualKeyboardAct->setCheckable(true);
     showVirtualKeyboardAct->setChecked(false);
     showVirtualKeyboardAct->setStatusTip(tr("Show the Virtual MIDI Keyboard"));
@@ -4068,7 +4148,7 @@ void CsoundQt::createActions()
     connect(showWidgetEditAct, SIGNAL(toggled(bool)), this, SLOT(showWidgetEdit(bool)));
     connect(splitViewAct, SIGNAL(toggled(bool)), showWidgetEditAct, SLOT(setEnabled(bool)));
 
-    setHelpEntryAct = new QAction(QIcon(prefix + "gtk-info.png"), tr("Opcode Entry"), this);
+    setHelpEntryAct = new QAction(QIcon(prefix + "info.png"), tr("Opcode Entry"), this);
     setHelpEntryAct->setStatusTip(tr("Show Opcode Entry in help panel"));
     setHelpEntryAct->setIconText(tr("Manual for opcode"));
     setHelpEntryAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -4087,7 +4167,9 @@ void CsoundQt::createActions()
     externalBrowserAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("Opcode Entry in External Browser"), this);
     externalBrowserAct->setStatusTip(tr("Show Opcode Entry in external browser"));
     externalBrowserAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(externalBrowserAct, SIGNAL(triggered()), this, SLOT(openExternalBrowser()));
+
+    connect(externalBrowserAct, &QAction::triggered, this,
+            [this](){this->helpForEntry(documentPages[curPage]->wordUnderCursor(), true);});
 
     openDocumentationAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("CsoundQt Documentation (online)"), this);
     openDocumentationAct->setStatusTip(tr("open CsoundQt Documentation in browser"));
@@ -4099,7 +4181,7 @@ void CsoundQt::createActions()
     openQuickRefAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(openQuickRefAct, SIGNAL(triggered()), this, SLOT(openQuickRef()));
 
-    showUtilitiesAct = new QAction(QIcon(prefix + "gnome-devel.png"), tr("Utilities"), this);
+    showUtilitiesAct = new QAction(QIcon(prefix + "devel.png"), tr("Utilities"), this);
     showUtilitiesAct->setCheckable(true);
     showUtilitiesAct->setChecked(false);
     showUtilitiesAct->setStatusTip(tr("Show the Csound Utilities dialog"));
@@ -4178,20 +4260,15 @@ void CsoundQt::createActions()
     resetPreferencesAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(resetPreferencesAct, SIGNAL(triggered()), this, SLOT(resetPreferences()));
 
-    reportBugAct = new QAction(tr("Report a Bug"), this);
-    reportBugAct->setStatusTip(tr("Report a bug in CsoundQt's Bug Tracker"));
+    reportBugAct = new QAction(tr("Report a CsoundQt Bug"), this);
+    reportBugAct->setStatusTip(tr("Report a CsoundQt bug that is clearly related to the front-end"));
     reportBugAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(reportBugAct, SIGNAL(triggered()), this, SLOT(reportBug()));
 
-    requestFeatureAct = new QAction(tr("Request a Feature (please add label \'Enhancement\')"), this);
-    requestFeatureAct->setStatusTip(tr("Request a feature in CsoundQt's Feature Tracker"));
-    requestFeatureAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(requestFeatureAct, SIGNAL(triggered()), this, SLOT(requestFeature()));
-
-    chatAct = new QAction(tr("Csound IRC Chat"), this);
-    chatAct->setStatusTip(tr("Open the IRC chat channel #csound in your browser"));
-    chatAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(chatAct, SIGNAL(triggered()), this, SLOT(chat()));
+    reportCsoundBugAct = new QAction(tr("Report a Csound Bug"), this);
+    reportCsoundBugAct->setStatusTip(tr("Report a bug that is caused by the core Csound -  when the same problem occurs also with \"Run in Terminal\""));
+    reportCsoundBugAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(reportCsoundBugAct, SIGNAL(triggered()), this, SLOT(reportCsoundBug()));
 
     duplicateAct = new QAction(tr("Duplicate Widgets"), this);
     duplicateAct->setShortcutContext(Qt::ApplicationShortcut);
@@ -4364,6 +4441,8 @@ void CsoundQt::connectActions()
             this, SLOT(statusBarMessage(QString)));
 
     connect(doc, SIGNAL(modified()), this, SLOT(documentWasModified()));
+    connect(doc, &DocumentPage::unmodified, [this](){this->documentWasModified(false);});
+
     //  connect(documentPages[curPage], SIGNAL(setWidgetClipboardSignal(QString)),
     //          this, SLOT(setWidgetClipboard(QString)));
     connect(doc, SIGNAL(setCurrentAudioFile(QString)),
@@ -4389,6 +4468,12 @@ void CsoundQt::connectActions()
 QString CsoundQt::getExamplePath(QString dir)
 {
     QString examplePath;
+
+    if (!m_options->examplePath.isEmpty() && QDir(m_options->examplePath + dir).exists()) {
+        examplePath = m_options->examplePath + dir;
+        return examplePath;
+    }
+
 #ifdef Q_OS_WIN32
     examplePath = qApp->applicationDirPath() + "/Examples/" + dir;
     if (!QDir(examplePath).exists()) {
@@ -4398,18 +4483,21 @@ QString CsoundQt::getExamplePath(QString dir)
     }
 #endif
 #ifdef Q_OS_MAC
-    examplePath = qApp->applicationDirPath() + "/../Resources/" + dir;
+    examplePath = qApp->applicationDirPath() + "/../Resources/Examples/" + dir;
     qDebug() << examplePath;
 #endif
 #ifdef Q_OS_LINUX
     examplePath = QString(); //qApp->applicationDirPath() + "/Examples/" + dir;
     QStringList possiblePaths;
-    possiblePaths << qApp->applicationDirPath() + "/Examples/" << "~/.local/share/csoundqt/Examples/"
-                  << "/usr/share/csoundqt/Examples/" << qApp->applicationDirPath() + "/../src/Examples/"
+    possiblePaths << qApp->applicationDirPath() + "/Examples/"
+                  << qApp->applicationDirPath() + "/../src/Examples/"
                   << qApp->applicationDirPath() + "/../../csoundqt/src/Examples/"
+                  << qApp->applicationDirPath() + "/../../CsoundQt/src/Examples/"
+                  << qApp->applicationDirPath() + "/../share/csoundqt/Examples/"
                   <<  "/../../qutecsound/src/Examples/"
                   << "~/.local/share/qutecsound/Examples/" << "/usr/share/qutecsound/Examples/"
-                  << qApp->applicationDirPath() + "/../share/csoundqt/Examples/";
+                  << "~/.local/share/csoundqt/Examples/"
+                  << "/usr/share/csoundqt/Examples/";
 
     foreach (QString path, possiblePaths) {
         path += dir;
@@ -4436,6 +4524,8 @@ QString CsoundQt::getExamplePath(QString dir)
 #endif
     return examplePath;
 }
+
+
 
 void CsoundQt::createMenus()
 {
@@ -4553,219 +4643,253 @@ void CsoundQt::createMenus()
     viewMenu->addAction(showOtherCsdAct);
     viewMenu->addAction(showWidgetEditAct);
 
-    QStringList tutFiles;
-    QStringList basicsFiles;
-    QStringList realtimeInteractionFiles;
-    QStringList featuresFiles;
+//    QStringList tutFiles;
+//    QStringList basicsFiles;
+//    QStringList realtimeInteractionFiles;
+//    QStringList featuresFiles;
 
-    QStringList livecollFiles;
-    QStringList widgetFiles;
-    QStringList synthFiles;
-    QStringList musicFiles;
-    QStringList usefulFiles;
-    QStringList exampleFiles;
-    QStringList htmlFiles;
-    QStringList pluginExamples;
-    QList<QStringList> subMenus;
-    QStringList subMenuNames;
+//    QStringList livecollFiles;
+//    QStringList widgetFiles;
+//    QStringList synthFiles;
+//    QStringList musicFiles;
+//    QStringList usefulFiles;
+//    QStringList exampleFiles;
+//    QStringList htmlFiles;
+//    QStringList pluginExamples;
+//    QList<QStringList> subMenus;
+//    QStringList subMenuNames;
 
-    livecollFiles << ":/examples/Live Collection/Live_Accordizer.csd"
-                  << ":/examples/Live Collection/Live_Delay_Feedback.csd"
-                  << ":/examples/Live Collection/Live_Granular.csd"
-                  << ":/examples/Live Collection/Live_RM_AM.csd";
+//    livecollFiles << ":/examples/Live Collection/Live_Accordizer.csd"
+//                  << ":/examples/Live Collection/Live_Delay_Feedback.csd"
+//                  << ":/examples/Live Collection/Live_Granular.csd"
+//                  << ":/examples/Live Collection/Live_RM_AM.csd";
 
-    subMenus << livecollFiles;
-    subMenuNames << tr("Live Collection");
+//    subMenus << livecollFiles;
+//    subMenuNames << tr("Live Collection");
 
-    widgetFiles.append(":/examples/Widgets/Widget_Panel.csd");
-    widgetFiles.append(":/examples/Widgets/Label_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/Display_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/Slider_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/Scrollnumber_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/SpinBox_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/Graph_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/Button_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/Checkbox_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/Menu_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/Controller_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/Lineedit_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/Scope_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/Tableplot_Widget.csd");
-    widgetFiles.append(":/examples/Widgets/String_Channels.csd");
-    widgetFiles.append(":/examples/Widgets/Presets.csd");
-    widgetFiles.append(":/examples/Widgets/Reserved_Channels.csd");
+//    widgetFiles.append(":/examples/Widgets/Widget_Panel.csd");
+//    widgetFiles.append(":/examples/Widgets/Label_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/Display_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/Slider_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/Scrollnumber_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/SpinBox_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/Graph_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/Button_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/Checkbox_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/Menu_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/Controller_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/Lineedit_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/Scope_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/Tableplot_Widget.csd");
+//    widgetFiles.append(":/examples/Widgets/String_Channels.csd");
+//    widgetFiles.append(":/examples/Widgets/Presets.csd");
+//    widgetFiles.append(":/examples/Widgets/Reserved_Channels.csd");
 
-    subMenus << widgetFiles;
-    subMenuNames << "Widgets";
+//    subMenus << widgetFiles;
+//    subMenuNames << "Widgets";
 
-    synthFiles.append(":/examples/Synths/Additive_Synth.csd");
-    synthFiles.append(":/examples/Synths/Imitative_Additive.csd");
-    synthFiles.append(":/examples/Synths/Simple_Subtractive.csd");
-    synthFiles.append(":/examples/Synths/Simple_FM_Synth.csd");
-    synthFiles.append(":/examples/Synths/Phase_Mod_Synth.csd");
-    synthFiles.append(":/examples/Synths/Formant_Synth.csd");
-    synthFiles.append(":/examples/Synths/Mono_Synth.csd");
-    synthFiles.append(":/examples/Synths/B6_Hammond.csd");
-    synthFiles.append(":/examples/Synths/Diffamator.csd");
-    synthFiles.append(":/examples/Synths/Sruti-Drone_Box.csd");
-    synthFiles.append(":/examples/Synths/Pipe_Synth.csd");
-    synthFiles.append(":/examples/Synths/Piano_phase.csd");
-    synthFiles.append(":/examples/Synths/String_Phaser.csd");
-    synthFiles.append(":/examples/Synths/Waveform_Mix.csd");
-    synthFiles.append(":/examples/Synths/Scanned_Synthesis_Sandbox.csd");
-    subMenus << synthFiles;
-    subMenuNames << "Synths";
+//    synthFiles.append(":/examples/Synths/Additive_Synth.csd");
+//    synthFiles.append(":/examples/Synths/Imitative_Additive.csd");
+//    synthFiles.append(":/examples/Synths/Simple_Subtractive.csd");
+//    synthFiles.append(":/examples/Synths/Simple_FM_Synth.csd");
+//    synthFiles.append(":/examples/Synths/Phase_Mod_Synth.csd");
+//    synthFiles.append(":/examples/Synths/Formant_Synth.csd");
+//    synthFiles.append(":/examples/Synths/Mono_Synth.csd");
+//    synthFiles.append(":/examples/Synths/B6_Hammond.csd");
+//    synthFiles.append(":/examples/Synths/Diffamator.csd");
+//    synthFiles.append(":/examples/Synths/Sruti-Drone_Box.csd");
+//    synthFiles.append(":/examples/Synths/Pipe_Synth.csd");
+//    synthFiles.append(":/examples/Synths/Piano_phase.csd");
+//    synthFiles.append(":/examples/Synths/String_Phaser.csd");
+//    synthFiles.append(":/examples/Synths/Waveform_Mix.csd");
+//    synthFiles.append(":/examples/Synths/Scanned_Synthesis_Sandbox.csd");
+//    subMenus << synthFiles;
+//    subMenuNames << "Synths";
 
 
-    musicFiles.append(":/examples/Music/Boulanger-Trapped_in_Convert.csd");
-    musicFiles.append(":/examples/Music/Chowning-Stria.csd");
-    musicFiles.append(":/examples/Music/Kung-Xanadu.csd");
-    musicFiles.append(":/examples/Music/Riley-In_C.csd");
-    musicFiles.append(":/examples/Music/Stockhausen-Studie_II.csd");
-    musicFiles.append(":/examples/Music/Bach-Invention_1.csd");
+//    musicFiles.append(":/examples/Music/Boulanger-Trapped_in_Convert.csd");
+//    musicFiles.append(":/examples/Music/Chowning-Stria.csd");
+//    musicFiles.append(":/examples/Music/Kung-Xanadu.csd");
+//    musicFiles.append(":/examples/Music/Riley-In_C.csd");
+//    musicFiles.append(":/examples/Music/Stockhausen-Studie_II.csd");
+//    musicFiles.append(":/examples/Music/Bach-Invention_1.csd");
 
-    subMenus << musicFiles;
-    subMenuNames << tr("Music");
+//    subMenus << musicFiles;
+//    subMenuNames << tr("Music");
 
-    usefulFiles.append(":/examples/Useful/SpectrumAnalyzer.csd");
-    usefulFiles.append(":/examples/Useful/IO_Test.csd");
-    usefulFiles.append(":/examples/Useful/MIDI_IO_Test.csd");
-    usefulFiles.append(":/examples/Useful/Audio_Input_Test.csd");
-    usefulFiles.append(":/examples/Useful/Audio_Output_Test.csd");
-    usefulFiles.append(":/examples/Useful/Audio_Thru_Test.csd");
-    usefulFiles.append(":/examples/Useful/MIDI_Recorder.csd");
-    usefulFiles.append(":/examples/Useful/MIDI_Layering.csd");
-    usefulFiles.append(":/examples/Useful/ASCII_Key.csd");
-    usefulFiles.append(":/examples/Useful/Monome_basic.csd");
-    usefulFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
-    usefulFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
-    usefulFiles.append(":/examples/Useful/SF_Play_from_HD.csd");
-    usefulFiles.append(":/examples/Useful/SF_Play_from_HD_2.csd");
-    usefulFiles.append(":/examples/Useful/SF_Snippets_Player.csd");
-    usefulFiles.append(":/examples/Useful/Multichannel_Player.csd");
-    usefulFiles.append(":/examples/Useful/Mixdown_Player.csd");
-    usefulFiles.append(":/examples/Useful/SF_Record.csd");
-    usefulFiles.append(":/examples/Useful/File_to_Text.csd");
-    usefulFiles.append(":/examples/Useful/Envelope_Extractor.csd");
-    usefulFiles.append(":/examples/Useful/Pitch_Tracker.csd");
-    usefulFiles.append(":/examples/Useful/SF_Splitter.csd");
-    usefulFiles.append(":/examples/Useful/SF_Merger.csd");
+//    usefulFiles.append(":/examples/Useful/SpectrumAnalyzer.csd");
+//    usefulFiles.append(":/examples/Useful/IO_Test.csd");
+//    usefulFiles.append(":/examples/Useful/MIDI_IO_Test.csd");
+//    usefulFiles.append(":/examples/Useful/Audio_Input_Test.csd");
+//    usefulFiles.append(":/examples/Useful/Audio_Output_Test.csd");
+//    usefulFiles.append(":/examples/Useful/Audio_Thru_Test.csd");
+//    usefulFiles.append(":/examples/Useful/MIDI_Recorder.csd");
+//    usefulFiles.append(":/examples/Useful/MIDI_Layering.csd");
+//    usefulFiles.append(":/examples/Useful/ASCII_Key.csd");
+//    usefulFiles.append(":/examples/Useful/Monome_basic.csd");
+//    usefulFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
+//    usefulFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
+//    usefulFiles.append(":/examples/Useful/SF_Play_from_HD.csd");
+//    usefulFiles.append(":/examples/Useful/SF_Play_from_HD_2.csd");
+//    usefulFiles.append(":/examples/Useful/SF_Snippets_Player.csd");
+//    usefulFiles.append(":/examples/Useful/Multichannel_Player.csd");
+//    usefulFiles.append(":/examples/Useful/Mixdown_Player.csd");
+//    usefulFiles.append(":/examples/Useful/SF_Record.csd");
+//    usefulFiles.append(":/examples/Useful/File_to_Text.csd");
+//    usefulFiles.append(":/examples/Useful/Envelope_Extractor.csd");
+//    usefulFiles.append(":/examples/Useful/Pitch_Tracker.csd");
+//    usefulFiles.append(":/examples/Useful/SF_Splitter.csd");
+//    usefulFiles.append(":/examples/Useful/SF_Merger.csd");
 
-    subMenus << usefulFiles;
-    subMenuNames << tr("Useful");
+//    subMenus << usefulFiles;
+//    subMenuNames << tr("Useful");
 
-    exampleFiles.append(":/examples/Miscellaneous/MIDI_Tunings.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Keyboard_Control.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Just_Intonation.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Mouse_Control.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Autotuner.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Event_Panel.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Score_Tricks.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Simple_Convolution.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Universal_Convolution.csd");
-    exampleFiles.append(":/examples/Miscellaneous/IR_Creator.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Cross_Synthesis.csd");
-    exampleFiles.append(":/examples/Miscellaneous/SF_Granular.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Oscillator_Aliasing.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Filter_lab.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Pvstencil.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Matrix.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Rms.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Reinit_Example.csd");
-    exampleFiles.append(":/examples/Miscellaneous/No_Reinit.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Mincer_Loop.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Circle_Map.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Binaural_Panning.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Spatialization.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Spatialization_5.1.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Pseudostereo.csd");
-    exampleFiles.append(":/examples/Miscellaneous/Noise_Reduction.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/MIDI_Tunings.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Keyboard_Control.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Just_Intonation.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Mouse_Control.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Autotuner.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Event_Panel.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Score_Tricks.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Simple_Convolution.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Universal_Convolution.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/IR_Creator.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Cross_Synthesis.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/SF_Granular.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Oscillator_Aliasing.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Filter_lab.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Pvstencil.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Matrix.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Rms.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Reinit_Example.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/No_Reinit.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Mincer_Loop.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Circle_Map.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Binaural_Panning.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Spatialization.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Spatialization_5.1.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Pseudostereo.csd");
+//    exampleFiles.append(":/examples/Miscellaneous/Noise_Reduction.csd");
 
-    subMenus << exampleFiles;
-    subMenuNames << tr("Miscellaneous");
+//    subMenus << exampleFiles;
+//    subMenuNames << tr("Miscellaneous");
 
-    htmlFiles.append(":/examples/Html5 Support/Minimal_Html_Example.csd");
-    htmlFiles.append(":/examples/Html5 Support/Styled_Sliders.csd");
-    htmlFiles.append(":/examples/Html5 Support/Html_file_in_CsoundQt.html");
-    subMenus << htmlFiles;
-    subMenuNames << tr("Html5 support");
+//    htmlFiles.append(":/examples/Html5 Support/Minimal_Html_Example.csd");
+//    htmlFiles.append(":/examples/Html5 Support/Styled_Sliders.csd");
+//    htmlFiles.append(":/examples/Html5 Support/Html_file_in_CsoundQt.html");
+//    subMenus << htmlFiles;
+//    subMenuNames << tr("Html5 support");
 
-    QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
-    QAction *newAction;
-    QMenu *submenu;
+//    QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
+//    QAction *newAction;
+//    QMenu *submenu;
 
-    basicsFiles.append(":/examples/Getting Started/Basics/Hello World.csd");
-    basicsFiles.append(":/examples/Getting Started/Basics/Document Structure.csd");
-    basicsFiles.append(":/examples/Getting Started/Basics/Basic Elements Opcodes.csd");
-    basicsFiles.append(":/examples/Getting Started/Basics/Basic Elements Variables.csd");
-    basicsFiles.append(":/examples/Getting Started/Basics/Getting Help.csd");
-    basicsFiles.append(":/examples/Getting Started/Basics/Instrument Control.csd");
-    basicsFiles.append(":/examples/Getting Started/Basics/Realtime Instrument Control.csd");
-    basicsFiles.append(":/examples/Getting Started/Basics/Routing.csd");
+//    basicsFiles.append(":/examples/Getting Started/Basics/Hello World.csd");
+//    basicsFiles.append(":/examples/Getting Started/Basics/Document Structure.csd");
+//    basicsFiles.append(":/examples/Getting Started/Basics/Basic Elements Opcodes.csd");
+//    basicsFiles.append(":/examples/Getting Started/Basics/Basic Elements Variables.csd");
+//    basicsFiles.append(":/examples/Getting Started/Basics/Getting Help.csd");
+//    basicsFiles.append(":/examples/Getting Started/Basics/Instrument Control.csd");
+//    basicsFiles.append(":/examples/Getting Started/Basics/Realtime Instrument Control.csd");
+//    basicsFiles.append(":/examples/Getting Started/Basics/Routing.csd");
 
-    QMenu *tutorialMenu = examplesMenu->addMenu(tr("Getting Started"));
-    submenu = tutorialMenu->addMenu(tr("Basics"));
-    foreach (QString fileName, basicsFiles) {
-        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-        newAction = submenu->addAction(name);
-        newAction->setData(fileName);
-        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-    }
+//    QMenu *tutorialMenu = examplesMenu->addMenu(tr("Getting Started"));
+//    submenu = tutorialMenu->addMenu(tr("Basics"));
+//    foreach (QString fileName, basicsFiles) {
+//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+//        newAction = submenu->addAction(name);
+//        newAction->setData(fileName);
+//        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+//    }
 
-    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Creating_Widgets.csd");
-    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Invalue.csd");
-    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Outvalue.csd");
-    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Buttontypes.csd");
-    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Checkbox.csd");
-    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Live_Audio_Input.csd");
-    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Receiving_Notes.csd");
-    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Synth.csd");
-    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Control_Data.csd");
-    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Assign_Controllers.csd");
-    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/OpenSoundControl.csd");
+//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Creating_Widgets.csd");
+//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Invalue.csd");
+//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Outvalue.csd");
+//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Buttontypes.csd");
+//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Checkbox.csd");
+//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Live_Audio_Input.csd");
+//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Receiving_Notes.csd");
+//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Synth.csd");
+//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Control_Data.csd");
+//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Assign_Controllers.csd");
+//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/OpenSoundControl.csd");
 
-    submenu = tutorialMenu->addMenu(tr("Realtime Interaction"));
-    foreach (QString fileName, realtimeInteractionFiles) {
-        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-        newAction = submenu->addAction(name);
-        newAction->setData(fileName);
-        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-    }
+//    submenu = tutorialMenu->addMenu(tr("Realtime Interaction"));
+//    foreach (QString fileName, realtimeInteractionFiles) {
+//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+//        newAction = submenu->addAction(name);
+//        newAction->setData(fileName);
+//        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+//    }
 
-    featuresFiles.append(":/examples/Getting Started/Language_Features/Function_Tables_1.csd");
-    featuresFiles.append(":/examples/Getting Started/Language_Features/Function_Tables_2.csd");
-    featuresFiles.append(":/examples/Getting Started/Language_Features/Loops_1.csd");
-    featuresFiles.append(":/examples/Getting Started/Language_Features/Loops_2.csd");
-    featuresFiles.append(":/examples/Getting Started/Language_Features/Console_Print.csd");
-    featuresFiles.append(":/examples/Getting Started/Language_Features/Writing_Audio_Files.csd");
-    featuresFiles.append(":/examples/Getting Started/Language_Features/Using_Udos.csd");
+//    featuresFiles.append(":/examples/Getting Started/Language_Features/Function_Tables_1.csd");
+//    featuresFiles.append(":/examples/Getting Started/Language_Features/Function_Tables_2.csd");
+//    featuresFiles.append(":/examples/Getting Started/Language_Features/Loops_1.csd");
+//    featuresFiles.append(":/examples/Getting Started/Language_Features/Loops_2.csd");
+//    featuresFiles.append(":/examples/Getting Started/Language_Features/Console_Print.csd");
+//    featuresFiles.append(":/examples/Getting Started/Language_Features/Writing_Audio_Files.csd");
+//    featuresFiles.append(":/examples/Getting Started/Language_Features/Using_Udos.csd");
 
-    submenu = tutorialMenu->addMenu(tr("Language Features"));
-    foreach (QString fileName, featuresFiles) {
-        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-        newAction = submenu->addAction(name);
-        newAction->setData(fileName);
-        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-    }
+//    submenu = tutorialMenu->addMenu(tr("Language Features"));
+//    foreach (QString fileName, featuresFiles) {
+//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+//        newAction = submenu->addAction(name);
+//        newAction->setData(fileName);
+//        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+//    }
 
-    tutFiles.append(":/examples/Getting Started/Toots/Toot1.csd");
-    tutFiles.append(":/examples/Getting Started/Toots/Toot2.csd");
-    tutFiles.append(":/examples/Getting Started/Toots/Toot3.csd");
-    tutFiles.append(":/examples/Getting Started/Toots/Toot4.csd");
-    tutFiles.append(":/examples/Getting Started/Toots/Toot5.csd");
+//    tutFiles.append(":/examples/Getting Started/Toots/Toot1.csd");
+//    tutFiles.append(":/examples/Getting Started/Toots/Toot2.csd");
+//    tutFiles.append(":/examples/Getting Started/Toots/Toot3.csd");
+//    tutFiles.append(":/examples/Getting Started/Toots/Toot4.csd");
+//    tutFiles.append(":/examples/Getting Started/Toots/Toot5.csd");
 
-    submenu = tutorialMenu->addMenu("Toots");
-    foreach (QString fileName, tutFiles) {
-        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-        newAction = submenu->addAction(name);
-        newAction->setData(fileName);
-        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-    }
+//    submenu = tutorialMenu->addMenu("Toots");
+//    foreach (QString fileName, tutFiles) {
+//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+//        newAction = submenu->addAction(name);
+//        newAction->setData(fileName);
+//        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+//    }
 
-    pluginExamples << ":/examples/Plugins/CircularBuffer.csd";
+//    pluginExamples << ":/examples/Plugins/CircularBuffer.csd";
 
-    subMenus << pluginExamples;
-    subMenuNames << tr("Plugins");
+//    subMenus << pluginExamples;
+//	subMenuNames << tr("Plugins");
+
+        //-----
+/*
+	QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
+	QAction *newAction;
+        QMenu *submenu;
+
+	QList<QStringList> subMenus; // should get rid of those  as :examples/ is not needed any more
+	QStringList subMenuNames;
+
+	// CsoundQt Main Examples (was embedded examples with before)
+	QString mainExamplesPath = getExamplePath("CsoundQt");
+	if (QDir(mainExamplesPath).exists()) {
+		QMenu *mainExamplesMenu = examplesMenu->addMenu(tr("CsoundQt examples"));
+		QStringList subDirs = QDir(mainExamplesPath).entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+		qDebug() << "subdirs: " << subDirs;
+		foreach (QString subDir, subDirs) {
+			QString dirName = subDir.mid(subDir.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+			submenu = mainExamplesMenu->addMenu(dirName);
+			QStringList filters;
+			filters << "*.csd";
+			QStringList mainExamplesFiles = QDir(mainExamplesPath + "/" + subDir).entryList(filters,QDir::Files);
+			foreach (QString fileName, mainExamplesFiles) {
+				//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+				newAction = submenu->addAction(fileName);
+				newAction->setData(mainExamplesPath + "/" + subDir + "/" + fileName);
+				connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+			}
+            // TODO: "Getting Started has also submenus take care how they are organized <- bad code, must be rewritten
+		}
+	} else {
+		qDebug() << "Warning: Could not find CsoundQt main examples.";
+	}
+
 
 
     //FLOSS Manual Examples
@@ -4794,28 +4918,29 @@ void CsoundQt::createMenus()
 
 
     //McCurdy Collection
-    QString mcCurdyPath = getExamplePath("McCurdy Collection");
-    if (QDir(mcCurdyPath).exists()) {
-        QMenu *mccurdyMenu = examplesMenu->addMenu(tr("McCurdy Collection"));
-        QStringList subDirs = QDir(mcCurdyPath).entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-        foreach (QString subDir, subDirs) {
-            QString dirName = subDir.mid(subDir.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-            submenu = mccurdyMenu->addMenu(dirName);
-            QStringList filters;
-            filters << "*.csd";
-            QStringList mcCurdyFiles = QDir(mcCurdyPath + "/" + subDir).entryList(filters,QDir::Files);
-            foreach (QString fileName, mcCurdyFiles) {
-                //        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-                newAction = submenu->addAction(fileName);
-                newAction->setData(mcCurdyPath + "/" + subDir + "/" + fileName);
-                connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-            }
-        }
-    } else {
-        qDebug() << "Warning: Could not find McCurdy Collection.";
-    }
+	QString mcCurdyPath = getExamplePath("McCurdy Collection");
+	if (QDir(mcCurdyPath).exists()) {
+		QMenu *mccurdyMenu = examplesMenu->addMenu(tr("McCurdy Collection"));
+		QStringList subDirs = QDir(mcCurdyPath).entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+		foreach (QString subDir, subDirs) {
+			QString dirName = subDir.mid(subDir.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+			submenu = mccurdyMenu->addMenu(dirName);
+			QStringList filters;
+			filters << "*.csd";
+			QStringList mcCurdyFiles = QDir(mcCurdyPath + "/" + subDir).entryList(filters,QDir::Files);
+			foreach (QString fileName, mcCurdyFiles) {
+				//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
+				newAction = submenu->addAction(fileName);
+				newAction->setData(mcCurdyPath + "/" + subDir + "/" + fileName);
+				connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
+			}
+		}
+	} else {
+		qDebug() << "Warning: Could not find McCurdy Collection.";
+	}
 
-    // Add the rest
+
+	// TODO: find a way to add Stria synth to CsoundQt/Synths
     for (int i = 0; i < subMenus.size(); i++) {
         submenu = examplesMenu->addMenu(subMenuNames[i]);
         foreach (QString fileName, subMenus[i]) {
@@ -4842,6 +4967,10 @@ void CsoundQt::createMenus()
             }
         }
     }
+*/
+
+
+    fillExampleMenu();
 
 
     favoriteMenu = menuBar()->addMenu(tr("Favorites"));
@@ -4861,6 +4990,7 @@ void CsoundQt::createMenus()
     // helpMenu->addAction(browseForwardAct);
     helpMenu->addSeparator();
     helpMenu->addAction(showManualAct);
+	helpMenu->addAction(showManualOnlineAct);
     helpMenu->addAction(downloadManualAct);
     helpMenu->addAction(showOverviewAct);
     // helpMenu->addAction(showOpcodeQuickRefAct);
@@ -4869,15 +4999,71 @@ void CsoundQt::createMenus()
     helpMenu->addSeparator();
     helpMenu->addAction(resetPreferencesAct);
     helpMenu->addSeparator();
-    // helpMenu->addAction(requestFeatureAct);
-    // helpMenu->addAction(chatAct);
     helpMenu->addSeparator();
     helpMenu->addAction(reportBugAct);
+    helpMenu->addAction(reportCsoundBugAct);
     helpMenu->addAction(aboutAct);
     // helpMenu->addAction(donateAct);
     // uhelpMenu->addAction(aboutQtAct);
 
 }
+
+
+void CsoundQt::fillExampleMenu()
+{
+    QString examplePath = getExamplePath("");
+    qDebug() << examplePath;
+    if (examplePath.isEmpty() ) {
+        qDebug() << "examplePath not set";
+        return;
+    }
+
+    QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
+
+    QDir dir(examplePath);
+    if (dir.count() > 0) {
+        fillExampleSubmenu(dir.absolutePath(), examplesMenu, 0);
+    }
+}
+
+void CsoundQt::fillExampleSubmenu(QDir dir, QMenu *m, int depth)
+{
+    QString test = dir.dirName();
+    //qDebug() << "dirName: " << test;
+    if (depth > m_options->menuDepth) {
+        return;
+    }
+
+    // add extra entry for FLOSS manual
+    if (dir.dirName().startsWith("FLOSS")) {
+        m->addAction(tr("Read FLOSS Manual Online"),this, SLOT(openFLOSSManual()));
+        m->addSeparator();
+    }
+
+    QStringList filters;
+    filters << "*.csd" << "*.pdf" << "*.html";
+    dir.setNameFilters(filters);
+    QStringList files = dir.entryList(QDir::Files,QDir::Name);
+    QStringList dirs = dir.entryList(QDir::AllDirs,QDir::Name);
+    for (int i = 0; i < dirs.size() && i < 256; i++) {
+        QDir newDir(dir.absolutePath() + "/" + dirs[i]);
+        newDir.setNameFilters(filters);
+        QStringList newFiles = dir.entryList(QDir::Files,QDir::Name);
+        QStringList newDirs = dir.entryList(QDir::AllDirs,QDir::Name);
+        if (newFiles.size() > 0 ||  newDirs.size() > 0) {
+            if (dirs[i] != "." && dirs[i] != ".." && dirs[i]!="SourceMaterials") {
+                QMenu *menu = m->addMenu(dirs[i]);
+                fillExampleSubmenu(newDir.absolutePath(), menu, depth + 1);
+            }
+        }
+    }
+    for (int i = 0; i < files.size() &&  i < 256; i++) {
+        QAction *newAction = m->addAction(files[i],
+                                          this, SLOT(openExample()));
+        newAction->setData(dir.absoluteFilePath(files[i]));
+    }
+}
+
 
 void CsoundQt::fillFileMenu()
 {
@@ -5110,7 +5296,7 @@ void CsoundQt::createToolBars()
     configureToolBar->addAction(showPythonConsoleAct);
 #endif
     // configureToolBar->addAction(showScratchPadAct);
-    // configureToolBar->addAction(showUtilitiesAct);
+    configureToolBar->addAction(showUtilitiesAct);
     configureToolBar->setFloatable(false);
 
     Qt::ToolButtonStyle toolButtonStyle = (m_options->iconText?
@@ -5226,8 +5412,8 @@ void CsoundQt::readSettings()
                                                  QVariant(QColor(Qt::black))).value<QColor>();
     m_options->consoleBgColor = settings.value("consoleBgColor",
                                                QVariant(QColor(Qt::white))).value<QColor>();
-    m_options->editorBgColor = settings.value("editorBgColor",
-                                              QVariant(QColor(Qt::white))).value<QColor>();
+    // m_options->editorBgColor = settings.value("editorBgColor",
+    //                                           QVariant(QColor(Qt::white))).value<QColor>();
 
     m_options->tabWidth = settings.value("tabWidth", 24).toInt();
     m_options->tabIndents = settings.value("tabIndents", false).toBool();
@@ -5237,7 +5423,7 @@ void CsoundQt::readSettings()
     m_options->autoPlay = settings.value("autoplay", false).toBool();
     m_options->autoJoin = settings.value("autoJoin", true).toBool();
     m_options->menuDepth = settings.value("menuDepth", 3).toInt();
-    m_options->saveChanges = settings.value("savechanges", false).toBool();
+    m_options->saveChanges = settings.value("savechanges", true).toBool();
     m_options->askIfTemporary = settings.value("askIfTemporary", false).toBool();
     m_options->rememberFile = settings.value("rememberfile", true).toBool();
     m_options->saveWidgets = settings.value("savewidgets", true).toBool();
@@ -5264,6 +5450,9 @@ void CsoundQt::readSettings()
     lastTabIndex = settings.value("lasttabindex", "").toInt();
     m_options->debugPort = settings.value("debugPort",34711).toInt();
     m_options->tabShortcutActive = settings.value("tabShortcutActive", true).toBool();
+    m_options->highlightScore = settings.value("highlightScore", false).toBool();
+
+
     settings.endGroup();
     settings.beginGroup("Run");
     m_options->useAPI = settings.value("useAPI", true).toBool();
@@ -5310,6 +5499,9 @@ void CsoundQt::readSettings()
     m_options->overrideNumChannels = settings.value("overrideNumChannels", false).toBool();
     m_options->numChannels = settings.value("numChannels", 2).toInt();
     m_options->numInputChannels = settings.value("numInputChannels", 2).toInt();
+
+    m_options->useLimiter = settings.value("useLimiter", csoundGetVersion()>=6160).toBool();
+    m_options->limitValue = settings.value("limitValue", 1.0).toDouble();
 
     m_options->realtimeFlag = settings.value("realtimeFlag", false).toBool();
     m_options->sampleAccurateFlag = settings.value("sampleAccurateFlag", false).toBool();
@@ -5370,6 +5562,7 @@ void CsoundQt::readSettings()
     m_options->defaultCsd = settings.value("defaultCsd","").toString();
     m_options->defaultCsdActive = settings.value("defaultCsdActive","").toBool();
     m_options->favoriteDir = settings.value("favoriteDir","").toString();
+    m_options->examplePath = settings.value("examplePath", "").toString();
     m_options->pythonDir = settings.value("pythonDir","").toString();
     m_options->pythonExecutable = settings.value("pythonExecutable","python").toString();
     m_options->csoundExecutable = settings.value("csoundExecutable","csound").toString();
@@ -5486,7 +5679,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("consolefontsize", m_options->consoleFontPointSize);
         settings.setValue("consoleFontColor", QVariant(m_options->consoleFontColor));
         settings.setValue("consoleBgColor", QVariant(m_options->consoleBgColor));
-        settings.setValue("editorBgColor", QVariant(m_options->editorBgColor));
+        // settings.setValue("editorBgColor", QVariant(m_options->editorBgColor));
         settings.setValue("tabWidth", m_options->tabWidth );
         settings.setValue("tabIndents", m_options->tabIndents);
         settings.setValue("colorvariables", m_options->colorVariables);
@@ -5521,6 +5714,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("lasttabindex", lastIndex);
         settings.setValue("debugPort", m_options->debugPort);
         settings.setValue("tabShortcutActive", m_options->tabShortcutActive);
+        settings.setValue("highlightScore", m_options->highlightScore);
     }
     else {
         settings.remove("");
@@ -5555,6 +5749,9 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("overrideNumChannels", m_options->overrideNumChannels);
         settings.setValue("numChannels", m_options->numChannels);
         settings.setValue("numInputChannels", m_options->numInputChannels);
+
+        settings.setValue("useLimiter", m_options->useLimiter);
+        settings.setValue("limitValue", m_options->limitValue);
 
         settings.setValue("additionalFlags", m_options->additionalFlags);
         settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);
@@ -5608,6 +5805,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("defaultCsd",m_options->defaultCsd);
         settings.setValue("defaultCsdActive",m_options->defaultCsdActive);
         settings.setValue("favoriteDir",m_options->favoriteDir);
+        settings.setValue("examplePath", m_options->examplePath);
         settings.setValue("pythonDir",m_options->pythonDir);
         settings.setValue("pythonExecutable",m_options->pythonExecutable);
         settings.setValue("csoundExecutable", m_options->csoundExecutable);
@@ -5670,6 +5868,7 @@ void CsoundQt::clearSettings()
     settings.sync();
 }
 
+
 int CsoundQt::execute(QString executable, QString options)
 {
     int ret = 0;
@@ -5702,8 +5901,7 @@ int CsoundQt::execute(QString executable, QString options)
     QProcess *p = new QProcess(this);
     p->setWorkingDirectory(path);
     p->start(commandLine);
-    Q_PID id = p->pid();
-    qDebug() << "Launched external program with id:" << id;
+    qDebug() << "Launched external program with id:" << p->processId();
     ret = !p->waitForStarted() ? 1 : 0;
 #endif
     return ret;
@@ -5826,12 +6024,10 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         fileName = QString("");
     }
 
-    QDEBUG << "makeNewPage" << fileName << "curPage: " << curPage;
     if (!makeNewPage(fileName, text)) {
         QApplication::restoreOverrideCursor();
         return -1;
     }
-    QDEBUG << "makeNewPage returned, curPage: " << curPage;
 
     if (!m_options->autoJoin &&
             (fileName.endsWith(".sco") ||
@@ -5866,7 +6062,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     if (runNow) {
         play();
     }
-    QDEBUG << "loadFile "  << fileName << "finished, curPage " << curPage;
+    QDEBUG << "loadFile" << fileName << "finished, curPage:" << curPage;
     return curPage;
 }
 
@@ -5877,6 +6073,7 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
                              tr("Please close a document before opening another."));
         return false;
     }
+    auto t0 = std::chrono::high_resolution_clock::now();
     DocumentPage *newPage = new DocumentPage(this, m_opcodeTree, &m_configlists, m_midiLearn);
     int insertPoint = curPage + 1;
     curPage += 1;
@@ -5930,7 +6127,9 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
     page->getEngine()->setMidiHandler(midiHandler);
 
     setCurrentOptionsForPage(page); // Redundant but does the trick of setting the font properly now that stylesheets are being used...
-    // storeSettings(); // try: do not store on making new page still...
+    auto t1 = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration<double, std::milli>(t1-t0).count();
+    QDEBUG << "makeNewPage finished in (ms)" << elapsed;
     return true;
 }
 
@@ -6344,6 +6543,11 @@ int CsoundQt::getDocument(QString name)
         }
     }
     return index;
+}
+
+QString CsoundQt::getTheme()
+{
+    return m_options->theme;
 }
 
 QString CsoundQt::getSelectedText(int index, int section)
@@ -6803,6 +7007,7 @@ void CsoundQt::loadPreset(int preSetIndex, int index) {
     if (index == -1) {
         index = curPage;
     }
+
     if (index < documentTabs->count() && index >= 0) {
         return documentPages[index]->loadPreset(preSetIndex);
     }

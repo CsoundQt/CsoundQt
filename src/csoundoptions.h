@@ -89,6 +89,9 @@ public:
     int numChannels;
     int numInputChannels;
 
+    bool useLimiter;
+    double limitValue;
+
 	bool useCsoundMidi;
 	bool simultaneousRun; // Allow running various instances (tabs) simultaneously.
 

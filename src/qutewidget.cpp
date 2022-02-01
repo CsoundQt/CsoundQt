@@ -143,10 +143,7 @@ void QuteWidget::widgetMessage(QString path, double value)
 
 QString QuteWidget::getChannelName()
 {
-	//  widgetLock.lockForRead();
-	QString name = m_channel;
-	//  widgetLock.unlock();
-	return name;
+    return m_channel;
 }
 
 QString QuteWidget::getChannel2Name()
@@ -261,7 +258,7 @@ void QuteWidget::applyInternalProperties()
 	height = property("QCS_height").toInt();
 	setWidgetGeometry(x,y,width, height);
 	m_channel = property("QCS_objectName").toString();
-	m_channel2 = property("QCS_objectName2").toString();
+    m_channel2 = property("QCS_objectName2").toString();
 	m_midicc = property("QCS_midicc").toInt();
 	m_midichan = property("QCS_midichan").toInt();
 	setVisible(property("QCS_visible").toBool());
@@ -427,9 +424,9 @@ void QuteWidget::addChn_k()
 
 void QuteWidget::createPropertiesDialog()
 {
-    qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n"
-             << dynamicPropertyNames ();
-    int footerRow = 20;
+//    qDebug() << "QuteWidget::createPropertiesDialog()---Dynamic Properties:\n"
+//             << dynamicPropertyNames ();
+	int footerRow = 20;
 	dialog = new QDialog(this);
     dialog->resize(360, 300);
 	//  dialog->setModal(true);
@@ -497,7 +494,7 @@ void QuteWidget::createPropertiesDialog()
         layout->addWidget(midichanSpinBox, midiRow,3, Qt::AlignLeft|Qt::AlignVCenter);
 
         midiLearnButton = new QPushButton(tr("MIDI learn"));
-        layout->addWidget(midiLearnButton, midiRow, 4, Qt::AlignLeft|Qt::AlignVCenter);
+		layout->addWidget(midiLearnButton, midiRow, 4, Qt::AlignLeft|Qt::AlignVCenter);
 	}
 	acceptButton = new QPushButton(tr("Ok"));
 	acceptButton->setDefault(true);

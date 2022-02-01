@@ -66,6 +66,8 @@ protected:
 	bool m_repeatKeys;
     QMutex consoleLock;
 
+    QRegularExpression rxerr;
+
 signals:
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -101,7 +103,7 @@ public:
 	{
 		setReadOnly(true);
 		setFontItalic(false);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
         document()->setDefaultFont(QFont("Courier New", 10));
 #else
         document()->setDefaultFont(QFont("Courier New", 7));

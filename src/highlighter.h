@@ -28,8 +28,11 @@
 #include <QHash>
 #include <QTextCharFormat>
 #include <QStringList>
+#include <QRegularExpression>
 
 #include <QTextDocument>
+
+enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection };
 
 struct ParenthesisInfo
 {
@@ -44,9 +47,11 @@ public:
 
 	QVector<ParenthesisInfo *> parentheses();
 	void insert(ParenthesisInfo *info);
+    CsdSection section;
 
 private:
 	QVector<ParenthesisInfo *> m_parentheses;
+
 };
 
 class Highlighter : public QSyntaxHighlighter
@@ -63,6 +68,9 @@ public:
 	void setColorVariables(bool color);
 	void setMode(int mode);
     void setTheme(const QString &theme);
+    void enableScoreSyntaxHighlighting(bool status) {
+        m_scoreSyntaxHighlighting = status;
+    }
     QTextCharFormat getFormat(QString tag);
 
 	// for html
@@ -93,22 +101,27 @@ protected:
 	void highlightPythonBlock(const QString &text);
 	void highlightXmlBlock(const QString &text);
 	void highlightHtmlBlock(const QString &text);
+    void highlightScore(const QString &text, int start, int end);
 	int findOpcode(QString opcodeName, int start = 0, int end = -1);
+    bool isOpcode(QString name);
 
 private:
 	struct HighlightingRule
 	{
-		QRegExp pattern;
+        QRegularExpression pattern;
 		QTextCharFormat format;
         int group;
 	};
 	QVector<HighlightingRule> highlightingRules;
 	QVector<HighlightingRule> lastHighlightingRules;
 
-	QRegExp commentStartExpression;
-	QRegExp commentEndExpression;
+    QRegularExpression commentStartExpression;
+    QRegularExpression commentEndExpression;
     QRegExp functionRegex;
-	//    QRegExp b64encStartExpression;
+
+    QRegularExpression rxScoreLetter;
+    QRegularExpression rxQuotation;
+    //    QRegExp b64encStartExpression;
 	//    QRegExp b64encEndExpression;
 
 
@@ -124,6 +137,8 @@ private:
     QTextCharFormat ioFormat;
     QTextCharFormat deprecatedFormat;
     QTextCharFormat operatorFormat;
+    QTextCharFormat scoreLetterFormat;
+    QTextCharFormat errorFormat;
 
 
 	QTextCharFormat labelFormat;
@@ -140,15 +155,19 @@ private:
 
     QStringList pythonKeywords;  //Python
 	QTextCharFormat keywordFormat;
-    QRegExp csoundOptionsRx, csoundOptionsRx2;
+    QRegularExpression csoundOptionsRx, csoundOptionsRx2;
 
 	//     void setFirstRules();
 	void setLastRules();
 
 	QStringList m_opcodeList;
+    QSet<QString> m_opcodesSet;
+
 	bool colorVariables;
 	// TODO this is duplicated in documentview class. Should it be unified?
 	int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
+
+    bool m_scoreSyntaxHighlighting;
 
     QString m_theme;
 

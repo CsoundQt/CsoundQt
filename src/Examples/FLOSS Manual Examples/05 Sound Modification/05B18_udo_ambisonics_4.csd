@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
---env:SSDIR+=../SourceMaterials -odac -m0
+--env:SSDIR+=../../SourceMaterials -odac -m0
 </CsOptions>
 <CsInstruments>
 sr      =  44100
@@ -10,8 +10,8 @@ nchnls  =  8
 
 zakinit 16, 1
 
-#include "../SourceMaterials/ambisonics_udos.txt"
-#include "../SourceMaterials/ambisonics_utilities.txt"
+#include "../../SourceMaterials/ambisonics_udos.txt"
+#include "../../SourceMaterials/ambisonics_utilities.txt"
 
 instr 1
 asnd    buzz    p4,p5,p6,1

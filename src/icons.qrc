@@ -1,103 +1,118 @@
 <RCC>
     <qresource prefix="/">
-        <file>themes/fun/gtk-reload.png</file>
-        <file>themes/fun/control-center2.png</file>
-        <file>themes/fun/gnome-dev-floppy.png</file>
-        <file>themes/fun/gnome-mime-application-x-diagram.png</file>
-        <file>themes/fun/gnome-folder.png</file>
-        <file>themes/fun/gksu-root-terminal.png</file>
-        <file>themes/fun/edit-find.png</file>
-        <file>themes/fun/gtk-media-play-ltr2.png</file>
-        <file>themes/fun/gtk-paste.png</file>
-        <file>themes/fun/gtk-copy.png</file>
-        <file>themes/fun/editfile.png</file>
-        <file>themes/fun/gtk-undo.png</file>
-        <file>themes/fun/gtk-redo.png</file>
-        <file>themes/fun/playfile.png</file>
-        <file>themes/fun/gnome-devel.png</file>
-        <file>themes/fun/scratchpad.png</file>
-        <file>themes/fun/gtk-new.png</file>
-        <file>themes/fun/gtk-media-play-trl.png</file>
-        <file>themes/fun/gtk-media-play-ltr.png</file>
-        <file>themes/fun/gtk-cut.png</file>
-        <file>themes/fun/gtk-close.png</file>
-        <file>themes/fun/gtk-media-record.png</file>
-        <file>themes/fun/render.png</file>
-        <file>themes/fun/gtk-media-pause.png</file>
-        <file>themes/fun/gtk-info.png</file>
-        <file>themes/fun/note.png</file>
-        <file>themes/fun/gtk-media-stop.png</file>
-        <file>themes/fun/pyroom.png</file>
-        <file>themes/boring/gtk-reload.png</file>
-        <file>themes/boring/control-center2.png</file>
-        <file>themes/boring/gnome-mime-application-x-diagram.png</file>
-        <file>themes/boring/gnome-dev-floppy.png</file>
-        <file>themes/boring/gnome-folder.png</file>
-        <file>themes/boring/gksu-root-terminal.png</file>
+        <file>themes/boring/reload.png</file>
+        <file>themes/boring/settings.png</file>
+        <file>themes/boring/widgets.png</file>
+        <file>themes/boring/floppy.png</file>
+        <file>themes/boring/folder.png</file>
         <file>themes/boring/edit-find.png</file>
-        <file>themes/boring/gtk-media-play-ltr2.png</file>
-        <file>themes/boring/gtk-paste.png</file>
-        <file>themes/boring/gtk-copy.png</file>
+        <file>themes/boring/terminal.png</file>
+        <file>themes/boring/edit-paste.png</file>
+        <file>themes/boring/edit-copy.png</file>
         <file>themes/boring/editfile.png</file>
-        <file>themes/boring/gtk-undo.png</file>
-        <file>themes/boring/gtk-redo.png</file>
+        <file>themes/boring/edit-undo.png</file>
+        <file>themes/boring/edit-redo.png</file>
         <file>themes/boring/playfile.png</file>
-        <file>themes/boring/gnome-devel.png</file>
+        <file>themes/boring/devel.png</file>
         <file>themes/boring/scratchpad.png</file>
-        <file>themes/boring/gtk-new.png</file>
-        <file>themes/boring/gtk-media-play-trl.png</file>
-        <file>themes/boring/gtk-cut.png</file>
-        <file>themes/boring/gtk-media-play-ltr.png</file>
-        <file>themes/boring/gtk-close.png</file>
-        <file>themes/boring/gtk-media-record.png</file>
+        <file>themes/boring/edit-new.png</file>
+        <file>themes/boring/edit-cut.png</file>
+        <file>themes/boring/media-play.png</file>
+        <file>themes/boring/edit-close.png</file>
+        <file>themes/boring/media-record.png</file>
         <file>themes/boring/render.png</file>
-        <file>themes/boring/gtk-media-pause.png</file>
-        <file>themes/boring/gtk-info.png</file>
+        <file>themes/boring/render.svg</file>
+        <file>themes/boring/media-pause.png</file>
+        <file>themes/boring/info.png</file>
         <file>themes/boring/note.png</file>
-        <file>themes/boring/gtk-media-stop.png</file>
+        <file>themes/boring/media-stop.png</file>
         <file>themes/boring/pyroom.png</file>
-        <file>themes/boring/midi_keyboard.png</file>
-        <file>themes/fun/midi_keyboard.png</file>
-
-        <file>themes/breeze/gtk-reload.png</file>
-        <file>themes/breeze/control-center2.png</file>
-        <file>themes/breeze/gnome-mime-application-x-diagram.png</file>
-        <file>themes/breeze/gnome-dev-floppy.png</file>
-        <file>themes/breeze/gnome-folder.png</file>
-        <file>themes/breeze/gksu-root-terminal.png</file>
+        <file>themes/boring/midi-keyboard.png</file>
+        
+        <file>themes/breeze/reload.png</file>
+        <file>themes/breeze/settings.png</file>
+        <file>themes/breeze/widgets.png</file>
+        <file>themes/breeze/floppy.png</file>
+        <file>themes/breeze/folder.png</file>
         <file>themes/breeze/edit-find.png</file>
-        <file>themes/breeze/gtk-media-play-ltr2.png</file>
-        <file>themes/breeze/gtk-paste.png</file>
-        <file>themes/breeze/gtk-copy.png</file>
+        <file>themes/breeze/terminal.png</file>
+        <file>themes/breeze/edit-paste.png</file>
+        <file>themes/breeze/edit-copy.png</file>
         <file>themes/breeze/editfile.png</file>
-        <file>themes/breeze/gtk-undo.png</file>
-        <file>themes/breeze/gtk-redo.png</file>
+        <file>themes/breeze/edit-undo.png</file>
+        <file>themes/breeze/edit-redo.png</file>
         <file>themes/breeze/playfile.png</file>
-        <file>themes/breeze/gnome-devel.png</file>
+        <file>themes/breeze/devel.png</file>
         <file>themes/breeze/scratchpad.png</file>
-        <file>themes/breeze/gtk-new.png</file>
-        <file>themes/breeze/gtk-media-play-trl.png</file>
-        <file>themes/breeze/gtk-cut.png</file>
-        <file>themes/breeze/gtk-media-play-ltr.png</file>
-        <file>themes/breeze/gtk-close.png</file>
-        <file>themes/breeze/gtk-media-record.png</file>
+        <file>themes/breeze/edit-new.png</file>
+        
+        <file>themes/breeze/edit-cut.png</file>
+        
+        <file>themes/breeze/edit-close.png</file>
+        <file>themes/breeze/media-record.png</file>
         <file>themes/breeze/render.png</file>
-        <file>themes/breeze/gtk-media-pause.png</file>
-        <file>themes/breeze/gtk-info.png</file>
+        <file>themes/breeze/render.svg</file>
+        <file>themes/breeze/media-pause.png</file>
+        <file>themes/breeze/info.png</file>
         <file>themes/breeze/note.png</file>
-        <file>themes/breeze/gtk-media-stop.png</file>
+		<file>themes/breeze/media-play.png</file>
+        <file>themes/breeze/media-stop.png</file>
         <file>themes/breeze/pyroom.png</file>
-        <file>themes/breeze/midi_keyboard.png</file>
+        <file>themes/breeze/midi-keyboard.png</file>
         <file>themes/breeze/hearing.svg</file>
-        <file>themes/common/align-horizontal-left.svg</file>
-        <file>themes/common/align-horizontal-right.svg</file>
-        <file>themes/common/align-vertical-top.svg</file>
-        <file>themes/common/align-vertical-bottom.svg</file>
-        <file>themes/common/align-vertical-center.svg</file>
-        <file>themes/common/align-horizontal-center.svg</file>
-        <file>themes/common/object-order-front.svg</file>
-        <file>themes/common/object-order-back.svg</file>
+        <file>themes/breeze/browse-next.png</file>
+        <file>themes/breeze/browse-prev.png</file>
+	<file>themes/breeze/home.png</file>
+
+        <file>themes/breeze-dark/reload.png</file>
+        <file>themes/breeze-dark/settings.png</file>
+        <file>themes/breeze-dark/widgets.png</file>
+        <file>themes/breeze-dark/floppy.png</file>
+        <file>themes/breeze-dark/folder.png</file>
+        <file>themes/breeze-dark/edit-find.png</file>
+        <file>themes/breeze-dark/terminal.png</file>
+        <file>themes/breeze-dark/edit-paste.png</file>
+        <file>themes/breeze-dark/edit-copy.png</file>
+        <file>themes/breeze-dark/editfile.png</file>
+        <file>themes/breeze-dark/edit-undo.png</file>
+        <file>themes/breeze-dark/edit-redo.png</file>
+        <file>themes/breeze-dark/playfile.png</file>
+        <file>themes/breeze-dark/devel.png</file>
+        <file>themes/breeze-dark/scratchpad.png</file>
+        <file>themes/breeze-dark/edit-new.png</file>
+        <file>themes/breeze-dark/media-play.png</file>
+        <file>themes/breeze-dark/edit-cut.png</file>
+        <file>themes/breeze-dark/edit-close.png</file>
+        <file>themes/breeze-dark/media-record.png</file>
+        <file>themes/breeze-dark/render.svg</file>
+        <file>themes/breeze-dark/media-pause.png</file>
+        <file>themes/breeze-dark/info.png</file>
+        <file>themes/breeze-dark/note.png</file>
+        <file>themes/breeze-dark/media-stop.png</file>
+        <file>themes/breeze-dark/pyroom.png</file>
+        <file>themes/breeze-dark/midi-keyboard.png</file>
+        <file>themes/breeze-dark/hearing.svg</file>
+	<file>themes/breeze-dark/browse-next.png</file>
+        <file>themes/breeze-dark/browse-prev.png</file>
+        <file>themes/breeze-dark/home.png</file>
+
+        <file>themes/breeze/align-horizontal-left.svg</file>
+        <file>themes/breeze/align-horizontal-right.svg</file>
+        <file>themes/breeze/align-vertical-top.svg</file>
+        <file>themes/breeze/align-vertical-bottom.svg</file>
+        <file>themes/breeze/align-vertical-center.svg</file>
+        <file>themes/breeze/align-horizontal-center.svg</file>
+        <file>themes/breeze/object-order-front.svg</file>
+        <file>themes/breeze/object-order-back.svg</file>
                             
+        <file>themes/breeze-dark/align-horizontal-left.svg</file>
+        <file>themes/breeze-dark/align-horizontal-right.svg</file>
+        <file>themes/breeze-dark/align-vertical-top.svg</file>
+        <file>themes/breeze-dark/align-vertical-bottom.svg</file>
+        <file>themes/breeze-dark/align-vertical-center.svg</file>
+        <file>themes/breeze-dark/align-horizontal-center.svg</file>
+        <file>themes/breeze-dark/object-order-front.svg</file>
+        <file>themes/breeze-dark/object-order-back.svg</file>
                 
                 
     </qresource>

@@ -14,136 +14,7 @@
         <file>opcodes.xml</file>
         <file>default.csd</file>
         <file>test.csd</file>
-        <file>../examples/Miscellaneous/MIDI_Tunings.csd</file>
-        <file>../examples/Miscellaneous/Keyboard_Control.csd</file>
-        <file>../examples/Miscellaneous/Just_Intonation.csd</file>
-        <file>../examples/Miscellaneous/Mouse_Control.csd</file>
-        <file>../examples/Miscellaneous/Autotuner.csd</file>
-        <file>../examples/Miscellaneous/Event_Panel.csd</file>
-        <file>../examples/Miscellaneous/Score_Tricks.csd</file>
-        <file>../examples/Miscellaneous/Simple_Convolution.csd</file>
-        <file>../examples/Miscellaneous/Universal_Convolution.csd</file>
-        <file>../examples/Miscellaneous/IR_Creator.csd</file>
-        <file>../examples/Miscellaneous/Cross_Synthesis.csd</file>
-        <file>../examples/Miscellaneous/SF_Granular.csd</file>
-        <file>../examples/Miscellaneous/Oscillator_Aliasing.csd</file>
-        <file>../examples/Miscellaneous/Filter_lab.csd</file>
-        <file>../examples/Miscellaneous/Pvstencil.csd</file>
-        <file>../examples/Miscellaneous/Noise_Reduction.csd</file>
-        <file>../examples/Miscellaneous/Rms.csd</file>
-        <file>../examples/Miscellaneous/Reinit_Example.csd</file>
-        <file>../examples/Miscellaneous/No_Reinit.csd</file>
-     	<file>../examples/Miscellaneous/Matrix.csd</file>
-        <file>../examples/Miscellaneous/Mincer_Loop.csd</file>
-        <file>../examples/Miscellaneous/Circle_Map.csd</file>
-        <file>../examples/Miscellaneous/Binaural_Panning.csd</file>
-        <file>../examples/Miscellaneous/Spatialization.csd</file>
-        <file>../examples/Miscellaneous/Spatialization_5.1.csd</file>
-        <file>../examples/Miscellaneous/Pseudostereo.csd</file>
-        <file>../examples/Widgets/Widget_Panel.csd</file>
-        <file>../examples/Widgets/Label_Widget.csd</file>
-        <file>../examples/Widgets/Display_Widget.csd</file>
-        <file>../examples/Widgets/Slider_Widget.csd</file>
-        <file>../examples/Widgets/Lineedit_Widget.csd</file>
-        <file>../examples/Widgets/Scrollnumber_Widget.csd</file>
-        <file>../examples/Widgets/SpinBox_Widget.csd</file>
-        <file>../examples/Widgets/Graph_Widget.csd</file>
-        <file>../examples/Widgets/Button_Widget.csd</file>
-        <file>../examples/Widgets/Checkbox_Widget.csd</file>
-        <file>../examples/Widgets/Menu_Widget.csd</file>
-        <file>../examples/Widgets/Controller_Widget.csd</file>
-        <file>../examples/Widgets/Scope_Widget.csd</file>
-        <file>../examples/Widgets/Tableplot_Widget.csd</file>
-        <file>../examples/Widgets/String_Channels.csd</file>
-        <file>../examples/Widgets/Presets.csd</file>
-        <file>../examples/Widgets/Reserved_Channels.csd</file>
-        <file>../examples/Getting Started/Basics/Hello World.csd</file>
-        <file>../examples/Getting Started/Basics/Document Structure.csd</file>
-        <file>../examples/Getting Started/Basics/Basic Elements Opcodes.csd</file>
-        <file>../examples/Getting Started/Basics/Basic Elements Variables.csd</file>
-        <file>../examples/Getting Started/Basics/Getting Help.csd</file>
-        <file>../examples/Getting Started/Basics/Instrument Control.csd</file>
-        <file>../examples/Getting Started/Basics/Realtime Instrument Control.csd</file>
-        <file>../examples/Getting Started/Basics/Routing.csd</file>
-        <file>../examples/Getting Started/Realtime_Interaction/Creating_Widgets.csd</file>
-        <file>../examples/Getting Started/Realtime_Interaction/Widgets_Invalue.csd</file>
-        <file>../examples/Getting Started/Realtime_Interaction/Widgets_Outvalue.csd</file>
-        <file>../examples/Getting Started/Realtime_Interaction/Widgets_Buttontypes.csd</file>
-        <file>../examples/Getting Started/Realtime_Interaction/Widgets_Checkbox.csd</file>
-        <file>../examples/Getting Started/Realtime_Interaction/Live_Audio_Input.csd</file>
-        <file>../examples/Getting Started/Realtime_Interaction/MIDI_Receiving_Notes.csd</file>
-        <file>../examples/Getting Started/Realtime_Interaction/MIDI_Synth.csd</file>
-        <file>../examples/Getting Started/Realtime_Interaction/MIDI_Control_Data.csd</file>
-        <file>../examples/Getting Started/Realtime_Interaction/MIDI_Assign_Controllers.csd</file>
-        <file>../examples/Getting Started/Realtime_Interaction/Keyboard_Input.csd</file>
-        <file>../examples/Getting Started/Realtime_Interaction/OpenSoundControl.csd</file>
-        <file>../examples/Getting Started/Language_Features/Function_Tables_1.csd</file>
-        <file>../examples/Getting Started/Language_Features/Function_Tables_2.csd</file>
-        <file>../examples/Getting Started/Language_Features/Loops_1.csd</file>
-        <file>../examples/Getting Started/Language_Features/Loops_2.csd</file>
-        <file>../examples/Getting Started/Language_Features/Console_Print.csd</file>
-        <file>../examples/Getting Started/Language_Features/Writing_Audio_Files.csd</file>
-        <file>../examples/Getting Started/Language_Features/Using_Udos.csd</file>
-        <file>../examples/Getting Started/Toots/Toot1.csd</file>
-        <file>../examples/Getting Started/Toots/Toot2.csd</file>
-        <file>../examples/Getting Started/Toots/Toot3.csd</file>
-        <file>../examples/Getting Started/Toots/Toot4.csd</file>
-        <file>../examples/Getting Started/Toots/Toot5.csd</file>
-        <file>../examples/Synths/Additive_Synth.csd</file>
-        <file>../examples/Synths/Imitative_Additive.csd</file>
-        <file>../examples/Synths/Simple_Subtractive.csd</file>
-        <file>../examples/Synths/Simple_FM_Synth.csd</file>
-        <file>../examples/Synths/Phase_Mod_Synth.csd</file>
-        <file>../examples/Synths/Formant_Synth.csd</file>
-        <file>../examples/Synths/Mono_Synth.csd</file>
-        <file>../examples/Synths/B6_Hammond.csd</file>
-        <file>../examples/Synths/Diffamator.csd</file>
-        <file>../examples/Synths/Sruti-Drone_Box.csd</file>
-        <file>../examples/Synths/Pipe_Synth.csd</file>
-        <file>../examples/Synths/Piano_phase.csd</file>
-        <file>../examples/Synths/String_Phaser.csd</file>
-        <file>../examples/Synths/Waveform_Mix.csd</file>
-		<file>../examples/Synths/Scanned_Synthesis_Sandbox.csd</file>
-		<file>../examples/Useful/SpectrumAnalyzer.csd</file>
-		<file>../examples/Useful/SF_Play_from_buffer.csd</file>
-        <file>../examples/Useful/SF_Play_from_buffer_2.csd</file>
-        <file>../examples/Useful/SF_Play_from_HD.csd</file>
-        <file>../examples/Useful/SF_Play_from_HD_2.csd</file>
-        <file>../examples/Useful/SF_Snippets_Player.csd</file>
-        <file>../examples/Useful/Multichannel_Player.csd</file>
-        <file>../examples/Useful/SF_Record.csd</file>
-        <file>../examples/Useful/Monome_basic.csd</file>
-        <file>../examples/Useful/Audio_Input_Test.csd</file>
-        <file>../examples/Useful/Audio_Output_Test.csd</file>
-        <file>../examples/Useful/Audio_Thru_Test.csd</file>
-        <file>../examples/Useful/MIDI_IO_Test.csd</file>
-        <file>../examples/Useful/MIDI_Recorder.csd</file>
-        <file>../examples/Useful/MIDI_Layering.csd</file>
-        <file>../examples/Useful/ASCII_Key.csd</file>
-        <file>../examples/Useful/IO_Test.csd</file>
-        <file>../examples/Useful/File_to_Text.csd</file>
-        <file>../examples/Useful/Envelope_Extractor.csd</file>
-        <file>../examples/Useful/Pitch_Tracker.csd</file>
-        <file>../examples/Useful/Mixdown_Player.csd</file>
-        <file>../examples/Useful/SF_Merger.csd</file>
-        <file>../examples/Useful/SF_Splitter.csd</file>
-        <file>../examples/Useful/AudioMidiTest.csd</file>
-                
-        <file>../examples/Music/Chowning-Stria.csd</file>
-        <file>../examples/Music/Riley-In_C.csd</file>
-        <file>../examples/Music/Boulanger-Trapped_in_Convert.csd</file>
-        <file>../examples/Music/Kung-Xanadu.csd</file>
-        <file>../examples/Music/Stockhausen-Studie_II.csd</file>
-        <file>../examples/Music/Bach-Invention_1.csd</file>
-        <file>../examples/Live Collection/Live_Accordizer.csd</file>
-        <file>../examples/Live Collection/Live_Delay_Feedback.csd</file>
-        <file>../examples/Live Collection/Live_Granular.csd</file>
-        <file>../examples/Live Collection/Live_RM_AM.csd</file>
-		<file>../examples/Html5 Support/Minimal_Html_Example.csd</file>
-		<file>../examples/Html5 Support/Styled_Sliders.csd</file>
-		<file>../examples/Html5 Support/Html_file_in_CsoundQt.html</file>
-		<file>../examples/Plugins/CircularBuffer.csd</file>
-		<file>translations/qutecsound_en.qm</file>
+        <file>translations/qutecsound_en.qm</file>
         <file>translations/qutecsound_es.qm</file>
         <file>translations/qutecsound_de.qm</file>
         <file>translations/qutecsound_fr.qm</file>
@@ -165,5 +36,6 @@
         <file>appstyle-white.css</file>
         <file>../images/html5.png</file>
         <file>../images/tools-wizard.svg</file>
+        <file>AudioMidiTest.csd</file>
     </qresource>
 </RCC>

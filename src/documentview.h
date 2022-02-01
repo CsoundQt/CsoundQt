@@ -42,7 +42,8 @@ public:
 	bool insertComplete; // Whether to insert full text or only opcode name
 
 protected:
-	virtual void keyPressEvent(QKeyEvent * event);
+    virtual void keyPressEvent(QKeyEvent * event);
+
 signals:
 	void keyPressed(QString text); // Used to send both pressed keys and full opcode text to be pasted
 };
@@ -84,9 +85,10 @@ public:
 	int getViewMode();
 
 	QString wordUnderCursor();
+    QString lineUnderCursor();
 	QString getActiveSection();
 	QString getActiveText();
-	int currentLine();
+    int currentLineNumber();
 	bool isModified();
 	bool childHasFocus();
 	void print(QPrinter *printer);
@@ -99,10 +101,11 @@ public:
     Highlighter* getHighlighter() { return &m_highlighter; }
     void gotoLineDialog();
     void markCurrentPosition();
+    const QStringList getAllWords();
 
 
 public slots:
-	void setModified(bool mod = true);
+    void setModified(bool mod = true);
     void syntaxCheck();
 	void textChanged();
 	void escapePressed();
@@ -171,7 +174,7 @@ private:
 
 	bool m_isModified;
 	bool m_autoComplete;
-	bool m_autoParameterMode;
+    bool m_autoParameterMode;
 	bool errorMarked;
 	bool internalChange;  // to let popoup opcode completion know if text change was internal
 	QTextEdit * m_currentEditor;
@@ -181,6 +184,20 @@ private:
 	QString lastReplace;
 	QStringList m_localVariables;
 	QStringList m_globalVariables;
+    QTime m_lastWordsUpdate;
+    QStringList m_allWords;
+    int m_lastCursorPosition;
+    QStringList m_longOptions = {
+        "syntax-check-only", "control-rate=", "messagelevel=",
+        "env:", "dither", "sched", "omacro:", "smacro:",
+        "verbose", "sample-accurate", "realtime",
+        "nchnls=", "nchnls_i=", "sinesize", "daemon",
+        "port=", "use-system-sr", "ksmps=",
+        "limiter", "udp-echo", "opcode-dir="
+    };
+    QStringList m_longOptions2 = {"rtmidi", "rtaudio"};
+
+    // QTime m_lastContextUpdate;
 
     QList<int> cursorPositions;
 

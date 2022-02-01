@@ -22,7 +22,7 @@
 
 #include "inspector.h"
 #include "types.h"
-
+#include <chrono>
 #include <QtGui>
 
 Inspector::Inspector(QWidget *parent)
@@ -51,8 +51,16 @@ Inspector::Inspector(QWidget *parent)
     m_treeWidget->expandItem(treeItem3);    // instruments
     m_treeWidget->collapseItem(treeItem4);  // ftables
     m_treeWidget->collapseItem(treeItem5);    // score
-    opcodeRegexp = QRegExp("\\bopcode\\s+(\\w+)\\b");
+    rxOpcode.setPattern("\\bopcode\\s+(\\w+),");
+    xinRx.setPattern("\\bxin\\b");
+    // xinRx.setPattern("[akiS]\\w+[,\\w\\d\\s_]+\\bxin\\s*$");
+    xoutRx.setPattern("\\bxout\\s+\\b");
+    // ftableRx1.setPattern("^f\\s*\\d");
+    ftableRx2.setPattern("^[\\w]*[\\s]*ftgen");
+
     inspectLabels = false;
+
+
 }
 
 
@@ -63,11 +71,14 @@ Inspector::~Inspector()
 
 void Inspector::parseText(const QString &text)
 {
-	//  qDebug() << "Inspector::parseText";
-    // m_opcodes.clear();
     udosMap.clear();
-    udosVector.clear();
-	inspectorMutex.lock();
+    // udosVector.clear();
+    inspectorMutex.lock();
+
+    auto t1 = std::chrono::high_resolution_clock::now();
+
+    bool insideSco = false;
+    bool insideOrc = false;
 	bool treeItem1Expanded = true;
 	bool treeItem2Expanded = true;
 	bool treeItem3Expanded = true;
@@ -90,119 +101,126 @@ void Inspector::parseText(const QString &text)
 	m_treeWidget->clear();
 	treeItem1 = new TreeItem(m_treeWidget, QStringList(tr("Opcodes")));
 	treeItem1->setLine(-1);
-	treeItem1->setBackground(0, Qt::lightGray);
-	treeItem2 = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
+    treeItem2 = new TreeItem(m_treeWidget, QStringList(tr("Macros")));
 	treeItem2->setLine(-1);
 	treeItem3 = new TreeItem(m_treeWidget, QStringList(tr("Instruments")));
 	treeItem3->setLine(-1);
-	treeItem3->setBackground(0, Qt::lightGray);
-	treeItem4 = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
+    treeItem4 = new TreeItem(m_treeWidget, QStringList(tr("F-tables")));
 	treeItem4->setLine(-1);
 	treeItem5 = new TreeItem(m_treeWidget, QStringList(tr("Score")));
 	treeItem5->setLine(-1);  // This might be overridden below
-	treeItem5->setBackground(0, Qt::lightGray);
-	TreeItem *currentInstrument = treeItem3;
+    TreeItem *currentInstrument = nullptr;
+    TreeItem *currentItem = treeItem3;
     Opcode *currentOpcode = nullptr;
 	int commentIndex = 0;
-    int index;
-	bool partOfComment = false;
-	QStringList lines = text.split(QRegExp("[\n\r]"));
-    QString line;
-    auto xinRegexp = QRegExp("\\bxin\\b");
-	for (int i = 0; i< lines.size(); i++) {
-        line = lines[i].trimmed();
-		if (!partOfComment && lines[i].indexOf("/*") != -1) {
+    bool partOfComment = false;
+    int i = 0;
+    auto lines = text.splitRef(QRegularExpression("[\n\r]"));
+
+    QRegularExpressionMatch match;
+    QRegularExpression orcStartRx("^\\s*<CsInstruments>");
+
+    for(; i<lines.size(); i++) {
+        if(orcStartRx.match(lines[i]).hasMatch()) {
+            treeItem3->setLine(i + 1);
+            break;
+        }
+    }
+
+    // Parsing orchestra
+    for (; i< lines.size(); i++) {
+        if (partOfComment) {
+            if (lines[i].indexOf("*/") != -1)
+                partOfComment = false;
+            continue;
+        }
+        if (!partOfComment && (commentIndex=lines[i].indexOf("/*")) != -1) {
 			partOfComment = true;
-			commentIndex = lines[i].indexOf("/*");
-		}
-		if (partOfComment) {
-			if (lines[i].indexOf("*/") != -1) {
-				partOfComment = false;
-				commentIndex = -1;
-			} else {
-				commentIndex = 0;
-			}
-		}
-        if (line.startsWith("instr")) {
-            QString text = line.mid(line.indexOf("instr") + 6);
-            QStringList columnslist(text.simplified());
-			TreeItem *newItem = new TreeItem(treeItem3, columnslist);
-			newItem->setLine(i + 1);
-			newItem->setForeground (0, QBrush(Qt::darkMagenta) );
-			newItem->setBackground(0, QColor(240, 240, 240));
-			currentInstrument = newItem;
+        }
+        auto line = lines[i].trimmed();
+        if (line.isEmpty())
+            continue;
+        if (line[0] == "<") {
+            if (line.startsWith("<CsScore>")) {
+                treeItem5->setLine(i + 1);
+                currentItem = treeItem5;
+                insideSco = true;
+                break;
+            }
+            continue;
+        }
+        else if (line.startsWith("instr")) {
+            auto instrline = line.mid(6);
+            auto newItem = new TreeItem(treeItem3, QStringList(instrline.toString().simplified()));
+            newItem->setLine(i + 1);
+            currentInstrument = newItem;
+            currentItem = newItem;
 		}
         else if (line.startsWith(";; ")) {
-			QStringList columnslist(lines[i].trimmed().remove(0,2));
-			TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
-			newItem->setForeground (0, QBrush(Qt::darkGreen) );
-			newItem->setLine(i + 1);
+            auto itemname = line.trimmed().mid(2);
+            TreeItem *newItem = new TreeItem(currentItem, QStringList(itemname.toString()));
+            newItem->setLine(i + 1);
 		}
         else if (line.startsWith("endin")) {
             // everything between instruments is placed in the main instrument menu
-            currentInstrument = treeItem3;
+            currentInstrument = nullptr;
+            currentItem = treeItem3;
 		}
         else if (line.startsWith("endop")) {
             if(currentOpcode != nullptr) {
                 udosMap.insert(currentOpcode->opcodeName, *currentOpcode);
-                udosVector << currentOpcode;
+                // udosVector << currentOpcode;
                 currentOpcode = nullptr;
+                currentItem = treeItem3;
             }
-
+            else {
+                qDebug() << "endop found outside opcode definition, line" << (i+1);
+            }
         }
-        else if ((index = opcodeRegexp.indexIn(line, 0)) != -1) {
-            auto opcodeName = opcodeRegexp.cap(1);
-            QString text = line.simplified();
-            QStringList columnslist(text.mid(7));
-            // m_opcodes.append(opcodeName);
+        else if (line.startsWith("#define")) {
+            QString item = line.mid(8).toString(); // .simplified();
+            QStringList columnslist(item);
+            if (treeItem2->childCount() == 0) { // set line for element to the first one found
+                treeItem2->setLine(i + 1);
+            }
+            TreeItem *newItem = new TreeItem(treeItem2, columnslist);
+            newItem->setLine(i + 1);
+        }
+        else if((match=rxOpcode.match(line)).hasMatch()) {
+            auto opcodeName = match.captured(1); // opcodeRegexp.cap(1);
+            auto itemtext = line.mid(7).toString(); // .simplified();
+            QStringList columnslist(itemtext);
             if (treeItem1->childCount() == 0) { // set line for element to the first one found
                 treeItem1->setLine(i + 1);
             }
             TreeItem *newItem = new TreeItem(treeItem1, columnslist);
             newItem->setLine(i + 1);
-            currentInstrument = newItem;
-            newItem->setBackground(0, QColor(240, 240, 240));
-            currentOpcode = new Opcode();
-            currentOpcode->opcodeName = opcodeName;
+            currentItem = newItem;
+            currentOpcode = new Opcode(opcodeName);
         }
-        else if ((index = xinRegexp.indexIn(line, 0)) != -1
-                 && !partOfComment
-                 && currentOpcode != nullptr) {
-            currentOpcode->inArgs = line.mid(0, index).simplified();
-            QStringList columnslist(line.simplified());
-            TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
+        else if((currentOpcode != nullptr) && currentOpcode->inArgs.isEmpty() && (match=xinRx.match(line)).hasMatch()) {
+            currentOpcode->inArgs = line.mid(0, match.capturedStart()).toString().simplified();
+            QStringList columnslist(line.toString().simplified());
+            TreeItem *newItem = new TreeItem(currentItem, columnslist);
             newItem->setLine(i + 1);
-            newItem->setForeground(0, QColor("darkBlue"));
         }
-        else if ((index = QRegExp("\\bxout\\b").indexIn(line, 0)) != -1
-                 && !partOfComment
-                 && currentOpcode != nullptr) {
-            currentOpcode->outArgs = line.mid(0, index).simplified();
-            QStringList columnslist(line.simplified());
-            TreeItem *newItem = new TreeItem(currentInstrument, columnslist);
+        else if(currentOpcode != nullptr && currentOpcode->outArgs.isEmpty() && (match=xoutRx.match(line)).hasMatch()) {
+            currentOpcode->outArgs = line.mid(match.capturedEnd()).toString().simplified();
+            auto itemtext = line.toString().simplified();
+            QStringList columnslist(itemtext);
+            TreeItem *newItem = new TreeItem(currentItem, columnslist);
             newItem->setLine(i + 1);
-            newItem->setForeground(0, QColor("darkBlue"));
         }
-        else if (line.startsWith("#define")) {
-            QString text = line.simplified().mid(8);
-            QStringList columnslist(text);
-			if (treeItem2->childCount() == 0) { // set line for element to the first one found
-				treeItem2->setLine(i + 1);
-			}
-			TreeItem *newItem = new TreeItem(treeItem2, columnslist);
-			newItem->setLine(i + 1);
-		}
-        // table
-        else if (line.contains(QRegExp("^f\\s*\\d")) ||
-                 line.contains(QRegExp("^[\\w]*[\\s]*ftgen"))) {
-            QString text = line;
-			QStringList columnslist(text.simplified());
+        // global tables
+        else if(currentInstrument==nullptr && ftableRx2.match(line).hasMatch()) {
+            QStringList columnslist(line.toString());
 			if (treeItem4->childCount() == 0) { // set line for element to the first one found
 				treeItem4->setLine(i + 1);
 			}
 			TreeItem *newItem = new TreeItem(treeItem4, columnslist);
 			newItem->setLine(i + 1);
 		}
+        /*
         else if (line.contains(QRegExp("^s\\s*\\b")) ||
                  line.contains(QRegExp("^m\\s*\\b"))) {
             QString text = line;
@@ -210,6 +228,8 @@ void Inspector::parseText(const QString &text)
 			TreeItem *newItem = new TreeItem(treeItem5, columnslist);
 			newItem->setLine(i + 1);
 		}
+        */
+        /*
         // label
         else if (inspectLabels
                  && line.contains(QRegExp("^\\s*\\b\\w+:"))
@@ -221,14 +241,9 @@ void Inspector::parseText(const QString &text)
 				newItem->setLine(i + 1);
 			}
 		}
-        else if (line.contains("<CsScore>")) {
-			treeItem5->setLine(i + 1);
-			currentInstrument = treeItem5;
-		}
-        else if (line.contains("<CsInstruments>")) {
-			treeItem3->setLine(i + 1);
-		}
-	}
+        */
+
+    }
 	treeItem1->setExpanded(treeItem1Expanded);
 	treeItem2->setExpanded(treeItem2Expanded);
 	treeItem3->setExpanded(treeItem3Expanded);
@@ -241,7 +256,10 @@ void Inspector::parseText(const QString &text)
 			instr->setExpanded(instrumentExpanded[instr->text(0)]);
 		}
 	}
+    std::chrono::duration<double, std::milli> ms_double = std::chrono::high_resolution_clock::now() - t1;
+    qDebug() << "Inspector::parseText: "<< ms_double.count() << "ms\n";
     inspectorMutex.unlock();
+
 }
 
 void Inspector::parsePythonText(const QString &text)
@@ -266,10 +284,9 @@ void Inspector::parsePythonText(const QString &text)
 			TreeItem *newItem = new TreeItem(treeItem2, columnslist);
 			currentParent = newItem;
 			m_treeWidget->expandItem(newItem);
-			//      QFont itemFont = newItem->font(0);
-			//      itemFont.setBold(true);
-			//      newItem->setBackground(1, QBrush(Qt::darkRed) );
-			//      newItem->setFont(1, itemFont);
+            QFont itemFont = newItem->font(0);
+            itemFont.setBold(true);
+            newItem->setFont(1, itemFont);
 			newItem->setLine(i + 1);
 		}
 		else if (lines[i].contains(QRegExp("[\\s]+def "))) {
@@ -292,7 +309,7 @@ void Inspector::parsePythonText(const QString &text)
 		else if (lines[i].contains("##")) {
 			QStringList columnslist(lines[i].simplified());
 			TreeItem *newItem = new TreeItem(treeItem3, columnslist);
-			newItem->setForeground (0, QBrush(Qt::darkGreen) );
+            // newItem->setForeground (0, QBrush(Qt::darkGreen) );
 			newItem->setLine(i + 1);
 		}
 	}

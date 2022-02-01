@@ -21,12 +21,15 @@
 */
 
 #include <QDir>
+//#include <QOperatingSystemVersion> // not present before Qt 5.9
+#include <QSysInfo>
 
 #include "qutecsound.h"
 #include "configdialog.h"
 #include "options.h"
 #include "types.h"
 #include "configlists.h"
+
 
 typedef QPair<QString, QString> QStringPair;
 
@@ -155,6 +158,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
 	fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
 	lineNumbersCheckBox->setChecked(m_options->showLineNumberArea);
+
 	lineEndingComboBox->setCurrentIndex(m_options->lineEnding);
 	consoleFontComboBox->setCurrentIndex(consoleFontComboBox->findText(m_options->consoleFont) );
 	consoleFontSizeComboBox->setCurrentIndex(consoleFontSizeComboBox->findText(QString::number((int) m_options->consoleFontPointSize)));
@@ -170,9 +174,9 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	consoleBgColorPushButton->setPalette(palette);
 
 	pixmap.fill(m_options->editorBgColor);
-	editorBgColorButton->setIcon(pixmap);
+    // editorBgColorButton->setIcon(pixmap);
 	palette = QPalette(m_options->editorBgColor);
-	editorBgColorButton->setPalette(palette);
+    // editorBgColorButton->setPalette(palette);
 
 	tabWidthSpinBox->setValue(m_options->tabWidth);
 	tabIndentCheckBox->setChecked(m_options->tabIndents);
@@ -205,6 +209,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	fontScalingSpinBox->setValue(m_options->fontScaling);
 	fontOffsetSpinBox->setValue(m_options->fontOffset);
     tabShortcutActiveCheckBox->setChecked(m_options->tabShortcutActive);
+    highlightScoreCheckBox->setChecked(m_options->highlightScore);
 
 	if (m_options->useAPI)
 		ApiRadioButton->setChecked(true);
@@ -292,6 +297,15 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     realtimeCheckBox->setChecked(m_options->realtimeFlag);
     sampleAccurateCheckBox->setChecked(m_options->sampleAccurateFlag);
 
+    //limiter
+    bool limiterAvailable = csoundGetVersion()>=6160;
+    limiterCheckBox->setEnabled(limiterAvailable);
+    limiterSpinBox->setEnabled(limiterAvailable);
+    if (limiterAvailable) {
+        limiterCheckBox->setChecked(m_options->useLimiter);
+        limiterSpinBox->setValue(m_options->limitValue);
+    }
+
 	JackNameLineEdit->setText(m_options->rtJackName);
 	RtMidiModuleComboBox->setCurrentIndex(RtMidiModuleComboBox->findData(m_options->rtMidiModule));
 	RtMidiInputLineEdit->setText(m_options->rtMidiInputDevice);
@@ -323,6 +337,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	//  defaultCsdLineEdit->setText(m_options->defaultCsd);
 	//  defaultCsdLineEdit->setEnabled(m_options->defaultCsdActive);
 	favoriteLineEdit->setText(m_options->favoriteDir);
+    examplePathlineEdit->setText(m_options->examplePath);
 	pythonDirLineEdit->setText(m_options->pythonDir);
 	pythonExecutableLineEdit->setText(m_options->pythonExecutable);
 	csoundExecutableLineEdit->setText(m_options->csoundExecutable);
@@ -353,7 +368,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(rawWaveToolButton, SIGNAL(clicked()), this, SLOT(browseRawWaveDir()));
 	//  connect(defaultCsdToolButton, SIGNAL(clicked()), this, SLOT(browseDefaultCsd()));
 	connect(favoriteToolButton, SIGNAL(clicked()), this, SLOT(browseFavorite()));
-	connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
+    connect(examplePathToolButton, SIGNAL(clicked()), this, SLOT(browseExamplePath()) );
+    connect(terminalToolButton, SIGNAL(clicked()), this, SLOT(browseTerminal()));
 	connect(browserToolButton, SIGNAL(clicked()), this, SLOT(browseBrowser()));
 	connect(dotToolButton, SIGNAL(clicked()), this, SLOT(browseDot()));
 	connect(waveEditorToolButton, SIGNAL(clicked()), this, SLOT(browseWaveEditor()));
@@ -371,7 +387,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	connect(midiOutputToolButton, SIGNAL(released()), this, SLOT(selectMidiOutput()));
 	connect(consoleFontColorPushButton, SIGNAL(released()), this, SLOT(selectTextColor()));
 	connect(consoleBgColorPushButton, SIGNAL(released()), this, SLOT(selectBgColor()));
-	connect(editorBgColorButton, SIGNAL(released()), this, SLOT(selectEditorBgColor()));
+    // connect(editorBgColorButton, SIGNAL(released()), this, SLOT(selectEditorBgColor()));
 
 	connect(clearTemplatePushButton,SIGNAL(released()), this, SLOT(clearTemplate()));
 	connect(defaultTemplatePushButton,SIGNAL(released()), this, SLOT(defaultTemplate()));
@@ -407,6 +423,8 @@ void ConfigDialog::onRtModuleComboBoxChanged(int index) {
     // Todo: remember the settings for each backend in a hash table, and set it to the last
     // known value when changed back. Otherwise set it to the default adc/dac
     auto currentText = this->RtModuleComboBox->currentText();
+    //auto currentOperatingSystem = QOperatingSystemVersion::current();
+    //qDebug() << "module: " << currentText << "Op.system type is: " << QSysInfo::productType() ;
     if(currentText == "null") {
         RtInputLineEdit->setText("");
         RtOutputLineEdit->setText("");
@@ -426,7 +444,11 @@ void ConfigDialog::onRtModuleComboBoxChanged(int index) {
             m_options->useSystemSamplerate = false;
             m_options->samplerate = 0;
         }
-    } else {
+    } else if (currentText.startsWith("portaudio") && QSysInfo::productType()=="osx" ) { // on newer Mac's the internal microphone has 1 channel and that causes problems for portaudio. Disable input by default
+			qDebug() << "Set audio input to none for portaudio on MacOS";
+			RtInputLineEdit->setText("");
+			RtOutputLineEdit->setText("dac");
+	} else {
         RtInputLineEdit->setText("adc");
         RtOutputLineEdit->setText("dac");
     }
@@ -514,8 +536,10 @@ void ConfigDialog::accept()
 	m_options->HwBufferSize = HwBufferSizeLineEdit->text().toInt();
 	m_options->HwBufferSizeActive = HwBufferSizeCheckBox->isChecked();
     // m_options->dither = DitherCheckBox->isChecked();
-    m_options->realtimeFlag =
+    m_options->realtimeFlag = realtimeCheckBox->isChecked(); // this was empty after = ?
     // m_options->newParser = newParserCheckBox->isChecked() ? 1 : 0;
+    m_options->useLimiter = limiterCheckBox->isEnabled() && limiterCheckBox->isChecked();
+    m_options->limitValue = limiterSpinBox->value();
 	m_options->multicore = multicoreCheckBox->isChecked();
 	m_options->numThreads = numThreadsSpinBox->value();
 	m_options->additionalFlags = AdditionalFlagsLineEdit->text();
@@ -585,6 +609,7 @@ void ConfigDialog::accept()
 	//  m_options->defaultCsdActive = defaultCsdCheckBox->isChecked();
 	//  m_options->defaultCsd = defaultCsdLineEdit->text();
 	m_options->favoriteDir = favoriteLineEdit->text();
+    m_options->examplePath = examplePathlineEdit->text();
 	m_options->pythonDir = pythonDirLineEdit->text();
 	m_options->pythonExecutable = pythonExecutableLineEdit->text();
 	m_options->csoundExecutable = csoundExecutableLineEdit->text();
@@ -602,6 +627,7 @@ void ConfigDialog::accept()
 
 	m_options->csdTemplate = templateTextEdit->toPlainText();
     m_options->checkSyntaxBeforeRun = checkSyntaxBeforeRunCheckBox->isChecked();
+    m_options->highlightScore = highlightScoreCheckBox->isChecked();
 
 	//  emit(changeFont());
 	QDialog::accept();
@@ -701,6 +727,12 @@ void ConfigDialog::browseFavorite()
 {
 	browseDir(m_options->favoriteDir);
 	favoriteLineEdit->setText(m_options->favoriteDir);
+}
+
+void ConfigDialog::browseExamplePath()
+{
+    browseDir(m_options->examplePath);
+    examplePathlineEdit->setText(m_options->examplePath);
 }
 
 void ConfigDialog::browseTerminal()
@@ -953,9 +985,9 @@ void ConfigDialog::selectEditorBgColor()
 		m_options->editorBgColor = color;
 		QPixmap pixmap (64,64);
 		pixmap.fill(m_options->editorBgColor);
-		editorBgColorButton->setIcon(pixmap);
+        // editorBgColorButton->setIcon(pixmap);
 		QPalette palette(m_options->editorBgColor);
-		editorBgColorButton->setPalette(palette);
+        // editorBgColorButton->setPalette(palette);
 	}
 }
 
