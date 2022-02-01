@@ -369,7 +369,7 @@ private:
 
 	// Contained Widgets
 	QVector<QuteWidget *> m_widgets;
-	QVector<FrameWidget *> editWidgets;
+    QVector<FrameWidget *> editWidgets;
 	// These vectors must be used with care since they are not reentrant and will
 	// cause problems when accessed simultaneously
 	// They are pointers to widgets already in widgets vector

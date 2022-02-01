@@ -726,11 +726,11 @@ void DocumentView::syntaxCheck()
 	// syntax check
 	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
 	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-    auto words = cursor.selectedText().splitRef(QRegExp("\\b"),
-                                                SKIP_EMPTY_PARTS);
+    auto words = cursor.selectedText().split(QRegExp("\\b"),
+                                             SKIP_EMPTY_PARTS);
 	bool showHover = false;
 	for(int i = 0; i < words.size(); i++) {
-        auto word = words[words.size() - i - 1].toString();
+        auto word = words[words.size() - i - 1];
 		if (m_opcodeTree->isOpcode(word)) {
             QString syntax = m_opcodeTree->getSyntax(word);
 			if(!syntax.isEmpty()) {

@@ -21,7 +21,6 @@
 
 
   sr        =           48000
-  kr        =           4800
   ksmps     =           10
   nchnls    =           2
 
@@ -245,12 +244,19 @@ instr 999                                       ;  global amplitude shaping enve
 endin
 
 ; spectrogram for gui display in csoundqt
+instr setup
+	outvalue "graph1", "@find fft amon"
+	turnoff
+endin
+
 instr 2000
 	amon1, amon2 monitor
 	dispfft amon1, 1/12, 4096, 1
 endin
 
+
 alwayson 2000
+schedule "setup", 0.1, -1
 
 </CsInstruments>
 <CsScore>
@@ -709,6 +715,12 @@ e
 </CsScore>
 
 </CsoundSynthesizer>
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -772,7 +784,7 @@ The basis for this code was the original MUS10 orchestra file with modifications
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>0</value>
+  <value>9</value>
   <objectName2/>
   <zoomx>2.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -780,7 +792,7 @@ The basis for this code was the original MUS10 orchestra file with modifications
   <dispy>1.00000000</dispy>
   <modex>lin</modex>
   <modey>lin</modey>
-  <showSelector>false</showSelector>
+  <showSelector>true</showSelector>
   <showGrid>true</showGrid>
   <showTableInfo>false</showTableInfo>
   <showScrollbars>false</showScrollbars>

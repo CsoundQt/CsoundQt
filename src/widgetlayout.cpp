@@ -3979,17 +3979,18 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
     if (channelValue.first == "_SetPresetIndex") {
         loadPresetFromIndex((int)channelValue.second);
     }
-    QString channelName = channelValue.first;
-    if (channelName.contains("/")) {
-        channelName = channelName.left(channelName.indexOf("/"));
+    QString path, channelName = channelValue.first;
+    auto idx = channelName.indexOf("/");
+    if (idx >= 0) {
+        path = channelName.mid(idx+1);
+        channelName = channelName.left(idx);
     }
-    QString path = channelValue.first.mid(channelValue.first.indexOf("/") + 1);
     widgetsMutex.lock();
     if (!channelName.isEmpty()) {
         // Pass the value on to the other widgets
         for (int i = 0; i < m_widgets.size(); i++){
             if (m_widgets[i]->getChannelName() == channelName) {
-                if (path == channelName) {
+                if (path.isEmpty()) {
                     m_widgets[i]->setValue(channelValue.second);
                 }
                 else
