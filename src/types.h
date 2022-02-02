@@ -125,7 +125,7 @@ public:
     QString desc;
     int isFlag;
 
-    Opcode() {};
+    Opcode() {}
     Opcode(QString name, QString outs="", QString ins=""): opcodeName(name), outArgs(outs), inArgs(ins) {}
 
 };

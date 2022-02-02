@@ -174,23 +174,25 @@ void DockHelp::loadFile(QString fileName, QString anchor) {
         ui->text->setText(tr("Not Found! Make sure the documentation path is set in the Configuration Dialog."));
 		return;
 	}
-#ifdef Q_OS_WIN32
-	QStringList searchPaths;
-	searchPaths << docDir;
-	ui->text->setSearchPaths(searchPaths);
-	QTextStream in(&file);
-	in.setAutoDetectUnicode(true);
-	ui->text->setHtml(in.readAll());
-#else
 
-    if(QFileInfo(fileName).suffix() == ".md") {
+//#ifdef Q_OS_WIN32
+//	QStringList searchPaths;
+//	searchPaths << docDir;
+//	ui->text->setSearchPaths(searchPaths);
+//	QTextStream in(&file);
+//	in.setAutoDetectUnicode(true);
+//	ui->text->setHtml(in.readAll());
+//#else
+
+ // seems that setSource work now for Windows too. Needs testing
+    if (QFileInfo(fileName).suffix() == ".md") {
         QFile file(fileName);
         QTextStream md(&file);
 #if QT_VERSION >= 0x051400
-    ui->text->document()->setMarkdown(md.readAll());
-    ui->text->setHtml(ui->text->document()->toHtml());
+        ui->text->document()->setMarkdown(md.readAll());
+        ui->text->setHtml(ui->text->document()->toHtml());
 #else
-    ui->text->document()->setPlainText(md.readAll());
+        ui->text->document()->setPlainText(md.readAll());
 #endif
     }
     else {
@@ -202,7 +204,8 @@ void DockHelp::loadFile(QString fileName, QString anchor) {
         ui->text->setSource(url);
     }
 
-#endif
+
+//#endif
 
 }
 
