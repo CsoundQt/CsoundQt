@@ -118,6 +118,8 @@ schedule "PostInit", 16384/sr + 0.01, -1
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -614,6 +616,37 @@ schedule "PostInit", 16384/sr + 0.01, -1
    <r>255</r>
    <g>255</g>
    <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject version="2" type="BSBLabel">
+  <objectName/>
+  <x>785</x>
+  <y>517</y>
+  <width>226</width>
+  <height>55</height>
+  <uuid>{13da7982-27d8-46ae-a425-3aecf9e1c34c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Press mouse in spectrum display to get peak!</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>16</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
   </bgcolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>

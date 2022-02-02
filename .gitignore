@@ -28,3 +28,7 @@ util/opcodes.xml
 *.dmg
 .DS_Store
 *~
+
+src_QML_*
+qmlcache_loader.cpp
+src_qml_resources_qmlcache.qrc
