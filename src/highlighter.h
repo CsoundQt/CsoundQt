@@ -48,6 +48,7 @@ public:
 	QVector<ParenthesisInfo *> parentheses();
 	void insert(ParenthesisInfo *info);
     CsdSection section;
+    void clearParenthesis() { m_parentheses.clear(); }
 
 private:
 	QVector<ParenthesisInfo *> m_parentheses;

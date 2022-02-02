@@ -517,6 +517,9 @@ void Highlighter::highlightBlock(const QString &text)
     if(data == nullptr) {
         data = new TextBlockData;
     }
+    else {
+        data->clearParenthesis();
+    }
 
     int leftPos = text.indexOf('(');
     while (leftPos != -1) {

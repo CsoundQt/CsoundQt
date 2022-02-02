@@ -876,7 +876,10 @@ void DocumentView::textChanged() {
     auto senderName = sender != nullptr ? sender->property("name").toString() : "";
     qDebug() << "sender: " << senderName << "modified:" << modified;
     */
-    if((m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) && m_autoComplete) {
+    if(!(m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE))
+        return;
+    syntaxCheck();
+    if(m_autoComplete) {
         // TODO: replace all this with QCompleter
         QTextCursor cursor = editor->textCursor();
         int curIndex = cursor.position();
@@ -919,6 +922,7 @@ void DocumentView::textChanged() {
             useFunction = true;
         }
         QRegularExpressionMatch rxmatch;
+        bool showSyntaxMenu = false;
         if((rxmatch=QRegularExpression("\\s*-([+-])(\\w*)").match(line)).hasMatch()) {
             syntaxMenu->clear();
             auto capt = rxmatch.captured(2);
@@ -928,6 +932,7 @@ void DocumentView::textChanged() {
                     QAction *a = syntaxMenu->addAction(option, this,
                                                        SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
                     a->setData(option);
+                    showSyntaxMenu = true;
                 }
             }
         }
@@ -941,6 +946,7 @@ void DocumentView::textChanged() {
                     QAction *a = syntaxMenu->addAction(var, this,
                                                        SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
                     a->setData(var);
+                    showSyntaxMenu = true;
                 }
             }
             // opcodes and parameters
@@ -1003,6 +1009,7 @@ void DocumentView::textChanged() {
                     auto a = syntaxMenu->addAction(text, this, SLOT(insertAutoCompleteText()));
                     a->setData(syntaxText);
                     a->setToolTip(syntaxText);
+                    showSyntaxMenu = true;
                     menuWordsSeen.insert(opcodeName);
                 }
                 syntaxMenu->addSeparator();
@@ -1017,6 +1024,7 @@ void DocumentView::textChanged() {
                         QRegularExpression("\\b[akigp]").match(word).hasMatch()) {
                     auto a = syntaxMenu->addAction(theWord, this, SLOT(insertAutoCompleteText()));
                     a->setData(theWord);
+                    showSyntaxMenu = true;
                     menuWordsSeen.insert(theWord);
                 }
             }
@@ -1024,24 +1032,22 @@ void DocumentView::textChanged() {
                 if(tag.toLower().startsWith(wordlow) && word != tag) {
                     auto a = syntaxMenu->addAction(tag, this, SLOT(insertAutoCompleteText()));
                     a->setData(tag);
+                    showSyntaxMenu = true;
                 }
             }
-        }
-        auto actions = syntaxMenu->actions();
-        if(!actions.isEmpty()) {
-            QRect r =  editor->cursorRect();
-            QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-            syntaxMenu->setDefaultAction(actions[0]);
-            syntaxMenu->move(editor->mapToGlobal(p));
-            syntaxMenu->show();
         }
         else {
             destroySyntaxMenu();
         }
+        if(showSyntaxMenu && !syntaxMenu->actions().isEmpty()) {
+            QRect r =  editor->cursorRect();
+            QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+            syntaxMenu->setDefaultAction(syntaxMenu->actions()[0]);
+            syntaxMenu->move(editor->mapToGlobal(p));
+            syntaxMenu->show();
+        }
     }
-    if(m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE) {
-		syntaxCheck();
-	}
+
 }
 
 void DocumentView::escapePressed()
@@ -1747,8 +1753,7 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
 		for(int i = 0; i < lines.size(); i++) {
 			int line = lines[i].first;
 			QString text = lines[i].second;
-			qDebug() <<"Line: " << line << " error: " << text;
-			cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor,line-1);
+            cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor,line-1);
 			cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 			cur.mergeCharFormat(errorFormat);
 			internalChange = true;
@@ -1935,8 +1940,9 @@ QString DocumentView::changeToInvalue(QString text)
 
 void DocumentView::destroySyntaxMenu()
 {
+    syntaxMenu->clear();
 	syntaxMenu->hide();
-	//  syntaxMenu = 0;
+    //  syntaxMenu = 0;
 }
 
 void DocumentView::opcodeHelp()

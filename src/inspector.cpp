@@ -115,8 +115,8 @@ void Inspector::parseText(const QString &text)
 	int commentIndex = 0;
     bool partOfComment = false;
     int i = 0;
-    auto lines = text.splitRef(QRegularExpression("[\n\r]"));
-
+    // auto lines = text.splitRef(QRegularExpression("[\n\r]"));
+    auto lines = text.splitRef('\n');
     QRegularExpressionMatch match;
     QRegularExpression orcStartRx("^\\s*<CsInstruments>");
 
@@ -136,6 +136,7 @@ void Inspector::parseText(const QString &text)
         }
         if (!partOfComment && (commentIndex=lines[i].indexOf("/*")) != -1) {
 			partOfComment = true;
+            continue;
         }
         auto line = lines[i].trimmed();
         if (line.isEmpty())
@@ -149,7 +150,7 @@ void Inspector::parseText(const QString &text)
             }
             continue;
         }
-        else if (line.startsWith("instr")) {
+        else if (line.startsWith("instr ")) {
             auto instrline = line.mid(6);
             auto newItem = new TreeItem(treeItem3, QStringList(instrline.toString().simplified()));
             newItem->setLine(i + 1);
