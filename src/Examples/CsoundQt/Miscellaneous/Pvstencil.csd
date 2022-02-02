@@ -1,5 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
+--env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 
@@ -32,8 +33,8 @@ instr 1
 Sfile		invalue	"_Browse1"
 asig		TakeAll	Sfile, 1; 1=loop, 0=no loop
 fsig		pvsanal	asig, gifftsize, gifftsize/4, gifftsize, 0
-klevel		invalue	"level"
-fstencil	pvstencil	fsig, 0, klevel, gitab
+klevel		invalue	"leveldb"
+fstencil	pvstencil	fsig, 0, ampdb(klevel), gitab
 aout		pvsynth	fstencil
 		outs		aout, aout
 endin
@@ -45,6 +46,8 @@ i 1 0 999
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -59,7 +62,7 @@ e
   <g>177</g>
   <b>148</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>13</x>
   <y>50</y>
@@ -70,10 +73,10 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label/>
+  <label>BratscheMono.wav</label>
   <alignment>left</alignment>
   <font>Noto Sans</font>
-  <fontsize>10</fontsize>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -87,7 +90,7 @@ e
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>313</x>
   <y>47</y>
@@ -100,7 +103,7 @@ e
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>BratscheMono.wav</stringvalue>
   <text>Open File</text>
   <image>/</image>
   <eventLine/>
@@ -109,19 +112,19 @@ e
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>18</x>
   <y>89</y>
-  <width>213</width>
-  <height>224</height>
+  <width>384</width>
+  <height>231</height>
   <uuid>{9679894d-ad89-4220-b5ee-cf5c5f5e746b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Limit for Binamps to pass</label>
-  <alignment>right</alignment>
+  <label>        dB-limit for Binamps to pass</label>
+  <alignment>left</alignment>
   <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
@@ -136,27 +139,27 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>248</x>
-  <y>93</y>
-  <width>166</width>
-  <height>201</height>
+  <x>147</x>
+  <y>137</y>
+  <width>248</width>
+  <height>155</height>
   <uuid>{3b712f67-5ab1-42fc-b918-20ec414d60e0}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>The opcode pvstencil gives you many opportunities to mask the result of a fft-analysis before resynthesizing. In this simple case, you can select amplitudes of the fft-bins which are beyond a certain threshold.Â
+  <label>The opcode pvstencil offers many opportunities to mask the result of a fft-analysis before resynthesizing. In this simple case, you can select amplitudes of the fft-bins which are beyond a certain threshold.Â
 For another application, see the Noise Reduction example.</label>
   <alignment>left</alignment>
-  <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>12</fontsize>
+  <valignment>bottom</valignment>
+  <font>Bitstream Vera Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -168,11 +171,11 @@ For another application, see the Noise Reduction example.</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
+  <bordermode>false</bordermode>
+  <borderradius>0</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>9</y>
@@ -203,42 +206,39 @@ For another application, see the Noise Reduction example.</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
-  <objectName>level</objectName>
-  <x>24</x>
-  <y>96</y>
+ <bsbObject type="BSBVSlider" version="2">
+  <objectName>leveldb</objectName>
+  <x>21</x>
+  <y>97</y>
   <width>25</width>
   <height>210</height>
   <uuid>{3ca11a62-cebd-437a-9ed2-7d12be82426e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
-  <minimum>0.00000000</minimum>
-  <maximum>0.30000000</maximum>
-  <value>0.02142900</value>
+  <minimum>-100.00000000</minimum>
+  <maximum>0.00000000</maximum>
+  <value>-26.80000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
-  <objectName>level</objectName>
-  <x>62</x>
-  <y>273</y>
-  <width>57</width>
-  <height>26</height>
-  <uuid>{ea408eaa-c537-4dba-be96-c41a3f989077}</uuid>
+ <bsbObject type="BSBSpinBox" version="2">
+  <objectName>leveldb</objectName>
+  <x>56</x>
+  <y>118</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{2f6de60d-3f52-4185-83a2-82d0c8a55dbe}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
-  <label>0.0223</label>
   <alignment>right</alignment>
-  <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>14</fontsize>
-  <precision>3</precision>
+  <font>Liberation Sans</font>
+  <fontsize>16</fontsize>
   <color>
    <r>0</r>
    <g>0</g>
@@ -249,40 +249,11 @@ For another application, see the Noise Reduction example.</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>0</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>57</x>
-  <y>121</y>
-  <width>160</width>
-  <height>118</height>
-  <uuid>{b2f7b491-6ae9-49e8-9383-9653bd75aaf4}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <label>(According to your sound you may want to change the upper limit in the Properties dialog)</label>
-  <alignment>center</alignment>
-  <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>12</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>noborder</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>0</borderwidth>
+  <resolution>0.10000000</resolution>
+  <minimum>-1e+12</minimum>
+  <maximum>0</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>-26.8</value>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
