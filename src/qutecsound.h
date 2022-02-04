@@ -295,6 +295,7 @@ private slots:
     void testAudioSetup();
     void checkSyntaxMenuAction();
     void tabMoved(int to, int from);
+    void openExamplesFolder();
 
     DocumentPage *getCurrentDocumentPage() {
         if(curPage >= documentPages.size())
@@ -509,6 +510,7 @@ private:
     QAction *lineNumbersAct;
 	QAction *parameterModeAct;
 //	QAction *showParametersAct;
+    QAction *openExamplesFolderAct;
     QSignalMapper *focusMapper;
 	int curPage;
 	int curCsdPage;  // To recall last csd visited

@@ -1105,6 +1105,12 @@ void CsoundQt::tabMoved(int to, int from)  // arguments should be from, but prob
     changePage(to);
 }
 
+void CsoundQt::openExamplesFolder()
+{
+    qDebug() << "Trying to open Examples folder" << getExamplePath("");
+    QDesktopServices::openUrl(QUrl(getExamplePath("")));
+}
+
 QString CsoundQt::getSaveFileName()
 {
     bool widgetsVisible = widgetPanel->isVisible();
@@ -4643,333 +4649,6 @@ void CsoundQt::createMenus()
     viewMenu->addAction(showOtherCsdAct);
     viewMenu->addAction(showWidgetEditAct);
 
-//    QStringList tutFiles;
-//    QStringList basicsFiles;
-//    QStringList realtimeInteractionFiles;
-//    QStringList featuresFiles;
-
-//    QStringList livecollFiles;
-//    QStringList widgetFiles;
-//    QStringList synthFiles;
-//    QStringList musicFiles;
-//    QStringList usefulFiles;
-//    QStringList exampleFiles;
-//    QStringList htmlFiles;
-//    QStringList pluginExamples;
-//    QList<QStringList> subMenus;
-//    QStringList subMenuNames;
-
-//    livecollFiles << ":/examples/Live Collection/Live_Accordizer.csd"
-//                  << ":/examples/Live Collection/Live_Delay_Feedback.csd"
-//                  << ":/examples/Live Collection/Live_Granular.csd"
-//                  << ":/examples/Live Collection/Live_RM_AM.csd";
-
-//    subMenus << livecollFiles;
-//    subMenuNames << tr("Live Collection");
-
-//    widgetFiles.append(":/examples/Widgets/Widget_Panel.csd");
-//    widgetFiles.append(":/examples/Widgets/Label_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/Display_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/Slider_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/Scrollnumber_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/SpinBox_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/Graph_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/Button_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/Checkbox_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/Menu_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/Controller_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/Lineedit_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/Scope_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/Tableplot_Widget.csd");
-//    widgetFiles.append(":/examples/Widgets/String_Channels.csd");
-//    widgetFiles.append(":/examples/Widgets/Presets.csd");
-//    widgetFiles.append(":/examples/Widgets/Reserved_Channels.csd");
-
-//    subMenus << widgetFiles;
-//    subMenuNames << "Widgets";
-
-//    synthFiles.append(":/examples/Synths/Additive_Synth.csd");
-//    synthFiles.append(":/examples/Synths/Imitative_Additive.csd");
-//    synthFiles.append(":/examples/Synths/Simple_Subtractive.csd");
-//    synthFiles.append(":/examples/Synths/Simple_FM_Synth.csd");
-//    synthFiles.append(":/examples/Synths/Phase_Mod_Synth.csd");
-//    synthFiles.append(":/examples/Synths/Formant_Synth.csd");
-//    synthFiles.append(":/examples/Synths/Mono_Synth.csd");
-//    synthFiles.append(":/examples/Synths/B6_Hammond.csd");
-//    synthFiles.append(":/examples/Synths/Diffamator.csd");
-//    synthFiles.append(":/examples/Synths/Sruti-Drone_Box.csd");
-//    synthFiles.append(":/examples/Synths/Pipe_Synth.csd");
-//    synthFiles.append(":/examples/Synths/Piano_phase.csd");
-//    synthFiles.append(":/examples/Synths/String_Phaser.csd");
-//    synthFiles.append(":/examples/Synths/Waveform_Mix.csd");
-//    synthFiles.append(":/examples/Synths/Scanned_Synthesis_Sandbox.csd");
-//    subMenus << synthFiles;
-//    subMenuNames << "Synths";
-
-
-//    musicFiles.append(":/examples/Music/Boulanger-Trapped_in_Convert.csd");
-//    musicFiles.append(":/examples/Music/Chowning-Stria.csd");
-//    musicFiles.append(":/examples/Music/Kung-Xanadu.csd");
-//    musicFiles.append(":/examples/Music/Riley-In_C.csd");
-//    musicFiles.append(":/examples/Music/Stockhausen-Studie_II.csd");
-//    musicFiles.append(":/examples/Music/Bach-Invention_1.csd");
-
-//    subMenus << musicFiles;
-//    subMenuNames << tr("Music");
-
-//    usefulFiles.append(":/examples/Useful/SpectrumAnalyzer.csd");
-//    usefulFiles.append(":/examples/Useful/IO_Test.csd");
-//    usefulFiles.append(":/examples/Useful/MIDI_IO_Test.csd");
-//    usefulFiles.append(":/examples/Useful/Audio_Input_Test.csd");
-//    usefulFiles.append(":/examples/Useful/Audio_Output_Test.csd");
-//    usefulFiles.append(":/examples/Useful/Audio_Thru_Test.csd");
-//    usefulFiles.append(":/examples/Useful/MIDI_Recorder.csd");
-//    usefulFiles.append(":/examples/Useful/MIDI_Layering.csd");
-//    usefulFiles.append(":/examples/Useful/ASCII_Key.csd");
-//    usefulFiles.append(":/examples/Useful/Monome_basic.csd");
-//    usefulFiles.append(":/examples/Useful/SF_Play_from_buffer.csd");
-//    usefulFiles.append(":/examples/Useful/SF_Play_from_buffer_2.csd");
-//    usefulFiles.append(":/examples/Useful/SF_Play_from_HD.csd");
-//    usefulFiles.append(":/examples/Useful/SF_Play_from_HD_2.csd");
-//    usefulFiles.append(":/examples/Useful/SF_Snippets_Player.csd");
-//    usefulFiles.append(":/examples/Useful/Multichannel_Player.csd");
-//    usefulFiles.append(":/examples/Useful/Mixdown_Player.csd");
-//    usefulFiles.append(":/examples/Useful/SF_Record.csd");
-//    usefulFiles.append(":/examples/Useful/File_to_Text.csd");
-//    usefulFiles.append(":/examples/Useful/Envelope_Extractor.csd");
-//    usefulFiles.append(":/examples/Useful/Pitch_Tracker.csd");
-//    usefulFiles.append(":/examples/Useful/SF_Splitter.csd");
-//    usefulFiles.append(":/examples/Useful/SF_Merger.csd");
-
-//    subMenus << usefulFiles;
-//    subMenuNames << tr("Useful");
-
-//    exampleFiles.append(":/examples/Miscellaneous/MIDI_Tunings.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Keyboard_Control.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Just_Intonation.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Mouse_Control.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Autotuner.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Event_Panel.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Score_Tricks.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Simple_Convolution.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Universal_Convolution.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/IR_Creator.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Cross_Synthesis.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/SF_Granular.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Oscillator_Aliasing.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Filter_lab.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Pvstencil.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Matrix.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Rms.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Reinit_Example.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/No_Reinit.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Mincer_Loop.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Circle_Map.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Binaural_Panning.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Spatialization.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Spatialization_5.1.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Pseudostereo.csd");
-//    exampleFiles.append(":/examples/Miscellaneous/Noise_Reduction.csd");
-
-//    subMenus << exampleFiles;
-//    subMenuNames << tr("Miscellaneous");
-
-//    htmlFiles.append(":/examples/Html5 Support/Minimal_Html_Example.csd");
-//    htmlFiles.append(":/examples/Html5 Support/Styled_Sliders.csd");
-//    htmlFiles.append(":/examples/Html5 Support/Html_file_in_CsoundQt.html");
-//    subMenus << htmlFiles;
-//    subMenuNames << tr("Html5 support");
-
-//    QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
-//    QAction *newAction;
-//    QMenu *submenu;
-
-//    basicsFiles.append(":/examples/Getting Started/Basics/Hello World.csd");
-//    basicsFiles.append(":/examples/Getting Started/Basics/Document Structure.csd");
-//    basicsFiles.append(":/examples/Getting Started/Basics/Basic Elements Opcodes.csd");
-//    basicsFiles.append(":/examples/Getting Started/Basics/Basic Elements Variables.csd");
-//    basicsFiles.append(":/examples/Getting Started/Basics/Getting Help.csd");
-//    basicsFiles.append(":/examples/Getting Started/Basics/Instrument Control.csd");
-//    basicsFiles.append(":/examples/Getting Started/Basics/Realtime Instrument Control.csd");
-//    basicsFiles.append(":/examples/Getting Started/Basics/Routing.csd");
-
-//    QMenu *tutorialMenu = examplesMenu->addMenu(tr("Getting Started"));
-//    submenu = tutorialMenu->addMenu(tr("Basics"));
-//    foreach (QString fileName, basicsFiles) {
-//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-//        newAction = submenu->addAction(name);
-//        newAction->setData(fileName);
-//        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-//    }
-
-//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Creating_Widgets.csd");
-//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Invalue.csd");
-//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Outvalue.csd");
-//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Buttontypes.csd");
-//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Widgets_Checkbox.csd");
-//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/Live_Audio_Input.csd");
-//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Receiving_Notes.csd");
-//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Synth.csd");
-//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Control_Data.csd");
-//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/MIDI_Assign_Controllers.csd");
-//    realtimeInteractionFiles.append(":/examples/Getting Started/Realtime_Interaction/OpenSoundControl.csd");
-
-//    submenu = tutorialMenu->addMenu(tr("Realtime Interaction"));
-//    foreach (QString fileName, realtimeInteractionFiles) {
-//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-//        newAction = submenu->addAction(name);
-//        newAction->setData(fileName);
-//        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-//    }
-
-//    featuresFiles.append(":/examples/Getting Started/Language_Features/Function_Tables_1.csd");
-//    featuresFiles.append(":/examples/Getting Started/Language_Features/Function_Tables_2.csd");
-//    featuresFiles.append(":/examples/Getting Started/Language_Features/Loops_1.csd");
-//    featuresFiles.append(":/examples/Getting Started/Language_Features/Loops_2.csd");
-//    featuresFiles.append(":/examples/Getting Started/Language_Features/Console_Print.csd");
-//    featuresFiles.append(":/examples/Getting Started/Language_Features/Writing_Audio_Files.csd");
-//    featuresFiles.append(":/examples/Getting Started/Language_Features/Using_Udos.csd");
-
-//    submenu = tutorialMenu->addMenu(tr("Language Features"));
-//    foreach (QString fileName, featuresFiles) {
-//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-//        newAction = submenu->addAction(name);
-//        newAction->setData(fileName);
-//        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-//    }
-
-//    tutFiles.append(":/examples/Getting Started/Toots/Toot1.csd");
-//    tutFiles.append(":/examples/Getting Started/Toots/Toot2.csd");
-//    tutFiles.append(":/examples/Getting Started/Toots/Toot3.csd");
-//    tutFiles.append(":/examples/Getting Started/Toots/Toot4.csd");
-//    tutFiles.append(":/examples/Getting Started/Toots/Toot5.csd");
-
-//    submenu = tutorialMenu->addMenu("Toots");
-//    foreach (QString fileName, tutFiles) {
-//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-//        newAction = submenu->addAction(name);
-//        newAction->setData(fileName);
-//        connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-//    }
-
-//    pluginExamples << ":/examples/Plugins/CircularBuffer.csd";
-
-//    subMenus << pluginExamples;
-//	subMenuNames << tr("Plugins");
-
-        //-----
-/*
-	QMenu *examplesMenu = menuBar()->addMenu(tr("Examples"));
-	QAction *newAction;
-        QMenu *submenu;
-
-	QList<QStringList> subMenus; // should get rid of those  as :examples/ is not needed any more
-	QStringList subMenuNames;
-
-	// CsoundQt Main Examples (was embedded examples with before)
-	QString mainExamplesPath = getExamplePath("CsoundQt");
-	if (QDir(mainExamplesPath).exists()) {
-		QMenu *mainExamplesMenu = examplesMenu->addMenu(tr("CsoundQt examples"));
-		QStringList subDirs = QDir(mainExamplesPath).entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-		qDebug() << "subdirs: " << subDirs;
-		foreach (QString subDir, subDirs) {
-			QString dirName = subDir.mid(subDir.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-			submenu = mainExamplesMenu->addMenu(dirName);
-			QStringList filters;
-			filters << "*.csd";
-			QStringList mainExamplesFiles = QDir(mainExamplesPath + "/" + subDir).entryList(filters,QDir::Files);
-			foreach (QString fileName, mainExamplesFiles) {
-				//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-				newAction = submenu->addAction(fileName);
-				newAction->setData(mainExamplesPath + "/" + subDir + "/" + fileName);
-				connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-			}
-            // TODO: "Getting Started has also submenus take care how they are organized <- bad code, must be rewritten
-		}
-	} else {
-		qDebug() << "Warning: Could not find CsoundQt main examples.";
-	}
-
-
-
-    //FLOSS Manual Examples
-    QString flossManPath = getExamplePath("FLOSS Manual Examples");
-    if (QDir(flossManPath).exists()) {
-        QMenu *flossmanMenu = examplesMenu->addMenu(tr("FLOSS Manual Examples"));
-        flossmanMenu->addAction(tr("Read FLOSS Manual Online"),this, SLOT(openFLOSSManual()));
-        flossmanMenu->addSeparator();
-        QStringList subDirs = QDir(flossManPath).entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-        foreach (QString subDir, subDirs) {
-            QString dirName = subDir.mid(subDir.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-            submenu = flossmanMenu->addMenu(dirName);
-            QStringList filters;
-            filters << "*.csd";
-            QStringList flossManFiles = QDir(flossManPath + "/" + subDir).entryList(filters,QDir::Files);
-            foreach (QString fileName, flossManFiles) {
-                //        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-                newAction = submenu->addAction(fileName);
-                newAction->setData(flossManPath + "/" + subDir + "/" + fileName);
-                connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-            }
-        }
-    } else {
-        qDebug() << "Warning: Could not find FLOSS Manual Examples.";
-    }
-
-
-    //McCurdy Collection
-	QString mcCurdyPath = getExamplePath("McCurdy Collection");
-	if (QDir(mcCurdyPath).exists()) {
-		QMenu *mccurdyMenu = examplesMenu->addMenu(tr("McCurdy Collection"));
-		QStringList subDirs = QDir(mcCurdyPath).entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-		foreach (QString subDir, subDirs) {
-			QString dirName = subDir.mid(subDir.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-			submenu = mccurdyMenu->addMenu(dirName);
-			QStringList filters;
-			filters << "*.csd";
-			QStringList mcCurdyFiles = QDir(mcCurdyPath + "/" + subDir).entryList(filters,QDir::Files);
-			foreach (QString fileName, mcCurdyFiles) {
-				//        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-				newAction = submenu->addAction(fileName);
-				newAction->setData(mcCurdyPath + "/" + subDir + "/" + fileName);
-				connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-			}
-		}
-	} else {
-		qDebug() << "Warning: Could not find McCurdy Collection.";
-	}
-
-
-	// TODO: find a way to add Stria synth to CsoundQt/Synths
-    for (int i = 0; i < subMenus.size(); i++) {
-        submenu = examplesMenu->addMenu(subMenuNames[i]);
-        foreach (QString fileName, subMenus[i]) {
-            QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-            newAction = submenu->addAction(name);
-            newAction->setData(fileName);
-            connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-        }
-        if (subMenuNames[i] == "Synths") {
-            QString striaPath = getExamplePath("Stria Synth");
-            if (QDir(striaPath).exists()) {
-                QMenu *striaMenu = submenu->addMenu(tr("Stria Synth"));
-                QStringList filters;
-                filters << "*.csd" << "*.pdf";
-                QStringList striaFiles = QDir(striaPath).entryList(filters,QDir::Files);
-                foreach (QString fileName, striaFiles) {
-                    //        QString name = fileName.mid(fileName.lastIndexOf("/") + 1).replace("_", " ").remove(".csd");
-                    newAction = striaMenu->addAction(fileName);
-                    newAction->setData(striaPath + QDir::separator() + fileName);
-                    connect(newAction,SIGNAL(triggered()), this, SLOT(openExample()));
-                }
-            } else {
-                qDebug() << "Warning: Could not find Stria Synth files.";
-            }
-        }
-    }
-*/
-
-
     fillExampleMenu();
 
 
@@ -5024,6 +4703,17 @@ void CsoundQt::fillExampleMenu()
     if (dir.count() > 0) {
         fillExampleSubmenu(dir.absolutePath(), examplesMenu, 0);
     }
+
+    if (!examplePath.isEmpty()) {
+        examplesMenu->addSeparator();
+        openExamplesFolderAct = new QAction(tr("Open Examples Folder"), this);
+        openExamplesFolderAct->setStatusTip(tr("Save the document under a new name"));
+        openExamplesFolderAct->setShortcutContext(Qt::ApplicationShortcut);
+        connect(openExamplesFolderAct, SIGNAL(triggered()), this, SLOT(openExamplesFolder()));
+        examplesMenu->addAction(openExamplesFolderAct);
+    }
+
+
 }
 
 void CsoundQt::fillExampleSubmenu(QDir dir, QMenu *m, int depth)
