@@ -5081,7 +5081,7 @@ void CsoundQt::readSettings()
 #ifdef Q_OS_MACOS
     m_options->font = settings.value("font", "Menlo").toString();
     m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
-    m_options->consoleFont = settings.value("consolefont", "SF Mono").toString(); // or Menlo or Courier?
+    m_options->consoleFont = settings.value("consolefont", "Courier").toString();
     m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
 #endif
 #ifdef Q_OS_WIN
