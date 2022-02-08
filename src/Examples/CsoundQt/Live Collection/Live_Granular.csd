@@ -4,7 +4,12 @@
 </CsOptions>
 <CsInstruments>
 
-/*****LIVE GRANULAR SYNTHESIS*****/
+/*
+
+	LIVE GRANULAR SYNTHESIS
+	
+*/
+
 ;example for CsoundQt
 ;written by joachim heintz
 ;jan 2010 / june 2011
@@ -204,6 +209,9 @@ e
 
 
 
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -342,7 +350,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -379,7 +387,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -416,7 +424,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -453,7 +461,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -633,7 +641,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -670,7 +678,7 @@ If you want to reduce the delay of the granulated output, set giMaxGrLen in the 
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>

@@ -8,9 +8,7 @@
 /*
  
 Dependencies: 
-  csound >= 6.15
-  CsoundQt >= 1.0.0
-  plugins: klib>=1.5, else>=1.5
+  plugins: klib, else
 */
 
 sr = 44100
@@ -98,6 +96,8 @@ schedule "main", 0, -1
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -112,7 +112,7 @@ schedule "main", 0, -1
   <g>255</g>
   <b>255</b>
  </bgcolor>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>record</objectName>
   <x>12</x>
   <y>12</y>
@@ -130,10 +130,11 @@ schedule "main", 0, -1
   <image>/</image>
   <eventLine>i1 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>30</fontsize>
  </bsbObject>
- <bsbObject type="BSBTableDisplay" version="2">
+ <bsbObject version="2" type="BSBTableDisplay">
   <objectName>plot</objectName>
   <x>12</x>
   <y>97</y>
