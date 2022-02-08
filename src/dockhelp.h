@@ -86,6 +86,7 @@ private:
 signals:
 	void Close(bool visible);
 	void openManualExample(QString fileName);
+    void requestExternalBrowser(QUrl url);
 
 };
 

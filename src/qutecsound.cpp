@@ -2861,11 +2861,13 @@ void CsoundQt::openExternalBrowser(QUrl url)
         execute(m_options->browser, "\"" + url.toString() + "\"");
     }
     else {
-        QMessageBox::critical(this, tr("Error"),
-                              tr("Could not open external browser:\n%1\n"
-                                 "Please check preferences.").arg(m_options->browser));
+//        QMessageBox::critical(this, tr("Error"),
+//                              tr("Could not open external browser:\n%1\n"
+//                                 "Please check preferences.").arg(m_options->browser));
+        qDebug() << "No browser found from option, trying default system browser";
+        QDesktopServices::openUrl(url);
     }
-    QDesktopServices::openUrl(url);
+    //QDesktopServices::openUrl(url); // this opens it twice
 }
 
 void CsoundQt::openPdfFile(QString name)
@@ -3902,6 +3904,7 @@ void CsoundQt::createActions()
     // connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisible(bool)));
     connect(showHelpAct, SIGNAL(toggled(bool)), helpPanel, SLOT(setVisibleAndRaise(bool)));
     connect(helpPanel, SIGNAL(Close(bool)), showHelpAct, SLOT(setChecked(bool)));
+    connect(helpPanel, SIGNAL(requestExternalBrowser(QUrl)), this, SLOT(openExternalBrowser(QUrl)) );
 
     raiseHelpAct = new QAction(this);
     raiseHelpAct->setText(tr("Show/Raise help panel"));
