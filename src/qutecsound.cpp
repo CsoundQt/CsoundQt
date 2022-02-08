@@ -5081,14 +5081,20 @@ void CsoundQt::readSettings()
 #ifdef Q_OS_MACOS
     m_options->font = settings.value("font", "Menlo").toString();
     m_options->fontPointSize = settings.value("fontsize", 12).toDouble();
+    m_options->consoleFont = settings.value("consolefont", "SF Mono").toString(); // or Menlo or Courier?
+    m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
 #endif
 #ifdef Q_OS_WIN
     m_options->font = settings.value("font", "Consolas").toString();
     m_options->fontPointSize = settings.value("fontsize", 11).toDouble();
+    m_options->consoleFont = settings.value("consolefont", "Courier").toString();
+    m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
 #endif
 #ifdef Q_OS_LINUX
     m_options->font = settings.value("font", "Liberation Mono").toString();
     m_options->fontPointSize = settings.value("fontsize", 11).toDouble();
+    m_options->consoleFont = settings.value("consolefont", "DejaVu Sans Mono").toString();
+    m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
 #endif
     m_options->showLineNumberArea = settings.value("showLineNumberArea", true).toBool();
 
@@ -5098,8 +5104,8 @@ void CsoundQt::readSettings()
     m_options->lineEnding = settings.value("lineEnding", 0).toInt();
 #endif
 
-    m_options->consoleFont = settings.value("consolefont", "Courier").toString();
-    m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
+    //m_options->consoleFont = settings.value("consolefont", "Courier").toString();  // platform specific
+    //m_options->consoleFontPointSize = settings.value("consolefontsize", 10).toDouble();
 
     m_options->consoleFontColor = settings.value("consoleFontColor",
                                                  QVariant(QColor(Qt::black))).value<QColor>();
