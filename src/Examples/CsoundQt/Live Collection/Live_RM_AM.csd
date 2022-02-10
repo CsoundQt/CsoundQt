@@ -4,7 +4,12 @@
 </CsOptions>
 <CsInstruments>
 
-/*****LIVE RING MODULATION / AMPLITUDE MODULATION*****/
+/*
+
+	LIVE RING MODULATION / AMPLITUDE MODULATION
+	
+*/
+
 ;example for CsoundQt
 ;written by joachim heintz
 ;may 2011
@@ -102,6 +107,9 @@ i 1 0 36000
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
+
 
 <bsbPanel>
  <label>Widgets</label>

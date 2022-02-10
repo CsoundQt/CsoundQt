@@ -118,6 +118,10 @@ schedule "PostInit", 16384/sr + 0.01, -1
 </CsoundSynthesizer>
 
 
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -132,7 +136,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <g>22</g>
   <b>22</b>
  </bgcolor>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName>spectrum</objectName>
   <x>10</x>
   <y>9</y>
@@ -142,7 +146,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <description>Spectrum</description>
+  <description>Spectrum - Press mouse to show/play peak</description>
   <value>0</value>
   <objectName2/>
   <zoomx>2.00000000</zoomx>
@@ -159,7 +163,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch1</objectName>
   <x>10</x>
   <y>520</y>
@@ -175,7 +179,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch2</objectName>
   <x>40</x>
   <y>520</y>
@@ -191,7 +195,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch3</objectName>
   <x>70</x>
   <y>520</y>
@@ -207,7 +211,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>ch4</objectName>
   <x>100</x>
   <y>520</y>
@@ -223,7 +227,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>fftsize</objectName>
   <x>150</x>
   <y>520</y>
@@ -259,7 +263,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <selectedIndex>2</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>30</x>
   <y>550</y>
@@ -290,7 +294,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>145</x>
   <y>550</y>
@@ -321,23 +325,23 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>playpeak</objectName>
-  <x>460</x>
-  <y>520</y>
+  <x>459</x>
+  <y>519</y>
   <width>30</width>
   <height>30</height>
   <uuid>{f8803c6a-6fba-459f-a113-0e33c0ff19d1}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description>Play the peak frequency</description>
+  <midicc>0</midicc>
+  <description>Play the peak frequency when the mouse is pressed</description>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>435</x>
   <y>550</y>
@@ -368,7 +372,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>ingain</objectName>
   <x>585</x>
   <y>515</y>
@@ -398,7 +402,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <flatstyle>true</flatstyle>
   <integerMode>true</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>505</x>
   <y>530</y>
@@ -429,7 +433,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>peakgain</objectName>
   <x>720</x>
   <y>515</y>
@@ -459,7 +463,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <flatstyle>true</flatstyle>
   <integerMode>true</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>640</x>
   <y>530</y>
@@ -490,7 +494,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>340</x>
   <y>550</y>
@@ -521,7 +525,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>filterlow</objectName>
   <x>375</x>
   <y>520</y>
@@ -530,14 +534,14 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <uuid>{761ac268-c49b-4473-a0df-c045ea9fdaa4}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description>Play the peak frequency</description>
+  <midicc>0</midicc>
+  <description>Filter low frequencies</description>
   <selected>true</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>refreshrateidx</objectName>
   <x>250</x>
   <y>520</y>
@@ -588,7 +592,7 @@ schedule "PostInit", 16384/sr + 0.01, -1
   <selectedIndex>4</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>250</x>
   <y>550</y>
@@ -617,6 +621,37 @@ schedule "PostInit", 16384/sr + 0.01, -1
   </bgcolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>794</x>
+  <y>519</y>
+  <width>196</width>
+  <height>45</height>
+  <uuid>{13da7982-27d8-46ae-a425-3aecf9e1c34c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Press mouse in spectrum display to show nearest  peak</label>
+  <alignment>left</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>13</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>239</r>
+   <g>239</g>
+   <b>239</b>
+  </color>
+  <bgcolor mode="background">
+   <r>48</r>
+   <g>53</g>
+   <b>58</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>

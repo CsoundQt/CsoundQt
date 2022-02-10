@@ -115,7 +115,6 @@ void Inspector::parseText(const QString &text)
 	int commentIndex = 0;
     bool partOfComment = false;
     int i = 0;
-    // auto lines = text.splitRef(QRegularExpression("[\n\r]"));
     auto lines = text.splitRef('\n');
     QRegularExpressionMatch match;
     QRegularExpression orcStartRx("^\\s*<CsInstruments>");
@@ -129,16 +128,17 @@ void Inspector::parseText(const QString &text)
 
     // Parsing orchestra
     for (; i< lines.size(); i++) {
+        auto line = lines[i];
         if (partOfComment) {
-            if (lines[i].indexOf("*/") != -1)
+            if (line.indexOf("*/") != -1)
                 partOfComment = false;
             continue;
         }
-        if (!partOfComment && (commentIndex=lines[i].indexOf("/*")) != -1) {
+        if (!partOfComment && (commentIndex=line.indexOf("/*")) != -1) {
 			partOfComment = true;
             continue;
         }
-        auto line = lines[i].trimmed();
+        line = line.trimmed();
         if (line.isEmpty())
             continue;
         if (line[0] == "<") {
@@ -199,6 +199,22 @@ void Inspector::parseText(const QString &text)
             currentItem = newItem;
             currentOpcode = new Opcode(opcodeName);
         }
+        else if(currentOpcode != nullptr) {
+            if(currentOpcode->inArgs.isEmpty() && (match=xinRx.match(line)).hasMatch()) {
+                currentOpcode->inArgs = line.mid(0, match.capturedStart()).toString().simplified();
+                QStringList columnslist(line.toString().simplified());
+                TreeItem *newItem = new TreeItem(currentItem, columnslist);
+                newItem->setLine(i + 1);
+            }
+            else if(currentOpcode->outArgs.isEmpty() && (match=xoutRx.match(line)).hasMatch()) {
+                currentOpcode->outArgs = line.mid(match.capturedEnd()).toString().simplified();
+                auto itemtext = line.toString().simplified();
+                QStringList columnslist(itemtext);
+                TreeItem *newItem = new TreeItem(currentItem, columnslist);
+                newItem->setLine(i + 1);
+            }
+        }
+        /*
         else if((currentOpcode != nullptr) && currentOpcode->inArgs.isEmpty() && (match=xinRx.match(line)).hasMatch()) {
             currentOpcode->inArgs = line.mid(0, match.capturedStart()).toString().simplified();
             QStringList columnslist(line.toString().simplified());
@@ -212,6 +228,7 @@ void Inspector::parseText(const QString &text)
             TreeItem *newItem = new TreeItem(currentItem, columnslist);
             newItem->setLine(i + 1);
         }
+        */
         // global tables
         else if(currentInstrument==nullptr && ftableRx2.match(line).hasMatch()) {
             QStringList columnslist(line.toString());

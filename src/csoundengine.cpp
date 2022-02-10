@@ -361,6 +361,7 @@ void CsoundEngine::readWidgetValues(CsoundUserData *ud)
         for (i = ud->wl->newValues.constBegin(); i != end; ++i) {
             if(csoundGetChannelPtr(ud->csound, &pvalue, i.key().toLocal8Bit().constData(),
                                    CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+                // 0 == success
                 *pvalue = (MYFLT) i.value();
             }
         }
@@ -1048,8 +1049,10 @@ void CsoundEngine::setupChannels()
     // Set channels values for existing channels (i.e. those declared with chn_*
     // in the csound header
     for (int i = 0; i < numChannels; i++) {
-        int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name,
-                                           0);
+        //                                                      name        type
+        // if type is 0, no new channel is created if it does not exist,
+        // the returned value is the channel type
+        int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name, 0);
         if (chanType & CSOUND_INPUT_CHANNEL) {
             if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_CONTROL_CHANNEL) {
                 ud->wl->valueMutex.lock();

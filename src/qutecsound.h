@@ -186,6 +186,7 @@ public slots:
 	void evaluateCsound(QString code = QString());
 	void breakpointReached();
     void setParsedUDOs();
+    void openExternalBrowser(QUrl url = QUrl());
 
 
 protected:
@@ -253,7 +254,7 @@ private slots:
 	void virtualCCIn(int channel, int cc, int value);
 	void handleTableSyntax(QString syntax);
 	void openManualExample(QString fileName);
-	void openExternalBrowser(QUrl url = QUrl());
+    //void openExternalBrowser(QUrl url = QUrl()); // moved to public slots to connect with helpPanel
 	void openPdfFile(QString name);
 	void openFLOSSManual();
 	void openQuickRef();
@@ -295,6 +296,7 @@ private slots:
     void testAudioSetup();
     void checkSyntaxMenuAction();
     void tabMoved(int to, int from);
+    void openExamplesFolder();
 
     DocumentPage *getCurrentDocumentPage() {
         if(curPage >= documentPages.size())
@@ -509,6 +511,7 @@ private:
     QAction *lineNumbersAct;
 	QAction *parameterModeAct;
 //	QAction *showParametersAct;
+    QAction *openExamplesFolderAct;
     QSignalMapper *focusMapper;
 	int curPage;
 	int curCsdPage;  // To recall last csd visited

@@ -2,6 +2,7 @@
 
 ---
 
+![CsoundQt](doc/images/screenshot-linux-spectrumanalyzer.jpg)
 
 [CsoundQt](http://csoundqt.github.io) is a frontend for [Csound](http://csound.github.io/) featuring a highlighting editor with autocomplete, interactive widgets and integrated help. It is cross-platform and aims to be a simple yet powerful and complete development environment for Csound. 
 
@@ -13,7 +14,7 @@ For more information visit the [CsoundQt Website](http://csoundqt.github.io).
 
 Go to [Releases](https://github.com/CsoundQt/CsoundQt/releases) to download the latest binary for your platform.
 
-**CsoundQt** needs **csound** to be installed. Current version is compatible with Csound `6.14` and later. To install csound go here: <https://github.com/csound/csound/releases>
+**CsoundQt** needs **csound** to be installed. Current version is compatible with Csound `6.1` and later. To install csound go here: <https://github.com/csound/csound/releases>
 
 ## Screenshots
 

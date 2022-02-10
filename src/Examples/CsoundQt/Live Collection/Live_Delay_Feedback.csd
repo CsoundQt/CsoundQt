@@ -4,7 +4,12 @@
 </CsOptions>
 <CsInstruments>
 
-/*****LIVE DEALY AND FEEDBACK*****/
+/* 
+
+LIVE DEALY AND FEEDBACK
+
+*/
+
 ;example for CsoundQt
 ;written by joachim heintz
 ;may 2011
@@ -109,6 +114,9 @@ i 1 0 36000
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
+
 
 <bsbPanel>
  <label>Widgets</label>
