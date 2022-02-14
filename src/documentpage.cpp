@@ -944,9 +944,9 @@ void DocumentPage::setColorVariables(bool colorVariables)
 	m_view->setColorVariables(colorVariables);
 }
 
-void DocumentPage::setAutoComplete(bool autoComplete)
+void DocumentPage::setAutoComplete(bool autoComplete, int delay)
 {
-	m_view->setAutoComplete(autoComplete);
+    m_view->setAutoComplete(autoComplete, delay);
 }
 
 void DocumentPage::setAutoParameterMode(bool autoParameterMode)

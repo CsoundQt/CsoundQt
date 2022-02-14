@@ -428,9 +428,11 @@ void DocumentView::insertText(QString text, int section)
 	}
 }
 
-void DocumentView::setAutoComplete(bool autoComplete)
+void DocumentView::setAutoComplete(bool autoComplete, int delay)
 {
 	m_autoComplete = autoComplete;
+    if(delay > 0)
+        m_autoCompleteDelay = delay;
 }
 
 void DocumentView::setAutoParameterMode(bool autoParameterMode)
@@ -855,12 +857,182 @@ const QStringList DocumentView::getAllWords() {
     return m_allWords;
 }
 
+void DocumentView::autoCompleteAtCursor() {
+    TextEditor *editor = m_mainEditor;
+
+    // TODO: replace all this with QCompleter
+    QTextCursor cursor = editor->textCursor();
+    int curIndex = cursor.position();
+    // Sometimes this function is called multiple times without real
+    // changes, resulting in superfluous work. This catches those
+    // situations but it would be much nicer if we were not called
+    // in the first place!
+    if(curIndex == m_lastCursorPosition)
+        return;
+
+    m_lastCursorPosition = curIndex;
+
+    cursor.select(QTextCursor::WordUnderCursor);
+    QString word = cursor.selectedText();
+    if(word.isEmpty())
+        return;
+    QString wordlow = word.toLower();
+    if (word == ",") {
+        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
+        cursor.movePosition(QTextCursor::StartOfWord);
+        cursor.select(QTextCursor::WordUnderCursor);
+        word = cursor.selectedText();
+    }
+    QTextCursor lineCursor = editor->textCursor();
+    lineCursor.select(QTextCursor::LineUnderCursor);
+    QString line = lineCursor.selectedText();
+    QSet<QString>menuWordsSeen;
+
+    int commentIndex = -1;
+    bool useFunction = false;
+    if (line.indexOf(";") != -1) {
+        commentIndex = lineCursor.position() - line.length() + line.indexOf(";");
+        if (commentIndex < curIndex)
+            return;
+    }
+    if(QRegularExpression("^\\s*(opcode|instr)").match(line).hasMatch()) {
+        return;
+    }
+    if(!QRegularExpression("\\s*\\w+\\s+\\w+").match(line).hasMatch()) {
+        useFunction = true;
+    }
+    QRegularExpressionMatch rxmatch;
+    bool showSyntaxMenu = false;
+    if((rxmatch=QRegularExpression("\\s*-([+-])(\\w*)").match(line)).hasMatch()) {
+        syntaxMenu->clear();
+        auto capt = rxmatch.captured(2);
+        auto options = rxmatch.captured(1)=="-"? m_longOptions: m_longOptions2;
+        for(auto option: options) {
+            if(option.startsWith(capt)) {
+                QAction *a = syntaxMenu->addAction(option, this,
+                                                   SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
+                a->setData(option);
+                showSyntaxMenu = true;
+            }
+        }
+    }
+    else if (cursor.position() > cursor.anchor() && word.size() > 2 && !word.startsWith("\"")) { // Only at the end of the word
+        syntaxMenu->clear();
+        foreach(QString var, m_localVariables) {
+            if (var.endsWith(',')) {
+                var.chop(1);
+            }
+            if (var.startsWith(word) && word != var) {
+                QAction *a = syntaxMenu->addAction(var, this,
+                                                   SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
+                a->setData(var);
+                showSyntaxMenu = true;
+            }
+        }
+        // opcodes and parameters
+        auto syntax = m_opcodeTree->getPossibleSyntax(word);
+        bool allEqual = true;
+        for(int i = 0; i < syntax.size(); i++) {
+            if (syntax[i].opcodeName != word) {
+                allEqual = false;
+                break;
+            }
+        }
+        if (syntax.size() > 0 && !allEqual) {
+            for(int i = 0; i < syntax.size(); i++) {
+                QString opcodeName = syntax[i].opcodeName;
+                QString text = opcodeName.size() < 14 ?
+                           opcodeName.leftJustified(14) :
+                           opcodeName + " ";
+
+                QString outArgs = syntax[i].outArgs;
+                auto inArgs = syntax[i].inArgs;
+                if(!inArgs.isEmpty()) {
+                    text += inArgs.size()<=28 ? inArgs : inArgs.mid(0, 27)+"…";
+                }
+                if(text.size() < 42) {
+                    text = text.leftJustified(42);
+                }
+                switch(outArgs[0].toLatin1()) {
+                case 'a':
+                    text += " :a"; break;
+                case 'k':
+                    text += " :k"; break;
+                case 'i':
+                    text += " :i"; break;
+                case 'x':
+                    text += " :x"; break;
+                case 'S':
+                    text += " :S"; break;
+                case 'f':
+                    text += " :pvs"; break;
+                }
+
+                QString syntaxText;
+                if (useFunction) {
+                    syntaxText = QString("%1(%2)").arg(
+                        syntax[i].opcodeName.simplified(),
+                        syntax[i].inArgs.simplified());
+                } else {
+                    syntaxText= syntax[i].outArgs.simplified();
+                    if (!syntax[i].outArgs.isEmpty())
+                        syntaxText += " ";
+                    syntaxText += syntax[i].opcodeName.simplified();
+                    if (!syntax[i].inArgs.isEmpty()) {
+                        if (syntax[i].inArgs.contains("(x)") ) {
+                            syntaxText += "(x)"; // avoid other text like (with no rate restriction)
+                        } else {
+                            syntaxText += " " + syntax[i].inArgs.simplified();
+                        }
+                    }
+                }
+                auto a = syntaxMenu->addAction(text, this, SLOT(insertAutoCompleteText()));
+                a->setData(syntaxText);
+                a->setToolTip(syntaxText);
+                showSyntaxMenu = true;
+                menuWordsSeen.insert(opcodeName);
+            }
+            syntaxMenu->addSeparator();
+        }
+        // check for autcompletion from ALL words in text editor
+        auto allWords = getAllWords();
+        QStringList menuWords;
+        for(auto theWord: allWords) {
+            if (word != theWord &&
+                    theWord.toLower().startsWith(wordlow) &&
+                    !menuWordsSeen.contains(theWord) &&
+                    QRegularExpression("\\b[akigp]").match(word).hasMatch()) {
+                auto a = syntaxMenu->addAction(theWord, this, SLOT(insertAutoCompleteText()));
+                a->setData(theWord);
+                showSyntaxMenu = true;
+                menuWordsSeen.insert(theWord);
+            }
+        }
+        for(auto tag: tagWords) {
+            if(tag.toLower().startsWith(wordlow) && word != tag) {
+                auto a = syntaxMenu->addAction(tag, this, SLOT(insertAutoCompleteText()));
+                a->setData(tag);
+                showSyntaxMenu = true;
+            }
+        }
+    }
+    else {
+        destroySyntaxMenu();
+    }
+    if(showSyntaxMenu && !syntaxMenu->actions().isEmpty()) {
+        QRect r =  editor->cursorRect();
+        QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
+        syntaxMenu->setDefaultAction(syntaxMenu->actions()[0]);
+        syntaxMenu->move(editor->mapToGlobal(p));
+        syntaxMenu->show();
+    }
+}
+
 void DocumentView::textChanged() {
     if (internalChange) {
         internalChange = false;
 		return;
 	}
-	TextEditor *editor = m_mainEditor;
 
     //test: seems to do the trick and solve "always modified bug
     bool modified = m_mainEditor->document()->isModified();
@@ -871,183 +1043,21 @@ void DocumentView::textChanged() {
     // This should go somewhere else, maybe when escape is pressed?
     unmarkErrorLines();
 
-    /*
-    auto sender = static_cast<QTextEdit*>(this->sender());
-    auto senderName = sender != nullptr ? sender->property("name").toString() : "";
-    qDebug() << "sender: " << senderName << "modified:" << modified;
-    */
     if(!(m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE))
         return;
     syntaxCheck();
     if(m_autoComplete) {
-        // TODO: replace all this with QCompleter
-        QTextCursor cursor = editor->textCursor();
-        int curIndex = cursor.position();
-        // Sometimes this function is called multiple times without real
-        // changes, resulting in superfluous work. This catches those
-        // situations but it would be much nicer if we were not called
-        // in the first place!
-        if(curIndex == m_lastCursorPosition)
-            return;
-
-        m_lastCursorPosition = curIndex;
-
-        cursor.select(QTextCursor::WordUnderCursor);
-        QString word = cursor.selectedText();
-        if(word.isEmpty())
-            return;
-        QString wordlow = word.toLower();
-        if (word == ",") {
-            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
-            cursor.movePosition(QTextCursor::StartOfWord);
-            cursor.select(QTextCursor::WordUnderCursor);
-            word = cursor.selectedText();
+        if(m_autoCompleteTimer != nullptr && m_autoCompleteTimer->isActive()) {
+            m_autoCompleteTimer->stop();
         }
-        QTextCursor lineCursor = editor->textCursor();
-        lineCursor.select(QTextCursor::LineUnderCursor);
-        QString line = lineCursor.selectedText();
-        QSet<QString>menuWordsSeen;
-
-        int commentIndex = -1;
-        bool useFunction = false;
-        if (line.indexOf(";") != -1) {
-            commentIndex = lineCursor.position() - line.length() + line.indexOf(";");
-            if (commentIndex < curIndex)
-                return;
-        }
-        if(QRegularExpression("^\\s*(opcode|instr)").match(line).hasMatch()) {
-            return;
-        }
-        if(!QRegularExpression("\\s*\\w+\\s+\\w+").match(line).hasMatch()) {
-            useFunction = true;
-        }
-        QRegularExpressionMatch rxmatch;
-        bool showSyntaxMenu = false;
-        if((rxmatch=QRegularExpression("\\s*-([+-])(\\w*)").match(line)).hasMatch()) {
-            syntaxMenu->clear();
-            auto capt = rxmatch.captured(2);
-            auto options = rxmatch.captured(1)=="-"? m_longOptions: m_longOptions2;
-            for(auto option: options) {
-                if(option.startsWith(capt)) {
-                    QAction *a = syntaxMenu->addAction(option, this,
-                                                       SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
-                    a->setData(option);
-                    showSyntaxMenu = true;
-                }
-            }
-        }
-        else if (cursor.position() > cursor.anchor() && word.size() > 2 && !word.startsWith("\"")) { // Only at the end of the word
-            syntaxMenu->clear();
-            foreach(QString var, m_localVariables) {
-                if (var.endsWith(',')) {
-                    var.chop(1);
-                }
-                if (var.startsWith(word) && word != var) {
-                    QAction *a = syntaxMenu->addAction(var, this,
-                                                       SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
-                    a->setData(var);
-                    showSyntaxMenu = true;
-                }
-            }
-            // opcodes and parameters
-            auto syntax = m_opcodeTree->getPossibleSyntax(word);
-            bool allEqual = true;
-            for(int i = 0; i < syntax.size(); i++) {
-                if (syntax[i].opcodeName != word) {
-                    allEqual = false;
-                    break;
-                }
-            }
-            if (syntax.size() > 0 && !allEqual) {
-                for(int i = 0; i < syntax.size(); i++) {
-                    QString opcodeName = syntax[i].opcodeName;
-                    QString text = opcodeName.size() < 14 ?
-                               opcodeName.leftJustified(14) :
-                               opcodeName + " ";
-
-                    QString outArgs = syntax[i].outArgs;
-                    auto inArgs = syntax[i].inArgs;
-                    if(!inArgs.isEmpty()) {
-                        text += inArgs.size()<=28 ? inArgs : inArgs.mid(0, 27)+"…";
-                    }
-                    if(text.size() < 42) {
-                        text = text.leftJustified(42);
-                    }
-                    switch(outArgs[0].toLatin1()) {
-                    case 'a':
-                        text += " :a"; break;
-                    case 'k':
-                        text += " :k"; break;
-                    case 'i':
-                        text += " :i"; break;
-                    case 'x':
-                        text += " :x"; break;
-                    case 'S':
-                        text += " :S"; break;
-                    case 'f':
-                        text += " :pvs"; break;
-                    }
-
-                    QString syntaxText;
-                    if (useFunction) {
-                        syntaxText = QString("%1(%2)").arg(
-                            syntax[i].opcodeName.simplified(),
-                            syntax[i].inArgs.simplified());
-                    } else {
-                        syntaxText= syntax[i].outArgs.simplified();
-                        if (!syntax[i].outArgs.isEmpty())
-                            syntaxText += " ";
-                        syntaxText += syntax[i].opcodeName.simplified();
-                        if (!syntax[i].inArgs.isEmpty()) {
-                            if (syntax[i].inArgs.contains("(x)") ) {
-                                syntaxText += "(x)"; // avoid other text like (with no rate restriction)
-                            } else {
-                                syntaxText += " " + syntax[i].inArgs.simplified();
-                            }
-                        }
-                    }
-                    auto a = syntaxMenu->addAction(text, this, SLOT(insertAutoCompleteText()));
-                    a->setData(syntaxText);
-                    a->setToolTip(syntaxText);
-                    showSyntaxMenu = true;
-                    menuWordsSeen.insert(opcodeName);
-                }
-                syntaxMenu->addSeparator();
-            }
-            // check for autcompletion from ALL words in text editor
-            auto allWords = getAllWords();
-            QStringList menuWords;
-            for(auto theWord: allWords) {
-                if (word != theWord &&
-                        theWord.toLower().startsWith(wordlow) &&
-                        !menuWordsSeen.contains(theWord) &&
-                        QRegularExpression("\\b[akigp]").match(word).hasMatch()) {
-                    auto a = syntaxMenu->addAction(theWord, this, SLOT(insertAutoCompleteText()));
-                    a->setData(theWord);
-                    showSyntaxMenu = true;
-                    menuWordsSeen.insert(theWord);
-                }
-            }
-            for(auto tag: tagWords) {
-                if(tag.toLower().startsWith(wordlow) && word != tag) {
-                    auto a = syntaxMenu->addAction(tag, this, SLOT(insertAutoCompleteText()));
-                    a->setData(tag);
-                    showSyntaxMenu = true;
-                }
-            }
-        }
-        else {
-            destroySyntaxMenu();
-        }
-        if(showSyntaxMenu && !syntaxMenu->actions().isEmpty()) {
-            QRect r =  editor->cursorRect();
-            QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-            syntaxMenu->setDefaultAction(syntaxMenu->actions()[0]);
-            syntaxMenu->move(editor->mapToGlobal(p));
-            syntaxMenu->show();
-        }
+        auto autoCompleteTask = new QTimer(this);
+        autoCompleteTask->setInterval(200);
+        autoCompleteTask->setSingleShot(true);
+        connect(autoCompleteTask, &QTimer::timeout, this, &DocumentView::autoCompleteAtCursor);
+        autoCompleteTask->start();
+        m_autoCompleteTimer = autoCompleteTask;
+        // this->autoCompleteAtCursor();
     }
-
 }
 
 void DocumentView::escapePressed()

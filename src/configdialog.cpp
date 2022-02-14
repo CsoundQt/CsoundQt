@@ -195,6 +195,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     toolbarIconSizeSpinBox->setValue(m_options->toolbarIconSize);
 	wrapLinesCheckBox->setChecked(m_options->wrapLines);
 	autoCompleteCheckBox->setChecked(m_options->autoComplete);
+    autoCompleteDelaySpinBox->setValue(m_options->autoCompleteDelay);
+
 	autoParameterModeCheckBox->setChecked(m_options->autoParameterMode);
 	widgetsCheckBox->setChecked(m_options->enableWidgets);
 	midiCcToCurrentPageOnlyCheckBox->setChecked(m_options->midiCcToCurrentPageOnly);
@@ -502,6 +504,7 @@ void ConfigDialog::accept()
     m_options->toolbarIconSize = toolbarIconSizeSpinBox->value();
 	m_options->wrapLines = wrapLinesCheckBox->isChecked();
 	m_options->autoComplete = autoCompleteCheckBox->isChecked();
+    m_options->autoCompleteDelay = autoCompleteDelaySpinBox->value();
 	m_options->autoParameterMode = autoParameterModeCheckBox->isChecked();
 	m_options->enableWidgets = widgetsCheckBox->isChecked();
 	m_options->midiCcToCurrentPageOnly = midiCcToCurrentPageOnlyCheckBox->isChecked();

@@ -69,7 +69,7 @@ public:
 	~DocumentView();
 
 	void insertText(QString text, int section = -1);
-	void setAutoComplete(bool autoComplete);
+    void setAutoComplete(bool autoComplete, int delay = 0);
 	void setAutoParameterMode(bool autoParameterMode);
 	void setViewMode(int mode);
 
@@ -116,7 +116,7 @@ public slots:
 	void getToIn(); // chnget/chnset to invalue/outvalue
 	void inToGet(); // invalue/outvalue to chnget/chnset
 	void insertAutoCompleteText();
-	void findString(QString query = QString());
+    void findString(QString query = QString());
 	void evaluate();
 	void updateContext();
 	void updateOrcContext(QString orc);
@@ -126,6 +126,7 @@ public slots:
 	void hideHoverText();
 	void updateHoverText(int x, int y, QString text);
 	void createContextMenu(QPoint pos);
+    void autoCompleteAtCursor();
 
 	void showOrc(bool);
 	void showScore(bool);
@@ -174,6 +175,8 @@ private:
 
 	bool m_isModified;
 	bool m_autoComplete;
+    int m_autoCompleteDelay = 150;
+    QTimer* m_autoCompleteTimer = nullptr;
     bool m_autoParameterMode;
 	bool errorMarked;
 	bool internalChange;  // to let popoup opcode completion know if text change was internal

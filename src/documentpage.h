@@ -144,7 +144,7 @@ public:
 	void setLineWrapMode(QTextEdit::LineWrapMode wrapLines);
 	void setColorVariables(bool colorVariables);
 	//    void setOpcodeNameList(QStringList opcodeNameList);
-	void setAutoComplete(bool autoComplete);
+    void setAutoComplete(bool autoComplete, int delay = 0);
 	void setAutoParameterMode(bool autoParameterMode);
 	QString getActiveSection();
 	QString getActiveText();

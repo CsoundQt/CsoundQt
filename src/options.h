@@ -60,6 +60,7 @@ public:
     int  toolbarIconSize;
 	bool wrapLines;
 	bool autoComplete;
+    int autoCompleteDelay;
 	bool autoParameterMode;
     bool tabShortcutActive;
 
