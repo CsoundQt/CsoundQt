@@ -9,8 +9,8 @@ build64:TMPDIR = build/doubles
 #build64:DEFINES += USE_DOUBLE
 OBJECTS_DIR = "$${TMPDIR}/obj"
 
-#DEFAULT_RTMIDI_DIRS = rtmidi
-RTMIDI_VERSIONS = "rtmidi" "rtmidi-5.0.0" "rtmidi-4.0.0" "rtmidi-3.0.0" "rtmidi-2.1.1" "rtmidi-2.1.0" "rtmidi-2.0.1" "rtmidi-1.0.15"
+DEFAULT_RTMIDI_DIRS = "rtmidi"
+RTMIDI_VERSIONS = "rtmidi-5.0.0" "rtmidi-4.0.0" "rtmidi-3.0.0" "rtmidi-2.1.1" "rtmidi-2.1.0" "rtmidi-2.0.1" "rtmidi-1.0.15"
 for (rtdir, RTMIDI_VERSIONS) {
     DEFAULT_RTMIDI_DIRNAME=$$rtdir
     DEFAULT_RTMIDI_DIRS += $${DEFAULT_RTMIDI_DIRNAME} \

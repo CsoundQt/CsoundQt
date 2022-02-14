@@ -184,6 +184,11 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
         if (useLimiter) {
             opts << "--limiter="+QString::number(limitValue);
         }
+
+        // add --print_version by default if Csound 6.17 or later
+        if ( csoundGetVersion() >=6170 ) {
+            opts << "--print_version";
+        }
 	}
 	else {
         opts << "--format=" + m_configlists->fileTypeNames[fileFileType]

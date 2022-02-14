@@ -36,6 +36,6 @@
         <file>appstyle-white.css</file>
         <file>../images/html5.png</file>
         <file>../images/tools-wizard.svg</file>
-        <file>AudioMidiTest.csd</file>
+        <file alias="AudioMidiTest.csd">Examples/CsoundQt/Useful/AudioMidiTest.csd</file>
     </qresource>
 </RCC>
