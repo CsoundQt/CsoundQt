@@ -51,7 +51,7 @@ jobs:
           csound_include="$csound_brew_root"/include
           csound_lib="$csound_brew_root"/lib
           
-          qmake CONFIG+=rtmidi -DCSOUND_LIBRARY_DIR="$csound_lib" qcs.pro
+          qmake CONFIG+=rtmidi DCSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
           make -j4
 
           tree   
