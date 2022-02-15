@@ -32,3 +32,6 @@ util/opcodes.xml
 src_QML_*
 qmlcache_loader.cpp
 src_qml_resources_qmlcache.qrc
+*.AppImage
+make_appdir/AppDir/
+make_appdir/csoundqt.desktop

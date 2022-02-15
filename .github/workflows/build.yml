@@ -1,0 +1,117 @@
+name: Build And Publish
+on: push
+env:
+  PACKAGENAME: CsoundQt
+jobs:
+  buildjob:
+    name: Build CsoundQt on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [macos-latest]
+        include:
+          #- os: windows-latest
+          #  triplet: x64-windows
+          #- os: ubuntu-latest
+          #  triplet: x64-linux
+          - os: macos-latest
+            triplet: x64-osx
+        # os: [windows-2019]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: update submodules
+        run: |
+          echo "Calling git submodule update"
+          git submodule update --init --recursive
+          git submodule status --recursive
+
+          echo "Finished submodules"
+
+
+      - uses: lukka/get-cmake@latest
+
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: macos build
+        if: runner.os == 'macOS'
+        run: |
+
+          brew update
+          brew install csound
+          brew install qt  
+
+          qmake CONFIG+=rtmidi qcs.pro
+          make -j4
+
+          tree   
+          
+          # brew installs here
+          # sudo apt-get install libsndfile1-dev libfluidsynth-dev libeigen3-dev fluid libhdf5-dev 
+
+          # cd csound/include
+          # ln -s ../Android/CsoundAndroid/jni/version.h .
+          # ln -s ../Android/CsoundAndroid/jni/float-version.h .
+          # cd ../..
+
+          rm -fr build-macos
+          mkdir build-macos
+          mv bin/Csound-d-cs6 build-macos
+          hdiutil create -fs HFS+ -srcfolder build-macos -volname CsoundQt "CsoundQt.dmg"
+          
+          mkdir -p ../artifacts
+          cp CsoundQt.dmg ../artifacts
+          ls ../artifacts
+
+
+      - name: linux build
+        if: runner.os == 'linux'
+        run: |
+          sudo apt update
+
+          
+          echo "--- Root dir ---"
+          ls
+
+          rm -fr build-linux
+          mkdir build-linux
+          cd build-linux
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: plugins
+          path: artifacts/*.zip
+
+  publish:           
+    name: Publish artifacts as a Pre-Release
+    # if: contains(github.ref, 'tags/v')
+    needs: [buildjob]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Load Release URL File from release job
+        uses: actions/download-artifact@v2
+        with:
+          name: plugins
+          path: plugins
+
+      - name: List files
+        run: |
+          ls -R
+      
+      #- name: Publish
+      #  uses: "marvinpinto/action-automatic-releases@latest"
+      #  with:
+      #    repo_token: "${{ secrets.GITHUB_TOKEN }}"
+      #    automatic_release_tag: "latest"
+      #    title: "Development Build"
+      #    prerelease: True
+      #    files: |
+      #      plugins/*.zip
+            

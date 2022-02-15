@@ -8,19 +8,20 @@
 # change according to your own sysem
 # constants
 
+
 BINARY="CsoundQt-d-cs6"
-BUILD_DIR="../../build-qcs-Desktop-Release/"
-EXECUTABLE="$BUILD_DIR/bin/$BINARY"
-VERSION="0.9.8.2"
-CSOUND_VERSION="6.14.0"
-CSOUND_PREFIX="/usr/local/"
-CSOUND_PLUGINS_DIR="$CSOUND_PREFIX/lib/csound/plugins64-6.0/" 
+BUILD_DIR="../../build-qcs-Desktop-Release"
+# EXECUTABLE="$BUILD_DIR/bin/$BINARY"
+EXECUTABLE="../bin/$BINARY"
+VERSION="1.1.0"
+CSOUND_VERSION="6.17.0"
+CSOUND_PREFIX="/usr/local"
+CSOUND_PLUGINS_DIR="$CSOUND_PREFIX/lib/csound/plugins64-6.0" 
 CSOUND_MANUAL_HTML_DIR="$HOME/src/csound-manual/html"
 BUNDLE_CSOUND=true # for now: always bundle Csound
-SRC_DIR="../" #CsoundQt root
-LIB_DIR="/usr/lib/"
-APP_DIR="AppDir" #"$BUILD_DIR/AppDir"
-
+SRC_DIR=".." #CsoundQt root
+LIB_DIR="/usr/lib"
+APP_DIR="AppDir" # "$BUILD_DIR/AppDir"
 
 
 # download linuxdeploy and its Qt plugin
@@ -29,20 +30,23 @@ APP_DIR="AppDir" #"$BUILD_DIR/AppDir"
 #wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
 
 
-LINUXDEPLOY="$HOME/bin/linuxdeploy-x86_64.AppImage"
-
+# LINUXDEPLOY="$HOME/bin/linuxdeploy-x86_64.AppImage"
+LINUXDEPLOY=$(which linuxdeploy-x86_64.AppImage)
 
 #1 export necessary environment variables
-export VERSION=0.9.8.2 
+export VERSION=$VERSION 
 export QML_SOURCES_PATHS="$SRC_DIR/src/QML"; 
 
 
 # correct desktop file -  instead of csoundqt as command use the actual binary name
 sed "s/Exec=csoundqt/Exec=$BINARY/g" $SRC_DIR/csoundqt.desktop > csoundqt.desktop
 
-#2 create initial AppDir with linuxdeploy
-#TODO: cannot blacklist csound libs.blacklist nor -blacklist flag work...
-$LINUXDEPLOY --appdir $APP_DIR --executable=$EXECUTABLE --desktop-file=csoundqt.desktop --icon-file=$SRC_DIR/images/csoundqt.svg --library=$LIB_DIR/libportmidi.so --library=$LIB_DIR/x86_64-linux-gnu/liblo.so --library=$LIB_DIR/x86_64-linux-gnu/libstk.so   --plugin=qt
+# 2 create initial AppDir with linuxdeploy
+# TODO: cannot blacklist csound libs.blacklist nor -blacklist flag work...
+LIBPORTMIDI=$(locate --limit 1 libportmidi.so)
+
+
+$LINUXDEPLOY --appdir $APP_DIR --executable=$EXECUTABLE --desktop-file=csoundqt.desktop --icon-file=$SRC_DIR/images/csoundqt.svg --library=$LIBPORTMIDI --library=$LIB_DIR/x86_64-linux-gnu/liblo.so --library=$LIB_DIR/x86_64-linux-gnu/libstk.so --plugin=qt
 
 
 #libraries still missing: libstk-4.5.0.so libfltk.so.1.1
@@ -63,10 +67,11 @@ cp "$CSOUND_PREFIX/bin/csound" $APP_DIR/usr/bin
 #what about other utilities? Should they be accessible? I think no, then user has to install csound separately. NB! Try to match the Csound version!
 
 #create hook to set Csound Plugins Dir environment
+
+mkdir -p $APP_DIR/apprun-hooks
 echo 'export OPCODE6DIR64="${APPDIR}/usr/lib/csound/plugins64-6.0/"' >  $APP_DIR/apprun-hooks/csound-plugins-hook.sh
 
-
 # and create final AppImage
-$LINUXDEPLOY --appdir $APP_DIR  --output appimage
+$LINUXDEPLOY --appdir $APP_DIR --executable=$EXECUTABLE --desktop-file=csoundqt.desktop --icon-file=$SRC_DIR/images/csoundqt.svg --plugin=qt --output appimage
 
 
