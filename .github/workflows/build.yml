@@ -70,7 +70,7 @@ jobs:
 
           rm -fr build-macos
           mkdir build-macos
-          mv bin/Csound-d-cs6 build-macos
+          cp bin/CsoundQt-d-cs6.app build-macos
           hdiutil create -fs HFS+ -srcfolder build-macos -volname CsoundQt "CsoundQt.dmg"
           
           mkdir -p ../artifacts
