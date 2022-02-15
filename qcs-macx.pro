@@ -5,17 +5,8 @@
 	message(Building CsoundQt for Macintosh OS X.)
 }
 
-i386:  {
-CONFIG += i386
-QMAKE_CXXFLAGS += -arch i386
-} else:universal {
-QMAKE_CXXFLAGS += -arch i386
-CONFIG += i386
-CONFIG += ppc
-} else {
 CONFIG += x86_64
 QMAKE_CXXFLAGS += -arch x86_64
-}
 
 build32: MAC_LIB = CsoundLib
 build64: MAC_LIB = CsoundLib64
@@ -27,11 +18,15 @@ HOME_DIRECTORY =
 CSOUND_FRAMEWORK_DIR = /Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
 DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${CSOUND_FRAMEWORK_DIR}/Headers \
         $${CSOUND_FRAMEWORK_DIR}/Headers \
-        /usr/local/include/csound
+        /usr/local/include/csound \
+        /usr/local/opt/csound/include
+        
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
 DEFAULT_CSOUND_LIBRARY_DIRS = $${HOME_DIRECTORY}/$${CSOUND_FRAMEWORK_DIR} \
         $${CSOUND_FRAMEWORK_DIR} \
-        /usr/local/lib
+        /usr/local/lib \
+        /usr/local/opt/csound/lib
+
 build32:DEFAULT_CSOUND_LIBS = CsoundLib
 build64:DEFAULT_CSOUND_LIBS = CsoundLib64
 
@@ -55,19 +50,23 @@ include(config.pri)
 
 # Use results from config step
 LIBS *= -L$${CSOUND_LIBRARY_DIR}
+
 rtmidi {
 DEFINES += __MACOSX_CORE__
 LIBS += -framework CoreFoundation
 LIBS += -framework CoreMidi -framework CoreAudio
 }
+
 quteapp_f {
 message(Bundling QuteApp_f)
 RESOURCES += "src/quteapp_f_osx.qrc"
 }
+
 quteapp_d {
 message(Bundling QuteApp_d)
 RESOURCES += "src/quteapp_d_osx.qrc"
 }
+
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
 LCSOUND = -F$${HOME_DIRECTORY}/Library/Frameworks -F/Library/Frameworks -framework $${MAC_LIB}
 csound6: LCSND = -L/usr/local/lib -lcsnd6.6.0

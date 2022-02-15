@@ -44,9 +44,13 @@ jobs:
 
           brew update
           brew install csound
-          brew install qt  
+          brew install qt@5
 
-          qmake CONFIG+=rtmidi qcs.pro
+          csound_brew_root=$(brew --prefix csound)
+          csound_include="$csound_brew_root"/include
+          csound_lib="$csound_brew_root"/lib
+          
+          qmake CONFIG+=rtmidi -DCSOUND_LIBRARY_DIR="$csound_lib" qcs.pro
           make -j4
 
           tree   
