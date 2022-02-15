@@ -59,8 +59,7 @@ jobs:
           qmake CONFIG+=rtmidi DCSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
           make -j4
 
-          tree   
-          
+          find .
           # brew installs here
           # sudo apt-get install libsndfile1-dev libfluidsynth-dev libeigen3-dev fluid libhdf5-dev 
 
