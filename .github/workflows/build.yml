@@ -68,14 +68,21 @@ jobs:
           # ln -s ../Android/CsoundAndroid/jni/float-version.h .
           # cd ../..
 
-          rm -fr build-macos
+          # rm -fr build-macos
+          echo "mkdir build-macos"
           mkdir build-macos
-          cp bin/CsoundQt-d-cs6.app build-macos
+          echo "copying app to build-macos"
+          cp -r bin/CsoundQt-d-cs6.app build-macos
+          echo "Creating .dmg file"
           hdiutil create -fs HFS+ -srcfolder build-macos -volname CsoundQt "CsoundQt.dmg"
-          
+
+          echo "Creating artifacts folder"
           mkdir -p ../artifacts
+          echo "Copying .dmg to artifacts"
           cp CsoundQt.dmg ../artifacts
+          echo "Listing artifacts"
           ls ../artifacts
+          echo "ready!"
 
 
       - name: linux build
