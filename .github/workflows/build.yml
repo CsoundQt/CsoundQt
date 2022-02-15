@@ -77,11 +77,11 @@ jobs:
           hdiutil create -fs HFS+ -srcfolder build-macos -volname CsoundQt "CsoundQt.dmg"
 
           echo "Creating artifacts folder"
-          mkdir -p ../artifacts
+          mkdir -p artifacts
           echo "Copying .dmg to artifacts"
-          cp CsoundQt.dmg ../artifacts
+          cp CsoundQt.dmg artifacts
           echo "Listing artifacts"
-          ls ../artifacts
+          ls artifacts
           echo "ready!"
 
 
