@@ -101,7 +101,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: CsoundQt
-          path: artifacts/*.zip
+          path: artifacts/*
 
   publish:           
     name: Publish artifacts as a Pre-Release
