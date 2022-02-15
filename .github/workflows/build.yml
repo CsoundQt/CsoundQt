@@ -34,9 +34,9 @@ jobs:
           echo "Finished submodules"
 
 
-      - uses: lukka/get-cmake@latest
+      # - uses: lukka/get-cmake@latest
 
-      - uses: ilammy/msvc-dev-cmd@v1
+      # - uses: ilammy/msvc-dev-cmd@v1
 
       - name: macos build
         if: runner.os == 'macOS'
@@ -44,7 +44,8 @@ jobs:
 
           brew update
           brew install csound
-          brew install qt@5
+          brew install qt5
+          brew link qt5 --force
 
           csound_brew_root=$(brew --prefix csound)
           csound_include="$csound_brew_root"/include
