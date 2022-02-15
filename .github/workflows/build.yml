@@ -100,7 +100,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: plugins
+          name: CsoundQt
           path: artifacts/*.zip
 
   publish:           
@@ -114,20 +114,20 @@ jobs:
       - name: Load Release URL File from release job
         uses: actions/download-artifact@v2
         with:
-          name: plugins
-          path: plugins
+          name: CsoundQt
+          path: artifacts
 
       - name: List files
         run: |
           ls -R
       
-      #- name: Publish
-      #  uses: "marvinpinto/action-automatic-releases@latest"
-      #  with:
-      #    repo_token: "${{ secrets.GITHUB_TOKEN }}"
-      #    automatic_release_tag: "latest"
-      #    title: "Development Build"
-      #    prerelease: True
-      #    files: |
-      #      plugins/*.zip
+      - name: Publish
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          title: "Development Build"
+          prerelease: True
+          files: |
+            artifacts/*
             
