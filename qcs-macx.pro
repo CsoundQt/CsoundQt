@@ -15,7 +15,7 @@ build64: MAC_LIB = CsoundLib64
 HOME_DIRECTORY =
 
 # Set default paths
-CSOUND_FRAMEWORK_DIR = /Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
+CSOUND_FRAMEWORK_DIR = Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
 DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${CSOUND_FRAMEWORK_DIR}/Headers \
         $${CSOUND_FRAMEWORK_DIR}/Headers \
         /usr/local/include/csound \
@@ -23,7 +23,7 @@ DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${CSOUND_FRAMEWORK_DIR}/Headers \
         
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
 DEFAULT_CSOUND_LIBRARY_DIRS = $${HOME_DIRECTORY}/$${CSOUND_FRAMEWORK_DIR} \
-        $${CSOUND_FRAMEWORK_DIR} \
+        /$${CSOUND_FRAMEWORK_DIR} \
         /usr/local/lib \
         /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Versions/Current
         
@@ -52,6 +52,7 @@ include(config.pri)
 # Use results from config step
 LIBS *= -L$${CSOUND_LIBRARY_DIR}
 
+
 rtmidi {
 DEFINES += __MACOSX_CORE__
 LIBS += -framework CoreFoundation
@@ -69,9 +70,9 @@ RESOURCES += "src/quteapp_d_osx.qrc"
 }
 
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
-LCSOUND = -F$${HOME_DIRECTORY}/Library/Frameworks -F/Library/Frameworks -framework $${MAC_LIB}
-csound6: LCSND = -L/usr/local/lib -lcsnd6.6.0
-else: LCSND = -l_csnd
+LCSOUND = -F$${HOME_DIRECTORY}/Library/Frameworks -F/Library/Frameworks /usr/local/opt/csound/Frameworks -framework $${MAC_LIB}
+
+LCSND = -L/usr/local/lib -lcsnd6.6.0
 
 QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
 ICON = $${PWD}/images/qtcs.icns
