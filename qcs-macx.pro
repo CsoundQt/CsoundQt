@@ -19,13 +19,14 @@ CSOUND_FRAMEWORK_DIR = /Library/Frameworks/$${MAC_LIB}.framework/Versions/Curren
 DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${CSOUND_FRAMEWORK_DIR}/Headers \
         $${CSOUND_FRAMEWORK_DIR}/Headers \
         /usr/local/include/csound \
-        /usr/local/opt/csound/include
+        /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Headers
         
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
 DEFAULT_CSOUND_LIBRARY_DIRS = $${HOME_DIRECTORY}/$${CSOUND_FRAMEWORK_DIR} \
         $${CSOUND_FRAMEWORK_DIR} \
         /usr/local/lib \
-        /usr/local/opt/csound/lib
+        /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Versions/Current
+        
 
 build32:DEFAULT_CSOUND_LIBS = CsoundLib
 build64:DEFAULT_CSOUND_LIBS = CsoundLib64
