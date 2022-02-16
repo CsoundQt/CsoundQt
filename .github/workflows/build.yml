@@ -52,11 +52,8 @@ jobs:
 
           ls -R "$csound_brew_root"
           
-          csound_include="$csound_brew_root"/include
-          csound_lib="$csound_brew_root"/lib
-
-         
-          qmake CONFIG+=rtmidi CONFIG+=release CSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
+          # qmake CONFIG+=rtmidi CONFIG+=release CSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
+          qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
           make -j4
 
           rm -fr bin/CsoundQt-d-cs6.app/Contents/Frameworks/CsoundLib64.framework
