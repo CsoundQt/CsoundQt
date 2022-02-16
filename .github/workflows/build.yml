@@ -41,7 +41,8 @@ jobs:
       - name: macos build
         if: runner.os == 'macOS'
         run: |
-
+          set -o xtrace   # echo each command before it is executed
+          
           brew update
           brew install csound
           brew install qt5
@@ -56,10 +57,13 @@ jobs:
           qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
           make -j4
 
+          
           rm -fr bin/CsoundQt-d-cs6.app/Contents/Frameworks/CsoundLib64.framework
-          install_name_tool -change @rpath/libcsnd6.6.0.dylib libcsnd6.6.0.dylib bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
-          install_name_tool -change @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 CsoundLib64.
-          framework/Versions/6.0/CsoundLib64 bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
+
+          install_name_tool -change @rpath/libcsnd6.6.0.dylib  libcsnd6.6.0.dylib  bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
+
+          install_name_tool -change @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64  CsoundLib64.framework/Versions/6.0/CsoundLib64  bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
+
           macdeployqt bin/CsoundQt-d-cs6.app -qmldir=src/QML -dmg
           
           otool -L bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
