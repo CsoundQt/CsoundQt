@@ -1107,8 +1107,9 @@ void CsoundQt::tabMoved(int to, int from)  // arguments should be from, but prob
 
 void CsoundQt::openExamplesFolder()
 {
-    qDebug() << "Trying to open Examples folder" << getExamplePath("");
-    QDesktopServices::openUrl(QUrl(getExamplePath("")));
+    QUrl examplePath = QUrl::fromLocalFile(QFileInfo(getExamplePath("")).absoluteFilePath());
+    qDebug() << "Trying to open Examples folder" << examplePath;
+    QDesktopServices::openUrl(examplePath);
 }
 
 QString CsoundQt::getSaveFileName()
