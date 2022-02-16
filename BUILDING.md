@@ -120,8 +120,7 @@ This will deploy all necessary libraries and other components to the CsoundQt ap
 _NB! To avoid conflicts, **the bundle does not contain Csound**! You must install it separately from >http://csound.github.io/download.html>._
 
 
-_NB! There is a bug in Qt 5.5 that does not allow to resize floating panel on OSX (i.e Widgets panel). As a workaround you can check **Configuration->Widgets->Widgets are an independent window**_
-
+_
 <a name="linux">
 
 Notes for Linux Builds 

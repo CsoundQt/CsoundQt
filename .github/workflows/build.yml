@@ -56,25 +56,25 @@ jobs:
           csound_lib="$csound_brew_root"/lib
 
          
-          qmake CONFIG+=rtmidi DCSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
+          qmake CONFIG+=rtmidi CONFIG+=release CSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
           make -j4
 
+          rm -fr bin/CsoundQt-d-cs6.app/Contents/Frameworks/CsoundLib64.framework
+          install_name_tool -change @rpath/libcsnd6.6.0.dylib libcsnd6.6.0.dylib bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
+          install_name_tool -change @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 CsoundLib64.
+          framework/Versions/6.0/CsoundLib64 bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
+          macdeployqt bin/CsoundQt-d-cs6.app -qmldir=src/QML -dmg
+          
+          otool -L bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
+
           find .
-          # brew installs here
-          # sudo apt-get install libsndfile1-dev libfluidsynth-dev libeigen3-dev fluid libhdf5-dev 
 
-          # cd csound/include
-          # ln -s ../Android/CsoundAndroid/jni/version.h .
-          # ln -s ../Android/CsoundAndroid/jni/float-version.h .
-          # cd ../..
-
-          # rm -fr build-macos
-          echo "mkdir build-macos"
-          mkdir build-macos
-          echo "copying app to build-macos"
-          cp -r bin/CsoundQt-d-cs6.app build-macos
-          echo "Creating .dmg file"
-          hdiutil create -fs HFS+ -srcfolder build-macos -volname CsoundQt "CsoundQt.dmg"
+          #echo "mkdir build-macos"
+          #mkdir build-macos
+          #echo "copying app to build-macos"
+          #cp -r bin/CsoundQt-d-cs6.app build-macos
+          #echo "Creating .dmg file"
+          #hdiutil create -fs HFS+ -srcfolder build-macos -volname CsoundQt "CsoundQt.dmg"
 
           echo "Creating artifacts folder"
           mkdir -p artifacts
