@@ -56,13 +56,15 @@ jobs:
           # qmake CONFIG+=rtmidi CONFIG+=release CSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
           qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
           make -j4
+          make install
 
           
-          rm -fr bin/CsoundQt-d-cs6.app/Contents/Frameworks/CsoundLib64.framework
+          # rm -fr bin/CsoundQt-d-cs6.app/Contents/Frameworks/CsoundLib64.framework
 
-          install_name_tool -change @rpath/libcsnd6.6.0.dylib  libcsnd6.6.0.dylib  bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
+          otool -L bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
 
-          install_name_tool -change @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64  CsoundLib64.framework/Versions/6.0/CsoundLib64  bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
+          # install_name_tool -change @rpath/libcsnd6.6.0.dylib  libcsnd6.6.0.dylib  bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
+          # install_name_tool -change @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64  CsoundLib64.framework/Versions/6.0/CsoundLib64  bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
 
           macdeployqt bin/CsoundQt-d-cs6.app -qmldir=src/QML -dmg
           

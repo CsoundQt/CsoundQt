@@ -1,5 +1,4 @@
-Build instructions for CsoundQt
-===============================
+# Build instructions for CsoundQt
 
 - [Getting the Sources](#sources)     
 - [Building](#building)        
@@ -11,40 +10,49 @@ Build instructions for CsoundQt
 
 
 
-*Please help improving these instructions and report any issue to one of the developers or to https://github.com/CsoundQt/CsoundQt/issues. Thanks!*
+Please help improving these instructions and report any issue to https://github.com/CsoundQt/CsoundQt/issues. Thanks!
 
 <a name="sources">
 
-Getting the sources <a name="sources">
---------
+## Getting the sources <a name="sources">
+
 
 The source files for CsoundQt can be browsed and downloaded from Github:
 [https://github.com/CsoundQt/CsoundQt](https://github.com/CsoundQt/CsoundQt)
 
 
-You can also find source releases in Github Releases section <https://github.com/CsoundQt/CsoundQt/releases>.     
+You can also find source releases in Github Releases section <https://github.com/CsoundQt/CsoundQt/releases>.
 
 
-The latest stable release is kept in ***master*** branch in Github repository, the newest modifications and fixes in ***develop*** branch. For building yourself, use the *develop* branch. 
+The latest stable release is kept in ***master*** branch in Github repository, the newest modifications and
+fixes in ***develop*** branch. For building yourself, use the *develop* branch.
 
 Clone the github repository:
     
     $  git clone https://github.com/CsoundQt/CsoundQt.git 
     $  git submodule update --init --recursive
     
+
 Develop is set as the default branch in github
 
 
 <a name="building"> 
    
-Building 
--------
+## Building
 
-To build **CsoundQt**, you must have installed [**Csound**](https://csound.com/download.html) first. On OSX and Windows you can use the prebuilt installers, for Linux it is mostly preferable to build it yourself.  See <https://github.com/csound/csound/blob/develop/BUILD.md> for instructions.
+To build **CsoundQt**, you must have installed [**Csound**](https://csound.com/download.html) first. On OSX and
+Windows you can use the prebuilt installers, for Linux it is mostly preferable to build it yourself.
+See <https://github.com/csound/csound/blob/develop/BUILD.md> for instructions.
 
-To build **CsoundQt** you need [**Qt**](http://qt-project.org/) (>= 5.7). The [**libsndfile**](http://www.mega-nerd.com/libsndfile/) library will allow recording the realtime output of Csound to a file. CsoundQt can be built with [PythonQt](https://github.com/MeVisLab/pythonqt) support. Global MIDI I/O and control of the CsoundQt widgets can also be enabled through the [RtMidi](http://www.music.mcgill.ca/~gary/rtmidi/) library.
+To build **CsoundQt** you need [**Qt**](http://qt-project.org/) (>= 5.7). The [**libsndfile**](http://www.mega-nerd.com/libsndfile/)
+library will allow recording the realtime output of Csound to a file.
+CsoundQt can be built with [PythonQt](https://github.com/MeVisLab/pythonqt) support.
+Global MIDI I/O and control of the CsoundQt widgets can also be enabled through the [RtMidi](http://www.music.mcgill.ca/~gary/rtmidi/) library.
 
-The easiest way to build CsoundQt is to open its qcs.pro file in **QtCreator** and build it there (A step-by-step instruction [**here**](https://github.com/CsoundQt/CsoundQt/wiki)). You can download and install Qt development kit (including QtCreator and all necessary libraries) from [QT page](http://www.qt.io/download-open-source/). It is recommended to use **Qt 5.3 or newer**, to be able to use CsoundQt's **Virtual Midi Keyboard**.
+The easiest way to build CsoundQt is to open its qcs.pro file in **QtCreator** and build it there (A step-by-step instruction
+[**here**](https://github.com/CsoundQt/CsoundQt/wiki)). You can download and install Qt development kit (including QtCreator
+and all necessary libraries) from [QT page](http://www.qt.io/download-open-source/).
+
 
 CsoundQt uses qmake to build, so you can build on the **command line** with:
 
@@ -55,33 +63,42 @@ On UNIX systems you can install CsoundQt system wide with the command
 
     $ sudo make install
      
-The qmake project file will attempt to find the dependencies in standard locations. You can specify the locations manually and give additional options for building. Consult the qcs.pro file.
+The qmake project file will attempt to find the dependencies in standard locations. You can specify the locations
+manually and give additional options for building. Consult the qcs.pro file.
 
   
 <a name="rtmidi">  
 
 ### Building with RtMidi
 
-It is highly recommended to build with [RtMidi](http://www.music.mcgill.ca/~gary/rtmidi/) support, as it will in most cases make MIDI I/O more stable than relying on Csound's MIDI modules. With RtMidi support you can also associate widgets with MIDI controllers. RtMidi version 2.0.1 or greater is required. To enable it run qmake with this argument:
+It is highly recommended to build with [RtMidi](http://www.music.mcgill.ca/~gary/rtmidi/) support, as it will in
+most cases make MIDI I/O more stable than relying on Csound's MIDI modules. With RtMidi support you can also
+associate widgets with MIDI controllers. To enable it run qmake with this argument:
 
 	$ qmake CONFIG+=rtmidi
 
+
+-----------------
+
+**NB: this instructions are outdated. They are left here as a reference**
+
+
 <a name="pythonqt">
 
-###Building with PythonQt support 
+### Building with PythonQt support
 
 You can build optional support for **PythonQt**:
 
 	$ qmake CONFIG+=pythonqt
 
 PythonQt support gives you many extended possibilities to interact with CsoundQt and running Csound instances from the python console, from scripts or from python code in your csound code. Read more in chapter [12C](http://floss.booktype.pro/csound/c-python-in-csoundqt/) in the [Csound FLOSS Manual](http://floss.booktype.pro/csound/).
- 
+
 The [PythonQt sources](https://github.com/MeVisLab/pythonqt) should be put in the same base directory as the CsoundQt sources, where they will be found and used. You must build and install the PythonQt libraries before using them. CsoundQt currently requires PythonQt >= 2.0.1; to build against **Qt5**, it requires **PythonQt >= 3.0**
 
 To build PythonQt you need to edit first file *build/python.prf* in the PythonQt source directory (in QtCreator project tree  *src->python->python.prf*). Change it to the python version you have, for instance:
 
     unix:PYTHON_VERSION=2.7
-  
+
 In QtCreator **disable _"Shadow Build"_** in *Projects > Build Settings > General.* and build. When building on command line:
 
     $ qmake PythonQt.pro
@@ -91,8 +108,12 @@ For making the libraries available, see platform specific notes below.
 
 <a name="osx">
 
-Notes for OSX build
----------------------
+
+--------------
+
+
+## Notes for OSX build
+
 
 The paths in *qcs-macx.pro* are set up for using **Csound from the OSX installer** (not Homebrew).
 
