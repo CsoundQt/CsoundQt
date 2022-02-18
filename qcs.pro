@@ -93,7 +93,7 @@ buildDoubles: message("Doubles is now built by default, no need to specify build
 build32:build64:CONFIG -= build32
 unix {
     macx:include (qcs-macx.pro)
-    else:haiku-g++ {include (qcs-haiku.pro) }
+    # else:haiku-g++ {include (qcs-haiku.pro) }
     else: include (qcs-unix.pro)
 }
 win32-g++:include (qcs-win32.pro)
