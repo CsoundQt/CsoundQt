@@ -337,6 +337,7 @@ private:
 	void clearSettings();
     void setToolbarIconSize(int size);
     int execute(QString executable, QString options);
+    int startProcess(QString executable, const QStringList &args);
     //    bool saveCurrent();
 	bool makeNewPage(QString fileName, QString text);
 	bool loadCompanionFile(const QString &fileName);

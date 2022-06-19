@@ -135,7 +135,10 @@ void Inspector::parseText(const QString &text)
             continue;
         }
         if (!partOfComment && (commentIndex=line.indexOf("/*")) != -1) {
-			partOfComment = true;
+            if(line.indexOf("*/", commentIndex) != -1) {
+                partOfComment = false;
+            } else
+                partOfComment = true;
             continue;
         }
         line = line.trimmed();

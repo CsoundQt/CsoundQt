@@ -2138,7 +2138,8 @@ void CsoundQt::runInTerm(bool realtime)
     tempFile.setAutoRemove(false);
     if (fileName.startsWith(":/")) {
         if (!tempFile.open()) {
-            qDebug() << "CsoundQt::runCsound() : Error creating temp file";
+            QMessageBox::critical(this, tr("Error running terminal"),
+                                  tr("Error creating temp file"));
             runAct->setChecked(false);
             return;
         }
@@ -2149,40 +2150,47 @@ void CsoundQt::runInTerm(bool realtime)
         if (!tempScriptFiles.contains(fileName))
             tempScriptFiles << fileName;
     }
-    //  QString script = generateScript(m_options->realtime, fileName);
     QString executable = fileName.endsWith(".py") ? m_options->pythonExecutable : "";
     QString script = generateScript(realtime, fileName, executable);
     QTemporaryFile scriptFile(QDir::tempPath() + QDir::separator() + SCRIPT_NAME);
     scriptFile.setAutoRemove(false);
     if (!scriptFile.open()) {
         runAct->setChecked(false);
+        QMessageBox::critical(this, tr("Error running terminal"),
+                              tr("Error generating the script to be run at the terminal"));
         return;
     }
     QTextStream out(&scriptFile);
     out << script;
-    //     file.flush();
     scriptFile.close();
-    scriptFile.setPermissions (QFile::ExeOwner| QFile::WriteOwner| QFile::ReadOwner);
+    scriptFile.setPermissions(QFile::ExeOwner| QFile::WriteOwner| QFile::ReadOwner);
     QString scriptFileName = scriptFile.fileName();
-
-    QString options;
+    QStringList args;
+    QString termexe = m_options->terminal;
+    // QString options;
 #ifdef Q_OS_LINUX
-    options = "-e " + scriptFileName;
+    args << "-e" << scriptFileName;
+    // options = "-e " + scriptFileName;
 #endif
 #ifdef Q_OS_SOLARIS
-    options = "-e " + scriptFileName;
+    args << "-e" << scriptFileName;
+    // options = "-e " + scriptFileName;
 #endif
 #ifdef Q_OS_MACOS
-    options = scriptFileName;
+    args << "-a" << m_options->terminal << scriptFileName;
+    termexe = "open";
+    // options = scriptFileName;
 #endif
 #ifdef Q_OS_WIN32
-    options = scriptFileName;
-    qDebug() << "m_options->terminal == " << m_options->terminal;
+    args << scriptFileName;
+    // options = scriptFileName;
+    // qDebug() << "m_options->terminal == " << m_options->terminal;
 #endif
-    if (execute(m_options->terminal, options)) {
+    if(startProcess(termexe, args)) {
+    // if (execute(m_options->terminal, options)) {
         QMessageBox::critical(this, tr("Error running terminal"),
-                              tr("Could not run terminal program:\n   %1\n"
-                                 "Check environment tab in preferences.").arg(m_options->terminal));
+                              tr("Could not run terminal program: '%1'\nArgs: %2\n"
+                                 "Check environment tab in preferences.").arg(termexe, args.join(" ")));
     }
     runAct->setChecked(false);
     if (!tempScriptFiles.contains(scriptFileName))
@@ -5570,6 +5578,20 @@ void CsoundQt::clearSettings()
     settings.sync();
 }
 
+int CsoundQt::startProcess(QString executable, const QStringList &args) {
+    QString path = documentPages[curPage]->getFilePath();
+    if (path.startsWith(":/examples/", Qt::CaseInsensitive)) {
+        // example or other embedded file
+        path = QDir::tempPath();   // copy of example is saved there
+    }
+    auto p = new QProcess();
+    p->setProgram(executable);
+    p->setArguments(args);
+    p->setWorkingDirectory(path);
+    p->start();
+    qDebug() << "Launched external program with id:" << p->processId();
+    return !p->waitForStarted() ? 1 : 0;
+}
 
 int CsoundQt::execute(QString executable, QString options)
 {
@@ -5599,10 +5621,13 @@ int CsoundQt::execute(QString executable, QString options)
         // example or other embedded file
         path = QDir::tempPath();   // copy of example is saved there
     }
-    qDebug() << "CsoundQt::execute   " << commandLine << path;
-    QProcess *p = new QProcess(this);
+    qDebug() << "CsoundQt::execute " << commandLine << path;
+    auto p = new QProcess();
+    p->setProgram(executable);
+    auto args = options.split(" ");
+    p->setArguments(args);
     p->setWorkingDirectory(path);
-    p->start(commandLine);
+    p->start();
     qDebug() << "Launched external program with id:" << p->processId();
     ret = !p->waitForStarted() ? 1 : 0;
 #endif
