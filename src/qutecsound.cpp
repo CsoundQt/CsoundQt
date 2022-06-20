@@ -3343,6 +3343,7 @@ void CsoundQt::updateInspector()
     }
     else {
         m_inspector->parsePythonText(documentPages[curPage]->getBasicText());
+        // m_inspector->parsePythonText(documentPages[curPage]->getFullText());
     }
     m_inspectorNeedsUpdate = false;
     // this->setParsedUDOs();
