@@ -74,7 +74,7 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 
 #define MAX_THREAD_COUNT 32 // to enable up to MAX_THREAD_COUNT documents/consoles have messageDispatchers
 
-#define INSPECTOR_UPDATE_PERIOD_MS 2500
+#define INSPECTOR_UPDATE_PERIOD_MS 3000
 
 
 CsoundQt::CsoundQt(QStringList fileNames)
@@ -2949,6 +2949,9 @@ void CsoundQt::openShortcutDialog()
     KeyboardShortcuts dialog(this, m_keyActions);
     connect(&dialog, SIGNAL(restoreDefaultShortcuts()), this, SLOT(setDefaultKeyboardShortcuts()));
     dialog.exec();
+    if(dialog.needsSave()) {
+        writeSettings(QStringList(), 0);
+    }
 }
 
 void CsoundQt::downloadManual()
@@ -5421,11 +5424,13 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("openProperties", m_options->openProperties);
         settings.setValue("fontOffset", m_options->fontOffset);
         settings.setValue("fontScaling", m_options->fontScaling);
-        settings.setValue("lastfiles", openFiles);
-        settings.setValue("lasttabindex", lastIndex);
         settings.setValue("debugPort", m_options->debugPort);
         settings.setValue("tabShortcutActive", m_options->tabShortcutActive);
         settings.setValue("highlightScore", m_options->highlightScore);
+        if(openFiles.size() > 0 && lastIndex != 0) {
+            settings.setValue("lastfiles", openFiles);
+            settings.setValue("lasttabindex", lastIndex);
+        }
     }
     else {
         settings.remove("");
