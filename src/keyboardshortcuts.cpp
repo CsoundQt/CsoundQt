@@ -26,6 +26,7 @@
 KeyboardShortcuts::KeyboardShortcuts(QWidget *parent, const QVector<QAction *> keyActions)
 	: QDialog(parent), m_keyActions(keyActions)
 {
+    m_modified = false;
 	setupUi(this);
 	setWindowTitle(tr("Keyboard Shortcuts"));
 	refreshTable();
@@ -125,6 +126,7 @@ void KeyboardShortcuts::assignShortcut(int row, int /*column*/)
 			return;
 		}
 		keyitem->setText(dialog.newShortcut);
+        m_modified = true;
 		//    refreshTable();
 	}
 }

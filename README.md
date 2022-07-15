@@ -4,9 +4,12 @@
 
 ![CsoundQt](doc/images/screenshot-linux-spectrumanalyzer.jpg)
 
-[CsoundQt](http://csoundqt.github.io) is a frontend for [Csound](http://csound.github.io/) featuring a highlighting editor with autocomplete, interactive widgets and integrated help. It is cross-platform and aims to be a simple yet powerful and complete development environment for Csound. 
+[CsoundQt](http://csoundqt.github.io) is a frontend for [Csound](http://csound.github.io/) featuring a 
+highlighting editor with autocomplete, interactive widgets and integrated help. It is cross-platform and 
+aims to be a simple yet powerful and complete development environment for Csound. 
 
-Csound is a musical programming language with a very long history, with roots in the origins of computer music. It is still being maintained by an active community and despite its age, is still one of the most powerful tools for sound processing and synthesis. 
+Csound is a musical programming language with a very long history, with roots in the origins of computer 
+music. It is actively maintained and still one of the most powerful tools for sound processing and synthesis. 
 
 For more information visit the [CsoundQt Website](http://csoundqt.github.io).
 
@@ -14,7 +17,13 @@ For more information visit the [CsoundQt Website](http://csoundqt.github.io).
 
 Go to [Releases](https://github.com/CsoundQt/CsoundQt/releases) to download the latest binary for your platform.
 
-**CsoundQt** needs **csound** to be installed. Current version is compatible with Csound `6.1` and later. To install csound go here: <https://github.com/csound/csound/releases>
+**CsoundQt** needs **csound** to be installed. Current version is compatible with Csound `6.15` and later. 
+
+**NB**: CsoundQt does not support csound 7
+
+To install csound go here: <https://github.com/csound/csound/releases>
+
+-----------
 
 ## Screenshots
 

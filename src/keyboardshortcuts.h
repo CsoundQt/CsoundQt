@@ -40,9 +40,11 @@ public:
 
 	void refreshTable();
 	bool shortcutTaken(QString shortcut);
+    bool needsSave() { return m_modified; }
 
 private:
 	QVector<QAction *> m_keyActions;
+    bool m_modified;
 
 private slots:
 	void restoreDefaults();
