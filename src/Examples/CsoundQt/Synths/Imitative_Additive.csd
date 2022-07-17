@@ -732,6 +732,7 @@ irndfqdv  =         i(gkrndfqdv) ;max freq deviation (cent)
 irnddurdv =         i(gkrddurdv) ;max dur deviation (%)
 ivol      =         i(gkvol) ;overall volume (dB)
 idur      =         i(gkmaxdur) ;duration of each note (without random deviations)
+idur      =         (idur < 0.1) ? 0.1 : idur ;make sure there will not be zero duration
 
 
 
