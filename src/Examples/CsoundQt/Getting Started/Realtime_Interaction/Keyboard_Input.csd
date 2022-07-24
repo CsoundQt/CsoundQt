@@ -40,6 +40,9 @@ f 0 3600
 
 
 
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -64,8 +67,10 @@ f 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Keyboard Input</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
@@ -81,7 +86,7 @@ f 0 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -93,8 +98,10 @@ f 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>The "sensekey" opcode can receive keyboard input. You must make sure that either the widget panel or the console panel have focus for this to work!</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -114,14 +121,15 @@ f 0 3600
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>keyvalue</objectName>
-  <x>153</x>
-  <y>148</y>
+  <x>87</x>
+  <y>194</y>
   <width>80</width>
   <height>25</height>
   <uuid>{866495c9-536f-460b-b7d9-ab6083980023}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -143,7 +151,7 @@ f 0 3600
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
   <randomizable group="0">false</randomizable>
-  <mouseControl act="continuous"/>
+  <mouseControl act=""/>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

@@ -31,6 +31,9 @@ e
 
 
 
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -45,7 +48,7 @@ e
   <g>95</g>
   <b>162</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>12</y>
@@ -55,8 +58,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Using Widgets</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
@@ -72,11 +77,11 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>14</x>
+  <x>10</x>
   <y>50</y>
   <width>365</width>
   <height>93</height>
@@ -84,8 +89,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>You can receive Widget values in the Csound orchestra using "channels". You use channel names to identify them, and you must set the channel name in the Widget and in the orchestra's invalue opcode.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -101,50 +108,24 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>15</x>
-  <y>320</y>
-  <width>364</width>
-  <height>49</height>
-  <uuid>{2a45bc5a-cc63-47d2-a2b8-0355f4d1edc8}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <label>Now run Csound, and notice how the widget is controlling the frequency of the oscillator!</label>
-  <alignment>left</alignment>
-  <font>Helvetica</font>
-  <fontsize>14</fontsize>
-  <precision>3</precision>
-  <color>
-   <r>241</r>
-   <g>241</g>
-   <b>241</b>
-  </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <bordermode>border</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
-  <objectName/>
-  <x>12</x>
-  <y>184</y>
-  <width>368</width>
-  <height>101</height>
+  <x>10</x>
+  <y>200</y>
+  <width>380</width>
+  <height>220</height>
   <uuid>{ba0489e8-4f09-443d-bd82-4a57532c1e31}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>Enter the slider's properties by right-clicking (or control-clicking) and selecting "Properties". This will open the Widget Properties dialog, which will allow you to set the Widget's channel name. Set the channel name to "freq" (without the quotes).</label>
+  <description/>
+  <label>Enter the slider's properties by right-clicking (or control-clicking) and selecting "Properties". This will open the Widget Properties dialog, which will allow you to set the Widget's channel name. Set the channel name to "freq" (without the quotes).
+Now run Csound, and notice how the widget is controlling the frequency of the oscillator!</label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
+  <valignment>top</valignment>
+  <font>Nimbus Sans [urw]</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -157,13 +138,13 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>slider</objectName>
-  <x>13</x>
+  <x>10</x>
   <y>160</y>
   <width>366</width>
   <height>21</height>
@@ -171,27 +152,30 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>300.00000000</minimum>
   <maximum>1000.00000000</maximum>
-  <value>300.00000000</value>
+  <value>449.18032787</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>12</x>
-  <y>409</y>
-  <width>372</width>
+  <x>10</x>
+  <y>425</y>
+  <width>380</width>
   <height>51</height>
   <uuid>{56667bda-b29d-49dc-a2d0-560ec1aa5f6c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>You can change a slider's range in its properties dialog, if you want a broader or smaller range.</label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
+  <valignment>top</valignment>
+  <font>Nimbus Sans [urw]</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -204,11 +188,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

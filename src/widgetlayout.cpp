@@ -279,7 +279,12 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
     QDomNodeList c = p.childNodes();
     int version = 0;
     for (int i = 0; i < c.size(); i++) {
+        auto t0 = std::chrono::high_resolution_clock::now();
+        auto item = c.item(i);
         int ret = parseXmlNode(c.item(i));
+        auto t1 = std::chrono::high_resolution_clock::now();
+        auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
+        QDEBUG << "parseXmlNode" << item.toElement().attribute("type") << diff << "ms";
         if (ret == -1) {
             qDebug() << "WidgetLayout::loadXmlWidgets Error in Xml node parsing";
             QMessageBox::warning(this, tr("Unrecognized wigdet format"),
@@ -311,7 +316,7 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
     //		this->resize(m_w, m_h);
     //		//    setOuterGeometry();
     //	}
-    qDebug() << "Finished loading xml widsgets";
+    qDebug() << "Finished loading xml widgets";
 }
 
 void WidgetLayout::loadXmlPresets(QString xmlPresets)
@@ -680,19 +685,22 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         return -1;
     }
     int ret = 0;
+    auto element = mainnode.toElement();
     QuteWidget *widget = nullptr;
     QDomNodeList c = mainnode.childNodes();
-    QString type = mainnode.toElement().attribute("type");
+    QString type = element.attribute("type");
     bool forceBackground = false;
-    ret = mainnode.toElement().attribute("version").toInt();
+    ret = element.attribute("version").toInt();
     if (type == "BSBLabel" || type == "BSBDisplay") {
-        QuteText *w= new QuteText(this);
+
+        QuteText *w = new QuteText(this);
+        w->setTransparentForMouse(true);
         w->setFontOffset(m_fontOffset);
         w->setFontScaling(m_fontScaling);
         w->setType(type == "BSBLabel" ? "label" : "display");
-        QDomElement ebg = mainnode.toElement().firstChildElement("bgcolor");
+        QDomElement ebg = element.firstChildElement("bgcolor");
         if (!ebg.isNull()) {
-            if (mainnode.toElement().attribute("mode")== "background") {
+            if (element.attribute("mode")== "background") {
                 w->setProperty("QCS_bgcolormode", true);
             }
             w->setProperty("QCS_bgcolor", QVariant(getColorFromElement(ebg)));
@@ -800,12 +808,11 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         widget->setProperty("QCS_bgcolormode", true);
         widget->setProperty("QCS_bgcolor", QColor(240, 240, 240));
     }
+
     for (int i = 0; i < c.size() ; i++) {
         QDomElement node = c.item(i).toElement();
         QString nodeName = node.nodeName();
         if (nodeName == "color" || nodeName == "bgcolor") {  // COLOR type
-            //      qDebug() << "WidgetLayout::newXmlWidget property: " <<  nodeName.toLocal8Bit()
-            //        << " set to: " << getColorFromElement(node);
             if (node.attribute("mode") == "background") {
                 widget->setProperty("QCS_bgcolormode", true);
             }
@@ -909,6 +916,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     }
     widget->applyInternalProperties();
     registerWidget(widget);
+
     return ret;
 }
 
@@ -2964,7 +2972,11 @@ QString WidgetLayout::createText(int x, int y, int width, int height, QString wi
     widget->setProperty("QCS_bgcolormode", lastParts[7] == "background");
     widget->setProperty("QCS_bordermode", lastParts[8]);
     QString labelText = widgetLine.mid(widgetLine.indexOf("border") + 7);
-    if (parts[5] == "display" || parts[5] == "label") {
+    if (parts[5] == "label") {
+        widget->setProperty("QCS_precision", 3);
+        widget->setTransparentForMouse(true);
+    }
+    else if (parts[5] == "display") {
         widget->setProperty("QCS_precision", 3);
     }
     else {

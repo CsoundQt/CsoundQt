@@ -102,8 +102,13 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
     */
 	if (!xmlPanels.isEmpty()) {
 		//FIXME allow multiple layouts
+        auto t0 = std::chrono::high_resolution_clock::now();
         m_widgetLayouts[0]->loadXmlWidgets(xmlPanels[0]);
-		m_widgetLayouts[0]->markHistory();
+        auto t1 = std::chrono::high_resolution_clock::now();
+        auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
+        QDEBUG << "loadXmlWidgets" << diff << "ms";
+
+        m_widgetLayouts[0]->markHistory();
         auto presetsStart = text.indexOf("<bsbPresets>");
         if(presetsStart >= 0) {
             auto presetsEnd = text.indexOf("</bsbPresets>", presetsStart);

@@ -49,6 +49,7 @@ public:
 	void setBgColor(QColor bgColor);
 	void setBg(bool bg);
 	void setBorder(bool border);
+    void setTransparentForMouse(bool status);
 	virtual void setText(QString text);
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();

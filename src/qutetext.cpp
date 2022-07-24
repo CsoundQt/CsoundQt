@@ -34,7 +34,7 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
     // Necessary to pass mouse tracking to widget panel for _MouseX channels
     m_widget->setMouseTracking(true);
     setMouseTracking(true);
-    // m_widget->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
     //  canFocus(true);
 
 	//   connect(static_cast<QLabel*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
@@ -92,6 +92,12 @@ void QuteText::setValue(QString value)
 void QuteText::setType(QString type)
 {
 	m_type = type;
+}
+
+void QuteText::setTransparentForMouse(bool status)
+{
+    m_widget->setAttribute(Qt::WA_TransparentForMouseEvents, status);
+    setAttribute(Qt::WA_TransparentForMouseEvents, status);
 }
 
 void QuteText::setAlignment(QString alignment)
@@ -224,16 +230,39 @@ void QuteText::applyInternalProperties()
     }
     QString borderStyle = borderWidth > 0 ? "solid" : "none";
 
-	int new_fontSize = 0;
-	int totalHeight = 0;
-	double fontSize = (property("QCS_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
+    double scaledFontSize = property("QCS_fontsize").toDouble() * m_fontScaling;
+    double fontSize = scaledFontSize + m_fontOffset;
 
+    /*
+
+    while(true) {
+        QDEBUG << "trying pointsize" << new_fontSize;
+        font.setPointSize(new_fontSize);
+        QFontMetricsF fm(font);
+
+        auto t0 = std::chrono::high_resolution_clock::now();
+
+        auto totalHeight = fm.height();
+        auto t1 = std::chrono::high_resolution_clock::now();
+        auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
+        QDEBUG << "::::::::::::::::::: in " << diff << "ms";
+
+        if(totalHeight >= fontSize + 1)
+            break;
+
+        new_fontSize += 1;
+    }
+    */
+    /*
 	while (totalHeight < fontSize + 1) {
-		new_fontSize++;
-		QFont font(property("QCS_font").toString(), new_fontSize);
+        qDebug() << "font size" << new_fontSize;
+        new_fontSize += 2;
+        font.setPointSize(new_fontSize);
+        // QFont font(property("QCS_font").toString(), new_fontSize);
 		QFontMetricsF fm(font);
-		totalHeight = fm.ascent() + fm.descent();
+        totalHeight = fm.ascent() + fm.descent();
 	}
+    */
 
     QString bgstr = property("QCS_bgcolormode").toBool() ?
         (QString("; background-color:")+property("QCS_bgcolor").value<QColor>().name()) :
@@ -241,7 +270,8 @@ void QuteText::applyInternalProperties()
 
     m_widget->setStyleSheet(
         "QLabel{ font-family:\"" + property("QCS_font").toString() + "\""
-            + "; font-size: " + QString::number(new_fontSize) + "pt"
+            // + "; font-size: " + QString::number(new_fontSize) + "pt"
+            + "; font-size: " + QString::number(fontSize) + "px"
             + bgstr
             + "; color:" + property("QCS_color").value<QColor>().name()
             + "; border-color:" + property("QCS_color").value<QColor>().name()
@@ -701,6 +731,14 @@ QuteLineEdit::QuteLineEdit(QWidget* parent) : QuteText(parent)
 	setProperty("QCS_bordermode", QVariant()); // Remove these property
 	setProperty("QCS_borderradius", QVariant()); // Remove these property
 	setProperty("QCS_borderwidth", QVariant()); // Remove these property
+
+    // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    m_widget->setMouseTracking(true);
+    setMouseTracking(true);
+
+    m_widget->setAttribute(Qt::WA_TransparentForMouseEvents, false);
+    setAttribute(Qt::WA_TransparentForMouseEvents, false);
+
 }
 
 QuteLineEdit::~QuteLineEdit()

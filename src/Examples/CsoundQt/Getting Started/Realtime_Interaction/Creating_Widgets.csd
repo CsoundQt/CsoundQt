@@ -29,6 +29,9 @@ endin
 
 
 
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -43,7 +46,7 @@ endin
   <g>95</g>
   <b>162</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>6</y>
@@ -53,8 +56,10 @@ endin
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Widgets</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
@@ -70,9 +75,9 @@ endin
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>45</y>
@@ -82,10 +87,12 @@ endin
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>You can create Widgets by right-clicking (or control-clicking on OS X) anywhere in the Widget Panel. Try it here:</label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
-  <fontsize>18</fontsize>
+  <valignment>top</valignment>
+  <font>Sans Serif</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>241</r>
@@ -97,24 +104,26 @@ endin
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>322</y>
   <width>391</width>
-  <height>113</height>
+  <height>140</height>
   <uuid>{62393637-5d87-4d05-978d-fa18be6cc92c}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>You can delete widgets by right-clicking the Widgets and selecting delete. Using this menu or the keyboard commands, you can also copy, paste, cut and duplicate widgets.</label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
-  <fontsize>18</fontsize>
+  <valignment>top</valignment>
+  <font>Noto Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>241</r>
@@ -126,24 +135,26 @@ endin
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>11</x>
-  <y>234</y>
+  <x>10</x>
+  <y>155</y>
   <width>390</width>
-  <height>73</height>
+  <height>120</height>
   <uuid>{b38cec05-f765-43a8-9353-ddc36f0b0abd}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>You can move and resize widgets by entering the EDIT MODE, pressing Ctrl+E or Command+E on OS X.</label>
   <alignment>left</alignment>
-  <font>Helvetica</font>
-  <fontsize>18</fontsize>
+  <valignment>top</valignment>
+  <font>Noto Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>241</r>
@@ -155,11 +166,11 @@ endin
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

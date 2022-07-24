@@ -28,6 +28,8 @@ f 1 0 1024 10 1
 i 1 0 3600  ;turn on instr 1 for 3600 seconds
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -42,7 +44,7 @@ i 1 0 3600  ;turn on instr 1 for 3600 seconds
   <g>136</g>
   <b>103</b>
  </bgcolor>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>6</x>
   <y>11</y>
@@ -75,7 +77,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>7</x>
   <y>315</y>
@@ -106,7 +108,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Browse1</objectName>
   <x>327</x>
   <y>325</y>
@@ -128,7 +130,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>204</x>
   <y>326</y>
@@ -159,7 +161,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Browse2</objectName>
   <x>327</x>
   <y>359</y>
@@ -181,7 +183,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>204</x>
   <y>360</y>
@@ -212,7 +214,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLineEdit" version="2">
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse1</objectName>
   <x>22</x>
   <y>390</y>
@@ -240,7 +242,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject type="BSBLineEdit" version="2">
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>_Browse2</objectName>
   <x>22</x>
   <y>445</y>
@@ -268,7 +270,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>22</x>
   <y>362</y>
@@ -299,7 +301,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>22</x>
   <y>419</y>
@@ -330,7 +332,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>6</x>
   <y>122</y>
@@ -361,7 +363,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Play</objectName>
   <x>315</x>
   <y>140</y>
@@ -383,7 +385,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Stop</objectName>
   <x>315</x>
   <y>205</y>
@@ -405,7 +407,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>210</x>
   <y>140</y>
@@ -436,7 +438,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>210</x>
   <y>205</y>
@@ -467,7 +469,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Render</objectName>
   <x>315</x>
   <y>250</y>
@@ -489,7 +491,7 @@ NOTE: Buttons must be of "value" type for this to work!</label>
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>186</x>
   <y>237</y>
@@ -522,7 +524,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName>counter</objectName>
   <x>21</x>
   <y>175</y>
@@ -536,8 +538,8 @@ Run offline
   <label>20</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Courier New</font>
-  <fontsize>80</fontsize>
+  <font>Liberation Mono</font>
+  <fontsize>64</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -549,11 +551,11 @@ Run offline
    <g>232</g>
    <b>171</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>true</bordermode>
   <borderradius>10</borderradius>
   <borderwidth>5</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>43</x>
   <y>149</y>
@@ -584,7 +586,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>_Pause</objectName>
   <x>315</x>
   <y>170</y>
@@ -606,7 +608,7 @@ Run offline
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>210</x>
   <y>170</y>
@@ -638,7 +640,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
+ <bsbObject version="2" type="BSBButton">
   <objectName>_MBrowse</objectName>
   <x>284</x>
   <y>483</y>
@@ -660,7 +662,7 @@ Run offline
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>156</x>
   <y>484</y>
@@ -691,7 +693,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLineEdit" version="2">
+ <bsbObject version="2" type="BSBLineEdit">
   <objectName>_MBrowse</objectName>
   <x>22</x>
   <y>512</y>
@@ -719,7 +721,7 @@ Run offline
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>7</x>
   <y>556</y>
@@ -750,7 +752,7 @@ Run offline
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName>_GetPresetName</objectName>
   <x>170</x>
   <y>604</y>
@@ -781,7 +783,7 @@ Run offline
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>15</x>
   <y>633</y>
@@ -812,7 +814,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>15</x>
   <y>605</y>
@@ -843,7 +845,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBScrollNumber" version="2">
+ <bsbObject version="2" type="BSBScrollNumber">
   <objectName>_GetPresetNumber</objectName>
   <x>169</x>
   <y>632</y>
@@ -877,7 +879,7 @@ Run offline
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject type="BSBSpinBox" version="2">
+ <bsbObject version="2" type="BSBSpinBox">
   <objectName>_SetPreset</objectName>
   <x>293</x>
   <y>589</y>
@@ -907,7 +909,7 @@ Run offline
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>272</x>
   <y>566</y>
@@ -938,7 +940,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>249</x>
   <y>615</y>
@@ -969,7 +971,7 @@ Run offline
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBDropdown" version="2">
+ <bsbObject version="2" type="BSBDropdown">
   <objectName>_SetPresetIndex</objectName>
   <x>270</x>
   <y>637</y>

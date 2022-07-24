@@ -2410,7 +2410,8 @@ void CsoundQt::openExternalEditor()
                                  " external editor."));
     }
     if (!m_options->waveeditor.isEmpty()) {
-        name = "\"" + name + "\"";
+        // name = "\"" + name + "\"";
+        QDEBUG << "Opening rendered audiofile: " << name;
         execute(m_options->waveeditor, name);
     }
     else {
