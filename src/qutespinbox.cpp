@@ -24,6 +24,8 @@
 #include <QStringBuilder>
 #include <cmath>
 
+#define USEFONTPIXELSIZE
+
 QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
 {
 	delete m_widget; //delete widget created by parent constructor
@@ -274,8 +276,8 @@ void QuteSpinBox::refreshWidget()
 
 void QuteSpinBox::applyInternalProperties()
 {
+    QuteWidget::applyInternalProperties();
 
-	QuteWidget::applyInternalProperties();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif
@@ -292,6 +294,7 @@ void QuteSpinBox::applyInternalProperties()
 			break;
 		}
 	}
+
     w->setDecimals(i);
     w->setSingleStep(resolution);
     Qt::Alignment align;
@@ -307,21 +310,33 @@ void QuteSpinBox::applyInternalProperties()
 	}
     w->setAlignment(align);
 	setTextColor(property("QCS_color").value<QColor>());
-    // QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
 
 	int new_fontSize = 0;
 	int totalHeight = 0;
 	double fontSize = (property("QCS_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
 
-	while (totalHeight < fontSize + 1) {
-		new_fontSize++;
-		QFont font(property("QCS_font").toString(), new_fontSize);
-        QFontMetricsF fm(font);
-		totalHeight = fm.ascent() + fm.descent();
-	}
     auto bgstr = property("QCS_bgcolormode").toBool() ?
         QString("background-color:")+property("QCS_bgcolor").value<QColor>().name()+";" :
         QString("");
+
+#ifdef USEFONTPIXELSIZE
+    auto sheet = QString(
+        "QDoubleSpinBox {"
+        "font-family: \"%1\";"
+        "font-size: %2px;"
+        "color: %3;"
+        "%4 }")
+        .arg(property("QCS_font").toString())
+        .arg(QString::number(fontSize))
+        .arg(property("QCS_color").value<QColor>().name())
+        .arg(bgstr);
+#else
+    while (totalHeight < fontSize + 1) {
+        new_fontSize++;
+        QFont font(property("QCS_font").toString(), new_fontSize);
+        QFontMetricsF fm(font);
+        totalHeight = fm.ascent() + fm.descent();
+    }
     auto sheet = QString(
         "QDoubleSpinBox {"
         "font-family: \"%1\";"
@@ -332,11 +347,14 @@ void QuteSpinBox::applyInternalProperties()
         .arg(QString::number(new_fontSize))
         .arg(property("QCS_color").value<QColor>().name())
         .arg(bgstr);
+
+#endif
     m_widget->setStyleSheet(sheet);
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
+
 }
 
 void QuteSpinBox::createPropertiesDialog()

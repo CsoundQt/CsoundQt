@@ -684,6 +684,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         qDebug() << "WidgetLayout::newXmlWidget null element! Aborting.";
         return -1;
     }
+    auto t0 = std::chrono::high_resolution_clock::now();
+
     int ret = 0;
     auto element = mainnode.toElement();
     QuteWidget *widget = nullptr;
@@ -909,13 +911,18 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         }
         else {  // STRING type (all the rest)
             QDomNode n = node.firstChild();
-            // qDebug() << mainnode.nodeName() << "property" << nodeName << "value" << n.nodeValue();
             nodeName.prepend("QCS_");
             widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue());
         }
     }
+
     widget->applyInternalProperties();
     registerWidget(widget);
+
+    auto t1 = std::chrono::high_resolution_clock::now();
+    auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
+    QDEBUG << "newXmlWidget" << diff << "ms";
+
 
     return ret;
 }

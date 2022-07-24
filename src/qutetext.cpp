@@ -23,6 +23,8 @@
 #include "qutetext.h"
 #include <math.h>
 
+#define USEFONTPIXELSIZE
+
 QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 {
 	m_value = 0.0;
@@ -234,28 +236,7 @@ void QuteText::applyInternalProperties()
     double fontSize = scaledFontSize + m_fontOffset;
 
     /*
-
-    while(true) {
-        QDEBUG << "trying pointsize" << new_fontSize;
-        font.setPointSize(new_fontSize);
-        QFontMetricsF fm(font);
-
-        auto t0 = std::chrono::high_resolution_clock::now();
-
-        auto totalHeight = fm.height();
-        auto t1 = std::chrono::high_resolution_clock::now();
-        auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
-        QDEBUG << "::::::::::::::::::: in " << diff << "ms";
-
-        if(totalHeight >= fontSize + 1)
-            break;
-
-        new_fontSize += 1;
-    }
-    */
-    /*
 	while (totalHeight < fontSize + 1) {
-        qDebug() << "font size" << new_fontSize;
         new_fontSize += 2;
         font.setPointSize(new_fontSize);
         // QFont font(property("QCS_font").toString(), new_fontSize);
@@ -884,6 +865,18 @@ void QuteLineEdit::applyInternalProperties()
 	int totalHeight = 0;
 	double fontSize = (property("QCS_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
 
+#ifdef USEFONTPIXELSIZE
+    m_widget->setStyleSheet("QLineEdit { font-family:\"" + property("QCS_font").toString()
+                            + "\"; font-size: " + QString::number(fontSize) + "px"
+                            + (property("QCS_bgcolormode").toBool() ?
+                                   QString("; background-color:") + property("QCS_bgcolor").value<QColor>().name() : QString("; "))
+                            + "; color:" + property("QCS_color").value<QColor>().name()
+                            + "; border-color:" + property("QCS_color").value<QColor>().name()
+                            + "; border-radius:" + QString::number(property("QCS_borderradius").toInt()) + "px"
+                            + "; border-width:" + QString::number(property("QCS_borderwidth").toInt()) + "px"
+                            + "; border-style: " + borderStyle
+                            + "; }");
+#else
 	while (totalHeight < fontSize + 1) {
 		new_fontSize++;
 		QFont font(property("QCS_font").toString(), new_fontSize);
@@ -901,6 +894,7 @@ void QuteLineEdit::applyInternalProperties()
 							+ "; border-width:" + QString::number(property("QCS_borderwidth").toInt()) + "px"
 							+ "; border-style: " + borderStyle
 							+ "; }");
+#endif
 	//  qDebug() << "QuteLineEdit::applyInternalProperties() sylesheet" <<  m_widget->styleSheet();
 }
 
