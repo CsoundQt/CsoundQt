@@ -29,7 +29,7 @@
 #include <csound.h>
 
 
-#define QCS_VERSION "1.1.0-rc2"
+#define QCS_VERSION "1.1.0-rc3"
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_DEFAULT_TIME 50

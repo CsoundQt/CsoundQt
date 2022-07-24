@@ -732,6 +732,7 @@ irndfqdv  =         i(gkrndfqdv) ;max freq deviation (cent)
 irnddurdv =         i(gkrddurdv) ;max dur deviation (%)
 ivol      =         i(gkvol) ;overall volume (dB)
 idur      =         i(gkmaxdur) ;duration of each note (without random deviations)
+idur      =         (idur < 0.1) ? 0.1 : idur ;make sure there will not be zero duration
 
 
 
@@ -825,6 +826,8 @@ aout      monitor
 i 1 0 36000
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -839,7 +842,7 @@ i 1 0 36000
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
   <x>874</x>
   <y>591</y>
@@ -861,7 +864,7 @@ i 1 0 36000
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>734</x>
   <y>71</y>
@@ -892,7 +895,7 @@ i 1 0 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>268</x>
   <y>335</y>
@@ -923,7 +926,7 @@ i 1 0 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>522</x>
   <y>335</y>
@@ -954,7 +957,7 @@ i 1 0 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>756</x>
   <y>335</y>
@@ -985,7 +988,7 @@ i 1 0 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>769</x>
   <y>584</y>
@@ -1016,7 +1019,7 @@ i 1 0 36000
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>268</x>
   <y>508</y>
@@ -1047,7 +1050,7 @@ i 1 0 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>756</x>
   <y>485</y>
@@ -1078,7 +1081,7 @@ i 1 0 36000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>13</y>
@@ -1109,7 +1112,7 @@ i 1 0 36000
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>221</y>
@@ -1149,7 +1152,7 @@ When the "Print current values" button is activated, the analyzed partials are s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>values</objectName>
   <x>995</x>
   <y>119</y>
@@ -1160,7 +1163,40 @@ When the "Print current values" button is activated, the analyzed partials are s
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label/>
+  <label>File 'bell.aiff' at position 0.156075 seconds:
+01) amp = 0.157462, freq = 883.870605, bin = 21
+02) amp = 0.146633, freq = 884.567993, bin = 20
+03) amp = 0.135147, freq = 476.610565, bin = 11
+04) amp = 0.131553, freq = 372.406586, bin = 9
+05) amp = 0.118698, freq = 366.300812, bin = 8
+06) amp = 0.086246, freq = 84.113129, bin = 2
+07) amp = 0.085053, freq = 501.003845, bin = 10
+08) amp = 0.083320, freq = 2447.225098, bin = 57
+09) amp = 0.079914, freq = 51.505806, bin = 1
+10) amp = 0.079458, freq = 594.384155, bin = 14
+11) amp = 0.068787, freq = 484.265411, bin = 12
+12) amp = 0.063580, freq = 116.272369, bin = 3
+13) amp = 0.057279, freq = 2442.896240, bin = 56
+14) amp = 0.056479, freq = 307.501007, bin = 7
+15) amp = 0.055476, freq = 255.095337, bin = 6
+16) amp = 0.055435, freq = 225.735062, bin = 5
+17) amp = 0.050937, freq = 584.701050, bin = 13
+18) amp = 0.046534, freq = 1213.459473, bin = 28
+19) amp = 0.042123, freq = 1588.513184, bin = 37
+20) amp = 0.035536, freq = 876.142334, bin = 22
+21) amp = 0.035124, freq = 584.020447, bin = 15
+22) amp = 0.033349, freq = 2453.455811, bin = 58
+23) amp = 0.030820, freq = 1217.297241, bin = 29
+24) amp = 0.025115, freq = 255.966904, bin = 4
+25) amp = 0.023024, freq = 1589.229858, bin = 36
+26) amp = 0.021252, freq = 1603.028198, bin = 38
+27) amp = 0.017921, freq = 733.842896, bin = 19
+28) amp = 0.014162, freq = 1993.371704, bin = 46
+29) amp = 0.013220, freq = 960.022034, bin = 23
+30) amp = 0.013042, freq = 1211.234375, bin = 27
+31) amp = 0.010606, freq = 2003.215576, bin = 47
+32) amp = 0.010236, freq = 3102.525391, bin = 72
+</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Arial</font>
@@ -1180,7 +1216,7 @@ When the "Print current values" button is activated, the analyzed partials are s
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>990</x>
   <y>70</y>
@@ -1211,7 +1247,7 @@ When the "Print current values" button is activated, the analyzed partials are s
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>livein</objectName>
   <x>861</x>
   <y>180</y>
@@ -1227,8 +1263,8 @@ When the "Print current values" button is activated, the analyzed partials are s
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.47826087</xValue>
-  <yValue>0.47826087</yValue>
+  <xValue>0.25549939</xValue>
+  <yValue>0.25549939</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1240,7 +1276,7 @@ When the "Print current values" button is activated, the analyzed partials are s
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1248,7 +1284,7 @@ When the "Print current values" button is activated, the analyzed partials are s
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>livein_over</objectName>
   <x>947</x>
   <y>180</y>
@@ -1277,7 +1313,7 @@ When the "Print current values" button is activated, the analyzed partials are s
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1285,7 +1321,7 @@ When the "Print current values" button is activated, the analyzed partials are s
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>gain</objectName>
   <x>861</x>
   <y>205</y>
@@ -1304,7 +1340,7 @@ When the "Print current values" button is activated, the analyzed partials are s
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>dolive</objectName>
   <x>861</x>
   <y>230</y>
@@ -1327,7 +1363,7 @@ Snapshot!</text>
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>941</x>
   <y>201</y>
@@ -1358,7 +1394,7 @@ Snapshot!</text>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>sample</objectName>
   <x>738</x>
   <y>114</y>
@@ -1377,10 +1413,10 @@ Snapshot!</text>
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>live</objectName>
   <x>863</x>
   <y>115</y>
@@ -1402,7 +1438,7 @@ Snapshot!</text>
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>862</x>
   <y>149</y>
@@ -1433,7 +1469,7 @@ Snapshot!</text>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>inch</objectName>
   <x>927</x>
   <y>148</y>
@@ -1463,7 +1499,7 @@ Snapshot!</text>
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>740</x>
   <y>148</y>
@@ -1494,7 +1530,7 @@ Snapshot!</text>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>sampnr</objectName>
   <x>801</x>
   <y>147</y>
@@ -1522,9 +1558,9 @@ Snapshot!</text>
   <minimum>1</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>1</value>
+  <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>740</x>
   <y>178</y>
@@ -1546,7 +1582,7 @@ Snapshot!</text>
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>740</x>
   <y>225</y>
@@ -1581,7 +1617,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>keysel</objectName>
   <x>740</x>
   <y>205</y>
@@ -1603,7 +1639,7 @@ L = Live Input,
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>797</x>
   <y>178</y>
@@ -1625,7 +1661,7 @@ L = Live Input,
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>267</x>
   <y>71</y>
@@ -1656,7 +1692,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_MBrowse</objectName>
   <x>275</x>
   <y>75</y>
@@ -1684,7 +1720,7 @@ L = Live Input,
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_MBrowse</objectName>
   <x>620</x>
   <y>75</y>
@@ -1706,7 +1742,7 @@ L = Live Input,
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>pos</objectName>
   <x>273</x>
   <y>242</y>
@@ -1735,7 +1771,7 @@ L = Live Input,
    <g>255</g>
    <b>255</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1743,7 +1779,7 @@ L = Live Input,
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>591</x>
   <y>280</y>
@@ -1774,7 +1810,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>position</objectName>
   <x>612</x>
   <y>302</y>
@@ -1785,7 +1821,7 @@ L = Live Input,
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.147</label>
+  <label>0.156</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Arial</font>
@@ -1805,7 +1841,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName>showtab</objectName>
   <x>272</x>
   <y>109</y>
@@ -1816,7 +1852,7 @@ L = Live Input,
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <value>0</value>
+  <value>7</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -1832,7 +1868,7 @@ L = Live Input,
   <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>showname</objectName>
   <x>274</x>
   <y>282</y>
@@ -1844,7 +1880,7 @@ L = Live Input,
   <midicc>0</midicc>
   <description/>
   <label>File selected:
-'fox.wav'</label>
+'bell.aiff'</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Arial</font>
@@ -1864,7 +1900,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>756</x>
   <y>365</y>
@@ -1895,7 +1931,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>756</x>
   <y>392</y>
@@ -1926,7 +1962,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>887</x>
   <y>393</y>
@@ -1948,7 +1984,7 @@ L = Live Input,
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>756</x>
   <y>419</y>
@@ -1979,7 +2015,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>886</x>
   <y>419</y>
@@ -2001,7 +2037,7 @@ L = Live Input,
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>756</x>
   <y>446</y>
@@ -2032,7 +2068,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse3</objectName>
   <x>886</x>
   <y>447</y>
@@ -2054,7 +2090,7 @@ L = Live Input,
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>print</objectName>
   <x>892</x>
   <y>366</y>
@@ -2073,10 +2109,10 @@ L = Live Input,
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>exp1</objectName>
   <x>930</x>
   <y>393</y>
@@ -2098,7 +2134,7 @@ L = Live Input,
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>exp2</objectName>
   <x>929</x>
   <y>420</y>
@@ -2120,7 +2156,7 @@ L = Live Input,
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>exp3</objectName>
   <x>929</x>
   <y>447</y>
@@ -2142,7 +2178,7 @@ L = Live Input,
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out</objectName>
   <x>767</x>
   <y>516</y>
@@ -2171,7 +2207,7 @@ L = Live Input,
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -2179,7 +2215,7 @@ L = Live Input,
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out_over</objectName>
   <x>937</x>
   <y>516</y>
@@ -2208,7 +2244,7 @@ L = Live Input,
    <g>0</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -2216,7 +2252,7 @@ L = Live Input,
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>vol</objectName>
   <x>768</x>
   <y>551</y>
@@ -2235,7 +2271,7 @@ L = Live Input,
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>948</x>
   <y>548</y>
@@ -2266,7 +2302,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>275</x>
   <y>370</y>
@@ -2297,7 +2333,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>fast</objectName>
   <x>458</x>
   <y>404</y>
@@ -2327,7 +2363,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>354</x>
   <y>403</y>
@@ -2358,7 +2394,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>numpartsana</objectName>
   <x>462</x>
   <y>371</y>
@@ -2388,7 +2424,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>32</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>hopmove</objectName>
   <x>275</x>
   <y>435</y>
@@ -2410,7 +2446,7 @@ L = Live Input,
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>380</x>
   <y>435</y>
@@ -2441,7 +2477,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>hopmovsiz</objectName>
   <x>450</x>
   <y>437</y>
@@ -2471,7 +2507,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>manpos</objectName>
   <x>275</x>
   <y>403</y>
@@ -2490,10 +2526,10 @@ L = Live Input,
   <eventLine>i1 0 10</eventLine>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
+  <latched>true</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>numpartspl</objectName>
   <x>695</x>
   <y>369</y>
@@ -2523,7 +2559,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>32</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>refpch</objectName>
   <x>695</x>
   <y>432</y>
@@ -2553,7 +2589,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>60</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>529</x>
   <y>432</y>
@@ -2584,7 +2620,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>stcent</objectName>
   <x>695</x>
   <y>464</y>
@@ -2614,7 +2650,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>100</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>528</x>
   <y>463</y>
@@ -2645,7 +2681,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>528</x>
   <y>369</y>
@@ -2676,7 +2712,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>shiftpl</objectName>
   <x>695</x>
   <y>400</y>
@@ -2706,7 +2742,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>528</x>
   <y>399</y>
@@ -2737,7 +2773,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>rndfqdv</objectName>
   <x>695</x>
   <y>528</y>
@@ -2767,7 +2803,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>527</x>
   <y>518</y>
@@ -2798,7 +2834,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>rndampdv</objectName>
   <x>695</x>
   <y>560</y>
@@ -2828,7 +2864,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>527</x>
   <y>552</y>
@@ -2859,7 +2895,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>rnddurdv</objectName>
   <x>695</x>
   <y>592</y>
@@ -2889,7 +2925,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>527</x>
   <y>586</y>
@@ -2920,7 +2956,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>maxdur</objectName>
   <x>695</x>
   <y>496</y>
@@ -2950,7 +2986,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>527</x>
   <y>495</y>
@@ -2981,7 +3017,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>att</objectName>
   <x>290</x>
   <y>540</y>
@@ -3010,7 +3046,7 @@ L = Live Input,
    <g>170</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -3018,7 +3054,7 @@ L = Live Input,
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>dec</objectName>
   <x>290</x>
   <y>559</y>
@@ -3047,7 +3083,7 @@ L = Live Input,
    <g>170</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -3055,7 +3091,7 @@ L = Live Input,
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>sus</objectName>
   <x>290</x>
   <y>578</y>
@@ -3084,7 +3120,7 @@ L = Live Input,
    <g>170</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -3092,7 +3128,7 @@ L = Live Input,
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>rel</objectName>
   <x>291</x>
   <y>598</y>
@@ -3121,7 +3157,7 @@ L = Live Input,
    <g>170</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -3129,7 +3165,7 @@ L = Live Input,
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>att</objectName>
   <x>463</x>
   <y>536</y>
@@ -3160,7 +3196,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>dec</objectName>
   <x>463</x>
   <y>556</y>
@@ -3191,7 +3227,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>sus</objectName>
   <x>463</x>
   <y>576</y>
@@ -3222,7 +3258,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>rel</objectName>
   <x>463</x>
   <y>595</y>
@@ -3253,7 +3289,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>272</x>
   <y>537</y>
@@ -3284,7 +3320,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>272</x>
   <y>556</y>
@@ -3315,7 +3351,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>272</x>
   <y>575</y>
@@ -3346,7 +3382,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>272</x>
   <y>593</y>
@@ -3377,7 +3413,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>350</x>
   <y>470</y>
@@ -3408,7 +3444,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>randpos</objectName>
   <x>275</x>
   <y>467</y>
@@ -3430,7 +3466,7 @@ L = Live Input,
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>rndpos1</objectName>
   <x>410</x>
   <y>471</y>
@@ -3460,7 +3496,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>rndpos2</objectName>
   <x>458</x>
   <y>471</y>
@@ -3490,7 +3526,7 @@ L = Live Input,
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>vol</objectName>
   <x>916</x>
   <y>548</y>
@@ -3521,7 +3557,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>pos</objectName>
   <x>460</x>
   <y>305</y>
@@ -3549,9 +3585,9 @@ L = Live Input,
   <minimum>0</minimum>
   <maximum>1</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0</value>
+  <value>0.0534521</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>453</x>
   <y>280</y>
@@ -3582,7 +3618,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>71</y>
@@ -3613,7 +3649,7 @@ L = Live Input,
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>111</y>

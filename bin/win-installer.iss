@@ -17,13 +17,13 @@
 
 [setup]
 #define AppName "CsoundQt"
-#define AppVersion "0.9.8.2"
+#define AppVersion "1.1.0"
 #define AppPublisher "CsoundQt"
 #define AppURL "https://csoundqt.github.io/"
-#define ManualDir "C:\Users\tarmo\Downloads\csound-manual\manual"
+#define ManualDir "C:\Program Files\csound\doc\manual"
 #define CsoundQTIcon "..\images\qtcs.ico"
 #define AppExeName "CsoundQt-d-html-cs6.exe"
-#define CsoundBinariesDir "C:\Users\tarmo\Downloads\Csound6.14.0-Windows_x64-binaries"
+#define CsoundBinariesDir "C:\Users\tarmo\Downloads\Csound6.17-binaries"
 #define BuildDir "..\..\build-qcs-Desktop_Qt_5_12_4_MSVC2017_64bit-Release\bin"
 #define LicenseFile "..\lgpl-2.1.txt"
 
