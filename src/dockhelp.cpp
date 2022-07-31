@@ -30,7 +30,7 @@ DockHelp::DockHelp(QWidget *parent)
 	: QDockWidget(parent), ui(new Ui::DockHelp)
 {
 	ui->setupUi(this);
-	findFlags = 0;
+    findFlags = QTextDocument::FindFlags();
     setWindowTitle("Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
 

@@ -35,6 +35,8 @@
 # qmake qcs.pro INSTALL_DIR=~ SHARE_DIR=~/.local/share
 ################################################################################
 
+#To prepare for Qt6 build
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
 #Support for Qt4 dropped from v0.9.8 de facto, v1.0.0 declaring it here:
 lessThan(QT_MAJOR_VERSION,5): error("Qt5 or higher required. Use CsoundQt 0.9.7 or earlier to build for Qt4.")

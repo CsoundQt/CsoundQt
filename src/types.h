@@ -107,7 +107,7 @@
     #define SKIP_EMPTY_PARTS Qt::SkipEmptyParts
 #else
     #define ENDL endl
-    #define SKIP_EMPTY_PARTS QString::SkipEmptyParts
+    #define SKIP_EMPTY_PARTS Qt::SkipEmptyParts
 #endif
 
 

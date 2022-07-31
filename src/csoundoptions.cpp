@@ -114,7 +114,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 	if (HwBufferSizeActive)
         opts << "-B" + QString::number(HwBufferSize);
 	if (additionalFlagsActive && !additionalFlags.trimmed().isEmpty()) {
-		QStringList addFlags = additionalFlags.split(QRegExp("[\\s]"),QString::SkipEmptyParts);
+        QStringList addFlags = additionalFlags.split(QRegExp("[\\s]"),Qt::SkipEmptyParts);
 		foreach (QString f, addFlags) {
             QDEBUG << "Additional Flags:" << additionalFlags;
             opts << f;

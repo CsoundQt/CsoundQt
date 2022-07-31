@@ -239,7 +239,7 @@ CurveType Curve::get_type() const
 QStringList parseCaption(QString caption) {
     QStringList out;
     if(caption.contains("fft")) {
-        auto parts = caption.splitRef(", ", QString::SkipEmptyParts);
+        auto parts = caption.splitRef(", ", Qt::SkipEmptyParts);
         auto p1 = parts[0].mid(6);  // skip "instr"
         auto signal = parts[1].mid(7);
         auto ffttype = parts[2].mid(5, parts[2].trimmed().size() - 2);

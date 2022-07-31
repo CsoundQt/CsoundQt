@@ -217,7 +217,7 @@ QString QuteButton::getQml()
 		QString eventLine = property("QCS_eventLine").toString();
         QString turnOffLine = QString();
 		if (property("QCS_latch").toBool() && eventLine.size() > 0) {
-			QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+			QStringList lineElements = eventLine.split(QRegExp("\\s"),Qt::SkipEmptyParts);
 			if (lineElements.size() > 0 && lineElements[0] == "i") {
 				lineElements.removeAt(0); // Remove first element if it is "i"
 			}
@@ -613,7 +613,7 @@ bool QuteButton::hasIndefiniteDuration()
 {
 	QString eventLine = property("QCS_eventLine").toString();
 	if ( !eventLine.isEmpty()) {
-		QStringList lineElements = eventLine.split(QRegExp("\\s"),QString::SkipEmptyParts);
+		QStringList lineElements = eventLine.split(QRegExp("\\s"),Qt::SkipEmptyParts);
 		if (lineElements.size() > 0 && lineElements[0] == "i") {
 			lineElements.removeAt(0); // Remove first element if it is "i"
 		}

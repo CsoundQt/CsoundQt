@@ -1504,7 +1504,7 @@ int QuteGraph::getIndexForTableNum(int ftable)
 	for (int i = 0; i < curves.size(); i++) {
 		QString text = curves[i]->get_caption();
 		if (text.contains("ftable")) {
-			QStringList parts = text.split(QRegExp("[ :]"), QString::SkipEmptyParts);
+			QStringList parts = text.split(QRegExp("[ :]"), Qt::SkipEmptyParts);
             if (parts.size() > 1) {
 				int num = parts.last().toInt();
 				if (ftable == num) {

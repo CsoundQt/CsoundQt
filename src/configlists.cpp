@@ -80,7 +80,7 @@ void ConfigLists::msgCallback(CSOUND *csound, int attr, const char *fmt, va_list
 	Q_UNUSED(attr);
 	QString *ud = (QString *) csoundGetHostData(csound);
 	QString msg;
-	msg = msg.vsprintf(fmt, args);
+    msg = msg.vasprintf(fmt, args);
 	if (msg.isEmpty()) {
 		return;
 	}
