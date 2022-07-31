@@ -83,10 +83,10 @@ int main(int argc, char *argv[])
         if(arg == "--help") {
             QTextStream out(stdout);
             out << "\n\n";
-            out << "Options:" << endl;
-            out << "   --play        Autoplay the last file passed via command line" << endl;
-            out << "   --help        This message" << endl;
-            out << endl;
+            out << "Options:" << Qt::endl;
+            out << "   --play        Autoplay the last file passed via command line" << Qt::endl;
+            out << "   --help        This message" << Qt::endl;
+            out << Qt::endl;
             exit(0);
         }
         if(arg == "--play") {
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
         } else {
             socket->close();
             //qDebug()<<"Another instance already running.";
-            int answer = QMessageBox::warning(NULL, QObject::tr("CsoundQt"),
+            int answer = QMessageBox::warning(nullptr, QObject::tr("CsoundQt"),
                                               QObject::tr("Another instance is already running. "
                                                           "Are you sure you want to open a new"
                                                           " window?"),

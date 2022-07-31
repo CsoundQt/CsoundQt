@@ -745,7 +745,7 @@ void DocumentPage::updateCsLadspaText()
 	QString text = "<csLADSPA>\nName=";
 	text += fileName.mid(fileName.lastIndexOf("/") + 1) + "\n";
 	text += "Maker=CsoundQt\n";
-	QString id = QString::number(qrand());
+    QString id = QString::number(QRandomGenerator::global()->generate());
 	text += "UniqueID=" + id + "\n";
 	text += "Copyright=none\n";
 	//FIXME allow multiple
@@ -1362,7 +1362,7 @@ int DocumentPage::runPython()
 {
 	QProcess p;
 	QDir::setCurrent(fileName.mid(fileName.lastIndexOf("/") + 1));
-	p.start(m_pythonExecutable + " \"" + fileName + "\"");
+    p.start(m_pythonExecutable, QStringList() <<  " \"" + fileName + "\"");
 	m_pythonRunning = true;
 	while (!p.waitForFinished (100) && m_pythonRunning) {
 		// TODO make stop button stop python too

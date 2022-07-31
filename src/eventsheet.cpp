@@ -1052,7 +1052,8 @@ void EventSheet::deleteRows()
 			selectedRows.append(list[i].row());
 		}
 	}
-	qSort(selectedRows);
+    // old: qSort(selectedRows);
+    std::sort(selectedRows.begin(), selectedRows.end());
 	for (int i = selectedRows.size() - 1; i >=0; i--) {
 		this->removeRow(selectedRows[i]);
 	}
@@ -1248,7 +1249,7 @@ void EventSheet::randomize(double min, double max, int mode)
 		}
 		double value = 0.0;
 		if (mode == 0) {
-			value = min + ((double) qrand() / (double) RAND_MAX) * (max - min);
+            value = min + ((double) QRandomGenerator::global()->generate() / (double) RAND_MAX) * (max - min);
 		}
 		else /*if (mode == 1)*/ {  // Integers only
             value = min + (generator.generate() % (int) (max - min + 1)); // Include max value as a possibility

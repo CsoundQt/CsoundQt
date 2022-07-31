@@ -528,7 +528,7 @@ void CsoundQt::utilitiesMessageCallback(CSOUND *csound,
 {
     DockConsole *console = (DockConsole *) csoundGetHostData(csound);
     QString msg;
-    msg = msg.vsprintf(fmt, args);
+    msg = msg.vasprintf(fmt, args);
     //  qDebug() << msg;
     console->appendMessage(msg);
 }
