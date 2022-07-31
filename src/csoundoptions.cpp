@@ -27,6 +27,7 @@
 #include <QDir> // for static QDir::separator()
 #include <QDebug>
 #include <cstdlib> // for calloc
+#include <QRegExp>
 
 CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	m_configlists(configlists)

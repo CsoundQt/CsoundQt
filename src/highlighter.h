@@ -32,6 +32,8 @@
 
 #include <QTextDocument>
 
+#include <QRegExp>
+
 enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection };
 
 struct ParenthesisInfo

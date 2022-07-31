@@ -24,6 +24,8 @@
 #include "opentryparser.h"
 #include "node.h"
 
+#include <QRegExp>
+
 DotGenerator::DotGenerator(QString fileName, QString orcText, OpEntryParser *opcodeTree) :
 	m_fileName(fileName), m_orcText(orcText), m_opcodeTree(opcodeTree)
 {
