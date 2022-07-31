@@ -901,9 +901,9 @@ void EventSheet::runScript(QString name)
 	QString outFileName = "qutesheet_out_data.txt";
 	QDir oldDir = QDir::current();
 	QDir tempDir(QDir::tempPath());
-	QString subDir = "QCS-" + QString::number(qrand());
+    QString subDir = "QCS-" + QString::number(QRandomGenerator::global()->generate());
 	while (!tempDir.mkdir(subDir))
-		subDir = "QCS-" + QString(qrand());
+        subDir = "QCS-" + QString(QRandomGenerator::global()->generate());
 	tempDir.cd(subDir);
 	QDir::setCurrent(tempDir.absolutePath());
 	QFile module(tempDir.absolutePath() + QDir::separator() + "qutesheet.py");
@@ -934,7 +934,7 @@ void EventSheet::runScript(QString name)
 	QFile outFile(tempDir.absolutePath() + QDir::separator() + outFileName);
 
 	QProcess p;
-	p.start("python " + name.mid(name.lastIndexOf("/") + 1));
+    p.start("python", QStringList() << name.mid(name.lastIndexOf("/") + 1));
 
 	while (!p.waitForFinished (10) && !m_stopScript) {
 		qApp->processEvents();
@@ -1234,8 +1234,11 @@ void EventSheet::randomize(double min, double max, int mode)
 	// Mode 0 =
 	// Mode 1 = integers only
 	QModelIndexList list = this->selectedIndexes();
-	QTime midnight(0, 0, 0);
-	qsrand(midnight.secsTo(QTime::currentTime()));
+    //QTime midnight(0, 0, 0);
+    //old code (before Qt 6):
+    //qsrand(midnight.secsTo(QTime::currentTime()));
+    // new:
+    QRandomGenerator generator =  QRandomGenerator(0x1234);
 	for (int i = 0; i < list.size(); i++) {
 		QTableWidgetItem * item = this->item(list[i].row(), list[i].column());
 		if (item == 0) {
@@ -1248,7 +1251,7 @@ void EventSheet::randomize(double min, double max, int mode)
 			value = min + ((double) qrand() / (double) RAND_MAX) * (max - min);
 		}
 		else /*if (mode == 1)*/ {  // Integers only
-			value = min + (qrand() % (int) (max - min + 1)); // Include max value as a possibility
+            value = min + (generator.generate() % (int) (max - min + 1)); // Include max value as a possibility
 		}
 		noHistoryChange = 1;
 		item->setData(Qt::DisplayRole,
@@ -1260,17 +1263,18 @@ void EventSheet::randomize(double min, double max, int mode)
 
 void EventSheet::shuffle(int iterations)
 {
-	QTime midnight(0, 0, 0);
-	qsrand(midnight.secsTo(QTime::currentTime()));
+    //QTime midnight(0, 0, 0);
+    //qsrand(midnight.secsTo(QTime::currentTime()));
+    QRandomGenerator generator =  QRandomGenerator(0x1234);
 	QModelIndexList list = this->selectedIndexes();
 	if (list.size() < 3)
 		return;
 	for (int i = 0; i < iterations; i++) { // First traverse to copy values
-		int num1 = qrand() % list.size();
+        int num1 = generator.generate() % list.size();
 		QTableWidgetItem * item1 = this->item(list[num1].row(), list[num1].column());
-		int num2 = qrand() % list.size();
+        int num2 = generator.generate() % list.size();
 		while (num2 == num1) {
-			num2 = qrand() % list.size();
+            num2 = generator.generate() % list.size();
 		}
 		QTableWidgetItem * item2 = this->item(list[num2].row(), list[num2].column());
 		QVariant value1 = QVariant();

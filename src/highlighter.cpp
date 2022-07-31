@@ -487,8 +487,7 @@ Highlighter::~Highlighter()
 void Highlighter::setOpcodeNameList(QStringList list)
 {
 	m_opcodeList = list;
-    //QSet<QString>(list.begin(), list.end()); // does not work with older Qt versions
-    m_opcodesSet = list.toSet();
+    m_opcodesSet = QSet<QString>(list.begin(), list.end());
 	//   setFirstRules();
 	setLastRules();
 }
