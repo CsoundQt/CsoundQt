@@ -263,15 +263,15 @@ void BaseView::setFontPointSize(float size)
 
 void BaseView::setTabStopWidth(int width)
 {
-	m_mainEditor->setTabStopWidth(width);
-	m_orcEditor->setTabStopWidth(width);
-	m_scoreEditor->setTabStopWidth(width);
-	m_optionsEditor->setTabStopWidth(width);
-	//  m_filebEditor->setTabStopWidth(width);
-	m_otherEditor->setTabStopWidth(width);
-	m_otherCsdEditor->setTabStopWidth(width);
-	m_widgetEditor->setTabStopWidth(width);
-	m_appEditor->setTabStopWidth(width);
+    m_mainEditor->setTabStopDistance(width);
+    m_orcEditor->setTabStopDistance(width);
+    m_scoreEditor->setTabStopWidth(width);
+    m_optionsEditor->setTabStopDistance(width);
+    //  m_filebEditor->setTabStopDistance(width);
+    m_otherEditor->setTabStopDistance(width);
+    m_otherCsdEditor->setTabStopDistance(width);
+    m_widgetEditor->setTabStopDistance(width);
+    m_appEditor->setTabStopDistance(width);
 }
 
 void BaseView::setTabIndents(bool indents)

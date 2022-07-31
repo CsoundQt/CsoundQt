@@ -281,7 +281,7 @@ void AppWizard::createMacApp(QString appName, QString appDir, QStringList dataFi
 	QDir dir(appDir);
 	QList<QPair<QString, QString> > copyList;
 	if (dir.exists(appName + QDir::separator() + "osx")) {
-		int ret = QProcess::execute("rm -fR " + dir.absolutePath() + QDir::separator() + appName + QDir::separator() + "osx");
+        int ret = QProcess::execute("rm", QStringList() << "-fR"  << dir.absolutePath() + QDir::separator() + appName + QDir::separator() + "osx");
         qDebug()  << "deleted directory";
 		if (ret != 0) {
 			QMessageBox::critical(this, tr("Error"), tr("Could not delete old application directory! Aborted."));
@@ -376,7 +376,7 @@ void AppWizard::createLinuxApp(QString appName, QString appDir, QStringList data
 	QDir dir(appDir);
 	QList<QPair<QString, QString> > copyList;
 	if (dir.exists(appName + QDir::separator() + "linux")) {
-		int ret = QProcess::execute("rm -fR " + dir.absolutePath() + QDir::separator() + appName + QDir::separator() + "linux");
+        int ret = QProcess::execute("rm", QStringList() << "-fR" << dir.absolutePath() + QDir::separator() + appName + QDir::separator() + "linux");
 		qDebug() << "Deleted directory";
 		if (ret != 0) {
 			QMessageBox::critical(this, tr("Error"), tr("Could not delete old application directory! Aborted."));

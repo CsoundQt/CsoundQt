@@ -84,7 +84,7 @@ void ScoreEditor::setFontPointSize(float size)
 
 void ScoreEditor::setTabStopWidth(int width)
 {
-	m_textEditor->setTabStopWidth(width);
+    m_textEditor->setTabStopDistance(width);
 }
 
 void ScoreEditor::setLineWrapMode(QTextEdit::LineWrapMode mode)

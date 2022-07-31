@@ -93,7 +93,7 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 
 	QPalette Pal(this->palette());
     // set black background
-    Pal.setColor(QPalette::Background, Qt::black);
+    Pal.setColor(QPalette::Window, Qt::black); // old was QPalette::Background
     this->setAutoFillBackground(true);
     this->setPalette(Pal);
     this->setStyleSheet("QFrame { border: 0px; }");
