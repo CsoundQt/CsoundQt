@@ -29,6 +29,8 @@
 #include <cstdlib> // for calloc
 #include <QRegExp>
 
+
+
 CsoundOptions::CsoundOptions(ConfigLists *configlists) :
 	m_configlists(configlists)
 {

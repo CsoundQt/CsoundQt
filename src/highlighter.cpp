@@ -25,6 +25,9 @@
 #include <QDebug>
 #include <QRegularExpression>
 
+#include <QStringRef>
+#include <QRegExp>
+
 
 TextBlockData::TextBlockData()
 {

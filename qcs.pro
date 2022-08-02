@@ -38,7 +38,7 @@
 #To prepare for Qt6 build
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
-#hopefully temporary (needed for QRegExp)
+#temporary compatibility layer for Qt5->Qt6 (needed for QRegExp, QStringRef -  replace them later!)
 QT += core5compat
 
 #Support for Qt4 dropped from v0.9.8 de facto, v1.0.0 declaring it here:
