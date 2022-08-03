@@ -351,7 +351,7 @@ void QuteGraph::setValue(double value)
 void QuteGraph::setValue(QString text)
 {
     bool ok;
-    auto parts = text.splitRef(' ', SKIP_EMPTY_PARTS);
+    auto parts = text.split(' ', SKIP_EMPTY_PARTS); // splitRef
     if(parts[0] == "@set") {
         bool ok;
         int index = parts[1].toInt(&ok);
@@ -377,10 +377,10 @@ void QuteGraph::setValue(QString text)
         }
         int index;
         if(parts[1] == "fft") {
-            index = findCurve(CURVE_SPECTRUM, parts[2].toString());
+            index = findCurve(CURVE_SPECTRUM, parts[2]);
         }
         else if (parts[1] == "audio") {
-            index = findCurve(CURVE_AUDIOSIGNAL, parts[2].toString());
+            index = findCurve(CURVE_AUDIOSIGNAL, parts[2]);
         }
         else if (parts[1] == "table") {
             int tabnum = parts[2].toInt(&ok);
@@ -463,7 +463,7 @@ void QuteGraph::setValue(QString text)
         }
     }
     else if(parts[0] == "@getPeak") {
-        m_getPeakChannel = parts[1].toString();
+        m_getPeakChannel = parts[1];
         qDebug() << "@getPeak channel: " << m_getPeakChannel;
         MYFLT *ptr;
         csoundGetChannelPtr(m_ud->csound, &ptr,
@@ -1210,12 +1210,12 @@ QString mton(double midinote) {
         }
     }
     if(octave >= 0) {
-        dst.append('0' + octave);
+        dst.append(QChar('0' + octave)); // Qt6 CHECK! this might be wrong!
     } else {
         dst.append('-');
-        dst.append('0' - octave);
+        dst.append(QChar('0' - octave));
     }
-    dst.append('A' + _pc2idx[pc]);
+    dst.append(QChar('A' + _pc2idx[pc]));
     int32_t alt = _pc2alt[pc];
     if(alt > 0) {
         dst.append(_alts[alt]);

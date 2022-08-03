@@ -158,7 +158,7 @@ void Inspector::parseText(const QString &text)
         else if(currentOpcode == nullptr && currentInstrument == nullptr) {
             // we are at instr 0
             if (line.startsWith("instr ")) {
-                auto instrline = line.mid(6).trimmed()();
+                auto instrline = line.mid(6).trimmed();
                 auto newItem = new TreeItem(treeItem3, QStringList(instrline));
                 newItem->setLine(i + 1);
                 currentInstrument = newItem;
@@ -186,7 +186,7 @@ void Inspector::parseText(const QString &text)
                 newItem->setLine(i + 1);
             }
             else if(ftableRx2.match(line).hasMatch()) {
-                QStringList columnslist(line.toString());
+                QStringList columnslist(line);
                 if (treeItem4->childCount() == 0) { // set line for element to the first one found
                     treeItem4->setLine(i + 1);
                 }

@@ -71,6 +71,8 @@ private slots:
 	void browseCvInput();
 	void browseCvOutput();
 
+    void on_atsaRunPushButton_clicked();
+
 signals:
 	void runUtility(QString flags);
 	void Close(bool visible);

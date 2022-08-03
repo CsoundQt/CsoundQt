@@ -308,7 +308,7 @@ QString QuteText::getWidgetLine()
 	line += static_cast<QFrame*>(m_widget)->frameShape()==QFrame::NoFrame ? "noborder ": "border ";
 	//   line += ((QLabel *)m_widget)->toPlainText();
 	QString outText = property("QCS_label").toString();
-	outText.replace(QRegExp("[\n\r]"), "\u00AC");
+    outText.replace(QRegularExpression("[\n\r]"), "\u00AC");
 	line += outText;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -1075,7 +1075,7 @@ QString QuteScrollNumber::getWidgetLine()
 	line += property("QCS_bgcolormode").toBool() ? "background ":"nobackground ";
 	line += property("QCS_bordermode").toBool() ? "noborder ": "border ";
 	QString outText = property("QCS_label").toString();
-	outText.replace(QRegExp("[\n\r]"), "\u00AC");
+    outText.replace(QRegularExpression("[\n\r]"), "\u00AC");
 	line += outText;
 	//   qDebug("QuteText::getWidgetLine() %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX

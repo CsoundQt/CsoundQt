@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>860</width>
-    <height>440</height>
+    <width>872</width>
+    <height>468</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,7 @@
        <x>10</x>
        <y>0</y>
        <width>260</width>
-       <height>402</height>
+       <height>443</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
@@ -230,8 +230,8 @@
       <rect>
        <x>230</x>
        <y>100</y>
-       <width>171</width>
-       <height>261</height>
+       <width>173</width>
+       <height>277</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="layout_2">
@@ -316,7 +316,7 @@
        <x>10</x>
        <y>0</y>
        <width>421</width>
-       <height>101</height>
+       <height>112</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="layout_3">
@@ -373,7 +373,7 @@
        <x>10</x>
        <y>100</y>
        <width>181</width>
-       <height>261</height>
+       <height>277</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="layout_4">
@@ -463,7 +463,7 @@
        <x>10</x>
        <y>0</y>
        <width>421</width>
-       <height>101</height>
+       <height>112</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="layout_6">
@@ -520,7 +520,7 @@
        <x>10</x>
        <y>100</y>
        <width>181</width>
-       <height>261</height>
+       <height>277</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="layout_7">
@@ -605,7 +605,7 @@
        <x>230</x>
        <y>100</y>
        <width>171</width>
-       <height>221</height>
+       <height>223</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="layout_8">
@@ -761,7 +761,7 @@
        <x>10</x>
        <y>100</y>
        <width>181</width>
-       <height>261</height>
+       <height>277</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="layout_12">
@@ -846,7 +846,7 @@
        <x>10</x>
        <y>0</y>
        <width>421</width>
-       <height>101</height>
+       <height>112</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="layout_10">
@@ -902,8 +902,8 @@
       <rect>
        <x>230</x>
        <y>100</y>
-       <width>174</width>
-       <height>161</height>
+       <width>183</width>
+       <height>168</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="layout_11">
@@ -1003,7 +1003,7 @@
        <x>10</x>
        <y>0</y>
        <width>421</width>
-       <height>101</height>
+       <height>112</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="layout_15">
@@ -1059,8 +1059,8 @@
       <rect>
        <x>10</x>
        <y>100</y>
-       <width>131</width>
-       <height>272</height>
+       <width>134</width>
+       <height>332</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="layout_16">
@@ -1158,8 +1158,8 @@
       <rect>
        <x>150</x>
        <y>100</y>
-       <width>131</width>
-       <height>272</height>
+       <width>136</width>
+       <height>277</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="layout_17">
@@ -1244,7 +1244,7 @@
        <x>290</x>
        <y>101</y>
        <width>144</width>
-       <height>271</height>
+       <height>279</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="layout_14">
@@ -1379,12 +1379,12 @@
    <slot>resetCvanal()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>186</x>
-     <y>418</y>
+     <x>138</x>
+     <y>478</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
-     <y>-9</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1395,8 +1395,8 @@
    <slot>runCvanal()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>314</x>
-     <y>419</y>
+     <x>269</x>
+     <y>478</y>
     </hint>
     <hint type="destinationlabel">
      <x>455</x>
@@ -1408,7 +1408,7 @@
    <sender>hetResetPushButton</sender>
    <signal>released()</signal>
    <receiver>UtilitiesDialog</receiver>
-   <slot>resetHetro()</slot>
+   <slot>resetHet()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>111</x>
@@ -1416,23 +1416,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>143</x>
-     <y>470</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hetRunPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>runHetro()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>331</x>
-     <y>497</y>
+     <y>437</y>
     </hint>
    </hints>
   </connection>
@@ -1448,7 +1432,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
-     <y>450</y>
+     <y>437</y>
     </hint>
    </hints>
   </connection>
@@ -1459,44 +1443,12 @@
    <slot>runLpanal()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
+     <x>327</x>
+     <y>448</y>
     </hint>
     <hint type="destinationlabel">
      <x>385</x>
-     <y>499</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pvResetPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>resetPvanal()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>141</x>
-     <y>449</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pvRunPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>runPvanal()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>263</x>
-     <y>453</y>
+     <y>437</y>
     </hint>
    </hints>
   </connection>
@@ -1512,7 +1464,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>243</x>
-     <y>484</y>
+     <y>437</y>
     </hint>
    </hints>
   </connection>
@@ -1523,14 +1475,24 @@
    <slot>runAtsa()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
+     <x>327</x>
+     <y>448</y>
     </hint>
     <hint type="destinationlabel">
      <x>354</x>
-     <y>469</y>
+     <y>437</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>resetAtsa()</slot>
+  <slot>resetCvanal()</slot>
+  <slot>resetHetro()</slot>
+  <slot>resetLpanal()</slot>
+  <slot>runAtsa()</slot>
+  <slot>resetHet()</slot>
+  <slot>runCvanal()</slot>
+  <slot>runLpanal()</slot>
+ </slots>
 </ui>
