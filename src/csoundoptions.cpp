@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <cstdlib> // for calloc
 #include <QRegExp>
+#include <QRegularExpression>
 
 
 
@@ -117,7 +118,7 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
 	if (HwBufferSizeActive)
         opts << "-B" + QString::number(HwBufferSize);
 	if (additionalFlagsActive && !additionalFlags.trimmed().isEmpty()) {
-        QStringList addFlags = additionalFlags.split(QRegExp("[\\s]"),Qt::SkipEmptyParts);
+        QStringList addFlags = additionalFlags.split(QRegularExpression("[\\s]"),Qt::SkipEmptyParts);
 		foreach (QString f, addFlags) {
             QDEBUG << "Additional Flags:" << additionalFlags;
             opts << f;
