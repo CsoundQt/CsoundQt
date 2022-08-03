@@ -1,6 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Controls 1.2
-import QtQuick.Layouts 1.1
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 Rectangle {
     property int channel: channelSpinBox.value
@@ -18,9 +18,8 @@ Rectangle {
         SpinBox {
             id: channelSpinBox
             Layout.fillWidth: true
-            decimals: 0
-            maximumValue: 16
-            minimumValue: 1
+            from: 1
+            to: 16
             value: 1
             Keys.forwardTo: controls // to forward them further to keyboard to be able to play wrom computer keys
         }
@@ -30,9 +29,8 @@ Rectangle {
         SpinBox {
             id: velocitySpinBox
             Layout.fillWidth: true
-            decimals: 0
-            maximumValue: 127
-            minimumValue: 1
+            from: 1
+            to: 127
             value: 64
             Keys.forwardTo: controls
         }
@@ -42,9 +40,8 @@ Rectangle {
         SpinBox {
             id: octaveSpinBox
             Layout.fillWidth: true
-            decimals: 0
-            maximumValue: 12
-            minimumValue: 0
+            from: 0
+            to: 12
             value: 5
             Keys.forwardTo: controls
         }
@@ -54,9 +51,8 @@ Rectangle {
         SpinBox {
             id: numOctavesSpinBox
             Layout.fillWidth: true
-            decimals: 0
-            maximumValue: 8
-            minimumValue: 1
+            from: 1
+            to: 8
             value: 3
             Keys.forwardTo: controls
         }

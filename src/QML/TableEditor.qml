@@ -2,10 +2,10 @@
 // (c) Tarmo Johannes 2015 tarmo@otsakool.edu.ee
 //Licence: GPL 2
 
-import QtQuick 2.1
-import QtQuick.Controls 1.1
-import QtQuick.Window 2.0
-import QtQuick.Dialogs 1.1
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Window 2.15
+import QtQuick.Dialogs
 
 Rectangle {
     id: mainWindow
@@ -445,20 +445,22 @@ Rectangle {
         text: qsTr("Max value:")
     }
 
-    SpinBox {
+    SpinBox { // NB! TODO: Does not work as an double SpingBox
         id: maxSpinbox
-        horizontalAlignment: 1
+        //horizontalAlignment: 1
         anchors.left: parent.left
         anchors.leftMargin: 6
-        stepSize: 0.01
+        //stepSize: 0.01
         anchors.right: drawRect.left
         anchors.rightMargin: 6
         anchors.top: drawRect.top
         anchors.topMargin: 0
+        from: 1
         value: 1
-        maximumValue: 9999999
-        decimals: 2
-        onEditingFinished: {canvas.requestPaint(); graph2syntax() }// to display new max number
+        to: 9999999
+        //decimals: 2
+        editable: true
+        onValueChanged: {canvas.requestPaint(); graph2syntax() }// to display new max number
     }
 
     CheckBox {
@@ -528,13 +530,14 @@ Rectangle {
         id: tableSizeSpinbox
         y: 362
         value: 1024
-        minimumValue: 1
-        maximumValue: 99999
+        from: 1
+        to: 99999
         anchors.left: drawRect.right
         anchors.leftMargin: 6
         anchors.bottom: drawRect.bottom
         anchors.bottomMargin: 0
-        onEditingFinished: {canvas.requestPaint(); graph2syntax() }// to display new max number
+        editable: true
+        onValueChanged: {canvas.requestPaint(); graph2syntax() }// to display new max number
 
 
     }
@@ -552,10 +555,11 @@ Rectangle {
         anchors.horizontalCenter: tableSizeSpinbox.horizontalCenter
     }
 
+    ButtonGroup { id: syntaxTypeGroup; }
 
     Row {
         id: syntaxRadioButtons
-        ExclusiveGroup { id: syntaxTypeGroup }
+
 
         width: drawRect.width
         //height: 40
@@ -572,14 +576,14 @@ Rectangle {
             id: ftgenButton
             text: qsTr("ftgen")
             checked: true
-            exclusiveGroup: syntaxTypeGroup
+            ButtonGroup.group: syntaxTypeGroup
         }
 
         RadioButton {
             id: fbutton
             text: qsTr("f statement")
             enabled: false
-            exclusiveGroup: syntaxTypeGroup
+            ButtonGroup.group: syntaxTypeGroup
         }
 
 

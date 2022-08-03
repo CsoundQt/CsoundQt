@@ -1,6 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Controls 1.2
-import QtQuick.Layouts 1.1
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 Rectangle {
     id: ccRect
@@ -19,7 +19,8 @@ Rectangle {
 
         Label {id: ccLabel; text: qsTr("CC"); }
         SpinBox {id: cc;
-            minimumValue: 1; maximumValue: 119; stepSize: 1;
+
+            from: 1; to: 119; stepSize: 1;
             value: ccNumber;
             width: 55 // to be wide enough for 2 numbers
             onValueChanged: ccNumber = value;
@@ -29,7 +30,7 @@ Rectangle {
         Slider {
             id: valueSlider;
             width: ccRect.width - ccLabel.width - cc.width - 25;
-            minimumValue: 0 ; maximumValue: 127; stepSize: 1;
+            from: 0 ; to: 127; stepSize: 1;
             value: 0
             onValueChanged: ccValueChanged(cc.value, value)
         }
