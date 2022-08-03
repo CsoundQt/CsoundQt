@@ -26,7 +26,7 @@
 #include <QRegularExpression>
 
 #include <QStringRef>
-#include <QRegExp>
+#include <QRegularExpression>
 
 
 TextBlockData::TextBlockData()
@@ -347,8 +347,8 @@ Highlighter::Highlighter(QTextDocument *parent)
     commentStartExpression.setPattern("/\\*");
     commentEndExpression.setPattern("\\*/");
 
-    //  b64encStartExpression = QRegExp("<CsFileB .*>");
-	//  b64encEndExpression = QRegExp("<CsFileB>");
+    //  b64encStartExpression = QRegularExpression("<CsFileB .*>");
+    //  b64encEndExpression = QRegularExpression("<CsFileB>");
 	colorVariables = true;
 	m_mode = 0; // default to Csound mode
     m_scoreSyntaxHighlighting = true;
@@ -417,14 +417,14 @@ Highlighter::Highlighter(QTextDocument *parent)
                         "ksmps|midi-key-cps=|midi-velocity=)|"
                         "\\+(rtaudio=|rtmidi=|jack_client=))");
     /*
-    csoundOptionsRx = QRegExp("--(env|nodisplays|nosound|control-rate|messagelevel=|"
+    csoundOptionsRx = QRegularExpression("--(env|nodisplays|nosound|control-rate|messagelevel=|"
                               "dither|sched|omacro:|smacro:|verbose|sample-accurate|"
                               "realtime|nchnls|nchnls_i|sinesize=|daemon|port=|"
                               "use-system-sr|ksmps|midi-key-cps=|midi-velocity=)");
     */
     csoundOptionsRx2 = QRegularExpression("-+(rtaudio=|rtmidi=|jack_client=)");
 
-    functionRegex = QRegExp("\\b\\w+(\\:a|\\:k|\\:i)?(?=\\()");
+    functionRegex = QRegularExpression("\\b\\w+(\\:a|\\:k|\\:i)?(?=\\()");
 
     // For Python
     pythonKeywords << "and" << "or" << "not" << "is"
@@ -872,35 +872,37 @@ void Highlighter::highlightCsoundBlock(const QString &line)
 
 void Highlighter::highlightPythonBlock(const QString &text)
 {
-	QRegExp expression("\\b+\\w\\b+");
+    QRegularExpression expression("\\b+\\w\\b+");
 	int index = text.indexOf(expression, 0);
     for (int i = 0; i < pythonKeywords.size(); i++) {
-        QRegExp expression("\\b+" + pythonKeywords[i] + "\\b+");
+        QRegularExpression expression("\\b+" + pythonKeywords[i] + "\\b+");
 		int index = text.indexOf(expression);
 		while (index >= 0) {
-			int length = expression.matchedLength();
+            // TODO: this substitution is probably wrong! Test and compare with Qt 5!!!
+            int length = expression.match(pythonKeywords[i]).capturedLength();// was: expression.matchedLength();
+            qDebug() << "Matched length" << length;
 			setFormat(index, length, keywordFormat);
 			index = text.indexOf(expression, index + length);
 		}
 	}
-	QRegExp strings( QRegExp("\"[^\"]*\""));
+    QRegularExpression strings( QRegularExpression("\"[^\"]*\""));
 	index = text.indexOf(strings);
 	while (index >= 0) {
-		int length = strings.matchedLength();
+        int length = 4;//strings.matchedLength(); // TEMPORARY!
 		setFormat(index, length, quotationFormat);
 		index = text.indexOf(strings, index + length);
 	}
-	strings = QRegExp("'[^'']*'");
+    strings = QRegularExpression("'[^'']*'");
 	index = text.indexOf(strings);
 	while (index >= 0) {
-		int length = strings.matchedLength();
+        int length = 4; // strings.matchedLength(); / TEMPORARY!
 		setFormat(index, length, quotationFormat);
 		index = text.indexOf(strings, index + length);
 	}
-	QRegExp expComment("#.*");
+    QRegularExpression expComment("#.*");
 	index = text.indexOf(expComment);
 	while (index >= 0) {
-		int length = expComment.matchedLength();
+        int length = 4;//expComment.matchedLength();/ TEMPORARY!
 		setFormat(index, length, singleLineCommentFormat);
 		index = text.indexOf(expComment, index + length);
 	}
@@ -914,57 +916,57 @@ void Highlighter::highlightXmlBlock(const QString &/*text*/)
 
 void Highlighter::highlightHtmlBlock(const QString &text)
 {
-	QRegExp expression("\\b+\\w\\b+");
+    QRegularExpression expression("\\b+\\w\\b+");
 	int index = text.indexOf(expression, 0);
 	for (int i = 0; i < htmlKeywords.size(); i++) {
-		QRegExp expression(htmlKeywords[i]);//expression("\\b+" + htmlKeywords[i] + "\\b+");
+        QRegularExpression expression(htmlKeywords[i]);//expression("\\b+" + htmlKeywords[i] + "\\b+");
 		int index = text.indexOf(expression);
 		while (index >= 0) {
-			int length = expression.matchedLength();
+            int length = 4; //expression.matchedLength(); // TEMPORARY!
 			setFormat(index, length, keywordFormat);
 			index = text.indexOf(expression, index + length);
 		}
 	}
 
 	for (int i=0; i<javascriptKeywords.size(); i++) {
-		QRegExp expression("\\b+" + javascriptKeywords[i] + "\\b+");
+        QRegularExpression expression("\\b+" + javascriptKeywords[i] + "\\b+");
 		int index = text.indexOf(expression);
 		while (index >= 0) {
-			int length = expression.matchedLength();
+            int length =  4; //expression.matchedLength(); // TEMPORARY!
 			setFormat(index, length, jsKeywordFormat); // TODO javascriptformat
 			index = text.indexOf(expression, index + length);
 		}
 	}
 
-	QRegExp endTag( QRegExp(">$"));
+    QRegularExpression endTag( QRegularExpression(">$"));
 	index = text.indexOf(endTag);
 	while (index >= 0) {
-		int length = endTag.matchedLength();
+        int length = 4; //endTag.matchedLength(); // TEMPORARY!
 		setFormat(index, length, keywordFormat);
 		index = text.indexOf(endTag, index + length);
 	}
 
-	QRegExp strings( QRegExp("\"[^\"]*\""));
+    QRegularExpression strings( QRegularExpression("\"[^\"]*\""));
 	index = text.indexOf(strings);
 	while (index >= 0) {
-		int length = strings.matchedLength();
+        int length = 4; //strings.matchedLength(); // TEMPORARY!
 		setFormat(index, length, quotationFormat);
 		index = text.indexOf(strings, index + length);
 	}
-	strings = QRegExp("'[^'']*'");
+    strings = QRegularExpression("'[^'']*'");
 	index = text.indexOf(strings);
 	while (index >= 0) {
-		int length = strings.matchedLength();
+        int length = 4; //strings.matchedLength(); // TEMPORARY!
 		setFormat(index, length, quotationFormat);
 		index = text.indexOf(strings, index + length);
 	}
 	int commentIndex = -1;
-	QRegExp expComment("//.*"); // TODO: avaoid https://
+    QRegularExpression expComment("//.*"); // TODO: avaoid https://
 	index = text.indexOf(expComment);
 	if (index>0 ) {
 		if (text.at(index-1)!=':') { // clumsy way to avoid addresses like https://
 			while (index >= 0) { // did not manage to do it with regular expression
-				int length = expComment.matchedLength();
+                int length = 4; //expComment.matchedLength(); // TEMPORARY!
 				setFormat(index, length, singleLineCommentFormat);
 				index = text.indexOf(expComment, index + length);
 			}
@@ -982,8 +984,8 @@ void Highlighter::highlightHtmlBlock(const QString &text)
 
     // multiline
     setCurrentBlockState(0);
-    QRegExp htmlCommentStartExpression = QRegExp("<!--");
-	QRegExp htmlCommentEndExpression = QRegExp("-->");
+    QRegularExpression htmlCommentStartExpression = QRegularExpression("<!--");
+    QRegularExpression htmlCommentEndExpression = QRegularExpression("-->");
 
 
 	int startIndex = 0;
@@ -1004,7 +1006,7 @@ void Highlighter::highlightHtmlBlock(const QString &text)
 			commentLength = text.length() - startIndex;
 		} else {
 			commentLength = endIndex - startIndex
-					+ htmlCommentEndExpression.matchedLength();
+                    + 4; //htmlCommentEndExpression.matchedLength(); // TEMPORARY!
 		}
 		setFormat(startIndex, commentLength, multiLineCommentFormat);
 		startIndex = text.indexOf(htmlCommentStartExpression,

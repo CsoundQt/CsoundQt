@@ -33,6 +33,7 @@
 #include <QTextDocument>
 
 #include <QRegExp>
+#include <QRegularExpression>
 
 enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection };
 
@@ -120,7 +121,7 @@ private:
 
     QRegularExpression commentStartExpression;
     QRegularExpression commentEndExpression;
-    QRegExp functionRegex;
+    QRegularExpression functionRegex;
 
     QRegularExpression rxScoreLetter;
     QRegularExpression rxQuotation;
