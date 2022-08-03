@@ -1125,7 +1125,13 @@ void DocumentView::indentNewLine()
 		QString line = linecursor.selectedText();
         QRegularExpression regex = QRegularExpression("\\s+");
 		if (line.indexOf(regex) == 0) {
-			m_mainEditor->insertPlainText(regex.cap());
+            // old: m_mainEditor->insertPlainText(regex.cap());
+
+            // TODO: check! Not sure if done the right way! (Qt6)
+            // see https://github.com/Komet/MediaElch/issues/1086
+            QString text = regex.match(line).captured();
+            qDebug() << "Captured text" << text; // SHORTHEN LATER!
+            m_mainEditor->insertPlainText(text);
 		}
 	}
 }

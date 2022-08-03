@@ -115,7 +115,7 @@ void Inspector::parseText(const QString &text)
 	int commentIndex = 0;
     bool partOfComment = false;
     int i = 0;
-    auto lines = text.splitRef('\n');
+    auto lines = text.split('\n'); // was (old): splitRef
     QRegularExpressionMatch match;
     QRegularExpression orcStartRx("^\\s*<CsInstruments>");
 
