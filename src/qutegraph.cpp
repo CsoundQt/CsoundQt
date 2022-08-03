@@ -1504,7 +1504,7 @@ int QuteGraph::getIndexForTableNum(int ftable)
 	for (int i = 0; i < curves.size(); i++) {
 		QString text = curves[i]->get_caption();
 		if (text.contains("ftable")) {
-			QStringList parts = text.split(QRegExp("[ :]"), Qt::SkipEmptyParts);
+            QStringList parts = text.split(QRegularExpression("[ :]"), Qt::SkipEmptyParts);
             if (parts.size() > 1) {
 				int num = parts.last().toInt();
 				if (ftable == num) {
@@ -1938,7 +1938,7 @@ void QuteTable::setValue(double value) {
 };
 
 void QuteTable::setValue(QString s) {
-    auto parts = s.splitRef(' ', SKIP_EMPTY_PARTS);
+    auto parts = s.split(' ', SKIP_EMPTY_PARTS); // was splitRef
     if(parts.size() == 0) {
         qWarning() << "TablePLot: Message not understood, expected @set <tabnum> "
                     "or @update";
