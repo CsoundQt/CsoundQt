@@ -288,7 +288,7 @@ void Inspector::parsePythonText(const QString &text)
 	treeItem4 = 0;
 	treeItem5 = 0;
 	TreeItem *currentParent = 0;
-	QStringList lines = text.split(QRegExp("[\\n\\r]"));
+    QStringList lines = text.split(QRegularExpression("[\\n\\r]"));
 	for (int i = 0; i< lines.size(); i++) {
 		if (lines[i].trimmed().startsWith("class ")) {
 			QStringList columnslist(lines[i].simplified());
@@ -300,14 +300,14 @@ void Inspector::parsePythonText(const QString &text)
             newItem->setFont(1, itemFont);
 			newItem->setLine(i + 1);
 		}
-		else if (lines[i].contains(QRegExp("[\\s]+def "))) {
+        else if (lines[i].contains(QRegularExpression("[\\s]+def "))) {
 			QStringList columnslist(lines[i].simplified());
 			if (currentParent != 0) {
 				TreeItem *newItem = new TreeItem(currentParent, columnslist);
 				newItem->setLine(i + 1);
 			}
 		}
-		else if (lines[i].trimmed().contains(QRegExp("\\bimport\\b"))) {
+        else if (lines[i].trimmed().contains(QRegularExpression("\\bimport\\b"))) {
 			QStringList columnslist(lines[i].simplified());
 			TreeItem *newItem = new TreeItem(treeItem1, columnslist);
 			newItem->setLine(i + 1);

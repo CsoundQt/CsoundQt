@@ -1123,7 +1123,7 @@ void DocumentView::indentNewLine()
 		linecursor.movePosition(QTextCursor::PreviousBlock);
 		linecursor.select(QTextCursor::LineUnderCursor);
 		QString line = linecursor.selectedText();
-        QRegExp regex = QRegExp("\\s+");
+        QRegularExpression regex = QRegularExpression("\\s+");
 		if (line.indexOf(regex) == 0) {
 			m_mainEditor->insertPlainText(regex.cap());
 		}

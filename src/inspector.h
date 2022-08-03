@@ -75,7 +75,7 @@ private:
 	QMutex inspectorMutex;
     // QVector<QString> m_opcodes;
     QStringList m_opcodes;
-    QRegExp opcodeRegexp;
+    QRegularExpression opcodeRegexp;
     QRegularExpression rxOpcode;
     bool inspectLabels;
     QHash<QString, Opcode>udosMap;
