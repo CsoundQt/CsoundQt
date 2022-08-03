@@ -953,19 +953,21 @@ void DocumentView::autoCompleteAtCursor() {
                 if(text.size() < 42) {
                     text = text.leftJustified(42);
                 }
-                switch(outArgs[0].toLatin1()) {
-                case 'a':
-                    text += " :a"; break;
-                case 'k':
-                    text += " :k"; break;
-                case 'i':
-                    text += " :i"; break;
-                case 'x':
-                    text += " :x"; break;
-                case 'S':
-                    text += " :S"; break;
-                case 'f':
-                    text += " :pvs"; break;
+                if (!outArgs.isEmpty()) {
+                    switch(outArgs[0].toLatin1()) {
+                    case 'a':
+                        text += " :a"; break;
+                    case 'k':
+                        text += " :k"; break;
+                    case 'i':
+                        text += " :i"; break;
+                    case 'x':
+                        text += " :x"; break;
+                    case 'S':
+                        text += " :S"; break;
+                    case 'f':
+                        text += " :pvs"; break;
+                    }
                 }
 
                 QString syntaxText;
