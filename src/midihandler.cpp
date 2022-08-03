@@ -5,6 +5,8 @@
 #include "RtMidi.h"
 #endif
 
+#include <QRegExp> // Qt6 Replace it later!
+
 #ifdef QCS_RTMIDI
 static void midiInMessageCallback(double deltatime,
 								std::vector< unsigned char > *message,

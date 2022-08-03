@@ -44,6 +44,8 @@
 #include "risset.h"
 #include <thread>
 
+#include <QTextCodec> // necessary for deprecated QTextDecoder
+
 
 #ifdef Q_OS_WIN
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
@@ -287,9 +289,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
         for (int i=0; i<10; i++) {
             int key = (i==9) ? 0 : i+1;
 #ifdef Q_OS_MACOS
-            QShortcut *shortcut = new  QShortcut(QKeySequence(Qt::META + (Qt::Key_0 + key)), this);
+            QShortcut *shortcut = new  QShortcut(QKeySequence(Qt::META | (Qt::Key_0 + key)), this);
 #else
-            QShortcut *shortcut = new QShortcut(QKeySequence(Qt::ALT + (Qt::Key_0 + key)), this);
+            QShortcut *shortcut = new QShortcut(QKeySequence(Qt::ALT | (Qt::Key_0 + key)), this);
 #endif
             connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()));
             mapper->setMapping(shortcut, i); // tab 0 -> Alt+1, tab 1 -> Alt + 2 etc tab 9 -> Alt + 0
@@ -297,11 +299,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
         // Wire the signal mapper to the tab widget index change slot
         connect(mapper, SIGNAL(mapped(int)), documentTabs, SLOT(setCurrentIndex(int)));
 #ifdef Q_OS_MACOS
-        QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::META + Qt::Key_Left), this);
-        QShortcut *tabRight = new QShortcut(QKeySequence(Qt::META + Qt::Key_Right), this);
+        QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::META | Qt::Key_Left), this);
+        QShortcut *tabRight = new QShortcut(QKeySequence(Qt::META | Qt::Key_Right), this);
 #else
-        QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Left), this);
-        QShortcut *tabRight = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Right), this);
+        QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_Left), this);
+        QShortcut *tabRight = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_Right), this);
 #endif
         connect(tabLeft, SIGNAL(activated()), this, SLOT(pageLeft()));
         connect(tabRight, SIGNAL(activated()), this, SLOT(pageRight()));
@@ -1038,7 +1040,7 @@ void CsoundQt::evaluateString(QString evalCode)
     TREE *testTree = NULL;
     if  (scratchPadCsdModeAct->isChecked()) {
         // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
-        if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
+        if (QRegularExpression("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").match(evalCode).hasMatch()) {
             sendEvent(evalCode);
             return;
         }
@@ -2393,11 +2395,11 @@ void CsoundQt::openExternalEditor()
     name += currentAudioFile;
     QString optionsText = documentPages[curPage]->getOptionsText();
     if (currentAudioFile == "") {
-        if (!optionsText.contains(QRegExp("\\W-o"))) {
+        if (!optionsText.contains(QRegularExpression("\\W-o"))) {
             name += "test.wav";
         }
         else {
-            optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\W-o")) + 3);
+            optionsText = optionsText.mid(optionsText.indexOf(QRegularExpression("\\W-o")) + 3);
             optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
             optionsText = optionsText.left(optionsText.indexOf("-")).trimmed();
             if (!optionsText.startsWith("dac"))
@@ -2428,13 +2430,13 @@ void CsoundQt::openExternalPlayer()
     name += currentAudioFile;
     QString optionsText = documentPages[curPage]->getOptionsText();
     if (currentAudioFile == "") {
-        if (!optionsText.contains(QRegExp("\\W-o"))) {
+        if (!optionsText.contains(QRegularExpression("\\W-o"))) {
             name += "test.wav";
         }
         else {
-            optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\W-o")) + 3);
+            optionsText = optionsText.mid(optionsText.indexOf(QRegularExpression("\\W-o")) + 3);
             optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
-            optionsText = optionsText.left(optionsText.indexOf(QRegExp("-"))).trimmed();
+            optionsText = optionsText.left(optionsText.indexOf(QRegularExpression("-"))).trimmed();
             if (!optionsText.startsWith("dac"))
                 name += optionsText;
         }
@@ -3391,11 +3393,11 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     configureAct->setShortcut(tr("Ctrl+,"));
     editAct->setShortcut(tr("CTRL+E"));
     runAct->setShortcut(tr("CTRL+R"));
-    runTermAct->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
+    runTermAct->setShortcut(QKeySequence(Qt::CTRL|Qt::SHIFT|Qt::Key_T));
     pauseAct->setShortcut(tr("Ctrl+Shift+M"));
 
     stopAct->setShortcut(tr("Ctrl+."));
-    stopAllAct->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_Period));
+    stopAllAct->setShortcut(QKeySequence(Qt::CTRL|Qt::SHIFT|Qt::Key_Period));
 
     recAct->setShortcut(tr("Ctrl+Space"));
     renderAct->setShortcut(tr("Alt+F"));
@@ -5846,7 +5848,7 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
 
     if (!fileName.startsWith(":/")) {  // Don't store internal examples in recents menu
         lastUsedDir = fileName;
-        lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")) + 1);
+        lastUsedDir.resize(fileName.lastIndexOf(QRegularExpression("[/]")) + 1);
     }
     if (recentFiles.count(fileName) == 0 && fileName!="" && !fileName.startsWith(":/")) {
         recentFiles.prepend(fileName);
