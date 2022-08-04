@@ -59,11 +59,10 @@ int main(int argc, char *argv[])
     // Set a global template for ALL qDebug messages.
 	qSetMessagePattern("[%{if-debug}D%{endif}%{if-info}I%{endif}%{if-warning}W%{endif}%{if-critical}C%{endif}%{if-fatal}F%{endif}][%{file}:%{line} %{function}] %{message}");
 
+    // in Qt6 not needed, High-DPI always enabled
+    //QApplication::setAttribute(Qt::AA_EnableHighDpiScaling); // TO test if this solved hight DPI problems
+    //QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-#ifdef USE_QT_GT_55
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling); // TO test if this solved hight DPI problems
-    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-#endif
     QStringList fileNames;
     QApplication qapp(argc, argv);
 

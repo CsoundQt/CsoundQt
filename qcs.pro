@@ -43,8 +43,9 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 #temporary compatibility layer for Qt5->Qt6 (needed for QRegExp, QStringRef, QTextDecoder -  replace them later!)
 QT += core5compat
 
-#Support for Qt4 dropped from v0.9.8 de facto, v1.0.0 declaring it here:
-lessThan(QT_MAJOR_VERSION,5): error("Qt5 or higher required. Use CsoundQt 0.9.7 or earlier to build for Qt4.")
+#Support for Qt4 and Qt5 dropped
+
+lessThan(QT_MAJOR_VERSION,6): error("Qt6 is required for this build.")
 
 csound5: error("Building for Csound5 nont supported.")
 
@@ -68,30 +69,30 @@ debugger {
 message("Building for Csound 6.")
 
 
-QT += concurrent network widgets printsupport
-DEFINES += USE_QT5
-CONFIG += QCS_QT5
+QT += concurrent network widgets printsupport quickwidgets
+#DEFINES += USE_QT5
+#CONFIG += QCS_QT5
 
-greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 2) {
-    QT += quickwidgets
-    DEFINES += USE_QT_GT_53
-    CONFIG += QCS_QT53
-}
+#greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 2) {
+#    QT += quickwidgets
+#    DEFINES += USE_QT_GT_53
+#    CONFIG += QCS_QT53
+#}
 
-greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 3) {
-    DEFINES += USE_QT_GT_54
-    CONFIG += QCS_QT54
-}
+#greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 3) {
+#    DEFINES += USE_QT_GT_54
+#    CONFIG += QCS_QT54
+#}
 
-greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 5) {
-	DEFINES += USE_QT_GT_55
-	CONFIG += QCS_QT55
-}
+#greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 5) {
+#	DEFINES += USE_QT_GT_55
+#	CONFIG += QCS_QT55
+#}
 
-greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 7) {
-        DEFINES += USE_QT_GT_58
-        CONFIG += QCS_QT58
-}
+#greaterThan(QT_MAJOR_VERSION, 4): greaterThan (QT_MINOR_VERSION, 7) {
+#        DEFINES += USE_QT_GT_58
+#        CONFIG += QCS_QT58
+#}
 
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")
 
@@ -145,14 +146,8 @@ pythonqt {
     win32:INCLUDEPATH *= $${PYTHON_INCLUDE_DIR}
     INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/src
     INCLUDEPATH *= $${PYTHONQT_SRC_DIR}/extensions/PythonQt_QtAll
-    QT += svg sql webkit xmlpatterns opengl
-    QCS_QT53 {
-		QT += webkitwidgets multimedia multimediawidgets #positioning sensors
-    }
-	QCS_QT55 {
-		QT -= webkit webkitwidgets
-		#QT += webengine # maybe we need to add that for some functionality
-	}
+    QT += svg sql xmlpatterns opengl multimedia multimediawidgets # This must be tested qith Qt6
+
 }
 
 

@@ -722,14 +722,14 @@ void CsoundQt::closeEvent(QCloseEvent *event)
     // this->showNormal();  // Don't store full screen size in preferences
     qApp->processEvents();
     storeSettings();
-#ifdef USE_QT_GT_53
+
     if (!m_virtualKeyboardPointer.isNull() && m_virtualKeyboard->isVisible()) {
         showVirtualKeyboard(false);
     }
     if (!m_tableEditorPointer.isNull() && m_tableEditor->isVisible()) {
         showTableEditor(false);
     }
-#endif
+
     // These two give faster shutdown times as the panels don't have to be
     // called up as the tabs close
     showWidgetsAct->setChecked(false);
@@ -2706,7 +2706,7 @@ void CsoundQt::showDebugger(bool show)
 
 void CsoundQt::showVirtualKeyboard(bool show)
 {
-#ifdef USE_QT_GT_53
+
     if (show) {
         // create here to be able to be able to delete in on close and catch destroyed()
         // to uncheck action button
@@ -2728,14 +2728,12 @@ void CsoundQt::showVirtualKeyboard(bool show)
         m_virtualKeyboard->setVisible(false);
         m_virtualKeyboard->close();
     }
-#else
-    QMessageBox::warning(this, tr("Qt5 Required"), tr("Qt version > 5.2 is required for the virtual keyboard."));
-#endif
+
 }
 
 void CsoundQt::showTableEditor(bool show)
 {
-#ifdef USE_QT_GT_53
+
     if (show) {
         m_tableEditor = new QQuickWidget(this); // create here to be able to
         m_tableEditor->setAttribute(Qt::WA_DeleteOnClose); // ... be able to delete in on close and catch destroyed() to uncheck action button
@@ -2764,16 +2762,14 @@ void CsoundQt::showTableEditor(bool show)
         m_tableEditor->setVisible(false);
         m_tableEditor->close();
     }
-#else
-    QMessageBox::warning(this, tr("Qt5 Required"), tr("Qt version > 5.2 is required for the virtual keyboard."));
-#endif
+
 
 }
 
 void CsoundQt::virtualKeyboardActOff(QObject *parent)
 {
     (void) parent;
-#ifdef USE_QT_GT_53
+
     //qDebug()<<"VirtualKeyboard destroyed";
     if (!m_virtualKeyboardPointer.isNull()) {
         // check if object still existing (i.e application not exiting)
@@ -2781,20 +2777,20 @@ void CsoundQt::virtualKeyboardActOff(QObject *parent)
             showVirtualKeyboardAct->setChecked(false);
         }
     }
-#endif
+
 }
 
 void CsoundQt::tableEditorActOff(QObject *parent)
 {
     (void) parent;
-#ifdef USE_QT_GT_53
+
     //qDebug()<<"VirtualKeyboard destroyed";
     if (!m_tableEditorPointer.isNull()) { // check if object still existing (i.e application not exiting)
         if (showTableEditorAct->isChecked()) {
             showTableEditorAct->setChecked(false);
         }
     }
-#endif
+
 }
 
 

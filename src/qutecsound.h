@@ -24,10 +24,9 @@
 #define QUTECSOUND_H
 
 #include <QtWidgets>
-#ifdef USE_QT_GT_53
 #include <QQuickWidget>
 #include <QQuickItem>
-#endif
+
 
 #include <QLocalServer>
 #include <QLocalSocket>
@@ -365,10 +364,10 @@ private:
 	DockHelp *helpPanel;
 	WidgetPanel *widgetPanel;  // Dock widget, for containing the widget layout
 	QDockWidget *m_scratchPad;
-#ifdef USE_QT_GT_53
+
 	QQuickWidget *m_virtualKeyboard, *m_tableEditor;
 	QPointer <QQuickWidget> m_virtualKeyboardPointer, m_tableEditorPointer; // to control, if the object is deleted
-#endif
+
 #if defined(QCS_QTHTML)
 public: CsoundHtmlView *csoundHtmlView;
 #endif

@@ -411,12 +411,9 @@ void CsoundHtmlWrapper::csoundMessageCallback(int attributes,
                            va_list args)
 {
     (void) attributes;
-#ifdef  USE_QT_GT_54
+
     QString message = QString::vasprintf(format, args);
-#else
-    QString message;
-    message.sprintf(format, args); // NB! Should pass but not tested!
-#endif
+
     qDebug() << message;
 //    if (!console->isHidden()) { // otherwise crash on exit
 //        passMessages(message);
