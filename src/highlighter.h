@@ -32,7 +32,6 @@
 
 #include <QTextDocument>
 
-#include <QRegExp>
 #include <QRegularExpression>
 
 enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection };

@@ -164,7 +164,7 @@ QStringList AppWizard::processDataFiles()
 					QString dataName = line.mid(startIndex + 1, endIndex-startIndex - 1);
 					QString newDataName = dataName;
 #ifdef Q_OS_WIN32
-					if (newDataName.indexOf(QRegExp("\\w\\:")) == 0) { // Absolute path
+                    if (newDataName.indexOf(QRegularExpression("\\w\\:")) == 0) { // Absolute path
 #else
 					if (newDataName.startsWith("/")) { // Absolute path
 #endif

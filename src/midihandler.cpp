@@ -5,8 +5,6 @@
 #include "RtMidi.h"
 #endif
 
-#include <QRegExp> // Qt6 Replace it later!
-
 #ifdef QCS_RTMIDI
 static void midiInMessageCallback(double deltatime,
 								std::vector< unsigned char > *message,
@@ -101,7 +99,8 @@ int MidiHandler::findMidiInPortByName(QString name) {
 	int port = 9999; // stands for None
 #ifdef QCS_RTMIDI
 	// to check agains alsa names wihtout port
-	int index = QRegExp("(\\s\\d+):(\\d+)$").indexIn(name);
+    QRegularExpression re("(\\s\\d+):(\\d+)$");
+    int index = name.indexOf(re);
 	if (index>0) {
 		qDebug()<<name << " seems to be Alsa device. Excluding port part.";
 		name=name.left(index); // remove also space
@@ -124,7 +123,8 @@ int MidiHandler::findMidiInPortByName(QString name) {
 int MidiHandler::findMidiOutPortByName(QString name) {
 	int port = 9999; // stands for None
 #ifdef QCS_RTMIDI
-	int index = QRegExp("(\\s\\d+):(\\d+)$").indexIn(name);
+    QRegularExpression re("(\\s\\d+):(\\d+)$");
+    int index = name.indexOf(re);
 	if (index>0) {
 		qDebug()<<name << " seems to be Alsa device. Excluding port part.";
 		name=name.left(index);
