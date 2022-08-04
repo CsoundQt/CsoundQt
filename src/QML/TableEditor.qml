@@ -1,4 +1,4 @@
-//qmlTableEditor - helps to graphically create and change Csound Gen7 (straigt lines) type of tables
+﻿//qmlTableEditor - helps to graphically create and change Csound Gen7 (straigt lines) type of tables
 // (c) Tarmo Johannes 2015 tarmo@otsakool.edu.ee
 //Licence: GPL 2
 
@@ -528,14 +528,16 @@ Rectangle {
 
     SpinBox {
         id: tableSizeSpinbox
-        y: 362
+        //y: 362
         value: 1024
         from: 1
         to: 99999
-        anchors.left: drawRect.right
-        anchors.leftMargin: 6
-        anchors.bottom: drawRect.bottom
-        anchors.bottomMargin: 0
+//        anchors.left: drawRect.right
+//        anchors.leftMargin: 6
+        anchors.right: mainArea.right
+        anchors.rightMargin: 10
+        anchors.top: drawRect.bottom
+        anchors.topMargin: 2
         editable: true
         onValueChanged: {canvas.requestPaint(); graph2syntax() }// to display new max number
 
@@ -544,15 +546,14 @@ Rectangle {
 
     Label {
         id: tableSizeLabel
-        x: 583
-        y: 334
+//        x: 583
+//        y: 334
         height: 22
         text: qsTr("Table size")
-        anchors.horizontalCenterOffset: 0
-        anchors.bottom: tableSizeSpinbox.top
-        anchors.bottomMargin: 6
-        horizontalAlignment: Text.AlignHCenter
-        anchors.horizontalCenter: tableSizeSpinbox.horizontalCenter
+        anchors.right: tableSizeSpinbox.left
+        anchors.rightMargin: 2
+        //horizontalAlignment: Text.AlignHCenter
+        anchors.verticalCenter: tableSizeSpinbox.verticalCenter
     }
 
     ButtonGroup { id: syntaxTypeGroup; }
@@ -609,11 +610,22 @@ Rectangle {
         onClicked:helpDialog.visible = true;
     }
 
-    MessageDialog {
+    Dialog {
         id: helpDialog
         title: qsTr("Help")
         visible: false
-        text: qsTr("Double-click to add a new point.\nDrag to move, right-click to remove\nYou can edit the table definition in textarea. \nThe changes in definition are displayed when you press ENTER or click on button Update Graph\n");
+
+
+        contentItem: TextArea {
+            //            implicitWidth: 400
+            //            implicitHeight: 300
+            anchors.fill: parent
+
+            text: qsTr("Double-click to add a new point.\nDrag to move, right-click to remove\nYou can edit the table definition in textarea. \nThe changes in definition are displayed when you press ENTER or click on button Update Graph\n");
+
+
+        }
+        standardButtons: Dialog.Ok
         onAccepted: visible=false;
     }
 
