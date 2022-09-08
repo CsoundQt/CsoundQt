@@ -1,0 +1,23 @@
+app-id: org.csoundqt.CsoundQt
+runtime: org.kde.Platform
+runtime-version: '5.15-21.08'
+sdk: org.kde.Sdk
+command: bin/CsoundQt-d-cs6
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --filesystem=host
+  - --device=dri
+modules:
+  - name: CsoundQt
+    buildsystem: simple
+    build-commands: 
+      - qmake CONFIG+=rtmidi qcs.pro
+      - make -j$(nproc)
+      - make
+      
+    sources:
+      - type: git
+        url: https://github.com/CsoundQt/CsoundQt
+        branch: develop

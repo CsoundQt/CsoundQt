@@ -37,3 +37,5 @@ make_appdir/AppDir/
 make_appdir/csoundqt.desktop
 
 compile_commands.json
+flatpak-build
+.flatpak*
