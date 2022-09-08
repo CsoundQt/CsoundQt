@@ -21,7 +21,7 @@
 
 
   sr        =           48000
-  ksmps     =           10
+  ksmps     =           16
   nchnls    =           2
 
   gaudio    init        0
@@ -721,6 +721,9 @@ e
 
 
 
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -757,7 +760,7 @@ The basis for this code was the original MUS10 orchestra file with modifications
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>DejaVu Sans</font>
-  <fontsize>14</fontsize>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>

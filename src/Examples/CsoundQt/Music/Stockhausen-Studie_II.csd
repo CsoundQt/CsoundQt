@@ -1687,6 +1687,8 @@ e
 </CsScore>
 </CsoundSynthesizer>
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -1716,7 +1718,7 @@ e
   <alignment>center</alignment>
   <valignment>top</valignment>
   <font>Noto Sans</font>
-  <fontsize>18</fontsize>
+  <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
    <r>27</r>
@@ -1747,7 +1749,7 @@ e
   <alignment>center</alignment>
   <valignment>top</valignment>
   <font>Noto Sans</font>
-  <fontsize>18</fontsize>
+  <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
    <r>27</r>
@@ -1776,7 +1778,7 @@ e
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.32000000</value>
+  <value>0.39000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -1829,7 +1831,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.55264932</xValue>
+  <xValue>0.68365745</xValue>
   <yValue>0.36363600</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1903,7 +1905,7 @@ e
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.55781685</xValue>
+  <xValue>0.73474905</xValue>
   <yValue>0.52631600</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1974,7 +1976,7 @@ e
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.80625000</value>
+  <value>0.88750000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2086,7 +2088,7 @@ e
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.88125000</value>
+  <value>0.91875000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -2420,7 +2422,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.320</label>
+  <label>0.390</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
   <font>Lucida Grande</font>
@@ -2456,8 +2458,8 @@ generated in Csound by Joachim Heintz
 Version 1, November 2009</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>18</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -2469,7 +2471,7 @@ Version 1, November 2009</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -2503,8 +2505,8 @@ Version 1, November 2009</label>
   <label>Print all Events in Output Console</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>14</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -2516,7 +2518,7 @@ Version 1, November 2009</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -2564,8 +2566,8 @@ Version 1, November 2009</label>
   <label>dB-Range</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
-  <fontsize>14</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -2577,7 +2579,7 @@ Version 1, November 2009</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
@@ -2595,8 +2597,8 @@ Version 1, November 2009</label>
   <label>Show as</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Helvetica</font>
-  <fontsize>14</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -2608,7 +2610,7 @@ Version 1, November 2009</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>

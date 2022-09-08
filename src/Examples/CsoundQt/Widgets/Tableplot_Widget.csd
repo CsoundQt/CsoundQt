@@ -69,6 +69,8 @@ schedule 1, 0.1, 3600, gi1, gi2
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -83,7 +85,7 @@ schedule 1, 0.1, 3600, gi1, gi2
   <g>240</g>
   <b>240</b>
  </bgcolor>
- <bsbObject version="2" type="BSBTableDisplay">
+ <bsbObject type="BSBTableDisplay" version="2">
   <objectName>plot2</objectName>
   <x>370</x>
   <y>74</y>
@@ -101,7 +103,7 @@ schedule 1, 0.1, 3600, gi1, gi2
   </color>
   <range>0.00</range>
  </bsbObject>
- <bsbObject version="2" type="BSBTableDisplay">
+ <bsbObject type="BSBTableDisplay" version="2">
   <objectName>plot1</objectName>
   <x>8</x>
   <y>74</y>
@@ -119,7 +121,7 @@ schedule 1, 0.1, 3600, gi1, gi2
   </color>
   <range>0.00</range>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>11</y>
@@ -150,10 +152,10 @@ schedule 1, 0.1, 3600, gi1, gi2
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>11</x>
-  <y>354</y>
+  <x>10</x>
+  <y>360</y>
   <width>460</width>
   <height>127</height>
   <uuid>{ce9539a1-5f6f-4a93-8e67-2e45899088cb}</uuid>
@@ -168,7 +170,7 @@ The widget also accepts string values. The table can be set with 'outvalue "@set
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>52</r>
@@ -184,7 +186,7 @@ The widget also accepts string values. The table can be set with 'outvalue "@set
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>320</y>
@@ -198,8 +200,8 @@ The widget also accepts string values. The table can be set with 'outvalue "@set
   <label>Description</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
-  <fontsize>24</fontsize>
+  <font>Liberation Sans</font>
+  <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
    <r>67</r>

@@ -11,7 +11,8 @@ nchnls = 2
 instr 1
 	kfreq invalue "freq"
 	kamp invalue "amp"
-	asig oscil kamp, kfreq, 1
+	asig oscil 1, kfreq, -1
+	asig *= interp(lag(kamp, 0.1))
 	outs asig, asig
 endin
 
@@ -20,6 +21,10 @@ endin
 i 1 0 1000
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
 
 
 
@@ -40,8 +45,8 @@ i 1 0 1000
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>90</x>
-  <y>5</y>
+  <x>153</x>
+  <y>7</y>
   <width>202</width>
   <height>41</height>
   <uuid>{c5f4063e-4a46-4f9d-96db-839bea9a983f}</uuid>
@@ -71,8 +76,8 @@ i 1 0 1000
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>5</x>
-  <y>45</y>
+  <x>63</x>
+  <y>54</y>
   <width>373</width>
   <height>78</height>
   <uuid>{7650f5b0-e83a-46a4-ba7f-45a47f71997e}</uuid>
@@ -84,7 +89,7 @@ i 1 0 1000
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
-  <fontsize>14</fontsize>
+  <fontsize>13</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -102,18 +107,18 @@ i 1 0 1000
  </bsbObject>
  <bsbObject type="BSBVSlider" version="2">
   <objectName>amp</objectName>
-  <x>40</x>
-  <y>155</y>
+  <x>85</x>
+  <y>215</y>
   <width>20</width>
-  <height>100</height>
+  <height>150</height>
   <uuid>{a99d91b7-f92c-4044-a927-70a2943b968e}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
-  <value>0.21000000</value>
+  <value>0.19333333</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -121,18 +126,18 @@ i 1 0 1000
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>freq</objectName>
-  <x>65</x>
-  <y>155</y>
-  <width>313</width>
+  <x>110</x>
+  <y>185</y>
+  <width>300</width>
   <height>23</height>
   <uuid>{dfc109a0-ff5a-40e4-9a56-bb67e10acb6a}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <minimum>100.00000000</minimum>
   <maximum>1000.00000000</maximum>
-  <value>703.83386581</value>
+  <value>421.00000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -140,8 +145,8 @@ i 1 0 1000
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>140</x>
-  <y>175</y>
+  <x>161</x>
+  <y>141</y>
   <width>198</width>
   <height>41</height>
   <uuid>{6b918bc4-f76f-460e-8f7b-5054495f2143}</uuid>
@@ -150,9 +155,9 @@ i 1 0 1000
   <midicc>-3</midicc>
   <description/>
   <label>Frequency (from 100 to 1000 transmitting on channel 'freq'</label>
-  <alignment>left</alignment>
+  <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -165,14 +170,14 @@ i 1 0 1000
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>10</x>
-  <y>260</y>
+  <x>0</x>
+  <y>253</y>
   <width>86</width>
   <height>86</height>
   <uuid>{baae2608-4500-4d99-99f3-941f5e2b5a84}</uuid>
@@ -180,10 +185,10 @@ i 1 0 1000
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Amplitude (transmitting from 0 to 0.5 on channel 'amp'</label>
+  <label>Amplitude (sending from 0 to 0.5 on channel 'amp'</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
@@ -196,22 +201,22 @@ i 1 0 1000
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBScope" version="2">
   <objectName/>
-  <x>100</x>
+  <x>110</x>
   <y>215</y>
-  <width>281</width>
-  <height>130</height>
+  <width>300</width>
+  <height>150</height>
   <uuid>{9d18e25d-d310-4e60-9109-541fdad0d7df}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>-1.00000000</value>
+  <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
