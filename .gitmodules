@@ -1,3 +1,7 @@
 [submodule "rtmidi"]
 	path = rtmidi
 	url = https://github.com/thestk/rtmidi
+[submodule "csound"]
+	path = csound
+	url = https://github.com/csound/csound
+	branch = csound6
