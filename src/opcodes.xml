@@ -105,8 +105,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
       [, iseed] [, imode]</synopsis></opcode>
 <opcode><desc>Generate granular synthesis textures with more user control.</desc><synopsis>ares <opcodename>grain3</opcodename> kcps, kphs, kfmd, kpmd, kgdur, kdens, imaxovr, kfn, iwfn, \
       kfrpow, kprpow [, iseed] [, imode]</synopsis></opcode>
-<opcode><desc>A more complex granular synthesis texture generator.</desc><synopsis>ares <opcodename>granule</opcodename> xamp, ivoice, iratio, imode, ithd, ifn, ipshift, igskip, \
-      igskip_os, ilength, kgap, igap_os, kgsize, igsize_os, iatt, idec \
+<opcode><desc>A more complex granular synthesis texture generator.</desc><synopsis>ares <opcodename>granule</opcodename> xamp, ivoice, iratio, imode, ithd, ifn, ipshift, igskip, igskip_os, ilength, kgap, igap_os, kgsize, igsize_os, iatt, idec \
       [, iseed] [, ipitch1] [, ipitch2] [, ipitch3] [, ipitch4] [, ifnenv]</synopsis></opcode>
 <opcode><desc>Granular synthesizer with &quot;per grain&quot; control
       over many of its parameters.  Has a sync input to
@@ -821,7 +820,7 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <opcode><desc>A DC blocking filter.</desc><synopsis>ares <opcodename>dcblock2</opcodename> ain [, iorder] [, iskip]</synopsis></opcode>
 <opcode><desc>Equalizer filter</desc><synopsis>asig <opcodename>eqfil</opcodename> ain, kcf, kbw, kgain[, istor]</synopsis></opcode>
 <opcode><desc>A non-linear filter system to excite the signal.</desc><synopsis>ares <opcodename>exciter</opcodename> asig, kfreq, kceil, kharmonics, kblend</synopsis></opcode>
-<opcode><desc>Performs filtering using a transposed form-II digital filter lattice with no time-varying control.</desc><synopsis>ares <opcodename>filter2</opcodename> asig, iM, iN, ib0, ib1, ..., ibM, ia1, ia2, ..., iaN</synopsis><synopsis>kres <opcodename>filter2</opcodename> ksig, iM, iN, ib0, ib1, ..., ibM, ia1, ia2, ..., iaN</synopsis></opcode>
+<opcode><desc>Performs filtering using a transposed form-II digital filter lattice with no time-varying control.</desc><synopsis>ares <opcodename>filter2</opcodename> asig, ibcoefs, iacoefs, ib0, ib1, ..., ibM, ia1, ia2, ..., iaN</synopsis><synopsis>kres <opcodename>filter2</opcodename> ksig, ibcoefs, iacoefs, ib0, ib1, ..., ibM, ia1, ia2, ..., iaN</synopsis></opcode>
 <opcode><desc>AM/FM analysis from quadrature signal.</desc><synopsis>am, af <opcodename>fmanal</opcodename> are, aim</synopsis></opcode>
 <opcode><desc>Formant filter.</desc><synopsis>asig <opcodename>fofilter</opcodename> ain, xcf, xris, xdec[, istor]</synopsis></opcode>
 <opcode><desc>Apply a gammatone filter to an audio signal.</desc><synopsis>aout <opcodename>gtf</opcodename> ain, kfreq, idecay[, iorder, iphase]</synopsis></opcode>
@@ -1034,6 +1033,10 @@ This file is distributed under the GNU Free Documentation Licence--><opcodes>
 <category name="Instrument Control:Time Reading">
 <opcode><desc>Returns the number seconds since a base date.</desc><synopsis>ir[, inano] <opcodename>date</opcodename></synopsis><synopsis>kr[, knano] <opcodename>date</opcodename></synopsis></opcode>
 <opcode><desc>Returns as a string the date and time specified.</desc><synopsis>Sir <opcodename>dates</opcodename> [ itime]</synopsis></opcode>
+<opcode><desc>Read absolute time in k-rate cycles.</desc><synopsis>ires <opcodename>elapsedcycles</opcodename></synopsis><synopsis>kres <opcodename>elapsedcycles</opcodename></synopsis></opcode>
+<opcode><desc>Read absolute time in seconds.</desc><synopsis>ires <opcodename>elapsedtime</opcodename></synopsis><synopsis>kres <opcodename>elapsedtime</opcodename></synopsis></opcode>
+<opcode><desc>Read absolute time in k-rate cycles.</desc><synopsis>kres <opcodename>eventcycles</opcodename></synopsis></opcode>
+<opcode><desc>Read absolute time in seconds.</desc><synopsis>kres <opcodename>eventtime</opcodename></synopsis></opcode>
 <opcode><desc>Reads the value of an internal clock.</desc><synopsis>ir <opcodename>readclock</opcodename> inum</synopsis></opcode>
 <opcode><desc>Read the real time clock from the operating system.</desc><synopsis>ires <opcodename>rtclock</opcodename></synopsis><synopsis>kres <opcodename>rtclock</opcodename></synopsis></opcode>
 <opcode><desc>Read absolute time in k-rate cycles.</desc><synopsis>kres <opcodename>timeinstk</opcodename></synopsis></opcode>
@@ -1968,7 +1971,7 @@ inum_parm, kupdate</synopsis></opcode>
       determined by the specified filename stem.</desc><synopsis><opcodename>cs</opcodename> [-OPTIONS] &lt;name&gt; [CSOUND OPTIONS ... ]</synopsis></opcode>
 <opcode><desc>Converts a binary file to a Base64 encoded text file.</desc><synopsis><opcodename>csb64enc</opcodename> [OPTIONS ... ] infile1 [ infile2 [ ... ]]</synopsis></opcode>
 <opcode><desc>Converts a soundfile into a single Fourier transform frame.</desc><synopsis><opcodename>csound -U cvanal</opcodename> [flags] infilename outfilename</synopsis><synopsis><opcodename>cvanal</opcodename> [flags] infilename outfilename</synopsis></opcode>
-<opcode><desc>Reduces noise in a file.</desc><synopsis><opcodename>dnoise</opcodename> [flags] -i noise_ref_file  -o output_soundfile  input_soundfile</synopsis></opcode>
+<opcode><desc>Reduces noise in a file.</desc><synopsis><opcodename>dnoise</opcodename> [flags] -i noise_ref_file  -o output_soundfile  soundfile_format  input_soundfile</synopsis></opcode>
 <opcode><desc>Extracts the envelope of a file to a text file.</desc><synopsis><opcodename>envext</opcodename> [-flags] soundfile</synopsis><synopsis>csound -U <opcodename>envext</opcodename> [-flags] soundfile</synopsis></opcode>
 <opcode><desc>Extract a section of audio from an audio file.</desc><synopsis><opcodename>extractor</opcodename> [OPTIONS ... ] infile</synopsis></opcode>
 <opcode><desc>Converts a .het file to a comma separated text file.</desc><synopsis><opcodename>het_export</opcodename> het_file cstext_file</synopsis><synopsis>csound -U <opcodename>het_export</opcodename> het_file cstext_file</synopsis></opcode>
