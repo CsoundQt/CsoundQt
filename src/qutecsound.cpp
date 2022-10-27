@@ -2868,8 +2868,10 @@ void CsoundQt::openManualExample(QString fileName)
 
 void CsoundQt::openExternalBrowser(QUrl url)
 {
+    QString test = url.toString();
     if (!m_options->browser.isEmpty() && QFile::exists(m_options->browser)) {
-        execute(m_options->browser, "\"" + url.toString() + "\"");
+        //execute(m_options->browser, "\"" + url.toString() + "\"");
+        execute(m_options->browser, url.toString()); // remove quotes, otherwise wrong with changed QProcess
     }
     else {
 //        QMessageBox::critical(this, tr("Error"),
