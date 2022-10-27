@@ -1952,8 +1952,9 @@ void CsoundQt::play(bool realtime, int index)
             return;
         }
     }
-    else if (page->isModified()) {
-        if (m_options->saveChanges && !save()) {
+    //else if (page->isModified()) {
+    else if (m_options->saveChanges ) { // is modified returns sometimes wrongly false. save anyway when asked TODO: degub DocumentPage::isModified()
+        if (!save()) {
             if (curPage == oldPage) {
                 runAct->setChecked(false);
             }
