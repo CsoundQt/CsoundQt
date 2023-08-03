@@ -5,8 +5,12 @@
 	message(Building CsoundQt for Macintosh OS X.)
 }
 
-CONFIG += x86_64
-QMAKE_CXXFLAGS += -arch x86_64
+#CONFIG += x86_64
+#QMAKE_CXXFLAGS += -arch x86_64
+
+#Test:
+QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
+
 
 build32: MAC_LIB = CsoundLib
 build64: MAC_LIB = CsoundLib64
@@ -15,7 +19,7 @@ build64: MAC_LIB = CsoundLib64
 HOME_DIRECTORY =
 
 # Set default paths
-CSOUND_FRAMEWORK_DIR = Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
+CSOUND_FRAMEWORK_DIR = /Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
 DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${CSOUND_FRAMEWORK_DIR}/Headers \
         $${CSOUND_FRAMEWORK_DIR}/Headers \
         /usr/local/include/csound \
