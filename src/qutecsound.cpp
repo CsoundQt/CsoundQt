@@ -1922,6 +1922,8 @@ void CsoundQt::play(bool realtime, int index)
     curPage = index;
     auto page = documentPages[curPage];
 
+    QFileInfo fileInfo(QFileInfo(page->getFileName()).path());
+
     if (page->getFileName().isEmpty()) {
         int answer;
         if(!m_options->askIfTemporary)
@@ -1953,7 +1955,7 @@ void CsoundQt::play(bool realtime, int index)
         }
     }
     //else if (page->isModified()) {
-    else if (m_options->saveChanges && !page->getFileName().startsWith(":/")) { // is modified returns sometimes wrongly false. save anyway when asked TODO: degub DocumentPage::isModified()
+    else if (m_options->saveChanges && fileInfo.isWritable() && !page->getFileName().startsWith(":/")) { // is modified returns sometimes wrongly false. save anyway when asked TODO: degub DocumentPage::isModified()
         if (!save()) {
             if (curPage == oldPage) {
                 runAct->setChecked(false);
@@ -2010,7 +2012,7 @@ void CsoundQt::play(bool realtime, int index)
     QString runFileName1, runFileName2;
     QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
     runFileName1 = fileName;
-    if(fileName.startsWith(":/", Qt::CaseInsensitive) || !m_options->saveChanges) {
+    if(fileName.startsWith(":/", Qt::CaseInsensitive) || !m_options->saveChanges || !fileInfo.isWritable() ) {
         QDEBUG << "***** Using temporary file for filename" << fileName;
         QString tmpFileName = QDir::tempPath();
         if (!tmpFileName.endsWith("/") && !tmpFileName.endsWith("\\")) {
@@ -2027,7 +2029,7 @@ void CsoundQt::play(bool realtime, int index)
             }
             // If example, just copy, since readonly anyway, otherwise get contents from editor.
             // Necessary since examples may contain <CsFileB> section with data.
-            if (!fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
+            if (!fileName.startsWith(":/examples/", Qt::CaseInsensitive) ) {
                 csdFile.write(page->getBasicText().toLatin1());
             } else {
                 auto fullText = page->getView()->getFullText();
