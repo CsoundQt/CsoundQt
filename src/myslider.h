@@ -18,36 +18,55 @@ class MySlider:public QSlider
 public:
     explicit MySlider(Qt::Orientation orientation, QWidget *parent = nullptr):QSlider(orientation, parent){};
     explicit MySlider(QWidget *parent = nullptr):QSlider(parent){
-        this->setStyleSheet("\
-                            QSlider::groove:horizontal {\
-                                height: 8px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */ \
-                                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);\
-                                margin: 2px 0;\
-                            }\
-                            QSlider::handle:horizontal {\
-                                background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #8f8f8f);\
-                                border: 1px solid #5c5c5c;\
-                                width: 16px;\
-                                height: 16px; \
-                                margin: -2px 0; /* handle is placed by default on the contents rect of the groove. Expand outside the groove */ \
-                                border-radius: 8px;\
-                            }\
-                            QSlider::groove:vertical { \
-                                background:  qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4); \
-                                position: absolute; /* absolutely position 4px from the left and right of the widget. setting margins on the widget should work too... */ \
-                                left: 4px; right: 4px; \
-                                width: 8px; \
-                                margin: 2px 0;\
-                            } \
-                            QSlider::handle:vertical { \
-                                width: 16px; \
-                                height: 16px; \
-                                background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #8f8f8f); \
-                                margin: 0 -4px; /* expand outside the groove */ \
-                                border: 1px solid #5c5c5c;\
-                                border-radius: 8px;\
-                            } \
-                        ");
+        this->setStyleSheet(R"(
+
+                            QSlider::groove:horizontal {
+                                height: 4px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
+                                background: #dcdcdc;
+                                border: 1px solid #a8a8a8;
+                                border-radius: 2px;
+                            }
+
+                            QSlider::sub-page:horizontal {
+                            background: #aedaf5;
+                            border: 1px solid #a8a8a8;
+                            height: 4px;
+                            border-radius: 2px;
+                            }
+
+                            QSlider::handle:horizontal {
+                                background: #e9eaeb;
+                                border: 1px solid #a8a8a8;
+                                width: 14px;
+                                height: 14px;
+                                margin: -7px -1px; /* handle is placed by default on the contents rect of the groove. Expand outside the groove */
+                                border-radius: 7.5px;
+                            }
+
+                            QSlider::groove:vertical {
+                                width: 4px;
+                                background: #dcdcdc;
+                                border: 1px solid #a8a8a8;
+                                border-radius: 2px;
+                            }
+
+
+                            QSlider::add-page:vertical {
+                                background: #aedaf5;
+                                border: 1px solid #a8a8a8;
+                                width: 4px;
+                                border-radius: 2px;
+                            }
+
+                            QSlider::handle:vertical {
+                                background: #e9eaeb;
+                                border: 1px solid #a8a8a8;
+                                width: 14px;
+                                height: 14px;
+                                margin: -1 -7px;
+                                border-radius: 7.5px;
+                            }
+                        )");
     };
 protected:
     virtual void paintEvent(QPaintEvent *ev)

@@ -36,10 +36,11 @@ QuteSlider::QuteSlider(QWidget *parent) : QuteWidget(parent)
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 	canFocus(false);
-    if (width() > height())
+    if (width() > height())    {
         static_cast<QSlider *>(m_widget)->setOrientation(Qt::Horizontal);
-    else
+    } else {
         static_cast<QSlider *>(m_widget)->setOrientation(Qt::Vertical);
+    }
 
 	connect(static_cast<QSlider *>(m_widget), SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
 
