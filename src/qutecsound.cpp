@@ -1922,6 +1922,8 @@ void CsoundQt::play(bool realtime, int index)
     curPage = index;
     auto page = documentPages[curPage];
 
+    QFileInfo fileInfo(QFileInfo(page->getFileName()).path());
+
     if (page->getFileName().isEmpty()) {
         int answer;
         if(!m_options->askIfTemporary)
@@ -1952,8 +1954,9 @@ void CsoundQt::play(bool realtime, int index)
             return;
         }
     }
-    else if (page->isModified()) {
-        if (m_options->saveChanges && !save()) {
+    //else if (page->isModified()) {
+    else if (m_options->saveChanges && fileInfo.isWritable() && !page->getFileName().startsWith(":/")) { // is modified returns sometimes wrongly false. save anyway when asked TODO: degub DocumentPage::isModified()
+        if (!save()) {
             if (curPage == oldPage) {
                 runAct->setChecked(false);
             }
@@ -2009,7 +2012,7 @@ void CsoundQt::play(bool realtime, int index)
     QString runFileName1, runFileName2;
     QTemporaryFile csdFile, csdFile2; // TODO add support for orc/sco pairs
     runFileName1 = fileName;
-    if(fileName.startsWith(":/", Qt::CaseInsensitive) || !m_options->saveChanges) {
+    if(fileName.startsWith(":/", Qt::CaseInsensitive) || !m_options->saveChanges || !fileInfo.isWritable() ) {
         QDEBUG << "***** Using temporary file for filename" << fileName;
         QString tmpFileName = QDir::tempPath();
         if (!tmpFileName.endsWith("/") && !tmpFileName.endsWith("\\")) {
@@ -2026,7 +2029,7 @@ void CsoundQt::play(bool realtime, int index)
             }
             // If example, just copy, since readonly anyway, otherwise get contents from editor.
             // Necessary since examples may contain <CsFileB> section with data.
-            if (!fileName.startsWith(":/examples/", Qt::CaseInsensitive)) {
+            if (!fileName.startsWith(":/examples/", Qt::CaseInsensitive) ) {
                 csdFile.write(page->getBasicText().toLatin1());
             } else {
                 auto fullText = page->getView()->getFullText();
@@ -2867,8 +2870,10 @@ void CsoundQt::openManualExample(QString fileName)
 
 void CsoundQt::openExternalBrowser(QUrl url)
 {
+    QString test = url.toString();
     if (!m_options->browser.isEmpty() && QFile::exists(m_options->browser)) {
-        execute(m_options->browser, "\"" + url.toString() + "\"");
+        //execute(m_options->browser, "\"" + url.toString() + "\"");
+        execute(m_options->browser, url.toString()); // remove quotes, otherwise wrong with changed QProcess
     }
     else {
 //        QMessageBox::critical(this, tr("Error"),
@@ -2958,7 +2963,7 @@ void CsoundQt::openShortcutDialog()
 void CsoundQt::downloadManual()
 {
     // NB! must be updated when new manual comes out!
-    openExternalBrowser(QUrl("https://github.com/csound/csound/releases/download/6.17.0/Csound6.17.0_manual_html.zip"));
+    openExternalBrowser(QUrl("https://github.com/csound/manual/releases/download/6.18.0/Csound6.18.0_manual_html.zip"));
     QMessageBox::information(this, tr("Set manual path"),
                              tr("Unzip the manual to any location and set that path"
                                 " in Configure/Enviromnent/Html doc directory"));

@@ -118,8 +118,8 @@ kpnt2		=		kpos2 * ilen2
  else; 3) RANDOM POSITIONS AND INTERPOLATIONS
 kfqnewval1	invalue	"fqnewval1"; frequency of new random values for file 1
 kfqnewval2	invalue	"fqnewval2"; and for file 2
-kpnt1		randomi	0, ilen1, kfqnewval1
-kpnt2		randomi	0, ilen2, kfqnewval2
+kpnt1		randomi	0, ilen1, kfqnewval1, 3
+kpnt2		randomi	0, ilen2, kfqnewval2, 3
  endif
 ;show pointer positions
 		outvalue	"kpnt1", kpnt1; time in seconds for display widget
