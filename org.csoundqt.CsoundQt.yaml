@@ -21,3 +21,4 @@ modules:
       - type: git
         url: https://github.com/CsoundQt/CsoundQt
         branch: develop
+        disable-shallow-clone: true
