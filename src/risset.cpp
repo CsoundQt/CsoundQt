@@ -67,17 +67,36 @@ Risset::Risset(QString pythonExe)
 #endif
     // local path to download the html docs from github.com//csound-plugins/risset-docs
     rissetDocsRepoPath.setPath(csoundqtDataRoot.filePath("risset-docs"));
+
     if(QFile::exists(pythonExe))
         m_pythonExe = pythonExe;
     else if(!pythonExe.isEmpty())
         m_pythonExe = which(pythonExe, "python3");
     else
         m_pythonExe = which("python3", "python3");
-    QDEBUG << "Using python binary:" << m_pythonExe;
-    QStringList args = {"-m", "risset", "info", "--full"};
+    QDEBUG << "Python binary: " << m_pythonExe;
+
+    // Try the risset script
+    QString rissetScriptPath = which("risset", "risset");
+    QStringList args = {"info", "--full"};
     QProcess proc;
-    proc.start(m_pythonExe, args);
-    proc.waitForFinished();
+    proc.start(rissetScriptPath, args);
+    auto finishok = proc.waitForFinished();
+    if (!finishok) {
+        QDEBUG << "Risset script not installed" << proc.errorString();
+        m_rissetPath = "";
+        proc.start(m_pythonExe, {"-m", "risset", "info", "--full"});
+        finishok = proc.waitForFinished();
+        if (!finishok) {
+            isInstalled = false;
+            QDEBUG << "Risset not installed for python " << m_pythonExe << ", error: " << proc.errorString();
+            return;
+        }
+    } else {
+        m_rissetPath = rissetScriptPath;
+    }
+
+
     auto procOut = proc.readAllStandardOutput();
     m_infoText = QString::fromLocal8Bit(procOut);
     QJsonDocument m_jsonInfo = QJsonDocument::fromJson(procOut);
@@ -85,9 +104,10 @@ Risset::Risset(QString pythonExe)
     rissetVersion = root.value("version").toString();
     if(rissetVersion.isEmpty()) {
         isInstalled = false;
-        QDEBUG << "Risset not installed" << proc.errorString();
+        QDEBUG << "Risset did not execute correctly: " << proc.errorString();
         return;
     }
+    m_rissetPath = rissetScriptPath;
     rissetRoot.setPath(root.value("rissetroot").toString());
     rissetHtmlDocs.setPath(root.value("htmldocs").toString());
     rissetOpcodesXml = root.value("opcodesxml").toString();
@@ -146,10 +166,24 @@ QString Risset::htmlManpage(QString opcodeName) {
 
 
 int Risset::generateDocumentation(std::function<void(int)> callback) {
-    QStringList args = {"-m", "risset", "makedocs"};
+    if (!isInstalled) {
+        QDEBUG << "Risset is not installed";
+    }
+
+    QString executable;
+    QStringList args;
+
+    if (!m_rissetPath.isEmpty()) {
+        executable = m_rissetPath;
+        args = QStringList({"makedocs"});
+    } else {
+        executable = m_pythonExe;
+        args = QStringList({"-m", "risset", "makedocs"});
+    }
+
     if(callback == nullptr) {
         QProcess proc;
-        proc.start(m_pythonExe, args);
+        proc.start(executable, args);
         proc.waitForFinished();
         if(proc.exitCode() != 0) {
             QDEBUG << "Error while making documentation. Risset args: << args";
@@ -166,7 +200,7 @@ int Risset::generateDocumentation(std::function<void(int)> callback) {
     }
     else {
         QProcess *proc = new QProcess();
-        proc->start(m_pythonExe, args);
+        proc->start(executable, args);
         runningProcesses.append(proc);
         QObject::connect(proc, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [this, callback](int exitCode, QProcess::ExitStatus exitStatus) {
@@ -191,8 +225,7 @@ static bool updateGitRepo(QString path) {
 
 static bool cloneGitRepo(QString url, QString path) {
     QProcess proc;
-    QStringList args = {"clone", "--depth", "1", url, path};
-    proc.start("git", args);
+    proc.start("git", {"clone", "--depth", "1", url, path});
     proc.waitForFinished();
     return true;
 }

@@ -33,6 +33,7 @@ public:
 private:
     QString m_infoText;
     QString m_pythonExe;
+    QString m_rissetPath;
     QJsonDocument m_jsonInfo;
     bool opcodeIndexDone;
     QList<QProcess*> runningProcesses;
