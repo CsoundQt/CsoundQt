@@ -50,6 +50,7 @@ csound6 {
 
 # Add C++11 support since version 0.9.4
 CONFIG += c++11
+# CONFIG += c++14
 
 #for csound6 (may need extra conditions for csound7 later:
 DEFINES += CSOUND6

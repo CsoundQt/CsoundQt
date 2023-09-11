@@ -321,15 +321,26 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
     */
     m_opcodeTree = new OpEntryParser(":/opcodes.xml");
-    QString rissetOpcodesXml = risset->rissetOpcodesXml;
-    // QString rissetOpcodesXml = m_rissetDataPath.filePath("opcodes.xml");
-    if(QFile::exists(rissetOpcodesXml)) {
-        qDebug() << "Parsing risset's opcodes.xml:" << rissetOpcodesXml;
-        m_opcodeTree->parseOpcodesXml(rissetOpcodesXml);
-        m_opcodeTree->sortOpcodes();
-    } else {
-        qDebug() << "Risset's opcodes.xml not found: " << rissetOpcodesXml;
+    if(risset->isInstalled) {
+        QString rissetOpcodesXml = risset->rissetOpcodesXml;
+        if(!QFile::exists(rissetOpcodesXml)) {
+            QDEBUG << "opcodes.xml not found, searched: " << rissetOpcodesXml;
+            QDEBUG << "Calling risset to generate opcodes.xml";
+            auto error = risset->generateOpcodesXml();
+            if(error != RissetError::Ok) {
+                QDEBUG << "Could not generate opcodes.xml";
+                rissetOpcodesXml = "";
+            }
+        }
+        if(!rissetOpcodesXml.isEmpty() && QFile::exists(rissetOpcodesXml)) {
+            QDEBUG << "Parsing risset's opcodes.xml:" << rissetOpcodesXml;
+            m_opcodeTree->parseOpcodesXml(rissetOpcodesXml);
+            m_opcodeTree->sortOpcodes();
+        } else {
+            QDEBUG << "Risset's opcodes.xml not found: " << rissetOpcodesXml;
+        }
     }
+
     m_opcodeTree->setUdos(m_inspector->getUdosMap());
     LiveCodeEditor *liveeditor = new LiveCodeEditor(m_scratchPad, m_opcodeTree);
     liveeditor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);

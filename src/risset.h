@@ -7,17 +7,23 @@
 #include <QProcess>
 
 
+enum class RissetError { Ok, Error, HtmlError, RissetNotInstalled };
+
+
 class Risset
 {
 public:
     Risset(QString pythonExe);
 
     QString htmlManpage(QString opcodeName);
-    int generateDocumentation(std::function<void(int)> callback=nullptr);
+    RissetError generateDocumentation(std::function<void(int)> callback=nullptr);
+    RissetError generateOpcodesXml();
+
     bool downloadDocumentation();
     QString findHtmlDocumentation();
     QString markdownManpage(QString opcodeName);
     void cleanupProcesses();
+    QString defaultOpcodesXmlPath() { return rissetRoot.filePath("opcodes.xml"); }
 
     bool isInstalled;
     QString rissetVersion;

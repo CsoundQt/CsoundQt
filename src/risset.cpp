@@ -52,7 +52,6 @@ static QString which(QString cmd, QString otherwise) {
     return otherwise;
 }
 
-
 Risset::Risset(QString pythonExe)
 {
     opcodeIndexDone = false;
@@ -111,6 +110,11 @@ Risset::Risset(QString pythonExe)
     rissetRoot.setPath(root.value("rissetroot").toString());
     rissetHtmlDocs.setPath(root.value("htmldocs").toString());
     rissetOpcodesXml = root.value("opcodesxml").toString();
+    if(!QFile::exists(rissetOpcodesXml)) {
+        QDEBUG << "Did not find opcodes.xml, path = " << rissetOpcodesXml;
+        this->generateOpcodesXml();
+    }
+
     rissetManpages.setPath(root.value("manpages").toString());
     QDEBUG << "Risset opcodes.xml: " << rissetOpcodesXml;
     this->opcodeNames.clear();
@@ -164,10 +168,41 @@ QString Risset::htmlManpage(QString opcodeName) {
     return "";
 }
 
-
-int Risset::generateDocumentation(std::function<void(int)> callback) {
+RissetError Risset::generateOpcodesXml() {
     if (!isInstalled) {
         QDEBUG << "Risset is not installed";
+        return RissetError::RissetNotInstalled;
+    }
+    QString executable;
+    QStringList args;
+    QString path = this->defaultOpcodesXmlPath();
+
+    if (!m_rissetPath.isEmpty()) {
+        executable = m_rissetPath;
+        args = QStringList({"--debug", "dev", "--outfile", path, "opcodesxml"});
+    } else {
+        executable = m_pythonExe;
+        args = QStringList({"-m", "risset", "--debug", "dev", "--outfile", path, "opcodesxml"});
+    }
+
+    QProcess proc;
+    QDEBUG << "Calling risset to generate opcodes.xml. exec: " << executable << ", args: " << args;
+    proc.start(executable, args);
+    proc.waitForFinished();
+    if(proc.exitCode() != 0) {
+        QDEBUG << "Error while generating opcodesxml";
+        return RissetError::Error;
+    }
+    rissetOpcodesXml = path;
+    return RissetError::Ok;
+}
+
+
+
+RissetError Risset::generateDocumentation(std::function<void(int)> callback) {
+    if (!isInstalled) {
+        QDEBUG << "Risset is not installed";
+        return RissetError::RissetNotInstalled;
     }
 
     QString executable;
@@ -186,16 +221,16 @@ int Risset::generateDocumentation(std::function<void(int)> callback) {
         proc.start(executable, args);
         proc.waitForFinished();
         if(proc.exitCode() != 0) {
-            QDEBUG << "Error while making documentation. Risset args: << args";
-            return 1;
+            QDEBUG << "Error while making documentation. Risset args: " << args;
+            return RissetError::Error;
         } else  {
             if(!QFile::exists(rissetHtmlDocs.filePath("index.html"))) {
-                QDEBUG << "Risset::geerateDocumentation failed to genererate HTML docs, path: "
+                QDEBUG << "Risset::generateDocumentation failed to genererate HTML docs, path: "
                          << rissetHtmlDocs.path();
-                return 2;
+                return RissetError::HtmlError;
             }
             QDEBUG << "Risset makedocs OK!";
-            return 0;
+            return RissetError::Ok;
         }
     }
     else {
@@ -209,7 +244,7 @@ int Risset::generateDocumentation(std::function<void(int)> callback) {
             callback(exitCode);
             this->cleanupProcesses();
         });
-        return 0;
+        return RissetError::Ok;
     }
 }
 

@@ -36,7 +36,7 @@ class ConsoleWidget;
 class QuteButton; // For registering buttons with main application
 class AppProperties;
 
-enum PlayStopStatus { Ok=0, Starting=1, Stopping=2 };
+enum class PlayStopStatus { Ok, Starting, Stopping };
 
 class BaseDocument : public QObject
 {
