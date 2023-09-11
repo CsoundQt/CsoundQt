@@ -279,12 +279,12 @@ void WidgetLayout::loadXmlWidgets(QString xmlWidgets)
     QDomNodeList c = p.childNodes();
     int version = 0;
     for (int i = 0; i < c.size(); i++) {
-        auto t0 = std::chrono::high_resolution_clock::now();
+        // auto t0 = std::chrono::high_resolution_clock::now();
         auto item = c.item(i);
-        int ret = parseXmlNode(c.item(i));
-        auto t1 = std::chrono::high_resolution_clock::now();
-        auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
-        QDEBUG << "parseXmlNode" << item.toElement().attribute("type") << diff << "ms";
+        int ret = parseXmlNode(item);
+        // auto t1 = std::chrono::high_resolution_clock::now();
+        // auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
+        // QDEBUG << "parseXmlNode" << item.toElement().attribute("type") << diff << "ms";
         if (ret == -1) {
             qDebug() << "WidgetLayout::loadXmlWidgets Error in Xml node parsing";
             QMessageBox::warning(this, tr("Unrecognized wigdet format"),
@@ -689,7 +689,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     int ret = 0;
     auto element = mainnode.toElement();
     QuteWidget *widget = nullptr;
-    QDomNodeList c = mainnode.childNodes();
+    QDomNodeList childNodes = mainnode.childNodes();
     QString type = element.attribute("type");
     bool forceBackground = false;
     ret = element.attribute("version").toInt();
@@ -762,10 +762,13 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                 this, SLOT(newValue(QPair<QString,double>)));
     }
     else if (type == "BSBController") {
+        auto t0 = std::chrono::high_resolution_clock::now();
         QuteMeter *w = new QuteMeter(this);
         widget = static_cast<QuteWidget *>(w);
         connect(widget, SIGNAL(newValue(QPair<QString,double>)),
                 this, SLOT(newValue(QPair<QString,double>)));
+        QDEBUG << "... BSBControlled new" << std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now()-t0).count() << "ms";
+
     }
     else if (type == "BSBGraph") {
         QuteGraph *w = new QuteGraph(this);
@@ -811,14 +814,14 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         widget->setProperty("QCS_bgcolor", QColor(240, 240, 240));
     }
 
-    for (int i = 0; i < c.size() ; i++) {
-        QDomElement node = c.item(i).toElement();
+    for (int i = 0; i < childNodes.size() ; i++) {
+        QDomElement node = childNodes.item(i).toElement();
         QString nodeName = node.nodeName();
         if (nodeName == "color" || nodeName == "bgcolor") {  // COLOR type
             if (node.attribute("mode") == "background") {
                 widget->setProperty("QCS_bgcolormode", true);
             }
-            QDomNode n = node.firstChild();
+            // QDomNode n = node.firstChild();
             nodeName.prepend("QCS_");
             widget->setProperty(nodeName.toLocal8Bit(), getColorFromElement(node));
         }
@@ -828,14 +831,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         else if (nodeName == "value" || nodeName == "resolution"
                  || nodeName == "minimum" || nodeName == "maximum"
                  || nodeName == "pressedValue") {  // DOUBLE type
-            QDomNode n = node.firstChild();
             nodeName.prepend("QCS_");
-            widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toDouble());
-        }
-        else if (nodeName == "selectedIndex") {  // INT type
-            QDomNode n = node.firstChild();
-            nodeName.prepend("QCS_");
-            widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
+            widget->setProperty(nodeName.toLocal8Bit(), node.firstChild().nodeValue().toDouble());
         }
         else if (nodeName == "x" || nodeName == "y") {  // INT type (with offset)
             QDomNode n = node.firstChild();
@@ -858,27 +855,26 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
             widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
         }
         else if (nodeName == "midichan") {
-            QDomNode n = node.firstChild();
-            nodeName.prepend("QCS_");
-            widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
-            registerWidgetChannel(widget, n.nodeValue().toInt());
+            auto value = node.firstChild().nodeValue().toInt();
+            widget->setProperty("QCS_midichan", value);
+            registerWidgetChannel(widget, value);
         }
         else if (nodeName == "midicc") {
-            QDomNode n = node.firstChild();
-            nodeName.prepend("QCS_");
-            widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
-            registerWidgetController(widget, n.nodeValue().toInt());
+            auto value = node.firstChild().nodeValue().toInt();
+            widget->setProperty("QCS_midicc", value);
+            registerWidgetController(widget, value);
         }
         else if (nodeName == "randomizable" || nodeName == "selected"
                  || nodeName == "visible" ) {  // BOOL type
             QDomNode n = node.firstChild();
-            nodeName.prepend("QCS_");
-            widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue() == "true");
             if (nodeName == "randomizable") {
                 if (node.attribute("group") != "") {
                     widget->setProperty("QCS_randomizableGroup", node.attribute("group").toInt() );
                 }
             }
+            nodeName.prepend("QCS_");
+            widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue() == "true");
+
         }
         else if (nodeName == "bsbDropdownItemList") {  // MENU ITEM type
             if (node.attribute("mode") == "value") {
@@ -921,8 +917,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
 
     auto t1 = std::chrono::high_resolution_clock::now();
     auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
-    QDEBUG << "newXmlWidget" << diff << "ms";
-
+    QDEBUG << "newXmlWidget type" << type << "took " << diff << "ms";
 
     return ret;
 }
@@ -2894,17 +2889,19 @@ int WidgetLayout::parseXmlNode(QDomNode node)
     }
     else if (name == "bgcolor") {
         bool bg = false;
-        if (node.toElement().attribute("mode")== "background") {
+        auto nodeElement = node.toElement();
+
+        if (nodeElement.attribute("mode")== "background") {
             //qDebug() << "background true";
             bg = true;
         }
-        QDomElement er = node.toElement().firstChildElement("r");
-        QDomElement eg = node.toElement().firstChildElement("g");
-        QDomElement eb = node.toElement().firstChildElement("b");
+        QDomElement er = nodeElement.firstChildElement("r");
+        QDomElement eg = nodeElement.firstChildElement("g");
+        QDomElement eb = nodeElement.firstChildElement("b");
         auto bgcolor = QColor(er.firstChild().nodeValue().toInt(),
                               eg.firstChild().nodeValue().toInt(),
                               eb.firstChild().nodeValue().toInt());
-        auto parent = node.parentNode().nodeName();
+        // auto parent = node.parentNode().nodeName();
         //qDebug() << "setting background" << parent << bgcolor << node.toElement().text();
         setBackground(bg, bgcolor);
     }

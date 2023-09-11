@@ -60,20 +60,21 @@ inline CsoundEngineStatus csoundEngineStatus(CsoundUserData *ud) {
 QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 {
 	m_widget = new StackedLayoutWidget(this);
-	m_widget->show();
-	//  m_widget->setAutoFillBackground(true);
-	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
-	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+    //  m_widget->setAutoFillBackground(true);
+    // m_widget->show();
+
     m_numticksY = 6;
 	m_label = new QLabel(this);
 	QPalette palette = m_widget->palette();
     palette.setColor(QPalette::WindowText, QColor(150, 150, 150));
 	m_label->setPalette(palette);
-	m_label->setText("");
+    // m_label->setText("");
     m_label->setFont(QFont({"Helvetica", 7}));
     m_label->move(120, -4);
 	m_label->resize(500, 25);
-	m_pageComboBox = new QComboBox(this);
+    m_label->setFocusPolicy(Qt::NoFocus);
+
+    m_pageComboBox = new QComboBox(this);
     m_pageComboBox->setMinimumWidth(120);
     m_pageComboBox->setMaximumHeight(14);
     m_pageComboBox->setFont(QFont({"Sans", 7}));
@@ -82,7 +83,6 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
                                   "{ min-width: 150px; }");
     // m_pageComboBox->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLength);
     m_pageComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-	m_label->setFocusPolicy(Qt::NoFocus);
     m_drawGrid = true;
     m_drawTableInfo = true;
     m_showScrollbars = true;
@@ -122,6 +122,11 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
     m_frozen = false;
     m_getPeakChannel = "";
     m_peakChannelPtr = nullptr;
+
+    m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
+    m_widget->setContextMenuPolicy(Qt::NoContextMenu);
+    m_widget->show();
+
 }
 
 QuteGraph::~QuteGraph()
@@ -843,6 +848,7 @@ void QuteGraph::addCurve(Curve * curve)
     scene->addItem(markerText);
     m_spectrumPeakTexts.append(markerText);
     m_dbRange = 100;
+    auto gridTextFont = QFont("Sans", 6);
 
     if(graphType == GraphType::GRAPH_SPECTRUM) {
         for (int i = 0 ; i < numTicksY; i++) {
@@ -857,7 +863,7 @@ void QuteGraph::addCurve(Curve * curve)
             int dbs = round(float(i)/numTicksY * 120.0);
             gridText->setHtml(QString("<div style=\"background:#000000;\">-%1 </p>"
                                       ).arg(dbs));
-            gridText->setFont(QFont("Sans", 6));
+            gridText->setFont(gridTextFont);
             gridText->setVisible(false);
             scene->addItem(gridText);
             gridTextVectorY.append(gridText);
@@ -885,7 +891,7 @@ void QuteGraph::addCurve(Curve * curve)
                                 .arg(kHz, 2, 'f', 1));
 
             }
-            gridText->setFont(QFont("Sans", 6));
+            gridText->setFont(gridTextFont);
             gridText->setVisible(false);
             scene->addItem(gridText);
             gridTextVectorX.append(gridText);
@@ -1112,7 +1118,7 @@ void QuteGraph::drawSpectrumPath(Curve *curve, int index) {
         int step = 1000;
         int numTicksX = nyquist / step;
         int numTicksY = 7;
-        printf("grid: nyquist: %d, numticks: %d\n", nyquist, numTicksX);
+        // printf("grid: nyquist: %d, numticks: %d\n", nyquist, numTicksX);
 
         auto gridPen = QPen(QColor(40, 40, 40));
         gridPen.setCosmetic(true);
@@ -1253,7 +1259,6 @@ void QuteGraph::freezeSpectrum(bool status) {
     } else {
         m_frozen = false;
     }
-
 }
 
 void QuteGraph::drawSpectrum(Curve *curve, int index) {
