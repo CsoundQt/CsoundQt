@@ -5361,9 +5361,8 @@ void CsoundQt::storeSettings()
         }
     }
     // sometimes settings are stored in startup when there is no pages open
-    int lastIndex = (documentPages.size()==0) ? 0 : documentTabs->currentIndex();
     if (documentPages.size() > 0) {
-        writeSettings(files, lastIndex);
+        writeSettings(files, documentTabs->currentIndex());
     } else {
         qDebug() << "No files open. Will not store settings (for any case - testing)";
     }
@@ -5373,17 +5372,33 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 {
     QSettings settings("csound", "qutecsound");
     QDEBUG << "writing settings to csound/qutecsound";
-    if (!m_resetPrefs) {
-        // Version 1 when clearing additional flags, version 2 when setting jack client to *
-        // version 3 to store that new widget format warning has been shown.
-        // version 4 to signal that the many shortcuts have been changed
-        settings.setValue("settingsVersion", 4);
+
+    settings.setValue("settingsVersion", 4);
+
+    QHash<QString, QVariant> shortcuts;
+    foreach (QAction *act, m_keyActions) {
+        shortcuts[act->text().remove("&")] = QVariant(act->shortcut().toString());
     }
-    else {
-        settings.remove("");
-    }
-    settings.beginGroup("GUI");
-    if (!m_resetPrefs) {
+
+    if(m_resetPrefs) {
+        settings.beginGroup("GUI");
+        settings.setValue("shortcuts", QVariant(shortcuts));
+        settings.endGroup();
+        settings.beginGroup("Options");
+        for(auto groupName: {"Editor", "Run", "Environment", "External"}) {
+            settings.beginGroup(groupName);
+            settings.remove("");  // removes all settings in the section
+            settings.endGroup();
+        }
+        settings.beginGroup("Template");
+        settings.setValue("csdTemplate", m_options->csdTemplate);
+        settings.endGroup();
+        settings.endGroup();; // options
+        m_resetPrefs = false;
+
+    } else {
+        settings.beginGroup("GUI");
+        settings.setValue("shortcuts", QVariant(shortcuts));
         settings.setValue("pos", pos());
         settings.setValue("size", size());
         settings.setValue("dockstate", saveState());
@@ -5395,19 +5410,10 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("theme", m_options->theme);
         settings.setValue("windowState", saveState());
         settings.setValue("windowGeometry", saveGeometry());
-    }
-    else {
-        settings.remove("");
-    }
-    QHash<QString, QVariant> shortcuts;
-    foreach (QAction *act, m_keyActions) {
-        shortcuts[act->text().remove("&")] = QVariant(act->shortcut().toString());
-    }
-    settings.setValue("shortcuts", QVariant(shortcuts));
-    settings.endGroup();
-    settings.beginGroup("Options");
-    settings.beginGroup("Editor");
-    if (!m_resetPrefs) {
+        settings.endGroup();
+
+        settings.beginGroup("Options");
+        settings.beginGroup("Editor");
         settings.setValue("font", m_options->font );
         settings.setValue("fontsize", m_options->fontPointSize);
         settings.setValue("showLineNumberArea", m_options->showLineNumberArea);
@@ -5428,7 +5434,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("askIfTemporary", m_options->askIfTemporary);
         settings.setValue("rememberfile", m_options->rememberFile);
         settings.setValue("savewidgets", m_options->saveWidgets);
-		settings.setValue("midiCcToActivePageOnly", m_options->midiCcToCurrentPageOnly);
+        settings.setValue("midiCcToActivePageOnly", m_options->midiCcToCurrentPageOnly);
         settings.setValue("widgetsIndependent", m_options->widgetsIndependent);
         settings.setValue("iconText", m_options->iconText);
         settings.setValue("showToolbar", m_options->showToolbar);
@@ -5455,17 +5461,15 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("lastfiles", openFiles);
         settings.setValue("lasttabindex", lastIndex);
         // if(openFiles.size() > 0 && lastIndex != 0) {
-        // if(openFiles.size() > 0) {
-        //     settings.setValue("lastfiles", openFiles);
-        //     settings.setValue("lasttabindex", lastIndex);
-        // }
-    }
-    else {
-        settings.remove("");
-    }
-    settings.endGroup();
-    settings.beginGroup("Run");
-    if (!m_resetPrefs) {
+        if(openFiles.size() > 0) {
+             settings.setValue("lastfiles", openFiles);
+             if(lastIndex > 0) {
+                settings.setValue("lasttabindex", lastIndex);
+             }
+        }
+        settings.endGroup(); // Options/Editor
+
+        settings.beginGroup("Run");
         settings.setValue("useAPI", m_options->useAPI);
         settings.setValue("keyRepeat", m_options->keyRepeat);
         settings.setValue("debugLiveEvents", m_options->debugLiveEvents);
@@ -5493,10 +5497,8 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("overrideNumChannels", m_options->overrideNumChannels);
         settings.setValue("numChannels", m_options->numChannels);
         settings.setValue("numInputChannels", m_options->numInputChannels);
-
         settings.setValue("useLimiter", m_options->useLimiter);
         settings.setValue("limitValue", m_options->limitValue);
-
         settings.setValue("additionalFlags", m_options->additionalFlags);
         settings.setValue("additionalFlagsActive", m_options->additionalFlagsActive);
         settings.setValue("fileUseOptions", m_options->fileUseOptions);
@@ -5522,13 +5524,9 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("simultaneousRun", m_options->simultaneousRun);
         settings.setValue("sampleFormat", m_options->sampleFormat);
         settings.setValue("checkSyntaxBeforeRun", m_options->checkSyntaxBeforeRun);
-    }
-    else {
-        settings.remove("");
-    }
-    settings.endGroup();
-    settings.beginGroup("Environment");
-    if (!m_resetPrefs) {
+        settings.endGroup(); // Options/Run
+
+        settings.beginGroup("Environment");
         settings.setValue("csdocdir", m_options->csdocdir);
         settings.setValue("opcodedir",m_options->opcodedir);
         settings.setValue("opcodedirActive",m_options->opcodedirActive);
@@ -5558,30 +5556,27 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("templateDir",m_options->templateDir);
         settings.setValue("opcodexmldir", m_options->opcodexmldir); // TEST can be that this is the reason for crash MacOS -  dir set wrong from corrupted plist file
         settings.setValue("opcodexmldirActive",m_options->opcodexmldirActive);
-    }
-    else {
-        settings.remove("");
-    }
-    settings.endGroup();
-    settings.beginGroup("External");
-    if (!m_resetPrefs) {
+        settings.endGroup(); // options/environment
+
+        settings.beginGroup("External");
         settings.setValue("terminal", m_options->terminal);
         settings.setValue("browser", m_options->browser);
         settings.setValue("dot", m_options->dot);
         settings.setValue("waveeditor", m_options->waveeditor);
         settings.setValue("waveplayer", m_options->waveplayer);
         settings.setValue("pdfviewer", m_options->pdfviewer);
-    }
-    else {
-        settings.remove("");
-    }
-    settings.endGroup();
-    settings.beginGroup("Template");
-    settings.setValue("csdTemplate", m_options->csdTemplate);
-    settings.endGroup();
-    settings.endGroup();
+        settings.endGroup(); // options/external
 
+        settings.beginGroup("Template");
+        settings.setValue("csdTemplate", m_options->csdTemplate);
+        settings.endGroup(); // options/template
+
+        settings.endGroup(); // options
+
+    }
     settings.sync();
+    return;
+
 }
 
 void CsoundQt::clearSettings()
