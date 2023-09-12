@@ -5372,6 +5372,7 @@ void CsoundQt::storeSettings()
 void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
 {
     QSettings settings("csound", "qutecsound");
+    QDEBUG << "writing settings to csound/qutecsound";
     if (!m_resetPrefs) {
         // Version 1 when clearing additional flags, version 2 when setting jack client to *
         // version 3 to store that new widget format warning has been shown.
@@ -5450,10 +5451,14 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("debugPort", m_options->debugPort);
         settings.setValue("tabShortcutActive", m_options->tabShortcutActive);
         settings.setValue("highlightScore", m_options->highlightScore);
-        if(openFiles.size() > 0 && lastIndex != 0) {
-            settings.setValue("lastfiles", openFiles);
-            settings.setValue("lasttabindex", lastIndex);
-        }
+
+        settings.setValue("lastfiles", openFiles);
+        settings.setValue("lasttabindex", lastIndex);
+        // if(openFiles.size() > 0 && lastIndex != 0) {
+        // if(openFiles.size() > 0) {
+        //     settings.setValue("lastfiles", openFiles);
+        //     settings.setValue("lasttabindex", lastIndex);
+        // }
     }
     else {
         settings.remove("");

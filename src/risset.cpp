@@ -66,15 +66,6 @@ Risset::Risset(QString pythonExe)
 #endif
     // local path to download the html docs from github.com//csound-plugins/risset-docs
     rissetDocsRepoPath.setPath(csoundqtDataRoot.filePath("risset-docs"));
-
-    if(QFile::exists(pythonExe))
-        m_pythonExe = pythonExe;
-    else if(!pythonExe.isEmpty())
-        m_pythonExe = which(pythonExe, "python3");
-    else
-        m_pythonExe = which("python3", "python3");
-    QDEBUG << "Python binary: " << m_pythonExe;
-
     // Try the risset script
     QString rissetScriptPath = which("risset", "risset");
     QStringList args = {"info", "--full"};
@@ -84,6 +75,15 @@ Risset::Risset(QString pythonExe)
     if (!finishok) {
         QDEBUG << "Risset script not installed" << proc.errorString();
         m_rissetPath = "";
+        if(QFile::exists(pythonExe))
+        m_pythonExe = pythonExe;
+        else if(!pythonExe.isEmpty())
+            m_pythonExe = which(pythonExe, "python3");
+        else
+            m_pythonExe = which("python3", "python3");
+
+        QDEBUG << "Python binary: " << m_pythonExe;
+
         proc.start(m_pythonExe, {"-m", "risset", "info", "--full"});
         finishok = proc.waitForFinished();
         if (!finishok) {
@@ -94,7 +94,6 @@ Risset::Risset(QString pythonExe)
     } else {
         m_rissetPath = rissetScriptPath;
     }
-
 
     auto procOut = proc.readAllStandardOutput();
     m_infoText = QString::fromLocal8Bit(procOut);
@@ -180,9 +179,13 @@ RissetError Risset::generateOpcodesXml() {
     if (!m_rissetPath.isEmpty()) {
         executable = m_rissetPath;
         args = QStringList({"--debug", "dev", "--outfile", path, "opcodesxml"});
-    } else {
+    } else if(!m_pythonExe.isEmpty()) {
         executable = m_pythonExe;
         args = QStringList({"-m", "risset", "--debug", "dev", "--outfile", path, "opcodesxml"});
+    } else {
+        QDEBUG << "Either the risset script should be known or the python executable "
+                  "should be known...";
+        return RissetError::RissetNotInstalled;
     }
 
     QProcess proc;
