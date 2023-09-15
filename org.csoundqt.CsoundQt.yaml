@@ -1,6 +1,6 @@
 app-id: org.csoundqt.CsoundQt
 runtime: org.kde.Platform
-runtime-version: '5.15-21.08'
+runtime-version: '5.15-22.08'
 sdk: org.kde.Sdk
 command: bin/CsoundQt-d-cs6
 finish-args:
@@ -13,6 +13,7 @@ modules:
   - name: CsoundQt
     buildsystem: simple
     build-commands: 
+      - git submodule update --init --recursive
       - qmake CONFIG+=rtmidi qcs.pro
       - make -j$(nproc)
       - make
@@ -21,4 +22,4 @@ modules:
       - type: git
         url: https://github.com/CsoundQt/CsoundQt
         branch: develop
-        disable-shallow-clone: true
+        disable-shallow-clone: false
