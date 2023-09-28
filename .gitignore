@@ -42,3 +42,4 @@ flatpak-build
 qcs.pro.user*
 .qtc_clangd
 .~*
+.cache
