@@ -46,8 +46,8 @@ prints "Finished parsing and compiling, now running."
 ;!!!! Tested with  Core Audio Mac OSX -  Output device: Uscita Integrata Buffer Size (-b) and Hardware Size (-B) unchecked in Configure/Run Panel 
 ;!!!! Tested with  Core Audio MAc OSX -  Output device: Firewire M-Audio 410       "                "                 "           "           "  
 
-sr = 44100;48000
-ksmps = 1024;1000
+sr = 48000;48000
+ksmps = 256;1000
 nchnls = 2
 
 #define		EPSILON #int(sr/ksmps)#
@@ -6953,6 +6953,8 @@ e
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -10397,7 +10399,7 @@ e
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.000</label>
+  <label>1.000</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
   <font>Lucida Grande</font>
@@ -10428,7 +10430,7 @@ e
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.000</label>
+  <label>72.000</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
   <font>Lucida Grande</font>
@@ -10459,7 +10461,7 @@ e
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.000</label>
+  <label>64.000</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
   <font>Lucida Grande</font>
@@ -12640,7 +12642,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.80000000</xValue>
-  <yValue>0.23735213</yValue>
+  <yValue>0.47994647</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -12677,7 +12679,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.80000000</xValue>
-  <yValue>0.76264787</yValue>
+  <yValue>0.52005353</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>

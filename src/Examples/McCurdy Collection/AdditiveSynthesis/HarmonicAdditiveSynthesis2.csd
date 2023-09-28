@@ -13,7 +13,7 @@
 </CsOptions>
 <CsInstruments>
 sr		= 48000		;SAMPLE RATE
-ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 64			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -218,6 +218,10 @@ endin
 i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -232,7 +236,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -242,8 +246,10 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Additive Synthesis 2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -261,7 +267,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>10</x>
   <y>68</y>
@@ -271,6 +277,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -282,19 +289,22 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>321</y>
@@ -304,8 +314,10 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1      2      3      4      5      6      7      8      9     10     11    12    13    14    15    16    17    18    19    20     21    22    23    24    25    26    27    28    29    30</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -321,9 +333,9 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>34</x>
   <y>68</y>
@@ -333,6 +345,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -344,19 +357,22 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>58</x>
   <y>68</y>
@@ -366,6 +382,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp3</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -377,19 +394,22 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>82</x>
   <y>68</y>
@@ -399,6 +419,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp4</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -410,19 +431,22 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>106</x>
   <y>68</y>
@@ -432,6 +456,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp5</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -443,19 +468,22 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>131</x>
   <y>68</y>
@@ -465,6 +493,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp6</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -476,19 +505,22 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>155</x>
   <y>68</y>
@@ -498,6 +530,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp7</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -509,19 +542,22 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>179</x>
   <y>68</y>
@@ -531,6 +567,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp8</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -542,19 +579,22 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>203</x>
   <y>68</y>
@@ -564,6 +604,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp9</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -575,19 +616,22 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>227</x>
   <y>68</y>
@@ -597,6 +641,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp10</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -608,19 +653,22 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>513</x>
   <y>467</y>
@@ -630,6 +678,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -638,9 +687,11 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>false</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>true</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Fund_Freq</objectName>
   <x>25</x>
   <y>369</y>
@@ -650,6 +701,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.48235294</value>
@@ -658,7 +710,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>24</x>
   <y>386</y>
@@ -668,8 +720,10 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Fundamental (Hertz)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -685,9 +739,9 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Fund_Freq_Value</objectName>
   <x>643</x>
   <y>385</y>
@@ -697,8 +751,10 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>400.853</label>
+  <description/>
+  <label>400.852</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -714,9 +770,9 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>25</x>
   <y>403</y>
@@ -726,6 +782,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.44705882</value>
@@ -734,7 +791,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>24</x>
   <y>422</y>
@@ -744,8 +801,10 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Global Amplitude</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -761,9 +820,9 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>642</x>
   <y>420</y>
@@ -773,8 +832,10 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.447</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -790,9 +851,9 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>736</x>
   <y>2</y>
@@ -802,8 +863,10 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Additive Synthesis 2 - 30 Harmonics</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -821,7 +884,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>740</x>
   <y>18</y>
@@ -831,12 +894,14 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>---------------------------------------------------------------------------------------------------
 In this example a lot more harmonics have been added in addition to an amplitude envelope, tremolo and vibrato. These additions enhance the fusion of the various partials. Some presets are provided (only the partial strengths are contained in the presets) which provide only general approximations of the sounds they attempt to imitate. Notice how the upper haromics are only used in very small amounts (their presence is nonetheless crucial in creating the tone of the instrument). The 'Buzz' preset that employs all harmonics equally sounds rather shrill and unnatural. Also the fundemental (partial 1) is not always the strongest partial. In the 'Trumpet' preset the 4th partial is the strongest. In the clarinet timbre, the odd numbered partials predominate. This is what gives the clarinet timbre its 'hollow' characteristic. The main problem in this example is that the spectrum is not dynamic. In order to create a dynamic spectrum it would be necessary to be able to control the strength of each partial with its own envelope. Implementing this would result in a vast number of controls that would require setting up. Another problem with this example is that the harmonics are always perfectly tuned whereas in the real world even harmonic sounds exhibit small distortions in pitch in their harmonics which imbue them with a slight inharmonicity, crucial to their character.
 Additionally control over the initial phase of each of the partials would be needed to be able to control the nature of interference between partials. If all the suggested improvements were added we would have an extremely flexible instrument but it would have an rather unwieldy number on controls and herein lies the main problem with designing an additive synthesis interface. In contrast FM synthesis allows the creation of rich, dynamic spectra by using just a small number of controls (but it lacks the ability to modify independent partials).
 Perhaps an alternative approach would be to borrow aspects of subtractive synthesis and employ filters to create dynamic spectra.
 This example also allows control from a MIDI keyboard by setting the 'On (GUI) / Off (MIDI)' switch to Off (MIDI). The instrument will respond to note number, velocity and pitch bend.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -852,9 +917,9 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>252</x>
   <y>68</y>
@@ -864,6 +929,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp11</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -875,19 +941,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>276</x>
   <y>68</y>
@@ -897,6 +966,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp12</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -908,19 +978,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>300</x>
   <y>68</y>
@@ -930,6 +1003,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp13</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -941,19 +1015,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>324</x>
   <y>68</y>
@@ -963,6 +1040,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp14</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -974,19 +1052,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>348</x>
   <y>68</y>
@@ -996,6 +1077,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp15</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1007,19 +1089,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>373</x>
   <y>68</y>
@@ -1029,6 +1114,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp16</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1040,19 +1126,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>397</x>
   <y>68</y>
@@ -1062,6 +1151,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp17</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1073,19 +1163,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>421</x>
   <y>68</y>
@@ -1095,6 +1188,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp18</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1106,19 +1200,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>445</x>
   <y>68</y>
@@ -1128,6 +1225,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp19</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1139,19 +1237,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>469</x>
   <y>68</y>
@@ -1161,6 +1262,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp20</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1172,19 +1274,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>494</x>
   <y>68</y>
@@ -1194,6 +1299,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp21</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1205,19 +1311,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>518</x>
   <y>68</y>
@@ -1227,6 +1336,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp22</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1238,19 +1348,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>542</x>
   <y>68</y>
@@ -1260,6 +1373,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp23</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1271,19 +1385,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>566</x>
   <y>68</y>
@@ -1293,6 +1410,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp24</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1304,19 +1422,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>590</x>
   <y>68</y>
@@ -1326,6 +1447,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp25</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1337,19 +1459,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>615</x>
   <y>68</y>
@@ -1359,6 +1484,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp26</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1370,19 +1496,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>639</x>
   <y>68</y>
@@ -1392,6 +1521,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp27</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1403,19 +1533,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>663</x>
   <y>68</y>
@@ -1425,6 +1558,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp28</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1436,19 +1570,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>687</x>
   <y>68</y>
@@ -1458,6 +1595,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp29</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1469,19 +1607,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>711</x>
   <y>68</y>
@@ -1491,6 +1632,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>PartAmp30</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1502,19 +1644,22 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>46</x>
   <y>479</y>
@@ -1524,6 +1669,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1531,9 +1677,11 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <image>/</image>
   <eventLine>i3  0  0  .55  .55  .9  .45  .5  .5  .8  .3  .3  .3  .07  .06  .26  .16  .05  .05  .05  .05  .05  .05  .05  .04  .04  .04  .023  .022  .015  .01  .009  .008</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>136</x>
   <y>479</y>
@@ -1543,6 +1691,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1550,9 +1699,11 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <image>/</image>
   <eventLine>i3  0  0  .4  .47  .56  1.3  .8  .7  .6  .25  .2  .13  .07  .04  .03  .023  .013  .01  .008  .0075  .007  .0065  0  0  0  0  0  0  0  0  0  0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>226</x>
   <y>479</y>
@@ -1562,6 +1713,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1569,9 +1721,11 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <image>/</image>
   <eventLine>i3  0  0  1.3  .025  .8  .15  .18  .15  .08  .035  .025  .004  .004  .008  .0035  0  .0042  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>316</x>
   <y>479</y>
@@ -1581,6 +1735,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1588,9 +1743,11 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <image>/</image>
   <eventLine>i3  0  0  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5  .5</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>406</x>
   <y>479</y>
@@ -1600,6 +1757,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -1607,9 +1765,11 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <image>/</image>
   <eventLine>i3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>540</y>
@@ -1619,8 +1779,10 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Amplitude Envelope</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -1638,7 +1800,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>429</x>
   <y>540</y>
@@ -1648,8 +1810,10 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Modulation</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -1667,7 +1831,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Attack</objectName>
   <x>9</x>
   <y>573</y>
@@ -1677,15 +1841,27 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00100000</minimum>
   <maximum>8.00000000</maximum>
   <value>0.08099000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>625</y>
@@ -1695,8 +1871,10 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Attack</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1712,9 +1890,9 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Attack</objectName>
   <x>5</x>
   <y>658</y>
@@ -1724,8 +1902,10 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.081</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -1741,9 +1921,9 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Att_Lev</objectName>
   <x>69</x>
   <y>573</y>
@@ -1753,15 +1933,27 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.91000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>67</x>
   <y>625</y>
@@ -1771,9 +1963,11 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Attack
 Level</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1789,9 +1983,9 @@ Level</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Att_Lev</objectName>
   <x>65</x>
   <y>658</y>
@@ -1801,8 +1995,10 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.910</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -1818,9 +2014,9 @@ Level</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Decay_1</objectName>
   <x>129</x>
   <y>573</y>
@@ -1830,15 +2026,27 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
   <value>0.60000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>127</x>
   <y>625</y>
@@ -1848,9 +2056,11 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Decay
 1</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1866,9 +2076,9 @@ Level</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Decay_1</objectName>
   <x>125</x>
   <y>658</y>
@@ -1878,8 +2088,10 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.600</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -1895,9 +2107,9 @@ Level</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Dec_Lev</objectName>
   <x>189</x>
   <y>573</y>
@@ -1907,15 +2119,27 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.53000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>187</x>
   <y>625</y>
@@ -1925,9 +2149,11 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Decay
 Level</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1943,9 +2169,9 @@ Level</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Dec_Lev</objectName>
   <x>185</x>
   <y>658</y>
@@ -1955,8 +2181,10 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.530</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -1972,9 +2200,9 @@ Level</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Decay_2</objectName>
   <x>249</x>
   <y>573</y>
@@ -1984,15 +2212,27 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
   <value>4.20000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>247</x>
   <y>625</y>
@@ -2002,9 +2242,11 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Decay
 2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -2020,9 +2262,9 @@ Level</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Decay_2</objectName>
   <x>245</x>
   <y>658</y>
@@ -2032,8 +2274,10 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>4.200</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -2049,9 +2293,9 @@ Level</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Sustain</objectName>
   <x>309</x>
   <y>573</y>
@@ -2061,15 +2305,27 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.53000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>307</x>
   <y>625</y>
@@ -2079,8 +2335,10 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Sustain</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -2096,9 +2354,9 @@ Level</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Sustain</objectName>
   <x>305</x>
   <y>658</y>
@@ -2108,8 +2366,10 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.530</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -2125,9 +2385,9 @@ Level</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Release</objectName>
   <x>369</x>
   <y>573</y>
@@ -2137,15 +2397,27 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>15.00000000</maximum>
   <value>0.10000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>367</x>
   <y>625</y>
@@ -2155,8 +2427,10 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Release</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -2172,9 +2446,9 @@ Level</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Release</objectName>
   <x>365</x>
   <y>658</y>
@@ -2184,8 +2458,10 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.100</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -2201,9 +2477,9 @@ Level</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Mod_Rate</objectName>
   <x>438</x>
   <y>573</y>
@@ -2213,15 +2489,27 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00100000</minimum>
   <maximum>20.00000000</maximum>
   <value>4.60077000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>436</x>
   <y>625</y>
@@ -2231,9 +2519,11 @@ Level</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Mod
 Rate</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -2249,9 +2539,9 @@ Rate</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Mod_Rate</objectName>
   <x>434</x>
   <y>658</y>
@@ -2261,8 +2551,10 @@ Rate</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>4.601</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -2278,9 +2570,9 @@ Rate</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Vib_Depth</objectName>
   <x>498</x>
   <y>573</y>
@@ -2290,15 +2582,27 @@ Rate</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.10000000</maximum>
   <value>0.00400000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>496</x>
   <y>625</y>
@@ -2308,9 +2612,11 @@ Rate</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Vib
 Depth</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -2326,9 +2632,9 @@ Depth</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Vib_Depth</objectName>
   <x>494</x>
   <y>658</y>
@@ -2338,8 +2644,10 @@ Depth</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.004</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -2355,9 +2663,9 @@ Depth</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Trem_Depth</objectName>
   <x>558</x>
   <y>573</y>
@@ -2367,15 +2675,27 @@ Depth</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.50000000</maximum>
   <value>0.17000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>556</x>
   <y>625</y>
@@ -2385,9 +2705,11 @@ Depth</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Trem
 Depth</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -2403,9 +2725,9 @@ Depth</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Trem_Depth</objectName>
   <x>554</x>
   <y>658</y>
@@ -2415,8 +2737,10 @@ Depth</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.170</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -2432,9 +2756,9 @@ Depth</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Delay_Time</objectName>
   <x>618</x>
   <y>573</y>
@@ -2444,15 +2768,27 @@ Depth</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>3.00000000</maximum>
   <value>0.45000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>616</x>
   <y>625</y>
@@ -2462,9 +2798,11 @@ Depth</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Delay
 Time</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -2480,9 +2818,9 @@ Time</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Delay_Time</objectName>
   <x>614</x>
   <y>658</y>
@@ -2492,8 +2830,10 @@ Time</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.450</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -2509,9 +2849,9 @@ Time</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>Rise_Time</objectName>
   <x>678</x>
   <y>573</y>
@@ -2521,15 +2861,27 @@ Time</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>5.00000000</maximum>
   <value>0.87000000</value>
   <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
+  <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
+  <color>
+   <r>245</r>
+   <g>124</g>
+   <b>0</b>
+  </color>
+  <textcolor>#512900</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>676</x>
   <y>625</y>
@@ -2539,9 +2891,11 @@ Time</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Rise
 Time</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -2557,9 +2911,9 @@ Time</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Rise_Time</objectName>
   <x>674</x>
   <y>658</y>
@@ -2569,8 +2923,10 @@ Time</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.870</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -2586,9 +2942,9 @@ Time</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>311</x>
   <y>333</y>
@@ -2598,8 +2954,10 @@ Time</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Partial Strength</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -2615,7 +2973,7 @@ Time</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

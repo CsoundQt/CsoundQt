@@ -65,6 +65,8 @@ i 10		0		-1		;GUI
 f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -79,7 +81,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -89,8 +91,10 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Doppler Effect</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -108,7 +112,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>11</x>
   <y>5</y>
@@ -118,6 +122,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -125,9 +130,11 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Frequency_Rotation</objectName>
   <x>9</x>
   <y>60</y>
@@ -137,6 +144,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>-5.00000000</minimum>
   <maximum>5.00000000</maximum>
   <value>0.20000000</value>
@@ -145,7 +153,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>78</y>
@@ -155,8 +163,10 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Frequency of Rotation (Hertz)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -172,9 +182,9 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Frequency_Rotation</objectName>
   <x>449</x>
   <y>77</y>
@@ -184,8 +194,10 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.200</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -201,9 +213,9 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>518</x>
   <y>2</y>
@@ -213,8 +225,10 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Doppler EffectCircular Motion Doppler Effect  </label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -232,7 +246,7 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>521</x>
   <y>20</y>
@@ -242,9 +256,11 @@ f 0	  3600				;DUMMY SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>--------------------------------------------------------------------------------------------------------------------------------------------------
 This example uses three LFOs to create the effect of a sound moving in a circle around the listener. The three parameters controlled by these LFOs are amplitude, panning and delay time. The modulation of the delay time also results in a modulation of pitch which is sometimes referred to as the Doppler effect. Crucial to this effect is that that all three LFOs share the same frequency value. Negative frequency values are also allowed - this would represent a change in direction of the source sounds motion around us. Also of crucial importance is the phase relationship between the three LFOs as this defines exactly where the sound source is in relation to the listener. The panning LFO should be at its points of minimum rate of change when the sound source is moving parallel to the direction in which the listener is facing, i.e. directly to the left or to the right of the listener. The delay time LFO (pitch modulation/doppler) should be at its points of minimum rate of change when the sound source is moving perpendicular to the direction in which the listener is facing, i.e. directly in front of or behind the listener. The phase difference between these two LFOs is either 90 or 270, depending on whether the source sound is moving in a clockwise or anticlockwise direction around us. Amplitude modulation comes into play whenever we are not listening from the centre of the circle of motion. The closer to the edge of the circle we are the greater the amount of amplitude modulation we will experience. If the amplitude modulation is extreme then the circle of the source sound's motion must be extremely large. The phase of the amplitude modulation LFO is also adjustable ('Orientation' slider - this define which edge of the circle we are closest to, e.g. upper, lower, left, right etc. It is probably best to always include at least a small amount of amplitude modulation as we perceive sounds directly to our left or to our right to be more loud, even if they remain equidistant from us. In this case the amplitude LFO phase ('Orientation') should be 0.5 (radians). The waveform for all three LFOs is a sine wave. This defines the object's motion as being circular. If we were to use a different waveform this would model non-circular motion. There is interesting potential in experimentation in this direction with this example.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -260,9 +276,9 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Central_Edge</objectName>
   <x>449</x>
   <y>117</y>
@@ -272,8 +288,10 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.702</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -289,9 +307,9 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>159</y>
@@ -301,8 +319,10 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Orientation (radians)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -318,9 +338,9 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Central_Edge</objectName>
   <x>9</x>
   <y>100</y>
@@ -330,6 +350,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.70200000</value>
@@ -338,7 +359,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Orientation</objectName>
   <x>449</x>
   <y>157</y>
@@ -348,8 +369,10 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.500</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -365,9 +388,9 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Orientation</objectName>
   <x>9</x>
   <y>140</y>
@@ -377,6 +400,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.50000000</value>
@@ -385,7 +409,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>118</y>
@@ -395,8 +419,10 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Central / Edge</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -412,9 +438,9 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Panning_Width</objectName>
   <x>9</x>
   <y>180</y>
@@ -424,6 +450,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.51800000</value>
@@ -432,7 +459,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Panning_Width</objectName>
   <x>449</x>
   <y>197</y>
@@ -442,8 +469,10 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.518</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -459,9 +488,9 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>199</y>
@@ -471,8 +500,10 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Panning Width</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -488,9 +519,9 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>279</y>
@@ -500,8 +531,10 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Output Gain</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -517,9 +550,9 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Output_Gain</objectName>
   <x>9</x>
   <y>261</y>
@@ -529,6 +562,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.70000000</value>
@@ -537,7 +571,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Output_Gain</objectName>
   <x>449</x>
   <y>279</y>
@@ -547,8 +581,10 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.700</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -564,9 +600,9 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Doppler_Depth</objectName>
   <x>449</x>
   <y>238</y>
@@ -576,8 +612,10 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.042</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -593,9 +631,9 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>239</y>
@@ -605,8 +643,10 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Doppler Depth</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -622,9 +662,9 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Doppler_Depth</objectName>
   <x>9</x>
   <y>221</y>
@@ -634,6 +674,7 @@ This example uses three LFOs to create the effect of a sound moving in a circle 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>0.10000000</maximum>
   <value>0.04180000</value>

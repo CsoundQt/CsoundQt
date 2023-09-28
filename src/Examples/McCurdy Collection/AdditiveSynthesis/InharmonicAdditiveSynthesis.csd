@@ -14,7 +14,7 @@
 </CsOptions>
 <CsInstruments>
 sr		= 48000		;SAMPLE RATE
-ksmps	= 10			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE (MAY NEED TO BE LOW WHEN WORKING WITH SHORT DELAY TIMES DEFINED INITIALLY AT KRATE)
+ksmps	= 64			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE (MAY NEED TO BE LOW WHEN WORKING WITH SHORT DELAY TIMES DEFINED INITIALLY AT KRATE)
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -205,7 +205,9 @@ endin
 i 10 0 3600	;GUI
 i 3 0 0		;INIT
 </CsScore>
-</CsoundSynthesizer><bsbPanel>
+</CsoundSynthesizer>
+
+<bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>722</x>
@@ -219,7 +221,7 @@ i 3 0 0		;INIT
   <g>226</g>
   <b>185</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>2</y>
@@ -229,8 +231,10 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Inharmonic Additive Synthesis</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -248,7 +252,7 @@ i 3 0 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>181</x>
   <y>54</y>
@@ -258,6 +262,7 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -269,19 +274,22 @@ i 3 0 0		;INIT
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>93</x>
   <y>306</y>
@@ -291,8 +299,10 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Partial Strength:    1      2      3      4      5      6      7      8      9     10 </label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -308,9 +318,9 @@ i 3 0 0		;INIT
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>205</x>
   <y>54</y>
@@ -320,6 +330,7 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -331,19 +342,22 @@ i 3 0 0		;INIT
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>229</x>
   <y>54</y>
@@ -353,6 +367,7 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp3</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -364,19 +379,22 @@ i 3 0 0		;INIT
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>253</x>
   <y>54</y>
@@ -386,6 +404,7 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp4</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -397,19 +416,22 @@ i 3 0 0		;INIT
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>277</x>
   <y>54</y>
@@ -419,6 +441,7 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp5</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -430,19 +453,22 @@ i 3 0 0		;INIT
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>301</x>
   <y>54</y>
@@ -452,30 +478,34 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp6</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.18000001</yValue>
+  <yValue>0.18000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>325</x>
   <y>54</y>
@@ -485,6 +515,7 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp7</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -496,19 +527,22 @@ i 3 0 0		;INIT
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>349</x>
   <y>54</y>
@@ -518,6 +552,7 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp8</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -529,19 +564,22 @@ i 3 0 0		;INIT
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>373</x>
   <y>54</y>
@@ -551,6 +589,7 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp9</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -562,19 +601,22 @@ i 3 0 0		;INIT
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName/>
   <x>397</x>
   <y>54</y>
@@ -584,30 +626,34 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp10</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.30000001</yValue>
+  <yValue>0.30000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
    <b>208</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>6</x>
   <y>6</y>
@@ -617,6 +663,7 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -625,9 +672,11 @@ i 3 0 0		;INIT
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Fund_Freq</objectName>
   <x>92</x>
   <y>334</y>
@@ -637,15 +686,16 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.49623451</value>
+  <value>0.49623450</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>92</x>
   <y>351</y>
@@ -655,8 +705,10 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Fundamental (Hertz)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -672,9 +724,9 @@ i 3 0 0		;INIT
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Fund_Freq_Value</objectName>
   <x>451</x>
   <y>351</y>
@@ -684,8 +736,10 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>437.000</label>
+  <description/>
+  <label>436.998</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -701,9 +755,9 @@ i 3 0 0		;INIT
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Amplitude</objectName>
   <x>92</x>
   <y>372</y>
@@ -713,15 +767,16 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.30000001</value>
+  <value>0.30000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>92</x>
   <y>389</y>
@@ -731,8 +786,10 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Global Amplitude</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -748,9 +805,9 @@ i 3 0 0		;INIT
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>Amplitude</objectName>
   <x>452</x>
   <y>389</y>
@@ -760,8 +817,10 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.300</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -777,9 +836,9 @@ i 3 0 0		;INIT
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>616</x>
   <y>2</y>
@@ -789,8 +848,10 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Inharmonic Additive Synthesis</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -808,7 +869,7 @@ i 3 0 0		;INIT
   <borderradius>5</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>621</x>
   <y>25</y>
@@ -818,11 +879,13 @@ i 3 0 0		;INIT
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>-------------------------------------------------------------------------------------------------------------------------------------
 In inharmonic additive synthesis the partial spacings do not follow the harmonic series and so in this example each of the partials is individually tunable. The fundemental is defined using the 'Fundemental' slider. Note that the lowest partial is not necessarily the perceived fundemental of the tone. Curiously in the default timbre produced by this example, which is that of a tubular bell, the perceived fundemental of 437 Hz is not present at all!
 The fundemental is actually 1 octave below the 3rd partial. The frequencies of subsequent partials are derived using ratios. A simple ADR envelope is implemented independently for each partial in order to permit the creation of dynamic spectra. This example is designed for producing percussive sounds only and therefore has no sustain portion in any of the amplitude envelopes. Setting 'decay' values very high will give the impression of a sustaining instrument.
 Notice how, in general, the higher partials tend to decay quicker. Also when damped, i.e. if the envelopes enter their release stages, the higher partials tend to decay quicker. The data for the default sound in this example was derived from a sonogram sound analysis program. This example also allow pitch control from a MIDI keyboard by first activating the 'MIDI switch in the interface. In this mode the instrument will also respond to key velocity.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -838,9 +901,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>437</y>
@@ -850,8 +913,10 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Ratio</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -867,9 +932,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>479</y>
@@ -879,8 +944,10 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Attack</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -896,9 +963,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>518</y>
@@ -908,8 +975,10 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Decay</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -925,9 +994,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>556</y>
@@ -937,8 +1006,10 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Release</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -954,9 +1025,9 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack1</objectName>
   <x>7</x>
   <y>459</y>
@@ -966,6 +1037,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -985,7 +1057,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.003</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack2</objectName>
   <x>67</x>
   <y>459</y>
@@ -995,6 +1067,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1014,7 +1087,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.003</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack4</objectName>
   <x>187</x>
   <y>459</y>
@@ -1024,6 +1097,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1043,7 +1117,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.003</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack3</objectName>
   <x>127</x>
   <y>459</y>
@@ -1053,6 +1127,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1072,7 +1147,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.003</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack7</objectName>
   <x>367</x>
   <y>459</y>
@@ -1082,6 +1157,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1101,7 +1177,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.003</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack8</objectName>
   <x>427</x>
   <y>459</y>
@@ -1111,6 +1187,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1130,7 +1207,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.003</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack6</objectName>
   <x>307</x>
   <y>459</y>
@@ -1140,6 +1217,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1159,7 +1237,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.003</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack5</objectName>
   <x>247</x>
   <y>459</y>
@@ -1169,6 +1247,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1188,7 +1267,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.003</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack10</objectName>
   <x>547</x>
   <y>459</y>
@@ -1198,6 +1277,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1217,7 +1297,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.003</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Attack9</objectName>
   <x>487</x>
   <y>459</y>
@@ -1227,6 +1307,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1246,7 +1327,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.003</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ratio9</objectName>
   <x>487</x>
   <y>418</y>
@@ -1256,6 +1337,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1275,7 +1357,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>11.0343</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ratio10</objectName>
   <x>547</x>
   <y>418</y>
@@ -1285,6 +1367,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1304,7 +1387,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>12.0252</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ratio5</objectName>
   <x>247</x>
   <y>418</y>
@@ -1314,6 +1397,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1333,7 +1417,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>4.01602</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ratio6</objectName>
   <x>307</x>
   <y>418</y>
@@ -1343,6 +1427,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1362,7 +1447,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>5.18078</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ratio8</objectName>
   <x>427</x>
   <y>418</y>
@@ -1372,6 +1457,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1391,7 +1477,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>7.75515</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ratio7</objectName>
   <x>367</x>
   <y>418</y>
@@ -1401,6 +1487,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1420,7 +1507,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>6.43707</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ratio3</objectName>
   <x>127</x>
   <y>418</y>
@@ -1430,6 +1517,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1449,7 +1537,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ratio4</objectName>
   <x>187</x>
   <y>418</y>
@@ -1459,6 +1547,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1478,7 +1567,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>2.93135</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ratio2</objectName>
   <x>67</x>
   <y>418</y>
@@ -1488,6 +1577,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1507,7 +1597,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>1.23112</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Ratio1</objectName>
   <x>7</x>
   <y>418</y>
@@ -1517,6 +1607,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1536,7 +1627,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.622426</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release9</objectName>
   <x>487</x>
   <y>537</y>
@@ -1546,6 +1637,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1565,7 +1657,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.01</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release10</objectName>
   <x>547</x>
   <y>537</y>
@@ -1575,6 +1667,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1594,7 +1687,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.005</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release5</objectName>
   <x>247</x>
   <y>537</y>
@@ -1604,6 +1697,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1623,7 +1717,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.25</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release6</objectName>
   <x>307</x>
   <y>537</y>
@@ -1633,6 +1727,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1652,7 +1747,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release8</objectName>
   <x>427</x>
   <y>537</y>
@@ -1662,6 +1757,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1681,7 +1777,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.02</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release7</objectName>
   <x>367</x>
   <y>537</y>
@@ -1691,6 +1787,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1710,7 +1807,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.04</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release3</objectName>
   <x>127</x>
   <y>537</y>
@@ -1720,6 +1817,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1739,7 +1837,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release4</objectName>
   <x>187</x>
   <y>537</y>
@@ -1749,6 +1847,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1768,7 +1867,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.32</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release2</objectName>
   <x>67</x>
   <y>537</y>
@@ -1778,6 +1877,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1797,7 +1897,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.4</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Release1</objectName>
   <x>7</x>
   <y>537</y>
@@ -1807,6 +1907,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1826,7 +1927,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>0.3</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay1</objectName>
   <x>7</x>
   <y>498</y>
@@ -1836,6 +1937,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1855,7 +1957,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>4.5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay2</objectName>
   <x>67</x>
   <y>498</y>
@@ -1865,6 +1967,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1884,7 +1987,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>7.22</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay4</objectName>
   <x>187</x>
   <y>498</y>
@@ -1894,6 +1997,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1913,7 +2017,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>9.42</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay3</objectName>
   <x>127</x>
   <y>498</y>
@@ -1923,6 +2027,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1942,7 +2047,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>9.26</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay7</objectName>
   <x>367</x>
   <y>498</y>
@@ -1952,6 +2057,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -1971,7 +2077,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>4.5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay8</objectName>
   <x>427</x>
   <y>498</y>
@@ -1981,6 +2087,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -2000,7 +2107,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>2.22</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay6</objectName>
   <x>307</x>
   <y>498</y>
@@ -2010,6 +2117,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -2029,7 +2137,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>4.98</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay5</objectName>
   <x>247</x>
   <y>498</y>
@@ -2039,6 +2147,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -2058,7 +2167,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>8.7</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay10</objectName>
   <x>547</x>
   <y>498</y>
@@ -2068,6 +2177,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
@@ -2087,7 +2197,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <randomizable group="0">false</randomizable>
   <value>1.34</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Decay9</objectName>
   <x>487</x>
   <y>498</y>
@@ -2097,6 +2207,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>9</fontsize>

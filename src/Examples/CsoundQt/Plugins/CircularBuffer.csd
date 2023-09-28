@@ -98,6 +98,8 @@ schedule "main", 0, -1
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -112,7 +114,7 @@ schedule "main", 0, -1
   <g>255</g>
   <b>255</b>
  </bgcolor>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>record</objectName>
   <x>12</x>
   <y>12</y>
@@ -134,7 +136,7 @@ schedule "main", 0, -1
   <latched>false</latched>
   <fontsize>30</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBTableDisplay">
+ <bsbObject type="BSBTableDisplay" version="2">
   <objectName>plot</objectName>
   <x>12</x>
   <y>97</y>

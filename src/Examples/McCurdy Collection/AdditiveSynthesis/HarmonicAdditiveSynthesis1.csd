@@ -13,7 +13,7 @@
 </CsOptions>
 <CsInstruments>
 sr		= 48000		;SAMPLE RATE
-ksmps	= 50			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
+ksmps	= 64			;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls	= 2			;NUMBER OF CHANNELS (2=STEREO)
 0dbfs	= 1			;MAXIMUM SOUND INTENSITY LEVEL REGARDLESS OF BIT DEPTH
 
@@ -125,6 +125,8 @@ i 2 0 3600	;PARTIAL SPACINGS RANDOM FACTORS INSTRUMENTS PLAY A NOTE FOR 1 HOUR (
 i 10 0 3600	;GUI
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -149,8 +151,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Additive Synthesis 1</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -178,17 +182,20 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>1.00000000</yValue>
+  <yValue>0.59600000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
@@ -200,6 +207,7 @@ i 10 0 3600	;GUI
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -211,8 +219,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1      2      3      4      5      6      7      8      9     10 </label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -228,7 +238,7 @@ i 10 0 3600	;GUI
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName/>
@@ -240,17 +250,20 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.74000000</yValue>
+  <yValue>0.31200000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
@@ -262,6 +275,7 @@ i 10 0 3600	;GUI
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName/>
@@ -273,17 +287,20 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp3</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.64000000</yValue>
+  <yValue>0.73600000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
@@ -295,6 +312,7 @@ i 10 0 3600	;GUI
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName/>
@@ -306,17 +324,20 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp4</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.48400000</yValue>
+  <yValue>0.41600000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
@@ -328,6 +349,7 @@ i 10 0 3600	;GUI
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName/>
@@ -339,17 +361,20 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp5</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.38800000</yValue>
+  <yValue>0.76800000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
@@ -361,6 +386,7 @@ i 10 0 3600	;GUI
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName/>
@@ -372,17 +398,20 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp6</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.32000000</yValue>
+  <yValue>0.28000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
@@ -394,6 +423,7 @@ i 10 0 3600	;GUI
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName/>
@@ -405,17 +435,20 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp7</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.29600000</yValue>
+  <yValue>0.83600000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
@@ -427,6 +460,7 @@ i 10 0 3600	;GUI
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName/>
@@ -438,17 +472,20 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp8</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.27600000</yValue>
+  <yValue>0.00000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
@@ -460,6 +497,7 @@ i 10 0 3600	;GUI
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName/>
@@ -471,17 +509,20 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp9</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.26800000</yValue>
+  <yValue>0.79600000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
@@ -493,6 +534,7 @@ i 10 0 3600	;GUI
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBController">
   <objectName/>
@@ -504,17 +546,20 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>PartAmp10</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.00000000</xValue>
-  <yValue>0.25600000</yValue>
+  <yValue>0.00000000</yValue>
   <type>llif</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>208</r>
    <g>208</g>
@@ -526,6 +571,7 @@ i 10 0 3600	;GUI
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName/>
@@ -537,6 +583,7 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -545,7 +592,9 @@ i 10 0 3600	;GUI
   <image>/</image>
   <eventLine>i 1 0 -1</eventLine>
   <latch>true</latch>
-  <latched>false</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>true</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Fund_Freq</objectName>
@@ -557,9 +606,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.29032258</value>
+  <value>0.18181818</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -575,8 +625,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Fundamental (Hertz)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -592,7 +644,7 @@ i 10 0 3600	;GUI
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Fund_Freq_Value</objectName>
@@ -604,8 +656,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>121.527</label>
+  <description/>
+  <label>61.923</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -621,7 +675,7 @@ i 10 0 3600	;GUI
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Amplitude</objectName>
@@ -633,9 +687,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.15249267</value>
+  <value>0.31671554</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -651,8 +706,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Global Amplitude</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -668,7 +725,7 @@ i 10 0 3600	;GUI
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Amplitude</objectName>
@@ -680,8 +737,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <label>0.152</label>
+  <description/>
+  <label>0.317</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -697,7 +756,7 @@ i 10 0 3600	;GUI
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Warp</objectName>
@@ -709,6 +768,7 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
   <value>1.00000000</value>
@@ -727,8 +787,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Warp Partial Spacings</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -744,7 +806,7 @@ i 10 0 3600	;GUI
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Warp</objectName>
@@ -756,8 +818,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>1.000</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -773,7 +837,7 @@ i 10 0 3600	;GUI
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBHSlider">
   <objectName>Rnd</objectName>
@@ -785,6 +849,7 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
   <value>0.00000000</value>
@@ -803,8 +868,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Partial Spacings Random Factor</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -820,7 +887,7 @@ i 10 0 3600	;GUI
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBDisplay">
   <objectName>Rnd</objectName>
@@ -832,8 +899,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>9</fontsize>
   <precision>3</precision>
@@ -849,7 +918,7 @@ i 10 0 3600	;GUI
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
   <objectName>Reset</objectName>
@@ -861,6 +930,7 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -868,7 +938,9 @@ i 10 0 3600	;GUI
   <image>/</image>
   <eventLine>i 4 0 0</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -880,8 +952,10 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Additive Synthesis 1 - 10 Harmonics</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial Black</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -909,9 +983,11 @@ i 10 0 3600	;GUI
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>-------------------------------------------------------------------------------------------------
 Additive synthesis is the technique whereby sine waves of different frequencies are mixed and manipulated in such a way that they are perceived fused and seem to form a new, more complex tone. The inspiration for additive synthesis comes from Fourier theory that states that any sound can be replicated as a composite of sine waves of various frequencies and phases.  In harmonic additive synthesis the sequence of frequencies  followed by the different sine wave oscillators follows that of the harmonic series in that each harmonic is a product of the fundemental. For example: if the fundemental of a harmonic tone is 100 Hz. then its 1st harmonic will be at 200 Hz. its 2nd at 300 Hz and so on. This example offers the user manipulation of the first 10 harmonics but to synthesize bright timbres rich in higher harmonics such as a violin this number will be insufficient. The next example which utilises more partials, demonstrates  ways in which the fusion of partials can be enhanced but also draws attention to the shortcomings of additive synthesis. Note that the fundemental can also be referred to as the 1st partial, the 1 harmonic as the 2nd partial and so on. Partial spacings can be modified in two ways. 'Warp Partial  Spacings' compresses or expands partials spacings depending  upon whether its value is less than or greater than 1. 'Partial Spacings Random Factor' multiplies a unique random value to each partial frequency.                             </label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -927,7 +1003,7 @@ Additive synthesis is the technique whereby sine waves of different frequencies 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
   <objectName/>
@@ -939,8 +1015,10 @@ Additive synthesis is the technique whereby sine waves of different frequencies 
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Partial Strength</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -956,7 +1034,7 @@ Additive synthesis is the technique whereby sine waves of different frequencies 
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
