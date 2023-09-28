@@ -64,7 +64,7 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
 	l->addWidget(splitter);
 	setLayout(l);
 	m_mode = EDIT_CSOUND_MODE;
-	m_highlighter.setOpcodeNameList(opcodeTree->opcodeNameList());
+    m_highlighter.setOpcodeNameList(opcodeTree->opcodeNameList());
 	m_highlighter.setDocument(m_mainEditor->document());
 	m_viewMode = 0;
 	m_appProperties.used = false;

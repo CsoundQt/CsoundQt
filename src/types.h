@@ -124,9 +124,10 @@ public:
     QString inArgs;
     QString desc;
     int isFlag;
+    bool isInstalled;
 
     Opcode() {}
-    Opcode(QString name, QString outs="", QString ins=""): opcodeName(name), outArgs(outs), inArgs(ins) {}
+    Opcode(QString name, QString outs="", QString ins="", bool installed=true): opcodeName(name), outArgs(outs), inArgs(ins), isInstalled(installed) {}
 
 };
 

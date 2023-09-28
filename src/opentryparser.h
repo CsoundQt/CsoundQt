@@ -39,7 +39,7 @@ public:
     void parseOpcodesXml(QString opcodeFile);
     void sortOpcodes();
 	void addExtraOpcodes();
-	QStringList opcodeNameList();
+    QStringList opcodeNameList(bool includeDisabled=false);
 	QString getSyntax(QString opcodeName);
 	QVector<Opcode> getPossibleSyntax(QString word);
 	QList< QPair<QString, QList<Opcode> > > getOpcodesByCategory();
@@ -52,15 +52,16 @@ public:
     void setUdos(QHash<QString, Opcode>*udosMap) { m_udosMap = udosMap; }
     Opcode findOpcode(QString opcodeName);
     bool isKnownOpcode(QString name);
+    QList<Opcode> opcodeList;
 
 private:
 	QString m_opcodeFile;
-	QList<Opcode> opcodeList;
     QHash<QString, Opcode> opcodeMap;
 	QList< QPair<QString, QList<Opcode> > > opcodeCategoryList;
 	QVector<QList<Opcode> > opcodeListCategory;
 	QStringList categoryList;
 	QStringList excludedOpcodes;
+    QStringList m_opcodeNameListCache;
 
 	void addOpcode(Opcode opcode);
     void addFlag(QString flag, QString description);

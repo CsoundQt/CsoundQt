@@ -336,6 +336,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
             QDEBUG << "Parsing risset's opcodes.xml:" << rissetOpcodesXml;
             m_opcodeTree->parseOpcodesXml(rissetOpcodesXml);
             m_opcodeTree->sortOpcodes();
+            risset->markOpcodeTree(m_opcodeTree);
         } else {
             QDEBUG << "Risset's opcodes.xml not found: " << rissetOpcodesXml;
         }
@@ -2201,7 +2202,6 @@ void CsoundQt::runInTerm(bool realtime)
     // qDebug() << "m_options->terminal == " << m_options->terminal;
 #endif
     if(startProcess(termexe, args)) {
-    // if (execute(m_options->terminal, options)) {
         QMessageBox::critical(this, tr("Error running terminal"),
                               tr("Could not run terminal program: '%1'\nArgs: %2\n"
                                  "Check environment tab in preferences.").arg(termexe, args.join(" ")));
@@ -2480,6 +2480,7 @@ void CsoundQt::setEditorFocus()
  * @param external - If true, open in an external browser (default=false)
  */
 void CsoundQt::helpForEntry(QString entry, bool external) {
+    QDEBUG << "searching help for" << entry;
     if (entry.startsWith('#')) { // For #define and friends
         entry.remove(0,1);
     }
@@ -2489,13 +2490,23 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
         return;
     }
     QString errmsg;
-    if(risset->isInstalled && risset->opcodeNames.contains(entry)) {
+
+    if(risset->isInstalled && risset->opcodeToPlugin.contains(entry)) {
         // Check external help sources
+        QDEBUG << "Found an opcode from an external plugin: " << entry;
+        auto pluginName = risset->opcodeToPlugin[entry];
+        if(!risset->pluginInstalled[pluginName]) {
+            QDEBUG << "The opcode " << entry << "is defined in the plugin " << pluginName << ", but this plugin is not installed";
+            QMessageBox::information(this, "Risset",
+                                     QString("The plugin '%1' containing the opcode '%2' is not installed "
+                                             "You can install it via risset: 'risset install %1'").arg(pluginName, entry));
+        }
         QString fileName = risset->htmlManpage(entry);
         if(!fileName.isEmpty()) {
             openHtmlHelp(fileName, entry, external);
         }
         else {
+            QDEBUG << "Did not find html page for opcode" << entry;
             auto reply = QMessageBox::question(this, "Risset",
                                                "Risset documentation not found. Do you want to fetch it? "
                                                " (it may take a few seconds)",
@@ -2884,7 +2895,8 @@ void CsoundQt::openExternalBrowser(QUrl url)
     QString test = url.toString();
     if (!m_options->browser.isEmpty() && QFile::exists(m_options->browser)) {
         //execute(m_options->browser, "\"" + url.toString() + "\"");
-        execute(m_options->browser, url.toString()); // remove quotes, otherwise wrong with changed QProcess
+        startProcess(m_options->browser, QStringList(url.toString()));
+        // execute(m_options->browser, url.toString()); // remove quotes, otherwise wrong with changed QProcess
     }
     else {
 //        QMessageBox::critical(this, tr("Error"),
@@ -2984,17 +2996,36 @@ void CsoundQt::about()
 {
     About *msgBox = new About(this);
     msgBox->setWindowFlags(msgBox->windowFlags() | Qt::FramelessWindowHint);
-    QString text ="<h1>";
-    text += tr("by: Andres Cabrera, Tarmo Johannes, Eduardo Moguillansky and others") +"</h1><h2>",
-            text += tr("Version %1").arg(QCS_VERSION) + "</h2><h2>";
-    text += tr("Released under the LGPLv2 or GPLv3") + "</h2>";
-    text += tr("Using Csound version:") + QString::number(csoundGetVersion()) + " ";
-    text += tr("Precision:") + (csoundGetSizeOfMYFLT() == 8 ? "double (64-bit)" : "float (32-bit)") + "<br />";
+
+    QString text ="<h2>";
+    text += tr("Authors: Andres Cabrera, Tarmo Johannes, Eduardo Moguillansky and others") + "</h2><h2>";
+    text += tr("Version %1").arg(QCS_VERSION) + "</h2>";
+    text += "<h3>" + tr("Released under the LGPLv2 or GPLv3") + "</h3>";
+    text += tr("Using Csound version: <strong>%1</strong>, precision: <strong>%2</strong><br/>").arg(
+                QString::number(csoundGetVersion()),
+                csoundGetSizeOfMYFLT() == 8 ? "double (64-bit)" : "float (32-bit)");
     if(risset->isInstalled) {
-        text += tr("Risset package manager found, version: %1").arg(risset->rissetVersion);
+        text += "<hr>";
+        text += "<h3>Risset</h3>";
+        text += tr("Risset package manager found, version: <strong>%1</strong><br/>").arg(risset->rissetVersion);
+        text += tr("Plugins installed:<br/>");
+        if(!risset->installedPlugins.isEmpty()) {
+            text += "<ul>";
+            for(auto pluginName : risset->installedPlugins) {
+                auto opcodesInPlugin = risset->pluginOpcodes[pluginName];
+                auto opcodesStr = opcodesInPlugin.join(", ");
+
+                text += QString("<li><strong>%1</strong>: %2</li>").arg(pluginName, opcodesStr);
+            }
+            text += "</ul>";
+        } else {
+            text += "No plugins installed<br/>";
+        }
+
     } else {
-        text += tr("Risset package manager not found");
+        text += tr("Risset package manager not found. See <center><a href=\"https://github.com/csound-plugins/risset\">github.com/csound-plugins/risset</a></center>");
     }
+    text += "<hr>";
 
 #ifdef QCS_PYTHONQT
     text += tr("Built with PythonQt support.")+ "<br />";
@@ -4717,9 +4748,9 @@ void CsoundQt::createMenus()
     helpMenu->addSeparator();
     helpMenu->addAction(resetPreferencesAct);
     helpMenu->addSeparator();
-    helpMenu->addSeparator();
     helpMenu->addAction(reportBugAct);
     helpMenu->addAction(reportCsoundBugAct);
+    helpMenu->addSeparator();
     helpMenu->addAction(aboutAct);
     // helpMenu->addAction(donateAct);
     // uhelpMenu->addAction(aboutQtAct);
@@ -5618,7 +5649,7 @@ int CsoundQt::startProcess(QString executable, const QStringList &args) {
     p->setArguments(args);
     p->setWorkingDirectory(path);
     p->start();
-    qDebug() << "Launched external program with id:" << p->processId();
+    qDebug() << "Launched external program with id:" << p->processId() << ", executable: " << executable << ", args: " << args;
     return !p->waitForStarted() ? 1 : 0;
 }
 
@@ -5630,7 +5661,8 @@ int CsoundQt::execute(QString executable, QString options)
     QString commandLine = "open -a \"" + executable + "\" " + options;
 #endif
 #ifdef Q_OS_LINUX
-    QString commandLine = "\"" + executable + "\" " + options;
+    // QString commandLine = "\"" + executable + "\" " + options;
+    QString commandLine = executable + " " + options;
 #endif
 #ifdef Q_OS_HAIKU
     QString commandLine = "\"" + executable + "\" " + options;
@@ -5650,7 +5682,7 @@ int CsoundQt::execute(QString executable, QString options)
         // example or other embedded file
         path = QDir::tempPath();   // copy of example is saved there
     }
-    qDebug() << "CsoundQt::execute " << commandLine << path;
+    qDebug() << "CsoundQt::execute " << commandLine;
     auto p = new QProcess();
     p->setProgram(executable);
     auto args = options.split(" ");
@@ -6029,11 +6061,6 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
 			cmdLine = m_options->csoundExecutable+ " ";
 		}
 		qDebug()<<"Command line: " << cmdLine;
-        //#ifdef Q_OS_MAC
-        //		cmdLine = "/usr/local/bin/csound ";
-        //#else
-        //		cmdLine = "csound ";
-        //#endif
         m_options->rt = (realtime && m_options->rtUseOptions)
                 || (!realtime && m_options->fileUseOptions);
         cmdLine += m_options->generateCmdLineFlags() + " ";
@@ -6150,7 +6177,6 @@ void CsoundQt::getCompanionFileName()
 void CsoundQt::setWidgetPanelGeometry()
 {
     QRect geometry = documentPages[curPage]->getWidgetLayoutOuterGeometry();
-    //	qDebug() << "CsoundQt::setWidgetPanelGeometry() " << geometry;
     if (geometry.width() <= 0 || geometry.width() > 4096) {
         geometry.setWidth(400);
         qDebug() << "Warning: width invalid.";
@@ -6184,10 +6210,6 @@ int CsoundQt::isOpen(QString fileName)
     return open;
 }
 
-//void *CsoundQt::getCurrentCsound()
-//{
-//  return (void *)documentPages[curCsdPage]->getCsound();
-//}
 
 QString CsoundQt::setDocument(int index)
 {
@@ -6752,12 +6774,6 @@ EventSheet* CsoundQt::getSheet(int index, QString sheetName)
         return NULL;
     }
 }
-
-//void CsoundQt::newCurve(Curve * curve)
-//{
-//  newCurveBuffer.append(curve);
-//}
-//
 
 void CsoundQt::loadPreset(int preSetIndex, int index) {
     if (index == -1) {

@@ -116,21 +116,43 @@ Risset::Risset(QString pythonExe)
 
     rissetManpages.setPath(root.value("manpages").toString());
     QDEBUG << "Risset opcodes.xml: " << rissetOpcodesXml;
-    this->opcodeNames.clear();
     QDEBUG << "Risset version: " << rissetVersion;
+    QDEBUG << "Risset manual: " << rissetHtmlDocs.absolutePath();
+    this->opcodeNames.clear();
     auto plugins = root.value(QString("plugins")).toObject();
     for(auto pluginName: plugins.keys()) {
+        QDEBUG << "Risset - parsing plugin" << pluginName;
         auto plugindef = plugins.value(pluginName).toObject();
         bool installed = plugindef.value("installed").toBool();
+        auto opcodesInPlugin = plugindef.value("opcodes").toArray();
+        QStringList opcodesList;
+        for(auto opcodeName: opcodesInPlugin) {
+            QString opcodeNameStr = opcodeName.toString();
+            opcodeNames.append(opcodeNameStr);
+            opcodeToPlugin[opcodeNameStr] = pluginName;
+            opcodesList.append(opcodeNameStr);
+        }
+        pluginInstalled[pluginName] = installed;
+        this->pluginOpcodes[pluginName] = opcodesList;
         if(installed) {
-            auto opcodesInPlugin = plugindef.value("opcodes").toArray();
-            for(auto opcodeName: opcodesInPlugin) {
-                QString opcodeNameStr = opcodeName.toString();
-                opcodeNames.append(opcodeNameStr);
-            }
+            this->installedPlugins.append(pluginName);
+        }
+
+    }
+    // QDEBUG << "Risset opcodes: " << opcodeNames;
+    opcodeIndexDone = true;
+}
+
+
+void Risset::markOpcodeTree(OpEntryParser *tree) {
+    // Mark the opcodes which are not installed. This information can be used, for example
+    // for more nuanced highlighting
+    for(auto& opcode : tree->opcodeList) {
+        auto pluginName = this->opcodeToPlugin.value(opcode.opcodeName);
+        if(!pluginName.isEmpty()) {
+            opcode.isInstalled = this->pluginInstalled[pluginName];
         }
     }
-    opcodeIndexDone = true;
 }
 
 
@@ -155,10 +177,12 @@ QString Risset::htmlManpage(QString opcodeName) {
     // TODO!
     if(rissetHtmlDocs.exists()) {
         QString path = rissetHtmlDocs.filePath("opcodes/" + opcodeName + ".html");
-        if(QFile::exists(path))
+        if(QFile::exists(path)) {
+            QDEBUG << "Risset: found html man page for opcode" << opcodeName << ": " << path;
             return path;
+        }
         else {
-            QDEBUG << "Dir not find html page for opcode" << opcodeName << "\n"
+            QDEBUG << "Risset: did not find html page for opcode" << opcodeName << "\n"
                    << "... Searched: " << path;
         }
     }

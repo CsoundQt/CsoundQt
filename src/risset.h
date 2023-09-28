@@ -5,7 +5,7 @@
 #include <QJsonDocument>
 #include <QDir>
 #include <QProcess>
-
+#include "opentryparser.h"
 
 enum class RissetError { Ok, Error, HtmlError, RissetNotInstalled };
 
@@ -23,6 +23,7 @@ public:
     QString findHtmlDocumentation();
     QString markdownManpage(QString opcodeName);
     void cleanupProcesses();
+    void markOpcodeTree(OpEntryParser *tree);
     QString defaultOpcodesXmlPath() { return rissetRoot.filePath("opcodes.xml"); }
 
     bool isInstalled;
@@ -34,7 +35,11 @@ public:
     QDir rissetManpages;
     QStringList installedPlugins;
     QDir csoundqtDataRoot;
-    QStringList opcodeNames;
+    QStringList opcodeNames;                     // list of all opcodes (not installed opcodes might be excluded)
+    QHash<QString, bool> pluginInstalled;        // maps plugin to installed status
+    QHash<QString, QString> opcodeToPlugin;      // maps an opcode to its plugin
+    QHash<QString, QStringList> pluginOpcodes;   // list of opcodes per plugin
+
 
 private:
     QString m_infoText;
