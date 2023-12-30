@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QWaitCondition>
 #include <QFile>
+#include <QObject>
 
 CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     QDockWidget(parent),
@@ -24,6 +25,7 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
 #else
 	webView = new QWebEngineView(this);
     //webView->page()->profile()->clearHttpCache();
+    QObject::connect(webView, &QWebEngineView::loadFinished, this, &CsoundHtmlView::removeTemporaryHtmlFile );
 #endif
     csoundHtmlWrapper.setCsoundHtmlView(this);
     csoundHtmlOnlyWrapper.setCsoundHtmlView(this);
@@ -115,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         html = html.insert(injection_index, injection);
 #endif
-        QString htmlfilename;
+        QString htmlfilename; // maybe use also tempHtml herer
         if (filename.startsWith(":/") ) { // an example file
             htmlfilename = QDir::tempPath()+"/html-example.html"; // TODO: take name from filename
         } else {
@@ -127,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
         out << html;
         htmlfile.close();
         loadFromUrl(QUrl::fromLocalFile(htmlfilename));
-        // kas aitab, kui on siin:
+
 #ifdef USE_WEBENGINE
         webView->page()->setWebChannel(&channel);
         if (filename.endsWith(".html", Qt::CaseInsensitive)) {
@@ -159,73 +161,6 @@ void CsoundHtmlView::stop()
     csoundHtmlOnlyWrapper.stop();
 }
 
-void CsoundHtmlView::viewHtml(QString htmlText)
-{
-    qDebug();
-    tempHtml.setFileTemplate( QDir::tempPath()+"/csoundqt-html-XXXXXX.html" ); // must have html ending for webkit
-    if (tempHtml.open()) {
-#ifdef USE_WEBENGINE
-        // Inject necessary code to load qtwebchannel/qwebchannel.js.
-        QString injection = R"(
-<script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
-<script>
-"use strict";
-document.addEventListener("DOMContentLoaded", function () {//void CsoundHtmlView::closeEvent(QCloseEvent *event)
-                            //{
-                            //    qDebug() ;
-                            //    if (webView) {
-                            //		webView->close(); // is it necessary?
-                            //    }
-                            //}
-
-
-
-
-    try {
-        console.log("Initializing Csound...");
-        window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {
-        window.csound = channel.objects.csound;
-        csound.message("Initialized csound.\n");
-        });
-    } catch (e) {
-        alert("initialize_csound error: " + e.message);
-        console.log(e.message);
-    }
-});
-</script>
-)";
-        // Tricky because now HTML doesn't have to have a <head> element,
-        // and both <html> and <head> can have attributes. So we need to find an
-        // injection point that is the very first place allowed to put a <script>
-        // element.
-        int injection_index = htmlText.indexOf("<head", 0, Qt::CaseInsensitive);
-        if (injection_index != -1) {
-            injection_index = htmlText.indexOf(">", injection_index) + 1;
-        } else {
-            injection_index = htmlText.indexOf("<html", 0, Qt::CaseInsensitive);
-            injection_index = htmlText.indexOf(">", injection_index) + 1;
-        }
-        htmlText = htmlText.insert(injection_index, injection);
-#endif
-		tempHtml.write(htmlText.toLocal8Bit());
-		tempHtml.resize(tempHtml.pos()); // otherwise may keep contents from previous write if that was bigger
-		tempHtml.close();
-        loadFromUrl(QUrl::fromLocalFile(tempHtml.fileName()));
-#ifdef USE_WEBENGINE
-        webView->page()->setWebChannel(&channel);
-        auto filename = documentPage.load()->getFileName();
-        if (filename.endsWith(".html", Qt::CaseInsensitive)) {
-            // Register CsoundHtmlOnlyWrapper when performing HTML files.
-            qDebug()  << "Setting CsoundHtmlOnlyWrapper JavaScript object on view.";
-            channel.registerObject("csound", &csoundHtmlOnlyWrapper);
-        } else {
-            // Register CsoundHtmlWrapper when performing CSD files with embedded <html> element.
-            qDebug()  << "Setting CsoundWrapper JavaScript object on view.";
-            channel.registerObject("csound", &csoundHtmlWrapper);
-        }
-#endif
-	}
-}
 
 #ifdef USE_WEBKIT
 void CsoundHtmlView::addJSObject()
@@ -292,8 +227,13 @@ void CsoundHtmlView::showDebugWindow()
 		debuggerView->setUrl(QUrl("http://localhost:"+debugPort));
 		debugger->show();
 	} else {
-		qDebug()<<"Debugging port not set or reading failed";
-	}
+        qDebug()<<"Debugging port not set or reading failed";
+    }
+}
+
+void CsoundHtmlView::removeTemporaryHtmlFile(bool ok)
+{
+    qDebug() << "Ok: " << ok << "Should remove: " << tempHtml.fileName();
 }
 
 #endif
