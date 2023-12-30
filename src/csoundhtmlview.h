@@ -70,7 +70,8 @@ private:
     // For performing HTML files (HTML-only performance).
     CsoundHtmlOnlyWrapper csoundHtmlOnlyWrapper;
     CsoundEngine *m_csoundEngine;
-    QTemporaryFile tempHtml;
+    //QTemporaryFile tempHtml;
+    QFile htmlfile;
     CsoundOptions * m_options;
 #ifdef USE_WEBENGINE
 	QString m_debugPort;

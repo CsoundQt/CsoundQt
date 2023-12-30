@@ -123,7 +123,8 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             htmlfilename = filename + ".html";
         }
-        QFile htmlfile(htmlfilename);
+        htmlfile.setFileName(htmlfilename);
+        //htmlfile(htmlfilename);
         htmlfile.open(QIODevice::WriteOnly);
         QTextStream out(&htmlfile);
         out << html;
@@ -233,7 +234,11 @@ void CsoundHtmlView::showDebugWindow()
 
 void CsoundHtmlView::removeTemporaryHtmlFile(bool ok)
 {
-    qDebug() << "Ok: " << ok << "Should remove: " << tempHtml.fileName();
+    if (ok) {
+        qDebug() << "Removing temporary html: " << htmlfile.fileName();
+        htmlfile.remove();
+
+    }
 }
 
 #endif
