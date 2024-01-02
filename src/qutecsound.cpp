@@ -214,7 +214,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_server = new QLocalServer();
     connect(m_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 
-
 #if defined(QCS_QTHTML)
 #ifdef USE_WEBENGINE	// set the remote debugging port for chromium based web browser here
     //TODO: change it when user changes

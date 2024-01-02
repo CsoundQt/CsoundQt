@@ -21,10 +21,10 @@ public:
         this->setStyleSheet(R"(
 
                             QSlider::groove:horizontal {
-                                height: 4px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
+                                height: 2px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
                                 background: #dcdcdc;
                                 border: 1px solid #a8a8a8;
-                                border-radius: 2px;
+                                border-radius: 1px;
                             }
 
                             QSlider::sub-page:horizontal {
@@ -37,17 +37,18 @@ public:
                             QSlider::handle:horizontal {
                                 background: #e9eaeb;
                                 border: 1px solid #a8a8a8;
-                                width: 14px;
-                                height: 14px;
-                                margin: -7px -1px; /* handle is placed by default on the contents rect of the groove. Expand outside the groove */
-                                border-radius: 7.5px;
+                                width: 18px;
+                                height: 18px;
+                                margin: -9px -1px; /* handle is placed by default on the contents rect of the groove. Expand outside the groove */
+                                border-radius: 9px;
+                                padding: -9px 0px;
                             }
 
                             QSlider::groove:vertical {
-                                width: 4px;
+                                width: 2px;
                                 background: #dcdcdc;
                                 border: 1px solid #a8a8a8;
-                                border-radius: 2px;
+                                border-radius: 1px;
                             }
 
 
@@ -61,10 +62,10 @@ public:
                             QSlider::handle:vertical {
                                 background: #e9eaeb;
                                 border: 1px solid #a8a8a8;
-                                width: 14px;
-                                height: 14px;
-                                margin: -1 -7px;
-                                border-radius: 7.5px;
+                                width: 18px;
+                                height: 18px;
+                                margin: -1 -9px;
+                                border-radius: 9px;
                             }
                         )");
     };
@@ -91,7 +92,7 @@ protected:
             {
                 int x = std::round((double)((double)((double)(i - this->minimum()) / (double)(this->maximum() - this->minimum())) * (double)(this->width() - handle.width()) + (double)(handle.width() / 2.0))) - 1;
                 int h = 4;
-                p.setPen(QColor("#a5a294"));
+                p.setPen(QColor(0xa5, 0xa2, 0x94));
                 if (tickPosition() == TicksBothSides || tickPosition() == TicksAbove)
                 {
                     int y = this->rect().top();

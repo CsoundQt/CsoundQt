@@ -64,9 +64,8 @@ QString getElement(const QString &text, const QString &tag)
 
 void CsoundHtmlView::load(DocumentPage *documentPage_)
 {
-    //TODO: call this whenever document is saved, not only on run. Usually always saved when run but there is also option not to save... Think.
-    documentPage = documentPage_; // consider rewrite...
-    qDebug() ;
+    qDebug();
+    documentPage = documentPage_;
     auto text = documentPage.load()->getFullText();
     auto filename = documentPage.load()->getFileName();
     QFile csdfile(filename);
@@ -225,7 +224,7 @@ void CsoundHtmlView::showDebugWindow()
         debugger->setAttribute(Qt::WA_DeleteOnClose);
         debugger->setLayout(layout);
 		qDebug()<<"Opening window for localhost:"<<debugPort;
-		debuggerView->setUrl(QUrl("http://localhost:"+debugPort));
+        debuggerView->setUrl(QUrl("http://localhost:"+debugPort));
 		debugger->show();
 	} else {
         qDebug()<<"Debugging port not set or reading failed";
