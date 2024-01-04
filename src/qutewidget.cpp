@@ -31,8 +31,13 @@ QuteWidget::QuteWidget(QWidget *parent):
 	connect(propertiesAct, SIGNAL(triggered()), this, SLOT(openProperties()));
 
 	addChn_kAct = new QAction(tr("Add chn_k to csd"),this);
-	addChn_kAct->setStatusTip(tr("Add chn_k definitionto ;;channels section in editor"));
+    addChn_kAct->setStatusTip(tr("Add chn_k definition to ;;channels section in editor"));
 	connect(addChn_kAct, SIGNAL(triggered()), this, SLOT(addChn_k()));
+
+#ifdef USE_QT_LT_50
+    openMidiDialogAct = new QAction(tr("Midi learn"),this);
+    connect(openMidiDialogAct, SIGNAL(triggered()), this, SLOT(openMidiDialog()));
+#endif
 
 	m_value = 0.0;
 	m_value2 = 0.0;
@@ -281,7 +286,7 @@ void QuteWidget::updateDialogWindow(int cc, int channel) // to update values fro
 
 	if (!dialog) {
 		qDebug() << "Dialog window not careated";
-		return;
+        return;
 	}
 
 	if (dialog->isVisible() && acceptsMidi()) {
@@ -312,8 +317,12 @@ void QuteWidget::popUpMenu(QPoint pos)
 	}
 
 	if (acceptsMidi()) {
+#ifdef USE_QT_LT_50
+        menu.addAction(openMidiDialogAct);
+#else
 		menu.addAction(tr("Midi learn"), this, &QuteWidget::openMidiDialog  ); //midi learn act
-		menu.addSeparator();
+#endif
+        menu.addSeparator();
 	}
 
 	QList<QAction *> actionList = getParentActionList();

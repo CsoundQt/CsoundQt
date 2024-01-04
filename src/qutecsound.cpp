@@ -376,7 +376,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     makeNewPage(QDir::tempPath()+"/tmp.csd",  QCS_DEFAULT_TEMPLATE);
     save();
     play(true, -1); // problem, if pulse/alsa in settings but jack has been started
-    QThread::msleep(100); // wait a tiny bit
+    //QThread::msleep(100); // wait a tiny bit
     stop();
     deleteTab(curPage);
     documentTabs->setCurrentIndex(oldPage);
@@ -5671,11 +5671,12 @@ void CsoundQt::getCompanionFileName()
 
 #ifdef USE_QT5
 			companion = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/empty.sco"; // QT >5.0
-			QFile f(companion); // does it create it here
 #else
             companion = QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/empty.sco";
+
 #endif
-			f.open(QIODevice::ReadWrite | QIODevice::Text);
+            QFile f(companion);
+            f.open(QIODevice::ReadWrite | QIODevice::Text);
 			f.close();
 			qDebug() << "Created empty score file as companion: " << companion;
 		}

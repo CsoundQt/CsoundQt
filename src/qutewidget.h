@@ -124,7 +124,9 @@ private:
 
 	QAction *propertiesAct;
 	QAction *addChn_kAct;
-
+#ifdef USE_QT_LT_50
+    QAction *openMidiDialogAct;
+#endif
 
 	QPushButton *applyButton;
 	QPushButton *cancelButton;
