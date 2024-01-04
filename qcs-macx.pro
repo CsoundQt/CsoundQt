@@ -17,6 +17,7 @@ HOME_DIRECTORY =
 # Set default paths
 CSOUND_FRAMEWORK_DIR = Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
 DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${CSOUND_FRAMEWORK_DIR}/Headers \
+        /$${CSOUND_FRAMEWORK_DIR}/Headers \
         $${CSOUND_FRAMEWORK_DIR}/Headers \
         /usr/local/include/csound \
         /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Headers
