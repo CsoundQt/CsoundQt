@@ -20,6 +20,7 @@
     02111-1307 USA
 */
 
+#include <unistd.h>
 #ifdef USE_QT5
 #include <QtConcurrent>
 #endif
