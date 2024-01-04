@@ -356,7 +356,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // Open files passed in the command line. Here to make sure they are the active tab.
     foreach (QString fileName, fileNames) {
         if (QFile::exists(fileName)) {
-            qDebug() << "loading file " << fileName;
             loadFile(fileName, m_options->autoPlay);
         }
         else {
@@ -2589,6 +2588,7 @@ void CsoundQt::setFullScreen(bool full)
 		m_fullScreenComponent = "mainwindow";
     }
     else {
+        checkFullScreen(); // if something is still fullscreen by error, reset it;
         this->showNormal();
 		m_fullScreenComponent = "";
     }
@@ -5763,7 +5763,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         changePage(index);
         return index;
     }
-    QDEBUG << "loading file" << fileName;
+    // QDEBUG << "loading file" << fileName;
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly)) {
         QMessageBox::warning(this, tr("CsoundQt"),
@@ -5849,7 +5849,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     if (runNow) {
         play();
     }
-    QDEBUG << "loadFile" << fileName << "finished, curPage:" << curPage;
+    //QDEBUG << "loadFile" << fileName << "finished, curPage:" << curPage;
     return curPage;
 }
 
