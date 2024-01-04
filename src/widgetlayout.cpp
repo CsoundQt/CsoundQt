@@ -21,6 +21,7 @@
 */
 
 #include <cstdlib>
+#include <unistd.h>
 
 #include <QThread>
 
