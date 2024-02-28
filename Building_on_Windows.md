@@ -39,6 +39,7 @@ Create  `config.user.pri`  in CsoundQt source root directory and enter following
 
 With content like:
 
+```
 CONFIG *= rtmidi
 CONFIG *= perfThread_build
 #CONFIG +=record_support # crash on Windows 11...
@@ -54,6 +55,7 @@ DEFAULT_LIBSNDFILE_LIBRARY_DIRS = "C:\Program Files\Mega-Nerd\libsndfile\bin"
 PTHREAD_INCLUDE_DIR = $$PWD/../pthreads/Pre-built.2/include
 LPTHREAD = $$PWD/../pthreads/Pre-built.2/lib/x64/pthreadVC2.lib
 
+```
 
 ## Build, install
 
@@ -64,5 +66,5 @@ Copy Examples folder to build/bin dir.
 To include also Csound, copy the following from Csound installation directory:
 - Csound6_x64/doc -> bin/doc
 - Csound6_x64/bin/* -> bin (next to CsoundQt executable
-
+- Csound6_x64/plugins64/  -> bin
 
