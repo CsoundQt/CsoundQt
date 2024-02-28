@@ -2129,7 +2129,7 @@ void CsoundQt::play(bool realtime, int index)
         return;
     }
 #if defined(QCS_QTHTML)
-    if (!documentPages.isEmpty()) {
+    if (!documentPages.isEmpty() && !documentPages[curPage]->getHtmlText().isEmpty()) {
         if ( !m_options->saveChanges ) { // otherwise the htmlview gets updated on save
             updateHtmlView();
             qDebug()<<"update html on run";
@@ -5943,7 +5943,7 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
     //  qDebug("CsoundQt::saveFile");
     // update htmlview on Save
 #if defined(QCS_QTHTML)
-    if (!documentPages.isEmpty()) {
+    if (!documentPages.isEmpty() && !documentPages[curPage]->getHtmlText().isEmpty()) {
         qDebug()<<"Update html on save";
         updateHtmlView();
     }
