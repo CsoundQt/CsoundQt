@@ -5125,6 +5125,7 @@ void CsoundQt::readSettings()
     recentFiles = settings.value("recentFiles").toStringList();
     setDefaultKeyboardShortcuts();
     QHash<QString, QVariant> actionList = settings.value("shortcuts").toHash();
+
     if (actionList.count() != 0) {
         QHashIterator<QString, QVariant> i(actionList);
         while (i.hasNext()) {
