@@ -1040,14 +1040,42 @@ void CsoundEngine::setupChannels()
     csoundSetInputChannelCallback(ud->csound, &CsoundEngine::inputValueCallback);
     csoundSetOutputChannelCallback(ud->csound, &CsoundEngine::outputValueCallback);
     // For chnget/chnset
-    controlChannelInfo_t *channelList;
-    int numChannels = csoundListChannels(ud->csound, &channelList);
-    controlChannelInfo_t *entry = channelList;
+
+    // old:
+//    controlChannelInfo_t *channelList;
+//    int numChannels = csoundListChannels(ud->csound, &channelList);
+//    controlChannelInfo_t *entry = channelList;
 
     MYFLT *pvalue;
     QVector<QuteWidget *> widgets = ud->wl->getWidgets();
     // Set channels values for existing channels (i.e. those declared with chn_*
     // in the csound header
+
+    // Push all values of the widgets to channels.
+    // The only string widget is "BSBLineEdit" ;
+    // ignore Label type: BSBLabel + reserved channels
+    // BSBController  has 2 channels and values
+
+    const QStringList reservedChannels = QStringList() << "_Play" << "_Stop" << "_Pause" << "_Render" << "_MBrowse" << "_SetPreset" << "_SetPresetIndex" << "_GetPresetName" << "_GetPresetNumber";
+
+    foreach (QuteWidget *w, widgets) {
+        QString type = w->getWidgetType();
+        QString channel = w->getChannelName();
+        if ( !reservedChannels.contains(channel) && type!="BSBLabel") {
+            if (type=="BSBLineEdit") {
+                csoundSetStringChannel(ud->csound, channel.toLocal8Bit().constData(), w->getStringValue().toLocal8Bit().data() );
+            } else  {
+                csoundSetControlChannel(ud->csound, channel.toLocal8Bit().constData(), w->getValue() );
+                if (type=="BSBController") {
+                    csoundSetControlChannel(ud->csound, w->getChannel2Name().toLocal8Bit().constData(), w->getValue2() );
+                }
+            }
+        }
+    }
+
+
+    /*
+     * This is the old code sending values only to declared channels
     for (int i = 0; i < numChannels; i++) {
         //                                                      name        type
         // if type is 0, no new channel is created if it does not exist,
@@ -1102,7 +1130,9 @@ void CsoundEngine::setupChannels()
         }
         entry++;
     }
-    csoundDeleteChannelList(ud->csound, channelList);
+    */
+
+//    csoundDeleteChannelList(ud->csound, channelList);
 
     // Force creation of string channels for _Browse widgets
     foreach (QuteWidget *w, widgets) {
