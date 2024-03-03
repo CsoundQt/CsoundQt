@@ -64,6 +64,7 @@ QString getElement(const QString &text, const QString &tag)
 
 void CsoundHtmlView::load(DocumentPage *documentPage_)
 {
+<<<<<<< Updated upstream
     qDebug();
     documentPage = documentPage_;
     auto text = documentPage.load()->getFullText();
@@ -73,6 +74,17 @@ void CsoundHtmlView::load(DocumentPage *documentPage_)
     QTextStream out(&csdfile);
     out << text;
     csdfile.close();
+=======
+	documentPage = documentPage_;
+    qDebug() ;
+	auto text = documentPage.load()->getFullText();
+	auto filename = documentPage.load()->getFileName();
+//    QFile csdfile(filename); // since full text comes from documentPage?
+//    csdfile.open(QIODevice::WriteOnly);
+//    QTextStream out(&csdfile);
+//    out << text;
+//    csdfile.close();
+>>>>>>> Stashed changes
     auto html = getElement(text, "html");
     if (html.size() > 0) {
 #ifdef USE_WEBENGINE
