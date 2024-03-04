@@ -61,19 +61,22 @@ jobs:
           # qmake CONFIG+=rtmidi CONFIG+=release CSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
           qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
           make -j4
-          make install
+          make install_first 
+          make install_pythonlinks
+          # not sure if cocoa and printsupport are necessary any more...
 
-          
-          # rm -fr bin/CsoundQt-d-cs6.app/Contents/Frameworks/CsoundLib64.framework
+          # remove Csound from bundle
+          rm -fr bin/CsoundQt-d-cs6.app/Contents/Frameworks/CsoundLib64.framework
 
-          otool -L bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
-
-          # install_name_tool -change @rpath/libcsnd6.6.0.dylib  libcsnd6.6.0.dylib  bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
-          # install_name_tool -change @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64  CsoundLib64.framework/Versions/6.0/CsoundLib64  bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
-
-          macdeployqt bin/CsoundQt-d-cs6.app -qmldir=src/QML -dmg
+          install_name_tool -change @executable_path/../Frameworks/libcsnd6.6.0.dylib  libcsnd6.6.0.dylib  bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
+          install_name_tool -change /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Versions/6.0/CsoundLib64  CsoundLib64.framework/Versions/6.0/CsoundLib64  bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
           
           otool -L bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
+
+          hdiutil create -fs HFS+ -srcfolder bin/CsoundQt-d-cs6.app -volname CsoundQt CsoundQt.dmg
+          
+          #macdeployqt bin/CsoundQt-d-cs6.app -qmldir=src/QML -dmg
+          
 
           find .
 
