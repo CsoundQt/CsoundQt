@@ -969,7 +969,7 @@ void DocumentView::autoCompleteAtCursor() {
                 }
 
                 QString syntaxText;
-                if (useFunction) {
+                if (useFunction && !syntax[i].inArgs.isEmpty()) {
                     syntaxText = QString("%1(%2)").arg(
                         syntax[i].opcodeName.simplified(),
                         syntax[i].inArgs.simplified());
