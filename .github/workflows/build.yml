@@ -47,10 +47,15 @@ jobs:
           brew install csound
           brew install qt5
           brew link qt5 --force
+
+
           
           csound_brew_root=$(brew --prefix csound)
           echo "Csound brew root: $csound_brew_root"
 
+          # download missing csPerthread.hpp
+          curl -o $csound_brew_root/Frameworks/CsoundLib64.framework/Versions/6.0/Headers/csPerfThread.hpp https://raw.githubusercontent.com/csound/csound/master/interfaces/csPerfThread.hpp 
+          
           ls -R "$csound_brew_root"
           
           # qmake CONFIG+=rtmidi CONFIG+=release CSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
