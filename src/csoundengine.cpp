@@ -1061,8 +1061,8 @@ void CsoundEngine::setupChannels()
     foreach (QuteWidget *w, widgets) {
         QString type = w->getWidgetType();
         QString channel = w->getChannelName();
-        if ( !reservedChannels.contains(channel) && type!="BSBLabel") {
-            if (type=="BSBLineEdit") {
+        if ( !reservedChannels.contains(channel) && type!="BSBLabel" && type!="BSBDisplay" ) { // ignore labels and displays
+            if ( type=="BSBLineEdit") {
                 csoundSetStringChannel(ud->csound, channel.toLocal8Bit().constData(), w->getStringValue().toLocal8Bit().data() );
             } else  {
                 csoundSetControlChannel(ud->csound, channel.toLocal8Bit().constData(), w->getValue() );
