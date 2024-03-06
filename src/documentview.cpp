@@ -876,13 +876,14 @@ void DocumentView::autoCompleteAtCursor() {
     QString word = cursor.selectedText();
     if(word.isEmpty())
         return;
-    QString wordlow = word.toLower();
-    if (word == ",") {
+
+    if (word == "," || word == ")") {
         cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
         cursor.movePosition(QTextCursor::StartOfWord);
         cursor.select(QTextCursor::WordUnderCursor);
         word = cursor.selectedText();
     }
+    QString wordlow = word.toLower(); // this must be AFTER the word is corrected
     QTextCursor lineCursor = editor->textCursor();
     lineCursor.select(QTextCursor::LineUnderCursor);
     QString line = lineCursor.selectedText();
@@ -997,11 +998,12 @@ void DocumentView::autoCompleteAtCursor() {
         // check for autcompletion from ALL words in text editor
         auto allWords = getAllWords();
         QStringList menuWords;
+
         for(auto theWord: allWords) {
             if (word != theWord &&
                     theWord.toLower().startsWith(wordlow) &&
-                    !menuWordsSeen.contains(theWord) &&
-                    QRegularExpression("\\b[akigp]").match(word).hasMatch()) {
+                   !menuWordsSeen.contains(theWord) /* &&
+                    QRegularExpression("\\b[akigp]").match(word).hasMatch()*/ ) {
                 auto a = syntaxMenu->addAction(theWord, this, SLOT(insertAutoCompleteText()));
                 a->setData(theWord);
                 showSyntaxMenu = true;
@@ -1231,10 +1233,11 @@ void DocumentView::insertAutoCompleteText()
 
 		QTextCursor cursor = editor->textCursor();
 		cursor.select(QTextCursor::WordUnderCursor);
-		while ((cursor.selectedText() == "" || cursor.selectedText() == ",") && !cursor.atBlockStart()) {
-			cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
-			cursor.select(QTextCursor::WordUnderCursor);
+        while ((cursor.selectedText() == "" || cursor.selectedText() == "," || cursor.selectedText()==")") && !cursor.atBlockStart()) {
+            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
+            cursor.select(QTextCursor::WordUnderCursor);
 		}
+
 		cursor.insertText("");
 		editor->setTextCursor(cursor);
 
