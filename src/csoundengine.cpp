@@ -1039,23 +1039,16 @@ void CsoundEngine::setupChannels()
     ud->previousStringOutputValues.clear();
     csoundSetInputChannelCallback(ud->csound, &CsoundEngine::inputValueCallback);
     csoundSetOutputChannelCallback(ud->csound, &CsoundEngine::outputValueCallback);
-    // For chnget/chnset
 
-    // old:
-//    controlChannelInfo_t *channelList;
-//    int numChannels = csoundListChannels(ud->csound, &channelList);
-//    controlChannelInfo_t *entry = channelList;
+    // since v 1.1.2 widgets->csound do not need any more chn_k declaration
+    // but csound->widget still does
 
-    MYFLT *pvalue;
     QVector<QuteWidget *> widgets = ud->wl->getWidgets();
-    // Set channels values for existing channels (i.e. those declared with chn_*
-    // in the csound header
 
     // Push all values of the widgets to channels.
     // The only string widget is "BSBLineEdit" ;
     // ignore Label type: BSBLabel + reserved channels
     // BSBController  has 2 channels and values
-
     const QStringList reservedChannels = QStringList() << "_Play" << "_Stop" << "_Pause" << "_Render" << "_MBrowse" << "_SetPreset" << "_SetPresetIndex" << "_GetPresetName" << "_GetPresetNumber";
 
     foreach (QuteWidget *w, widgets) {
@@ -1073,36 +1066,41 @@ void CsoundEngine::setupChannels()
         }
     }
 
+    // connect outputchannels with widgets that are declared with chn_k or chn_S, type 2 (output channel)
+    controlChannelInfo_t *channelList;
+    int numChannels = csoundListChannels(ud->csound, &channelList);
+    controlChannelInfo_t *entry = channelList;
 
-    /*
-     * This is the old code sending values only to declared channels
+    MYFLT *pvalue;
+
     for (int i = 0; i < numChannels; i++) {
         //                                                      name        type
         // if type is 0, no new channel is created if it does not exist,
         // the returned value is the channel type
         int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name, 0);
-        if (chanType & CSOUND_INPUT_CHANNEL) {
-            if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_CONTROL_CHANNEL) {
-                ud->wl->valueMutex.lock();
-                foreach (QuteWidget *w, widgets) {
-                    if (w->getChannelName() == QString(entry->name)) {
-                        ud->wl->newValues.insert(w->getChannelName(), w->getValue());
-                    }
-                    if (w->getChannel2Name() == QString(entry->name)) {
-                        ud->wl->newValues.insert(w->getChannel2Name(), w->getValue2());
-                    }
-                }
-                ud->wl->valueMutex.unlock();
-            } else if ((chanType & CSOUND_CHANNEL_TYPE_MASK) ==  CSOUND_STRING_CHANNEL) {
-                ud->wl->stringValueMutex.lock();
-                foreach (QuteWidget *w, widgets) {
-                    if (w->getChannelName() == QString(entry->name)) {
-                        ud->wl->newStringValues.insert(w->getChannelName(), w->getStringValue());
-                    }
-                }
-                ud->wl->stringValueMutex.unlock();
-            }
-        }
+// old code to set values from widgets to declared channels
+//        if (chanType & CSOUND_INPUT_CHANNEL) {
+//            if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_CONTROL_CHANNEL) {
+//                ud->wl->valueMutex.lock();
+//                foreach (QuteWidget *w, widgets) {
+//                    if (w->getChannelName() == QString(entry->name)) {
+//                        ud->wl->newValues.insert(w->getChannelName(), w->getValue());
+//                    }
+//                    if (w->getChannel2Name() == QString(entry->name)) {
+//                        ud->wl->newValues.insert(w->getChannel2Name(), w->getValue2());
+//                    }
+//                }
+//                ud->wl->valueMutex.unlock();
+//            } else if ((chanType & CSOUND_CHANNEL_TYPE_MASK) ==  CSOUND_STRING_CHANNEL) {
+//                ud->wl->stringValueMutex.lock();
+//                foreach (QuteWidget *w, widgets) {
+//                    if (w->getChannelName() == QString(entry->name)) {
+//                        ud->wl->newStringValues.insert(w->getChannelName(), w->getStringValue());
+//                    }
+//                }
+//                ud->wl->stringValueMutex.unlock();
+//            }
+//        }
         if (chanType & CSOUND_OUTPUT_CHANNEL) { // Channels can be input and output at the same time
             if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_CONTROL_CHANNEL) {
                 ud->outputChannelNames << QString(entry->name);
@@ -1130,9 +1128,9 @@ void CsoundEngine::setupChannels()
         }
         entry++;
     }
-    */
 
-//    csoundDeleteChannelList(ud->csound, channelList);
+
+    csoundDeleteChannelList(ud->csound, channelList);
 
     // Force creation of string channels for _Browse widgets
     foreach (QuteWidget *w, widgets) {
