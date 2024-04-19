@@ -1,22 +1,20 @@
 <CsoundSynthesizer>
 <CsOptions>
--o dac
+-m128
 </CsOptions>
 <CsInstruments>
 
 /*****OUTPUT TEST*****/
 /*example for CsoundQt
 written by joachim heintz 
-jan 2009*/ 
+jan 2009, revised aug 2023*/ 
 
 sr = 44100
-ksmps = 128
+ksmps = 64
 nchnls = 2; change here if your output device has more channels
 0dbfs = 1
 
-giSine     ftgen      0,0, 2^10, 10, 1 
-
-	opcode	ShowLED_a, 0, Sakii
+opcode	ShowLED_a, 0, Sakii
 /*Shows an audio signal in an outvalue channel.
 You can choose to show the value in dB or in raw amplitudes. 
 */
@@ -27,18 +25,18 @@ kdispfreq: refresh frequency (Hz)
 idb: 1 = show in dB,0 = show in  raw amplitudes (both in  the range 0-1) 
 idbrange:  if idb=1:how many db-steps are shown (e.g. if  36 you will not see anything from a  signal below -36 dB) 
 */
-Soutchan, asig, kdispfreq, idb, idbrange xin
-kdispval   max_k      asig,kdispfreq, 1 
-	if idb != 0 then
-kdb        =          dbfsamp(kdispval)
-kval       =          (idbrange+ kdb) / idbrange 
-           else
-kval       =          kdispval
-	endif
-           outvalue   Soutchan,kval 
+  Soutchan, asig, kdispfreq, idb, idbrange xin
+  kdispval = max_k(asig,kdispfreq,1) 
+ 	if (idb != 0) then
+    kdb = dbfsamp(kdispval)
+    kval = (idbrange+kdb) / idbrange 
+  else
+    kval = kdispval
+ 	endif
+  outvalue(Soutchan,kval)
 	endop
 
-	opcode ShowOver_a, 0, Sakk
+opcode ShowOver_a, 0, Sakk
 /*Shows if the incoming audio signal was more than 1 and stays there for some time*/
 /*Input:
 Soutchan: string with the name of the outvaluechannel
@@ -46,150 +44,167 @@ asig: audio signal which is to displayed
 kdispfreq: refresh frequency (Hz) 
 khold: time in seconds to "hold the red light" 
 */
-Soutchan, asig, kdispfreq, khold xin
-kon        init       0
-ktim       times
-kstart     init       0
-kend       init       0
-khold      =          (khold< .01? .01 : khold); avoiding too short hold times 
-kmax       max_k      asig,kdispfreq, 1 
-	if kon == 0 && kmax > 1 then
-kstart     =          ktim
-kend       =          kstart+ khold 
-           outvalue   Soutchan,kmax 
-kon        =          1
-	endif
-	if kon == 1 && ktim > kend then
-           outvalue   Soutchan,0 
-kon        =          0
-	endif
+  Soutchan, asig, kdispfreq, khold xin
+  kon init 0
+  ktim times
+  kstart init 0
+  kend init 0
+  khold = (khold < .01? .01 : khold); avoiding too short hold times 
+  kmax = max_k(asig,kdispfreq,1)
+ 	if (kon == 0 && kmax > 1) then
+    kstart = ktim
+    kend = kstart+khold 
+    outvalue(Soutchan,kmax)
+    kon = 1
+ 	endif
+ 	if kon == 1 && ktim > kend then
+    outvalue(Soutchan,0)
+    kon = 0
+ 	endif
 	endop
 	
-	opcode OutToAll, 0, aiik
-;outputs asig to all channels from ichnA to ichnZ, and activates the display
-asig, ichnA, ichnZ, kTrigDisp xin
-           outch      ichnA,asig 
-Sout       sprintf    "out%d",ichnA 
-Soutover   sprintf    "out%dover",ichnA 
-           ShowLED_a  Sout,asig, kTrigDisp, 1, 48 
-           ShowOver_a Soutover,asig, kTrigDisp, 0 
- if ichnA < ichnZ then
-           OutToAll   asig,ichnA+1, ichnZ, kTrigDisp 
- endif
-	endop
-	
-	opcode ClearAll, 0, ii
-;clears the display for all channels between A and Z
-ichnA, ichnZ xin
-asig       =          0
-Sout       sprintf    "out%d",ichnA 
-Soutover   sprintf    "out%dover",ichnA 
-           ShowLED_a  Sout,asig, 1, 1, 48 
-           ShowOver_a Soutover,asig, 1, 0 
- if ichnA < ichnZ then
-           ClearAll   ichnA+1,ichnZ 
- endif
-	endop
 
 
-instr 1
-;GUI input
-kSel       invalue    "signal";0-4 for the selected signals2 
-kChnA      invalue    "chnA";first channel to be tested 
-kChnZ      invalue    "chnZ";last channel to be tested 
-kVol       invalue    "vol";volume in  dB 
-kSigDur    invalue    "sigdur";duration of the test signal 
-kPausDur   invalue    "pausdur";duration of the pause 
-kAll       invalue    "all";1 =  send to all available channels 
-iNewChn    init       i(kChnA)
-kTrigDisp  metro      20;refresh rate for the LED's 
-iPaus      init       0;pause status 
-kcheckchng changed    kAll;whether checkbox  has changed  or not 
-kSigchng   changed    kSel ;signal type has changed
+instr Control
 
-;make live signal change possible
-if kSigchng == 1 then
-           reinit     signal
-endif
+  ;GUI input
+  gkSel = invalue:k("signal") //0-4 for the selected signals2 
+  kChnA = invalue:k("chnA") //first channel to be tested 
+  iChnA = invalue:i("chnA")
+  kChnZ = invalue:k("chnZ") //last channel to be tested 
+  gkVol = invalue:k("vol") //volume in  dB 
+  kSigDur = invalue:k("sigdur") //duration of the test signal 
+  kPausDur = invalue:k("pausdur");duration of the pause 
+  kAll = invalue:k("all") //1 =  send to all available channels 
 
-signal:
-;calculate audio
- if i(kSel) == 0 then; white noise
-asig       rnd31      ampdbfs(kVol),0 
- elseif i(kSel) == 1 then; pink noise
-asig       pinkish    ampdbfs(kVol)
- elseif i(kSel) == 2 then; 10 KHz
-asig       oscili     ampdbfs(kVol),10000, giSine 
-asig       linen      asig,.005, p3, .005 
- elseif i(kSel) == 3 then; 1 kHz
-asig       oscili     ampdbfs(kVol),1000, giSine 
-asig       linen      asig,.005, p3, .005 
-           else       ;100Hz 
-asig       oscili     ampdbfs(kVol),100, giSine 
-asig       linen      asig,.005, p3, .005 
- endif
-           rireturn
+  kChn init iChnA
+  kThisTime init 0
+  kSound init 1
+  kPaus init 0
+  kWasAll init 0
+  
+  //test signal to all channels as constant sound
+  if kAll == 1 then
+    
+    //if this is the first run ...
+    if kWasAll == 0 then
+    
+      //... avoid duplicating an already running signal in one channel
+      turnoff2("PlayOneChannel",0,0)
+      
+      //... then call all selected channels
+      kIndx = kChnA
+      while kIndx <= kChnZ do
+        schedulek("PlayOneChannel",0,99999,kIndx)
+        kIndx += 1
+      od
+      
+    endif
 
-;renew values for channels if changed
-kchanged   changed    kChnA,kChnZ 
-if kchanged == 1 then
-           reinit     all
-endif
-
-;send to all channels if checkbox is on
-all: 
- if kAll == 1 then
-           OutToAll   asig,i(kChnA), i(kChnZ), kTrigDisp 
-           rireturn
-		
-;if checkbox if off:
-           else
- 
-;clear display if checkbox has changed from 1 to 0
-  if kcheckchng == 1 && kAll == 0 then
-           ClearAll   i(kChnA),i(kChnZ) 
+    kWasAll = 1
+  
+  //test signal circulating with pauses in between
+  else
+  
+    //turn off the signal to all channels if it runs
+    if kWasAll == 1 then
+      turnoff2("PlayOneChannel",0,0)
+      kWasAll = 0
+    endif
+  
+    //perform the circulation
+    if kThisTime <= 0 then
+  
+      if kSound == 1 then
+    
+        schedulek("PlayOneChannel",0,kSigDur,kChn)
+        kSound = 0
+        kPaus = 1
+        kThisTime = kPausDur
+        kChn += 1
+        kChn = kChn > kChnZ ? kChnA : kChn
+    
+      else
+    
+        kSound = 1
+        kPaus = 0
+        kThisTime = kSigDur   
+    
+      endif
+  
+    endif
+    
   endif
+  
+  //clock counts backwards in every k-cycle
+  kThisTime -= 1/kr
 
-;loop over the desired output channels
-loop: 
-iSigDur    =          i(kSigDur)
-iPausDur   =          i(kPausDur)
-ilen       =          (iPaus== 0? iSigDur : iPausDur) 
-           timout     0,ilen, play 
-           reinit     loop
-play: 
-;calculate audio signal
- if iPaus == 1 then; pause
-asig       =          0
- endif
-;send to output and show
-ichn       =          iNewChn
-           outch      ichn,asig 
-Sout       sprintf    "out%d",ichn 
-Soutover   sprintf    "out%dover",ichn 
-           ShowLED_a  Sout,asig, kTrigDisp, 1, 48 
-           ShowOver_a Soutover,asig, kTrigDisp, 0 
-;reset values for next turn
-iChnA      =          i(kChnA)
-iChnZ      =          i(kChnZ)
-iNewChn    =          (iPaus== 1? (ichn >=  iChnZ ? iChnA : ichn + 1) : ichn) 
-iPaus      =          (iPaus== 1? 0 : 1) 
- endif
 endin
+schedule("Control",0,-1)
+
+
+instr PlayOneChannel
+
+  iChan = p4
+
+  if gkSel == 0 then  //white noise
+    asig = rnd31:a(ampdbfs(gkVol),0)
+  elseif gkSel == 1 then  //pink noise
+    asig = pinkish(ampdbfs(gkVol))
+  elseif gkSel == 2 then  //10 KHz
+    asig  = oscili:a(ampdbfs(gkVol),10000)
+    asig  = linen:a(asig,.005,p3,.005)
+  elseif gkSel == 3 then  //1 kHz
+    asig  = oscili:a(ampdbfs(gkVol),1000)
+    asig  = linen:a(asig,.005,p3,.005)
+  else                    //100Hz 
+    asig = oscili:a(ampdbfs(gkVol),100)
+    asig = linen:a(asig,.005,p3,.005) 
+ endif
+ 
+ outch(iChan,asig)
+
+endin
+
+instr Display
+
+  gkTrigDisp = metro(20) //refresh rate for the LED's 
+  gaOut[] monitor 
+  
+  //create as many instances for single display as there are channels
+  indx = 0
+  while indx < nchnls do
+    schedule("DisplayOneChannel",0,99999,indx)
+    indx += 1
+  od
+
+endin
+schedule("Display",0,-1)
+
+instr DisplayOneChannel
+
+  indx = p4
+  iOutChn = indx+1
+  Sout = sprintf("out%d",iOutChn)
+  Soutover = sprintf("outover%d",iOutChn)
+  ShowLED_a(Sout,gaOut[indx], gkTrigDisp,1,48) 
+  ShowOver_a(Soutover,gaOut[indx],gkTrigDisp,0) 
+
+endin
+
 </CsInstruments>
 <CsScore>
-i 1 0 9999
-e
 </CsScore>
 </CsoundSynthesizer>
+
 
 
 
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>0</x>
- <y>0</y>
+ <x>579</x>
+ <y>229</y>
  <width>628</width>
  <height>414</height>
  <visible>true</visible>
@@ -199,7 +214,7 @@ e
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>19</x>
   <y>64</y>
@@ -230,7 +245,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>89</x>
   <y>64</y>
@@ -261,7 +276,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>158</x>
   <y>65</y>
@@ -292,41 +307,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
-  <objectName>vol</objectName>
-  <x>168</x>
-  <y>110</y>
-  <width>52</width>
-  <height>30</height>
-  <uuid>{c0cebb18-2f97-4efc-9a26-30b337278cb0}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <description/>
-  <alignment>right</alignment>
-  <font>Noto Sans</font>
-  <fontsize>14</fontsize>
-  <color>
-   <r>0</r>
-   <g>0</g>
-   <b>0</b>
-  </color>
-  <bgcolor mode="background">
-   <r>255</r>
-   <g>255</g>
-   <b>255</b>
-  </bgcolor>
-  <value>-20.00000000</value>
-  <resolution>0.10000000</resolution>
-  <minimum>-999999999999.00000000</minimum>
-  <maximum>999999999999.00000000</maximum>
-  <bordermode>true</bordermode>
-  <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
-  <randomizable group="0">false</randomizable>
-  <mouseControl act=""/>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>240</x>
   <y>66</y>
@@ -357,7 +338,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>signal</objectName>
   <x>230</x>
   <y>110</y>
@@ -398,7 +379,7 @@ e
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>27</x>
   <y>293</y>
@@ -430,7 +411,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>145</x>
   <y>18</y>
@@ -461,7 +442,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>25</x>
   <y>192</y>
@@ -498,7 +479,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>25</x>
   <y>174</y>
@@ -535,7 +516,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>47</x>
   <y>192</y>
@@ -572,7 +553,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>47</x>
   <y>174</y>
@@ -609,7 +590,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>69</x>
   <y>192</y>
@@ -646,7 +627,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>69</x>
   <y>174</y>
@@ -683,7 +664,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>91</x>
   <y>192</y>
@@ -720,7 +701,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>91</x>
   <y>174</y>
@@ -757,7 +738,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>113</x>
   <y>192</y>
@@ -794,7 +775,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>113</x>
   <y>174</y>
@@ -831,7 +812,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>135</x>
   <y>192</y>
@@ -868,7 +849,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>135</x>
   <y>174</y>
@@ -905,7 +886,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>157</x>
   <y>192</y>
@@ -942,7 +923,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>157</x>
   <y>174</y>
@@ -979,7 +960,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>179</x>
   <y>192</y>
@@ -1016,7 +997,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>179</x>
   <y>174</y>
@@ -1053,7 +1034,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>213</x>
   <y>192</y>
@@ -1090,7 +1071,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>213</x>
   <y>174</y>
@@ -1127,7 +1108,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>235</x>
   <y>192</y>
@@ -1164,7 +1145,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>235</x>
   <y>174</y>
@@ -1201,7 +1182,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>257</x>
   <y>192</y>
@@ -1238,7 +1219,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>257</x>
   <y>174</y>
@@ -1275,7 +1256,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>280</x>
   <y>191</y>
@@ -1312,7 +1293,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>280</x>
   <y>173</y>
@@ -1349,7 +1330,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>302</x>
   <y>191</y>
@@ -1386,7 +1367,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>302</x>
   <y>173</y>
@@ -1423,7 +1404,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>324</x>
   <y>191</y>
@@ -1460,7 +1441,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>324</x>
   <y>173</y>
@@ -1497,7 +1478,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>346</x>
   <y>191</y>
@@ -1534,7 +1515,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>346</x>
   <y>173</y>
@@ -1571,7 +1552,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>368</x>
   <y>191</y>
@@ -1608,7 +1589,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>368</x>
   <y>173</y>
@@ -1645,7 +1626,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>402</x>
   <y>191</y>
@@ -1682,7 +1663,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>402</x>
   <y>173</y>
@@ -1719,7 +1700,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>424</x>
   <y>191</y>
@@ -1756,7 +1737,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>424</x>
   <y>173</y>
@@ -1793,7 +1774,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>446</x>
   <y>191</y>
@@ -1830,7 +1811,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>446</x>
   <y>173</y>
@@ -1867,7 +1848,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>468</x>
   <y>191</y>
@@ -1904,7 +1885,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>468</x>
   <y>173</y>
@@ -1941,7 +1922,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>490</x>
   <y>191</y>
@@ -1978,7 +1959,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>490</x>
   <y>173</y>
@@ -2015,7 +1996,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>512</x>
   <y>191</y>
@@ -2052,7 +2033,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>512</x>
   <y>173</y>
@@ -2089,7 +2070,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>536</x>
   <y>191</y>
@@ -2126,7 +2107,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>536</x>
   <y>173</y>
@@ -2163,7 +2144,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>hor8</objectName>
   <x>558</x>
   <y>191</y>
@@ -2200,7 +2181,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>DelayMute</objectName>
   <x>558</x>
   <y>173</y>
@@ -2237,7 +2218,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>25</x>
   <y>146</y>
@@ -2268,7 +2249,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>47</x>
   <y>146</y>
@@ -2299,7 +2280,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>69</x>
   <y>146</y>
@@ -2330,7 +2311,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>91</x>
   <y>146</y>
@@ -2361,7 +2342,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>113</x>
   <y>146</y>
@@ -2392,7 +2373,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>135</x>
   <y>146</y>
@@ -2423,7 +2404,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>157</x>
   <y>146</y>
@@ -2454,7 +2435,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>179</x>
   <y>146</y>
@@ -2485,7 +2466,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>208</x>
   <y>147</y>
@@ -2516,7 +2497,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>230</x>
   <y>147</y>
@@ -2547,7 +2528,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>252</x>
   <y>147</y>
@@ -2578,7 +2559,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>274</x>
   <y>147</y>
@@ -2609,7 +2590,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>297</x>
   <y>146</y>
@@ -2640,7 +2621,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>319</x>
   <y>146</y>
@@ -2671,7 +2652,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>341</x>
   <y>146</y>
@@ -2702,7 +2683,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>363</x>
   <y>146</y>
@@ -2733,7 +2714,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>398</x>
   <y>145</y>
@@ -2764,7 +2745,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>420</x>
   <y>145</y>
@@ -2795,7 +2776,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>442</x>
   <y>145</y>
@@ -2826,7 +2807,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>464</x>
   <y>145</y>
@@ -2857,7 +2838,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>486</x>
   <y>145</y>
@@ -2888,7 +2869,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>508</x>
   <y>145</y>
@@ -2919,7 +2900,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>532</x>
   <y>145</y>
@@ -2950,7 +2931,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>554</x>
   <y>145</y>
@@ -2981,7 +2962,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>chnA</objectName>
   <x>32</x>
   <y>110</y>
@@ -3011,7 +2992,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <randomizable group="0">false</randomizable>
   <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>chnZ</objectName>
   <x>100</x>
   <y>110</y>
@@ -3041,7 +3022,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <randomizable group="0">false</randomizable>
   <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>all</objectName>
   <x>529</x>
   <y>114</y>
@@ -3057,7 +3038,7 @@ Make sure the nchnls (number of channels) parameter in the orchestra header is a
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>488</x>
   <y>64</y>
@@ -3089,7 +3070,7 @@ all channels</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>sigdur</objectName>
   <x>344</x>
   <y>110</y>
@@ -3117,9 +3098,9 @@ all channels</label>
   <minimum>0.1</minimum>
   <maximum>10</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0</value>
+  <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>327</x>
   <y>63</y>
@@ -3150,7 +3131,7 @@ all channels</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>pausdur</objectName>
   <x>421</x>
   <y>110</y>
@@ -3178,9 +3159,9 @@ all channels</label>
   <minimum>0.001</minimum>
   <maximum>10</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0</value>
+  <value>1</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>404</x>
   <y>63</y>
@@ -3210,6 +3191,36 @@ all channels</label>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBSpinBox" version="2">
+  <objectName>vol</objectName>
+  <x>155</x>
+  <y>109</y>
+  <width>70</width>
+  <height>32</height>
+  <uuid>{8a92e62e-1f97-4826-9342-7f5427ed40fd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <alignment>right</alignment>
+  <font>Liberation Sans</font>
+  <fontsize>14</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>0.10000000</resolution>
+  <minimum>-100</minimum>
+  <maximum>0</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>-20</value>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

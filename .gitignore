@@ -29,9 +29,19 @@ util/opcodes.xml
 .DS_Store
 *~
 
+
+*.qmlc
 src_QML_*
 qmlcache_loader.cpp
 src_qml_resources_qmlcache.qrc
 *.AppImage
 make_appdir/AppDir/
 make_appdir/csoundqt.desktop
+
+compile_commands.json
+flatpak-build
+.flatpak*
+qcs.pro.user*
+.qtc_clangd
+.~*
+.cache

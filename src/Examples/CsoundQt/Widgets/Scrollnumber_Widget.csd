@@ -7,6 +7,7 @@ sr = 44100
 ksmps = 128
 nchnls = 2
 0dbfs = 1
+A4 = 442
 
 
 instr 1 ; always on
@@ -15,7 +16,7 @@ instr 1 ; always on
 	kb invalue "b"
 	
 	if changed(kmidi, ka, kb) == 1 then
-		khertz = 440 * 2^((kmidi -69)/12)
+		khertz = mtof(kmidi)
 		outvalue "hertz", sprintfk("%.1f Hz.", khertz)
 		outvalue "c", sprintfk("is %.3f", ka*kb)
 	endif
@@ -27,6 +28,8 @@ endin
 i 1 0 3600
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -136,8 +139,8 @@ i 1 0 3600
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>a</objectName>
-  <x>17</x>
-  <y>231</y>
+  <x>15</x>
+  <y>230</y>
   <width>55</width>
   <height>26</height>
   <uuid>{d46c4956-ab0b-4024-987f-e277c708d41a}</uuid>
@@ -158,7 +161,7 @@ i 1 0 3600
    <g>220</g>
    <b>220</b>
   </bgcolor>
-  <value>3.12900000</value>
+  <value>3.22900000</value>
   <resolution>0.00100000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>999999999999.00000000</maximum>
@@ -170,8 +173,8 @@ i 1 0 3600
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>b</objectName>
-  <x>115</x>
-  <y>231</y>
+  <x>110</x>
+  <y>230</y>
   <width>55</width>
   <height>26</height>
   <uuid>{81904718-714a-4157-a559-e688b0c0205c}</uuid>
@@ -192,7 +195,7 @@ i 1 0 3600
    <g>220</g>
    <b>220</b>
   </bgcolor>
-  <value>11.80000000</value>
+  <value>26.10000000</value>
   <resolution>0.10000000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>999999999999.00000000</maximum>
@@ -204,8 +207,8 @@ i 1 0 3600
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>72</x>
-  <y>231</y>
+  <x>70</x>
+  <y>230</y>
   <width>44</width>
   <height>26</height>
   <uuid>{2ee5bcc9-bff7-4d21-a848-8b2af2c72899}</uuid>
@@ -235,7 +238,7 @@ i 1 0 3600
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName>c</objectName>
-  <x>170</x>
+  <x>165</x>
   <y>230</y>
   <width>90</width>
   <height>26</height>
@@ -244,7 +247,7 @@ i 1 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>is 36.922</label>
+  <label>is 84.277</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
@@ -319,7 +322,7 @@ i 1 0 3600
    <g>63</g>
    <b>69</b>
   </bgcolor>
-  <value>86.00000000</value>
+  <value>69.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-999999999999.00000000</minimum>
   <maximum>999999999999.00000000</maximum>
@@ -402,7 +405,7 @@ i 1 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>1174.7 Hz.</label>
+  <label>442.0 Hz.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>

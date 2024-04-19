@@ -1052,7 +1052,7 @@ void EventSheet::deleteRows()
 			selectedRows.append(list[i].row());
 		}
 	}
-    // old: qSort(selectedRows);
+
     std::sort(selectedRows.begin(), selectedRows.end());
 	for (int i = selectedRows.size() - 1; i >=0; i--) {
 		this->removeRow(selectedRows[i]);
@@ -1235,12 +1235,14 @@ void EventSheet::randomize(double min, double max, int mode)
 	// Mode 0 =
 	// Mode 1 = integers only
 	QModelIndexList list = this->selectedIndexes();
+
     //QTime midnight(0, 0, 0);
     //old code (before Qt 6):
     //qsrand(midnight.secsTo(QTime::currentTime()));
     // new:
     QRandomGenerator generator =  QRandomGenerator(0x1234);
 	for (int i = 0; i < list.size(); i++) {
+
 		QTableWidgetItem * item = this->item(list[i].row(), list[i].column());
 		if (item == 0) {
 			item = new QTableWidgetItem();

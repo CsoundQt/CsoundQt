@@ -58,6 +58,7 @@ csound6 {
 
 # Add C++11 support since version 0.9.4
 CONFIG += c++11
+# CONFIG += c++14
 
 #for csound6 (may need extra conditions for csound7 later:
 DEFINES += CSOUND6
@@ -167,6 +168,8 @@ CONFIG += c++11
 
 INCLUDEPATH *= $${CSOUND_API_INCLUDE_DIR}
 INCLUDEPATH *= $${CSOUND_INTERFACES_INCLUDE_DIR}
+
+INCLUDEPATH += $$PWD/csound/include
 
 #DESTDIR = $${_PRO_FILE_PWD_}/bin
 DESTDIR = bin
@@ -321,5 +324,6 @@ message(LIBS are:       $${LIBS})
 message(TARGET is:      $${TARGET})
 
 DISTFILES += \
+    Building_on_Windows.md \
     config.user.pri
 

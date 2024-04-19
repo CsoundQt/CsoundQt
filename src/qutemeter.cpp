@@ -32,16 +32,11 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
     setGeometry(0,0, parent->width(), parent->height());
     m_widget = new MeterWidget(this);
     m_widget->setAutoFillBackground(true);
-    m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
     //  m_widget->setWindowFlags(Qt::WindowStaysOnTopHint);
     canFocus(false);
     //   static_cast<MeterWidget *>(m_widget)->setRenderHints(QPainter::Antialiasing);
     //  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
     //  connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValues(double, double)), this, SLOT(setValuesFromWidget(double,double)));
-    connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValue1(double)),
-            this, SLOT(valueChanged(double)));
-    connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValue2(double)),
-            this, SLOT(value2Changed(double)));
 
     setProperty("QCS_xMin", 0.0);
     setProperty("QCS_xMax", 1.0);
@@ -63,6 +58,12 @@ QuteMeter::QuteMeter(QWidget *parent) : QuteWidget(parent)
 
     setProperty("QCS_bordermode", "noborder");
     setProperty("QCS_borderColor", "#00FF00");
+
+    connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValue1(double)),
+            this, SLOT(valueChanged(double)));
+    connect(static_cast<MeterWidget *>(m_widget), SIGNAL(newValue2(double)),
+            this, SLOT(value2Changed(double)));
+    m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 
 }
 
@@ -609,6 +610,7 @@ void QuteMeter::value2Changed(double value2)
 
 MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
 {
+    auto t0 = std::chrono::high_resolution_clock::now();
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -625,7 +627,6 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
     setScene(m_scene);
     m_mouseDown = false;
     auto borderPen = QPen(QColor(Qt::green).darker(150), 2);
-    // auto blockPen = QPen(QColor(Qt::green), 0);
     auto blockPen = Qt::NoPen;
     m_block = m_scene->addRect(0, 0, 0, 0, blockPen, QBrush(Qt::green));
     m_point = m_scene->addEllipse(0, 0, 0, 0, QPen(Qt::green) , QBrush(Qt::green));
@@ -633,6 +634,9 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
     m_hline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
     m_border = m_scene->addRect(m_scene->sceneRect(), borderPen, Qt::NoBrush);
     m_border->hide();
+    auto t1 = std::chrono::high_resolution_clock::now();
+    QDEBUG << "... MeterWidget constructor " << std::chrono::duration<double, std::milli>(t1-t0).count() << "ms";
+
 }
 
 MeterWidget::~MeterWidget()

@@ -21,17 +21,26 @@
 */
 
 #include "quteslider.h"
+#ifdef Q_OS_MAC
+    #include "myslider.h"
+#endif
 
 QuteSlider::QuteSlider(QWidget *parent) : QuteWidget(parent)
 {
-	m_widget = new QSlider(this);
+#ifdef Q_OS_MAC
+    m_widget = new MySlider(this);
+#else
+    m_widget = new QSlider(this);
+#endif
+
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 	canFocus(false);
-	if (width() > height())
-		static_cast<QSlider *>(m_widget)->setOrientation(Qt::Horizontal);
-	else
-		static_cast<QSlider *>(m_widget)->setOrientation(Qt::Vertical);
+    if (width() > height())    {
+        static_cast<QSlider *>(m_widget)->setOrientation(Qt::Horizontal);
+    } else {
+        static_cast<QSlider *>(m_widget)->setOrientation(Qt::Vertical);
+    }
 
 	connect(static_cast<QSlider *>(m_widget), SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
 

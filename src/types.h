@@ -29,7 +29,7 @@
 #include <csound.h>
 
 
-#define QCS_VERSION "1.1.0-rc3-qt6"
+#define QCS_VERSION "1.1.2-rc2-qt6"
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_DEFAULT_TIME 50
@@ -124,9 +124,10 @@ public:
     QString inArgs;
     QString desc;
     int isFlag;
+    bool isInstalled;
 
     Opcode() {}
-    Opcode(QString name, QString outs="", QString ins=""): opcodeName(name), outArgs(outs), inArgs(ins) {}
+    Opcode(QString name, QString outs="", QString ins="", bool installed=true): opcodeName(name), outArgs(outs), inArgs(ins), isInstalled(installed) {}
 
 };
 

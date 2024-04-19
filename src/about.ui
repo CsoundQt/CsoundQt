@@ -6,23 +6,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>600</height>
+    <width>582</width>
+    <height>712</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize">
-   <size>
-    <width>500</width>
-    <height>600</height>
-   </size>
-  </property>
-  <property name="maximumSize">
    <size>
     <width>500</width>
     <height>600</height>
@@ -104,9 +98,9 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>560</y>
-     <width>481</width>
+     <x>0</x>
+     <y>670</y>
+     <width>581</width>
      <height>31</height>
     </rect>
    </property>
@@ -125,8 +119,8 @@
     <rect>
      <x>10</x>
      <y>90</y>
-     <width>481</width>
-     <height>461</height>
+     <width>561</width>
+     <height>571</height>
     </rect>
    </property>
    <property name="palette">
@@ -201,9 +195,9 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>30</y>
+     <y>20</y>
      <width>411</width>
-     <height>41</height>
+     <height>61</height>
     </rect>
    </property>
    <property name="palette">
@@ -304,7 +298,7 @@
     </font>
    </property>
    <property name="text">
-    <string>CsoundQt</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#2f2f2f;&quot;&gt;CsoundQt&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

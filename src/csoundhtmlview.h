@@ -41,7 +41,6 @@ public:
     void load(DocumentPage *documentPage);
     void stop();
     void setCsoundEngine(CsoundEngine *csEngine);
-    void viewHtml(QString htmlText);
 	void clear();
     void setOptions(CsoundOptions * options);
 #ifdef USE_WEBKIT
@@ -59,6 +58,9 @@ public slots:
 #ifdef USE_WEBENGINE
 	void showDebugWindow();
 #endif
+    void removeTemporaryHtmlFile(bool ok);
+
+
 
 private:
 	Ui::Html5GuiDisplay *ui;
@@ -68,7 +70,8 @@ private:
     // For performing HTML files (HTML-only performance).
     CsoundHtmlOnlyWrapper csoundHtmlOnlyWrapper;
     CsoundEngine *m_csoundEngine;
-    QTemporaryFile tempHtml;
+    //QTemporaryFile tempHtml;
+    QFile htmlfile;
     CsoundOptions * m_options;
 #ifdef USE_WEBENGINE
 	QString m_debugPort;

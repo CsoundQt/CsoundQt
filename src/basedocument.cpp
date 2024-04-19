@@ -66,8 +66,11 @@ BaseDocument::~BaseDocument()
     }
 }
 
+/* Returns the number of panels
+ */
 int BaseDocument::parseAndRemoveWidgetText(QString &text)
 {
+
 	QStringList xmlPanels;
     while(true) {
         auto panelStart = text.indexOf("<bsbPanel");
@@ -83,7 +86,6 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
         auto panel = text.mid(panelStart, panelEnd+11-panelStart);
         xmlPanels << panel;
         text.remove(panelStart, panelEnd+11-panelStart);
-        // QDEBUG << "panel: \n" << panel;
 
     }
     /*

@@ -9,9 +9,11 @@ nchnls = 2
 0dbfs = 1
 
 instr 1
-	asig oscils 0.2, 440, 0
+	kfreq invalue "freq"
+	asig oscili 0.2, kfreq
 	kpan oscil 1, 1, 1
-	outs asig*kpan, asig*(1-kpan)
+	apan = interp(lag(kpan, 0.1))
+	outs asig*apan, asig*(1-apan)
 endin
 
 
@@ -31,12 +33,12 @@ i 1 0 1000
  <height>658</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="background" >
+ <bgcolor mode="background">
   <r>138</r>
   <g>149</g>
   <b>156</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>144</x>
   <y>1</y>
@@ -46,8 +48,10 @@ i 1 0 1000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Scope Widget</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
@@ -56,16 +60,16 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground" >
+  <bgcolor mode="nobackground">
    <r>191</r>
    <g>204</g>
    <b>234</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
   <y>41</y>
@@ -75,8 +79,10 @@ i 1 0 1000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The Scope widget is an oscilloscope which can show the output of Csound. The oscilloscope can show individual channels or a sum of all output channels. Clicking on a Scope widget freezes it.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -85,25 +91,26 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>191</r>
    <g>204</g>
    <b>234</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
-  <x>9</x>
-  <y>88</y>
-  <width>466</width>
-  <height>98</height>
+  <x>10</x>
+  <y>90</y>
+  <width>465</width>
+  <height>95</height>
   <uuid>{14105eb1-daf6-406d-845b-f4f1895cb1f3}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>1.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -111,17 +118,19 @@ i 1 0 1000
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
-  <x>9</x>
-  <y>188</y>
-  <width>467</width>
-  <height>99</height>
+  <x>10</x>
+  <y>190</y>
+  <width>465</width>
+  <height>95</height>
   <uuid>{09dd2a94-dcc8-49cc-b819-890da8bd1506}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>2.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -129,56 +138,63 @@ i 1 0 1000
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
-  <x>9</x>
-  <y>291</y>
-  <width>466</width>
-  <height>97</height>
+  <x>10</x>
+  <y>290</y>
+  <width>465</width>
+  <height>95</height>
   <uuid>{41f59e5e-61e3-445d-833a-7b9624803ad9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-1.00000000</value>
+  <description>With trigger</description>
+  <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>TriggerUp</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
-  <x>9</x>
-  <y>437</y>
+  <x>10</x>
+  <y>435</y>
   <width>231</width>
   <height>90</height>
   <uuid>{b65d33f6-9d4a-4330-acdb-a097f4ca52b2}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-1.00000000</value>
+  <description/>
+  <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>8.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>10</x>
-  <y>393</y>
+  <y>390</y>
   <width>465</width>
-  <height>37</height>
+  <height>40</height>
   <uuid>{7c7b875f-7bff-4359-9a43-ebc3ca6b92ac}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The decimation property averages sample, allowing a larger time frame to be displayed. The default without decimation is one audio sample per screen pixel.</label>
   <alignment>left</alignment>
-  <font>Arial</font>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
   <color>
@@ -186,36 +202,38 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>191</r>
    <g>204</g>
    <b>234</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
-  <x>248</x>
-  <y>437</y>
+  <x>250</x>
+  <y>435</y>
   <width>226</width>
   <height>90</height>
   <uuid>{edce6d38-8f7b-435e-8ced-a81d92e1af20}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <value>-1.00000000</value>
+  <description>With trigger up</description>
+  <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>TriggerUp</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
-  <x>9</x>
+  <x>10</x>
   <y>535</y>
   <width>84</width>
   <height>84</height>
@@ -223,6 +241,7 @@ i 1 0 1000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>-1.00000000</value>
   <type>lissajou</type>
   <zoomx>2.00000000</zoomx>
@@ -230,10 +249,11 @@ i 1 0 1000
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope" >
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
-  <x>101</x>
+  <x>100</x>
   <y>535</y>
   <width>84</width>
   <height>84</height>
@@ -241,6 +261,7 @@ i 1 0 1000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>-1.00000000</value>
   <type>poincare</type>
   <zoomx>2.00000000</zoomx>
@@ -248,10 +269,11 @@ i 1 0 1000
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel" >
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>194</x>
+  <x>195</x>
   <y>535</y>
   <width>281</width>
   <height>82</height>
@@ -259,8 +281,10 @@ i 1 0 1000
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The Scope widget can also show Lissajou and Poincare graphs. The decimation parameter in these cases determines the "zoom".</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -269,35 +293,202 @@ i 1 0 1000
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="background" >
+  <bgcolor mode="background">
    <r>191</r>
    <g>204</g>
    <b>234</b>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <objectName/>
- <x>326</x>
- <y>88</y>
- <width>491</width>
- <height>658</height>
- <visible>true</visible>
+ <bsbObject type="BSBKnob" version="2">
+  <objectName>freq</objectName>
+  <x>500</x>
+  <y>155</y>
+  <width>80</width>
+  <height>80</height>
+  <uuid>{a8e7f48f-cdfd-4b90-8620-34b479088dc6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <minimum>100.00000000</minimum>
+  <maximum>2000.00000000</maximum>
+  <value>717.50000000</value>
+  <mode>lin</mode>
+  <mouseControl act="">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+  <color>
+   <r>255</r>
+   <g>170</g>
+   <b>0</b>
+  </color>
+  <textcolor>#ffaa00</textcolor>
+  <border>0</border>
+  <borderColor>#512900</borderColor>
+  <showvalue>true</showvalue>
+  <flatstyle>true</flatstyle>
+  <integerMode>true</integerMode>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>500</x>
+  <y>240</y>
+  <width>83</width>
+  <height>38</height>
+  <uuid>{f7bc5048-75ac-4422-9b37-e03695421ebd}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Signal Frequency</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>170</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>396</x>
+  <y>88</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{ff10449d-c7e7-44fe-ab19-7a9ea63b7d45}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>No trigger</label>
+  <alignment>right</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>170</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>394</x>
+  <y>188</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{9bb7b498-b8b1-46e5-ac6c-119ca88cef38}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>No trigger</label>
+  <alignment>right</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>170</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>396</x>
+  <y>291</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{4ea1f73b-b11b-436a-97bb-8b1d0e618499}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>With trigger
+</label>
+  <alignment>right</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>170</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>397</x>
+  <y>434</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{a5f816e1-bf92-4c2d-b56e-c86e35431271}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>With trigger
+</label>
+  <alignment>right</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>255</r>
+   <g>170</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacGUI>
-ioView background {35466, 38293, 40092}
-ioText {144, 1} {191, 39} display 0.000000 0.00100 "" center "Arial" 24 {0, 0, 0} {58880, 56576, 54528} nobackground noborder Scope Widget
-ioText {10, 41} {465, 44} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {48896, 52224, 59904} nobackground noborder The Scope widget is an oscilloscope which can show the output of Csound. The oscilloscope can show individual channels or a sum of all output channels. Clicking on a Scope widget freezes it.
-ioGraph {9, 88} {466, 98} scope 2.000000 1 
-ioGraph {9, 188} {467, 99} scope 2.000000 2 
-ioGraph {9, 291} {466, 97} scope 2.000000 -1 
-ioGraph {9, 437} {231, 90} scope 8.000000 -1 
-ioText {10, 393} {465, 37} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {48896, 52224, 59904} nobackground noborder The decimation property averages sample, allowing a larger time frame to be displayed. The default without decimation is one audio sample per screen pixel.
-ioGraph {248, 437} {226, 90} scope 1.000000 -1 
-ioGraph {9, 535} {84, 84} lissajou 2.000000 -1 
-ioGraph {101, 535} {84, 84} poincare 2.000000 -1 
-ioText {194, 535} {281, 82} display 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {48896, 52224, 59904} nobackground noborder The Scope widget can also show Lissajou and Poincare graphs. The decimation parameter in these cases determines the "zoom".
-</MacGUI>

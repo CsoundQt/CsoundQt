@@ -495,6 +495,7 @@ void Highlighter::setOpcodeNameList(QStringList list)
 	setLastRules();
 }
 
+
 void Highlighter::setMode(int mode)
 {
 	m_mode = mode;

@@ -68,6 +68,7 @@ public:
 	Highlighter(QTextDocument *parent = 0);
 	~Highlighter();
 	void setOpcodeNameList(QStringList list);
+    void setDisabledOpcodes(QStringList list);
 	void setColorVariables(bool color);
 	void setMode(int mode);
     void setTheme(const QString &theme);
@@ -166,7 +167,7 @@ private:
 	QStringList m_opcodeList;
     QSet<QString> m_opcodesSet;
 
-	bool colorVariables;
+    bool colorVariables;
 	// TODO this is duplicated in documentview class. Should it be unified?
 	int m_mode; //type of text 0=csound 1=python 2=xml 3=orc 4=sco   -1=anything else
 

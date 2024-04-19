@@ -35,13 +35,15 @@ endin
 i 1 0 3600
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>292</x>
  <y>90</y>
- <width>385</width>
- <height>275</height>
+ <width>435</width>
+ <height>298</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">

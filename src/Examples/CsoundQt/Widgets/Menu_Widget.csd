@@ -43,6 +43,8 @@ f 0 3600
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -57,7 +59,7 @@ f 0 3600
   <g>191</g>
   <b>200</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>83</x>
   <y>6</y>
@@ -88,7 +90,7 @@ f 0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>23</x>
   <y>50</y>
@@ -119,7 +121,7 @@ f 0 3600
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>type</objectName>
   <x>90</x>
   <y>170</y>
@@ -150,11 +152,11 @@ f 0 3600
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
   <x>185</x>
   <y>170</y>
-  <width>110</width>
+  <width>160</width>
   <height>30</height>
   <uuid>{ada21fd8-091b-4dc6-bc5f-b140c2284ef5}</uuid>
   <visible>true</visible>
@@ -172,7 +174,7 @@ f 0 3600
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>transp</objectName>
   <x>90</x>
   <y>205</y>
@@ -203,7 +205,7 @@ f 0 3600
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
   <x>185</x>
   <y>205</y>
@@ -225,7 +227,7 @@ f 0 3600
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>35</x>
   <y>175</y>
@@ -256,7 +258,7 @@ f 0 3600
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>15</x>
   <y>210</y>

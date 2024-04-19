@@ -39,8 +39,6 @@
 #include "widgetlayout.h"
 #include "console.h"
 #include "midilearndialog.h"
-
-#include "curve.h"
 #include "qutebutton.h"
 
 #include <QMessageBox>
@@ -112,7 +110,7 @@ int DocumentPage::setTextString(QString &text)
 		return ret;
 	}
     auto t0 = std::chrono::high_resolution_clock::now();
-	int baseRet = parseAndRemoveWidgetText(text);
+    parseAndRemoveWidgetText(text);
     auto t1 = std::chrono::high_resolution_clock::now();
     auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
     QDEBUG << "parseAndRemoveWidgetText:" << diff << "ms";
@@ -184,10 +182,6 @@ int DocumentPage::setTextString(QString &text)
 			}
 		}
 		ret = 1;
-	}
-	if (baseRet != 1) {
-		applyMacOptions(m_macOptions);
-		qDebug("<MacOptions> loaded.");
 	}
     */
 	// Load Live Event Panels ------------------------

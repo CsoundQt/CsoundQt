@@ -113,7 +113,7 @@ pythonqt {
             exists($${dir}) {
                 !no_messages {
                     message(PYTHONQT_SRC_DIR set to $${dir})
-                    message()
+                    message(" ")
                 }
                 PYTHONQT_SRC_DIR = $${dir}
                 break()
@@ -124,7 +124,12 @@ pythonqt {
     isEmpty(PYTHONQT_LIB_DIR) {
         !no_messages:message(PythonQt library directory not specified. Using source directory.)
         PYTHONQT_LIB_DIR = $${PYTHONQT_SRC_DIR}/lib
+
+
     }
+
+
+    message(PythonQt LIB DIR: $$PYTHONQT_LIB_DIR )
 }
 rtmidi {
 # check if RTMIDI is found in system

@@ -43,7 +43,8 @@ win32-msvc: INCLUDEPATH += $${PTHREAD_INCLUDE_DIR} $${DEFAULT_LIBSNDFILE_INCLUDE
 RC_FILE = "src/qutecsound.rc"
 LCSOUND = "$${CSOUND_LIBRARY_DIR}/$${CSOUND_LIB}"
 win32-g++:csound6: LCSND = "$${CSOUND_LIBRARY_DIR}/csnd6.dll"
-#win32-msvc: LCSND = "$${CSOUND_LIBRARY_DIR}/csnd6.lib"
+
+win32-msvc:record_support: LCSND = "$${CSOUND_LIBRARY_DIR}/csnd6.lib" # needed for build on Windows 11
 
 rtmidi {
 DEFINES += __WINDOWS_MM__
@@ -69,5 +70,4 @@ win32-msvc2013:LIBS *= ole32.lib
 win32-msvc2015:LIBS *= ole32.lib
 win32-msvc2017:LIBS *= ole32.lib
 win32-msvc:LIBS *= ole32.lib
-
 

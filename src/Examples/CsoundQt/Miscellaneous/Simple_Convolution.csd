@@ -5,14 +5,14 @@
 <CsInstruments>
 
 sr = 44100
-ksmps = 16
+ksmps = 32
 nchnls = 2	
 0dbfs = 1
 
 /*****Simple convolution*****/
 ;example for CsoundQt
 ;written by joachim heintz
-;apr 2009 / jan 2022
+;apr 2009 / jan 2022 / jan 2024
 ;using the code from matt ingalls (manual for pconvolve)
 ;please send bug reports and suggestions
 ;to jh at joachimheintz.de
@@ -32,16 +32,42 @@ opcode CsQtMeter, 0, SSak
   if kOn == 0 && kMax > 1 then
    kTim = 0
    kEnd = iHoldTim
-   chnset k(1), S_chan_over
+   chnset 1, S_chan_over
    kOn = 1
   endif
   if kOn == 1 && kTim > kEnd then
-   chnset k(0), S_chan_over
+   chnset 0, S_chan_over
    kOn =	0
   endif
  endif
  kTim += ksmps/sr
 endop
+
+opcode SimpConv,aa,SSPVPooo
+  Sfile,Sir,kAmp,kWDmix,kSpeed,iSkip,iLoop,iPartSize xin
+  iPartSize = (iPartSize == 0) ? 2048 : iPartSize
+  iDel		=		(ksmps < iPartSize ? iPartSize + ksmps : iPartSize) / sr
+  // sound file mono or stereo
+  if (filenchnls(Sfile) == 1) then
+    aSndL diskin Sfile,kSpeed,iSkip,iLoop
+    aSndR = aSndL
+  else
+    aSndL,aSndR diskin Sfile,kSpeed,iSkip,iLoop
+  endif
+  if (filenchnls(Sir) == 1) then	;impulsefile mono
+    aWetL	pconvolve aSndL,Sir,iPartSize,1
+    aWetR pconvolve aSndR,Sir,iPartSize,1
+  else				;impulsefile stereo
+    aWetL pconvolve aSndL,Sir,iPartSize,1
+    aWetR pconvolve aSndR,Sir,iPartSize,2
+  endif
+  aDryL		= delay:a(aSndL,iDel)
+  aDryR		= delay:a(aSndR,iDel)
+  aMixL = ntrpol:a(aDryL,aWetL,kWDmix)
+  aMixR = ntrpol:a(aDryR,aWetR,kWDmix)
+  xout(aMixL*kAmp,aMixR*kAmp)
+endop
+
 
 ;declare software channels
 chn_k "outL", 2
@@ -54,54 +80,24 @@ chn_k "wdmix", 1
 chn_k "gaindb", 1
 
 
-instr 1
-Sfile		chnget	"_Browse1"
-Simpulse	chnget	"_Browse2"
-kwdmix		chnget	"wdmix"
-kgaindb		chnget	"gaindb"
-ilenfil	filelen	Sfile
-ilenimp	filelen	Simpulse
-inchnfil	filenchnls	Sfile
-inchnimp	filenchnls	Simpulse
-ipart		=		2048; partitionsize (see manual page for pconvolve)
+instr Conv
 
-kwet		=		kwdmix
-kdry		=		1 - kwdmix
-idur		=		ilenfil + ilenimp; overall duration
-p3		=		idur
-kgain = ampdb(kgaindb)
+  // input
+  Sfile		= chnget:S("_Browse1")
+  Simpulse	= chnget:S("_Browse2")
+  kWdMix		= chnget:k("wdmix")
+  kGainDb		= chnget:k("gaindb")
+  kGain = ampdb(kGainDb)
+  p3 = filelen(Sfile) + filelen(Simpulse) + 1
 
-  ; for the following see the example from matt ingalls in the csound manual (pconvolve)
-idel		=		(ksmps < ipart ? ipart + ksmps : ipart) / sr; delay introduced by pconvolve
-kcount		init		idel * kr
-loop:
-  if inchnfil == 1 then	;soundfile mono
-a1		soundin	Sfile
-a2		=		a1
-  else				;soundfile stereo
-a1, a2		soundin	Sfile
-  endif
-  if inchnimp == 1 then	;impulsefile mono
-awetL	  	pconvolve  	kwet * a1, Simpulse, ipart, 1
-awetR	  	pconvolve  	kwet * a2, Simpulse, ipart, 1
-  else				;impulsefile stereo
-awetL	  	pconvolve  	kwet * a1, Simpulse, ipart, 1
-awetR	  	pconvolve  	kwet * a2, Simpulse, ipart, 2
-  endif
-
-adryL		delay		kdry * a1, idel
-adryR		delay		kdry * a2, idel
-
-kcount		-=		1
-  if kcount > 0 kgoto loop
-
-  aL = (awetL + adryL) * kgain
-  aR = (awetR + adryR) * kgain
-		outs		aL, aR
+  // convolution
+  aL,aR SimpConv Sfile,Simpulse,kGain,kWdMix
+		out(aL,aR)
 		
-	kTrigDisp metro 10
- CsQtMeter "outL", "outL_over", aL, kTrigDisp
- CsQtMeter "outR", "outR_over", aR, kTrigDisp
+		//show signal
+		kTrigDisp metro 10
+		CsQtMeter "outL", "outL_over", aL, kTrigDisp
+		CsQtMeter "outR", "outR_over", aR, kTrigDisp
 
 endin
 
@@ -113,8 +109,8 @@ i 1 0 1; plays the whole soundfile
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>669</x>
- <y>224</y>
+ <x>829</x>
+ <y>212</y>
  <width>460</width>
  <height>389</height>
  <visible>true</visible>
@@ -268,7 +264,7 @@ i 1 0 1; plays the whole soundfile
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.39007092</value>
+  <value>0.58156028</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -383,8 +379,8 @@ i 1 0 1; plays the whole soundfile
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.87634494</xValue>
-  <yValue>0.87634494</yValue>
+  <xValue>-inf</xValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -396,7 +392,7 @@ i 1 0 1; plays the whole soundfile
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -433,7 +429,7 @@ i 1 0 1; plays the whole soundfile
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -457,8 +453,8 @@ i 1 0 1; plays the whole soundfile
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.80310404</xValue>
-  <yValue>0.80310404</yValue>
+  <xValue>-inf</xValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -470,7 +466,7 @@ i 1 0 1; plays the whole soundfile
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -507,7 +503,7 @@ i 1 0 1; plays the whole soundfile
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -528,7 +524,7 @@ i 1 0 1; plays the whole soundfile
   <description/>
   <minimum>-30.00000000</minimum>
   <maximum>0.00000000</maximum>
-  <value>-8.35227273</value>
+  <value>-14.14772727</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -607,7 +603,7 @@ i 1 0 1; plays the whole soundfile
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>-8.352</label>
+  <label>-14.148</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Arial</font>

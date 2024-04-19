@@ -118,8 +118,8 @@ kpnt2		=		kpos2 * ilen2
  else; 3) RANDOM POSITIONS AND INTERPOLATIONS
 kfqnewval1	invalue	"fqnewval1"; frequency of new random values for file 1
 kfqnewval2	invalue	"fqnewval2"; and for file 2
-kpnt1		randomi	0, ilen1, kfqnewval1
-kpnt2		randomi	0, ilen2, kfqnewval2
+kpnt1		randomi	0, ilen1, kfqnewval1, 3
+kpnt2		randomi	0, ilen2, kfqnewval2, 3
  endif
 ;show pointer positions
 		outvalue	"kpnt1", kpnt1; time in seconds for display widget
@@ -172,6 +172,8 @@ e
 </CsScore>
 </CsoundSynthesizer>
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -186,10 +188,10 @@ e
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>timreadmeth</objectName>
   <x>832</x>
-  <y>69</y>
+  <y>68</y>
   <width>110</width>
   <height>25</height>
   <uuid>{2cbcd6fe-f4d6-4d9a-9710-df3bd7967c6d}</uuid>
@@ -217,7 +219,7 @@ e
   <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>525</x>
   <y>64</y>
@@ -231,8 +233,8 @@ e
   <label>Select a Method of Time Reading</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>18</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -244,11 +246,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>492</x>
   <y>96</y>
@@ -279,7 +281,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>phaspeed1</objectName>
   <x>551</x>
   <y>126</y>
@@ -298,7 +300,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>phaspeed1</objectName>
   <x>889</x>
   <y>128</y>
@@ -329,7 +331,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>phaspeed2</objectName>
   <x>550</x>
   <y>154</y>
@@ -348,7 +350,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>phaspeed2</objectName>
   <x>888</x>
   <y>156</y>
@@ -379,7 +381,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>500</x>
   <y>125</y>
@@ -410,7 +412,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>499</x>
   <y>152</y>
@@ -441,7 +443,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>258</y>
@@ -455,8 +457,8 @@ e
   <label>pvscross</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>18</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -468,11 +470,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>397</y>
@@ -486,8 +488,8 @@ e
   <label>pvsvoc</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>18</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -499,11 +501,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>330</y>
@@ -517,8 +519,8 @@ e
   <label>pvsfilter</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>18</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -530,11 +532,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>466</y>
@@ -548,8 +550,8 @@ e
   <label>pvsmorph</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>18</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -561,11 +563,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>border</bordermode>
+  <bordermode>true</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>crossamp</objectName>
   <x>74</x>
   <y>293</y>
@@ -584,7 +586,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>crossamp</objectName>
   <x>406</x>
   <y>295</y>
@@ -615,7 +617,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>17</x>
   <y>292</y>
@@ -646,7 +648,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>146</x>
   <y>265</y>
@@ -677,7 +679,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>351</x>
   <y>294</y>
@@ -708,7 +710,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>morphfreq</objectName>
   <x>79</x>
   <y>559</y>
@@ -727,7 +729,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>morphfreq</objectName>
   <x>411</x>
   <y>561</y>
@@ -758,7 +760,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>22</x>
   <y>558</y>
@@ -789,7 +791,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>88</x>
   <y>531</y>
@@ -803,7 +805,7 @@ e
   <label>Frequencies from </label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Noto Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -816,11 +818,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>356</x>
   <y>560</y>
@@ -851,16 +853,16 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>selcross</objectName>
-  <x>357</x>
-  <y>231</y>
+  <x>355</x>
+  <y>226</y>
   <width>108</width>
-  <height>22</height>
+  <height>30</height>
   <uuid>{d2474762-8299-44f9-9ffb-54562c752970}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
-  <midicc>-3</midicc>
+  <midicc>0</midicc>
   <description/>
   <bsbDropdownItemList>
    <bsbDropdownItem>
@@ -887,12 +889,12 @@ e
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>45</x>
-  <y>227</y>
+  <y>226</y>
   <width>325</width>
-  <height>32</height>
+  <height>30</height>
   <uuid>{eb3b80e1-f6e8-44d6-8978-147b2c1d6bd1}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -901,8 +903,8 @@ e
   <label>Select a Method of Cross Synthesis</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>18</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -914,11 +916,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>filtdepth</objectName>
   <x>73</x>
   <y>362</y>
@@ -937,7 +939,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>filtdepth</objectName>
   <x>405</x>
   <y>364</y>
@@ -968,7 +970,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>16</x>
   <y>361</y>
@@ -999,7 +1001,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>82</x>
   <y>336</y>
@@ -1030,7 +1032,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>350</x>
   <y>363</y>
@@ -1061,7 +1063,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>vocdepth</objectName>
   <x>71</x>
   <y>429</y>
@@ -1074,13 +1076,13 @@ e
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>1.00000000</value>
+  <value>0.94181818</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>vocdepth</objectName>
   <x>403</x>
   <y>431</y>
@@ -1091,7 +1093,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>1.000</label>
+  <label>0.942</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Lucida Grande</font>
@@ -1111,7 +1113,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>428</y>
@@ -1142,7 +1144,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>80</x>
   <y>403</y>
@@ -1173,7 +1175,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>348</x>
   <y>430</y>
@@ -1204,7 +1206,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>morphamp</objectName>
   <x>79</x>
   <y>497</y>
@@ -1223,7 +1225,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>morphamp</objectName>
   <x>411</x>
   <y>499</y>
@@ -1254,7 +1256,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>22</x>
   <y>496</y>
@@ -1285,7 +1287,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>90</x>
   <y>471</y>
@@ -1299,7 +1301,7 @@ e
   <label>Amplitudes from </label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
+  <font>Noto Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
@@ -1312,11 +1314,11 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>356</x>
   <y>498</y>
@@ -1347,7 +1349,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>499</x>
   <y>101</y>
@@ -1378,7 +1380,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>492</x>
   <y>196</y>
@@ -1409,7 +1411,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>502</x>
   <y>202</y>
@@ -1424,8 +1426,8 @@ e
 Set Positions for File 1 from left to right and for File 2 from bottom to top</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>14</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -1437,11 +1439,11 @@ Set Positions for File 1 from left to right and for File 2 from bottom to top</l
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>livepos1</objectName>
   <x>631</x>
   <y>201</y>
@@ -1470,7 +1472,7 @@ Set Positions for File 1 from left to right and for File 2 from bottom to top</l
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1478,7 +1480,7 @@ Set Positions for File 1 from left to right and for File 2 from bottom to top</l
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>492</x>
   <y>490</y>
@@ -1509,7 +1511,7 @@ Set Positions for File 1 from left to right and for File 2 from bottom to top</l
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>498</x>
   <y>498</y>
@@ -1524,8 +1526,8 @@ Set Positions for File 1 from left to right and for File 2 from bottom to top</l
 Set Frequency for new Random Positions in File 1 and File 2</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>14</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -1537,11 +1539,11 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>fqnewval1</objectName>
   <x>518</x>
   <y>542</y>
@@ -1560,7 +1562,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>fqnewval1</objectName>
   <x>591</x>
   <y>565</y>
@@ -1591,7 +1593,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>fqnewval2</objectName>
   <x>728</x>
   <y>541</y>
@@ -1604,13 +1606,13 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>2.00000000</maximum>
-  <value>0.42105300</value>
+  <value>0.07017544</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>fqnewval2</objectName>
   <x>799</x>
   <y>565</y>
@@ -1621,7 +1623,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>0.4211</label>
+  <label>0.070</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Lucida Grande</font>
@@ -1641,7 +1643,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>536</x>
   <y>564</y>
@@ -1672,7 +1674,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>747</x>
   <y>564</y>
@@ -1703,7 +1705,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>603</y>
@@ -1734,7 +1736,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kpnt1</objectName>
   <x>114</x>
   <y>656</y>
@@ -1765,7 +1767,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>12</x>
   <y>642</y>
@@ -1779,8 +1781,8 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>Position (sec) in File 1</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>14</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -1792,11 +1794,11 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>kpnt2</objectName>
   <x>115</x>
   <y>708</y>
@@ -1827,7 +1829,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>12</x>
   <y>693</y>
@@ -1858,7 +1860,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out</objectName>
   <x>372</x>
   <y>683</y>
@@ -1887,7 +1889,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1895,7 +1897,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outover</objectName>
   <x>706</x>
   <y>683</y>
@@ -1924,7 +1926,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1932,7 +1934,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>dbrange</objectName>
   <x>654</x>
   <y>715</y>
@@ -1962,7 +1964,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <randomizable group="0">false</randomizable>
   <value>50</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>575</x>
   <y>714</y>
@@ -1993,7 +1995,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>372</x>
   <y>714</y>
@@ -2024,7 +2026,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>showdb</objectName>
   <x>489</x>
   <y>714</y>
@@ -2050,7 +2052,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <selectedIndex>1</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>vol</objectName>
   <x>373</x>
   <y>642</y>
@@ -2069,7 +2071,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>396</x>
   <y>618</y>
@@ -2100,7 +2102,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>showpos1</objectName>
   <x>202</x>
   <y>612</y>
@@ -2116,8 +2118,8 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.96596037</xValue>
-  <yValue>0.26391149</yValue>
+  <xValue>0.23026316</xValue>
+  <yValue>0.69230769</yValue>
   <type>crosshair</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2129,7 +2131,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable group="0" mode="both">false</randomizable>
+  <randomizable mode="both" group="0">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -2137,7 +2139,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>vol</objectName>
   <x>665</x>
   <y>645</y>
@@ -2168,7 +2170,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>12</x>
   <y>612</y>
@@ -2182,8 +2184,8 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>Output</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>18</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>14</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -2195,11 +2197,11 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>96</y>
@@ -2230,7 +2232,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>14</x>
   <y>117</y>
@@ -2258,7 +2260,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>373</x>
   <y>115</y>
@@ -2280,7 +2282,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse2</objectName>
   <x>14</x>
   <y>151</y>
@@ -2308,10 +2310,10 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse2</objectName>
   <x>373</x>
-  <y>149</y>
+  <y>148</y>
   <width>107</width>
   <height>29</height>
   <uuid>{cb9b3b67-c25f-42cf-a2c4-4b3efb8d2754}</uuid>
@@ -2330,7 +2332,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>184</y>
@@ -2361,7 +2363,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>changeorder</objectName>
   <x>324</x>
   <y>187</y>
@@ -2377,7 +2379,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>43</x>
   <y>66</y>
@@ -2391,8 +2393,8 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <label>Choose Files</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
-  <font>Lucida Grande</font>
-  <fontsize>18</fontsize>
+  <font>Noto Sans</font>
+  <fontsize>16</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>
@@ -2404,11 +2406,11 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>14</y>
@@ -2439,7 +2441,7 @@ Set Frequency for new Random Positions in File 1 and File 2</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>747</x>
   <y>603</y>

@@ -9,6 +9,8 @@
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -77,7 +79,7 @@
   <x>160</x>
   <y>100</y>
   <width>80</width>
-  <height>25</height>
+  <height>30</height>
   <uuid>{7f11964b-c55f-4334-a22b-d12eb00d2c20}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -207,7 +209,7 @@
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
-  <fontsize>36</fontsize>
+  <fontsize>32</fontsize>
   <precision>3</precision>
   <color>
    <r>15</r>

@@ -52,7 +52,6 @@ static QString which(QString cmd, QString otherwise) {
     return otherwise;
 }
 
-
 Risset::Risset(QString pythonExe)
 {
     opcodeIndexDone = false;
@@ -67,17 +66,35 @@ Risset::Risset(QString pythonExe)
 #endif
     // local path to download the html docs from github.com//csound-plugins/risset-docs
     rissetDocsRepoPath.setPath(csoundqtDataRoot.filePath("risset-docs"));
-    if(QFile::exists(pythonExe))
-        m_pythonExe = pythonExe;
-    else if(!pythonExe.isEmpty())
-        m_pythonExe = which(pythonExe, "python3");
-    else
-        m_pythonExe = which("python3", "python3");
-    QDEBUG << "Using python binary:" << m_pythonExe;
-    QStringList args = {"-m", "risset", "info", "--full"};
+    // Try the risset script
+    QString rissetScriptPath = which("risset", "risset");
+    QStringList args = {"info", "--full"};
     QProcess proc;
-    proc.start(m_pythonExe, args);
-    proc.waitForFinished();
+    proc.start(rissetScriptPath, args);
+    auto finishok = proc.waitForFinished();
+    if (!finishok) {
+        QDEBUG << "Risset script not installed" << proc.errorString();
+        m_rissetPath = "";
+        if(QFile::exists(pythonExe))
+        m_pythonExe = pythonExe;
+        else if(!pythonExe.isEmpty())
+            m_pythonExe = which(pythonExe, "python3");
+        else
+            m_pythonExe = which("python3", "python3");
+
+        QDEBUG << "Python binary: " << m_pythonExe;
+
+        proc.start(m_pythonExe, {"-m", "risset", "info", "--full"});
+        finishok = proc.waitForFinished();
+        if (!finishok) {
+            isInstalled = false;
+            QDEBUG << "Risset not installed for python " << m_pythonExe << ", error: " << proc.errorString();
+            return;
+        }
+    } else {
+        m_rissetPath = rissetScriptPath;
+    }
+
     auto procOut = proc.readAllStandardOutput();
     m_infoText = QString::fromLocal8Bit(procOut);
     QJsonDocument m_jsonInfo = QJsonDocument::fromJson(procOut);
@@ -85,29 +102,57 @@ Risset::Risset(QString pythonExe)
     rissetVersion = root.value("version").toString();
     if(rissetVersion.isEmpty()) {
         isInstalled = false;
-        QDEBUG << "Risset not installed" << proc.errorString();
+        QDEBUG << "Risset did not execute correctly: " << proc.errorString();
         return;
     }
+    m_rissetPath = rissetScriptPath;
     rissetRoot.setPath(root.value("rissetroot").toString());
     rissetHtmlDocs.setPath(root.value("htmldocs").toString());
     rissetOpcodesXml = root.value("opcodesxml").toString();
+    if(!QFile::exists(rissetOpcodesXml)) {
+        QDEBUG << "Did not find opcodes.xml, path = " << rissetOpcodesXml;
+        this->generateOpcodesXml();
+    }
+
     rissetManpages.setPath(root.value("manpages").toString());
     QDEBUG << "Risset opcodes.xml: " << rissetOpcodesXml;
-    this->opcodeNames.clear();
     QDEBUG << "Risset version: " << rissetVersion;
+    QDEBUG << "Risset manual: " << rissetHtmlDocs.absolutePath();
+    this->opcodeNames.clear();
     auto plugins = root.value(QString("plugins")).toObject();
     for(auto pluginName: plugins.keys()) {
+        QDEBUG << "Risset - parsing plugin" << pluginName;
         auto plugindef = plugins.value(pluginName).toObject();
         bool installed = plugindef.value("installed").toBool();
+        auto opcodesInPlugin = plugindef.value("opcodes").toArray();
+        QStringList opcodesList;
+        for(auto opcodeName: opcodesInPlugin) {
+            QString opcodeNameStr = opcodeName.toString();
+            opcodeNames.append(opcodeNameStr);
+            opcodeToPlugin[opcodeNameStr] = pluginName;
+            opcodesList.append(opcodeNameStr);
+        }
+        pluginInstalled[pluginName] = installed;
+        this->pluginOpcodes[pluginName] = opcodesList;
         if(installed) {
-            auto opcodesInPlugin = plugindef.value("opcodes").toArray();
-            for(auto opcodeName: opcodesInPlugin) {
-                QString opcodeNameStr = opcodeName.toString();
-                opcodeNames.append(opcodeNameStr);
-            }
+            this->installedPlugins.append(pluginName);
+        }
+
+    }
+    // QDEBUG << "Risset opcodes: " << opcodeNames;
+    opcodeIndexDone = true;
+}
+
+
+void Risset::markOpcodeTree(OpEntryParser *tree) {
+    // Mark the opcodes which are not installed. This information can be used, for example
+    // for more nuanced highlighting
+    for(auto& opcode : tree->opcodeList) {
+        auto pluginName = this->opcodeToPlugin.value(opcode.opcodeName);
+        if(!pluginName.isEmpty()) {
+            opcode.isInstalled = this->pluginInstalled[pluginName];
         }
     }
-    opcodeIndexDone = true;
 }
 
 
@@ -132,10 +177,12 @@ QString Risset::htmlManpage(QString opcodeName) {
     // TODO!
     if(rissetHtmlDocs.exists()) {
         QString path = rissetHtmlDocs.filePath("opcodes/" + opcodeName + ".html");
-        if(QFile::exists(path))
+        if(QFile::exists(path)) {
+            QDEBUG << "Risset: found html man page for opcode" << opcodeName << ": " << path;
             return path;
+        }
         else {
-            QDEBUG << "Dir not find html page for opcode" << opcodeName << "\n"
+            QDEBUG << "Risset: did not find html page for opcode" << opcodeName << "\n"
                    << "... Searched: " << path;
         }
     }
@@ -144,29 +191,78 @@ QString Risset::htmlManpage(QString opcodeName) {
     return "";
 }
 
+RissetError Risset::generateOpcodesXml() {
+    if (!isInstalled) {
+        QDEBUG << "Risset is not installed";
+        return RissetError::RissetNotInstalled;
+    }
+    QString executable;
+    QStringList args;
+    QString path = this->defaultOpcodesXmlPath();
 
-int Risset::generateDocumentation(std::function<void(int)> callback) {
-    QStringList args = {"-m", "risset", "makedocs"};
+    if (!m_rissetPath.isEmpty()) {
+        executable = m_rissetPath;
+        args = QStringList({"--debug", "dev", "--outfile", path, "opcodesxml"});
+    } else if(!m_pythonExe.isEmpty()) {
+        executable = m_pythonExe;
+        args = QStringList({"-m", "risset", "--debug", "dev", "--outfile", path, "opcodesxml"});
+    } else {
+        QDEBUG << "Either the risset script should be known or the python executable "
+                  "should be known...";
+        return RissetError::RissetNotInstalled;
+    }
+
+    QProcess proc;
+    QDEBUG << "Calling risset to generate opcodes.xml. exec: " << executable << ", args: " << args;
+    proc.start(executable, args);
+    proc.waitForFinished();
+    if(proc.exitCode() != 0) {
+        QDEBUG << "Error while generating opcodesxml";
+        return RissetError::Error;
+    }
+    rissetOpcodesXml = path;
+    return RissetError::Ok;
+}
+
+
+
+RissetError Risset::generateDocumentation(std::function<void(int)> callback) {
+    if (!isInstalled) {
+        QDEBUG << "Risset is not installed";
+        return RissetError::RissetNotInstalled;
+    }
+
+    QString executable;
+    QStringList args;
+
+    if (!m_rissetPath.isEmpty()) {
+        executable = m_rissetPath;
+        args = QStringList({"makedocs"});
+    } else {
+        executable = m_pythonExe;
+        args = QStringList({"-m", "risset", "makedocs"});
+    }
+
     if(callback == nullptr) {
         QProcess proc;
-        proc.start(m_pythonExe, args);
+        proc.start(executable, args);
         proc.waitForFinished();
         if(proc.exitCode() != 0) {
-            QDEBUG << "Error while making documentation. Risset args: << args";
-            return 1;
+            QDEBUG << "Error while making documentation. Risset args: " << args;
+            return RissetError::Error;
         } else  {
             if(!QFile::exists(rissetHtmlDocs.filePath("index.html"))) {
-                QDEBUG << "Risset::geerateDocumentation failed to genererate HTML docs, path: "
+                QDEBUG << "Risset::generateDocumentation failed to genererate HTML docs, path: "
                          << rissetHtmlDocs.path();
-                return 2;
+                return RissetError::HtmlError;
             }
             QDEBUG << "Risset makedocs OK!";
-            return 0;
+            return RissetError::Ok;
         }
     }
     else {
         QProcess *proc = new QProcess();
-        proc->start(m_pythonExe, args);
+        proc->start(executable, args);
         runningProcesses.append(proc);
         QObject::connect(proc, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [this, callback](int exitCode, QProcess::ExitStatus exitStatus) {
@@ -175,7 +271,7 @@ int Risset::generateDocumentation(std::function<void(int)> callback) {
             callback(exitCode);
             this->cleanupProcesses();
         });
-        return 0;
+        return RissetError::Ok;
     }
 }
 
@@ -191,8 +287,7 @@ static bool updateGitRepo(QString path) {
 
 static bool cloneGitRepo(QString url, QString path) {
     QProcess proc;
-    QStringList args = {"clone", "--depth", "1", url, path};
-    proc.start("git", args);
+    proc.start("git", {"clone", "--depth", "1", url, path});
     proc.waitForFinished();
     return true;
 }

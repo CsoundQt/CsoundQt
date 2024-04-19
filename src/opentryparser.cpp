@@ -55,6 +55,7 @@ void OpEntryParser::parseOpcodesXml(QString opcodeFile) {
             while(!synop.isNull()) {
                 Opcode op;
                 op.desc = description;
+                op.isInstalled = true;
                 QDomElement s = synop.toElement();
                 QDomNode node = s.firstChild();
                 QDomElement elem = node.toElement();
@@ -126,13 +127,20 @@ void OpEntryParser::sortOpcodes()
               [](const Opcode &a, const Opcode &b) -> bool { return a.opcodeName < b.opcodeName; });
 }
 
-QStringList OpEntryParser::opcodeNameList()
+QStringList OpEntryParser::opcodeNameList(bool includeDisabled)
 {
+    if(!m_opcodeNameListCache.isEmpty()) {
+       return m_opcodeNameListCache;
+    }
 	QStringList list;
-    for (int i = 0; i<opcodeList.size();i++)  {
-		list.append(opcodeList[i].opcodeName);
-	}
-	return list;
+    includeDisabled = false;
+    for(auto opcode : opcodeList) {
+        if(includeDisabled || opcode.isInstalled) {
+            list.append(opcode.opcodeName);
+        }
+    }
+    m_opcodeNameListCache = list;
+    return list;
 }
 
 void OpEntryParser::addOpcode(Opcode opcode)
@@ -236,7 +244,7 @@ QList<Opcode> OpEntryParser::getOpcodeList(int index)
 
 bool OpEntryParser::isOpcode(QString opcodeName)
 {
-    for (int i = 0; i< opcodeList.size();i++)  {
+    for (int i = 0; i < opcodeList.size();i++)  {
 		if (opcodeName == opcodeList[i].opcodeName) {
             return true;
         }
@@ -253,7 +261,7 @@ bool OpEntryParser::getOpcodeArgNames(Node &node)
 	QVector<Port> inputs = node.getInputs();
 	QVector<Port> outputs = node.getOutputs();
     int idx = -1;
-    for (int i = 0; i< opcodeList.size();i++)  {
+    for (int i = 0; i < opcodeList.size();i++)  {
         if (opcodeName == opcodeList[i].opcodeName) {
             idx = i;
             break;
