@@ -302,6 +302,7 @@ macx {
     }
 
     final.path = $$PWD
+    #final.commands += codesign -s - --deep $$OUT_PWD/$$DESTDIR/$${TARGET}.app ; #try codesigning to eliminate asking for Docuemtns folder permission every time
     final.commands += hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname CsoundQt $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg # untested!
     INSTALLS += cocoa printsupport pythonlinks final
 
