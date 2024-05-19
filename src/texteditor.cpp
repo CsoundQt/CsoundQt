@@ -139,7 +139,7 @@ int TextEditLineNumbers::getAreaWidth()
     int right_padding = lineNumberArea->padding();
     int left_padding  = lineNumberArea->padding();
     int numDigits = 4;
-    int oneDigit = this->fontMetrics().width(QLatin1Char('9'));
+    int oneDigit = this->fontMetrics().horizontalAdvance(QLatin1Char('9'));
     return oneDigit * scaling * numDigits + left_padding + right_padding;
 }
 
@@ -240,7 +240,7 @@ void LineNumberArea::paintEvent(QPaintEvent *)
 				font.setBold(true);
 				painter.setFont(font);
 			}
-            int x = width - metrics.width(number)*m_lineNumbersSizeFactor - m_padding;
+            int x = width - metrics.horizontalAdvance(number)*m_lineNumbersSizeFactor - m_padding;
             painter.drawText(x, y, number);
 			if (bold) {
 				font.setBold(false);

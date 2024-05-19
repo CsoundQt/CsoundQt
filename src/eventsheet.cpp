@@ -903,7 +903,7 @@ void EventSheet::runScript(QString name)
 	QDir tempDir(QDir::tempPath());
     QString subDir = "QCS-" + QString::number(QRandomGenerator::global()->generate());
 	while (!tempDir.mkdir(subDir))
-        subDir = "QCS-" + QString(QRandomGenerator::global()->generate());
+        subDir = "QCS-" + QString((QChar) QRandomGenerator::global()->generate());
 	tempDir.cd(subDir);
 	QDir::setCurrent(tempDir.absolutePath());
 	QFile module(tempDir.absolutePath() + QDir::separator() + "qutesheet.py");
@@ -1634,7 +1634,7 @@ void EventSheet::cellDoubleClickedSlot(int /*row*/, int /*column*/)
 
 void EventSheet::cellChangedSlot(int row, int column)
 {
-    if (this->item(row, column) != 0 && this->item(row, column)->data(Qt::DisplayRole).toString() != 0) {
+    if (this->item(row, column) != nullptr && this->item(row, column)->data(Qt::DisplayRole).toString() != nullptr) {
 		while (column > 0) {
 			column--;
 			QTableWidgetItem * item = this->item(row, column);

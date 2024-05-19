@@ -238,7 +238,7 @@ void DocumentView::updateOrcContext(QString orc)
 		linecursor.movePosition(QTextCursor::EndOfLine);
 	}
 	QString instr = cursor.selection().toPlainText();
-    auto lines = instr.splitRef("\n", SKIP_EMPTY_PARTS);
+    auto lines = instr.split("\n", SKIP_EMPTY_PARTS);
 
     auto rxWordSplit = QRegularExpression("[\\s,+-/\\*\\.\\^\\(\\)\\[\\]$]");
 	m_localVariables.clear();
@@ -248,7 +248,7 @@ void DocumentView::updateOrcContext(QString orc)
         if (line.isEmpty() || line.startsWith(";")) {
 			continue;
 		}
-        auto words = line.toString().split(rxWordSplit, SKIP_EMPTY_PARTS);
+        auto words = line.split(rxWordSplit, SKIP_EMPTY_PARTS);
         for(auto word: words) {
             if(!seen.contains(word) && !m_opcodeTree->isOpcode(word)) {
                 seen.insert(word);
@@ -728,7 +728,7 @@ void DocumentView::syntaxCheck()
 	// syntax check
 	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
 	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-    auto words = cursor.selectedText().split(QRegExp("\\b"),
+    auto words = cursor.selectedText().split(QRegularExpression("\\b"),
                                              SKIP_EMPTY_PARTS);
 	bool showHover = false;
 	for(int i = 0; i < words.size(); i++) {
@@ -1125,9 +1125,10 @@ void DocumentView::indentNewLine()
 		linecursor.movePosition(QTextCursor::PreviousBlock);
 		linecursor.select(QTextCursor::LineUnderCursor);
 		QString line = linecursor.selectedText();
-		QRegExp regex = QRegExp("\\s+");
-		if (line.indexOf(regex) == 0) {
-			m_mainEditor->insertPlainText(regex.cap());
+        QRegularExpression regex = QRegularExpression("\\s+");
+        QRegularExpressionMatch match;
+        if (line.indexOf(regex, 0, &match) == 0) {
+            m_mainEditor->insertPlainText(match.captured());
 		}
 	}
 }
@@ -1251,7 +1252,7 @@ void DocumentView::insertAutoCompleteText()
 		if (insertComplete) {
 			if (noOutargs) {
 				QString syntaxText = action->data().toString();
-				int index =syntaxText.indexOf(QRegExp("\\w\\s+\\w"));
+                int index =syntaxText.indexOf(QRegularExpression("\\w\\s+\\w"));
 				editor->insertPlainText(syntaxText.mid(index + 1).trimmed());  // right returns the whole string if index < 0
 			}
 			else {
@@ -1911,7 +1912,7 @@ QString DocumentView::changeToChnget(QString text)
 			line.replace("outvalue", "chnset");
 			int arg1Index = line.indexOf("chnset") + 7;
 			int arg2Index = line.indexOf(",") + 1;
-			int arg2EndIndex = line.indexOf(QRegExp("[\\s]*[;]"), arg2Index);
+            int arg2EndIndex = line.indexOf(QRegularExpression("[\\s]*[;]"), arg2Index);
 			QString arg1 = line.mid(arg1Index, arg2Index-arg1Index - 1).trimmed();
 			QString arg2 = line.mid(arg2Index, arg2EndIndex-arg2Index).trimmed();
 			QString comment = line.mid(arg2EndIndex);
@@ -1937,7 +1938,7 @@ QString DocumentView::changeToInvalue(QString text)
 			line.replace("chnset", "outvalue");
 			int arg1Index = line.indexOf("outvalue") + 8;
 			int arg2Index = line.indexOf(",") + 1;
-			int arg2EndIndex = line.indexOf(QRegExp("[\\s]*[;]"), arg2Index);
+            int arg2EndIndex = line.indexOf(QRegularExpression("[\\s]*[;]"), arg2Index);
 			QString arg1 = line.mid(arg1Index, arg2Index-arg1Index - 1).trimmed();
 			QString arg2 = line.mid(arg2Index, arg2EndIndex-arg2Index).trimmed();
 			QString comment = line.mid(arg2EndIndex);

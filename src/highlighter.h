@@ -119,7 +119,7 @@ private:
 
     QRegularExpression commentStartExpression;
     QRegularExpression commentEndExpression;
-    QRegExp functionRegex;
+    QRegularExpression functionRegex;
 
     QRegularExpression rxScoreLetter;
     QRegularExpression rxQuotation;

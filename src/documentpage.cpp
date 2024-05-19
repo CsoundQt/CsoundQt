@@ -382,7 +382,7 @@ QString DocumentPage::getMacOptions(QString option)
 		option += ":";
 	if (!option.endsWith(" "))
 		option += " ";
-	int index = m_macOptions.indexOf(QRegExp(option + ".*"));
+    int index = m_macOptions.indexOf(QRegularExpression(option + ".*"));
 	if (index < 0) {
         qDebug("Option %s not found!", option.toLocal8Bit().constData());
 		return QString("");
@@ -636,13 +636,13 @@ int DocumentPage::characterCount(bool countExtras)
 int DocumentPage::instrumentCount()
 {
 	QString text = this->getBasicText();
-	return text.count((QRegExp("\\n[ \\t]*instr\\s")));
+    return text.count((QRegularExpression("\\n[ \\t]*instr\\s")));
 }
 
 int DocumentPage::udoCount()
 {
 	QString text = this->getBasicText();
-	return text.count((QRegExp("\\n[ \\t]*opcode\\s")));
+    return text.count((QRegularExpression("\\n[ \\t]*opcode\\s")));
 }
 
 int DocumentPage::widgetCount()
@@ -1422,7 +1422,7 @@ void DocumentPage::showMidiLearn(QuteWidget *widget)
 
 void DocumentPage::applyMacOptions(QStringList options)
 {
-	int index = options.indexOf(QRegExp("WindowBounds: .*"));
+    int index = options.indexOf(QRegularExpression("WindowBounds: .*"));
 	if (index > 0) {
 		QString line = options[index];
 		QStringList values = line.split(" ");
@@ -1445,7 +1445,7 @@ void DocumentPage::setMacOption(QString option, QString newValue)
 		option += ":";
 	if (!option.endsWith(" "))
 		option += " ";
-	int index = m_macOptions.indexOf(QRegExp(option + ".*"));
+    int index = m_macOptions.indexOf(QRegularExpression(option + ".*"));
 	if (index < 0) {
 		qDebug("Option not found!");
 		return;

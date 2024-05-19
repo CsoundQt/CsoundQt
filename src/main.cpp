@@ -83,10 +83,10 @@ int main(int argc, char *argv[])
         if(arg == "--help") {
             QTextStream out(stdout);
             out << "\n\n";
-            out << "Options:" << endl;
-            out << "   --play        Autoplay the last file passed via command line" << endl;
-            out << "   --help        This message" << endl;
-            out << endl;
+            out << "Options:\n";
+            out << "   --play        Autoplay the last file passed via command line\n";
+            out << "   --help        This message\n";
+            out << "\n";
             exit(0);
         }
         if(arg == "--play") {

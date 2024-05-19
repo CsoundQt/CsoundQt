@@ -38,8 +38,8 @@ QString DotGenerator::getDotText()
 {
 	QString dotText = "digraph csd {\n    fontsize=18\n    label=\"" + m_fileName + "\"\n";
 	QStringList instruments;
-	while (m_orcText.contains(QRegExp("\\b*instr"))) {
-		int index = m_orcText.indexOf(QRegExp("\\b*instr"));
+    while (m_orcText.contains(QRegularExpression("\\b*instr"))) {
+        int index = m_orcText.indexOf(QRegularExpression("\\b*instr"));
 		int end = m_orcText.indexOf("endin", index) + 6 ;
 		QString instrument = m_orcText.mid(index, end - index);
 		instruments.append(instrument);
@@ -52,7 +52,7 @@ QString DotGenerator::getDotText()
 		QString instrument = instruments[i];
 		QVector <Node> instrumentGraph;
 		QVector <QPair <QString, int> > instrumentLabels;
-		QStringList lines = instrument.split(QRegExp("\n"), QString::SkipEmptyParts);
+        QStringList lines = instrument.split(QRegularExpression("\n"), Qt::SkipEmptyParts);
 		for (int j = 0; j < lines.size(); j++) {
 			QString line = lines[j];
 			if (line.contains("instr")) {
@@ -61,7 +61,7 @@ QString DotGenerator::getDotText()
 			else if (line.contains("endin")) { // Do nothing
 			}
 			else {
-				QStringList parts = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+                QStringList parts = line.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
 				//         qDebug() << parts << "----------";
 				if (parts.size() > 0) {
 					if (parts[0].startsWith(";")) {
@@ -79,7 +79,7 @@ QString DotGenerator::getDotText()
 					else if (parts[0] == "endif") {
 
 					}
-					else if (line.trimmed().contains(QRegExp("^[\\w]+:"))) {  // a label
+                    else if (line.trimmed().contains(QRegularExpression("^[\\w]+:"))) {  // a label
 						QPair<QString, int> l;
 						l.first = parts[0].trimmed();
 						l.second = instrumentGraph.size();
@@ -165,7 +165,7 @@ Node DotGenerator::createNode(QStringList parts)
 				comment = inArgs.mid(commentIndex);
 			}
 			inArgs.remove(comment);
-			QStringList args = inArgs.split(QRegExp("[,\\s]+"), QString::SkipEmptyParts);
+            QStringList args = inArgs.split(QRegularExpression("[,\\s]+"), Qt::SkipEmptyParts);
 			bool string = false;
 			QString stringArg = "";
 			foreach (QString arg, args) {
@@ -186,7 +186,7 @@ Node DotGenerator::createNode(QStringList parts)
 					node.newInput(port);
 				}
 			}
-			args = outArgs.split(QRegExp("[\\s,]+"), QString::SkipEmptyParts);
+            args = outArgs.split(QRegularExpression("[\\s,]+"), Qt::SkipEmptyParts);
 			foreach (QString arg, args) {
 				//                   qDebug() << "outArg:" << arg;
 				Port port;
@@ -261,7 +261,7 @@ QString DotGenerator::makeinputConnection(int i, int j, int n, Port input, QHash
 
 		qDebug() << keys;
 		bool connected = false;
-		QStringList expTokens = label.split(QRegExp("[\\+\\-\\*\\/\\^\\)\\(\\%\\!]+"), QString::SkipEmptyParts);
+        QStringList expTokens = label.split(QRegularExpression("[\\+\\-\\*\\/\\^\\)\\(\\%\\!]+"), Qt::SkipEmptyParts);
 		if (expTokens.size() > 1 && !label.contains("\"")) { //means it is an expression
 			text += "    " + nodeName + "->";
 			text += "   Node" + QString::number(i) + "_" + QString::number(j) + ":i" + QString::number(n);
@@ -270,7 +270,7 @@ QString DotGenerator::makeinputConnection(int i, int j, int n, Port input, QHash
 		}
 		foreach (QString key, keys) {
 			foreach (QString token, expTokens) {
-				token.remove(QRegExp("\\s+"));
+                token.remove(QRegularExpression("\\s+"));
 				if (token == key) {
 					if (key != "") {
 						//                   qDebug() << "expTokens match" << token;

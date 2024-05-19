@@ -93,7 +93,7 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 
 	QPalette Pal(this->palette());
     // set black background
-    Pal.setColor(QPalette::Background, Qt::black);
+    Pal.setColor(QPalette::Base, Qt::black);
     this->setAutoFillBackground(true);
     this->setPalette(Pal);
     this->setStyleSheet("QFrame { border: 0px; }");
@@ -217,7 +217,7 @@ void QuteGraph::mousePressEvent(QMouseEvent *event) {
             m_spectrumPeakTexts[index]->setVisible(true);
             m_mouseDragging = true;
             auto view = getView(index);
-            auto peakIndex = view->mapToScene(event->x(), 0).x();
+            auto peakIndex = view->mapToScene(event->position().x(), 0).x();
             auto curve = curves[index];
             auto freq = peakIndex / curve->get_size() * this->m_ud->sampleRate*0.5;
             m_showPeakTempFrequency = freq;
@@ -356,7 +356,7 @@ void QuteGraph::setValue(double value)
 void QuteGraph::setValue(QString text)
 {
     bool ok;
-    auto parts = text.splitRef(' ', SKIP_EMPTY_PARTS);
+    auto parts = text.split(' ', SKIP_EMPTY_PARTS);
     if(parts[0] == "@set") {
         bool ok;
         int index = parts[1].toInt(&ok);
@@ -382,10 +382,10 @@ void QuteGraph::setValue(QString text)
         }
         int index;
         if(parts[1] == "fft") {
-            index = findCurve(CURVE_SPECTRUM, parts[2].toString());
+            index = findCurve(CURVE_SPECTRUM, parts[2]);
         }
         else if (parts[1] == "audio") {
-            index = findCurve(CURVE_AUDIOSIGNAL, parts[2].toString());
+            index = findCurve(CURVE_AUDIOSIGNAL, parts[2]);
         }
         else if (parts[1] == "table") {
             int tabnum = parts[2].toInt(&ok);
@@ -468,7 +468,7 @@ void QuteGraph::setValue(QString text)
         }
     }
     else if(parts[0] == "@getPeak") {
-        m_getPeakChannel = parts[1].toString();
+        m_getPeakChannel = parts[1];
         qDebug() << "@getPeak channel: " << m_getPeakChannel;
         MYFLT *ptr;
         csoundGetChannelPtr(m_ud->csound, &ptr,
@@ -1216,12 +1216,12 @@ QString mton(double midinote) {
         }
     }
     if(octave >= 0) {
-        dst.append('0' + octave);
+        dst.append(QChar('0' + octave));
     } else {
         dst.append('-');
-        dst.append('0' - octave);
+        dst.append(QChar('0' - octave));
     }
-    dst.append('A' + _pc2idx[pc]);
+    dst.append(QChar('A' + _pc2idx[pc]));
     int32_t alt = _pc2alt[pc];
     if(alt > 0) {
         dst.append(_alts[alt]);
@@ -1509,7 +1509,7 @@ int QuteGraph::getIndexForTableNum(int ftable)
 	for (int i = 0; i < curves.size(); i++) {
 		QString text = curves[i]->get_caption();
 		if (text.contains("ftable")) {
-			QStringList parts = text.split(QRegExp("[ :]"), QString::SkipEmptyParts);
+            QStringList parts = text.split(QRegularExpression("[ :]"), Qt::SkipEmptyParts);
             if (parts.size() > 1) {
 				int num = parts.last().toInt();
 				if (ftable == num) {
@@ -1943,7 +1943,7 @@ void QuteTable::setValue(double value) {
 };
 
 void QuteTable::setValue(QString s) {
-    auto parts = s.splitRef(' ', SKIP_EMPTY_PARTS);
+    auto parts = s.split(' ', SKIP_EMPTY_PARTS);
     if(parts.size() == 0) {
         qWarning() << "TablePLot: Message not understood, expected @set <tabnum> "
                     "or @update";

@@ -115,7 +115,7 @@ void Inspector::parseText(const QString &text)
 	int commentIndex = 0;
     bool partOfComment = false;
     int i = 0;
-    auto lines = text.splitRef('\n');
+    auto lines = text.split('\n');
     QRegularExpressionMatch match;
     QRegularExpression orcStartRx("^\\s*<CsInstruments>");
 
@@ -142,7 +142,7 @@ void Inspector::parseText(const QString &text)
         line = line.trimmed();
         if (line.isEmpty())
             continue;
-        if (line[0] == "<") {
+        if (line[0] == '<') {
             if (line.startsWith("</CsInstruments>"))
                 break;
             QDEBUG << "Malformed orchestra, tag" << line << "is invalid";
@@ -151,14 +151,14 @@ void Inspector::parseText(const QString &text)
         if (line.startsWith(';') || line.startsWith("//"))
             continue;
         else if (line.startsWith(";; ")) {
-            auto itemname = line.mid(2).trimmed().toString();
+            auto itemname = line.mid(2).trimmed();
             TreeItem *newItem = new TreeItem(currentItem, QStringList(itemname));
             newItem->setLine(i + 1);
         }
         else if(currentOpcode == nullptr && currentInstrument == nullptr) {
             // we are at instr 0
             if (line.startsWith("instr ")) {
-                auto instrline = line.mid(6).trimmed().toString();
+                auto instrline = line.mid(6).trimmed();
                 auto newItem = new TreeItem(treeItem3, QStringList(instrline));
                 newItem->setLine(i + 1);
                 currentInstrument = newItem;
@@ -166,7 +166,7 @@ void Inspector::parseText(const QString &text)
             }
             else if((match=rxOpcode.match(line)).hasMatch()) {
                 auto opcodeName = match.captured(1);
-                auto itemtext = line.mid(7).toString();
+                auto itemtext = line.mid(7);
                 QStringList columnslist(itemtext);
                 if (treeItem1->childCount() == 0) { // set line for element to the first one found
                     treeItem1->setLine(i + 1);
@@ -178,7 +178,7 @@ void Inspector::parseText(const QString &text)
                 udosMap.insert(currentOpcode->opcodeName, *currentOpcode);
             }
             else if (line.startsWith("#define")) {
-                QString item = line.mid(8).toString();
+                QString item = line.mid(8);
                 if (treeItem2->childCount() == 0) { // set line for element to the first one found
                     treeItem2->setLine(i + 1);
                 }
@@ -186,7 +186,7 @@ void Inspector::parseText(const QString &text)
                 newItem->setLine(i + 1);
             }
             else if(ftableRx2.match(line).hasMatch()) {
-                QStringList columnslist(line.toString());
+                QStringList columnslist(line);
                 if (treeItem4->childCount() == 0) { // set line for element to the first one found
                     treeItem4->setLine(i + 1);
                 }
@@ -207,14 +207,14 @@ void Inspector::parseText(const QString &text)
                 }
             }
             else if(currentOpcode->inArgs.isEmpty() && (match=xinRx.match(line)).hasMatch()) {
-                currentOpcode->inArgs = line.mid(0, match.capturedStart()).toString().simplified();
+                currentOpcode->inArgs = line.mid(0, match.capturedStart()).simplified();
                 // QStringList columnslist(line.toString().simplified());
                 QStringList columnslist(currentOpcode->inArgs + " xin");
                 TreeItem *newItem = new TreeItem(currentItem, columnslist);
                 newItem->setLine(i + 1);
             }
             else if(currentOpcode->outArgs.isEmpty() && (match=xoutRx.match(line)).hasMatch()) {
-                currentOpcode->outArgs = line.mid(match.capturedEnd()).toString().simplified();
+                currentOpcode->outArgs = line.mid(match.capturedEnd()).simplified();
                 // auto itemtext = line.toString().simplified();
                 // QStringList columnslist(itemtext);
                 QStringList columnslist("xout " + currentOpcode->outArgs);
@@ -288,7 +288,7 @@ void Inspector::parsePythonText(const QString &text)
 	treeItem4 = 0;
 	treeItem5 = 0;
 	TreeItem *currentParent = 0;
-	QStringList lines = text.split(QRegExp("[\\n\\r]"));
+    QStringList lines = text.split(QRegularExpression("[\\n\\r]"));
 	for (int i = 0; i< lines.size(); i++) {
 		if (lines[i].trimmed().startsWith("class ")) {
 			QStringList columnslist(lines[i].simplified());
@@ -300,14 +300,14 @@ void Inspector::parsePythonText(const QString &text)
             newItem->setFont(1, itemFont);
 			newItem->setLine(i + 1);
 		}
-		else if (lines[i].contains(QRegExp("[\\s]+def "))) {
+        else if (lines[i].contains(QRegularExpression("[\\s]+def "))) {
 			QStringList columnslist(lines[i].simplified());
 			if (currentParent != 0) {
 				TreeItem *newItem = new TreeItem(currentParent, columnslist);
 				newItem->setLine(i + 1);
 			}
 		}
-		else if (lines[i].trimmed().contains(QRegExp("\\bimport\\b"))) {
+        else if (lines[i].trimmed().contains(QRegularExpression("\\bimport\\b"))) {
 			QStringList columnslist(lines[i].simplified());
 			TreeItem *newItem = new TreeItem(treeItem1, columnslist);
 			newItem->setLine(i + 1);

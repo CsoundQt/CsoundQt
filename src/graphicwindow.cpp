@@ -95,21 +95,20 @@ void GraphicWindow::save()
 	QString fileName = QFileDialog::getSaveFileName(this,
 													tr("Save Image"), QString(), tr("Image Files (*.png *.jpg *.bmp)"));
 	if (fileName != "")
-		imageLabel->pixmap()->save(fileName);
+        imageLabel->pixmap().save(fileName);
 }
 
 void GraphicWindow::print()
 {
-	Q_ASSERT(imageLabel->pixmap());
 	QPrintDialog dialog(&printer, this);
 	if (dialog.exec()) {
 		QPainter painter(&printer);
 		QRect rect = painter.viewport();
-		QSize size = imageLabel->pixmap()->size();
+        QSize size = imageLabel->pixmap().size();
 		size.scale(rect.size(), Qt::KeepAspectRatio);
 		painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
-		painter.setWindow(imageLabel->pixmap()->rect());
-		painter.drawPixmap(0, 0, *imageLabel->pixmap());
+        painter.setWindow(imageLabel->pixmap().rect());
+        painter.drawPixmap(0, 0, imageLabel->pixmap());
 	}
 }
 
@@ -141,9 +140,8 @@ void GraphicWindow::fitToWindow()
 
 void GraphicWindow::scaleImage(double factor)
 {
-	Q_ASSERT(imageLabel->pixmap());
 	scaleFactor *= factor;
-	imageLabel->resize(scaleFactor * imageLabel->pixmap()->size());
+    imageLabel->resize(scaleFactor * imageLabel->pixmap().size());
 
 	adjustScrollBar(scrollArea->horizontalScrollBar(), factor);
 	adjustScrollBar(scrollArea->verticalScrollBar(), factor);

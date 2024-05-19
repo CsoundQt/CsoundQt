@@ -1371,166 +1371,17 @@
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>cvResetPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>resetCvanal()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>186</x>
-     <y>418</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>390</x>
-     <y>-9</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cvRunPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>runCvanal()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>314</x>
-     <y>419</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>455</x>
-     <y>6</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hetResetPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>resetHetro()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>143</x>
-     <y>470</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hetRunPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>runHetro()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>331</x>
-     <y>497</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lpResetPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>resetLpanal()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>450</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lpRunPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>runLpanal()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>385</x>
-     <y>499</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pvResetPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>resetPvanal()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>141</x>
-     <y>449</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pvRunPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>runPvanal()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>263</x>
-     <y>453</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>atsaResetPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>resetAtsa()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>243</x>
-     <y>484</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>atsaRunPushButton</sender>
-   <signal>released()</signal>
-   <receiver>UtilitiesDialog</receiver>
-   <slot>runAtsa()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>354</x>
-     <y>469</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
+ <slots>
+  <slot>resetCvanal()</slot>
+  <slot>runCvanal()</slot>
+  <slot>resetHetro()</slot>
+  <slot>runHetro()</slot>
+  <slot>resetLpanal()</slot>
+  <slot>runLpanal()</slot>
+  <slot>resetPvanal()</slot>
+  <slot>runPvanal()</slot>
+  <slot>resetAtsa()</slot>
+  <slot>runAtsa()</slot>
+ </slots>
 </ui>

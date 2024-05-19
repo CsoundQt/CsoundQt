@@ -38,7 +38,7 @@ class LiveEventFrame : public QWidget
 	Q_OBJECT
 	Q_PROPERTY(bool visibleEnabled READ getVisibleEnabled WRITE setVisibleEnabled)
 public:
-	LiveEventFrame(QString csdName, QWidget *parent = 0, Qt::WindowFlags f = 0 );
+    LiveEventFrame(QString csdName, QWidget *parent = 0, Qt::WindowFlags f = Qt::Widget);
 	~LiveEventFrame();
 	EventSheet * getSheet();
 	void setName(QString name);

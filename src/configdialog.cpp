@@ -42,8 +42,8 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 {
 	setupUi(this);
     // don't expand over screen, leave some room for panels
-    setMaximumSize(QApplication::desktop()->width()  * 0.9,
-                   QApplication::desktop()->height() * 0.9);
+    setMaximumSize(QGuiApplication::primaryScreen()->geometry().width()  * 0.9,
+                   QGuiApplication::primaryScreen()->geometry().height() * 0.9);
 
 	m_configlists->refreshModules();
 

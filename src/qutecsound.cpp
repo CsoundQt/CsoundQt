@@ -76,7 +76,6 @@ static const QString SCRIPT_NAME = "csoundqt_run_script-XXXXXX.sh";
 
 #define INSPECTOR_UPDATE_PERIOD_MS 3000
 
-
 CsoundQt::CsoundQt(QStringList fileNames)
 {
     m_closing = false;
@@ -288,7 +287,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #ifdef Q_OS_MACOS
             QShortcut *shortcut = new  QShortcut(QKeySequence(Qt::META + (Qt::Key_0 + key)), this);
 #else
-            QShortcut *shortcut = new QShortcut(QKeySequence(Qt::ALT + (Qt::Key_0 + key)), this);
+            QShortcut *shortcut = new QShortcut(QKeySequence(Qt::ALT | (Qt::Key_0 + (Qt::Key) key)), this);
 #endif
             connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()));
             mapper->setMapping(shortcut, i); // tab 0 -> Alt+1, tab 1 -> Alt + 2 etc tab 9 -> Alt + 0
@@ -299,8 +298,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
         QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::META + Qt::Key_Left), this);
         QShortcut *tabRight = new QShortcut(QKeySequence(Qt::META + Qt::Key_Right), this);
 #else
-        QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Left), this);
-        QShortcut *tabRight = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Right), this);
+        QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::ALT | (Qt::Key)Qt::Key_Left), this);
+        QShortcut *tabRight = new QShortcut(QKeySequence(Qt::ALT | (Qt::Key) Qt::Key_Right), this);
 #endif
         connect(tabLeft, SIGNAL(activated()), this, SLOT(pageLeft()));
         connect(tabRight, SIGNAL(activated()), this, SLOT(pageRight()));
@@ -538,7 +537,7 @@ void CsoundQt::utilitiesMessageCallback(CSOUND *csound,
 {
     DockConsole *console = (DockConsole *) csoundGetHostData(csound);
     QString msg;
-    msg = msg.vsprintf(fmt, args);
+    msg = msg.vasprintf(fmt, args);
     //  qDebug() << msg;
     console->appendMessage(msg);
 }
@@ -1048,7 +1047,7 @@ void CsoundQt::evaluateString(QString evalCode)
     TREE *testTree = NULL;
     if  (scratchPadCsdModeAct->isChecked()) {
         // first check if it is a scoreline, then if it is csound code, if that also that fails, try with python
-        if (QRegExp("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").indexIn(evalCode) >= 0) {
+        if (QRegularExpression("[if]\\s*-*[0-9]+\\s+[0-9]+\\s+[0-9]+.*\\n").globalMatch(evalCode).hasNext()) {
             sendEvent(evalCode);
             return;
         }
@@ -2405,11 +2404,11 @@ void CsoundQt::openExternalEditor()
     name += currentAudioFile;
     QString optionsText = documentPages[curPage]->getOptionsText();
     if (currentAudioFile == "") {
-        if (!optionsText.contains(QRegExp("\\W-o"))) {
+        if (!optionsText.contains(QRegularExpression("\\W-o"))) {
             name += "test.wav";
         }
         else {
-            optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\W-o")) + 3);
+            optionsText = optionsText.mid(optionsText.indexOf(QRegularExpression("\\W-o")) + 3);
             optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
             optionsText = optionsText.left(optionsText.indexOf("-")).trimmed();
             if (!optionsText.startsWith("dac"))
@@ -2440,13 +2439,13 @@ void CsoundQt::openExternalPlayer()
     name += currentAudioFile;
     QString optionsText = documentPages[curPage]->getOptionsText();
     if (currentAudioFile == "") {
-        if (!optionsText.contains(QRegExp("\\W-o"))) {
+        if (!optionsText.contains(QRegularExpression("\\W-o"))) {
             name += "test.wav";
         }
         else {
-            optionsText = optionsText.mid(optionsText.indexOf(QRegExp("\\W-o")) + 3);
+            optionsText = optionsText.mid(optionsText.indexOf(QRegularExpression("\\W-o")) + 3);
             optionsText = optionsText.left(optionsText.indexOf("\n")).trimmed();
-            optionsText = optionsText.left(optionsText.indexOf(QRegExp("-"))).trimmed();
+            optionsText = optionsText.left(optionsText.indexOf(QRegularExpression("-"))).trimmed();
             if (!optionsText.startsWith("dac"))
                 name += optionsText;
         }
@@ -3443,11 +3442,11 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     configureAct->setShortcut(tr("Ctrl+,"));
     editAct->setShortcut(tr("CTRL+E"));
     runAct->setShortcut(tr("CTRL+R"));
-    runTermAct->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
+    runTermAct->setShortcut(QKeySequence(Qt::CTRL|Qt::SHIFT|Qt::Key_T));
     pauseAct->setShortcut(tr("Ctrl+Shift+M"));
 
     stopAct->setShortcut(tr("Ctrl+."));
-    stopAllAct->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_Period));
+    stopAllAct->setShortcut(QKeySequence(Qt::CTRL|Qt::SHIFT|Qt::Key_Period));
 
     recAct->setShortcut(tr("Ctrl+Space"));
     renderAct->setShortcut(tr("Alt+F"));
@@ -3488,12 +3487,12 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     openDocumentationAct->setShortcut(tr("F1"));
     showUtilitiesAct->setShortcut(tr("Ctrl+9"));
 
-    setHelpEntryAct->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F1));
+    setHelpEntryAct->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_F1));
     externalBrowserAct->setShortcut(tr("Shift+Alt+F1"));
     showInspectorAct->setShortcut(tr("F5"));
 
-    browseBackAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
-    browseForwardAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
+    browseBackAct->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Left));
+    browseForwardAct->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Right));
     openQuickRefAct->setShortcut(tr(""));
     commentAct->setShortcut(tr("Ctrl+/"));
     //  uncommentAct->setShortcut(tr("Shift+Ctrl+/"));
@@ -3507,7 +3506,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     killLineAct->setShortcut(tr("Ctrl+K"));
     killToEndAct->setShortcut(tr("Shift+Alt+K"));
     gotoLineAct->setShortcut(tr("Ctrl+L"));
-    goBackAct->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Left));
+    goBackAct->setShortcut(QKeySequence(Qt::ALT | Qt::Key_Left));
     showOrcAct->setShortcut(tr("Shift+Alt+1"));
     showScoreAct->setShortcut(tr("Shift+Alt+2"));
     showOptionsAct->setShortcut(tr("Shift+Alt+3"));
@@ -3520,7 +3519,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     cabbageAct->setShortcut(tr("Shift+Ctrl+C"));
     //	showParametersAct->setShortcut(tr("Alt+P"));
 
-    checkSyntaxAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
+    checkSyntaxAct->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_U));
 
     storeSettings();
 }
@@ -5721,9 +5720,15 @@ void fillCompanionSco(QString &fileName, QString &text) {
     while (!companionFile.atEnd()) {
         QByteArray line = companionFile.readLine();
         changeNewLines(line);
-        QTextDecoder decoder(QTextCodec::codecForLocale());
-        text = text + decoder.toUnicode(line);
-        if (!line.endsWith("\n"))
+        QTextStream ts(&line, QTextStream::ReadOnly);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    ts.setCodec("UTF-8");
+#else
+    ts.setEncoding(QStringConverter::Utf8);
+#endif
+        text = text +
+                *ts.string();
+        if (!text.endsWith("\n"))
             text.append("\n");
     }
     text.append("</CsScore>\n</CsoundSynthesizer>\n");
@@ -5740,8 +5745,13 @@ void fillCompanionOrc(QString &fileName, QString &text) {
     while (!companionFlle.atEnd()) {
         QByteArray line = companionFlle.readLine();
         changeNewLines(line);
-        QTextDecoder decoder(QTextCodec::codecForLocale());
-        orcText = orcText + decoder.toUnicode(line);
+        QTextStream ts(&line, QTextStream::ReadOnly);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        ts.setCodec("UTF-8");
+#else
+        ts.setEncoding(QStringConverter::Utf8);
+#endif
+        orcText = orcText + *ts.string();
         if (!line.endsWith("\n"))
             orcText += "\n";
     }
@@ -5785,11 +5795,16 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         }
         if (!inEncFile) {
             changeNewLines(line);
-            QTextDecoder decoder(QTextCodec::codecForLocale());
-            // text = text + decoder.toUnicode(line);
-            if (!line.endsWith("\n"))
+            QTextStream ts(&line, QTextStream::ReadOnly);
+    #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+            ts.setCodec("UTF-8");
+    #else
+            ts.setEncoding(QStringConverter::Utf8);
+    #endif
+
+            if (!text.endsWith("\n"))
                 text += "\n";
-            lines << text + decoder.toUnicode(line);
+            lines << text + ts.readAll();
         }
         else {
             // text += line;
@@ -5900,7 +5915,7 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
 
     if (!fileName.startsWith(":/")) {  // Don't store internal examples in recents menu
         lastUsedDir = fileName;
-        lastUsedDir.resize(fileName.lastIndexOf(QRegExp("[/]")) + 1);
+        lastUsedDir.resize(fileName.lastIndexOf(QRegularExpression("[/]")) + 1);
     }
     if (recentFiles.count(fileName) == 0 && fileName!="" && !fileName.startsWith(":/")) {
         recentFiles.prepend(fileName);
