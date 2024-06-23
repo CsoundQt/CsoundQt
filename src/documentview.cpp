@@ -453,7 +453,7 @@ void DocumentView::setViewMode(int mode)
 	switch (m_viewMode) {
 	case 0: // csd without extra sections
 		m_mainEditor->show();
-		m_highlighter.setDocument(m_mainEditor->document());
+        m_highlighter.setDocument(m_mainEditor->document());
         break;
 	case 1: // full plain text
 		m_mainEditor->show();
@@ -857,6 +857,7 @@ const QStringList DocumentView::getAllWords() {
     return m_allWords;
 }
 
+
 void DocumentView::autoCompleteAtCursor() {
     TextEditor *editor = m_mainEditor;
 
@@ -896,15 +897,19 @@ void DocumentView::autoCompleteAtCursor() {
         if (commentIndex < curIndex)
             return;
     }
-    if(QRegularExpression("^\\s*(opcode|instr)").match(line).hasMatch()) {
+    static QRegularExpression rxOpcodeOrInstrAtStart("^\\s*(opcode|instr)");
+    if(rxOpcodeOrInstrAtStart.match(line).hasMatch()) {
         return;
     }
-    if(!QRegularExpression("\\s*\\w+\\s+\\w+").match(line).hasMatch()) {
+    static QRegularExpression rxTwoWords("\\s*\\w+\\s+\\w+");
+    if(!rxTwoWords.match(line).hasMatch()) {
         useFunction = true;
     }
-    QRegularExpressionMatch rxmatch;
     bool showSyntaxMenu = false;
-    if((rxmatch=QRegularExpression("\\s*-([+-])(\\w*)").match(line)).hasMatch()) {
+    // matches long command line options, like --nosound, -+rtaudio, etc.
+    static QRegularExpression rxCommandLineOption("\\s*-([+-])(\\w*)");
+    QRegularExpressionMatch rxmatch;
+    if((rxmatch = rxCommandLineOption.match(line)).hasMatch()) {
         syntaxMenu->clear();
         auto capt = rxmatch.captured(2);
         auto options = rxmatch.captured(1)=="-"? m_longOptions: m_longOptions2;
@@ -1043,7 +1048,7 @@ void DocumentView::textChanged() {
         return;
 
     // This should go somewhere else, maybe when escape is pressed?
-    unmarkErrorLines();
+    // unmarkErrorLines();
 
     if(!(m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE))
         return;
@@ -1053,7 +1058,7 @@ void DocumentView::textChanged() {
             m_autoCompleteTimer->stop();
         }
         auto autoCompleteTask = new QTimer(this);
-        autoCompleteTask->setInterval(200);
+        autoCompleteTask->setInterval(m_autoCompleteDelay);
         autoCompleteTask->setSingleShot(true);
         connect(autoCompleteTask, &QTimer::timeout, this, &DocumentView::autoCompleteAtCursor);
         autoCompleteTask->start();
@@ -1066,6 +1071,9 @@ void DocumentView::escapePressed()
 {
 	// TODO implment for multiple views
 	if (m_viewMode < 2) {
+        if(errorMarked)
+            unmarkErrorLines();
+
 		if (m_mainEditor->getParameterMode()) {
 			// Force unselecting
 			m_mainEditor->moveCursor(QTextCursor::NextCharacter);
@@ -1757,16 +1765,21 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
 {
 	// TODO implement for multiple views
 	if (m_viewMode < 2) {
-		bool originallyMod = m_mainEditor->document()->isModified();
+        auto fmt = m_highlighter.getFormat("default");
+        auto fg = fmt.foreground().color();
+        auto bg = fmt.background().color();
+        bool originallyMod = m_mainEditor->document()->isModified();
 		internalChange = true;
 		QTextCharFormat errorFormat;
-		errorFormat.setBackground(QBrush(QColor(255, 182, 193)));
+        // make error background depend on color theme
+        QColor errbg = fg.lightness() < bg.lightness() ? bg.darker(200) : bg.lighter(200);
+        errbg.setRed(errbg.blue() * 2.5);
+        errorFormat.setBackground(QBrush(errbg));
 		QTextCursor cur = m_mainEditor->textCursor();
 		cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-		for(int i = 0; i < lines.size(); i++) {
+        for(int i = 0; i < lines.size(); i++) {
 			int line = lines[i].first;
-			QString text = lines[i].second;
-            cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor,line-1);
+            cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, line-1);
 			cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 			cur.mergeCharFormat(errorFormat);
 			internalChange = true;

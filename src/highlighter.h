@@ -119,13 +119,8 @@ private:
 
     QRegularExpression commentStartExpression;
     QRegularExpression commentEndExpression;
-    QRegExp functionRegex;
-
     QRegularExpression rxScoreLetter;
     QRegularExpression rxQuotation;
-    //    QRegExp b64encStartExpression;
-	//    QRegExp b64encEndExpression;
-
 
     QTextCharFormat csdtagFormat, instFormat, headerFormat;
 	QTextCharFormat irateFormat, krateFormat, arateFormat, girateFormat, gkrateFormat, garateFormat;
@@ -141,7 +136,6 @@ private:
     QTextCharFormat operatorFormat;
     QTextCharFormat scoreLetterFormat;
     QTextCharFormat errorFormat;
-
 
 	QTextCharFormat labelFormat;
     QTextCharFormat csoundOptionFormat;

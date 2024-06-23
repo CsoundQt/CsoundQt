@@ -197,7 +197,6 @@ void Highlighter::setTheme(const QString &theme) {
         defaultFormat.setForeground(QColor("#FBFBFB"));
         defaultFormat.setBackground(QColor("#161616"));
 
-
         // csdtagFormat.setFontWeight(QFont::Bold);
 
         instFormat.setForeground(QColor("#B268AB"));
@@ -217,9 +216,8 @@ void Highlighter::setTheme(const QString &theme) {
         deprecatedFormat.setUnderlineColor("#880000");
         deprecatedFormat.setFontUnderline(true);
 
-
         // singleLineCommentFormat.setForeground(QColor("#9F9F8F"));
-        singleLineCommentFormat.setForeground(QColor("#755CB0"));
+        singleLineCommentFormat.setForeground(QColor("#856CB0"));
         singleLineCommentFormat.setFontItalic(true);
 
         importantCommentFormat.setBackground(defaultFormat.background().color().lighter(140));
@@ -231,16 +229,14 @@ void Highlighter::setTheme(const QString &theme) {
 
         pfieldFormat.setFontWeight(QFont::Bold);
 
-        // krateFormat.setForeground(QColor("#EF9A9A"));
         krateFormat.setForeground(QColor("#66EEBB"));
         irateFormat.setForeground(QColor("#FFFFFF"));
 
-        // arateFormat.setForeground(QColor("#C62828"));
         arateFormat.setForeground(QColor("#F75C5C"));
         arateFormat.setFontWeight(QFont::Bold);
 
 
-        fsigFormat.setForeground(QColor("#Ad1457"));
+        fsigFormat.setForeground(QColor("#BD2467"));
         fsigFormat.setFontWeight(QFont::Bold);
 
         labelFormat.setForeground(instFormat.foreground());
@@ -249,7 +245,6 @@ void Highlighter::setTheme(const QString &theme) {
 
         nameFormat.setForeground(QColor("#D298FB"));
         nameFormat.setFontWeight(QFont::Bold);
-        // nameFormat.setFontUnderline(true);
 
         // quotationFormat.setForeground(QColor("#66FFAA"));
         quotationFormat.setForeground(QColor("#91FF55"));
@@ -261,8 +256,6 @@ void Highlighter::setTheme(const QString &theme) {
         ioFormat.setForeground(QColor("#FFD54F"));
         ioFormat.setFontWeight(QFont::Bold);
 
-        // udoFormat.setForeground(QColor("#60BBB4"));
-        // udoFormat.setFontWeight(opcodeFormat.fontWeight());
         udoFormat.setForeground(opcodeFormat.foreground());
         udoFormat.setFontWeight(QFont::Normal);
 
@@ -272,7 +265,6 @@ void Highlighter::setTheme(const QString &theme) {
 
         scoreLetterFormat.setForeground(opcodeFormat.foreground());
         scoreLetterFormat.setFontWeight(QFont::Bold);
-
 
     }
     else {
@@ -420,8 +412,6 @@ Highlighter::Highlighter(QTextDocument *parent)
                               "use-system-sr|ksmps|midi-key-cps=|midi-velocity=)");
     */
     csoundOptionsRx2 = QRegularExpression("-+(rtaudio=|rtmidi=|jack_client=)");
-
-    functionRegex = QRegExp("\\b\\w+(\\:a|\\:k|\\:i)?(?=\\()");
 
     // For Python
     pythonKeywords << "and" << "or" << "not" << "is"
@@ -714,14 +704,6 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         index = rxmatch.capturedEnd()+1;
     }
 
-    /*
-    index = 0;
-    while ((index = functionRegex.indexIn(text, index)) != -1 && index < commentIndex) {
-        length = functionRegex.matchedLength();
-        setFormat(index, length, opcodeFormat);
-        index += length;
-    }
-    */
     QRegularExpression expressionRx("\\b[\\w:]+\\b");
     QRegularExpression pfieldRx("\\bp[\\d]+\\b");
     index = 0;
