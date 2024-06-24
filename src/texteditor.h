@@ -35,6 +35,8 @@ public:
 	void setTabIndents(bool indents) {m_tabIndents = indents;}
 	void setParameterMode(bool on) {m_parameterMode = on; setCursorWidth(on ? 8 : 1);}
 	bool getParameterMode() {return m_parameterMode;}
+    int getLastKey() {return m_lastkey;}
+
 
 protected:
 	virtual void keyPressEvent (QKeyEvent * event);
@@ -46,6 +48,8 @@ protected:
 	bool m_tabIndents;
 	bool m_parameterMode;
 	bool m_commaTyped;
+    int  m_lastkey;
+
 
 signals:
 	void showParameterInfo();
