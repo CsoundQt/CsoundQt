@@ -3384,6 +3384,8 @@ void CsoundQt::updateCurrentPageTask() {
 }
 
 
+
+
 void CsoundQt::updateInspector()
 {
     if (m_closing  || curPage >= documentPages.size()) {
@@ -3402,7 +3404,6 @@ void CsoundQt::updateInspector()
         // m_inspector->parsePythonText(documentPages[curPage]->getFullText());
     }
     m_inspectorNeedsUpdate = false;
-    // this->setParsedUDOs();
     QTimer::singleShot(INSPECTOR_UPDATE_PERIOD_MS, this, SLOT(updateInspector()));
 }
 

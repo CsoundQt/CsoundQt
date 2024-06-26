@@ -51,12 +51,12 @@ Inspector::Inspector(QWidget *parent)
     m_treeWidget->expandItem(treeItem3);    // instruments
     m_treeWidget->collapseItem(treeItem4);  // ftables
     m_treeWidget->collapseItem(treeItem5);    // score
-    rxOpcode.setPattern("\\bopcode\\s+(\\w+),");
+    rxOpcode.setPattern("\\bopcode\\s+(\w+),\\s*\\w+\\s*,\\s*\\w+");
     xinRx.setPattern("\\bxin\\b");
     // xinRx.setPattern("[akiS]\\w+[,\\w\\d\\s_]+\\bxin\\s*$");
-    xoutRx.setPattern("\\bxout\\s+\\b");
+    xoutRx.setPattern("\\bxout\\s+");
     // ftableRx1.setPattern("^f\\s*\\d");
-    ftableRx2.setPattern("^[\\w]*[\\s]*ftgen");
+    ftableRx2.setPattern("^\\w*\\s*ftgen");
     inspectLabels = false;
 }
 
@@ -73,13 +73,12 @@ void Inspector::parseText(const QString &text)
 
     auto t1 = std::chrono::high_resolution_clock::now();
 
-    bool insideSco = false;
-    bool insideOrc = false;
-	bool treeItem1Expanded = true;
+    bool treeItem1Expanded = true;
 	bool treeItem2Expanded = true;
 	bool treeItem3Expanded = true;
 	bool treeItem4Expanded = true;
 	bool treeItem5Expanded = true;
+    bool insideOrc = false;
 	if  (treeItem1 != 0) {
 		treeItem1Expanded = treeItem1->isExpanded();
 		treeItem2Expanded = treeItem2->isExpanded();
@@ -113,120 +112,124 @@ void Inspector::parseText(const QString &text)
     int i = 0;
     auto lines = text.splitRef('\n');
     QRegularExpressionMatch match;
-    QRegularExpression orcStartRx("^\\s*<CsInstruments>");
+    static QRegularExpression orcStartRx("^\\s*<CsInstruments>");
 
     for(; i<lines.size(); i++) {
         if(orcStartRx.match(lines[i]).hasMatch()) {
             i++;
             treeItem3->setLine(i);
+            insideOrc = true;
             break;
         }
     }
 
     // Parsing orchestra
-    for (; i< lines.size(); i++) {
-        auto line = lines[i];
-        if (partOfComment) {
-            if (line.indexOf("*/") != -1)
-                partOfComment = false;
-            continue;
-        }
-        if (!partOfComment && (commentIndex=line.indexOf("/*")) != -1) {
-            partOfComment = line.indexOf("*/", commentIndex) == -1;
-            continue;
-        }
-        line = line.trimmed();
+    if(insideOrc) {
+        for (; i< lines.size(); i++) {
+            auto line = lines[i];
+            if (partOfComment) {
+                if (line.indexOf("*/") != -1)
+                    partOfComment = false;
+                continue;
+            }
+            if (!partOfComment && (commentIndex=line.indexOf("/*")) != -1) {
+                partOfComment = line.indexOf("*/", commentIndex) == -1;
+                continue;
+            }
+            line = line.trimmed();
 
-        if (line.isEmpty())
-            continue;
-        if (line[0] == "<") {
-            if (line.startsWith("</CsInstruments>"))
+            if (line.isEmpty() || line[0] == ';' || (line[0] == '/' && line[1] == '/'))
+                continue;
+            if (line[0] == '<') {
+                if (!line.startsWith("</CsInstruments>"))
+                    QDEBUG << "Malformed orchestra, tag" << line << "is invalid";
                 break;
-            QDEBUG << "Malformed orchestra, tag" << line << "is invalid";
-            continue;
-        }
-        if (line.startsWith(';') || line.startsWith("//"))
-            continue;
-        else if (line.startsWith(";; ")) {
-            auto itemname = line.mid(2).trimmed().toString();
-            TreeItem *newItem = new TreeItem(currentItem, QStringList(itemname));
-            newItem->setLine(i + 1);
-        }
-        else if(currentOpcode == nullptr && currentInstrument == nullptr) {
-            // we are at instr 0
-            if (line.startsWith("instr ")) {
-                auto instrline = line.mid(6).trimmed().toString();
-                auto newItem = new TreeItem(treeItem3, QStringList(instrline));
-                newItem->setLine(i + 1);
-                currentInstrument = newItem;
-                currentItem = newItem;
             }
-            else if((match=rxOpcode.match(line)).hasMatch()) {
-                auto opcodeName = match.captured(1);
-                auto itemtext = line.mid(7).toString();
-                QStringList columnslist(itemtext);
-                if (treeItem1->childCount() == 0) { // set line for element to the first one found
-                    treeItem1->setLine(i + 1);
+            if(currentOpcode == nullptr && currentInstrument == nullptr) {
+                // we are at instr 0
+                if (line.startsWith("instr ")) {
+                    auto instrline = line.mid(6).trimmed().toString();
+                    auto newItem = new TreeItem(treeItem3, QStringList(instrline));
+                    newItem->setLine(i + 1);
+                    currentInstrument = newItem;
+                    currentItem = newItem;
                 }
-                TreeItem *newItem = new TreeItem(treeItem1, columnslist);
-                newItem->setLine(i + 1);
-                currentItem = newItem;
-                udosMap.insert(opcodeName, Opcode(opcodeName));
-                currentOpcode = &udosMap[opcodeName];
-            }
-            else if (line.startsWith("#define")) {
-                QString item = line.mid(8).toString();
-                if (treeItem2->childCount() == 0) { // set line for element to the first one found
-                    treeItem2->setLine(i + 1);
+                else if(line.startsWith("opcode ") && (match=rxOpcode.match(line)).hasMatch()) {
+                    auto opcodeName = match.captured(1);
+                    auto itemtext = line.mid(7).toString();
+                    QStringList columnslist(itemtext);
+                    if (treeItem1->childCount() == 0) { // set line for element to the first one found
+                        treeItem1->setLine(i + 1);
+                    }
+                    TreeItem *newItem = new TreeItem(treeItem1, columnslist);
+                    newItem->setLine(i + 1);
+                    currentItem = newItem;
+                    udosMap.insert(opcodeName, Opcode(opcodeName));
+                    currentOpcode = &udosMap[opcodeName];
                 }
-                TreeItem *newItem = new TreeItem(treeItem2, QStringList(item));
-                newItem->setLine(i + 1);
-            }
-            else if(ftableRx2.match(line).hasMatch()) {
-                QStringList columnslist(line.toString());
-                if (treeItem4->childCount() == 0) { // set line for element to the first one found
-                    treeItem4->setLine(i + 1);
+                else if (line[0] == '#') {
+                    if (line.startsWith("#define")) {
+                        QString item = line.mid(8).toString();
+                        if (treeItem2->childCount() == 0) { // set line for element to the first one found
+                            treeItem2->setLine(i + 1);
+                        }
+                        TreeItem *newItem = new TreeItem(treeItem2, QStringList(item));
+                        newItem->setLine(i + 1);
+                    } else if (line.startsWith("#include")) {
+                        QString item = line.mid(8).toString();
+                        if (treeItem2->childCount() == 0) { // set line for element to the first one found
+                            treeItem2->setLine(i + 1);
+                        }
+                        TreeItem *newItem = new TreeItem(treeItem2, QStringList(item));
+                        newItem->setLine(i + 1);
+                    }
                 }
-                TreeItem *newItem = new TreeItem(treeItem4, columnslist);
-                newItem->setLine(i + 1);
-            }
-        }
-        else if(currentOpcode != nullptr) {
-            if (line.startsWith("endop")) {
-                if(currentOpcode != nullptr) {
-                    currentOpcode = nullptr;
-                    currentItem = treeItem3;
-                }
-                else {
-                    qDebug() << "endop found outside opcode definition, line" << (i+1);
+                else if(ftableRx2.match(line).hasMatch()) {
+                    QStringList columnslist(line.toString());
+                    if (treeItem4->childCount() == 0) { // set line for element to the first one found
+                        treeItem4->setLine(i + 1);
+                    }
+                    TreeItem *newItem = new TreeItem(treeItem4, columnslist);
+                    newItem->setLine(i + 1);
                 }
             }
-            else if(currentOpcode->inArgs.isEmpty() && (match=xinRx.match(line)).hasMatch()) {
-                currentOpcode->inArgs = line.mid(0, match.capturedStart()).toString().simplified();
-                QStringList columnslist(currentOpcode->inArgs + " xin");
-                TreeItem *newItem = new TreeItem(currentItem, columnslist);
-                newItem->setLine(i + 1);
+            else if(currentOpcode != nullptr) {
+                if (line == "endop") {
+                    if(currentOpcode != nullptr) {
+                        currentOpcode = nullptr;
+                        currentItem = treeItem3;
+                    }
+                    else {
+                        qDebug() << "endop found outside opcode definition, line" << (i+1);
+                    }
+                }
+                else if(currentOpcode->inArgs.isEmpty() && (match=xinRx.match(line)).hasMatch()) {
+                    currentOpcode->inArgs = line.mid(0, match.capturedStart()).toString().simplified();
+                    QStringList columnslist(currentOpcode->inArgs + " xin");
+                    TreeItem *newItem = new TreeItem(currentItem, columnslist);
+                    newItem->setLine(i + 1);
+                }
+                else if(currentOpcode->outArgs.isEmpty() && (match=xoutRx.match(line)).hasMatch()) {
+                    currentOpcode->outArgs = line.mid(match.capturedEnd()).toString().simplified();
+                    QStringList columnslist("xout " + currentOpcode->outArgs);
+                    TreeItem *newItem = new TreeItem(currentItem, columnslist);
+                    newItem->setLine(i + 1);
+                }
             }
-            else if(currentOpcode->outArgs.isEmpty() && (match=xoutRx.match(line)).hasMatch()) {
-                currentOpcode->outArgs = line.mid(match.capturedEnd()).toString().simplified();
-                QStringList columnslist("xout " + currentOpcode->outArgs);
-                TreeItem *newItem = new TreeItem(currentItem, columnslist);
-                newItem->setLine(i + 1);
+            else if (line == "endin") {
+                // everything between instruments is placed in the main instrument menu
+                currentInstrument = nullptr;
+                currentItem = treeItem3;
             }
-        }
-        else if (line.startsWith("endin")) {
-            // everything between instruments is placed in the main instrument menu
-            currentInstrument = nullptr;
-            currentItem = treeItem3;
         }
     }
 
+
+    static QRegularExpression rxCsScore("^\\s*<CsScore>");
     for(; i< lines.size(); i++) {
-        auto line = lines[i].trimmed();
-        if (line.startsWith("<CsScore>")) {
+        if (rxCsScore.match(lines[i]).hasMatch()) {
             treeItem5->setLine(i + 1);
             currentItem = treeItem5;
-            insideSco = true;
             break;
         }
     }
