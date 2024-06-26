@@ -126,7 +126,7 @@ public:
     int isFlag;
     bool isInstalled;
 
-    Opcode() {}
+    Opcode() = default;
     Opcode(QString name, QString outs="", QString ins="", bool installed=true): opcodeName(name), outArgs(outs), inArgs(ins), isInstalled(installed) {}
 
 };
@@ -135,16 +135,13 @@ class RingBuffer
 {
 public:
     RingBuffer() {
-        // size = 2048*4;
         size = 4096 * 4;
 		resize(size);
 		currentPos = 0;
 		currentReadPos = 0;
-		//       lock = false;
-	}
-	~RingBuffer() {}
-	//     bool lock;
-	QList<MYFLT> buffer;
+    }
+    ~RingBuffer() = default;
+    QList<MYFLT> buffer;
 	long currentPos;
 	long currentReadPos;
 	int size;

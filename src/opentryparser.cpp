@@ -198,18 +198,25 @@ QString OpEntryParser::getSyntax(QString opcodeName)
     return "";
 }
 
-QVector<Opcode> OpEntryParser::getPossibleSyntax(QString word)
+QVector<Opcode> OpEntryParser::getMatchingOpcodes(QString word, int maxsize)
 {
+    // returns a vector of opcode definitions which start with <word>
+    // if maxsize is not 0, only a maximum of <maxsize> entries are included
+    int numopcodes = 0;
     QVector<Opcode> out;
 	for (int i = 0; i < opcodeList.size(); i++) {
 		if (opcodeList[i].opcodeName.startsWith(word)) {
-			out << opcodeList[i];
+            if(maxsize > 0 && numopcodes >= maxsize)
+                break;
+            out << opcodeList[i];
+            numopcodes++;
 		}
 	}
     auto it = m_udosMap->constBegin();
     while(it != m_udosMap->constEnd()) {
-        if(it->opcodeName.startsWith(word))
+        if(it->opcodeName.startsWith(word)) {
             out << it.value();
+        }
         it++;
     }
     return out;

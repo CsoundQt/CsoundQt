@@ -71,7 +71,7 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 		m_commaTyped = false;
 		break;
 	case Qt::Key_Comma:
-		m_commaTyped = true;
+        m_commaTyped = true;
 		break;
 	}
     QTextEdit::keyPressEvent(event); // Process key events in the rest of the application

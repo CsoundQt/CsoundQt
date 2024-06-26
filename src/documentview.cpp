@@ -110,11 +110,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	syntaxMenu = new MySyntaxMenu(m_mainEditor);
 	//  syntaxMenu->setFocusPolicy(Qt::NoFocus);
 	syntaxMenu->setAutoFillBackground(true);
-    // QPalette p = syntaxMenu->palette();
-    // p.setColor(QPalette::WindowText, Qt::blue);
-    // p.setColor(static_cast<QPalette::ColorRole>(9), QColor("#eaeac5")); // was: Qt::yellow
-    // syntaxMenu->setPalette(p);
-	connect(syntaxMenu,SIGNAL(keyPressed(QString)),
+    connect(syntaxMenu,SIGNAL(keyPressed(QString)),
 			m_mainEditor, SLOT(insertPlainText(QString)));
 
 	setViewMode(1);
@@ -840,6 +836,7 @@ void DocumentView::createParenthesisSelection(int pos, bool paired)
 	editor->setExtraSelections(selections);
 }
 
+
 const QStringList DocumentView::getAllWords() {
     // All words are parsed at max. each 4 seconds
     const int minMsecsFromLastParsing = 4000;
@@ -860,7 +857,6 @@ const QStringList DocumentView::getAllWords() {
 
 void DocumentView::autoCompleteAtCursor() {
     TextEditor *editor = m_mainEditor;
-
     // TODO: replace all this with QCompleter
     QTextCursor cursor = editor->textCursor();
     int curIndex = cursor.position();
@@ -873,24 +869,23 @@ void DocumentView::autoCompleteAtCursor() {
 
     if(word.isEmpty()) {
         // This handles the special case where the cursor is at a ")" or a ","
-        // which work as separators so
+        // which work as separators so the word to the left appears empty
         cursor.select(QTextCursor::WordUnderCursor);
         QString wordUnderCursor = cursor.selectedText();
-        if (wordUnderCursor == "," || wordUnderCursor == ")") {
-            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
-            cursor.movePosition(QTextCursor::StartOfWord);
-            cursor.select(QTextCursor::WordUnderCursor);
-            word = cursor.selectedText();
-            if(word.isEmpty()) {
-                return;
-            }
+        if(wordUnderCursor != "," && wordUnderCursor != ")")
+            return;
 
-        } else {
+        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
+        cursor.movePosition(QTextCursor::StartOfWord);
+        cursor.select(QTextCursor::WordUnderCursor);
+        word = cursor.selectedText();
+        if(word.isEmpty()) {
             return;
         }
     }
 
     if(word.size() < 3)
+        // only start completion after three characters
         return;
 
     QTextCursor lineCursor = editor->textCursor();
@@ -898,7 +893,6 @@ void DocumentView::autoCompleteAtCursor() {
     QString line = lineCursor.selectedText();
 
     int commentIndex = -1;
-    bool useFunction = false;
     if (line.indexOf(";") != -1) {
         commentIndex = lineCursor.position() - line.length() + line.indexOf(";");
         if (commentIndex < curIndex)
@@ -909,6 +903,7 @@ void DocumentView::autoCompleteAtCursor() {
         return;
     }
     static QRegularExpression rxTwoWords("\\s*\\w+\\s+\\w+");
+    bool useFunction = false;
     if(!rxTwoWords.match(line).hasMatch()) {
         useFunction = true;
     }
@@ -945,23 +940,23 @@ void DocumentView::autoCompleteAtCursor() {
             }
         }
         // opcodes and parameters
-        auto syntax = m_opcodeTree->getPossibleSyntax(word);
+        auto opcodedefs = m_opcodeTree->getMatchingOpcodes(word);
         bool allEqual = true;
-        for(int i = 0; i < syntax.size(); i++) {
-            if (syntax[i].opcodeName != word) {
+        for(int i = 0; i < opcodedefs.size(); i++) {
+            if (opcodedefs[i].opcodeName != word) {
                 allEqual = false;
                 break;
             }
         }
-        if (syntax.size() > 0 && !allEqual) {
-            for(int i = 0; i < syntax.size(); i++) {
-                QString opcodeName = syntax[i].opcodeName;
+        if (opcodedefs.size() > 0 && !allEqual) {
+            for(int i = 0; i < opcodedefs.size(); i++) {
+                QString opcodeName = opcodedefs[i].opcodeName;
                 QString text = opcodeName.size() < 14 ?
                            opcodeName.leftJustified(14) :
                            opcodeName + " ";
 
-                QString outArgs = syntax[i].outArgs;
-                auto inArgs = syntax[i].inArgs;
+                QString outArgs = opcodedefs[i].outArgs;
+                auto inArgs = opcodedefs[i].inArgs;
                 if(!inArgs.isEmpty()) {
                     text += inArgs.size()<=28 ? inArgs : inArgs.mid(0, 27)+"…";
                 }
@@ -984,20 +979,20 @@ void DocumentView::autoCompleteAtCursor() {
                 }
 
                 QString syntaxText;
-                if (useFunction && !syntax[i].inArgs.isEmpty()) {
+                if (useFunction && !opcodedefs[i].inArgs.isEmpty()) {
                     syntaxText = QString("%1(%2)").arg(
-                        syntax[i].opcodeName.simplified(),
-                        syntax[i].inArgs.simplified());
+                        opcodedefs[i].opcodeName.simplified(),
+                        opcodedefs[i].inArgs.simplified());
                 } else {
-                    syntaxText= syntax[i].outArgs.simplified();
-                    if (!syntax[i].outArgs.isEmpty())
+                    syntaxText= opcodedefs[i].outArgs.simplified();
+                    if (!opcodedefs[i].outArgs.isEmpty())
                         syntaxText += " ";
-                    syntaxText += syntax[i].opcodeName.simplified();
-                    if (!syntax[i].inArgs.isEmpty()) {
-                        if (syntax[i].inArgs.contains("(x)") ) {
+                    syntaxText += opcodedefs[i].opcodeName.simplified();
+                    if (!opcodedefs[i].inArgs.isEmpty()) {
+                        if (opcodedefs[i].inArgs.contains("(x)") ) {
                             syntaxText += "(x)"; // avoid other text like (with no rate restriction)
                         } else {
-                            syntaxText += " " + syntax[i].inArgs.simplified();
+                            syntaxText += " " + opcodedefs[i].inArgs.simplified();
                         }
                     }
                 }
@@ -1014,17 +1009,20 @@ void DocumentView::autoCompleteAtCursor() {
         QStringList menuWords;
         QString wordlow = word.toLower(); // this must be AFTER the word is corrected
 
+        // variables
+        QRegularExpression rxVariables("\\b(g)?[iakS][a-zA-Z0-9_]+");
         for(auto theWord: allWords) {
             if (word != theWord &&
                     theWord.toLower().startsWith(wordlow) &&
-                   !menuWordsSeen.contains(theWord) /* &&
-                    QRegularExpression("\\b[akigp]").match(word).hasMatch()*/ ) {
+                   !menuWordsSeen.contains(theWord)  &&
+                    rxVariables.match(word).hasMatch() ) {
                 auto a = syntaxMenu->addAction(theWord, this, SLOT(insertAutoCompleteText()));
                 a->setData(theWord);
                 showSyntaxMenu = true;
                 menuWordsSeen.insert(theWord);
             }
         }
+
         for(auto tag: tagWords) {
             if(tag.toLower().startsWith(wordlow) && word != tag) {
                 auto a = syntaxMenu->addAction(tag, this, SLOT(insertAutoCompleteText()));
@@ -1069,8 +1067,9 @@ void DocumentView::textChanged() {
             m_autoCompleteTimer->stop();
         }
         auto key = m_mainEditor->getLastKey();
-        if(key != Qt::Key_Backspace && key != Qt::Key_Delete) {
+        if(key != Qt::Key_Backspace && key != Qt::Key_Delete && key != Qt::Key_Space && key != Qt::Key_Comma && key != Qt::Key_BraceLeft && key != Qt::Key_Colon) {
             // Only perform autocomplete if the change was not generated by deleting
+            // Also pressing any word separator would never lead to autocomplete
             auto autoCompleteTask = new QTimer(this);
             autoCompleteTask->setInterval(m_autoCompleteDelay);
             autoCompleteTask->setSingleShot(true);

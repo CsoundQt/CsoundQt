@@ -287,6 +287,7 @@ private slots:
 	void showWidgetEdit(bool);
 	void toggleLineArea();
 	void toggleParameterMode();
+    void autocomplete();
 //	void showParametersInEditor();
 	void onNewConnection(); // when new client is connecting to localServer
 	void onReadyRead(); // when message comes in
@@ -511,6 +512,7 @@ private:
     QAction *reportCsoundBugAct;
     QAction *lineNumbersAct;
 	QAction *parameterModeAct;
+    QAction *autocompleteAct;
 //	QAction *showParametersAct;
     QAction *openExamplesFolderAct;
     QSignalMapper *focusMapper;

@@ -41,7 +41,7 @@ public:
 	void addExtraOpcodes();
     QStringList opcodeNameList(bool includeDisabled=false);
 	QString getSyntax(QString opcodeName);
-	QVector<Opcode> getPossibleSyntax(QString word);
+    QVector<Opcode> getMatchingOpcodes(QString word, int maxsize = 0);
 	QList< QPair<QString, QList<Opcode> > > getOpcodesByCategory();
 	int getCategoryCount();
 	QString getCategory(int index);

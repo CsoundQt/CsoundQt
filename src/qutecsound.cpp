@@ -3459,6 +3459,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showGenAct->setShortcut(tr(""));
     showOverviewAct->setShortcut(tr(""));
     raiseConsoleAct->setShortcut(tr("Ctrl+3"));
+    autocompleteAct->setShortcut(tr("Ctrl+M"));
 #ifdef Q_OS_MACOS
     viewFullScreenAct->setShortcut(tr("Ctrl+Shift+F"));
 #else
@@ -3576,6 +3577,12 @@ void CsoundQt::toggleLineArea()
 void CsoundQt::toggleParameterMode()
 {
     documentPages[curPage]->toggleParameterMode();
+}
+
+void CsoundQt::autocomplete()
+{
+    DocumentPage* page = documentPages[curPage];
+    page->autocomplete();
 }
 
 #ifdef QCS_DEBUGGER
@@ -4356,6 +4363,10 @@ void CsoundQt::createActions()
     parameterModeAct = new QAction(tr("Toggle parameter mode"),this);
     connect(parameterModeAct,SIGNAL(triggered()), this, SLOT(toggleParameterMode()));
 
+    autocompleteAct = new QAction(tr("Autocomplete"), this);
+    autocompleteAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(autocompleteAct, SIGNAL(triggered()), this, SLOT(autocomplete()));
+
     //	showParametersAct = new QAction(tr("Show available parameters"),this);
     //	connect(showParametersAct,SIGNAL(triggered()), this, SLOT(showParametersInEditor()));
 
@@ -4417,6 +4428,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(showVirtualKeyboardAct);
     m_keyActions.append(showTableEditorAct);
     m_keyActions.append(checkSyntaxAct);
+    m_keyActions.append(autocompleteAct);
 #if defined(QCS_QTHTML)
     m_keyActions.append(raiseHtml5Act);
 #endif
@@ -4629,6 +4641,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(cutAct);
     editMenu->addAction(copyAct);
     editMenu->addAction(pasteAct);
+    editMenu->addAction(autocompleteAct);
     editMenu->addAction(evaluateAct);
     editMenu->addAction(evaluateSectionAct);
     editMenu->addAction(scratchPadCsdModeAct);

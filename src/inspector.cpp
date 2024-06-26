@@ -57,10 +57,7 @@ Inspector::Inspector(QWidget *parent)
     xoutRx.setPattern("\\bxout\\s+\\b");
     // ftableRx1.setPattern("^f\\s*\\d");
     ftableRx2.setPattern("^[\\w]*[\\s]*ftgen");
-
     inspectLabels = false;
-
-
 }
 
 
@@ -72,7 +69,6 @@ Inspector::~Inspector()
 void Inspector::parseText(const QString &text)
 {
     udosMap.clear();
-    // udosVector.clear();
     inspectorMutex.lock();
 
     auto t1 = std::chrono::high_resolution_clock::now();
@@ -112,7 +108,7 @@ void Inspector::parseText(const QString &text)
     TreeItem *currentInstrument = nullptr;
     TreeItem *currentItem = treeItem3;
     Opcode *currentOpcode = nullptr;
-	int commentIndex = 0;
+    int commentIndex = 0;
     bool partOfComment = false;
     int i = 0;
     auto lines = text.splitRef('\n');
@@ -140,6 +136,7 @@ void Inspector::parseText(const QString &text)
             continue;
         }
         line = line.trimmed();
+
         if (line.isEmpty())
             continue;
         if (line[0] == "<") {
@@ -174,8 +171,8 @@ void Inspector::parseText(const QString &text)
                 TreeItem *newItem = new TreeItem(treeItem1, columnslist);
                 newItem->setLine(i + 1);
                 currentItem = newItem;
-                currentOpcode = new Opcode(opcodeName);
-                udosMap.insert(currentOpcode->opcodeName, *currentOpcode);
+                udosMap.insert(opcodeName, Opcode(opcodeName));
+                currentOpcode = &udosMap[opcodeName];
             }
             else if (line.startsWith("#define")) {
                 QString item = line.mid(8).toString();
@@ -197,8 +194,6 @@ void Inspector::parseText(const QString &text)
         else if(currentOpcode != nullptr) {
             if (line.startsWith("endop")) {
                 if(currentOpcode != nullptr) {
-                    // udosMap.insert(currentOpcode->opcodeName, *currentOpcode);
-                    // udosVector << currentOpcode;
                     currentOpcode = nullptr;
                     currentItem = treeItem3;
                 }
@@ -208,15 +203,12 @@ void Inspector::parseText(const QString &text)
             }
             else if(currentOpcode->inArgs.isEmpty() && (match=xinRx.match(line)).hasMatch()) {
                 currentOpcode->inArgs = line.mid(0, match.capturedStart()).toString().simplified();
-                // QStringList columnslist(line.toString().simplified());
                 QStringList columnslist(currentOpcode->inArgs + " xin");
                 TreeItem *newItem = new TreeItem(currentItem, columnslist);
                 newItem->setLine(i + 1);
             }
             else if(currentOpcode->outArgs.isEmpty() && (match=xoutRx.match(line)).hasMatch()) {
                 currentOpcode->outArgs = line.mid(match.capturedEnd()).toString().simplified();
-                // auto itemtext = line.toString().simplified();
-                // QStringList columnslist(itemtext);
                 QStringList columnslist("xout " + currentOpcode->outArgs);
                 TreeItem *newItem = new TreeItem(currentItem, columnslist);
                 newItem->setLine(i + 1);
@@ -227,22 +219,6 @@ void Inspector::parseText(const QString &text)
             currentInstrument = nullptr;
             currentItem = treeItem3;
         }
-
-        /*
-        else if((currentOpcode != nullptr) && currentOpcode->inArgs.isEmpty() && (match=xinRx.match(line)).hasMatch()) {
-            currentOpcode->inArgs = line.mid(0, match.capturedStart()).toString().simplified();
-            QStringList columnslist(line.toString().simplified());
-            TreeItem *newItem = new TreeItem(currentItem, columnslist);
-            newItem->setLine(i + 1);
-        }
-        else if(currentOpcode != nullptr && currentOpcode->outArgs.isEmpty() && (match=xoutRx.match(line)).hasMatch()) {
-            currentOpcode->outArgs = line.mid(match.capturedEnd()).toString().simplified();
-            auto itemtext = line.toString().simplified();
-            QStringList columnslist(itemtext);
-            TreeItem *newItem = new TreeItem(currentItem, columnslist);
-            newItem->setLine(i + 1);
-        }
-        */
     }
 
     for(; i< lines.size(); i++) {

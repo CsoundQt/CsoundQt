@@ -1749,3 +1749,7 @@ void DocumentPage::parseUdos(bool force) {
     }
     m_parseUdosNeeded = false;
 }
+
+void DocumentPage::autocomplete() {
+    m_view->autoCompleteAtCursor();
+}
