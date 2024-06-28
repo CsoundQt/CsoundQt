@@ -763,11 +763,11 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     }
     else if (type == "BSBController") {
         auto t0 = std::chrono::high_resolution_clock::now();
-        QuteMeter *w = new QuteMeter(this);
+        auto w = new QuteMeter(this);
         widget = static_cast<QuteWidget *>(w);
         connect(widget, SIGNAL(newValue(QPair<QString,double>)),
                 this, SLOT(newValue(QPair<QString,double>)));
-        QDEBUG << "... BSBControlled new" << std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now()-t0).count() << "ms";
+        QDEBUG << "... BSBController new" << std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now()-t0).count() << "ms";
 
     }
     else if (type == "BSBGraph") {
@@ -821,7 +821,6 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
             if (node.attribute("mode") == "background") {
                 widget->setProperty("QCS_bgcolormode", true);
             }
-            // QDomNode n = node.firstChild();
             nodeName.prepend("QCS_");
             widget->setProperty(nodeName.toLocal8Bit(), getColorFromElement(node));
         }
@@ -834,15 +833,17 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
             nodeName.prepend("QCS_");
             widget->setProperty(nodeName.toLocal8Bit(), node.firstChild().nodeValue().toDouble());
         }
-        else if (nodeName == "x" || nodeName == "y") {  // INT type (with offset)
-            QDomNode n = node.firstChild();
-            nodeName.prepend("QCS_");
-            if (offset) {
-                widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt() + 20);
-            }
-            else {
-                widget->setProperty(nodeName.toLocal8Bit(), n.nodeValue().toInt());
-            }
+        else if (nodeName == "x") {
+            auto value = node.firstChild().nodeValue().toInt();
+            if(offset)
+                value += 20;
+            widget->setProperty("QCS_x", value);
+        }
+        else if (nodeName == "y") {  // INT type (with offset)
+            auto value = node.firstChild().nodeValue().toInt();
+            if(offset)
+                value += 20;
+            widget->setProperty("QCS_y", value);
         }
         else if (nodeName == "width" || nodeName == "height"
                  || nodeName == "fontsize"

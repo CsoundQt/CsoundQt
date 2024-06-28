@@ -3384,8 +3384,6 @@ void CsoundQt::updateCurrentPageTask() {
 }
 
 
-
-
 void CsoundQt::updateInspector()
 {
     if (m_closing  || curPage >= documentPages.size()) {

@@ -76,11 +76,9 @@ Risset::Risset(QString pythonExe)
         QDEBUG << "Risset script not installed" << proc.errorString();
         m_rissetPath = "";
         if(QFile::exists(pythonExe))
-        m_pythonExe = pythonExe;
-        else if(!pythonExe.isEmpty())
-            m_pythonExe = which(pythonExe, "python3");
+            m_pythonExe = pythonExe;
         else
-            m_pythonExe = which("python3", "python3");
+            m_pythonExe = which(!pythonExe.isEmpty() ? pythonExe: "python3", "python3");
 
         QDEBUG << "Python binary: " << m_pythonExe;
 
@@ -120,7 +118,7 @@ Risset::Risset(QString pythonExe)
     QDEBUG << "Risset manual: " << rissetHtmlDocs.absolutePath();
     this->opcodeNames.clear();
     auto plugins = root.value(QString("plugins")).toObject();
-    for(auto pluginName: plugins.keys()) {
+    for(auto& pluginName: plugins.keys()) {
         QDEBUG << "Risset - parsing plugin" << pluginName;
         auto plugindef = plugins.value(pluginName).toObject();
         bool installed = plugindef.value("installed").toBool();

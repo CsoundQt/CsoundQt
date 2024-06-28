@@ -892,12 +892,17 @@ void DocumentView::autoCompleteAtCursor() {
     lineCursor.select(QTextCursor::LineUnderCursor);
     QString line = lineCursor.selectedText();
 
-    int commentIndex = -1;
-    if (line.indexOf(";") != -1) {
-        commentIndex = lineCursor.position() - line.length() + line.indexOf(";");
-        if (commentIndex < curIndex)
+    int lineCommentIndex;
+
+    if((lineCommentIndex = line.indexOf(";")) >= 0) {
+        if(lineCursor.position() - line.length() + lineCommentIndex < curIndex)
             return;
     }
+    if((lineCommentIndex = line.indexOf("//")) >= 0) {
+        if(lineCursor.position() - line.length() + lineCommentIndex < curIndex)
+            return;
+    }
+
     static QRegularExpression rxOpcodeOrInstrAtStart("^\\s*(opcode|instr)");
     if(rxOpcodeOrInstrAtStart.match(line).hasMatch()) {
         return;
