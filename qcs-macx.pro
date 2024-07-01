@@ -5,8 +5,8 @@
 	message(Building CsoundQt for Macintosh OS X.)
 }
 
-CONFIG += x86_64
-QMAKE_CXXFLAGS += -arch x86_64
+# CONFIG += x86_64
+# QMAKE_CXXFLAGS += -arch x86_64
 
 build32: MAC_LIB = CsoundLib
 build64: MAC_LIB = CsoundLib64
