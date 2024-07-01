@@ -14,20 +14,22 @@ build64: MAC_LIB = CsoundLib64
 #paths set up for using the csound from installed package
 HOME_DIRECTORY =
 
-# Set default paths
+# Set default paths. Put homebrew paths at the end
 CSOUND_FRAMEWORK_DIR = Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
 DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${CSOUND_FRAMEWORK_DIR}/Headers \
         /$${CSOUND_FRAMEWORK_DIR}/Headers \
         $${CSOUND_FRAMEWORK_DIR}/Headers \
         /usr/local/include/csound \
-        /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Headers
+        /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Headers \
+        /opt/homebrew/opt/csound/Frameworks/CsoundLib64.framework/Versions/6.0/Headers
+
         
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
 DEFAULT_CSOUND_LIBRARY_DIRS = $${HOME_DIRECTORY}/$${CSOUND_FRAMEWORK_DIR} \
         /$${CSOUND_FRAMEWORK_DIR} \
         /usr/local/lib \
-        /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Versions/Current
-        
+        /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Versions/Current \
+        /opt/homebrew/opt/csound/Frameworks/CsoundLib64.framework/Versions/6.0
 
 build32:DEFAULT_CSOUND_LIBS = CsoundLib
 build64:DEFAULT_CSOUND_LIBS = CsoundLib64

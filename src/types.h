@@ -180,21 +180,6 @@ public:
 		mutex.unlock();
 	}
 
-    void putMany(MYFLT *data, long dataSize) {
-        long space = availableWriteSpace();
-        if(dataSize >= space) {
-            // qDebug("RingBuffer: Buffer overflow, only writing %ld elements!", space);
-            currentReadPos = currentPos;
-        }
-
-        mutex.lock();
-        for(int i=0; i<dataSize; i++) {
-            buffer[currentPos] = data[i];
-            currentPos = (currentPos + 1) % size;
-        }
-        mutex.unlock();
-    }
-
     void putManyScaled(MYFLT *data, long dataSize, MYFLT scaleFactor) {
         long space = availableWriteSpace();
         if(dataSize >= space) {
@@ -202,9 +187,16 @@ public:
             currentReadPos = currentPos;
         }
         mutex.lock();
-        for(int i=0; i<dataSize; i++) {
-            int idx = (currentPos + i) % size;
-            buffer[idx] = data[i] * scaleFactor;
+        if(scaleFactor != 1.0) {
+            for(int i=0; i<dataSize; i++) {
+                int idx = (currentPos + i) % size;
+                buffer[idx] = data[i] * scaleFactor;
+            }
+        } else {
+            for(int i=0; i<dataSize; i++) {
+                int idx = (currentPos + i) % size;
+                buffer[idx] = data[i];
+            }
         }
         auto previousPos = currentPos;
         currentPos += dataSize;
