@@ -1051,21 +1051,40 @@ void CsoundEngine::setupChannels()
     // BSBController  has 2 channels and values
     const QStringList reservedChannels = QStringList() << "_Play" << "_Stop" << "_Pause" << "_Render" << "_MBrowse" << "_SetPreset" << "_SetPresetIndex" << "_GetPresetName" << "_GetPresetNumber";
 
+    // ? ud->wl->valueMutex.lock(); - is it necessary?
+    ud->previousOutputValues << 0;
     foreach (QuteWidget *w, widgets) {
         QString type = w->getWidgetType();
         QString channel = w->getChannelName();
         if ( !reservedChannels.contains(channel) && type!="BSBLabel" && type!="BSBDisplay" ) { // ignore labels and displays
             if ( type=="BSBLineEdit") {
-                csoundSetStringChannel(ud->csound, channel.toLocal8Bit().constData(), w->getStringValue().toLocal8Bit().data() );
+                //csoundSetStringChannel(ud->csound, channel.toLocal8Bit().constData(), w->getStringValue().toLocal8Bit().data() );
+                ud->wl->newStringValues.insert(w->getChannelName(), w->getStringValue());
+
+                ud->outputStringChannelNames << QString(channel);
+                ud->previousStringOutputValues << "";
+                ud->previousStringOutputValues.last() = w->getStringValue();
+
             } else  {
-                csoundSetControlChannel(ud->csound, channel.toLocal8Bit().constData(), w->getValue() );
+                //csoundSetControlChannel(ud->csound, channel.toLocal8Bit().constData(), w->getValue() );
+                ud->wl->newValues.insert(w->getChannelName(), w->getValue()); // does this put value to widget?
+
+                // try setting connection for output
+                ud->outputChannelNames << QString(channel);
+                //ud->previousOutputValues << 0;
+                ud->previousOutputValues.last() = w->getValue();
+
                 if (type=="BSBController") {
-                    csoundSetControlChannel(ud->csound, w->getChannel2Name().toLocal8Bit().constData(), w->getValue2() );
+                    //csoundSetControlChannel(ud->csound, w->getChannel2Name().toLocal8Bit().constData(), w->getValue2() );
+                    ud->wl->newValues.insert(w->getChannel2Name(), w->getValue2());
+                    ud->previousOutputValues.last() = w->getValue2();
+
                 }
             }
         }
     }
 
+ /*
     // connect outputchannels with widgets that are declared with chn_k or chn_S, type 2 (output channel)
     controlChannelInfo_t *channelList;
     int numChannels = csoundListChannels(ud->csound, &channelList);
@@ -1101,38 +1120,39 @@ void CsoundEngine::setupChannels()
 //                ud->wl->stringValueMutex.unlock();
 //            }
 //        }
-        if (chanType & CSOUND_OUTPUT_CHANNEL) { // Channels can be input and output at the same time
-            if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_CONTROL_CHANNEL) {
-                ud->outputChannelNames << QString(entry->name);
-                ud->previousOutputValues << 0;
-                foreach (QuteWidget *w, widgets) {
-                    if (w->getChannelName() == QString(entry->name)) {
-                        ud->previousOutputValues.last() = w->getValue();
-                        continue;
-                    }
-                    if (w->getChannel2Name() == QString(entry->name)) {
-                        ud->previousOutputValues.last() = w->getValue2();
-                        continue;
-                    }
-                }
-            } else if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_STRING_CHANNEL) {
-                ud->outputStringChannelNames << QString(entry->name);
-                ud->previousStringOutputValues << "";
-                foreach (QuteWidget *w, widgets) {
-                    if (w->getChannelName() == QString(entry->name)) {
-                        ud->previousStringOutputValues.last() = w->getStringValue();
-                        continue;
-                    }
-                }
-            }
-        }
+//        if (chanType & CSOUND_OUTPUT_CHANNEL) { // Channels can be input and output at the same time
+//            if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_CONTROL_CHANNEL) {
+//                ud->outputChannelNames << QString(entry->name);
+//                ud->previousOutputValues << 0;
+//                foreach (QuteWidget *w, widgets) {
+//                    if (w->getChannelName() == QString(entry->name)) {
+//                        ud->previousOutputValues.last() = w->getValue();
+//                        continue;
+//                    }
+//                    if (w->getChannel2Name() == QString(entry->name)) {
+//                        ud->previousOutputValues.last() = w->getValue2();
+//                        continue;
+//                    }
+//                }
+//            } else if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_STRING_CHANNEL) {
+//                ud->outputStringChannelNames << QString(entry->name);
+//                ud->previousStringOutputValues << "";
+//                foreach (QuteWidget *w, widgets) {
+//                    if (w->getChannelName() == QString(entry->name)) {
+//                        ud->previousStringOutputValues.last() = w->getStringValue();
+//                        continue;
+//                    }
+//                }
+//            }
+//        }
         entry++;
     }
 
 
     csoundDeleteChannelList(ud->csound, channelList);
-
+*/
     // Force creation of string channels for _Browse widgets
+    MYFLT *pvalue;
     foreach (QuteWidget *w, widgets) {
         if (w->getChannelName().startsWith("_Browse")) {
             csoundGetChannelPtr(ud->csound, &pvalue, w->getChannelName().toLocal8Bit(),
