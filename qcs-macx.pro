@@ -79,7 +79,7 @@ LCSOUND = -F$${HOME_DIRECTORY}/Library/Frameworks -F/Library/Frameworks -F/usr/l
 #clumsy test for github actions homebrew build. needs rewrite and setting different variable for LCSND_DIR
 exists (/opt/homebrew/opt/csound/lib/libcsnd6.6.0.dylib) {
     LCSND = -L/opt/homebrew/opt/csound/lib/ -lcsnd6.6.0
-} else exists(/usr/local/lib/libcsnd6.6.0.dylib ) {
+} else exists(/usr/local/lib/libcsnd6.6.0.dylib) {
     LCSND = -L/usr/local/lib/ -lcsnd6.6.0
 } else {
     LCSND = -lcsnd6.6.0
