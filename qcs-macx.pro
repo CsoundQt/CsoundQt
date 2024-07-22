@@ -73,7 +73,7 @@ RESOURCES += "src/quteapp_d_osx.qrc"
 }
 
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
-LCSOUND = -F$${HOME_DIRECTORY}/Library/Frameworks -F/Library/Frameworks -F/usr/local/opt/csound/Frameworks -framework $${MAC_LIB}
+LCSOUND = -F$${HOME_DIRECTORY}/Library/Frameworks -F/Library/Frameworks -F/usr/local/opt/csound/Frameworks -F/opt/homebrew/opt/csound/Frameworks -framework $${MAC_LIB}
 
 
 #clumsy test for github actions homebrew build. needs rewrite and setting different variable for LCSND_DIR
