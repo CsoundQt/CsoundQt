@@ -182,7 +182,7 @@ html_webkit|html_webengine: {
 }
 
 LIBS += $${LCSOUND} \
-	$${LCSND} \
+#	$${LCSND} \ # CS 7
     $${LSNDFILE} \
     $${RTMIDI} \
     $${LPTHREAD}

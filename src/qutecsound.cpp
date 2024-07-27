@@ -3288,7 +3288,7 @@ void CsoundQt::runUtility(QString flags)
         strcpy(argv[index++],files[2].toLocal8Bit());
         int argc = index;
         CSOUND *csoundU;
-        csoundU=csoundCreate(0);
+        csoundU=csoundCreate(nullptr, nullptr);
         csoundSetHostData(csoundU, (void *) m_console);
         csoundSetMessageCallback(csoundU, &CsoundQt::utilitiesMessageCallback);
         // Utilities always run in the same thread as CsoundQt

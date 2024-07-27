@@ -533,7 +533,7 @@ void CsoundEngine::evaluate(QString code)
 {
     CSOUND *csound = getCsound();
     if (csound) {
-        csoundCompileOrc(csound, code.toLatin1());
+        csoundCompileOrc(csound, code.toLatin1(), 0); // or should the last parameter be 1 fo async?
         queueMessage(tr("Csound code evaluated.\n"));
     } else {
         queueMessage(tr("Csound is not running. Code not evaluated."));
@@ -715,7 +715,7 @@ int CsoundEngine::checkSyntax() {
     CsoundOptions options(m_options);
     options.checkSyntaxOnly = true;
 
-    ud->csound = csoundCreate((void *) ud);
+    ud->csound = csoundCreate((void *) ud, nullptr);
     QDEBUG << "$$$ checkSyntax 2";
 
     eventQueueSize = 0;
@@ -781,12 +781,12 @@ int CsoundEngine::runCsound()
         consoles[i]->reset();
     }
 #ifdef QCS_DESTROY_CSOUND
-    ud->csound=csoundCreate((void *) ud);
+    ud->csound=csoundCreate((void *) ud, nullptr);
     ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
     Q_ASSERT(ud->midiBuffer);
     ud->virtualMidiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
     Q_ASSERT(ud->virtualMidiBuffer);
-    // csoundFlushCircularBuffer(ud->csound, ud->midiBuffer);
+    csoundFlushCircularBuffer(ud->csound, ud->midiBuffer);
 #endif
 #ifdef QCS_DEBUGGER
     if(m_debugging) {
@@ -807,7 +807,10 @@ int CsoundEngine::runCsound()
     }
 #endif
     if(!m_options.useCsoundMidi) {
-        csoundSetHostImplementedMIDIIO(ud->csound, 1);
+        // CS7
+        // csoundSetHostImplementedMIDIIO(ud->csound, 1);
+        csoundSetHostMIDIIO(ud->csound);
+
         csoundSetExternalMidiInOpenCallback(ud->csound, &midiInOpenCb);
         csoundSetExternalMidiReadCallback(ud->csound, &midiReadCb);
         csoundSetExternalMidiInCloseCallback(ud->csound, &midiInCloseCb);
@@ -818,9 +821,12 @@ int CsoundEngine::runCsound()
     }
     csoundCreateMessageBuffer(ud->csound, 0);
 
+    // CS7 - maybe better ditch FLTK support
+    /*
     if (m_options.enableFLTK) {
         // Disable FLTK graphs, but allow FLTK widgets.
         int *var = (int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags");
+        // use Qt equivalent
         if (var) {
             *var = 4;
         } else {
@@ -845,6 +851,8 @@ int CsoundEngine::runCsound()
             qDebug() << "Error reading the FTLK_Flags variable";
         }
     }
+    */
+
     csoundRegisterKeyboardCallback(ud->csound,
                                    &CsoundEngine::keyEventCallback,
                                    (void *) ud, CSOUND_CALLBACK_KBD_EVENT | CSOUND_CALLBACK_KBD_TEXT);
@@ -897,7 +905,7 @@ int CsoundEngine::runCsound()
 
     ud->zerodBFS = csoundGet0dBFS(ud->csound);
     ud->sampleRate = csoundGetSr(ud->csound);
-    ud->numChnls = csoundGetNchnls(ud->csound);
+    ud->numChnls = csoundGetChannels(ud->csound, 0);
     ud->outputBufferSize = csoundGetKsmps(ud->csound);
     if (ud->enableWidgets) {
         setupChannels();
@@ -905,6 +913,8 @@ int CsoundEngine::runCsound()
     // Do not run the performance thread if the piece is an HTML file,
     // the HTML code must do that.
     if (!m_options.fileName1.endsWith(".html", Qt::CaseInsensitive)) {
+        //CS7 ADD:
+        csoundStart(ud->csound);
         ud->perfThread = new CsoundPerformanceThread(ud->csound);
         ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
         ud->perfThread->Play();
@@ -1014,7 +1024,8 @@ void CsoundEngine::cleanupCsound()
     }
 #endif
 
-    csoundCleanup(ud->csound);
+    //csoundCleanup(ud->csound);
+    csoundReset(ud->csound); // CS7  replacement  csoundCleanup?
     flushQueues();
     csoundDestroyMessageBuffer(ud->csound);
 

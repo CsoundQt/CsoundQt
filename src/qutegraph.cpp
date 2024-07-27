@@ -1665,8 +1665,13 @@ void QuteTableWidget::updatePath() {
         return;
     }
 
-    MYFLT *data;
-    int tabsize = csoundGetTable(m_ud->csound, &data, m_tabnum);
+
+    //CS7 changes
+    MYFLT *data = nullptr;
+
+    int tabsize = csoundTableLength(m_ud->csound, m_tabnum);
+    csoundTableCopyOut(m_ud->csound, m_tabnum, data, 0);
+
     if(tabsize == 0 || data == nullptr) {
         QDEBUG << "Table not found" << m_tabnum;
         return;
