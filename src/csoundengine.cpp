@@ -59,7 +59,7 @@ CsoundEngine::CsoundEngine(ConfigLists *configlists) :
     m_consoleBufferSize = 0;
     m_recording = false;
 #ifndef QCS_DESTROY_CSOUND
-    ud->csound=csoundCreate( (void *) ud);
+    ud->csound=csoundCreate( (void *) ud, nullptr);
     ud->midiBuffer = csoundCreateCircularBuffer(ud->csound, 1024, sizeof(unsigned char));
     Q_ASSERT(ud->midiBuffer);
 #endif
@@ -83,7 +83,7 @@ CsoundEngine::~CsoundEngine()
     m_msgUpdateThread.waitForFinished(); // Join the message thread
     stop();
 #ifndef QCS_DESTROY_CSOUND
-    csoundDestroyCircularBuffer(ud->csound, ud->midiBuffer);
+    //csoundDestroyCircularBuffer(ud->csound, ud->midiBuffer); // CS7 circular buffer destroyed in csoundDestroy
     csoundDestroy(ud->csound);
 #endif
     delete ud;
@@ -1030,9 +1030,9 @@ void CsoundEngine::cleanupCsound()
     csoundDestroyMessageBuffer(ud->csound);
 
 #ifdef QCS_DESTROY_CSOUND
-    csoundDestroyCircularBuffer(ud->csound, ud->midiBuffer);
+    //csoundDestroyCircularBuffer(ud->csound, ud->midiBuffer); // Cs7 destroyed in csoundDestroy
     ud->midiBuffer = nullptr;
-    csoundDestroyCircularBuffer(ud->csound, ud->virtualMidiBuffer);
+    //csoundDestroyCircularBuffer(ud->csound, ud->virtualMidiBuffer); // Cs7 destroyed in csoundDestroy
     ud->virtualMidiBuffer = nullptr;
     csoundDestroy(ud->csound);
     ud->csound = nullptr;
