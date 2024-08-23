@@ -25,7 +25,6 @@
 
 #include <QDockWidget>
 #include <QUrl>
-#include "types.h"
 #include <QTextDocument>
 
 namespace Ui {
@@ -76,6 +75,8 @@ public slots:
             raise();
     }
     void toggleFindBarVisible(bool show);
+    void increaseFontSize();
+    void decreaseFontSize();
 
 
 private:
