@@ -316,7 +316,7 @@ void CsoundEngine::csThread(void *data)
 {
     CsoundUserData* udata = (CsoundUserData*)data;
     if (!(udata->flags & QCS_NO_COPY_BUFFER)) {
-        MYFLT *outputBuffer = csoundGetSpout(udata->csound);
+        MYFLT const *outputBuffer = csoundGetSpout(udata->csound);
         // outputBufferSize == ksmps
         long numSamples = udata->outputBufferSize * udata->numChnls;
         udata->audioOutputBuffer.putManyScaled(outputBuffer, numSamples,
@@ -359,7 +359,7 @@ void CsoundEngine::readWidgetValues(CsoundUserData *ud)
         QHash<QString, double>::const_iterator i;
         QHash<QString, double>::const_iterator end = ud->wl->newValues.constEnd();
         for (i = ud->wl->newValues.constBegin(); i != end; ++i) {
-            if(csoundGetChannelPtr(ud->csound, &pvalue, i.key().toLocal8Bit().constData(),
+            if(csoundGetChannelPtr(ud->csound, (void **)&pvalue, i.key().toLocal8Bit().constData(),
                                    CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
                 // 0 == success
                 *pvalue = (MYFLT) i.value();
@@ -385,7 +385,7 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
     MYFLT* pvalue;
     for (int i = 0; i < ud->outputChannelNames.size(); i++) {
         if (ud->outputChannelNames[i] != ""
-                && csoundGetChannelPtr(ud->csound, &pvalue,
+                && csoundGetChannelPtr(ud->csound, (void **) &pvalue,
                                        ud->outputChannelNames[i].toLocal8Bit().constData(),
                                        CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
             if(ud->previousOutputValues[i] != *pvalue) {
@@ -396,7 +396,7 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
     }
     for (int i = 0; i < ud->outputStringChannelNames.size(); i++) {
         if (ud->outputStringChannelNames[i] != ""
-                && csoundGetChannelPtr(ud->csound, &pvalue,
+                && csoundGetChannelPtr(ud->csound, (void **) &pvalue,
                                        ud->outputStringChannelNames[i].toLocal8Bit().constData(),
                                        CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
             char chanString[2048]; // large enough for long strings in displays
@@ -1063,7 +1063,7 @@ void CsoundEngine::setupChannels()
         //                                                      name        type
         // if type is 0, no new channel is created if it does not exist,
         // the returned value is the channel type
-        int chanType = csoundGetChannelPtr(ud->csound, &pvalue, entry->name, 0);
+        int chanType = csoundGetChannelPtr(ud->csound, (void **) &pvalue, entry->name, 0);
         if (chanType & CSOUND_INPUT_CHANNEL) {
             if ((chanType & CSOUND_CHANNEL_TYPE_MASK) == CSOUND_CONTROL_CHANNEL) {
                 ud->wl->valueMutex.lock();
@@ -1118,7 +1118,7 @@ void CsoundEngine::setupChannels()
     // Force creation of string channels for _Browse widgets
     foreach (QuteWidget *w, widgets) {
         if (w->getChannelName().startsWith("_Browse")) {
-            csoundGetChannelPtr(ud->csound, &pvalue, w->getChannelName().toLocal8Bit(),
+            csoundGetChannelPtr(ud->csound, (void **) &pvalue, w->getChannelName().toLocal8Bit(),
                                 CSOUND_INPUT_CHANNEL | CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL);
             ud->wl->newStringValues.insert(w->getChannelName(), w->getStringValue());
         }

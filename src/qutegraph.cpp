@@ -471,7 +471,7 @@ void QuteGraph::setValue(QString text)
         m_getPeakChannel = parts[1].toString();
         qDebug() << "@getPeak channel: " << m_getPeakChannel;
         MYFLT *ptr;
-        csoundGetChannelPtr(m_ud->csound, &ptr,
+        csoundGetChannelPtr(m_ud->csound, (void **) &ptr,
                             m_getPeakChannel.toLocal8Bit().constData(),
                             CSOUND_INPUT_CHANNEL | CSOUND_CONTROL_CHANNEL);
         m_peakChannelPtr = ptr;
