@@ -28,7 +28,8 @@
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
 #endif
 
-#include "csound_standard_types.h"
+#include <csound_standard_types.h>
+#include <csound_type_system.h>
 
 #include "csoundengine.h"
 #include "widgetlayout.h"
@@ -97,11 +98,15 @@ void CsoundEngine::outputValueCallback (CSOUND *csound,
 {
     // Called by the csound running engine when 'outvalue' opcode is used
     // To pass data from Csound to CsoundQt
+    CS_TYPE const *csChannelType = (CS_TYPE *) channelType;
+    QString channelTypeName = QString(csChannelType->varTypeName).toLower();
+    // OR: use new function in Csound API:  PUBLIC const char *csoundGetChannelVarType(CSOUND *csound, const char *name);
+
     CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-    if (channelType == &CS_VAR_TYPE_S) {
+    if (channelTypeName == "s") {
         ud->csEngine->passOutString(channelName, (const char *) channelValuePtr);
     }
-    else if (channelType == &CS_VAR_TYPE_K){
+    else if (channelTypeName == "k"){
         ud->csEngine->passOutValue(channelName, *((MYFLT *)channelValuePtr));
     } else {
         QDEBUG << "Unsupported type";
@@ -115,8 +120,11 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
 {
     // Called by the csound running engine when 'invalue' opcode is used
     // To pass data from CsoundQt to Csound
+
+    CS_TYPE const *csChannelType = (CS_TYPE *) channelType;
+    QString channelTypeName = QString(csChannelType->varTypeName).toLower();
     CsoundUserData *ud = (CsoundUserData *) csoundGetHostData(csound);
-    if (channelType == &CS_VAR_TYPE_S) { // channel is a string channel
+    if (channelTypeName == "s") { // channel is a string channel
         char *string = (char *) channelValuePtr;
         QString newValue = ud->wl->getStringForChannel(channelName);
         int maxlen = csoundGetChannelDatasize(csound, channelName);
@@ -127,7 +135,7 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
             string[0] = '\0';
         }
     }
-    else if (channelType == &CS_VAR_TYPE_K) {  // Not a string channel
+    else if (channelTypeName == "k") {  // Not a string channel
         //FIXME check if mouse tracking is active, and move this from here
         MYFLT *value = (MYFLT *) channelValuePtr;
         if(!strcmp(channelName, "_Mouse")) {
