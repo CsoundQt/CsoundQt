@@ -1667,13 +1667,21 @@ void QuteTableWidget::updatePath() {
 
 
     //CS7 changes
-    MYFLT *data = nullptr;
 
     int tabsize = csoundTableLength(m_ud->csound, m_tabnum);
-    csoundTableCopyOut(m_ud->csound, m_tabnum, data, 0);
+    MYFLT *data = nullptr;
+    if (tabsize>0) {
 
-    if(tabsize == 0 || data == nullptr) {
-        QDEBUG << "Table not found" << m_tabnum;
+        data = new double[tabsize]();
+        // old: csoundTableCopyOut(m_ud->csound, m_tabnum, data, 0);
+        int result = csoundGetTable(m_ud->csound, &data, m_tabnum);
+        if (result<=0) {
+            QDEBUG << "Table could not be read: " << m_tabnum;
+            return;
+        }
+
+    } else {
+        QDEBUG << "Table not found: " << m_tabnum;
         return;
     }
 
@@ -1729,6 +1737,7 @@ void QuteTableWidget::updatePath() {
         poly.append(QPointF(x2, y2));
     }
     m_path.addPolygon(poly);
+    delete[] data;
 }
 
 void QuteTableWidget::updateData(int tabnum) {
