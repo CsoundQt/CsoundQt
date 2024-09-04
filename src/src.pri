@@ -75,6 +75,7 @@ HEADERS = "src/about.h" \
     "src/additionalfilespage.h" \
     "src/scoreeditor.h" \
     "src/filebeditor.h" \
+    $$PWD/csound_threaded_csqt.hpp \
     $$PWD/myslider.h \
     $$PWD/risset.h \
     $$PWD/selectcolorbutton.h \
