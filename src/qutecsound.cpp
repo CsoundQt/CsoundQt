@@ -44,6 +44,9 @@
 #include "risset.h"
 #include <thread>
 
+#include <csound_compiler.h> // csound7: needed for TREE structure
+
+
 
 #ifdef Q_OS_WIN
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
