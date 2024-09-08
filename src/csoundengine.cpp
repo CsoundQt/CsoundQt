@@ -898,8 +898,10 @@ int CsoundEngine::runCsound()
             free((char *) argv[i]);
         }
         free(argv);
-        if (ud->result != CSOUND_SUCCESS) {
-            qDebug()  << "Csound compile failed! "  << ud->result;
+        int startResult = csoundStart(ud->csound); // must be called in Csound7
+
+        if (ud->result != CSOUND_SUCCESS ||  startResult != CSOUND_SUCCESS)  {
+            qDebug()  << "Csound compile / csoundStart failed! "  << ud->result << startResult;
             // Commenting out flushQues fixes the crash.
             // Investigate closer, if it must be here
             // seems that messages are outputted into console anyway...
@@ -921,8 +923,6 @@ int CsoundEngine::runCsound()
     // Do not run the performance thread if the piece is an HTML file,
     // the HTML code must do that.
     if (!m_options.fileName1.endsWith(".html", Qt::CaseInsensitive)) {
-        //CS7 ADD:
-        csoundStart(ud->csound);
         ud->perfThread = new CsoundPerformanceThread(ud->csound);
         ud->perfThread->SetProcessCallback(CsoundEngine::csThread, (void*)ud);
         ud->perfThread->Play();
