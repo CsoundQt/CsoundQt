@@ -116,19 +116,22 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         html = html.insert(injection_index, injection);
 #endif
-        QString htmlfilename; // maybe use also tempHtml herer
-        if (filename.startsWith(":/") ) { // an example file
-            htmlfilename = QDir::tempPath()+"/html-example.html"; // TODO: take name from filename
+        QString htmlFilename; // maybe use also tempHtml herer
+
+        QFileInfo fileInfo(QFileInfo(filename).path());
+
+
+        if (filename.startsWith(":/") || !fileInfo.isWritable()) { // if an example file or the folder is not writable
+            htmlFilename = QDir::tempPath()+"/html-example.html"; // create it in a temporary location
         } else {
-            htmlfilename = filename + ".html";
+            htmlFilename = filename + ".html";
         }
-        htmlfile.setFileName(htmlfilename);
-        //htmlfile(htmlfilename);
-        htmlfile.open(QIODevice::WriteOnly);
-        QTextStream out(&htmlfile);
+        htmlFile.setFileName(htmlFilename);
+        htmlFile.open(QIODevice::WriteOnly);
+        QTextStream out(&htmlFile);
         out << html;
-        htmlfile.close();
-        loadFromUrl(QUrl::fromLocalFile(htmlfilename));
+        htmlFile.close();
+        loadFromUrl(QUrl::fromLocalFile(htmlFilename));
 
 #ifdef USE_WEBENGINE
         webView->page()->setWebChannel(&channel);
@@ -234,8 +237,8 @@ void CsoundHtmlView::showDebugWindow()
 void CsoundHtmlView::removeTemporaryHtmlFile(bool ok)
 {
     if (ok) {
-        qDebug() << "Removing temporary html: " << htmlfile.fileName();
-        htmlfile.remove();
+        qDebug() << "Removing temporary html: " << htmlFile.fileName();
+        htmlFile.remove();
 
     }
 }
