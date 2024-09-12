@@ -159,8 +159,6 @@ public slots:
 
 	void insertChn_k(QString channel);
 
-    void increaseFontSize();
-    void decreaseFontSize();
 
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent *event);

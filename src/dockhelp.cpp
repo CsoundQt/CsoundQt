@@ -63,16 +63,6 @@ DockHelp::DockHelp(QWidget *parent)
     ui->nextFindButton->setVisible(false);
     ui->previousFindButton->setVisible(false);
 
-    QAction *increaseFontAction = new QAction(this);
-    QAction *decreaseFontAction = new QAction(this);
-    increaseFontAction->setShortcut(QKeySequence::ZoomIn);
-    increaseFontAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    decreaseFontAction->setShortcut(QKeySequence::ZoomOut);
-    decreaseFontAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    connect(increaseFontAction, &QAction::triggered, this, &DockHelp::increaseFontSize);
-    connect(decreaseFontAction, &QAction::triggered, this, &DockHelp::decreaseFontSize);
-    addAction(increaseFontAction);
-    addAction(decreaseFontAction);
 
     styleSheetLight = (
       "body {                                                                      "
@@ -228,6 +218,14 @@ void DockHelp::setIconTheme(QString theme)
     ui->toggleFindButton->setIcon(QIcon(QString(":/themes/%1/edit-find.png").arg(theme)));
     ui->previousFindButton->setIcon(QIcon(QString(":/themes/%1/browse-prev.png").arg(theme)));
     ui->nextFindButton->setIcon(QIcon(QString(":/themes/%1/browse-next.png").arg(theme)));
+}
+
+void DockHelp::changeFontSize(int change)
+{
+    QFont font = ui->text->font();
+    int currentSize = font.pointSize();
+    font.setPointSize(currentSize+change);
+    ui->text->setFont(font);
 }
 
 void DockHelp::closeEvent(QCloseEvent * /*event*/)
@@ -389,20 +387,4 @@ void DockHelp::toggleFindBarVisible(bool show) {
     if(show) {
         ui->findLine->setFocus();
     }
-}
-
-void DockHelp::increaseFontSize()
-{
-    QFont font = ui->text->font();
-    int currentSize = font.pointSize();
-    font.setPointSize(++currentSize);
-    ui->text->setFont(font);
-}
-
-void DockHelp::decreaseFontSize()
-{
-    QFont font = ui->text->font();
-    int currentSize = font.pointSize();
-    font.setPointSize(--currentSize);
-    ui->text->setFont(font);
 }

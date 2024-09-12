@@ -118,19 +118,6 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	m_oldCursorPosition = -1; // 0 or positive, if cursor needs to be moved there
     markCurrentPosition();
 
-    //test
-    // try changing font size:
-    QAction *increaseFontAction = new QAction(this);
-    QAction *decreaseFontAction = new QAction(this);
-    increaseFontAction->setShortcut(QKeySequence::ZoomIn);
-    increaseFontAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    decreaseFontAction->setShortcut(QKeySequence::ZoomOut);
-    decreaseFontAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    connect(increaseFontAction, &QAction::triggered, this, &DocumentView::increaseFontSize );
-    connect(decreaseFontAction, &QAction::triggered, this, &DocumentView::decreaseFontSize);
-    addAction(increaseFontAction);
-    addAction(decreaseFontAction);
-
 }
 
 DocumentView::~DocumentView()
@@ -2123,21 +2110,3 @@ void HoverWidget::mousePressEvent(QMouseEvent *ev)
 	this->hide();
 }
 
-
-void DocumentView::increaseFontSize()
-{
-    QFont font = m_mainEditor->font();
-    int currentSize = font.pointSize();
-    QDEBUG << "Current fontsize: " << currentSize;
-    font.setPointSize(++currentSize);
-    m_mainEditor->setFont(font);
-}
-
-void DocumentView::decreaseFontSize()
-{
-    QFont font = m_mainEditor->font();
-    int currentSize = font.pointSize();
-    QDEBUG << "Current fontsize: " << currentSize;
-    font.setPointSize(--currentSize);
-    m_mainEditor->setFont(font);
-}
