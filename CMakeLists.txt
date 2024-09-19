@@ -246,6 +246,15 @@ if(CSQT_BUILD_RECORDING_SUPPORT)
   message("Building recording support.")
 endif(CSQT_BUILD_RECORDING_SUPPORT)
 
+
+# LINUX definition
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    set(LINUX YES)
+    message(STATUS "LINUX operating system found")
+else()
+    set(LINUX NO)
+endif()
+
 #link to Csound
 if (WIN32)
 # win32-msvc:build64: DEFAULT_CSOUND_LIBS = csound64.lib
