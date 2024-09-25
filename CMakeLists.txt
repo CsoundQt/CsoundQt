@@ -5,6 +5,17 @@ project(CsoundQt VERSION 0.1 LANGUAGES CXX)
 option(CSQT_BUILD_DEBUGGER_SUPPORT "Build Debugger Support" OFF)
 option(CSQT_BUILD_RECORDING_SUPPORT "Build recording support" ON)
 
+# for user defined options: rename Custom.cmake.ex to Custom.cmake
+# uncomment neccessary variable and make changes according to your system
+find_file(CUSTOM_CMAKE "Custom.cmake" HINTS ${CMAKE_HOME_DIRECTORY})
+if(CUSTOM_CMAKE)
+    message(STATUS "Including Custom.cmake file: ${CUSTOM_CMAKE}")
+    include(${CUSTOM_CMAKE})
+else()
+    message(STATUS "Not using Custom.cmake file.")
+endif()
+
+
 # TODOs
 # * Build for Windows
 # * Build for MacOS
@@ -279,6 +290,7 @@ elseif(LINUX)
           /usr/lib
     REQUIRED)
 
+  #? how to add custom user defined paths from Custom.cmake ?
   set(CSOUND_INCLUDE_PATHS /usr/local/include/csound
               /usr/include/csound
   )
