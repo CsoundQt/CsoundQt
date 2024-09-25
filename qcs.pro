@@ -44,22 +44,19 @@ csound5: error("Building for Csound5 nont supported.")
 DEFINES += NOMINMAX
 # DEFINES += USE_WIDGET_MUTEX
 
-csound6 {
-    message("No need to specify CONFIG+=csound6 anymore as Csound6 build is now default.")
-}
 
 # Add C++11 support since version 0.9.4
 CONFIG += c++11
 # CONFIG += c++14
 
-#for csound6 (may need extra conditions for csound7 later:
-DEFINES += CSOUND6
-CONFIG += csound6
+#for csound7 (was csound6 before). Will not have no meaning in CsoundQt7
+DEFINES += CSOUND7
+CONFIG += csound7
 debugger {
     DEFINES += QCS_DEBUGGER
     message("Building debugger.")
 }
-message("Building for Csound 6.")
+message("Building for Csound 7.")
 
 
 QT += concurrent network widgets printsupport
@@ -182,7 +179,7 @@ build64:TARGET = $${TARGET}-d
 pythonqt:TARGET = $${TARGET}-py
 html_webkit|html_webengine:TARGET = $${TARGET}-html
 
-csound6:TARGET = $${TARGET}-cs6
+TARGET = $${TARGET}-cs7
 
 CONFIG(debug, debug|release):TARGET = $${TARGET}-debug
 
