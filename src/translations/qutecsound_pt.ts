@@ -2200,7 +2200,7 @@ Extended Python features are not available</source>
         <translation type="unfinished">Não me pergunte de novo</translation>
     </message>
     <message>
-        <source>Russian translation: Gleb Rogozinsky</source>
+        <source>Russian translation: Gleb Rogozinski</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

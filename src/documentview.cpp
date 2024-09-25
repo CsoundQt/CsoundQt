@@ -23,7 +23,6 @@
 #include "documentview.h"
 #include "findreplace.h"
 #include "opentryparser.h"
-#include "node.h"
 #include "types.h"
 
 #include "highlighter.h"
@@ -100,8 +99,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
-	//          this, SLOT(syntaxCheck()));
-	//  connect(scoreEditor, SIGNAL(cursorPositionChanged()),
+    //          this, SLOT(syntaxCheck())	//  connect(scoreEditor, SIGNAL(cursorPositionChanged()),
 	//          this, SLOT(syntaxCheck()));
 
 	errorMarked = false;
@@ -1014,13 +1012,16 @@ void DocumentView::autoCompleteAtCursor() {
         QStringList menuWords;
         QString wordlow = word.toLower(); // this must be AFTER the word is corrected
 
-        // variables
-        QRegularExpression rxVariables("\\b(g)?[iakS][a-zA-Z0-9_]+");
+        // any word [was: variables ]
+        //QRegularExpression rxVariables("\\b(g)?[iakS][a-zA-Z0-9_]+"); // this only matches variable names
+        static QRegularExpression rxAnyWord("\\b[A-Za-z][a-zA-Z0-9_]*\\b" ); // any word that starts with a letter
+        QRegularExpressionMatch match = rxAnyWord.match(word);
         for(auto theWord: allWords) {
             if (word != theWord &&
                     theWord.toLower().startsWith(wordlow) &&
                    !menuWordsSeen.contains(theWord)  &&
-                    rxVariables.match(word).hasMatch() ) {
+                    /* rxVariables.match(word).hasMatch() */
+                    match.hasMatch()    ) {
                 auto a = syntaxMenu->addAction(theWord, this, SLOT(insertAutoCompleteText()));
                 a->setData(theWord);
                 showSyntaxMenu = true;
@@ -2108,3 +2109,4 @@ void HoverWidget::mousePressEvent(QMouseEvent *ev)
     (void) ev;
 	this->hide();
 }
+

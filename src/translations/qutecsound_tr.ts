@@ -1318,8 +1318,8 @@ Lütfen CsoundQt&apos;yi yeniden başlatın.</translation>
         <translation>Fince Çeviri: Niko Humalam&amp;auml;ki</translation>
     </message>
     <message>
-        <source>Russian translation: Gleb Rogozinsky</source>
-        <translation>Rusça Çeviri: Gleb Rogozinsky</translation>
+        <source>Russian translation: Gleb Rogozinski</source>
+        <translation>Rusça Çeviri: Gleb Rogozinski</translation>
     </message>
     <message>
         <source>If you find CsoundQt useful, please consider donating to the project:</source>

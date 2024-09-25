@@ -25,7 +25,6 @@
 
 #include <QDockWidget>
 #include <QUrl>
-#include "types.h"
 #include <QTextDocument>
 
 namespace Ui {
@@ -44,6 +43,7 @@ public:
 	bool externalBrowser;
 	QString docDir;
     void setIconTheme(QString theme);
+    void changeFontSize(int change);
 
 private:
 	QTextDocument::FindFlags findFlags;

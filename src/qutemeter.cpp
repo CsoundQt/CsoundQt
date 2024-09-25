@@ -634,8 +634,8 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
     m_hline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
     m_border = m_scene->addRect(m_scene->sceneRect(), borderPen, Qt::NoBrush);
     m_border->hide();
-    auto t1 = std::chrono::high_resolution_clock::now();
-    QDEBUG << "... MeterWidget constructor " << std::chrono::duration<double, std::milli>(t1-t0).count() << "ms";
+    // auto t1 = std::chrono::high_resolution_clock::now();
+    // QDEBUG << "... MeterWidget constructor " << std::chrono::duration<double, std::milli>(t1-t0).count() << "ms";
 
 }
 

@@ -152,6 +152,8 @@ public:
 #if defined(QCS_QTHTML)
 	void updateHtmlView();
 #endif
+    void changeFontSize(int change);
+
 public slots:
 	int loadFile(QString fileName, bool runNow = false);
 	int loadFileFromSystem(QString fileName); // checks for m_options->autoPlay, if the function is called from other class
@@ -187,6 +189,9 @@ public slots:
 	void breakpointReached();
     void setParsedUDOs();
     void openExternalBrowser(QUrl url = QUrl());
+
+    void increaseFontSize();
+    void decreaseFontSize();
 
 
 protected:

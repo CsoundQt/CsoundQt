@@ -1605,8 +1605,8 @@ Debe reiniciar CsoundQt.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2576"/>
-        <source>Russian translation: Gleb Rogozinsky</source>
-        <translation>Traducción rusa: Gleb Rogozinsky</translation>
+        <source>Russian translation: Gleb Rogozinski</source>
+        <translation>Traducción rusa: Gleb Rogozinski</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2581"/>

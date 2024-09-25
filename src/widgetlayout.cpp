@@ -767,7 +767,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         widget = static_cast<QuteWidget *>(w);
         connect(widget, SIGNAL(newValue(QPair<QString,double>)),
                 this, SLOT(newValue(QPair<QString,double>)));
-        QDEBUG << "... BSBController new" << std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now()-t0).count() << "ms";
+        // QDEBUG << "... BSBController new" << std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now()-t0).count() << "ms";
 
     }
     else if (type == "BSBGraph") {
@@ -916,9 +916,9 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     widget->applyInternalProperties();
     registerWidget(widget);
 
-    auto t1 = std::chrono::high_resolution_clock::now();
-    auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
-    QDEBUG << "newXmlWidget type" << type << "took " << diff << "ms";
+    // auto t1 = std::chrono::high_resolution_clock::now();
+    // auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
+    // QDEBUG << "newXmlWidget type" << type << "took " << diff << "ms";
 
     return ret;
 }

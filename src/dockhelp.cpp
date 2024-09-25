@@ -63,6 +63,7 @@ DockHelp::DockHelp(QWidget *parent)
     ui->nextFindButton->setVisible(false);
     ui->previousFindButton->setVisible(false);
 
+
     styleSheetLight = (
       "body {                                                                      "
       "    background-color: #f8f8f8 !important;                                   "
@@ -217,6 +218,14 @@ void DockHelp::setIconTheme(QString theme)
     ui->toggleFindButton->setIcon(QIcon(QString(":/themes/%1/edit-find.png").arg(theme)));
     ui->previousFindButton->setIcon(QIcon(QString(":/themes/%1/browse-prev.png").arg(theme)));
     ui->nextFindButton->setIcon(QIcon(QString(":/themes/%1/browse-next.png").arg(theme)));
+}
+
+void DockHelp::changeFontSize(int change)
+{
+    QFont font = ui->text->font();
+    int currentSize = font.pointSize();
+    font.setPointSize(currentSize+change);
+    ui->text->setFont(font);
 }
 
 void DockHelp::closeEvent(QCloseEvent * /*event*/)

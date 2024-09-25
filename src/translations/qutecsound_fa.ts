@@ -1502,7 +1502,7 @@ You must restart CsoundQt.</source>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2576"/>
-        <source>Russian translation: Gleb Rogozinsky</source>
+        <source>Russian translation: Gleb Rogozinski</source>
         <translation>ترجمه‌ی روسی: گلیب راگوزینسکی</translation>
     </message>
     <message>

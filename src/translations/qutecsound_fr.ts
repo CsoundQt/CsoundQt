@@ -1626,8 +1626,8 @@ Il faut redémarrer CsoundQt.</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2576"/>
-        <source>Russian translation: Gleb Rogozinsky</source>
-        <translation>Traduction russe : Gleb Rogozinsky</translation>
+        <source>Russian translation: Gleb Rogozinski</source>
+        <translation>Traduction russe : Gleb Rogozinski</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2581"/>
