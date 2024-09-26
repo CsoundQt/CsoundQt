@@ -32,7 +32,7 @@
 #include <csPerfThread.hpp>
 #include <cwindow.h> // Necessary for WINDAT struct
 #include <csound_circular_buffer.h> // necessary for csoundCreateCircularBuffer and similar
-#include <graph_display.h> // necessary for WINDAT declaration
+#include <csound_graph_display.h> // necessary for WINDAT declaration
 
 
 #ifdef QCS_DEBUGGER

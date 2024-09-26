@@ -28,7 +28,6 @@
 #include <ole2.h> // for OleInitialize() FLTK bug workaround
 #endif
 
-#include <csound_standard_types.h>
 #include <csound_type_system.h>
 
 #include "csoundengine.h"
