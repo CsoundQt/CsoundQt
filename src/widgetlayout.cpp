@@ -3647,6 +3647,7 @@ void WidgetLayout::newPreset()
     QLineEdit *nameLineEdit = new QLineEdit(&d);
     QLabel *numberLabel = new QLabel(tr("Number:"), &d);
     QSpinBox *numberSpinBox = new QSpinBox(&d);
+    numberSpinBox->unsetLocale();
     QPushButton *okButton = new QPushButton(tr("Ok"),&d);
     QPushButton *cancelButton = new QPushButton(tr("Cancel"),&d);
     l->addWidget(nameLabel, 0,0, Qt::AlignRight);

@@ -437,6 +437,7 @@ void QuteWidget::createPropertiesDialog()
     layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     xSpinBox = new QSpinBox(dialog);
+    xSpinBox->unsetLocale();
 	xSpinBox->setMaximum(9999);
 	layout->addWidget(xSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -444,6 +445,7 @@ void QuteWidget::createPropertiesDialog()
     layout->addWidget(label, 0, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     ySpinBox = new QSpinBox(dialog);
+    ySpinBox->unsetLocale();
 	ySpinBox->setMaximum(9999);
 	layout->addWidget(ySpinBox, 0, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -451,6 +453,7 @@ void QuteWidget::createPropertiesDialog()
     layout->addWidget(label, 1, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     wSpinBox = new QSpinBox(dialog);
+    wSpinBox->unsetLocale();
 	wSpinBox->setMaximum(9999);
 	layout->addWidget(wSpinBox, 1, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -458,6 +461,7 @@ void QuteWidget::createPropertiesDialog()
     layout->addWidget(label, 1, 2, Qt::AlignRight|Qt::AlignVCenter);
 
     hSpinBox = new QSpinBox(dialog);
+    hSpinBox->unsetLocale();
 	hSpinBox->setMaximum(9999);
 	layout->addWidget(hSpinBox, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -483,6 +487,7 @@ void QuteWidget::createPropertiesDialog()
         layout->addWidget(label, midiRow, 0, Qt::AlignRight|Qt::AlignVCenter);
 
         midiccSpinBox = new QSpinBox(dialog);
+        midiccSpinBox->unsetLocale();
 		midiccSpinBox->setRange(0,119);
         layout->addWidget(midiccSpinBox, midiRow, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -490,6 +495,7 @@ void QuteWidget::createPropertiesDialog()
         layout->addWidget(label, midiRow, 2, Qt::AlignRight|Qt::AlignVCenter);
 
         midichanSpinBox = new QSpinBox(dialog);
+        midichanSpinBox->unsetLocale();
 		midichanSpinBox->setRange(0,127);
         layout->addWidget(midichanSpinBox, midiRow,3, Qt::AlignLeft|Qt::AlignVCenter);
 

@@ -1202,6 +1202,7 @@ void DocumentView::gotoLineDialog()
     layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     auto lineSpinBox = new QSpinBox(dialog);
+    lineSpinBox->unsetLocale(); // for chinease numbers to work
     lineSpinBox->setRange(0, 99999999);
     layout->addWidget(lineSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
