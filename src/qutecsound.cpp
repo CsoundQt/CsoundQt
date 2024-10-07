@@ -1131,8 +1131,6 @@ void CsoundQt::setLineAndColumn(int line, int column)
     } else {
         labelText +=  QString::number(column);
     }
-
-    QDEBUG << labelText;
     lineAndColumnLabel->setText(labelText);
 }
 
