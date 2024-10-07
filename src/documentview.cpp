@@ -687,7 +687,11 @@ void DocumentView::syntaxCheck()
     editor = m_viewMode < 2 ? m_mainEditor : (TextEditor *) sender();
     m_currentEditor = editor ; // for parenthesis functions
 
-	QTextCursor cursor = editor->textCursor();
+    QTextCursor cursor = editor->textCursor();
+
+    // send cursor position
+    emit newLineAndColumn(cursor.blockNumber()+1 , cursor.positionInBlock()+1);
+
 
 	// matchparenthesis. Code by Geir Vatterkar see https://doc.qt.io/archives/qq/QtQuarterly31.pdf
 	// some corrections by Heinz van Saanen http://qt-apps.org/content/show.php/CLedit?content=125532 ; comments: http://www.qtcentre.org/archive/index.php/t-31084.html
