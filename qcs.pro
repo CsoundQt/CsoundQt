@@ -41,7 +41,7 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
 
 #temporary compatibility layer for Qt5->Qt6 (needed for QRegExp, QStringRef, QTextDecoder -  replace them later!)
-QT += core5compat
+#QT += core5compat
 
 #Support for Qt4 and Qt5 dropped
 

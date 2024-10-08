@@ -680,7 +680,8 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         return;
     }
 
-    auto text = QStringRef(&line, 0, commentIndex);
+    //auto text = QStringRef(&line, 0, commentIndex);
+    auto text = QStringView(line).mid(0,commentIndex);
 
     // define
     rx.setPattern("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
