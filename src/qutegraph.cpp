@@ -1943,20 +1943,20 @@ void QuteTable::setValue(double value) {
 };
 
 void QuteTable::setValue(QString s) {
-    auto parts = s.split(' ', SKIP_EMPTY_PARTS); // was splitRef
+    auto parts = QStringView{s}.split(' ', SKIP_EMPTY_PARTS); // was splitRef
     if(parts.size() == 0) {
         qWarning() << "TablePLot: Message not understood, expected @set <tabnum> "
                     "or @update";
         return;
     }
-    if(parts[0] == "@set") {
+    if(parts[0] == QString("@set")) { // not sure if this does not cause any overhead...
         if(parts.size() != 2) {
             qWarning() << "@set message expects a table number (example: @set 103)";
             return;
         }
         int tabnum = parts[1].toInt();
         setTableNumber(tabnum);
-    } else if (parts[0] == "@update" && m_tabnum > 0) {
+    } else if (parts[0] == QString("@update") && m_tabnum > 0) {
         setValue(-1);
     } else
         qWarning() << "Message not supported:" << s;
