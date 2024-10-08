@@ -232,7 +232,9 @@ void DocumentView::updateOrcContext(QString orc)
 		linecursor.movePosition(QTextCursor::EndOfLine);
 	}
 	QString instr = cursor.selection().toPlainText();
-    auto lines = instr.split("\n", SKIP_EMPTY_PARTS); // old (preQt6): instr.splitRef("\n", SKIP_EMPTY_PARTS);
+
+    //QList <QStringView> lines = QStringView{instr}.split(u'\n', SKIP_EMPTY_PARTS); // old (preQt6): instr.splitRef("\n", SKIP_EMPTY_PARTS);
+    auto lines = instr.split('\n', SKIP_EMPTY_PARTS); // here ther is not sense to use QStringView as QString is needed soon later
 
     auto rxWordSplit = QRegularExpression("[\\s,+-/\\*\\.\\^\\(\\)\\[\\]$]");
 	m_localVariables.clear();

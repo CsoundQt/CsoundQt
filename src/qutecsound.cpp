@@ -44,7 +44,7 @@
 #include "risset.h"
 #include <thread>
 
-#include <QTextCodec> // necessary for deprecated QTextDecoder
+//#include <QTextCodec> // necessary for deprecated QTextDecoder
 
 
 #ifdef Q_OS_WIN
@@ -5769,8 +5769,10 @@ void fillCompanionSco(QString &fileName, QString &text) {
     while (!companionFile.atEnd()) {
         QByteArray line = companionFile.readLine();
         changeNewLines(line);
-        QTextDecoder decoder(QTextCodec::codecForLocale());
-        text = text + decoder.toUnicode(line);
+        //QTextDecoder decoder(QTextCodec::codecForLocale());
+        QStringDecoder decoder(QStringDecoder::System ); // TODO: TEST THIS ON WINDOWS!!!
+
+        text = text + decoder(line);
         if (!line.endsWith("\n"))
             text.append("\n");
     }
@@ -5788,8 +5790,9 @@ void fillCompanionOrc(QString &fileName, QString &text) {
     while (!companionFlle.atEnd()) {
         QByteArray line = companionFlle.readLine();
         changeNewLines(line);
-        QTextDecoder decoder(QTextCodec::codecForLocale());
-        orcText = orcText + decoder.toUnicode(line);
+        //QTextDecoder decoder(QTextCodec::codecForLocale());
+        QStringDecoder decoder(QStringDecoder::System); // TODO: TEST ON WINDOWS!
+        orcText = orcText + decoder(line);
         if (!line.endsWith("\n"))
             orcText += "\n";
     }
@@ -5833,11 +5836,12 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         }
         if (!inEncFile) {
             changeNewLines(line);
-            QTextDecoder decoder(QTextCodec::codecForLocale());
+            //QTextDecoder decoder(QTextCodec::codecForLocale());
+            QStringDecoder decoder(QStringDecoder::System);
             // text = text + decoder.toUnicode(line);
             if (!line.endsWith("\n"))
                 text += "\n";
-            lines << text + decoder.toUnicode(line);
+            lines << text + decoder(line); // TEST ON WINDOWS!!!
         }
         else {
             // text += line;

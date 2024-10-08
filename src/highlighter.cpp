@@ -25,7 +25,6 @@
 #include <QDebug>
 #include <QRegularExpression>
 
-#include <QStringRef>
 #include <QRegularExpression>
 
 
@@ -817,7 +816,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         index = 0;
         while((rxmatch = rule.pattern.match(text, index)).hasMatch()) {
             int group = rule.group;
-            qDebug() << "last rule matched: " << rule.pattern.pattern();
+            //qDebug() << "last rule matched: " << rule.pattern.pattern();
             setFormat(rxmatch.capturedLength(group), rxmatch.capturedStart(group), rule.format);
             index = rxmatch.capturedEnd();
         }

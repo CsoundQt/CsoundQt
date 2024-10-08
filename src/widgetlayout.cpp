@@ -3164,7 +3164,7 @@ QString WidgetLayout::createButton(int x, int y, int width, int height, QString 
 
 QString WidgetLayout::createKnob(int x, int y, int width, int height, QString widgetLine)
 {
-    auto parts = widgetLine.split(QRegularExpression("[\\{\\}, ]"), SKIP_EMPTY_PARTS); // splitRef
+    auto parts = QStringView(widgetLine).split(QRegularExpression("[\\{\\}, ]"), SKIP_EMPTY_PARTS); // splitRef
     // QStringList parts = widgetLine.split(QRegularExpression("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QuteKnob *widget= new QuteKnob(this);
     widget->setProperty("QCS_x",x);
@@ -3179,7 +3179,7 @@ QString WidgetLayout::createKnob(int x, int y, int width, int height, QString wi
         int i=9;
         QString channelName = "";
         while (parts.size()>i) {
-            channelName += parts[i] + " ";
+            channelName += parts[i].toString() + " ";
             i++;
         }
         channelName.chop(1);  //remove last space
