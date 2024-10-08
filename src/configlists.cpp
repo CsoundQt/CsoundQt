@@ -257,12 +257,11 @@ QStringList ConfigLists::runCsoundInternally(QStringList flags)
 	//Remember menu bar to set it after FLTK grabs it
 	menuBarHandle = GetMenuBar();
 #endif
-	CSOUND *csoundD;
-	m_messages.clear();
-	csoundD=csoundCreate(&m_messages);
+    m_messages.clear();
+    CSOUND *csoundD = csoundCreate(&m_messages);
 
 	csoundSetMessageCallback(csoundD, msgCallback);
-	int result = csoundCompile(csoundD,argc,argv);
+    int result = csoundCompile(csoundD, argc, argv);
 
 	if(!result) {
 		csoundPerform(csoundD);

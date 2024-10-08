@@ -390,6 +390,7 @@ void QuteMeter::createPropertiesDialog()
     layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     pointSizeSpinBox = new QSpinBox(dialog);
+    pointSizeSpinBox->unsetLocale();
     pointSizeSpinBox->setValue(w->getPointSize());
     pointSizeSpinBox->setToolTip("Size of the point / line if applicable");
     layout->addWidget(pointSizeSpinBox, 7,1, Qt::AlignLeft|Qt::AlignVCenter);
@@ -408,6 +409,7 @@ void QuteMeter::createPropertiesDialog()
     label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
     layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
     fadeSpeedSpinBox = new QSpinBox(dialog);
+    fadeSpeedSpinBox->unsetLocale();
     fadeSpeedSpinBox->setValue(property("QCS_fadeSpeed").toDouble());
     fadeSpeedSpinBox->setRange(0, 1000);
     layout->addWidget(fadeSpeedSpinBox, 7,3, Qt::AlignLeft|Qt::AlignVCenter);
@@ -634,8 +636,8 @@ MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
     m_hline = m_scene->addLine(0, 0, 0, 0, QPen(Qt::green));
     m_border = m_scene->addRect(m_scene->sceneRect(), borderPen, Qt::NoBrush);
     m_border->hide();
-    auto t1 = std::chrono::high_resolution_clock::now();
-    QDEBUG << "... MeterWidget constructor " << std::chrono::duration<double, std::milli>(t1-t0).count() << "ms";
+    // auto t1 = std::chrono::high_resolution_clock::now();
+    // QDEBUG << "... MeterWidget constructor " << std::chrono::duration<double, std::milli>(t1-t0).count() << "ms";
 
 }
 

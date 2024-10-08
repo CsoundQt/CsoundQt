@@ -1624,8 +1624,8 @@ You must restart CsoundQt.</source>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2576"/>
-        <source>Russian translation: Gleb Rogozinsky</source>
-        <translation>러시아어 번역: Gleb Rogozinsky</translation>
+        <source>Russian translation: Gleb Rogozinski</source>
+        <translation>러시아어 번역: Gleb Rogozinski</translation>
     </message>
     <message>
         <location filename="../qutecsound.cpp" line="2577"/>

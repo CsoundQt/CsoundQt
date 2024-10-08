@@ -5,6 +5,7 @@
 	message(Building CsoundQt for Macintosh OS X.)
 }
 
+
 #CONFIG += x86_64
 #QMAKE_CXXFLAGS += -arch x86_64
 
@@ -18,20 +19,24 @@ build64: MAC_LIB = CsoundLib64
 #paths set up for using the csound from installed package
 HOME_DIRECTORY =
 
-# Set default paths
-CSOUND_FRAMEWORK_DIR = /Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
+
+# Set default paths. Put homebrew paths at the end
+CSOUND_FRAMEWORK_DIR = Library/Frameworks/$${MAC_LIB}.framework/Versions/Current
+
 DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${CSOUND_FRAMEWORK_DIR}/Headers \
         /$${CSOUND_FRAMEWORK_DIR}/Headers \
         $${CSOUND_FRAMEWORK_DIR}/Headers \
         /usr/local/include/csound \
-        /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Headers
+        /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Headers \
+        /opt/homebrew/opt/csound/Frameworks/CsoundLib64.framework/Versions/6.0/Headers
+
         
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS = $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
 DEFAULT_CSOUND_LIBRARY_DIRS = $${HOME_DIRECTORY}/$${CSOUND_FRAMEWORK_DIR} \
         /$${CSOUND_FRAMEWORK_DIR} \
         /usr/local/lib \
-        /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Versions/Current
-        
+        /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Versions/Current \
+        /opt/homebrew/opt/csound/Frameworks/CsoundLib64.framework/Versions/6.0
 
 build32:DEFAULT_CSOUND_LIBS = CsoundLib
 build64:DEFAULT_CSOUND_LIBS = CsoundLib64
@@ -75,9 +80,18 @@ RESOURCES += "src/quteapp_d_osx.qrc"
 }
 
 #LIBS += -framework QtCore -framework QtGui -framework QtXml
-LCSOUND = -F$${HOME_DIRECTORY}/Library/Frameworks -F/Library/Frameworks -F/usr/local/opt/csound/Frameworks -framework $${MAC_LIB}
+LCSOUND = -F$${HOME_DIRECTORY}/Library/Frameworks -F/Library/Frameworks -F/usr/local/opt/csound/Frameworks -F/opt/homebrew/opt/csound/Frameworks -framework $${MAC_LIB}
 
-LCSND = -L/usr/local/lib -lcsnd6.6.0
+
+#clumsy test for github actions homebrew build. needs rewrite and setting different variable for LCSND_DIR
+exists (/opt/homebrew/opt/csound/lib/libcsnd6.6.0.dylib) {
+    LCSND = -L/opt/homebrew/opt/csound/lib/ -lcsnd6.6.0
+} else: exists(/usr/local/lib/libcsnd6.6.0.dylib) {
+    LCSND = -L/usr/local/lib/ -lcsnd6.6.0
+} else {
+    LCSND = -lcsnd6.6.0
+}
+
 
 QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
 ICON = $${PWD}/images/qtcs.icns

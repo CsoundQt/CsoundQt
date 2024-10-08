@@ -159,6 +159,7 @@ public slots:
 
 	void insertChn_k(QString channel);
 
+
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent *event);
 

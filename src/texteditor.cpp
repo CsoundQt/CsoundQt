@@ -38,6 +38,7 @@ TextEditor::TextEditor(QWidget *parent) :
 
 void TextEditor::keyPressEvent (QKeyEvent * event)
 {
+    m_lastkey = event->key();
 	if (m_commaTyped && event->key() != Qt::Key_Space) {
 		m_commaTyped = false;
 	}
@@ -63,27 +64,25 @@ void TextEditor::keyPressEvent (QKeyEvent * event)
 	case Qt::Key_Enter:
 		emit enterPressed();
 		break;
-	case Qt::Key_Space:
+    case Qt::Key_Space:
 		if (m_commaTyped) {
 			emit showParameterInfo();
 		}
 		m_commaTyped = false;
 		break;
 	case Qt::Key_Comma:
-		m_commaTyped = true;
+        m_commaTyped = true;
 		break;
 	}
-	QTextEdit::keyPressEvent(event); // Process key events in the rest of the application
+    QTextEdit::keyPressEvent(event); // Process key events in the rest of the application
 	if (event->key() == Qt::Key_Up || event->key() == Qt::Key_Down
 			|| event->key() == Qt::Key_Left || event->key() == Qt::Key_Right) {
 		emit arrowPressed();
-	}
-
-	if (event->key() == Qt::Key_Escape) {
+    } else if (event->key() == Qt::Key_Escape) {
 		emit escapePressed();
 	} else if(event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
 		emit newLine();
-	}
+    }
     return;
 }
 
@@ -120,7 +119,7 @@ void TextEditor::mouseReleaseEvent(QMouseEvent *e)
 //}
 
 TextEditLineNumbers::TextEditLineNumbers(QWidget *parent)
-	: TextEditor(parent)
+    : TextEditor(parent)
 {
 	setLineAreaVisible(false);
 	lineNumberArea = new LineNumberArea(this);

@@ -151,6 +151,8 @@ public:
 #if defined(QCS_QTHTML)
 	void updateHtmlView();
 #endif
+    void changeFontSize(int change);
+
 public slots:
 	int loadFile(QString fileName, bool runNow = false);
 	int loadFileFromSystem(QString fileName); // checks for m_options->autoPlay, if the function is called from other class
@@ -186,6 +188,9 @@ public slots:
 	void breakpointReached();
     void setParsedUDOs();
     void openExternalBrowser(QUrl url = QUrl());
+
+    void increaseFontSize();
+    void decreaseFontSize();
 
 
 protected:
@@ -286,6 +291,7 @@ private slots:
 	void showWidgetEdit(bool);
 	void toggleLineArea();
 	void toggleParameterMode();
+    void autocomplete();
 //	void showParametersInEditor();
 	void onNewConnection(); // when new client is connecting to localServer
 	void onReadyRead(); // when message comes in
@@ -510,6 +516,7 @@ private:
     QAction *reportCsoundBugAct;
     QAction *lineNumbersAct;
 	QAction *parameterModeAct;
+    QAction *autocompleteAct;
 //	QAction *showParametersAct;
     QAction *openExamplesFolderAct;
     QSignalMapper *focusMapper;

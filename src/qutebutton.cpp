@@ -369,6 +369,7 @@ void QuteButton::createPropertiesDialog()
     layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     fontSizeSpinBox = new QSpinBox(dialog);
+    fontSizeSpinBox->unsetLocale();
     fontSizeSpinBox->setMinimum(6);
     fontSizeSpinBox->setMaximum(999);
     fontSizeSpinBox->setValue(property("QCS_fontsize").toInt());

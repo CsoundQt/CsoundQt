@@ -496,6 +496,7 @@ void QuteKnob::createPropertiesDialog()
     layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     borderWidthSpinBox = new QSpinBox(dialog);
+    borderWidthSpinBox->unsetLocale();
     borderWidthSpinBox->setValue(property("QCS_border").toInt());
     borderWidthSpinBox->setRange(0, 8);
     borderWidthSpinBox->setToolTip("Set to 1 or more to draw a border around the knob in flat mode");

@@ -2905,6 +2905,34 @@ void CsoundQt::openExternalBrowser(QUrl url)
     //QDesktopServices::openUrl(url); // this opens it twice
 }
 
+void CsoundQt::increaseFontSize()
+{
+    changeFontSize(1);
+}
+
+void CsoundQt::decreaseFontSize()
+{
+    changeFontSize(-1);
+}
+
+void CsoundQt::changeFontSize(int change)
+{
+    if (helpPanel->hasFocus() ) {
+        // QDEBUG << "change helpPanel size" << change;
+        helpPanel->changeFontSize(change);
+    }  else {
+        m_options->fontPointSize += change; // this may affect the pad's font size as well...
+        // QDEBUG << "main Editor size" << m_options->fontPointSize;
+        for (int i = 0; i < documentPages.size(); i++) {
+            documentPages[i]->setTextFont(QFont(m_options->font, (int) m_options->fontPointSize));
+        }
+        // apply the same size to code pad (maybe should be separate but so far it has used the same size.
+        DocumentView *pad = static_cast<LiveCodeEditor*>(m_scratchPad->widget())->getDocumentView();
+        pad->setFont(QFont(m_options->font, (int) m_options->fontPointSize));
+    }
+    // console live changing not supported now, possible only through Configuration Dialog
+}
+
 void CsoundQt::openPdfFile(QString name)
 {
     if (!m_options->pdfviewer.isEmpty()) {
@@ -3041,7 +3069,7 @@ void CsoundQt::about()
     text += tr("Italian translation: Francesco") + "<br />";
     text += tr("Turkish translation: Ali Isciler") + "<br />";
     text += tr("Finnish translation: Niko Humalam&auml;ki") + "<br />";
-    text += tr("Russian translation: Gleb Rogozinsky") + "<br />";
+    text += tr("Russian translation: Gleb Rogozinski") + "<br />";
     text += tr("Persian translation: Amin Khoshsabk") + "<br />";
     text += tr("Korean translation: Jieun Jun") + "<br />";
     text += QString("<center><a href=\"http://csoundqt.github.io\">csoundqt.github.io</a></center>");
@@ -3400,7 +3428,6 @@ void CsoundQt::updateInspector()
         // m_inspector->parsePythonText(documentPages[curPage]->getFullText());
     }
     m_inspectorNeedsUpdate = false;
-    // this->setParsedUDOs();
     QTimer::singleShot(INSPECTOR_UPDATE_PERIOD_MS, this, SLOT(updateInspector()));
 }
 
@@ -3457,6 +3484,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     showGenAct->setShortcut(tr(""));
     showOverviewAct->setShortcut(tr(""));
     raiseConsoleAct->setShortcut(tr("Ctrl+3"));
+    autocompleteAct->setShortcut(tr("Ctrl+M"));
 #ifdef Q_OS_MACOS
     viewFullScreenAct->setShortcut(tr("Ctrl+Shift+F"));
 #else
@@ -3574,6 +3602,12 @@ void CsoundQt::toggleLineArea()
 void CsoundQt::toggleParameterMode()
 {
     documentPages[curPage]->toggleParameterMode();
+}
+
+void CsoundQt::autocomplete()
+{
+    DocumentPage* page = documentPages[curPage];
+    page->autocomplete();
 }
 
 #ifdef QCS_DEBUGGER
@@ -4354,8 +4388,22 @@ void CsoundQt::createActions()
     parameterModeAct = new QAction(tr("Toggle parameter mode"),this);
     connect(parameterModeAct,SIGNAL(triggered()), this, SLOT(toggleParameterMode()));
 
+    autocompleteAct = new QAction(tr("Autocomplete"), this);
+    autocompleteAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(autocompleteAct, SIGNAL(triggered()), this, SLOT(autocomplete()));
+
     //	showParametersAct = new QAction(tr("Show available parameters"),this);
     //	connect(showParametersAct,SIGNAL(triggered()), this, SLOT(showParametersInEditor()));
+
+    // font size ZoomIn, ZoomOut
+    QAction *increaseFontAction = new QAction(this);
+    QAction *decreaseFontAction = new QAction(this);
+    increaseFontAction->setShortcut(QKeySequence::ZoomIn);
+    decreaseFontAction->setShortcut(QKeySequence::ZoomOut);
+    connect(increaseFontAction, &QAction::triggered, this, &CsoundQt::increaseFontSize );
+    connect(decreaseFontAction, &QAction::triggered, this, &CsoundQt::decreaseFontSize);
+    addAction(increaseFontAction);
+    addAction(decreaseFontAction);
 
     setKeyboardShortcutsList();
     setDefaultKeyboardShortcuts();
@@ -4415,6 +4463,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(showVirtualKeyboardAct);
     m_keyActions.append(showTableEditorAct);
     m_keyActions.append(checkSyntaxAct);
+    m_keyActions.append(autocompleteAct);
 #if defined(QCS_QTHTML)
     m_keyActions.append(raiseHtml5Act);
 #endif
@@ -4627,6 +4676,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(cutAct);
     editMenu->addAction(copyAct);
     editMenu->addAction(pasteAct);
+    editMenu->addAction(autocompleteAct);
     editMenu->addAction(evaluateAct);
     editMenu->addAction(evaluateSectionAct);
     editMenu->addAction(scratchPadCsdModeAct);

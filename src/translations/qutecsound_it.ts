@@ -2208,8 +2208,8 @@ Le caratteristiche estese di Python non sono disponibili</translation>
         <translation>Non chiedere di nuovo</translation>
     </message>
     <message>
-        <source>Russian translation: Gleb Rogozinsky</source>
-        <translation>Traduzione russa: Gleb Rogozinsky</translation>
+        <source>Russian translation: Gleb Rogozinski</source>
+        <translation>Traduzione russa: Gleb Rogozinski</translation>
     </message>
     <message>
         <source>You can only create an app with a csd file.</source>

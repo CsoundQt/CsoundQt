@@ -29,7 +29,9 @@
 #include <csound.h>
 
 
-#define QCS_VERSION "1.1.2-rc2-qt6"
+
+#define QCS_VERSION "1.1.3-qt6"
+
 
 // Time in milliseconds for widget and console messages updates
 #define QCS_QUEUETIMER_DEFAULT_TIME 50
@@ -126,7 +128,7 @@ public:
     int isFlag;
     bool isInstalled;
 
-    Opcode() {}
+    Opcode() = default;
     Opcode(QString name, QString outs="", QString ins="", bool installed=true): opcodeName(name), outArgs(outs), inArgs(ins), isInstalled(installed) {}
 
 };
@@ -135,16 +137,13 @@ class RingBuffer
 {
 public:
     RingBuffer() {
-        // size = 2048*4;
         size = 4096 * 4;
 		resize(size);
 		currentPos = 0;
 		currentReadPos = 0;
-		//       lock = false;
-	}
-	~RingBuffer() {}
-	//     bool lock;
-	QList<MYFLT> buffer;
+    }
+    ~RingBuffer() = default;
+    QList<MYFLT> buffer;
 	long currentPos;
 	long currentReadPos;
 	int size;
@@ -183,21 +182,6 @@ public:
 		mutex.unlock();
 	}
 
-    void putMany(MYFLT *data, long dataSize) {
-        long space = availableWriteSpace();
-        if(dataSize >= space) {
-            // qDebug("RingBuffer: Buffer overflow, only writing %ld elements!", space);
-            currentReadPos = currentPos;
-        }
-
-        mutex.lock();
-        for(int i=0; i<dataSize; i++) {
-            buffer[currentPos] = data[i];
-            currentPos = (currentPos + 1) % size;
-        }
-        mutex.unlock();
-    }
-
     void putManyScaled(MYFLT *data, long dataSize, MYFLT scaleFactor) {
         long space = availableWriteSpace();
         if(dataSize >= space) {
@@ -205,9 +189,16 @@ public:
             currentReadPos = currentPos;
         }
         mutex.lock();
-        for(int i=0; i<dataSize; i++) {
-            int idx = (currentPos + i) % size;
-            buffer[idx] = data[i] * scaleFactor;
+        if(scaleFactor != 1.0) {
+            for(int i=0; i<dataSize; i++) {
+                int idx = (currentPos + i) % size;
+                buffer[idx] = data[i] * scaleFactor;
+            }
+        } else {
+            for(int i=0; i<dataSize; i++) {
+                int idx = (currentPos + i) % size;
+                buffer[idx] = data[i];
+            }
         }
         auto previousPos = currentPos;
         currentPos += dataSize;

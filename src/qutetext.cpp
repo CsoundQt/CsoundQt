@@ -492,6 +492,7 @@ void QuteText::createPropertiesDialog()
     label = new QLabel("Precision", dialog);
     layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
     precisionSpinBox = new QSpinBox(dialog);
+    precisionSpinBox->unsetLocale();
     precisionSpinBox->setValue(property("QCS_precision").toInt());
     layout->addWidget(precisionSpinBox, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -515,6 +516,7 @@ void QuteText::createPropertiesDialog()
     labelPtrs["fontSize"] = label;
 
     fontSize = new QSpinBox(dialog);
+    fontSize->unsetLocale();
 	fontSize->setMaximum(999); // allow also very big fonts
     layout->addWidget(fontSize,9, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -524,6 +526,7 @@ void QuteText::createPropertiesDialog()
     labelPtrs["borderRadius"] = label;
 
     borderRadius = new QSpinBox(dialog);
+    borderRadius->unsetLocale();
     layout->addWidget(borderRadius, 9, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
     label = new QLabel(dialog);
@@ -532,6 +535,7 @@ void QuteText::createPropertiesDialog()
     labelPtrs["borderWidth"] = label;
 
     borderWidth = new QSpinBox(dialog);
+    borderWidth->unsetLocale();
     borderWidth->setMinimum(0);
     borderWidth->setToolTip(tr("Set the width to 0 disable the border"));
     layout->addWidget(borderWidth, 10, 3, Qt::AlignLeft|Qt::AlignVCenter);

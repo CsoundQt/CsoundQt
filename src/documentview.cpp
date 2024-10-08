@@ -23,7 +23,6 @@
 #include "documentview.h"
 #include "findreplace.h"
 #include "opentryparser.h"
-#include "node.h"
 #include "types.h"
 
 #include "highlighter.h"
@@ -72,8 +71,8 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
     //  m_highlighter = new Highlighter();
     connect(m_mainEditor, SIGNAL(textChanged()),
             this, SLOT(textChanged()));
-    connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
-            this, SLOT(updateContext()));
+    // connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
+    //        this, SLOT(updateContext()));
     connect(m_mainEditor, SIGNAL(cursorPositionChanged()),
             this, SLOT(syntaxCheck()));
 	connect(m_mainEditor, SIGNAL(escapePressed()),
@@ -100,8 +99,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 
 	//TODO put this for line reporting for score editor
 	//  connect(scoreEditor, SIGNAL(textChanged()),
-	//          this, SLOT(syntaxCheck()));
-	//  connect(scoreEditor, SIGNAL(cursorPositionChanged()),
+    //          this, SLOT(syntaxCheck())	//  connect(scoreEditor, SIGNAL(cursorPositionChanged()),
 	//          this, SLOT(syntaxCheck()));
 
 	errorMarked = false;
@@ -110,11 +108,7 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	syntaxMenu = new MySyntaxMenu(m_mainEditor);
 	//  syntaxMenu->setFocusPolicy(Qt::NoFocus);
 	syntaxMenu->setAutoFillBackground(true);
-    // QPalette p = syntaxMenu->palette();
-    // p.setColor(QPalette::WindowText, Qt::blue);
-    // p.setColor(static_cast<QPalette::ColorRole>(9), QColor("#eaeac5")); // was: Qt::yellow
-    // syntaxMenu->setPalette(p);
-	connect(syntaxMenu,SIGNAL(keyPressed(QString)),
+    connect(syntaxMenu,SIGNAL(keyPressed(QString)),
 			m_mainEditor, SLOT(insertPlainText(QString)));
 
 	setViewMode(1);
@@ -453,7 +447,7 @@ void DocumentView::setViewMode(int mode)
 	switch (m_viewMode) {
 	case 0: // csd without extra sections
 		m_mainEditor->show();
-		m_highlighter.setDocument(m_mainEditor->document());
+        m_highlighter.setDocument(m_mainEditor->document());
         break;
 	case 1: // full plain text
 		m_mainEditor->show();
@@ -840,6 +834,7 @@ void DocumentView::createParenthesisSelection(int pos, bool paired)
 	editor->setExtraSelections(selections);
 }
 
+
 const QStringList DocumentView::getAllWords() {
     // All words are parsed at max. each 4 seconds
     const int minMsecsFromLastParsing = 4000;
@@ -857,54 +852,71 @@ const QStringList DocumentView::getAllWords() {
     return m_allWords;
 }
 
+
 void DocumentView::autoCompleteAtCursor() {
     TextEditor *editor = m_mainEditor;
-
     // TODO: replace all this with QCompleter
     QTextCursor cursor = editor->textCursor();
     int curIndex = cursor.position();
-    // Sometimes this function is called multiple times without real
-    // changes, resulting in superfluous work. This catches those
-    // situations but it would be much nicer if we were not called
-    // in the first place!
-    if(curIndex == m_lastCursorPosition)
-        return;
 
-    m_lastCursorPosition = curIndex;
-
-    cursor.select(QTextCursor::WordUnderCursor);
+    // Only use the word written until cursor, not the entire word under the cursor
+    // This is the behaviour used in all text editors
+    cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::MoveAnchor);
+    cursor.setPosition(curIndex, QTextCursor::KeepAnchor);
     QString word = cursor.selectedText();
-    if(word.isEmpty())
-        return;
 
-    if (word == "," || word == ")") {
+    if(word.isEmpty()) {
+        // This handles the special case where the cursor is at a ")" or a ","
+        // which work as separators so the word to the left appears empty
+        cursor.select(QTextCursor::WordUnderCursor);
+        QString wordUnderCursor = cursor.selectedText();
+        if(wordUnderCursor != "," && wordUnderCursor != ")")
+            return;
+
         cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
         cursor.movePosition(QTextCursor::StartOfWord);
         cursor.select(QTextCursor::WordUnderCursor);
         word = cursor.selectedText();
+        if(word.isEmpty()) {
+            return;
+        }
     }
-    QString wordlow = word.toLower(); // this must be AFTER the word is corrected
+
+    if(word.size() < 3)
+        // only start completion after three characters
+        return;
+
     QTextCursor lineCursor = editor->textCursor();
     lineCursor.select(QTextCursor::LineUnderCursor);
     QString line = lineCursor.selectedText();
-    QSet<QString>menuWordsSeen;
 
-    int commentIndex = -1;
-    bool useFunction = false;
-    if (line.indexOf(";") != -1) {
-        commentIndex = lineCursor.position() - line.length() + line.indexOf(";");
-        if (commentIndex < curIndex)
+    int lineCommentIndex;
+
+    if((lineCommentIndex = line.indexOf(";")) >= 0) {
+        if(lineCursor.position() - line.length() + lineCommentIndex < curIndex)
             return;
     }
-    if(QRegularExpression("^\\s*(opcode|instr)").match(line).hasMatch()) {
+    if((lineCommentIndex = line.indexOf("//")) >= 0) {
+        if(lineCursor.position() - line.length() + lineCommentIndex < curIndex)
+            return;
+    }
+
+    static QRegularExpression rxOpcodeOrInstrAtStart("^\\s*(opcode|instr)");
+    if(rxOpcodeOrInstrAtStart.match(line).hasMatch()) {
         return;
     }
-    if(!QRegularExpression("\\s*\\w+\\s+\\w+").match(line).hasMatch()) {
+    static QRegularExpression rxTwoWords("\\s*\\w+\\s+\\w+");
+    bool useFunction = false;
+    if(!rxTwoWords.match(line).hasMatch()) {
         useFunction = true;
     }
-    QRegularExpressionMatch rxmatch;
+    // matches long command line options, like --nosound, -+rtaudio, etc.
+    static QRegularExpression rxCommandLineOption("\\s*-([+-])(\\w*)");
+
     bool showSyntaxMenu = false;
-    if((rxmatch=QRegularExpression("\\s*-([+-])(\\w*)").match(line)).hasMatch()) {
+    QSet<QString>menuWordsSeen;
+    QRegularExpressionMatch rxmatch;
+    if((rxmatch = rxCommandLineOption.match(line)).hasMatch()) {
         syntaxMenu->clear();
         auto capt = rxmatch.captured(2);
         auto options = rxmatch.captured(1)=="-"? m_longOptions: m_longOptions2;
@@ -931,23 +943,23 @@ void DocumentView::autoCompleteAtCursor() {
             }
         }
         // opcodes and parameters
-        auto syntax = m_opcodeTree->getPossibleSyntax(word);
+        auto opcodedefs = m_opcodeTree->getMatchingOpcodes(word);
         bool allEqual = true;
-        for(int i = 0; i < syntax.size(); i++) {
-            if (syntax[i].opcodeName != word) {
+        for(int i = 0; i < opcodedefs.size(); i++) {
+            if (opcodedefs[i].opcodeName != word) {
                 allEqual = false;
                 break;
             }
         }
-        if (syntax.size() > 0 && !allEqual) {
-            for(int i = 0; i < syntax.size(); i++) {
-                QString opcodeName = syntax[i].opcodeName;
+        if (opcodedefs.size() > 0 && !allEqual) {
+            for(int i = 0; i < opcodedefs.size(); i++) {
+                QString opcodeName = opcodedefs[i].opcodeName;
                 QString text = opcodeName.size() < 14 ?
                            opcodeName.leftJustified(14) :
                            opcodeName + " ";
 
-                QString outArgs = syntax[i].outArgs;
-                auto inArgs = syntax[i].inArgs;
+                QString outArgs = opcodedefs[i].outArgs;
+                auto inArgs = opcodedefs[i].inArgs;
                 if(!inArgs.isEmpty()) {
                     text += inArgs.size()<=28 ? inArgs : inArgs.mid(0, 27)+"…";
                 }
@@ -972,20 +984,20 @@ void DocumentView::autoCompleteAtCursor() {
                 }
 
                 QString syntaxText;
-                if (useFunction && !syntax[i].inArgs.isEmpty()) {
+                if (useFunction && !opcodedefs[i].inArgs.isEmpty()) {
                     syntaxText = QString("%1(%2)").arg(
-                        syntax[i].opcodeName.simplified(),
-                        syntax[i].inArgs.simplified());
+                        opcodedefs[i].opcodeName.simplified(),
+                        opcodedefs[i].inArgs.simplified());
                 } else {
-                    syntaxText= syntax[i].outArgs.simplified();
-                    if (!syntax[i].outArgs.isEmpty())
+                    syntaxText= opcodedefs[i].outArgs.simplified();
+                    if (!opcodedefs[i].outArgs.isEmpty())
                         syntaxText += " ";
-                    syntaxText += syntax[i].opcodeName.simplified();
-                    if (!syntax[i].inArgs.isEmpty()) {
-                        if (syntax[i].inArgs.contains("(x)") ) {
+                    syntaxText += opcodedefs[i].opcodeName.simplified();
+                    if (!opcodedefs[i].inArgs.isEmpty()) {
+                        if (opcodedefs[i].inArgs.contains("(x)") ) {
                             syntaxText += "(x)"; // avoid other text like (with no rate restriction)
                         } else {
-                            syntaxText += " " + syntax[i].inArgs.simplified();
+                            syntaxText += " " + opcodedefs[i].inArgs.simplified();
                         }
                     }
                 }
@@ -1000,18 +1012,25 @@ void DocumentView::autoCompleteAtCursor() {
         // check for autcompletion from ALL words in text editor
         auto allWords = getAllWords();
         QStringList menuWords;
+        QString wordlow = word.toLower(); // this must be AFTER the word is corrected
 
+        // any word [was: variables ]
+        //QRegularExpression rxVariables("\\b(g)?[iakS][a-zA-Z0-9_]+"); // this only matches variable names
+        static QRegularExpression rxAnyWord("\\b[A-Za-z][a-zA-Z0-9_]*\\b" ); // any word that starts with a letter
+        QRegularExpressionMatch match = rxAnyWord.match(word);
         for(auto theWord: allWords) {
             if (word != theWord &&
                     theWord.toLower().startsWith(wordlow) &&
-                   !menuWordsSeen.contains(theWord) /* &&
-                    QRegularExpression("\\b[akigp]").match(word).hasMatch()*/ ) {
+                   !menuWordsSeen.contains(theWord)  &&
+                    /* rxVariables.match(word).hasMatch() */
+                    match.hasMatch()    ) {
                 auto a = syntaxMenu->addAction(theWord, this, SLOT(insertAutoCompleteText()));
                 a->setData(theWord);
                 showSyntaxMenu = true;
                 menuWordsSeen.insert(theWord);
             }
         }
+
         for(auto tag: tagWords) {
             if(tag.toLower().startsWith(wordlow) && word != tag) {
                 auto a = syntaxMenu->addAction(tag, this, SLOT(insertAutoCompleteText()));
@@ -1041,11 +1060,12 @@ void DocumentView::textChanged() {
     //test: seems to do the trick and solve "always modified bug
     bool modified = m_mainEditor->document()->isModified();
     setModified(modified);
-    if(!modified)
+    if(!modified) {
         return;
+    }
 
     // This should go somewhere else, maybe when escape is pressed?
-    unmarkErrorLines();
+    // unmarkErrorLines();
 
     if(!(m_mode == EDIT_CSOUND_MODE || m_mode == EDIT_ORC_MODE))
         return;
@@ -1054,12 +1074,18 @@ void DocumentView::textChanged() {
         if(m_autoCompleteTimer != nullptr && m_autoCompleteTimer->isActive()) {
             m_autoCompleteTimer->stop();
         }
-        auto autoCompleteTask = new QTimer(this);
-        autoCompleteTask->setInterval(200);
-        autoCompleteTask->setSingleShot(true);
-        connect(autoCompleteTask, &QTimer::timeout, this, &DocumentView::autoCompleteAtCursor);
-        autoCompleteTask->start();
-        m_autoCompleteTimer = autoCompleteTask;
+        auto key = m_mainEditor->getLastKey();
+        if(key != Qt::Key_Backspace && key != Qt::Key_Delete && key != Qt::Key_Space && key != Qt::Key_Comma && key != Qt::Key_BraceLeft && key != Qt::Key_Colon) {
+            // Only perform autocomplete if the change was not generated by deleting
+            // Also pressing any word separator would never lead to autocomplete
+            auto autoCompleteTask = new QTimer(this);
+            autoCompleteTask->setInterval(m_autoCompleteDelay);
+            autoCompleteTask->setSingleShot(true);
+            connect(autoCompleteTask, &QTimer::timeout, this, &DocumentView::autoCompleteAtCursor);
+            autoCompleteTask->start();
+            m_autoCompleteTimer = autoCompleteTask;
+        }
+
         // this->autoCompleteAtCursor();
     }
 }
@@ -1068,6 +1094,9 @@ void DocumentView::escapePressed()
 {
 	// TODO implment for multiple views
 	if (m_viewMode < 2) {
+        if(errorMarked)
+            unmarkErrorLines();
+
 		if (m_mainEditor->getParameterMode()) {
 			// Force unselecting
 			m_mainEditor->moveCursor(QTextCursor::NextCharacter);
@@ -1181,6 +1210,7 @@ void DocumentView::gotoLineDialog()
     layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     auto lineSpinBox = new QSpinBox(dialog);
+    lineSpinBox->unsetLocale(); // for chinease numbers to work
     lineSpinBox->setRange(0, 99999999);
     layout->addWidget(lineSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -1765,16 +1795,21 @@ void DocumentView::markErrorLines(QList<QPair<int, QString> > lines)
 {
 	// TODO implement for multiple views
 	if (m_viewMode < 2) {
-		bool originallyMod = m_mainEditor->document()->isModified();
+        auto fmt = m_highlighter.getFormat("default");
+        auto fg = fmt.foreground().color();
+        auto bg = fmt.background().color();
+        bool originallyMod = m_mainEditor->document()->isModified();
 		internalChange = true;
 		QTextCharFormat errorFormat;
-		errorFormat.setBackground(QBrush(QColor(255, 182, 193)));
+        // make error background depend on color theme
+        QColor errbg = fg.lightness() < bg.lightness() ? bg.darker(200) : bg.lighter(200);
+        errbg.setRed(errbg.blue() * 2.5);
+        errorFormat.setBackground(QBrush(errbg));
 		QTextCursor cur = m_mainEditor->textCursor();
 		cur.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-		for(int i = 0; i < lines.size(); i++) {
+        for(int i = 0; i < lines.size(); i++) {
 			int line = lines[i].first;
-			QString text = lines[i].second;
-            cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor,line-1);
+            cur.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, line-1);
 			cur.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 			cur.mergeCharFormat(errorFormat);
 			internalChange = true;
@@ -2083,3 +2118,4 @@ void HoverWidget::mousePressEvent(QMouseEvent *ev)
     (void) ev;
 	this->hide();
 }
+

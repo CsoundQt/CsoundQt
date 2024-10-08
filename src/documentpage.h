@@ -188,6 +188,7 @@ public:
     void gotoLine(int line);
     void gotoLineDialog();
     void goBackToPreviousPosition();
+    void autocomplete();
 
 public slots:
 	virtual int play(CsoundOptions *options);
