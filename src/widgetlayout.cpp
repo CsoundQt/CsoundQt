@@ -3047,7 +3047,8 @@ QString WidgetLayout::createScrollNumber(int x, int y, int width, int height, QS
 QString WidgetLayout::createLineEdit(int x, int y, int width, int height, QString widgetLine)
 {
     qDebug() << "createLineEdit";
-    auto parts = widgetLine.split(QRegularExpression("[\\{\\}, ]"), SKIP_EMPTY_PARTS); // was splitRef
+    // the following line was using splitRef, replacing it with QStringView does not make sens, since not run often
+    auto parts = widgetLine.split(QRegularExpression("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
     QStringList quoteParts = widgetLine.split('"');
     if (parts.size()<20 || quoteParts.size()<5)
         return "";

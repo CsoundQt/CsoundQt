@@ -233,6 +233,7 @@ void DocumentView::updateOrcContext(QString orc)
 	}
 	QString instr = cursor.selection().toPlainText();
 
+    // TODO: work on this. At the moment the function is not called, but later QStrinView would be more efficient
     //QList <QStringView> lines = QStringView{instr}.split(u'\n', SKIP_EMPTY_PARTS); // old (preQt6): instr.splitRef("\n", SKIP_EMPTY_PARTS);
     auto lines = instr.split('\n', SKIP_EMPTY_PARTS); // here ther is not sense to use QStringView as QString is needed soon later
 

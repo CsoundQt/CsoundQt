@@ -112,9 +112,8 @@ void Inspector::parseText(const QString &text)
     bool partOfComment = false;
     int i = 0;
     auto lines = text.split('\n'); // was (old): splitRef
-    // could be: auto lines = QStringView{text}.split(u'\n'); - but this requires a lot of changes below,
-    // also converting back to QString, so it probably does not make sense
-    // still - perhaps it is worth rewriting. Test speeds
+    // could be: auto lines = QStringView{text}.split(u'\n'); -  this requires a lot of changes below.
+    // Since this function is not called so often, let's not overcomplicate.
     QRegularExpressionMatch match;
     static QRegularExpression orcStartRx("^\\s*<CsInstruments>");
 
