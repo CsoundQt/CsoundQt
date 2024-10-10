@@ -1183,6 +1183,7 @@ void DocumentPage::setPanelLoopRangeSlot(int index, double start, double end)
 	m_liveFrames[index]->setLoopRange(start,end);
 }
 
+
 void DocumentPage::registerButton(QuteButton *b)
 {
 	//  qDebug();
@@ -1259,7 +1260,7 @@ void DocumentPage::init(QWidget *parent, OpEntryParser *opcodeTree)
 
 	// Connect for clearing marked lines and letting inspector know text has changed
 	connect(m_view, SIGNAL(contentsChanged()), this, SLOT(textChanged()));
-	//   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(moved()));
+
 
 	connect(m_csEngine, SIGNAL(errorLines(QList<QPair<int, QString> >)),
 			m_view, SLOT(markErrorLines(QList<QPair<int, QString> >)));
