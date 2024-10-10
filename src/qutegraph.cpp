@@ -356,8 +356,9 @@ void QuteGraph::setValue(double value)
 void QuteGraph::setValue(QString text)
 {
     bool ok;
-    auto parts = text.split(' ', SKIP_EMPTY_PARTS); // splitRef
-    if(parts[0] == "@set") {
+    //auto parts = text.split(' ', SKIP_EMPTY_PARTS); // splitRef
+    auto parts = QStringView(text).split(' ', SKIP_EMPTY_PARTS);
+    if(parts[0] == QLatin1String("@set")) {
         bool ok;
         int index = parts[1].toInt(&ok);
         if(parts.size() != 2 || !ok) {
@@ -368,7 +369,7 @@ void QuteGraph::setValue(QString text)
         if(index >= 0 && index < curves.size())
             this->setValue(index);
     }
-    else if(parts[0] == "@find") {
+    else if(parts[0] == QLatin1String("@find")) {
         // @find type text
         // type: one of fft, audio, ftable
         // Example: @find fft asignal
@@ -381,13 +382,13 @@ void QuteGraph::setValue(QString text)
             return;
         }
         int index;
-        if(parts[1] == "fft") {
-            index = findCurve(CURVE_SPECTRUM, parts[2]);
+        if(parts[1] == QLatin1String("fft")) {
+            index = findCurve(CURVE_SPECTRUM, parts[2]); // TODO: cresyr overload findCurve(..., QStringView)
         }
-        else if (parts[1] == "audio") {
+        else if (parts[1] == QLatin1String("audio") ) {
             index = findCurve(CURVE_AUDIOSIGNAL, parts[2]);
         }
-        else if (parts[1] == "table") {
+        else if (parts[1] == QLatin1String("table") ) {
             int tabnum = parts[2].toInt(&ok);
             if(!ok) {
                 qDebug()<<"@find table syntax: @find table <tablenumber:int>";
@@ -407,7 +408,7 @@ void QuteGraph::setValue(QString text)
             return;
         }
     }    
-    else if(parts[0] == "@freeze") {
+    else if(parts[0] == QLatin1String("@freeze") ) {
         int index = m_value;
         if(graphtypes[index] != GraphType::GRAPH_SPECTRUM)
             return;
@@ -419,12 +420,12 @@ void QuteGraph::setValue(QString text)
         }
         freezeSpectrum(status);
     }
-    else if (parts[0] == "@showPeak") {
+    else if (parts[0] == QLatin1String("@showPeak") ) {
         if(parts.size() == 2) {
-            if(parts[1] == "true" || parts[1] == "1") {
+            if(parts[1] == QLatin1String("true") || parts[1] == QLatin1String("1")) {
                 m_showPeak = true;
             }
-            else if (parts[1] == "false" || parts[1] == "0") {
+            else if (parts[1] == QLatin1String("false") || parts[1] == QLatin1String("0")) {
                 m_showPeak = false;
             } else {
                 bool ok;
@@ -467,8 +468,8 @@ void QuteGraph::setValue(QString text)
             return;
         }
     }
-    else if(parts[0] == "@getPeak") {
-        m_getPeakChannel = parts[1];
+    else if(parts[0] == QLatin1String("@getPeak")) {
+        m_getPeakChannel = parts[1].toString();
         qDebug() << "@getPeak channel: " << m_getPeakChannel;
         MYFLT *ptr;
         csoundGetChannelPtr(m_ud->csound, &ptr,
@@ -646,7 +647,7 @@ void QuteGraph::applyProperties()
 }
 
 
-int QuteGraph::findCurve(CurveType type, QString text) {
+int QuteGraph::findCurve(CurveType type, QStringView text) {
     // returns the index or -1 if not found
     for (int i = 0; i < curves.size(); i++) {
         if(curves[i]->get_type() != type)

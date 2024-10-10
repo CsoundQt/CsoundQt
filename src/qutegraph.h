@@ -69,7 +69,7 @@ public:
                 m_label->hide();
         }
     }
-    int findCurve(CurveType type, QString text);
+    int findCurve(CurveType type, QStringView text);
 	virtual void applyInternalProperties();
     size_t spectrumGetPeak(Curve *curve, double freq, double relativeBandwidth);
 
