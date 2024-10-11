@@ -112,12 +112,13 @@ QString CsoundOptions::generateCmdLineFlags()
 QStringList CsoundOptions::generateCmdLineFlagsList()
 {
     QStringList opts;
+    static const QRegularExpression wihteSpaceRegex("[\\s]");
 	if (bufferSizeActive)
         opts << "-b" + QString::number(bufferSize);
 	if (HwBufferSizeActive)
         opts << "-B" + QString::number(HwBufferSize);
 	if (additionalFlagsActive && !additionalFlags.trimmed().isEmpty()) {
-        QStringList addFlags = additionalFlags.split(QRegularExpression("[\\s]"),Qt::SkipEmptyParts);
+        QStringList addFlags = additionalFlags.split(wihteSpaceRegex,Qt::SkipEmptyParts);
 		foreach (QString f, addFlags) {
             QDEBUG << "Additional Flags:" << additionalFlags;
             opts << f;

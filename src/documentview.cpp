@@ -237,7 +237,7 @@ void DocumentView::updateOrcContext(QString orc)
     //QList <QStringView> lines = QStringView{instr}.split(u'\n', SKIP_EMPTY_PARTS); // old (preQt6): instr.splitRef("\n", SKIP_EMPTY_PARTS);
     auto lines = instr.split('\n', SKIP_EMPTY_PARTS); // here ther is not sense to use QStringView as QString is needed soon later
 
-    auto rxWordSplit = QRegularExpression("[\\s,+-/\\*\\.\\^\\(\\)\\[\\]$]");
+    static const QRegularExpression rxWordSplit("[\\s,+-/\\*\\.\\^\\(\\)\\[\\]$]");
 	m_localVariables.clear();
     QSet<QString> seen;
     for(QString line: lines) {
@@ -246,7 +246,7 @@ void DocumentView::updateOrcContext(QString orc)
 			continue;
 		}
         auto words = line.split(rxWordSplit, SKIP_EMPTY_PARTS);
-        for(auto word: words) {
+        for(const QString &word: words) {
             if(!seen.contains(word) && !m_opcodeTree->isOpcode(word)) {
                 seen.insert(word);
             }
@@ -601,7 +601,7 @@ QString DocumentView::getActiveSection()
 			m_oldCursorPosition = cursor.position(); // to move back there on next keypress
 			cursor.select(QTextCursor::LineUnderCursor);
 			bool sectionStart = cursor.selectedText().simplified().startsWith("##");
-			while (!sectionStart && !cursor.anchor() == 0) {
+            while (!sectionStart && !(cursor.anchor() == 0)) {
 				cursor.movePosition(QTextCursor::PreviousBlock);
 				cursor.select(QTextCursor::LineUnderCursor);
 				sectionStart = cursor.selectedText().simplified().startsWith("##");
@@ -627,7 +627,7 @@ QString DocumentView::getActiveSection()
 			cursor.select(QTextCursor::LineUnderCursor);
 			QString text = cursor.selectedText().simplified();
 			bool sectionStart = text.startsWith("instr") || text.startsWith(";;");
-			while (!sectionStart && !cursor.anchor() == 0) {
+            while (!sectionStart && !(cursor.anchor() == 0)) {
 				cursor.movePosition(QTextCursor::PreviousBlock);
 				cursor.select(QTextCursor::LineUnderCursor);
 				text = cursor.selectedText().simplified();
@@ -725,7 +725,9 @@ void DocumentView::syntaxCheck()
 	// syntax check
 	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
 	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-    auto words = cursor.selectedText().split(QRegularExpression("\\b"),
+
+    static const QRegularExpression wordBoundary("\\b");
+    auto words = cursor.selectedText().split(wordBoundary,
                                              SKIP_EMPTY_PARTS);
 	bool showHover = false;
 	for(int i = 0; i < words.size(); i++) {
@@ -847,7 +849,8 @@ const QStringList DocumentView::getAllWords() {
         QDEBUG << "Updating all words, time since last update: " << msecs << "msecs";
         TextEditor *editor = m_mainEditor;
         QString wholeText = editor->toPlainText();
-        auto allWords = wholeText.split(QRegularExpression("[" + QRegularExpression::escape("+-*/=#&,\"\'|[]()<>.;:^") + "\\s]"), SKIP_EMPTY_PARTS);
+        static const QRegularExpression wordBoundary("[" + QRegularExpression::escape("+-*/=#&,\"\'|[]()<>.;:^") + "\\s]");
+        auto allWords = wholeText.split(wordBoundary, SKIP_EMPTY_PARTS);
         allWords.removeDuplicates();
         m_lastWordsUpdate = now;
         m_allWords = allWords;
@@ -904,26 +907,26 @@ void DocumentView::autoCompleteAtCursor() {
             return;
     }
 
-    static QRegularExpression rxOpcodeOrInstrAtStart("^\\s*(opcode|instr)");
+    static const QRegularExpression rxOpcodeOrInstrAtStart("^\\s*(opcode|instr)");
     if(rxOpcodeOrInstrAtStart.match(line).hasMatch()) {
         return;
     }
-    static QRegularExpression rxTwoWords("\\s*\\w+\\s+\\w+");
+    static const QRegularExpression rxTwoWords("\\s*\\w+\\s+\\w+");
     bool useFunction = false;
     if(!rxTwoWords.match(line).hasMatch()) {
         useFunction = true;
     }
     // matches long command line options, like --nosound, -+rtaudio, etc.
-    static QRegularExpression rxCommandLineOption("\\s*-([+-])(\\w*)");
+    static const QRegularExpression rxCommandLineOption("\\s*-([+-])(\\w*)");
 
     bool showSyntaxMenu = false;
     QSet<QString>menuWordsSeen;
     QRegularExpressionMatch rxmatch;
     if((rxmatch = rxCommandLineOption.match(line)).hasMatch()) {
         syntaxMenu->clear();
-        auto capt = rxmatch.captured(2);
-        auto options = rxmatch.captured(1)=="-"? m_longOptions: m_longOptions2;
-        for(auto option: options) {
+        QString capt = rxmatch.captured(2);
+        QStringList options = rxmatch.captured(1)=="-"? m_longOptions: m_longOptions2;
+        for(const QString &option: options) {
             if(option.startsWith(capt)) {
                 QAction *a = syntaxMenu->addAction(option, this,
                                                    SLOT(insertAutoCompleteText())); // was: insertParameterText that does not exist any more
@@ -1014,18 +1017,17 @@ void DocumentView::autoCompleteAtCursor() {
         }
         // check for autcompletion from ALL words in text editor
         auto allWords = getAllWords();
-        QStringList menuWords;
+        //QStringList menuWords;
         QString wordlow = word.toLower(); // this must be AFTER the word is corrected
 
         // any word [was: variables ]
         //QRegularExpression rxVariables("\\b(g)?[iakS][a-zA-Z0-9_]+"); // this only matches variable names
-        static QRegularExpression rxAnyWord("\\b[A-Za-z][a-zA-Z0-9_]*\\b" ); // any word that starts with a letter
+        static const QRegularExpression rxAnyWord("\\b[A-Za-z][a-zA-Z0-9_]*\\b" ); // any word that starts with a letter
         QRegularExpressionMatch match = rxAnyWord.match(word);
-        for(auto theWord: allWords) {
+        for(const QString &theWord: allWords) {
             if (word != theWord &&
-                    theWord.toLower().startsWith(wordlow) &&
+                    theWord.startsWith(wordlow, Qt::CaseInsensitive) &&
                    !menuWordsSeen.contains(theWord)  &&
-                    /* rxVariables.match(word).hasMatch() */
                     match.hasMatch()    ) {
                 auto a = syntaxMenu->addAction(theWord, this, SLOT(insertAutoCompleteText()));
                 a->setData(theWord);
@@ -1034,8 +1036,8 @@ void DocumentView::autoCompleteAtCursor() {
             }
         }
 
-        for(auto tag: tagWords) {
-            if(tag.toLower().startsWith(wordlow) && word != tag) {
+        for(const QString &tag: tagWords) {
+            if(tag.startsWith(wordlow, Qt::CaseInsensitive) && word != tag) {
                 auto a = syntaxMenu->addAction(tag, this, SLOT(insertAutoCompleteText()));
                 a->setData(tag);
                 showSyntaxMenu = true;
@@ -1048,7 +1050,8 @@ void DocumentView::autoCompleteAtCursor() {
     if(showSyntaxMenu && !syntaxMenu->actions().isEmpty()) {
         QRect r =  editor->cursorRect();
         QPoint p = QPoint(r.x() + r.width(), r.y() + r.height());
-        syntaxMenu->setDefaultAction(syntaxMenu->actions()[0]);
+        const auto actions = syntaxMenu->actions();
+        syntaxMenu->setDefaultAction(actions[0]);
         syntaxMenu->move(editor->mapToGlobal(p));
         syntaxMenu->show();
     }
@@ -1159,7 +1162,7 @@ void DocumentView::indentNewLine()
 		linecursor.movePosition(QTextCursor::PreviousBlock);
 		linecursor.select(QTextCursor::LineUnderCursor);
 		QString line = linecursor.selectedText();
-        QRegularExpression regex = QRegularExpression("\\s+");
+        static const QRegularExpression regex("\\s+");
 		if (line.indexOf(regex) == 0) {
             // old: m_mainEditor->insertPlainText(regex.cap());
 
@@ -1219,9 +1222,9 @@ void DocumentView::gotoLineDialog()
 
     auto okButton = new QPushButton(tr("Ok"));
     layout->addWidget(okButton, 10, 1, Qt::AlignCenter|Qt::AlignVCenter);
-    connect(okButton, &QPushButton::clicked,
+    connect(okButton, &QPushButton::clicked, this,
             [this, lineSpinBox](){ this->jumpToLine(lineSpinBox->value()); });
-    connect(okButton, &QPushButton::clicked, [dialog](){ dialog->close(); });
+    connect(okButton, &QPushButton::clicked, this, [dialog](){ dialog->close(); });
 
     lineSpinBox->setFocus();
     lineSpinBox->selectAll();
@@ -1368,7 +1371,7 @@ void DocumentView::createContextMenu(QPoint pos)
 		menu->addAction(tr("Show/hide line numbers"), this, SLOT(toggleLineArea()));
 		menu->addSeparator();
 		QMenu *opcodeMenu = menu->addMenu("Opcodes");
-		QMenu *mainMenu = 0;
+        QMenu *mainMenu = 0;
 		QMenu *subMenu;
 		QString currentMain = "";
 		for (int i = 0; i < m_opcodeTree->getCategoryCount(); i++) {
@@ -1381,10 +1384,10 @@ void DocumentView::createContextMenu(QPoint pos)
 			if (categorySplit.size() < 2) {
 				subMenu = mainMenu;
 			}
-			else {
-				subMenu = mainMenu->addMenu(categorySplit[1]);
+            else {
+                subMenu = mainMenu->addMenu(categorySplit[1]);
 			}
-			foreach(Opcode opcode, m_opcodeTree->getOpcodeList(i)) {
+            foreach(Opcode opcode, m_opcodeTree->getOpcodeList(i)) {
 				QAction *action = subMenu->addAction(opcode.opcodeName, this, SLOT(opcodeFromMenu()));
 				QString opcodeText = opcode.outArgs;
 				opcodeText += (!opcode.outArgs.isEmpty()

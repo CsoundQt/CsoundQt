@@ -636,13 +636,15 @@ int DocumentPage::characterCount(bool countExtras)
 int DocumentPage::instrumentCount()
 {
 	QString text = this->getBasicText();
-    return text.count((QRegularExpression("\\n[ \\t]*instr\\s")));
+    static const  QRegularExpression instrRegex("\\n[ \\t]*instr\\s");
+    return text.count(instrRegex);
 }
 
 int DocumentPage::udoCount()
 {
 	QString text = this->getBasicText();
-    return text.count((QRegularExpression("\\n[ \\t]*opcode\\s")));
+    static const  QRegularExpression opcodeRegex("\\n[ \\t]*opcode\\s");
+    return text.count(opcodeRegex);
 }
 
 int DocumentPage::widgetCount()
