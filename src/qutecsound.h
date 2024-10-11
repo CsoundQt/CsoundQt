@@ -302,6 +302,7 @@ private slots:
     void checkSyntaxMenuAction();
     void tabMoved(int to, int from);
     void openExamplesFolder();
+    void setLineAndColumn(int line, int column);
 
     DocumentPage *getCurrentDocumentPage() {
         if(curPage >= documentPages.size())
@@ -555,6 +556,7 @@ private:
         "--limiter", "--udp-echo", "--opcode-dir=", "-+rtmidi", "-+rtaudio",
         "--format"
     };
+    QLabel *lineAndColumnLabel;
 };
 
 class FileOpenEater : public QObject

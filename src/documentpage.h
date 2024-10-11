@@ -246,6 +246,8 @@ public slots:
 	void setPanelTempoSlot(int index, double tempo);
 	void setPanelLoopLengthSlot(int index, double length);
 	void setPanelLoopRangeSlot(int index, double start, double end);
+
+
 private:
 	virtual void init(QWidget *parent,OpEntryParser *opcodeTree);
 	CsoundOptions getParentOptions();
@@ -279,6 +281,7 @@ private slots:
 	void setPanelTempo(LiveEventFrame *panel, double tempo);
 	void setPanelLoopEnabled(LiveEventFrame *panel, bool enabled);
 	void evaluatePython(QString code);
+
 signals:
 	void currentTextUpdated();  // To let inspector know it must update
 	void setCurrentAudioFile(QString name);
