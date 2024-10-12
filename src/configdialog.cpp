@@ -423,6 +423,7 @@ ConfigDialog::~ConfigDialog()
 }
 
 void ConfigDialog::onRtModuleComboBoxChanged(int index) {
+    Q_UNUSED(index);
     // Todo: remember the settings for each backend in a hash table, and set it to the last
     // known value when changed back. Otherwise set it to the default adc/dac
     auto currentText = this->RtModuleComboBox->currentText();

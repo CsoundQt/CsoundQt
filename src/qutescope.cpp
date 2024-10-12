@@ -100,6 +100,8 @@ QString triggerModeToName(TriggerMode t) {
         return "NoTrigger";
     else if(t == TriggerMode::TriggerUp)
         return "TriggerUp";
+    else
+        return QString();
 }
 
 

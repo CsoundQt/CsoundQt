@@ -99,14 +99,14 @@ int MidiHandler::findMidiInPortByName(QString name) {
 	int port = 9999; // stands for None
 #ifdef QCS_RTMIDI
 	// to check agains alsa names wihtout port
-    QRegularExpression re("(\\s\\d+):(\\d+)$");
+    static const QRegularExpression re("(\\s\\d+):(\\d+)$");
     int index = name.indexOf(re);
 	if (index>0) {
 		qDebug()<<name << " seems to be Alsa device. Excluding port part.";
 		name=name.left(index); // remove also space
 	}
 	QString portName;
-	for (int i=0; i<m_midiin->getPortCount(); i++) { // find port number according to the name
+    for (unsigned int i=0; i<m_midiin->getPortCount(); i++) { // find port number according to the name
 		portName = QString::fromStdString(m_midiin->getPortName(i));
 		// for alsa portnames come in formant <portname> <dd:dd> - get rid of the last part to match the device if i
 
@@ -123,14 +123,14 @@ int MidiHandler::findMidiInPortByName(QString name) {
 int MidiHandler::findMidiOutPortByName(QString name) {
 	int port = 9999; // stands for None
 #ifdef QCS_RTMIDI
-    QRegularExpression re("(\\s\\d+):(\\d+)$");
+    static const QRegularExpression re("(\\s\\d+):(\\d+)$");
     int index = name.indexOf(re);
 	if (index>0) {
 		qDebug()<<name << " seems to be Alsa device. Excluding port part.";
 		name=name.left(index);
 	}
 	QString portName;
-	for (int i=0; i<m_midiout->getPortCount(); i++) { // find port number according to the name
+    for (unsigned int i=0; i<m_midiout->getPortCount(); i++) { // find port number according to the name
 		portName = QString::fromStdString(m_midiout->getPortName(i));
 		//qDebug()<<i<< " " << portName;
 		if (portName.startsWith(name)) {

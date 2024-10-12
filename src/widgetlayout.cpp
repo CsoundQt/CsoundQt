@@ -684,7 +684,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         qDebug() << "WidgetLayout::newXmlWidget null element! Aborting.";
         return -1;
     }
-    auto t0 = std::chrono::high_resolution_clock::now();
+    //auto t0 = std::chrono::high_resolution_clock::now();
 
     int ret = 0;
     auto element = mainnode.toElement();
@@ -762,7 +762,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                 this, SLOT(newValue(QPair<QString,double>)));
     }
     else if (type == "BSBController") {
-        auto t0 = std::chrono::high_resolution_clock::now();
+        //auto t0 = std::chrono::high_resolution_clock::now();
         auto w = new QuteMeter(this);
         widget = static_cast<QuteWidget *>(w);
         connect(widget, SIGNAL(newValue(QPair<QString,double>)),
@@ -1562,7 +1562,7 @@ QString WidgetLayout::getCsladspaLines()
 QString WidgetLayout::getQml()
 {
     QString qml = "import QtQuick 2.0\nimport QtQuick.Controls 2.0 // NB! Requires Qt 5.7 or later. Rewrite with QtQuick.Controls 1.X if using older Qt versions \n\n";
-    QString s2 = QString(R"()");
+    //QString s2 = QString(R"()");
     qml += "Rectangle {\n";
     QColor bgcolor = this->palette().color(QWidget::backgroundRole());
     qml+=QString("\tcolor: \"%1\"\n").arg(bgcolor.name());
@@ -2852,6 +2852,7 @@ void WidgetLayout::contextMenuEvent(QContextMenuEvent *event)
 }
 
 void WidgetLayout::closeEvent(QCloseEvent *event) {
+    Q_UNUSED(event);
     emit this->windowStatus(false);
 }
 
@@ -3086,11 +3087,12 @@ QString WidgetLayout::createLineEdit(int x, int y, int width, int height, QStrin
 
 QString WidgetLayout::createSpinBox(int x, int y, int width, int height, QString widgetLine)
 {
-    QStringList parts = widgetLine.split(QRegularExpression("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
+    const static QRegularExpression regex("[\\{\\}, ]");
+    QStringList parts = widgetLine.split(regex, SKIP_EMPTY_PARTS);
     QStringList quoteParts = widgetLine.split('"');
     if (parts.size()<20 || quoteParts.size()<5)
         return "";
-    QStringList lastParts = quoteParts[4].split(QRegularExpression("[\\{\\}, ]"), SKIP_EMPTY_PARTS);
+    QStringList lastParts = quoteParts[4].split(regex, SKIP_EMPTY_PARTS);
     if (lastParts.size() < 9)
         return "";
     QuteSpinBox *widget= new QuteSpinBox(this);
@@ -3391,7 +3393,7 @@ QString WidgetLayout::createDummy(int x, int y, int width, int height, QString w
 }
 
 QString WidgetLayout::createTableDisplay(int x, int y, int width, int height, QString widgetLine) {
-
+    Q_UNUSED(widgetLine);
     QuteTable *widget = new QuteTable(this);
     widget->setProperty("QCS_x", x);
     widget->setProperty("QCS_y", y);
