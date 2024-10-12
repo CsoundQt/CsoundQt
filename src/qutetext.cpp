@@ -865,8 +865,6 @@ void QuteLineEdit::applyInternalProperties()
 	setTextColor(property("QCS_color").value<QColor>());
 	QString borderStyle = (property("QCS_bordermode").toString() == "border" ? "solid": "none");
 
-	int new_fontSize = 0;
-	int totalHeight = 0;
 	double fontSize = (property("QCS_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
 
 #ifdef USEFONTPIXELSIZE
@@ -881,6 +879,8 @@ void QuteLineEdit::applyInternalProperties()
                             + "; border-style: " + borderStyle
                             + "; }");
 #else
+    int new_fontSize = 0;
+    int totalHeight = 0;
 	while (totalHeight < fontSize + 1) {
 		new_fontSize++;
 		QFont font(property("QCS_font").toString(), new_fontSize);

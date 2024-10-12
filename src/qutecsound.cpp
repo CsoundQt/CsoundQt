@@ -2665,6 +2665,8 @@ void CsoundQt::setHtmlFullScreen(bool full)
 		//this->showNormal();
 		m_fullScreenComponent = "";
     }
+# else
+    Q_UNUSED(full);
 #endif
 }
 
@@ -2834,6 +2836,8 @@ void CsoundQt::showHtml5Gui(bool show)
 {
 #if defined(QCS_QTHTML)
     csoundHtmlView->setVisible(show);
+#else
+    Q_UNUSED(show);
 #endif
 }
 

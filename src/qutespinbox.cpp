@@ -311,8 +311,6 @@ void QuteSpinBox::applyInternalProperties()
     w->setAlignment(align);
 	setTextColor(property("QCS_color").value<QColor>());
 
-	int new_fontSize = 0;
-	int totalHeight = 0;
 	double fontSize = (property("QCS_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
 
     auto bgstr = property("QCS_bgcolormode").toBool() ?
@@ -331,6 +329,8 @@ void QuteSpinBox::applyInternalProperties()
         .arg(property("QCS_color").value<QColor>().name())
         .arg(bgstr);
 #else
+    int new_fontSize = 0;
+    int totalHeight = 0;
     while (totalHeight < fontSize + 1) {
         new_fontSize++;
         QFont font(property("QCS_font").toString(), new_fontSize);

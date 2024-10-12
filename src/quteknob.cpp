@@ -36,6 +36,7 @@ void QVdial::mousePressEvent (QMouseEvent *event) {
 }
 
 void QVdial::mouseReleaseEvent (QMouseEvent *event) {
+    Q_UNUSED(event);
     m_dragging = false;
 }
 

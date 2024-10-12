@@ -240,7 +240,7 @@ void QuteGraph::mouseReleased() {
     m_showPeakTemp = false;
     int index = (int)m_value;
     m_spectrumPeakTexts[index]->setVisible(m_showPeak);
-    auto scene = getView(index)->scene();
+    // auto scene = getView(index)->scene();
     m_spectrumPeakMarkers[index]->setVisible(m_showPeak);
 }
 
@@ -1165,7 +1165,7 @@ size_t QuteGraph::spectrumGetPeak(Curve *curve, double freq, double bandwidth) {
     qreal maxvalue = 0;
     size_t maxindex = 0;
     if(!m_frozen) {
-        for(int i=index0; i<index1; i++) {
+        for(auto i=index0; i<index1; i++) {
             auto data = curve->get_data(i);
             if (data > maxvalue) {
                 maxvalue = data;
@@ -1174,7 +1174,7 @@ size_t QuteGraph::spectrumGetPeak(Curve *curve, double freq, double bandwidth) {
         }
     }
     else {
-        for(int i=index0; i<index1; i++) {
+        for(auto i=index0; i<index1; i++) {
             auto data = frozenCurve[i];
             if (data > maxvalue) {
                 maxvalue = data;
@@ -1254,7 +1254,7 @@ void QuteGraph::freezeSpectrum(bool status) {
     if(status) {
         m_frozen = true;
         frozenCurve.resize(curve->get_size());
-        for(int i=0; i < curve->get_size(); i++) {
+        for(size_t i=0; i < curve->get_size(); i++) {
             frozenCurve[i] = curve->get_data(i);
         }
     } else {
@@ -1370,7 +1370,7 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
         markerText->setPos(markerX, markerY);
         double factor = nyquist / curveSize;
         double peakFreq;
-        if(peakIndex <= 1 || peakIndex >= curveSize - 2) {
+        if(peakIndex <= 1 || peakIndex >= static_cast<size_t>(curveSize - 2) ) {
             peakFreq = factor * peakIndex;
         }
         else {
@@ -1618,6 +1618,7 @@ void QuteTableWidget::paintGrid(QPainter *painter) {
 
 
 void QuteTableWidget::paintEvent(QPaintEvent *event) {
+    Q_UNUSED(event);
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::NoPen);

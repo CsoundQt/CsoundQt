@@ -612,7 +612,7 @@ void QuteMeter::value2Changed(double value2)
 
 MeterWidget::MeterWidget(QWidget *parent) : QGraphicsView(parent)
 {
-    auto t0 = std::chrono::high_resolution_clock::now();
+    //auto t0 = std::chrono::high_resolution_clock::now();
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setAlignment(Qt::AlignLeft | Qt::AlignTop);

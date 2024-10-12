@@ -3,6 +3,7 @@
 
 
 SelectColorButton::SelectColorButton(QWidget* parent) {
+    Q_UNUSED(parent);
     connect( this, SIGNAL(clicked()), this, SLOT(selectColor()) );
 }
 

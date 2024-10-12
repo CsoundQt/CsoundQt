@@ -145,8 +145,13 @@ int main(int argc, char *argv[])
     QString language = qsettings.value("language", QLocale::system().name()).toString();
     qsettings.endGroup();
     QTranslator translator;
-    translator.load(QString(":/translations/qutecsound_") + language);
-    qapp.installTranslator(&translator);
+    bool loaded = translator.load(QString(":/translations/qutecsound_") + language);
+    if (loaded) {
+        qapp.installTranslator(&translator);
+    } else {
+        QDEBUG << "Could load translator";
+    }
+
     CsoundQt *csoundQt = new CsoundQt(fileNames);
     if (!csoundQt->startServer())
         qDebug()<<"Could not start local server.";
