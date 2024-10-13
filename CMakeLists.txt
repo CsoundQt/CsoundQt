@@ -5,6 +5,8 @@ project(CsoundQt VERSION 0.1 LANGUAGES CXX)
 option(CSQT_BUILD_DEBUGGER_SUPPORT "Build Debugger Support" OFF)
 option(CSQT_BUILD_RECORDING_SUPPORT "Build recording support" ON)
 option(CSQT_BUILD_RTMIDI_SUPPORT "Build Internal MIDI (rtmidi) support" ON)
+option(CSQT_BUILD_HTML_SUPPORT "Build Html support" ON)
+
 
 # for user defined options: rename Custom.cmake.ex to Custom.cmake
 # uncomment neccessary variable and make changes according to your system
@@ -19,7 +21,6 @@ endif()
 include("sources.cmake")
 
 # TODOs
-# * rtmidi - make it default, not optional
 # * Build for Windows
 # * Build for MacOS
 # * Package for MacOS
@@ -106,6 +107,32 @@ if(CSQT_BUILD_RTMIDI_SUPPORT)
     target_sources(CsoundQt PRIVATE ${HEADERS} ${SOURCES})
     message("Building internal MIDI (rtmidi) support.")
 endif(CSQT_BUILD_RTMIDI_SUPPORT)
+
+
+if(CSQT_BUILD_HTML_SUPPORT)
+    message(STATUS "Building HTML support")
+    target_compile_definitions(CsoundQt PRIVATE QCS_QTHTML USE_WEBENGINE) # TODO: change QCS_ to CSQT later in entire code
+
+    target_sources(CsoundQt PRIVATE
+        src/csoundhtmlview.cpp
+        src/csoundhtmlwrapper.cpp
+        src/CsoundHtmlOnlyWrapper.cpp
+    )
+
+    #target_include_directories(CsoundQt PRIVATE src)
+
+    # # Headers are typically handled by the IDE, but you can also explicitly list them if needed
+    # set(HEADERS
+    #     src/csoundhtmlview.h
+    #     src/csoundhtmlwrapper.h
+    #     src/CsoundHtmlOnlyWrapper.h
+    # )
+
+    find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network WebEngineWidgets WebChannel)
+    target_link_libraries(CsoundQt PRIVATE Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::WebEngineWidgets Qt${QT_VERSION_MAJOR}::WebChannel)
+endif()
+
+
 
 
 # LINUX definition
