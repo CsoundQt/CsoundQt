@@ -71,7 +71,7 @@ private:
     CsoundHtmlOnlyWrapper csoundHtmlOnlyWrapper;
     CsoundEngine *m_csoundEngine;
     //QTemporaryFile tempHtml;
-    QFile htmlfile;
+    QFile htmlFile;
     CsoundOptions * m_options;
 #ifdef USE_WEBENGINE
 	QString m_debugPort;

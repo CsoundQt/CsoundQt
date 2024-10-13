@@ -43,6 +43,7 @@ public:
 	bool externalBrowser;
 	QString docDir;
     void setIconTheme(QString theme);
+    void changeFontSize(int change);
 
 private:
 	QTextDocument::FindFlags findFlags;
@@ -75,8 +76,6 @@ public slots:
             raise();
     }
     void toggleFindBarVisible(bool show);
-    void increaseFontSize();
-    void decreaseFontSize();
 
 
 private:

@@ -118,19 +118,6 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	m_oldCursorPosition = -1; // 0 or positive, if cursor needs to be moved there
     markCurrentPosition();
 
-    //test
-    // try changing font size:
-    QAction *increaseFontAction = new QAction(this);
-    QAction *decreaseFontAction = new QAction(this);
-    increaseFontAction->setShortcut(QKeySequence::ZoomIn);
-    increaseFontAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    decreaseFontAction->setShortcut(QKeySequence::ZoomOut);
-    decreaseFontAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    connect(increaseFontAction, &QAction::triggered, this, &DocumentView::increaseFontSize );
-    connect(decreaseFontAction, &QAction::triggered, this, &DocumentView::decreaseFontSize);
-    addAction(increaseFontAction);
-    addAction(decreaseFontAction);
-
 }
 
 DocumentView::~DocumentView()
@@ -700,7 +687,11 @@ void DocumentView::syntaxCheck()
     editor = m_viewMode < 2 ? m_mainEditor : (TextEditor *) sender();
     m_currentEditor = editor ; // for parenthesis functions
 
-	QTextCursor cursor = editor->textCursor();
+    QTextCursor cursor = editor->textCursor();
+
+    // send cursor position
+    emit newLineAndColumn(cursor.blockNumber()+1 , cursor.positionInBlock()+1);
+
 
 	// matchparenthesis. Code by Geir Vatterkar see https://doc.qt.io/archives/qq/QtQuarterly31.pdf
 	// some corrections by Heinz van Saanen http://qt-apps.org/content/show.php/CLedit?content=125532 ; comments: http://www.qtcentre.org/archive/index.php/t-31084.html
@@ -1215,6 +1206,7 @@ void DocumentView::gotoLineDialog()
     layout->addWidget(label, 0, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     auto lineSpinBox = new QSpinBox(dialog);
+    lineSpinBox->unsetLocale(); // for chinease numbers to work
     lineSpinBox->setRange(0, 99999999);
     layout->addWidget(lineSpinBox, 0, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -2123,21 +2115,3 @@ void HoverWidget::mousePressEvent(QMouseEvent *ev)
 	this->hide();
 }
 
-
-void DocumentView::increaseFontSize()
-{
-    QFont font = m_mainEditor->font();
-    int currentSize = font.pointSize();
-    QDEBUG << "Current fontsize: " << currentSize;
-    font.setPointSize(++currentSize);
-    m_mainEditor->setFont(font);
-}
-
-void DocumentView::decreaseFontSize()
-{
-    QFont font = m_mainEditor->font();
-    int currentSize = font.pointSize();
-    QDEBUG << "Current fontsize: " << currentSize;
-    font.setPointSize(--currentSize);
-    m_mainEditor->setFont(font);
-}

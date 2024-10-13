@@ -159,8 +159,6 @@ public slots:
 
 	void insertChn_k(QString channel);
 
-    void increaseFontSize();
-    void decreaseFontSize();
 
 protected:
 	virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -228,6 +226,8 @@ signals:
 	void contentsChanged();
 	void closeExtraPanels();
 	void evaluate(QString code);
+    void newLineAndColumn(int line, int column);
+
 };
 
 #endif // DOCUMENTVIEW_H

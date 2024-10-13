@@ -1122,6 +1122,18 @@ void CsoundQt::openExamplesFolder()
     QDesktopServices::openUrl(examplePath);
 }
 
+void CsoundQt::setLineAndColumn(int line, int column)
+{
+    QString labelText = QString("%1 : %2, %3 : ").arg(tr("Line")).arg(line).arg(tr("Column"));
+    if (column>80) {
+        QString color = "red"; //isDarkPalette ? "#FF4C4C" : "red";
+        labelText += QString("<span style='color:%1;'><b>%2</b></span>").arg(color).arg(column);
+    } else {
+        labelText +=  QString::number(column);
+    }
+    lineAndColumnLabel->setText(labelText);
+}
+
 QString CsoundQt::getSaveFileName()
 {
     bool widgetsVisible = widgetPanel->isVisible();
@@ -2907,6 +2919,34 @@ void CsoundQt::openExternalBrowser(QUrl url)
     //QDesktopServices::openUrl(url); // this opens it twice
 }
 
+void CsoundQt::increaseFontSize()
+{
+    changeFontSize(1);
+}
+
+void CsoundQt::decreaseFontSize()
+{
+    changeFontSize(-1);
+}
+
+void CsoundQt::changeFontSize(int change)
+{
+    if (helpPanel->hasFocus() ) {
+        // QDEBUG << "change helpPanel size" << change;
+        helpPanel->changeFontSize(change);
+    }  else {
+        m_options->fontPointSize += change; // this may affect the pad's font size as well...
+        // QDEBUG << "main Editor size" << m_options->fontPointSize;
+        for (int i = 0; i < documentPages.size(); i++) {
+            documentPages[i]->setTextFont(QFont(m_options->font, (int) m_options->fontPointSize));
+        }
+        // apply the same size to code pad (maybe should be separate but so far it has used the same size.
+        DocumentView *pad = static_cast<LiveCodeEditor*>(m_scratchPad->widget())->getDocumentView();
+        pad->setFont(QFont(m_options->font, (int) m_options->fontPointSize));
+    }
+    // console live changing not supported now, possible only through Configuration Dialog
+}
+
 void CsoundQt::openPdfFile(QString name)
 {
     if (!m_options->pdfviewer.isEmpty()) {
@@ -4369,6 +4409,16 @@ void CsoundQt::createActions()
     //	showParametersAct = new QAction(tr("Show available parameters"),this);
     //	connect(showParametersAct,SIGNAL(triggered()), this, SLOT(showParametersInEditor()));
 
+    // font size ZoomIn, ZoomOut
+    QAction *increaseFontAction = new QAction(this);
+    QAction *decreaseFontAction = new QAction(this);
+    increaseFontAction->setShortcut(QKeySequence::ZoomIn);
+    decreaseFontAction->setShortcut(QKeySequence::ZoomOut);
+    connect(increaseFontAction, &QAction::triggered, this, &CsoundQt::increaseFontSize );
+    connect(decreaseFontAction, &QAction::triggered, this, &CsoundQt::decreaseFontSize);
+    addAction(increaseFontAction);
+    addAction(decreaseFontAction);
+
     setKeyboardShortcutsList();
     setDefaultKeyboardShortcuts();
 }
@@ -4489,6 +4539,10 @@ void CsoundQt::connectActions()
     connect(unindentAct, SIGNAL(triggered()), doc, SLOT(unindent()));
     connect(killLineAct, SIGNAL(triggered()), doc, SLOT(killLine()));
     connect(killToEndAct, SIGNAL(triggered()), doc, SLOT(killToEnd()));
+
+    // line and column number connection
+    connect(doc->getView(), SIGNAL(newLineAndColumn(int, int)), this, SLOT(setLineAndColumn(int,int)));
+
     // connect(gotoLineAct, SIGNAL(triggered()), doc, SLOT(gotoLineDialog()));
     //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
     //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
@@ -5100,7 +5154,10 @@ void CsoundQt::createStatusBar()
 {
     auto statusbar = statusBar();
     statusbar->showMessage(tr("Ready"));
-    // TODO: add widgets on the right
+
+    lineAndColumnLabel = new QLabel();
+    setLineAndColumn(0,0);
+    statusbar->addPermanentWidget(lineAndColumnLabel);
 }
 
 void CsoundQt::readSettings()
