@@ -16,6 +16,7 @@ else()
     message(STATUS "Not using Custom.cmake file.")
 endif()
 
+include("sources.cmake")
 
 # TODOs
 # * rtmidi - make it default, not optional
@@ -46,174 +47,7 @@ else()
   message(FATAL_ERROR "Only Qt5 is currently supported")
 endif(QT_VERSION_MAJOR EQUAL 5)
 
-set(PROJECT_SOURCES
-  # Resources
-  "src/application.qrc"
-  "src/pythonscripts.qrc"
-  "src/icons.qrc"
-  "src/qml_resources.qrc"
 
-  # Forms
-  "src/about.ui"
-  "src/configdialog.ui"
-  "src/findreplace.ui"
-  "src/keyboardshortcuts.ui"
-  "src/keyselector.ui"
-  "src/liveeventcontrol.ui"
-  "src/liveeventframe.ui"
-  "src/utilitiesdialog.ui"
-  "src/appdetailspage.ui"
-  "src/pluginspage.ui"
-  "src/additionalfilespage.ui"
-  "src/filebeditor.ui"
-  src/midilearndialog.ui
-  src/debugpanel.ui
-  src/dockhelp.ui
-  src/livecodeeditor.ui
-  src/newbreakpointdialog.ui
-  src/html5guidisplay.ui
-
-  # Headers
-  "src/about.h"
-  "src/configdialog.h"
-  "src/configlists.h"
-  "src/console.h"
-  "src/csoundengine.h"
-  "src/csoundoptions.h"
-  "src/curve.h"
-  "src/dockhelp.h"
-  "src/documentpage.h"
-  "src/documentview.h"
-  "src/dotgenerator.h"
-  "src/eventsheet.h"
-  "src/findreplace.h"
-  "src/framewidget.h"
-  "src/graphicwindow.h"
-  "src/highlighter.h"
-  "src/inspector.h"
-  "src/keyboardshortcuts.h"
-  "src/liveeventcontrol.h"
-  "src/liveeventframe.h"
-  "src/node.h"
-  "src/opentryparser.h"
-  "src/options.h"
-  "src/qutebutton.h"
-  "src/qutecheckbox.h"
-  "src/qutecombobox.h"
-  "src/quteconsole.h"
-  "src/qutecsound.h"
-  "src/qutedummy.h"
-  "src/qutegraph.h"
-  "src/quteknob.h"
-  "src/qutemeter.h"
-  "src/qutescope.h"
-  "src/quteslider.h"
-  "src/qutespinbox.h"
-  "src/qutetext.h"
-  "src/qutewidget.h"
-  "src/texteditor.h"
-  "src/types.h"
-  "src/utilitiesdialog.h"
-  "src/widgetlayout.h"
-  "src/widgetpanel.h"
-  "src/widgetpreset.h"
-  "src/qutesheet.h"
-  "src/basedocument.h"
-  "src/baseview.h"
-  "src/appwizard.h"
-  "src/appdetailspage.h"
-  "src/pluginspage.h"
-  "src/additionalfilespage.h"
-  "src/scoreeditor.h"
-  "src/filebeditor.h"
-  "src/myslider.h"
-  "src/risset.h"
-  "src/selectcolorbutton.h"
-  "src/midihandler.h"
-  "src/midilearndialog.h"
-  "src/debugpanel.h"
-  "src/livecodeeditor.h"
-  "src/newbreakpointdialog.h"
-  #src/CsoundHtmlOnlyWrapper.h
-
-  # Sources
-  "src/about.cpp"
-  "src/configdialog.cpp"
-  "src/configlists.cpp"
-  "src/console.cpp"
-  "src/csoundengine.cpp"
-  "src/csoundoptions.cpp"
-  "src/curve.cpp"
-  "src/dockhelp.cpp"
-  "src/documentpage.cpp"
-  "src/documentview.cpp"
-  "src/dotgenerator.cpp"
-  "src/eventsheet.cpp"
-  "src/findreplace.cpp"
-  "src/framewidget.cpp"
-  "src/graphicwindow.cpp"
-  "src/highlighter.cpp"
-  "src/inspector.cpp"
-  "src/keyboardshortcuts.cpp"
-  "src/liveeventcontrol.cpp"
-  "src/liveeventframe.cpp"
-  "src/main.cpp"
-  "src/node.cpp"
-  "src/opentryparser.cpp"
-  "src/options.cpp"
-  "src/qutebutton.cpp"
-  "src/qutecheckbox.cpp"
-  "src/qutecombobox.cpp"
-  "src/quteconsole.cpp"
-  "src/qutecsound.cpp"
-  "src/qutedummy.cpp"
-  "src/qutegraph.cpp"
-  "src/quteknob.cpp"
-  "src/qutemeter.cpp"
-  "src/qutescope.cpp"
-  "src/quteslider.cpp"
-  "src/qutespinbox.cpp"
-  "src/qutetext.cpp"
-  "src/qutewidget.cpp"
-  "src/texteditor.cpp"
-  "src/utilitiesdialog.cpp"
-  "src/widgetlayout.cpp"
-  "src/widgetpanel.cpp"
-  "src/widgetpreset.cpp"
-  "src/qutesheet.cpp"
-  "src/basedocument.cpp"
-  "src/baseview.cpp"
-  "src/appwizard.cpp"
-  "src/appdetailspage.cpp"
-  "src/pluginspage.cpp"
-  "src/additionalfilespage.cpp"
-  "src/scoreeditor.cpp"
-  "src/filebeditor.cpp"
-  "src/risset.cpp"
-  "src/selectcolorbutton.cpp"
-  "src/midihandler.cpp"
-  "src/midilearndialog.cpp"
-  "src/debugpanel.cpp"
-  "src/livecodeeditor.cpp"
-  "src/newbreakpointdialog.cpp"
-  #src/csoundhtmlview.cpp
-  #src/CsoundHtmlOnlyWrapper.cpp
-)
-
-set(TS_FILES "src/translations/qutecsound_en.ts"
-  "src/translations/qutecsound_es.ts"
-  "src/translations/qutecsound_de.ts"
-  "src/translations/qutecsound_pt.ts"
-  "src/translations/qutecsound_fr.ts"
-  "src/translations/qutecsound_it.ts"
-  "src/translations/qutecsound_tr.ts"
-  "src/translations/qutecsound_el.ts"
-  "src/translations/qutecsound_uk.ts"
-  "src/translations/qutecsound_fi.ts"
-  "src/translations/qutecsound_ru.ts"
-  "src/translations/qutecsound_fa.ts"
-  "src/translations/qutecsound_kr.ts"
-)
 
 set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/translations")
 
@@ -266,12 +100,8 @@ if(CSQT_BUILD_RTMIDI_SUPPORT)
     target_compile_definitions(CsoundQt PRIVATE QCS_RTMIDI) # TODO: perhaps CSQT_RTMIDI let's change naming conventions from qutecsound to CsoundQt in v7
 
     set(RTMIDI_DIR "${CMAKE_HOME_DIRECTORY}/rtmidi")
-
-    # Add the headers and sources
     set(HEADERS "${RTMIDI_DIR}/RtMidi.h")
     set(SOURCES "${RTMIDI_DIR}/RtMidi.cpp")
-
-    #include_directories(${RTMIDI_DIR})
 
     target_sources(CsoundQt PRIVATE ${HEADERS} ${SOURCES})
     message("Building internal MIDI (rtmidi) support.")
