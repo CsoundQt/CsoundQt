@@ -4,6 +4,7 @@ project(CsoundQt VERSION 0.1 LANGUAGES CXX)
 
 option(CSQT_BUILD_DEBUGGER_SUPPORT "Build Debugger Support" OFF)
 option(CSQT_BUILD_RECORDING_SUPPORT "Build recording support" ON)
+option(CSQT_BUILD_RTMIDI_SUPPORT "Build Internal MIDI (rtmidi) support" ON)
 
 # for user defined options: rename Custom.cmake.ex to Custom.cmake
 # uncomment neccessary variable and make changes according to your system
@@ -17,6 +18,7 @@ endif()
 
 
 # TODOs
+# * rtmidi - make it default, not optional
 # * Build for Windows
 # * Build for MacOS
 # * Package for MacOS
@@ -258,6 +260,24 @@ if(CSQT_BUILD_RECORDING_SUPPORT)
 endif(CSQT_BUILD_RECORDING_SUPPORT)
 
 
+# RTMIDI -  the sources should be in ./rtmidi, pulled with git submodules
+# git submodule update --init --recursive (first time) or git submodule update --recursive (updating)
+if(CSQT_BUILD_RTMIDI_SUPPORT)
+    target_compile_definitions(CsoundQt PRIVATE QCS_RTMIDI) # TODO: perhaps CSQT_RTMIDI let's change naming conventions from qutecsound to CsoundQt in v7
+
+    set(RTMIDI_DIR "${CMAKE_HOME_DIRECTORY}/rtmidi")
+
+    # Add the headers and sources
+    set(HEADERS "${RTMIDI_DIR}/RtMidi.h")
+    set(SOURCES "${RTMIDI_DIR}/RtMidi.cpp")
+
+    #include_directories(${RTMIDI_DIR})
+
+    target_sources(CsoundQt PRIVATE ${HEADERS} ${SOURCES})
+    message("Building internal MIDI (rtmidi) support.")
+endif(CSQT_BUILD_RTMIDI_SUPPORT)
+
+
 # LINUX definition
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
     set(LINUX YES)
@@ -281,6 +301,8 @@ elseif(APPLE)
 
 
 elseif(LINUX)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread") # seems necessary, see https://stackoverflow.com/questions/34143265/undefined-reference-to-symbol-pthread-createglibc-2-2-5
+
   find_library(CSOUND_LIBRARY csound64
     PATHS /usr/local/lib
           /usr/lib
@@ -297,8 +319,24 @@ elseif(LINUX)
 
   message("Using csound: ${CSOUND_LIBRARY} ${CSND6_LIBRARY}")
 
+  if(CSQT_BUILD_RTMIDI_SUPPORT)
+      target_compile_definitions(CsoundQt PRIVATE __LINUX_ALSASEQ__ __LINUX_ALSA__)
+
+      # Link against the ALSA library
+      target_link_libraries(CsoundQt PRIVATE asound)
+
+      # Check if the JACK library exists in common paths
+      find_library(JACK_LIB NAMES jack HINTS /usr/lib64 /usr/lib /usr/local/lib)
+
+      if(JACK_LIB)
+          message(STATUS "FOUND JACK")
+          target_compile_definitions(CsoundQt PRIVATE __UNIX_JACK__)
+          target_link_libraries(CsoundQt PRIVATE ${JACK_LIB})
+      endif()
+  endif()
+
   target_link_libraries(CsoundQt PRIVATE ${CSOUND_LIBRARY} ${CSND6_LIBRARY})
-  target_include_directories(CsoundQt PRIVATE ${CSOUND_INCLUDE_PATHS})
+  target_include_directories(CsoundQt PRIVATE ${CSOUND_INCLUDE_PATHS} ${RTMIDI_DIR})
 
 else()
   message(FATAL_ERROR "Unsupported platform")
@@ -341,3 +379,27 @@ install(TARGETS CsoundQt
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(CsoundQt)
 endif()
+
+# for testing only:
+
+get_target_property(INCLUDE_DIRS CsoundQt INCLUDE_DIRECTORIES)
+
+if(INCLUDE_DIRS)
+    message(STATUS "Include paths for target 'CsoundQt':")
+    foreach(INCLUDE_DIR ${INCLUDE_DIRS})
+        message(STATUS "    ${INCLUDE_DIR}")
+    endforeach()
+else()
+    message(STATUS "No include directories found for target 'CsoundQt'.")
+endif()
+
+get_target_property(LINK_LIBS CsoundQt LINK_LIBRARIES)
+if(LINK_LIBS)
+    message(STATUS "Linked libraries for target 'CsoundQt':")
+    foreach(LIB ${LINK_LIBS})
+        message(STATUS "    ${LIB}")
+    endforeach()
+else()
+    message(STATUS "No libraries linked to target 'CsoundQt'.")
+endif()
+
