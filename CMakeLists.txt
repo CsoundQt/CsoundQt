@@ -160,21 +160,46 @@ elseif(APPLE)
 elseif(LINUX)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread") # seems necessary, see https://stackoverflow.com/questions/34143265/undefined-reference-to-symbol-pthread-createglibc-2-2-5
 
+  unset(CSOUND_LIBRARY CACHE) # necessary to avoid taking old value from cache
+  unset(CSND6_LIBRARY CACHE)
+
+  if(DEFINED CSOUND_LIBRARY_PATH) # user define in custom.cmake
+      set(CSOUND_LIBRARY_PATHS ${CSOUND_LIBRARY_PATH})
+  else()
+      set(CSOUND_LIBRARY_PATHS
+          /usr/local/lib
+          /usr/lib
+          /usr/lib64
+      )
+  endif()
+
+  #message(STATUS "Csound library paths: ${CSOUND_LIBRARY_PATHS}")
+
   find_library(CSOUND_LIBRARY csound64
-    PATHS /usr/local/lib
-          /usr/lib
+    HINTS ${CSOUND_LIBRARY_PATH}
+    PATHS ${CSOUND_LIBRARY_PATHS}
     REQUIRED)
+
   find_library(CSND6_LIBRARY csnd6
-    PATHS /usr/local/lib
-          /usr/lib
+    PATHS ${CSOUND_LIBRARY_PATHS}
     REQUIRED)
 
-  #? how to add custom user defined paths from Custom.cmake ?
-  set(CSOUND_INCLUDE_PATHS /usr/local/include/csound
-              /usr/include/csound
-  )
+  if(CSOUND_LIBRARY)
+    message(STATUS "Csound library found at: ${CSOUND_LIBRARY}")
+  else()
+    message(FATAL_ERROR "Csound library not found.")
+  endif()
 
-  message("Using csound: ${CSOUND_LIBRARY} ${CSND6_LIBRARY}")
+
+    if(DEFINED CSOUND_INCLUDE_PATH) # in custom.cmake
+        set(CSOUND_INCLUDE_PATHS ${CSOUND_INCLUDE_PATH})
+    else()
+        set(CSOUND_INCLUDE_PATHS
+            /usr/local/include/csound
+            /usr/include/csound
+        )
+    endif()
+
 
   if(CSQT_BUILD_RTMIDI_SUPPORT)
       target_compile_definitions(CsoundQt PRIVATE __LINUX_ALSASEQ__ __LINUX_ALSA__)
