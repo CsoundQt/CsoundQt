@@ -1125,6 +1125,18 @@ void CsoundQt::openExamplesFolder()
     QDesktopServices::openUrl(examplePath);
 }
 
+void CsoundQt::setLineAndColumn(int line, int column)
+{
+    QString labelText = QString("%1 : %2, %3 : ").arg(tr("Line")).arg(line).arg(tr("Column"));
+    if (column>80) {
+        QString color = "red"; //isDarkPalette ? "#FF4C4C" : "red";
+        labelText += QString("<span style='color:%1;'><b>%2</b></span>").arg(color).arg(column);
+    } else {
+        labelText +=  QString::number(column);
+    }
+    lineAndColumnLabel->setText(labelText);
+}
+
 QString CsoundQt::getSaveFileName()
 {
     bool widgetsVisible = widgetPanel->isVisible();
@@ -4530,6 +4542,10 @@ void CsoundQt::connectActions()
     connect(unindentAct, SIGNAL(triggered()), doc, SLOT(unindent()));
     connect(killLineAct, SIGNAL(triggered()), doc, SLOT(killLine()));
     connect(killToEndAct, SIGNAL(triggered()), doc, SLOT(killToEnd()));
+
+    // line and column number connection
+    connect(doc->getView(), SIGNAL(newLineAndColumn(int, int)), this, SLOT(setLineAndColumn(int,int)));
+
     // connect(gotoLineAct, SIGNAL(triggered()), doc, SLOT(gotoLineDialog()));
     //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
     //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
@@ -5141,7 +5157,10 @@ void CsoundQt::createStatusBar()
 {
     auto statusbar = statusBar();
     statusbar->showMessage(tr("Ready"));
-    // TODO: add widgets on the right
+
+    lineAndColumnLabel = new QLabel();
+    setLineAndColumn(0,0);
+    statusbar->addPermanentWidget(lineAndColumnLabel);
 }
 
 void CsoundQt::readSettings()

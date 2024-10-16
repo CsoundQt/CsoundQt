@@ -226,6 +226,8 @@ signals:
 	void contentsChanged();
 	void closeExtraPanels();
 	void evaluate(QString code);
+    void newLineAndColumn(int line, int column);
+
 };
 
 #endif // DOCUMENTVIEW_H

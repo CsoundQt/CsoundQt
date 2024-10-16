@@ -390,6 +390,7 @@ void QuteMeter::createPropertiesDialog()
     layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     pointSizeSpinBox = new QSpinBox(dialog);
+    pointSizeSpinBox->unsetLocale();
     pointSizeSpinBox->setValue(w->getPointSize());
     pointSizeSpinBox->setToolTip("Size of the point / line if applicable");
     layout->addWidget(pointSizeSpinBox, 7,1, Qt::AlignLeft|Qt::AlignVCenter);
@@ -408,6 +409,7 @@ void QuteMeter::createPropertiesDialog()
     label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
     layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
     fadeSpeedSpinBox = new QSpinBox(dialog);
+    fadeSpeedSpinBox->unsetLocale();
     fadeSpeedSpinBox->setValue(property("QCS_fadeSpeed").toDouble());
     fadeSpeedSpinBox->setRange(0, 1000);
     layout->addWidget(fadeSpeedSpinBox, 7,3, Qt::AlignLeft|Qt::AlignVCenter);
