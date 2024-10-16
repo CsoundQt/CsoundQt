@@ -57,7 +57,7 @@ public slots:
     double EvalCode(const QString &text) { return evalCode(text); }
     double get0dBFS();
 	double Get0dBFS() {return get0dBFS();}
-    int getApiVersion();
+    //int getApiVersion(); // not present in Csound7 any more
     double getControlChannel(const QString &name);
 	//double RequestChannel(const QString &name) { return getControlChannel(const QString &name)  } // NB! this works differently, better do not provide this alias!
     qint64 getCurrentTimeSamples();

@@ -880,13 +880,13 @@ int CsoundEngine::runCsound()
     csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
     csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
     if (!m_options.fileName1.endsWith(".html", Qt::CaseInsensitive)) {
-#if CS_APIVERSION>=4
+//#if CS_APIVERSION>=4
         char const **argv;// since there was change in Csound API
         argv = (const char **) calloc(33, sizeof(char*));
-#else
-        char **argv;
-        argv = (char **) calloc(33, sizeof(char*));
-#endif
+//#else
+//        char **argv;
+//        argv = (char **) calloc(33, sizeof(char*));
+//#endif
 
         int argc = m_options.generateCmdLine((char **)argv);
 

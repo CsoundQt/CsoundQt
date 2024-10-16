@@ -83,9 +83,9 @@ double CsoundHtmlOnlyWrapper::get0dBFS() {
     return csound.Get0dBFS(); //cs->Get0dBFS();
 }
 
-int CsoundHtmlOnlyWrapper::getApiVersion() {
-    return csound.GetAPIVersion();
-}
+//int CsoundHtmlOnlyWrapper::getApiVersion() {
+//    return csound.GetAPIVersion();
+//}
 
 double CsoundHtmlOnlyWrapper::getControlChannel(const QString &name) {
     int result = 0;

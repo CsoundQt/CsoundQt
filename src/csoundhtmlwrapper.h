@@ -46,7 +46,7 @@ public slots:
     int compileOrc(const QString &text);
     double evalCode(const QString &text);
     double get0dBFS();
-    int getApiVersion();
+    //int getApiVersion(); // not present in Csound7
     double getControlChannel(const QString &name);
     qint64 getCurrentTimeSamples();
     QString getEnv(const QString &name);

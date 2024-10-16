@@ -246,11 +246,11 @@ QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(QString modul
 
 QStringList ConfigLists::runCsoundInternally(QStringList flags)
 {
-#if CS_APIVERSION>=4
+//#if CS_APIVERSION>=4 // CS_APIVERSION is not any more in Csound 7 source
 	const char *argv[33];
-#else
-	char *argv[33];
-#endif
+//#else
+//	char *argv[33];
+//#endif
     int index = 1;
     Q_ASSERT(flags.size() < 32);
 	argv[0]  = (char *) calloc(7, sizeof(char));
