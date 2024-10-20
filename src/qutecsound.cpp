@@ -1332,7 +1332,7 @@ void CsoundQt::setupEnvironment()
         csoundSetGlobalEnv("OPCODEDIR64", m_options->opcodedir64.toLatin1().constData());
     }
     if (m_options->opcode6dir64Active) {
-        csoundSetGlobalEnv("OPCODE6DIR64", m_options->opcode6dir64.toLatin1().constData());
+        csoundSetGlobalEnv("OPCODE7DIR64", m_options->opcode6dir64.toLatin1().constData());
     }
 #ifdef Q_OS_WIN32
 	// if opcodes are in the same directory or in ./plugins64, then set OPCODE6DIR64 to the bundled plugins
@@ -1346,8 +1346,8 @@ void CsoundQt::setupEnvironment()
 		opcodedir = QString();
 	}
 	if (!opcodedir.isEmpty()) {
-		qDebug() << "Setting OPCODE6DIR64 to: " << opcodedir;
-		csoundSetGlobalEnv("OPCODE6DIR64", opcodedir.toLocal8Bit().constData());
+        qDebug() << "Setting OPCODE7DIR64 to: " << opcodedir;
+        csoundSetGlobalEnv("OPCODE7DIR64", opcodedir.toLocal8Bit().constData());
 	}
 #endif
 #ifdef Q_OS_MACOS
