@@ -22,6 +22,7 @@
 
 #include "qutegraph.h"
 #include "curve.h"
+#include "src/types.h"
 #include <cmath>
 #include <QPalette>
 
@@ -407,7 +408,7 @@ void QuteGraph::setValue(QString text)
             qDebug() << "@find: graph not found";
             return;
         }
-    }    
+    }
     else if(parts[0] == QLatin1String("@freeze") ) {
         int index = m_value;
         if(graphtypes[index] != GraphType::GRAPH_SPECTRUM)
@@ -491,7 +492,7 @@ void QuteGraph::refreshWidget()
 #endif
 	int index = 0;
 	if (m_valueChanged) {
-        index = (int) m_value;
+        index = static_cast<int>(m_value);
         if(index < 0) {
             m_value2 = -index;
         } else {
@@ -632,7 +633,7 @@ void QuteGraph::applyProperties()
     setProperty("CSQT_showSelector", showSelectorCheckBox->checkState());
     setProperty("CSQT_showGrid", showGridCheckBox->checkState());
     setProperty("CSQT_showScrollbars", showScrollbarsCheckBox->isChecked());
-    setProperty("CSQT_enableTables", acceptTablesCheckBox->isChecked());   
+    setProperty("CSQT_enableTables", acceptTablesCheckBox->isChecked());
     setProperty("CSQT_enableDisplays", acceptDisplaysCheckBox->isChecked());
 
     m_enableTables = acceptTablesCheckBox->isChecked();
@@ -661,7 +662,7 @@ int QuteGraph::findCurve(CurveType type, QStringView text) {
 }
 
 void QuteGraph::changeCurve(int index)
-{    
+{
     if(curves.size() <= 0)
         return;
 
@@ -1586,7 +1587,7 @@ void QuteTableWidget::paintGrid(QPainter *painter) {
     auto y1 = rect.y() + rect.height() - margin + yoffset ;
     auto height = rect.height() - margin*2;
     double yscale = -height / (m_maxy - m_miny);
-
+    auto textcolor = QColor(200, 200, 200);
     auto tabsizestr = QString::number(m_tabsize);
     const int textMargin = 4;
     painter->setBrush(Qt::NoBrush);
@@ -1601,11 +1602,11 @@ void QuteTableWidget::paintGrid(QPainter *painter) {
     if (m_maxy > 0 && m_miny < 0) {
         int yzero = static_cast<int>(-m_miny * yscale + (y0+height));
         painter->drawLine(x0, yzero, x1, yzero);
-        painter->setPen(QColor(200, 200, 200));
+        painter->setPen(textcolor);
         painter->drawText(rect.x(), yzero, "0");
     }
 
-    painter->setPen(QColor(200, 200, 200));
+    painter->setPen(textcolor);
     painter->setFont(gridFont);
     painter->drawText(rect.x()+textMargin, y0+textMargin, maxystr);
     painter->drawText(rect, Qt::AlignLeft|Qt::AlignBottom, minystr);
@@ -1664,26 +1665,23 @@ void QuteTableWidget::setRange(double maxy) {
 
 void QuteTableWidget::updatePath() {
     if(!m_running || m_tabnum <= 0) {
+        QDEBUG << "Not running or table number not set";
         return;
     }
 
-
     //CS7 changes
-
     int tabsize = csoundTableLength(m_ud->csound, m_tabnum);
-    MYFLT *data = nullptr;
-    if (tabsize>0) {
-
-        data = new double[tabsize]();
-        // old: csoundTableCopyOut(m_ud->csound, m_tabnum, data, 0);
-        int result = csoundGetTable(m_ud->csound, &data, m_tabnum);
-        if (result<=0) {
-            QDEBUG << "Table could not be read: " << m_tabnum;
-            return;
-        }
-
-    } else {
+    if(tabsize <= 0) {
         QDEBUG << "Table not found: " << m_tabnum;
+        return;
+    }
+
+    // data = new double[tabsize]();  // <--- no need to allocate memory, we get a pointer to the table
+    // old: csoundTableCopyOut(m_ud->csound, m_tabnum, data, 0);
+    MYFLT *data = nullptr;
+    int result = csoundGetTable(m_ud->csound, &data, m_tabnum);
+    if (result <= 0 || data == nullptr) {
+        QDEBUG << "Table could not be read: " << m_tabnum;
         return;
     }
 
@@ -1693,7 +1691,6 @@ void QuteTableWidget::updatePath() {
     auto rect = this->rect();
     auto width = rect.width() - margin*2;
     auto height = rect.height() - margin*2;
-
 
     double xscale = width / (double)tabsize;
     double y0 = rect.y() + margin;
@@ -1720,34 +1717,32 @@ void QuteTableWidget::updatePath() {
         miny = m_miny = floor(newminy);
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     m_path.clear();
-#else
-    m_path = QPainterPath(); // not sure if it works
-#endif
     QPolygonF poly;
+    size_t numpoints = tabsize / step;
+    poly.reserve(numpoints+1);
     double yscale = -height / (maxy-miny);
-
     double ydata = data[0];
     poly.append(QPoint(x0, (ydata-miny)*yscale+y0+height));
-
+    double ytop = y0 + height;
     for(int i=1; i < tabsize; i+=step) {
         ydata = data[i];
         double x2 = i*xscale + x0;
-        double y2 = (ydata - miny) * yscale + (y0+height);
-        // path->lineTo(x2, y2);
+        double y2 = (ydata - miny) * yscale + ytop;
         poly.append(QPointF(x2, y2));
     }
     m_path.addPolygon(poly);
-    delete[] data;
+    // delete[] data;
 }
 
 void QuteTableWidget::updateData(int tabnum) {
     QMutexLocker locker(&mutex);
     if(!m_running) {
+        QDEBUG << "Not running, cannot update";
         return;
     }
-    else if(tabnum >= 0 && tabnum != m_tabnum) {
+    if(tabnum >= 0 && tabnum != m_tabnum) {
+        QDEBUG << "Changing/Setting table number to new/first value";
         if(m_autorange) {
             m_maxy = 1.0;
             m_miny = 0;
@@ -1850,7 +1845,7 @@ void QuteTable::applyProperties() {
 }
 
 void QuteTable::refreshWidget() {
-    // Q_ASSERT(m_valueChanged);
+    Q_ASSERT(m_valueChanged);
     QMutexLocker locker(&mutex);
     m_valueChanged = false;
     auto status = csoundEngineStatus(m_csoundUserData);
@@ -1921,6 +1916,10 @@ void QuteTable::setWidgetGeometry(int x, int y, int width, int height) {
 */
 
 void QuteTable::setTableNumber(int tabnum) {
+    if(tabnum <= 0) {
+        qWarning() << "Table number must be greater than 0";
+        return;
+    }
     if(tabnum == m_tabnum)
         return;
     m_valueChanged = true;
@@ -1935,7 +1934,7 @@ void QuteTable::setValue(double value) {
         m_value = m_tabnum;
         return;
     }
-    else if(value == -1) {
+    else if(value < 0.) {
         if(m_tabnum <= 0) {
             QDEBUG << "Table number not set, can't update";
             return;
@@ -1944,17 +1943,9 @@ void QuteTable::setValue(double value) {
         m_valueChanged = true;
         // auto w = static_cast<QuteTableWidget*>(m_widget);
         // w->updateData(m_tabnum);
-        return;
     }
-    else if(m_value == value) {
-        return;
-    }
-    else if(value > 0) {
+    else if(value > 0 && value != m_tabnum) {
         setTableNumber(static_cast<int>(value));
-    }
-    else {
-        qDebug() << "Invalid value for TablePlot:" << value;
-        return;
     }
 };
 
