@@ -1120,8 +1120,6 @@ void QuteGraph::drawSpectrumPath(Curve *curve, int index) {
         int step = 1000;
         int numTicksX = nyquist / step;
         int numTicksY = 7;
-        // printf("grid: nyquist: %d, numticks: %d\n", nyquist, numTicksX);
-
         auto gridPen = QPen(QColor(40, 40, 40));
         gridPen.setCosmetic(true);
         auto textColor = QColor(128, 128, 128);
@@ -1183,7 +1181,7 @@ size_t QuteGraph::spectrumGetPeak(Curve *curve, double freq, double bandwidth) {
             }
         }
     }
-    if(maxindex > curveSize - 1 || maxindex < 0) {
+    if(maxindex > curveSize - 1) {
         qDebug() << "spectrum peak: wrong index " << maxindex;
         return 0;
     }

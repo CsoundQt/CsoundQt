@@ -45,3 +45,4 @@ qcs.pro.user*
 .qtc_clangd
 .~*
 .cache
+.clangd

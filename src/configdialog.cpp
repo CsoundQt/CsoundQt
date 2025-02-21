@@ -427,13 +427,8 @@ void ConfigDialog::onRtModuleComboBoxChanged(int index) {
         RtInputLineEdit->setText("");
         RtOutputLineEdit->setText("");
     } else if (currentText == "jack") {
-#ifdef Q_OS_LINUX
-        RtInputLineEdit->setText("adc:system:capture_");
-        RtOutputLineEdit->setText("dac:system:playback_");
-#else
         RtInputLineEdit->setText("adc");
         RtOutputLineEdit->setText("dac");
-#endif
     } else if (currentText == "pulse") {
         RtInputLineEdit->setText("adc");
         RtOutputLineEdit->setText("dac");
@@ -1003,7 +998,7 @@ void ConfigDialog::on_csoundMidiCheckBox_toggled(bool checked)
 void ConfigDialog::checkRtMidiModule(QString module)
 {
 	if (module=="jack") { // && there is no lists; but now not connected. later: remove this function!
-		qDebug()<<Q_FUNC_INFO<<"Setting dummy input and output for jack midi";
+		QDEBUG << "Setting dummy input and output for jack midi";
 		RtMidiInputLineEdit->setText("dummy");
 		RtMidiOutputLineEdit->setText("dummy");
 	}
