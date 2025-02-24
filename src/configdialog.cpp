@@ -212,6 +212,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	fontScalingSpinBox->setValue(m_options->fontScaling);
 	fontOffsetSpinBox->setValue(m_options->fontOffset);
     tabShortcutActiveCheckBox->setChecked(m_options->tabShortcutActive);
+    tabCloseButtonCheckBox->setChecked(m_options->tabShowCloseButton);
     highlightScoreCheckBox->setChecked(m_options->highlightScore);
 
 	if (m_options->useAPI)
@@ -510,6 +511,7 @@ void ConfigDialog::accept()
     m_options->graphUpdateRate = graphUpdateRateSpinBox->value();
 	m_options->debugPort = debugPortSpinBox->value();
     m_options->tabShortcutActive = tabShortcutActiveCheckBox->isChecked();
+    m_options->tabShowCloseButton = tabCloseButtonCheckBox->isChecked();
 	m_options->useAPI = ApiRadioButton->isChecked();
 	//  m_options->thread = threadCheckBox->isChecked();
 	m_options->keyRepeat = keyRepeatCheckBox->isChecked();
@@ -786,7 +788,7 @@ void ConfigDialog::selectAudioInput()
     if(module == "jack") {
         deviceList.prepend(QStringPair("adc", "adc"));
         deviceList.prepend(QStringPair("Do Not Autoconnect", "adc:null"));
-        deviceList.prepend(QStringPair("System Inputs", "adc:system:capture_"));
+        // deviceList.prepend(QStringPair("System Inputs", "adc:system:capture_"));
     } else {
         deviceList.prepend(QStringPair("Default", "adc"));
     }

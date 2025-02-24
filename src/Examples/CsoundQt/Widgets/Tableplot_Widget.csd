@@ -125,6 +125,8 @@ schedule 10, 0, 100
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -139,7 +141,7 @@ schedule 10, 0, 100
   <g>240</g>
   <b>240</b>
  </bgcolor>
- <bsbObject type="BSBTableDisplay" version="2">
+ <bsbObject version="2" type="BSBTableDisplay">
   <objectName>plot2</objectName>
   <x>370</x>
   <y>74</y>
@@ -157,7 +159,7 @@ schedule 10, 0, 100
   </color>
   <range>0.00</range>
  </bsbObject>
- <bsbObject type="BSBTableDisplay" version="2">
+ <bsbObject version="2" type="BSBTableDisplay">
   <objectName>plot1</objectName>
   <x>8</x>
   <y>74</y>
@@ -175,7 +177,7 @@ schedule 10, 0, 100
   </color>
   <range>0.00</range>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>7</x>
   <y>11</y>
@@ -206,7 +208,7 @@ schedule 10, 0, 100
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>10</x>
   <y>360</y>
@@ -240,7 +242,7 @@ The widget also accepts string values. The table can be set with 'outvalue "@set
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject type="BSBLabel" version="2">
+ <bsbObject version="2" type="BSBLabel">
   <objectName/>
   <x>11</x>
   <y>320</y>

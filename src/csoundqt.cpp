@@ -249,7 +249,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
     if (scratchPadVisible)
         m_scratchPad->hide();  // Hide until CsoundQt has finished loading
     documentTabs = new QTabWidget (this);
-    documentTabs->setTabsClosable(true);
+    if(m_options->tabShowCloseButton) {
+        documentTabs->setTabsClosable(true);
+    }
     documentTabs->setMovable(true);
     connect(documentTabs, SIGNAL(currentChanged(int)), this, SLOT(changePage(int)));
     // To force changing to clicked tab before closing
@@ -425,14 +427,14 @@ CsoundQt::CsoundQt(QStringList fileNames)
         file.setFileName(":/appstyle-dark.css");
     }
     else {
-        QDEBUG << "Using light palette";
+        QDEBUG << "Using light palette, text lightness: " << palette.text().color().lightness() << ", window lightness: " << palette.window().color().lightness();
         file.setFileName(":/appstyle-white.css");
     }
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
-    // originalStyleSheet += styleSheet;
-    // qApp->setStyleSheet(originalStyleSheet);
-    qApp->setStyleSheet(styleSheet);
+    originalStyleSheet += styleSheet;
+    qApp->setStyleSheet(originalStyleSheet);
+    // qApp->setStyleSheet(styleSheet);
 
 #endif
 
@@ -3113,6 +3115,7 @@ void CsoundQt::applySettings()
     configureToolBar->setVisible(m_options->showToolbar);
     controlToolBar->setMovable(!(m_options->lockToolbar));
     configureToolBar->setMovable(!(m_options->lockToolbar));
+    documentTabs->setTabsClosable(m_options->tabShowCloseButton);
 
     QString currentOptions = (m_options->useAPI ? tr("API") : tr("Console")) + " ";
     //  if (m_options->useAPI) {
@@ -5123,8 +5126,8 @@ void CsoundQt::readSettings()
     lastTabIndex = settings.value("lasttabindex", "").toInt();
     m_options->debugPort = settings.value("debugPort",34711).toInt();
     m_options->tabShortcutActive = settings.value("tabShortcutActive", true).toBool();
+    m_options->tabShowCloseButton = settings.value("tabShowCloseValue", true).toBool();
     m_options->highlightScore = settings.value("highlightScore", false).toBool();
-
 
     settings.endGroup();
     settings.beginGroup("Run");
@@ -5388,6 +5391,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("fontScaling", m_options->fontScaling);
         settings.setValue("debugPort", m_options->debugPort);
         settings.setValue("tabShortcutActive", m_options->tabShortcutActive);
+        settings.setValue("tabShowCloseButton", m_options->tabShowCloseButton);
         settings.setValue("highlightScore", m_options->highlightScore);
 
         settings.setValue("lastfiles", openFiles);

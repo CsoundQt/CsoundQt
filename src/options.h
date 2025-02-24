@@ -63,6 +63,7 @@ public:
     int autoCompleteDelay;
 	bool autoParameterMode;
     bool tabShortcutActive;
+    bool tabShowCloseButton;
 
     bool highlightScore;
 
