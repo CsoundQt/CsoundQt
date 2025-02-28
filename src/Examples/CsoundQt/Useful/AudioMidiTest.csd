@@ -327,6 +327,16 @@ e
 
 
 
+
+
+
+
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -383,7 +393,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-15</label>
+  <label>-22</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Arial</font>
@@ -513,7 +523,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.82645998</yValue>
+  <yValue>0.97634084</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -550,7 +560,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.86010624</yValue>
+  <yValue>0.97799852</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -625,7 +635,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>-7.00000000</value>
+  <value>-11.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -659,7 +669,7 @@ e
    <g>20</g>
    <b>20</b>
   </bgcolor>
-  <value>-8.00000000</value>
+  <value>-13.00000000</value>
   <resolution>1.00000000</resolution>
   <minimum>-120.00000000</minimum>
   <maximum>24.00000000</maximum>
@@ -761,7 +771,7 @@ e
     <stringvalue/>
    </bsbDropdownItem>
   </bsbDropdownItemList>
-  <selectedIndex>2</selectedIndex>
+  <selectedIndex>0</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -1426,7 +1436,7 @@ e
   <eventLine/>
   <latch>true</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>true</latched>
+  <latched>false</latched>
   <fontsize>24</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBLabel">
@@ -1477,7 +1487,7 @@ e
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.23529400</xValue>
-  <yValue>0.68749271</yValue>
+  <yValue>-36.76986213</yValue>
   <type>fill</type>
   <pointsize>3</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2111,7 +2121,7 @@ e
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.41750000</value>
+  <value>0.24750000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>

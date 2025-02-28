@@ -743,7 +743,8 @@ int CsoundEngine::checkSyntax() {
         QDEBUG << "Syntax check ok, return code: " << ud->result;
         out = 0;   // OK
     }
-    // csoundDestroyMessageBuffer(ud->csound);
+    csoundDestroyMessageBuffer(ud->csound);
+    csoundDestroy(ud->csound);
     // csoundCleanup(ud->csound);
     // csoundReset(ud->csound);
     return out;

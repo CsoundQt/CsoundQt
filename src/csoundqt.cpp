@@ -5126,7 +5126,7 @@ void CsoundQt::readSettings()
     lastTabIndex = settings.value("lasttabindex", "").toInt();
     m_options->debugPort = settings.value("debugPort",34711).toInt();
     m_options->tabShortcutActive = settings.value("tabShortcutActive", true).toBool();
-    m_options->tabShowCloseButton = settings.value("tabShowCloseValue", true).toBool();
+    m_options->tabShowCloseButton = settings.value("tabShowCloseButton", true).toBool();
     m_options->highlightScore = settings.value("highlightScore", false).toBool();
 
     settings.endGroup();
