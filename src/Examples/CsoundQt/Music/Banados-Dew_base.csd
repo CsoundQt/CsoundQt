@@ -55,8 +55,8 @@ giRotationSpeed = 27 //how many seconds it takes for positions to rotate 360 deg
 //Relative Values for each element of a gen05 function table. These will be processed later. 
 // The Q durations are relative to each other, the Q values are absolute.
 // Both tables must be the same length! the final values are added after
-giQTableValues[] 		fillarray	0.9,		1,		2,		0.7,		1.8,		9,		3,		0.16,		17,		4,		9,		3,		5,		0.6, 		3.1, 		1, 	28
-giQTableDurations[] 	fillarray 	10, 		11,	3,		0.1,		12,		6,		8,		0.3,		11,		9,		6,		16,	8,		7,			4, 		2,		1				
+giQTableValues[] 	fillarray	0.9,	1,	2,	0.7,	1.8,	9,	3,	0.16,	17,	4,	9,	3,	5,	0.6, 	3.1, 	1, 	28
+giQTableDurations[] 	fillarray 	10, 	11,	3,	0.1,	12,	6,	8,	0.3,	11,	9,	6,	16,	8,	7,	4, 	2,	1				
 
 //////////////
 // Globals // don't change manually
