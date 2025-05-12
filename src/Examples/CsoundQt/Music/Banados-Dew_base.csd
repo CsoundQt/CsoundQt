@@ -10,7 +10,7 @@ nchnls = 2 // currently supports 2, 4 and 5 channel setups, but can easily be ad
 //you can also set nchnls to 9 to output second order b-format signals directly
 0dbfs = 1
 //////////////////////////////////
-// Dew - Tom Bañados Russell   //
+// Dew - Tom Banados Russell   //
 // GNU General Public Liscence //
 ////////////////////////////////
 
@@ -357,7 +357,7 @@ i "Main"		0		1
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>Tom Bañados Russell</label>
+  <label>Tom Banados Russell</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Arial</font>
