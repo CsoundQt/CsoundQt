@@ -212,6 +212,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	fontScalingSpinBox->setValue(m_options->fontScaling);
 	fontOffsetSpinBox->setValue(m_options->fontOffset);
     tabShortcutActiveCheckBox->setChecked(m_options->tabShortcutActive);
+    tabCloseButtonCheckBox->setChecked(m_options->tabShowCloseButton);
     highlightScoreCheckBox->setChecked(m_options->highlightScore);
 
 	if (m_options->useAPI)
@@ -427,13 +428,8 @@ void ConfigDialog::onRtModuleComboBoxChanged(int index) {
         RtInputLineEdit->setText("");
         RtOutputLineEdit->setText("");
     } else if (currentText == "jack") {
-#ifdef Q_OS_LINUX
-        RtInputLineEdit->setText("adc:system:capture_");
-        RtOutputLineEdit->setText("dac:system:playback_");
-#else
         RtInputLineEdit->setText("adc");
         RtOutputLineEdit->setText("dac");
-#endif
     } else if (currentText == "pulse") {
         RtInputLineEdit->setText("adc");
         RtOutputLineEdit->setText("dac");
@@ -515,6 +511,7 @@ void ConfigDialog::accept()
     m_options->graphUpdateRate = graphUpdateRateSpinBox->value();
 	m_options->debugPort = debugPortSpinBox->value();
     m_options->tabShortcutActive = tabShortcutActiveCheckBox->isChecked();
+    m_options->tabShowCloseButton = tabCloseButtonCheckBox->isChecked();
 	m_options->useAPI = ApiRadioButton->isChecked();
 	//  m_options->thread = threadCheckBox->isChecked();
 	m_options->keyRepeat = keyRepeatCheckBox->isChecked();
@@ -791,7 +788,7 @@ void ConfigDialog::selectAudioInput()
     if(module == "jack") {
         deviceList.prepend(QStringPair("adc", "adc"));
         deviceList.prepend(QStringPair("Do Not Autoconnect", "adc:null"));
-        deviceList.prepend(QStringPair("System Inputs", "adc:system:capture_"));
+        // deviceList.prepend(QStringPair("System Inputs", "adc:system:capture_"));
     } else {
         deviceList.prepend(QStringPair("Default", "adc"));
     }
@@ -1003,7 +1000,7 @@ void ConfigDialog::on_csoundMidiCheckBox_toggled(bool checked)
 void ConfigDialog::checkRtMidiModule(QString module)
 {
 	if (module=="jack") { // && there is no lists; but now not connected. later: remove this function!
-		qDebug()<<Q_FUNC_INFO<<"Setting dummy input and output for jack midi";
+		QDEBUG << "Setting dummy input and output for jack midi";
 		RtMidiInputLineEdit->setText("dummy");
 		RtMidiOutputLineEdit->setText("dummy");
 	}

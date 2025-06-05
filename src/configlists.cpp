@@ -297,7 +297,8 @@ bool ConfigLists::isJackRunning() {
     CSOUND *cs = csoundCreate(nullptr, nullptr);
     csoundSetRTAudioModule(cs, "jack");
     int n = csoundGetAudioDevList(cs, nullptr, 1);
-    qDebug() << "isJackRunning" << n;
     csoundDestroy(cs);
     return n > 0;
 }
+
+

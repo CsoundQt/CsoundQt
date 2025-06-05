@@ -30,7 +30,7 @@ gi2 ftgen 0, 0,  512, 2, 0
 chn_k "plot1", "w" 
 chn_k "plot2", "w"
 
-instr 1
+instr 10
 	ktab1 init gi1
 	ktab2 init gi2
 	
@@ -54,15 +54,15 @@ instr 1
 	
 	; Update rate of the plots. NB: the widget update rate in
 	; CsoundQt is limited to 30 fps, so any update faster than
-	; than will have no effect other than time aliasing
-	ktrig metro 24
+	; than will have no effect
+	ktrig metro 30
 	
 	chnset ktrig == 1 ? -1 : ktab1, "plot1"
 	chnset ktrig == 1 ? -1 : ktab2, "plot2"
 	
 endin
 
-schedule 1, 0.1, 3600, gi1, gi2
+schedule 10, 0, 100
 
 </CsInstruments>
 <CsScore>
@@ -73,13 +73,67 @@ schedule 1, 0.1, 3600, gi1, gi2
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>0</x>
  <y>0</y>
- <width>435</width>
- <height>149</height>
+ <width>730</width>
+ <height>487</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
