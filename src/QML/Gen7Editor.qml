@@ -1,18 +1,23 @@
-import QtQuick 2.1
-import QtQuick.Controls 1.1
-import QtQuick.Dialogs 1.1
+//qmlTableEditor - helps to graphically create and change Csound Gen7 (straigt lines) type of tables
+// (c) Tarmo Johannes 2015 tarmo@otsakool.edu.ee
+//Licence: GPL 2
 
-// Ваш текущий код, немного модифицированный:
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Window 2.15
+import QtQuick.Dialogs
+
 Rectangle {
     id: gen7Editor
+    width: 720
+    height: 550
     anchors.fill: parent
-    
-    property var points: [];
-    property int pointWidth: 10;
+    property var points: []; // array of endpoints of the segments
+    property int pointWidth: 10; // set constant
     property real currentIndex: 0
     property real currentValue: 0
 
-    Item {id: mainArea; anchors.fill: parent; anchors.margins: 5}
+    Item {id: mainArea; anchors.fill: parent}
 
     signal newSyntax(string syntax)
 
@@ -102,7 +107,7 @@ Rectangle {
         //console.log("Checksum: ", checksum);
         //console.log("New table definition: ", syntax);
         syntaxField.text = syntax;
-        //mainWindow.newSyntax(syntax);
+        //gen7Editor.newSyntax(syntax);
         return syntax;
     }
 
@@ -193,119 +198,145 @@ Rectangle {
     }
 
 
+
+
+
+
     Component {
-    id: pointComponent  // create points on the graph dynamically
+        id: pointComponent  // create points on the grpah dynamically
 
         Rectangle {
-            id: pointRect
+            id:pointRect
             width: pointWidth; height: width
-            color: (pointArea.containsMouse || pointArea.drag.active) ? "blue" : "red"
+            color: (pointArea.containsMouse || pointArea.drag.active )?  "blue" : "red"
             radius: width/2
-            property real value: 0
-            property real index: 0
+            property real value: 0 // TODO: keep as 0..1 and the scale to -max..max
+            property real index:0  //TODO: keep as 0..1 and then scale to int(0..tableSize)
+
 
             MouseArea {
                 id: pointArea
                 anchors.fill: parent
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
-                hoverEnabled: true
+                acceptedButtons:  Qt.LeftButton | Qt.RightButton
+                hoverEnabled:  true
                 drag.target: parent
 
-                drag.minimumX: -width/2
+                drag.minimumX: -width/2 //TODO :  make it fit with getMaximumX
                 drag.maximumX: drawRect.width - width/2
                 drag.minimumY: -height/2
                 drag.maximumY: drawRect.height - height/2
 
-                onPressed: {
+                onPressed:
                     if (pressedButtons & Qt.RightButton) {
                         var index = points.indexOf(parent);
-                        points.splice(index, 1);
-                        parent.destroy();
-                        valueRect.visible = false;
+                        //console.log("Deleting point with index: ", index)
+
+                        points.splice(index,1) // remove from array
+                        parent.destroy() // remove pointRect
+                        valueRect.visible = false; // hide valueRect
                         canvas.requestPaint();
+
+                    }
+
+                drag.onActiveChanged: { //to detect dragEnd and dragFihised - not fired if not in automiatic mode
+                    valueRect.visible  = drag.active // show the valuebox on drag
+                    if (!drag.active) { // on dragEnd update index of the pointArea
+                        parent.index =  x2index(parent.x+pointWidth/2)
+                        parent.value = y2value(parent.y+pointWidth/2)
+                        graph2syntax() // update syntax
                     }
                 }
 
-                drag.onActiveChanged: {
-                    valueRect.visible = drag.active;
-                    if (!drag.active) {
-                        parent.index = x2index(parent.x + pointWidth/2);
-                        parent.value = y2value(parent.y + pointWidth/2);
-                        graph2syntax();
-                    }
-                }
+
 
                 onHoveredChanged: {
                     currentValue = y2value(parent.y + pointWidth/2);
                     currentIndex = x2index(parent.x + pointWidth/2);
-                    valueRect.x = parent.x - valueRect.width/2;
-                    valueRect.y = parent.y - valueRect.height - 10;
-                    valueRect.y = Math.max(2, valueRect.y);
-                    valueRect.visible = containsMouse || drag.active;
+                    valueRect.x = parent.x-valueRect.width/2;
+                    valueRect.y = parent.y-valueRect.height-10;
+                    valueRect.y = Math.max(-drawRect.y +2, valueRect.y) // not to show outside of window
+                    valueRect.visible = containsMouse || drag.active; // show the valuebox while hovered
                 }
+
+
             }
+
+
 
             onXChanged: {
-                var index = points.indexOf(this);
-                if (index != -1) {
+                var index =  points.indexOf(this);
+                //console.log("MOVING: ",index);
+                if (index!=-1)
                     pointArea.drag.minimumX = getMinimumX(index);
+                if (index!=-1)
                     pointArea.drag.maximumX = getMaximumX(index);
-                }
                 canvas.requestPaint();
-                currentIndex = x2index(this.x + pointWidth/2);
-                valueRect.x = x - valueRect.width/2;
-            }
 
+                currentIndex = x2index(this.x+pointWidth/2); // pointWidth/2 since the center of the point marker is the desired point
+                valueRect.x = x-valueRect.width/2
+            }
             onYChanged: {
                 canvas.requestPaint();
-                currentValue = y2value(y + pointWidth/2);
-                valueRect.y = y - valueRect.height - 10;
-                valueRect.y = Math.max(2, valueRect.y);
+                currentValue = y2value(y+pointWidth/2);
+                valueRect.y = y-valueRect.height-10;
+                valueRect.y = Math.max(-drawRect.y +2, valueRect.y) // not to show outside of window
+
             }
         }
+
+
     }
 
+
+
+
+
     Rectangle {
-        id: drawRect
-        width: parent.width - 200
-        height: parent.height - 250
+        width: parent.width*0.75; height: parent.height*0.6
         color: "#ffffff"
         anchors.horizontalCenter: parent.horizontalCenter
         y: valueRect.height + 5
+        id: drawRect
         z: 1
-
         function updatePointPositions() {
-            for (var i = 0; i < points.length; i++) {
-                points[i].x = points[i].index * (drawRect.width - pointWidth/2);
-                points[i].y = (1 - points[i].value) * drawRect.height - pointWidth/2;
+
+            //points[0].x = 0;
+            //points[0].y= drawRect.height/2-pointWidth/2;
+            //points[points.length-1].x= drawRect.width-pointWidth/2;
+            //points[points.length-1].y= 0-pointWidth/2;
+
+            // update all points: -  lisa value ja index iga punkti juurde
+            for (var i=0;i<points.length;i++) {
+
+                points[i].x = points[i].index *  (drawRect.width-pointWidth/2);
+                var helper = 1-(points[i].value+maxSpinbox.value)/2; // to 0..1 inversed
+                //onsole.log("HElper 0..1",helper);
+                points[i].y= (1-points[i].value)*drawRect.height-pointWidth/2;
+                //console.log("point, inedx,value,newX, newY",i,points[i].index,points[i].value, points[i].x, points[i].y);
+
+
             }
+
             canvas.requestPaint();
+
         }
 
         Component.onCompleted: {
-            points[0] = pointComponent.createObject(drawRect, { 
-                "x": 0, 
-                "y": height*0.5 - pointWidth/2, 
-                "index": 0, 
-                "value": 0.5 
-            });
-            points[1] = pointComponent.createObject(drawRect, { 
-                "x": width - pointWidth/2, 
-                "y": 0 - pointWidth/2, 
-                "index": 1, 
-                "value": 1 
-            });
+            points[0] = pointComponent.createObject(drawRect, { "x" : 0, "y":gen7Editor.height*0.6*0.5-pointWidth/2, "index":0, "value":0.5 }); // value = 0.5 since bipolar view in the begining
+            points[1] = pointComponent.createObject(drawRect, { "x" :gen7Editor.width*0.75-pointWidth/2, "y":0-pointWidth/2, "index":1,"value":1}); // cannot use this.heigth since probably not created yet...
             canvas.requestPaint();
         }
 
         onWidthChanged: updatePointPositions();
-        onHeightChanged: updatePointPositions();
+        onHeightChanged:updatePointPositions();
 
-        Rectangle {
-            id: valueRect
+        Rectangle { // displays
+            id:valueRect
+            //y: (y<-drawRect.y + 2) ? -drawRect.y + 2 : y // don't let to go up from upper window border
             width: 150
             height: 50
-            z: 1
+            // TODO: how to rise above labels and other objects
+            z:1
             opacity: 0.8
             color: "#fbfcba"
             radius: 4
@@ -313,86 +344,86 @@ Rectangle {
             border.width: 1
             border.color: "black"
 
+
             Column {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 4
-                Label { 
-                    text: qsTr("Value: ") + (scaleValue(currentValue)).toFixed(3) 
-                }
+                Label {text: qsTr("Value: ")+(scaleValue(currentValue)).toFixed(3)}
                 Label {
-                    text: qsTr("Index: ") + ((tableSizeSpinbox.value >= 2) 
-                        ? (Math.round(currentIndex * tableSizeSpinbox.value)).toString() 
-                        : currentIndex.toFixed(6))
+                    text: qsTr("Index: ")+  ( (tableSizeSpinbox.value>=2) ? (Math.round(currentIndex*tableSizeSpinbox.value)).toString() : currentIndex.toFixed(6) )   // if table lenght set to 1, so also decimal values, don't scale
                 }
             }
+
         }
 
+        //TODO: set firt element 0
         MouseArea {
             anchors.fill: parent
             onDoubleClicked: {
-                insertPoint(mouse.x, mouse.y);
-                graph2syntax();
+                //console.log(mouse.x,mouse.y);
+                insertPoint(mouse.x,mouse.y);
+                graph2syntax()
             }
         }
+
+
 
         Canvas {
-            id: canvas
-            anchors.fill: parent
-            renderTarget: Canvas.Image  // Для более четкого рендеринга
-            renderStrategy: Canvas.Cooperative  // Оптимальная стратегия рендеринга
+            id:canvas
 
-            onPaint: {
+
+            //width:155; height: 118
+            anchors.fill: parent
+
+            onPaint:{
                 var context = canvas.getContext('2d');
-                context.reset();  // Очищаем контекст
-                
-                // Очистка холста
-                context.clearRect(0, 0, width, height);
-                
-                // Настройки стиля
-                context.strokeStyle = "black";
-                context.lineWidth = 1;  // Тонкие линии
-                context.font = "12px sans-serif";
-                context.textBaseline = "top";
-                
-                // Оси координат
+                var offset = points[0].width / 2 ; // to move to the centre of circle
+
                 context.beginPath();
-                
-                // Вертикальная ось (Y)
-                context.moveTo(pointWidth/2, 0);
-                context.lineTo(pointWidth/2, height);
-                
-                // Горизонтальная ось (X)
-                var y0 = bipolar.checked ? height/2 : height - 1;
-                context.moveTo(0, y0);
-                context.lineTo(width, y0);
-                
+                context.clearRect(0, 0, width, height);
+                context.fill();
+
+                //axis and numbers
+                context.beginPath();
+                context.lindeWidth = 4;
+                context.moveTo(pointWidth/2,0) ;
+                context.strokeStyle = "black";
+                context.lineTo(pointWidth/2,drawRect.height);
+                //context.stroke();
+                var y0 = (bipolar.checked) ? drawRect.height/2 : drawRect.height-context.lindeWidth/2
+                //y0 -= 10;
+                context.moveTo(0,y0);
+                context.lineTo(drawRect.width,y0);
                 context.stroke();
-                
-                // Подписи значений
-                context.fillStyle = "black";
-                context.fillText(maxSpinbox.value.toFixed(2), 15, 5);
-                context.fillText("0", 15, y0 - 15);
-                
-                if (bipolar.checked) {
-                    context.fillText((-maxSpinbox.value).toFixed(2), 15, height - 15);
-                }
-                
-                // Линии графика
-                if (points.length > 0) {
-                    context.beginPath();
-                    context.strokeStyle = "red";
-                    context.lineWidth = 1.5;  // Слегка толще основных линий
-                    var offset = points[0].width / 2;
-                    
-                    context.moveTo(points[0].x + offset, points[0].y + offset);
-                    for (var i = 1; i < points.length; i++) {
-                        context.lineTo(points[i].x + offset, points[i].y + offset);
-                    }
+                context.font ="12px sans-serif";
+                context.strokeText(maxSpinbox.value.toString() ,10,10);
+                context.strokeText("0",10,y0-5);
+                if (bipolar.checked)
+                    context.strokeText(-maxSpinbox.value.toString() ,10,drawRect.height-5);
+
+
+
+                // lines between points
+                context.beginPath();
+                context.lineWidth = 1;
+
+                //console.log("points.length: ", points.length)
+                for (var i=1;i<points.length;i++) {
+                    context.moveTo(points[i-1].x + offset, points[i-1].y+ offset) ;
+                    context.strokeStyle = "red"
+                    context.lineTo(points[i].x + offset, points[i].y + offset);
                     context.stroke();
+                    //console.log("i-1, x, y:",i-1,points[i-1].x,points[i-1].y);
+                    //console.log("i, x, y:",i,points[i].x,points[i].y);
                 }
+
             }
         }
+
+
+
+
     }
 
     Label { // TODO: leia koht, võibolla messagedialog
@@ -415,20 +446,22 @@ Rectangle {
         text: qsTr("Max value:")
     }
 
-    SpinBox {
+    SpinBox { // NB! TODO: Does not work as an double SpingBox
         id: maxSpinbox
-        horizontalAlignment: 1
+        //horizontalAlignment: 1
         anchors.left: parent.left
         anchors.leftMargin: 6
-        stepSize: 0.01
+        //stepSize: 0.01
         anchors.right: drawRect.left
         anchors.rightMargin: 6
         anchors.top: drawRect.top
         anchors.topMargin: 0
+        from: 1
         value: 1
-        maximumValue: 9999999
-        decimals: 2
-        onEditingFinished: {canvas.requestPaint(); graph2syntax() }// to display new max number
+        to: 9999999
+        //decimals: 2
+        editable: true
+        onValueChanged: {canvas.requestPaint(); graph2syntax() }// to display new max number
     }
 
     CheckBox {
@@ -452,7 +485,7 @@ Rectangle {
         anchors.topMargin: 6
 
         onClicked:  {
-            mainWindow.newSyntax(graph2syntax()); // send signal to host
+            gen7Editor.newSyntax(graph2syntax()); // send signal to host
         }
     }
 
@@ -480,7 +513,7 @@ Rectangle {
         anchors.top: graph2syntaxButton.top
         anchors.bottom:  mainArea.bottom
         anchors.bottomMargin: 10 // has no influence in some reason
-        //height: mainWindow.height * 0.15
+        //height: gen7Editor.height * 0.15
         readOnly: false
         //wrapMode: TextInput.WordWrap
         text: "giTable ftgen 0,0,1024, 7, 0.000000, 1024, 1.000000" // corresponds to the default position of points
@@ -496,36 +529,39 @@ Rectangle {
 
     SpinBox {
         id: tableSizeSpinbox
-        y: 362
+        //y: 362
         value: 1024
-        minimumValue: 1
-        maximumValue: 99999
-        anchors.left: drawRect.right
-        anchors.leftMargin: 6
-        anchors.bottom: drawRect.bottom
-        anchors.bottomMargin: 0
-        onEditingFinished: {canvas.requestPaint(); graph2syntax() }// to display new max number
+        from: 1
+        to: 99999
+//        anchors.left: drawRect.right
+//        anchors.leftMargin: 6
+        anchors.right: mainArea.right
+        anchors.rightMargin: 10
+        anchors.top: drawRect.bottom
+        anchors.topMargin: 2
+        editable: true
+        onValueChanged: {canvas.requestPaint(); graph2syntax() }// to display new max number
 
 
     }
 
     Label {
         id: tableSizeLabel
-        x: 583
-        y: 334
+//        x: 583
+//        y: 334
         height: 22
         text: qsTr("Table size")
-        anchors.horizontalCenterOffset: 0
-        anchors.bottom: tableSizeSpinbox.top
-        anchors.bottomMargin: 6
-        horizontalAlignment: Text.AlignHCenter
-        anchors.horizontalCenter: tableSizeSpinbox.horizontalCenter
+        anchors.right: tableSizeSpinbox.left
+        anchors.rightMargin: 2
+        //horizontalAlignment: Text.AlignHCenter
+        anchors.verticalCenter: tableSizeSpinbox.verticalCenter
     }
 
+    ButtonGroup { id: syntaxTypeGroup; }
 
     Row {
         id: syntaxRadioButtons
-        ExclusiveGroup { id: syntaxTypeGroup }
+
 
         width: drawRect.width
         //height: 40
@@ -542,14 +578,14 @@ Rectangle {
             id: ftgenButton
             text: qsTr("ftgen")
             checked: true
-            exclusiveGroup: syntaxTypeGroup
+            ButtonGroup.group: syntaxTypeGroup
         }
 
         RadioButton {
             id: fbutton
             text: qsTr("f statement")
             enabled: false
-            exclusiveGroup: syntaxTypeGroup
+            ButtonGroup.group: syntaxTypeGroup
         }
 
 
@@ -575,15 +611,23 @@ Rectangle {
         onClicked:helpDialog.visible = true;
     }
 
-    MessageDialog {
+    Dialog {
         id: helpDialog
         title: qsTr("Help")
         visible: false
-        text: qsTr("Double-click to add a new point.\nDrag to move, right-click to remove\nYou can edit the table definition in textarea. \nThe changes in definition are displayed when you press ENTER or click on button Update Graph\n");
+
+
+        contentItem: TextArea {
+            //            implicitWidth: 400
+            //            implicitHeight: 300
+            anchors.fill: parent
+
+            text: qsTr("Double-click to add a new point.\nDrag to move, right-click to remove\nYou can edit the table definition in textarea. \nThe changes in definition are displayed when you press ENTER or click on button Update Graph\n");
+
+
+        }
+        standardButtons: Dialog.Ok
         onAccepted: visible=false;
     }
-    width: parent.width
-    height: parent.height
-    
-    // ... остальной код ...
+
 }
