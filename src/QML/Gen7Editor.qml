@@ -11,7 +11,7 @@ Rectangle {
     id: gen7Editor
     width: 720
     height: 550
-    anchors.fill: parent
+    //anchors.fill: parent
     property var points: []; // array of endpoints of the segments
     property int pointWidth: 10; // set constant
     property real currentIndex: 0
@@ -19,7 +19,7 @@ Rectangle {
 
     Item {id: mainArea; anchors.fill: parent}
 
-    signal newSyntax(string syntax)
+    // signal newSyntax(string syntax) // moved to main element
 
     function insertPoint(x,y) { // finds right place in the array (sorted by x), insert into array and creates the object
         var index = -1;
@@ -107,7 +107,7 @@ Rectangle {
         //console.log("Checksum: ", checksum);
         //console.log("New table definition: ", syntax);
         syntaxField.text = syntax;
-        //gen7Editor.newSyntax(syntax);
+        //tableEditor.newSyntax(syntax);
         return syntax;
     }
 
@@ -485,7 +485,7 @@ Rectangle {
         anchors.topMargin: 6
 
         onClicked:  {
-            gen7Editor.newSyntax(graph2syntax()); // send signal to host
+            tableEditor.newSyntax(graph2syntax()); // send signal to host
         }
     }
 
@@ -618,13 +618,7 @@ Rectangle {
 
 
         contentItem: TextArea {
-            //            implicitWidth: 400
-            //            implicitHeight: 300
-            anchors.fill: parent
-
             text: qsTr("Double-click to add a new point.\nDrag to move, right-click to remove\nYou can edit the table definition in textarea. \nThe changes in definition are displayed when you press ENTER or click on button Update Graph\n");
-
-
         }
         standardButtons: Dialog.Ok
         onAccepted: visible=false;

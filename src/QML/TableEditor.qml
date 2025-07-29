@@ -2,11 +2,14 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-ApplicationWindow {
+Item {
     width: 800
     height: 700
     visible: true
-    title: "Csound Table Editors"
+    id: tableEditor
+    // title: "Csound Table Editors"
+
+    signal newSyntax(string syntax)
 
     ColumnLayout {
         anchors.fill: parent
@@ -25,23 +28,12 @@ ApplicationWindow {
             Layout.fillHeight: true
             currentIndex: tabBar.currentIndex
 
-            Item {
-                Loader {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    source: "Gen7Editor.qml"
-                }
-            }
+            Gen7Editor {}
 
-            Item {
-                Loader {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    source: "Gen10Editor.qml"
-                }
-            }
 
+            Gen10Editor {}
 
         }
+
     }
 }
