@@ -7,6 +7,9 @@ Item {
     width: 800
     height: 700
 
+    property string name: "gen10"  // important! to let parent know which editor is active in tabView
+
+
     property var harmonics: [1.0, 0.5, 0.3, 0.25, 0.2, 0.1667, 0.1429, 0.125, 
                             0.1111, 0.1, 0.0909, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625]
     property int tableSize: 1024

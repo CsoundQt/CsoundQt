@@ -12,10 +12,12 @@ Rectangle {
     width: 720
     height: 550
     //anchors.fill: parent
+    property string name: "gen7"  // important! to let parent know which editor is active in tabView
     property var points: []; // array of endpoints of the segments
     property int pointWidth: 10; // set constant
     property real currentIndex: 0
     property real currentValue: 0
+
 
     Item {id: mainArea; anchors.fill: parent}
 
@@ -426,7 +428,7 @@ Rectangle {
 
     }
 
-    Label { // TODO: leia koht, võibolla messagedialog
+    Label {
         visible: false
         id: tipLAbel
         x: 271
@@ -477,24 +479,24 @@ Rectangle {
     }
 
 
-    Button {
-        id: graph2syntaxButton
-        text: qsTr("&Insert to CsoundQt")
-        anchors.left: drawRect.left
-        anchors.top: syntaxRadioButtons.bottom
-        anchors.topMargin: 6
+    // Button {
+    //     id: graph2syntaxButton
+    //     text: qsTr("&Insert to CsoundQt")
+    //     anchors.left: drawRect.left
+    //     anchors.top: syntaxRadioButtons.bottom
+    //     anchors.topMargin: 6
 
-        onClicked:  {
-            tableEditor.newSyntax(graph2syntax()); // send signal to host
-        }
-    }
+    //     onClicked:  {
+    //         tableEditor.newSyntax(graph2syntax()); // send signal to host
+    //     }
+    // }
 
 
     Button {
         id: syntax2graphButton
         text: qsTr("&Update graph")
         anchors.left: drawRect.left
-        anchors.top: graph2syntaxButton.bottom
+        anchors.top: syntaxRadioButtons.bottom
         anchors.topMargin: 6
 
 
@@ -507,10 +509,10 @@ Rectangle {
     TextArea {
         id: syntaxField
         objectName: "syntaxField" // to reach it fro C++
-        anchors.left: graph2syntaxButton.right
+        anchors.left: syntax2graphButton.right
         anchors.leftMargin: 6
         anchors.right: drawRect.right
-        anchors.top: graph2syntaxButton.top
+        anchors.top: syntax2graphButton.top
         anchors.bottom:  mainArea.bottom
         anchors.bottomMargin: 10 // has no influence in some reason
         //height: gen7Editor.height * 0.15
@@ -522,19 +524,11 @@ Rectangle {
     }
 
 
-
-
-
-
-
     SpinBox {
         id: tableSizeSpinbox
-        //y: 362
         value: 1024
         from: 1
         to: 99999
-//        anchors.left: drawRect.right
-//        anchors.leftMargin: 6
         anchors.right: mainArea.right
         anchors.rightMargin: 10
         anchors.top: drawRect.bottom
