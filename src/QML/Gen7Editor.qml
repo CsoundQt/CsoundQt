@@ -323,7 +323,7 @@ Rectangle {
 
         MouseArea {
             anchors.fill: parent
-            onDoubleClicked: {
+            onDoubleClicked: function(mouse) {
                 insertPoint(mouse.x,mouse.y);
                 graph2syntax()
             }
@@ -458,7 +458,12 @@ Rectangle {
         anchors.top: syntax2graphButton.top
         anchors.bottom:  mainArea.bottom
         anchors.bottomMargin: 10 // has no influence in some reason
+
         readOnly: false
+        font.family: "Courier New"
+        font.pixelSize: 10
+        wrapMode: TextArea.Wrap
+
         text: "giTable ftgen 0,0,1024, 7, 0.000000, 1024, 1.000000" // corresponds to the default position of points
         Keys.onReturnPressed: syntax2graph(syntaxField.text, maxSpinbox.value)
 
@@ -547,7 +552,7 @@ Rectangle {
         visible: false
 
 
-        contentItem: TextArea {
+        contentItem: TextEdit {
             wrapMode: TextArea.Wrap
             text: qsTr("Double-click to add a new point.\nDrag to move, right-click to remove\nYou can edit the table definition in textarea. \nThe changes in definition are displayed when you press ENTER or click on button Update Graph\n");
         }
