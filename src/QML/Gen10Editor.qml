@@ -227,29 +227,41 @@ Item {
         onPaint: {
             var ctx = getContext("2d")
             ctx.clearRect(0, 0, width, height)
-            
+
             ctx.strokeStyle = "#999"
             ctx.beginPath()
             ctx.moveTo(0, height/2)
             ctx.lineTo(width, height/2)
             ctx.stroke()
-            
-            ctx.strokeStyle = "#e74c3c"
-            ctx.lineWidth = 1.2
-            ctx.beginPath()
-            
+
+            // Step 1: Calculate all y values and store them
+            var yValues = []
+            var maxY = 0;
             for (var x = 0; x < width; x++) {
-                var t = x/width * 2 * Math.PI
-                var y = height/2
-                
+                var t = x / width * 2 * Math.PI
+                var y = 0
                 for (var h = 0; h < harmonics.length; h++) {
                     var harmonic = h + 1
                     var amplitude = harmonics[h] || 0
-                    y -= Math.sin(t * harmonic) * amplitude * (height/4)
+                    y += Math.sin(t * harmonic) * amplitude
                 }
-                
-                if (x === 0) ctx.moveTo(x, y)
-                else ctx.lineTo(x, y)
+                yValues.push(y)
+                if (Math.abs(y)>maxY) {
+                    maxY = Math.abs(y)
+                }
+            }
+
+            // Normalize, if needed and draw
+            ctx.strokeStyle = "#e74c3c"
+            ctx.lineWidth = 1.2
+            ctx.beginPath()
+            for (x = 0; x < width; x++) {
+                var normalizedY = maxY>1 ? yValues[x]/maxY : yValues[x]
+                var yCanvas = height/2 - normalizedY * (height/2) * 0.95
+                if (x === 0)
+                    ctx.moveTo(x, yCanvas)
+                else
+                    ctx.lineTo(x, yCanvas)
             }
             ctx.stroke()
         }
