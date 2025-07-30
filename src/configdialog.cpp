@@ -98,7 +98,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
         languageComboBox->addItem(m_configlists->languages[i],
                                   QVariant(m_configlists->languageCodes[i]));
 	}
-	midiInterfaceComboBox->clear();
+    midiInterfaceComboBox->clear();
 	midiOutInterfaceComboBox->clear();
 
 #ifdef CSQT_RTMIDI
@@ -123,6 +123,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 			midiOutInterfaceComboBox->addItem(QString::fromStdString(midiout.getPortName(i)), QVariant(i));
 		}
 	}
+
 #ifdef CSQT_OLD_RTMIDI
 	catch (RtError &error) {
 #else
@@ -132,20 +133,20 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		error.printMessage();
 	}
 #else
-	midiInterfaceComboBox->addItem(tr("No RtMidi support"));
+    midiInterfaceComboBox->addItem(tr("No RtMidi support"), QVariant(9999));
 #endif
 
-	midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI In interface")), QVariant(9999));
+    midiInterfaceComboBox->addItem(QString(tr("None", "No MIDI In interface")), QVariant(9999));
 	//match interface by nameby name, not by index
 	int ifIndex = midiInterfaceComboBox->findText(m_options->midiInterfaceName);
 	if (ifIndex>=0) {
 		midiInterfaceComboBox->setCurrentIndex(ifIndex);
 	} else {
         qDebug()<< m_options->midiInterfaceName << "not found. Setting MIDI In to None";
-        // set to none if not found
+        // set to none if not found. this deals also with translation.
         midiInterfaceComboBox->setCurrentIndex(midiInterfaceComboBox->findData(9999));
 	}
-	midiOutInterfaceComboBox->addItem(QString(tr(" None", "No MIDI Out interface")), QVariant(9999));
+    midiOutInterfaceComboBox->addItem(QString(tr("None", "No MIDI Out interface")), QVariant(9999));
 
 	ifIndex = midiOutInterfaceComboBox->findText(m_options->midiOutInterfaceName);
 	if (ifIndex>=0) {
@@ -155,7 +156,6 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 		midiOutInterfaceComboBox->setCurrentIndex(midiOutInterfaceComboBox->findData(9999));
 	}
 
-	themeComboBox->setCurrentIndex(themeComboBox->findText(m_options->theme));
 	fontComboBox->setCurrentIndex(fontComboBox->findText(m_options->font) );
 	fontSizeComboBox->setCurrentIndex(fontSizeComboBox->findText(QString::number((int) m_options->fontPointSize)));
 	lineNumbersCheckBox->setChecked(m_options->showLineNumberArea);
@@ -181,7 +181,23 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
 	tabWidthSpinBox->setValue(m_options->tabWidth);
 	tabIndentCheckBox->setChecked(m_options->tabIndents);
-    highlightingThemeComboBox->setCurrentText(m_options->highlightingTheme);
+
+    // allow translations for highlightingThemeComboBox and themeCombobox
+    // NB! make sure that the strings are the same as in configdialog.ui
+    highlightingThemeComboBox->setItemData(0, "light");
+    highlightingThemeComboBox->setItemData(1, "dark");
+    highlightingThemeComboBox->setItemData(2, "classic");
+    highlightingThemeComboBox->setItemData(3, "none");
+    highlightingThemeComboBox->setCurrentIndex(highlightingThemeComboBox->findData(m_options->highlightingTheme));
+
+
+    themeComboBox->setItemData(0, "breeze");
+    themeComboBox->setItemData(1, "breeze-dark");
+    themeComboBox->setItemData(2, "boring");
+    themeComboBox->setCurrentIndex(themeComboBox->findData(m_options->theme));
+
+
+
 	autoplayCheckBox->setChecked(m_options->autoPlay);
 	autoJoinCheckBox->setChecked(m_options->autoJoin);
 	menusDepthSpinBox->setValue(m_options->menuDepth);
@@ -279,12 +295,12 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     if(m_options->useSystemSamplerate) {
         if(RtModuleComboBox->currentText() == "pulse") {
             // pulseaudio backend has no system sample rate, so we default to the orchestra
-            samplerateComboBox->setCurrentText("Orchestra");
+            samplerateComboBox->setCurrentIndex(ORCHESTRA);
         } else {
-            samplerateComboBox->setCurrentText("System");
+            samplerateComboBox->setCurrentIndex(SYSTEM);
         }
     } else if (m_options->samplerate == 0) {
-        samplerateComboBox->setCurrentText("Orchestra");
+        samplerateComboBox->setCurrentIndex(ORCHESTRA);
     } else {
         samplerateComboBox->setCurrentText(QString::number(m_options->samplerate));
     }
@@ -433,8 +449,8 @@ void ConfigDialog::onRtModuleComboBoxChanged(int index) {
     } else if (currentText == "pulse") {
         RtInputLineEdit->setText("adc");
         RtOutputLineEdit->setText("dac");
-        if(m_options->useSystemSamplerate || this->samplerateComboBox->currentText() == "System") {
-            this->samplerateComboBox->setCurrentText("Orchestra");
+        if(m_options->useSystemSamplerate || this->samplerateComboBox->currentIndex() == SYSTEM) {
+            this->samplerateComboBox->setCurrentIndex(ORCHESTRA); // pulse has no own sample rate
             m_options->useSystemSamplerate = false;
             m_options->samplerate = 0;
         }
@@ -471,7 +487,6 @@ void ConfigDialog::setCurrentTab(int index)
 
 void ConfigDialog::accept()
 {
-	m_options->theme = themeComboBox->currentText();
 	m_options->font = fontComboBox->currentText();
 	m_options->fontPointSize = fontSizeComboBox->currentText().toDouble();
 	m_options->showLineNumberArea = lineNumbersCheckBox->isChecked();
@@ -480,7 +495,11 @@ void ConfigDialog::accept()
 	m_options->consoleFontPointSize = consoleFontSizeComboBox->currentText().toDouble();
 	m_options->tabWidth = tabWidthSpinBox->value();
 	m_options->tabIndents = tabIndentCheckBox->isChecked();
-    m_options->highlightingTheme = highlightingThemeComboBox->currentText();
+
+    // deal with localized themes:
+    m_options->theme = themeComboBox->currentData().toString();    // to allow to be translated
+    m_options->highlightingTheme = highlightingThemeComboBox->currentData().toString();
+
     m_options->colorVariables = m_options->highlightingTheme != "none";
     m_options->autoPlay = autoplayCheckBox->isChecked();
 	m_options->autoJoin = autoJoinCheckBox->isChecked();
@@ -558,16 +577,16 @@ void ConfigDialog::accept()
 	m_options->rtOutputDevice = RtOutputLineEdit->text();
 	m_options->rtJackName = JackNameLineEdit->text();
     // m_options->useSystemSamplerate = useSystemSamplerateCheckBox->isChecked();
-    auto srmenu = samplerateComboBox->currentText();
-    if(srmenu == "System") {
+    int srmenu = samplerateComboBox->currentIndex();
+    if(srmenu == SYSTEM) {
         m_options->useSystemSamplerate = true;
         m_options->samplerate = 0;
-    } else if (srmenu == "Orchestra") {
+    } else if (srmenu == ORCHESTRA) {
         m_options->useSystemSamplerate = false;
         m_options->samplerate = 0;
     } else {
         m_options->useSystemSamplerate = false;
-        m_options->samplerate = srmenu.toInt();
+        m_options->samplerate = samplerateComboBox->currentText().toInt();
     }
     m_options->overrideNumChannels = numChannelsCheckBox->isChecked();
     m_options->numChannels = numChannelsSpinBox->value();
