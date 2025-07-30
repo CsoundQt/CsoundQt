@@ -607,11 +607,13 @@ Rectangle {
 
     Dialog {
         id: helpDialog
+        width: parent.width*0.8
         title: qsTr("Help")
         visible: false
 
 
         contentItem: TextArea {
+            wrapMode: TextArea.Wrap
             text: qsTr("Double-click to add a new point.\nDrag to move, right-click to remove\nYou can edit the table definition in textarea. \nThe changes in definition are displayed when you press ENTER or click on button Update Graph\n");
         }
         standardButtons: Dialog.Ok
