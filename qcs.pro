@@ -129,7 +129,7 @@ TARGET = CsoundQt
 
 build32:TARGET = $${TARGET}-f
 build64:TARGET = $${TARGET}-d
-html_webkit|html_webengine:TARGET = $${TARGET}-html
+html_support:TARGET = $${TARGET}-html
 
 TARGET = $${TARGET}-cs7
 
