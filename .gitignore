@@ -1,7 +1,7 @@
 .directory
 # rtmidi*
 config.user.pri
-qcs.pro.user
+*.user
 
 bin/*.exe
 bin/*.dll
