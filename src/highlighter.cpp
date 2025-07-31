@@ -856,10 +856,10 @@ void Highlighter::highlightCsoundBlock(const QString &line)
 
 void Highlighter::highlightPythonBlock(const QString &text)
 {
-    QRegularExpression expression("\\b+\\w\\b+");
+    QRegularExpression expression("\\b\\w\\b");
 	int index = text.indexOf(expression, 0);
     for (int i = 0; i < pythonKeywords.size(); i++) {
-        QRegularExpression expression("\\b+" + pythonKeywords[i] + "\\b+");
+        QRegularExpression expression("\\b" + pythonKeywords[i] + "\\b");
 		int index = text.indexOf(expression);
 		while (index >= 0) {
             // Qt6: Test this substitution and compare with Qt 5!!!
@@ -899,10 +899,10 @@ void Highlighter::highlightXmlBlock(const QString &/*text*/)
 
 void Highlighter::highlightHtmlBlock(const QString &text)
 {
-    QRegularExpression expression("\\b+\\w\\b+");
+    QRegularExpression expression("\\b\\w\\b");
 	int index = text.indexOf(expression, 0);
 	for (int i = 0; i < htmlKeywords.size(); i++) {
-        QRegularExpression expression("\\b+" + htmlKeywords[i] + "\\b+");
+        QRegularExpression expression("\\b" + htmlKeywords[i] + "\\b");
 		int index = text.indexOf(expression);
 		while (index >= 0) {
             int length = 4; //expression.matchedLength();
@@ -912,7 +912,7 @@ void Highlighter::highlightHtmlBlock(const QString &text)
 	}
 
 	for (int i=0; i<javascriptKeywords.size(); i++) {
-        QRegularExpression expression("\\b+" + javascriptKeywords[i] + "\\b+");
+        QRegularExpression expression("\\b" + javascriptKeywords[i] + "\\b");
 		int index = text.indexOf(expression);
 		while (index >= 0) {
             int length =  expression.match(text).capturedLength(); //expression.matchedLength();
