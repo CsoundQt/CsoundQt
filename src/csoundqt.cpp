@@ -4950,7 +4950,7 @@ void CsoundQt::createToolBars()
     configureToolBar = addToolBar(tr("Panels"));
     configureToolBar->setObjectName("panelToolBar");
 #if defined(CSQT_QTHTML)
-    // configureToolBar->addAction(showHtml5Act);
+    configureToolBar->addAction(showHtml5Act);
 #endif
     configureToolBar->addAction(showWidgetsAct);
     configureToolBar->addAction(showHelpAct);
