@@ -128,6 +128,10 @@ endif
 endin
 
 </CsInstruments>
+<CsScore>
+</CsScore>
+</CsoundSynthesizer>
+
 <html>
 <head>
 </head>
@@ -270,6 +274,3 @@ function on_sliderMasterLevel(value) {
 </table>
 
 </html>
-<CsScore>
-</CsScore>
-</CsoundSynthesizer>
