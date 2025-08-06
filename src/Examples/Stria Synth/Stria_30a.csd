@@ -1,6 +1,5 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac1 -d
 </CsOptions>
 <CsLicense>
 
@@ -35,9 +34,6 @@ List of changes
 >Add meter linear for morph and percent output
 >Range for Im1/2 : 4
 >Range for Freq. Spread: 0.001  to 100
-
-
-
 
 </CsLicense>
 <CsInstruments>
@@ -924,9 +920,9 @@ outvalue "MSC1",0										; set msw1 = 0 (PAD 1 is always on)
 endif
 
 
-if kres = 122 || kres == 90 then						;The same for PAD 2
+if kres == 122 || kres == 90 then						;The same for PAD 2
 outvalue "MSC2",1
-elseif kres = 120 || kres == 88 then
+elseif kres == 120 || kres == 88 then
 outvalue "MSC2",0
 endif
 
@@ -1124,7 +1120,7 @@ endif
 if ifreq <= 0 igoto stop
 if iratio < 1 igoto stop
 
-do:
+dodo:
 ifreq = ifreq0 * iratio^ind		; Geometric Formula
 if ifreq > sr/2 goto stop
 
@@ -1136,7 +1132,7 @@ gifreq = ifreq
 ind = ind + 1
 gind = ind	; copia il valore massimo dell'indice in gind
 
-igoto do
+igoto dodo
 
 stop:
 ;ifreq = ifreq_old
@@ -1187,7 +1183,7 @@ iexp = i(gk_exp)
 imaxharm = i(gk_maxharm)
 icurfreq = ifund
 
-do:
+dodo:
 
 if ind > (imaxharm - 1) igoto stop
 gifreq = icurfreq
@@ -1198,7 +1194,7 @@ tabw_i	icurfreq, ind - 1, 300
 tabw_i	icurfreq, ind - 1, 301
 gind = ind
 gifreq = icurfreq
-igoto do
+igoto dodo
 
 stop:
 
@@ -1228,7 +1224,7 @@ ifund   	= 	i(gkFIB_Fund)
 
 ifreq = ifund
 
-do:
+dodo:
 
 ifreq_old = ifreq
 
@@ -1243,7 +1239,7 @@ index = index + 1
 gind = index	; make a copy of index into gind
 
 
-igoto do
+igoto dodo
 
 stop:
 outvalue "led_G", 0
@@ -2217,8 +2213,8 @@ icar  random	i(gk_CAR_min), i(gk_CAR_max);extracts random number for	car_min
 imod  random i(gk_MOD_min), i(gk_MOD_max) ;extracts random number for car_max
 
 
-icar = (i(gk_cm) = 0 ?  int(icar) : icar)	;select if use integer or float values
-imod = (i(gk_cm) = 0 ?  int(imod) : imod)
+icar = (i(gk_cm) == 0 ?  int(icar) : icar)	;select if use integer or float values
+imod = (i(gk_cm) == 0 ?  int(imod) : imod)
 
 iindex random 0,i(gkindx1)					;extracts random number for modulation index
 
@@ -2563,8 +2559,8 @@ icar  random	i(gk_CAR_min), i(gk_CAR_max)			;6,14
 imod  random  	i(gk_MOD_min), i(gk_MOD_max)		 ;5,13
 
 
-icar = (i(gk_cm) = 0 ?  int(icar) : icar)
-imod = (i(gk_cm) = 0 ?  int(imod) : imod)
+icar = (i(gk_cm) == 0 ?  int(icar) : icar)
+imod = (i(gk_cm) == 0 ?  int(imod) : imod)
 
 iindex random 0,i(gkindx2)
 
@@ -2716,7 +2712,7 @@ if iratio < 1 goto stop
 
 
 
-do:
+dodo:
     ifreq = ifreq0 * iratio^ind
     if ifreq > sr/2 goto stop
 
@@ -2730,7 +2726,7 @@ ind = ind + 1
 gind = ind			; copy max index in variable gind
 
 
-igoto do
+igoto dodo
 
 stop:
 
@@ -2794,7 +2790,7 @@ iexp = p5
 imaxharm = p6
 icurfreq = ifund
 
-do:
+dodo:
 
 if ind > (imaxharm - 1) igoto stop
 gifreq = icurfreq
@@ -2806,7 +2802,7 @@ tabw_i	icurfreq, ind - 1, 302
 
 gind = ind
 gifreq = icurfreq
-igoto do
+igoto dodo
 
 stop:
 
@@ -2838,7 +2834,7 @@ ifund   	= 	p5
 
 ifreq = ifund
 
-do:
+dodo:
 
 ifreq_old = ifreq
 
@@ -2854,7 +2850,7 @@ index = index + 1
 gind = index	; copia il valore massimo dell'indice in gind
 
 
-igoto do
+igoto dodo
 
 stop:
 outvalue "led_G", 0
@@ -6873,86 +6869,84 @@ endin
 
 </CsInstruments>
 <CsScore>
-
-f9  	0 8 -2 1 2 3 4 5 6 7 8	; Contains the numbers of tables affected by ftmorf
-f10		0 16384 10 1			; Morph table
-f11 	0 32 -2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-
-
-f300	0 2048 -2 0  			;Contains pitch grid generated from GUI
-f301	0 2048 -2 0			    ;A copy of f300
-f302	0 2048 -2 0			    ;Contains pitch grid after a snap read
-f303	0  2   -2  301 302 	;List
-
-
-f600 0 4 -2 602 603 604 605  
-f601 0 1024 10 1 /*init contents of 601 dont matter */
-
-
-
-f602 0 1025  20 5
-f603 0 1025 7 0 64 1 768 1 64 0
-f604 0 1025 7 0 6 1 500 0.3 500 0 6 0 12 0 
-f605 0 1025 5 1 1024 0.001
-
-
-f701  	0  2   -2  703 704	;Contains the list of tables for snap morphing  (2 tables)
-f702  	0  128  10  1			; Morph table (don't care initial content)
-f703  	0  128  -2  0  		; 1st table
-f704  	0  128  -2  0			; 2nd table
-
-f800 0   32 7 1 15 1 1 -1 15 -1
-;            
-f900 0 512 -7 1 512 1			;
-f901 0 512 -2 0
-;MKG f902 0 512 -2 0
-
-f902 0 512 7 1 128 1 0 0 384 0
-
-f903 0 1024 -19 1 0 0 1  ; UNITY FUNCTION FOR CHOP/GRAIN
-;-------------------------------------------------
-
-i 1 0 36000
-i 4 0 36000
-
-
-i 7 0.1 0.1
-i 8 0 36000
-i 9 0 0.1
-;i 15 0 3600
-i 60 0 36000
-i 61 0 36000
-
-
-i 161 0 36000
-i 901 0 36000
-i 902 0 36000
-i 903 0 36000
-i 904 0 36000
-i 905 0 36000
-i 906 0 36000
-i 907 0 36000
-i 908 0 36000
-i 909 0 36000
-i 910 0 36000
-
-i 900 0 36000
-i 976 0 36000
-
-i 991 0 36000
-i 992 0 36000
-		
-
-
-i 999 0 36000
-
-i 1001  0 0.1
-i 1002  0.1 36000
-e
-</CsScore>
+ 
+f 9  	0 8 -2 1 2 3 4 5 6 7 8	; Contains the numbers of tables affected by ftmorf 
+f 10		0 16384 10 1			; Morph table 
+f 11 	0 32 -2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+ 
+ 
+f 300	0 2048 -2 0  			;Contains pitch grid generated from GUI 
+f 301	0 2048 -2 0			    ;A copy of f300 
+f 302	0 2048 -2 0			    ;Contains pitch grid after a snap read 
+f 303	0  2   -2  301 302 	;List 
+ 
+ 
+f 600 0 4 -2 602 603 604 605 
+f 601 0 1024 10 1 /*init contents of 601 dont matter */ 
+ 
+ 
+ 
+f 602 0 1025  20 5 
+f 603 0 1025 7 0 64 1 768 1 64 0 
+f 604 0 1025 7 0 6 1 500 0.3 500 0 6 0 12 0 
+f 605 0 1025 5 1 1024 0.001 
+ 
+ 
+f 701  	0  2   -2  703 704	;Contains the list of tables for snap morphing  (2 tables) 
+f 702  	0  128  10  1			; Morph table (don't care initial content) 
+f 703  	0  128  -2  0  		; 1st table 
+f 704  	0  128  -2  0			; 2nd table 
+ 
+f 800 0   32 7 1 15 1 1 -1 15 -1 
+; 
+f 900 0 512 -7 1 512 1			; 
+f 901 0 512 -2 0 
+;MKG f902 0 512 -2 0 
+ 
+f 902 0 512 7 1 128 1 0 0 384 0 
+ 
+f 903 0 1024 -19 1 0 0 1  ; UNITY FUNCTION FOR CHOP/GRAIN 
+;------------------------------------------------- 
+ 
+i 1 0 36000 
+i 4 0 36000 
+ 
+ 
+i 7 0.1 0.1 
+i 8 0 36000 
+i 9 0 0.1 
+;i 15 0 3600 
+i 60 0 36000 
+i 61 0 36000 
+ 
+ 
+i 161 0 36000 
+i 901 0 36000 
+i 902 0 36000 
+i 903 0 36000 
+i 904 0 36000 
+i 905 0 36000 
+i 906 0 36000 
+i 907 0 36000 
+i 908 0 36000 
+i 909 0 36000 
+i 910 0 36000 
+ 
+i 900 0 36000 
+i 976 0 36000 
+ 
+i 991 0 36000 
+i 992 0 36000 
+ 
+ 
+ 
+i 999 0 36000 
+ 
+i 1001  0 0.1 
+i 1002  0.1 36000 
+e 
+ </CsScore>
 </CsoundSynthesizer>
-
-
 
 
 <bsbPanel>
@@ -9327,7 +9321,7 @@ e
   <description/>
   <minimum>0.00010000</minimum>
   <maximum>400.00000000</maximum>
-  <value>0.10000000</value>
+  <value>0.00010000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>-1.00000000</resolution>
@@ -18047,7 +18041,7 @@ e
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>0.100</label>
+  <label>0.000</label>
   <alignment>center</alignment>
   <valignment>top</valignment>
   <font>Lucida Grande</font>
@@ -20909,7 +20903,7 @@ e
   <minimum>0.0001</minimum>
   <maximum>400</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0.1</value>
+  <value>0.0001</value>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>metronome</objectName>
@@ -21318,7 +21312,7 @@ e
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <value>89</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
