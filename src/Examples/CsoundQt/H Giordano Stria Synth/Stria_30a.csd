@@ -6949,11 +6949,17 @@ e
 </CsoundSynthesizer>
 
 
+
+
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>323</x>
- <y>82</y>
+ <x>314</x>
+ <y>50</y>
  <width>1521</width>
  <height>895</height>
  <visible>true</visible>
@@ -8775,7 +8781,7 @@ e
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>/Users/eug/Documents/CSD/Stria/Chop_test.txt</label>
+  <label>/home/jh/src/csoundqt/src/Examples/Stria Synth/TEST_V09.txt</label>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -17383,7 +17389,7 @@ e
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/Users/eug/Documents/CSD/Stria/Chop_test.txt</stringvalue>
+  <stringvalue>/home/jh/src/csoundqt/src/Examples/Stria Synth/TEST_V09.txt</stringvalue>
   <text>Browse</text>
   <image>/</image>
   <eventLine/>
@@ -26907,7 +26913,7 @@ e
   <description/>
   <minimum>0.02000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.33360000</value>
+  <value>0.33438400</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -27044,7 +27050,7 @@ e
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <value>0.33360000</value>
+  <value>0.33438400</value>
   <resolution>0.01000000</resolution>
   <minimum>0.02000000</minimum>
   <maximum>1.00000000</maximum>
