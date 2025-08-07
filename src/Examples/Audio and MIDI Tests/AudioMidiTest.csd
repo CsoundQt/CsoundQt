@@ -339,6 +339,8 @@ e
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -355,8 +357,8 @@ e
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>331</x>
-  <y>59</y>
+  <x>329</x>
+  <y>89</y>
   <width>373</width>
   <height>328</height>
   <uuid>{f046b35f-13ea-4c0f-9282-b4b6007fc90e}</uuid>
@@ -386,8 +388,8 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>dbdisp</objectName>
-  <x>604</x>
-  <y>124</y>
+  <x>602</x>
+  <y>154</y>
   <width>36</width>
   <height>28</height>
   <uuid>{cd057454-88c9-4ff0-8146-afe05c81f45d}</uuid>
@@ -417,8 +419,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>6</x>
-  <y>282</y>
+  <x>4</x>
+  <y>312</y>
   <width>322</width>
   <height>105</height>
   <uuid>{d25e4c33-85be-48ad-a3f4-b071e3baa5fe}</uuid>
@@ -451,7 +453,7 @@ e
   <x>6</x>
   <y>9</y>
   <width>698</width>
-  <height>48</height>
+  <height>44</height>
   <uuid>{dc5604fd-41c0-4189-abe2-55c72f10172b}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -460,7 +462,7 @@ e
   <label>Audio / MIDI Test</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
-  <font>Arial</font>
+  <font>Liberation Sans</font>
   <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
@@ -479,8 +481,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>6</x>
-  <y>59</y>
+  <x>4</x>
+  <y>89</y>
   <width>322</width>
   <height>220</height>
   <uuid>{6b0524fe-c62b-443e-a7cc-2786168abc62}</uuid>
@@ -510,8 +512,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>62</x>
-  <y>85</y>
+  <x>60</x>
+  <y>115</y>
   <width>16</width>
   <height>140</height>
   <uuid>{9144966e-0db1-4ae8-a1ad-3fb19f21a144}</uuid>
@@ -547,8 +549,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>23</x>
-  <y>85</y>
+  <x>21</x>
+  <y>115</y>
   <width>16</width>
   <height>140</height>
   <uuid>{9b761a44-1f92-480b-9656-ffdbfa02e0ed}</uuid>
@@ -584,8 +586,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>19</x>
-  <y>227</y>
+  <x>17</x>
+  <y>257</y>
   <width>23</width>
   <height>25</height>
   <uuid>{cf92f08d-bb58-4a3d-acda-479165db96d4}</uuid>
@@ -615,8 +617,8 @@ e
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>indb1</objectName>
-  <x>12</x>
-  <y>250</y>
+  <x>10</x>
+  <y>280</y>
   <width>36</width>
   <height>21</height>
   <uuid>{557e7fb7-3fab-45bd-b4ea-cbe3fd20a92a}</uuid>
@@ -649,8 +651,8 @@ e
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>indb2</objectName>
-  <x>51</x>
-  <y>250</y>
+  <x>49</x>
+  <y>280</y>
   <width>36</width>
   <height>21</height>
   <uuid>{38bd1f5e-dcf7-4897-a5c6-565e19983e63}</uuid>
@@ -683,8 +685,8 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
-  <x>206</x>
-  <y>327</y>
+  <x>204</x>
+  <y>357</y>
   <width>100</width>
   <height>48</height>
   <uuid>{a3545b15-5470-4efb-9dfd-eee56bc47d2a}</uuid>
@@ -705,8 +707,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>20</x>
-  <y>311</y>
+  <x>18</x>
+  <y>341</y>
   <width>25</width>
   <height>25</height>
   <uuid>{a4ab00b5-62ab-45b1-9b1f-2978742d4057}</uuid>
@@ -742,8 +744,8 @@ e
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>signaltype</objectName>
-  <x>549</x>
-  <y>247</y>
+  <x>547</x>
+  <y>277</y>
   <width>110</width>
   <height>28</height>
   <uuid>{6d7e91db-0e40-4c78-8ff3-e01a436b45af}</uuid>
@@ -778,8 +780,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>58</x>
-  <y>227</y>
+  <x>56</x>
+  <y>257</y>
   <width>23</width>
   <height>25</height>
   <uuid>{00820929-c5f2-4b95-857d-8f65bc444510}</uuid>
@@ -809,8 +811,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>140</x>
-  <y>85</y>
+  <x>138</x>
+  <y>115</y>
   <width>16</width>
   <height>140</height>
   <uuid>{da5af5b6-02b8-49a3-b786-9b9d9cb6a8c0}</uuid>
@@ -846,8 +848,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>101</x>
-  <y>85</y>
+  <x>99</x>
+  <y>115</y>
   <width>16</width>
   <height>140</height>
   <uuid>{bbbbb404-dee3-4f9a-8b33-ee195f268fd9}</uuid>
@@ -883,8 +885,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>97</x>
-  <y>227</y>
+  <x>95</x>
+  <y>257</y>
   <width>23</width>
   <height>25</height>
   <uuid>{731bae72-8739-4e2d-bcf8-dac396e37ccc}</uuid>
@@ -914,8 +916,8 @@ e
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>indb3</objectName>
-  <x>90</x>
-  <y>250</y>
+  <x>88</x>
+  <y>280</y>
   <width>36</width>
   <height>21</height>
   <uuid>{0dea1661-8fb5-4157-8e62-59c9d9ab05a1}</uuid>
@@ -948,8 +950,8 @@ e
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>indb4</objectName>
-  <x>129</x>
-  <y>250</y>
+  <x>127</x>
+  <y>280</y>
   <width>36</width>
   <height>21</height>
   <uuid>{fa018fbc-6904-481b-9ab5-765ad0da46ca}</uuid>
@@ -982,8 +984,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>136</x>
-  <y>227</y>
+  <x>134</x>
+  <y>257</y>
   <width>23</width>
   <height>25</height>
   <uuid>{727c9851-0e1b-4fc9-8afc-fd6c62f253be}</uuid>
@@ -1013,8 +1015,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>218</x>
-  <y>85</y>
+  <x>216</x>
+  <y>115</y>
   <width>16</width>
   <height>140</height>
   <uuid>{e26d498d-3c52-4e91-83a3-1a269ef06cb8}</uuid>
@@ -1050,8 +1052,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>179</x>
-  <y>85</y>
+  <x>177</x>
+  <y>115</y>
   <width>16</width>
   <height>140</height>
   <uuid>{01c6f2e2-d06d-4bc4-9dbf-6917d96e9e98}</uuid>
@@ -1087,8 +1089,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>175</x>
-  <y>227</y>
+  <x>173</x>
+  <y>257</y>
   <width>23</width>
   <height>25</height>
   <uuid>{2846ddf1-0e08-457a-8d28-e6dd839a2eb8}</uuid>
@@ -1118,8 +1120,8 @@ e
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>indb5</objectName>
-  <x>168</x>
-  <y>250</y>
+  <x>166</x>
+  <y>280</y>
   <width>36</width>
   <height>21</height>
   <uuid>{5abc28b7-4a2d-472d-9b00-4bca52043588}</uuid>
@@ -1152,8 +1154,8 @@ e
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>indb6</objectName>
-  <x>207</x>
-  <y>250</y>
+  <x>205</x>
+  <y>280</y>
   <width>36</width>
   <height>21</height>
   <uuid>{577dd7c9-26ee-41c7-b301-6f7b95b7dd6a}</uuid>
@@ -1186,8 +1188,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>214</x>
-  <y>227</y>
+  <x>212</x>
+  <y>257</y>
   <width>23</width>
   <height>25</height>
   <uuid>{f55bd16e-cd68-44a7-8b08-2f9e1183ab42}</uuid>
@@ -1217,8 +1219,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>295</x>
-  <y>85</y>
+  <x>293</x>
+  <y>115</y>
   <width>16</width>
   <height>140</height>
   <uuid>{0de4815b-bd0e-4a3e-abd9-4fd53ca0079a}</uuid>
@@ -1254,8 +1256,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>257</x>
-  <y>85</y>
+  <x>255</x>
+  <y>115</y>
   <width>16</width>
   <height>140</height>
   <uuid>{d0bca9d8-5b3a-4d17-bda8-da14e12ceaf0}</uuid>
@@ -1291,8 +1293,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>253</x>
-  <y>227</y>
+  <x>251</x>
+  <y>257</y>
   <width>23</width>
   <height>25</height>
   <uuid>{34ecffc5-5d86-422e-97fc-e5c9fd0e0aa7}</uuid>
@@ -1322,8 +1324,8 @@ e
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>indb7</objectName>
-  <x>246</x>
-  <y>250</y>
+  <x>244</x>
+  <y>280</y>
   <width>36</width>
   <height>21</height>
   <uuid>{e2d590fc-d377-4d40-bd2e-9f8ff3af5bc5}</uuid>
@@ -1356,8 +1358,8 @@ e
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>indb8</objectName>
-  <x>285</x>
-  <y>250</y>
+  <x>283</x>
+  <y>280</y>
   <width>36</width>
   <height>21</height>
   <uuid>{3da9b4f6-fe00-4b13-a271-976525c17057}</uuid>
@@ -1390,8 +1392,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>292</x>
-  <y>227</y>
+  <x>290</x>
+  <y>257</y>
   <width>23</width>
   <height>25</height>
   <uuid>{4c976814-f547-431d-ab74-e9225f3aff12}</uuid>
@@ -1421,8 +1423,8 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on1</objectName>
-  <x>341</x>
-  <y>170</y>
+  <x>339</x>
+  <y>200</y>
   <width>48</width>
   <height>48</height>
   <uuid>{55747531-f2e1-4e50-9839-3e788d995014}</uuid>
@@ -1443,8 +1445,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>566</x>
-  <y>174</y>
+  <x>564</x>
+  <y>204</y>
   <width>113</width>
   <height>35</height>
   <uuid>{a498f284-9d66-4ec8-9c40-07632ace83b4}</uuid>
@@ -1474,8 +1476,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>357</x>
-  <y>87</y>
+  <x>355</x>
+  <y>117</y>
   <width>16</width>
   <height>80</height>
   <uuid>{738f62ff-0256-428d-826b-2e96fb28c483}</uuid>
@@ -1511,8 +1513,8 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on2</objectName>
-  <x>391</x>
-  <y>170</y>
+  <x>389</x>
+  <y>200</y>
   <width>48</width>
   <height>48</height>
   <uuid>{6fa42161-ada8-4ca1-a785-00e8d9ca3d0c}</uuid>
@@ -1533,8 +1535,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>406</x>
-  <y>87</y>
+  <x>404</x>
+  <y>117</y>
   <width>16</width>
   <height>80</height>
   <uuid>{81589d71-6606-4fa8-b0fa-daeaf64b35ac}</uuid>
@@ -1570,8 +1572,8 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on3</objectName>
-  <x>440</x>
-  <y>170</y>
+  <x>438</x>
+  <y>200</y>
   <width>48</width>
   <height>48</height>
   <uuid>{aeb8b307-415d-4a1f-83a6-edd57e6e525d}</uuid>
@@ -1592,8 +1594,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>456</x>
-  <y>87</y>
+  <x>454</x>
+  <y>117</y>
   <width>16</width>
   <height>80</height>
   <uuid>{47096117-b4df-4a57-9f63-43e4433b93d2}</uuid>
@@ -1629,8 +1631,8 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on4</objectName>
-  <x>490</x>
-  <y>170</y>
+  <x>488</x>
+  <y>200</y>
   <width>48</width>
   <height>48</height>
   <uuid>{28590fdc-f133-43b3-99b8-7d7c379d5f79}</uuid>
@@ -1651,8 +1653,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>506</x>
-  <y>88</y>
+  <x>504</x>
+  <y>118</y>
   <width>16</width>
   <height>80</height>
   <uuid>{1c265b1b-8455-4c2c-96e6-e6f5d5d97caf}</uuid>
@@ -1688,8 +1690,8 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on5</objectName>
-  <x>343</x>
-  <y>327</y>
+  <x>341</x>
+  <y>357</y>
   <width>48</width>
   <height>48</height>
   <uuid>{7a266b0a-9e69-4579-b3d5-bf911c9ae383}</uuid>
@@ -1710,8 +1712,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>358</x>
-  <y>243</y>
+  <x>356</x>
+  <y>273</y>
   <width>16</width>
   <height>80</height>
   <uuid>{122c6052-83a6-4992-86e3-a44e37e9d19d}</uuid>
@@ -1747,8 +1749,8 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on6</objectName>
-  <x>393</x>
-  <y>327</y>
+  <x>391</x>
+  <y>357</y>
   <width>48</width>
   <height>48</height>
   <uuid>{e04bef86-57d9-46fc-8e12-508e8b42f03f}</uuid>
@@ -1769,8 +1771,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>407</x>
-  <y>243</y>
+  <x>405</x>
+  <y>273</y>
   <width>16</width>
   <height>80</height>
   <uuid>{ad1f2483-c122-4501-8e77-b1795091923d}</uuid>
@@ -1806,8 +1808,8 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on7</objectName>
-  <x>442</x>
-  <y>327</y>
+  <x>440</x>
+  <y>357</y>
   <width>48</width>
   <height>48</height>
   <uuid>{987ad683-ffda-4c02-ba76-fba80eef6f99}</uuid>
@@ -1828,8 +1830,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>457</x>
-  <y>243</y>
+  <x>455</x>
+  <y>273</y>
   <width>16</width>
   <height>80</height>
   <uuid>{831662dd-60f9-46a5-a8b2-6335223bf3ab}</uuid>
@@ -1865,8 +1867,8 @@ e
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>on8</objectName>
-  <x>492</x>
-  <y>327</y>
+  <x>490</x>
+  <y>357</y>
   <width>48</width>
   <height>48</height>
   <uuid>{eb86882f-def6-42b6-90ae-22f49f88a876}</uuid>
@@ -1887,8 +1889,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>507</x>
-  <y>243</y>
+  <x>505</x>
+  <y>273</y>
   <width>16</width>
   <height>80</height>
   <uuid>{2816aa9b-fa21-4b9c-a8ae-c29e6509d5b7}</uuid>
@@ -1924,8 +1926,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>16</x>
-  <y>287</y>
+  <x>14</x>
+  <y>317</y>
   <width>82</width>
   <height>26</height>
   <uuid>{3112a9ff-3ad0-4640-be66-9c8f659b03c2}</uuid>
@@ -1955,8 +1957,8 @@ e
  </bsbObject>
  <bsbObject type="BSBGraph" version="2">
   <objectName>graph-index</objectName>
-  <x>550</x>
-  <y>276</y>
+  <x>548</x>
+  <y>306</y>
   <width>142</width>
   <height>98</height>
   <uuid>{c1ed5763-b6f3-49fa-a32b-01e54082a604}</uuid>
@@ -1982,8 +1984,8 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>display</objectName>
-  <x>46</x>
-  <y>311</y>
+  <x>44</x>
+  <y>341</y>
   <width>140</width>
   <height>25</height>
   <uuid>{23d21873-0a2e-49e7-826a-9c6e4613e89a}</uuid>
@@ -2013,8 +2015,8 @@ e
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName/>
-  <x>19</x>
-  <y>355</y>
+  <x>17</x>
+  <y>385</y>
   <width>25</width>
   <height>25</height>
   <uuid>{4226d3d7-ef78-4a0f-8d15-8cd322f71634}</uuid>
@@ -2050,8 +2052,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>16</x>
-  <y>332</y>
+  <x>14</x>
+  <y>362</y>
   <width>82</width>
   <height>26</height>
   <uuid>{67bb9df3-11b5-4f60-a18d-7f0dd3cb6dd2}</uuid>
@@ -2081,8 +2083,8 @@ e
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>displaycc</objectName>
-  <x>45</x>
-  <y>355</y>
+  <x>43</x>
+  <y>385</y>
   <width>140</width>
   <height>25</height>
   <uuid>{37470029-ec0e-4126-921e-eb82afe59857}</uuid>
@@ -2112,8 +2114,8 @@ e
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>leveldelta</objectName>
-  <x>572</x>
-  <y>88</y>
+  <x>570</x>
+  <y>118</y>
   <width>100</width>
   <height>100</height>
   <uuid>{f8080f9c-7129-4dca-882f-9a3d2607106b}</uuid>
@@ -2266,8 +2268,8 @@ e
  </bsbObject>
  <bsbObject type="BSBGraph" version="2">
   <objectName>spectrum-index</objectName>
-  <x>6</x>
-  <y>390</y>
+  <x>4</x>
+  <y>420</y>
   <width>698</width>
   <height>200</height>
   <uuid>{a99a03fb-0336-41b5-99f4-bc12ec8036c3}</uuid>
@@ -2275,7 +2277,7 @@ e
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <value>1</value>
+  <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
   <zoomy>1.00000000</zoomy>
@@ -2293,8 +2295,8 @@ e
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>spmenu</objectName>
-  <x>614</x>
-  <y>391</y>
+  <x>612</x>
+  <y>421</y>
   <width>90</width>
   <height>28</height>
   <uuid>{a8934883-bf45-4155-be13-834e1b5f9a9b}</uuid>
@@ -2354,8 +2356,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>547</x>
-  <y>226</y>
+  <x>545</x>
+  <y>256</y>
   <width>97</width>
   <height>24</height>
   <uuid>{8afe76f5-61f5-4669-b921-f9520406a099}</uuid>
@@ -2385,8 +2387,8 @@ e
  </bsbObject>
  <bsbObject type="BSBScrollNumber" version="2">
   <objectName>signalfreq</objectName>
-  <x>660</x>
-  <y>248</y>
+  <x>658</x>
+  <y>278</y>
   <width>32</width>
   <height>26</height>
   <uuid>{53268cff-714e-423a-902b-7351141be7ec}</uuid>
@@ -2419,8 +2421,8 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>659</x>
-  <y>226</y>
+  <x>657</x>
+  <y>256</y>
   <width>30</width>
   <height>24</height>
   <uuid>{ae79f074-43a6-4d48-965c-5f07fcc4d3ac}</uuid>
@@ -2450,8 +2452,8 @@ e
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>fftsize</objectName>
-  <x>614</x>
-  <y>420</y>
+  <x>612</x>
+  <y>450</y>
   <width>90</width>
   <height>28</height>
   <uuid>{13bbe66e-eb51-4cd5-b44e-59eb1ee3e6dd}</uuid>
@@ -2481,20 +2483,20 @@ e
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>180</x>
-  <y>20</y>
-  <width>249</width>
-  <height>28</height>
+  <x>5</x>
+  <y>55</y>
+  <width>690</width>
+  <height>32</height>
   <uuid>{f10e642f-7bf6-4bd6-8c2d-7d8a2fccfd06}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>(Set channels in Configuration!)</label>
+  <label>Set "Channels" in Configure > Run to match your hardware settings!</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
   <font>Liberation Sans</font>
-  <fontsize>16</fontsize>
+  <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
    <r>205</r>
