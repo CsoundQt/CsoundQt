@@ -274,6 +274,9 @@ i 1 0 36000; spend 10 hours in profund research and listen to the voice of the t
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="596" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -288,7 +291,7 @@ e
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>showascii1</objectName>
   <x>359</x>
   <y>326</y>
@@ -298,8 +301,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>104</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -315,9 +320,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>showchar1</objectName>
   <x>359</x>
   <y>288</y>
@@ -327,8 +332,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>h</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -344,9 +351,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>typein1</objectName>
   <x>119</x>
   <y>184</y>
@@ -356,8 +363,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>30</fontsize>
   <precision>3</precision>
@@ -373,9 +382,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>typein2</objectName>
   <x>223</x>
   <y>183</y>
@@ -385,8 +394,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>30</fontsize>
   <precision>3</precision>
@@ -402,9 +413,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>thanks</objectName>
   <x>62</x>
   <y>242</y>
@@ -414,8 +425,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Thank you!</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -431,9 +444,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>youtyped</objectName>
   <x>79</x>
   <y>290</y>
@@ -443,8 +456,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>You typed the character</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -460,9 +475,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>asyouwill</objectName>
   <x>65</x>
   <y>374</y>
@@ -472,8 +487,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>As you will certainly have heard by the unique tone which is presented here for the first time as the result of long research from all times and cultures at least on earth</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -489,9 +506,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ascii1</objectName>
   <x>82</x>
   <y>328</y>
@@ -501,8 +518,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The ASCII code of this character is</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -518,9 +537,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>showchar2</objectName>
   <x>96</x>
   <y>451</y>
@@ -530,8 +549,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -547,9 +568,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>isavery</objectName>
   <x>137</x>
   <y>453</y>
@@ -559,8 +580,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -576,9 +599,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>isatotally</objectName>
   <x>139</x>
   <y>546</y>
@@ -588,8 +611,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -605,9 +630,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>theby</objectName>
   <x>66</x>
   <y>492</y>
@@ -617,8 +642,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -634,9 +661,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>showascii2</objectName>
   <x>78</x>
   <y>544</y>
@@ -646,8 +673,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -663,9 +692,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>.</objectName>
   <x>375</x>
   <y>290</y>
@@ -675,8 +704,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -692,9 +723,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>!</objectName>
   <x>393</x>
   <y>328</y>
@@ -704,8 +735,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>!</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -721,9 +754,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>49</x>
   <y>16</y>
@@ -733,8 +766,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Get the ASCII Code of a Character</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
@@ -750,9 +785,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>48</x>
   <y>55</y>
@@ -762,9 +797,11 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>And learn a lot more about the symbolic function of characters and numbers.
 This can be very important for your future life.</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -780,9 +817,9 @@ This can be very important for your future life.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>47</x>
   <y>112</y>
@@ -792,9 +829,11 @@ This can be very important for your future life.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>First, select your personal speed at the slider on the right.
 Then, press the Start button.</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -810,9 +849,9 @@ Then, press the Start button.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>speed</objectName>
   <x>514</x>
   <y>222</y>
@@ -822,6 +861,7 @@ Then, press the Start button.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <minimum>0.10000000</minimum>
   <maximum>2.00000000</maximum>
   <value>0.74555985</value>
@@ -830,7 +870,7 @@ Then, press the Start button.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>513</x>
   <y>192</y>
@@ -840,8 +880,10 @@ Then, press the Start button.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Select Your Personal Speed of Messages</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -857,9 +899,9 @@ Then, press the Start button.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>age</objectName>
   <x>514</x>
   <y>277</y>
@@ -869,9 +911,11 @@ Then, press the Start button.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Age estimated from your speed selection:
 23 years, 6 months, 6 days.</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -887,9 +931,9 @@ Then, press the Start button.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
   <x>513</x>
   <y>373</y>
@@ -899,6 +943,7 @@ Then, press the Start button.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -906,9 +951,10 @@ Then, press the Start button.</label>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="596" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

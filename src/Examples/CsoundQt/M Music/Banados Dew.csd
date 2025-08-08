@@ -301,13 +301,15 @@ i "Main"		0		1
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>750</x>
  <y>151</y>
  <width>490</width>
- <height>169</height>
+ <height>181</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -412,8 +414,8 @@ i "Main"		0		1
   <objectName>_Play</objectName>
   <x>301</x>
   <y>50</y>
-  <width>100</width>
-  <height>30</height>
+  <width>105</width>
+  <height>41</height>
   <uuid>{d9dbac87-a40e-4258-8e4b-e2c0fbde18f9}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -422,14 +424,21 @@ i "Main"		0		1
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>button3</text>
+  <text>Start</text>
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
-  <fontsize>10</fontsize>
+  <fontsize>20</fontsize>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
+<MacGUI>
+ioView background {61680, 61680, 61680}
+ioText {31, 8} {64, 34} label 0.000000 0.00100 "" left "Arial" 24 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Dew
+ioText {31, 42} {137, 25} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Tom Banados Russell
+ioText {30, 83} {201, 69} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder The piece "Dew" is constantly evolving to different circumstances. This is the code used in all these evolutions.
+ioButton {301, 50} {105, 41} value 1.000000 "_Play" "Start" "/" i1 0 10
+</MacGUI>

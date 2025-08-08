@@ -188,4 +188,22 @@ ioText {15, 47} {308, 134} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0,
 </MacGUI>
 
 <EventPanel name="" tempo="60.00000000" loop="8.00000000" x="1200" y="349" width="445" height="314">i 1 0 0.255419 61 64.000000 
+
  </EventPanel>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>240</r>
+  <g>240</g>
+  <b>240</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
