@@ -5,7 +5,7 @@
 
 sr = 44100
 ksmps = 128
-nchnls = 2
+nchnls = 8
 0dbfs = 1
 
 /*****multi channel soundfile player*****/
@@ -229,6 +229,8 @@ e
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -243,7 +245,7 @@ e
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>skiptime</objectName>
   <x>116</x>
   <y>208</y>
@@ -273,7 +275,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>15</x>
   <y>135</y>
@@ -301,7 +303,7 @@ e
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>2</x>
   <y>207</y>
@@ -332,7 +334,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>313</x>
   <y>134</y>
@@ -345,7 +347,7 @@ e
   <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/Joachim/Csound/Hui/8kanaltest/7chnls.aiff</stringvalue>
+  <stringvalue/>
   <text>Open File</text>
   <image>/</image>
   <eventLine/>
@@ -354,7 +356,7 @@ e
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
   <x>49</x>
   <y>168</y>
@@ -376,7 +378,7 @@ e
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Stop</objectName>
   <x>265</x>
   <y>168</y>
@@ -398,12 +400,12 @@ e
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>7</x>
   <y>8</y>
-  <width>403</width>
-  <height>67</height>
+  <width>402</width>
+  <height>84</height>
   <uuid>{2d23372e-361c-47fe-9cdf-0b8967f6782f}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -430,12 +432,12 @@ SOUNDFILE PLAYER</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>6</x>
-  <y>76</y>
+  <x>5</x>
+  <y>95</y>
   <width>403</width>
-  <height>55</height>
+  <height>37</height>
   <uuid>{675dfc88-8d95-4a42-9d12-5a6bc6e41c06}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -462,7 +464,7 @@ For mono files, see the Mixdown_Player example.</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>over8</objectName>
   <x>260</x>
   <y>395</y>
@@ -491,7 +493,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>3</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -499,7 +501,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out8</objectName>
   <x>260</x>
   <y>419</y>
@@ -515,8 +517,8 @@ For mono files, see the Mixdown_Player example.</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-inf</xValue>
-  <yValue>-inf</yValue>
+  <xValue>0.16794330</xValue>
+  <yValue>0.16794330</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -528,7 +530,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -536,7 +538,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>over7</objectName>
   <x>228</x>
   <y>395</y>
@@ -565,7 +567,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>3</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -573,7 +575,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out7</objectName>
   <x>228</x>
   <y>419</y>
@@ -589,8 +591,8 @@ For mono files, see the Mixdown_Player example.</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>-inf</xValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -602,7 +604,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -610,7 +612,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>over6</objectName>
   <x>195</x>
   <y>395</y>
@@ -639,7 +641,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>3</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -647,7 +649,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out6</objectName>
   <x>195</x>
   <y>419</y>
@@ -663,8 +665,8 @@ For mono files, see the Mixdown_Player example.</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>0.38148095</xValue>
+  <yValue>0.38148095</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -676,7 +678,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -684,7 +686,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>over5</objectName>
   <x>163</x>
   <y>395</y>
@@ -713,7 +715,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>3</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -721,7 +723,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out5</objectName>
   <x>163</x>
   <y>419</y>
@@ -737,8 +739,8 @@ For mono files, see the Mixdown_Player example.</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>0.13229970</xValue>
+  <yValue>0.13229970</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -750,7 +752,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -758,7 +760,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>over4</objectName>
   <x>129</x>
   <y>395</y>
@@ -787,7 +789,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>3</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -795,7 +797,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out4</objectName>
   <x>129</x>
   <y>419</y>
@@ -811,8 +813,8 @@ For mono files, see the Mixdown_Player example.</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>0.22725645</xValue>
+  <yValue>0.22725645</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -824,7 +826,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -832,7 +834,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>over3</objectName>
   <x>97</x>
   <y>395</y>
@@ -861,7 +863,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>3</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -869,7 +871,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out3</objectName>
   <x>97</x>
   <y>419</y>
@@ -885,8 +887,8 @@ For mono files, see the Mixdown_Player example.</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>0.46426327</xValue>
+  <yValue>0.46426327</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -898,7 +900,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -906,7 +908,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>over2</objectName>
   <x>64</x>
   <y>395</y>
@@ -935,7 +937,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>3</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -943,7 +945,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out2</objectName>
   <x>64</x>
   <y>419</y>
@@ -959,8 +961,8 @@ For mono files, see the Mixdown_Player example.</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>0.28118132</xValue>
+  <yValue>0.28118132</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -972,7 +974,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -980,7 +982,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>over1</objectName>
   <x>32</x>
   <y>395</y>
@@ -1009,7 +1011,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>3</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1017,7 +1019,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>out1</objectName>
   <x>32</x>
   <y>419</y>
@@ -1033,8 +1035,8 @@ For mono files, see the Mixdown_Player example.</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.00000000</xValue>
-  <yValue>0.00000000</yValue>
+  <xValue>0.06025890</xValue>
+  <yValue>0.06025890</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1046,7 +1048,7 @@ For mono files, see the Mixdown_Player example.</label>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -1054,7 +1056,7 @@ For mono files, see the Mixdown_Player example.</label>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>db</objectName>
   <x>63</x>
   <y>242</y>
@@ -1073,7 +1075,7 @@ For mono files, see the Mixdown_Player example.</label>
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>db</objectName>
   <x>299</x>
   <y>242</y>
@@ -1104,7 +1106,7 @@ For mono files, see the Mixdown_Player example.</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>349</x>
   <y>242</y>
@@ -1135,7 +1137,7 @@ For mono files, see the Mixdown_Player example.</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>242</y>
@@ -1166,7 +1168,7 @@ For mono files, see the Mixdown_Player example.</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>302</x>
   <y>440</y>
@@ -1197,7 +1199,7 @@ For mono files, see the Mixdown_Player example.</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>min</objectName>
   <x>311</x>
   <y>463</y>
@@ -1228,7 +1230,7 @@ For mono files, see the Mixdown_Player example.</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>sec</objectName>
   <x>357</x>
   <y>463</y>
@@ -1239,7 +1241,7 @@ For mono files, see the Mixdown_Player example.</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>00</label>
+  <label>09</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Arial</font>
@@ -1259,7 +1261,7 @@ For mono files, see the Mixdown_Player example.</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>342</x>
   <y>463</y>
@@ -1290,7 +1292,7 @@ For mono files, see the Mixdown_Player example.</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>311</x>
   <y>486</y>
@@ -1321,7 +1323,7 @@ For mono files, see the Mixdown_Player example.</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>353</x>
   <y>486</y>
@@ -1352,7 +1354,7 @@ For mono files, see the Mixdown_Player example.</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>302</x>
   <y>439</y>
@@ -1383,7 +1385,7 @@ For mono files, see the Mixdown_Player example.</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>296</x>
   <y>517</y>
@@ -1415,7 +1417,7 @@ Channels</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>chn1</objectName>
   <x>31</x>
   <y>525</y>
@@ -1449,7 +1451,7 @@ Channels</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>chn2</objectName>
   <x>63</x>
   <y>525</y>
@@ -1483,7 +1485,7 @@ Channels</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>chn3</objectName>
   <x>97</x>
   <y>525</y>
@@ -1517,7 +1519,7 @@ Channels</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>chn4</objectName>
   <x>129</x>
   <y>525</y>
@@ -1551,7 +1553,7 @@ Channels</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>chn5</objectName>
   <x>162</x>
   <y>525</y>
@@ -1585,7 +1587,7 @@ Channels</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>chn6</objectName>
   <x>194</x>
   <y>525</y>
@@ -1619,7 +1621,7 @@ Channels</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>chn7</objectName>
   <x>228</x>
   <y>525</y>
@@ -1653,7 +1655,7 @@ Channels</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>chn8</objectName>
   <x>260</x>
   <y>525</y>
@@ -1687,7 +1689,7 @@ Channels</label>
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>msg</objectName>
   <x>24</x>
   <y>280</y>
@@ -1698,7 +1700,8 @@ Channels</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>No messages yet ...</label>
+  <label>File channels = 8, output channels = 8.
+</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Arial</font>
@@ -1718,7 +1721,7 @@ Channels</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>loop</objectName>
   <x>307</x>
   <y>215</y>
@@ -1734,7 +1737,7 @@ Channels</label>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>328</x>
   <y>212</y>
@@ -1765,7 +1768,7 @@ Channels</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>len</objectName>
   <x>301</x>
   <y>412</y>
@@ -1776,7 +1779,7 @@ Channels</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label/>
+  <label>07 : 25 </label>
   <alignment>center</alignment>
   <valignment>top</valignment>
   <font>Arial</font>
@@ -1796,7 +1799,7 @@ Channels</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>301</x>
   <y>390</y>
@@ -1827,7 +1830,7 @@ Channels</label>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Pause</objectName>
   <x>157</x>
   <y>168</y>
@@ -1852,3 +1855,56 @@ Channels</label>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
+<MacGUI>
+ioView background {43690, 43690, 32639}
+ioText {116, 208} {80, 25} editnum 0.000000 0.001000 "skiptime" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 0.000000
+ioText {15, 135} {297, 28} edit 0.000000 0.00100 "_Browse1"  "Noto Sans" 10 {0, 0, 0} {58368, 58368, 58368} truenoborder 
+ioText {2, 207} {114, 30} label 0.000000 0.00100 "" right "Lucida Grande" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Skiptime (sec)
+ioButton {313, 134} {100, 30} value 1.000000 "_Browse1" "Open File" "/" 
+ioButton {49, 168} {96, 30} value 1.000000 "_Play" "Play" "/" 
+ioButton {265, 168} {100, 30} value 1.000000 "_Stop" "Stop" "/" 
+ioText {7, 8} {402, 84} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {65024, 65024, 64768} nobackground noborder MULTI CHANNEL¬SOUNDFILE PLAYER
+ioText {6, 76} {403, 37} label 0.000000 0.00100 "" center "DejaVu Sans" 10 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Here you can play 3- to 8-channel (intervleaved) files.¬For mono files, see the Mixdown_Player example.
+ioMeter {260, 395} {25, 25} {39680, 768, 0} "over8" 0.000000 "over8" 0.000000 fill 1 0 mouse
+ioMeter {260, 419} {25, 100} {0, 59904, 0} "out8" 0.167943 "out8" 0.167943 fill 1 0 mouse
+ioMeter {228, 395} {25, 25} {39680, 768, 0} "over7" 0.000000 "over7" 0.000000 fill 1 0 mouse
+ioMeter {228, 419} {25, 100} {0, 59904, 0} "out7" -inf "out7" -inf fill 1 0 mouse
+ioMeter {195, 395} {25, 25} {39680, 768, 0} "over6" 0.000000 "over6" 0.000000 fill 1 0 mouse
+ioMeter {195, 419} {25, 100} {0, 59904, 0} "out6" 0.381481 "out6" 0.381481 fill 1 0 mouse
+ioMeter {163, 395} {25, 25} {39680, 768, 0} "over5" 0.000000 "over5" 0.000000 fill 1 0 mouse
+ioMeter {163, 419} {25, 100} {0, 59904, 0} "out5" 0.132300 "out5" 0.132300 fill 1 0 mouse
+ioMeter {129, 395} {25, 25} {39680, 768, 0} "over4" 0.000000 "over4" 0.000000 fill 1 0 mouse
+ioMeter {129, 419} {25, 100} {0, 59904, 0} "out4" 0.227256 "out4" 0.227256 fill 1 0 mouse
+ioMeter {97, 395} {25, 25} {39680, 768, 0} "over3" 0.000000 "over3" 0.000000 fill 1 0 mouse
+ioMeter {97, 419} {25, 100} {0, 59904, 0} "out3" 0.464263 "out3" 0.464263 fill 1 0 mouse
+ioMeter {64, 395} {25, 25} {39680, 768, 0} "over2" 0.000000 "over2" 0.000000 fill 1 0 mouse
+ioMeter {64, 419} {25, 100} {0, 59904, 0} "out2" 0.281181 "out2" 0.281181 fill 1 0 mouse
+ioMeter {32, 395} {25, 25} {39680, 768, 0} "over1" 0.000000 "over1" 0.000000 fill 1 0 mouse
+ioMeter {32, 419} {25, 100} {0, 59904, 0} "out1" 0.060259 "out1" 0.060259 fill 1 0 mouse
+ioSlider {63, 242} {237, 28} -12.000000 12.000000 0.000000 db
+ioText {299, 242} {52, 28} display 0.000000 0.00100 "db" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 0.000
+ioText {349, 242} {47, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder dB
+ioText {13, 242} {51, 28} label 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Gain
+ioText {302, 440} {94, 26} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Time
+ioText {311, 463} {33, 26} display 0.000000 0.00100 "min" right "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 00
+ioText {357, 463} {33, 26} display 9.000000 0.00100 "sec" left "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 09
+ioText {342, 463} {17, 27} label 0.000000 0.00100 "" center "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder :
+ioText {311, 486} {37, 28} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder min
+ioText {353, 486} {37, 28} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder sec
+ioText {302, 439} {96, 76} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 
+ioText {296, 517} {109, 50} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Route Output¬Channels
+ioText {31, 525} {25, 27} scroll 1.000000 1.000000 "chn1" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
+ioText {63, 525} {25, 27} scroll 2.000000 1.000000 "chn2" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
+ioText {97, 525} {25, 27} scroll 3.000000 1.000000 "chn3" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
+ioText {129, 525} {25, 27} scroll 4.000000 1.000000 "chn4" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
+ioText {162, 525} {25, 27} scroll 5.000000 1.000000 "chn5" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
+ioText {194, 525} {25, 27} scroll 6.000000 1.000000 "chn6" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
+ioText {228, 525} {25, 27} scroll 7.000000 1.000000 "chn7" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
+ioText {260, 525} {25, 27} scroll 8.000000 1.000000 "chn8" center "Arial" 14 {0, 0, 0} {65280, 65280, 65280} background noborder 
+ioText {24, 280} {377, 112} display 0.000000 0.00100 "msg" left "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder File channels = 8, output channels = 8.¬
+ioCheckbox {307, 215} {20, 20} off loop
+ioText {328, 212} {68, 27} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Loop
+ioText {301, 412} {96, 25} display 0.000000 0.00100 "len" center "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 07 : 25 
+ioText {301, 390} {97, 27} label 0.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder File Length
+ioButton {157, 168} {100, 30} value 1.000000 "_Pause" "Pause" "/" 
+</MacGUI>

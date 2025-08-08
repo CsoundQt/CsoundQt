@@ -225,6 +225,8 @@ e
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -249,8 +251,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -278,8 +282,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -307,8 +313,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>sec</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -324,7 +332,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -336,8 +344,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>min</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -353,7 +363,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -365,8 +375,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>:</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -382,7 +394,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>sec</objectName>
@@ -394,8 +406,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>59</label>
+  <description/>
+  <label>22</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -411,7 +425,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>min</objectName>
@@ -423,8 +437,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>02</label>
+  <description/>
+  <label>00</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -440,7 +456,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -452,8 +468,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Time</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -469,7 +487,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>numoutch</objectName>
@@ -481,6 +499,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -510,8 +529,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Number Of Output Channels</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -527,7 +548,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>firstout</objectName>
@@ -539,6 +560,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -568,8 +590,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>First Output Channel</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -585,7 +609,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -597,8 +621,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>8</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -614,7 +640,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -626,8 +652,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>7</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -643,7 +671,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -655,8 +683,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>6</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -672,7 +702,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -684,8 +714,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>5</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -701,7 +733,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -713,8 +745,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>4</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -730,7 +764,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -742,8 +776,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>3</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -759,7 +795,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -771,8 +807,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -788,7 +826,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -800,8 +838,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>1</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -817,7 +857,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -829,8 +869,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>R</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -846,7 +888,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -858,8 +900,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>L</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -875,7 +919,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -887,8 +931,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>OUT</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -904,7 +950,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -916,8 +962,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>IN</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -933,7 +981,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -945,8 +993,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Mixes any number of mono soundfiles to any number of output channels by panning. For instance, if you mix 8 channels down to 2, it will be done in this way:</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -962,7 +1012,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -974,8 +1024,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>MIXDOWN PLAYER</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
@@ -991,7 +1043,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1003,8 +1055,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Gain</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1020,7 +1074,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1032,8 +1086,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>dB</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1049,7 +1105,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>db</objectName>
@@ -1061,8 +1117,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>0.000</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1078,7 +1136,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1090,8 +1148,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Skiptime</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -1107,7 +1167,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBHSlider" version="2">
   <objectName>db</objectName>
@@ -1119,6 +1179,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>-12.00000000</minimum>
   <maximum>12.00000000</maximum>
   <value>0.00000000</value>
@@ -1137,6 +1198,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
@@ -1166,7 +1228,8 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <description/>
+  <label>/media/jh/Daten/Joachim/Elektronik-Beispiele/CageWilliamsMix/WilliamsSpur1.aif|/media/jh/Daten/Joachim/Elektronik-Beispiele/CageWilliamsMix/WilliamsSpur2.aif</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -1193,14 +1256,17 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>/media/jh/Daten/Joachim/Elektronik-Beispiele/CageWilliamsMix/WilliamsSpur1.aif|/media/jh/Daten/Joachim/Elektronik-Beispiele/CageWilliamsMix/WilliamsSpur2.aif</stringvalue>
   <text>Select Files</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>out1</objectName>
@@ -1212,17 +1278,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-0.75150371</xValue>
-  <yValue>-0.75150371</yValue>
+  <xValue>0.38696235</xValue>
+  <yValue>0.38696235</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1234,6 +1303,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>over1</objectName>
@@ -1245,6 +1315,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over1</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1256,6 +1327,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -1267,6 +1340,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>out2</objectName>
@@ -1278,17 +1352,20 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>-0.80731731</xValue>
-  <yValue>-0.80731731</yValue>
+  <xValue>0.11962833</xValue>
+  <yValue>0.11962833</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1300,6 +1377,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>over2</objectName>
@@ -1311,6 +1389,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over2</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1322,6 +1401,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -1333,6 +1414,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>out3</objectName>
@@ -1344,6 +1426,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out3</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1355,6 +1438,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1366,6 +1451,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>over3</objectName>
@@ -1377,6 +1463,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over3</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1388,6 +1475,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -1399,6 +1488,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>out4</objectName>
@@ -1410,6 +1500,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out4</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1421,6 +1512,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1432,6 +1525,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>over4</objectName>
@@ -1443,6 +1537,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over4</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1454,6 +1549,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -1465,6 +1562,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>out5</objectName>
@@ -1476,6 +1574,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out5</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1487,6 +1586,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1498,6 +1599,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>over5</objectName>
@@ -1509,6 +1611,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over5</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1520,6 +1623,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -1531,6 +1636,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>out6</objectName>
@@ -1542,6 +1648,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out6</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1553,6 +1660,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1564,6 +1673,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>over6</objectName>
@@ -1575,6 +1685,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over6</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1586,6 +1697,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -1597,6 +1710,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>out7</objectName>
@@ -1608,6 +1722,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out7</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1619,6 +1734,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1630,6 +1747,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>over7</objectName>
@@ -1641,6 +1759,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over7</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1652,6 +1771,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -1663,6 +1784,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>out8</objectName>
@@ -1674,6 +1796,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out8</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1685,6 +1808,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
@@ -1696,6 +1821,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>over8</objectName>
@@ -1707,6 +1833,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>over8</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -1718,6 +1845,8 @@ e
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>155</r>
    <g>3</g>
@@ -1729,6 +1858,7 @@ e
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>chn1</objectName>
@@ -1740,8 +1870,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>1</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1757,7 +1889,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>chn2</objectName>
@@ -1769,8 +1901,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1786,7 +1920,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>chn3</objectName>
@@ -1798,8 +1932,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1815,7 +1951,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>chn4</objectName>
@@ -1827,8 +1963,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1844,7 +1982,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>chn5</objectName>
@@ -1856,8 +1994,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1873,7 +2013,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>chn6</objectName>
@@ -1885,8 +2025,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1902,7 +2044,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>chn7</objectName>
@@ -1914,8 +2056,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1931,7 +2075,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDisplay" version="2">
   <objectName>chn8</objectName>
@@ -1943,8 +2087,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label/>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1960,7 +2106,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -1972,8 +2118,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Output Channel</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1989,7 +2137,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -2001,8 +2149,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Make sure your nchnls value in the orchestra header matches the desired number of channels!</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -2018,8 +2168,71 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
+<MacGUI>
+ioView background {43690, 43690, 32639}
+ioText {30, 56} {399, 124} label 0.000000 0.00100 "" center "Arial" 10 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 
+ioText {324, 316} {96, 76} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 
+ioText {375, 362} {37, 28} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder sec
+ioText {333, 362} {37, 28} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder min
+ioText {364, 339} {17, 27} label 0.000000 0.00100 "" center "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder :
+ioText {379, 339} {33, 26} display 22.000000 0.00100 "sec" left "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 22
+ioText {333, 339} {33, 26} display 0.000000 0.00100 "min" right "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 00
+ioText {324, 316} {94, 26} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Time
+ioText {230, 319} {43, 28} editnum 2.000000 1.000000 "numoutch" left "" 0 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 2.000000
+ioText {29, 319} {203, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Number Of Output Channels
+ioText {184, 350} {44, 27} editnum 1.000000 1.000000 "firstout" left "" 0 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 1.000000
+ioText {29, 350} {156, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder First Output Channel
+ioText {352, 118} {33, 29} label 8.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 8
+ioText {316, 119} {33, 29} label 7.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 7
+ioText {278, 119} {33, 29} label 6.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 6
+ioText {241, 119} {33, 29} label 5.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 5
+ioText {205, 119} {33, 29} label 4.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 4
+ioText {168, 119} {33, 29} label 3.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 3
+ioText {131, 119} {33, 29} label 2.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 2
+ioText {94, 119} {33, 29} label 1.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 1
+ioText {352, 148} {33, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder R
+ioText {94, 147} {33, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder L
+ioText {29, 146} {52, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder OUT
+ioText {29, 118} {52, 29} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder IN
+ioText {30, 59} {397, 59} label 0.000000 0.00100 "" center "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Mixes any number of mono soundfiles to any number of output channels by panning. For instance, if you mix 8 channels down to 2, it will be done in this way:
+ioText {73, 11} {308, 42} label 0.000000 0.00100 "" center "Arial" 22 {0, 0, 0} {65024, 65024, 64768} nobackground noborder MIXDOWN PLAYER
+ioText {42, 277} {67, 27} label 0.000000 0.00100 "" right "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Gain
+ioText {370, 278} {47, 27} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder dB
+ioText {320, 277} {52, 28} display 0.000000 0.00100 "db" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 0.000
+ioText {253, 188} {80, 25} label 0.000000 0.00100 "" right "Arial" 10 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Skiptime
+ioSlider {109, 277} {212, 28} -12.000000 12.000000 0.000000 db
+ioText {336, 187} {65, 27} editnum 0.000000 0.001000 "skip" left "" 0 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 0.000000
+ioText {19, 228} {417, 27} edit 0.000000 0.00100 "_MBrowse"  "Lucida Grande" 12 {0, 0, 0} {8960, 8960, 8960} truenoborder /media/jh/Daten/Joachim/Elektronik-Beispiele/CageWilliamsMix/WilliamsSpur1.aif|/media/jh/Daten/Joachim/Elektronik-Beispiele/CageWilliamsMix/WilliamsSpur2.aif
+ioButton {71, 186} {100, 30} value 1.000000 "_MBrowse" "Select Files" "/" 
+ioMeter {32, 419} {25, 100} {0, 59904, 0} "out1" 0.386962 "out1" 0.386962 fill 1 0 mouse
+ioMeter {32, 395} {25, 25} {39680, 768, 0} "over1" 0.000000 "over1" 0.000000 fill 1 0 mouse
+ioMeter {64, 419} {25, 100} {0, 59904, 0} "out2" 0.119628 "out2" 0.119628 fill 1 0 mouse
+ioMeter {64, 395} {25, 25} {39680, 768, 0} "over2" 0.000000 "over2" 0.000000 fill 1 0 mouse
+ioMeter {97, 419} {25, 100} {0, 59904, 0} "out3" -inf "out3" -inf fill 1 0 mouse
+ioMeter {97, 395} {25, 25} {39680, 768, 0} "over3" 0.000000 "over3" 0.000000 fill 1 0 mouse
+ioMeter {129, 419} {25, 100} {0, 59904, 0} "out4" -inf "out4" -inf fill 1 0 mouse
+ioMeter {129, 395} {25, 25} {39680, 768, 0} "over4" 0.000000 "over4" 0.000000 fill 1 0 mouse
+ioMeter {163, 419} {25, 100} {0, 59904, 0} "out5" -inf "out5" -inf fill 1 0 mouse
+ioMeter {163, 395} {25, 25} {39680, 768, 0} "over5" 0.000000 "over5" 0.000000 fill 1 0 mouse
+ioMeter {195, 419} {25, 100} {0, 59904, 0} "out6" -inf "out6" -inf fill 1 0 mouse
+ioMeter {195, 395} {25, 25} {39680, 768, 0} "over6" 0.000000 "over6" 0.000000 fill 1 0 mouse
+ioMeter {228, 419} {25, 100} {0, 59904, 0} "out7" -inf "out7" -inf fill 1 0 mouse
+ioMeter {228, 395} {25, 25} {39680, 768, 0} "over7" 0.000000 "over7" 0.000000 fill 1 0 mouse
+ioMeter {260, 419} {25, 100} {0, 59904, 0} "out8" -inf "out8" -inf fill 1 0 mouse
+ioMeter {260, 395} {25, 25} {39680, 768, 0} "over8" 0.000000 "over8" 0.000000 fill 1 0 mouse
+ioText {32, 527} {26, 28} display 1.000000 0.00100 "chn1" center "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 1
+ioText {65, 527} {26, 28} display 2.000000 0.00100 "chn2" center "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 2
+ioText {96, 527} {26, 28} display 0.000000 0.00100 "chn3" center "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 
+ioText {129, 527} {26, 28} display 0.000000 0.00100 "chn4" center "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 
+ioText {162, 527} {26, 28} display 0.000000 0.00100 "chn5" center "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 
+ioText {195, 527} {26, 28} display 0.000000 0.00100 "chn6" center "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 
+ioText {226, 527} {26, 28} display 0.000000 0.00100 "chn7" center "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 
+ioText {259, 527} {26, 28} display 0.000000 0.00100 "chn8" center "Arial" 14 {0, 0, 0} {65024, 65024, 64768} nobackground noborder 
+ioText {324, 531} {80, 25} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Output Channel
+ioText {319, 396} {116, 123} label 0.000000 0.00100 "" left "Arial" 10 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Make sure your nchnls value in the orchestra header matches the desired number of channels!
+</MacGUI>
