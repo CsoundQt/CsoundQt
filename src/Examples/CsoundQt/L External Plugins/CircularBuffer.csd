@@ -6,9 +6,8 @@
 <CsInstruments>
 
 /*
- 
-Dependencies: 
-  plugins: klib, else
+This example uses the external plugins klib and else in
+https://github.com/csound-plugins/csound-plugins
 */
 
 sr = 44100
@@ -96,6 +95,8 @@ schedule "main", 0, -1
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
