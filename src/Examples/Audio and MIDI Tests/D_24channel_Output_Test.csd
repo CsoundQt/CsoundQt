@@ -188,6 +188,8 @@ endin
 <CsScore>
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -680,7 +682,7 @@ endin
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.95000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -3143,7 +3145,7 @@ all channels</label>
   </bgcolor>
   <resolution>0.10000000</resolution>
   <minimum>-100</minimum>
-  <maximum>0</maximum>
+  <maximum>0.3</maximum>
   <randomizable group="0">false</randomizable>
   <value>-20</value>
  </bsbObject>
