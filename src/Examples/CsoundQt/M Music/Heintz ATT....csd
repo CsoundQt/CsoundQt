@@ -3401,6 +3401,8 @@ AACsAACmAAC0AACzAACtAACVAAB/AAByAABhAABOAABAAAAwAAAgAAAZAAAPAAAIAAADAAD+
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -3415,25 +3417,6 @@ AACsAACmAAC0AACzAACtAACVAAB/AAByAABhAABOAABAAAAwAAAgAAAZAAAPAAAIAAADAAD+
   <g>46</g>
   <b>255</b>
  </bgcolor>
- <bsbObject type="BSBVSlider" version="2">
-  <objectName>slider1</objectName>
-  <x>5</x>
-  <y>5</y>
-  <width>20</width>
-  <height>100</height>
-  <uuid>{fef65cef-2d8e-4a20-abfb-98fb4fa4c2f2}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <minimum>0.00000000</minimum>
-  <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
-  <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
-  <resolution>-1.00000000</resolution>
-  <randomizable group="0">false</randomizable>
- </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
