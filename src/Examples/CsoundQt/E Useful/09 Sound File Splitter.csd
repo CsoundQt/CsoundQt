@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
--+max_str_len=10000 -n
+-n
 </CsOptions>
 <CsInstruments>
 
@@ -18,6 +18,7 @@ ilen		filelen	gSfile
 ;as time resolution in csound is bound to ksmps, one control period must be added to avoid omitting samples
 p3		=		(ksmps == 1 ? ilen : ilen + ksmps/sr)
 inchnls	filenchnls	gSfile
+print inchnls
  if inchnls == 2 then
  		event_i	"i", 12, 0, p3
  elseif inchnls == 4 then
@@ -139,6 +140,9 @@ e
 </CsScore>
 </CsoundSynthesizer>
 
+
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -153,7 +157,7 @@ e
   <g>170</g>
   <b>127</b>
  </bgcolor>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>364</x>
   <y>69</y>
@@ -163,16 +167,19 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
+  <stringvalue>/media/jh/Daten/Joachim/Stuecke/57_reza/multichannel/reza_4chnls_16bit.wav</stringvalue>
   <text>Select File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>17</x>
   <y>72</y>
@@ -182,7 +189,8 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <description/>
+  <label>/media/jh/Daten/Joachim/Stuecke/57_reza/multichannel/reza_4chnls_16bit.wav</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
@@ -199,7 +207,7 @@ e
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Render</objectName>
   <x>163</x>
   <y>107</y>
@@ -209,6 +217,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -216,9 +225,11 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
-  <latched>true</latched>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>85</x>
   <y>16</y>
@@ -228,8 +239,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>SOUNDFILE SPLITTER</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>24</fontsize>
   <precision>3</precision>
@@ -245,9 +258,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>19</x>
   <y>147</y>
@@ -257,8 +270,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Splits any stereo or multichannel soundfile in mono files. Just browse your file and press the Split! button. Find the split files in the same folder as the source file.</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -274,9 +289,8 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="360" y="248" width="612" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

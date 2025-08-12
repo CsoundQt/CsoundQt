@@ -13,7 +13,7 @@ nchnls = 2
 0dbfs = 1
 
 
-;;ascii numbers for key shortcuts (32=space, 112='p', 110='n')
+;ascii numbers for key shortcuts (32=space, 112='p', 110='n')
 gikeynxt  =         32 ;next sound
 gikeyls   =         112 ;next sound one less
 gikeymr   =         110 ;next sound one in advance 
@@ -255,6 +255,8 @@ endin
 i 1 0 10000
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -264,12 +266,12 @@ i 1 0 10000
  <height>351</height>
  <visible>true</visible>
  <uuid/>
- <bgcolor mode="nobackground">
-  <r>205</r>
-  <g>255</g>
-  <b>123</b>
+ <bgcolor mode="background">
+  <r>229</r>
+  <g>165</g>
+  <b>10</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_MBrowse</objectName>
   <x>11</x>
   <y>135</y>
@@ -297,7 +299,7 @@ i 1 0 10000
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_MBrowse</objectName>
   <x>161</x>
   <y>134</y>
@@ -319,7 +321,7 @@ i 1 0 10000
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>next</objectName>
   <x>12</x>
   <y>197</y>
@@ -341,7 +343,7 @@ i 1 0 10000
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>messages</objectName>
   <x>193</x>
   <y>171</y>
@@ -352,8 +354,8 @@ i 1 0 10000
   <midichan>0</midichan>
   <midicc>0</midicc>
   <description/>
-  <label>Playing file number 3:
-'808loop.wav'.</label>
+  <label>Playing file number 1:
+'fox.wav'.</label>
   <alignment>left</alignment>
   <valignment>top</valignment>
   <font>Arial</font>
@@ -373,7 +375,7 @@ i 1 0 10000
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outL</objectName>
   <x>11</x>
   <y>239</y>
@@ -402,7 +404,7 @@ i 1 0 10000
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -410,7 +412,7 @@ i 1 0 10000
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outLover</objectName>
   <x>230</x>
   <y>239</y>
@@ -439,7 +441,7 @@ i 1 0 10000
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -447,7 +449,7 @@ i 1 0 10000
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outR</objectName>
   <x>11</x>
   <y>265</y>
@@ -476,7 +478,7 @@ i 1 0 10000
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -484,7 +486,7 @@ i 1 0 10000
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outRover</objectName>
   <x>230</x>
   <y>265</y>
@@ -513,7 +515,7 @@ i 1 0 10000
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -521,7 +523,7 @@ i 1 0 10000
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>nextfil</objectName>
   <x>124</x>
   <y>199</y>
@@ -549,9 +551,9 @@ i 1 0 10000
   <minimum>1</minimum>
   <maximum>1e+12</maximum>
   <randomizable group="0">false</randomizable>
-  <value>0</value>
+  <value>2</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>11</x>
   <y>169</y>
@@ -582,7 +584,7 @@ i 1 0 10000
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>123</x>
   <y>170</y>
@@ -613,7 +615,7 @@ i 1 0 10000
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>9</x>
   <y>9</y>
@@ -644,7 +646,7 @@ i 1 0 10000
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>53</y>
@@ -675,7 +677,7 @@ i 1 0 10000
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
   <x>269</x>
   <y>134</y>
@@ -697,7 +699,7 @@ i 1 0 10000
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Stop</objectName>
   <x>379</x>
   <y>134</y>
@@ -719,7 +721,7 @@ i 1 0 10000
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>gaindb</objectName>
   <x>267</x>
   <y>263</y>
@@ -738,7 +740,7 @@ i 1 0 10000
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>267</x>
   <y>236</y>
@@ -769,7 +771,7 @@ i 1 0 10000
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>397</x>
   <y>235</y>
@@ -800,7 +802,7 @@ i 1 0 10000
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>gaindb</objectName>
   <x>314</x>
   <y>236</y>

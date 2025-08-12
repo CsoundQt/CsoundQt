@@ -203,13 +203,15 @@ f 0 36000; don't listen to music longer than 10 hours
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>72</x>
  <y>179</y>
- <width>400</width>
- <height>200</height>
+ <width>556</width>
+ <height>602</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -217,7 +219,7 @@ e
   <g>170</g>
   <b>164</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>19</x>
   <y>113</y>
@@ -227,7 +229,8 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/TrommelStereo.aiff</label>
+  <description/>
+  <label>/home/jh/src/csoundqt/src/Examples/SourceMaterials/ClassicalGuitar.wav</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -244,7 +247,7 @@ e
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>378</x>
   <y>111</y>
@@ -254,16 +257,19 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/TrommelStereo.aiff</stringvalue>
+  <stringvalue>/home/jh/src/csoundqt/src/Examples/SourceMaterials/ClassicalGuitar.wav</stringvalue>
   <text>Open File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>db</objectName>
   <x>117</x>
   <y>262</y>
@@ -273,6 +279,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <minimum>-18.00000000</minimum>
   <maximum>18.00000000</maximum>
   <value>0.00000000</value>
@@ -281,7 +288,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>db_disp</objectName>
   <x>258</x>
   <y>262</y>
@@ -291,8 +298,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>+0.00 dB</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -308,9 +317,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>20</x>
   <y>148</y>
@@ -320,6 +329,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -327,9 +337,11 @@ e
   <image>/</image>
   <eventLine>i 2 0 1 0</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>223</x>
   <y>150</y>
@@ -339,6 +351,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -346,9 +359,11 @@ e
   <image>/</image>
   <eventLine>i 1 0 .1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>skip</objectName>
   <x>21</x>
   <y>216</y>
@@ -358,6 +373,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -377,7 +393,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>1.409</value>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>122</x>
   <y>149</y>
@@ -387,6 +403,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -394,9 +411,11 @@ e
   <image>/</image>
   <eventLine>i 3 0 .1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>loop</objectName>
   <x>152</x>
   <y>216</y>
@@ -406,12 +425,13 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>min</objectName>
   <x>344</x>
   <y>348</y>
@@ -421,8 +441,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>00</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -438,9 +460,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>sec</objectName>
   <x>391</x>
   <y>348</y>
@@ -450,8 +472,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>06</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -467,9 +491,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>379</x>
   <y>348</y>
@@ -479,8 +503,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>:</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -496,9 +522,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>21</x>
   <y>190</y>
@@ -508,8 +534,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>skiptime</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -525,9 +553,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>130</x>
   <y>192</y>
@@ -537,8 +565,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>loop</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -554,9 +584,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>22</x>
   <y>261</y>
@@ -566,8 +596,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>volume</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -583,9 +615,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>message</objectName>
   <x>24</x>
   <y>456</y>
@@ -595,10 +627,12 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Length = 151.951
 Samplerate = 44100
 Channels = 2</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -616,7 +650,7 @@ Channels = 2</label>
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>25</x>
   <y>422</y>
@@ -626,8 +660,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Messages</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -643,9 +679,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outL</objectName>
   <x>24</x>
   <y>328</y>
@@ -655,6 +691,7 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out1_post</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -666,19 +703,22 @@ Channels = 2</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outLover</objectName>
   <x>271</x>
   <y>328</y>
@@ -688,6 +728,7 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>outLover</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -699,19 +740,22 @@ Channels = 2</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outR</objectName>
   <x>24</x>
   <y>355</y>
@@ -721,6 +765,7 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>out2_post</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -732,19 +777,22 @@ Channels = 2</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outRover</objectName>
   <x>271</x>
   <y>355</y>
@@ -754,6 +802,7 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>outRover</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -765,19 +814,22 @@ Channels = 2</label>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>dbrange</objectName>
   <x>109</x>
   <y>390</y>
@@ -787,6 +839,7 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -806,7 +859,7 @@ Channels = 2</label>
   <randomizable group="0">false</randomizable>
   <value>48</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>24</x>
   <y>389</y>
@@ -816,8 +869,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>dB Range</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -833,9 +888,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>peakhold</objectName>
   <x>357</x>
   <y>390</y>
@@ -845,6 +900,7 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -864,7 +920,7 @@ Channels = 2</label>
   <randomizable group="0">false</randomizable>
   <value>3</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>235</x>
   <y>389</y>
@@ -874,8 +930,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Peak Hold time</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -891,9 +949,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>convertsr</objectName>
   <x>224</x>
   <y>216</y>
@@ -903,12 +961,13 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>202</x>
   <y>192</y>
@@ -918,8 +977,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>convert</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -935,9 +996,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>hor</objectName>
   <x>302</x>
   <y>347</y>
@@ -947,8 +1008,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>00</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -964,9 +1027,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>ms</objectName>
   <x>437</x>
   <y>349</y>
@@ -976,8 +1039,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>075</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -993,9 +1058,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>333</x>
   <y>349</y>
@@ -1005,8 +1070,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>:</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -1022,9 +1089,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>424</x>
   <y>348</y>
@@ -1034,8 +1101,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>:</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -1051,9 +1120,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>299</x>
   <y>320</y>
@@ -1063,8 +1132,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>hh</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1080,9 +1151,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>344</x>
   <y>320</y>
@@ -1092,8 +1163,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>min</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1109,9 +1182,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>390</x>
   <y>320</y>
@@ -1121,8 +1194,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>sec</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1138,9 +1213,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>439</x>
   <y>320</y>
@@ -1150,8 +1225,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>ms</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -1167,20 +1244,22 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>277</x>
   <y>194</y>
-  <width>187</width>
-  <height>54</height>
+  <width>191</width>
+  <height>66</height>
   <uuid>{39ddd5a0-7219-4007-b12b-0c8269b25eab}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>(sample rate conversion if the sr of the file doesn't match the sr of the orchestra)</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>12</fontsize>
   <precision>3</precision>
@@ -1196,9 +1275,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>49</x>
   <y>18</y>
@@ -1208,8 +1287,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>SOUNDFILE PLAYER</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
@@ -1225,9 +1306,9 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>48</x>
   <y>60</y>
@@ -1237,8 +1318,10 @@ Channels = 2</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>(playing from the hard disk)</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
@@ -1254,7 +1337,7 @@ Channels = 2</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

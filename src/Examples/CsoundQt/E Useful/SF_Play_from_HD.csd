@@ -1,5 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
+--env:SSDIR+=../../SourceMaterials
 </CsOptions>
 <CsInstruments>
 
@@ -36,13 +37,15 @@ f 0 36000; don't listen to music longer than 10 hours
 e
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>0</x>
- <y>0</y>
- <width>428</width>
- <height>537</height>
+ <x>424</x>
+ <y>302</y>
+ <width>497</width>
+ <height>591</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -50,7 +53,7 @@ e
   <g>170</g>
   <b>129</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLineEdit">
+ <bsbObject type="BSBLineEdit" version="2">
   <objectName>_Browse1</objectName>
   <x>15</x>
   <y>97</y>
@@ -60,7 +63,8 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
-  <label/>
+  <description/>
+  <label>ClassicalGuitar.wav</label>
   <alignment>left</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -77,7 +81,7 @@ e
   </bgcolor>
   <background>nobackground</background>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Browse1</objectName>
   <x>314</x>
   <y>95</y>
@@ -87,16 +91,19 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
-  <stringvalue>/home/linux/Joachim/Materialien/SamplesKlangbearbeitung/PassageStereo.aiff</stringvalue>
+  <stringvalue>ClassicalGuitar.wav</stringvalue>
   <text>Open File</text>
   <image>/</image>
   <eventLine/>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>112</x>
   <y>138</y>
@@ -106,6 +113,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -113,9 +121,11 @@ e
   <image>/</image>
   <eventLine>i 1 0 9999</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>213</x>
   <y>139</y>
@@ -125,6 +135,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -132,9 +143,11 @@ e
   <image>/</image>
   <eventLine>i 2 0 .1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>skip</objectName>
   <x>144</x>
   <y>184</y>
@@ -144,6 +157,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <alignment>right</alignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
@@ -163,7 +177,7 @@ e
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>loop</objectName>
   <x>306</x>
   <y>187</y>
@@ -173,12 +187,13 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>64</x>
   <y>183</y>
@@ -188,8 +203,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>skiptime</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -205,9 +222,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>255</x>
   <y>182</y>
@@ -217,8 +234,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>loop</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -234,9 +253,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>15</x>
   <y>9</y>
@@ -246,8 +265,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>SIMPLE SOUNDFILE PLAYER</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>26</fontsize>
   <precision>3</precision>
@@ -263,9 +284,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>51</y>
@@ -275,8 +296,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>(playing from the hard disk)</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>22</fontsize>
   <precision>3</precision>
@@ -292,9 +315,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>17</x>
   <y>406</y>
@@ -304,9 +327,11 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>This simple example shows how a mono or stereo soundfile can be played in Csound directly from the hard disk.
 Note that the sample rate of the file is NOT converted to the orchestra sample rate!</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -322,9 +347,9 @@ Note that the sample rate of the file is NOT converted to the orchestra sample r
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>15</x>
   <y>220</y>
@@ -334,6 +359,7 @@ Note that the sample rate of the file is NOT converted to the orchestra sample r
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>1.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -341,8 +367,9 @@ Note that the sample rate of the file is NOT converted to the orchestra sample r
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>15</x>
   <y>306</y>
@@ -352,6 +379,7 @@ Note that the sample rate of the file is NOT converted to the orchestra sample r
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>2.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -359,6 +387,7 @@ Note that the sample rate of the file is NOT converted to the orchestra sample r
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
