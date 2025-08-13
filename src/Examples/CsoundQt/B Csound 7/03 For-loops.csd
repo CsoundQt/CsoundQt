@@ -92,6 +92,10 @@ endin
 
 
 
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -143,7 +147,7 @@ endin
   <alignment>center</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
-  <fontsize>24</fontsize>
+  <fontsize>20</fontsize>
   <precision>3</precision>
   <color>
    <r>0</r>

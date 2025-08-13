@@ -1,6 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 --env:SSDIR+=../../SourceMaterials
+-m128
 </CsOptions>
 <CsInstruments>
 
@@ -70,7 +71,6 @@ instr Play
     file_sr,file_chns)
     chnset(strcat(warn,mess),"message")
   
-  
   aout[] = diskin2(file,1,skip,loop,0,1-cvrt)
   out(aout*ampdb(dB))
   
@@ -86,13 +86,6 @@ instr Play
   tsec:k += 1/kr
 
 endin
-
-// (actually a latch button could be used to start AND stop.
-// but currently (aug 2025) not properly working.)
-instr Stop
-  turnoff2_i("Play",0,1)
-endin
-
 
 //UDO for displaying an audio signal in widgets
 opcode CsQtMeter, 0, SSak ;see https://github.com/csudo/csudo/blob/master/csqt/CsQtMeter.csd
@@ -132,98 +125,10 @@ instr Monitor
 endin
 schedule(Monitor,0,-1)
 
-/*
-
-
-instr 4
-ilen		=		gilen
-ilenk		=		ilen * kr; duration of the file in k-cycles
-ichn		=		gichn
-gkdb		invalue	"db"; gain value in dB
-kskip	invalue	"skip"; skiptime in sec
-iskip		=		i(kskip)
-itimi10k	=		i(gktimi10k) % ilenk; time instr 10 was active in control cycles in respect to the loops
-kloop	invalue	"loop"; value 1 if checked
-iloop		=		i(kloop)
-istart		=		iskip + (itimi10k / kr)
-
-;playing
-iplaylen	=		(iloop == 1 ? p3 : ilen)
-   
-		event_i	"i", 10, 0, iplaylen, istart, ichn, giconvrt
-
-   ;time output
-ktimout	=		(gktimi10k / kr + iskip) % ilen; position in the soundfile in seconds
-ktimouthor	=		int(ktimout / 3600)
-Shor		sprintfk	"%02d", ktimouthor
-ktimoutmin	=		int(ktimout / 60)
-Smin		sprintfk	"%02d", ktimoutmin
-ktimoutsec	=		int(ktimout % 60)
-Ssec		sprintfk	"%02d", ktimoutsec
-ktimoutms	=		frac(ktimout) * 1000
-Sms		sprintfk	"%03d", ktimoutms
-		outvalue	"hor", Shor
-		outvalue	"min", Smin
-		outvalue	"sec", Ssec
-		outvalue	"ms", Sms
-
-   ;turnoff if no loop and end of file is reached
-  if iloop == 0 && ktimout > ilen then
-		event		"i", 1, 0, .1
-		turnoff
-  endif
-endin
-
-
-instr 10
-iskip	=		p4
-ichn		=		p5
-iconvrt	=		(p6 == 1 ? 0 : 1)
-k1 = 1
-
-kdbrange	invalue	"dbrange"  ;dB range for the meters
-kpeakhold	invalue	"peakhold"  ;Duration of clip indicator hold in seconds;
-	if ichn == 1 then
-aL		diskin2	gSfile, 1, iskip, 1, 0, iconvrt
-aR		=		aL
-	else
-printk2  k1
-aL, aR	diskin2	gSfile, 1, iskip, 1, 0, iconvrt
-	endif
-
-   ;Volume
-kmult		=		ampdbfs(gkdb)
-Sdb_disp	sprintfk	"%+.2f dB", gkdb
-		outvalue	"db_disp", Sdb_disp
-aL		=		aL * kmult
-aR		=		aR * kmult
-
-   ;show output
-kTrigDisp	metro		10
-		ShowLED_a		"outL", aL, kTrigDisp, 1, kdbrange
-		ShowLED_a		"outR", aR, kTrigDisp, 1, kdbrange
-		ShowOver_a	"outLover", aL, kTrigDisp, kpeakhold
-		ShowOver_a	"outRover", aR, kTrigDisp, kpeakhold
-
-		outs		aL, aR
-gktimi10k	=		gktimi10k + 1; count the time instr 10 was active
-endin
-
-*/
-
 </CsInstruments>
 <CsScore>
-
 </CsScore>
 </CsoundSynthesizer>
-
-
-
-
-
-
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -279,50 +184,6 @@ endin
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject type="BSBButton" version="2">
-  <objectName/>
-  <x>20</x>
-  <y>148</y>
-  <width>80</width>
-  <height>28</height>
-  <uuid>{c0de047a-de03-4e6d-a942-b71b2821460d}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <description/>
-  <type>event</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>Play</text>
-  <image>/</image>
-  <eventLine>i "Play" 0 999999</eventLine>
-  <latch>false</latch>
-  <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
-  <fontsize>12</fontsize>
- </bsbObject>
- <bsbObject type="BSBButton" version="2">
-  <objectName/>
-  <x>221</x>
-  <y>148</y>
-  <width>80</width>
-  <height>28</height>
-  <uuid>{539bf852-6d92-4e53-a7ce-a478772c8a44}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <description/>
-  <type>event</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>Stop</text>
-  <image>/</image>
-  <eventLine>i "Stop" 0 0</eventLine>
-  <latch>false</latch>
-  <momentaryMidiButton>false</momentaryMidiButton>
-  <latched>false</latched>
-  <fontsize>12</fontsize>
- </bsbObject>
  <bsbObject type="BSBSpinBox" version="2">
   <objectName>skip</objectName>
   <x>21</x>
@@ -355,10 +216,10 @@ endin
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>_Pause</objectName>
-  <x>120</x>
-  <y>148</y>
+  <x>141</x>
+  <y>147</y>
   <width>80</width>
-  <height>28</height>
+  <height>30</height>
   <uuid>{ae8f2ca0-5960-4a9b-853d-22682c1c7916}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
@@ -658,7 +519,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.82915518</xValue>
+  <xValue>0.84723698</xValue>
   <yValue>0.57894700</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -732,7 +593,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.84721845</xValue>
+  <xValue>0.85883584</xValue>
   <yValue>1.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -879,7 +740,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>998</label>
+  <label>424</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Noto Sans</font>
@@ -1283,7 +1144,7 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.19905496</xValue>
+  <xValue>0.17048105</xValue>
   <yValue>0.00000000</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
@@ -1303,6 +1164,28 @@ Length = 20.088, Samplerate = 44100, Channels = 2</label>
    <b>30</b>
   </bgcolor>
   <bgcolormode>true</bgcolormode>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>button36</objectName>
+  <x>19</x>
+  <y>147</y>
+  <width>110</width>
+  <height>30</height>
+  <uuid>{32b4a871-bb88-486a-829a-1335bf4a4d41}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Play / Stop</text>
+  <image>/</image>
+  <eventLine>i "Play" 0 -1</eventLine>
+  <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>12</fontsize>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
