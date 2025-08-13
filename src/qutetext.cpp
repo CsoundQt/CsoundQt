@@ -174,13 +174,14 @@ void QuteText::setText(QString text)
 	QString displayText = text;
 	m_stringValue = text;
 	m_valueChanged = true;
-	displayText.replace("\n", "<br />");
-#ifdef  USE_WIDGET_MUTEX
+    displayText.replace("\n", "<br />");
+    displayText = "<pre>" + displayText + "</pre>"; // preserve spaces and line breaks
+#ifdef USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
 
 	m_widget->blockSignals(true);
-	static_cast<QLabel*>(m_widget)->setText(displayText);
+    static_cast<QLabel*>(m_widget)->setText(displayText);
 	m_widget->blockSignals(false);
 }
 
