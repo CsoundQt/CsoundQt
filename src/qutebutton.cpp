@@ -295,6 +295,16 @@ void QuteButton::applyProperties()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForWrite();
 #endif
+
+    QString channel = property("CSQT_objectName").toString();
+    if (channel.isEmpty()) {
+        QMessageBox::warning(
+            nullptr,
+            tr("Missing Channel Name"),
+            tr("The button must have a channel name set!")
+            );
+    }
+
 	QString eventLine = line->text();
     while (eventLine.size() > 0 && eventLine[0] == ' ') {
         // remove all spaces at the beginning. This is needed for event queue lines
@@ -539,7 +549,7 @@ void QuteButton::performAction() {
     //bool useMomentaryMidiButton = property("CSQT_momentaryMidiButton").toBool();
 
 	if (type.contains("event") && !eventLine.isEmpty()) {
-		if ( hasIndefiniteDuration() ) {		
+        if ( hasIndefiniteDuration() ) {
             if ( m_currentValue == 0 ) { // turn off
                 QStringList lineElements = eventLine.split(QRegularExpression("\\s"),SKIP_EMPTY_PARTS);
 				if (lineElements.size() > 0 && lineElements[0] == "i") {
@@ -634,13 +644,27 @@ void QuteButton::buttonPressed()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
+
+    if (m_channel.isEmpty()) {
+        QMessageBox::warning(
+            nullptr,
+            tr("Missing Channel Name"),
+            tr("The button must have a channel name set!")
+            );
+        return;
+    }
+
     // open file browser on release
     if (m_channel.startsWith("_Browse") || m_channel.startsWith("_MBrowse")) {
         return;
     }
     auto w = static_cast<QPushButton *>(m_widget);
     if (property("CSQT_latch").toBool()) {
+
         m_currentValue = !w->isChecked() ? m_value : 0;
+        // test:
+        bool test = w->isChecked();
+        QDEBUG << "Button pressed, checked is : " << test << " value:  " << m_currentValue;
     } else {
 		m_currentValue = m_value;
     }
