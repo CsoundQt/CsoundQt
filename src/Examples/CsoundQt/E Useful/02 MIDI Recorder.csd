@@ -1,202 +1,146 @@
 <CsoundSynthesizer>
 <CsOptions>
---midi-key=4 --midi-velocity=5 -+max_str_len=8192
+-m128
 </CsOptions>
 <CsInstruments>
 sr = 44100
 ksmps = 64
 nchnls = 2
-0dbfs = 1.0
+0dbfs = 1
 
-;Jacob Joaquin
-;March 1, 2010
-;jacobjoaquin@gmail.com
-;csound.noisepages.com
+/***** MIDI RECORDER *****/
+// Records MIDI note events
 
-; Tune Instruments
-# define TUNE # 264.99816498389697 #  ; 440 * 3 ^ (-6 / 13)
+; after an examle by Jacob Joaquin 2010
+; rewritten by joachim heintz 2025
 
-; Instruments
-# define MIDI_Synth     # 1 #
-# define Echo           # 2 #
-# define Capture_Events # 100 #
-# define Playback       # 200 #
-# define Record         # 201 #
-# define Clear          # 202 #
-# define Init           # 500 #
+// array to store triplets of time, notenum, velocity
+Arr@global:k[] init 100000
 
-; F-Tables
-# define T_Sine # 1 #  ; Sine wave
+// pointer in the array
+RecPointer@global:k init 0
 
-; Sine wave
-gitemp ftgen $T_Sine, 0, 2 ^ 16, 10, 1
+// recording time
+RecTime@global:k init 0
 
-gScore = ""
-gkrecord init 0
-gkoffset init 0
-gkcounter init 0
+// guide all midi events to instr GetMidi
+massign(0,"GetMidi")
 
-instr $MIDI_Synth
-    ; MIDI input
-    inote_play = p4                  ; Note number
-    ivelocity = p5                   ; Velocity
-    ivelocity = ivelocity / 127      ; Normalize velocity
-    kgate madsr 0.005, 1, 1, 0.25  ; MIDI envelope
-    
-    ; Frequency
-    ifreq = $TUNE * 3 ^ ((inote_play - 60) / 13)
+// channels 
+chn_S("midi-received",2)
+chn_k("rec-is-on",2)
+chn_k("playback-progress",2)
 
-    ; FM Synth
-    a1 foscil kgate * ivelocity, ifreq, 1, 2, 6 * ivelocity, $T_Sine    
-    
-    ; Outputs
-    a1 = a1 * 0.5
-    outs a1, a1
-    chnmix a1, "Send"
-    
 
-    ; Send event info to $Capture_Event    
-    klisten init 1      ; Listen for release time
-    kflag release       ; Track release
-    kdur timeinsts
-    ktime times 
-    
-    if (klisten == 1 && kflag == 1 && gkrecord == 1) then
-        event "i", $Capture_Events, 0, 1, ktime - gkoffset, kdur, inote_play, ivelocity * 127
+instr Init
+  chnset("","midi-received")
+endin
+schedule(Init,0,.1)
+
+instr GetMidi
+
+  // get midi events
+  s:k,ch:k,d1:k,d2:k = midiin()
+  
+  // get note-on or -off messages
+  if (s == 128) || (s == 144) then
+  
+    // note-on 
+    if (s == 144) && (d2 > 0) then
+      // call the MidiSound instrument with note number as instance
+      schedulek(sprintfk("MidiSound.%03d",d1),0,-1,d1,d2)
+      // send info to gui
+      chnset(sprintfk("%-10s%-12d%-10d%.3f","ON",d1,d2,RecTime),"midi-received")
+      
+    // otherwise turn off the instance by sending a negative p1
+    else
+      // only for gui display
+      if (s == 128) then
+        chnset(sprintfk("%-10s%-12d%-10d%.3f","OFF",d1,d2,RecTime),"midi-received")
+      else
+        chnset(sprintfk("%-10s%-12d%-10d%.3f","ON",d1,d2,RecTime),"midi-received")
+      endif
+      // set d2 to zero for writing in array as note-on with zero velocity
+      d2 = 0
+      schedulek(sprintfk("-MidiSound.%03d",d1),0,-1,d1,d2)
+    endif
         
-        ; Stop listening
-        klisten = 0
+    // write the data into the array
+    Arr[RecPointer] = RecTime
+    Arr[RecPointer+1] = d1
+    Arr[RecPointer+2] = d2
+  
+    // advance rec pointer
+    RecPointer += 3
+    
+  endif 
+  
+endin
+schedule(GetMidi,0,-1)
+
+instr Record
+
+  RecTime += 1/kr
+
+endin
+
+instr Play
+
+  readIndx:k init 0
+  localTime:k init 0
+  nextTime:k = Arr[readIndx]
+  
+  if ((readIndx < RecPointer) && localTime >= nextTime) then
+
+    note_number:k = Arr[readIndx+1]
+    velocity:k = Arr[readIndx+2]
+    
+    // for positive verlocity call the MidiSound instrument with note number as instance
+    if (velocity > 0) then
+      schedulek(sprintfk("MidiSound.%03d",note_number),0,-1,note_number,velocity)
+    // otherwise turn off
+    else
+      schedulek(sprintfk("-MidiSound.%03d",note_number),0,-1,note_number,velocity)
     endif
     
-endin
-
-instr $Echo
-    iamp = p4        ; Amplitude
-    itime = p5       ; Time of delay
-    ifb = p6         ; Delay feedback amount
-    iroom_size = p7  ; Size of room, for reverb
-    idamp = p8       ; High frequency dampening of reverb
+    // increase the read pointer
+    readIndx += 3
     
-    ; Receive send signal from MIDI_Synth
-    a0 chnget "Send"
-    
-    ; Effects
-    adelay delayr itime
-    delayw a0 + adelay * ifb    
-    al, ar freeverb adelay, adelay, 0.1, 0.2
-    
-    ; Outputs
-    outs al * iamp, ar * iamp    
-    chnclear "Send"
+  endif
+  
+  localTime += 1/kr
+  
+  // stop any sound in case this instrument is turned off
+  if (release() == 1) then
+    turnoff2(MidiSound,0,1)
+  endif
 
 endin
 
-instr $Capture_Events
-    istart = p4
-    idur = p5
-    inote = p6
-    ivelocity = p7
-    
-    prints "captured -- i 1 %f %f %d %f\n", istart, idur, inote, \
-           ivelocity
-    Sline sprintf "i 1 %f %f %d %f\n", istart, \
-            idur, inote, ivelocity
-    fprints "captured.sco", Sline
-    gScore strcat gScore, Sline
-    gkcounter = gkcounter + 1
-    Snum sprintfk "%i", gkcounter
-    outvalue "numnotes", Snum
-    turnoff
+instr MidiSound
+
+  note:i = p4
+  amp:i = p5/127
+  sound:a = poscil(amp*1.5,mtof(note))+poscil(amp/4,mtof:k(note+randomi:k(11.85,12.15,20,3)))
+  outall(linenr:a(sound/2,.1,.1,.01))
+
 endin
 
-instr $Playback
-    S1 = gScore
-linesleft:
-    ipos strindex S1, "\n"
-    if ipos == -1 igoto nomorelines
-    Sline strsub S1, 0, ipos
-    Stext strcat "playing -- ", Sline
-    prints Stext
-    prints "\n"
-    scoreline_i Sline
-    S1 strsub S1, ipos + 1
-    igoto linesleft
-nomorelines:
-endin
 
-instr $Record
-    gkrecord = p4
-    gkoffset times
-    Srecording = ""
-    if p4 == 1 then
-        Srecording = "Recording"
-    endif
-    outvalue "recording", Srecording
-endin
-
-instr $Clear
-    gkrecord init 0
-    gkcounter init 0
-    gScore = ""
-    prints "Memory cleared."
-    turnoff
-endin
-
-instr $Init
-    outvalue "numnotes", "0"
-    outvalue "recording", ""
-endin
 
 </CsInstruments>
 <CsScore>
-; Instruments
-# define MIDI_Synth     # 1 #
-# define Echo           # 2 #
-# define Capture_Events # 100 #
-# define Init           # 500 #
-
-; Turn on echo effects
-i $Echo 0 10000 1 0.333 0.333 0.2 0.2
-i $Init 0 0.1
-
 </CsScore>
 </CsoundSynthesizer>
 
 
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 767 231 353 393
-CurrentView: io
-IOViewEdit: On
-Options:
-</MacOptions>
-<MacGUI>
-ioView background {57054, 58596, 65535}
-ioButton {219, 247} {100, 30} event 1.000000 "button1" "Clear memory" "/" i202 0 1
-ioButton {78, 300} {170, 30} event 1.000000 "button1" "Play events" "/" i200 0 -3600
-ioButton {15, 247} {100, 30} event 1.000000 "button1" "Start Record" "/" i201 0 0.1 1
-ioButton {117, 247} {100, 30} event 1.000000 "button1" "Pause Record" "/" i201 0 0.1 0
-ioText {232, 221} {80, 25} display 0.000000 0.00100 "numnotes" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground border 5
-ioText {15, 198} {203, 45} display 0.000000 0.00100 "recording" left "Lucida Grande" 20 {49920, 8192, 0} {65280, 65280, 65280} background border 
-ioText {221, 198} {102, 24} label 0.000000 0.00100 "" center "Lucida Grande" 8 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Number recorded
-ioText {24, 6} {292, 35} label 0.000000 0.00100 "" center "Lucida Grande" 20 {0, 0, 0} {65280, 65280, 65280} nobackground border MIDI Recorder
-ioText {15, 47} {308, 134} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0, 0, 0} {59648, 58368, 65280} background border This file can record incoming MIDI notes or realtime score events from the Live Event Panels, both to memory and to a csd file called "captured.sco". The file will be created in the current directory, so if you haven't saved this example, it can be created anywhere...
-</MacGUI>
-
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="1200" y="349" width="445" height="314">i 1 0 0.255419 61 64.000000 
-
- </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
+ <x>397</x>
+ <y>197</y>
+ <width>677</width>
+ <height>476</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -204,6 +148,354 @@ ioText {15, 47} {308, 134} label 0.000000 0.00100 "" left "Lucida Grande" 12 {0,
   <g>240</g>
   <b>240</b>
  </bgcolor>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>startstoprec</objectName>
+  <x>110</x>
+  <y>145</y>
+  <width>115</width>
+  <height>34</height>
+  <uuid>{cd8ea423-1ea9-4078-a02f-7b6930e66ab1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Start / Stop</text>
+  <image>/</image>
+  <eventLine>i "Record" 0 -1</eventLine>
+  <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>12</fontsize>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>pauseresumerec</objectName>
+  <x>238</x>
+  <y>145</y>
+  <width>142</width>
+  <height>34</height>
+  <uuid>{c41c2c66-7d63-4857-bc57-362615e45156}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Pause / Resume</text>
+  <image>/</image>
+  <eventLine>i "PauseRecord" 0 -1</eventLine>
+  <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>12</fontsize>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>10</x>
+  <y>145</y>
+  <width>80</width>
+  <height>34</height>
+  <uuid>{2146fb06-7c6e-436d-b494-c138e649c7e9}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>RECORD</label>
+  <alignment>right</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>16</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>startstopplay</objectName>
+  <x>110</x>
+  <y>190</y>
+  <width>115</width>
+  <height>34</height>
+  <uuid>{590ad5a2-5f3d-4cb6-9c60-029771123239}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Start / Stop</text>
+  <image>/</image>
+  <eventLine>i "Play" 0 -1</eventLine>
+  <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>true</latched>
+  <fontsize>12</fontsize>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>pauseresumeplay</objectName>
+  <x>238</x>
+  <y>190</y>
+  <width>146</width>
+  <height>34</height>
+  <uuid>{5cef303f-4117-46ce-9b27-d4b173b72b60}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Pause / Resume</text>
+  <image>/</image>
+  <eventLine>i "PausePlay" 0 -1</eventLine>
+  <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>12</fontsize>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>10</x>
+  <y>190</y>
+  <width>80</width>
+  <height>34</height>
+  <uuid>{8ee76e2b-cc3e-4909-9f7c-202b0209c924}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>PLAY</label>
+  <alignment>right</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>16</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>5</x>
+  <y>55</y>
+  <width>658</width>
+  <height>77</height>
+  <uuid>{80ffc85b-15be-41c8-95cb-080a092e55d3}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>This example can record incoming MIDI notes to memory, and play them back with a simple sound. It can also save the content to a csd file.</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>16</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>5</x>
+  <y>10</y>
+  <width>656</width>
+  <height>43</height>
+  <uuid>{ff0c0b4b-6f94-41a8-b4c1-5852a7ef2e35}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>MIDI RECORDER</label>
+  <alignment>center</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>32</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>midi-received</objectName>
+  <x>10</x>
+  <y>318</y>
+  <width>648</width>
+  <height>32</height>
+  <uuid>{bb63bcab-72f4-450b-abc9-e5e8490ed18b}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>OFF       90          64        29.883</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Mono</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>true</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>1</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>8</x>
+  <y>281</y>
+  <width>647</width>
+  <height>34</height>
+  <uuid>{6e441c1f-0cc4-47c4-abb7-9866ed2c2039}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Event     Note number Velocity  Record time</label>
+  <alignment>left</alignment>
+  <valignment>center</valignment>
+  <font>Liberation Mono</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>0</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBController" version="2">
+  <objectName>rec-is-on</objectName>
+  <x>395</x>
+  <y>145</y>
+  <width>48</width>
+  <height>34</height>
+  <uuid>{e5618b19-49a3-48f1-8ecc-75670fbf7c69}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <objectName2>rec-is-on</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00ff00</borderColor>
+  <color>
+   <r>224</r>
+   <g>27</g>
+   <b>36</b>
+  </color>
+  <randomizable group="0" mode="both">false</randomizable>
+  <bgcolor>
+   <r>30</r>
+   <g>30</g>
+   <b>30</b>
+  </bgcolor>
+  <bgcolormode>true</bgcolormode>
+ </bsbObject>
+ <bsbObject type="BSBController" version="2">
+  <objectName>playback-progress</objectName>
+  <x>395</x>
+  <y>190</y>
+  <width>270</width>
+  <height>34</height>
+  <uuid>{db695565-f1b9-4061-804b-75a2ba85f220}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <objectName2>rec-is-on</objectName2>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.00000000</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00ff00</borderColor>
+  <color>
+   <r>0</r>
+   <g>234</g>
+   <b>0</b>
+  </color>
+  <randomizable group="0" mode="both">false</randomizable>
+  <bgcolor>
+   <r>30</r>
+   <g>30</g>
+   <b>30</b>
+  </bgcolor>
+  <bgcolormode>true</bgcolormode>
+ </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
