@@ -37,7 +37,6 @@
 #include "qutegraph.h"  // Needed for passing the ud to the graph for display data
 #include "midihandler.h"
 
-// #define QDEBUG qDebug() << __FUNCTION__ << ":"
 
 CsoundEngine::CsoundEngine(ConfigLists *configlists) :
     m_options(configlists)
@@ -80,7 +79,6 @@ CsoundEngine::~CsoundEngine()
     m_msgUpdateThread.waitForFinished(); // Join the message thread
     stop();
 #ifndef CSQT_DESTROY_CSOUND
-    //csoundDestroyCircularBuffer(ud->csound, ud->midiBuffer); // CS7 circular buffer destroyed in csoundDestroy
     csoundDestroy(ud->csound);
 #endif
     delete ud;
@@ -324,16 +322,10 @@ void CsoundEngine::csThread(void *data)
         // outputBufferSize == ksmps
         long numSamples = udata->outputBufferSize * udata->numChnls;
         udata->audioOutputBuffer.putManyScaled(outputBuffer, numSamples,
-                                               1.0/udata->zerodBFS);
-        // for (int i = 0; i < udata->outputBufferSize*udata->numChnls; i++) {
-        //     udata->audioOutputBuffer.put(outputBuffer[i]/ udata->zerodBFS);
-        // }
+                                               1.0/udata->zerodBFS);       
     }
-    //  udata->wl->getValues(&udata->channelNames,
-    //                       &udata->values,
-    //                       &udata->stringValues);
+
     if (udata->enableWidgets) {
-        //        csoundDeleteChannelList(udata->csound, *channelList);
         writeWidgetValues(udata);
         readWidgetValues(udata);
     }
@@ -404,7 +396,6 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
 void CsoundEngine::setWidgetLayout(WidgetLayout *wl)
 {
     ud->wl = wl;
-    //  connect(wl, SIGNAL(destroyed()), this, SLOT(widgetLayoutDestroyed()));
     // Key presses on widget layout and console are passed to the engine
 	connect(wl, SIGNAL(keyPressed(int)),
 			this, SLOT(keyPressForCsound(int)));
@@ -531,11 +522,6 @@ void CsoundEngine::evaluate(QString code)
     }
 }
 
-//void CsoundEngine::unregisterScope(QuteScope *scope)
-//{
-//  // TODO is it necessary to unregiter scopes?
-//  qDebug()  << "Not implemented";
-//}
 
 int CsoundEngine::popKeyPressEvent()
 {
@@ -568,22 +554,13 @@ void CsoundEngine::processEventQueue()
     eventMutex.lock();
     while (eventQueueSize > 0) {
         eventQueueSize--;
-        m_playMutex.lock();
-#ifdef CSQT_DESTROY_CSOUND
+        m_playMutex.lock();        
         if (ud->perfThread) {
-            //ScoreEvent is not working
-            //      ud->perfThread->ScoreEvent(0, type, eventElements.size(), pFields);
-            //      qDebug()  << eventQueue[eventQueueSize];
             ud->perfThread->InputMessage(eventQueue[eventQueueSize].toLatin1());
         }
         else {
             QDEBUG << "WARNING: ud->perfThread is NULL";
-        }
-#else
-        if (ud->perfThread) {
-            ud->perfThread->InputMessage(eventQueue[eventQueueSize].toLatin1());
-        }
-#endif
+        }       
         m_playMutex.unlock();
     }
     eventMutex.unlock();
@@ -596,7 +573,6 @@ void CsoundEngine::passOutValue(QString channelName, double value)
 
 void CsoundEngine::passOutString(QString channelName, QString value)
 {
-    //   qDebug() ;
     ud->wl->newValue(QPair<QString, QString>(channelName, value));
 }
 
@@ -605,7 +581,6 @@ int CsoundEngine::play(CsoundOptions *options)
     QMutexLocker locker(&m_playMutex);
     if (ud->perfThread && (ud->perfThread->GetStatus() == 0)) {
         // GetStatus == 0 means playing
-        // ud->perfThread->TogglePause(); // no need for that when there is Pause button
         QDEBUG << "Already playing";
 		return 0;
     }
@@ -638,7 +613,6 @@ void CsoundEngine::pause()
 {
     QMutexLocker locker(&m_playMutex);
     if (ud->perfThread && (ud->perfThread->GetStatus() == 0))  {		
-		//ud->perfThread->Pause();
 		ud->perfThread->TogglePause();
 		m_paused = !m_paused;
 		qDebug() << "Paused: " << m_paused;
@@ -735,7 +709,7 @@ int CsoundEngine::checkSyntax() {
         flushQueues();
         locker.unlock(); // otherwise csoundStop will freeze
         stop();
-        emit (errorLines(getErrorLines()));
+        emit errorLines(getErrorLines());
 
         out = -3;  // compilation error
     } else {
@@ -745,8 +719,6 @@ int CsoundEngine::checkSyntax() {
     }
     csoundDestroyMessageBuffer(ud->csound);
     csoundDestroy(ud->csound);
-    // csoundCleanup(ud->csound);
-    // csoundReset(ud->csound);
     return out;
 }
 
@@ -799,10 +771,7 @@ int CsoundEngine::runCsound()
     }
 #endif
     if(!m_options.useCsoundMidi) {
-        // CS7
-        // csoundSetHostImplementedMIDIIO(ud->csound, 1);
         csoundSetHostMIDIIO(ud->csound);
-
         csoundSetExternalMidiInOpenCallback(ud->csound, &midiInOpenCb);
         csoundSetExternalMidiReadCallback(ud->csound, &midiReadCb);
         csoundSetExternalMidiInCloseCallback(ud->csound, &midiInCloseCb);
@@ -812,38 +781,6 @@ int CsoundEngine::runCsound()
         csoundSetExternalMidiErrorStringCallback(ud->csound, &midiErrorStringCb);
     }
     csoundCreateMessageBuffer(ud->csound, 0);
-
-    // CS7 - maybe better ditch FLTK support
-    /*
-    if (m_options.enableFLTK) {
-        // Disable FLTK graphs, but allow FLTK widgets.
-        int *var = (int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags");
-        // use Qt equivalent
-        if (var) {
-            *var = 4;
-        } else {
-            if (csoundCreateGlobalVariable(ud->csound, "FLTK_Flags", sizeof(int)) != CSOUND_SUCCESS) {
-                qDebug() << "Error creating the FTLK_Flags variable";
-            }  else {
-                int *var = (int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags");
-                if (var) {
-                    *var = 4;
-                } else {
-                    qDebug() << "Error reading the FTLK_Flags variable";
-                }
-            }
-        }
-    }
-    else {
-        csoundSetGlobalEnv("CS_OMIT_LIBS", "fluidOpcodes,virtual,widgets");
-        int *var = (int*) csoundQueryGlobalVariable(ud->csound, "FLTK_Flags");
-        if (var) {
-            *var = 3;
-        } else {
-            qDebug() << "Error reading the FTLK_Flags variable";
-        }
-    }
-    */
 
     csoundRegisterKeyboardCallback(ud->csound,
                                    &CsoundEngine::keyEventCallback,
@@ -865,13 +802,8 @@ int CsoundEngine::runCsound()
     csoundSetKillGraphCallback(ud->csound, &CsoundEngine::killGraphCallback);
     csoundSetExitGraphCallback(ud->csound, &CsoundEngine::exitGraphCallback);
     if (!m_options.fileName1.endsWith(".html", Qt::CaseInsensitive)) {
-//#if CS_APIVERSION>=4
         char const **argv;// since there was change in Csound API
         argv = (const char **) calloc(33, sizeof(char*));
-//#else
-//        char **argv;
-//        argv = (char **) calloc(33, sizeof(char*));
-//#endif
 
         int argc = m_options.generateCmdLine((char **)argv);
 
@@ -882,17 +814,23 @@ int CsoundEngine::runCsound()
             free((char *) argv[i]);
         }
         free(argv);
-        int startResult = csoundStart(ud->csound); // must be called in Csound7
 
-        if (ud->result != CSOUND_SUCCESS ||  startResult != CSOUND_SUCCESS)  {
-            qDebug()  << "Csound compile / csoundStart failed! "  << ud->result << startResult;
-            // Commenting out flushQues fixes the crash.
-            // Investigate closer, if it must be here
-            // seems that messages are outputted into console anyway...
-            flushQueues(); // the line was here in some earlier version. Otherwise errormessaged won't be processed by Console::appendMessage()
+
+        if (ud->result != CSOUND_SUCCESS )  {
+            qDebug()  << "Csound compile failed! "  << ud->result;
+            flushQueues();
             locker.unlock(); // otherwise csoundStop will freeze
             stop();
             emit (errorLines(getErrorLines()));
+            return -3;
+        }
+
+        int startResult = csoundStart(ud->csound); // must be after compilation check, otherwise unneeded messages are printed to console
+        if (startResult != CSOUND_SUCCESS) {
+            //just for testing to see, if it ever comes out
+            // if it happens that compile succeeds and start fails, need also flushQueues and stop here.
+            // but this is quite unlikely
+            QDEBUG << "csoundStart() failed";
             return -3;
         }
     }
@@ -918,8 +856,6 @@ int CsoundEngine::runCsound()
 
 void CsoundEngine::stopCsound()
 {
-    //    perfThread->ScoreEvent(0, 'e', 0, 0);
-    // m_playMutex.lock();
     QMutexLocker locker(&m_playMutex);
     if(!ud->perfThread)
         return;
@@ -967,18 +903,10 @@ void CsoundEngine::stopCsound()
         return;
     }
 
-    // QDEBUG  << "Joining...";
     pt->Join();
-    // QDEBUG  << "Joined.";
-
     ud->perfThread = NULL;
     delete pt;
-
-    // QDEBUG << "Cleaning up csound...";
-
     this->cleanupCsound();
-
-    // QDEBUG << "Clean up OK";
 
 
 #ifdef CSQT_DEBUGGER
@@ -989,12 +917,10 @@ void CsoundEngine::stopCsound()
     // Put menu bar back
     SetMenuBar(menuBarHandle);
 #endif
-    // QDEBUG << "emitting stopSignal...";
 
     locker.unlock();
     emit stopSignal();
 
-    // QDEBUG << "Exiting stopCsound";
 }
 
 void CsoundEngine::cleanupCsound()
@@ -1017,14 +943,12 @@ void CsoundEngine::cleanupCsound()
 #endif
 
     //csoundCleanup(ud->csound);
-    csoundReset(ud->csound); // CS7  replacement  csoundCleanup?
+    csoundReset(ud->csound); // CS7  replacement  csoundCleanup? maybe not needed.
     flushQueues();
     csoundDestroyMessageBuffer(ud->csound);
 
 #ifdef CSQT_DESTROY_CSOUND
-    //csoundDestroyCircularBuffer(ud->csound, ud->midiBuffer); // Cs7 destroyed in csoundDestroy
     ud->midiBuffer = nullptr;
-    //csoundDestroyCircularBuffer(ud->csound, ud->virtualMidiBuffer); // Cs7 destroyed in csoundDestroy
     ud->virtualMidiBuffer = nullptr;
     csoundDestroy(ud->csound);
     ud->csound = nullptr;
@@ -1138,7 +1062,6 @@ void CsoundEngine::messageListDispatcher(void *data)
             ud_local->csEngine->m_messageMutex.lock();
             for (int i = 0; i< count; i++) {
                 ud_local->csEngine->messageQueue << csoundGetFirstMessage(csound);
-                // FIXME: Is this thread safe?
                 csoundPopFirstMessage(csound);
             }
             ud_local->csEngine->m_messageMutex.unlock();
