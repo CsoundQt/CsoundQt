@@ -545,7 +545,7 @@ void QuteButton::performAction() {
     QString type = property("CSQT_type").toString();
     QString eventLine = property("CSQT_eventLine").toString();
     QString name = m_channel;
-	bool isLatch = property("CSQT_latch").toBool();
+    //bool isLatch = property("CSQT_latch").toBool();
     //bool useMomentaryMidiButton = property("CSQT_momentaryMidiButton").toBool();
 
 	if (type.contains("event") && !eventLine.isEmpty()) {
@@ -568,15 +568,15 @@ void QuteButton::performAction() {
 				lineElements.prepend("i");
 				setValue(0);
 				m_isPlaying = false;
-				emit(queueEventSignal(lineElements.join(" ")));
+                emit queueEventSignal(lineElements.join(" "));
 			} else {
 				setValue( property("CSQT_pressedValue").toDouble()  ); // was 1
 				m_isPlaying = true;
-				emit(queueEventSignal(eventLine));
+                emit queueEventSignal(eventLine);
 			}
 		} else { // if not negative p3 then just fire the event
-			if (!isLatch && m_currentValue>0) { //do not fire the event if latched && m_value==0 && is positive p3
-				emit(queueEventSignal(eventLine));
+            if ( /*!isLatch && */ m_currentValue>0) { //do fire the event also if latched && is positive p3
+                emit queueEventSignal(eventLine);
 			}
 		}
     }
