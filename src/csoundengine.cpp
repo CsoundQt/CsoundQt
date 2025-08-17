@@ -882,17 +882,23 @@ int CsoundEngine::runCsound()
             free((char *) argv[i]);
         }
         free(argv);
-        int startResult = csoundStart(ud->csound); // must be called in Csound7
 
-        if (ud->result != CSOUND_SUCCESS ||  startResult != CSOUND_SUCCESS)  {
-            qDebug()  << "Csound compile / csoundStart failed! "  << ud->result << startResult;
-            // Commenting out flushQues fixes the crash.
-            // Investigate closer, if it must be here
-            // seems that messages are outputted into console anyway...
-            flushQueues(); // the line was here in some earlier version. Otherwise errormessaged won't be processed by Console::appendMessage()
+
+        if (ud->result != CSOUND_SUCCESS )  {
+            qDebug()  << "Csound compile failed! "  << ud->result;
+            flushQueues();
             locker.unlock(); // otherwise csoundStop will freeze
             stop();
             emit (errorLines(getErrorLines()));
+            return -3;
+        }
+
+        int startResult = csoundStart(ud->csound); // must be after compilation check, otherwise unneeded messages are printed to console
+        if (startResult != CSOUND_SUCCESS) {
+            //just for testing to see, if it ever comes out
+            // if it happens that compile succeeds and start fails, need also flushQueues and stop here.
+            // but this is quite unlikely
+            QDEBUG << "csoundStart() failed";
             return -3;
         }
     }
