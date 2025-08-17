@@ -31,9 +31,9 @@
 
 CsoundHtmlWrapper::CsoundHtmlWrapper(QObject *parent) :
     QObject(parent),
+    csoundHtmlView(nullptr),
     m_csoundEngine(nullptr),
-    message_callback(nullptr),
-    csoundHtmlView(nullptr)
+    message_callback(nullptr)
 {
 }
 
@@ -377,7 +377,9 @@ void CsoundHtmlWrapper::stop(){
     if (!m_csoundEngine) {
         return;
     }
-    csoundReset(getCsound());
+    QDEBUG;
+    m_csoundEngine = nullptr;
+    // csoundReset(getCsound()); // crash happens here...
 }
 
 double CsoundHtmlWrapper::tableGet(int table_number, int index){
