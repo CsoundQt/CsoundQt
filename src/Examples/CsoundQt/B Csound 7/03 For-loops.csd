@@ -162,10 +162,10 @@ endin
 
 instr Short
 
-  start:i init 0
+  strt:i init 0
   for freq in [200 ... 2000, 100] do
-    schedule(PlaySine,start,5-start,freq)
-    start += 1/8
+    schedule(PlaySine,strt,5-strt,freq)
+    strt += 1/8
   od
   schedule(ShowShortCode,0,1)
 
@@ -213,6 +213,8 @@ endin
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 <bsbPanel>
