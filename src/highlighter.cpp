@@ -296,6 +296,8 @@ void Highlighter::setTheme(const QString &theme) {
     errorFormat.setForeground(deprecatedFormat.foreground().color());
     errorFormat.setFontStrikeOut(true);
 
+    importantCommentFormat.setFontWeight(QFont::Bold);
+
     // ioFormat.setFontItalic(true);
 
     QColor color = saturateColor(headerFormat.foreground().color().lighter(150), 150);
