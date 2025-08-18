@@ -701,6 +701,8 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         return;
     }
 
+
+
     rx.setPattern(R"(&&|==|\|\||<|>|<=|>=|!=|\\)");
     index = 0;
     while((rxmatch=rx.match(text, index)).hasMatch()) {
@@ -814,16 +816,25 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     }
 
     //last rules  -- not used except for label
-    for(auto rule: lastHighlightingRules) {
-        index = 0;
-        while((rxmatch = rule.pattern.match(text, index)).hasMatch()) {
-            int group = rule.group;
-            //qDebug() << "last rule matched: " << rule.pattern.pattern();
-            setFormat(rxmatch.capturedLength(group), rxmatch.capturedStart(group), rule.format);
-            index = rxmatch.capturedEnd();
-        }
-    }
+    // for(auto rule: lastHighlightingRules) {
+    //     index = 0;
+    //     while((rxmatch = rule.pattern.match(text, index)).hasMatch()) {
+    //         int group = rule.group;
+    //         //qDebug() << "last rule matched: " << rule.pattern.pattern();
+    //         setFormat(rxmatch.capturedLength(group), rxmatch.capturedStart(group), rule.format);
+    //         index = rxmatch.capturedEnd();
+    //     }
+    // }
 
+    // label
+    rx.setPattern("^\\s*([a-zA-Z]\\w*):\\s*$");
+    rxmatch = rx.match(text);
+
+    if (rxmatch.hasMatch()) {
+        setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), labelFormat);
+        // setFormat(rxmatch.capturedEnd(1), 1, colonFormat);
+        return;
+    }
 
 
     setCurrentBlockState(0);
