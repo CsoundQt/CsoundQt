@@ -2192,6 +2192,10 @@ void CsoundQt::stop(int index)
     if (curPage >= documentPages.size()) {
         return; // A bit of a hack to avoid crashing when documents are deleted very quickly...
     }
+#if defined(CSQT_QTHTML)
+    csoundHtmlView->stop();
+    //csoundHtmlView->setCsoundEngine(nullptr); // probably crashes it...
+#endif
     Q_ASSERT(docIndex >= 0);
     if (docIndex >= documentPages.size()) {
         qDebug() << "CsoundQt::stop : document index" << docIndex
@@ -2199,6 +2203,9 @@ void CsoundQt::stop(int index)
         markStopped();
 		return;
     }
+
+
+
     if (documentPages[docIndex]->isRunning()) {
         documentPages[docIndex]->stop();
 		documentTabs->setTabIcon(docIndex, QIcon());
