@@ -43,8 +43,8 @@ endop
 // declare display channels and call one instr for each channel
 indx = 0
 while indx < nchnls do
-  chn_k sprintf("out%d",indx),2
-  chn_k sprintf("out%dover",indx),2
+  chn_k sprintf("out%d",indx+1),2
+  chn_k sprintf("out%dover",indx+1),2
   schedule "DisplayOneChannel",0,99999,indx
   indx += 1
 od
@@ -188,6 +188,8 @@ endin
 <CsScore>
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 
@@ -610,7 +612,7 @@ endin
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.95000000</xValue>
-  <yValue>-inf</yValue>
+  <yValue>0.66665871</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
