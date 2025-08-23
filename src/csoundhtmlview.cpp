@@ -20,6 +20,7 @@ CsoundHtmlView::CsoundHtmlView(QWidget *parent) :
     ui->setupUi(this);
 
     webView = new QWebEngineView(this);
+    webView->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
     //webView->page()->profile()->clearHttpCache();
     QObject::connect(webView, &QWebEngineView::loadFinished, this, &CsoundHtmlView::removeTemporaryHtmlFile );
     csoundHtmlWrapper.setCsoundHtmlView(this);
@@ -143,6 +144,9 @@ void CsoundHtmlView::stop()
 {
     qDebug() ;
     documentPage = 0;
+    if (csoundHtmlWrapper.isPlaying() ){
+        csoundHtmlWrapper.stop();
+    }
     csoundHtmlOnlyWrapper.stop();
 }
 

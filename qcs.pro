@@ -33,7 +33,7 @@
 ################################################################################
 
 #temporary
-CONFIG+=bundle_csound
+#CONFIG+=bundle_csound
 
 #To prepare for Qt6 build
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
@@ -129,7 +129,7 @@ TARGET = CsoundQt
 
 build32:TARGET = $${TARGET}-f
 build64:TARGET = $${TARGET}-d
-html_webkit|html_webengine:TARGET = $${TARGET}-html
+html_support:TARGET = $${TARGET}-html
 
 TARGET = $${TARGET}-cs7
 
@@ -201,15 +201,17 @@ macx {
     pythonlinks.path= $$PWD
     pythonlinks.commands = install_name_tool -change /System/Library/Frameworks/Python.framework/Versions/2.7/Python Python.framework/Versions/2.7/Python $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
 
-    # bundle command: install_name_tool -change /Applications/Csound/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 /Users/tarmojohannes/Documents/src/build-qcs-Qt_6_5_3_for_macOS-Release/bin/CsoundQt-d-cs7.app/Contents/MacOS/CsoundQt-d-cs7
+    # bundle command: install_name_tool -change /Applications/Csound/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 /Users/tarmojohannes/Documents/src/build-qcs-Qt_6_5_3_for_macOS-Release/bin/CsoundQt-d-cs7.app/Contents/MacOS/CsoundQt-d-cs7
+    # sign with developer cert: codesign -s "Mac Developer: Tarmo Johannes (ND7C9HZ522)" --deep /Users/tarmojohannes/Documents/src/build-cs7-qcsQt_6_5_3_for_macOS-Release/bin/CsoundQt-d-cs7.app
+    # install certificate name:
     bundle_csound {
         # Nothing special to do for that, just don't delete, leave the links to @rpath
         message("Bundle Csound into  the package")
         csound.path= $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/
         csound.files = /Applications/Csound/CsoundLib64.framework
         INSTALLS+=csound
-        final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib @rpath/CsoundLib64.framework/Versions/6.0/libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
-        final.commands += install_name_tool -change  CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        #final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib @rpath/CsoundLib64.framework/Versions/6.0/libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        final.commands += install_name_tool -change  /Applications/Csound/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
 
     } else {
         final.path = $$PWD

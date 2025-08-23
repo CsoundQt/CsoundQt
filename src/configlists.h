@@ -30,6 +30,12 @@
 
 typedef struct CSOUND_ CSOUND;
 
+// helper function to convert char[] safely to QString
+template <size_t N>
+inline QString safeQString(const char (&str)[N]) {
+    return QString::fromUtf8(str, strnlen(str, N));
+}
+
 class ConfigLists
 {
 public:

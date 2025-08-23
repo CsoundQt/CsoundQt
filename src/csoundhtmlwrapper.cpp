@@ -31,9 +31,9 @@
 
 CsoundHtmlWrapper::CsoundHtmlWrapper(QObject *parent) :
     QObject(parent),
+    csoundHtmlView(nullptr),
     m_csoundEngine(nullptr),
-    message_callback(nullptr),
-    csoundHtmlView(nullptr)
+    message_callback(nullptr)
 {
 }
 
@@ -83,7 +83,7 @@ int CsoundHtmlWrapper::compileCsd(const QString &filename) {
         return -1;
     }
 //#if CS_APIVERSION>=4
-    csoundCompileCSD(getCsound(), filename.toLocal8Bit(), 0);
+    csoundCompileCSD(getCsound(), filename.toLocal8Bit(), 0, 0);
     return 0;
 //#else
 //    return csoundCompileCSD(getCsound(), filename.toLocal8Bit().data(),0);
@@ -94,7 +94,7 @@ int CsoundHtmlWrapper::compileCsdText(const QString &text) {
     if (!m_csoundEngine) {
         return -1;
     }
-    return csoundCompileCSD(getCsound(), text.toLocal8Bit(),1);
+    return csoundCompileCSD(getCsound(), text.toLocal8Bit(), 1, 0);
 }
 
 int CsoundHtmlWrapper::compileOrc(const QString &text) {
@@ -377,7 +377,9 @@ void CsoundHtmlWrapper::stop(){
     if (!m_csoundEngine) {
         return;
     }
-    csoundReset(getCsound());
+    QDEBUG;
+    m_csoundEngine = nullptr;
+    // csoundReset(getCsound()); // crash happens here...
 }
 
 double CsoundHtmlWrapper::tableGet(int table_number, int index){

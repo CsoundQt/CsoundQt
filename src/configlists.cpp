@@ -34,7 +34,6 @@
 typedef QPair<QString, QString> QStringPair;
 
 
-
 ConfigLists::ConfigLists()
 {
     fileTypeNames      << "wav" << "aiff" << "au" << "avr"
@@ -141,13 +140,13 @@ QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
 		qDebug() << "Device "<<i << devs[i].device_name;
 		QString displayName, id;
 		if (module=="jack") {
-			displayName = devs[i].device_name;
-			id = devs[i].device_name;
+            displayName = safeQString(devs[i].device_name);
+            id = displayName;
 		} else {
             displayName = QString("%1 (%2)")
-                    .arg(devs[i].device_name)
-                    .arg(devs[i].interface_name);
-			id = QString(devs[i].device_id);
+            .arg(safeQString(devs[i].device_name))
+                .arg(safeQString(devs[i].interface_name));
+            id = safeQString(devs[i].device_id);
 		}
 		deviceList.insert(displayName, id);
 	}
@@ -180,13 +179,13 @@ QList<QPair<QString, QString> > ConfigLists::getMidiOutputDevices(QString module
         // qDebug() << devs[i].device_name;
 		QString displayName, id;
 		if (module=="jack") {
-			displayName = devs[i].device_name;
-			id = devs[i].device_name;
+            displayName = safeQString(devs[i].device_name);
+            id = safeQString(devs[i].device_name);
 		} else {
             displayName = QString("%1 (%2)")
-                    .arg(devs[i].device_name)
-                    .arg(devs[i].interface_name);
-			id = QString(devs[i].device_id);
+                              .arg(safeQString( devs[i].device_name) )
+                    .arg(safeQString(devs[i].interface_name));
+            id = safeQString(devs[i].device_id);
 		}
 
         deviceList.append(QStringPair(displayName, id));
@@ -211,8 +210,11 @@ QList<QPair<QString, QString> > ConfigLists::getAudioInputDevices(QString module
 		return deviceList;
 	}
 	for (i = 0; i < n; i++) {
-        // qDebug() << "evs[i].device_name;
-        deviceList.append(QStringPair(devs[i].device_name, devs[i].device_id));
+        // qDebug() << "devs[i].device_name;
+        // this caused sometimes carbage on MacOS: deviceList.append(QStringPair(devs[i].device_name, devs[i].device_id));
+        deviceList.append(QStringPair(safeQString( devs[i].device_name),
+                                      safeQString( devs[i].device_id)));
+
 	}
 	free(devs);
     csoundDestroy(cs);
@@ -236,7 +238,9 @@ QList<QPair<QString, QString> > ConfigLists::getAudioOutputDevices(QString modul
 	}
 	for (i = 0; i < n; i++) {
         // qDebug()  << devs[i].device_name;
-        deviceList.append(QStringPair(devs[i].device_name, devs[i].device_id));
+        //deviceList.append(QStringPair(devs[i].device_name, devs[i].device_id));
+        deviceList.append(QStringPair(safeQString( devs[i].device_name),
+                                      safeQString( devs[i].device_id)));
 	}
 	free(devs);
     csoundDestroy(cs);

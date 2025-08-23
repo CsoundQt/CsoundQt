@@ -29,6 +29,9 @@ class CsoundQt;
 class Options;
 class ConfigLists;
 
+constexpr int ORCHESTRA = 0; // instead of macros
+constexpr int SYSTEM = 1;  // and lazy for using enum...
+
 class ConfigDialog : public QDialog, public Ui::ConfigDialog
 {
 	Q_OBJECT
@@ -38,6 +41,8 @@ public:
 	~ConfigDialog();
 	int currentTab();
 	void setCurrentTab(int index);
+
+
 
 
 public slots:
