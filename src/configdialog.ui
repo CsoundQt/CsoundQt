@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>826</width>
-    <height>746</height>
+    <height>740</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,6 +38,18 @@
    </property>
    <item row="0" column="0">
     <widget class="QScrollArea" name="scrollArea">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="midLineWidth">
+      <number>0</number>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -46,8 +58,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>818</width>
-        <height>697</height>
+        <width>820</width>
+        <height>699</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -72,7 +84,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -127,6 +139,9 @@
                 </item>
                 <item row="3" column="7">
                  <spacer name="horizontalSpacer_16">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeType">
                    <enum>QSizePolicy::Fixed</enum>
                   </property>
@@ -275,6 +290,9 @@
                 </item>
                 <item row="2" column="3">
                  <spacer name="horizontalSpacer_8">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeType">
                    <enum>QSizePolicy::Fixed</enum>
                   </property>
@@ -516,6 +534,9 @@
                 </property>
                 <item row="3" column="4">
                  <spacer name="horizontalSpacer_14">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeType">
                    <enum>QSizePolicy::Fixed</enum>
                   </property>
@@ -705,6 +726,9 @@
                 </item>
                 <item row="3" column="7">
                  <spacer name="horizontalSpacer_17">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>20</width>
@@ -720,6 +744,9 @@
            </item>
            <item>
             <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
              <property name="sizeHint" stdset="0">
               <size>
                <width>40</width>
@@ -845,6 +872,9 @@
                 </item>
                 <item row="0" column="3">
                  <spacer name="horizontalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeType">
                    <enum>QSizePolicy::Fixed</enum>
                   </property>
@@ -878,6 +908,9 @@
                 </item>
                 <item row="1" column="7">
                  <spacer name="horizontalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>40</width>
@@ -921,6 +954,9 @@
            </item>
            <item>
             <spacer name="verticalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
@@ -1272,6 +1308,9 @@
                 </item>
                 <item>
                  <spacer name="horizontalSpacer_7">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>40</width>
@@ -1317,6 +1356,9 @@
            </item>
            <item row="10" column="0">
             <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
@@ -1366,6 +1408,9 @@
                 </item>
                 <item row="1" column="2">
                  <spacer name="horizontalSpacer_19">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>40</width>
@@ -1512,6 +1557,9 @@
                 </item>
                 <item row="1" column="3">
                  <spacer name="horizontalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeType">
                    <enum>QSizePolicy::Fixed</enum>
                   </property>
@@ -1527,6 +1575,9 @@
               </item>
               <item row="0" column="1">
                <spacer name="horizontalSpacer_18">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -1604,6 +1655,9 @@
                 </item>
                 <item>
                  <spacer name="horizontalSpacer_22">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>40</width>
@@ -1635,6 +1689,9 @@
              </item>
              <item>
               <spacer name="horizontalSpacer_12">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>40</width>
@@ -1777,6 +1834,9 @@
               </item>
               <item row="0" column="4">
                <spacer name="horizontalSpacer_15">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -1825,6 +1885,9 @@
               </item>
               <item row="6" column="2">
                <spacer name="horizontalSpacer_13">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -2230,6 +2293,9 @@
           <layout class="QGridLayout" name="gridLayout_6">
            <item row="1" column="0">
             <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
@@ -2246,6 +2312,9 @@
              <layout class="QGridLayout" name="gridLayout_7">
               <item row="1" column="0">
                <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
@@ -2361,6 +2430,9 @@
                   </item>
                   <item>
                    <spacer name="horizontalSpacer_5">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
                     <property name="sizeType">
                      <enum>QSizePolicy::Fixed</enum>
                     </property>
@@ -2384,6 +2456,9 @@
                   </item>
                   <item>
                    <spacer name="horizontalSpacer_21">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
                     <property name="sizeHint" stdset="0">
                      <size>
                       <width>40</width>
@@ -2427,6 +2502,9 @@
                  </item>
                  <item>
                   <spacer name="horizontalSpacer_9">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
                    <property name="sizeHint" stdset="0">
                     <size>
                      <width>40</width>
@@ -2777,6 +2855,9 @@ Default directory for sound files. Used if no full path is given for sound files
                 </item>
                 <item row="17" column="0">
                  <spacer name="verticalSpacer_2">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>20</width>
@@ -3032,6 +3113,9 @@ Default directory for sound files. Used if no full path is given for sound files
                <layout class="QHBoxLayout" name="horizontalLayout">
                 <item>
                  <spacer name="horizontalSpacer_11">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>40</width>
@@ -3071,13 +3155,25 @@ Default directory for sound files. Used if no full path is given for sound files
     </widget>
    </item>
    <item row="1" column="0">
-    <layout class="QHBoxLayout" name="buttonLayout">
+    <layout class="QHBoxLayout" name="buttonLayout" stretch="0,0,0,0">
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>2</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item>
-      <spacer name="buttonSpacer">
+      <spacer name="horizontalSpacer_10">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>131</width>
-         <height>31</height>
+         <width>40</width>
+         <height>20</height>
         </size>
        </property>
       </spacer>
