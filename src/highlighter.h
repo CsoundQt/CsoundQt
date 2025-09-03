@@ -71,6 +71,9 @@ public:
     void setDisabledOpcodes(QStringList list);
 	void setColorVariables(bool color);
 	void setMode(int mode);
+    void setSectionType(CsdSection sectionType=CsdSection::UnknownSection) {
+        m_sectionType = sectionType;
+    }
     void setTheme(const QString &theme);
     void enableScoreSyntaxHighlighting(bool status) {
         m_scoreSyntaxHighlighting = status;
@@ -174,6 +177,7 @@ private:
 	QTextCharFormat m_formats[LastConstruct + 1];
 
     QStringList m_parsedUDOs;
+    CsdSection m_sectionType;
 };
 
 #endif

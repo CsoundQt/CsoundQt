@@ -22,7 +22,6 @@
 
 #include "highlighter.h"
 
-#include "types.h"
 
 #include <QRegularExpression>
 
@@ -344,6 +343,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 	colorVariables = true;
 	m_mode = 0; // default to Csound mode
     m_scoreSyntaxHighlighting = true;
+    m_sectionType = CsdSection::UnknownSection;
 
     tagPatterns << "<CsoundSynthesizer>" << "</CsoundSynthesizer>"
 				<< "<CsInstruments>" << "</CsInstruments>"
@@ -623,10 +623,10 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     if(m_theme == "none")
         return;
 
-    // do multiline comments first
+    // comments first
 
+    // multiline comments
     setCurrentBlockState(0);
-
 
     int startIndex = 0;
     //int commentIndex = -1;
@@ -672,7 +672,6 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     } else {
         commentIndex = line.size() + 1;
     }
-    // auto text = line.mid(0, commentIndex);
 
     int index = 0;
     int length = 0;
@@ -681,12 +680,12 @@ void Highlighter::highlightCsoundBlock(const QString &line)
 
     rx.setPattern("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>");
     rxmatch = rx.match(line);
-    if(rxmatch.hasMatch()) { // NB!! this does not work in split view
-        if(rxmatch.captured(1) == "CsInstruments") {
+    if(rxmatch.hasMatch() ) {
+        if(rxmatch.captured(1) == "CsInstruments" ) {
             blockdata->section = OrchestraSection;
-        } else if(rxmatch.captured(1) == "CsScore") {
+        } else if(rxmatch.captured(1) == "CsScore" ) {
             blockdata->section = ScoreSection;
-        } else if(rxmatch.captured(1) == "CsOptions") {
+        } else if(rxmatch.captured(1) == "CsOptions" )  {
             blockdata->section = OptionsSection;
         } else {
             blockdata->section = UnknownSection;
@@ -695,13 +694,13 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         return;
     }
 
-    if(blockdata->section == ScoreSection) {
+    if(blockdata->section == ScoreSection || m_sectionType == ScoreSection) {
         if(m_scoreSyntaxHighlighting) {
             highlightScore(line, 0, commentIndex);
         }
         return;
     }
-    else if(blockdata->section == OptionsSection) {
+    else if(blockdata->section == OptionsSection || m_sectionType == OptionsSection ) {
         index = 0;
         while((rxmatch = csoundOptionsRx.match(line, index)).hasMatch()) {
             length = rxmatch.capturedLength();
@@ -710,201 +709,198 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         }
         return;
     }
-    else if(blockdata->section == UnknownSection) {
+    else if(blockdata->section == OrchestraSection || m_sectionType == OrchestraSection) {
+        //auto text = QStringRef(&line, 0, commentIndex);
+        auto text = QStringView(line).mid(0,commentIndex);
+
+        // define
+        rx.setPattern("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
+        rxmatch = rx.match(text);
+        if(rxmatch.hasMatch()) {
+            setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), macroDefineFormat);
+            return;
+        }
+
+        rx.setPattern("^\\s*\\b(instr|opcode)\\s+(\\w+)\\b");
+        rxmatch = rx.match(text);
+        if(rxmatch.hasMatch()) {
+            auto group = rxmatch.captured(2);
+            setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1), instFormat);
+            setFormat(rxmatch.capturedStart(2), rxmatch.capturedLength(2), nameFormat);
+            return;
+        }
+
+        rx.setPattern(R"(&&|==|\|\||<|>|<=|>=|!=|\\)");
+        index = 0;
+        while((rxmatch=rx.match(text, index)).hasMatch()) {
+            length = rxmatch.capturedLength();
+            setFormat(rxmatch.capturedStart(), length, operatorFormat);
+            index = rxmatch.capturedEnd()+1;
+        }
+
+        QRegularExpression expressionRx("\\b[\\w:]+\\b");
+        QRegularExpression pfieldRx("\\bp[\\d]+\\b");
+        index = 0;
+        while((rxmatch = expressionRx.match(text, index)).hasMatch()) {
+            int wordStart = rxmatch.capturedStart();
+            int wordEnd = rxmatch.capturedEnd();
+            index = wordEnd;
+
+            if(wordStart > 0) {
+                auto prev = text.at(wordStart - 1);
+                if(prev == '$' || prev == '#') {
+                    // check if macro name - replacement for regexp solution
+                    setFormat(wordStart-1, wordEnd - wordStart + 1, macroDefineFormat);
+                    index = wordEnd;
+                    continue;
+                }
+            }
+            wordEnd = (wordEnd > 0 ? wordEnd : text.size());
+            QString word = rxmatch.captured();
+            if(pfieldRx.match(word).hasMatch()) {
+                setFormat(wordStart, wordEnd - wordStart, pfieldFormat);
+            }
+            else if(instPatterns.contains(word)) {
+                setFormat(wordStart, wordEnd - wordStart, instFormat);
+                break; // was: return. For any case, to go through lines after while loop
+            }
+            else if(tagPatterns.contains("<" + word + ">") && wordStart > 0) {
+                setFormat(wordStart - (text[wordStart - 1] == '/'? 2: 1),
+                          wordEnd - wordStart + (text[wordStart - 1] == '/'? 3: 2),
+                          csdtagFormat);
+            }
+            else if(headerPatterns.contains(word)) {
+                setFormat(wordStart, wordEnd - wordStart, headerFormat);
+            }
+            else if(keywordLiterals.contains(word)) {
+                setFormat(wordStart, wordEnd - wordStart, keywordFormat);
+            }
+            else if(ioPatterns.contains(word)) {
+                setFormat(wordStart, wordEnd - wordStart, ioFormat);
+            }
+            else if(word[word.size()-1] != ':' && word.contains(":")) {
+                // functional style opcode:k(...)
+                auto parts = word.split(":");
+                if (parts.size() == 2) {
+                    if (isOpcode(parts[0])) {
+                        setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
+                    }
+                }
+                else {
+                    setFormat(wordStart, wordEnd - wordStart, errorFormat);
+                }
+            }
+            else if(m_parsedUDOs.contains(word)) {
+                setFormat(wordStart, wordEnd - wordStart, udoFormat);
+            }
+            else if(deprecatedOpcodes.contains(word)) {
+                setFormat(wordStart, wordEnd - wordStart, deprecatedFormat);
+            }
+            else if(isOpcode(word)) {
+                setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
+            }
+            else if(colorVariables) {
+                if(word.startsWith('a')) {
+                    setFormat(wordStart, wordEnd - wordStart, arateFormat);
+                }
+                else if(word.startsWith('k')) {
+                    setFormat(wordStart, wordEnd - wordStart, krateFormat);
+                }
+                else if(word.startsWith('i')) {
+                    setFormat(wordStart, wordEnd - wordStart, irateFormat);
+                }
+                else if(word.startsWith("ga")) {
+                    setFormat(wordStart, wordEnd - wordStart, garateFormat);
+                }
+                else if(word.startsWith("gk")) {
+                    setFormat(wordStart, wordEnd - wordStart, gkrateFormat);
+                }
+                else if(word.startsWith("gi")) {
+                    setFormat(wordStart, wordEnd - wordStart, girateFormat);
+                }
+                else if(word.startsWith("S")) {
+                    setFormat(wordStart, wordEnd - wordStart, stringVarFormat);
+                }
+                else if(word.startsWith("gS")) {
+                    setFormat(wordStart, wordEnd - wordStart, gstringVarFormat);
+                }
+                else if(word.startsWith("f")) {
+                    setFormat(wordStart, wordEnd - wordStart, fsigFormat);
+                }
+                else if(word.startsWith("gf")) {
+                    setFormat(wordStart, wordEnd - wordStart, gfsigFormat);
+                }
+            }
+
+        }
+
+        // string
+        rx.setPattern("\"[^\"]*\"");
+        index = 0;
+        while ((rxmatch = rx.match(text, index)).hasMatch()) {
+            setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), quotationFormat);
+            index = rxmatch.capturedEnd();
+        }
+
+        //last rules  -- earlier for label, npw not used any more
+        // for(auto rule: lastHighlightingRules) {
+        //     index = 0;
+        //     while((rxmatch = rule.pattern.match(text, index)).hasMatch()) {
+        //         int group = rule.group;
+        //         //qDebug() << "last rule matched: " << rule.pattern.pattern();
+        //         setFormat(rxmatch.capturedLength(group), rxmatch.capturedStart(group), rule.format);
+        //         index = rxmatch.capturedEnd();
+        //     }
+        // }
+
+        // label (separate)
+        rx.setPattern("^\\s*([a-zA-Z]\\w*):\\s*$");
+        rxmatch = rx.match(text);
+
+        if (rxmatch.hasMatch()) {
+            setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), labelFormat);
+            // setFormat(rxmatch.capturedEnd(1), 1, colonFormat);
+            return;
+        }
+
+        // Multiline {{ ... }} strings
+        if (previousBlockState() == 2) {
+            // We are continuing inside a multiline block
+            int endIdx = line.indexOf("}}");
+            if (endIdx == -1) {
+                setFormat(0, line.length(), quotationFormat);
+                setCurrentBlockState(2);  // still inside
+                return;                   // stop here
+            } else {
+                setFormat(0, endIdx + 2, quotationFormat);
+                setCurrentBlockState(0);  // closed
+                // continue parsing after endIdx if needed
+            }
+        }
+
+        // If we get here, we are not inside a multiline block
+        int startIdx = line.indexOf("{{");
+        while (startIdx >= 0) {
+            int endIdx = line.indexOf("}}", startIdx + 2);
+            int stringLength;
+            if (endIdx == -1) {
+                setCurrentBlockState(2);
+                stringLength = line.length() - startIdx;
+            } else {
+                stringLength = endIdx - startIdx + 2;
+            }
+            setFormat(startIdx, stringLength, quotationFormat);
+
+            if (endIdx == -1)
+                break;
+            else
+                startIdx = line.indexOf("{{", endIdx + 2);
+        }
+    } else {
         return;
     }
 
-    //auto text = QStringRef(&line, 0, commentIndex);
-    auto text = QStringView(line).mid(0,commentIndex);
 
-    // define
-    rx.setPattern("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
-    rxmatch = rx.match(text);
-    if(rxmatch.hasMatch()) {
-        setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), macroDefineFormat);
-        return;
-    }
-
-    rx.setPattern("^\\s*\\b(instr|opcode)\\s+(\\w+)\\b");
-    rxmatch = rx.match(text);
-    if(rxmatch.hasMatch()) {
-        auto group = rxmatch.captured(2);
-        setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1), instFormat);
-        setFormat(rxmatch.capturedStart(2), rxmatch.capturedLength(2), nameFormat);
-        return;
-    }
-
-
-
-    rx.setPattern(R"(&&|==|\|\||<|>|<=|>=|!=|\\)");
-    index = 0;
-    while((rxmatch=rx.match(text, index)).hasMatch()) {
-        length = rxmatch.capturedLength();
-        setFormat(rxmatch.capturedStart(), length, operatorFormat);
-        index = rxmatch.capturedEnd()+1;
-    }
-
-    QRegularExpression expressionRx("\\b[\\w:]+\\b");
-    QRegularExpression pfieldRx("\\bp[\\d]+\\b");
-    index = 0;
-    while((rxmatch = expressionRx.match(text, index)).hasMatch()) {
-        int wordStart = rxmatch.capturedStart();
-        int wordEnd = rxmatch.capturedEnd();
-        index = wordEnd;
-
-        if(wordStart > 0) {
-            auto prev = text.at(wordStart - 1);
-            if(prev == '$' || prev == '#') {
-                // check if macro name - replacement for regexp solution
-                setFormat(wordStart-1, wordEnd - wordStart + 1, macroDefineFormat);
-                index = wordEnd;
-                continue;
-			}
-        }
-		wordEnd = (wordEnd > 0 ? wordEnd : text.size());
-        QString word = rxmatch.captured();
-        if(pfieldRx.match(word).hasMatch()) {
-			setFormat(wordStart, wordEnd - wordStart, pfieldFormat);
-		}
-        else if(instPatterns.contains(word)) {
-			setFormat(wordStart, wordEnd - wordStart, instFormat);
-            break; // was: return. For any case, to go through lines after while loop
-		}
-        else if(tagPatterns.contains("<" + word + ">") && wordStart > 0) {
-            setFormat(wordStart - (text[wordStart - 1] == '/'? 2: 1),
-                      wordEnd - wordStart + (text[wordStart - 1] == '/'? 3: 2),
-                      csdtagFormat);
-		}
-        else if(headerPatterns.contains(word)) {
-            setFormat(wordStart, wordEnd - wordStart, headerFormat);
-		}
-        else if(keywordLiterals.contains(word)) {
-            setFormat(wordStart, wordEnd - wordStart, keywordFormat);
-		}
-        else if(ioPatterns.contains(word)) {
-            setFormat(wordStart, wordEnd - wordStart, ioFormat);
-        }
-        else if(word[word.size()-1] != ':' && word.contains(":")) {
-            // functional style opcode:k(...)
-            auto parts = word.split(":");
-			if (parts.size() == 2) {
-                if (isOpcode(parts[0])) {
-					setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
-				}
-			}
-            else {
-                setFormat(wordStart, wordEnd - wordStart, errorFormat);
-            }
-		}
-        else if(m_parsedUDOs.contains(word)) {
-            setFormat(wordStart, wordEnd - wordStart, udoFormat);
-        }
-        else if(deprecatedOpcodes.contains(word)) {
-            setFormat(wordStart, wordEnd - wordStart, deprecatedFormat);
-        }
-        else if(isOpcode(word)) {
-			setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
-		}
-        else if(colorVariables) {
-            if(word.startsWith('a')) {
-                setFormat(wordStart, wordEnd - wordStart, arateFormat);
-            }
-            else if(word.startsWith('k')) {
-                setFormat(wordStart, wordEnd - wordStart, krateFormat);
-            }
-            else if(word.startsWith('i')) {
-                setFormat(wordStart, wordEnd - wordStart, irateFormat);
-            }
-            else if(word.startsWith("ga")) {
-                setFormat(wordStart, wordEnd - wordStart, garateFormat);
-            }
-            else if(word.startsWith("gk")) {
-                setFormat(wordStart, wordEnd - wordStart, gkrateFormat);
-            }
-            else if(word.startsWith("gi")) {
-                setFormat(wordStart, wordEnd - wordStart, girateFormat);
-            }
-            else if(word.startsWith("S")) {
-                setFormat(wordStart, wordEnd - wordStart, stringVarFormat);
-            }
-            else if(word.startsWith("gS")) {
-                setFormat(wordStart, wordEnd - wordStart, gstringVarFormat);
-            }
-            else if(word.startsWith("f")) {
-                setFormat(wordStart, wordEnd - wordStart, fsigFormat);
-            }
-            else if(word.startsWith("gf")) {
-                setFormat(wordStart, wordEnd - wordStart, gfsigFormat);
-            }
-        }
-
-    }
-
-    // string
-    rx.setPattern("\"[^\"]*\"");
-    index = 0;
-    while ((rxmatch = rx.match(text, index)).hasMatch()) {
-        setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), quotationFormat);
-        index = rxmatch.capturedEnd();
-    }
-
-    //last rules  -- not used except for label
-    // for(auto rule: lastHighlightingRules) {
-    //     index = 0;
-    //     while((rxmatch = rule.pattern.match(text, index)).hasMatch()) {
-    //         int group = rule.group;
-    //         //qDebug() << "last rule matched: " << rule.pattern.pattern();
-    //         setFormat(rxmatch.capturedLength(group), rxmatch.capturedStart(group), rule.format);
-    //         index = rxmatch.capturedEnd();
-    //     }
-    // }
-
-    // label (separate)
-    rx.setPattern("^\\s*([a-zA-Z]\\w*):\\s*$");
-    rxmatch = rx.match(text);
-
-    if (rxmatch.hasMatch()) {
-        setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), labelFormat);
-        // setFormat(rxmatch.capturedEnd(1), 1, colonFormat);
-        return;
-    }
-
-
-
-
-    // Multiline {{ ... }} strings
-    if (previousBlockState() == 2) {
-        // We are continuing inside a multiline block
-        int endIdx = line.indexOf("}}");
-        if (endIdx == -1) {
-            setFormat(0, line.length(), quotationFormat);
-            setCurrentBlockState(2);  // still inside
-            return;                   // stop here
-        } else {
-            setFormat(0, endIdx + 2, quotationFormat);
-            setCurrentBlockState(0);  // closed
-            // continue parsing after endIdx if needed
-        }
-    }
-
-    // If we get here, we are not inside a multiline block
-    int startIdx = line.indexOf("{{");
-    while (startIdx >= 0) {
-        int endIdx = line.indexOf("}}", startIdx + 2);
-        int stringLength;
-        if (endIdx == -1) {
-            setCurrentBlockState(2);
-            stringLength = line.length() - startIdx;
-        } else {
-            stringLength = endIdx - startIdx + 2;
-        }
-        setFormat(startIdx, stringLength, quotationFormat);
-
-        if (endIdx == -1)
-            break;
-        else
-            startIdx = line.indexOf("{{", endIdx + 2);
-    }
 
 }
 
