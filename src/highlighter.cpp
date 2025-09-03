@@ -21,7 +21,7 @@
 */
 
 #include "highlighter.h"
-#include "types.h"
+// #include "types.h"
 
 #include <QRegularExpression>
 
@@ -640,11 +640,6 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     while (startIndex >= 0 ) {
         endMatch = commentEndExpression.match(line, startIndex);
         int endIndex = endMatch.hasMatch() ? endMatch.capturedStart() : -1;
-        if (format(startIndex) == quotationFormat) {
-            rxmatch = commentStartExpression.match(line, startIndex+1);
-            startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
-            continue;
-        }
         int commentLength;
         if (endIndex == -1) {
             setCurrentBlockState(1);
@@ -714,9 +709,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         //auto text = QStringRef(&line, 0, commentIndex);
         auto text = QStringView(line).mid(0,commentIndex);
 
-        // test
         if (format(0)==multiLineCommentFormat) {
-            QDEBUG << "Multiline comment. No highlighting";
             return;
         }
 
@@ -731,7 +724,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         rx.setPattern("^\\s*\\b(instr|opcode)\\s+(\\w+)\\b");
         rxmatch = rx.match(text);
         if(rxmatch.hasMatch()) {
-            auto group = rxmatch.captured(2);
+            //auto group = rxmatch.captured(2);
             setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1), instFormat);
             setFormat(rxmatch.capturedStart(2), rxmatch.capturedLength(2), nameFormat);
             return;
@@ -745,8 +738,8 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             index = rxmatch.capturedEnd()+1;
         }
 
-        QRegularExpression expressionRx("\\b[\\w:]+\\b");
-        QRegularExpression pfieldRx("\\bp[\\d]+\\b");
+        static const QRegularExpression expressionRx("\\b[\\w:]+\\b");
+        static const QRegularExpression pfieldRx("\\bp[\\d]+\\b");
         index = 0;
         while((rxmatch = expressionRx.match(text, index)).hasMatch()) {
             int wordStart = rxmatch.capturedStart();
@@ -872,20 +865,17 @@ void Highlighter::highlightCsoundBlock(const QString &line)
 
         // Multiline {{ ... }} strings
         if (previousBlockState() == 2) {
-            // We are continuing inside a multiline block
             int endIdx = line.indexOf("}}");
             if (endIdx == -1) {
                 setFormat(0, line.length(), quotationFormat);
-                setCurrentBlockState(2);  // still inside
-                return;                   // stop here
+                setCurrentBlockState(2);
+                return;
             } else {
                 setFormat(0, endIdx + 2, quotationFormat);
-                setCurrentBlockState(0);  // closed
-                // continue parsing after endIdx if needed
+                setCurrentBlockState(0);  // string closed
             }
         }
 
-        // If we get here, we are not inside a multiline block
         int startIdx = line.indexOf("{{");
         while (startIdx >= 0) {
             int endIdx = line.indexOf("}}", startIdx + 2);
@@ -906,9 +896,6 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     } else {
         return;
     }
-
-
-
 }
 
 
