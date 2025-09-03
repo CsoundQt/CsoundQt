@@ -173,7 +173,7 @@ private:
     QString m_theme;
 
 	// for html
-	QTextCharFormat jsKeywordFormat, htmlTagFormat;
+    QTextCharFormat jsKeywordFormat, htmlTagFormat, attrFormat, tagNameFormat;
 	QTextCharFormat m_formats[LastConstruct + 1];
 
     QStringList m_parsedUDOs;

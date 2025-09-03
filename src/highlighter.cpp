@@ -302,7 +302,12 @@ void Highlighter::setTheme(const QString &theme) {
 
     QColor color = saturateColor(headerFormat.foreground().color().lighter(150), 150);
     csoundOptionFormat.setForeground(color);
-    jsKeywordFormat = keywordFormat;
+
+    // html
+    htmlTagFormat = csdtagFormat;
+    tagNameFormat = arateFormat;
+    attrFormat = irateFormat;
+    jsKeywordFormat =  krateFormat;// keywordFormat;
 
     m_theme = theme;
     // emit this->rehighlight();
@@ -428,6 +433,7 @@ Highlighter::Highlighter(QTextDocument *parent)
                    << "True" << "False" << "None";
 
 	// for html
+    /* not used at the moment as tags are highlighted
     htmlKeywords << "<\\ba\\b" << "<\\babbr\\b" << "<\\bacronym\\b" << "<\\baddress\\b"
                  << "<\\bapplet\\b" << "<\\barea\\b" << "<\\barticle\\b" << "<\\baside\\b"
                  << "<\\baudio\\b" << "<\\bb\\b" << "<\\bbase\\b" << "<\\bbasefont\\b"
@@ -464,8 +470,33 @@ Highlighter::Highlighter(QTextDocument *parent)
                 << "<\\btitle\\b" << "<\\btr\\b" << "<\\btrack\\b" << "<\\btt\\b"
                 << "<\\bu\\b" << "<\\bul\\b" << "<\\bvar\\b" << "<\\bwbr\\b" << "<\\bxmp\\b"
                 << "<!\\bDOCTYPE\\b";
+    */
 
-	javascriptKeywords << "function" << "var" << "if" << "===" << "console.log"  << "console.warn";
+    javascriptKeywords
+        << "break" << "case" << "catch" << "class" << "const" << "continue"
+        << "debugger" << "default" << "delete" << "do" << "else" << "enum"
+        << "export" << "extends" << "false" << "finally" << "for" << "function"
+        << "if" << "import" << "in" << "instanceof" << "let" << "new"
+        << "null" << "return" << "super" << "switch" << "this" << "throw"
+        << "true" << "try" << "typeof" << "var" << "void" << "while"
+        << "with" << "yield"
+        // ES2015+ keywords
+        << "await" << "async" << "of"
+        // Common built-ins and objects
+        << "Array" << "Date" << "eval" << "function" << "hasOwnProperty"
+        << "Infinity" << "isFinite" << "isNaN" << "isPrototypeOf" << "length"
+        << "Math" << "NaN" << "name" << "Number" << "Object" << "prototype"
+        << "String" << "toString" << "undefined" << "valueOf"
+        // Global objects
+        << "console" << "console.log" << "console.warn" << "console.error"
+        << "window" << "document" << "alert" << "parseInt" << "parseFloat"
+        << "setTimeout" << "setInterval" << "Promise" << "RegExp" << "Error"
+        // Special values
+        << "undefined" << "null" << "true" << "false";
+
+    QStringList jsOperators = { // not implemented at the moment
+        "+", "-", "*", "/", "===", "==", "=", "++", "--", "&&", "||", "!", ">", "<", ">=", "<=", "!=", "!=="
+    };
 
     rxScoreLetter.setPattern("^\\s*(i|f|e|d|s)");
     rxQuotation.setPattern("\"[^\"]*\"");
@@ -946,36 +977,57 @@ void Highlighter::highlightHtmlBlock(const QString &text)
 {
     //QRegularExpression expression("\\b\\w\\b");
     //int index = text.indexOf(expression, 0);
-	for (int i = 0; i < htmlKeywords.size(); i++) {
-        static const QRegularExpression expression("\\b" + htmlKeywords[i] + "\\b");
-		int index = text.indexOf(expression);
-		while (index >= 0) {
-            int length = 4; //expression.matchedLength();
-			setFormat(index, length, keywordFormat);
-			index = text.indexOf(expression, index + length);
-		}
-	}
 
-	for (int i=0; i<javascriptKeywords.size(); i++) {
-        static const QRegularExpression expression("\\b" + javascriptKeywords[i] + "\\b");
-		int index = text.indexOf(expression);
-		while (index >= 0) {
+    // htmlKeywords seems not needed, as the tags are highlighted anyway
+/*
+    for (int i = 0; i < htmlKeywords.size(); i++) {
+        QRegularExpression expression("\\b" + htmlKeywords[i] + "\\b");
+        int index = text.indexOf(expression);
+        while (index >= 0) {
+            int length = expression.match(text).capturedLength();
+            setFormat(index, length, keywordFormat); // keyword format
+            index = text.indexOf(expression, index + length);
+        }
+    }
+*/
+
+    for (int i=0; i<javascriptKeywords.size(); i++) {
+        QRegularExpression expression("\\b" + javascriptKeywords[i] + "\\b");
+        int index = text.indexOf(expression);
+        while (index >= 0) {
             int length =  expression.match(text).capturedLength(); //expression.matchedLength();
-			setFormat(index, length, jsKeywordFormat); // TODO javascriptformat
-			index = text.indexOf(expression, index + length);
-		}
-	}
+            setFormat(index, length, jsKeywordFormat); // TODO javascriptformat
+            index = text.indexOf(expression, index + length);
+        }
+    }
 
-    static const QRegularExpression endTag( QRegularExpression(">$"));
-    int index = text.indexOf(endTag);
-	while (index >= 0) {
-        int length = endTag.match(text).capturedLength(); //endTag.matchedLength();
-		setFormat(index, length, keywordFormat);
-		index = text.indexOf(endTag, index + length);
-	}
+
+    static const QRegularExpression tagRx("<[^>]+>");
+    int index = text.indexOf(tagRx);
+    while (index >= 0) {
+        int len = tagRx.match(text, index).capturedLength();
+        setFormat(index, len, htmlTagFormat);
+        index = text.indexOf(tagRx, index + len);
+    }
+
+    static const QRegularExpression tagNameRx("<\\s*/?\\s*([a-zA-Z][a-zA-Z0-9-]*)");
+    QRegularExpressionMatch match = tagNameRx.match(text);
+    while (match.hasMatch()) {
+        setFormat(match.capturedStart(1), match.capturedLength(1), tagNameFormat); // or tagNameFormat
+        match = tagNameRx.match(text, match.capturedEnd());
+    }
+
+    static const QRegularExpression attrNameRx("\\s([a-zA-Z_:][a-zA-Z0-9_:.-]*)=");
+    QRegularExpressionMatch attrMatch = attrNameRx.match(text);
+    while (attrMatch.hasMatch()) {
+        setFormat(attrMatch.capturedStart(1), attrMatch.capturedLength(1), attrFormat );
+        attrMatch = attrNameRx.match(text, attrMatch.capturedEnd());
+    }
+
+
 
     static const QRegularExpression strings( QRegularExpression("\"[^\"]*\""));
-	index = text.indexOf(strings);
+    index = text.indexOf(strings);
 	while (index >= 0) {
         int length = strings.match(text).capturedLength(); //strings.matchedLength();
 		setFormat(index, length, quotationFormat);
