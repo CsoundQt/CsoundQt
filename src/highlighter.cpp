@@ -21,7 +21,7 @@
 */
 
 #include "highlighter.h"
-
+#include "types.h"
 
 #include <QRegularExpression>
 
@@ -657,6 +657,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
     }
 
+    // single line comments
     int commentIndex = line.indexOf(';'); // try both comment markings
 	if (commentIndex < 0) {
         commentIndex = line.indexOf("//");
@@ -712,6 +713,12 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     else if(blockdata->section == OrchestraSection || m_sectionType == OrchestraSection) {
         //auto text = QStringRef(&line, 0, commentIndex);
         auto text = QStringView(line).mid(0,commentIndex);
+
+        // test
+        if (format(0)==multiLineCommentFormat) {
+            QDEBUG << "Multiline comment. No highlighting";
+            return;
+        }
 
         // define
         rx.setPattern("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
