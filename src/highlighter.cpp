@@ -21,7 +21,7 @@
 */
 
 #include "highlighter.h"
-// #include "types.h"
+#include "types.h"
 
 #include <QRegularExpression>
 
@@ -581,7 +581,7 @@ void Highlighter::highlightBlock(const QString &text)
         }
     }
 
-	switch (m_mode) {
+    switch (m_mode) { // mode is set by the file type
 	case 0:  // Csound mode
 		highlightCsoundBlock(text);
 		break;
@@ -646,7 +646,6 @@ void Highlighter::highlightScore(const QString &text, int start, int end) {
 
 void Highlighter::highlightCsoundBlock(const QString &line)
 {
-    // TODO: rewrite this using QRegularExpression
     QRegularExpression rx;
     QRegularExpressionMatch rxmatch;
 
@@ -714,6 +713,8 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             blockdata->section = ScoreSection;
         } else if(rxmatch.captured(1) == "CsOptions" )  {
             blockdata->section = OptionsSection;
+        } else if(rxmatch.captured(1) == "html" )  {
+            blockdata->section = HtmlSection;
         } else {
             blockdata->section = UnknownSection;
         }
@@ -726,8 +727,10 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             highlightScore(line, 0, commentIndex);
         }
         return;
-    }
-    else if(blockdata->section == OptionsSection || m_sectionType == OptionsSection ) {
+    } else if (blockdata->section == HtmlSection || m_sectionType == HtmlSection) {
+        highlightHtmlBlock(line);
+        return;
+    } else if(blockdata->section == OptionsSection || m_sectionType == OptionsSection ) {
         index = 0;
         while((rxmatch = csoundOptionsRx.match(line, index)).hasMatch()) {
             length = rxmatch.capturedLength();
@@ -990,6 +993,35 @@ void Highlighter::highlightHtmlBlock(const QString &text)
         }
     }
 */
+    // TODO: NB! duplicated code! create separate function
+    QRegularExpression rx;
+    QRegularExpressionMatch rxmatch;
+    // check what type of block it is:
+    auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
+
+    rx.setPattern("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>");
+    rxmatch = rx.match(text);
+    if(rxmatch.hasMatch() ) {
+        if(rxmatch.captured(1) == "CsInstruments" ) {
+            blockdata->section = OrchestraSection;
+        } else if(rxmatch.captured(1) == "CsScore" ) {
+            blockdata->section = ScoreSection;
+        } else if(rxmatch.captured(1) == "CsOptions" )  {
+            blockdata->section = OptionsSection;
+        } else if(rxmatch.captured(1) == "html" )  {
+            blockdata->section = HtmlSection;
+        } else {
+            blockdata->section = UnknownSection;
+        }
+        setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), csdtagFormat);
+        return;
+    }
+
+    if (blockdata->section >= UnknownSection && blockdata->section < HtmlSection ) {
+        highlightCsoundBlock(text);
+        return;
+    }
+
 
     for (int i=0; i<javascriptKeywords.size(); i++) {
         QRegularExpression expression("\\b" + javascriptKeywords[i] + "\\b");

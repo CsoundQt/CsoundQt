@@ -34,7 +34,7 @@
 
 #include <QRegularExpression>
 
-enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection };
+enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection, HtmlSection };
 
 struct ParenthesisInfo
 {
