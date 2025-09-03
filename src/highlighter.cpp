@@ -627,34 +627,33 @@ void Highlighter::highlightCsoundBlock(const QString &line)
 
     setCurrentBlockState(0);
 
-    auto lineView = QStringView(line); // to
 
     int startIndex = 0;
     //int commentIndex = -1;
     if(previousBlockState() != 1) {
-        rxmatch = commentStartExpression.match(lineView, 0);
+        rxmatch = commentStartExpression.match(line, 0);
         startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
     }
 
     QRegularExpressionMatch endMatch;
 
     while (startIndex >= 0 ) {
-        endMatch = commentEndExpression.match(lineView, startIndex);
+        endMatch = commentEndExpression.match(line, startIndex);
         int endIndex = endMatch.hasMatch() ? endMatch.capturedStart() : -1;
         if (format(startIndex) == quotationFormat) {
-            rxmatch = commentStartExpression.match(lineView, startIndex+1);
+            rxmatch = commentStartExpression.match(line, startIndex+1);
             startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
             continue;
         }
         int commentLength;
         if (endIndex == -1) {
             setCurrentBlockState(1);
-            commentLength = lineView.length() - startIndex;
+            commentLength = line.length() - startIndex;
         } else {
             commentLength = endIndex - startIndex + endMatch.capturedLength();
         }
         setFormat(startIndex, commentLength, multiLineCommentFormat);
-        rxmatch = commentStartExpression.match(lineView, startIndex + commentLength);
+        rxmatch = commentStartExpression.match(line, startIndex + commentLength);
         startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
     }
 
@@ -682,7 +681,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
 
     rx.setPattern("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>");
     rxmatch = rx.match(line);
-    if(rxmatch.hasMatch()) {
+    if(rxmatch.hasMatch()) { // NB!! this does not work in split view
         if(rxmatch.captured(1) == "CsInstruments") {
             blockdata->section = OrchestraSection;
         } else if(rxmatch.captured(1) == "CsScore") {
