@@ -128,7 +128,7 @@ void Inspector::parseText(const QString &text)
     if(insideOrc) {
         for (; i< lines.size(); i++) {
             auto line = lines[i].trimmed();
-            if (line.isEmpty() || line[0] == ';' || (line[0] == '/' && line[1] == '/'))
+            if (line.isEmpty() || line[0] == ';' || line.startsWith("//"))
                 continue;
 
             if (partOfComment) {
