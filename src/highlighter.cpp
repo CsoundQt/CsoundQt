@@ -22,8 +22,7 @@
 
 #include "highlighter.h"
 
-#include <QDebug>
-#include <QRegularExpression>
+#include "types.h"
 
 #include <QRegularExpression>
 
@@ -624,6 +623,41 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     if(m_theme == "none")
         return;
 
+    // do multiline comments first
+
+    setCurrentBlockState(0);
+
+    auto lineView = QStringView(line); // to
+
+    int startIndex = 0;
+    //int commentIndex = -1;
+    if(previousBlockState() != 1) {
+        rxmatch = commentStartExpression.match(lineView, 0);
+        startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
+    }
+
+    QRegularExpressionMatch endMatch;
+
+    while (startIndex >= 0 ) {
+        endMatch = commentEndExpression.match(lineView, startIndex);
+        int endIndex = endMatch.hasMatch() ? endMatch.capturedStart() : -1;
+        if (format(startIndex) == quotationFormat) {
+            rxmatch = commentStartExpression.match(lineView, startIndex+1);
+            startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
+            continue;
+        }
+        int commentLength;
+        if (endIndex == -1) {
+            setCurrentBlockState(1);
+            commentLength = lineView.length() - startIndex;
+        } else {
+            commentLength = endIndex - startIndex + endMatch.capturedLength();
+        }
+        setFormat(startIndex, commentLength, multiLineCommentFormat);
+        rxmatch = commentStartExpression.match(lineView, startIndex + commentLength);
+        startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
+    }
+
     int commentIndex = line.indexOf(';'); // try both comment markings
 	if (commentIndex < 0) {
         commentIndex = line.indexOf("//");
@@ -826,7 +860,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     //     }
     // }
 
-    // label
+    // label (separate)
     rx.setPattern("^\\s*([a-zA-Z]\\w*):\\s*$");
     rxmatch = rx.match(text);
 
@@ -837,35 +871,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
     }
 
 
-    setCurrentBlockState(0);
 
-	int startIndex = 0;
-    if(previousBlockState() != 1) {
-        rxmatch = commentStartExpression.match(text, 0);
-        startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
-    }
-
-    QRegularExpressionMatch endMatch;
-
-    while (startIndex >= 0 && startIndex < commentIndex) {
-        endMatch = commentEndExpression.match(text, startIndex);
-        int endIndex = endMatch.hasMatch() ? endMatch.capturedStart() : -1;
-        if (format(startIndex) == quotationFormat) {
-            rxmatch = commentStartExpression.match(text, startIndex+1);
-            startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
-            continue;
-		}
-		int commentLength;
-		if (endIndex == -1) {
-            setCurrentBlockState(1);
-			commentLength = text.length() - startIndex;
-		} else {
-            commentLength = endIndex - startIndex + endMatch.capturedLength();
-		}
-		setFormat(startIndex, commentLength, multiLineCommentFormat);
-        rxmatch = commentStartExpression.match(text, startIndex + commentLength);
-        startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
-    }
 
     // Multiline {{ ... }} strings
     if (previousBlockState() == 2) {
