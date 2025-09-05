@@ -459,6 +459,7 @@ void DocumentView::setViewMode(int mode)
 		break;
 	default:
 		m_highlighter.setDocument(m_orcEditor->document());
+        m_highlighter.setSectionType(CsdSection::OrchestraSection); // to enable to highlight it propery
 		m_orcEditor->setVisible(m_viewMode & 2);
 		m_scoreEditor->setVisible(m_viewMode & 4);
 		m_optionsEditor->setVisible(m_viewMode & 8);

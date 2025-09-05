@@ -34,7 +34,7 @@
 
 #include <QRegularExpression>
 
-enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection };
+enum CsdSection { UnknownSection, OptionsSection, OrchestraSection, ScoreSection, HtmlSection };
 
 struct ParenthesisInfo
 {
@@ -71,6 +71,9 @@ public:
     void setDisabledOpcodes(QStringList list);
 	void setColorVariables(bool color);
 	void setMode(int mode);
+    void setSectionType(CsdSection sectionType=CsdSection::UnknownSection) {
+        m_sectionType = sectionType;
+    }
     void setTheme(const QString &theme);
     void enableScoreSyntaxHighlighting(bool status) {
         m_scoreSyntaxHighlighting = status;
@@ -170,10 +173,11 @@ private:
     QString m_theme;
 
 	// for html
-	QTextCharFormat jsKeywordFormat, htmlTagFormat;
+    QTextCharFormat jsKeywordFormat, htmlTagFormat, attrFormat, tagNameFormat;
 	QTextCharFormat m_formats[LastConstruct + 1];
 
     QStringList m_parsedUDOs;
+    CsdSection m_sectionType;
 };
 
 #endif
