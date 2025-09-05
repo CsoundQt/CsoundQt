@@ -356,10 +356,14 @@ void QuteGraph::setValue(double value)
 
 void QuteGraph::setValue(QString text)
 {
+    if (text.isEmpty()) {
+        return;
+    }
+
     bool ok;
     //auto parts = text.split(' ', SKIP_EMPTY_PARTS); // splitRef
     auto parts = QStringView(text).split(' ', SKIP_EMPTY_PARTS);
-    if(parts[0] == QLatin1String("@set")) {
+    if (parts[0] == QLatin1String("@set")) {
         bool ok;
         int index = parts[1].toInt(&ok);
         if(parts.size() != 2 || !ok) {
