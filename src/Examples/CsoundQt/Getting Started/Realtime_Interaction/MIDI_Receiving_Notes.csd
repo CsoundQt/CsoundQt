@@ -1,6 +1,6 @@
 /*Getting started.. Realtime Interaction: MIDI Notes
 
-Select the MIDI input port in CsoundQts "preferences" menu under the tab "run" -> "RT MIDI Module". Then you can choose between "portmidi" or "virtual". "portmidi" with option "a", enables all available midi-devices. "Virtual" enables the virtual midikeyboard, which you can play with your alphabetic computer keyboard.
+Select the MIDI input port in CsoundQts "Configuration" panel under the tab "run" -> "RT MIDI Module". Then you can choose between "portmidi" or "virtual". "portmidi" with option "a", enables all available midi-devices. "Virtual" enables the virtual midikeyboard, which you can play with your alphabetic computer keyboard.
 
 Without modification, the MIDI-Channel-Number selects the Csound Instrument Number.  (MIDI Ch 1 = instr 1, MIDI Ch 2 = instr 2, ...)
 To route the desired MIDI-information (note-number and velocity) to the p-arguments (4 and 5), it will be defined in CsOptions:
@@ -29,6 +29,9 @@ e 3600
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann & Joachim Heintz (Dec. 2009) - Incontri HMT-Hannover 
+
+
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="60" y="304" width="513" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -43,7 +46,7 @@ e 3600
   <g>95</g>
   <b>162</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>25</x>
   <y>24</y>
@@ -53,8 +56,10 @@ e 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>..nothing here!</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -70,9 +75,8 @@ e 3600
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="60" y="304" width="513" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
