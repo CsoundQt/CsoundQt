@@ -49,8 +49,8 @@ endif
 
 if kDance == 1 then
 	; Dance Point
-	knew_x randomh 0, 1, 15
-	knew_y randomh 0, 1, 15
+	knew_x randomh 0, 1, 15  ;change here for the
+	knew_y randomh 0, 1, 15  ;speed of the changes
 	outvalue "point_x", knew_x
 	outvalue "point_y", knew_y
 endif
@@ -66,18 +66,13 @@ e
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Dec. 2009) - Incontri HMT-Hannover 
 
-
-
-
-
-
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>1013</x>
  <y>279</y>
- <width>563</width>
- <height>397</height>
+ <width>637</width>
+ <height>568</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -85,7 +80,7 @@ e
   <g>162</g>
   <b>8</b>
  </bgcolor>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>point_y</objectName>
   <x>30</x>
   <y>195</y>
@@ -95,30 +90,34 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <objectName2>point_x</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.61348438</xValue>
-  <yValue>0.47489458</yValue>
+  <xValue>0.92621702</xValue>
+  <yValue>0.36287013</yValue>
   <type>point</type>
   <pointsize>7</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>31</x>
   <y>32</y>
@@ -128,8 +127,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>1. Run Csound</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -145,9 +146,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>31</x>
   <y>123</y>
@@ -157,8 +158,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Read out the point position and print it to the console.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -174,9 +177,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>361</x>
   <y>123</y>
@@ -186,8 +189,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Send random position data to the point.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -203,9 +208,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>182</x>
   <y>124</y>
@@ -215,8 +220,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Use point position data to control an oscils amplitude and frequency.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -232,9 +239,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBConsole">
+ <bsbObject type="BSBConsole" version="2">
   <objectName/>
   <x>361</x>
   <y>195</y>
@@ -244,6 +251,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <font>Courier</font>
   <fontsize>8</fontsize>
   <color>
@@ -257,7 +265,7 @@ e
    <b>255</b>
   </bgcolor>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>30</x>
   <y>66</y>
@@ -267,8 +275,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>2. Press one of these three buttons and move the point.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -284,9 +294,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>_Play</objectName>
   <x>173</x>
   <y>32</y>
@@ -296,6 +306,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <type>value</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -303,9 +314,11 @@ e
   <image>/</image>
   <eventLine>i1 0 10</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>read</objectName>
   <x>30</x>
   <y>103</y>
@@ -315,12 +328,13 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>sound</objectName>
   <x>183</x>
   <y>103</y>
@@ -330,12 +344,13 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBCheckBox">
+ <bsbObject type="BSBCheckBox" version="2">
   <objectName>dance</objectName>
   <x>360</x>
   <y>105</y>
@@ -345,12 +360,34 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <selected>false</selected>
   <label/>
   <pressedValue>1</pressedValue>
   <randomizable group="0">false</randomizable>
  </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>_Stop</objectName>
+  <x>328</x>
+  <y>32</y>
+  <width>100</width>
+  <height>30</height>
+  <uuid>{1c1d134d-8d23-4f33-8eed-8205e3cabcda}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <type>value</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Stop Csound</text>
+  <image>/</image>
+  <eventLine>i1 0 10</eventLine>
+  <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>10</fontsize>
+ </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

@@ -8,7 +8,7 @@ aMyAudioVariable
 kMyControlVariable
 iThisIsTheInitVariable
 
-Numeric Value types: (From: An Overview of Csound Variable Types by Andres Cabrera (Csound Journal Issue 10 on www.csounds.com)) 
+Numeric Value types: (From: An Overview of Csound Variable Types by Andres Cabrera (Csound Journal Issue 10 on https://csoundjournal.com/issue10/CsoundRates.html)) 
 	a-type: These variables hold audio samples, or control signals that are 
 		calculated and updated every audio sample.
 
@@ -20,7 +20,7 @@ Numeric Value types: (From: An Overview of Csound Variable Types by Andres Cabre
 
 More detailed information can be found here:
 -Constants and Variables (Menu: Help->Csound Manual->1. Overview - Syntax of the orchestra->Constants and Variables)
--An Overview of Csound Variable Types by Andres Cabrera (Csound Journal Issue 10 on www.csounds.com)
+-An Overview of Csound Variable Types by Andres Cabrera (Csound Journal Issue 10 on https://csoundjournal.com/issue10/CsoundRates.html)
 */
 
 <CsoundSynthesizer>
@@ -50,13 +50,18 @@ e
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover 
 
+
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>1013</x>
  <y>279</y>
- <width>563</width>
- <height>397</height>
+ <width>625</width>
+ <height>598</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -64,7 +69,7 @@ e
   <g>143</g>
   <b>151</b>
  </bgcolor>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>freqsweep</objectName>
   <x>108</x>
   <y>37</y>
@@ -74,8 +79,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>999.1507</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -93,7 +100,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>22</x>
   <y>365</y>
@@ -103,6 +110,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -110,8 +118,9 @@ e
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>21</x>
   <y>7</y>
@@ -121,8 +130,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>This label displays the current frequency:</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -138,9 +149,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>22</x>
   <y>313</y>
@@ -150,8 +161,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The scope shows the current output-waveform.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -167,18 +180,19 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName/>
-  <x>21</x>
-  <y>165</y>
+  <x>23</x>
+  <y>166</y>
   <width>251</width>
   <height>109</height>
   <uuid>{8ca94d8e-b7f1-42ea-8842-6971bea7aa46}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
@@ -187,9 +201,15 @@ e
   <dispy>1.00000000</dispy>
   <modex>auto</modex>
   <modey>auto</modey>
+  <showSelector>true</showSelector>
+  <showGrid>true</showGrid>
+  <showTableInfo>true</showTableInfo>
+  <showScrollbars>true</showScrollbars>
+  <enableTables>true</enableTables>
+  <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>21</x>
   <y>105</y>
@@ -199,8 +219,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The pure waveform used by the oscillator is visable in the Graph display.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -216,9 +238,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>freqsweep</objectName>
   <x>108</x>
   <y>37</y>
@@ -228,8 +250,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>999.1507</label>
   <alignment>center</alignment>
+  <valignment>top</valignment>
   <font>Helvetica</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -247,7 +271,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>22</x>
   <y>365</y>
@@ -257,6 +281,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -264,8 +289,9 @@ e
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>21</x>
   <y>7</y>
@@ -275,8 +301,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>This label displays the current frequency:</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -292,9 +320,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>22</x>
   <y>313</y>
@@ -304,8 +332,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The scope shows the current output-waveform.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -321,29 +351,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
-  <objectName/>
-  <x>21</x>
-  <y>165</y>
-  <width>251</width>
-  <height>109</height>
-  <uuid>{ef1ce543-98ba-4cf3-8f83-7404ec9981e1}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <value>0</value>
-  <objectName2/>
-  <zoomx>1.00000000</zoomx>
-  <zoomy>1.00000000</zoomy>
-  <dispx>1.00000000</dispx>
-  <dispy>1.00000000</dispy>
-  <modex>auto</modex>
-  <modey>auto</modey>
-  <all>true</all>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>21</x>
   <y>105</y>
@@ -353,8 +363,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The pure waveform used by the oscillator is visable in the Graph display.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -370,9 +382,8 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

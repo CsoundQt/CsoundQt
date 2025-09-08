@@ -66,15 +66,17 @@ endin
 <CsScore>
 f 1 0 1024 7 -1 1024 1 		;saw-waveform functiontable
 f 2 0 1024 10 1 				;sine-waveform functiontable
-; instr  start  dur
-i1 		0 	2
-i2 		3 	2
-i3 		6 	2
-i4		9	2
+; instr start dur
+i 1     0     2
+i 2     3     2
+i 3     6     2
+i 4     9     2
 e
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -89,7 +91,7 @@ e
   <g>158</g>
   <b>162</b>
  </bgcolor>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>8</x>
   <y>110</y>
@@ -99,6 +101,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -106,8 +109,9 @@ e
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>20</y>
@@ -117,8 +121,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>See how the SAW output-waveform changes, because of the used LP filter and the modulation.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -134,7 +140,7 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
