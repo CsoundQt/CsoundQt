@@ -170,6 +170,21 @@ e
 
 
 
+
+
+<EventPanel name="Theme 1" tempo="90.00000000" loop="8.00000000" x="586" y="279" width="680" height="492" visible="false" loopStart="2" loopEnd="8">    
+;type        ;inst        ;start        ;dur        ;note        ;veloc 
+i 1 0 1.25 57 100 
+i 1 1 1.5 47 100 
+i 1 2 1 35 100 
+i 1 3 0.75 58 100 
+i 1 4 1.75 51 100 
+i 1 5 0.5 36 100 
+i 1 6 2 52 100 
+    
+    
+    </EventPanel>
+<EventPanel name="Drone" tempo="60.00000000" loop="8.00000000" x="52" y="415" width="655" height="346" visible="false" loopStart="0" loopEnd="0">i 1 0 15 32 100 </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -184,7 +199,7 @@ e
   <g>46</g>
   <b>50</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>5</x>
   <y>123</y>
@@ -215,7 +230,7 @@ e
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>15</y>
@@ -246,7 +261,7 @@ e
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>238</x>
   <y>15</y>
@@ -277,7 +292,7 @@ e
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>LfoWave</objectName>
   <x>14</x>
   <y>70</y>
@@ -313,7 +328,7 @@ e
   <selectedIndex>3</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>83</y>
@@ -344,7 +359,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>135</x>
   <y>83</y>
@@ -375,7 +390,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>LfoDepth</objectName>
   <x>178</x>
   <y>37</y>
@@ -405,7 +420,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>LfoFreq</objectName>
   <x>135</x>
   <y>37</y>
@@ -435,7 +450,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>342</x>
   <y>83</y>
@@ -466,7 +481,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>297</x>
   <y>83</y>
@@ -497,7 +512,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>257</x>
   <y>83</y>
@@ -528,7 +543,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>RevColor</objectName>
   <x>340</x>
   <y>37</y>
@@ -558,7 +573,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>RevSize</objectName>
   <x>296</x>
   <y>37</y>
@@ -588,7 +603,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>RevWet</objectName>
   <x>252</x>
   <y>37</y>
@@ -618,7 +633,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>60</x>
   <y>263</y>
@@ -649,7 +664,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>128</x>
   <y>269</y>
@@ -680,7 +695,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>126</x>
   <y>202</y>
@@ -711,7 +726,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>83</x>
   <y>202</y>
@@ -742,7 +757,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>35</x>
   <y>202</y>
@@ -773,7 +788,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>PhStages</objectName>
   <x>62</x>
   <y>241</y>
@@ -807,7 +822,7 @@ e
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>PhSep</objectName>
   <x>126</x>
   <y>227</y>
@@ -837,7 +852,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>PhQ</objectName>
   <x>126</x>
   <y>156</y>
@@ -867,7 +882,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>PhFdbk</objectName>
   <x>82</x>
   <y>156</y>
@@ -897,7 +912,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>PhFreq</objectName>
   <x>38</x>
   <y>156</y>
@@ -927,7 +942,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>209</x>
   <y>123</y>
@@ -958,7 +973,7 @@ e
   <borderradius>5</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>Vcf1</objectName>
   <x>232</x>
   <y>147</y>
@@ -995,7 +1010,7 @@ e
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>14</x>
   <y>47</y>
@@ -1059,16 +1074,3 @@ e
 <value id="{54d46c69-3b11-4f33-934f-e487e18fb8d5}" mode="2" >1.79999995</value>
 </preset>
 </bsbPresets>
-<EventPanel name="Theme 1" tempo="90.00000000" loop="8.00000000" x="586" y="279" width="680" height="492" visible="false" loopStart="2" loopEnd="8">    
-;type        ;inst        ;start        ;dur        ;note        ;veloc 
-i 1 0 1.25 57 100 
-i 1 1 1.5 47 100 
-i 1 2 1 35 100 
-i 1 3 0.75 58 100 
-i 1 4 1.75 51 100 
-i 1 5 0.5 36 100 
-i 1 6 2 52 100 
-    
-    
-    </EventPanel>
-<EventPanel name="Drone" tempo="60.00000000" loop="8.00000000" x="52" y="415" width="655" height="346" visible="false" loopStart="0" loopEnd="0">i 1 0 15 32 100 </EventPanel>
