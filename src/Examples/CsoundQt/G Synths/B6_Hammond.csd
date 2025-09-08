@@ -17,7 +17,7 @@ nchnls	= 2
 
 			massign		0,2
 
-chn_k "Acc", "f"
+chn_k "Acc", 1
 chn_k "Asymm", 1
 chn_k "C", 1
 chn_k "Csound_On", 2
@@ -279,12 +279,12 @@ instr	2	;Midi Organ
 
 	aH_ftSum		sum		aH_16ft,aH_8ft,aH_5_13ft,aH_4ft,aH_2_23ft,aH_2ft,aH_1_35ft,aH_1_23ft,aH_1ft
 	aH_env		madsr	i(gk_H_Att),0,1,0.01
-	aH_env		=		(gkSplit > ikey ? aNull:aH_env)
+	aH_env		=		(gkSplit > ikey ? aNull : aH_env)
 	kH_perc_Harm	=		gkH_perc_Harm
 
-	aH_perc		=		(kH_perc_Harm > 2 ? a2_23ft:a4ft)
+	aH_perc		=		(kH_perc_Harm > 2 ? a2_23ft : a4ft)
 	aH_perc_env	madsr	0.01,i(gk_H_perc_Dec),0,0.01
-	aH_perc_env	=		(gkSplit > ikey ? aNull:aH_perc_env)
+	aH_perc_env	=		(gkSplit > ikey ? aNull : aH_perc_env)
 	aH_ftSumOut	=		(aH_ftSum + gkH_leak*aftSum)*aH_env*gkH_lvl + (gkH_perc_lvl*aH_perc)*aH_perc_env
 
 	;DRAWBARS LOW
@@ -300,12 +300,12 @@ instr	2	;Midi Organ
 
 	aL_ftSum		sum		aL_16ft,aL_8ft,aL_5_13ft,aL_4ft,aL_2_23ft,aL_2ft,aL_1_35ft,aL_1_23ft,aL_1ft
 	aL_env		madsr	i(gk_L_Att),0,1,0.01
-	aL_env		=		(gkSplit > ikey ? aL_env:aNull)
+	aL_env		=		(gkSplit > ikey ? aL_env : aNull)
 	kL_perc_Harm	=		gkL_perc_Harm
 
-	aL_perc		=		(kL_perc_Harm > 2 ? a2_23ft:a4ft)
+	aL_perc		=		(kL_perc_Harm > 2 ? a2_23ft : a4ft)
 	aL_perc_env	madsr	0.01,i(gk_L_perc_Dec),0,0.01
-	aL_percEnv	=		(gkSplit > ikey ? aL_perc_env:aNull)
+	aL_percEnv	=		(gkSplit > ikey ? aL_perc_env : aNull)
 	aL_ftSumOut	=		(aL_ftSum + gkL_leak*aftSum)*aL_env*gkL_lvl + (gkL_perc_lvl*aL_perc)*aL_perc_env
 
 	;mix&output
@@ -320,7 +320,7 @@ instr	3	;Effects
 	;;Scanner
 	kSc_LpOut		tonek	gkSc_C,gkSc_Acc
 	kSc_Fst2		=		kSc_LpOut*gkSc_Fst
-	kSc_Freq		=		(kSc_Fst2 > gkSc_Slw ? kSc_Fst2:gkSc_Slw)
+	kSc_Freq		=		(kSc_Fst2 > gkSc_Slw ? kSc_Fst2 : gkSc_Slw)
 	kSc_sine		oscil	gkSc_Depth,kSc_Freq,1
 
 	aSc_dlt1		interp	(1-kSc_sine)*gkSc_Delay
@@ -542,6 +542,8 @@ i 3 0 3600	;Effects
 i 10 0 3600	;Param Display
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 <bsbPanel>
@@ -1857,7 +1859,7 @@ Att</label>
   <description/>
   <minimum>0.10000000</minimum>
   <maximum>15.00000000</maximum>
-  <value>9.63600000</value>
+  <value>15.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
