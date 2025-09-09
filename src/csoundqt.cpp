@@ -2387,8 +2387,9 @@ void CsoundQt::openExternalEditor()
     }
     if (!m_options->waveeditor.isEmpty()) {
         // name = "\"" + name + "\"";
-        QDEBUG << "Opening rendered audiofile: " << name;
-        execute(m_options->waveeditor, name);
+        //QDEBUG << "Opening rendered audiofile: " << name;
+        // execute(m_options->waveeditor, name);
+        startProcess(m_options->waveeditor, QStringList() << name));
     }
     else {
         QDesktopServices::openUrl(QUrl::fromLocalFile (name));
@@ -2421,8 +2422,9 @@ void CsoundQt::openExternalPlayer()
                                  " external player."));
     }
     if (!m_options->waveplayer.isEmpty()) {
-        name = "\"" + name + "\"";
-        execute(m_options->waveplayer, name);
+        // name = "\"" + name + "\""; // I doubt if thi is needed with startProcess
+        //execute(m_options->waveplayer, name);
+        startProcess(m_options->waveplayer, QStringList() << name);
     }
     else {
         QDesktopServices::openUrl(QUrl::fromLocalFile (name));
@@ -2910,8 +2912,9 @@ void CsoundQt::openPdfFile(QString name)
                                      "Please go to Edit->Options->Environment and select directory\n"));
         }
 #endif
-        QString arg = "\"" + name + "\"";
-        execute(m_options->pdfviewer, arg);
+        //QString arg = "\"" + name + "\"";
+        //execute(m_options->pdfviewer, arg);
+        startProcess(m_options->pdfviewer, QStringList() << name );
     }
     else {
         QDesktopServices::openUrl(QUrl::fromLocalFile (name));
@@ -3342,7 +3345,8 @@ void CsoundQt::runUtility(QString flags)
 #ifdef Q_OS_WIN32
         options = SCRIPT_NAME;
 #endif
-        execute(m_options->terminal, options);
+        //execute(m_options->terminal, options);
+        startProcess(m_options->terminal, QStringList() << options  );
     }
 }
 
