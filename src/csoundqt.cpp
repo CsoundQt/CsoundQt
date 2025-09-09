@@ -2930,7 +2930,7 @@ void CsoundQt::openQuickRef()
 
 void CsoundQt::openOnlineDocumentation()
 {
-     openExternalBrowser(QUrl("http://csoundqt.github.io/pages/documentation.html"));
+     openExternalBrowser(QUrl("https://csoundqt.github.io/doc/"));
 }
 
 
@@ -5548,17 +5548,24 @@ void CsoundQt::clearSettings()
 
 int CsoundQt::startProcess(QString executable, const QStringList &args) {
     QString path = documentPages[curPage]->getFilePath();
-    if (path.startsWith(":/examples/", Qt::CaseInsensitive)) {
+    if (path.startsWith(":", Qt::CaseInsensitive) ) {
         // example or other embedded file
         path = QDir::tempPath();   // copy of example is saved there
     }
     auto p = new QProcess();
     p->setProgram(executable);
     p->setArguments(args);
-    p->setWorkingDirectory(path);
+    if ( QDir(path).exists()) {
+        p->setWorkingDirectory(path);
+    }
     p->start();
-    qDebug() << "Launched external program with id:" << p->processId() << ", executable: " << executable << ", args: " << args;
-    return !p->waitForStarted() ? 1 : 0;
+    if (!p->waitForStarted()) {
+        qDebug() << "Failed to start process:" << executable << args << p->errorString();
+        return 1;
+    } else {
+        qDebug() << "Launched external program with id:" << p->processId();
+        return 0;
+    }
 }
 
 int CsoundQt::execute(QString executable, QString options)
