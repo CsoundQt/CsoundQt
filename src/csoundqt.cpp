@@ -2886,9 +2886,12 @@ void CsoundQt::decreaseFontSize()
 void CsoundQt::changeFontSize(int change)
 {
     if (helpPanel->hasFocus() ) {
-        // QDEBUG << "change helpPanel size" << change;
+        QDEBUG << "change helpPanel size" << change;
         helpPanel->changeFontSize(change);
-    }  else {
+    } else if (m_console->widgetHasFocus()) {
+        m_options->consoleFontPointSize += change;
+        documentPages[curPage]->setConsoleFont(QFont(m_options->consoleFont, m_options->consoleFontPointSize));
+    } else {
         m_options->fontPointSize += change; // this may affect the pad's font size as well...
         // QDEBUG << "main Editor size" << m_options->fontPointSize;
         for (int i = 0; i < documentPages.size(); i++) {
