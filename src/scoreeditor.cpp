@@ -79,7 +79,20 @@ void ScoreEditor::setPlainText(QString text)
 
 void ScoreEditor::setFontPointSize(float size)
 {
-	m_textEditor->setFontPointSize(size);
+    switch (m_mode) {
+    case 0:
+        m_textEditor->setFontPointSize(size);
+        break;
+    case 1: {
+        QFont newFont = m_textEditor->font(); // use the same font as for orchestra
+        newFont.setPointSize(size-2); // otherwise looks bigger than orchestra
+        m_sheet->setFont(newFont);
+        break;
+    }
+    default:
+        break;
+    }
+
 }
 
 void ScoreEditor::setTabStopWidth(int width)

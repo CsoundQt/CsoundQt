@@ -239,8 +239,9 @@ void BaseView::setFont(QFont font)
 {
 	m_mainEditor->setFont(font);
 	m_orcEditor->setFont(font);
-	m_scoreEditor->setFont(font);
-	m_optionsEditor->setFont(font);
+    //m_scoreEditor->setFont(font);
+    m_scoreEditor->setFontPointSize(font.pointSize());
+    m_optionsEditor->setFont(font);
 	//  m_filebEditor->setFont(font);
 	m_otherEditor->setFont(font);
 	m_otherCsdEditor->setFont(font);

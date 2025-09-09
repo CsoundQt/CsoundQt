@@ -2892,7 +2892,7 @@ void CsoundQt::changeFontSize(int change)
         m_options->consoleFontPointSize += change;
         documentPages[curPage]->setConsoleFont(QFont(m_options->consoleFont, m_options->consoleFontPointSize));
     } else {
-        m_options->fontPointSize += change; // this may affect the pad's font size as well...
+        m_options->fontPointSize += change;
         // QDEBUG << "main Editor size" << m_options->fontPointSize;
         for (int i = 0; i < documentPages.size(); i++) {
             documentPages[i]->setTextFont(QFont(m_options->font, (int) m_options->fontPointSize));
