@@ -2389,7 +2389,7 @@ void CsoundQt::openExternalEditor()
         // name = "\"" + name + "\"";
         //QDEBUG << "Opening rendered audiofile: " << name;
         // execute(m_options->waveeditor, name);
-        startProcess(m_options->waveeditor, QStringList() << name));
+        startProcess(m_options->waveeditor, QStringList() << name);
     }
     else {
         QDesktopServices::openUrl(QUrl::fromLocalFile (name));
