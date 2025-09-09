@@ -1,7 +1,7 @@
 /* Getting Started .. Realtime Interaction: Widgets
 
 CsoundQt's Widgets provide a quick and easy way to build your customised GUI to communicate with csound's synthesis engine in realtime. 
-To make the Widgets-Panel visible, click the Widgets symbol in the menu or press (Alt+1).
+To make the Widgets-Panel visible, click the Widgets symbol in the menu or press Cmd+1 for Mac or Ctrl+1 for Windows and Linux.
 
 */
 
@@ -32,6 +32,9 @@ endin
 
 
 
+
+
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -173,4 +176,3 @@ endin
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

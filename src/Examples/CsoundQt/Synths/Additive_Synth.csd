@@ -247,13 +247,15 @@ e
 </CsScore>
 </CsoundSynthesizer>
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
  <x>203</x>
  <y>124</y>
- <width>703</width>
- <height>470</height>
+ <width>734</width>
+ <height>593</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">

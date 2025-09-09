@@ -1,6 +1,6 @@
 /* Getting Started .. Realtime Interaction: Widgets 2
 
-Make the Widgets-panel visible, by clicking the Widgets symbol in the menu or pressing (Alt+1).
+Make the Widgets-panel visible, by clicking the Widgets symbol in the toolbar or pressing Cmd+1 for Mac or Ctrl+1 for Windows and Linux.
 
 */
 
@@ -34,6 +34,9 @@ e
 
 
 
+
+
+<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -195,4 +198,3 @@ Now run Csound, and notice how the widget is controlling the frequency of the os
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="Events" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

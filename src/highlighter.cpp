@@ -296,6 +296,8 @@ void Highlighter::setTheme(const QString &theme) {
     errorFormat.setForeground(deprecatedFormat.foreground().color());
     errorFormat.setFontStrikeOut(true);
 
+    importantCommentFormat.setFontWeight(QFont::Bold);
+
     // ioFormat.setFontItalic(true);
 
     QColor color = saturateColor(headerFormat.foreground().color().lighter(150), 150);
@@ -818,7 +820,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         index = rxmatch.capturedEnd();
     }
 
-    //last rules
+    //last rules  -- not used except for label
     for(auto rule: lastHighlightingRules) {
         index = 0;
         while((rxmatch = rule.pattern.match(text, index)).hasMatch()) {
@@ -828,6 +830,8 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             index = rxmatch.capturedEnd();
         }
     }
+
+
 
     setCurrentBlockState(0);
 
@@ -858,6 +862,41 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         rxmatch = commentStartExpression.match(text, startIndex + commentLength);
         startIndex = rxmatch.hasMatch() ? rxmatch.capturedStart() : -1;
     }
+
+    // Multiline {{ ... }} strings
+    if (previousBlockState() == 2) {
+        // We are continuing inside a multiline block
+        int endIdx = line.indexOf("}}");
+        if (endIdx == -1) {
+            setFormat(0, line.length(), quotationFormat);
+            setCurrentBlockState(2);  // still inside
+            return;                   // stop here
+        } else {
+            setFormat(0, endIdx + 2, quotationFormat);
+            setCurrentBlockState(0);  // closed
+            // continue parsing after endIdx if needed
+        }
+    }
+
+    // If we get here, we are not inside a multiline block
+    int startIdx = line.indexOf("{{");
+    while (startIdx >= 0) {
+        int endIdx = line.indexOf("}}", startIdx + 2);
+        int stringLength;
+        if (endIdx == -1) {
+            setCurrentBlockState(2);
+            stringLength = line.length() - startIdx;
+        } else {
+            stringLength = endIdx - startIdx + 2;
+        }
+        setFormat(startIdx, stringLength, quotationFormat);
+
+        if (endIdx == -1)
+            break;
+        else
+            startIdx = line.indexOf("{{", endIdx + 2);
+    }
+
 }
 
 
