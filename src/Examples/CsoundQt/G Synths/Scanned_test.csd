@@ -8,7 +8,7 @@ By Tarmo Johannes trmjhnns@gmail.com 2013/2016
 
 <CsoundSynthesizer>
 <CsOptions>
--odac
+-odac --env:SSDIR+=../../SourceMaterials
 ;-d ; ucomment if you don't want to have output about tables and fft analyse
 </CsOptions>
 <CsInstruments>
@@ -257,6 +257,18 @@ f0 3600 ; wait for live events
 
 
 
+
+
+<EventPanel name="tweak parameters of isntr sound" tempo="60.00000000" loop="8.00000000" x="442" y="697" width="655" height="346" visible="false" loopStart="0" loopEnd="0">;             ;              ;              ;              ;amp dbFS             ;init             ;irate             ;massed             ;centering             ;scanning trajectory             ;freq 
+i "sound" 0 5 -10 18 0.43 20 40 72 261 
+i . 1 . . . . . . . 100 
+i . 2 . . . . . . . 200 
+i . 3 . . . . . . . 400 
+i . 4 . . . . . . . 800 
+i . 5 . . . . . . . 2000 </EventPanel>
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="120" y="455" width="655" height="346" visible="true" loopStart="0" loopEnd="0">;             ;              ;              ;              ;amp             ;freq             ;preset           ;save file 
+i "preset_call" 0 4 -10 8.07 3 0 
+; viimane oli preset 8    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -271,7 +283,7 @@ f0 3600 ; wait for live events
   <g>46</g>
   <b>255</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>11</y>
@@ -281,6 +293,7 @@ f0 3600 ; wait for live events
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>Scanned synthesis sandbox for experiments
 
 Press Live Events for tweaking different parameteres
@@ -295,6 +308,7 @@ Have fun!
 
 			tarmo</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Liberation Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -310,9 +324,9 @@ Have fun!
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>preset</objectName>
   <x>78</x>
   <y>368</y>
@@ -322,6 +336,7 @@ Have fun!
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <alignment>left</alignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
@@ -341,7 +356,7 @@ Have fun!
   <randomizable group="0">false</randomizable>
   <value>30</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>13</x>
   <y>368</y>
@@ -351,8 +366,10 @@ Have fun!
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Preset: </label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -368,9 +385,9 @@ Have fun!
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>button3</objectName>
   <x>146</x>
   <y>366</y>
@@ -380,6 +397,7 @@ Have fun!
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -387,9 +405,11 @@ Have fun!
   <image>/</image>
   <eventLine>i1 0 -1  -10  8.00 0 0</eventLine>
   <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName/>
   <x>14</x>
   <y>401</y>
@@ -399,6 +419,7 @@ Have fun!
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
@@ -407,9 +428,15 @@ Have fun!
   <dispy>1.00000000</dispy>
   <modex>lin</modex>
   <modey>lin</modey>
+  <showSelector>true</showSelector>
+  <showGrid>true</showGrid>
+  <showTableInfo>true</showTableInfo>
+  <showScrollbars>true</showScrollbars>
+  <enableTables>true</enableTables>
+  <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>271</y>
@@ -419,10 +446,12 @@ Have fun!
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Change preset by the spinbox below or (Virtual) Midi controller Channel 1, CC 1 (mostly modulator wheel).
 
 New presets apply to new notes, no infulence during playing time.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -438,9 +467,9 @@ New presets apply to new notes, no infulence during playing time.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>394</x>
   <y>398</y>
@@ -450,8 +479,10 @@ New presets apply to new notes, no infulence during playing time.</label>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>Have a look at the FFT display (last one in menu)</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Arial</font>
   <fontsize>10</fontsize>
   <precision>3</precision>
@@ -467,18 +498,8 @@ New presets apply to new notes, no infulence during playing time.</label>
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="tweak parameters of isntr sound" tempo="60.00000000" loop="8.00000000" x="442" y="697" width="655" height="346" visible="false" loopStart="0" loopEnd="0">;             ;              ;              ;              ;amp dbFS             ;init             ;irate             ;massed             ;centering             ;scanning trajectory             ;freq 
-i "sound" 0 5 -10 18 0.43 20 40 72 261 
-i . 1 . . . . . . . 100 
-i . 2 . . . . . . . 200 
-i . 3 . . . . . . . 400 
-i . 4 . . . . . . . 800 
-i . 5 . . . . . . . 2000 </EventPanel>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="120" y="455" width="655" height="346" visible="true" loopStart="0" loopEnd="0">;             ;              ;              ;              ;amp             ;freq             ;preset           ;save file 
-i "preset_call" 0 4 -10 8.07 3 0 
-; viimane oli preset 8    </EventPanel>

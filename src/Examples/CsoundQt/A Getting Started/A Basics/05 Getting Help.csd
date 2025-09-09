@@ -1,6 +1,6 @@
 /*Getting started.. 1.5 Getting Help
 
-General information about CsoundQt's buttons and windows, can be found in the 'Open Quick Reference Guide' located in the Help Menu.
+CsoundQt's documentation is at https://csoundqt.github.io/doc/ (also linked in the Help Menu).
 
 Help for most of the used Csound vocabulary is available, by marking the words with the cursor and selecting
 Show Opcode Entry from the Help Menu (or with shortcut: Shift+F1)
@@ -23,8 +23,8 @@ CommandUnifile
 PartOpcodesOverview
 
 Further Reading:
-In the help menu is a direkt link to the Csound Manual and also to it's second chapter 'Opcodes Overview'.
-On 'http://www.Csounds.com/tutorials' there are more tutorials, some are also available in different languages.
+In the help menu is a direkt link to the Csound Manual and also to it's second chapter 'Opcode Overview'.
+The Csound FLOSS Manual offers an in-depth intruduction at https://flossmanual.csound.com/
 */
 <CsoundSynthesizer>
 <CsOptions>
@@ -55,6 +55,11 @@ e
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover 
 
+
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -69,18 +74,20 @@ e
   <g>158</g>
   <b>162</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>21</x>
-  <y>17</y>
+  <x>33</x>
+  <y>19</y>
   <width>241</width>
   <height>137</height>
   <uuid>{f643e4a3-2682-4978-afb1-0a55dfaa1063}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>This is a widget window. More information about widgets can be found in the menu: Examples-> Widgets</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
@@ -96,9 +103,70 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>20</x>
+  <y>200</y>
+  <width>248</width>
+  <height>71</height>
+  <uuid>{17ce6c00-b473-4ea4-9bf4-44a0304a85a6}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>This label displays the current frequency:</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Lucida Grande</font>
+  <fontsize>14</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBDisplay" version="2">
+  <objectName>freqsweep</objectName>
+  <x>110</x>
+  <y>235</y>
+  <width>144</width>
+  <height>29</height>
+  <uuid>{2a0e9cca-d3b3-4fbc-8e24-374c23d39941}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>674.407</label>
+  <alignment>center</alignment>
+  <valignment>top</valignment>
+  <font>Nimbus Sans [urw]</font>
+  <fontsize>18</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>182</r>
+   <g>109</g>
+   <b>0</b>
+  </bgcolor>
+  <bordermode>true</bordermode>
+  <borderradius>1</borderradius>
   <borderwidth>1</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

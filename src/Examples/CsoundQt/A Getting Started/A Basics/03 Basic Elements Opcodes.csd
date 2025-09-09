@@ -45,7 +45,7 @@ endin
 <CsScore>
 f 1 0 1024 10 1 				; the basic sine waveform for the oscillator is generated here 
 i 1 0 5
-i 2 5 5					; the exponential curve goes more even thought the octaves
+i 2 5 5					; the exponential curve goes more even through the octaves
 e
 </CsScore>
 </CsoundSynthesizer>
@@ -54,6 +54,9 @@ e
 
 
 
+
+
+<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -242,4 +245,3 @@ e
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="596" height="322" visible="false" loopStart="0" loopEnd="0">    </EventPanel>

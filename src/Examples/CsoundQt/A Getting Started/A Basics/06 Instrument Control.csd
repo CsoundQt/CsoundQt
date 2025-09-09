@@ -28,29 +28,31 @@ nchnls = 2
 0dbfs = 1
 
 instr 1
-aSine poscil3 p4, p5, 1 		; Here, a different oscillator type is used, which has more flexibility and higher precision.
+aSine poscil3 p4, p5 		; Here, a different oscillator type is used, which has more flexibility and higher precision.
 	outs aSine, aSine
 endin
 
 </CsInstruments>
 
 <CsScore>
-f 1 0 1024 10 1
-;ins strt dur  amp  freq  
-i 1 	0 	2 	0.8 	440		; loud
-i 1 	3 	2	0.1	554.365	; quiet
-i 1 	6 	2	0.4	659.255	
+;ins start dur amp  freq  
+i 1  0     2   0.8  440		; loud
+i 1  3     2   0.1  554.365	; quiet
+i 1  6     2   0.4  659.255	
 
-i 1 	9 	3	0.1	440  		; you can layer more instances of the same instrument easily
-i 1 	9.5 	3.5	0.2	554.365
-i 1 	10 	3	0.1	659.255
-i 1 	10.2 	2.5	0.15	783.991
-i 1 	10.8 	2	0.3	932.328
+i 1  9     3   0.1  440  		; you can layer more instances of the same instrument easily
+i 1  9.5   3.5 0.2  554.365
+i 1  10    3   0.1  659.255
+i 1  10.2  2.5 0.15 783.991
+i 1  10.8  2   0.3  932.328
 e
-; Keep in mind, that in "realtime mode", the number of layers is limited by your machines CPU power.
+; Keep in mind, that in "realtime mode", the number of layers is limited by your machine's CPU power.
 </CsScore>
 </CsoundSynthesizer>
 ; written by Alex Hofmann (Nov. 2009) - Incontri HMT-Hannover
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -65,7 +67,7 @@ e
   <g>158</g>
   <b>162</b>
  </bgcolor>
- <bsbObject version="2" type="BSBScope">
+ <bsbObject type="BSBScope" version="2">
   <objectName/>
   <x>28</x>
   <y>282</y>
@@ -75,6 +77,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>-255.00000000</value>
   <type>scope</type>
   <zoomx>2.00000000</zoomx>
@@ -82,8 +85,9 @@ e
   <dispx>1.00000000</dispx>
   <dispy>1.00000000</dispy>
   <mode>0.00000000</mode>
+  <triggermode>NoTrigger</triggermode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>29</x>
   <y>230</y>
@@ -93,8 +97,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The scope shows the current output-waveform.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>Lucida Grande</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -110,9 +116,9 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBGraph">
+ <bsbObject type="BSBGraph" version="2">
   <objectName/>
   <x>29</x>
   <y>80</y>
@@ -122,6 +128,7 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <value>0</value>
   <objectName2/>
   <zoomx>1.00000000</zoomx>
@@ -130,9 +137,15 @@ e
   <dispy>1.00000000</dispy>
   <modex>auto</modex>
   <modey>auto</modey>
+  <showSelector>true</showSelector>
+  <showGrid>true</showGrid>
+  <showTableInfo>true</showTableInfo>
+  <showScrollbars>true</showScrollbars>
+  <enableTables>true</enableTables>
+  <enableDisplays>true</enableDisplays>
   <all>true</all>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>29</x>
   <y>20</y>
@@ -142,8 +155,10 @@ e
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
+  <description/>
   <label>The pure waveform used by the oscillator is displayed in this Graph widget.</label>
   <alignment>left</alignment>
+  <valignment>top</valignment>
   <font>DejaVu Sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -159,9 +174,8 @@ e
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="320" y="218" width="604" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>

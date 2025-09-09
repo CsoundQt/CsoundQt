@@ -62,7 +62,7 @@
 <CsInstruments>
 
 sr		= 48000
-ksmps	= 10
+ksmps	= 16
 nchnls	= 2
 
 			maxalloc		1, 16		;Adjust maxalloc according to your system
@@ -1127,6 +1127,16 @@ i 12 0 3600		;Keyboard input
 
 
 
+
+
+<EventPanel name="Tests" tempo="60.00000000" loop="8.00000000" x="453" y="425" width="802" height="346" visible="false" loopStart="0" loopEnd="0">i 10  0  3.000000  440.000000 100 24 0.090938 0.550575 0.281511 0.570137 0.336029 0.364754 0.089972 0.179480 0.407763 0.717619 1.507408 2.038276 0.259735 0.076355 0.069394 0.898999 2.856621 2.614967 0.622085 0.951219 0.190021 0.489482 2.067318 2.033791 0.309037 0.131384 0.456526 0.545857 1.865052 2.758606 0.009423 0.922956 0.062012 0.448193 1.317877 1.606367 0.624784 1 0 1 0 0 1 
+    
+i 10  1  3.000000  440.000000 100 1 0.478926 0.599167 0.028437 0.206165 2.547630 3.000000 0.154535 0.435037 0.410224 0.935346 2.917274 1.000000 0.507214 0.527054 0.351074 0.123741 1.529569 3.500000 0.299779 0.483123 0.321528 0.215652 2.631786 5.000000 0.584880 0.575536 0.251249 0.363890 1.449478 2.000000 0.847388 0.195493 0.153552 0.211472 1.048423 2.000000 0.137826 0 0 0 0 0 0 
+    
+i 10  2  3.000000  440.000000 100 23 0.270588 0.302909 0.387075 0.268992 1.932318 1.082074 0.806773 0.675024 0.160935 0.000418 0.091414 1.950530 0.821397 0.103666 0.001935 0.658787 0.737449 0.762221 0.742802 0.112710 0.001273 0.136764 2.771899 0.210006 0.204091 0.660871 0.111000 0.560500 2.473292 1.065975 0.029706 0.159895 0.059344 0.425518 2.537653 0.606392 0.516453 0 1 0 0 1 0 
+    
+i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318 1.082074 0.806773 0.675024 0.160935 0.000418 0.091414 1.950530 0.821397 0.103666 0.001935 0.658787 0.737449 0.762221 0.742802 0.112710 0.001273 0.136764 2.771899 0.210006 0.204091 0.660871 0.111000 0.560500 2.473292 1.065975 0.029706 0.159895 0.059344 0.425518 2.537653 0.606392 0.516453 0 1 0 0 1 0 
+    </EventPanel>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -1141,7 +1151,7 @@ i 12 0 3600		;Keyboard input
   <g>242</g>
   <b>210</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>44</x>
   <y>2</y>
@@ -1172,7 +1182,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>41</y>
@@ -1203,7 +1213,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP1_A</objectName>
   <x>49</x>
   <y>8</y>
@@ -1222,7 +1232,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>49</x>
   <y>107</y>
@@ -1253,7 +1263,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>71</x>
   <y>108</y>
@@ -1284,7 +1294,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP1_D</objectName>
   <x>71</x>
   <y>9</y>
@@ -1303,7 +1313,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>93</x>
   <y>108</y>
@@ -1334,7 +1344,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP1_S</objectName>
   <x>93</x>
   <y>9</y>
@@ -1353,7 +1363,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>114</x>
   <y>108</y>
@@ -1384,7 +1394,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP1_R</objectName>
   <x>114</x>
   <y>9</y>
@@ -1403,7 +1413,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>44</x>
   <y>137</y>
@@ -1434,7 +1444,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>174</y>
@@ -1465,7 +1475,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP2_A</objectName>
   <x>49</x>
   <y>141</y>
@@ -1484,7 +1494,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>49</x>
   <y>240</y>
@@ -1515,7 +1525,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>71</x>
   <y>241</y>
@@ -1546,7 +1556,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP2_D</objectName>
   <x>71</x>
   <y>142</y>
@@ -1565,7 +1575,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>93</x>
   <y>241</y>
@@ -1596,7 +1606,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP2_S</objectName>
   <x>93</x>
   <y>142</y>
@@ -1615,7 +1625,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>114</x>
   <y>241</y>
@@ -1646,7 +1656,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP2_R</objectName>
   <x>114</x>
   <y>142</y>
@@ -1665,7 +1675,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>303</x>
   <y>6</y>
@@ -1696,7 +1706,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>44</x>
   <y>271</y>
@@ -1727,7 +1737,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>0</x>
   <y>310</y>
@@ -1758,7 +1768,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP3_A</objectName>
   <x>49</x>
   <y>277</y>
@@ -1777,7 +1787,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>49</x>
   <y>376</y>
@@ -1808,7 +1818,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>71</x>
   <y>377</y>
@@ -1839,7 +1849,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP3_D</objectName>
   <x>71</x>
   <y>278</y>
@@ -1858,7 +1868,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>93</x>
   <y>377</y>
@@ -1889,7 +1899,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP3_S</objectName>
   <x>93</x>
   <y>278</y>
@@ -1908,7 +1918,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>114</x>
   <y>377</y>
@@ -1939,7 +1949,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP3_R</objectName>
   <x>114</x>
   <y>278</y>
@@ -1958,7 +1968,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>259</x>
   <y>44</y>
@@ -1989,7 +1999,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP4_A</objectName>
   <x>308</x>
   <y>11</y>
@@ -2008,7 +2018,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>308</x>
   <y>110</y>
@@ -2039,7 +2049,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>330</x>
   <y>111</y>
@@ -2070,7 +2080,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP4_D</objectName>
   <x>330</x>
   <y>12</y>
@@ -2089,7 +2099,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>352</x>
   <y>111</y>
@@ -2120,7 +2130,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP4_S</objectName>
   <x>352</x>
   <y>12</y>
@@ -2139,7 +2149,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>373</x>
   <y>111</y>
@@ -2170,7 +2180,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP4_R</objectName>
   <x>373</x>
   <y>12</y>
@@ -2189,7 +2199,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>303</x>
   <y>141</y>
@@ -2220,7 +2230,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>303</x>
   <y>275</y>
@@ -2251,7 +2261,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>259</x>
   <y>180</y>
@@ -2282,7 +2292,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP5_A</objectName>
   <x>308</x>
   <y>147</y>
@@ -2301,7 +2311,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>308</x>
   <y>246</y>
@@ -2332,7 +2342,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>330</x>
   <y>247</y>
@@ -2363,7 +2373,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP5_D</objectName>
   <x>330</x>
   <y>148</y>
@@ -2382,7 +2392,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>352</x>
   <y>247</y>
@@ -2413,7 +2423,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP5_S</objectName>
   <x>352</x>
   <y>148</y>
@@ -2432,7 +2442,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>373</x>
   <y>247</y>
@@ -2463,7 +2473,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP5_R</objectName>
   <x>373</x>
   <y>148</y>
@@ -2482,7 +2492,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>259</x>
   <y>313</y>
@@ -2513,7 +2523,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP6_A</objectName>
   <x>308</x>
   <y>280</y>
@@ -2532,7 +2542,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>308</x>
   <y>379</y>
@@ -2563,7 +2573,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>330</x>
   <y>380</y>
@@ -2594,7 +2604,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP6_D</objectName>
   <x>330</x>
   <y>281</y>
@@ -2613,7 +2623,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>352</x>
   <y>380</y>
@@ -2644,7 +2654,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP6_S</objectName>
   <x>352</x>
   <y>281</y>
@@ -2663,7 +2673,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>373</x>
   <y>380</y>
@@ -2694,7 +2704,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP6_R</objectName>
   <x>373</x>
   <y>281</y>
@@ -2713,7 +2723,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>137</x>
   <y>2</y>
@@ -2744,7 +2754,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>138</x>
   <y>108</y>
@@ -2775,7 +2785,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP1_Lev</objectName>
   <x>143</x>
   <y>9</y>
@@ -2794,7 +2804,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>OP1_Ratio</objectName>
   <x>170</x>
   <y>26</y>
@@ -2824,7 +2834,7 @@ i 12 0 3600		;Keyboard input
   <randomizable group="0">false</randomizable>
   <value>3</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>48</y>
@@ -2855,7 +2865,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>OP1_Inv</objectName>
   <x>184</x>
   <y>79</y>
@@ -2877,7 +2887,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>137</x>
   <y>137</y>
@@ -2908,7 +2918,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>OP2_Inv</objectName>
   <x>184</x>
   <y>213</y>
@@ -2930,7 +2940,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>182</y>
@@ -2961,7 +2971,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>OP2_Ratio</objectName>
   <x>170</x>
   <y>160</y>
@@ -2991,7 +3001,7 @@ i 12 0 3600		;Keyboard input
   <randomizable group="0">false</randomizable>
   <value>2.5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP2_Lev</objectName>
   <x>143</x>
   <y>143</y>
@@ -3010,7 +3020,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>138</x>
   <y>241</y>
@@ -3041,7 +3051,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>137</x>
   <y>271</y>
@@ -3072,7 +3082,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>396</x>
   <y>6</y>
@@ -3103,7 +3113,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>396</x>
   <y>141</y>
@@ -3134,7 +3144,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>396</x>
   <y>275</y>
@@ -3165,7 +3175,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>138</x>
   <y>377</y>
@@ -3196,7 +3206,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP3_Lev</objectName>
   <x>143</x>
   <y>279</y>
@@ -3215,7 +3225,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>OP3_Ratio</objectName>
   <x>170</x>
   <y>296</y>
@@ -3245,7 +3255,7 @@ i 12 0 3600		;Keyboard input
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>180</x>
   <y>318</y>
@@ -3276,7 +3286,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>OP3_Inv</objectName>
   <x>184</x>
   <y>349</y>
@@ -3298,7 +3308,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>397</x>
   <y>111</y>
@@ -3329,7 +3339,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP4_Lev</objectName>
   <x>402</x>
   <y>12</y>
@@ -3348,7 +3358,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>OP4_Ratio</objectName>
   <x>429</x>
   <y>32</y>
@@ -3378,7 +3388,7 @@ i 12 0 3600		;Keyboard input
   <randomizable group="0">false</randomizable>
   <value>5.5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>439</x>
   <y>54</y>
@@ -3409,7 +3419,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>OP4_Inv</objectName>
   <x>443</x>
   <y>85</y>
@@ -3431,7 +3441,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>398</x>
   <y>247</y>
@@ -3462,7 +3472,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP5_Lev</objectName>
   <x>403</x>
   <y>148</y>
@@ -3481,7 +3491,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>OP5_Ratio</objectName>
   <x>429</x>
   <y>165</y>
@@ -3511,7 +3521,7 @@ i 12 0 3600		;Keyboard input
   <randomizable group="0">false</randomizable>
   <value>3.5</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>440</x>
   <y>187</y>
@@ -3542,7 +3552,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>OP5_Inv</objectName>
   <x>444</x>
   <y>218</y>
@@ -3564,7 +3574,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>398</x>
   <y>380</y>
@@ -3595,7 +3605,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>OP6_Lev</objectName>
   <x>403</x>
   <y>281</y>
@@ -3614,7 +3624,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>OP6_Ratio</objectName>
   <x>430</x>
   <y>298</y>
@@ -3644,7 +3654,7 @@ i 12 0 3600		;Keyboard input
   <randomizable group="0">false</randomizable>
   <value>0</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>440</x>
   <y>320</y>
@@ -3675,7 +3685,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>OP6_Inv</objectName>
   <x>443</x>
   <y>350</y>
@@ -3697,7 +3707,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>567</x>
   <y>150</y>
@@ -3728,7 +3738,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>579</x>
   <y>180</y>
@@ -3750,7 +3760,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>579</x>
   <y>208</y>
@@ -3772,7 +3782,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>579</x>
   <y>236</y>
@@ -3794,7 +3804,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>579</x>
   <y>264</y>
@@ -3816,7 +3826,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>579</x>
   <y>292</y>
@@ -3838,7 +3848,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>579</x>
   <y>321</y>
@@ -3860,7 +3870,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>579</x>
   <y>350</y>
@@ -3882,7 +3892,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>579</x>
   <y>379</y>
@@ -3904,7 +3914,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>567</x>
   <y>5</y>
@@ -3935,7 +3945,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>697</x>
   <y>5</y>
@@ -3966,7 +3976,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>570</x>
   <y>9</y>
@@ -3998,7 +4008,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>697</x>
   <y>219</y>
@@ -4029,7 +4039,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>697</x>
   <y>140</y>
@@ -4060,7 +4070,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>10</borderradius>
   <borderwidth>2</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
+ <bsbObject type="BSBHSlider" version="2">
   <objectName>Feedback</objectName>
   <x>701</x>
   <y>43</y>
@@ -4079,7 +4089,7 @@ i 12 0 3600		;Keyboard input
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>Algorithm</objectName>
   <x>706</x>
   <y>77</y>
@@ -4109,7 +4119,7 @@ i 12 0 3600		;Keyboard input
   <randomizable group="0">false</randomizable>
   <value>30</value>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>752</x>
   <y>81</y>
@@ -4140,7 +4150,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>753</x>
   <y>59</y>
@@ -4171,7 +4181,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDropdown">
+ <bsbObject type="BSBDropdown" version="2">
   <objectName>_SetPresetIndex</objectName>
   <x>700</x>
   <y>178</y>
@@ -4348,7 +4358,7 @@ i 12 0 3600		;Keyboard input
   <selectedIndex>28</selectedIndex>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName>Lock</objectName>
   <x>708</x>
   <y>113</y>
@@ -4370,7 +4380,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>711</x>
   <y>366</y>
@@ -4392,7 +4402,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>midinote</objectName>
   <x>776</x>
   <y>260</y>
@@ -4426,7 +4436,7 @@ i 12 0 3600		;Keyboard input
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>midiveloc</objectName>
   <x>776</x>
   <y>281</y>
@@ -4460,7 +4470,7 @@ i 12 0 3600		;Keyboard input
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>699</x>
   <y>258</y>
@@ -4491,7 +4501,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>699</x>
   <y>280</y>
@@ -4522,7 +4532,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBButton">
+ <bsbObject type="BSBButton" version="2">
   <objectName/>
   <x>711</x>
   <y>340</y>
@@ -4544,7 +4554,7 @@ i 12 0 3600		;Keyboard input
   <latched>false</latched>
   <fontsize>10</fontsize>
  </bsbObject>
- <bsbObject version="2" type="BSBScrollNumber">
+ <bsbObject type="BSBScrollNumber" version="2">
   <objectName>mididur</objectName>
   <x>776</x>
   <y>302</y>
@@ -4578,7 +4588,7 @@ i 12 0 3600		;Keyboard input
   <randomizable group="0">false</randomizable>
   <mouseControl act=""/>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>698</x>
   <y>303</y>
@@ -4609,7 +4619,7 @@ i 12 0 3600		;Keyboard input
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>573</x>
   <y>56</y>
@@ -7013,11 +7023,3 @@ i 12 0 3600		;Keyboard input
 <value id="{77612985-9528-4347-a5ab-f7302ad4f5fc}" mode="2" >0.00000000</value>
 </preset>
 </bsbPresets>
-<EventPanel name="Tests" tempo="60.00000000" loop="8.00000000" x="453" y="425" width="802" height="346" visible="false" loopStart="0" loopEnd="0">i 10  0  3.000000  440.000000 100 24 0.090938 0.550575 0.281511 0.570137 0.336029 0.364754 0.089972 0.179480 0.407763 0.717619 1.507408 2.038276 0.259735 0.076355 0.069394 0.898999 2.856621 2.614967 0.622085 0.951219 0.190021 0.489482 2.067318 2.033791 0.309037 0.131384 0.456526 0.545857 1.865052 2.758606 0.009423 0.922956 0.062012 0.448193 1.317877 1.606367 0.624784 1 0 1 0 0 1 
-    
-i 10  1  3.000000  440.000000 100 1 0.478926 0.599167 0.028437 0.206165 2.547630 3.000000 0.154535 0.435037 0.410224 0.935346 2.917274 1.000000 0.507214 0.527054 0.351074 0.123741 1.529569 3.500000 0.299779 0.483123 0.321528 0.215652 2.631786 5.000000 0.584880 0.575536 0.251249 0.363890 1.449478 2.000000 0.847388 0.195493 0.153552 0.211472 1.048423 2.000000 0.137826 0 0 0 0 0 0 
-    
-i 10  2  3.000000  440.000000 100 23 0.270588 0.302909 0.387075 0.268992 1.932318 1.082074 0.806773 0.675024 0.160935 0.000418 0.091414 1.950530 0.821397 0.103666 0.001935 0.658787 0.737449 0.762221 0.742802 0.112710 0.001273 0.136764 2.771899 0.210006 0.204091 0.660871 0.111000 0.560500 2.473292 1.065975 0.029706 0.159895 0.059344 0.425518 2.537653 0.606392 0.516453 0 1 0 0 1 0 
-    
-i 10  3  3.000000  440.000000 56 23 0.270588 0.302909 0.387075 0.268992 1.932318 1.082074 0.806773 0.675024 0.160935 0.000418 0.091414 1.950530 0.821397 0.103666 0.001935 0.658787 0.737449 0.762221 0.742802 0.112710 0.001273 0.136764 2.771899 0.210006 0.204091 0.660871 0.111000 0.560500 2.473292 1.065975 0.029706 0.159895 0.059344 0.425518 2.537653 0.606392 0.516453 0 1 0 0 1 0 
-    </EventPanel>
