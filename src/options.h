@@ -34,6 +34,7 @@ public:
 	~Options();
 
 	QString theme;  // Icon theme name
+    QString themeMode; // "light", "dark" or "auto"
 	QString font;
 	float fontPointSize;
 	bool showLineNumberArea;

@@ -97,6 +97,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
     curPage = -1;
     m_options = new Options(&m_configlists);
 
+    auto palette = qApp->palette();
+    // the palette is dark (dark "theme") if the background is darker than the text
+    isDarkPalette = palette.text().color().lightness() > palette.window().color().lightness();
+
+
 #ifdef Q_OS_MAC
     // this->setUnifiedTitleAndToolBarOnMac(true);
     // The unified toolbar has rendering problems if opengl is used, which happens
@@ -186,7 +191,15 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     QSettings settings("csoundqt", "csoundqt");
     settings.beginGroup("GUI");
-    m_options->theme = settings.value("theme", "breeze").toString();
+    if (m_options->themeMode == "auto") {
+        m_options->theme = isDarkPalette ? "breeze-dark" : "breeze";
+        m_options->highlightingTheme = isDarkPalette ? "dark" : "light";
+    } else {
+        m_options->theme = (m_options->themeMode == "dark") ? "breeze-dark" : "breeze";
+        m_options->highlightingTheme = (m_options->themeMode == "dark") ? "dark" : "light";
+    }
+    // m_options->theme = settings.value("theme", "breeze").toString();
+    QDEBUG << "Using theme: " << m_options->theme << " (mode: " << m_options->themeMode << ")" << m_options->highlightingTheme;
     helpPanel->setIconTheme(m_options->theme);
 
     if(settings.contains("windowState")) {
@@ -198,7 +211,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
     settings.beginGroup("Editor");
     // necessary to get it before htmlview is created
     m_options->debugPort = settings.value("debugPort", 34711).toInt();
-    m_options->highlightingTheme = settings.value("higlightingTheme", "light").toString();
+
+    // NB! -  think habout setting classical highlighting theme!
+    // m_options->highlightingTheme = settings.value("higlightingTheme", "light").toString();
     settings.endGroup();
 
     m_server = new QLocalServer();
@@ -416,9 +431,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // This is a bad idea, breaks lots of subtle things, like background color
     // on files loaded from command line
 #ifndef  Q_OS_MACOS // a workaround for showing close buttons on close NB! disable later
-    auto palette = qApp->palette();
-    // the palette is dark (dark "theme") if the background is darker than the text
-    isDarkPalette = palette.text().color().lightness() > palette.window().color().lightness();
 
     auto originalStyleSheet = qApp->styleSheet();
     QFile file;
@@ -3194,7 +3206,11 @@ void CsoundQt::applySettings()
 
     //storeSettings(); // save always when something new is changed
 
-    this->helpPanel->setIconTheme(m_options->theme);
+    // NB! Check this! maybe needed when user makes changes in settings.
+    if (m_options->themeMode != "auto") {
+        this->helpPanel->setIconTheme(m_options->theme);
+    }
+
 }
 
 void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
@@ -3217,8 +3233,19 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setLineEnding(m_options->lineEnding);
     p->setConsoleFont(QFont(m_options->consoleFont,
                             (int) m_options->consoleFontPointSize));
-	p->setConsoleColors(m_options->consoleFontColor,
-	                    m_options->consoleBgColor);
+    // orig:
+    // p->setConsoleColors(m_options->consoleFontColor,
+    //                     m_options->consoleBgColor);
+    //temporary test fro auto colors
+
+    if (m_options->themeMode == "auto") {
+        p->setConsoleColors(isDarkPalette ? Qt::white : Qt::black,
+                            isDarkPalette ? Qt::black : Qt::white);
+    } else {
+        p->setConsoleColors(m_options->consoleFontColor,
+                            m_options->consoleBgColor);
+    }
+
     p->setPythonExecutable(m_options->pythonExecutable);
     p->useOldFormat(m_options->oldFormat);
     p->setConsoleBufferSize(m_options->consoleBufferSize);
@@ -5028,6 +5055,7 @@ void CsoundQt::readSettings()
 
     settings.beginGroup("GUI");
     m_options->theme = settings.value("theme", "breeze").toString();
+    m_options->themeMode = settings.value("themeMode", "auto").toString();
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(600, 500)).toSize();
     resize(size); // does not work here for MacOS Mojave
@@ -5104,7 +5132,10 @@ void CsoundQt::readSettings()
     m_options->tabWidth = settings.value("tabWidth", 24).toInt();
     m_options->tabIndents = settings.value("tabIndents", false).toBool();
     // m_options->colorVariables = settings.value("colorvariables", true).toBool();
-    m_options->highlightingTheme = settings.value("highlightingTheme", "light").toString();
+
+    // NB! temporary comment out for highlightingTheme
+    //m_options->highlightingTheme = settings.value("highlightingTheme", "light").toString();
+
     m_options->colorVariables = m_options->highlightingTheme != "none";
     m_options->autoPlay = settings.value("autoplay", false).toBool();
     m_options->autoJoin = settings.value("autoJoin", true).toBool();
@@ -5354,6 +5385,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         //  settings.setValue("liveEventsActive", showLiveEventsAct->isChecked());
         settings.setValue("recentFiles", recentFiles);
         settings.setValue("theme", m_options->theme);
+        settings.setValue("themeMode", m_options->themeMode);
         settings.setValue("windowState", saveState());
         settings.setValue("windowGeometry", saveGeometry());
         settings.endGroup();
