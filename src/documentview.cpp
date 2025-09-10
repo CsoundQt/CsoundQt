@@ -868,7 +868,7 @@ void DocumentView::autoCompleteAtCursor() {
     TextEditor *editor = m_mainEditor;
     // TODO: replace all this with QCompleter
     QTextCursor cursor = editor->textCursor();
-    int curIndex = cursor.position();
+    int curIndex = cursor.position();    
 
     // Only use the word written until cursor, not the entire word under the cursor
     // This is the behaviour used in all text editors
@@ -876,22 +876,25 @@ void DocumentView::autoCompleteAtCursor() {
     cursor.setPosition(curIndex, QTextCursor::KeepAnchor);
     QString word = cursor.selectedText();
 
+
     if(word.isEmpty()) {
         // This handles the special case where the cursor is at a ")" or a ","
         // which work as separators so the word to the left appears empty
         cursor.select(QTextCursor::WordUnderCursor);
         QString wordUnderCursor = cursor.selectedText();
-        if(wordUnderCursor != "," && wordUnderCursor != ")")
-            return;
-
-        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
-        cursor.movePosition(QTextCursor::StartOfWord);
-        cursor.select(QTextCursor::WordUnderCursor);
-        word = cursor.selectedText();
-        if(word.isEmpty()) {
+        if(delimiters.contains(wordUnderCursor)) {
+            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
+            cursor.movePosition(QTextCursor::StartOfWord);
+            cursor.select(QTextCursor::WordUnderCursor);
+            word = cursor.selectedText();
+            if(word.isEmpty()) {
+                return;
+            }
+        } else {
             return;
         }
     }
+
 
     if(word.size() < 3)
         // only start completion after three characters
@@ -1266,7 +1269,7 @@ void DocumentView::inToGet()
 
 void DocumentView::insertAutoCompleteText()
 {
-	TextEditor *editor;
+    TextEditor *editor;
 	if (m_viewMode < 2) {
 		editor = m_mainEditor;
 	}
@@ -1282,7 +1285,7 @@ void DocumentView::insertAutoCompleteText()
 
 		QTextCursor cursor = editor->textCursor();
 		cursor.select(QTextCursor::WordUnderCursor);
-        while ((cursor.selectedText() == "" || cursor.selectedText() == "," || cursor.selectedText()==")") && !cursor.atBlockStart()) {
+        while ((cursor.selectedText().isEmpty() || delimiters.contains(cursor.selectedText()) ) && !cursor.atBlockStart()) {
             cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, 2);
             cursor.select(QTextCursor::WordUnderCursor);
 		}
