@@ -21,17 +21,12 @@
 */
 
 #include "quteslider.h"
-#ifdef Q_OS_MAC
-    #include "myslider.h"
-#endif
+
 
 QuteSlider::QuteSlider(QWidget *parent) : QuteWidget(parent)
 {
-#ifdef Q_OS_MAC
-    m_widget = new MySlider(this);
-#else
-    m_widget = new QSlider(this);
-#endif
+
+     m_widget = new QSlider(this);
 
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
