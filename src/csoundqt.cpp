@@ -20,6 +20,8 @@
     02111-1307 USA
 */
 
+#include <QStyleHints>
+
 #include "configdialog.h"
 #include "console.h"
 #include "dockhelp.h"
@@ -100,6 +102,21 @@ CsoundQt::CsoundQt(QStringList fileNames)
     auto palette = qApp->palette();
     // the palette is dark (dark "theme") if the background is darker than the text
     isDarkPalette = palette.text().color().lightness() > palette.window().color().lightness();
+
+    // test detecting theme change: NB! requires Qt 6.5 or newer
+
+    connect(qApp->styleHints(), &QStyleHints::colorSchemeChanged,
+            this, [](Qt::ColorScheme scheme){
+        if (scheme == Qt::ColorScheme::Dark) {
+            QDEBUG << "Dark mode detected";
+            // apply dark palette or custom styles
+        } else {
+            QDEBUG << "Light mode detected";
+            // switch to light
+        }
+    });
+
+
 
 
 #ifdef Q_OS_MAC
