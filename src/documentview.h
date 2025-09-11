@@ -201,6 +201,8 @@ private:
     };
     QStringList m_longOptions2 = {"rtmidi", "rtaudio"};
 
+    QStringList delimiters = {")", ",", "\"", "'", "]", "}"};
+
     // QTime m_lastContextUpdate;
 
     QList<int> cursorPositions;
