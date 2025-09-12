@@ -297,23 +297,49 @@ void BaseView::setColorVariables(bool color)
 	m_highlighter.setColorVariables(color);
 }
 
+// orig:
+// void BaseView::setBackgroundColor(QColor color)
+// {
+//     // before it was setPalette, but that does not work runtime.
+//     m_mainEditor->setStyleSheet("QTextEdit { background-color: "+color.name() + "}");
+// }
+
+// void BaseView::setTextColor(QColor color)
+// {
+//     // before it was setPalette, but that does not work runtime.
+//     m_mainEditor->setStyleSheet("QTextEdit { color: " + color.name() + "}");
+// }
+
+// void BaseView::setColors(QColor text, QColor background) {
+//     auto sheet = QString("QTextEdit { color: %1; background-color: %2; }")
+//             .arg(text.name())
+//             .arg(background.name());
+//     m_mainEditor->setStyleSheet(sheet);
+// }
+
 void BaseView::setBackgroundColor(QColor color)
 {
-    // before it was setPalette, but that does not work runtime.
-    m_mainEditor->setStyleSheet("QTextEdit { background-color: "+color.name() + "}");
+    QPalette palette = m_mainEditor->palette();
+    palette.setColor(QPalette::Base, color);
+    m_mainEditor->setPalette(palette);
+    m_mainEditor->setStyleSheet(""); // Clear stylesheet to ensure palette applies
 }
 
 void BaseView::setTextColor(QColor color)
 {
-    // before it was setPalette, but that does not work runtime.
-    m_mainEditor->setStyleSheet("QTextEdit { color: " + color.name() + "}");
+    QPalette palette = m_mainEditor->palette();
+    palette.setColor(QPalette::Text, color);
+    m_mainEditor->setPalette(palette);
+    m_mainEditor->setStyleSheet("");
 }
 
-void BaseView::setColors(QColor text, QColor background) {
-    auto sheet = QString("QTextEdit { color: %1; background-color: %2; }")
-            .arg(text.name())
-            .arg(background.name());
-    m_mainEditor->setStyleSheet(sheet);
+void BaseView::setColors(QColor text, QColor background)
+{
+    QPalette palette = m_mainEditor->palette();
+    palette.setColor(QPalette::Text, text);
+    palette.setColor(QPalette::Base, background);
+    m_mainEditor->setPalette(palette);
+    m_mainEditor->setStyleSheet("");
 }
 
 

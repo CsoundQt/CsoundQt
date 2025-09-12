@@ -315,6 +315,8 @@ private slots:
 	void removeBreakpoint(int line, int instr);
 	void removeInstrumentBreakpoint(double instr);
 #endif
+    void applyThemeFromSystem(Qt::ColorScheme scheme);
+
 private:
 	void createActions();
 	void setKeyboardShortcutsList();

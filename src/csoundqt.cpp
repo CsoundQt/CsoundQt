@@ -106,14 +106,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // test detecting theme change: NB! requires Qt 6.5 or newer
 
     connect(qApp->styleHints(), &QStyleHints::colorSchemeChanged,
-            this, [](Qt::ColorScheme scheme){
-        if (scheme == Qt::ColorScheme::Dark) {
-            QDEBUG << "Dark mode detected";
-            // apply dark palette or custom styles
-        } else {
-            QDEBUG << "Light mode detected";
-            // switch to light
-        }
+            this, [this](Qt::ColorScheme scheme){
+        QDEBUG << (scheme == Qt::ColorScheme::Dark ? "Dark scheme detected" : "Light scheme detected");
+            applyThemeFromSystem(scheme);
     });
 
 
@@ -450,6 +445,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #ifndef  Q_OS_MACOS // a workaround for showing close buttons on close NB! disable later
 
     auto originalStyleSheet = qApp->styleSheet();
+    QDEBUG << "Original stylesheet" << originalStyleSheet;
     QFile file;
     if (isDarkPalette) {
         QDEBUG << "Using dark palette";
@@ -462,7 +458,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
     originalStyleSheet += styleSheet;
-    qApp->setStyleSheet(originalStyleSheet);
+    //qApp->setStyleSheet(originalStyleSheet);
     // qApp->setStyleSheet(styleSheet);
 
 #endif
@@ -545,6 +541,97 @@ CsoundQt::~CsoundQt()
 {
     qDebug() << "CsoundQt::~CsoundQt()";
     // This function is not called... see closeEvent()
+}
+
+void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
+{
+    isDarkPalette = (scheme == Qt::ColorScheme::Dark);
+
+    if (m_options->themeMode == "auto") {
+        m_options->theme = isDarkPalette ? "breeze-dark" : "breeze";
+        m_options->highlightingTheme = isDarkPalette ? "dark" : "light";
+    }
+
+    helpPanel->setIconTheme(m_options->theme);
+
+    // 4. Update all QActions to use correct icons
+    QString prefix = ":/themes/" + m_options->theme + "/";
+    newAct->setIcon(QIcon(prefix + "edit-new.png"));
+    openAct->setIcon(QIcon(prefix + "folder.png"));
+    reloadAct->setIcon(QIcon(prefix + "reload.png"));
+    saveAct->setIcon(QIcon(prefix + "floppy.png"));
+    closeTabAct->setIcon(QIcon(prefix + "edit-close.png"));
+    undoAct->setIcon(QIcon(prefix + "edit-undo.png"));
+    redoAct->setIcon(QIcon(prefix + "edit-redo.png"));
+    cutAct->setIcon(QIcon(prefix + "edit-cut.png"));
+    copyAct->setIcon(QIcon(prefix + "edit-copy.png"));
+    pasteAct->setIcon(QIcon(prefix + "edit-paste.png"));
+    runAct->setIcon(QIcon(prefix + "media-play.png"));
+    QDEBUG << "Run Icon: " << prefix + "media-play.png";
+    runTermAct->setIcon(QIcon(prefix + "terminal.png"));
+    stopAct->setIcon(QIcon(prefix + "media-stop.png"));
+    pauseAct->setIcon(QIcon(prefix + "media-pause.png"));
+    stopAllAct->setIcon(QIcon(prefix + "media-stop.png"));
+    recAct->setIcon(QIcon(prefix + "media-record.png"));
+    renderAct->setIcon(QIcon(prefix + "render.svg"));
+    testAudioSetupAct->setIcon(QIcon(prefix + "hearing.svg"));
+    checkSyntaxAct->setIcon(QIcon(prefix + "scratchpad.png"));
+    externalPlayerAct->setIcon(QIcon(prefix + "playfile.png"));
+    externalEditorAct->setIcon(QIcon(prefix + "editfile.png"));
+    showWidgetsAct->setIcon(QIcon(prefix + "widgets.png"));
+    showInspectorAct->setIcon(QIcon(prefix + "edit-find.png"));
+    showHelpAct->setIcon(QIcon(prefix + "info.png"));
+    showConsoleAct->setIcon(QIcon(prefix + "terminal.png"));
+    showScratchPadAct->setIcon(QIcon(prefix + "scratchpad.png"));
+    showUtilitiesAct->setIcon(QIcon(prefix + "devel.png"));
+    showVirtualKeyboardAct->setIcon(QIcon(prefix + "midi-keyboard.png"));
+    aboutAct->setIcon(QIcon(prefix + "about.png"));
+    configureAct->setIcon(QIcon(prefix + "configure.png"));
+
+    controlToolBar->update();
+    configureToolBar->update();
+
+    QDEBUG << controlToolBar->styleSheet();
+
+
+
+    // 5. Update toolbar icon theme
+    //controlToolBar->setIconSize(QSize(m_options->toolbarIconSize, m_options->toolbarIconSize));
+    //configureToolBar->setIconSize(QSize(m_options->toolbarIconSize, m_options->toolbarIconSize));
+    // Optionally, set stylesheet for toolbars if needed
+
+    // 6. Update highlighting theme for open documents
+    for (int i = 0; i < documentPages.size(); ++i) {
+        documentPages[i]->setHighlightingTheme(m_options->highlightingTheme);
+        //documentPages[i]->setTextFont(QFont(m_options->font, (int)m_options->fontPointSize));
+        // If you have a method to trigger a full repaint, you can call it here
+    }
+
+    // 7. Update app stylesheet to match theme
+    // QFile file;
+    // if (isDarkPalette) {
+    //     file.setFileName(":/appstyle-dark.css");
+    // } else {
+    //     file.setFileName(":/appstyle-white.css");
+    // }
+    // file.open(QFile::ReadOnly);
+    // QString styleSheet = QLatin1String(file.readAll());
+    // QString originalStyleSheet = qApp->styleSheet();
+    // //QString originalStyleSheet = ""; // Optionally, keep previous style if needed
+    // qApp->setStyleSheet(originalStyleSheet + styleSheet);
+
+    // update icons in tabs, etc.
+    for (int i = 0; i < documentPages.size(); ++i) {
+        if (documentPages[i]->isRunning()) {
+            documentTabs->setTabIcon(i, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme )));
+        } else if (documentPages[i]->isRecording()) {
+            documentTabs->setTabIcon(i, QIcon(QString(":/themes/%1/media-record.png").arg(m_options->theme )));
+        } else if (documentPages[i]->isModified()) {
+            documentTabs->setTabIcon(i, modIcon); // modIcon should be updated too if needed
+        } else {
+            documentTabs->setTabIcon(i, QIcon());
+        }
+    }
 }
 
 void CsoundQt::utilitiesMessageCallback(CSOUND *csound,
@@ -5041,7 +5128,10 @@ void CsoundQt::createToolBars()
 
 void CsoundQt::setToolbarIconSize(int size) {
     controlToolBar->setIconSize(QSize(size, size));
-    controlToolBar->setStyleSheet("QToolBar { padding: 0 3px }");
+    // if using local styleSheet (maybe bad idea!) - take care also of setting the background colour!
+    QColor bgColor = qApp->palette().color(QPalette::Window);
+    // controlToolBar->setContentsMargins(3, 0, 3, 0); // instead of padding in stylesheet, but seems not needed
+    //controlToolBar->setStyleSheet("QToolBar { padding: 0 3px }"); // this does not allow to change light/dark background
     configureToolBar->setIconSize(QSize(size, size));
 }
 
