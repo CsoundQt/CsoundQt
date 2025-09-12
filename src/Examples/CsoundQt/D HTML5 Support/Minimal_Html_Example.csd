@@ -5,29 +5,7 @@
 <CsOptions>
 -odac -d
 </CsOptions>
-<html>
-  <head>
-  </head>
-  <body bgcolor="lightblue">
-  <script>
-  function onGetControlChannelCallback(value) {
-    document.getElementById('testChannel').innerHTML = value;
-   } // to test csound.getControlChannel with QtWebEngine 
-  </script>
-   <h2>Minimal Csound-Html5 example</h2><br>
-   <br>
-   Frequency: 
-   <input type="range" id="slider" oninput='csound.setControlChannel("testChannel",this.value/100.0); '></input><br>
-    <button id="button" onclick='csound.readScore("i 1 0 3")' >Event</button>
-   <br><br>
-   Get channel from csound with callback (QtWebchannel): <label id="getchannel"></label> <button onclick='csound.getControlChannel("testChannel", onGetControlChannelCallback)' >Get</button><br>
-        Value from channel "testChannel":  <label id="testChannel"></label><br>
-   <br>
-    Get as return value (QtWebkit) <button onclick='alert("TestChannel: "+csound.getControlChannel("testChannel"))'>Get as retrun value</button>
 
-   <br>
-  </body>
-</html>
 <CsInstruments>
 
 sr = 44100
@@ -38,8 +16,7 @@ ksmps = 32
 chnset 0.5, "testChannel" ; to test chnget in the host
 
 instr 1 
-  kfreq= 200+chnget:k("testChannel")*500	
-  printk2 kfreq
+  kfreq= 200+lag:k(chnget:k("testChannel")*500, 0.1)	
   aenv linen 1,0.1,p3,0.25
   out poscil(0.5,kfreq)*aenv
 endin
@@ -52,6 +29,58 @@ i 1 0 0.5 ; to hear if Csound is loaded
 f 0 3600
 </CsScore>
 </CsoundSynthesizer>
+
+<html>
+  <head>
+  <style>
+  body {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    font-family: sans-serif;
+    padding: 20px;
+  }
+  
+  input[type="range"] {
+  accent-color: #ee9800; /* works in Chromium, Firefox, Safari */
+}
+
+  button {
+    background-color: #ee9800;
+    color: #1e1e1e;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  button:hover {
+    background-color: #ffa733;
+  }
+  </style>
+  </head>
+  <body>
+  <script>
+  function onGetControlChannelCallback(value) {
+    document.getElementById('testChannel').innerHTML = value;
+   } // to get csound.getControlChannel via QtWebEngine 
+  </script>
+   <h2>Minimal Csound + Html example</h2><br>
+   <br>
+   <button id="button" onclick='csound.readScore("i 1 0 3")' >Event</button>
+   <br>
+   Frequency: 
+   <input type="range" id="slider" oninput='csound.setControlChannel("testChannel",this.value/100.0); '></input><br>
+   <br>
+    <br>
+   Get channel from csound: <label id="getchannel"></label> <button onclick='csound.getControlChannel("testChannel", onGetControlChannelCallback)' >Get</button>
+   <br>
+   <br>
+   Value from channel "testChannel":  <b><label id="testChannel"></label></b><br>
+   <br>
+  </body>
+</html>
+
+
 
 
 <bsbPanel>
@@ -78,6 +107,7 @@ f 0 3600
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
@@ -85,7 +115,9 @@ f 0 3600
   <image>/</image>
   <eventLine>i1 0 1</eventLine>
   <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
+  <fontsize>10</fontsize>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
