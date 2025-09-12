@@ -310,6 +310,7 @@ void Highlighter::setTheme(const QString &theme) {
     jsKeywordFormat =  krateFormat;// keywordFormat;
 
     m_theme = theme;
+    rehighlight();
     // emit this->rehighlight();
 }
 

@@ -108,7 +108,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     connect(qApp->styleHints(), &QStyleHints::colorSchemeChanged,
             this, [this](Qt::ColorScheme scheme){
         QDEBUG << (scheme == Qt::ColorScheme::Dark ? "Dark scheme detected" : "Light scheme detected");
-            applyThemeFromSystem(scheme);
+        applyThemeFromSystem(scheme);
     });
 
 
@@ -203,16 +203,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     QSettings settings("csoundqt", "csoundqt");
     settings.beginGroup("GUI");
-    if (m_options->themeMode == "auto") {
-        m_options->theme = isDarkPalette ? "breeze-dark" : "breeze";
-        m_options->highlightingTheme = isDarkPalette ? "dark" : "light";
-    } else {
-        m_options->theme = (m_options->themeMode == "dark") ? "breeze-dark" : "breeze";
-        m_options->highlightingTheme = (m_options->themeMode == "dark") ? "dark" : "light";
-    }
-    // m_options->theme = settings.value("theme", "breeze").toString();
-    QDEBUG << "Using theme: " << m_options->theme << " (mode: " << m_options->themeMode << ")" << m_options->highlightingTheme;
-    helpPanel->setIconTheme(m_options->theme);
 
     if(settings.contains("windowState")) {
         restoreState(settings.value("windowState").toByteArray());
@@ -514,6 +504,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     if(documentPages.size() < 1)
         newFile();
 
+    // is it necessary here? -  probably called from applySettings already
+    // setColors(m_options->themeMode.isEmpty() ? "auto" : m_options->themeMode);
+
+
 /*
 #ifdef Q_OS_LINUX
     // ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3
@@ -545,114 +539,10 @@ CsoundQt::~CsoundQt()
 void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
 {
     isDarkPalette = (scheme == Qt::ColorScheme::Dark);
-
+    QDEBUG << "Dark: " << isDarkPalette << scheme;
     if (m_options->themeMode == "auto") {
-        m_options->theme = isDarkPalette ? "breeze-dark" : "breeze";
-        m_options->highlightingTheme = isDarkPalette ? "dark" : "light";
+        setColors( isDarkPalette ? "dark" : "light" );
     }
-
-    helpPanel->setIconTheme(m_options->theme);
-
-    // 4. Update all QActions to use correct icons
-    QString prefix = ":/themes/" + m_options->theme + "/";
-    newAct->setIcon(QIcon(prefix + "edit-new.png"));
-    openAct->setIcon(QIcon(prefix + "folder.png"));
-    reloadAct->setIcon(QIcon(prefix + "reload.png"));
-    saveAct->setIcon(QIcon(prefix + "floppy.png"));
-    closeTabAct->setIcon(QIcon(prefix + "edit-close.png"));
-    undoAct->setIcon(QIcon(prefix + "edit-undo.png"));
-    redoAct->setIcon(QIcon(prefix + "edit-redo.png"));
-    cutAct->setIcon(QIcon(prefix + "edit-cut.png"));
-    copyAct->setIcon(QIcon(prefix + "edit-copy.png"));
-    pasteAct->setIcon(QIcon(prefix + "edit-paste.png"));
-    runAct->setIcon(QIcon(prefix + "media-play.png"));
-    runTermAct->setIcon(QIcon(prefix + "terminal.png"));
-    stopAct->setIcon(QIcon(prefix + "media-stop.png"));
-    pauseAct->setIcon(QIcon(prefix + "media-pause.png"));
-    stopAllAct->setIcon(QIcon(prefix + "media-stop.png"));
-    recAct->setIcon(QIcon(prefix + "media-record.png"));
-    renderAct->setIcon(QIcon(prefix + "render.svg"));
-    testAudioSetupAct->setIcon(QIcon(prefix + "hearing.svg"));
-    checkSyntaxAct->setIcon(QIcon(prefix + "scratchpad.png"));
-    externalPlayerAct->setIcon(QIcon(prefix + "playfile.png"));
-    externalEditorAct->setIcon(QIcon(prefix + "editfile.png"));
-    showWidgetsAct->setIcon(QIcon(prefix + "widgets.png"));
-    showInspectorAct->setIcon(QIcon(prefix + "edit-find.png"));
-    showHelpAct->setIcon(QIcon(prefix + "info.png"));
-    showConsoleAct->setIcon(QIcon(prefix + "terminal.png"));
-    showScratchPadAct->setIcon(QIcon(prefix + "scratchpad.png"));
-    showUtilitiesAct->setIcon(QIcon(prefix + "devel.png"));
-    showVirtualKeyboardAct->setIcon(QIcon(prefix + "midi-keyboard.png"));
-    aboutAct->setIcon(QIcon(prefix + "about.png"));
-    configureAct->setIcon(QIcon(prefix + "settings.png"));
-    setHelpEntryAct->setIcon(QIcon(prefix + "info.png"));
-    newAct->setIcon(QIcon(prefix + "edit-new.png"));
-    openAct->setIcon(QIcon(prefix + "folder.png"));
-    saveAct->setIcon(QIcon(prefix + "floppy.png"));
-    reloadAct->setIcon(QIcon(prefix + "reload.png"));
-    checkSyntaxAct->setIcon(QIcon(prefix + "scratchpad.png"));
-    showScratchPadAct->setIcon(QIcon(prefix + "scratchpad.png"));
-
-    controlToolBar->update();
-    configureToolBar->update();
-
-    // 5. Update toolbar icon theme
-    //controlToolBar->setIconSize(QSize(m_options->toolbarIconSize, m_options->toolbarIconSize));
-    //configureToolBar->setIconSize(QSize(m_options->toolbarIconSize, m_options->toolbarIconSize));
-    // Optionally, set stylesheet for toolbars if needed
-
-
-    // console colors -  set the lighter one for for font color, if dark theme
-    QColor fontColor = m_options->consoleFontColor;
-    QColor bgColor = m_options->consoleBgColor;
-    bool fontIsLighter = fontColor.lightness() > bgColor.lightness();
-    QColor lighter = fontIsLighter ? fontColor : bgColor;
-    QColor darker  = fontIsLighter ? bgColor  : fontColor;
-
-
-    // 6. Update highlighting theme for open documents
-    for (int i = 0; i < documentPages.size(); ++i) {
-
-        if (m_options->themeMode == "auto" ) {
-            documentPages[i]->setHighlightingTheme(isDarkPalette ? "dark" : "light");
-        } else {
-            if (m_options->themeMode == "light-classic") {
-                documentPages[i]->setHighlightingTheme("classic");
-            } else {
-                documentPages[i]->setHighlightingTheme(m_options->themeMode=="dark" ? "dark" : "light");
-            }
-        }
-
-        if (isDarkPalette) { // set console colors
-            documentPages[i]->setConsoleColors(lighter, darker);
-        } else {
-            documentPages[i]->setConsoleColors(darker, lighter);
-        }
-        if (documentPages[i]->isRunning()) {
-            documentTabs->setTabIcon(i, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme )));
-        } else if (documentPages[i]->isRecording()) {
-            documentTabs->setTabIcon(i, QIcon(QString(":/themes/%1/media-record.png").arg(m_options->theme )));
-        } else if (documentPages[i]->isModified()) {
-            documentTabs->setTabIcon(i, modIcon); // modIcon should be updated too if needed
-        } else {
-            documentTabs->setTabIcon(i, QIcon());
-        }
-    }
-
-    // 7. Update app stylesheet to match theme
-    // QFile file;
-    // if (isDarkPalette) {
-    //     file.setFileName(":/appstyle-dark.css");
-    // } else {
-    //     file.setFileName(":/appstyle-white.css");
-    // }
-    // file.open(QFile::ReadOnly);
-    // QString styleSheet = QLatin1String(file.readAll());
-    // QString originalStyleSheet = qApp->styleSheet();
-    // //QString originalStyleSheet = ""; // Optionally, keep previous style if needed
-    // qApp->setStyleSheet(originalStyleSheet + styleSheet);
-
-
 }
 
 void CsoundQt::utilitiesMessageCallback(CSOUND *csound,
@@ -3248,12 +3138,7 @@ void CsoundQt::applySettings()
     // This is called at initialization, when clicking "apply" in the settings dialog
     // and when closing it with "OK"
 
-    if (m_options->themeMode != "auto") {
-        m_options->theme = m_options->themeMode == "dark" ? "dark" : "light";
-    } else {
-        m_options->theme = isDarkPalette ? "dark" : "light";
-    }
-    this->helpPanel->setIconTheme(m_options->theme);
+    setColors(m_options->themeMode);  // Centralized theme handling
 
     for (int i = 0; i < documentPages.size(); i++) {
         setCurrentOptionsForPage(documentPages[i]);
@@ -3363,24 +3248,6 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     p->setLineEnding(m_options->lineEnding);
     p->setConsoleFont(QFont(m_options->consoleFont,
                             (int) m_options->consoleFontPointSize));
-    // orig:
-    // p->setConsoleColors(m_options->consoleFontColor,
-    //                     m_options->consoleBgColor);
-    //temporary test fro auto colors
-
-    if (m_options->themeMode == "auto") {
-        p->setConsoleColors(isDarkPalette ? Qt::white : Qt::black,
-                            isDarkPalette ? Qt::black : Qt::white);
-    } else {
-        p->setConsoleColors(m_options->consoleFontColor,
-                            m_options->consoleBgColor);
-
-        if (m_options->themeMode == "light-classic") {
-            p->setHighlightingTheme("classic");
-        } else {
-           p->setHighlightingTheme(m_options->themeMode=="dark" ? "dark" : "light");
-        }
-    }
 
     p->setPythonExecutable(m_options->pythonExecutable);
     p->useOldFormat(m_options->oldFormat);
@@ -3395,6 +3262,221 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     flags |= m_options->noEvents ? CSQT_NO_RT_EVENTS : 0;
     p->setFlags(flags);
 
+    applyThemeToPage(p);
+}
+
+void CsoundQt::applyThemeToPage(DocumentPage *p)
+{
+    if (!p) return;
+
+
+    // Use current highlighting theme
+    p->setHighlightingTheme(m_options->highlightingTheme);
+    QDEBUG << m_options->highlightingTheme;
+
+    // Decide console colors the same way as in setColors() for consistency
+    QColor fontColor = m_options->consoleFontColor;
+    QColor bgColor   = m_options->consoleBgColor;
+
+    bool fontIsLighter = fontColor.lightness() > bgColor.lightness();
+    QColor lighter = fontIsLighter ? fontColor : bgColor;
+    QColor darker  = fontIsLighter ? bgColor  : fontColor;
+
+    if (isDarkPalette) {
+        fontColor = lighter;
+        bgColor   = darker;
+    } else {
+        fontColor = darker;
+        bgColor   = lighter;
+    }
+
+    p->setConsoleColors(fontColor, bgColor);
+}
+
+QPalette CsoundQt::makeAppPalette(bool dark)
+{
+    QPalette p;
+
+    if (dark) {
+        p.setColor(QPalette::Window,          QColor("#31363b"));
+        p.setColor(QPalette::WindowText,      QColor("#eff0f1"));
+        p.setColor(QPalette::Base,            QColor("#232629"));
+        p.setColor(QPalette::AlternateBase,   QColor("#31363b"));
+        p.setColor(QPalette::ToolTipBase,     QColor("#31363b"));
+        p.setColor(QPalette::ToolTipText,     QColor("#eff0f1"));
+        p.setColor(QPalette::Text,            QColor("#eff0f1"));
+        p.setColor(QPalette::Button,          QColor("#31363b"));
+        p.setColor(QPalette::ButtonText,      QColor("#eff0f1"));
+        p.setColor(QPalette::BrightText,      QColor("#ffffff"));
+        p.setColor(QPalette::Link,            QColor("#2980b9"));
+        p.setColor(QPalette::LinkVisited,     QColor("#7f8c8d"));
+        p.setColor(QPalette::Highlight,       QColor("#3daee9"));
+        p.setColor(QPalette::HighlightedText, QColor("#eff0f1"));
+        // Disabled state tweaks
+        p.setColor(QPalette::Disabled, QPalette::Text, QColor("#7f8c8d"));
+        p.setColor(QPalette::Disabled, QPalette::ButtonText, QColor("#7f8c8d"));
+    }
+    else {
+        p.setColor(QPalette::Window,          QColor("#eff0f1"));
+        p.setColor(QPalette::WindowText,      QColor("#232627"));
+        p.setColor(QPalette::Base,            QColor("#fcfcfc"));
+        p.setColor(QPalette::AlternateBase,   QColor("#eff0f1"));
+        p.setColor(QPalette::ToolTipBase,     QColor("#232627"));
+        p.setColor(QPalette::ToolTipText,     QColor("#fcfcfc"));
+        p.setColor(QPalette::Text,            QColor("#232627"));
+        p.setColor(QPalette::Button,          QColor("#eff0f1"));
+        p.setColor(QPalette::ButtonText,      QColor("#232627"));
+        p.setColor(QPalette::BrightText,      QColor("#ffffff"));
+        p.setColor(QPalette::Link,            QColor("#2980b9"));
+        p.setColor(QPalette::LinkVisited,     QColor("#7f8c8d"));
+        p.setColor(QPalette::Highlight,       QColor("#3daee9"));
+        p.setColor(QPalette::HighlightedText, QColor("#fcfcfc"));
+        p.setColor(QPalette::Disabled, QPalette::Text, QColor("#7f8c8d"));
+        p.setColor(QPalette::Disabled, QPalette::ButtonText, QColor("#7f8c8d"));
+    }
+
+    return p;
+}
+
+
+void CsoundQt::setColors(QString themeMode)
+{
+    // Centralized theme + highlighting + icon + console color handling.
+    // themeMode values: "auto", "dark", "light", "light-classic"
+
+    // if (!themeMode.isEmpty()) {
+    //     m_options->themeMode = themeMode;
+    // }
+
+    if (m_options->themeMode == "auto") {
+        const QPalette pal = qApp->palette();
+        isDarkPalette = pal.text().color().lightness() > pal.window().color().lightness();
+    } else {
+        isDarkPalette = themeMode == "dark";
+        QPalette pal = makeAppPalette(isDarkPalette);
+        qApp->setPalette(pal);
+        // QString existing = qApp->styleSheet();
+        // QString toolTipCss = QString(
+        //             "QToolTip { color: %1; background-color: %2; border: 1px solid %3; }")
+        //         .arg(pal.color(QPalette::ToolTipText).name(),
+        //              pal.color(QPalette::ToolTipBase).name(),
+        //              pal.color(QPalette::Highlight).darker(130).name());
+        // // Avoid duplicate appends if setColors called multiple times
+        // if (!existing.contains("QToolTip {") ) {
+        //     existing.append("\n" + toolTipCss);
+        //     qApp->setStyleSheet(existing);
+        // }
+    }
+
+    // Map theme mode to theme name (used in icon paths) and highlighting theme
+    if (m_options->themeMode == "dark") {
+        m_options->theme = "breeze-dark";
+        m_options->highlightingTheme = "dark";
+    }
+    else if (m_options->themeMode == "light") {
+        m_options->theme = "breeze";
+        m_options->highlightingTheme = "light";
+    }
+    else if (m_options->themeMode == "light-classic") {
+        m_options->theme = "breeze";
+        m_options->highlightingTheme = "classic";
+    }
+    else { // auto
+        m_options->theme = isDarkPalette ? "breeze-dark" : "breeze";
+        m_options->highlightingTheme = isDarkPalette ? "dark" : "light";
+    }
+
+    if (helpPanel) {
+        helpPanel->setIconTheme(m_options->theme);
+    }
+
+    // Helper to set an icon if the action exists
+    auto setIcon = [&](QAction *act, const QString &iconName) {
+        if (act) {
+            act->setIcon(QIcon(QString(":/themes/%1/%2").arg(m_options->theme, iconName)));
+        }
+    };
+
+    // Update all toolbar/menu actions (single source of truth)
+    setIcon(newAct, "edit-new.png");
+    setIcon(openAct, "folder.png");
+    setIcon(reloadAct, "reload.png");
+    setIcon(saveAct, "floppy.png");
+    setIcon(closeTabAct, "edit-close.png");
+    setIcon(undoAct, "edit-undo.png");
+    setIcon(redoAct, "edit-redo.png");
+    setIcon(cutAct, "edit-cut.png");
+    setIcon(copyAct, "edit-copy.png");
+    setIcon(pasteAct, "edit-paste.png");
+    setIcon(runAct, "media-play.png");
+    setIcon(runTermAct, "terminal.png");
+    setIcon(stopAct, "media-stop.png");
+    setIcon(pauseAct, "media-pause.png");
+    setIcon(stopAllAct, "media-stop.png");
+    setIcon(recAct, "media-record.png");
+    setIcon(renderAct, "render.svg");
+    setIcon(testAudioSetupAct, "hearing.svg");
+    setIcon(checkSyntaxAct, "scratchpad.png");
+    setIcon(externalPlayerAct, "playfile.png");
+    setIcon(externalEditorAct, "editfile.png");
+    setIcon(showWidgetsAct, "widgets.png");
+    setIcon(showInspectorAct, "edit-find.png");
+    setIcon(showHelpAct, "info.png");
+    setIcon(showConsoleAct, "terminal.png");
+    setIcon(showScratchPadAct, "scratchpad.png");
+    setIcon(showUtilitiesAct, "devel.png");
+    setIcon(showVirtualKeyboardAct, "midi-keyboard.png");
+    setIcon(aboutAct, "about.png");
+    setIcon(configureAct, "settings.png");
+    setIcon(setHelpEntryAct, "info.png");
+
+    if (controlToolBar)  controlToolBar->update();
+    if (configureToolBar) configureToolBar->update();
+
+    // Decide console colors:
+    // Keep user-set colors for explicit modes; optionally adapt in "auto"
+    QColor fontColor = m_options->consoleFontColor;
+    QColor bgColor   = m_options->consoleBgColor;
+
+    if (m_options->themeMode == "auto") {
+        bool fontIsLighter = fontColor.lightness() > bgColor.lightness();
+        QColor lighter = fontIsLighter ? fontColor : bgColor;
+        QColor darker  = fontIsLighter ? bgColor  : fontColor;
+        if (isDarkPalette) {
+            fontColor = lighter;
+            bgColor   = darker;
+        } else {
+            fontColor = darker;
+            bgColor   = lighter;
+        }
+    }
+
+    // Apply to all open documents
+    for (int i = 0; i < documentPages.size(); ++i) {
+
+        applyThemeToPage(documentPages[i]);
+
+        DocumentPage *p = documentPages[i];
+        if (!p) continue;
+
+        //p->setHighlightingTheme(m_options->highlightingTheme);
+        //p->setConsoleColors(fontColor, bgColor);
+
+        if (p->isRunning()) {
+            documentTabs->setTabIcon(i, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme)));
+        } else if (p->isRecording()) {
+            documentTabs->setTabIcon(i, QIcon(QString(":/themes/%1/media-record.png").arg(m_options->theme)));
+        } else if (p->isModified()) {
+            documentTabs->setTabIcon(i, modIcon);
+        } else {
+            documentTabs->setTabIcon(i, QIcon());
+        }
+    }
+
+    QDEBUG << "Theme mode:" << m_options->themeMode
+           << "theme:" << m_options->theme
+           << "highlighting:" << m_options->highlightingTheme
+           << "isDarkPalette:" << isDarkPalette;
 }
 
 void CsoundQt::runUtility(QString flags)
