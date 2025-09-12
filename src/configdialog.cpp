@@ -194,7 +194,7 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
     themeComboBox->setItemData(0, "auto");
     themeComboBox->setItemData(1, "dark");
     themeComboBox->setItemData(2, "light");
-    themeComboBox->setItemData(2, "light-classic");
+    themeComboBox->setItemData(3, "light-classic");
     themeComboBox->setCurrentIndex(themeComboBox->findData(m_options->themeMode));
 
 
