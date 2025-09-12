@@ -270,7 +270,7 @@ The 'moog' opcode is a model of a tone created by a Moog synthesizer. Only some 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b123</objectName>
   <x>8</x>
   <y>15</y>
   <width>120</width>

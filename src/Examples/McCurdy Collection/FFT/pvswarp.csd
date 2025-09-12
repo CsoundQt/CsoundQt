@@ -233,7 +233,7 @@ Changing FFT attributes while a note is playing can have unexpected results. If 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1324</objectName>
   <x>8</x>
   <y>8</y>
   <width>80</width>

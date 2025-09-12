@@ -338,7 +338,7 @@ An output gain control can be used to compensate for a loss in power when half p
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1324</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

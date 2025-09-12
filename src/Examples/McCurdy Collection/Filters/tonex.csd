@@ -192,7 +192,7 @@ tonex is an implementation of a second-order low-pass filter. Its input argument
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1324</objectName>
   <x>8</x>
   <y>6</y>
   <width>100</width>
