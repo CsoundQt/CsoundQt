@@ -567,7 +567,6 @@ void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
     copyAct->setIcon(QIcon(prefix + "edit-copy.png"));
     pasteAct->setIcon(QIcon(prefix + "edit-paste.png"));
     runAct->setIcon(QIcon(prefix + "media-play.png"));
-    QDEBUG << "Run Icon: " << prefix + "media-play.png";
     runTermAct->setIcon(QIcon(prefix + "terminal.png"));
     stopAct->setIcon(QIcon(prefix + "media-stop.png"));
     pauseAct->setIcon(QIcon(prefix + "media-pause.png"));
@@ -586,7 +585,6 @@ void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
     showUtilitiesAct->setIcon(QIcon(prefix + "devel.png"));
     showVirtualKeyboardAct->setIcon(QIcon(prefix + "midi-keyboard.png"));
     aboutAct->setIcon(QIcon(prefix + "about.png"));
-    configureAct->setIcon(QIcon(prefix + "configure.png"));
 
     controlToolBar->update();
     configureToolBar->update();
@@ -600,11 +598,32 @@ void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
     //configureToolBar->setIconSize(QSize(m_options->toolbarIconSize, m_options->toolbarIconSize));
     // Optionally, set stylesheet for toolbars if needed
 
+
+    // console colors -  set the lighter one for for font color, if dark theme
+    QColor fontColor = m_options->consoleFontColor;
+    QColor bgColor = m_options->consoleBgColor;
+    bool fontIsLighter = fontColor.lightness() > bgColor.lightness();
+    QColor lighter = fontIsLighter ? fontColor : bgColor;
+    QColor darker  = fontIsLighter ? bgColor  : fontColor;
+
+
     // 6. Update highlighting theme for open documents
     for (int i = 0; i < documentPages.size(); ++i) {
         documentPages[i]->setHighlightingTheme(m_options->highlightingTheme);
-        //documentPages[i]->setTextFont(QFont(m_options->font, (int)m_options->fontPointSize));
-        // If you have a method to trigger a full repaint, you can call it here
+        if (isDarkPalette) { // set console colors
+            documentPages[i]->setConsoleColors(lighter, darker);
+        } else {
+            documentPages[i]->setConsoleColors(darker, lighter);
+        }
+        if (documentPages[i]->isRunning()) {
+            documentTabs->setTabIcon(i, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme )));
+        } else if (documentPages[i]->isRecording()) {
+            documentTabs->setTabIcon(i, QIcon(QString(":/themes/%1/media-record.png").arg(m_options->theme )));
+        } else if (documentPages[i]->isModified()) {
+            documentTabs->setTabIcon(i, modIcon); // modIcon should be updated too if needed
+        } else {
+            documentTabs->setTabIcon(i, QIcon());
+        }
     }
 
     // 7. Update app stylesheet to match theme
@@ -622,15 +641,7 @@ void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
 
     // update icons in tabs, etc.
     for (int i = 0; i < documentPages.size(); ++i) {
-        if (documentPages[i]->isRunning()) {
-            documentTabs->setTabIcon(i, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme )));
-        } else if (documentPages[i]->isRecording()) {
-            documentTabs->setTabIcon(i, QIcon(QString(":/themes/%1/media-record.png").arg(m_options->theme )));
-        } else if (documentPages[i]->isModified()) {
-            documentTabs->setTabIcon(i, modIcon); // modIcon should be updated too if needed
-        } else {
-            documentTabs->setTabIcon(i, QIcon());
-        }
+
     }
 }
 
