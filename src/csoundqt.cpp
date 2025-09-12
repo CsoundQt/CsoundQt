@@ -585,6 +585,15 @@ void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
     showUtilitiesAct->setIcon(QIcon(prefix + "devel.png"));
     showVirtualKeyboardAct->setIcon(QIcon(prefix + "midi-keyboard.png"));
     aboutAct->setIcon(QIcon(prefix + "about.png"));
+    configureAct->setIcon(QIcon(prefix + "settings.png"));
+    setHelpEntryAct->setIcon(QIcon(prefix + "info.png"));
+    newAct->setIcon(QIcon(prefix + "edit-new.png"));
+    openAct->setIcon(QIcon(prefix + "folder.png"));
+    saveAct->setIcon(QIcon(prefix + "floppy.png"));
+    reloadAct->setIcon(QIcon(prefix + "reload.png"));
+    checkSyntaxAct->setIcon(QIcon(prefix + "scratchpad.png"));
+    showScratchPadAct->setIcon(QIcon(prefix + "scratchpad.png"));
+
 
     controlToolBar->update();
     configureToolBar->update();
