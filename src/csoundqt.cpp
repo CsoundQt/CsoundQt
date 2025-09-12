@@ -444,20 +444,19 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // on files loaded from command line
 #ifndef  Q_OS_MACOS // a workaround for showing close buttons on close NB! disable later
 
-    auto originalStyleSheet = qApp->styleSheet();
-    QDEBUG << "Original stylesheet" << originalStyleSheet;
-    QFile file;
-    if (isDarkPalette) {
-        QDEBUG << "Using dark palette";
-        file.setFileName(":/appstyle-dark.css");
-    }
-    else {
-        QDEBUG << "Using light palette, text lightness: " << palette.text().color().lightness() << ", window lightness: " << palette.window().color().lightness();
-        file.setFileName(":/appstyle-white.css");
-    }
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QLatin1String(file.readAll());
-    originalStyleSheet += styleSheet;
+    // auto originalStyleSheet = qApp->styleSheet();
+    // QFile file;
+    // if (isDarkPalette) {
+    //     QDEBUG << "Using dark palette";
+    //     file.setFileName(":/appstyle-dark.css");
+    // }
+    // else {
+    //     QDEBUG << "Using light palette, text lightness: " << palette.text().color().lightness() << ", window lightness: " << palette.window().color().lightness();
+    //     file.setFileName(":/appstyle-white.css");
+    // }
+    // file.open(QFile::ReadOnly);
+    // QString styleSheet = QLatin1String(file.readAll());
+    // originalStyleSheet += styleSheet;
     //qApp->setStyleSheet(originalStyleSheet);
     // qApp->setStyleSheet(styleSheet);
 
@@ -5138,7 +5137,7 @@ void CsoundQt::createToolBars()
     // test Mac
 #ifdef Q_OS_MAC
 
-    if (m_options->theme=="breeze-dark") {
+    if (m_options->theme=="breeze-dark") { // TODO: check this on MacOS!
         QColor textColor = QGuiApplication::palette().color(QPalette::Text);
         qDebug() << "Textcolor: " << textColor;
         QString styleString = QString("color: %1").arg(textColor.name());
@@ -5151,7 +5150,6 @@ void CsoundQt::createToolBars()
 void CsoundQt::setToolbarIconSize(int size) {
     controlToolBar->setIconSize(QSize(size, size));
     // if using local styleSheet (maybe bad idea!) - take care also of setting the background colour!
-    QColor bgColor = qApp->palette().color(QPalette::Window);
     // controlToolBar->setContentsMargins(3, 0, 3, 0); // instead of padding in stylesheet, but seems not needed
     //controlToolBar->setStyleSheet("QToolBar { padding: 0 3px }"); // this does not allow to change light/dark background
     configureToolBar->setIconSize(QSize(size, size));
