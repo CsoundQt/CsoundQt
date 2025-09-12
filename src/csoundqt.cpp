@@ -2759,6 +2759,7 @@ void CsoundQt::showTableEditor(bool show)
         m_tableEditorPointer = m_tableEditor;  // guarded pointer to check if object is  alive
         m_tableEditor->setWindowTitle(tr("CsoundQt table editor"));
         m_tableEditor->setWindowFlags(Qt::Window);
+        m_tableEditor->rootContext()->setContextProperty("windowColor", qApp->palette().color(QPalette::Window));
         m_tableEditor->setSource(QUrl("qrc:/QML/TableEditor.qml"));
         m_tableEditor->setResizeMode(QQuickWidget::SizeRootObjectToView);
         QObject *rootObject = m_tableEditor->rootObject();

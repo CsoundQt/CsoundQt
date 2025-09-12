@@ -11,6 +11,7 @@ Rectangle {
     id: gen7Editor
     width: 720
     height: 550
+    color: tableEditor.color
     //anchors.fill: parent
     property string name: "gen7"  // important! to let parent know which editor is active in tabView
     property var points: []; // array of endpoints of the segments
@@ -221,8 +222,6 @@ Rectangle {
                     }
                 }
 
-
-
                 onHoveredChanged: {
                     currentValue = y2value(parent.y + pointWidth/2);
                     currentIndex = x2index(parent.x + pointWidth/2);
@@ -256,9 +255,6 @@ Rectangle {
     }
 
 
-
-
-
     Rectangle {
         id: drawRect
         width: parent.width - 200
@@ -274,7 +270,6 @@ Rectangle {
             }
 
             canvas.requestPaint();
-
         }
 
         Component.onCompleted: {
@@ -313,8 +308,9 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 4
-                Label {text: qsTr("Value: ")+(scaleValue(currentValue)).toFixed(3)}
-                Label {
+                // use Text here not label, as its color will not be inverten when dark mode
+                Text { text: qsTr("Value: ")+(scaleValue(currentValue)).toFixed(3)}
+                Text {
                     text: qsTr("Index: ")+  ( (tableSizeSpinbox.value>=2) ? (Math.round(currentIndex*tableSizeSpinbox.value)).toString() : currentIndex.toFixed(6) )   // if table lenght set to 1, so also decimal values, don't scale
                 }
             }

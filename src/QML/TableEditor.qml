@@ -2,12 +2,13 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Item {
+Rectangle {
     width: 800
     height: 700
     visible: true
     id: tableEditor
     // title: "Csound Table Editors"
+    color: windowColor
     property string syntaxString: "" // will be updated from children
 
     signal newSyntax(string syntax)
