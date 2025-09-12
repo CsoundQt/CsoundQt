@@ -52,8 +52,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>820</width>
-        <height>705</height>
+        <width>832</width>
+        <height>747</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_18">
@@ -78,7 +78,7 @@
           <string/>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
@@ -1733,13 +1733,13 @@
            <item row="2" column="1">
             <widget class="QGroupBox" name="groupBox">
              <property name="title">
-              <string>Theme</string>
+              <string>Colour theme</string>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_6">
               <item>
                <widget class="QLabel" name="label_31">
                 <property name="text">
-                 <string>Icon Theme (requirest restart)</string>
+                 <string>Theme:</string>
                 </property>
                </widget>
               </item>
@@ -1747,17 +1747,22 @@
                <widget class="QComboBox" name="themeComboBox">
                 <item>
                  <property name="text">
-                  <string>breeze</string>
+                  <string>auto</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>breeze-dark</string>
+                  <string>dark</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>boring</string>
+                  <string>light</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>light classic</string>
                  </property>
                 </item>
                </widget>
@@ -2014,65 +2019,13 @@
                  </widget>
                 </item>
                 <item row="2" column="0">
-                 <widget class="QLabel" name="label_18">
-                  <property name="text">
-                   <string>Syntax Highlighting </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QComboBox" name="highlightingThemeComboBox">
-                  <property name="minimumSize">
-                   <size>
-                    <width>100</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>100</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Color theme for syntax highlighting</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">margin-top: 2; margin-bottom: 2; padding: 2</string>
-                  </property>
-                  <property name="sizeAdjustPolicy">
-                   <enum>QComboBox::AdjustToContents</enum>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>light</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>dark</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>classic</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>none</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="3" column="0">
                  <widget class="QLabel" name="label_34">
                   <property name="text">
                    <string>Line Ending Mode</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="1">
+                <item row="2" column="1">
                  <widget class="QComboBox" name="lineEndingComboBox">
                   <property name="minimumSize">
                    <size>
@@ -2104,14 +2057,14 @@
                   </item>
                  </widget>
                 </item>
-                <item row="4" column="0">
+                <item row="3" column="0">
                  <widget class="QLabel" name="label_19">
                   <property name="text">
                    <string>Tab Width</string>
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="1">
+                <item row="3" column="1">
                  <widget class="QSpinBox" name="tabWidthSpinBox">
                   <property name="minimumSize">
                    <size>

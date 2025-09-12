@@ -593,13 +593,8 @@ void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
     checkSyntaxAct->setIcon(QIcon(prefix + "scratchpad.png"));
     showScratchPadAct->setIcon(QIcon(prefix + "scratchpad.png"));
 
-
     controlToolBar->update();
     configureToolBar->update();
-
-    QDEBUG << controlToolBar->styleSheet();
-
-
 
     // 5. Update toolbar icon theme
     //controlToolBar->setIconSize(QSize(m_options->toolbarIconSize, m_options->toolbarIconSize));
@@ -617,7 +612,17 @@ void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
 
     // 6. Update highlighting theme for open documents
     for (int i = 0; i < documentPages.size(); ++i) {
-        documentPages[i]->setHighlightingTheme(m_options->highlightingTheme);
+
+        if (m_options->themeMode == "auto" ) {
+            documentPages[i]->setHighlightingTheme(isDarkPalette ? "dark" : "light");
+        } else {
+            if (m_options->themeMode == "light-classic") {
+                documentPages[i]->setHighlightingTheme("classic");
+            } else {
+                documentPages[i]->setHighlightingTheme(m_options->themeMode=="dark" ? "dark" : "light");
+            }
+        }
+
         if (isDarkPalette) { // set console colors
             documentPages[i]->setConsoleColors(lighter, darker);
         } else {
@@ -647,10 +652,7 @@ void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
     // //QString originalStyleSheet = ""; // Optionally, keep previous style if needed
     // qApp->setStyleSheet(originalStyleSheet + styleSheet);
 
-    // update icons in tabs, etc.
-    for (int i = 0; i < documentPages.size(); ++i) {
 
-    }
 }
 
 void CsoundQt::utilitiesMessageCallback(CSOUND *csound,
@@ -3245,6 +3247,14 @@ void CsoundQt::applySettings()
 {
     // This is called at initialization, when clicking "apply" in the settings dialog
     // and when closing it with "OK"
+
+    if (m_options->themeMode != "auto") {
+        m_options->theme = m_options->themeMode == "dark" ? "dark" : "light";
+    } else {
+        m_options->theme = isDarkPalette ? "dark" : "light";
+    }
+    this->helpPanel->setIconTheme(m_options->theme);
+
     for (int i = 0; i < documentPages.size(); i++) {
         setCurrentOptionsForPage(documentPages[i]);
     }
@@ -3331,11 +3341,6 @@ void CsoundQt::applySettings()
 
     //storeSettings(); // save always when something new is changed
 
-    // NB! Check this! maybe needed when user makes changes in settings.
-    if (m_options->themeMode != "auto") {
-        this->helpPanel->setIconTheme(m_options->theme);
-    }
-
 }
 
 void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
@@ -3369,13 +3374,19 @@ void CsoundQt::setCurrentOptionsForPage(DocumentPage *p)
     } else {
         p->setConsoleColors(m_options->consoleFontColor,
                             m_options->consoleBgColor);
+
+        if (m_options->themeMode == "light-classic") {
+            p->setHighlightingTheme("classic");
+        } else {
+           p->setHighlightingTheme(m_options->themeMode=="dark" ? "dark" : "light");
+        }
     }
 
     p->setPythonExecutable(m_options->pythonExecutable);
     p->useOldFormat(m_options->oldFormat);
     p->setConsoleBufferSize(m_options->consoleBufferSize);
     p->showLineNumbers(m_options->showLineNumberArea);
-    p->setHighlightingTheme(m_options->highlightingTheme);
+
     p->enableScoreSyntaxHighlighting(m_options->highlightScore);
 
     int flags = m_options->noBuffer ? CSQT_NO_COPY_BUFFER : 0;
