@@ -1301,6 +1301,8 @@ void CsoundQt::setupEnvironment()
             opcodedir = initialDir;
         } else if (QFile::exists(initialDir+"/plugins64/rtpa.dll" )) {
             opcodedir = initialDir+"/plugins64/";
+        } else if (QFile::exists("C:/Program Files/Csound7/plugins64/rtpa.dll")) {
+            opcodedir = "C:/Program Files/Csound7/plugins64/";
         } else {
             opcodedir = QString();
         }
@@ -1317,10 +1319,12 @@ void CsoundQt::setupEnvironment()
 
     }
 
-    qDebug() << "Setting  OPCODE7DIR64 to: " << opcodedir;
-    if (!opcodedir.isEmpty()) {
-        csoundSetGlobalEnv("OPCODE7DIR64", opcodedir.toLatin1().data());
 
+    if (!opcodedir.isEmpty()) {
+        QDEBUG << "Setting  OPCODE7DIR64 to: " << opcodedir;
+        csoundSetGlobalEnv("OPCODE7DIR64", opcodedir.toLatin1().data());
+    } else {
+        QDEBUG << "No OPCODE7DIR64 found";
     }
 }
 
