@@ -2841,14 +2841,14 @@ void CsoundQt::showVirtualKeyboard(bool show)
         m_virtualKeyboardPointer = m_virtualKeyboard;  // guarded pointer to check if object is  alive
         m_virtualKeyboard->setWindowTitle(tr("CsoundQt Virtual Keyboard"));
         m_virtualKeyboard->setWindowFlags(Qt::Window);
-        m_virtualKeyboard->setSource(QUrl("qrc:/QML/VirtualKeyboard.qml"));
-        QObject *rootObject = m_virtualKeyboard->rootObject();
         QColor windowColor = qApp->palette().color(QPalette::Window);
         m_virtualKeyboard->rootContext()->setContextProperty("windowColor", windowColor);
+        m_virtualKeyboard->setSource(QUrl("qrc:/QML/VirtualKeyboard.qml"));
+        QObject *rootObject = m_virtualKeyboard->rootObject();
         m_virtualKeyboard->setFocus();
-        connect(rootObject, SIGNAL(genNote(QVariant, QVariant, QVariant, QVariant)),
-                this, SLOT(virtualMidiIn(QVariant, QVariant, QVariant, QVariant)));
-        connect(rootObject, SIGNAL(newCCvalue(int,int,int)), this, SLOT(virtualCCIn(int, int, int)));
+        connect(rootObject, SIGNAL(genNote(QVariant,QVariant,QVariant,QVariant)),
+                this, SLOT(virtualMidiIn(QVariant,QVariant,QVariant,QVariant)));
+        connect(rootObject, SIGNAL(newCCvalue(int,int,int)), this, SLOT(virtualCCIn(int,int,int)));
         m_virtualKeyboard->setVisible(true);
         connect(m_virtualKeyboard, SIGNAL(destroyed(QObject*)),
                 this, SLOT(virtualKeyboardActOff(QObject*)));

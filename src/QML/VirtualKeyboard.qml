@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
 Rectangle {
-    id: keyboardComponent
+    id: main
     width: 600
     height: 180
     color: windowColor
@@ -49,8 +49,8 @@ Rectangle {
             Layout.fillHeight: true
             numOctaves: controls.numOctaves
             id: keyboard
-            onGenNote: function (on) {
-                layout.genNote(on, note + (12*layout.octave), layout.channel, layout.velocity)
+            onGenNote: function (on, note) {
+                main.genNote(on, note + (12*main.octave), main.channel, main.velocity)
             }
         }
     }
