@@ -7,7 +7,7 @@ Rectangle {
     id: drawTab
     width: 800
     height: 800
-    color: "darkGrey"// tableEditor.color
+    color: tableEditor.color
 
     property string name: "freehand"
     property var drawnWaveform: []

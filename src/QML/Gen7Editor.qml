@@ -259,10 +259,14 @@ Rectangle {
         id: drawRect
         width: parent.width - 200
         height: parent.height - 250
-        color:  tableEditor.color.lighter() //"#ffffff"
+        color:  isDarkColor(tableEditor.color) ?
+                    tableEditor.color.lighter(1.2) :   // For dark themes, lighten
+                    tableEditor.color.darker(1.05);  // For light themes, darken)
         anchors.horizontalCenter: parent.horizontalCenter
         y: valueRect.height + 5
         z: 1
+
+
         function updatePointPositions() {
             for (var i = 0; i < points.length; i++) {
                 points[i].x = points[i].index * (drawRect.width - pointWidth/2);
@@ -338,9 +342,11 @@ Rectangle {
                 context.reset();
                 context.clearRect(0, 0, width, height);
                 
+                var axesColor = tableEditor.isDarkColor(tableEditor.color) ? "#e0e0e0" : "#404040"
+
                 // style
-                context.strokeStyle = "black";
-                context.lineWidth = 1;  // Тонкие линии
+                context.strokeStyle = axesColor;
+                context.lineWidth = 1;
                 context.font = "12px sans-serif";
                 context.textBaseline = "top";
                 
@@ -357,7 +363,7 @@ Rectangle {
                 
                 context.stroke();
                 
-                context.fillStyle = "black";
+                context.fillStyle = axesColor;
                 context.fillText(maxSpinbox.value.toFixed(2), 15, 5);
                 context.fillText("0", 15, y0 - 15);
                 
@@ -368,7 +374,7 @@ Rectangle {
                 // graph lines
                 if (points.length > 0) {
                     context.beginPath();
-                    context.strokeStyle = "red";
+                    context.strokeStyle = "#d63031";
                     context.lineWidth = 1.5;
                     var offset = points[0].width / 2;
                     

@@ -11,7 +11,18 @@ Rectangle {
     color: windowColor
     property string syntaxString: "" // will be updated from children
 
+    // property bool isDarkTheme: isDarkColor(windowColor)
+
     signal newSyntax(string syntax)
+
+    function isDarkColor(color) {
+            // Calculate luminance using standard formula
+            var r = color.r
+            var g = color.g
+            var b = color.b
+            var luminance = 0.299 * r + 0.587 * g + 0.114 * b
+            return luminance < 0.5
+    }
 
     ColumnLayout {
         anchors.fill: parent
