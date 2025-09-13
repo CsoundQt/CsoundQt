@@ -221,7 +221,7 @@ rbjeq is a filter and EQ opcode offering 7 different modes. It is based on an al
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1420</objectName>
   <x>8</x>
   <y>6</y>
   <width>100</width>

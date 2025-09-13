@@ -320,7 +320,7 @@ An output gain control is added to allow for compensating for gain increase or d
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2885</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

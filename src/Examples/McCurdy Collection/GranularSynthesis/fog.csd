@@ -289,7 +289,7 @@ i 3	     0.1		 0		;INIT
   </bgcolor>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6350</objectName>
   <x>8</x>
   <y>8</y>
   <width>120</width>
@@ -1181,7 +1181,7 @@ i 3	     0.1		 0		;INIT
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4918</objectName>
   <x>653</x>
   <y>104</y>
   <width>60</width>

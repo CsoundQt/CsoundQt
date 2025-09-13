@@ -322,7 +322,7 @@ wgflute is a wave guide physical model of a flute based on work by Perry Cook bu
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9023</objectName>
   <x>8</x>
   <y>16</y>
   <width>120</width>

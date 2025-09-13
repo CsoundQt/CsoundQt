@@ -331,7 +331,7 @@ A 'Post Gain' control is included so that the user can compensate for the loss o
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b7411</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

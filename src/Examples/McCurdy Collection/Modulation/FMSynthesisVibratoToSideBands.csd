@@ -153,7 +153,7 @@ This example demonstrates the phenomenon of side bands upon which FM (frequency 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3558</objectName>
   <x>6</x>
   <y>6</y>
   <width>100</width>

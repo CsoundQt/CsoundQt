@@ -251,7 +251,7 @@ i 2	     0.1		 0		;INIT
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1411</objectName>
   <x>8</x>
   <y>8</y>
   <width>120</width>
@@ -1827,7 +1827,7 @@ Overlaps</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1930,7 +1930,7 @@ Overlaps</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1959,7 +1959,7 @@ Overlaps</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

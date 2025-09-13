@@ -1328,6 +1328,8 @@ void CsoundQt::setupEnvironment()
             opcodedir = initialDir;
         } else if (QFile::exists(initialDir+"/plugins64/rtpa.dll" )) {
             opcodedir = initialDir+"/plugins64/";
+        } else if (QFile::exists("C:/Program Files/Csound7/plugins64/rtpa.dll")) {
+            opcodedir = "C:/Program Files/Csound7/plugins64/";
         } else {
             opcodedir = QString();
         }
@@ -1344,10 +1346,12 @@ void CsoundQt::setupEnvironment()
 
     }
 
-    qDebug() << "Setting  OPCODE7DIR64 to: " << opcodedir;
-    if (!opcodedir.isEmpty()) {
-        csoundSetGlobalEnv("OPCODE7DIR64", opcodedir.toLatin1().data());
 
+    if (!opcodedir.isEmpty()) {
+        QDEBUG << "Setting  OPCODE7DIR64 to: " << opcodedir;
+        csoundSetGlobalEnv("OPCODE7DIR64", opcodedir.toLatin1().data());
+    } else {
+        QDEBUG << "No OPCODE7DIR64 found";
     }
 }
 
@@ -2916,10 +2920,13 @@ void CsoundQt::decreaseFontSize()
 void CsoundQt::changeFontSize(int change)
 {
     if (helpPanel->hasFocus() ) {
-        // QDEBUG << "change helpPanel size" << change;
+        QDEBUG << "change helpPanel size" << change;
         helpPanel->changeFontSize(change);
-    }  else {
-        m_options->fontPointSize += change; // this may affect the pad's font size as well...
+    } else if (m_console->widgetHasFocus()) {
+        m_options->consoleFontPointSize += change;
+        documentPages[curPage]->setConsoleFont(QFont(m_options->consoleFont, m_options->consoleFontPointSize));
+    } else {
+        m_options->fontPointSize += change;
         // QDEBUG << "main Editor size" << m_options->fontPointSize;
         for (int i = 0; i < documentPages.size(); i++) {
             documentPages[i]->setTextFont(QFont(m_options->font, (int) m_options->fontPointSize));

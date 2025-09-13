@@ -204,7 +204,7 @@ This example could easily be adapted to merge two mono files to a single stereo 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6681</objectName>
   <x>525</x>
   <y>62</y>
   <width>100</width>

@@ -284,7 +284,7 @@ wgpluck2 is another physical model implementation of a plucked string based the 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7548</objectName>
   <x>8</x>
   <y>16</y>
   <width>120</width>

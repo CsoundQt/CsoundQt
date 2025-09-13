@@ -666,7 +666,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7461</objectName>
   <x>28</x>
   <y>196</y>
   <width>100</width>
@@ -685,7 +685,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9833</objectName>
   <x>142</x>
   <y>196</y>
   <width>100</width>
@@ -704,7 +704,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1889</objectName>
   <x>257</x>
   <y>196</y>
   <width>100</width>
@@ -723,7 +723,7 @@ In the lower panel values can be typed directly in and converted into the other 
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5334</objectName>
   <x>371</x>
   <y>196</y>
   <width>100</width>
@@ -759,7 +759,7 @@ In the lower panel values can be typed directly in and converted into the other 
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -788,7 +788,7 @@ In the lower panel values can be typed directly in and converted into the other 
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -817,7 +817,7 @@ In the lower panel values can be typed directly in and converted into the other 
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -846,7 +846,7 @@ In the lower panel values can be typed directly in and converted into the other 
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

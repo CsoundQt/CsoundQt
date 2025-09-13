@@ -300,7 +300,7 @@ FOF (fonction d'onde formantique) is a rather specialised type of granular synth
   </bgcolor>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2148</objectName>
   <x>8</x>
   <y>8</y>
   <width>120</width>

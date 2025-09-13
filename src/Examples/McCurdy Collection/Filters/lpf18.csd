@@ -156,7 +156,7 @@ lpf18 is a implementation of a 3-pole resonant low-pass filter. The '18' refers 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4650</objectName>
   <x>8</x>
   <y>6</y>
   <width>100</width>

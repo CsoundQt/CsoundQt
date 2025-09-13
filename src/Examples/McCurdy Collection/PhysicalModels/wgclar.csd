@@ -316,7 +316,7 @@ wgclar is a wave guide physical model of a clarinet based on work by Perry Cook 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8956</objectName>
   <x>8</x>
   <y>16</y>
   <width>120</width>

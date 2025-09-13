@@ -131,7 +131,7 @@ i  2 0 3600	;INSTRUMENT 2 (CONVOLUTION INSTRUMENT) RUNS FOR 1 HOUR (AND KEEPS RE
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6738</objectName>
   <x>5</x>
   <y>5</y>
   <width>100</width>

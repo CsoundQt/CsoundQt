@@ -205,7 +205,7 @@ In mode 1 formants are retained by imposing the original amplitude values. In mo
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7615</objectName>
   <x>8</x>
   <y>8</y>
   <width>140</width>

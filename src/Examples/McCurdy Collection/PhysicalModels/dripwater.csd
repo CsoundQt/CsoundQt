@@ -120,7 +120,7 @@ i 3		0		0.1	;INIT
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7343</objectName>
   <x>349</x>
   <y>16</y>
   <width>160</width>
@@ -578,7 +578,7 @@ dripwater is a semi-physical model of dripping water. It is one of the PhISEM pe
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1806</objectName>
   <x>8</x>
   <y>16</y>
   <width>100</width>

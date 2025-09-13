@@ -149,7 +149,7 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4463</objectName>
   <x>12</x>
   <y>17</y>
   <width>100</width>
@@ -384,7 +384,7 @@ Waveset obviously has to allocate memory for the proceeding audio stream whilst 
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

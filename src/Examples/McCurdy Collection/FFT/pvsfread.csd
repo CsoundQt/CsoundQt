@@ -171,7 +171,7 @@ The fsig output by pvsfread is resynthesised using the pvsynth opcode.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1466</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

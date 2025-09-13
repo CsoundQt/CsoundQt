@@ -299,7 +299,7 @@ schedule("Run",0,-1)
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b1316</objectName>
   <x>65</x>
   <y>290</y>
   <width>186</width>
@@ -321,7 +321,7 @@ schedule("Run",0,-1)
   <fontsize>14</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b1156</objectName>
   <x>65</x>
   <y>337</y>
   <width>186</width>

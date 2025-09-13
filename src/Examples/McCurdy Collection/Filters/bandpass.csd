@@ -279,7 +279,7 @@ This example is an implementation of a bandpass filter using Csound's butterwort
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7552</objectName>
   <x>10</x>
   <y>40</y>
   <width>150</width>

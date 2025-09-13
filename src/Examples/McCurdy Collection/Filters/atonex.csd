@@ -190,7 +190,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1324</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -501,7 +501,7 @@ atonex is an implementation of a second-order high-pass filter. Its input argume
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

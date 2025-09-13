@@ -183,7 +183,7 @@ i 2	     0.01		 0.01	;INIT
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3330</objectName>
   <x>10</x>
   <y>12</y>
   <width>120</width>

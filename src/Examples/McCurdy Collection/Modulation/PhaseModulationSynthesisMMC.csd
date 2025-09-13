@@ -266,7 +266,7 @@ To bypass this effect set 'Chorus Dry/Wet Mix' to zero.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2463</objectName>
   <x>8</x>
   <y>6</y>
   <width>124</width>
@@ -436,7 +436,7 @@ To bypass this effect set 'Chorus Dry/Wet Mix' to zero.</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -465,7 +465,7 @@ To bypass this effect set 'Chorus Dry/Wet Mix' to zero.</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -783,7 +783,7 @@ Frequency</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

@@ -209,7 +209,7 @@ The example emulates a familiar sound ident. It is for educational purposes and 
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -221,7 +221,7 @@ The example emulates a familiar sound ident. It is for educational purposes and 
   <value>50</value>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9674</objectName>
   <x>280</x>
   <y>39</y>
   <width>100</width>

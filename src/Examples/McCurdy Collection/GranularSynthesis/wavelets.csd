@@ -184,7 +184,7 @@ i  4		0		3600		;REVERB
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3409</objectName>
   <x>8</x>
   <y>10</y>
   <width>100</width>
@@ -2074,7 +2074,7 @@ Gain</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

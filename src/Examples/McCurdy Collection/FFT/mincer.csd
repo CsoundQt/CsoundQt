@@ -229,7 +229,7 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4614</objectName>
   <x>8</x>
   <y>8</y>
   <width>120</width>
@@ -774,7 +774,7 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7982</objectName>
   <x>241</x>
   <y>139</y>
   <width>80</width>
@@ -793,7 +793,7 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8762</objectName>
   <x>324</x>
   <y>139</y>
   <width>80</width>
@@ -812,7 +812,7 @@ NOTE THAT IN THE 5.13 MANUAL THE ktab AND klock PARAMETER ARE INCORRECTLY SWAPPE
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3581</objectName>
   <x>324</x>
   <y>183</y>
   <width>80</width>

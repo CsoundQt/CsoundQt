@@ -184,7 +184,7 @@ f 0 3600
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4918</objectName>
   <x>221</x>
   <y>42</y>
   <width>120</width>
@@ -610,7 +610,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2538</objectName>
   <x>344</x>
   <y>42</y>
   <width>120</width>
@@ -629,7 +629,7 @@ This example shuffles the contents of a function table in a fashion similar to s
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6390</objectName>
   <x>467</x>
   <y>42</y>
   <width>120</width>

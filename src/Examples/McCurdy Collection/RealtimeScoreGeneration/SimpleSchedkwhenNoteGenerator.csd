@@ -135,7 +135,7 @@ This example demonstrates how the opcode 'schedkwhen' can be used to implement a
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9137</objectName>
   <x>8</x>
   <y>44</y>
   <width>80</width>

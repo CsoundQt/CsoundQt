@@ -199,7 +199,7 @@ ftsave and ftload allow the contents of function tables to be saved to and loade
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5204</objectName>
   <x>19</x>
   <y>63</y>
   <width>60</width>
@@ -218,7 +218,7 @@ ftsave and ftload allow the contents of function tables to be saved to and loade
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7826</objectName>
   <x>86</x>
   <y>63</y>
   <width>60</width>

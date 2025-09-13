@@ -411,7 +411,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -452,7 +452,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9624</objectName>
   <x>163</x>
   <y>85</y>
   <width>16</width>
@@ -804,7 +804,7 @@ hsboscil generates a tone composed of partials derived from a stack of octaves. 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9275</objectName>
   <x>163</x>
   <y>56</y>
   <width>16</width>

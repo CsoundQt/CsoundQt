@@ -214,7 +214,7 @@ i 11 0 0.01	;INIT
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2980</objectName>
   <x>8</x>
   <y>20</y>
   <width>120</width>
@@ -340,7 +340,7 @@ The phaser2 opcode is an implementation of an algorithm consisting of a user def
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

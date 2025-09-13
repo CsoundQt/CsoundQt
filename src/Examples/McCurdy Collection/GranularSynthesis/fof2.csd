@@ -306,7 +306,7 @@ MIDI controller 1 can be used to modulate glissando depth and CC#2 can be used t
   </bgcolor>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4648</objectName>
   <x>8</x>
   <y>8</y>
   <width>120</width>

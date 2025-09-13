@@ -141,7 +141,7 @@ i  2      0         3600		;INSTRUMENT 2 PLAYS FOR ONE HOUR
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b123</objectName>
   <x>5</x>
   <y>5</y>
   <width>100</width>

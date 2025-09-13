@@ -197,7 +197,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4670</objectName>
   <x>8</x>
   <y>6</y>
   <width>100</width>
@@ -460,7 +460,7 @@ vlowres is an implementation of a resonant low-pass filter. Its input arguments 
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

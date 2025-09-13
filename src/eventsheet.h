@@ -92,6 +92,9 @@ public slots:
 	void deleteColumn();
 	void deleteRows();
 
+    void getColumnNamesFromScore(); // experimental!
+
+
 protected:
 	void contextMenuEvent(QContextMenuEvent * event);
 	virtual void keyPressEvent(QKeyEvent * event);
@@ -149,6 +152,8 @@ private:
 	QAction *appendRowsAct;
 	QAction *deleteColumnAct;
 	QAction *deleteRowAct;
+
+    QAction *columNamesAct;
 
 	QStringList columnNames;
 

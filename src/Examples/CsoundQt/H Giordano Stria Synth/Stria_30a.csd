@@ -8269,7 +8269,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -12904,7 +12904,7 @@ e
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b5360</objectName>
   <x>917</x>
   <y>296</y>
   <width>124</width>
@@ -20189,7 +20189,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -20796,7 +20796,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -20826,7 +20826,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -20838,7 +20838,7 @@ e
   <value>13</value>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b6943</objectName>
   <x>135</x>
   <y>767</y>
   <width>108</width>
@@ -20900,7 +20900,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -20930,7 +20930,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -21234,10 +21234,10 @@ e
    <g>255</g>
    <b>255</b>
   </color>
-  <bgcolor mode="nobackground">
-   <r>255</r>
-   <g>204</g>
-   <b>102</b>
+  <bgcolor mode="background">
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
   </bgcolor>
   <resolution>1.00000000</resolution>
   <minimum>0</minimum>
@@ -22849,7 +22849,7 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -24542,7 +24542,7 @@ e
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b4880</objectName>
   <x>1029</x>
   <y>274</y>
   <width>60</width>
@@ -24564,7 +24564,7 @@ e
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b3891</objectName>
   <x>1030</x>
   <y>296</y>
   <width>60</width>

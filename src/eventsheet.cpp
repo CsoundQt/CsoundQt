@@ -35,11 +35,15 @@
 
 #include <QFile>
 #include <QMessageBox>
+#include <QRandomGenerator>
+#include <QProcess>
 
 // For rand() function
 #include <cstdlib>
+
 // Only for debug
-#include <QtCore>
+// #include <QtCore>
+#include "types.h"
 
 class OneValueDialog: public QDialog
 {
@@ -97,9 +101,9 @@ public:
 			l->addWidget(lab3);
 			l->addWidget(box3);
 		}
-		//    connect(box1, SIGNAL(editingFinished()), this, SLOT(accept ()) );
-		//    connect(box2, SIGNAL(editingFinished()), this, SLOT(accept ()) );
-		connect(box3, SIGNAL(editingFinished()), this, SLOT(accept ()) );
+        //    connect(box1, SIGNAL(editingFinished()), this, SLOT(accept()) );
+        //    connect(box2, SIGNAL(editingFinished()), this, SLOT(accept()) );
+        connect(box3, SIGNAL(editingFinished()), this, SLOT(accept()) );
 	}
 
 	double value1() { return box1->value();}
@@ -300,6 +304,34 @@ QString EventSheet::getLine(int number, bool scaleTempo, bool storeNumber, bool 
 	return line;
 }
 
+// to get the column names/comments form the first row of the score that has to be if format
+// ; p1-comment | p2-comment | p3-comment | p4-comment etc
+void EventSheet::getColumnNamesFromScore()
+{
+    //columnNames << "A" << "B" << "C" << "D";
+    //this->setHorizontalHeaderLabels(columnNames);
+    QString firstLine = getPlainText().split('\n')[0].simplified();
+    if (firstLine.startsWith(";") && firstLine.contains("|")) {
+        QStringList parts = firstLine.split("|");
+        if (parts.size() > 3) {
+            columnNames.clear();
+            columnNames << tr("Event");
+            for (int i = 0; i < parts.size(); i++) {
+                QString part = parts[i].trimmed();
+                if (part.startsWith(";")) {
+                    part.remove(0,1);
+                }
+                part = part.trimmed();
+                QString label = QString("p%1\n%2").arg(i+1).arg(part);
+                columnNames << label;
+                //this->horizontalHeaderItem(i+1)->setToolTip(label); // not necessary
+            }
+            QDEBUG << columnNames;
+            this->setHorizontalHeaderLabels(columnNames);
+        }
+    }
+}
+
 QList< QList<QVariant> > EventSheet::getData()
 {
 	// TODO this can be made a lot more efficient
@@ -376,7 +408,7 @@ void EventSheet::setFromText(QString text, int rowOffset, int columnOffset, int 
 	this->setHorizontalHeaderLabels(columnNames);
 	this->blockSignals(false);
 	if (!noHistoryMark) {
-		emit ( cellChanged(rowOffset, columnOffset) );
+        emit cellChanged(rowOffset, columnOffset);
 	}
 	if (this->rowCount() == 0)
 		this->setRowCount(1);
@@ -1063,6 +1095,7 @@ void EventSheet::contextMenuEvent (QContextMenuEvent * event)
 	//  qDebug() << "EventSheet::contextMenuEvent";
 
 	QMenu menu;
+    menu.addAction(columNamesAct);
 	menu.addAction(sendEventsAct);
 	menu.addAction(sendEventsOffsetAct);
 	menu.addAction(loopSelectionAct);
@@ -1506,6 +1539,9 @@ void EventSheet::createActions()
 	//  stopScriptAct->setStatusTip(tr("Delete Rows"));
 	//  stopScriptAct->setIconText(tr("Delete Rows"));
 	connect(stopScriptAct, SIGNAL(triggered()), this, SLOT(stopScript()));
+
+    columNamesAct = new QAction(tr("Get Column Names From Score"), this);
+    connect(columNamesAct, SIGNAL(triggered()), this, SLOT(getColumnNamesFromScore()));
 }
 
 QList<QPair<QString, QString> > EventSheet::parseLine(QString line)

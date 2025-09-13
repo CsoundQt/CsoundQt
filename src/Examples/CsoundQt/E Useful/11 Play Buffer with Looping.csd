@@ -135,7 +135,7 @@ endin
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b6499</objectName>
   <x>25</x>
   <y>100</y>
   <width>80</width>
@@ -157,7 +157,7 @@ endin
   <fontsize>12</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b3659</objectName>
   <x>24</x>
   <y>140</y>
   <width>80</width>

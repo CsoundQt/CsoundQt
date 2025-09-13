@@ -147,7 +147,7 @@ f 0	  3600				;'DUMMY' SCORE EVENT KEEPS REALTIME PERFORMANCE GOING FOR 1 HOUR
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6297</objectName>
   <x>4</x>
   <y>24</y>
   <width>115</width>

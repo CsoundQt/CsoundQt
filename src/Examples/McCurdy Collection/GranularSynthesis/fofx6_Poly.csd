@@ -565,7 +565,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   </bgcolor>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5872</objectName>
   <x>8</x>
   <y>8</y>
   <width>120</width>
@@ -3058,7 +3058,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9765</objectName>
   <x>574</x>
   <y>386</y>
   <width>16</width>
@@ -3714,7 +3714,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1528</objectName>
   <x>961</x>
   <y>386</y>
   <width>16</width>
@@ -3791,7 +3791,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8737</objectName>
   <x>597</x>
   <y>512</y>
   <width>16</width>
@@ -3810,7 +3810,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6495</objectName>
   <x>774</x>
   <y>512</y>
   <width>16</width>
@@ -4640,7 +4640,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4669,7 +4669,7 @@ i 300	0		3600		;RESETTING OF GLOBAL AUDIO VARIABLES
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

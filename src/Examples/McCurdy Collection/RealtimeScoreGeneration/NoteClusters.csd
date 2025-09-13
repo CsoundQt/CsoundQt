@@ -209,7 +209,7 @@ i 100 0.1	0.01		;INIT
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5574</objectName>
   <x>8</x>
   <y>20</y>
   <width>100</width>
@@ -336,7 +336,7 @@ The sounds themselves are simple sine waves.</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

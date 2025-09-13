@@ -199,7 +199,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2233</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -386,7 +386,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -415,7 +415,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

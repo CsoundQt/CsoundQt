@@ -83,7 +83,7 @@ f 0 3600	;REAL TIME FOR 1 HOUR
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4452</objectName>
   <x>10</x>
   <y>10</y>
   <width>100</width>

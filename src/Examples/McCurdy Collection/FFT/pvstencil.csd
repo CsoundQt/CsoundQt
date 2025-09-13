@@ -199,7 +199,7 @@ pvstencil is performs masking of a streaming pvoc signal according to secondary 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9164</objectName>
   <x>8</x>
   <y>8</y>
   <width>80</width>

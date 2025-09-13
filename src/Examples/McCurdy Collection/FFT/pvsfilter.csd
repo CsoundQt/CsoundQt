@@ -453,7 +453,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -482,7 +482,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -540,7 +540,7 @@ Lower values will result in less time smearing but greater harmonic distortion.<
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

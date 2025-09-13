@@ -669,7 +669,7 @@ i 10	0	3600	;INSTRUMENT 10 (GUI) PLAYS FOR 1 HOUR
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b3853</objectName>
   <x>513</x>
   <y>467</y>
   <width>165</width>
@@ -1660,7 +1660,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b8882</objectName>
   <x>46</x>
   <y>479</y>
   <width>80</width>
@@ -1682,7 +1682,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b3987</objectName>
   <x>136</x>
   <y>479</y>
   <width>80</width>
@@ -1704,7 +1704,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b4968</objectName>
   <x>226</x>
   <y>479</y>
   <width>80</width>
@@ -1726,7 +1726,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b4221</objectName>
   <x>316</x>
   <y>479</y>
   <width>80</width>
@@ -1748,7 +1748,7 @@ This example also allows control from a MIDI keyboard by setting the 'On (GUI) /
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b5664</objectName>
   <x>406</x>
   <y>479</y>
   <width>80</width>

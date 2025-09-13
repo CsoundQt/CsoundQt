@@ -3097,7 +3097,7 @@ e
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6075</objectName>
   <x>476</x>
   <y>100</y>
   <width>190</width>
@@ -3119,7 +3119,7 @@ e
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1048</objectName>
   <x>476</x>
   <y>129</y>
   <width>190</width>

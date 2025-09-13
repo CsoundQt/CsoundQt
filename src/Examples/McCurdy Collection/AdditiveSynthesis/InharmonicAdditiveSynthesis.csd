@@ -654,7 +654,7 @@ i 3 0 0		;INIT
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b7712</objectName>
   <x>6</x>
   <y>6</y>
   <width>164</width>
@@ -1046,7 +1046,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1076,7 +1076,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1106,7 +1106,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1136,7 +1136,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1166,7 +1166,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1196,7 +1196,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1226,7 +1226,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1256,7 +1256,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1286,7 +1286,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1316,7 +1316,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1346,7 +1346,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1376,7 +1376,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1406,7 +1406,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1436,7 +1436,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1466,7 +1466,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1496,7 +1496,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1526,7 +1526,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1556,7 +1556,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1586,7 +1586,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1616,7 +1616,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1646,7 +1646,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1676,7 +1676,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1706,7 +1706,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1736,7 +1736,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1766,7 +1766,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1796,7 +1796,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1826,7 +1826,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1856,7 +1856,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1886,7 +1886,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1916,7 +1916,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1946,7 +1946,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1976,7 +1976,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2006,7 +2006,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2036,7 +2036,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2066,7 +2066,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2096,7 +2096,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2126,7 +2126,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2156,7 +2156,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2186,7 +2186,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -2216,7 +2216,7 @@ Notice how, in general, the higher partials tend to decay quicker. Also when dam
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

@@ -196,7 +196,7 @@ butterbr/butbr is an implementation of a second-order IIR Butterworth band-rejec
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5900</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

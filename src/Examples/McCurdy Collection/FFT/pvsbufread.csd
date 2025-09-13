@@ -220,7 +220,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5383</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -641,7 +641,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8675</objectName>
   <x>174</x>
   <y>201</y>
   <width>120</width>
@@ -698,7 +698,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4463</objectName>
   <x>318</x>
   <y>298</y>
   <width>120</width>
@@ -869,7 +869,7 @@ This will therefore prevent overwriting of the buffer allowing the user to manip
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9681</objectName>
   <x>318</x>
   <y>248</y>
   <width>120</width>

@@ -200,7 +200,7 @@ i 1 0 1
   <background>nobackground</background>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b5704</objectName>
   <x>197</x>
   <y>73</y>
   <width>157</width>

@@ -196,7 +196,7 @@ reson is an implementation of a resonant second-order band--pass filter. Its inp
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1424</objectName>
   <x>8</x>
   <y>6</y>
   <width>100</width>

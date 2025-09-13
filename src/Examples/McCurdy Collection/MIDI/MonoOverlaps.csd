@@ -477,7 +477,7 @@ This example requires input from an external MIDI keyboard or a  virtual MIDI ke
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9093</objectName>
   <x>408</x>
   <y>256</y>
   <width>100</width>

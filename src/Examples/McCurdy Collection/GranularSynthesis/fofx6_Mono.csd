@@ -2710,7 +2710,7 @@ i 400     0.1		 0		;INIT
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1410</objectName>
   <x>60</x>
   <y>395</y>
   <width>16</width>
@@ -3366,7 +3366,7 @@ i 400     0.1		 0		;INIT
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5870</objectName>
   <x>447</x>
   <y>395</y>
   <width>16</width>
@@ -3443,7 +3443,7 @@ i 400     0.1		 0		;INIT
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2678</objectName>
   <x>597</x>
   <y>395</y>
   <width>16</width>
@@ -3462,7 +3462,7 @@ i 400     0.1		 0		;INIT
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5875</objectName>
   <x>774</x>
   <y>395</y>
   <width>16</width>

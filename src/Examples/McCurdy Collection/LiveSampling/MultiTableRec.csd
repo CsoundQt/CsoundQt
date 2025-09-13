@@ -122,7 +122,7 @@ i 10 0 3600	;GUI
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9248</objectName>
   <x>6</x>
   <y>47</y>
   <width>60</width>
@@ -141,7 +141,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5958</objectName>
   <x>68</x>
   <y>47</y>
   <width>60</width>
@@ -298,7 +298,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2924</objectName>
   <x>6</x>
   <y>87</y>
   <width>60</width>
@@ -317,7 +317,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8307</objectName>
   <x>68</x>
   <y>87</y>
   <width>60</width>
@@ -412,7 +412,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8297</objectName>
   <x>6</x>
   <y>128</y>
   <width>60</width>
@@ -431,7 +431,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1506</objectName>
   <x>68</x>
   <y>128</y>
   <width>60</width>
@@ -526,7 +526,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8916</objectName>
   <x>6</x>
   <y>169</y>
   <width>60</width>
@@ -545,7 +545,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9896</objectName>
   <x>68</x>
   <y>169</y>
   <width>60</width>
@@ -640,7 +640,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2915</objectName>
   <x>6</x>
   <y>210</y>
   <width>60</width>
@@ -659,7 +659,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8591</objectName>
   <x>68</x>
   <y>210</y>
   <width>60</width>
@@ -754,7 +754,7 @@ The code makes use of macros to minimize code repetition.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9028</objectName>
   <x>6</x>
   <y>251</y>
   <width>60</width>
@@ -773,7 +773,7 @@ The code makes use of macros to minimize code repetition.</label>
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5192</objectName>
   <x>68</x>
   <y>251</y>
   <width>60</width>

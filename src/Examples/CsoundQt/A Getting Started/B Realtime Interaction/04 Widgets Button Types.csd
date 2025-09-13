@@ -208,7 +208,7 @@ e 3600
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1485</objectName>
   <x>33</x>
   <y>282</y>
   <width>100</width>

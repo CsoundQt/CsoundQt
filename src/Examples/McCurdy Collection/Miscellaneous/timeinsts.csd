@@ -101,7 +101,7 @@ The timeinsts opcode outputs the time elapsed since the beginning of the note ev
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6530</objectName>
   <x>15</x>
   <y>43</y>
   <width>100</width>

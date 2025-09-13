@@ -642,7 +642,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5493</objectName>
   <x>8</x>
   <y>10</y>
   <width>80</width>
@@ -4739,7 +4739,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7214</objectName>
   <x>90</x>
   <y>10</y>
   <width>80</width>
@@ -4775,7 +4775,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4887,7 +4887,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -4970,7 +4970,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5053,7 +5053,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5136,7 +5136,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5219,7 +5219,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5302,7 +5302,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5751,7 +5751,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -5809,7 +5809,7 @@ This example expands on the design from the 'Simple Drum Sequencer' example. Bes
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

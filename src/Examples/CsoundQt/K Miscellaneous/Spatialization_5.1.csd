@@ -2044,10 +2044,10 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
-   <g>21</g>
-   <b>3</b>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <resolution>0.50000000</resolution>
   <minimum>-10</minimum>
@@ -2073,10 +2073,10 @@ e
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
-   <g>9</g>
-   <b>0</b>
+   <g>255</g>
+   <b>255</b>
   </bgcolor>
   <resolution>0.50000000</resolution>
   <minimum>-10</minimum>

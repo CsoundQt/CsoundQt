@@ -746,7 +746,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -804,7 +804,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -862,7 +862,7 @@ If 'External' is chosen then audio is taken from the computer's right channel in
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

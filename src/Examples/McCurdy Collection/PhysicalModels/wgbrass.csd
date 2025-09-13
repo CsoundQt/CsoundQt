@@ -248,7 +248,7 @@ Perhaps it will be improved in future releases of Csound.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6491</objectName>
   <x>8</x>
   <y>16</y>
   <width>120</width>

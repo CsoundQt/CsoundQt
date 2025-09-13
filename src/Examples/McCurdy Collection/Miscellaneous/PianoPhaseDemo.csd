@@ -665,7 +665,7 @@ The relationships between the two voices can be further explored through the ind
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8661</objectName>
   <x>11</x>
   <y>12</y>
   <width>100</width>
@@ -758,7 +758,7 @@ The relationships between the two voices can be further explored through the ind
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -816,7 +816,7 @@ The relationships between the two voices can be further explored through the ind
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -875,7 +875,7 @@ The relationships between the two voices can be further explored through the ind
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -934,7 +934,7 @@ The relationships between the two voices can be further explored through the ind
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -992,7 +992,7 @@ The relationships between the two voices can be further explored through the ind
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1051,7 +1051,7 @@ The relationships between the two voices can be further explored through the ind
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

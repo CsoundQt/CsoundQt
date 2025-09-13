@@ -192,7 +192,7 @@ i  1 0	3600		;GUI
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7422</objectName>
   <x>8</x>
   <y>20</y>
   <width>80</width>

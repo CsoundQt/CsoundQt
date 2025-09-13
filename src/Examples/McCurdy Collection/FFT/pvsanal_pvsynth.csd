@@ -245,7 +245,7 @@ Pvsynth is the compliment to pvsanal in that it takes an fsig signal and reynthe
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2803</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

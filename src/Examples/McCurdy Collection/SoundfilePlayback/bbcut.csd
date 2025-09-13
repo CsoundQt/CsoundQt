@@ -180,7 +180,7 @@ i 11 0 0.01	;INIT
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8158</objectName>
   <x>8</x>
   <y>10</y>
   <width>100</width>
@@ -746,7 +746,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -807,7 +807,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -868,7 +868,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -929,7 +929,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -990,7 +990,7 @@ Of course there is no reason why bbcutm/bbcutm cannot be applied to unmetered so
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1052,7 +1052,7 @@ Chance</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1113,7 +1113,7 @@ Chance</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -1174,7 +1174,7 @@ Chance</label>
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

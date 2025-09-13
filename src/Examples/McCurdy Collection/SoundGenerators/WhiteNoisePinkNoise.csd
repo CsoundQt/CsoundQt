@@ -297,7 +297,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4711</objectName>
   <x>186</x>
   <y>13</y>
   <width>16</width>
@@ -450,7 +450,7 @@ Noise produces white noise and pinkish produces pink noise.</label>
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6357</objectName>
   <x>186</x>
   <y>147</y>
   <width>16</width>

@@ -580,7 +580,7 @@ gifn is the table number containing the pluck wave form. The file mandpluk.aiff 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6624</objectName>
   <x>8</x>
   <y>16</y>
   <width>100</width>

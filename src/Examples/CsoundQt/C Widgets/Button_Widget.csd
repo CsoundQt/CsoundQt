@@ -347,7 +347,7 @@ Buttons can be set to "latch".</label>
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7730</objectName>
   <x>30</x>
   <y>350</y>
   <width>150</width>

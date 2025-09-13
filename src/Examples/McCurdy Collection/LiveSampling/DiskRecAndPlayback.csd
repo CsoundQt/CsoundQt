@@ -155,7 +155,7 @@ In this example file format is 32 bit floats at 44100. Care always needs to be t
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6743</objectName>
   <x>62</x>
   <y>44</y>
   <width>100</width>
