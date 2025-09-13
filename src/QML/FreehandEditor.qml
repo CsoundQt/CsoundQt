@@ -274,18 +274,18 @@ Rectangle {
 
             Item { Layout.fillWidth: true }
 
-            Button {
-                text: "To Csound Code"
-                Layout.preferredWidth: 100
-                Layout.preferredHeight: 25
-                font.pixelSize: 11
-                onClicked: generateCsoundCode() //saveFileDialog.open()
-                ToolTip.visible: hovered
-                ToolTip.text: "Save waveform as text file"
-            }
+            // Button {
+            //     text: "To Csound Code"
+            //     Layout.preferredWidth: 100
+            //     Layout.preferredHeight: 25
+            //     font.pixelSize: 11
+            //     onClicked: generateCsoundCode() //saveFileDialog.open()
+            //     ToolTip.visible: hovered
+            //     ToolTip.text: "Save waveform as text file"
+            // }
         }
 
-        // Область waveform
+        // drawing area
         Rectangle {
             id: waveformArea
             Layout.fillWidth: true
@@ -678,7 +678,7 @@ Rectangle {
     // }
 
     function generateCsoundCode() {
-        let csoundCode = "giTable ftgen 0, 0, " + tableSize + ", 2"
+        let csoundCode = "giData ftgen 0, 0, " + tableSize + ", 2"
         for (let i = 0; i < drawnWaveform.length; i++) {
             csoundCode += ", " + drawnWaveform[i].toFixed(8);
         }

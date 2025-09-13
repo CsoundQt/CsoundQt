@@ -34,6 +34,7 @@ Rectangle {
                             csoundCode = gen10Editor.generateCsoundCode();
                         } else if (stack.itemAt(stack.currentIndex)?.name === "freehand") {
                             csoundCode = freehandEditor.generateCsoundCode();
+                        }
                         //console.log("Text to insert: ", csoundCode);
                         if (csoundCode) {
                             newSyntax(csoundCode);
