@@ -371,10 +371,10 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
-                    onEntered: {
+                    onEntered: function() {
                         updateCoordinates(mouseX, mouseY)
                     }
-                    onPressed: {
+                    onPressed: function(mouse) {
                         isDrawing = true
                         isShifting = mouse.modifiers & Qt.ShiftModifier
                         lastDrawnIndex = -1
@@ -386,7 +386,7 @@ Rectangle {
                             drawWaveform(mouseX, mouseY)
                         }
                     }
-                    onPositionChanged: {
+                    onPositionChanged: function(mouse) {
                         updateCoordinates(mouseX, mouseY)
                         if (isShifting) {
                             shiftWaveform(mouseX)
@@ -394,13 +394,13 @@ Rectangle {
                             drawWaveform(mouseX, mouseY)
                         }
                     }
-                    onReleased: {
+                    onReleased: function(mouse) {
                         isDrawing = false
                         isShifting = false
                         lastDrawnIndex = -1
                         lastShiftX = -1
                     }
-                    onExited: {
+                    onExited: function() {
                         coordinatesText.text = "X: -, Y: -"
                     }
                 }
@@ -509,18 +509,19 @@ Rectangle {
     function smoothWaveform() {
         if (drawnWaveform.length === 0) return
         
-        var smoothed = new Array(tableSize)
-        var kernel = [0.25, 0.5, 0.25]
-        
-        for (var i = 0; i < tableSize; i++) {
-            var sum = 0
-            var weight = 0
+        const smoothed = new Array(tableSize)
+        // Option 1: Wider kernel for more aggressive smoothing
+    const kernel = [0.1, 0.2, 0.4, 0.2, 0.1]  // 5-point kernel
+    
+        for (let i = 0; i < tableSize; i++) {
+            let sum = 0
+            let weight = 0
             
-            for (var j = -1; j <= 1; j++) {
-                var index = i + j
+            for (let j = -2; j <= 2; j++) {  // Adjusted for 5-point kernel
+                const index = i + j
                 if (index >= 0 && index < tableSize) {
-                    sum += drawnWaveform[index] * kernel[j + 1]
-                    weight += kernel[j + 1]
+                    sum += drawnWaveform[index] * kernel[j + 2]
+                    weight += kernel[j + 2]
                 }
             }
             
