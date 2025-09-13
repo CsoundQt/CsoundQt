@@ -62,7 +62,6 @@ Rectangle {
 
             Gen7Editor { id: gen7Editor}
 
-
             Gen10Editor { id: gen10Editor}
 
             FreehandEditor { id: freehandEditor }

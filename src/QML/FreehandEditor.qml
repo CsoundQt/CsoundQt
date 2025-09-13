@@ -95,7 +95,7 @@ Rectangle {
                 spacing: 5
                 Layout.alignment: Qt.AlignLeft
                 
-                Text {
+                Label {
                     text: "Generate:"
                     font.pixelSize: 11
                     Layout.alignment: Qt.AlignVCenter
@@ -129,7 +129,7 @@ Rectangle {
                 spacing: 5
                 Layout.alignment: Qt.AlignLeft
                 
-                Text {
+                Label {
                     text: "Size:"
                     font.pixelSize: 11
                     Layout.alignment: Qt.AlignVCenter
@@ -159,7 +159,7 @@ Rectangle {
                 spacing: 5
                 Layout.alignment: Qt.AlignLeft
                 
-                Text {
+                Label {
                     text: "Scale:"
                     font.pixelSize: 11
                     Layout.alignment: Qt.AlignVCenter
