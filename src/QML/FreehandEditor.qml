@@ -28,7 +28,6 @@ Rectangle {
         anchors.margins: 10
         spacing: 10
 
-        // Первая строка кнопок
         RowLayout {
             Layout.preferredHeight: 30
             spacing: 10
@@ -274,15 +273,6 @@ Rectangle {
 
             Item { Layout.fillWidth: true }
 
-            // Button {
-            //     text: "To Csound Code"
-            //     Layout.preferredWidth: 100
-            //     Layout.preferredHeight: 25
-            //     font.pixelSize: 11
-            //     onClicked: generateCsoundCode() //saveFileDialog.open()
-            //     ToolTip.visible: hovered
-            //     ToolTip.text: "Save waveform as text file"
-            // }
         }
 
         // drawing area
@@ -336,7 +326,7 @@ Rectangle {
                     var ctx = getContext("2d")
                     ctx.clearRect(0, 0, width, height)
                     
-                    // Draw center line (0 line)
+                    // Draw center line (zero line)
                     var centerY = height / 2
                     ctx.strokeStyle = "lightgrey"
                     ctx.lineWidth = 1
@@ -408,15 +398,6 @@ Rectangle {
         }
     }
 
-    // FileDialog {
-    //     id: saveFileDialog
-    //     title: "Save Waveform Table"
-    //     //selectExisting: false
-    //     nameFilters: ["Text files (*.txt)", "All files (*)"]
-    //     onAccepted: {
-    //         saveTable(fileUrl)
-    //     }
-    // }
 
     function updateCoordinates(x, y) {
         var xIndex = Math.floor(x / waveformArea.width * tableSize)
@@ -477,7 +458,6 @@ Rectangle {
         
         if (shiftAmount === 0) return
         
-        // Круговая ротация
         var tempWaveform = drawnWaveform.slice()
         
         for (var i = 0; i < tableSize; i++) {
@@ -535,12 +515,10 @@ Rectangle {
     function phaseWaveform(phase) {
         if (drawnWaveform.length === 0) return
         
-        // Вычисляем количество точек для сдвига
         var shiftPoints = Math.round(phase * tableSize)
         
-        if (shiftPoints === 0) return // Нет изменений
+        if (shiftPoints === 0) return
         
-        // Круговая ротация волны (работает для положительных и отрицательных значений)
         var tempWaveform = drawnWaveform.slice()
         
         for (var i = 0; i < tableSize; i++) {
@@ -650,32 +628,6 @@ Rectangle {
         waveformCanvas.requestPaint()
     }
 
-    // function saveTable(fileUrl) {
-    //     if (drawnWaveform.length === 0) {
-    //         console.log("No waveform to save")
-    //         return
-    //     }
-
-    //     var filePath = fileUrl.toString();
-    //     if (filePath.startsWith("file:///")) {
-    //         filePath = filePath.substring(7);
-    //     }
-        
-    //     var content = "";
-    //     for (var i = 0; i < drawnWaveform.length; i++) {
-    //         content += drawnWaveform[i].toFixed(8);
-    //         if (i < drawnWaveform.length - 1) {
-    //             content += " ";
-    //         }
-    //     }
-        
-    //     var xhr = new XMLHttpRequest();
-    //     xhr.open("PUT", fileUrl);
-    //     xhr.setRequestHeader("Content-Type", "text/plain");
-    //     xhr.send(content);
-        
-    //     console.log("Table saved to:", filePath);
-    // }
 
     function generateCsoundCode() {
         let csoundCode = "giData ftgen 0, 0, " + tableSize + ", 2"
