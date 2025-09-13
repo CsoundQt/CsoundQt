@@ -50,6 +50,7 @@ Rectangle {
             currentIndex: stack.currentIndex
             TabButton { implicitWidth: Math.max(80, contentItem.implicitWidth + 20); text: "GEN7" }
             TabButton { implicitWidth: Math.max(80, contentItem.implicitWidth + 20); text: "GEN10" }
+            TabButton { implicitWidth: Math.max(80, contentItem.implicitWidth + 20); text: qsTr("Freehand") }
         }
 
         StackLayout {
@@ -63,6 +64,8 @@ Rectangle {
 
 
             Gen10Editor { id: gen10Editor}
+
+            FreehandEditor { id: freehandEditor }
 
         }
 

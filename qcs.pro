@@ -245,5 +245,6 @@ message(TARGET is:      $${TARGET})
 
 DISTFILES += \
     Building_on_Windows.md \
-    config.user.pri
+    config.user.pri \
+    src/QML/FreehandEditor.qml
 
