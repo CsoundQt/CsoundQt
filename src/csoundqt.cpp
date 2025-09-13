@@ -3076,7 +3076,7 @@ void CsoundQt::about()
 
 void CsoundQt::donate()
 {
-    openExternalBrowser(QUrl("http://sourceforge.net/donate/index.php?group_id=227265"));
+    openExternalBrowser(QUrl("https://www.paypal.com/paypalme/tarmojohannes"));
 }
 
 void CsoundQt::documentWasModified(bool status)
