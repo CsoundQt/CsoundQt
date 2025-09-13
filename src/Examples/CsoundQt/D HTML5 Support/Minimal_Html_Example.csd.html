@@ -1,0 +1,74 @@
+<html>
+  <head>
+<script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<script type="text/javascript">
+"use strict";
+document.addEventListener("DOMContentLoaded", function () {
+    try {
+        console.log("Initializing window.csound...");
+        window.channel = new QWebChannel(qt.webChannelTransport, function(channel) {
+        window.csound = channel.objects.csound;
+        if (typeof window.csound === 'undefined') {
+            alert('window.csound is undefined.');
+            return;
+        }
+        if (window.csound === null) {
+            alert('window.csound is null.');
+            return;
+        }
+        csound.message("Initialized csound.\n");
+        });
+    } catch (e) {
+        alert("initialize_csound error: " + e.message);
+        console.log(e.message);
+    }
+});
+</script>
+
+  <style>
+  body {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    font-family: sans-serif;
+    padding: 20px;
+  }
+  
+  input[type="range"] {
+  accent-color: #ee9800; /* works in Chromium, Firefox, Safari */
+}
+
+  button {
+    background-color: #ee9800;
+    color: #1e1e1e;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  button:hover {
+    background-color: #ffa733;
+  }
+  </style>
+  </head>
+  <body>
+  <script>
+  function onGetControlChannelCallback(value) {
+    document.getElementById('testChannel').innerHTML = value;
+   } // to get csound.getControlChannel via QtWebEngine 
+  </script>
+   <h2>Minimal Csound + Html example</h2><br>
+   <br>
+   <button id="button" onclick='csound.readScore("i 1 0 3")' >Event</button>
+   <br>
+   Frequency: 
+   <input type="range" id="slider" oninput='csound.setControlChannel("testChannel",this.value/100.0); '></input><br>
+   <br>
+    <br>
+   Get channel from csound: <label id="getchannel"></label> <button onclick='csound.getControlChannel("testChannel", onGetControlChannelCallback)' >Get</button>
+   <br>
+   <br>
+   Value from channel "testChannel":  <b><label id="testChannel"></label></b><br>
+   <br>
+  </body>
+</html>

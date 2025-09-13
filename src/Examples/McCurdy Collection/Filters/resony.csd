@@ -208,7 +208,7 @@ Resony is an implementation of a stack of second-order band--pass filters whose 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8269</objectName>
   <x>8</x>
   <y>6</y>
   <width>100</width>

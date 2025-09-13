@@ -1561,7 +1561,7 @@ Snapshot!</text>
   <value>2</value>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b7803</objectName>
   <x>740</x>
   <y>178</y>
   <width>56</width>
@@ -1640,7 +1640,7 @@ L = Live Input,
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b7716</objectName>
   <x>797</x>
   <y>178</y>
   <width>47</width>

@@ -212,7 +212,7 @@ An implementation of phase modulation synthesis with two parallel modulators mod
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6094</objectName>
   <x>8</x>
   <y>6</y>
   <width>124</width>

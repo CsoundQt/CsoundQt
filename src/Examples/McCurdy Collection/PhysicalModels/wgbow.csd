@@ -315,7 +315,7 @@ wgbow is a wave guide physical model of a bowed string based on work by Perry Co
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6089</objectName>
   <x>8</x>
   <y>16</y>
   <width>120</width>

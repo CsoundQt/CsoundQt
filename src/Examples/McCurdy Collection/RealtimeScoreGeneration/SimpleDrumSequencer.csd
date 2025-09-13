@@ -452,7 +452,7 @@ i 101 0 0			;SET INITIAL PATTERN
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5684</objectName>
   <x>6</x>
   <y>9</y>
   <width>86</width>
@@ -980,7 +980,7 @@ This example demonstrates how to contruct a simple looping drum sequencer. Seque
   <value>100</value>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3089</objectName>
   <x>101</x>
   <y>8</y>
   <width>80</width>

@@ -444,7 +444,7 @@ i 11		0.0     0.01	;INIT
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2124</objectName>
   <x>10</x>
   <y>16</y>
   <width>120</width>

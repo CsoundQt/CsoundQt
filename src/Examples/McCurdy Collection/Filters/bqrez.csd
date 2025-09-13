@@ -191,7 +191,7 @@ bqrez is an implementation of a second-order multi-mode filter. Its input argume
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3368</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

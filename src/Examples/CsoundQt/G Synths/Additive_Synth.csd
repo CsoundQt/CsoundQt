@@ -2275,7 +2275,7 @@ e
   <value>0.083333</value>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b9492</objectName>
   <x>535</x>
   <y>320</y>
   <width>158</width>

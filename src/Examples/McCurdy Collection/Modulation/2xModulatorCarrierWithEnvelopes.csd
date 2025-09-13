@@ -263,7 +263,7 @@ This example is also playable from a MIDI keyboard if 'MIDI' is chosen.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1214</objectName>
   <x>8</x>
   <y>6</y>
   <width>124</width>

@@ -504,7 +504,7 @@ This example presents a simple demonstration of the 'pitchamdf' opcode, used for
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6458</objectName>
   <x>6</x>
   <y>6</y>
   <width>100</width>

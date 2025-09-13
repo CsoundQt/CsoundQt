@@ -116,7 +116,7 @@ i 2		0		0.1	;INIT
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5502</objectName>
   <x>128</x>
   <y>8</y>
   <width>100</width>
@@ -803,7 +803,7 @@ tangent), pivoting (as in a vibraphone bar), or free (as in the lower end of a t
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4986</objectName>
   <x>8</x>
   <y>8</y>
   <width>120</width>

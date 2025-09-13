@@ -184,7 +184,7 @@ pvscross performs cross synthesis between two fsigs (streaming phase vocoding an
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5529</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

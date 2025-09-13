@@ -550,7 +550,7 @@ Note that the opcode needs to be 're-scraped' in order to hear the changes made 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8765</objectName>
   <x>8</x>
   <y>16</y>
   <width>100</width>

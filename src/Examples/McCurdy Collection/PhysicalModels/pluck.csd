@@ -237,7 +237,7 @@ This instrument can also be activated via MIDI. It will be velocity sensitive an
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8550</objectName>
   <x>8</x>
   <y>15</y>
   <width>120</width>

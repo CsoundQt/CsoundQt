@@ -195,7 +195,7 @@ Lowpass2 is an implementation of a second-order resonant IIR low-pass filter. It
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8735</objectName>
   <x>8</x>
   <y>6</y>
   <width>100</width>

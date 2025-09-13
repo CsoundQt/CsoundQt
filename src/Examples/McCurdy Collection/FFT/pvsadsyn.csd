@@ -205,7 +205,7 @@ pvsadsyn resynthesizes an fsig into an audio signal with some interesting user a
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5993</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

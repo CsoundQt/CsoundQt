@@ -5448,7 +5448,7 @@ Mode is a filtering opcode which is intended to be used as a resonator for modal
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b5469</objectName>
   <x>10</x>
   <y>10</y>
   <width>120</width>

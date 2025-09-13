@@ -1001,7 +1001,7 @@ i 99 0 3600	;OUTPUT
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8679</objectName>
   <x>18</x>
   <y>255</y>
   <width>180</width>
@@ -1158,7 +1158,7 @@ i 99 0 3600	;OUTPUT
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2402</objectName>
   <x>230</x>
   <y>255</y>
   <width>180</width>
@@ -1315,7 +1315,7 @@ i 99 0 3600	;OUTPUT
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7456</objectName>
   <x>442</x>
   <y>255</y>
   <width>180</width>
@@ -1614,7 +1614,7 @@ Gain</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6776</objectName>
   <x>654</x>
   <y>255</y>
   <width>180</width>
@@ -1865,7 +1865,7 @@ Gain</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4631</objectName>
   <x>865</x>
   <y>255</y>
   <width>180</width>
@@ -2163,7 +2163,7 @@ Gain</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1204</objectName>
   <x>1078</x>
   <y>255</y>
   <width>180</width>
@@ -2273,7 +2273,7 @@ Gain</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6320</objectName>
   <x>1290</x>
   <y>255</y>
   <width>180</width>
@@ -2572,7 +2572,7 @@ Back</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4738</objectName>
   <x>1502</x>
   <y>255</y>
   <width>180</width>
@@ -2871,7 +2871,7 @@ Back</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8903</objectName>
   <x>1714</x>
   <y>255</y>
   <width>180</width>
@@ -3122,7 +3122,7 @@ Back</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6549</objectName>
   <x>18</x>
   <y>585</y>
   <width>180</width>
@@ -3468,7 +3468,7 @@ Back</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3700</objectName>
   <x>230</x>
   <y>585</y>
   <width>180</width>
@@ -3625,7 +3625,7 @@ Back</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3531</objectName>
   <x>442</x>
   <y>585</y>
   <width>180</width>
@@ -3877,7 +3877,7 @@ TREMOLO</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6038</objectName>
   <x>654</x>
   <y>585</y>
   <width>180</width>
@@ -4137,7 +4137,7 @@ CHORUS</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6747</objectName>
   <x>866</x>
   <y>585</y>
   <width>180</width>
@@ -4388,7 +4388,7 @@ CHORUS</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2822</objectName>
   <x>1078</x>
   <y>585</y>
   <width>180</width>
@@ -4687,7 +4687,7 @@ Back</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8484</objectName>
   <x>1290</x>
   <y>585</y>
   <width>180</width>
@@ -4987,7 +4987,7 @@ Loss</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7674</objectName>
   <x>1502</x>
   <y>585</y>
   <width>180</width>
@@ -5238,7 +5238,7 @@ Loss</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8136</objectName>
   <x>1714</x>
   <y>585</y>
   <width>180</width>

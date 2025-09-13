@@ -596,7 +596,7 @@ Carrefull, audio file may give loud output !</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9631</objectName>
   <x>8</x>
   <y>16</y>
   <width>100</width>

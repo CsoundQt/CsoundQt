@@ -389,7 +389,7 @@ When unpitched noise-like sounds (like the soundfile option) are used the result
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7998</objectName>
   <x>8</x>
   <y>6</y>
   <width>100</width>

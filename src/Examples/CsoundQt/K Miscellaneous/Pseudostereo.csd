@@ -2107,7 +2107,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9850</objectName>
   <x>58</x>
   <y>577</y>
   <width>178</width>
@@ -2249,7 +2249,7 @@ KQogICAgeSA9IGlmZnQoWGZpbmFsKQogICAgcmV0dXJuIFtYZmluYWwsIHkucmVhbF0KCg
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2852</objectName>
   <x>316</x>
   <y>194</y>
   <width>181</width>

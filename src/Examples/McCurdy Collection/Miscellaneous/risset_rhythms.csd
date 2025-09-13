@@ -1704,7 +1704,7 @@ i 1		0		3600		;GUI
   <background>nobackground</background>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b9963</objectName>
   <x>8</x>
   <y>10</y>
   <width>109</width>

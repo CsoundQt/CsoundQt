@@ -322,7 +322,7 @@ Distort1 implements modified hyperbolic tangent distortion. Distort1 can be used
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b2251</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

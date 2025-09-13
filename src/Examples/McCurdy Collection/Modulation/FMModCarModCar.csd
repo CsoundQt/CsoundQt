@@ -236,7 +236,7 @@ This function facilitates the introduction of beating effects between the two os
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1255</objectName>
   <x>8</x>
   <y>6</y>
   <width>124</width>

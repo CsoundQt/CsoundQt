@@ -362,7 +362,7 @@ If record is pressed for a second time the original recording is overwritten. Ma
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3960</objectName>
   <x>187</x>
   <y>42</y>
   <width>80</width>

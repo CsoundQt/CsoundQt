@@ -1184,7 +1184,7 @@ Volume</label>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4784</objectName>
   <x>592</x>
   <y>363</y>
   <width>199</width>

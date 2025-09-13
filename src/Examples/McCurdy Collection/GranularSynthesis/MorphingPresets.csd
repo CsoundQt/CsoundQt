@@ -256,7 +256,7 @@ i 21		1		0.1
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9092</objectName>
   <x>8</x>
   <y>8</y>
   <width>120</width>
@@ -1731,7 +1731,7 @@ Modification</label>
   </bgcolor>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3192</objectName>
   <x>840</x>
   <y>50</y>
   <width>16</width>
@@ -1750,7 +1750,7 @@ Modification</label>
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1613</objectName>
   <x>1098</x>
   <y>50</y>
   <width>16</width>
@@ -1769,7 +1769,7 @@ Modification</label>
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6977</objectName>
   <x>840</x>
   <y>358</y>
   <width>16</width>
@@ -1788,7 +1788,7 @@ Modification</label>
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4149</objectName>
   <x>1098</x>
   <y>358</y>
   <width>16</width>
@@ -1807,7 +1807,7 @@ Modification</label>
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8915</objectName>
   <x>904</x>
   <y>49</y>
   <width>70</width>
@@ -1826,7 +1826,7 @@ Modification</label>
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8762</objectName>
   <x>979</x>
   <y>49</y>
   <width>70</width>

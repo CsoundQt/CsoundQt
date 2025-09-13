@@ -237,7 +237,7 @@ Valuator boxes indicate for the user whether the walker is taking a step up or d
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1103</objectName>
   <x>8</x>
   <y>10</y>
   <width>80</width>

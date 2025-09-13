@@ -2275,7 +2275,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2181</objectName>
   <x>574</x>
   <y>636</y>
   <width>120</width>
@@ -2295,7 +2295,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7155</objectName>
   <x>574</x>
   <y>601</y>
   <width>120</width>
@@ -2314,7 +2314,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5000</objectName>
   <x>574</x>
   <y>570</y>
   <width>120</width>
@@ -2333,7 +2333,7 @@ i 10 0 3600	;INSTRUMENT 10 PLAYS FOR 1 HOUR	(GUI)
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1973</objectName>
   <x>574</x>
   <y>539</y>
   <width>120</width>

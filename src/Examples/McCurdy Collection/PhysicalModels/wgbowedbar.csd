@@ -571,7 +571,7 @@ wgbowedbar is a wave guide physical model of a bowed bar based on work by Perry 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6358</objectName>
   <x>8</x>
   <y>16</y>
   <width>120</width>

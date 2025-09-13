@@ -195,7 +195,7 @@ butterbp/butbp is an implementation of a second-order IIR Butterworth band-pass 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7611</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

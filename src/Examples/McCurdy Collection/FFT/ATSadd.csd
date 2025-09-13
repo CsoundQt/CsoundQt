@@ -196,7 +196,7 @@ The maximum partial number that can be with this example is 311. Certain combina
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4807</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

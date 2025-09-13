@@ -327,7 +327,7 @@ The example is designed to work with 16 bit samples but could easily be adapted 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7086</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

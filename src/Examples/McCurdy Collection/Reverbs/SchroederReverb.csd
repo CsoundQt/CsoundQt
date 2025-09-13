@@ -1119,7 +1119,7 @@ The Schroeder reverb represents a reverb design that was invented in the early 1
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2108</objectName>
   <x>409</x>
   <y>14</y>
   <width>100</width>

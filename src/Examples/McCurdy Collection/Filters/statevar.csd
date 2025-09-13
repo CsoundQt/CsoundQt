@@ -198,7 +198,7 @@ Statevar is a digital implmentation of an analogue state variable filter. The us
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2993</objectName>
   <x>8</x>
   <y>6</y>
   <width>100</width>

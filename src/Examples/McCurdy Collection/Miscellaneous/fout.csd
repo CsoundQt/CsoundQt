@@ -218,7 +218,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7585</objectName>
   <x>33</x>
   <y>78</y>
   <width>150</width>
@@ -465,7 +465,7 @@ This example illustrates a method of rendering a realtime performance to the har
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8477</objectName>
   <x>329</x>
   <y>64</y>
   <width>15</width>
@@ -633,7 +633,7 @@ This example illustrates a method of rendering a realtime performance to the har
   </bgcolor>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8645</objectName>
   <x>329</x>
   <y>87</y>
   <width>15</width>
@@ -685,7 +685,7 @@ This example illustrates a method of rendering a realtime performance to the har
   </bgcolor>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1513</objectName>
   <x>329</x>
   <y>110</y>
   <width>15</width>
@@ -737,7 +737,7 @@ This example illustrates a method of rendering a realtime performance to the har
   </bgcolor>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8243</objectName>
   <x>444</x>
   <y>87</y>
   <width>15</width>

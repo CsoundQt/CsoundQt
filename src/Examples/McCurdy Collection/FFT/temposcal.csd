@@ -214,7 +214,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5551</objectName>
   <x>8</x>
   <y>8</y>
   <width>120</width>
@@ -629,7 +629,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8393</objectName>
   <x>242</x>
   <y>84</y>
   <width>80</width>
@@ -648,7 +648,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6560</objectName>
   <x>325</x>
   <y>84</y>
   <width>80</width>
@@ -667,7 +667,7 @@ temposcal uses phase vocoding with the option of phase locking to resynthesize a
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7584</objectName>
   <x>325</x>
   <y>128</y>
   <width>80</width>

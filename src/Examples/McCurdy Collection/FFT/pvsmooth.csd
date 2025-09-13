@@ -195,7 +195,7 @@ It can be observed that smaller FFT size and window sizes result in less time sm
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2403</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

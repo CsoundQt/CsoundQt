@@ -163,7 +163,7 @@ Moogladder is an emulation of the moog ladder resonant low-pass filter. The opco
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b7201</objectName>
   <x>8</x>
   <y>6</y>
   <width>100</width>

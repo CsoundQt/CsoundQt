@@ -911,7 +911,7 @@ i 10 0 3600	;GUI
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6968</objectName>
   <x>66</x>
   <y>341</y>
   <width>40</width>
@@ -930,7 +930,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4082</objectName>
   <x>106</x>
   <y>341</y>
   <width>40</width>
@@ -949,7 +949,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2146</objectName>
   <x>146</x>
   <y>341</y>
   <width>40</width>
@@ -968,7 +968,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5716</objectName>
   <x>186</x>
   <y>341</y>
   <width>40</width>
@@ -987,7 +987,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4636</objectName>
   <x>226</x>
   <y>341</y>
   <width>40</width>
@@ -1006,7 +1006,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3911</objectName>
   <x>266</x>
   <y>341</y>
   <width>40</width>
@@ -1025,7 +1025,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6846</objectName>
   <x>306</x>
   <y>341</y>
   <width>40</width>
@@ -1044,7 +1044,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8535</objectName>
   <x>346</x>
   <y>341</y>
   <width>40</width>
@@ -1063,7 +1063,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2309</objectName>
   <x>386</x>
   <y>341</y>
   <width>40</width>
@@ -1082,7 +1082,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6513</objectName>
   <x>85</x>
   <y>261</y>
   <width>40</width>
@@ -1101,7 +1101,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3619</objectName>
   <x>125</x>
   <y>261</y>
   <width>40</width>
@@ -1120,7 +1120,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5269</objectName>
   <x>205</x>
   <y>261</y>
   <width>40</width>
@@ -1139,7 +1139,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2809</objectName>
   <x>245</x>
   <y>261</y>
   <width>40</width>
@@ -1158,7 +1158,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6429</objectName>
   <x>285</x>
   <y>261</y>
   <width>40</width>
@@ -1177,7 +1177,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6020</objectName>
   <x>365</x>
   <y>261</y>
   <width>40</width>
@@ -1196,7 +1196,7 @@ i 10 0 3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1452</objectName>
   <x>405</x>
   <y>261</y>
   <width>40</width>

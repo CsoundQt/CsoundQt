@@ -191,7 +191,7 @@ i 10		0	   3600	;GUI
   <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b7725</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>
@@ -1228,7 +1228,7 @@ i 10		0	   3600	;GUI
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4095</objectName>
   <x>47</x>
   <y>280</y>
   <width>100</width>
@@ -1266,7 +1266,7 @@ i 10		0	   3600	;GUI
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3444</objectName>
   <x>264</x>
   <y>280</y>
   <width>100</width>

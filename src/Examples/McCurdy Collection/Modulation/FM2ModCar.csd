@@ -225,7 +225,7 @@ Peak deviation readouts for Mod. 1 and Car. and for Mod. 2 and Car are provided 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3827</objectName>
   <x>8</x>
   <y>6</y>
   <width>124</width>

@@ -195,7 +195,7 @@ lowres is an implementation of a resonant low-pass filter. Its input arguments a
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2774</objectName>
   <x>8</x>
   <y>6</y>
   <width>100</width>

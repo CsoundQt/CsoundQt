@@ -227,7 +227,7 @@ i 11		0		0	;INIT
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3266</objectName>
   <x>8</x>
   <y>8</y>
   <width>120</width>
@@ -520,7 +520,7 @@ i 11		0		0	;INIT
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8999</objectName>
   <x>308</x>
   <y>73</y>
   <width>70</width>
@@ -539,7 +539,7 @@ i 11		0		0	;INIT
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b2261</objectName>
   <x>378</x>
   <y>121</y>
   <width>70</width>

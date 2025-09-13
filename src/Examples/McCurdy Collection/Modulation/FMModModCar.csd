@@ -225,7 +225,7 @@ When the 'On/Off' switch is off the instrument can be played from MIDI.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5732</objectName>
   <x>8</x>
   <y>6</y>
   <width>124</width>

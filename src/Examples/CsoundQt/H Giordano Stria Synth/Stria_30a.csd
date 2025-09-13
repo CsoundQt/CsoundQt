@@ -12904,7 +12904,7 @@ e
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b5360</objectName>
   <x>917</x>
   <y>296</y>
   <width>124</width>
@@ -20838,7 +20838,7 @@ e
   <value>13</value>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b6943</objectName>
   <x>135</x>
   <y>767</y>
   <width>108</width>
@@ -24542,7 +24542,7 @@ e
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b4880</objectName>
   <x>1029</x>
   <y>274</y>
   <width>60</width>
@@ -24564,7 +24564,7 @@ e
   <fontsize>10</fontsize>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b3891</objectName>
   <x>1030</x>
   <y>296</y>
   <width>60</width>

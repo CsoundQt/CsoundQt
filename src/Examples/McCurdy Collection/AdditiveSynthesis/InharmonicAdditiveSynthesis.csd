@@ -654,7 +654,7 @@ i 3 0 0		;INIT
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
-  <objectName/>
+  <objectName>b7712</objectName>
   <x>6</x>
   <y>6</y>
   <width>164</width>

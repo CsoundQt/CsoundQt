@@ -432,7 +432,7 @@ The user can choose between using a stored file or the live input as the source 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b5618</objectName>
   <x>6</x>
   <y>6</y>
   <width>100</width>

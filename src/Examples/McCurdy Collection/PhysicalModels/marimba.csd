@@ -601,7 +601,7 @@ This instrument can be triggered either from the GUI button or via a connected M
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b8790</objectName>
   <x>8</x>
   <y>16</y>
   <width>100</width>

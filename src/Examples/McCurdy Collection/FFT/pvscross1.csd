@@ -484,7 +484,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4790</objectName>
   <x>25</x>
   <y>264</y>
   <width>210</width>
@@ -699,7 +699,7 @@ Manual file pointer adjustment is possible by first reducing 'Speed' to zero by 
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b6102</objectName>
   <x>250</x>
   <y>439</y>
   <width>120</width>

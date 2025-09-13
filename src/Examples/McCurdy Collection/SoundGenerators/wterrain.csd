@@ -607,7 +607,7 @@ i 4 0 3600			;REVERB
   <randomizable group="0">false</randomizable>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1063</objectName>
   <x>10</x>
   <y>10</y>
   <width>120</width>

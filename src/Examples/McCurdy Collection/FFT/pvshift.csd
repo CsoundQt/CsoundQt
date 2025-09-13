@@ -200,7 +200,7 @@ Pvshift shifts all frequency values of an fsig by a constant cycles-per-second v
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b4006</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>

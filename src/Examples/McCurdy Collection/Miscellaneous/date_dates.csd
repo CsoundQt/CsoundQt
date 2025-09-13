@@ -115,7 +115,7 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b1288</objectName>
   <x>9</x>
   <y>190</y>
   <width>110</width>
@@ -134,7 +134,7 @@ NB, AS OF WRITING 'DATE' DOES NOT WORK PROPERLY WITH CSOUND FLOAT.</label>
   <latched>false</latched>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b3016</objectName>
   <x>9</x>
   <y>228</y>
   <width>110</width>

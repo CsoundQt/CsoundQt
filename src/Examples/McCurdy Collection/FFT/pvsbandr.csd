@@ -221,7 +221,7 @@ The user can choose between different input sources which includes the computer'
   <borderwidth>1</borderwidth>
  </bsbObject>
  <bsbObject version="2" type="BSBButton">
-  <objectName/>
+  <objectName>b9622</objectName>
   <x>8</x>
   <y>8</y>
   <width>100</width>
