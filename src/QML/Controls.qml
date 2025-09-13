@@ -24,6 +24,7 @@ Item {
             from: 1
             to: 16
             value: 1
+            editable: true
             Keys.forwardTo: controls // to forward them further to keyboard to be able to play wrom computer keys
         }
         Label {
@@ -32,6 +33,7 @@ Item {
         SpinBox {
             id: velocitySpinBox
             Layout.fillWidth: true
+            editable: true
             from: 1
             to: 127
             value: 64
@@ -43,6 +45,7 @@ Item {
         SpinBox {
             id: octaveSpinBox
             Layout.fillWidth: true
+            editable: true
             from: 0
             to: 12
             value: 5
@@ -54,6 +57,7 @@ Item {
         SpinBox {
             id: numOctavesSpinBox
             Layout.fillWidth: true
+            editable: true
             from: 1
             to: 8
             value: 3

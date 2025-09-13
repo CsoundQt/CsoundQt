@@ -20,13 +20,17 @@ Rectangle {
         anchors.fill: parent
         spacing: 6
 
-        Row {
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.rightMargin: 10
+            Layout.leftMargin: 5
             spacing: 5
             Repeater {
                 model: 3
 
                 ControlSlider {
-                    width: layout.width/3 //model-2*spacing
+                    //Layout.preferredWidth: layout.width/3 - 10 //model-2*spacing
+                    Layout.fillWidth: true
                     ccNumber: index+1
                     onCcValueChanged: function(value) {
                         //console.log("CC:", channel, ccNumber, value)
@@ -40,7 +44,8 @@ Rectangle {
         Controls {
             id: controls
             Layout.fillWidth: true
-            anchors.topMargin: 10
+            Layout.rightMargin: 10
+            Layout.leftMargin: 10
             Keys.forwardTo: keyboard;
         }
 
