@@ -386,7 +386,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -415,7 +415,7 @@ An audio stream is first converted into two fsigs: amplitude-frequency and ampli
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

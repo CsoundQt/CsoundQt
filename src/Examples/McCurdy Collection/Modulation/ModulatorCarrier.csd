@@ -336,7 +336,7 @@ This example also employs a simple modulator carrier pairing. This time, however
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -365,7 +365,7 @@ This example also employs a simple modulator carrier pairing. This time, however
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

@@ -638,7 +638,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -667,7 +667,7 @@ The 'Amplitude Interpolation Point' and 'Frequency Interpolation Point' sliders 
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

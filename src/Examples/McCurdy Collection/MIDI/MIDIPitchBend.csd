@@ -194,7 +194,7 @@ There is nothing to say that the pitch bend wheel must be used to drive the pitc
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

@@ -314,7 +314,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -343,7 +343,7 @@ This example quantizes an incoming stream of MIDI notes according to an internal
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

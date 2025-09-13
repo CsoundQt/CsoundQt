@@ -296,7 +296,7 @@ The opcodes foscil and foscili implement the classic Chowning modulator-oscillat
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -325,7 +325,7 @@ The opcodes foscil and foscili implement the classic Chowning modulator-oscillat
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

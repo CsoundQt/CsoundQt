@@ -420,7 +420,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -449,7 +449,7 @@ This example demonstrates FM (frequency modulation) synthesis in its simplest fo
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>

@@ -396,7 +396,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
@@ -530,7 +530,7 @@ Gbuzz creates similar sounds to the buzz opcode by stacking harmonically relates
    <g>0</g>
    <b>0</b>
   </color>
-  <bgcolor mode="nobackground">
+  <bgcolor mode="background">
    <r>255</r>
    <g>255</g>
    <b>255</b>
