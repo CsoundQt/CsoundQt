@@ -7,7 +7,7 @@ Rectangle {
     id: drawTab
     width: 800
     height: 800
-    color: tableEditor.color
+    color: "darkGrey"// tableEditor.color
 
     property var drawnWaveform: []
     property int tableSize: 1024
@@ -171,9 +171,9 @@ Rectangle {
                     Layout.preferredHeight: 25
                     font.pixelSize: 11
                     placeholderText: "1.0"
-                    validator: RegularExpressionValidator { regularExpression: /^[0-9]*\.?[0-9]*$/ } // Разрешаем только точку
+                    validator: RegularExpressionValidator { regularExpression: /^[0-9]*\.?[0-9]*$/ } // allow dot
                     onTextChanged: {
-                        // Автоматически заменяем запятую на точку
+                        // comma to dot
                         if (text.includes(",")) {
                             var cursorPos = cursorPosition
                             text = text.replace(",", ".")
@@ -208,7 +208,7 @@ Rectangle {
                 spacing: 5
                 Layout.alignment: Qt.AlignLeft
                 
-                Text {
+                Label {
                     text: "Phase:"
                     font.pixelSize: 11
                     Layout.alignment: Qt.AlignVCenter
@@ -292,7 +292,7 @@ Rectangle {
             color: "white"
             border.color: "#ccc"
 
-            Text {
+            Label {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.margins: 5
@@ -303,7 +303,7 @@ Rectangle {
                 //Layout.alignment: Qt.AlignTop | Qt.AlignLeft
             }
                 
-            Text {
+            Label {
                 id: coordinatesText
                 anchors.top: parent.top
                 anchors.right: parent.right
@@ -311,6 +311,18 @@ Rectangle {
                 color: "#333"
                 text: "X: -, Y: -"
                // Layout.alignment: Qt.AlignTop | Qt.AlignRight
+            }
+
+            Label {
+                id: zeroLabel
+                anchors.left: parent.left
+                anchors.leftMargin: 4
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -8
+                text: "0"
+                font.pixelSize: 10
+                color: "grey"
+                z: 1 // above the canvas
             }
 
             Canvas {
@@ -323,6 +335,18 @@ Rectangle {
                     var ctx = getContext("2d")
                     ctx.clearRect(0, 0, width, height)
                     
+                    // Draw center line (0 line)
+                    var centerY = height / 2
+                    ctx.strokeStyle = "lightgrey"
+                    ctx.lineWidth = 1
+                    ctx.globalAlpha = 0.7
+                    ctx.beginPath()
+                    ctx.moveTo(0, centerY)
+                    ctx.lineTo(width, centerY)
+                    ctx.stroke()
+                    ctx.globalAlpha = 1.0 // Reset alpha
+
+
                     if (drawnWaveform.length === 0) return
                     
                     ctx.strokeStyle = "#e74c3c"
@@ -413,7 +437,8 @@ Rectangle {
         }
         
         waveformCanvas.requestPaint()
-        scaleField.text = "" // Очищаем поле после применения
+        scaleField.text = ""
+        scaleField.text = ""
     }
 
     function drawWaveform(x, y) {
@@ -477,6 +502,7 @@ Rectangle {
         drawnWaveform = []
         lastDrawnIndex = -1
         waveformCanvas.requestPaint()
+        phaseField.text = ""
     }
 
     function smoothWaveform() {
@@ -524,7 +550,7 @@ Rectangle {
         }
         
         waveformCanvas.requestPaint()
-        phaseField.text = "" // Очищаем поле после применения
+        // phaseField.text = "" // uncomment to clear the value.
     }
 
     function normalizeWaveform() {
