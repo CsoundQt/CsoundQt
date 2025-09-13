@@ -307,16 +307,6 @@ int CsoundHtmlWrapper::setGlobalEnv(const QString &name, const QString &value) {
     return csoundSetGlobalEnv(name.toLocal8Bit(), value.toLocal8Bit());
 }
 
-void CsoundHtmlWrapper::setInput(const QString &name){
-    if (!m_csoundEngine) {
-        return;
-    }
-//#if CS_APIVERSION>=4
-    //csound7 comment out: csoundSetInput(getCsound(), name.toLocal8Bit());
-//#else
-//    csoundSetInput(getCsound(), name.toLocal8Bit().data());
-//#endif
-}
 
 void CsoundHtmlWrapper::setMessageCallback(QObject *callback){
     qDebug();
@@ -327,23 +317,9 @@ int CsoundHtmlWrapper::setOption(const QString &name){
     if (!m_csoundEngine) {
         return -1;
     }
-//#if CS_APIVERSION>=4
     return csoundSetOption(getCsound(), name.toLocal8Bit());
-//#else
-//    return csoundSetOption(getCsound(), name.toLocal8Bit().data());
-//#endif
 }
 
-void CsoundHtmlWrapper::setOutput(const QString &name, const QString &type, const QString &format){
-    if (!m_csoundEngine) {
-        return;
-    }
-//#if CS_APIVERSION>=4
-    //csound7 comment out// csoundSetOutput(getCsound(), name.toLocal8Bit(), type.toLocal8Bit(), format.toLocal8Bit());
-//#else
-//    csoundSetOutput(getCsound(), name.toLocal8Bit().data(), type.toLocal8Bit().data(), format.toLocal8Bit().data());
-//#endif
-}
 
 void CsoundHtmlWrapper::setScoreOffsetSeconds(double value){
     if (!m_csoundEngine) {

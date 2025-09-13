@@ -38,9 +38,9 @@ f the GNU Lesser General Public
 CsoundHtmlOnlyWrapper::CsoundHtmlOnlyWrapper(QObject *parent) :
     QObject(parent),
     message_callback(nullptr),
-    m_options(nullptr),
+    console(nullptr),
     csoundHtmlView(nullptr),
-    console(nullptr)
+    m_options(nullptr)
 {
     csound.SetHostData(this);
     // TEST: move SetMessageCallback to Start() and set it to 0 in stop
@@ -169,9 +169,6 @@ void CsoundHtmlOnlyWrapper::rewindScore() {
     csound.RewindScore();
 }
 
-int CsoundHtmlOnlyWrapper::runUtility(const QString &command, int argc, char **argv) {
-    return 0; //csound.RunUtility(command.toLocal8Bit(), argc, argv); // gone in Csound7 Csound class
-}
 
 int CsoundHtmlOnlyWrapper::scoreEvent(char opcode, const double *pfields, long field_count) {
     csound.ScoreEvent(opcode, pfields, field_count);
@@ -183,7 +180,8 @@ void CsoundHtmlOnlyWrapper::setControlChannel(const QString &name, double value)
 }
 
 int CsoundHtmlOnlyWrapper::setGlobalEnv(const QString &name, const QString &value) {
-    return false; // csound7: csound.SetGlobalEnv(name.toLocal8Bit(), value.toLocal8Bit());
+    csoundSetGlobalEnv(name.toLocal8Bit(), value.toLocal8Bit());
+    return 0;
 }
 
 // csound7 -  commented out
@@ -237,7 +235,7 @@ int CsoundHtmlOnlyWrapper::Start() {
 		csound.Stop();
 		csound.Join();
 		// using stop() does not work since Cleanup and Reset are not needed
-	}
+    }
 
 	start();
 	return perform();
@@ -246,7 +244,6 @@ int CsoundHtmlOnlyWrapper::Start() {
 void CsoundHtmlOnlyWrapper::stop(){
 	csound.Stop();
 	csound.Join();
-    //csound.Cleanup();
 	csound.Reset(); // DOES THIS PERHAPS changes options, so that jack is not any more used as audio driver
 }
 

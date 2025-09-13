@@ -70,11 +70,8 @@ public slots:
     int scoreEvent(char type, double *pFields, long numFields);
     void setControlChannel(const QString &name, double value);
     int setGlobalEnv(const QString &name, const QString &value);
-    void setInput(const QString &name);
-    // Dummy for now.
     void setMessageCallback(QObject *callback);
     int setOption(const QString &name);
-    void setOutput(const QString &name, const QString &type, const QString &format);
     void setScoreOffsetSeconds(double value);
     void setScorePending(bool value);
     void setStringChannel(const QString &name, const QString &value);

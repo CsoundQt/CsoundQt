@@ -82,7 +82,6 @@ public slots:
     void reset();
 	void Reset() {reset();}
     void rewindScore();
-    int runUtility(const QString &command, int argc, char **argv);
     int scoreEvent(char type, const double *pFields, long numFields);
     void setControlChannel(const QString &name, double value);
 	void SetChannel(const QString &name, double value) {setControlChannel(name, value);}
