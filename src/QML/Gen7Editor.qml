@@ -259,7 +259,7 @@ Rectangle {
         id: drawRect
         width: parent.width - 200
         height: parent.height - 250
-        color: "#ffffff"
+        color:  tableEditor.color.lighter() //"#ffffff"
         anchors.horizontalCenter: parent.horizontalCenter
         y: valueRect.height + 5
         z: 1
