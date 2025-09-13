@@ -207,7 +207,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     // Set background ON by default, since any change in the app's palette (light/dark
     // mode) will change this background and make many existing scripts/examples
     // unreadable.
-    setBackground(true, QColor(240, 240, 240));
+    setBackground(true,  isLightTheme ? QColor(240, 240, 240) : QColor(53, 53, 53));
     m_updating = true;
     updateData(); // Starts updateData timer
 

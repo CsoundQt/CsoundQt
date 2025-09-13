@@ -49,6 +49,8 @@ void WidgetPanel::addWidgetLayout(WidgetLayout *w)
 	QScrollArea *scrollArea;
 	scrollArea = new QScrollArea(this);
 	scrollArea->setWidget(w);
+	scrollArea->setAutoFillBackground(true);
+    scrollArea->setBackgroundRole(QPalette::Window);
 	m_stack->addWidget(scrollArea);
 	m_stack->setFocusProxy(w);
 	scrollArea->setFocusProxy(w);
