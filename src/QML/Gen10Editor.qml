@@ -2,10 +2,11 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
-Item {
+Rectangle {
     id: root
     width: 800
     height: 700
+    color: tableEditor.color
 
     property string name: "gen10"  // important! to let parent know which editor is active in tabView
 
@@ -59,7 +60,7 @@ Item {
             spacing: 5
             height: 25
             
-            Text {
+            Label {
                 text: "Table Size:"
                 font.pixelSize: 11
                 anchors.verticalCenter: parent.verticalCenter
@@ -274,7 +275,7 @@ Item {
         spacing: 1
         width: 40
         
-        Text {
+        Label {
             text: label
             font.bold: true
             font.pixelSize: 10
@@ -325,7 +326,7 @@ Item {
             }
         }
         
-        Text {
+        Label {
             text: sliderControl.value.toFixed(2)
             font.pixelSize: 9
             anchors.horizontalCenter: parent.horizontalCenter

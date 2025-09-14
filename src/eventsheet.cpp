@@ -141,7 +141,7 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
 	this->setColumnCount(6);
 	columnNames << tr("Event") << "p1 (instr)" << "p2 (start)" << "p3 (dur)" << "p4" << "p5";
 	this->setHorizontalHeaderLabels(columnNames);
-	this->setColumnWidth(0, 50);
+    this->setColumnWidth(0, 50);
 	this->setColumnWidth(1, 70);
 	this->setColumnWidth(2, 70);
 	this->setColumnWidth(3, 70);
@@ -158,7 +158,7 @@ EventSheet::EventSheet(QWidget *parent) : QTableWidget(parent)
 	// changes because large operations like add or subractract will produce
 	// many steps in the history
 //	connect(this, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(cellDoubleClickedSlot(int, int)));
-	connect(this, SIGNAL(cellChanged (int, int)), this, SLOT(cellChangedSlot(int, int)));
+    connect(this, SIGNAL(cellChanged (int,int)), this, SLOT(cellChangedSlot(int,int)));
 
 	loopTimer.setSingleShot(true);
 	connect(&loopTimer, SIGNAL(timeout()), this, SLOT(sendEvents()));

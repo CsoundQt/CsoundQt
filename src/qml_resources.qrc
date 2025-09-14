@@ -8,5 +8,6 @@
         <file>QML/TableEditor.qml</file>
         <file>QML/Gen10Editor.qml</file>
         <file>QML/Gen7Editor.qml</file>
+        <file>QML/FreehandEditor.qml</file>
     </qresource>
 </RCC>

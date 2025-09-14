@@ -11,6 +11,7 @@ Rectangle {
     id: gen7Editor
     width: 720
     height: 550
+    color: tableEditor.color
     //anchors.fill: parent
     property string name: "gen7"  // important! to let parent know which editor is active in tabView
     property var points: []; // array of endpoints of the segments
@@ -221,8 +222,6 @@ Rectangle {
                     }
                 }
 
-
-
                 onHoveredChanged: {
                     currentValue = y2value(parent.y + pointWidth/2);
                     currentIndex = x2index(parent.x + pointWidth/2);
@@ -256,17 +255,18 @@ Rectangle {
     }
 
 
-
-
-
     Rectangle {
         id: drawRect
         width: parent.width - 200
         height: parent.height - 250
-        color: "#ffffff"
+        color:  isDarkColor(tableEditor.color) ?
+                    tableEditor.color.lighter(1.2) :   // For dark themes, lighten
+                    tableEditor.color.darker(1.05);  // For light themes, darken)
         anchors.horizontalCenter: parent.horizontalCenter
         y: valueRect.height + 5
         z: 1
+
+
         function updatePointPositions() {
             for (var i = 0; i < points.length; i++) {
                 points[i].x = points[i].index * (drawRect.width - pointWidth/2);
@@ -274,7 +274,6 @@ Rectangle {
             }
 
             canvas.requestPaint();
-
         }
 
         Component.onCompleted: {
@@ -313,8 +312,9 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 4
-                Label {text: qsTr("Value: ")+(scaleValue(currentValue)).toFixed(3)}
-                Label {
+                // use Text here not label, as its color will not be inverten when dark mode
+                Text { text: qsTr("Value: ")+(scaleValue(currentValue)).toFixed(3)}
+                Text {
                     text: qsTr("Index: ")+  ( (tableSizeSpinbox.value>=2) ? (Math.round(currentIndex*tableSizeSpinbox.value)).toString() : currentIndex.toFixed(6) )   // if table lenght set to 1, so also decimal values, don't scale
                 }
             }
@@ -342,9 +342,11 @@ Rectangle {
                 context.reset();
                 context.clearRect(0, 0, width, height);
                 
+                var axesColor = tableEditor.isDarkColor(tableEditor.color) ? "#e0e0e0" : "#404040"
+
                 // style
-                context.strokeStyle = "black";
-                context.lineWidth = 1;  // Тонкие линии
+                context.strokeStyle = axesColor;
+                context.lineWidth = 1;
                 context.font = "12px sans-serif";
                 context.textBaseline = "top";
                 
@@ -361,7 +363,7 @@ Rectangle {
                 
                 context.stroke();
                 
-                context.fillStyle = "black";
+                context.fillStyle = axesColor;
                 context.fillText(maxSpinbox.value.toFixed(2), 15, 5);
                 context.fillText("0", 15, y0 - 15);
                 
@@ -372,7 +374,7 @@ Rectangle {
                 // graph lines
                 if (points.length > 0) {
                     context.beginPath();
-                    context.strokeStyle = "red";
+                    context.strokeStyle = "#d63031";
                     context.lineWidth = 1.5;
                     var offset = points[0].width / 2;
                     

@@ -184,17 +184,18 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 
     // allow translations for highlightingThemeComboBox and themeCombobox
     // NB! make sure that the strings are the same as in configdialog.ui
-    highlightingThemeComboBox->setItemData(0, "light");
-    highlightingThemeComboBox->setItemData(1, "dark");
-    highlightingThemeComboBox->setItemData(2, "classic");
-    highlightingThemeComboBox->setItemData(3, "none");
-    highlightingThemeComboBox->setCurrentIndex(highlightingThemeComboBox->findData(m_options->highlightingTheme));
+    // highlightingThemeComboBox->setItemData(0, "light");
+    // highlightingThemeComboBox->setItemData(1, "dark");
+    // highlightingThemeComboBox->setItemData(2, "classic");
+    // highlightingThemeComboBox->setItemData(3, "none");
+    // highlightingThemeComboBox->setCurrentIndex(highlightingThemeComboBox->findData(m_options->highlightingTheme));
 
 
-    themeComboBox->setItemData(0, "breeze");
-    themeComboBox->setItemData(1, "breeze-dark");
-    themeComboBox->setItemData(2, "boring");
-    themeComboBox->setCurrentIndex(themeComboBox->findData(m_options->theme));
+    themeComboBox->setItemData(0, "auto");
+    themeComboBox->setItemData(1, "dark");
+    themeComboBox->setItemData(2, "light");
+    themeComboBox->setItemData(3, "light-classic");
+    themeComboBox->setCurrentIndex(themeComboBox->findData(m_options->themeMode));
 
 
 
@@ -497,8 +498,8 @@ void ConfigDialog::accept()
 	m_options->tabIndents = tabIndentCheckBox->isChecked();
 
     // deal with localized themes:
-    m_options->theme = themeComboBox->currentData().toString();    // to allow to be translated
-    m_options->highlightingTheme = highlightingThemeComboBox->currentData().toString();
+    m_options->themeMode = themeComboBox->currentData().toString();    // to allow to be translated
+    //m_options->highlightingTheme = highlightingThemeComboBox->currentData().toString();
 
     m_options->colorVariables = m_options->highlightingTheme != "none";
     m_options->autoPlay = autoplayCheckBox->isChecked();

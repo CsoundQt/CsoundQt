@@ -122,9 +122,19 @@ void Console::setColors(QColor textColor, QColor bgColor)
     // foreground on light background or the other way around)
 
     // before it was setPalette, but that does not work runtime.
-    auto sheet = QString("QTextEdit { color: %1; background-color: %2 }"
-                         ).arg(textColor.name(), bgColor.name());
-    this->setStyleSheet(sheet);
+    // comment: it does, when there is no stylesheet. or no colors defined in global stylesheet
+
+    // auto sheet = QString("QTextEdit { color: %1; background-color: %2 }"
+    //                      ).arg(textColor.name(), bgColor.name());
+    // this->setStyleSheet(sheet);
+
+
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Text, textColor);
+    palette.setColor(QPalette::Base, bgColor);
+    this->setPalette(palette);
+    this->setStyleSheet(""); // to be sure there is no local stylesheet hanging
+
 	m_textColor = textColor;
 	m_bgColor = bgColor;
     if(m_textColor.lightness() < m_bgColor.lightness()) {
@@ -137,6 +147,9 @@ void Console::setColors(QColor textColor, QColor bgColor)
         m_warningColor = QColor("orange");
         m_errorColor = QColor("#FF4040");
     }
+
+    reset(); // at the moment it is easiest just to clear console, not change colors (contents -> appendMessage)
+
 }
 
 void Console::reset()

@@ -469,12 +469,19 @@ void DocumentView::setViewMode(int mode)
 		m_widgetEditor->setVisible(m_viewMode & 128);
 		m_appEditor->setVisible(m_viewMode & 256);
         auto defaultFormat = m_highlighter.getFormat("default");
-        auto sheet =  QString("QTextEdit { color: %1; background-color: %2}")
-                .arg(defaultFormat.foreground().color().name())
-                .arg(defaultFormat.background().color().name());
-        if(m_viewMode & 2) {
-            m_orcEditor->setStyleSheet(sheet);
+        // auto sheet =  QString("QTextEdit { color: %1; background-color: %2}")
+        //         .arg(defaultFormat.foreground().color().name())
+        //         .arg(defaultFormat.background().color().name());
+        // if(m_viewMode & 2) {
+        //     m_orcEditor->setStyleSheet(sheet);
+        // }
+        if (m_viewMode & 2) {
+            QPalette p = m_orcEditor->palette();
+            p.setColor(QPalette::Base, defaultFormat.background().color());
+            p.setColor(QPalette::Text, defaultFormat.foreground().color());
+            m_orcEditor->setPalette(p);
         }
+
 
 	}
 }

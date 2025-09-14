@@ -33,7 +33,8 @@ public:
 	Options(ConfigLists *configlists);
 	~Options();
 
-	QString theme;  // Icon theme name
+    QString theme;  // Icon theme name TODO: rename to iconTheme
+    QString themeMode; // "auto", "dark", "light", "light-classic" the last goes for highlighting theme.
 	QString font;
 	float fontPointSize;
 	bool showLineNumberArea;

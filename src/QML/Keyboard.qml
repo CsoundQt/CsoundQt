@@ -18,12 +18,12 @@ Rectangle {
         return octave*12 + note
     }
 
-    onTurnon: {
+    onTurnon: function (notenum) {
         var midinum = indextomidi(notenum)
         genNote(1, midinum)
         //console.log("TURNON: ", notenum);
     }
-    onTurnoff: {
+    onTurnoff: function (notenum) {
         var midinum = indextomidi(notenum)
         genNote(0, midinum)
     }
@@ -46,13 +46,13 @@ Rectangle {
     }
 
     focus:true
-    Keys.onPressed: {
+    Keys.onPressed: function (event) {
         if (!event.isAutoRepeat) {
             //console.log("KEYBOARD key down: ", event.key);
             handleKeyEvent(true, event.key);
         }
     }
-    Keys.onReleased: {
+    Keys.onReleased: function(event) {
         if (!event.isAutoRepeat) {
             //console.log("KEYBOARD key up: ", event.key);
             handleKeyEvent(false, event.key);

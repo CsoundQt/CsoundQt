@@ -315,6 +315,9 @@ private slots:
 	void removeBreakpoint(int line, int instr);
 	void removeInstrumentBreakpoint(double instr);
 #endif
+    void applyThemeFromSystem(Qt::ColorScheme scheme);
+    void setColors(QString themeMode);
+
 private:
 	void createActions();
 	void setKeyboardShortcutsList();
@@ -370,6 +373,7 @@ private:
 #if defined(CSQT_QTHTML)
 public: CsoundHtmlView *csoundHtmlView;
 #endif
+    void applyThemeToPage(DocumentPage *p);
 private:
 	//    QString m_widgetClipboard;
 	Inspector *m_inspector;
@@ -543,6 +547,7 @@ private:
         "--format"
     };
     QLabel *lineAndColumnLabel;
+    QPalette makeAppPalette(bool dark);
 };
 
 class FileOpenEater : public QObject

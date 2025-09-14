@@ -58,7 +58,7 @@ debugger {
     message("Building debugger.")
 }
 
-QT += concurrent network widgets printsupport quickwidgets
+QT += concurrent network widgets printsupport quickwidgets quickcontrols2
 
 
 buildDoubles: message("Doubles is now built by default, no need to specify buildDoubles option")
@@ -245,5 +245,6 @@ message(TARGET is:      $${TARGET})
 
 DISTFILES += \
     Building_on_Windows.md \
-    config.user.pri
+    config.user.pri \
+    src/QML/FreehandEditor.qml
 
