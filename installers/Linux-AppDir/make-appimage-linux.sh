@@ -10,16 +10,16 @@
 
 
 BINARY="CsoundQt-d-cs7"
-BUILD_DIR="../../build-qcs-Desktop_Qt_6_5_2_GCC_64bit-Release/"
+BUILD_DIR="../../../build-qcs-Desktop_Qt_6_5_2_GCC_64bit-Release/"
 EXECUTABLE="$BUILD_DIR/bin/$BINARY"
 #EXECUTABLE="../bin/$BINARY"
-VERSION="7.0.0-alpha"
+VERSION="7.0.0-beta1"
 CSOUND_VERSION="7.0.0"
 CSOUND_PREFIX="$HOME/.local"
 CSOUND_PLUGINS_DIR="$CSOUND_PREFIX/lib/csound/plugins64-7.0"
 CSOUND_MANUAL_HTML_DIR="$HOME/src/csound-manual/html"
 BUNDLE_CSOUND=true # for now: always bundle Csound
-SRC_DIR=".." #CsoundQt root
+SRC_DIR="../../" #CsoundQt root
 LIB_DIR="/usr/lib"
 APP_DIR="./AppDir" # "$BUILD_DIR/AppDir" #
 
