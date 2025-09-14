@@ -81,8 +81,8 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_WIN
     // To force qml elemtns follow colour theme
+    qApp->setStyle(QStyleFactory::create("Fusion")); // this is not necessary by Qt 6.8 any more
     QQuickStyle::setStyle(QStringLiteral("Fusion"));
-    //test
     qDebug() << "QQC2 style requested:" << QQuickStyle::name();
 #endif
 

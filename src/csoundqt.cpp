@@ -3222,7 +3222,7 @@ void CsoundQt::applySettings()
     DocumentView *pad = static_cast<LiveCodeEditor*>(m_scratchPad->widget())->getDocumentView();
     pad->setFont(QFont(m_options->font, (int) m_options->fontPointSize));
     if (csoundGetVersion() < 5140) {
-        m_options->newParser = -1; // Don't use new parser flags
+        m_options->newParser = false; // Don't use new parser flags
     }
     setupEnvironment();
 
@@ -3358,8 +3358,14 @@ void CsoundQt::setColors(QString themeMode)
     // }
 
     if (m_options->themeMode == "auto") {
-        const QPalette pal = qApp->palette();
-        isDarkPalette = pal.text().color().lightness() > pal.window().color().lightness();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    auto scheme = qApp->styleHints()->colorScheme();
+    isDarkPalette = (scheme == Qt::ColorScheme::Dark);
+#else
+    // Fallback to palette heuristic -- does not work well on Windows
+    const QPalette pal = qApp->palette();
+    isDarkPalette = pal.text().color().lightness() > pal.window().color().lightness();
+#endif
     } else {
         isDarkPalette = themeMode == "dark";
         QPalette pal = makeAppPalette(isDarkPalette);
@@ -3517,15 +3523,18 @@ void CsoundQt::runUtility(QString flags)
             return;
         }
         int index = 0;
-        foreach (QString flag, indFlags) {
-            argv[index] = (char *) calloc(flag.size()+1, sizeof(char));
-            strcpy(argv[index], flag.toLocal8Bit());
+        for (const QString& flag : indFlags) {
+            QByteArray flagBytes = flag.toLocal8Bit();
+            argv[index] = (char *) calloc(flagBytes.size() + 1, sizeof(char));
+            qstrncpy(argv[index], flagBytes.constData(), flagBytes.size() + 1);
             index++;
         }
         argv[index] = (char *) calloc(files[0].size()+1, sizeof(char));
-        strcpy(argv[index++], files[0].toLocal8Bit());
+        QByteArray fileBytes = files[0].toLocal8Bit();
+        qstrncpy(argv[index++], fileBytes.constData(), fileBytes.size() + 1);
         argv[index] = (char *) calloc(files[2].size()+1, sizeof(char));
-        strcpy(argv[index++],files[2].toLocal8Bit());
+        fileBytes = files[2].toLocal8Bit();
+        qstrncpy(argv[index++], fileBytes.constData(), fileBytes.size() + 1);
         int argc = index;
         CSOUND *csoundU;
         csoundU=csoundCreate(nullptr, nullptr);
