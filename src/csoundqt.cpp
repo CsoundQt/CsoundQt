@@ -21,6 +21,7 @@
 */
 
 #include <QStyleHints>
+#include <QQmlContext>
 
 #include "configdialog.h"
 #include "console.h"

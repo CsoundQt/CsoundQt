@@ -25,6 +25,11 @@
 #include "csoundqt.h"
 #include <QLocalSocket>
 
+#ifdef Q_OS_WIN
+#include <QtQuickControls2/QQuickStyle>
+#include <QtCore/qbytearray.h>
+#endif
+
 #ifdef WIN32
 #include <tchar.h>
 #include <windows.h>
@@ -72,6 +77,13 @@ int main(int argc, char *argv[])
            QMessageBox::warning(NULL, QObject::tr("Csound version mismatch"), QObject::tr("This version of CsoundQt requires Csound 6.09 or newer. Please download it from <br>") +"<a href=http://csound.github.io/download>http://csound.github.io/download</a>" );
            return(0);
        }
+#endif
+
+#ifdef Q_OS_WIN
+    // To force qml elemtns follow colour theme
+    QQuickStyle::setStyle(QStringLiteral("Fusion"));
+    //test
+    qDebug() << "QQC2 style requested:" << QQuickStyle::name();
 #endif
 
     bool autoplay = false;
