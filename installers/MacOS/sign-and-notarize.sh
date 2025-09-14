@@ -1,7 +1,11 @@
-BUILD_DIR="../../build-cs7-qcsQt_6_5_3_for_macOS-Release/bin"
+BUILD_DIR="../../../build-cs7-qcsQt_6_5_3_for_macOS-Release/bin"
 APP="CsoundQt-d-html-cs7.app"
 DMG="CsoundQt-7.0.0-beta1-MacOS.dmg"
 
+# NB! In Csound framework -  move libs to Versions/7.0 and use name_change_tool to set the location for CsoundLib64 or according plugin, not sure...
+# the problem is for Opcodes64/libpmidi.dylib
+# otool -L tells depency: @loader_path/../../../../libs/libportmidi.dylib shold be @loader_path/../../libs/libportmidi.dylib -- must be tested!
+# like install_name_tool -change @loader_path/../../../../libs/libportmidi.dylib @loader_path/../../libs/libportmidi.dylib $BUILD_DIR/$APP/Contents/Frameworks/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/libpmidi.dylib
 # sign
 
 cd $BUILD_DIR
@@ -15,12 +19,12 @@ codesign --options=runtime --timestamp  --force --deep --sign "Developer ID Appl
 #nb! if runtime ise used, will not plugins. Maybe signing in directories is needed. like:
 find $APP/Contents/Frameworks/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/ -name "*.dylib" -exec codesign --force  --sign "Developer ID Application: Tarmo Johannes (DRQ77GKK9V)" {} \;
 
-find $APP/Contents/Frameworks/CsoundLib64.framework/libs -name "*.dylib" -exec codesign --force  --sign "Developer ID Application: Tarmo Johannes (DRQ77GKK9V)" {} \;
+find $APP/Contents/Frameworks/CsoundLib64.framework/Versions/7.0/libs -name "*.dylib" -exec codesign --force  --sign "Developer ID Application: Tarmo Johannes (DRQ77GKK9V)" {} \;
 
 #maybe Csound64 and macOS/CsoundQt-d must be signed separately
 codesign --options=runtime --timestamp  --force --sign "Developer ID Application: Tarmo Johannes (DRQ77GKK9V)"  $APP/Contents/MacOS/CsoundQt-d-html-cs7
 
-#codesign --options=runtime --timestamp  --force --sign "Developer ID Application: Tarmo Johannes (DRQ77GKK9V)"  $APP/Contents/Frameworks/CsoundLib64.framework/Versions/7.0/CsoundLib64
+codesign --options=runtime --timestamp  --force --sign "Developer ID Application: Tarmo Johannes (DRQ77GKK9V)"  $APP/Contents/Frameworks/CsoundLib64.framework/Versions/7.0/CsoundLib64
 
 
 
@@ -29,6 +33,7 @@ codesign --options=runtime --timestamp  --force --sign "Developer ID Application
 codesign -vvv --deep --strict $APP
 
 # pack
+rm $DMG
 hdiutil create -fs HFS+ -srcfolder $APP -volname CsoundQt7 $DMG
 
 #notarize:
