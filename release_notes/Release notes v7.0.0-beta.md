@@ -1,57 +1,72 @@
 # CsoundQt 7.0.0-beta1 Release Notes
 
-CsoundQt 7.0.0-beta1 represents a major milestone in the evolution of CsoundQt. This release introduces significant modernization efforts, full compatibility with Csound 7, and a complete migration to Qt 6, providing a more robust and future-ready foundation for the IDE.
+<br>
+
+*<small>Written by Github Copilit Agent. Edited by Tarmo Johannes</small>*
+
+
+**CsoundQt 7.0.0-beta1** represents a major milestone in the evolution of CsoundQt. This release introduces significant modernization efforts, full compatibility with Csound 7, and a complete migration to Qt 6, providing a more robust and future-ready foundation for the IDE.
 
 The source and upcoming binaries can be downloaded from: <https://github.com/CsoundQt/CsoundQt/releases/tag/v7.0.0-beta1>.
+
+<br>
 
 ## Major Platform and Dependency Updates
 
 ### Qt 6 Migration
-* **Complete migration to Qt 6**: CsoundQt 7 now requires Qt 6 (tested with Qt 6.5) for improved performance and modern platform support
+* **Complete migration to Qt 6**: CsoundQt7 now requires Qt 6 (tested with Qt 6.5) for improved performance and modern platform support
 * **Forced Fusion style on Windows**: Ensures consistent appearance across platforms
 * **Better macOS integration**: Removed deprecated MySlider for macOS as no longer needed
-* **Enhanced cross-platform consistency**: Updated platform-specific code paths for better reliability
+
 
 ### Csound 7 Support
-* **Full Csound 7 compatibility**: Updated all APIs and dependencies for Csound 7
+* **Full Csound 7 compatibility**: Updated all APIs and dependencies for Csound 7. Tested against Csound7-beta9.
 * **Local copy of csound_threaded.hpp**: Maintains compatibility for HTML wrapper functionality
 * **OPCODE7DIR64 environment variable**: Uses Csound 7's plugin directory structure, dropping support for older OPCODEDIR variables
-* **Updated ring buffer**: Improved performance and const-correctness for Csound 7 compatibility
+
+<br>
 
 ## New Features and User Interface Improvements
 
 ### Dark Theme and Color System
-* **Dynamic theme switching**: Users can now switch between light and dark themes at runtime from the View menu
-* **Automatic theme detection**: CsoundQt can automatically follow the system's dark/light theme preference
 * **Comprehensive dark theme support**: All components including console, widgets, table editors, and virtual keyboard properly support dark mode
+* **Dynamic theme switching**: Users can now switch between light and dark themes at runtime from the View menu (does not work well on Windows)
+* **Automatic theme detection**: CsoundQt can automatically follow the system's dark/light theme preference
 * **Theme-aware icons**: Updated icon system with automatic color inversion for dark themes
+
+
+### Examples
+*	**Renewed CsoundQt examples** : Reorganized, updated, improved
+*  **Csound 7 examples**: Special examples about new features in Csound 7
+*  **UI Fixes**: All spinboxes updated to use background (to work with dark theme), added compulsory channel to buttons that missed it
+*  **New Audio/MIDI tests**:  As first entry in Examples
 
 ### Enhanced Table Editor
 * **GEN7 table editor improvements**: Better visual representation with theme-aware colors
-* **Freehand table editing**: New capability for manual table curve drawing
-* **GEN02 code generation**: Ability to generate Csound ftgen code directly from edited tables
-* **Improved visual feedback**: Better scaling, smoothing, and zero-line display
+* **Freehand table editing**: New capability for manual table curve drawing, entered as GEN02 table
+* **GEN10 editor**: Ability to make a GEN10 waveform controlling the relative strength of harmonics via sliders and visual representation on the UI. 
+
 
 ### Split View and Score Editing Enhancements
 * **Font size zooming**: Added Ctrl/Cmd + Plus/Minus zoom functionality for editor, console, and score view
-* **Score column naming**: Automatic extraction and display of column names from score headers
-* **Improved highlighting**: Fixed syntax highlighting in split view for orchestra and score sections
+* **Score column naming**: Automatic extraction and display of column names from score headers (the first line should be comment withe headers of the p-fields like:   
+`; instr | start | dur | amp | freq | etc` 
+* **Improved highlighting**: Fixed syntax highlighting in split view for orchestra and score sections, multiline strings and comments within multiline comments
 
 ### Word Completion and Editor Features
 * **Enhanced autocomplete**: Now works with any words in the document (instrument names, macros, etc.), not just keywords
-* **Better word boundary detection**: Improved completion for text within quotes and parentheses
-* **Smarter triggering**: Autocomplete only triggers when actively typing, not when deleting or navigating
+* **Better word boundary detection**: Improved completion for text within quotes and parentheses 
 
 ### HTML and Web Integration
-* **Qt-based HTML support**: Replaced WebEngine/WebKit with Qt's native HTML support (CONFIG+=html_support)
-* **Cross-platform HTML**: HTML examples now work consistently across Windows, macOS, and Linux
+* **Qt-based HTML support**:  Dropped WebKit support, use QWebEngine (Chromium based).  Build configuration for qmake:    
+`CONFIG+=html_support`
 * **Improved HTML examples**: Cleaned up and modernized HTML interface examples
 * **Local content access**: Better handling of local file access for HTML interfaces
 
-### MIDI and Audio Improvements
+
+### Improved Virtual MIDI Keyboard
 * **Enhanced MIDI keyboard**: Better layout with editable spinboxes for MIDI parameters
 * **Improved virtual keyboard**: Fixed color themes and interaction handling
-* **Audio output testing**: Enhanced audio configuration and testing capabilities
 
 ## Core Infrastructure and Code Quality
 
@@ -65,13 +80,13 @@ The source and upcoming binaries can be downloaded from: <https://github.com/Cso
 ### Removed Features
 * **PythonQt support dropped**: Simplified the build system and reduced dependencies
 * **Live Event Sheets removed**: Functionality replaced by live code evaluation and Scratch Pad
-* **Legacy plugin support**: Removed support for deprecated opcode directory environment variables
+
 
 ### Build System and Distribution
-* **Improved CMake support**: Enhanced build configuration (still in progress)
+* **Iniated CMake support**: Not ready yet. Use qmake build system  (qcs.pro) for now
 * **Updated packaging**: Cleaned up binary distribution and moved installer-related files
-* **GitHub Actions improvements**: Better automated building and testing
 * **Code signing improvements**: Enhanced macOS code signing process
+
 
 ## Bug Fixes and Stability Improvements
 
@@ -94,21 +109,13 @@ The source and upcoming binaries can be downloaded from: <https://github.com/Cso
 
 ## Documentation and Examples
 
-### Updated Examples
-* **Csound 7 compatibility**: All examples updated to work properly with Csound 7
-* **HTML examples refined**: Modernized and improved HTML-based examples
-* **Fixed deprecated opcodes**: Updated examples to use current Csound syntax
-* **New MIDI examples**: Enhanced MIDI recording and playback examples
+New online documentation: https://csoundqt.github.io/doc/ 
 
-### Build Documentation
-* **Updated build instructions**: Comprehensive updates for Qt 6 and Csound 7 requirements
-* **Platform-specific guides**: Improved documentation for Windows, macOS, and Linux builds
-* **Dependency management**: Clear guidance on required libraries and build tools
 
 ## Breaking Changes and Migration Notes
 
 ### For Users
-* **Qt 6 requirement**: Users must have Qt 6 installed (Qt 5 no longer supported)
+* **Qt 6 requirement**: CsoundQt7 depends on Qt 6 (included in installation bundles)
 * **Csound 7 requirement**: Csound 6 is no longer supported
 * **Configuration migration**: Settings will need to be reconfigured due to new settings location
 * **Plugin paths**: Update OPCODE7DIR64 environment variable instead of older OPCODEDIR variables
@@ -126,7 +133,7 @@ The source and upcoming binaries can be downloaded from: <https://github.com/Cso
 
 ## Acknowledgments
 
-Special thanks to all contributors including Tarmo Johannes, Joachim Heintz, Eduardo Moguillansky, and the broader CsoundQt community for their extensive work on this major release.
+Special thanks to all contributors including Tarmo Johannes, Joachim Heintz, Eduardo Moguillansky, Gleb Rogozinksi. Thanks go to everybody who issued bug reports, asked questions or gave comments!
 
 ---
 
