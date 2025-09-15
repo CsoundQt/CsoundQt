@@ -22,6 +22,7 @@
 
 #include "csoundoptions.h"
 #include "configlists.h"
+#include "csound.h"
 #include "types.h"
 
 #include <QDir> // for static QDir::separator()
@@ -185,12 +186,13 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
             opts << "--limiter="+QString::number(limitValue);
         }
 
-        // add --print_version by default if Csound 6.17 or later
-        if ( csoundGetVersion() >=6170 ) {
+        // add --print_version by default if Csound 6.17 or later.
+        // But --print_version does not exist in csound 7
+        int version = csoundGetVersion();
+        if (version >= 6170 && version < 7000) {
             opts << "--print_version";
         }
-	}
-	else {
+    } else {
         opts << "--format=" + m_configlists->fileTypeNames[fileFileType]
 				+ ":" + m_configlists->fileFormatFlags[fileSampleFormat];
 		if (fileInputFilenameActive)
