@@ -131,6 +131,10 @@ QStringList CsoundOptions::generateCmdLineFlagsList()
         opts << "--sample-accurate";
     if (checkSyntaxOnly)
         opts << "--syntax-check-only";
+    // test:
+    QDEBUG << "rt: " << rt << " reUserOptions" << rtUseOptions << " audioNames: " << m_configlists->rtAudioNames
+           << " input, output " << rtInputDevice << rtOutputDevice;
+
     if (rt && rtUseOptions) {
 		if (rtOverrideOptions)
             opts << "-+ignore_csopts=1";

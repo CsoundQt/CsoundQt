@@ -59,7 +59,7 @@ ConfigLists::ConfigLists()
 	fileFormatNames << "24 Bit" << "16 Bit (short)" << "unsigned 8-bit"
 					<< "signed 8-bit" << "32 bit float"<< "long (32-bit)";
 
-	refreshModules();
+    refreshModules(); // NB! This returns none when run on MacOS signed bundle on creating the object as permissiona are not yet granted.
 
     languages << "English" << "Spanish" << "German" << "French" << "Portuguese"
               << "Italian"  << "Turkish"  << "Finnish" << "Russian" << "Korean"
@@ -115,6 +115,9 @@ void ConfigLists::refreshModules()
 	}
     rtMidiNames << "virtual" << "none";
     csoundDestroy(csound);
+    //test:
+    qDebug() << Q_FUNC_INFO << rtAudioNames;
+
 }
 
 QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)
