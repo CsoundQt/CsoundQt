@@ -58,9 +58,9 @@ ConfigLists::ConfigLists()
 					<< "schar"<< "float"<< "long";
 	fileFormatNames << "24 Bit" << "16 Bit (short)" << "unsigned 8-bit"
 					<< "signed 8-bit" << "32 bit float"<< "long (32-bit)";
-
-    refreshModules(); // NB! This returns none when run on MacOS signed bundle on creating the object as permissiona are not yet granted.
-
+#ifndef Q_OS_MACOS
+    refreshModules(); // this is too early for signed MacOS bundle. Call it later fro, CsounQt constructor
+#endif
     languages << "English" << "Spanish" << "German" << "French" << "Portuguese"
               << "Italian"  << "Turkish"  << "Finnish" << "Russian" << "Korean"
               << "Persian";
