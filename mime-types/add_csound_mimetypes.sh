@@ -6,7 +6,7 @@ if [ -z "$SHAREDIR" ] ; then
 	SHAREDIR=/usr/share #~/.local/share # use the latter one for local install
 fi
 ICONDIR=$SHAREDIR/icons/hicolor/128x128/mimetypes
-mkdir -v -p $ICONDIR
+mkdir -p $ICONDIR
 # cp -v csound-light-128.png $ICONDIR/csound.png
 # cp -v csound-dark-128.png $ICONDIR/csound.png
 cp -v csound.png $ICONDIR/csound.png
@@ -16,7 +16,7 @@ cp -v csound.png $ICONDIR/csound.png
 #create and register mimetype
 MIMEDIR=$SHAREDIR/mime # or /usr/share/mime
 DESTDIR=$MIMEDIR/packages
-mkdir -v -p $DESTDIR # make if does not exist
+mkdir -p $DESTDIR # make if does not exist
 cp -v *.xml $DESTDIR
 # Only update db if it already exists
 # packages will install into empty trees and
