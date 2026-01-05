@@ -2896,7 +2896,7 @@ void CsoundQt::openManualExample(QString fileName)
 void CsoundQt::openExternalBrowser(QUrl url)
 {
     QString test = url.toString();
-    if (!m_options->browser.isEmpty() && QFile::exists(m_options->browser)) {
+    if (!m_options->browser.isEmpty()) {
         //execute(m_options->browser, "\"" + url.toString() + "\"");
         startProcess(m_options->browser, QStringList(url.toString()));
         // execute(m_options->browser, url.toString()); // remove quotes, otherwise wrong with changed QProcess

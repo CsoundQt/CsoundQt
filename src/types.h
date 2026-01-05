@@ -97,6 +97,17 @@
 #define DEFAULT_DOT_EXECUTABLE "dot"
 #define DEFAULT_LOG_FILE ""
 #endif
+#ifdef Q_OS_OPENBSD
+#define DEFAULT_HTML_DIR "/usr/local/share/doc/csound-doc/html"
+#define DEFAULT_TERM_EXECUTABLE "xterm"
+#define DEFAULT_BROWSER_EXECUTABLE "firefox"
+#define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity"
+#define DEFAULT_WAVEPLAYER_EXECUTABLE "paplay"
+#define DEFAULT_PDFVIEWER_EXECUTABLE ""
+#define DEFAULT_DOT_EXECUTABLE "dot"
+#define DEFAULT_LOG_FILE ""
+#define DEFAULT_SCRIPT_DIR "/usr/local/share/csoundqt/Scripts"
+#endif
 
 #define CSQT_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n-odac\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 64\nnchnls = 2\n0dbfs = 1\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"
 
