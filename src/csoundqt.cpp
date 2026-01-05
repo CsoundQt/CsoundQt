@@ -6711,6 +6711,8 @@ QVariant CsoundQt::getWidgetProperty(QString widgetid, QString property, int ind
     return value;
 }
 
+// TODO: check  it -  probably all the createX functions are not needed any more
+// after removing PythonQt support
 
 QString CsoundQt::createNewLabel(int x , int y , QString channel, int index)
 {
