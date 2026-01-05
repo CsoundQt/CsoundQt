@@ -5064,38 +5064,26 @@ void CsoundQt::fillFileMenu()
     templateMenu->clear();
     QString templatePath = m_options->templateDir;
     if (templatePath.isEmpty() || !QDir(templatePath).exists()) {
-#ifdef Q_OS_WIN32
-        templatePath = qApp->applicationDirPath() + "/templates/";
-#endif
-#ifdef Q_OS_MAC
-        templatePath = qApp->applicationDirPath() + "/../templates/";
-        qDebug() << templatePath;
-#endif
-#ifdef Q_OS_LINUX
-        templatePath = qApp->applicationDirPath() + "/templates/";
-        if (!QDir(templatePath).exists()) {
-            templatePath = qApp->applicationDirPath() + "/../templates/";
+        QStringList possiblePaths;
+        possiblePaths << qApp->applicationDirPath() + "/templates"
+                      << qApp->applicationDirPath() + "/../templates"
+                      << qApp->applicationDirPath() + "/../../CsoundQt/templates"
+                      << "/usr/share/csoundqt/templates"
+                      << "/usr/local/share/csoundqt/templates";
+
+        foreach (QString path, possiblePaths) {
+            if (QDir(path).exists()) {
+                templatePath = path;
+                break;
+            }
         }
-        if (!QDir(templatePath).exists()) { // for out of tree builds
-            templatePath = qApp->applicationDirPath() + "/../../csoundqt/templates/";
-        }
-        if (!QDir(templatePath).exists()) { // for out of tree builds
-            templatePath = qApp->applicationDirPath() + "/../../CsoundQt/templates/";
-        }
-        if (!QDir(templatePath).exists()) {
-            templatePath = "/usr/share/csoundqt/templates/";
-        }
-#endif
-#ifdef Q_OS_SOLARIS
-        templatePath = qApp->applicationDirPath() + "/templates/";
-        if (!QDir(templatePath).exists()) {
-            templatePath = "/usr/share/qutecsound/templates/";
-        }
-        if (!QDir(templatePath).exists()) {
-            templatePath = qApp->applicationDirPath() + "/../src/templates/";
-        }
-#endif
     }
+    if (templatePath.isEmpty() || !QDir(templatePath).exists()) {
+        qDebug() << "TemplatePath: not found!";
+    } else {
+        qDebug() << "TemplatePath: " << templatePath;
+    }
+
     QStringList filters;
     filters << "*.csd"<<"*.html";
     QStringList templateFiles = QDir(templatePath).entryList(filters,QDir::Files);
