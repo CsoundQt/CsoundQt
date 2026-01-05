@@ -1,55 +1,57 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-  <dict>
-    <key>NSPrincipalClass</key>
-    <string>NSApplication</string>
-    <key>CFBundleDocumentTypes</key>
-    <array>
-      <dict>
-        <key>CFBundleTypeExtensions</key>
-        <array>
-          <string>orc</string>
-          <string>sco</string>
-          <string>csd</string>
-          <string>inc</string>
-		  <string>udo</string>
-        </array>
-        <key>CFBundleTypeIconFile</key>
-        <string>csoundqt.icns</string>
-        <key>CFBundleTypeOSTypes</key>
-        <array>
-          <string>TEXT</string>
-        </array>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>LSIsAppleDefaultForType</key>
-        <true/>
-      </dict>
-    </array>
-    <key>CFBundleExecutable</key>
-    <string>@EXECUTABLE@</string>
-    <key>CFBundleIdentifier</key>
-    <string>com.csound.csoundqt</string>
-    <key>CFBundleGetInfoString</key>
-    <string>Created by Qt/QMake</string>
-    <key>CFBundleIconFile</key>
-    <string>csoundqt.icns</string>
-    <key>CFBundlePackageType</key>
-    <string>APPL</string>
-    <key>CFBundleSignature</key>
-    <string>????</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>Used for audio input of Csound files</string>
-    <key>NSRequiresAquaSystemAppearance</key>
-	<string>False</string>
-    <key>LSEnvironment</key>
-    <array>
-    <dict>
-      <key>PATH</key>
-      <string>/usr/local/bin</string>
-    </dict>
-    </array>
-  </dict>
+<dict>
+  <key>NSPrincipalClass</key>
+  <string>NSApplication</string>
 
+  <key>CFBundleDocumentTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeExtensions</key>
+      <array>
+        <string>orc</string>
+        <string>sco</string>
+        <string>csd</string>
+        <string>inc</string>
+        <string>udo</string>
+      </array>
+      <key>CFBundleTypeIconFile</key>
+      <string>csoundqt.icns</string>
+      <key>CFBundleTypeOSTypes</key>
+      <array>
+        <string>TEXT</string>
+      </array>
+      <key>CFBundleTypeRole</key>
+      <string>Editor</string>
+      <key>LSIsAppleDefaultForType</key>
+      <true/>
+    </dict>
+  </array>
+
+  <key>CFBundleExecutable</key>
+  <string>@EXECUTABLE@</string>
+  <key>CFBundleIdentifier</key>
+  <string>com.csound.csoundqt</string>
+  <key>CFBundleGetInfoString</key>
+  <string>Created by Qt/QMake</string>
+  <key>CFBundleIconFile</key>
+  <string>csoundqt.icns</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+  <key>CFBundleSignature</key>
+  <string>????</string>
+
+  <key>NSMicrophoneUsageDescription</key>
+  <string>Used for audio input of Csound files</string>
+
+  <key>NSRequiresAquaSystemAppearance</key>
+  <string>False</string>
+
+  <key>LSEnvironment</key>
+  <dict>
+    <key>PATH</key>
+    <string>/usr/local/bin</string>
+  </dict>
+</dict>
 </plist>
