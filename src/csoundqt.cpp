@@ -3415,6 +3415,36 @@ void CsoundQt::setColors(QString themeMode)
         }
     };
 
+    // test
+    // code to make run and record button more visible when pressed.
+    // not sure if it works well an different platforms.
+    QString toolbarStyle;
+
+    QString baseStyle =
+        "QToolButton {"
+        "   border: 1px solid transparent;" // Reserve space for the border
+        "   border-radius: 4px;"
+        "   padding: 2px;"                  // Add a little breathing room
+        "}";
+
+    if (isDarkPalette) {
+        toolbarStyle = baseStyle +
+            "QToolButton:checked {"
+            "   background-color: rgba(255, 255, 255, 60);"
+            "   border-color: rgba(255, 255, 255, 80);" // Change color, not width
+            "}";
+    } else {
+        toolbarStyle = baseStyle +
+            "QToolButton:checked {"
+            "   background-color: rgba(0, 0, 0, 40);"
+            "   border-color: rgba(0, 0, 0, 60);"
+            "}";
+    }
+
+        controlToolBar->setStyleSheet(toolbarStyle);
+        configureToolBar->setStyleSheet(toolbarStyle);
+    // ----
+
     // Update all toolbar/menu actions (single source of truth)
     setIcon(newAct, "edit-new.png");
     setIcon(openAct, "folder.png");
@@ -4108,6 +4138,8 @@ void CsoundQt::createActions()
     editAct->setCheckable(true);
     editAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(editAct, SIGNAL(triggered(bool)), this, SLOT(setWidgetEditMode(bool)));
+
+
 
     runAct = new QAction(QIcon(prefix + "media-play.png"), tr("Run Csound"), this);
     runAct->setStatusTip(tr("Run current file"));
