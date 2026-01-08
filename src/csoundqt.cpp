@@ -1221,9 +1221,10 @@ void CsoundQt::deleteTab(int index)
         }
         widgetPanel->takeWidgetLayout(panelGeometry);
     }
+    documentTabs->widget(index)->clearFocus();
     documentPages.remove(index);
     documentTabs->removeTab(index);
-    delete  d;
+    delete d;
     if (curPage >= documentPages.size()) {
         curPage = documentPages.size() - 1;
     }
