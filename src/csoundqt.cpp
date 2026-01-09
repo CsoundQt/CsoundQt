@@ -5849,21 +5849,17 @@ int CsoundQt::execute(QString executable, QString options)
 {
     int ret = 0;
 
-#ifdef Q_OS_MAC
+#if defined(Q_OS_MAC)
     QString commandLine = "open -a \"" + executable + "\" " + options;
-#endif
-#ifdef Q_OS_LINUX
-    // QString commandLine = "\"" + executable + "\" " + options;
+#elif defined(Q_OS_HAIKU) || defined(Q_OS_SOLARIS)
+    QString commandLine = "\"" + executable + "\" " + options;
+#elif defined(Q_OS_WIN32)
+    QString commandLine = "\"" + executable + "\" " + (executable.startsWith("cmd")? " /k " : " ") + options;
+#else
     QString commandLine = executable + " " + options;
 #endif
-#ifdef Q_OS_HAIKU
-    QString commandLine = "\"" + executable + "\" " + options;
-#endif
-#ifdef Q_OS_SOLARIS
-    QString commandLine = "\"" + executable + "\" " + options;
-#endif
+
 #ifdef Q_OS_WIN32
-    QString commandLine = "\"" + executable + "\" " + (executable.startsWith("cmd")? " /k " : " ") + options;
     auto command_line = commandLine.toUtf8();
     qDebug() << "command_line: " << command_line;
     std::thread system_thread([command_line]{std::system(command_line);});
