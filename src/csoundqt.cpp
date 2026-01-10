@@ -4790,49 +4790,36 @@ QString CsoundQt::getExamplePath(QString dir)
     if (!QDir(examplePath).exists()) {
         QString programFilesPath= QDir::fromNativeSeparators(qgetenv("PROGRAMFILES"));
         examplePath =  programFilesPath + "/Csound6/bin/Examples/" + dir; // NB! with csound6.0.6 no Floss/mCcurdy/Stria examples there. Copy manually
-        //qDebug()<<"Windows examplepath: "<<examplePath;
     }
-#endif
-#ifdef Q_OS_MAC
+#elif Q_OS_MAC
     examplePath = qApp->applicationDirPath() + "/../Resources/Examples/" + dir;
-    qDebug() << examplePath;
-#endif
-#ifdef Q_OS_LINUX
-    examplePath = QString(); //qApp->applicationDirPath() + "/Examples/" + dir;
+#else
+    examplePath = QString();
     QStringList possiblePaths;
-    possiblePaths << qApp->applicationDirPath() + "/Examples/"
-                  << qApp->applicationDirPath() + "/../src/Examples/"
-                  << qApp->applicationDirPath() + "/../../csoundqt/src/Examples/"
-                  << qApp->applicationDirPath() + "/../../CsoundQt/src/Examples/"
-                  << qApp->applicationDirPath() + "/../share/csoundqt/Examples/"
-                  <<  "/../../csoundq/src/Examples/"
-                  << "~/.local/share/csoundq/Examples/" << "/usr/share/qutecsound/Examples/"
-                  << "~/.local/share/csoundqt/Examples/"
-                  << "/usr/share/csoundqt/Examples/";
+    possiblePaths << qApp->applicationDirPath() + "/Examples"
+                  << qApp->applicationDirPath() + "/../src/Examples"
+                  << qApp->applicationDirPath() + "/../../CsoundQt/src/Examples"
+                  << qApp->applicationDirPath() + "/../share/csoundqt/Examples"
+                  << "~/.local/share/csoundqt/Examples"
+                  << "/usr/share/csoundqt/Examples"
+                  << "/usr/local/share/csoundqt/Examples";
 
     foreach (QString path, possiblePaths) {
-        path += dir;
+        path += QDir::separator() + dir;
         if (QDir(path).exists()) {
             examplePath = path;
             break;
         }
     }
-    if (examplePath.isEmpty()) {
-        qDebug() << "Path to extended examples not found!";
+
+#endif
+
+    if (QDir(examplePath).isEmpty() || !QDir(examplePath).exists()) {
+        qDebug() << "ExamplePath: not found!";
     } else {
         qDebug() << "ExamplePath: " << examplePath;
     }
 
-#endif
-#ifdef Q_OS_SOLARIS
-    examplePath = qApp->applicationDirPath() + "/Examples/" + dir;
-    if (!QDir(examplePath).exists()) {
-        examplePath = "/usr/share/csoundq/Examples/" + dir;
-    }
-    if (!QDir(examplePath).exists()) {
-        examplePath = qApp->applicationDirPath() + "/../src/Examples/" + dir;
-    }
-#endif
     return examplePath;
 }
 
@@ -4988,7 +4975,6 @@ void CsoundQt::createMenus()
 void CsoundQt::fillExampleMenu()
 {
     QString examplePath = getExamplePath("");
-    qDebug() << examplePath;
     if (examplePath.isEmpty() ) {
         qDebug() << "examplePath not set";
         return;
