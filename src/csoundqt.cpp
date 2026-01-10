@@ -3140,6 +3140,7 @@ void CsoundQt::applySettings()
     // This is called at initialization, when clicking "apply" in the settings dialog
     // and when closing it with "OK"
 
+
     setColors(m_options->themeMode);  // Centralized theme handling
 
     for (int i = 0; i < documentPages.size(); i++) {
@@ -3404,6 +3405,38 @@ void CsoundQt::setColors(QString themeMode)
             act->setIcon(QIcon(QString(":/themes/%1/%2").arg(m_options->theme, iconName)));
         }
     };
+
+    // Prononounce a bit more the checked buttons on toolbars
+    // on Linux it seems ok + whole toolbar background is not switched on system theme change
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+
+    QString toolbarStyle;
+
+    QString baseStyle =
+        "QToolButton {"
+        "   border: 1px solid transparent;" // Reserve space for the border
+        "   border-radius: 4px;"
+        "   padding: 1px;"
+        "}";
+
+    if (isDarkPalette) {
+        toolbarStyle = baseStyle +
+            "QToolButton:checked {"
+            "   background-color: rgba(255, 255, 255, 30);"
+            "   border-color: rgba(255, 255, 255, 50);"
+            "}";
+    } else {
+        toolbarStyle = baseStyle +
+            "QToolButton:checked {"
+            "   background-color: rgba(0, 0, 0, 20);"
+            "   border-color: rgba(0, 0, 0, 30);"
+            "}";
+    }
+
+        controlToolBar->setStyleSheet(toolbarStyle);
+        configureToolBar->setStyleSheet(toolbarStyle);
+
+#endif
 
     // Update all toolbar/menu actions (single source of truth)
     setIcon(newAct, "edit-new.png");
@@ -4098,6 +4131,8 @@ void CsoundQt::createActions()
     editAct->setCheckable(true);
     editAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(editAct, SIGNAL(triggered(bool)), this, SLOT(setWidgetEditMode(bool)));
+
+
 
     runAct = new QAction(QIcon(prefix + "media-play.png"), tr("Run Csound"), this);
     runAct->setStatusTip(tr("Run current file"));
