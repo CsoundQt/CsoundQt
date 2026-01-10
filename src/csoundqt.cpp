@@ -3150,6 +3150,7 @@ void CsoundQt::applySettings()
     // This is called at initialization, when clicking "apply" in the settings dialog
     // and when closing it with "OK"
 
+
     setColors(m_options->themeMode);  // Centralized theme handling
 
     for (int i = 0; i < documentPages.size(); i++) {
@@ -3418,6 +3419,10 @@ void CsoundQt::setColors(QString themeMode)
     // test
     // code to make run and record button more visible when pressed.
     // not sure if it works well an different platforms.
+
+    // on Linux -  light theme background is too dark; whole toolbar background is not switched on system theme change
+    // probably better not.
+
     QString toolbarStyle;
 
     QString baseStyle =
