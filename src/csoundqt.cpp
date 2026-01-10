@@ -3426,14 +3426,14 @@ void CsoundQt::setColors(QString themeMode)
         "QToolButton {"
         "   border: 1px solid transparent;" // Reserve space for the border
         "   border-radius: 4px;"
-        "   padding: 2px;"                  // Add a little breathing room
+        "   padding: 1px;"
         "}";
 
     if (isDarkPalette) {
         toolbarStyle = baseStyle +
             "QToolButton:checked {"
-            "   background-color: rgba(255, 255, 255, 60);"
-            "   border-color: rgba(255, 255, 255, 80);" // Change color, not width
+            "   background-color: rgba(255, 255, 255, 30);"
+            "   border-color: rgba(255, 255, 255, 50);"
             "}";
     } else {
         toolbarStyle = baseStyle +
