@@ -2172,24 +2172,13 @@ void CsoundQt::runInTerm(bool realtime)
     QString scriptFileName = scriptFile.fileName();
     QStringList args;
     QString termexe = m_options->terminal;
-    // QString options;
-#ifdef Q_OS_LINUX
-    args << "-e" << scriptFileName;
-    // options = "-e " + scriptFileName;
-#endif
-#ifdef Q_OS_SOLARIS
-    args << "-e" << scriptFileName;
-    // options = "-e " + scriptFileName;
-#endif
-#ifdef Q_OS_MACOS
-    args << "-a" << m_options->terminal << scriptFileName;
+#if defined(Q_OS_MACOS)
+    args << "-a" << termexe << scriptFileName;
     termexe = "open";
-    // options = scriptFileName;
-#endif
-#ifdef Q_OS_WIN32
+#elif defined(Q_OS_WIN32)
     args << scriptFileName;
-    // options = scriptFileName;
-    // qDebug() << "m_options->terminal == " << m_options->terminal;
+#else
+    args << "-e" << scriptFileName;
 #endif
     if(startProcess(termexe, args)) {
         QMessageBox::critical(this, tr("Error running terminal"),
