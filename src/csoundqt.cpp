@@ -3416,12 +3416,9 @@ void CsoundQt::setColors(QString themeMode)
         }
     };
 
-    // test
-    // code to make run and record button more visible when pressed.
-    // not sure if it works well an different platforms.
-
-    // on Linux -  light theme background is too dark; whole toolbar background is not switched on system theme change
-    // probably better not.
+    // Prononounce a bit more the checked buttons on toolbars
+    // on Linux it seems ok + whole toolbar background is not switched on system theme change
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
 
     QString toolbarStyle;
 
@@ -3441,14 +3438,15 @@ void CsoundQt::setColors(QString themeMode)
     } else {
         toolbarStyle = baseStyle +
             "QToolButton:checked {"
-            "   background-color: rgba(0, 0, 0, 40);"
-            "   border-color: rgba(0, 0, 0, 60);"
+            "   background-color: rgba(0, 0, 0, 20);"
+            "   border-color: rgba(0, 0, 0, 30);"
             "}";
     }
 
         controlToolBar->setStyleSheet(toolbarStyle);
         configureToolBar->setStyleSheet(toolbarStyle);
-    // ----
+
+#endif
 
     // Update all toolbar/menu actions (single source of truth)
     setIcon(newAct, "edit-new.png");
