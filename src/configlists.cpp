@@ -58,9 +58,9 @@ ConfigLists::ConfigLists()
 					<< "schar"<< "float"<< "long";
 	fileFormatNames << "24 Bit" << "16 Bit (short)" << "unsigned 8-bit"
 					<< "signed 8-bit" << "32 bit float"<< "long (32-bit)";
-
-	refreshModules();
-
+#ifndef Q_OS_MACOS
+    refreshModules(); // this is too early for signed MacOS bundle. Call it later fro, CsounQt constructor
+#endif
     languages << "English" << "Spanish" << "German" << "French" << "Portuguese"
               << "Italian"  << "Turkish"  << "Finnish" << "Russian" << "Korean"
               << "Persian";
@@ -115,6 +115,9 @@ void ConfigLists::refreshModules()
 	}
     rtMidiNames << "virtual" << "none";
     csoundDestroy(csound);
+    //test:
+    qDebug() << Q_FUNC_INFO << rtAudioNames;
+
 }
 
 QHash<QString,QString> ConfigLists::getMidiInputDevices(QString module)

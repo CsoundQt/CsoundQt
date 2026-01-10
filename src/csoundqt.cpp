@@ -508,6 +508,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // is it necessary here? -  probably called from applySettings already
     // setColors(m_options->themeMode.isEmpty() ? "auto" : m_options->themeMode);
 
+#ifdef Q_OS_MACOS
+    m_configlists.refreshModules(); // must happen after UI is created
+#endif
 
 /*
 #ifdef Q_OS_LINUX
@@ -1218,9 +1221,10 @@ void CsoundQt::deleteTab(int index)
         }
         widgetPanel->takeWidgetLayout(panelGeometry);
     }
+    documentTabs->widget(index)->clearFocus();
     documentPages.remove(index);
     documentTabs->removeTab(index);
-    delete  d;
+    delete d;
     if (curPage >= documentPages.size()) {
         curPage = documentPages.size() - 1;
     }
@@ -2169,24 +2173,13 @@ void CsoundQt::runInTerm(bool realtime)
     QString scriptFileName = scriptFile.fileName();
     QStringList args;
     QString termexe = m_options->terminal;
-    // QString options;
-#ifdef Q_OS_LINUX
-    args << "-e" << scriptFileName;
-    // options = "-e " + scriptFileName;
-#endif
-#ifdef Q_OS_SOLARIS
-    args << "-e" << scriptFileName;
-    // options = "-e " + scriptFileName;
-#endif
-#ifdef Q_OS_MACOS
-    args << "-a" << m_options->terminal << scriptFileName;
+#if defined(Q_OS_MACOS)
+    args << "-a" << termexe << scriptFileName;
     termexe = "open";
-    // options = scriptFileName;
-#endif
-#ifdef Q_OS_WIN32
+#elif defined(Q_OS_WIN32)
     args << scriptFileName;
-    // options = scriptFileName;
-    // qDebug() << "m_options->terminal == " << m_options->terminal;
+#else
+    args << "-e" << scriptFileName;
 #endif
     if(startProcess(termexe, args)) {
         QMessageBox::critical(this, tr("Error running terminal"),
@@ -2893,7 +2886,7 @@ void CsoundQt::openManualExample(QString fileName)
 void CsoundQt::openExternalBrowser(QUrl url)
 {
     QString test = url.toString();
-    if (!m_options->browser.isEmpty() && QFile::exists(m_options->browser)) {
+    if (!m_options->browser.isEmpty()) {
         //execute(m_options->browser, "\"" + url.toString() + "\"");
         startProcess(m_options->browser, QStringList(url.toString()));
         // execute(m_options->browser, url.toString()); // remove quotes, otherwise wrong with changed QProcess
@@ -4787,49 +4780,36 @@ QString CsoundQt::getExamplePath(QString dir)
     if (!QDir(examplePath).exists()) {
         QString programFilesPath= QDir::fromNativeSeparators(qgetenv("PROGRAMFILES"));
         examplePath =  programFilesPath + "/Csound6/bin/Examples/" + dir; // NB! with csound6.0.6 no Floss/mCcurdy/Stria examples there. Copy manually
-        //qDebug()<<"Windows examplepath: "<<examplePath;
     }
-#endif
-#ifdef Q_OS_MAC
+#elif Q_OS_MAC
     examplePath = qApp->applicationDirPath() + "/../Resources/Examples/" + dir;
-    qDebug() << examplePath;
-#endif
-#ifdef Q_OS_LINUX
-    examplePath = QString(); //qApp->applicationDirPath() + "/Examples/" + dir;
+#else
+    examplePath = QString();
     QStringList possiblePaths;
-    possiblePaths << qApp->applicationDirPath() + "/Examples/"
-                  << qApp->applicationDirPath() + "/../src/Examples/"
-                  << qApp->applicationDirPath() + "/../../csoundqt/src/Examples/"
-                  << qApp->applicationDirPath() + "/../../CsoundQt/src/Examples/"
-                  << qApp->applicationDirPath() + "/../share/csoundqt/Examples/"
-                  <<  "/../../csoundq/src/Examples/"
-                  << "~/.local/share/csoundq/Examples/" << "/usr/share/qutecsound/Examples/"
-                  << "~/.local/share/csoundqt/Examples/"
-                  << "/usr/share/csoundqt/Examples/";
+    possiblePaths << qApp->applicationDirPath() + "/Examples"
+                  << qApp->applicationDirPath() + "/../src/Examples"
+                  << qApp->applicationDirPath() + "/../../CsoundQt/src/Examples"
+                  << qApp->applicationDirPath() + "/../share/csoundqt/Examples"
+                  << "~/.local/share/csoundqt/Examples"
+                  << "/usr/share/csoundqt/Examples"
+                  << "/usr/local/share/csoundqt/Examples";
 
     foreach (QString path, possiblePaths) {
-        path += dir;
+        path += QDir::separator() + dir;
         if (QDir(path).exists()) {
             examplePath = path;
             break;
         }
     }
-    if (examplePath.isEmpty()) {
-        qDebug() << "Path to extended examples not found!";
+
+#endif
+
+    if (QDir(examplePath).isEmpty() || !QDir(examplePath).exists()) {
+        qDebug() << "ExamplePath: not found!";
     } else {
         qDebug() << "ExamplePath: " << examplePath;
     }
 
-#endif
-#ifdef Q_OS_SOLARIS
-    examplePath = qApp->applicationDirPath() + "/Examples/" + dir;
-    if (!QDir(examplePath).exists()) {
-        examplePath = "/usr/share/csoundq/Examples/" + dir;
-    }
-    if (!QDir(examplePath).exists()) {
-        examplePath = qApp->applicationDirPath() + "/../src/Examples/" + dir;
-    }
-#endif
     return examplePath;
 }
 
@@ -4985,7 +4965,6 @@ void CsoundQt::createMenus()
 void CsoundQt::fillExampleMenu()
 {
     QString examplePath = getExamplePath("");
-    qDebug() << examplePath;
     if (examplePath.isEmpty() ) {
         qDebug() << "examplePath not set";
         return;
@@ -5061,38 +5040,26 @@ void CsoundQt::fillFileMenu()
     templateMenu->clear();
     QString templatePath = m_options->templateDir;
     if (templatePath.isEmpty() || !QDir(templatePath).exists()) {
-#ifdef Q_OS_WIN32
-        templatePath = qApp->applicationDirPath() + "/templates/";
-#endif
-#ifdef Q_OS_MAC
-        templatePath = qApp->applicationDirPath() + "/../templates/";
-        qDebug() << templatePath;
-#endif
-#ifdef Q_OS_LINUX
-        templatePath = qApp->applicationDirPath() + "/templates/";
-        if (!QDir(templatePath).exists()) {
-            templatePath = qApp->applicationDirPath() + "/../templates/";
+        QStringList possiblePaths;
+        possiblePaths << qApp->applicationDirPath() + "/templates"
+                      << qApp->applicationDirPath() + "/../templates"
+                      << qApp->applicationDirPath() + "/../../CsoundQt/templates"
+                      << "/usr/share/csoundqt/templates"
+                      << "/usr/local/share/csoundqt/templates";
+
+        foreach (QString path, possiblePaths) {
+            if (QDir(path).exists()) {
+                templatePath = path;
+                break;
+            }
         }
-        if (!QDir(templatePath).exists()) { // for out of tree builds
-            templatePath = qApp->applicationDirPath() + "/../../csoundqt/templates/";
-        }
-        if (!QDir(templatePath).exists()) { // for out of tree builds
-            templatePath = qApp->applicationDirPath() + "/../../CsoundQt/templates/";
-        }
-        if (!QDir(templatePath).exists()) {
-            templatePath = "/usr/share/csoundqt/templates/";
-        }
-#endif
-#ifdef Q_OS_SOLARIS
-        templatePath = qApp->applicationDirPath() + "/templates/";
-        if (!QDir(templatePath).exists()) {
-            templatePath = "/usr/share/qutecsound/templates/";
-        }
-        if (!QDir(templatePath).exists()) {
-            templatePath = qApp->applicationDirPath() + "/../src/templates/";
-        }
-#endif
     }
+    if (templatePath.isEmpty() || !QDir(templatePath).exists()) {
+        qDebug() << "TemplatePath: not found!";
+    } else {
+        qDebug() << "TemplatePath: " << templatePath;
+    }
+
     QStringList filters;
     filters << "*.csd"<<"*.html";
     QStringList templateFiles = QDir(templatePath).entryList(filters,QDir::Files);
@@ -5846,21 +5813,17 @@ int CsoundQt::execute(QString executable, QString options)
 {
     int ret = 0;
 
-#ifdef Q_OS_MAC
+#if defined(Q_OS_MAC)
     QString commandLine = "open -a \"" + executable + "\" " + options;
-#endif
-#ifdef Q_OS_LINUX
-    // QString commandLine = "\"" + executable + "\" " + options;
+#elif defined(Q_OS_HAIKU) || defined(Q_OS_SOLARIS)
+    QString commandLine = "\"" + executable + "\" " + options;
+#elif defined(Q_OS_WIN32)
+    QString commandLine = "\"" + executable + "\" " + (executable.startsWith("cmd")? " /k " : " ") + options;
+#else
     QString commandLine = executable + " " + options;
 #endif
-#ifdef Q_OS_HAIKU
-    QString commandLine = "\"" + executable + "\" " + options;
-#endif
-#ifdef Q_OS_SOLARIS
-    QString commandLine = "\"" + executable + "\" " + options;
-#endif
+
 #ifdef Q_OS_WIN32
-    QString commandLine = "\"" + executable + "\" " + (executable.startsWith("cmd")? " /k " : " ") + options;
     auto command_line = commandLine.toUtf8();
     qDebug() << "command_line: " << command_line;
     std::thread system_thread([command_line]{std::system(command_line);});
@@ -6711,6 +6674,8 @@ QVariant CsoundQt::getWidgetProperty(QString widgetid, QString property, int ind
     return value;
 }
 
+// TODO: check  it -  probably all the createX functions are not needed any more
+// after removing PythonQt support
 
 QString CsoundQt::createNewLabel(int x , int y , QString channel, int index)
 {

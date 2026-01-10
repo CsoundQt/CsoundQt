@@ -33,7 +33,7 @@
 ################################################################################
 
 #temporary
-#CONFIG+=bundle_csound
+CONFIG+=bundle_csound
 
 #To prepare for Qt6 build
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
@@ -146,7 +146,6 @@ unix:!macx {
 	}
 
 	target.path = $$INSTALL_DIR/bin
-	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET # do not install with the full name
 	INSTALLS += target
 
 	postInstall.path = $$INSTALL_DIR/bin
@@ -189,11 +188,17 @@ macx {
 
     # EXPERIMENTAL INSTALL instructions for making bundle (ie make install)
     first.path = $$PWD
-    first.commands = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML # first deployment
+    bundle_csound {
+        first.commands = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML # first deployment
+    } else {
+       first.commands = $$[QT_INSTALL_PREFIX]/bin/macdeployqt $$OUT_PWD/$$DESTDIR/$${TARGET}.app -qmldir=$$PWD/src/QML -sign-for-notarization=\"Developer ID Application: Tarmo Johannes (DRQ77GKK9V)\"
+    }
+
+# -sign-for-notarization=\"Developer ID Application: Tarmo Johannes (DRQ77GKK9V)\" -dmg
     INSTALLS += first
 
-    cocoa.path = $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/PlugIns/platforms # fix missing plugins (with qt 5.4.2 at least)
-    cocoa.files =  $$[QT_INSTALL_PREFIX]/plugins/platforms/libqcocoa.dylib
+    #cocoa.path = $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/PlugIns/platforms # fix missing plugins (with qt 5.4.2 at least)
+    #cocoa.files =  $$[QT_INSTALL_PREFIX]/plugins/platforms/libqcocoa.dylib
 
     printsupport.path =  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/PlugIns/printsupport
     printsupport.files =  $$[QT_INSTALL_PREFIX]/plugins/printsupport/libcocoaprintersupport.dylib
@@ -204,6 +209,7 @@ macx {
     # bundle command: install_name_tool -change /Applications/Csound/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 /Users/tarmojohannes/Documents/src/build-qcs-Qt_6_5_3_for_macOS-Release/bin/CsoundQt-d-cs7.app/Contents/MacOS/CsoundQt-d-cs7
     # sign with developer cert: codesign -s "Mac Developer: Tarmo Johannes (ND7C9HZ522)" --deep /Users/tarmojohannes/Documents/src/build-cs7-qcsQt_6_5_3_for_macOS-Release/bin/CsoundQt-d-cs7.app
     # install certificate name:
+    # NB! Must use bundled Csound since signed CsoundQt cannot use not signed frameworks from nonstandard locations, as /Applications/Csound seems to be.
     bundle_csound {
         # Nothing special to do for that, just don't delete, leave the links to @rpath
         message("Bundle Csound into  the package")
@@ -211,19 +217,19 @@ macx {
         csound.files = /Applications/Csound/CsoundLib64.framework
         INSTALLS+=csound
         #final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib @rpath/CsoundLib64.framework/Versions/6.0/libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
-        final.commands += install_name_tool -change  /Applications/Csound/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        final.commands += install_name_tool -change  /Applications/Csound/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
 
     } else {
         final.path = $$PWD
         final.commands = rm -rf  $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks/CsoundLib64.framework ;
-        final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
-        final.commands += install_name_tool -change  @rpath/CsoundLib64.framework/Versions/6.0/CsoundLib64 CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        #final.commands += install_name_tool -change @rpath/libcsnd6.6.0.dylib libcsnd6.6.0.dylib $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
+        final.commands += install_name_tool -change  @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 /Applications/Csound/CsoundLib64.framework/Versions/6.0/CsoundLib64 $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/$$TARGET ;
     }
 
     final.path = $$PWD
     #final.commands += codesign -s - --deep $$OUT_PWD/$$DESTDIR/$${TARGET}.app ; #try codesigning to eliminate asking for Docuemtns folder permission every time
-    final.commands += hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname CsoundQt $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg # untested!
-    INSTALLS += cocoa printsupport pythonlinks final
+    #final.commands += hdiutil create -fs HFS+ -srcfolder $$OUT_PWD/$$DESTDIR/$${TARGET}.app -volname CsoundQt $$OUT_PWD/$$DESTDIR/$${TARGET}.dmg # untested!
+    INSTALLS += printsupport pythonlinks final
 
 }
 
