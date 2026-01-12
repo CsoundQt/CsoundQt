@@ -98,7 +98,7 @@
 #define DEFAULT_LOG_FILE ""
 #endif
 #ifdef Q_OS_OPENBSD
-#define DEFAULT_HTML_DIR "/usr/local/share/doc/csound-doc/html"
+#define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"
 #define DEFAULT_TERM_EXECUTABLE "xterm"
 #define DEFAULT_BROWSER_EXECUTABLE "firefox"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity"

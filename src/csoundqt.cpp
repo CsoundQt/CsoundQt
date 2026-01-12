@@ -5496,11 +5496,7 @@ void CsoundQt::readSettings()
     m_options->sampleFormat = settings.value("sampleFormat", 0).toInt();
     settings.endGroup();
     settings.beginGroup("Environment");
-#ifdef Q_OS_MAC
     m_options->csdocdir = settings.value("csdocdir", DEFAULT_HTML_DIR).toString();
-#else
-    m_options->csdocdir = settings.value("csdocdir", "").toString();
-#endif
     m_options->opcode7dir64 = settings.value("opcode7dir64","").toString();
     m_options->opcode7dir64Active = settings.value("opcode7dir64Active",false).toBool();
     m_options->sadir = settings.value("sadir","").toString();
