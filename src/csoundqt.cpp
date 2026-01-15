@@ -378,24 +378,27 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     // try to find directory for manual, if not set
     QString docDir = QString(); //m_options->csdocdir;
-    QString index = docDir + QString("/index.html");
-    QStringList possibleDirectories;
-#ifdef Q_OS_LINUX
-    possibleDirectories  << "/usr/share/doc/csound-manual/html/"
-                         << "/usr/share/doc/csound-doc/html/"
-                         << QCoreApplication::applicationDirPath() + "/../share/doc/csound-manual/html/"   // for transportable apps like AppImage and perhas others
-                         << QCoreApplication::applicationDirPath() + "/../share/doc/csound-doc/html/"   ;
-#endif
-#ifdef Q_OS_WIN
+    if (m_options->csdocdir.isEmpty() ||
+            !QFile::exists(m_options->csdocdir+"/index.html") ) {
+        QStringList possibleDirectories;
+#if defined(Q_OS_WIN)
         QString programFilesPath = QDir::fromNativeSeparators(qgetenv("PROGRAMFILES"));
         QString programFilesPathx86 = QDir::fromNativeSeparators(qgetenv("PROGRAMFILES(X86)"));
-        possibleDirectories << initialDir +"/doc/manual/" << programFilesPath + "/Csound6/doc/manual/" << programFilesPathx86 + "/Csound6/doc/manual/" <<  programFilesPath + "/Csound6_x64/doc/manual/" <<  programFilesPath + "/csound/doc/manual/";
+        possibleDirectories << initialDir +"/doc/manual"
+                            << programFilesPath + "/Csound6/doc/manual"
+                            << programFilesPathx86 + "/Csound6/doc/manual"
+                            << programFilesPath + "/Csound6_x64/doc/manual"
+                            << programFilesPath + "/csound/doc/manual";
+#elif defined(Q_OS_MACOS)
+        possibleDirectories << initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual")
+                            << "/Library/Frameworks/CsoundLib64.framework/Resources/Manual";
+#else
+        possibleDirectories << "/usr/share/doc/csound-manual/html"
+                            << "/usr/share/doc/csound-doc/html"
+                            << "/usr/local/share/doc/csound/html"
+                            << QCoreApplication::applicationDirPath() + "/../share/doc/csound-manual/html"   // for transportable apps like AppImage and perhas others
+                            << QCoreApplication::applicationDirPath() + "/../share/doc/csound-doc/html";
 #endif
-#ifdef Q_OS_MACOS
-     possibleDirectories <<  initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/") <<  "/Library/Frameworks/CsoundLib64.framework/Resources/Manual/";
-#endif
-     if (m_options->csdocdir.isEmpty() ||
-            !QFile::exists(m_options->csdocdir+"/index.html") ) {
         foreach (QString dir, possibleDirectories) {
             qDebug() << "Looking manual in: " << dir;
             if (QFile::exists(dir+"/index.html")) {
@@ -5496,11 +5499,7 @@ void CsoundQt::readSettings()
     m_options->sampleFormat = settings.value("sampleFormat", 0).toInt();
     settings.endGroup();
     settings.beginGroup("Environment");
-#ifdef Q_OS_MAC
-    m_options->csdocdir = settings.value("csdocdir", DEFAULT_HTML_DIR).toString();
-#else
     m_options->csdocdir = settings.value("csdocdir", "").toString();
-#endif
     m_options->opcode7dir64 = settings.value("opcode7dir64","").toString();
     m_options->opcode7dir64Active = settings.value("opcode7dir64Active",false).toBool();
     m_options->sadir = settings.value("sadir","").toString();
