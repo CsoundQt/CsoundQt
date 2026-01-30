@@ -30,7 +30,7 @@
 
 
 
-#define CSQT_VERSION "7.0.0-beta1"
+#define CSQT_VERSION "7.0.0-beta2"
 
 
 // Time in milliseconds for widget and console messages updates

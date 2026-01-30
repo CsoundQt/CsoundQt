@@ -4610,8 +4610,8 @@ void CsoundQt::createActions()
     //	connect(showParametersAct,SIGNAL(triggered()), this, SLOT(showParametersInEditor()));
 
     // font size ZoomIn, ZoomOut
-    QAction *increaseFontAction = new QAction(this);
-    QAction *decreaseFontAction = new QAction(this);
+    increaseFontAction = new QAction(tr("Increase font"), this);
+    decreaseFontAction = new QAction(tr("Decrease font"), this);
     increaseFontAction->setShortcut(QKeySequence::ZoomIn);
     decreaseFontAction->setShortcut(QKeySequence::ZoomOut);
     connect(increaseFontAction, &QAction::triggered, this, &CsoundQt::increaseFontSize );
@@ -4960,6 +4960,10 @@ void CsoundQt::createMenus()
     viewMenu->addAction(showOtherAct);
     viewMenu->addAction(showOtherCsdAct);
     viewMenu->addAction(showWidgetEditAct);
+    viewMenu->addSeparator();
+    viewMenu->addAction(increaseFontAction);
+    viewMenu->addAction(decreaseFontAction);
+
 
     fillExampleMenu();
 
