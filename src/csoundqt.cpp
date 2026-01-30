@@ -1322,38 +1322,33 @@ void CsoundQt::setupEnvironment()
     _putenv(envString.toLocal8Bit());
 #endif
 
-    QString opcodedir;
+    QString opcodedir = QString();
 
-    // csoundGetEnv must be called after Compile or Precompile,
-    // But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
     if (m_options->opcode7dir64Active) {
-       opcodedir = m_options->opcode7dir64;
-    } else {
-#ifdef Q_OS_WIN32
-	// if opcodes are in the same directory or in ./plugins64, then set OPCODE7DIR64 to the bundled plugins
-	// no need to support 32-opcodes any more, set only OPCODE7DIR64
-        if (QFile::exists(initialDir+"/rtpa.dll" )) {
-            opcodedir = initialDir;
-        } else if (QFile::exists(initialDir+"/plugins64/rtpa.dll" )) {
-            opcodedir = initialDir+"/plugins64/";
-        } else if (QFile::exists("C:/Program Files/Csound7/plugins64/rtpa.dll")) {
-            opcodedir = "C:/Program Files/Csound7/plugins64/";
-        } else {
-            opcodedir = QString();
+        opcodedir = m_options->opcode7dir64;
+    } else if (!qEnvironmentVariableIsSet("OPCODE7DIR64") || !QDir(qEnvironmentVariable("OPCODE7DIR64")).exists()) {
+        QStringList possiblePaths;
+#if defined(Q_OS_WIN32)
+        // if opcodes are in the same directory or in ./plugins64, then set OPCODE7DIR64 to the bundled plugins
+        possiblePaths << initialDir
+                      << initialDir + "/plugins64"
+                      << "C:/Program Files/Csound7/plugins64"
+                      << "C:/Program Files/Csound/plugins64";
+#elif defined(Q_OS_MACOS)
+        // Use bundled opcodes if available
+        possiblePaths << initialDir + "/../Frameworks/CsoundLib64.framework/Resources/Opcodes64"
+                      << "/Applications/Csound/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64";
+#else
+        possiblePaths << "/usr/lib/csound/plugins64-7.0"
+                      << "/usr/local/lib/csound/plugins64-7.0";
+#endif
+        foreach (QString path, possiblePaths) {
+            if (QDir(path).exists()) {
+                opcodedir = path;
+                break;
+            }
         }
-
-#endif
-#ifdef Q_OS_MACOS
-    // Use bundled opcodes if available
-    if (QFile::exists(initialDir + "/../Frameworks/CsoundLib64.framework/Resources/Opcodes64")) {
-        opcodedir = initialDir + "/../Frameworks/CsoundLib64.framework/Resources/Opcodes64";
-    } else if (QFile::exists("/Applications/Csound/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64")) { // NB! The location may change in the future
-        opcodedir = "/Applications/Csound/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64";
     }
-#endif
-
-    }
-
 
     if (!opcodedir.isEmpty()) {
         QDEBUG << "Setting  OPCODE7DIR64 to: " << opcodedir;
