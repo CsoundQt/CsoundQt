@@ -663,8 +663,8 @@ void QuteButton::buttonPressed()
 
         m_currentValue = !w->isChecked() ? m_value : 0;
         // test:
-        bool test = w->isChecked();
-        QDEBUG << "Button pressed, checked is : " << test << " value:  " << m_currentValue;
+        // bool test = w->isChecked();
+        // QDEBUG << "Button pressed, checked is : " << test << " value:  " << m_currentValue;
     } else {
 		m_currentValue = m_value;
     }

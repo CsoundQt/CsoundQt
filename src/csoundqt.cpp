@@ -4814,7 +4814,7 @@ QString CsoundQt::getExamplePath(QString dir)
         QString programFilesPath= QDir::fromNativeSeparators(qgetenv("PROGRAMFILES"));
         examplePath =  programFilesPath + "/Csound6/bin/Examples/" + dir; // NB! with csound6.0.6 no Floss/mCcurdy/Stria examples there. Copy manually
     }
-#elif Q_OS_MAC
+#elif defined(Q_OS_MAC)
     examplePath = qApp->applicationDirPath() + "/../Resources/Examples/" + dir;
 #else
     examplePath = QString();
