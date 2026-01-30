@@ -32,9 +32,12 @@ bool HelpPage::acceptNavigationRequest(const QUrl &url, NavigationType type, boo
     if (type == NavigationTypeLinkClicked) {
         // Check for .csd files (examples)
         if (url.path().endsWith(".csd", Qt::CaseInsensitive)) {
-            QString path = url.toLocalFile();
-            emit dock->openManualExample(path);
-            return false; // Don't navigate in the help panel
+            // Only handle local .csd files
+            if (url.isLocalFile()) {
+                QString path = url.toLocalFile();
+                emit dock->openManualExample(path);
+                return false; // Don't navigate in the help panel
+            }
         }
         
         // Handle external links
@@ -88,6 +91,10 @@ DockHelp::DockHelp(QWidget *parent)
 	connect(ui->caseBox,SIGNAL(stateChanged(int)),this,SLOT(onCaseBoxChanged(int)));
 	connect(ui->wholeWordBox,SIGNAL(stateChanged(int)),this,SLOT(onWholeWordBoxChanged(int)));
 
+	// Disable whole word search as it's not supported by QWebEnginePage
+	ui->wholeWordBox->setEnabled(false);
+	ui->wholeWordBox->setToolTip(tr("Whole word search is not available with the web-based help viewer"));
+
     ui->toggleFindButton->setChecked(false);
     ui->findLine->setVisible(false);
     ui->caseBox->setVisible(false);
@@ -116,7 +123,7 @@ void DockHelp::loadFile(QString fileName, QString anchor) {
 
     QUrl url = QUrl::fromLocalFile(fileName);
     if(!anchor.isEmpty()) {
-        url.setUrl(url.toString() + "#" + anchor);
+        url.setFragment(anchor);
     }
     webView->setUrl(url);
 }
@@ -217,11 +224,20 @@ void DockHelp::onPreviousButtonPressed()
 void DockHelp::onCaseBoxChanged(int value)
 {
 	findCaseSensitive = (value != 0);
+	// Re-execute search with new flags if there's a search term
+	if (!lastFindText.isEmpty()) {
+		findText(lastFindText, false);
+	}
 }
 
 void DockHelp::onWholeWordBoxChanged(int value)
 {
 	findWholeWords = (value != 0);
+	// Note: QWebEnginePage doesn't support FindWholeWords flag
+	// Re-execute search with new flags if there's a search term
+	if (!lastFindText.isEmpty()) {
+		findText(lastFindText, false);
+	}
 }
 
 void DockHelp::findText(QString expr, bool backward)
