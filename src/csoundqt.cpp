@@ -1965,7 +1965,8 @@ void CsoundQt::play(bool realtime, int index)
     }
 
     //else if (page->isModified()) {
-    else if (m_options->saveChanges && fileInfo.isWritable() && !page->getFileName().startsWith(":/")) { // is modified returns sometimes wrongly false. save anyway when asked TODO: degub DocumentPage::isModified()
+    else if (m_options->saveChanges && fileInfo.isWritable() &&
+            !page->readOnly &&  !page->getFileName().startsWith(":/")) { // is modified returns sometimes wrongly false. save anyway when asked TODO: degub DocumentPage::isModified()
         if (!save()) {
             if (curPage == oldPage) {
                 runAct->setChecked(false);
@@ -6039,6 +6040,11 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     if (fileName.startsWith(m_options->csdocdir) && !m_options->csdocdir.isEmpty()) {
         documentPages[curPage]->readOnly = true;
     }
+    QString examplePath = getExamplePath("");
+    if (fileName.startsWith(examplePath) && !examplePath.isEmpty()) {
+        documentPages[curPage]->readOnly = true;
+    }
+
     QApplication::restoreOverrideCursor();
 
     // FIXME put back
