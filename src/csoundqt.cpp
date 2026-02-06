@@ -391,6 +391,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
                             << programFilesPath + "/csound/doc/manual";
 #elif defined(Q_OS_MACOS)
         possibleDirectories << initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual")
+                            << initialDir + QString("/../Resources/Manual")
                             << "/Library/Frameworks/CsoundLib64.framework/Resources/Manual";
 #else
         possibleDirectories << "/usr/share/doc/csound-manual/html"
