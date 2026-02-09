@@ -511,9 +511,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // is it necessary here? -  probably called from applySettings already
     // setColors(m_options->themeMode.isEmpty() ? "auto" : m_options->themeMode);
 
-#ifdef Q_OS_MACOS
-    m_configlists.refreshModules(); // must happen after UI is created
-#endif
+    m_configlists.refreshModules(); // must happen after setupEnvironment() has been called 
 
 /*
 #ifdef Q_OS_LINUX
