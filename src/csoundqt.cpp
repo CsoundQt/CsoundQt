@@ -22,6 +22,7 @@
 
 #include <QStyleHints>
 #include <QQmlContext>
+#include <QFileSystemWatcher>
 
 #include "configdialog.h"
 #include "console.h"
@@ -221,6 +222,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     m_server = new QLocalServer();
     connect(m_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
+
+    m_fileWatcher = new QFileSystemWatcher(this);
+    connect(m_fileWatcher, &QFileSystemWatcher::fileChanged,
+            this, &CsoundQt::onExternalFileChanged);
 
 #if defined(CSQT_QTHTML)
     //TODO: change it when user changes
@@ -845,6 +850,68 @@ void CsoundQt::reload()
     }
 }
 
+void CsoundQt::onExternalFileChanged(const QString &path)
+{
+    // Debounce: some editors (e.g. vim) fire multiple rapid signals for one save.
+    if (m_pendingFileChanges.contains(path))
+        return;
+    m_pendingFileChanges.insert(path);
+
+    QTimer::singleShot(300, this, [this, path]() {
+        m_pendingFileChanges.remove(path);
+
+        // Atomic-write editors (vim, emacs) delete-then-rename, which removes the
+        // path from the watcher. Re-add it if the file is still there.
+        if (QFile::exists(path))
+            m_fileWatcher->addPath(path);
+
+        // Find the document page that owns this file
+        int pageIndex = -1;
+        for (int i = 0; i < documentPages.size(); ++i) {
+            if (documentPages[i]->getFileName() == path) {
+                pageIndex = i;
+                break;
+            }
+        }
+        if (pageIndex == -1)
+            return; // tab was already closed
+
+        if (!QFile::exists(path)) {
+            QMessageBox::information(this, tr("File Deleted"),
+                tr("The file \"%1\" has been deleted or moved outside CsoundQt.")
+                .arg(QFileInfo(path).fileName()));
+            return;
+        }
+
+        // Read new content from disk
+        QFile file(path);
+        if (!file.open(QFile::ReadOnly))
+            return;
+        QStringDecoder decoder(QStringDecoder::System);
+        QString text = decoder(file.readAll());
+
+        DocumentPage *doc = documentPages[pageIndex];
+        if (doc->isModified()) {
+            int ret = QMessageBox::question(
+                this, tr("File Changed on Disk"),
+                tr("The file \"%1\" has been modified on disk.\n"
+                   "Do you want to reload it? Your unsaved changes will be lost.")
+                .arg(QFileInfo(path).fileName()),
+                QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+            if (ret != QMessageBox::Yes)
+                return;
+        }
+
+        doc->loadTextString(text);
+        doc->setModified(false);
+
+        if (!doc->isModified()) {
+            statusBar()->showMessage(
+                tr("File \"%1\" reloaded from disk.").arg(QFileInfo(path).fileName()), 3000);
+        }
+    });
+}
+
 void CsoundQt::openFromAction()
 {
     QString fileName = static_cast<QAction *>(sender())->data().toString();
@@ -1225,6 +1292,10 @@ void CsoundQt::deleteTab(int index)
         widgetPanel->takeWidgetLayout(panelGeometry);
     }
     documentTabs->widget(index)->clearFocus();
+    // Stop watching the file before the document is destroyed
+    const QString watchedPath = d->getFileName();
+    if (!watchedPath.isEmpty() && !watchedPath.startsWith(":/"))
+        m_fileWatcher->removePath(watchedPath);
     documentPages.remove(index);
     documentTabs->removeTab(index);
     delete d;
@@ -6034,6 +6105,11 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     }
     QApplication::restoreOverrideCursor();
 
+    // Watch for external changes (skip internal/example files)
+    if (!fileName.isEmpty() && !fileName.startsWith(":/") && QFile::exists(fileName)) {
+        m_fileWatcher->addPath(fileName);
+    }
+
     // FIXME put back
     //  widgetPanel->clearHistory();
     if (runNow) {
@@ -6166,17 +6242,32 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
         recentFiles.removeLast();
         fillFileMenu();
     }
+    // Stop watching the old path while we write to avoid a self-triggered reload.
+    // For saveAs the old path differs from fileName, so we remove both.
+    const QString oldWatchedPath = documentPages[curPage]->getFileName();
+    m_fileWatcher->removePath(oldWatchedPath);
+    if (oldWatchedPath != fileName)
+        m_fileWatcher->removePath(fileName);
+
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly)) {
         QMessageBox::warning(this, tr("Application"),
                              tr("Cannot write file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
+        // Restore watch on the old path since the write failed
+        if (!oldWatchedPath.isEmpty() && !oldWatchedPath.startsWith(":/"))
+            m_fileWatcher->addPath(oldWatchedPath);
         return false;
     }
 
     QTextStream out(&file);
     out << text;
+
+    // Re-watch the saved file (new path in case of saveAs)
+    if (!fileName.isEmpty() && !fileName.startsWith(":/"))
+        m_fileWatcher->addPath(fileName);
+
     documentPages[curPage]->setModified(false);
     setWindowModified(false);
     documentTabs->setTabIcon(curPage, QIcon());

@@ -46,6 +46,7 @@
 class QAction;
 class QMenu;
 class QTextEdit;
+class QFileSystemWatcher;
 
 class DockHelp;
 class WidgetPanel;
@@ -317,6 +318,7 @@ private slots:
 #endif
     void applyThemeFromSystem(Qt::ColorScheme scheme);
     void setColors(QString themeMode);
+    void onExternalFileChanged(const QString &path);
 
 private:
 	void createActions();
@@ -551,6 +553,8 @@ private:
     };
     QLabel *lineAndColumnLabel;
     QPalette makeAppPalette(bool dark);
+    QFileSystemWatcher *m_fileWatcher;
+    QSet<QString> m_pendingFileChanges;
 };
 
 class FileOpenEater : public QObject
