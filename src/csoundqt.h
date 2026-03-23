@@ -197,6 +197,7 @@ private slots:
 	void reload();
 	void openFromAction();
 	void openFromAction(QString fileName);
+    void handleDroppedFiles(QList<QUrl> urls);
 	void runScriptFromAction();
 	void runScript(QString fileName);
 	void createCodeGraph();

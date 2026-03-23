@@ -4812,6 +4812,9 @@ void CsoundQt::connectActions()
     // line and column number connection
     connect(doc->getView(), SIGNAL(newLineAndColumn(int, int)), this, SLOT(setLineAndColumn(int,int)));
 
+    // file drop connection
+    connect(doc->getView(), &BaseView::fileDropped, this, &CsoundQt::handleDroppedFiles);
+
     // connect(gotoLineAct, SIGNAL(triggered()), doc, SLOT(gotoLineDialog()));
     //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
     //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
@@ -5954,6 +5957,14 @@ int CsoundQt::execute(QString executable, QString options)
 int CsoundQt::loadFileFromSystem(QString fileName)
 {
     return loadFile(fileName,m_options->autoPlay);
+}
+
+void CsoundQt::handleDroppedFiles(QList<QUrl> urls)
+{
+    for (const QUrl &url : urls) {
+        if (url.isLocalFile())
+            loadFile(url.toLocalFile());
+    }
 }
 
 void changeNewLines(QByteArray &line) {
