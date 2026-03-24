@@ -209,6 +209,8 @@ void QuteGraph::setWidgetGeometry(int x,int y,int width,int height)
 
 void QuteGraph::mousePressEvent(QMouseEvent *event) {
     int index = (int)m_value;
+    if (index < 0 || index >= graphtypes.size())
+        return;
     switch(graphtypes[index]) {
     case GraphType::GRAPH_SPECTRUM: {
         if(event->button() & Qt::LeftButton) {
@@ -239,7 +241,9 @@ void QuteGraph::mouseReleased() {
         m_lastTextMarkerX = 0;
     }
     m_showPeakTemp = false;
-    int index = (int)m_value;
+    int index = (int)m_value;    
+    if (index < 0 || index >= m_spectrumPeakTexts.size() || index >= m_spectrumPeakMarkers.size()  )
+        return;
     m_spectrumPeakTexts[index]->setVisible(m_showPeak);
     // auto scene = getView(index)->scene();
     m_spectrumPeakMarkers[index]->setVisible(m_showPeak);
@@ -267,6 +271,8 @@ void QuteGraph::mouseMoveEvent(QMouseEvent *event) {
 void QuteGraph::keyPressEvent(QKeyEvent *event) {
     bool flag;
     int index = m_value;
+    if (index < 0 || index >= graphtypes.size())
+        return;
     auto graphtype = graphtypes[index];
     switch(event->key()) {
     case Qt::Key_F:
