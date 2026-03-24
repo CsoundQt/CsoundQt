@@ -146,7 +146,6 @@ unix:!macx {
 	}
 
 	target.path = $$INSTALL_DIR/bin
-	target.files = $$OUT_PWD/$$DESTDIR/$$TARGET # do not install with the full name
 	INSTALLS += target
 
 	postInstall.path = $$INSTALL_DIR/bin

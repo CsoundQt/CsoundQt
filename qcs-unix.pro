@@ -10,9 +10,9 @@ DEFAULT_CSOUND_API_INCLUDE_DIRS += /usr/local/include/csound \
 DEFAULT_CSOUND_INTERFACES_INCLUDE_DIRS += $${DEFAULT_CSOUND_API_INCLUDE_DIRS}
 DEFAULT_CSOUND_LIBRARY_DIRS += /usr/local/lib \
         /usr/lib
-build32:DEFAULT_CSOUND_LIBS = libcsound.so \
+build32:DEFAULT_CSOUND_LIBS = libcsound.so* \
 	libcsound.a
-build64:DEFAULT_CSOUND_LIBS = libcsound64.so \
+build64:DEFAULT_CSOUND_LIBS = libcsound64.so* \
         libcsound64.a
 
 DEFAULT_LIBSNDFILE_LIBRARY_DIRS = /usr/local/lib \
