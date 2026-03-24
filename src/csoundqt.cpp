@@ -284,7 +284,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     connect(documentTabs->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
 
     setCentralWidget(documentTabs);
-    connect(showEditorAct, SIGNAL(toggled(bool)), documentTabs, SLOT(setVisible(bool)));
+    connect(showEditorAct, SIGNAL(toggled(bool)), this, SLOT(showEditor(bool)));
     documentTabs->setVisible(showEditorAct->isChecked());
     documentTabs->setDocumentMode(true);
     modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
@@ -2531,6 +2531,21 @@ void CsoundQt::setEditorFocus()
 {
     documentPages[curPage]->setEditorFocus();
     this->raise();
+}
+
+void CsoundQt::showEditor(bool show)
+{
+    if (show == documentTabs->isVisible())
+        return;
+    if (show) {
+        // Expand window first, then show — so the layout never squeezes docks
+        resize(width() + m_editorWidth, height());
+        documentTabs->setVisible(true);
+    } else {
+        m_editorWidth = documentTabs->width();
+        documentTabs->setVisible(false);
+        resize(width() - m_editorWidth, height());
+    }
 }
 
 

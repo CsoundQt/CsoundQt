@@ -234,6 +234,7 @@ private slots:
 	void openExternalEditor();
 	void openExternalPlayer();
 	void setEditorFocus();
+    void showEditor(bool show);
 	void setHelpEntry();
     void helpForEntry(QString text, bool external=false);
     void setFullScreen(bool full);
@@ -531,6 +532,7 @@ private:
 	bool m_resetPrefs; // Flag to reset preferences to default when closing
 	bool m_inspectorNeedsUpdate;
 	bool m_closing; // CsoundQt is closing (to inform timer threads)
+    int m_editorWidth = 0; // stored editor width for hide/restore
 	UtilitiesDialog *utilitiesDialog;
 	QIcon modIcon;
 	QString currentAudioFile;
