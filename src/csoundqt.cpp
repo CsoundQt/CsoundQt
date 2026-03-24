@@ -285,6 +285,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     setCentralWidget(documentTabs);
     connect(showEditorAct, SIGNAL(toggled(bool)), documentTabs, SLOT(setVisible(bool)));
+    documentTabs->setVisible(showEditorAct->isChecked());
     documentTabs->setDocumentMode(true);
     modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
     modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
@@ -4306,7 +4307,7 @@ void CsoundQt::createActions()
     focusEditorAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(focusEditorAct, SIGNAL(triggered()), this, SLOT(setEditorFocus()));
 
-    showEditorAct = new QAction(tr("Editor"), this);
+    showEditorAct = new QAction(QIcon(prefix + "editor.png"), tr("Editor"), this);
     showEditorAct->setCheckable(true);
     showEditorAct->setChecked(true);
     showEditorAct->setStatusTip(tr("Show the text editor"));
@@ -5392,6 +5393,7 @@ void CsoundQt::readSettings()
     lastUsedDir = settings.value("lastuseddir", "").toString();
     lastFileDir = settings.value("lastfiledir", "").toString();
     //  showLiveEventsAct->setChecked(settings.value("liveEventsActive", true).toBool());
+    showEditorAct->setChecked(settings.value("editorVisible", true).toBool());
     m_options->language = m_configlists.languageCodes.indexOf(settings.value("language", QLocale::system().name()).toString());
     if (m_options->language < 0)
         m_options->language = 0;
@@ -5710,6 +5712,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("themeMode", m_options->themeMode);
         settings.setValue("windowState", saveState());
         settings.setValue("windowGeometry", saveGeometry());
+        settings.setValue("editorVisible", showEditorAct->isChecked());
         settings.endGroup();
 
         settings.beginGroup("Options");
