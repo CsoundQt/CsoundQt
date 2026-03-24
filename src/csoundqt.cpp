@@ -284,6 +284,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     connect(documentTabs->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
 
     setCentralWidget(documentTabs);
+    connect(showEditorAct, SIGNAL(toggled(bool)), documentTabs, SLOT(setVisible(bool)));
     documentTabs->setDocumentMode(true);
     modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
     modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
@@ -4305,6 +4306,13 @@ void CsoundQt::createActions()
     focusEditorAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(focusEditorAct, SIGNAL(triggered()), this, SLOT(setEditorFocus()));
 
+    showEditorAct = new QAction(tr("Editor"), this);
+    showEditorAct->setCheckable(true);
+    showEditorAct->setChecked(true);
+    showEditorAct->setStatusTip(tr("Show the text editor"));
+    showEditorAct->setIconText(tr("Editor"));
+    showEditorAct->setShortcutContext(Qt::ApplicationShortcut);
+
     showHelpAct = new QAction(QIcon(prefix + "info.png"), tr("Help Panel"), this);
     showHelpAct->setCheckable(true);
     showHelpAct->setChecked(true);
@@ -4999,6 +5007,7 @@ void CsoundQt::createMenus()
 
     viewMenu = menuBar()->addMenu(tr("View"));
     viewMenu->addAction(focusEditorAct);
+    viewMenu->addAction(showEditorAct);
     viewMenu->addAction(showWidgetsAct);
     viewMenu->addAction(showHelpAct);
     viewMenu->addAction(showConsoleAct);
@@ -5304,6 +5313,7 @@ void CsoundQt::createToolBars()
 #if defined(CSQT_QTHTML)
     configureToolBar->addAction(showHtml5Act);
 #endif
+    configureToolBar->addAction(showEditorAct);
     configureToolBar->addAction(showWidgetsAct);
     configureToolBar->addAction(showHelpAct);
     configureToolBar->addAction(showConsoleAct);
