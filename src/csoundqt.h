@@ -533,7 +533,7 @@ private:
 	bool m_inspectorNeedsUpdate;
 	bool m_closing; // CsoundQt is closing (to inform timer threads)
     int m_editorWidth = 0; // stored editor width for hide/restore
-	UtilitiesDialog *utilitiesDialog;
+    UtilitiesDialog *utilitiesDialog;
 	QIcon modIcon;
 	QString currentAudioFile;
 	QString initialDir;
