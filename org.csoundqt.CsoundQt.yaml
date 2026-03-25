@@ -1,25 +1,45 @@
 app-id: org.csoundqt.CsoundQt
 runtime: org.kde.Platform
-runtime-version: '5.15-22.08'
+runtime-version: '6.9'
 sdk: org.kde.Sdk
-command: bin/CsoundQt-d-cs6
+command: CsoundQt-d-cs7        # updated binary name
+
 finish-args:
   - --share=ipc
   - --socket=x11
   - --socket=wayland
-  - --filesystem=host
-  - --device=dri
+  - --socket=pulseaudio
+  - --device=all
+  - --filesystem=xdg-run/pipewire-0
+  - --filesystem=home
+  - --share=network
+  
 modules:
-  - name: CsoundQt
-    buildsystem: simple
-    build-commands: 
-      - git submodule update --init --recursive
-      - qmake CONFIG+=rtmidi qcs.pro
-      - make -j$(nproc)
-      - make
+  - name: csound
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DBUILD_STATIC_LIBRARY=OFF
+      - -DBUILD_TESTS=OFF
+      - -DBUILD_INSTALLER=OFF
+      - -DCMAKE_INSTALL_LIBDIR=lib
+      - -DINSTALL_PYTHON_INTERFACE=OFF
+      - -DUSE_PIPEWIRE=ON
       
     sources:
       - type: git
-        url: https://github.com/CsoundQt/CsoundQt
+        url: https://github.com/csound/csound
         branch: develop
-        disable-shallow-clone: false
+        disable-shallow-clone: true
+
+  - name: CsoundQt
+    buildsystem: simple
+    build-commands:
+      - git submodule update --init --recursive
+      - qmake CONFIG+=rtmidi CONFIG+=build64 qcs.pro CSOUND_API_INCLUDE_DIR=/app/include/csound CSOUND_LIBRARY_DIR=/app/lib INSTALL_DIR=/app SHARE_DIR=/app/share
+      - make -j$(nproc)
+      - make install
+    sources:
+      - type: git
+        url: https://github.com/CsoundQt/CsoundQt
+        branch: csoundqt7
+        disable-shallow-clone: true
