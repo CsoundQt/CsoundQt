@@ -578,6 +578,12 @@ void Highlighter::clearTypedVars()
     m_opcodeVariables.clear();
     m_structVariables.clear();
     m_userTypeNames.clear();
+    m_giVariables.clear();
+    m_gkVariables.clear();
+    m_gaVariables.clear();
+    m_gSVariables.clear();
+    m_gfVariables.clear();
+    m_namedInstruments.clear();
 }
 
 QTextCharFormat Highlighter::formatForType(const QString &typeStr) const
@@ -611,6 +617,19 @@ void Highlighter::registerTypedVar(const QString &name, const QString &typeStr)
     else if(t == "InstrDef" || t == "Instr") m_instrDefVariables.insert(name);
     else if(t == "Opcode")                m_opcodeVariables.insert(name);
     else if(m_userTypeNames.contains(t))  m_structVariables.insert(name);
+}
+
+void Highlighter::registerGlobalTypedVar(const QString &name, const QString &typeStr)
+{
+    QString t = typeStr;
+    t.remove("[]");
+    if(t == "i")       m_giVariables.insert(name);
+    else if(t == "k") m_gkVariables.insert(name);
+    else if(t == "a") m_gaVariables.insert(name);
+    else if(t == "S") m_gSVariables.insert(name);
+    else if(t == "f") m_gfVariables.insert(name);
+    // Other global types fall back to the regular sets
+    else               registerTypedVar(name, typeStr);
 }
 
 void Highlighter::highlightBlock(const QString &text)
@@ -842,6 +861,14 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             //auto group = rxmatch.captured(2);
             setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1), instFormat);
             setFormat(rxmatch.capturedStart(2), rxmatch.capturedLength(2), nameFormat);
+            // Track non-numeric instrument names so they can be highlighted at call sites
+            if(rxmatch.captured(1) == "instr") {
+                const QString instrName = rxmatch.captured(2);
+                bool isNumber = false;
+                instrName.toInt(&isNumber);
+                if(!isNumber)
+                    m_namedInstruments.insert(instrName);
+            }
             return;
         }
 
@@ -857,14 +884,14 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         }
 
         // Csound 7: detect @global typed variable definitions, e.g. "maxamp@global:i = 0dbfs / 5"
-        // Register the var name in the appropriate typed set so later uses are highlighted.
+        // Register the var name in the global-rate sets so later uses get girateFormat etc.
         {
             static const QRegularExpression globalRx("(\\w+)@global:(\\w+(?:\\[\\])?)");
             QRegularExpressionMatchIterator globalIt = globalRx.globalMatch(text);
             while(globalIt.hasNext()) {
                 auto m = globalIt.next();
                 if(m.capturedStart() < commentIndex) {
-                    registerTypedVar(m.captured(1), m.captured(2));
+                    registerGlobalTypedVar(m.captured(1), m.captured(2));
                 }
             }
         }
@@ -963,9 +990,28 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             else if(isOpcode(word)) {
                 setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
             }
+            else if(m_namedInstruments.contains(word)) {
+                setFormat(wordStart, wordEnd - wordStart, nameFormat);
+            }
             else if(colorVariables) {
-                // Csound 7: check explicitly typed variable sets first
-                if(m_aVariables.contains(word)) {
+                // @global:type sets — these take precedence over local typed sets
+                if(m_gaVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, garateFormat);
+                }
+                else if(m_gkVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, gkrateFormat);
+                }
+                else if(m_giVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, girateFormat);
+                }
+                else if(m_gSVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, gstringVarFormat);
+                }
+                else if(m_gfVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, gfsigFormat);
+                }
+                // Csound 7: check explicitly typed (local) variable sets
+                else if(m_aVariables.contains(word)) {
                     setFormat(wordStart, wordEnd - wordStart, arateFormat);
                 }
                 else if(m_kVariables.contains(word)) {

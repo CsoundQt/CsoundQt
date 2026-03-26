@@ -186,10 +186,16 @@ private:
     QSet<QString> m_SVariables, m_fVariables, m_bVariables, m_complexVariables;
     QSet<QString> m_instrDefVariables, m_opcodeVariables, m_structVariables;
     QSet<QString> m_userTypeNames;
+    // @global:type — separate global sets so they get girateFormat/gkrateFormat/garateFormat etc.
+    QSet<QString> m_giVariables, m_gkVariables, m_gaVariables;
+    QSet<QString> m_gSVariables, m_gfVariables;
+    // Named (non-numeric) instruments: instr Foo → highlight Foo wherever it appears
+    QSet<QString> m_namedInstruments;
 
     void clearTypedVars();
     QTextCharFormat formatForType(const QString &typeStr) const;
     void registerTypedVar(const QString &name, const QString &typeStr);
+    void registerGlobalTypedVar(const QString &name, const QString &typeStr);
 };
 
 #endif
