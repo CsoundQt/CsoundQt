@@ -130,6 +130,8 @@ private:
     QTextCharFormat csdtagFormat, instFormat, headerFormat;
 	QTextCharFormat irateFormat, krateFormat, arateFormat, girateFormat, gkrateFormat, garateFormat;
 	QTextCharFormat stringVarFormat, gstringVarFormat, fsigFormat, gfsigFormat;
+    QTextCharFormat booleanFormat; // Csound 7: :b / :B boolean typed variables
+    QTextCharFormat complexFormat; // Csound 7: :Complex typed variables
     QTextCharFormat opcodeFormat, udoFormat, macroDefineFormat, pfieldFormat;
     QTextCharFormat singleLineCommentFormat, importantCommentFormat;
 	QTextCharFormat multiLineCommentFormat;
@@ -178,6 +180,16 @@ private:
 
     QStringList m_parsedUDOs;
     CsdSection m_sectionType;
+
+    // Csound 7: explicitly typed variable sets
+    QSet<QString> m_iVariables, m_kVariables, m_aVariables;
+    QSet<QString> m_SVariables, m_fVariables, m_bVariables, m_complexVariables;
+    QSet<QString> m_instrDefVariables, m_opcodeVariables, m_structVariables;
+    QSet<QString> m_userTypeNames;
+
+    void clearTypedVars();
+    QTextCharFormat formatForType(const QString &typeStr) const;
+    void registerTypedVar(const QString &name, const QString &typeStr);
 };
 
 #endif
