@@ -43,8 +43,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Concurrent Network PrintSupport QuickWidgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Concurrent Network Xml PrintSupport QuickWidgets LinguistTools)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Concurrent Network PrintSupport QuickWidgets WebEngineWidgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Concurrent Network Xml PrintSupport QuickWidgets WebEngineWidgets LinguistTools)
 
 # Validate Qt version
 if(QT_VERSION_MAJOR EQUAL 5)
@@ -89,6 +89,7 @@ target_link_libraries(CsoundQt PRIVATE
   Qt${QT_VERSION_MAJOR}::Xml
   Qt${QT_VERSION_MAJOR}::PrintSupport
   Qt${QT_VERSION_MAJOR}::QuickWidgets
+  Qt${QT_VERSION_MAJOR}::WebEngineWidgets
 )
 
 if(CSQT_BUILD_DEBUGGER_SUPPORT)

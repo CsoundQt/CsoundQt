@@ -391,6 +391,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
                             << programFilesPath + "/csound/doc/manual";
 #elif defined(Q_OS_MACOS)
         possibleDirectories << initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual")
+                            << initialDir + QString("/../Resources/Manual")
                             << "/Library/Frameworks/CsoundLib64.framework/Resources/Manual";
 #else
         possibleDirectories << "/usr/share/doc/csound-manual/html"
@@ -1963,8 +1964,10 @@ void CsoundQt::play(bool realtime, int index)
             return;
         }
     }
+
     //else if (page->isModified()) {
-    else if (m_options->saveChanges && fileInfo.isWritable() && !page->getFileName().startsWith(":/")) { // is modified returns sometimes wrongly false. save anyway when asked TODO: degub DocumentPage::isModified()
+    else if (m_options->saveChanges && fileInfo.isWritable() &&
+            !page->readOnly &&  !page->getFileName().startsWith(":/")) { // is modified returns sometimes wrongly false. save anyway when asked TODO: degub DocumentPage::isModified()
         if (!save()) {
             if (curPage == oldPage) {
                 runAct->setChecked(false);
@@ -2472,7 +2475,7 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
         entry.remove(0,1);
     }
     QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
-    if (entry.startsWith("http://")) {
+    if (entry.startsWith("https://")) {
         openExternalBrowser(QUrl(entry));
         return;
     }
@@ -2526,17 +2529,23 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
     else {
         helpPanel->docDir = dir;
         QString fileName;
+        // changes here for the new manual system ----
         if (entry == "0dbfs")
-            fileName = dir + "/Zerodbfs.html";
-        else if (entry.contains("CsOptions"))
-            fileName = dir + "/CommandUnifile.html";
-        else if (entry.startsWith("chn_"))
-            fileName = dir + "/chn.html";
-        else if(QFile::exists(dir + "/" + entry + ".html")) {
-            fileName = dir + "/" + entry + ".html";
+            fileName = dir + "/opcodes/0dbfs.html";
+        else if (QSet<QString>({"CsoundSynthesizer", "CsOptions",
+            "CsInstruments", "CsScore", "CsFileB", "CsFile",
+            "CsVersion", "CsLicense", "html", "Cabbage"}).contains(entry)) {
+            fileName = dir + "/invoke/the-csd-file-format.html";
         }
-        else
+        else if (entry.startsWith("chn_"))
+            fileName = dir + "/opcodes/chn.html";
+        else if(QFile::exists(dir + "/opcodes/" + entry + ".html")) {
+            fileName = dir + "/opcodes/" + entry + ".html";
+        }
+        else {
+            QDEBUG << "Did not find help file for entry" << entry;
             return;
+        }
         openHtmlHelp(fileName, entry, external);
     }
 }
@@ -6032,6 +6041,11 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     if (fileName.startsWith(m_options->csdocdir) && !m_options->csdocdir.isEmpty()) {
         documentPages[curPage]->readOnly = true;
     }
+    QString examplePath = getExamplePath("");
+    if (fileName.startsWith(examplePath) && !examplePath.isEmpty()) {
+        documentPages[curPage]->readOnly = true;
+    }
+
     QApplication::restoreOverrideCursor();
 
     // FIXME put back

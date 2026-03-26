@@ -217,16 +217,6 @@
       </item>
      </layout>
     </item>
-    <item>
-     <widget class="QTextBrowser" name="text">
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="openLinks">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <action name="nextFindAct">
