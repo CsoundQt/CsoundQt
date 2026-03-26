@@ -21,7 +21,7 @@
 */
 
 #include "highlighter.h"
-#include "types.h"
+// #include "types.h"
 
 #include <QRegularExpression>
 
@@ -160,11 +160,11 @@ void Highlighter::setTheme(const QString &theme) {
 
 
         krateFormat.setForeground(QColor("#10796C"));
-        irateFormat.setForeground(QColor("#303F9F"));
+        irateFormat.setForeground(QColor("#546E7A"));
 
         // arateFormat.setForeground(QColor("#C62828"));
         arateFormat.setForeground(QColor("#B71C1C"));
-        arateFormat.setFontWeight(QFont::Bold);
+        //arateFormat.setFontWeight(QFont::Bold);
 
         stringVarFormat.setForeground(QColor(Qt::darkYellow));
         stringVarFormat.setFontWeight(QFont::Normal);
@@ -172,11 +172,11 @@ void Highlighter::setTheme(const QString &theme) {
         fsigFormat.setForeground(QColor("#Ad1457"));
         fsigFormat.setFontWeight(QFont::Bold);
 
-        booleanFormat.setForeground(QColor("#E65100"));
-        booleanFormat.setFontWeight(QFont::Bold);
+        booleanFormat.setForeground(QColor("#7B1FA2"));
+        //booleanFormat.setFontWeight(QFont::Bold);
 
-        complexFormat.setForeground(QColor("#00695C"));
-        complexFormat.setFontWeight(QFont::Bold);
+        complexFormat.setForeground(QColor("#6D4C41"));
+        //complexFormat.setFontWeight(QFont::Bold);
 
         labelFormat.setForeground(QColor(205,92,92));
         labelFormat.setFontWeight(QFont::Bold);
@@ -242,20 +242,20 @@ void Highlighter::setTheme(const QString &theme) {
         pfieldFormat.setFontWeight(QFont::Bold);
 
         krateFormat.setForeground(QColor("#66EEBB"));
-        irateFormat.setForeground(QColor("#FFFFFF"));
+        irateFormat.setForeground(QColor("#A0A0FF"));
 
         arateFormat.setForeground(QColor("#F75C5C"));
-        arateFormat.setFontWeight(QFont::Bold);
+        //arateFormat.setFontWeight(QFont::Bold);
 
 
         fsigFormat.setForeground(QColor("#BD2467"));
         fsigFormat.setFontWeight(QFont::Bold);
 
-        booleanFormat.setForeground(QColor("#FFB74D"));
-        booleanFormat.setFontWeight(QFont::Bold);
+        booleanFormat.setForeground(QColor("#D4E157"));
+        // booleanFormat.setFontWeight(QFont::Bold);
 
-        complexFormat.setForeground(QColor("#4DD0E1"));
-        complexFormat.setFontWeight(QFont::Bold);
+        complexFormat.setForeground(QColor("#26A69A"));
+        // complexFormat.setFontWeight(QFont::Bold);
 
         labelFormat.setForeground(instFormat.foreground());
         labelFormat.setFontWeight(QFont::Bold);
