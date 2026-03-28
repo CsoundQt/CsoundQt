@@ -180,7 +180,8 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_randomizable", false);
 	setProperty("CSQT_randomizableGroup", 0);
     setColor(QColor(245, 124, 0));
-    setTextColor(QColor(81, 41, 0));
+    QColor textColor =  isDarkTheme() ?  QColor(245, 124, 0) : qApp->palette().color(QPalette::WindowText); // yellowish color for dark theme
+    setTextColor(textColor);
     auto borderColor = QColor(81, 41, 0);
     setProperty("CSQT_borderColor", borderColor.name());
     setProperty("CSQT_border", 0);
