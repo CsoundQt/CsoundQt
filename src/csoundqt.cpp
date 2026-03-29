@@ -22,6 +22,7 @@
 
 #include <QStyleHints>
 #include <QQmlContext>
+#include <QFileSystemWatcher>
 
 #include "configdialog.h"
 #include "console.h"
@@ -93,7 +94,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     initialDir = QCoreApplication::applicationDirPath();
     setWindowTitle("CsoundQt[*]");
     // resize(780,550);
-	m_fullScreenComponent = QString();
+    m_fullScreenComponent = QString();
     setWindowIcon(QIcon(":/images/csoundqt.png"));
     //Does this take care of the decimal separator for different locales?
     QLocale::setDefault(QLocale::system());
@@ -222,6 +223,10 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_server = new QLocalServer();
     connect(m_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 
+    m_fileWatcher = new QFileSystemWatcher(this);
+    connect(m_fileWatcher, &QFileSystemWatcher::fileChanged,
+            this, &CsoundQt::onExternalFileChanged);
+
 #if defined(CSQT_QTHTML)
     //TODO: change it when user changes
     if (m_options->debugPort) {
@@ -279,6 +284,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     connect(documentTabs->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
 
     setCentralWidget(documentTabs);
+    connect(showEditorAct, SIGNAL(toggled(bool)), this, SLOT(showEditor(bool)));
+    documentTabs->setVisible(showEditorAct->isChecked());
     documentTabs->setDocumentMode(true);
     modIcon.addFile(":/images/modIcon2.png", QSize(), QIcon::Normal);
     modIcon.addFile(":/images/modIcon.png", QSize(), QIcon::Disabled);
@@ -483,11 +490,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     // Open files saved from last session
     if (!lastFiles.isEmpty()) {
-		// close the first, default page.
-		//qDebug() << " First page: " << documentPages[0]->getFileName() << lastFiles.count();
-		if (documentPages[0]->getFileName().isEmpty() && lastFiles.count()>0) { // first empty page
-			deleteTab(0);
-		}
+        // close the first, default page.
+        //qDebug() << " First page: " << documentPages[0]->getFileName() << lastFiles.count();
+        if (documentPages[0]->getFileName().isEmpty() && lastFiles.count()>0) { // first empty page
+            deleteTab(0);
+        }
         foreach (QString lastFile, lastFiles) {
             if (lastFile!="" && !lastFile.startsWith("untitled")) {
                 loadFile(lastFile);
@@ -521,8 +528,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // gets rounded... Did not find the real reasound
     // Csound must be started and stopped once, then it works:
     int oldPage = documentTabs->currentIndex();
-	QString tmp1 = lastUsedDir;
-	QString tmp2 = lastFileDir;
+    QString tmp1 = lastUsedDir;
+    QString tmp2 = lastFileDir;
     makeNewPage(QDir::tempPath()+"/tmp.csd",  CSQT_DEFAULT_TEMPLATE);
     save();
     play(true, -1); // problem, if pulse/alsa in settings but jack has been started
@@ -530,8 +537,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     stop();
     deleteTab(curPage);
     documentTabs->setCurrentIndex(oldPage);
-	lastUsedDir = tmp1;
-	lastFileDir = tmp2;
+    lastUsedDir = tmp1;
+    lastFileDir = tmp2;
 #endif
 */
 }
@@ -638,18 +645,18 @@ void CsoundQt::changePage(int index)
 #endif
     m_inspectorNeedsUpdate = true;
 
-	// set acceptsMidiCC for pages -  either all true, or only currrentPage true
-	for (int i=0; i<documentPages.size(); i++ ) {
-		if ( m_options->midiCcToCurrentPageOnly ) {
-			if (i==curPage) {
-				documentPages[i]->acceptsMidiCC = true;
-			} else {
-				documentPages[i]->acceptsMidiCC = false;
-			}
-		} else {
-			documentPages[i]->acceptsMidiCC = true;
-		}
-	}
+    // set acceptsMidiCC for pages -  either all true, or only currrentPage true
+    for (int i=0; i<documentPages.size(); i++ ) {
+        if ( m_options->midiCcToCurrentPageOnly ) {
+            if (i==curPage) {
+                documentPages[i]->acceptsMidiCC = true;
+            } else {
+                documentPages[i]->acceptsMidiCC = false;
+            }
+        } else {
+            documentPages[i]->acceptsMidiCC = true;
+        }
+    }
 }
 
 void CsoundQt::pageLeft()
@@ -843,6 +850,68 @@ void CsoundQt::reload()
     } else {
         QMessageBox::information(nullptr, "Reload", "File was not modified");
     }
+}
+
+void CsoundQt::onExternalFileChanged(const QString &path)
+{
+    // Debounce: some editors (e.g. vim) fire multiple rapid signals for one save.
+    if (m_pendingFileChanges.contains(path))
+        return;
+    m_pendingFileChanges.insert(path);
+
+    QTimer::singleShot(300, this, [this, path]() {
+        m_pendingFileChanges.remove(path);
+
+        // Atomic-write editors (vim, emacs) delete-then-rename, which removes the
+        // path from the watcher. Re-add it if the file is still there.
+        if (QFile::exists(path))
+            m_fileWatcher->addPath(path);
+
+        // Find the document page that owns this file
+        int pageIndex = -1;
+        for (int i = 0; i < documentPages.size(); ++i) {
+            if (documentPages[i]->getFileName() == path) {
+                pageIndex = i;
+                break;
+            }
+        }
+        if (pageIndex == -1)
+            return; // tab was already closed
+
+        if (!QFile::exists(path)) {
+            QMessageBox::information(this, tr("File Deleted"),
+                tr("The file \"%1\" has been deleted or moved outside CsoundQt.")
+                .arg(QFileInfo(path).fileName()));
+            return;
+        }
+
+        // Read new content from disk
+        QFile file(path);
+        if (!file.open(QFile::ReadOnly))
+            return;
+        QStringDecoder decoder(QStringDecoder::System);
+        QString text = decoder(file.readAll());
+
+        DocumentPage *doc = documentPages[pageIndex];
+        if (doc->isModified()) {
+            int ret = QMessageBox::question(
+                this, tr("File Changed on Disk"),
+                tr("The file \"%1\" has been modified on disk.\n"
+                   "Do you want to reload it? Your unsaved changes will be lost.")
+                .arg(QFileInfo(path).fileName()),
+                QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+            if (ret != QMessageBox::Yes)
+                return;
+        }
+
+        doc->loadTextString(text);
+        doc->setModified(false);
+
+        if (!doc->isModified()) {
+            statusBar()->showMessage(
+                tr("File \"%1\" reloaded from disk.").arg(QFileInfo(path).fileName()), 3000);
+        }
+    });
 }
 
 void CsoundQt::openFromAction()
@@ -1225,6 +1294,10 @@ void CsoundQt::deleteTab(int index)
         widgetPanel->takeWidgetLayout(panelGeometry);
     }
     documentTabs->widget(index)->clearFocus();
+    // Stop watching the file before the document is destroyed
+    const QString watchedPath = d->getFileName();
+    if (!watchedPath.isEmpty() && !watchedPath.startsWith(":/"))
+        m_fileWatcher->removePath(watchedPath);
     documentPages.remove(index);
     documentTabs->removeTab(index);
     delete d;
@@ -1831,20 +1904,20 @@ void CsoundQt::showUtilities(bool show)
 
 void CsoundQt::inToGet()
 {
-	documentPages[curPage]->inToGet();
+    documentPages[curPage]->inToGet();
 }
 
 void CsoundQt::insertMidiControlInstrument()
 {
 
-	QString instrument = documentPages[curPage]->getMidiControllerInstrument();
-	qDebug() << instrument;
-	int ret = QMessageBox::information(nullptr, tr("Insert"),
-		tr("This function generates a Csound instrument from the MIDI bindings of your widgets (if thre is any) and inserts to the text editor at the current cursor position\n"
-		"It can be useful if you want to run the csd outside of CsoundQt with your MIDI controller.\n"				"Rembember to add -Ma or similar MIDI options to the CsOptions."),   QMessageBox::Cancel |QMessageBox::Ok);
-	if (ret==QMessageBox::Ok) {
-		insertText("\n" + instrument + "\n");
-	}
+    QString instrument = documentPages[curPage]->getMidiControllerInstrument();
+    qDebug() << instrument;
+    int ret = QMessageBox::information(nullptr, tr("Insert"),
+        tr("This function generates a Csound instrument from the MIDI bindings of your widgets (if thre is any) and inserts to the text editor at the current cursor position\n"
+        "It can be useful if you want to run the csd outside of CsoundQt with your MIDI controller.\n"				"Rembember to add -Ma or similar MIDI options to the CsOptions."),   QMessageBox::Cancel |QMessageBox::Ok);
+    if (ret==QMessageBox::Ok) {
+        insertText("\n" + instrument + "\n");
+    }
 
 }
 
@@ -2090,11 +2163,11 @@ void CsoundQt::play(bool realtime, int index)
         // Csound compilation failed
         runAct->setChecked(false);
     } else if (ret == 0) {
-		// No problem:
-		// set playing icon on tab
+        // No problem:
+        // set playing icon on tab
         documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme )));
 
-		// enable widgets
+        // enable widgets
         if(m_options->checkSyntaxOnly) {
             return;
         }
@@ -2199,11 +2272,11 @@ void CsoundQt::pause(int index)
     }
     if (docIndex >= 0 && docIndex < documentPages.size()) {
         documentPages[docIndex]->pause();
-		if (documentPages[docIndex]->getEngine()->isPaused() ) {
+        if (documentPages[docIndex]->getEngine()->isPaused() ) {
             documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/media-pause.png").arg(m_options->theme )));
-		} else {
+        } else {
             documentTabs->setTabIcon(docIndex, QIcon(QString(":/themes/%1/media-play.png").arg(m_options->theme )));
-		}
+        }
     }
 }
 
@@ -2226,14 +2299,14 @@ void CsoundQt::stop(int index)
         qDebug() << "CsoundQt::stop : document index" << docIndex
                  << "out of range (max=" << documentPages.size() << ")";
         markStopped();
-		return;
+        return;
     }
 
 
 
     if (documentPages[docIndex]->isRunning()) {
         documentPages[docIndex]->stop();
-		documentTabs->setTabIcon(docIndex, QIcon());
+        documentTabs->setTabIcon(docIndex, QIcon());
 
 #ifdef Q_OS_WIN
         // necessary since sometimes fltk plugin closes the OLE/COM connection on csoundCleanup
@@ -2252,7 +2325,7 @@ void CsoundQt::stopAll()
 {
     for (int i = 0; i < documentPages.size(); i++) {
         documentPages[i]->stop();
-		documentTabs->setTabIcon(i, QIcon());
+        documentTabs->setTabIcon(i, QIcon());
     }
     markStopped();
 }
@@ -2263,7 +2336,7 @@ void CsoundQt::stopAllOthers()
         if (i != curPage) {
             DocumentPage *documentPage = documentPages[i];
             documentPage->stop();
-			documentTabs->setTabIcon(i, QIcon());
+            documentTabs->setTabIcon(i, QIcon());
         }
     }
     //	markStopped();
@@ -2291,27 +2364,27 @@ void CsoundQt::perfEnded()
 }
 
 void CsoundQt::record(bool rec) {
-	record(rec, curPage);
+    record(rec, curPage);
 }
 
 void CsoundQt::record(bool rec, int index=-1)
 {
-	if (index==-1) index=curPage;
-	if (rec) {
-		if (!documentPages[index]->isRunning()) {
+    if (index==-1) index=curPage;
+    if (rec) {
+        if (!documentPages[index]->isRunning()) {
             play();
         }
-		int ret = documentPages[index]->record(m_options->sampleFormat);
+        int ret = documentPages[index]->record(m_options->sampleFormat);
         documentTabs->setTabIcon(index, QIcon(QString(":/themes/%1/media-record.png").arg(m_options->theme )));
-		if (ret != 0) {
+        if (ret != 0) {
             recAct->setChecked(false);
-			documentTabs->setTabIcon(index, QIcon());
+            documentTabs->setTabIcon(index, QIcon());
         }
     }
     else {
-		documentPages[index]->stopRecording();
+        documentPages[index]->stopRecording();
         QMessageBox::information(nullptr, tr("Record"), tr("Recorded to audiofile ") + this->currentAudioFile);
-		// documentTabs->setTabIcon(curPage, QIcon());
+        // documentTabs->setTabIcon(curPage, QIcon());
     }
 }
 
@@ -2462,6 +2535,22 @@ void CsoundQt::setEditorFocus()
     this->raise();
 }
 
+void CsoundQt::showEditor(bool show)
+{
+    if (show == documentTabs->isVisible())
+        return;
+    if (show) {
+        documentTabs->setVisible(true);
+        documentTabs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    } else {
+        m_editorWidth = documentTabs->width();
+        documentTabs->setVisible(false);
+        documentTabs->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+        setMinimumWidth(0);
+        adjustSize();
+    }
+}
+
 
 /**
  * @brief CsoundQt::helpForEntry open help for given entry
@@ -2579,51 +2668,51 @@ void CsoundQt::setHelpEntry()
 
 void CsoundQt::setFullScreen(bool full)
 {
-	if (full) {
-		checkFullScreen();
+    if (full) {
+        checkFullScreen();
         this->showFullScreen();
-		m_fullScreenComponent = "mainwindow";
+        m_fullScreenComponent = "mainwindow";
     }
     else {
         checkFullScreen(); // if something is still fullscreen by error, reset it;
         this->showNormal();
-		m_fullScreenComponent = "";
+        m_fullScreenComponent = "";
     }
 }
 
 void CsoundQt::checkFullScreen() // checks if some component is already fullscreen and resets it
 {
     //qDebug()<< " fullScreenComponent: " << m_fullScreenComponent << "state bytes: " << m_preFullScreenState.size();
-	if ( !m_fullScreenComponent.isEmpty() ) {
-		if (m_fullScreenComponent == "mainwindow" ) {
-			viewFullScreenAct->setChecked(false);
-		} else if (m_fullScreenComponent == "help" ) {
-			viewHelpFullScreenAct->setChecked(false);
-		} else if (m_fullScreenComponent == "widgets") {
-			viewWidgetsFullScreenAct->setChecked(false);
-		} else if ( m_fullScreenComponent == "editor" ) {
-		} else if ( m_fullScreenComponent == "html" ) {
-			viewHtmlFullScreenAct->setChecked(false);
-		}
+    if ( !m_fullScreenComponent.isEmpty() ) {
+        if (m_fullScreenComponent == "mainwindow" ) {
+            viewFullScreenAct->setChecked(false);
+        } else if (m_fullScreenComponent == "help" ) {
+            viewHelpFullScreenAct->setChecked(false);
+        } else if (m_fullScreenComponent == "widgets") {
+            viewWidgetsFullScreenAct->setChecked(false);
+        } else if ( m_fullScreenComponent == "editor" ) {
+        } else if ( m_fullScreenComponent == "html" ) {
+            viewHtmlFullScreenAct->setChecked(false);
+        }
     }
 }
 
 void CsoundQt::setEditorFullScreen(bool full)
 {
-	if (full) {
-		checkFullScreen();
-		m_preFullScreenState = this->saveState();
+    if (full) {
+        checkFullScreen();
+        m_preFullScreenState = this->saveState();
         QList<QDockWidget *> dockWidgets = findChildren<QDockWidget *>();
         foreach (QDockWidget *dockWidget, dockWidgets) {
             dockWidget->hide();
         }
         this->showFullScreen();
-		m_fullScreenComponent = "editor";
+        m_fullScreenComponent = "editor";
     }
     else {
-		this->restoreState(m_preFullScreenState);
+        this->restoreState(m_preFullScreenState);
         this->showNormal(); // to restore titlebar etc
-		m_fullScreenComponent = "";
+        m_fullScreenComponent = "";
     }
 }
 
@@ -2631,22 +2720,22 @@ void CsoundQt::setEditorFullScreen(bool full)
 void CsoundQt::setHtmlFullScreen(bool full)
 {
 #ifdef CSQT_QTHTML
-	if (full) {
-		checkFullScreen();
-		m_preFullScreenState = this->saveState();
-		this->csoundHtmlView->setFloating(true);
+    if (full) {
+        checkFullScreen();
+        m_preFullScreenState = this->saveState();
+        this->csoundHtmlView->setFloating(true);
 #ifndef Q_OS_WIN // this was Q_OS_MACOS before -  try now showMaximized for all expect Windows
         this->csoundHtmlView->showMaximized();
 #else
-		this->csoundHtmlView->showFullScreen();
+        this->csoundHtmlView->showFullScreen();
 #endif
-		m_fullScreenComponent = "html";
+        m_fullScreenComponent = "html";
     }
     else {
-		this->restoreState(m_preFullScreenState);
+        this->restoreState(m_preFullScreenState);
         this->csoundHtmlView->setFloating(false);
-		//this->showNormal();
-		m_fullScreenComponent = "";
+        //this->showNormal();
+        m_fullScreenComponent = "";
     }
 # else
     Q_UNUSED(full);
@@ -2655,9 +2744,9 @@ void CsoundQt::setHtmlFullScreen(bool full)
 
 void CsoundQt::setHelpFullScreen(bool full)
 {
-	if (full) {
-		checkFullScreen();
-		m_preFullScreenState = this->saveState();
+    if (full) {
+        checkFullScreen();
+        m_preFullScreenState = this->saveState();
         this->helpPanel->setFloating(true);
 #ifndef Q_OS_WIN
         this->helpPanel->showMaximized();
@@ -2667,18 +2756,18 @@ void CsoundQt::setHelpFullScreen(bool full)
         m_fullScreenComponent = "help";
     }
     else {
-		this->restoreState(m_preFullScreenState);
-		//this->showNormal();
-		m_fullScreenComponent = "";
+        this->restoreState(m_preFullScreenState);
+        //this->showNormal();
+        m_fullScreenComponent = "";
     }
 }
 
 void CsoundQt::setWidgetsFullScreen(bool full)
 {
-	if (full) {
-		checkFullScreen();
-		m_preFullScreenState = this->saveState();
-		if (m_options->widgetsIndependent) {
+    if (full) {
+        checkFullScreen();
+        m_preFullScreenState = this->saveState();
+        if (m_options->widgetsIndependent) {
             auto doc = getCurrentDocumentPage();
             if(doc == nullptr)
                 return;
@@ -2697,7 +2786,7 @@ void CsoundQt::setWidgetsFullScreen(bool full)
             this->widgetPanel->showFullScreen();
 #endif
         }
-		m_fullScreenComponent = "widgets";
+        m_fullScreenComponent = "widgets";
     }
     else {
         if(m_options->widgetsIndependent) {
@@ -2705,11 +2794,11 @@ void CsoundQt::setWidgetsFullScreen(bool full)
             if(doc == nullptr)
                 return;
             doc->getWidgetLayout()->showNormal();
-			m_fullScreenComponent = "";
+            m_fullScreenComponent = "";
         } else {
-			this->restoreState(m_preFullScreenState);
-			//this->showNormal();
-			m_fullScreenComponent = "";
+            this->restoreState(m_preFullScreenState);
+            //this->showNormal();
+            m_fullScreenComponent = "";
         }
 
     }
@@ -2976,7 +3065,7 @@ void CsoundQt::openOnlineDocumentation()
 
 void CsoundQt::showManualOnline()
 {
-	openExternalBrowser(QUrl("http://csound.com/manual/index.html"));
+    openExternalBrowser(QUrl("http://csound.com/manual/index.html"));
 }
 
 void CsoundQt::resetPreferences()
@@ -3468,6 +3557,7 @@ void CsoundQt::setColors(QString themeMode)
     setIcon(externalEditorAct, "editfile.png");
     setIcon(showWidgetsAct, "widgets.png");
     setIcon(showInspectorAct, "edit-find.png");
+    setIcon(showEditorAct, "editor.png");
     setIcon(showHelpAct, "info.png");
     setIcon(showConsoleAct, "terminal.png");
     setIcon(showScratchPadAct, "scratchpad.png");
@@ -3710,8 +3800,8 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     joinAct->setShortcut(tr(""));
     inToGetAct->setShortcut(tr(""));
     getToInAct->setShortcut(tr(""));
-	midiControlAct->setShortcut(tr(""));
-	csladspaAct->setShortcut(tr(""));
+    midiControlAct->setShortcut(tr(""));
+    csladspaAct->setShortcut(tr(""));
     findAct->setShortcut(tr("Ctrl+F"));
     findAgainAct->setShortcut(tr("Ctrl+G"));
     configureAct->setShortcut(tr("Ctrl+,"));
@@ -3727,7 +3817,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     renderAct->setShortcut(tr("Alt+F"));
     externalPlayerAct->setShortcut(tr(""));
     externalEditorAct->setShortcut(tr(""));
-    focusEditorAct->setShortcut(tr("Ctrl+0"));
+    showEditorAct->setShortcut(tr("Ctrl+0"));
     raiseHelpAct->setShortcut(tr("Ctrl+2"));
     raiseWidgetsAct->setShortcut(tr("Ctrl+1"));
     showGenAct->setShortcut(tr(""));
@@ -3945,6 +4035,8 @@ void CsoundQt::removeInstrumentBreakpoint(double instr)
 
 void CsoundQt::createActions()
 {
+    //NB! when you need a new action with icon, set it also in function setColors() - otherwise will audo theme will not work.
+
     // Actions that are not connected here depend on the active document, so they are
     // connected with connectActions() and are changed when the document changes.
     QString theme = m_options->theme;
@@ -4093,10 +4185,10 @@ void CsoundQt::createActions()
     getToInAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(getToInAct, SIGNAL(triggered()), this, SLOT(getToIn()));
 
-	midiControlAct = new QAction(tr("Insert MidiControl instrument"), this);
-	midiControlAct->setStatusTip(tr("Generate instrument according to MIDI bindings of widgets"));
-	midiControlAct->setShortcutContext(Qt::ApplicationShortcut);
-	connect(midiControlAct, SIGNAL(triggered()), this, SLOT(insertMidiControlInstrument()));
+    midiControlAct = new QAction(tr("Insert MidiControl instrument"), this);
+    midiControlAct->setStatusTip(tr("Generate instrument according to MIDI bindings of widgets"));
+    midiControlAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(midiControlAct, SIGNAL(triggered()), this, SLOT(insertMidiControlInstrument()));
 
     csladspaAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Insert/Update CsLADSPA text"), this);
     csladspaAct->setStatusTip(tr("Insert/Update CsLADSPA section to csd file"));
@@ -4236,11 +4328,12 @@ void CsoundQt::createActions()
     focusMapper->setMapping(raiseInspectorAct, 5);
     this->addAction(raiseInspectorAct);
 
-    focusEditorAct = new QAction(tr("Focus Text Editor", "Give keyboard focus to the text editor"), this);
-    focusEditorAct->setStatusTip(tr("Give keyboard focus to the text editor"));
-    focusEditorAct->setIconText(tr("Editor"));
-    focusEditorAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(focusEditorAct, SIGNAL(triggered()), this, SLOT(setEditorFocus()));
+    showEditorAct = new QAction(QIcon(prefix + "editor.png"), tr("Editor"), this);
+    showEditorAct->setCheckable(true);
+    showEditorAct->setChecked(true);
+    showEditorAct->setStatusTip(tr("Show the text editor"));
+    showEditorAct->setIconText(tr("Editor"));
+    showEditorAct->setShortcutContext(Qt::ApplicationShortcut);
 
     showHelpAct = new QAction(QIcon(prefix + "info.png"), tr("Help Panel"), this);
     showHelpAct->setCheckable(true);
@@ -4282,10 +4375,10 @@ void CsoundQt::createActions()
     showManualAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showManualAct, SIGNAL(triggered()), helpPanel, SLOT(showManual()));
 
-	showManualOnlineAct = new QAction(tr("Csound Manual Online"), this);
-	showManualOnlineAct->setStatusTip(tr("Show the Csound manual online"));
-	showManualOnlineAct->setShortcutContext(Qt::ApplicationShortcut);
-	connect(showManualOnlineAct, SIGNAL(triggered()), this, SLOT(showManualOnline()));
+    showManualOnlineAct = new QAction(tr("Csound Manual Online"), this);
+    showManualOnlineAct->setStatusTip(tr("Show the Csound manual online"));
+    showManualOnlineAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(showManualOnlineAct, SIGNAL(triggered()), this, SLOT(showManualOnline()));
 
     downloadManualAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("Download Csound Manual"), this);
     downloadManualAct->setStatusTip(tr("Download latest Csound manual"));
@@ -4670,7 +4763,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(unindentAct);
     m_keyActions.append(externalPlayerAct);
     m_keyActions.append(externalEditorAct);
-    m_keyActions.append(focusEditorAct);
+    m_keyActions.append(showEditorAct);
     m_keyActions.append(raiseWidgetsAct);
     m_keyActions.append(showInspectorAct);
     m_keyActions.append(raiseHelpAct);
@@ -4748,6 +4841,9 @@ void CsoundQt::connectActions()
 
     // line and column number connection
     connect(doc->getView(), SIGNAL(newLineAndColumn(int, int)), this, SLOT(setLineAndColumn(int,int)));
+
+    // file drop connection
+    connect(doc->getView(), &BaseView::fileDropped, this, &CsoundQt::handleDroppedFiles);
 
     // connect(gotoLineAct, SIGNAL(triggered()), doc, SLOT(gotoLineDialog()));
     //  disconnect(doc, SIGNAL(copyAvailable(bool)), 0, 0);
@@ -4906,7 +5002,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(joinAct);
     editMenu->addAction(inToGetAct);
     editMenu->addAction(getToInAct);
-	editMenu->addAction(midiControlAct);
+    editMenu->addAction(midiControlAct);
     // editMenu->addAction(csladspaAct);
     editMenu->addAction(cabbageAct);
     editMenu->addSeparator();
@@ -4932,7 +5028,7 @@ void CsoundQt::createMenus()
 
 
     viewMenu = menuBar()->addMenu(tr("View"));
-    viewMenu->addAction(focusEditorAct);
+    viewMenu->addAction(showEditorAct);
     viewMenu->addAction(showWidgetsAct);
     viewMenu->addAction(showHelpAct);
     viewMenu->addAction(showConsoleAct);
@@ -4988,7 +5084,7 @@ void CsoundQt::createMenus()
     // helpMenu->addAction(browseForwardAct);
     helpMenu->addSeparator();
     helpMenu->addAction(showManualAct);
-	helpMenu->addAction(showManualOnlineAct);
+    helpMenu->addAction(showManualOnlineAct);
     helpMenu->addAction(downloadManualAct);
     helpMenu->addAction(showOverviewAct);
     // helpMenu->addAction(showOpcodeQuickRefAct);
@@ -5238,6 +5334,7 @@ void CsoundQt::createToolBars()
 #if defined(CSQT_QTHTML)
     configureToolBar->addAction(showHtml5Act);
 #endif
+    configureToolBar->addAction(showEditorAct);
     configureToolBar->addAction(showWidgetsAct);
     configureToolBar->addAction(showHelpAct);
     configureToolBar->addAction(showConsoleAct);
@@ -5291,7 +5388,7 @@ void CsoundQt::createStatusBar()
 void CsoundQt::readSettings()
 {
     QSettings settings("csoundqt", "csoundqt");
-	int settingsVersion = settings.value("settingsVersion", 4).toInt();
+    int settingsVersion = settings.value("settingsVersion", 4).toInt();
     // Version 1 to remove "-d" from additional command line flags
     // Version 2 to save default keyboard shortcuts (weren't saved previously)
     // Version 2 to add "*" to jack client name
@@ -5316,6 +5413,7 @@ void CsoundQt::readSettings()
     lastUsedDir = settings.value("lastuseddir", "").toString();
     lastFileDir = settings.value("lastfiledir", "").toString();
     //  showLiveEventsAct->setChecked(settings.value("liveEventsActive", true).toBool());
+    showEditorAct->setChecked(settings.value("editorVisible", true).toBool());
     m_options->language = m_configlists.languageCodes.indexOf(settings.value("language", QLocale::system().name()).toString());
     if (m_options->language < 0)
         m_options->language = 0;
@@ -5394,7 +5492,7 @@ void CsoundQt::readSettings()
     m_options->askIfTemporary = settings.value("askIfTemporary", false).toBool();
     m_options->rememberFile = settings.value("rememberfile", true).toBool();
     m_options->saveWidgets = settings.value("savewidgets", true).toBool();
-	m_options->midiCcToCurrentPageOnly = settings.value("midiCcToActivePageOnly", false).toBool();
+    m_options->midiCcToCurrentPageOnly = settings.value("midiCcToActivePageOnly", false).toBool();
     m_options->widgetsIndependent = settings.value("widgetsIndependent", false).toBool();
     m_options->iconText = settings.value("iconText", false).toBool();
     m_options->showToolbar = settings.value("showToolbar", true).toBool();
@@ -5634,6 +5732,7 @@ void CsoundQt::writeSettings(QStringList openFiles, int lastIndex)
         settings.setValue("themeMode", m_options->themeMode);
         settings.setValue("windowState", saveState());
         settings.setValue("windowGeometry", saveGeometry());
+        settings.setValue("editorVisible", showEditorAct->isChecked());
         settings.endGroup();
 
         settings.beginGroup("Options");
@@ -5893,6 +5992,14 @@ int CsoundQt::loadFileFromSystem(QString fileName)
     return loadFile(fileName,m_options->autoPlay);
 }
 
+void CsoundQt::handleDroppedFiles(QList<QUrl> urls)
+{
+    for (const QUrl &url : urls) {
+        if (url.isLocalFile())
+            loadFile(url.toLocalFile());
+    }
+}
+
 void changeNewLines(QByteArray &line) {
     while(line.contains("\r\n")) {
         line.replace("\r\n", "\n");
@@ -6047,6 +6154,11 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
 
     QApplication::restoreOverrideCursor();
 
+    // Watch for external changes (skip internal/example files)
+    if (!fileName.isEmpty() && !fileName.startsWith(":/") && QFile::exists(fileName)) {
+        m_fileWatcher->addPath(fileName);
+    }
+
     // FIXME put back
     //  widgetPanel->clearHistory();
     if (runNow) {
@@ -6179,17 +6291,32 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
         recentFiles.removeLast();
         fillFileMenu();
     }
+    // Stop watching the old path while we write to avoid a self-triggered reload.
+    // For saveAs the old path differs from fileName, so we remove both.
+    const QString oldWatchedPath = documentPages[curPage]->getFileName();
+    m_fileWatcher->removePath(oldWatchedPath);
+    if (oldWatchedPath != fileName)
+        m_fileWatcher->removePath(fileName);
+
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly)) {
         QMessageBox::warning(this, tr("Application"),
                              tr("Cannot write file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
+        // Restore watch on the old path since the write failed
+        if (!oldWatchedPath.isEmpty() && !oldWatchedPath.startsWith(":/"))
+            m_fileWatcher->addPath(oldWatchedPath);
         return false;
     }
 
     QTextStream out(&file);
     out << text;
+
+    // Re-watch the saved file (new path in case of saveAs)
+    if (!fileName.isEmpty() && !fileName.startsWith(":/"))
+        m_fileWatcher->addPath(fileName);
+
     documentPages[curPage]->setModified(false);
     setWindowModified(false);
     documentTabs->setTabIcon(curPage, QIcon());
@@ -6238,20 +6365,20 @@ QString CsoundQt::generateScript(bool realtime, QString tempFileName, QString ex
 
     if (executable.isEmpty()) {
 
-		//test if csound is present in the same folder as CsoundQt, then Csound is bundled. Try to copy it to temporary location and run it from there
-		// TODO: condition on csound.exe for windows, don't copy but set
+        //test if csound is present in the same folder as CsoundQt, then Csound is bundled. Try to copy it to temporary location and run it from there
+        // TODO: condition on csound.exe for windows, don't copy but set
 #ifdef Q_OS_WIN32
-		QString csoundExecutable = "/csound.exe";
+        QString csoundExecutable = "/csound.exe";
 #else
-		QString csoundExecutable = "/csound";
+        QString csoundExecutable = "/csound";
 #endif
-		if (QFile::exists(initialDir+csoundExecutable) && !initialDir.startsWith("/usr")) { // if starts with /usr then probably normal install on Linux
-			qDebug() << "Using bundled Csound to run in terminal";
-			cmdLine = "\"" + initialDir+csoundExecutable + "\" ";
-		} else {
-			cmdLine = m_options->csoundExecutable+ " ";
-		}
-		qDebug()<<"Command line: " << cmdLine;
+        if (QFile::exists(initialDir+csoundExecutable) && !initialDir.startsWith("/usr")) { // if starts with /usr then probably normal install on Linux
+            qDebug() << "Using bundled Csound to run in terminal";
+            cmdLine = "\"" + initialDir+csoundExecutable + "\" ";
+        } else {
+            cmdLine = m_options->csoundExecutable+ " ";
+        }
+        qDebug()<<"Command line: " << cmdLine;
         m_options->rt = (realtime && m_options->rtUseOptions)
                 || (!realtime && m_options->fileUseOptions);
         cmdLine += m_options->generateCmdLineFlags() + " ";
@@ -6342,7 +6469,7 @@ void CsoundQt::getCompanionFileName()
         QString companion = "";
         if (documentPages[curPage]->getFileName().endsWith(".orc")) {
             // create an empty score file to run the orchestra scorelessly
-			companion = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/empty.sco";
+            companion = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/empty.sco";
             QFile f(companion); // does it create it here
             f.open(QIODevice::ReadWrite | QIODevice::Text);
             f.close();

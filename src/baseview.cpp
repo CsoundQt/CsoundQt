@@ -55,6 +55,10 @@ BaseView::BaseView(QWidget *parent, OpEntryParser *opcodeTree) :
     m_appEditor = new TextEditor(this);
     editors << m_mainEditor << m_orcEditor << m_scoreEditor << m_optionsEditor << m_filebEditor
 			<< m_otherEditor << m_otherCsdEditor << m_widgetEditor << m_appEditor;
+    for (QWidget *w : editors) {
+        if (TextEditor *te = qobject_cast<TextEditor *>(w))
+            connect(te, &TextEditor::fileDropped, this, &BaseView::fileDropped);
+    }
 	splitter = new QSplitter(this); // Deleted with parent
 	splitter->setOrientation(Qt::Vertical);
 	splitter->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);

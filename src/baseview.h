@@ -146,6 +146,7 @@ public:
 	QString getBasicText();  // What Csound needs (no widgets, misc text, etc.)
 
 signals:
+    void fileDropped(QList<QUrl> urls);
 
 public slots:
 	void toggleLineArea();
