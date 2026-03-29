@@ -153,12 +153,6 @@ rtmidi {
     INCLUDEPATH += src/../$${RTMIDI_DIR}
 }
 
-# perfThread_build {
-#     HEADERS += "$${CSOUND_INTERFACES_INCLUDE_DIR}/csPerfThread.hpp"
-#     SOURCES += "$${CSOUND_INTERFACES_INCLUDE_DIR}/csPerfThread.cpp"
-#     message("Including csPerfThread files for perfThread_build.")
-# }
-
 html_support: {
 	HEADERS += src/csoundhtmlview.h
 	HEADERS += src/csoundhtmlwrapper.h
