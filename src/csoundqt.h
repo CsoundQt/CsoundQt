@@ -510,6 +510,9 @@ private:
     QAction *autocompleteAct;
 //	QAction *showParametersAct;
     QAction *openExamplesFolderAct;
+    QAction *increaseFontAction;
+    QAction *decreaseFontAction;
+
     QSignalMapper *focusMapper;
 	int curPage;
 	int curCsdPage;  // To recall last csd visited

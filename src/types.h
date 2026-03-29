@@ -30,7 +30,7 @@
 
 
 
-#define CSQT_VERSION "7.0.0-beta1"
+#define CSQT_VERSION "7.0.0-beta3"
 
 
 // Time in milliseconds for widget and console messages updates
@@ -44,7 +44,6 @@
 #define CSQT_MAX_MIDI_QUEUE 128
 
 #ifdef Q_OS_LINUX
-#define DEFAULT_HTML_DIR "/usr/share/doc/csound-doc/html"
 #define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
 #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/bin/audacity"
@@ -52,10 +51,8 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
 #define DEFAULT_DOT_EXECUTABLE "dot"
 #define DEFAULT_LOG_FILE ""
-#define DEFAULT_SCRIPT_DIR "/usr/share/csoundqt/Scripts"
 #endif
 #ifdef Q_OS_SOLARIS
-#define DEFAULT_HTML_DIR "/usr/local/share/doc/csound/html"
 #define DEFAULT_TERM_EXECUTABLE "/usr/openwin/bin/xterm"
 #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/local/bin/audacity"
@@ -63,10 +60,8 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/usr/bin/evince"
 #define DEFAULT_DOT_EXECUTABLE "dot"
 #define DEFAULT_LOG_FILE ""
-#define DEFAULT_SCRIPT_DIR "../../csoundqt/src/Scripts"
 #endif
 #ifdef Q_OS_MAC
-#define DEFAULT_HTML_DIR "/Library/Frameworks/CsoundLib64.framework/Resources/Manual"
 #define DEFAULT_TERM_EXECUTABLE "/Applications/Utilities/Terminal.app"
 #define DEFAULT_BROWSER_EXECUTABLE "/Applications/Safari.app"  // Safary is installed by default so let's use that
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/Applications/Audacity.app"
@@ -74,10 +69,8 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE "/Applications/Preview.app"
 #define DEFAULT_DOT_EXECUTABLE "/usr/local/bin/dot"
 #define DEFAULT_LOG_FILE ""
-#define DEFAULT_SCRIPT_DIR qApp->applicationDirPath() + "/../Resources/Scripts"
 #endif
 #ifdef Q_OS_WIN32
-#define DEFAULT_HTML_DIR "C:/Program Files/Csound/doc/manual"
 #define DEFAULT_TERM_EXECUTABLE "cmd.exe"
 #define DEFAULT_BROWSER_EXECUTABLE ""
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
@@ -85,10 +78,8 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #define DEFAULT_DOT_EXECUTABLE ""
 #define DEFAULT_LOG_FILE ""
-#define DEFAULT_SCRIPT_DIR qApp->applicationDirPath() + "/Scripts"
 #endif
 #ifdef Q_OS_HAIKU
-#define DEFAULT_HTML_DIR "/boot/common/share/doc/csound-doc/html"
 #define DEFAULT_TERM_EXECUTABLE "Terminal"
 #define DEFAULT_BROWSER_EXECUTABLE "/boot/apps/WebPositive/WebPositive"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE ""
@@ -98,7 +89,6 @@
 #define DEFAULT_LOG_FILE ""
 #endif
 #ifdef Q_OS_OPENBSD
-#define DEFAULT_HTML_DIR "/usr/local/share/doc/csound-doc/html"
 #define DEFAULT_TERM_EXECUTABLE "xterm"
 #define DEFAULT_BROWSER_EXECUTABLE "firefox"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "audacity"
@@ -106,7 +96,6 @@
 #define DEFAULT_PDFVIEWER_EXECUTABLE ""
 #define DEFAULT_DOT_EXECUTABLE "dot"
 #define DEFAULT_LOG_FILE ""
-#define DEFAULT_SCRIPT_DIR "/usr/local/share/csoundqt/Scripts"
 #endif
 
 #define CSQT_DEFAULT_TEMPLATE "<CsoundSynthesizer>\n<CsOptions>\n-odac\n</CsOptions>\n<CsInstruments>\n\nsr = 44100\nksmps = 64\nnchnls = 2\n0dbfs = 1\n\n\n</CsInstruments>\n<CsScore>\n\n</CsScore>\n</CsoundSynthesizer>"

@@ -861,7 +861,7 @@ const QStringList DocumentView::getAllWords() {
         QDEBUG << "Updating all words, time since last update: " << msecs << "msecs";
         TextEditor *editor = m_mainEditor;
         QString wholeText = editor->toPlainText();
-        static const QRegularExpression wordBoundary("[" + QRegularExpression::escape("+-*/=#&,\"\'|[]()<>.;:^") + "\\s]");
+        static const QRegularExpression wordBoundary("[" + QRegularExpression::escape("+-*/=#&,\"\'|[]()<>.;:^@") + "\\s]");
         auto allWords = wholeText.split(wordBoundary, SKIP_EMPTY_PARTS);
         allWords.removeDuplicates();
         m_lastWordsUpdate = now;

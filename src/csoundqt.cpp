@@ -378,24 +378,28 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     // try to find directory for manual, if not set
     QString docDir = QString(); //m_options->csdocdir;
-    QString index = docDir + QString("/index.html");
-    QStringList possibleDirectories;
-#ifdef Q_OS_LINUX
-    possibleDirectories  << "/usr/share/doc/csound-manual/html/"
-                         << "/usr/share/doc/csound-doc/html/"
-                         << QCoreApplication::applicationDirPath() + "/../share/doc/csound-manual/html/"   // for transportable apps like AppImage and perhas others
-                         << QCoreApplication::applicationDirPath() + "/../share/doc/csound-doc/html/"   ;
-#endif
-#ifdef Q_OS_WIN
+    if (m_options->csdocdir.isEmpty() ||
+            !QFile::exists(m_options->csdocdir+"/index.html") ) {
+        QStringList possibleDirectories;
+#if defined(Q_OS_WIN)
         QString programFilesPath = QDir::fromNativeSeparators(qgetenv("PROGRAMFILES"));
         QString programFilesPathx86 = QDir::fromNativeSeparators(qgetenv("PROGRAMFILES(X86)"));
-        possibleDirectories << initialDir +"/doc/manual/" << programFilesPath + "/Csound6/doc/manual/" << programFilesPathx86 + "/Csound6/doc/manual/" <<  programFilesPath + "/Csound6_x64/doc/manual/" <<  programFilesPath + "/csound/doc/manual/";
+        possibleDirectories << initialDir +"/doc/manual"
+                            << programFilesPath + "/Csound6/doc/manual"
+                            << programFilesPathx86 + "/Csound6/doc/manual"
+                            << programFilesPath + "/Csound6_x64/doc/manual"
+                            << programFilesPath + "/csound/doc/manual";
+#elif defined(Q_OS_MACOS)
+        possibleDirectories << initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual")
+                            << initialDir + QString("/../Resources/Manual")
+                            << "/Library/Frameworks/CsoundLib64.framework/Resources/Manual";
+#else
+        possibleDirectories << "/usr/share/doc/csound-manual/html"
+                            << "/usr/share/doc/csound-doc/html"
+                            << "/usr/local/share/doc/csound/html"
+                            << QCoreApplication::applicationDirPath() + "/../share/doc/csound-manual/html"   // for transportable apps like AppImage and perhas others
+                            << QCoreApplication::applicationDirPath() + "/../share/doc/csound-doc/html";
 #endif
-#ifdef Q_OS_MACOS
-     possibleDirectories <<  initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual/") <<  "/Library/Frameworks/CsoundLib64.framework/Resources/Manual/";
-#endif
-     if (m_options->csdocdir.isEmpty() ||
-            !QFile::exists(m_options->csdocdir+"/index.html") ) {
         foreach (QString dir, possibleDirectories) {
             qDebug() << "Looking manual in: " << dir;
             if (QFile::exists(dir+"/index.html")) {
@@ -508,9 +512,8 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // is it necessary here? -  probably called from applySettings already
     // setColors(m_options->themeMode.isEmpty() ? "auto" : m_options->themeMode);
 
-#ifdef Q_OS_MACOS
     m_configlists.refreshModules(); // must happen after UI is created
-#endif
+
 
 /*
 #ifdef Q_OS_LINUX
@@ -1319,38 +1322,33 @@ void CsoundQt::setupEnvironment()
     _putenv(envString.toLocal8Bit());
 #endif
 
-    QString opcodedir;
+    QString opcodedir = QString();
 
-    // csoundGetEnv must be called after Compile or Precompile,
-    // But I need to set OPCODEDIR before compile.... So I can't know keep the old OPCODEDIR
     if (m_options->opcode7dir64Active) {
-       opcodedir = m_options->opcode7dir64;
-    } else {
-#ifdef Q_OS_WIN32
-	// if opcodes are in the same directory or in ./plugins64, then set OPCODE7DIR64 to the bundled plugins
-	// no need to support 32-opcodes any more, set only OPCODE7DIR64
-        if (QFile::exists(initialDir+"/rtpa.dll" )) {
-            opcodedir = initialDir;
-        } else if (QFile::exists(initialDir+"/plugins64/rtpa.dll" )) {
-            opcodedir = initialDir+"/plugins64/";
-        } else if (QFile::exists("C:/Program Files/Csound7/plugins64/rtpa.dll")) {
-            opcodedir = "C:/Program Files/Csound7/plugins64/";
-        } else {
-            opcodedir = QString();
+        opcodedir = m_options->opcode7dir64;
+    } else if (!qEnvironmentVariableIsSet("OPCODE7DIR64") || !QDir(qEnvironmentVariable("OPCODE7DIR64")).exists()) {
+        QStringList possiblePaths;
+#if defined(Q_OS_WIN32)
+        // if opcodes are in the same directory or in ./plugins64, then set OPCODE7DIR64 to the bundled plugins
+        possiblePaths << initialDir
+                      << initialDir + "/plugins64"
+                      << "C:/Program Files/Csound7/plugins64"
+                      << "C:/Program Files/Csound/plugins64";
+#elif defined(Q_OS_MACOS)
+        // Use bundled opcodes if available
+        possiblePaths << initialDir + "/../Frameworks/CsoundLib64.framework/Resources/Opcodes64"
+                      << "/Applications/Csound/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64";
+#else
+        possiblePaths << "/usr/lib/csound/plugins64-7.0"
+                      << "/usr/local/lib/csound/plugins64-7.0";
+#endif
+        foreach (QString path, possiblePaths) {
+            if (QDir(path).exists()) {
+                opcodedir = path;
+                break;
+            }
         }
-
-#endif
-#ifdef Q_OS_MACOS
-    // Use bundled opcodes if available
-    if (QFile::exists(initialDir + "/../Frameworks/CsoundLib64.framework/Resources/Opcodes64")) {
-        opcodedir = initialDir + "/../Frameworks/CsoundLib64.framework/Resources/Opcodes64";
-    } else if (QFile::exists("/Applications/Csound/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64")) { // NB! The location may change in the future
-        opcodedir = "/Applications/Csound/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64";
     }
-#endif
-
-    }
-
 
     if (!opcodedir.isEmpty()) {
         QDEBUG << "Setting  OPCODE7DIR64 to: " << opcodedir;
@@ -1965,8 +1963,10 @@ void CsoundQt::play(bool realtime, int index)
             return;
         }
     }
+
     //else if (page->isModified()) {
-    else if (m_options->saveChanges && fileInfo.isWritable() && !page->getFileName().startsWith(":/")) { // is modified returns sometimes wrongly false. save anyway when asked TODO: degub DocumentPage::isModified()
+    else if (m_options->saveChanges && fileInfo.isWritable() &&
+            !page->readOnly &&  !page->getFileName().startsWith(":/")) { // is modified returns sometimes wrongly false. save anyway when asked TODO: degub DocumentPage::isModified()
         if (!save()) {
             if (curPage == oldPage) {
                 runAct->setChecked(false);
@@ -2474,7 +2474,7 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
         entry.remove(0,1);
     }
     QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
-    if (entry.startsWith("http://")) {
+    if (entry.startsWith("https://")) {
         openExternalBrowser(QUrl(entry));
         return;
     }
@@ -2528,17 +2528,23 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
     else {
         helpPanel->docDir = dir;
         QString fileName;
+        // changes here for the new manual system ----
         if (entry == "0dbfs")
-            fileName = dir + "/Zerodbfs.html";
-        else if (entry.contains("CsOptions"))
-            fileName = dir + "/CommandUnifile.html";
-        else if (entry.startsWith("chn_"))
-            fileName = dir + "/chn.html";
-        else if(QFile::exists(dir + "/" + entry + ".html")) {
-            fileName = dir + "/" + entry + ".html";
+            fileName = dir + "/opcodes/0dbfs.html";
+        else if (QSet<QString>({"CsoundSynthesizer", "CsOptions",
+            "CsInstruments", "CsScore", "CsFileB", "CsFile",
+            "CsVersion", "CsLicense", "html", "Cabbage"}).contains(entry)) {
+            fileName = dir + "/invoke/the-csd-file-format.html";
         }
-        else
+        else if (entry.startsWith("chn_"))
+            fileName = dir + "/opcodes/chn.html";
+        else if(QFile::exists(dir + "/opcodes/" + entry + ".html")) {
+            fileName = dir + "/opcodes/" + entry + ".html";
+        }
+        else {
+            QDEBUG << "Did not find help file for entry" << entry;
             return;
+        }
         openHtmlHelp(fileName, entry, external);
     }
 }
@@ -3140,6 +3146,7 @@ void CsoundQt::applySettings()
     // This is called at initialization, when clicking "apply" in the settings dialog
     // and when closing it with "OK"
 
+
     setColors(m_options->themeMode);  // Centralized theme handling
 
     for (int i = 0; i < documentPages.size(); i++) {
@@ -3404,6 +3411,38 @@ void CsoundQt::setColors(QString themeMode)
             act->setIcon(QIcon(QString(":/themes/%1/%2").arg(m_options->theme, iconName)));
         }
     };
+
+    // Prononounce a bit more the checked buttons on toolbars
+    // on Linux it seems ok + whole toolbar background is not switched on system theme change
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+
+    QString toolbarStyle;
+
+    QString baseStyle =
+        "QToolButton {"
+        "   border: 1px solid transparent;" // Reserve space for the border
+        "   border-radius: 4px;"
+        "   padding: 1px;"
+        "}";
+
+    if (isDarkPalette) {
+        toolbarStyle = baseStyle +
+            "QToolButton:checked {"
+            "   background-color: rgba(255, 255, 255, 30);"
+            "   border-color: rgba(255, 255, 255, 50);"
+            "}";
+    } else {
+        toolbarStyle = baseStyle +
+            "QToolButton:checked {"
+            "   background-color: rgba(0, 0, 0, 20);"
+            "   border-color: rgba(0, 0, 0, 30);"
+            "}";
+    }
+
+        controlToolBar->setStyleSheet(toolbarStyle);
+        configureToolBar->setStyleSheet(toolbarStyle);
+
+#endif
 
     // Update all toolbar/menu actions (single source of truth)
     setIcon(newAct, "edit-new.png");
@@ -4099,6 +4138,8 @@ void CsoundQt::createActions()
     editAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(editAct, SIGNAL(triggered(bool)), this, SLOT(setWidgetEditMode(bool)));
 
+
+
     runAct = new QAction(QIcon(prefix + "media-play.png"), tr("Run Csound"), this);
     runAct->setStatusTip(tr("Run current file"));
     runAct->setIconText(tr("Run"));
@@ -4577,8 +4618,8 @@ void CsoundQt::createActions()
     //	connect(showParametersAct,SIGNAL(triggered()), this, SLOT(showParametersInEditor()));
 
     // font size ZoomIn, ZoomOut
-    QAction *increaseFontAction = new QAction(this);
-    QAction *decreaseFontAction = new QAction(this);
+    increaseFontAction = new QAction(tr("Increase font"), this);
+    decreaseFontAction = new QAction(tr("Decrease font"), this);
     increaseFontAction->setShortcut(QKeySequence::ZoomIn);
     decreaseFontAction->setShortcut(QKeySequence::ZoomOut);
     connect(increaseFontAction, &QAction::triggered, this, &CsoundQt::increaseFontSize );
@@ -4781,7 +4822,7 @@ QString CsoundQt::getExamplePath(QString dir)
         QString programFilesPath= QDir::fromNativeSeparators(qgetenv("PROGRAMFILES"));
         examplePath =  programFilesPath + "/Csound6/bin/Examples/" + dir; // NB! with csound6.0.6 no Floss/mCcurdy/Stria examples there. Copy manually
     }
-#elif Q_OS_MAC
+#elif defined(Q_OS_MAC)
     examplePath = qApp->applicationDirPath() + "/../Resources/Examples/" + dir;
 #else
     examplePath = QString();
@@ -4927,6 +4968,10 @@ void CsoundQt::createMenus()
     viewMenu->addAction(showOtherAct);
     viewMenu->addAction(showOtherCsdAct);
     viewMenu->addAction(showWidgetEditAct);
+    viewMenu->addSeparator();
+    viewMenu->addAction(increaseFontAction);
+    viewMenu->addAction(decreaseFontAction);
+
 
     fillExampleMenu();
 
@@ -5461,11 +5506,7 @@ void CsoundQt::readSettings()
     m_options->sampleFormat = settings.value("sampleFormat", 0).toInt();
     settings.endGroup();
     settings.beginGroup("Environment");
-#ifdef Q_OS_MAC
-    m_options->csdocdir = settings.value("csdocdir", DEFAULT_HTML_DIR).toString();
-#else
     m_options->csdocdir = settings.value("csdocdir", "").toString();
-#endif
     m_options->opcode7dir64 = settings.value("opcode7dir64","").toString();
     m_options->opcode7dir64Active = settings.value("opcode7dir64Active",false).toBool();
     m_options->sadir = settings.value("sadir","").toString();
@@ -5999,6 +6040,11 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
     if (fileName.startsWith(m_options->csdocdir) && !m_options->csdocdir.isEmpty()) {
         documentPages[curPage]->readOnly = true;
     }
+    QString examplePath = getExamplePath("");
+    if (fileName.startsWith(examplePath) && !examplePath.isEmpty()) {
+        documentPages[curPage]->readOnly = true;
+    }
+
     QApplication::restoreOverrideCursor();
 
     // FIXME put back

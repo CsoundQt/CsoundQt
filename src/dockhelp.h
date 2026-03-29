@@ -25,11 +25,28 @@
 
 #include <QDockWidget>
 #include <QUrl>
-#include <QTextDocument>
+#include <QWebEngineView>
+#include <QWebEnginePage>
+#include <QWebEngineSettings>
+#include <QDesktopServices>
 
 namespace Ui {
 class DockHelp;
 }
+
+class DockHelp;
+
+class HelpPage : public QWebEnginePage {
+    Q_OBJECT
+public:
+    HelpPage(DockHelp* parent);
+
+protected:
+    bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame) override;
+
+private:
+    DockHelp* dock;
+};
 
 class DockHelp : public QDockWidget
 {
@@ -46,10 +63,11 @@ public:
     void changeFontSize(int change);
 
 private:
-	QTextDocument::FindFlags findFlags;
+	QWebEngineView *webView;
+	HelpPage *helpPage;
 	virtual void closeEvent(QCloseEvent * event);
     virtual void keyPressEvent(QKeyEvent *event);
-	void findText(QString expr); // bool backward = false, bool caseSensitive = false, bool wholeWords = false);
+	void findText(QString expr, bool backward = false);
 
 protected:
 	void resizeEvent(QResizeEvent *);
@@ -81,7 +99,9 @@ public slots:
 private:
 	Ui::DockHelp *ui;
 
-    QString styleSheetLight;
+	bool findCaseSensitive;
+	bool findWholeWords;
+	QString lastFindText;
 
 signals:
 	void Close(bool visible);

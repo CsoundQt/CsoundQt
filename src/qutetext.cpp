@@ -45,9 +45,9 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
     setProperty("CSQT_valignment", "top");
     setProperty("CSQT_font", "Arial");
 	setProperty("CSQT_fontsize", 12.0);
-	setProperty("CSQT_bgcolor", QColor());
+	setProperty("CSQT_bgcolor", qApp->palette().color(QPalette::Window));
 	setProperty("CSQT_bgcolormode", false);
-	setProperty("CSQT_color", QColor(Qt::black));
+	setProperty("CSQT_color", qApp->palette().color(QPalette::WindowText));
 	setProperty("CSQT_bordermode", "noborder");
 	setProperty("CSQT_borderradius", 1);
 	setProperty("CSQT_borderwidth", 1);
