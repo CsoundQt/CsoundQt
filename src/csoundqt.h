@@ -447,7 +447,6 @@ private:
 	QAction *renderAct;
 	QAction *externalEditorAct;
 	QAction *externalPlayerAct;
-	QAction *focusEditorAct;
     QAction *showEditorAct;
 	QAction *showHelpAct;
     QAction *raiseHelpAct;

@@ -3809,7 +3809,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     renderAct->setShortcut(tr("Alt+F"));
     externalPlayerAct->setShortcut(tr(""));
     externalEditorAct->setShortcut(tr(""));
-    focusEditorAct->setShortcut(tr("Ctrl+0"));
+    showEditorAct->setShortcut(tr("Ctrl+0"));
     raiseHelpAct->setShortcut(tr("Ctrl+2"));
     raiseWidgetsAct->setShortcut(tr("Ctrl+1"));
     showGenAct->setShortcut(tr(""));
@@ -4320,12 +4320,6 @@ void CsoundQt::createActions()
     focusMapper->setMapping(raiseInspectorAct, 5);
     this->addAction(raiseInspectorAct);
 
-    focusEditorAct = new QAction(tr("Focus Text Editor", "Give keyboard focus to the text editor"), this);
-    focusEditorAct->setStatusTip(tr("Give keyboard focus to the text editor"));
-    focusEditorAct->setIconText(tr("Editor"));
-    focusEditorAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(focusEditorAct, SIGNAL(triggered()), this, SLOT(setEditorFocus()));
-
     showEditorAct = new QAction(QIcon(prefix + "editor.png"), tr("Editor"), this);
     showEditorAct->setCheckable(true);
     showEditorAct->setChecked(true);
@@ -4761,7 +4755,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(unindentAct);
     m_keyActions.append(externalPlayerAct);
     m_keyActions.append(externalEditorAct);
-    m_keyActions.append(focusEditorAct);
+    m_keyActions.append(showEditorAct);
     m_keyActions.append(raiseWidgetsAct);
     m_keyActions.append(showInspectorAct);
     m_keyActions.append(raiseHelpAct);
@@ -5026,7 +5020,6 @@ void CsoundQt::createMenus()
 
 
     viewMenu = menuBar()->addMenu(tr("View"));
-    viewMenu->addAction(focusEditorAct);
     viewMenu->addAction(showEditorAct);
     viewMenu->addAction(showWidgetsAct);
     viewMenu->addAction(showHelpAct);
