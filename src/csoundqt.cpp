@@ -3620,7 +3620,7 @@ void CsoundQt::setColors(QString themeMode)
             tabBarCss = QString(
                 "QTabBar::close-button {"
                 "  image: url(:/themes/%1/edit-close.png);"
-                "  subcontrol-position: right;"
+                "  subcontrol-position: left;"
                 "}"
             ).arg(m_options->theme);
         }
