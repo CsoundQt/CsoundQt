@@ -3610,6 +3610,24 @@ void CsoundQt::setColors(QString themeMode)
         }
     }
 
+#ifdef Q_OS_MACOS
+    // Qt 6 on macOS: with documentMode enabled the native tab-bar rendering path
+    // does not show the Qt-injected close-button widgets.
+    // Force visibility via an explicit stylesheet on the tab bar.
+    if (documentTabs) {
+        QString tabBarCss;
+        if (m_options->tabShowCloseButton) {
+            tabBarCss = QString(
+                "QTabBar::close-button {"
+                "  image: url(:/themes/%1/edit-close.png);"
+                "  subcontrol-position: right;"
+                "}"
+            ).arg(m_options->theme);
+        }
+        documentTabs->tabBar()->setStyleSheet(tabBarCss);
+    }
+#endif
+
     QDEBUG << "Theme mode:" << m_options->themeMode
            << "theme:" << m_options->theme
            << "highlighting:" << m_options->highlightingTheme
