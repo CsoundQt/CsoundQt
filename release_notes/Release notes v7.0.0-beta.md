@@ -2,7 +2,7 @@
 
 <br>
 
-*<small>Written by Github Copilit Agent. Edited by Tarmo Johannes</small>*
+*<small>Written by Github Copilot Agent. Edited by Tarmo Johannes</small>*
 
 
 **CsoundQt 7.0.0-beta1** represents a major milestone in the evolution of CsoundQt. This release introduces significant modernization efforts, full compatibility with Csound 7, and a complete migration to Qt 6, providing a more robust and future-ready foundation for the IDE.
