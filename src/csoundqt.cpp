@@ -889,7 +889,7 @@ void CsoundQt::onExternalFileChanged(const QString &path)
         QFile file(path);
         if (!file.open(QFile::ReadOnly))
             return;
-        QStringDecoder decoder(QStringDecoder::System);
+        QStringDecoder decoder(QStringDecoder::Utf8);
         QString text = decoder(file.readAll());
 
         DocumentPage *doc = documentPages[pageIndex];
@@ -6022,7 +6022,7 @@ void fillCompanionSco(QString &fileName, QString &text) {
         QByteArray line = companionFile.readLine();
         changeNewLines(line);
         //QTextDecoder decoder(QTextCodec::codecForLocale());
-        QStringDecoder decoder(QStringDecoder::System ); // TODO: TEST THIS ON WINDOWS!!!
+        QStringDecoder decoder(QStringDecoder::Utf8); // Fixed: use UTF-8 instead of system locale
 
         text = text + decoder(line);
         if (!line.endsWith("\n"))
@@ -6035,15 +6035,15 @@ void fillCompanionOrc(QString &fileName, QString &text) {
     auto companionFileName = fileName.replace(".sco", ".orc");
     if (!QFile::exists(companionFileName))
         return;
-    QFile companionFlle(companionFileName);
+    QFile companionFile(companionFileName);
     QString orcText = "";
-    if (!companionFlle.open(QFile::ReadOnly))
+    if (!companionFile.open(QFile::ReadOnly))
         return;
-    while (!companionFlle.atEnd()) {
-        QByteArray line = companionFlle.readLine();
+    while (!companionFile.atEnd()) {
+        QByteArray line = companionFile.readLine();
         changeNewLines(line);
         //QTextDecoder decoder(QTextCodec::codecForLocale());
-        QStringDecoder decoder(QStringDecoder::System); // TODO: TEST ON WINDOWS!
+        QStringDecoder decoder(QStringDecoder::Utf8); // Fixed: use UTF-8 instead of system locale
         orcText = orcText + decoder(line);
         if (!line.endsWith("\n"))
             orcText += "\n";
@@ -6089,7 +6089,7 @@ int CsoundQt::loadFile(QString fileName, bool runNow)
         if (!inEncFile) {
             changeNewLines(line);
             //QTextDecoder decoder(QTextCodec::codecForLocale());
-            QStringDecoder decoder(QStringDecoder::System);
+            QStringDecoder decoder(QStringDecoder::Utf8); // Fixed: use UTF-8 instead of system locale
             // text = text + decoder.toUnicode(line);
             if (!line.endsWith("\n"))
                 text += "\n";
@@ -6311,6 +6311,7 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
     }
 
     QTextStream out(&file);
+    out.setEncoding(QStringConverter::Utf8);
     out << text;
 
     // Re-watch the saved file (new path in case of saveAs)
