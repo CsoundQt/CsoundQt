@@ -46,6 +46,7 @@
 class QAction;
 class QMenu;
 class QTextEdit;
+class QFileSystemWatcher;
 
 class DockHelp;
 class WidgetPanel;
@@ -196,6 +197,7 @@ private slots:
 	void reload();
 	void openFromAction();
 	void openFromAction(QString fileName);
+    void handleDroppedFiles(QList<QUrl> urls);
 	void runScriptFromAction();
 	void runScript(QString fileName);
 	void createCodeGraph();
@@ -232,6 +234,7 @@ private slots:
 	void openExternalEditor();
 	void openExternalPlayer();
 	void setEditorFocus();
+    void showEditor(bool show);
 	void setHelpEntry();
     void helpForEntry(QString text, bool external=false);
     void setFullScreen(bool full);
@@ -317,6 +320,7 @@ private slots:
 #endif
     void applyThemeFromSystem(Qt::ColorScheme scheme);
     void setColors(QString themeMode);
+    void onExternalFileChanged(const QString &path);
 
 private:
 	void createActions();
@@ -443,7 +447,7 @@ private:
 	QAction *renderAct;
 	QAction *externalEditorAct;
 	QAction *externalPlayerAct;
-	QAction *focusEditorAct;
+    QAction *showEditorAct;
 	QAction *showHelpAct;
     QAction *raiseHelpAct;
 	QAction *showManualAct;
@@ -527,7 +531,8 @@ private:
 	bool m_resetPrefs; // Flag to reset preferences to default when closing
 	bool m_inspectorNeedsUpdate;
 	bool m_closing; // CsoundQt is closing (to inform timer threads)
-	UtilitiesDialog *utilitiesDialog;
+    int m_editorWidth = 0; // stored editor width for hide/restore
+    UtilitiesDialog *utilitiesDialog;
 	QIcon modIcon;
 	QString currentAudioFile;
 	QString initialDir;
@@ -551,6 +556,8 @@ private:
     };
     QLabel *lineAndColumnLabel;
     QPalette makeAppPalette(bool dark);
+    QFileSystemWatcher *m_fileWatcher;
+    QSet<QString> m_pendingFileChanges;
 };
 
 class FileOpenEater : public QObject

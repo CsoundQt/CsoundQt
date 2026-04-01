@@ -78,6 +78,9 @@ public:
 	void canFocus(bool can);
 	void updateDialogWindow(int cc, int channel);
     virtual void setCsoundUserData(CsoundUserData *ud) { m_csoundUserData = ud; }
+    static bool isDarkTheme() {
+        return qApp->palette().color(QPalette::Window).lightness() < 128;
+    }
     double getSr(double defaultSr=0.0) {
         if(m_csoundUserData == nullptr) {
             QDEBUG << "csoundUserData: null";

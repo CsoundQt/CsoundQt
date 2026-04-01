@@ -1881,7 +1881,11 @@ QString WidgetLayout::createNewLabel(int x, int y, QString channel)
     } else {
         dialog = false;
     }
-    QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder "+ channel;
+    QColor _tc = qApp->palette().color(QPalette::WindowText);
+    QColor _bc = qApp->palette().color(QPalette::Window);
+    auto _tcs = QString("{%1, %2, %3}").arg(_tc.red()*256).arg(_tc.green()*256).arg(_tc.blue()*256);
+    auto _bcs = QString("{%1, %2, %3}").arg(_bc.red()*256).arg(_bc.green()*256).arg(_bc.blue()*256);
+    QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} label 0.000000 0.001000 \"\" left \"Arial\" 8 "+ _tcs +" "+ _bcs +" nobackground noborder "+ channel;
     uuid = createText(posx, posy, 80, 25, line);
     widgetChanged();
     if (dialog && getOpenProperties()) {
@@ -1904,7 +1908,11 @@ QString WidgetLayout::createNewDisplay(int x, int y, QString channel)
     } else {
         dialog = false;
     }
-    QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground border Display";
+    QColor _tc = qApp->palette().color(QPalette::WindowText);
+    QColor _bc = qApp->palette().color(QPalette::Window);
+    auto _tcs = QString("{%1, %2, %3}").arg(_tc.red()*256).arg(_tc.green()*256).arg(_tc.blue()*256);
+    auto _bcs = QString("{%1, %2, %3}").arg(_bc.red()*256).arg(_bc.green()*256).arg(_bc.blue()*256);
+    QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} display 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 "+ _tcs +" "+ _bcs +" nobackground border Display";
     uuid = createText(posx, posy, 80, 25, line);
     widgetChanged();
     if (dialog && getOpenProperties()) {
@@ -1927,7 +1935,11 @@ QString WidgetLayout::createNewScrollNumber(int x, int y, QString channel)
     } else {
         dialog = false;
     }
-    QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} background border 0.000000";
+    QColor _tc = qApp->palette().color(QPalette::WindowText);
+    QColor _bc = qApp->palette().color(QPalette::Window);
+    auto _tcs = QString("{%1, %2, %3}").arg(_tc.red()*256).arg(_tc.green()*256).arg(_tc.blue()*256);
+    auto _bcs = QString("{%1, %2, %3}").arg(_bc.red()*256).arg(_bc.green()*256).arg(_bc.blue()*256);
+    QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} scroll 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 "+ _tcs +" "+ _bcs +" background border 0.000000";
     uuid = createScrollNumber(posx, posy, 80, 25, line);
     widgetChanged();
     if (dialog && getOpenProperties()) {
@@ -1950,10 +1962,14 @@ QString WidgetLayout::createNewLineEdit(int x, int y, QString channel)
     } else {
         dialog = false;
     }
+    QColor _tc = qApp->palette().color(QPalette::WindowText);
+    QColor _bc = qApp->palette().color(QPalette::Window);
+    auto _tcs = QString("{%1, %2, %3}").arg(_tc.red()*256).arg(_tc.green()*256).arg(_tc.blue()*256);
+    auto _bcs = QString("{%1, %2, %3}").arg(_bc.red()*256).arg(_bc.green()*256).arg(_bc.blue()*256);
     auto line = QString("ioText {%1, %2} {100, 25} edit 0.000000 0.001000 "
-                        "\"%3\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} "
+                        "\"%3\" left \"Arial\" 8 %4 %5 "
                         "background border Type here")
-            .arg(QString::number(posx), QString::number(posy), channel);
+            .arg(QString::number(posx), QString::number(posy), channel, _tcs, _bcs);
 
     // QString line = "ioText {" + QString::number(posx) +", "+ QString::number(posy) +"} {100, 25} edit 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
     qDebug() << "createNewLineEdit";
@@ -1979,7 +1995,11 @@ QString WidgetLayout::createNewSpinBox(int x, int y, QString channel)
     } else {
         dialog = false;
     }
-    QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 {0, 0, 0} {65535, 65535, 65535} nobackground noborder Type here";
+    QColor _tc = qApp->palette().color(QPalette::WindowText);
+    QColor _bc = qApp->palette().color(QPalette::Window);
+    auto _tcs = QString("{%1, %2, %3}").arg(_tc.red()*256).arg(_tc.green()*256).arg(_tc.blue()*256);
+    auto _bcs = QString("{%1, %2, %3}").arg(_bc.red()*256).arg(_bc.green()*256).arg(_bc.blue()*256);
+    QString line = "ioText {"+ QString::number(posx) +", "+ QString::number(posy) +"} {80, 25} editnum 0.000000 0.001000 \"" + channel + "\" left \"Arial\" 8 "+ _tcs +" "+ _bcs +" nobackground noborder Type here";
     uuid = createSpinBox(posx, posy, 80, 25, line);
     widgetChanged();
     if (dialog && getOpenProperties()) {

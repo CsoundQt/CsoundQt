@@ -25,6 +25,7 @@
 
 #include <QTextEdit>
 #include <QAction>
+#include <QUrl>
 
 class TextEditor : public QTextEdit
 {
@@ -41,9 +42,9 @@ public:
 protected:
 	virtual void keyPressEvent (QKeyEvent * event);
     virtual void mouseReleaseEvent(QMouseEvent * e);
-	//    virtual void dropEvent(QDropEvent *event);  // See note on code
-	//    virtual void dragEnterEvent(QDragEnterEvent *event);
-	//    virtual void dragMoveEvent(QDragMoveEvent *event);
+    virtual void dropEvent(QDropEvent *event);
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dragMoveEvent(QDragMoveEvent *event);
 
 	bool m_tabIndents;
 	bool m_parameterMode;
@@ -63,6 +64,7 @@ signals:
 	void requestUnindent();
 	void requestParameterModeExit();
     void mouseReleased();
+    void fileDropped(QList<QUrl> urls);
 };
 
 class LineNumberArea;

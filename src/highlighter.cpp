@@ -21,7 +21,7 @@
 */
 
 #include "highlighter.h"
-#include "types.h"
+// #include "types.h"
 
 #include <QRegularExpression>
 
@@ -100,6 +100,12 @@ void Highlighter::setTheme(const QString &theme) {
         fsigFormat.setForeground(QColor(Qt::gray));
         fsigFormat.setFontWeight(QFont::Bold);
 
+        booleanFormat.setForeground(QColor("darkorange"));
+        booleanFormat.setFontWeight(QFont::Bold);
+
+        complexFormat.setForeground(QColor("teal"));
+        complexFormat.setFontWeight(QFont::Bold);
+
         labelFormat.setForeground(QColor(205,92,92));
         labelFormat.setFontWeight(QFont::Bold);
 
@@ -154,17 +160,23 @@ void Highlighter::setTheme(const QString &theme) {
 
 
         krateFormat.setForeground(QColor("#10796C"));
-        irateFormat.setForeground(QColor("#303F9F"));
+        irateFormat.setForeground(QColor("#546E7A"));
 
         // arateFormat.setForeground(QColor("#C62828"));
         arateFormat.setForeground(QColor("#B71C1C"));
-        arateFormat.setFontWeight(QFont::Bold);
+        //arateFormat.setFontWeight(QFont::Bold);
 
         stringVarFormat.setForeground(QColor(Qt::darkYellow));
         stringVarFormat.setFontWeight(QFont::Normal);
 
         fsigFormat.setForeground(QColor("#Ad1457"));
         fsigFormat.setFontWeight(QFont::Bold);
+
+        booleanFormat.setForeground(QColor("#7B1FA2"));
+        //booleanFormat.setFontWeight(QFont::Bold);
+
+        complexFormat.setForeground(QColor("#6D4C41"));
+        //complexFormat.setFontWeight(QFont::Bold);
 
         labelFormat.setForeground(QColor(205,92,92));
         labelFormat.setFontWeight(QFont::Bold);
@@ -230,14 +242,20 @@ void Highlighter::setTheme(const QString &theme) {
         pfieldFormat.setFontWeight(QFont::Bold);
 
         krateFormat.setForeground(QColor("#66EEBB"));
-        irateFormat.setForeground(QColor("#FFFFFF"));
+        irateFormat.setForeground(QColor("#A0A0FF"));
 
         arateFormat.setForeground(QColor("#F75C5C"));
-        arateFormat.setFontWeight(QFont::Bold);
+        //arateFormat.setFontWeight(QFont::Bold);
 
 
         fsigFormat.setForeground(QColor("#BD2467"));
         fsigFormat.setFontWeight(QFont::Bold);
+
+        booleanFormat.setForeground(QColor("#D4E157"));
+        // booleanFormat.setFontWeight(QFont::Bold);
+
+        complexFormat.setForeground(QColor("#26A69A"));
+        // complexFormat.setFontWeight(QFont::Bold);
 
         labelFormat.setForeground(instFormat.foreground());
         labelFormat.setFontWeight(QFont::Bold);
@@ -310,6 +328,7 @@ void Highlighter::setTheme(const QString &theme) {
     jsKeywordFormat =  krateFormat;// keywordFormat;
 
     m_theme = theme;
+    clearTypedVars();
     rehighlight();
     // emit this->rehighlight();
 }
@@ -372,7 +391,10 @@ Highlighter::Highlighter(QTextDocument *parent)
                     << "while" << "goto" << "igoto" << "kgoto"
                     << "do" << "od"
                     << "int" << "turnoff" << "xin" << "xout"
-                    << "passign";
+                    << "passign"
+                    // Csound 7 keywords
+                    << "create" << "delete" << "run" << "struct" << "for" << "global"
+                    << "InstrDef" << "Instr";
 
     ioPatterns      << "in" << "ins" << "inch" << "out" << "outs" << "outch"
                     << "outvalue" << "invalue" << "chnget" << "chngetk" << "chnset" << "chn_k"
@@ -541,6 +563,73 @@ void Highlighter::setColorVariables(bool color)
 
 	highlightingRules.clear();
 	setLastRules();
+}
+
+void Highlighter::clearTypedVars()
+{
+    m_iVariables.clear();
+    m_kVariables.clear();
+    m_aVariables.clear();
+    m_SVariables.clear();
+    m_fVariables.clear();
+    m_bVariables.clear();
+    m_complexVariables.clear();
+    m_instrDefVariables.clear();
+    m_opcodeVariables.clear();
+    m_structVariables.clear();
+    m_userTypeNames.clear();
+    m_giVariables.clear();
+    m_gkVariables.clear();
+    m_gaVariables.clear();
+    m_gSVariables.clear();
+    m_gfVariables.clear();
+    m_namedInstruments.clear();
+}
+
+QTextCharFormat Highlighter::formatForType(const QString &typeStr) const
+{
+    QString t = typeStr;
+    t.remove("[]");
+    if(t == "i") return irateFormat;
+    if(t == "k") return krateFormat;
+    if(t == "a") return arateFormat;
+    if(t == "S") return stringVarFormat;
+    if(t == "f") return fsigFormat;
+    if(t == "b" || t == "B") return booleanFormat;
+    if(t == "Complex") return complexFormat;
+    if(t == "InstrDef" || t == "Instr") return nameFormat;
+    if(t == "Opcode") return opcodeFormat;
+    if(m_userTypeNames.contains(t)) return nameFormat;
+    return defaultFormat;
+}
+
+void Highlighter::registerTypedVar(const QString &name, const QString &typeStr)
+{
+    QString t = typeStr;
+    t.remove("[]");
+    if(t == "i")                          m_iVariables.insert(name);
+    else if(t == "k")                     m_kVariables.insert(name);
+    else if(t == "a")                     m_aVariables.insert(name);
+    else if(t == "S")                     m_SVariables.insert(name);
+    else if(t == "f")                     m_fVariables.insert(name);
+    else if(t == "b" || t == "B")         m_bVariables.insert(name);
+    else if(t == "Complex")               m_complexVariables.insert(name);
+    else if(t == "InstrDef" || t == "Instr") m_instrDefVariables.insert(name);
+    else if(t == "Opcode")                m_opcodeVariables.insert(name);
+    else if(m_userTypeNames.contains(t))  m_structVariables.insert(name);
+}
+
+void Highlighter::registerGlobalTypedVar(const QString &name, const QString &typeStr)
+{
+    QString t = typeStr;
+    t.remove("[]");
+    if(t == "i")       m_giVariables.insert(name);
+    else if(t == "k") m_gkVariables.insert(name);
+    else if(t == "a") m_gaVariables.insert(name);
+    else if(t == "S") m_gSVariables.insert(name);
+    else if(t == "f") m_gfVariables.insert(name);
+    // Other global types fall back to the regular sets
+    else               registerTypedVar(name, typeStr);
 }
 
 void Highlighter::highlightBlock(const QString &text)
@@ -772,7 +861,39 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             //auto group = rxmatch.captured(2);
             setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1), instFormat);
             setFormat(rxmatch.capturedStart(2), rxmatch.capturedLength(2), nameFormat);
+            // Track non-numeric instrument names so they can be highlighted at call sites
+            if(rxmatch.captured(1) == "instr") {
+                const QString instrName = rxmatch.captured(2);
+                bool isNumber = false;
+                instrName.toInt(&isNumber);
+                if(!isNumber)
+                    m_namedInstruments.insert(instrName);
+            }
             return;
+        }
+
+        // Csound 7: detect struct type definitions, e.g. "struct MyType val0:i, val1:i"
+        {
+            static const QRegularExpression structRx("^\\s*\\bstruct\\b\\s+(\\w+)\\b");
+            rxmatch = structRx.match(text);
+            if(rxmatch.hasMatch() && rxmatch.capturedStart(1) < commentIndex) {
+                m_userTypeNames.insert(rxmatch.captured(1));
+                setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1), nameFormat);
+                // 'struct' keyword will be formatted by the word loop via keywordLiterals
+            }
+        }
+
+        // Csound 7: detect @global typed variable definitions, e.g. "maxamp@global:i = 0dbfs / 5"
+        // Register the var name in the global-rate sets so later uses get girateFormat etc.
+        {
+            static const QRegularExpression globalRx("(\\w+)@global:(\\w+(?:\\[\\])?)");
+            QRegularExpressionMatchIterator globalIt = globalRx.globalMatch(text);
+            while(globalIt.hasNext()) {
+                auto m = globalIt.next();
+                if(m.capturedStart() < commentIndex) {
+                    registerGlobalTypedVar(m.captured(1), m.captured(2));
+                }
+            }
         }
 
         rx.setPattern(R"(&&|==|\|\||<|>|<=|>=|!=|\\)");
@@ -824,11 +945,36 @@ void Highlighter::highlightCsoundBlock(const QString &line)
                 setFormat(wordStart, wordEnd - wordStart, ioFormat);
             }
             else if(word[word.size()-1] != ':' && word.contains(":")) {
-                // functional style opcode:k(...)
                 auto parts = word.split(":");
                 if (parts.size() == 2) {
-                    if (isOpcode(parts[0])) {
+                    const QString &varName  = parts[0];
+                    const QString &typeName = parts[1];
+                    // "@global:type" annotation: the token is "global:type", preceded by '@'
+                    if(wordStart > 0 && text.at(wordStart - 1) == '@') {
+                        // Highlight "@global:type" together as a keyword annotation
+                        setFormat(wordStart - 1, wordEnd - wordStart + 1, keywordFormat);
+                    }
+                    else if(isOpcode(varName)) {
+                        // functional style opcode:type(...) — existing behaviour
                         setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
+                    }
+                    else {
+                        // Csound 7: typed variable definition  varname:type
+                        static const QSet<QString> builtinTypes = {
+                            "i", "k", "a", "S", "f", "b", "B",
+                            "Complex", "InstrDef", "Instr", "Opcode"
+                        };
+                        QString typeBase = typeName;
+                        typeBase.remove("[]");
+                        if(builtinTypes.contains(typeBase) || m_userTypeNames.contains(typeBase)) {
+                            registerTypedVar(varName, typeName);
+                            // varname portion — colour by its type
+                            setFormat(wordStart, varName.size(), formatForType(typeName));
+                            // ":type" portion — highlight as keyword
+                            setFormat(wordStart + varName.size(),
+                                      wordEnd - wordStart - varName.size(),
+                                      keywordFormat);
+                        }
                     }
                 }
                 else {
@@ -844,8 +990,59 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             else if(isOpcode(word)) {
                 setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
             }
+            else if(m_namedInstruments.contains(word)) {
+                setFormat(wordStart, wordEnd - wordStart, nameFormat);
+            }
             else if(colorVariables) {
-                if(word.startsWith('a')) {
+                // @global:type sets — these take precedence over local typed sets
+                if(m_gaVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, garateFormat);
+                }
+                else if(m_gkVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, gkrateFormat);
+                }
+                else if(m_giVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, girateFormat);
+                }
+                else if(m_gSVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, gstringVarFormat);
+                }
+                else if(m_gfVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, gfsigFormat);
+                }
+                // Csound 7: check explicitly typed (local) variable sets
+                else if(m_aVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, arateFormat);
+                }
+                else if(m_kVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, krateFormat);
+                }
+                else if(m_iVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, irateFormat);
+                }
+                else if(m_SVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, stringVarFormat);
+                }
+                else if(m_fVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, fsigFormat);
+                }
+                else if(m_bVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, booleanFormat);
+                }
+                else if(m_complexVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, complexFormat);
+                }
+                else if(m_instrDefVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, nameFormat);
+                }
+                else if(m_opcodeVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, opcodeFormat);
+                }
+                else if(m_structVariables.contains(word)) {
+                    setFormat(wordStart, wordEnd - wordStart, nameFormat);
+                }
+                // Fall back to classic prefix-based detection
+                else if(word.startsWith('a')) {
                     setFormat(wordStart, wordEnd - wordStart, arateFormat);
                 }
                 else if(word.startsWith('k')) {

@@ -95,28 +95,31 @@ void TextEditor::mouseReleaseEvent(QMouseEvent *e)
 
 }
 
-//The following makes the editor almost accept drop events on OS X, but breaks all dragging on the same document on linux
-//void TextEditor::dropEvent(QDropEvent *event)
-//{
-//  qDebug() << "TextEditor::dropEvent" << event->format();
-////  QString fileName = QString(event->encodedData("text/uri-list")).remove("file://");
-////  event->;
-//
-//  event->acceptProposedAction();
-//}
-//
-//void TextEditor::dragEnterEvent(QDragEnterEvent *event)
-//{
-////  qDebug() << "TextEditor::dragEnterEvent" << event->format();
-//  // TODO remove file:// text from text
-//  event->acceptProposedAction();
-//}
-//
-//void TextEditor::dragMoveEvent(QDragMoveEvent *event)
-//{
-////  qDebug() << "TextEditor::dragMoveEvent" << event->mimeData()->text();
-//  event->acceptProposedAction();
-//}
+void TextEditor::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+        event->acceptProposedAction();
+    else
+        QTextEdit::dragEnterEvent(event);
+}
+
+void TextEditor::dragMoveEvent(QDragMoveEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+        event->acceptProposedAction();
+    else
+        QTextEdit::dragMoveEvent(event);
+}
+
+void TextEditor::dropEvent(QDropEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        emit fileDropped(event->mimeData()->urls());
+        event->acceptProposedAction();
+    } else {
+        QTextEdit::dropEvent(event);
+    }
+}
 
 TextEditLineNumbers::TextEditLineNumbers(QWidget *parent)
     : TextEditor(parent)
