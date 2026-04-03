@@ -321,6 +321,7 @@ private slots:
     void applyThemeFromSystem(Qt::ColorScheme scheme);
     void setColors(QString themeMode);
     void onExternalFileChanged(const QString &path);
+    void showTabContextMenu(const QPoint &pos);
 
 private:
 	void createActions();

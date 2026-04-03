@@ -282,6 +282,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
             documentTabs, SLOT(setCurrentIndex(int)));
     connect(documentTabs, SIGNAL(tabCloseRequested(int)), closeTabAct, SLOT(trigger()));
     connect(documentTabs->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
+    documentTabs->tabBar()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(documentTabs->tabBar(), &QTabBar::customContextMenuRequested,
+            this, &CsoundQt::showTabContextMenu);
 
     setCentralWidget(documentTabs);
     connect(showEditorAct, SIGNAL(toggled(bool)), this, SLOT(showEditor(bool)));
@@ -916,6 +919,38 @@ void CsoundQt::onExternalFileChanged(const QString &path)
                 tr("File \"%1\" reloaded from disk.").arg(QFileInfo(path).fileName()), 3000);
         }
     });
+}
+
+void CsoundQt::showTabContextMenu(const QPoint &pos)
+{
+    int tabIndex = documentTabs->tabBar()->tabAt(pos);
+    if (tabIndex < 0 || tabIndex >= documentPages.size())
+        return;
+
+    const QString filePath = documentPages[tabIndex]->getFileName();
+    const bool hasRealFile = !filePath.isEmpty() && !filePath.startsWith(":/");
+
+    QMenu menu;
+    QAction *openFolderAct = menu.addAction(tr("Open Containing Folder"));
+    openFolderAct->setEnabled(hasRealFile);
+
+    if (menu.exec(documentTabs->tabBar()->mapToGlobal(pos)) != openFolderAct)
+        return;
+
+#if defined(Q_OS_MACOS)
+    // Reveal and select the file in Finder
+    QProcess::startDetached("open", {"-R", filePath});
+#elif defined(Q_OS_WIN)
+    // Select the file in Explorer
+    QProcess::startDetached("explorer.exe",
+        {"/select,", QDir::toNativeSeparators(filePath)});
+#else
+    const QString dir = QFileInfo(filePath).absolutePath();
+    // QDEBUG << "opening " << dir;
+    if (!QDesktopServices::openUrl(QUrl::fromLocalFile(dir))) {
+        qDebug() << "Failed to open directory:" << dir;
+    }
+#endif
 }
 
 void CsoundQt::openFromAction()
