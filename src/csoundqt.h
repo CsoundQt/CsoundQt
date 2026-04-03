@@ -558,6 +558,7 @@ private:
     QPalette makeAppPalette(bool dark);
     QFileSystemWatcher *m_fileWatcher;
     QSet<QString> m_pendingFileChanges;
+    QSet<QString> m_selfSavedPaths;
 };
 
 class FileOpenEater : public QObject

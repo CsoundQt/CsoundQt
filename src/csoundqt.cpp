@@ -862,6 +862,10 @@ void CsoundQt::onExternalFileChanged(const QString &path)
     QTimer::singleShot(300, this, [this, path]() {
         m_pendingFileChanges.remove(path);
 
+        // If CsoundQt itself wrote this file, ignore the spurious inotify event.
+        if (m_selfSavedPaths.remove(path))
+            return;
+
         // Atomic-write editors (vim, emacs) delete-then-rename, which removes the
         // path from the watcher. Re-add it if the file is still there.
         if (QFile::exists(path))
@@ -6314,9 +6318,13 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
     out.setEncoding(QStringConverter::Utf8);
     out << text;
 
-    // Re-watch the saved file (new path in case of saveAs)
-    if (!fileName.isEmpty() && !fileName.startsWith(":/"))
+    // Re-watch the saved file (new path in case of saveAs).
+    // Mark it as a self-save so onExternalFileChanged ignores the
+    // spurious inotify event that Linux delivers after re-adding the watch.
+    if (!fileName.isEmpty() && !fileName.startsWith(":/")) {
+        m_selfSavedPaths.insert(fileName);
         m_fileWatcher->addPath(fileName);
+    }
 
     documentPages[curPage]->setModified(false);
     setWindowModified(false);
