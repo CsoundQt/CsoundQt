@@ -2,7 +2,7 @@
 # run the script from ints location, <source_root>/installers/MacOS, where it is located
 BUILD_DIR="../../build/Qt_6_10_2_for_macOS-Release/bin"
 APP="CsoundQt-d-html-cs7.app"
-DMG="CsoundQt-7.0.0-beta2-MacOS.dmg"
+DMG="CsoundQt-7.0.0-beta4-MacOS.dmg"
 
 #TODO: here or in qmake install (or manually) -  move Csound 7 Manual to tehe bundle:
 # Contents/Farmawroks/Csound/
