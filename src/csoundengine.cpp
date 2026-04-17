@@ -377,6 +377,25 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
             }
         }
     }
+    // BSBDisplay channels: type is determined at runtime by the first chnset/outvalue.
+    // Use csoundGetChannelVarTypeName to peek without creating the channel.
+    for (const QString &name : ud->displayChannelNames) {
+        const char *typeName = csoundGetChannelVarTypeName(ud->csound,
+                                                           name.toLocal8Bit().constData());
+        if (!typeName)
+            continue;  // channel not yet created by Csound
+        if (typeName[0] == 'k' || typeName[0] == 'K') {
+            if (csoundGetChannelPtr(ud->csound, (void **) &pvalue,
+                                    name.toLocal8Bit().constData(),
+                                    CSOUND_OUTPUT_CHANNEL | CSOUND_CONTROL_CHANNEL) == 0) {
+                ud->wl->setValue(name, (double)*pvalue);
+            }
+        } else if (typeName[0] == 'S') {
+            char chanString[4096];
+            csoundGetStringChannel(ud->csound, name.toLocal8Bit().constData(), chanString);
+            ud->wl->setValue(name, QString(chanString));
+        }
+    }
     for (int i = 0; i < ud->outputStringChannelNames.size(); i++) {
         if (ud->outputStringChannelNames[i] != ""
                 && csoundGetChannelPtr(ud->csound, (void **) &pvalue,
@@ -962,6 +981,7 @@ void CsoundEngine::setupChannels()
     ud->inputChannelNames.clear();
     ud->outputChannelNames.clear();
     ud->outputStringChannelNames.clear();
+    ud->displayChannelNames.clear();
     ud->previousOutputValues.clear();
     ud->previousStringOutputValues.clear();
     csoundSetInputChannelCallback(ud->csound, &CsoundEngine::inputValueCallback);
@@ -993,10 +1013,18 @@ void CsoundEngine::setupChannels()
         if (reservedChannels.contains(channel)
                 || channel.startsWith("_Browse")
                 || type == "BSBLabel"
-                || type == "BSBDisplay"
-                || type == "BSBGraph"   
-                || type == "BSBScope")  
+                || type == "BSBGraph"
+                || type == "BSBScope")
             continue;
+
+        if (type == "BSBDisplay") {
+            // BSBDisplay accepts both numeric and string chnset/outvalue.
+            // Don't pre-create any channel — the type is determined by the
+            // first chnset/outvalue call in the orchestra, and creating the
+            // wrong type here would cause an "incompatible type" error.
+            ud->displayChannelNames << channel;
+            continue;
+        }
 
         if (type == "BSBLineEdit") {
             // String channel: create + initialise with widget's current value.
@@ -1016,7 +1044,7 @@ void CsoundEngine::setupChannels()
             }
             ud->outputChannelNames << channel;
             ud->previousOutputValues << (MYFLT) w->getValue();
-
+            
             if (type == "BSBController") {
                 const QString channel2 = w->getChannel2Name();
                 if (!channel2.isEmpty()) {
