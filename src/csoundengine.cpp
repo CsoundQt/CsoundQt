@@ -122,9 +122,16 @@ void CsoundEngine::inputValueCallback (CSOUND *csound,
         char *string = (char *) channelValuePtr;
         QString newValue = ud->wl->getStringForChannel(channelName);
         int maxlen = csoundGetChannelDatasize(csound, channelName);
+        // Guard against zero/negative maxlen (channel not yet sized by Csound)
+        if (maxlen <= 0) {
+            return;
+        }
         if (newValue.size() > 0) {
+            // Copy at most maxlen-1 bytes so the buffer is never overrun.
+            // Always terminate at maxlen-1 to guard against newValue.size()
+            // >= maxlen (heap corruption on Windows).
             strncpy(string, newValue.toLocal8Bit(), maxlen - 1);
-            string[newValue.size()] = '\0';
+            string[maxlen - 1] = '\0';
         } else {
             string[0] = '\0';
         }
@@ -624,8 +631,14 @@ int CsoundEngine::play(CsoundOptions *options)
 
 void CsoundEngine::stop()
 {
+    // Guard against re-entrant stop (e.g. messageListDispatcher and UI both
+    // calling stop() simultaneously -- causes Windows heap corruption).
+    if (m_stopping.exchange(true)) {
+        return; // another stop is already in progress
+    }
     stopRecording();
     stopCsound();
+    m_stopping.store(false);
 }
 
 void CsoundEngine::pause()
@@ -870,6 +883,8 @@ int CsoundEngine::runCsound()
 		m_paused = false;
     }
     ud->audioOutputBuffer.resize(ud->numChnls * 2048);
+    // Mark Csound as active so the dispatcher is allowed to access message APIs.
+    ud->csoundActive.store(true);
     return 0;
 }
 
@@ -878,6 +893,12 @@ void CsoundEngine::stopCsound()
     QMutexLocker locker(&m_playMutex);
     if(!ud->perfThread)
         return;
+
+    // Signal the dispatcher to stop accessing Csound message APIs before we
+    // begin teardown.  This prevents the dispatcher from calling
+    // csoundGetMessageCnt/csoundGetFirstMessage/csoundPopFirstMessage while
+    // cleanupCsound() / csoundDestroy() is running (Windows heap corruption).
+    ud->csoundActive.store(false);
 
     CsoundPerformanceThread *pt = ud->perfThread;
 
@@ -1077,14 +1098,20 @@ void CsoundEngine::messageListDispatcher(void *data)
     while (ud_local->runDispatcher) {
         ud_local->playMutex->lock();
         if (ud_local->perfThread && (ud_local->perfThread->GetStatus() != 0)) {
-            // In case score has ended
+            // In case score has ended: call stop(), but only if no stop is
+            // already in progress (re-entrant stop causes Windows heap corruption).
             ud_local->playMutex->unlock();
-            ud_local->csEngine->stop();
+            if (!ud_local->csEngine->m_stopping.load()) {
+                ud_local->csEngine->stop();
+            }
         } else {
             ud_local->playMutex->unlock();
         }
         CSOUND *csound = ud_local->csEngine->getCsound();
-        if (csound) {
+        // Only access Csound message APIs while Csound is active.  Touching
+        // these APIs during stop/cleanup tears down the message buffer and
+        // causes heap corruption on Windows.
+        if (csound && ud_local->csoundActive.load()) {
             if (ud_local->wl) {
                 ud_local->wl->getMouseValues(&ud_local->mouseValues);
             }

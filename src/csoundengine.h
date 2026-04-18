@@ -27,6 +27,7 @@
 #include <QTimer>
 #include <QFuture>
 #include <QAtomicInt>
+#include <atomic>
 
 #include <csound.hpp>
 #include <csPerfThread.hpp>
@@ -75,6 +76,9 @@ struct CsoundUserData {
 	QMutex *playMutex; //perfThread access Mutex
 	/* performance */
 	bool runDispatcher;
+	// Set to true while Csound is active; dispatcher must not touch Csound
+	// message APIs when this is false (shutdown race / Windows heap corruption).
+	std::atomic<bool> csoundActive{false};
 	QVector<double> mouseValues;
 	RingBuffer audioOutputBuffer;
 	bool enableWidgets; // Whether widget values are processed in the callback
@@ -244,6 +248,9 @@ private:
     QMutex m_playMutex;
 	QMutex eventMutex;
     QMutex csoundMutex;
+	// Prevents re-entrant/concurrent stop (e.g. dispatcher + UI calling stop()
+	// simultaneously, which can cause Windows heap corruption on delete pt).
+	std::atomic<bool> m_stopping{false};
 	QVector<QString> eventQueue;
 	int m_refreshTime; // time in milliseconds for widget value updates (both input and output)
 	QVector<unsigned long> eventTimeStamps;
