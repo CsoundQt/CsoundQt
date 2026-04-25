@@ -79,8 +79,8 @@ cp -r $SRC_DIR/templates  $APP_DIR/usr/share/csoundqt
 # copy Csound binary, plugins and and Csound Manual
 mkdir -p  $APP_DIR/usr/lib/csound
 cp -r $CSOUND_PLUGINS_DIR $APP_DIR/usr/lib/csound
-mkdir -p $APP_DIR/usr/share/doc/csound-doc/
-cp -r $CSOUND_MANUAL_HTML_DIR $APP_DIR/usr/share/doc/csound-doc/
+mkdir -p $APP_DIR/usr/share/doc/csound-doc/html
+cp -r $CSOUND_MANUAL_HTML_DIR/* $APP_DIR/usr/share/doc/csound-doc/html
 cp "$CSOUND_PREFIX/bin/csound" $APP_DIR/usr/bin
 #what about other utilities? Should they be accessible? I think no, then user has to install csound separately. NB! Try to match the Csound version!
 
