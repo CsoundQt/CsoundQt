@@ -14,8 +14,8 @@ nchnls = 24 ; change here if your input device has more channels
 0dbfs = 1
 
 //UDO for displaying an audio signal in widgets
-opcode CsQtMeter, 0, SSak ;see https://github.com/csudo/csudo/blob/master/csqt/CsQtMeter.csd
- S_chan_sig, S_chan_over, aSig, kTrig	xin
+opcode CsQtMeter, k, SSak ;see https://github.com/csudo/csudo/blob/master/csqt/CsQtMeter.csd
+ S_chan_sig, S_chan__clip, aSig, kTrig	xin
  iDbRange = 60 ;shows 60 dB
  iHoldTim = 1 ;seconds to "hold the red light"
  kOn init 0
@@ -28,15 +28,16 @@ opcode CsQtMeter, 0, SSak ;see https://github.com/csudo/csudo/blob/master/csqt/C
   if kOn == 0 && kMax > 1 then
    kTim = 0
    kEnd = iHoldTim
-   chnset k(1), S_chan_over
+   chnset k(1), S_chan__clip
    kOn = 1
   endif
   if kOn == 1 && kTim > kEnd then
-   chnset k(0), S_chan_over
+   chnset k(0), S_chan__clip
    kOn =	0
   endif
  endif
  kTim += ksmps/sr
+ xout kMax
 endop
 
 // declare channels and call one instr for each channel
@@ -44,23 +45,21 @@ indx = 0
 while indx < nchnls do
   indx += 1
   chn_k sprintf("in%d",indx),2
-  chn_k sprintf("in%dover",indx),2
+  chn_k sprintf("in%d_clip",indx),2
   chn_k sprintf("db%d",indx),2
   schedule "Channel",0,99999,indx
 od
 chn_k "inchsel",1
 chn_k "insel",2
-chn_k "inselover",2
+chn_k "insel_clip",2
 chn_k "dbsel",2
 
 instr SelectedChannel
   kChan chnget "inchsel"
   aIn inch kChan
   gkTrigDisp metro 10
-  CsQtMeter "insel", "inselover", aIn, gkTrigDisp
-  kDb = dbamp(k(aIn))
-  kDb limit kDb,-99,10
-  kDb port kDb,1
+  kMax CsQtMeter "insel", "insel_clip", aIn, gkTrigDisp
+  kDb = dbamp(kMax)
   chnset kDb,"dbsel"
 endin
 schedule("SelectedChannel",0,-1)
@@ -69,12 +68,10 @@ instr Channel //displays the signals of one channel
   iChn = p4
   aIn inch iChn
   Sig sprintf "in%d",iChn
-  Sigover sprintf "in%dover",iChn
+  Sig_clip sprintf "in%d_clip",iChn
   SdB sprintf "db%d",iChn
-  CsQtMeter Sig, Sigover, aIn, gkTrigDisp
-  kDb = dbamp(k(aIn))
-  kDb limit kDb,-99,10
-  kDb port kDb,1
+  kMax CsQtMeter Sig, Sig_clip, aIn, gkTrigDisp
+  kDb = dbamp(kMax)
   chnset kDb,SdB
 endin
 
@@ -84,132 +81,10 @@ endin
 </CsoundSynthesizer>
 
 
-<MacOptions>
-Version: 3
-Render: Real
-Ask: Yes
-Functions: ioObject
-Listing: Window
-WindowBounds: 486 71 624 711
-CurrentView: io
-IOViewEdit: On
-Options: -b128 -A -s -m167 -R
-</MacOptions>
-<MacGUI>
-ioView background {43690, 43690, 32639}
-ioText {14, 359} {543, 58} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder This file tests whether your inputs are working. Please adjust it at the following places to your needs:
-ioText {147, -1} {299, 44} label 0.000000 0.00100 "" center "Lucida Grande" 26 {0, 0, 0} {65280, 65280, 65280} nobackground noborder INPUT TESTER
-ioText {14, 417} {546, 56} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1. Change the nchnls (number of channels) parameter in the orchestra header to the value you wish and your output device can.
-ioText {14, 474} {546, 59} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2. Make sure you are using the appropriate device by selecting it on the Configure dialog
-ioMeter {13, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in1" 0.602177 fill 1 0 mouse
-ioMeter {13, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "in1over" 0.000000 fill 1 0 mouse
-ioMeter {35, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in2" 0.602177 fill 1 0 mouse
-ioMeter {35, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "in2over" 0.000000 fill 1 0 mouse
-ioMeter {57, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in3" -inf fill 1 0 mouse
-ioMeter {57, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "in3over" 0.000000 fill 1 0 mouse
-ioMeter {79, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in4" -inf fill 1 0 mouse
-ioMeter {79, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "in4over" 0.000000 fill 1 0 mouse
-ioMeter {101, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in5" -inf fill 1 0 mouse
-ioMeter {101, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "in5over" 0.000000 fill 1 0 mouse
-ioMeter {123, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in6" -inf fill 1 0 mouse
-ioMeter {123, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "in6over" 0.000000 fill 1 0 mouse
-ioMeter {145, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in7" -inf fill 1 0 mouse
-ioMeter {145, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "in7over" 0.000000 fill 1 0 mouse
-ioMeter {167, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "in8" -inf fill 1 0 mouse
-ioMeter {167, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "in8over" 0.000000 fill 1 0 mouse
-ioMeter {200, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out9" 0.000000 fill 1 0 mouse
-ioMeter {200, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out9over" 0.000000 fill 1 0 mouse
-ioMeter {222, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out10" 0.000000 fill 1 0 mouse
-ioMeter {222, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out10over" 0.000000 fill 1 0 mouse
-ioMeter {244, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out11" 0.000000 fill 1 0 mouse
-ioMeter {244, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out11over" 0.000000 fill 1 0 mouse
-ioMeter {266, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out12" 0.000000 fill 1 0 mouse
-ioMeter {266, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out12over" 0.000000 fill 1 0 mouse
-ioMeter {288, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out13" 0.000000 fill 1 0 mouse
-ioMeter {288, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out13over" 0.000000 fill 1 0 mouse
-ioMeter {310, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out14" 0.000000 fill 1 0 mouse
-ioMeter {310, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out14over" 0.000000 fill 1 0 mouse
-ioMeter {332, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out15" 0.000000 fill 1 0 mouse
-ioMeter {332, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out15over" 0.000000 fill 1 0 mouse
-ioMeter {354, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out16" 0.000000 fill 1 0 mouse
-ioMeter {354, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out16over" 0.000000 fill 1 0 mouse
-ioMeter {388, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out17" 0.000000 fill 1 0 mouse
-ioMeter {388, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out17over" 0.000000 fill 1 0 mouse
-ioMeter {410, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out18" 0.000000 fill 1 0 mouse
-ioMeter {410, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out18over" 0.000000 fill 1 0 mouse
-ioMeter {432, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out19" 0.000000 fill 1 0 mouse
-ioMeter {432, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out19over" 0.000000 fill 1 0 mouse
-ioMeter {454, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out20" 0.000000 fill 1 0 mouse
-ioMeter {454, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out20over" 0.000000 fill 1 0 mouse
-ioMeter {476, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out21" 0.000000 fill 1 0 mouse
-ioMeter {476, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out21over" 0.000000 fill 1 0 mouse
-ioMeter {498, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out22" 0.000000 fill 1 0 mouse
-ioMeter {498, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out22over" 0.000000 fill 1 0 mouse
-ioMeter {520, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out23" 0.000000 fill 1 0 mouse
-ioMeter {520, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out23over" 0.000000 fill 1 0 mouse
-ioMeter {542, 87} {20, 169} {0, 59904, 0} "hor8" 0.450000 "out24" 0.000000 fill 1 0 mouse
-ioMeter {542, 69} {20, 20} {50176, 3584, 3072} "DelayMute" 0.600000 "out24over" 0.000000 fill 1 0 mouse
-ioText {9, 49} {25, 23} label 1.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1
-ioText {32, 49} {25, 23} label 2.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 2
-ioText {55, 49} {25, 23} label 3.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 3
-ioText {77, 49} {25, 23} label 4.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 4
-ioText {99, 49} {25, 23} label 5.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 5
-ioText {121, 49} {25, 23} label 6.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 6
-ioText {143, 49} {25, 23} label 7.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 7
-ioText {165, 49} {25, 23} label 8.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 8
-ioText {194, 49} {29, 23} label 9.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 9
-ioText {217, 49} {29, 23} label 10.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 10
-ioText {240, 49} {29, 23} label 11.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 11
-ioText {263, 49} {29, 23} label 12.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 12
-ioText {285, 49} {29, 23} label 13.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 13
-ioText {307, 49} {29, 23} label 14.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 14
-ioText {329, 49} {29, 23} label 15.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 15
-ioText {351, 49} {29, 23} label 16.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 16
-ioText {384, 49} {29, 23} label 17.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 17
-ioText {406, 49} {29, 23} label 18.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 18
-ioText {428, 49} {29, 23} label 19.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 19
-ioText {450, 49} {29, 23} label 20.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 20
-ioText {472, 49} {29, 23} label 21.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 21
-ioText {494, 49} {29, 23} label 22.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 22
-ioText {516, 49} {29, 23} label 23.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 23
-ioText {538, 49} {29, 23} label 24.000000 0.00100 "" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 24
-ioText {183, 326} {62, 29} editnum 60.000000 0.100000 "dbrange" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 60.000000
-ioText {85, 326} {93, 30} label 0.000000 0.00100 "" left "DejaVu Sans" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder dB Range
-ioText {425, 327} {51, 29} editnum 1.000000 1.000000 "peakhold" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
-ioText {317, 327} {104, 29} label 0.000000 0.00100 "" left "DejaVu Sans" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder Peak Hold time
-ioText {2, 261} {39, 22} display -29.300000 0.00100 "db1" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -29.3
-ioText {25, 285} {39, 22} display -29.300000 0.00100 "db2" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -29.3
-ioText {48, 261} {39, 22} display -inf 0.00100 "db3" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {71, 285} {39, 22} display -inf 0.00100 "db4" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {93, 261} {39, 22} display -inf 0.00100 "db5" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {115, 285} {39, 22} display -inf 0.00100 "db6" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {137, 261} {39, 22} display -inf 0.00100 "db7" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {159, 285} {39, 22} display -inf 0.00100 "db8" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {191, 261} {39, 22} display -inf 0.00100 "db9" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {214, 285} {39, 22} display -inf 0.00100 "db10" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {237, 261} {39, 22} display -inf 0.00100 "db11" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {260, 285} {39, 22} display -inf 0.00100 "db12" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {282, 261} {39, 22} display -inf 0.00100 "db13" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {304, 285} {39, 22} display -inf 0.00100 "db14" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {326, 261} {39, 22} display -inf 0.00100 "db15" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {348, 285} {39, 22} display -inf 0.00100 "db16" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {379, 261} {39, 22} display -inf 0.00100 "db17" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {402, 285} {39, 22} display -inf 0.00100 "db18" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {425, 261} {39, 22} display -inf 0.00100 "db19" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {448, 285} {39, 22} display -inf 0.00100 "db20" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {470, 261} {39, 22} display -inf 0.00100 "db21" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {492, 285} {39, 22} display -inf 0.00100 "db22" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {514, 261} {39, 22} display -inf 0.00100 "db23" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {536, 285} {39, 22} display -inf 0.00100 "db24" center "Lucida Grande" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -inf
-ioText {14, 535} {546, 59} label 0.000000 0.00100 "" left "Lucida Grande" 14 {0, 0, 0} {65280, 65280, 65280} nobackground noborder The white boxes show smoothed RMS values in dB FS.
-ioMeter {174, 337} {254, 30} {0, 59904, 0} "insel" 0.602177 "insel" 0.602177 fill 1 0 mouse
-ioMeter {425, 337} {29, 30} {50176, 3584, 3072} "inselover" 0.000000 "inselover" 0.000000 fill 1 0 mouse
-ioText {455, 337} {54, 28} display -29.900000 0.00100 "dbsel" center "Lucida Grande" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder -29.9
-ioText {16, 326} {125, 50} label 0.000000 0.00100 "" left "Helvetica" 12 {0, 0, 0} {65280, 65280, 65280} nobackground noborder or selectÂ¬one channel
-ioText {144, 336} {62, 29} editnum 1.000000 1.000000 "inchsel" left "" 0 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 1.000000
-ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0, 0} {65280, 65280, 65280} nobackground noborder 
-</MacGUI>
-<EventPanel name="" tempo="60.00000000" loop="8.00000000" x="392" y="275" width="612" height="322" visible="true" loopStart="0" loopEnd="0">    </EventPanel>
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -303,7 +178,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.39623350</yValue>
+  <yValue>-0.06441026</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -334,7 +209,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>in1over</objectName2>
+  <objectName2>in1_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -377,7 +252,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.42517949</yValue>
+  <yValue>-0.34610961</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -408,7 +283,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>in2over</objectName2>
+  <objectName2>in2_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -482,7 +357,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>in3over</objectName2>
+  <objectName2>in3_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -556,7 +431,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>in4over</objectName2>
+  <objectName2>in4_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -630,7 +505,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>in5over</objectName2>
+  <objectName2>in5_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -704,7 +579,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>in6over</objectName2>
+  <objectName2>in6_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -778,7 +653,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>in7over</objectName2>
+  <objectName2>in7_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -852,7 +727,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>in8over</objectName2>
+  <objectName2>in8_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -889,13 +764,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out9</objectName2>
+  <objectName2>in9</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -926,7 +801,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out9over</objectName2>
+  <objectName2>in9_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -963,13 +838,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out10</objectName2>
+  <objectName2>in10</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1000,7 +875,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out10over</objectName2>
+  <objectName2>in10_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1037,13 +912,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out11</objectName2>
+  <objectName2>in11</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1074,7 +949,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out11over</objectName2>
+  <objectName2>in11_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1111,13 +986,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out12</objectName2>
+  <objectName2>in12</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1148,7 +1023,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out12over</objectName2>
+  <objectName2>in12_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1185,13 +1060,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out13</objectName2>
+  <objectName2>in13</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1222,7 +1097,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out13over</objectName2>
+  <objectName2>in13_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1259,13 +1134,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out14</objectName2>
+  <objectName2>in14</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1296,7 +1171,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out14over</objectName2>
+  <objectName2>in14_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1333,13 +1208,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out15</objectName2>
+  <objectName2>in15</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1370,7 +1245,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out15over</objectName2>
+  <objectName2>in15_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1407,13 +1282,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out16</objectName2>
+  <objectName2>in16</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1444,7 +1319,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out16over</objectName2>
+  <objectName2>in16_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1481,13 +1356,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out17</objectName2>
+  <objectName2>in17</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1518,7 +1393,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out17over</objectName2>
+  <objectName2>in17_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1555,13 +1430,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out18</objectName2>
+  <objectName2>in18</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1592,7 +1467,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out18over</objectName2>
+  <objectName2>in18_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1629,13 +1504,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out19</objectName2>
+  <objectName2>in19</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1666,7 +1541,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out19over</objectName2>
+  <objectName2>in19_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1703,13 +1578,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out20</objectName2>
+  <objectName2>in20</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1740,7 +1615,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out20over</objectName2>
+  <objectName2>in20_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1777,13 +1652,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out21</objectName2>
+  <objectName2>in21</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1814,7 +1689,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out21over</objectName2>
+  <objectName2>in21_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1851,13 +1726,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out22</objectName2>
+  <objectName2>in22</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1888,7 +1763,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out22over</objectName2>
+  <objectName2>in22_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1925,13 +1800,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out23</objectName2>
+  <objectName2>in23</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -1962,7 +1837,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out23over</objectName2>
+  <objectName2>in23_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -1999,13 +1874,13 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out24</objectName2>
+  <objectName2>in24</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
   <xValue>0.45000000</xValue>
-  <yValue>0.00000000</yValue>
+  <yValue>-inf</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2036,7 +1911,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>out24over</objectName2>
+  <objectName2>in24_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -2817,7 +2692,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-37</label>
+  <label>-64</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -2841,14 +2716,14 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <objectName/>
   <x>595</x>
   <y>290</y>
-  <width>80</width>
+  <width>50</width>
   <height>30</height>
   <uuid>{e89c7c22-d239-4277-9711-933f89fea435}</uuid>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>dB (rms)</label>
+  <label>dB</label>
   <alignment>left</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -2884,8 +2759,8 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
   <yMax>1.00000000</yMax>
-  <xValue>0.39623350</xValue>
-  <yValue>0.39623350</yValue>
+  <xValue>-0.06441026</xValue>
+  <yValue>-0.06441026</yValue>
   <type>fill</type>
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
@@ -2906,7 +2781,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
-  <objectName>inselover</objectName>
+  <objectName>insel_clip</objectName>
   <x>425</x>
   <y>337</y>
   <width>29</width>
@@ -2916,7 +2791,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <objectName2>inselover</objectName2>
+  <objectName2>insel_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -2953,7 +2828,7 @@ ioText {350, 377} {206, 45} display 0.000000 0.00100 "msg" left "Arial" 10 {0, 0
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-37</label>
+  <label>-64</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3046,7 +2921,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-37</label>
+  <label>-81</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3077,7 +2952,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3108,7 +2983,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3139,7 +3014,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3170,7 +3045,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3201,7 +3076,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3232,7 +3107,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3263,7 +3138,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3294,7 +3169,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3325,7 +3200,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3356,7 +3231,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3387,7 +3262,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3418,7 +3293,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3449,7 +3324,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3480,7 +3355,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3511,7 +3386,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3542,7 +3417,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3573,7 +3448,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3604,7 +3479,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3635,7 +3510,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3666,7 +3541,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3697,7 +3572,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
@@ -3728,7 +3603,7 @@ one channel</label>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>-75</label>
+  <label>-inf</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Lucida Grande</font>
