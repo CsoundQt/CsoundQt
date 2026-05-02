@@ -3,16 +3,22 @@
 BUILD_DIR="../../build/Qt_6_10_2_for_macOS-Release/bin"
 APP="CsoundQt-d-html-cs7.app"
 DMG="CsoundQt-7.0.0-beta4-MacOS.dmg"
-
-#TODO: here or in qmake install (or manually) -  move Csound 7 Manual to tehe bundle:
-# Contents/Farmawroks/Csound/
+MANUAL_DIR="/Users/tarmo/Documents/src/csound7-manual-local"
 
 cp CsoundQt.entitlements $BUILD_DIR
 
 cd $BUILD_DIR
 
+# CopyCsound 7 Manual to tehe bundle:
+# to Contents/Farmawroks/Csound/ or Rather to Contents/Resources/Manual.  
+mkdir -p "$APP/Contents/Resources/Manual" && cp -r "$MANUAL_DIR/." "$APP/Contents/Resources/Manual/"
+
+
 #on some reason qt install script did not do it:
 install_name_tool -change /Applications/Csound/CsoundLib64.framework/CsoundLib64 @rpath/CsoundLib64.framework/CsoundLib64 $APP/Contents/MacOS/CsoundQt-d-html-cs7
+
+install_name_tool -id @rpath/CsoundLib64.framework/CsoundLib64 $APP/Contents/Frameworks/CsoundLib64.framework/Versions/7.0/CsoundLib64
+
 
 # NB! In Csound framework -  move libs to Versions/7.0 and use name_change_tool to set the location for CsoundLib64 or according plugin, not sure...
 # the problem is for Opcodes64/libpmidi.dylib
@@ -26,9 +32,12 @@ fi
 # otool -L tells depency: @loader_path/../../../../libs/libportmidi.dylib shold be @loader_path/../../libs/libportmidi.dylib -- must be tested!
 # run it after macdeloyqt has been executed
 install_name_tool -change @loader_path/../../../../libs/libportmidi.dylib @loader_path/../../libs/libportmidi.dylib $APP/Contents/Frameworks/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/libpmidi.dylib
-# sign
 
+install_name_tool -change @loader_path/../../../../libs/liblo.dylib @loader_path/../../libs/liblo.dylib $APP/Contents/Frameworks/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/libosc.dylib
 
+install_name_tool -change @loader_path/../../../../libs/libportaudio.dylib @loader_path/../../libs/libportaudio.dylib $APP/Contents/Frameworks/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/librtpa.dylib
+
+install_name_tool -change @loader_path/../../../../libs/libportmidi.dylib @loader_path/../../libs/libportmidi.dylib $APP/Contents/Frameworks/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/libpmidi.dylib
 
 # sign
 
@@ -53,6 +62,7 @@ codesign --options=runtime --timestamp  --force --deep --sign   "Developer ID Ap
 # check
 codesign -vvv --deep --strict $APP
 #spctl -vvv --assess --type exec $APP # <- this seems to tell rejected always...
+
 
 # pack
 rm $DMG
