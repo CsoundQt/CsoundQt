@@ -45,7 +45,7 @@ indx = 0
 while indx < nchnls do
   chn_k sprintf("out%d",indx+1),2
   chn_k sprintf("out%dover",indx+1),2
-  schedule "DisplayOneChannel",0,99999,indx
+  schedule "DisplayOneChannel",1/kr,99999,indx
   indx += 1
 od
 // other software channels
@@ -188,6 +188,8 @@ endin
 <CsScore>
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 

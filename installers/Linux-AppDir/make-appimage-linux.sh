@@ -9,15 +9,15 @@
 # constants
 
 
-BINARY="CsoundQt-d-cs7"
-BUILD_DIR="../../../build-qcs-Desktop_Qt_6_5_2_GCC_64bit-Release/"
+BINARY="CsoundQt-d-html-cs7"
+BUILD_DIR="../../../build-qcs-Desktop_Qt_6_9_3-Release/"
 EXECUTABLE="$BUILD_DIR/bin/$BINARY"
 #EXECUTABLE="../bin/$BINARY"
-VERSION="7.0.0-beta1"
+VERSION="7.0.0-beta4"
 CSOUND_VERSION="7.0.0"
 CSOUND_PREFIX="$HOME/.local"
 CSOUND_PLUGINS_DIR="$CSOUND_PREFIX/lib/csound/plugins64-7.0"
-CSOUND_MANUAL_HTML_DIR="$HOME/src/csound-manual/html"
+CSOUND_MANUAL_HTML_DIR="$HOME/src/csound7-manual-local/"
 BUNDLE_CSOUND=true # for now: always bundle Csound
 SRC_DIR="../../" #CsoundQt root
 LIB_DIR="/usr/lib"
@@ -37,7 +37,12 @@ LINUXDEPLOY=$(which linuxdeploy-x86_64.AppImage)
 export VERSION=$VERSION 
 export QML_SOURCES_PATHS="$SRC_DIR/src/QML"; 
 export LD_LIBRARY_PATH='/home/tarmo/.local/lib/:${LD_LIBRARY_PATH}' #TODO: use $CSOUND_PREFIX instead of hard coded path
-export QMAKE='/home/tarmo/Qt/6.5.2/gcc_64/bin/qmake'
+export QMAKE='/home/tarmo/Qt/6.9.3/gcc_64/bin/qmake'
+
+
+
+# if problem with libapimimer not found, remove or rename <QtInstall>/plugins/sqldrivers/libqsqlmimer.so
+# like: mv /home/tarmo/Qt/6.9.3/gcc_64/plugins/sqldrivers/libqsqlmimer.so ~/libqsqlmimer.so.bak
 
 # correct desktop file -  instead of csoundqt as command use the actual binary name
 sed "s/Exec=csoundqt/Exec=$BINARY/g" $SRC_DIR/csoundqt.desktop > csoundqt.desktop
@@ -50,8 +55,17 @@ LIBPORTMIDI=$(locate --limit 1 libportmidi.so)
 #echo $LINUXDEPLOY --appdir $APP_DIR --executable=$EXECUTABLE --desktop-file=csoundqt.desktop --icon-file=$SRC_DIR/images/csoundqt.svg --library=$LIBPORTMIDI --library=$LIB_DIR/x86_64-linux-gnu/liblo.so --library=$LIB_DIR/x86_64-linux-gnu/libstk.so --plugin=qt
 #exit
 
-$LINUXDEPLOY --appdir $APP_DIR --executable=$EXECUTABLE --desktop-file=csoundqt.desktop --icon-file=$SRC_DIR/images/csoundqt.svg --library=$LIBPORTMIDI --library=$LIB_DIR/x86_64-linux-gnu/liblo.so --library=$LIB_DIR/x86_64-linux-gnu/libstk.so --plugin=qt
+$LINUXDEPLOY --appdir $APP_DIR  --executable=$EXECUTABLE --desktop-file=csoundqt.desktop --icon-file=$SRC_DIR/images/csoundqt.svg \
+--library=$LIBPORTMIDI \
+--library=$LIB_DIR/x86_64-linux-gnu/liblo.so \
+--library=$LIB_DIR/x86_64-linux-gnu/libstk.so \
+--plugin=qt
 
+# Necessary for Chromium/QWebengine
+mkdir -p $APP_DIR/usr/lib/nss/
+cp /usr/lib/x86_64-linux-gnu/nss/libsoftokn3.so $APP_DIR/usr/lib/nss/
+cp /usr/lib/x86_64-linux-gnu/nss/libfreeblpriv3.so $APP_DIR/usr/lib/nss/
+cp /usr/lib/x86_64-linux-gnu/nss/libfreebl3.so $APP_DIR/usr/lib/nss/
 
 #libraries still missing: libstk-4.5.0.so libfltk.so.1.1
 
@@ -65,8 +79,8 @@ cp -r $SRC_DIR/templates  $APP_DIR/usr/share/csoundqt
 # copy Csound binary, plugins and and Csound Manual
 mkdir -p  $APP_DIR/usr/lib/csound
 cp -r $CSOUND_PLUGINS_DIR $APP_DIR/usr/lib/csound
-mkdir -p $APP_DIR/usr/share/doc/csound-doc/
-cp -r $CSOUND_MANUAL_HTML_DIR $APP_DIR/usr/share/doc/csound-doc/
+mkdir -p $APP_DIR/usr/share/doc/csound-doc/html
+cp -r $CSOUND_MANUAL_HTML_DIR/* $APP_DIR/usr/share/doc/csound-doc/html
 cp "$CSOUND_PREFIX/bin/csound" $APP_DIR/usr/bin
 #what about other utilities? Should they be accessible? I think no, then user has to install csound separately. NB! Try to match the Csound version!
 
@@ -76,6 +90,6 @@ mkdir -p $APP_DIR/apprun-hooks
 echo 'export OPCODE7DIR64="${APPDIR}/usr/lib/csound/plugins64-7.0/"' >  $APP_DIR/apprun-hooks/csound-plugins-hook.sh
 
 # and create final AppImage
-$LINUXDEPLOY --appdir $APP_DIR --executable=$EXECUTABLE --desktop-file=csoundqt.desktop --icon-file=$SRC_DIR/images/csoundqt.svg --plugin=qt --output appimage
+$LINUXDEPLOY --appdir $APP_DIR  --executable=$EXECUTABLE --desktop-file=csoundqt.desktop --icon-file=$SRC_DIR/images/csoundqt.svg --plugin=qt --output appimage
 
 

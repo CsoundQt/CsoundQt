@@ -321,6 +321,7 @@ private slots:
     void applyThemeFromSystem(Qt::ColorScheme scheme);
     void setColors(QString themeMode);
     void onExternalFileChanged(const QString &path);
+    void showTabContextMenu(const QPoint &pos);
 
 private:
 	void createActions();
@@ -558,6 +559,7 @@ private:
     QPalette makeAppPalette(bool dark);
     QFileSystemWatcher *m_fileWatcher;
     QSet<QString> m_pendingFileChanges;
+    QSet<QString> m_selfSavedPaths;
 };
 
 class FileOpenEater : public QObject

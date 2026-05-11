@@ -282,6 +282,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
             documentTabs, SLOT(setCurrentIndex(int)));
     connect(documentTabs, SIGNAL(tabCloseRequested(int)), closeTabAct, SLOT(trigger()));
     connect(documentTabs->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
+    documentTabs->tabBar()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(documentTabs->tabBar(), &QTabBar::customContextMenuRequested,
+            this, &CsoundQt::showTabContextMenu);
 
     setCentralWidget(documentTabs);
     connect(showEditorAct, SIGNAL(toggled(bool)), this, SLOT(showEditor(bool)));
@@ -862,6 +865,10 @@ void CsoundQt::onExternalFileChanged(const QString &path)
     QTimer::singleShot(300, this, [this, path]() {
         m_pendingFileChanges.remove(path);
 
+        // If CsoundQt itself wrote this file, ignore the spurious inotify event.
+        if (m_selfSavedPaths.remove(path))
+            return;
+
         // Atomic-write editors (vim, emacs) delete-then-rename, which removes the
         // path from the watcher. Re-add it if the file is still there.
         if (QFile::exists(path))
@@ -912,6 +919,38 @@ void CsoundQt::onExternalFileChanged(const QString &path)
                 tr("File \"%1\" reloaded from disk.").arg(QFileInfo(path).fileName()), 3000);
         }
     });
+}
+
+void CsoundQt::showTabContextMenu(const QPoint &pos)
+{
+    int tabIndex = documentTabs->tabBar()->tabAt(pos);
+    if (tabIndex < 0 || tabIndex >= documentPages.size())
+        return;
+
+    const QString filePath = documentPages[tabIndex]->getFileName();
+    const bool hasRealFile = !filePath.isEmpty() && !filePath.startsWith(":/");
+
+    QMenu menu;
+    QAction *openFolderAct = menu.addAction(tr("Open Containing Folder"));
+    openFolderAct->setEnabled(hasRealFile);
+
+    if (menu.exec(documentTabs->tabBar()->mapToGlobal(pos)) != openFolderAct)
+        return;
+
+#if defined(Q_OS_MACOS)
+    // Reveal and select the file in Finder
+    QProcess::startDetached("open", {"-R", filePath});
+#elif defined(Q_OS_WIN)
+    // Select the file in Explorer
+    QProcess::startDetached("explorer.exe",
+        {"/select,", QDir::toNativeSeparators(filePath)});
+#else
+    const QString dir = QFileInfo(filePath).absolutePath();
+    // QDEBUG << "opening " << dir;
+    if (!QDesktopServices::openUrl(QUrl::fromLocalFile(dir))) {
+        qDebug() << "Failed to open directory:" << dir;
+    }
+#endif
 }
 
 void CsoundQt::openFromAction()
@@ -3609,6 +3648,24 @@ void CsoundQt::setColors(QString themeMode)
             documentTabs->setTabIcon(i, QIcon());
         }
     }
+
+#ifdef Q_OS_MACOS
+    // Qt 6 on macOS: with documentMode enabled the native tab-bar rendering path
+    // does not show the Qt-injected close-button widgets.
+    // Force visibility via an explicit stylesheet on the tab bar.
+    if (documentTabs) {
+        QString tabBarCss;
+        if (m_options->tabShowCloseButton) {
+            tabBarCss = QString(
+                "QTabBar::close-button {"
+                "  image: url(:/themes/%1/edit-close.png);"
+                "  subcontrol-position: left;"
+                "}"
+            ).arg(m_options->theme);
+        }
+        documentTabs->tabBar()->setStyleSheet(tabBarCss);
+    }
+#endif
 
     QDEBUG << "Theme mode:" << m_options->themeMode
            << "theme:" << m_options->theme
@@ -6314,9 +6371,13 @@ bool CsoundQt::saveFile(const QString &fileName, bool saveWidgets)
     out.setEncoding(QStringConverter::Utf8);
     out << text;
 
-    // Re-watch the saved file (new path in case of saveAs)
-    if (!fileName.isEmpty() && !fileName.startsWith(":/"))
+    // Re-watch the saved file (new path in case of saveAs).
+    // Mark it as a self-save so onExternalFileChanged ignores the
+    // spurious inotify event that Linux delivers after re-adding the watch.
+    if (!fileName.isEmpty() && !fileName.startsWith(":/")) {
+        m_selfSavedPaths.insert(fileName);
         m_fileWatcher->addPath(fileName);
+    }
 
     documentPages[curPage]->setModified(false);
     setWindowModified(false);

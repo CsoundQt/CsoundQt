@@ -93,6 +93,7 @@ struct CsoundUserData {
 	QList<QString> inputChannelNames;
 	QList<QString> outputChannelNames;
 	QList<QString> outputStringChannelNames;
+	QList<QString> displayChannelNames;  // BSBDisplay: polled by type at runtime
 	QList<QVariant> previousOutputValues;
 	QList<QVariant> previousStringOutputValues;
     QString lastRecordingOutfile;
