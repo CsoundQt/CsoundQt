@@ -303,6 +303,15 @@ i "Main"		0		1
 
 
 
+
+
+<MacGUI>
+ioView background {61680, 61680, 61680}
+ioText {31, 8} {64, 34} label 0.000000 0.00100 "" left "Arial" 24 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Dew
+ioText {31, 42} {137, 25} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Tom Banados Russell
+ioText {30, 83} {201, 69} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder The piece "Dew" is constantly evolving to different circumstances. This is the code used in all these evolutions.
+ioButton {301, 50} {105, 41} value 1.000000 "_Play" "Start" "/" i1 0 10
+</MacGUI>
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -435,10 +444,3 @@ i "Main"		0		1
 </bsbPanel>
 <bsbPresets>
 </bsbPresets>
-<MacGUI>
-ioView background {61680, 61680, 61680}
-ioText {31, 8} {64, 34} label 0.000000 0.00100 "" left "Arial" 24 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Dew
-ioText {31, 42} {137, 25} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder Tom Banados Russell
-ioText {30, 83} {201, 69} label 0.000000 0.00100 "" left "Arial" 12 {0, 0, 0} {65024, 65024, 64768} nobackground noborder The piece "Dew" is constantly evolving to different circumstances. This is the code used in all these evolutions.
-ioButton {301, 50} {105, 41} value 1.000000 "_Play" "Start" "/" i1 0 10
-</MacGUI>

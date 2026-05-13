@@ -48,6 +48,8 @@ i 1 0 3600
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -215,7 +217,7 @@ i 1 0 3600
    <g>234</g>
    <b>187</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>41</r>
    <g>80</g>
@@ -438,7 +440,7 @@ i 1 0 3600
    <g>199</g>
    <b>234</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -475,7 +477,7 @@ i 1 0 3600
    <g>234</g>
    <b>228</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -698,7 +700,7 @@ i 1 0 3600
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -859,7 +861,7 @@ i 1 0 3600
    <g>85</g>
    <b>255</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -1051,7 +1053,7 @@ i 1 0 3600
    <g>255</g>
    <b>255</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -1243,7 +1245,7 @@ i 1 0 3600
    <g>85</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -1280,7 +1282,7 @@ i 1 0 3600
    <g>240</g>
    <b>240</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -1317,7 +1319,7 @@ i 1 0 3600
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -1447,7 +1449,7 @@ i 1 0 3600
    <g>82</g>
    <b>65</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>
@@ -1484,7 +1486,7 @@ i 1 0 3600
    <g>234</g>
    <b>152</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>42</r>
    <g>46</g>

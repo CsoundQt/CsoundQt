@@ -1036,11 +1036,15 @@ void CsoundEngine::setupChannels()
         } else {
             // Numeric channel: create bidirectional, write widget value directly
             // into the channel memory pointer so no staging queue is needed.
+            bool channelExists = csoundGetChannelVarType(ud->csound, channel.toLocal8Bit().constData()) != NULL;
             if (csoundGetChannelPtr(ud->csound, (void **) &pvalue,
                                     channel.toLocal8Bit().constData(),
                                     CSOUND_INPUT_CHANNEL | CSOUND_OUTPUT_CHANNEL
                                     | CSOUND_CONTROL_CHANNEL) == 0) {
-                *pvalue = (MYFLT) w->getValue();
+                // If the channel already exists we do not overwrite that value. 
+                if(!channelExists) {
+                    *pvalue = (MYFLT) w->getValue();
+                }
             }
             ud->outputChannelNames << channel;
             ud->previousOutputValues << (MYFLT) w->getValue();
