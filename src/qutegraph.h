@@ -231,7 +231,7 @@ public:
     void setUserData(CsoundUserData *ud) {
         mutex.lock(); m_ud = ud; mutex.unlock(); }
     void updateData(int tabnum);
-    void setRunningStatus(int csoundRunning) { m_running = csoundRunning; }
+    void setRunningStatus(int running) { m_running = running; }
     int currentTableNumber() { return m_tabnum; }
     void updatePath();
     void setColor(QColor color) { m_color = color; }

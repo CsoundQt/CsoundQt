@@ -491,24 +491,47 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
     m_repeatKeys = repeat;
 }
 
+void WidgetLayout::setDisplayValue(QString channelName, double value)
+{
+    Q_ASSERT(controlChannelMap.contains(channelName));
+    widgetsMutex.lock();
+    auto widgets = controlChannelMap[channelName];
+    if(!widgets.isEmpty()) {
+        for(auto w: widgets) {
+            auto wtype = w->getWidgetType();
+            if(wtype == "BSBDisplay" || wtype == "BSBTableDisplay") {
+                // TODO: define a property of qutewidget which sets if it is a unidirectional or bidirectional widget
+                // instead of checking the widget type
+                Q_ASSERT(w->getChannelName() == channelName);
+                w->setValue(value);
+            }
+        }
+    }
+    // widgetsMutex.lock();
+    // for (auto widget : m_widgets) {
+    //     if(widget->getWidgetType() == "BSBDisplay") {
+    //         widget->setValue(value);
+    //     }
+    // }
+    widgetsMutex.unlock(); 
+}
+
 void WidgetLayout::setValue(QString channelName, double value)
 {
-    // qDebug() << "Setting channel" << channelName << value;
+    Q_ASSERT(controlChannelMap.contains(channelName));
     widgetsMutex.lock();
-    for (int i = 0; i < m_widgets.size(); i++) {
-        if (m_widgets[i]->getUuid() == channelName) {
-            m_widgets[i]->setValue(value);
-            qDebug() << "Setting channel via UUID" << channelName;
-            break;
+    auto widgets = controlChannelMap[channelName];
+    if(!widgets.isEmpty()) {
+        for(auto w: controlChannelMap[channelName]) {
+            if(w->getChannelName() == channelName) {
+                w->setValue(value);
+            }
+            else {
+                w->setValue2(value);
+            }
         }
-        else if (m_widgets[i]->getChannelName() == channelName) {
-            m_widgets[i]->setValue(value);
-        }
-        if (m_widgets[i]->getChannel2Name() == channelName) {
-            m_widgets[i]->setValue2(value);
-        }
-
     }
+    // TODO: deal with UUID
     widgetsMutex.unlock();
 }
 
@@ -592,19 +615,13 @@ QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
 double WidgetLayout::getValueForChannel(QString channelName, bool *modified, double notfound)
 {
     (void) modified;
-    for (int i = 0; i < m_activeWidgets ; i++) {
-        if (m_widgets[i]->getChannelName() == channelName) {
-            double value = m_widgets[i]->getValue();
-            return value;
-        } else if (m_widgets[i]->getChannel2Name() == channelName) {
-            double value = m_widgets[i]->getValue2();
-            return value;
-        } else if (m_widgets[i]->getUuid() == channelName) {
-            double value = m_widgets[i]->getValue();
-            return value;
-        }
-    }
-    return notfound;
+    if(!controlChannelMap.contains(channelName))
+        return notfound;
+    auto widgets = controlChannelMap[channelName];
+    Q_ASSERT(!widgets.isEmpty());
+    auto w = widgets.constFirst();
+    return w->getChannelName() == channelName ? w->getValue() : w->getValue2();
+    // TODO: deal with UUID as channel name    
 }
 
 void WidgetLayout::getMouseValues(QVector<double> *values)
@@ -4014,44 +4031,51 @@ void WidgetLayout::deleteWidget(QuteWidget *widget)
 
 void WidgetLayout::newValue(QPair<QString, double> channelValue)
 {
-    if (channelValue.first == "_SetPreset") {
-        loadPreset((int)channelValue.second);
+    auto channelName = channelValue.first;
+    if(channelName.isEmpty())
+        return;
+        
+    if(channelName[0] == '_') {
+        if (channelName == "_SetPreset") {
+            loadPreset((int)channelValue.second);
+            return;
+        }
+        else if (channelName == "_SetPresetIndex") {
+            loadPresetFromIndex((int)channelValue.second);
+            return;
+        }    
     }
-    if (channelValue.first == "_SetPresetIndex") {
-        loadPresetFromIndex((int)channelValue.second);
-    }
-    QString path, channelName = channelValue.first;
+        
+    QString path;
     auto idx = channelName.indexOf("/");
     if (idx >= 0) {
         path = channelName.mid(idx+1);
         channelName = channelName.left(idx);
     }
-    widgetsMutex.lock();
-    if (!channelName.isEmpty()) {
-        // Pass the value on to the other widgets
-        for (int i = 0; i < m_widgets.size(); i++){
-            if (m_widgets[i]->getChannelName() == channelName) {
-                if (path.isEmpty()) {
-                    m_widgets[i]->setValue(channelValue.second);
-                }
-                else
-                    m_widgets[i]->widgetMessage(path,channelValue.second);
-            }
-            if (m_widgets[i]->getChannel2Name() == channelValue.first) {
-                m_widgets[i]->setValue2(channelValue.second);
-            }
-        }
-    }
-    widgetsMutex.unlock();
+    setValue(channelName, channelValue.second);
+    
+    // if (!channelName.isEmpty()) {
+    //     // Pass the value on to the other widgets
+    //     for (int i = 0; i < m_widgets.size(); i++){
+    //         if (m_widgets[i]->getChannelName() == channelName) {
+    //             if (path.isEmpty()) {
+    //                 m_widgets[i]->setValue(channelValue.second);
+    //             }
+    //             else
+    //                 m_widgets[i]->widgetMessage(path,channelValue.second);
+    //         }
+    //         if (m_widgets[i]->getChannel2Name() == channelValue.first) {
+    //             m_widgets[i]->setValue2(channelValue.second);
+    //         }
+    //     }
+    // }
     // Now store the value in the changes buffer to read from chnget
-    if (!channelValue.first.isEmpty()) {
-        valueMutex.lock();
-        if(newValues.contains(channelValue.first))
-            newValues[channelValue.first] = channelValue.second;
-        else
-            newValues.insert(channelValue.first, channelValue.second);
-        valueMutex.unlock();
-    }
+    valueMutex.lock();
+    if(newValues.contains(channelName))
+        newValues[channelName] = channelValue.second;
+    else
+        newValues.insert(channelName, channelValue.second);
+    valueMutex.unlock();
 }
 
 //FIXME there's no need to go through here coming from the widgets...
@@ -4059,7 +4083,7 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
 void WidgetLayout::newValue(QPair<QString, QString> channelValue)
 {
     QString channelName = channelValue.first;
-    if (channelValue.first.contains("/")) {
+    if (channelName.contains("/")) {
         channelName = channelValue.first.left(channelValue.first.indexOf("/"));
     }
     QString path = channelValue.first.mid(channelValue.first.indexOf("/") + 1);

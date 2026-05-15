@@ -96,8 +96,10 @@ struct CsoundUserData {
 	QList<QString> displayChannelNames;  // BSBDisplay: polled by type at runtime
 	QList<QVariant> previousOutputValues;
 	QList<QVariant> previousStringOutputValues;
+	QHash<QString, MYFLT*> channelPointers;
     QString lastRecordingOutfile;
-
+    QSet<QString> outputChannelNamesSet;
+    
 	void *midiBuffer; //Csound Circular Buffer
 	void *virtualMidiBuffer; //Csound Circular Buffer
 

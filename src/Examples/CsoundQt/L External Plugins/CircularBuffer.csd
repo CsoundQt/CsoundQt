@@ -73,20 +73,21 @@ endop
 
 instr main
   ; a circular buffer with a max. recording duration of 20 secs
+  
   ibuf = makeCircBuffer(20)
-  if timeinstk() == 1 then
-    outvalue "plot", sprintf("@set %d",dict_get:i(ibuf, "table"))
-  endif
-  krec invalue "record"
+  itabnum = dict_get:i(ibuf, "table")
+  prints("itabnum: %d\n", itabnum)
+  
+  krec = chnget("record")
   kplay = 1 - krec
   
   toggleInstr "recCircBuffer",  krec,  0,    ibuf, 1
   toggleInstr "playCircBuffer", kplay, 0.01, ibuf, /*speed*/ 1, /*outchannel*/ 1
   
-  if metro(gi_refreshRate) == 1 then
-    outvalue "plot", "@update"
-  endif 
+  chnset metro(gi_refreshRate) == 1 ? -1 : itabnum, "plot"
+
 endin
+
 
 schedule "main", 0, -1
 
@@ -95,6 +96,8 @@ schedule "main", 0, -1
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 
 
 

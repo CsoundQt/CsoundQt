@@ -79,6 +79,7 @@ public:
 	void setValue(QString channelName, QString value);
 	void setValue(int index, double value);
 	void setValue(int index, QString value);
+	void setDisplayValue(QString channelName, double value);
 	QString getStringForChannel(QString channelName, bool *modified = 0);
     double getValueForChannel(QString channelName, bool *modified = 0, double notfound = 0.0);
 	void getMouseValues(QVector<double> *values);
@@ -204,11 +205,16 @@ public:
 	QMutex valueMutex;
 	QMutex stringValueMutex;
 	QReadWriteLock mouseLock;
+	
+	
 
     QString getQml();
 
     QuteWidgetType widgetNameToType(QString widgetName);
     void addCreateWidgetActionsToMenu(QMenu &menu);
+    
+    QHash<QString, QList<QuteWidget *>> controlChannelMap;
+    
 
 public slots:
 	QString createNewLabel(int x = -1, int y = -1, QString channel = QString());
@@ -324,6 +330,8 @@ private:
 	QVector<WINDAT> curveUpdateBuffer; // FIXME move these buffers to documentpage to avoid duplication when having multiple panels
 	int curveUpdateBufferCount;
 	QList<Curve *> curves;
+	
+	
 	QTimer updateTimer;
 
 	unsigned long m_ksmpscount;  // Ksmps counter for Csound engine (Really needed here?)
