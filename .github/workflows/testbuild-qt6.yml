@@ -1,0 +1,77 @@
+name: Test Build qt 6 
+on: 
+  push:
+    branches:
+      - csoundqt7
+      
+env:
+  PACKAGENAME: CsoundQt
+  APPNAME: CsoundQt-d-cs7
+  CSOUND_VERSION: 7
+    
+jobs:
+  buildjob:
+    name: Test Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: update submodules
+        run: |
+          echo "Calling git submodule update"
+          git submodule update --init --recursive
+          git submodule status --recursive
+          echo "Finished submodules"
+      - name: macos build
+        if: runner.os == 'macOS'
+        run: |
+          set -o xtrace   # echo each command before it is executed
+          
+          brew update
+          brew install csound
+          brew install qt6
+          brew link qt6 --force
+          
+          csound_brew_root=$(brew --prefix csound)
+          echo "Csound brew root: $csound_brew_root"
+          # download missing csPerthread.hpp
+          curl -o $csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers/csPerfThread.hpp https://raw.githubusercontent.com/csound/csound/develop/interfaces/csPerfThread.hpp 
+          
+          ls -R "$csound_brew_root"
+          
+          # qmake CONFIG+=rtmidi CONFIG+=release CSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
+          qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
+          make -j$(nproc)
+          
+          otool -L bin/${{ env.APPNAME }}.app/Contents/MacOS/${{ env.APPNAME }}
+          hdiutil create -fs HFS+ -srcfolder bin/${{ env.APPNAME }}.app -volname CsoundQt CsoundQt.dmg
+          
+          find .
+          echo "Creating artifacts folder"
+          mkdir -p artifacts
+          echo "Copying .dmg to artifacts"
+          cp CsoundQt.dmg artifacts
+          echo "Listing artifacts"
+          ls artifacts
+          echo "ready!"
+          
+      - name: linux build
+        if: runner.os == 'linux'
+        run: |
+          sudo apt install qt6-base-dev
+          
+          git submodule update --init --recursive
+          qmake CONFIG+=rtmidi qcs.pro
+          make -j$(nproc)
+          mkdir -o artifacts
+          cp bin/* artifacts
+          
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CsoundQt
+          path: artifacts/*
