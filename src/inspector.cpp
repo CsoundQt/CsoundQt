@@ -150,14 +150,14 @@ void Inspector::parseText(const QString &text)
             }
             if(currentOpcode == nullptr && currentInstrument == nullptr) {
                 // we are at instr 0
-                if (line.startsWith("instr ")) {
+                if (line.startsWith("instr")) {
                     auto instrline = line.mid(6).trimmed();
                     auto newItem = new TreeItem(treeItem3, QStringList(instrline));
                     newItem->setLine(i + 1);
                     currentInstrument = newItem;
                     currentItem = newItem;
                 }
-                else if(line.startsWith("opcode ") && (match=rxOpcode.match(line)).hasMatch()) {
+                else if(line.startsWith("opcode") && (match=rxOpcode.match(line)).hasMatch()) {
                     auto opcodeName = match.captured(1);
                     auto itemtext = line.mid(7);
                     QStringList columnslist(itemtext);
