@@ -113,7 +113,7 @@ jobs:
           git submodule update --init --recursive
           qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
           make -j$(nproc)
-          mkdir -o artifacts
+          mkdir -p artifacts
           cp bin/* artifacts
           
       - uses: actions/upload-artifact@v4

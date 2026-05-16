@@ -497,7 +497,7 @@ void WidgetLayout::setDisplayValue(QString channelName, double value)
     widgetsMutex.lock();
     auto widgets = controlChannelMap[channelName];
     if(!widgets.isEmpty()) {
-        for(auto w: widgets) {
+        for(auto& w: widgets) {
             auto wtype = w->getWidgetType();
             if(wtype == "BSBDisplay" || wtype == "BSBTableDisplay") {
                 // TODO: define a property of qutewidget which sets if it is a unidirectional or bidirectional widget
@@ -522,7 +522,7 @@ void WidgetLayout::setValue(QString channelName, double value)
     widgetsMutex.lock();
     auto widgets = controlChannelMap[channelName];
     if(!widgets.isEmpty()) {
-        for(auto w: controlChannelMap[channelName]) {
+        for(auto& w: widgets) {
             if(w->getChannelName() == channelName) {
                 w->setValue(value);
             }
@@ -4088,7 +4088,10 @@ void WidgetLayout::newValue(QPair<QString, QString> channelValue)
     }
     QString path = channelValue.first.mid(channelValue.first.indexOf("/") + 1);
     // Send value to a widget if channel matches
-    widgetsMutex.lock();
+    if(!widgetsMutex.tryLock(1)) {
+        QDEBUG << "Could not acquire widgets lock";
+        return;
+    }
     if (!channelName.isEmpty()) {
         for (int i = 0; i < m_widgets.size(); i++){
             if (m_widgets[i]->getChannelName() != channelName)
@@ -4102,7 +4105,10 @@ void WidgetLayout::newValue(QPair<QString, QString> channelValue)
     widgetsMutex.unlock();
     // Now store the value in the changes buffer to read from chnget
     if (!channelValue.first.isEmpty()) {
-        stringValueMutex.lock();
+        if (!stringValueMutex.tryLock(1)) {
+            QDEBUG << "Could not acquire string value mutex";
+            return;
+        }
         if(newStringValues.contains(channelValue.first))
             newStringValues[channelValue.first] = channelValue.second;
         else

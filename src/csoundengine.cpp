@@ -342,9 +342,9 @@ void CsoundEngine::readWidgetValues(CsoundUserData *ud)
     MYFLT* pvalue;
 
     if (!ud->wl->newValues.isEmpty() && ud->wl->valueMutex.tryLock(1)) {
-        // QHash<QString, double>::const_iterator i;
+        QHash<QString, double>::const_iterator i;
         QHash<QString, double>::const_iterator end = ud->wl->newValues.constEnd();
-        for (auto i = ud->wl->newValues.constBegin(); i != end; ++i) {
+        for (i = ud->wl->newValues.constBegin(); i != end; ++i) {
             auto ptr = ud->channelPointers.find(i.key());
             if(ptr != ud->channelPointers.end()) {
                 pvalue = ptr.value();
