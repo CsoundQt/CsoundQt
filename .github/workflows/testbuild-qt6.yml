@@ -60,7 +60,25 @@ jobs:
           ls artifacts
           echo "ready!"
           
-      - name: linux build
+
+      - name: linux setup csound7
+        if: runner.os == 'linux'
+        run: |
+          git clone -b develop https://github.com/csound/csound --depth 1
+          cd csound
+          sudo apt-get update && sudo apt-get install cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libportmidi-dev libpulse-dev default-jdk liblo-dev libpng-dev libgmm++-dev bison flex libportsmf-dev libeigen3-dev libcunit1-dev
+          mkdir build && cd build
+          cmake .. -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF
+          cmake --build . --parallel
+          sudo make install
+          # sudo cmake --install .
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+          echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+          sudo ldconfig
+          csound --version
+          strace -f -t -e trace=file csound -+rtaudio=dummy --devices=out | grep "\.so" || echo ok
+        
+      - name: linux csoundqt7 build
         if: runner.os == 'linux'
         run: |
           sudo apt install qt6-base-dev qmake6
