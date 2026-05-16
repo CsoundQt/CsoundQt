@@ -81,8 +81,7 @@ jobs:
       - name: linux csoundqt7 build
         if: runner.os == 'linux'
         run: |
-          sudo apt install qt6-base-dev qmake6
-          
+          sudo apt install qt6-base-dev qmake6 qt6-declarative-dev qt6-webengine-dev          
           git submodule update --init --recursive
           qmake6 CONFIG+=rtmidi CONFIG+=release qcs.pro
           make -j$(nproc)
