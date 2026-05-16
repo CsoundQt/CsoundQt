@@ -60,11 +60,27 @@ jobs:
           ls artifacts
           echo "ready!"
           
+      - name: Checkout Csound
+        uses: actions/checkout@v4
+        with:
+          repository: csound/csound
+          path: csound
+          ref: develop
 
+      - name: Get Csound commit hash
+        id: csound-hash
+        run: echo "hash=$(git -C csound rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Cache Csound build
+        uses: actions/cache@v4
+        with:
+          path: csound/build
+          key: csound-${{ runner.os }}-${{ steps.csound-hash.outputs.hash }}
+      
       - name: linux setup csound7
-        if: runner.os == 'linux'
+        if: runner.os == 'linux' && steps.cache-csound.outputs.cache-hit != 'true'
         run: |
-          git clone -b develop https://github.com/csound/csound --depth 1
+          # git clone -b develop https://github.com/csound/csound --depth 1
           cd csound
           sudo apt-get update && sudo apt-get install cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libportmidi-dev default-jdk libpng-dev libgmm++-dev bison flex libportsmf-dev libeigen3-dev libcunit1-dev
           mkdir build && cd build
@@ -82,6 +98,7 @@ jobs:
         if: runner.os == 'linux'
         run: |
           sudo apt install qt6-base-dev qmake6 qt6-declarative-dev qt6-webengine-dev          
+          qmake6 --version
           git submodule update --init --recursive
           qmake6 CONFIG+=rtmidi CONFIG+=release qcs.pro
           make -j$(nproc)
