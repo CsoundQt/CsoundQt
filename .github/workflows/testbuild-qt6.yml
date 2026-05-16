@@ -93,14 +93,25 @@ jobs:
           sudo ldconfig
           csound --version
           # strace -f -t -e trace=file csound -+rtaudio=dummy --devices=out | grep "\.so" || echo ok
-        
+
+      - name: Install Qt
+        if: runner.os == 'linux'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.7.0'
+          host: linux
+          target: desktop
+          arch: linux_gcc_64
+          modules: 'qtwebengine qtwebchannel qtpositioning'  # add extras you need
+          cache: true  # caches the Qt install between runs
+      
       - name: linux csoundqt7 build
         if: runner.os == 'linux'
         run: |
-          sudo apt install qt6-base-dev qmake6 qt6-declarative-dev qt6-webengine-dev          
-          qmake6 --version
+          # sudo apt install qt6-base-dev qmake6 qt6-declarative-dev qt6-webengine-dev          
+          qmake --version
           git submodule update --init --recursive
-          qmake6 CONFIG+=rtmidi CONFIG+=release qcs.pro
+          qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
           make -j$(nproc)
           mkdir -o artifacts
           cp bin/* artifacts
