@@ -63,7 +63,7 @@ jobs:
       - name: linux build
         if: runner.os == 'linux'
         run: |
-          sudo apt install qt6-base-dev
+          sudo apt install qt6-base-dev qmake6
           
           git submodule update --init --recursive
           qmake CONFIG+=rtmidi qcs.pro
