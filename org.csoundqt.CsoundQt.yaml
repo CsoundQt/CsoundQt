@@ -210,7 +210,7 @@ modules:
       - qmake --version  # verify this is 6.8.x before building
       - git submodule update --init --recursive
       - export QMAKEPATH=/app &&
-              /usr/bin/qmake6 CONFIG+=rtmidi CONFIG+=release CONFIG+=build64 qcs.pro                           
+              /usr/bin/qmake6 CONFIG+=rtmidi CONFIG+=debug CONFIG+=build64 qcs.pro                           
                 CSOUND_API_INCLUDE_DIR=/app/include/csound
                 CSOUND_LIBRARY_DIR=/app/lib
                 INSTALL_DIR=/app
