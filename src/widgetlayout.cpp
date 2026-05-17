@@ -493,46 +493,63 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
 
 void WidgetLayout::setDisplayValue(QString channelName, double value)
 {
-    Q_ASSERT(controlChannelMap.contains(channelName));
-    widgetsMutex.lock();
-    auto widgets = controlChannelMap[channelName];
-    if(!widgets.isEmpty()) {
-        for(auto& w: widgets) {
-            auto wtype = w->getWidgetType();
-            if(wtype == "BSBDisplay" || wtype == "BSBTableDisplay") {
-                // TODO: define a property of qutewidget which sets if it is a unidirectional or bidirectional widget
-                // instead of checking the widget type
-                Q_ASSERT(w->getChannelName() == channelName);
-                w->setValue(value);
+    if(!controlChannelMap.contains(channelName)) {
+        widgetsMutex.lock();
+        for (const auto widget : m_widgets) {
+            if(widget->getWidgetType() == "BSBDisplay") {
+                widget->setValue(value);
+                QDEBUG << "Setting unknown display channel:" << channelName << "to" << value << "UUID: " << widget->getUuid();
             }
         }
+        widgetsMutex.unlock();
+    } else {
+        widgetsMutex.lock();
+        auto widgets = controlChannelMap[channelName];
+        if(!widgets.isEmpty()) {
+            for(const auto &w: widgets) {
+                auto wtype = w->getWidgetType();
+                if(wtype == "BSBDisplay" || wtype == "BSBTableDisplay") {
+                    // TODO: define a property of qutewidget which sets if it is a unidirectional or bidirectional widget
+                    // instead of checking the widget type
+                    w->setValue(value);
+                }
+            }
+        }
+        widgetsMutex.unlock();
     }
-    // widgetsMutex.lock();
-    // for (auto widget : m_widgets) {
-    //     if(widget->getWidgetType() == "BSBDisplay") {
-    //         widget->setValue(value);
-    //     }
-    // }
-    widgetsMutex.unlock(); 
+     
 }
 
 void WidgetLayout::setValue(QString channelName, double value)
 {
-    Q_ASSERT(controlChannelMap.contains(channelName));
-    widgetsMutex.lock();
-    auto widgets = controlChannelMap[channelName];
-    if(!widgets.isEmpty()) {
-        for(auto& w: widgets) {
-            if(w->getChannelName() == channelName) {
-                w->setValue(value);
-            }
-            else {
-                w->setValue2(value);
+    if(!controlChannelMap.contains(channelName)) {
+        widgetsMutex.lock();
+        for(int i = 0; i < m_widgets.size(); i++) {
+            if (m_widgets[i]->getChannelName() == channelName) {
+                m_widgets[i]->setValue(value);
+                QDEBUG << "Setting unknown channel:" << channelName << "to" << value << "UUID: " << m_widgets[i]->getUuid();
+            } else if (m_widgets[i]->getChannel2Name() == channelName) {
+                m_widgets[i]->setValue2(value);
+                QDEBUG << "Setting unknown channel 2:" << channelName << "to" << value << "UUID: " << m_widgets[i]->getUuid();
             }
         }
+        widgetsMutex.unlock();
+    } else {
+        widgetsMutex.lock();
+        auto widgets = controlChannelMap[channelName];
+        if(!widgets.isEmpty()) {
+            for(auto& w: widgets) {
+                if(w->getChannelName() == channelName) {
+                    w->setValue(value);
+                }
+                else {
+                    w->setValue2(value);
+                }
+            }
+        }
+        // TODO: deal with UUID
+        widgetsMutex.unlock();
     }
-    // TODO: deal with UUID
-    widgetsMutex.unlock();
 }
 
 
@@ -617,10 +634,14 @@ double WidgetLayout::getValueForChannel(QString channelName, bool *modified, dou
     (void) modified;
     if(!controlChannelMap.contains(channelName))
         return notfound;
-    auto widgets = controlChannelMap[channelName];
-    Q_ASSERT(!widgets.isEmpty());
-    auto w = widgets.constFirst();
-    return w->getChannelName() == channelName ? w->getValue() : w->getValue2();
+    const auto &widgets = controlChannelMap[channelName];
+    if(widgets.isEmpty()) {
+        QDEBUG << "No widgets found for channel " << channelName;
+        return notfound;
+    } else {
+        auto w = widgets.constFirst();
+        return w->getChannelName() == channelName ? w->getValue() : w->getValue2();
+    }
     // TODO: deal with UUID as channel name    
 }
 

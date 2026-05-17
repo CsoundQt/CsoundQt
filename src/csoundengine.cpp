@@ -875,7 +875,6 @@ int CsoundEngine::runCsound()
         }
         free(argv);
 
-
         if (ud->result != CSOUND_SUCCESS )  {
             qDebug()  << "Csound compile failed! "  << ud->result;
             flushQueues();
