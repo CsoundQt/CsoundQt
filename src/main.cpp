@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
     // check if another instance is already running. If yes, ask it to open the file in new tab and quit
     QLocalSocket * socket = new QLocalSocket();
     socket->connectToServer("csoundqt");
-    if (socket->waitForConnected(500)) {
-        // wait for max 0.5 seconds, returns true if the server in other instance is listening
+    if (socket->waitForConnected(200)) {
+        // wait for the given ms, returns true if the server in other instance is listening
         if (!fileNames.isEmpty()) {
             qDebug()<<"Opening file(s) in already running instance";
             QString message = "open ***" + fileNames.join("***"); // use a separator that is probably not in the file name
@@ -148,6 +148,7 @@ int main(int argc, char *argv[])
     splash->show();
     splash->raise();
     qapp.processEvents();
+    QThread::msleep(200);
     QSettings qsettings("csoundqt", "csoundqt");
     qsettings.beginGroup("GUI");
     QString language = qsettings.value("language", QLocale::system().name()).toString();
@@ -163,14 +164,22 @@ int main(int argc, char *argv[])
     CsoundQt *csoundQt = new CsoundQt(fileNames);
     if (!csoundQt->startServer())
         qDebug()<<"Could not start local server.";
-    splash->finish(csoundQt);
+    // splash->finish(csoundQt);
+    splash->hide();
     delete splash;
+    splash = nullptr;
+    
+    // enable widget updates after show
     csoundQt->show();
+    
+    
     if(autoplay && !fileNames.isEmpty())
         csoundQt->play();
 
+    
     filterObj.setMainWindow(csoundQt);
     // QDEBUG << "Starting qapp exec";
+    
     result = qapp.exec();
     return result;
 }

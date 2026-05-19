@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2010 Andres Cabrera
 	mantaraya36@gmail.com
@@ -155,12 +156,24 @@ int BaseDocument::parseAndRemoveWidgetText(QString &text)
 
 WidgetLayout* BaseDocument::newWidgetLayout()
 {
+ //    WidgetLayout* wl = new WidgetLayout(0);
+ //    wl->setWindowFlags(Qt::Window | wl->windowFlags());
+	// connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
+	// connect(wl, SIGNAL(registerButton(QuteButton*)),
+	// 		this, SLOT(registerButton(QuteButton*)));
+	// return wl;
+	
 	WidgetLayout* wl = new WidgetLayout(0);
     wl->setWindowFlags(Qt::Window | wl->windowFlags());
-	connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
-	connect(wl, SIGNAL(registerButton(QuteButton*)),
-			this, SLOT(registerButton(QuteButton*)));
-	return wl;
+    wl->setAttribute(Qt::WA_QuitOnClose, false);
+    // Prevent accessibility system from registering this as a top-level window
+    // until it is fully initialized
+    wl->setAttribute(Qt::WA_ShowWithoutActivating);
+    wl->setVisible(false);  // Keep hidden until explicitly shown
+    connect(wl, SIGNAL(queueEventSignal(QString)),this,SLOT(queueEvent(QString)));
+    connect(wl, SIGNAL(registerButton(QuteButton*)),
+            this, SLOT(registerButton(QuteButton*)));
+    return wl;
 }
 
 void BaseDocument::widgetsVisible(bool visible)
@@ -288,8 +301,12 @@ void BaseDocument::pause()
 
 void BaseDocument::stop()
 {
+    if(m_csEngine == nullptr) {
+        QDEBUG << "csound engine is null";
+        return;
+    }
     if (!m_csEngine->isRunning()) {
-        QDEBUG << "Csound is not running";
+        QDEBUG << "Csound is not running, no need to stop";
         return;
     }
     if(m_status == PlayStopStatus::Stopping) {
@@ -300,20 +317,25 @@ void BaseDocument::stop()
         QDEBUG << "Asked to stop, but we are already starting";
         return;
     }
-    // QDEBUG << "getting lock";
-    mutex.lock();
-    // QDEBUG << "locked, stopping engine";
+    
+    QDEBUG << "getting lock";
+    if(!mutex.tryLock(200)) {
+        QDEBUG << "Could not acquire lock, cannot stop csound";
+        return;
+    }
+    QDEBUG << "locked, stopping engine";
     m_status = PlayStopStatus::Stopping;
 
     m_csEngine->stop();
-    // QDEBUG << "Engine stopped, signaling widgets...";
+    
+    QDEBUG << "Engine stopped, signaling widgets...";
     foreach (WidgetLayout *wl, m_widgetLayouts) {
         // TODO only needed to flush graph buffer, but this should be moved to this class
         wl->engineStopped();
     }
     m_status = PlayStopStatus::Ok;
     mutex.unlock();
-    // QDEBUG << "Stopped OK";
+    QDEBUG << "Stopped OK";
 }
 
 int BaseDocument::record(int format)

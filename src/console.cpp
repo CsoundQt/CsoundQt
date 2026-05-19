@@ -208,6 +208,7 @@ void Console::keyReleaseEvent(QKeyEvent *event)
 
 DockConsole::DockConsole(QWidget * parent): QDockWidget(parent)
 {
+    qDebug() << "---------------------- wetWindowTitle DockConsole";
 	setWindowTitle(tr("Output Console"));
 	//  text = new Console(parent);
 	//  text->setReadOnly(true);

@@ -28,6 +28,7 @@
 Inspector::Inspector(QWidget *parent)
 	: QDockWidget(parent)
 {
+    QDEBUG << "setWindowTitle Inspector";
 	setWindowTitle(tr("Inspector"));
 	m_treeWidget = new QTreeWidget(this);
 //	m_treeWidget->setHeaderLabel(tr("Inspector"));
