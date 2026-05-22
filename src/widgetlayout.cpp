@@ -498,9 +498,11 @@ void WidgetLayout::setDisplayValue(QString channelName, double value)
     if(!channelNameToWidgets.contains(channelName)) {
         widgetsMutex.lock();
         for (const auto widget : m_widgets) {
-            if(widget->getWidgetType() == "BSBDisplay") {
+            auto wtype = widget->getWidgetTypeID();
+            if(wtype == QuteWidgetType::DISPLAY || wtype == QuteWidgetType::TABLEDISPLAY) {
                 widget->setValue(value);
                 QDEBUG << "Setting unknown display channel:" << channelName << "to" << value << "UUID: " << widget->getUuid();
+                channelNameToWidgets.insert(channelName, {widget});
             }
         }
         widgetsMutex.unlock();
@@ -509,8 +511,8 @@ void WidgetLayout::setDisplayValue(QString channelName, double value)
         auto widgets = channelNameToWidgets[channelName];
         if(!widgets.isEmpty()) {
             for(const auto &w: widgets) {
-                auto wtype = w->getWidgetType();
-                if(wtype == "BSBDisplay" || wtype == "BSBTableDisplay") {
+                auto wtype = w->getWidgetTypeID();
+                if(wtype ==  QuteWidgetType::DISPLAY || wtype == QuteWidgetType::TABLEDISPLAY) {
                     // TODO: define a property of qutewidget which sets if it is a unidirectional or bidirectional widget
                     // instead of checking the widget type
                     w->setValue(value);
@@ -628,16 +630,22 @@ void WidgetLayout::setValue(int index, QString value)
 QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
 {
     (void) modified;
-    for (int i = 0; i < m_activeWidgets ; i++) {
-        if (m_widgets[i]->getChannelName() == channelName) {
-            QString value = m_widgets[i]->getStringValue();
-            return value;
-        } else if (m_widgets[i]->getUuid() == channelName) {
-            QString value = m_widgets[i]->getStringValue();
-            return value;
+    const auto &widgets = channelNameToWidgets.constFind(channelName);
+    if(widgets == channelNameToWidgets.end()) {
+        for (int i = 0; i < m_activeWidgets ; i++) {
+            if (m_widgets[i]->getChannelName() == channelName) {
+                QString value = m_widgets[i]->getStringValue();
+                return value;
+            }
         }
+        return QString();
+    } else if(widgets.value().isEmpty()) {
+        return QString();
+    } else {
+        auto w = widgets.value().constFirst();
+        return w->getChannelName() == channelName ? w->getStringValue() : QString();
     }
-    return QString();
+   
 }
 
 double WidgetLayout::getValueForChannel(QString channelName, bool *modified, double notfound)
@@ -1102,7 +1110,8 @@ QString WidgetLayout::getMidiControllerInstrument()
 		if (registeredControllers[i].cc >= 0 && registeredControllers[i].chan>0) {
 			QuteWidget * widget = registeredControllers[i].widget;
 
-			bool isEventButton = (widget->getWidgetType()=="BSBButton"  && widget->property("CSQT_type").toString().contains("event") ); // type "event" or "pictevent"
+			// bool isEventButton = (widget->getWidgetType()=="BSBButton"  && widget->property("CSQT_type").toString().contains("event") ); // type "event" or "pictevent"
+			bool isEventButton = (widget->getWidgetTypeID() == QuteWidgetType::BUTTON  && widget->property("CSQT_type").toString().contains("event") ); // type "event" or "pictevent"
 			if ( isEventButton) {
 				QString eventLine = widget->property("CSQT_eventLine").toString();
 
@@ -1166,7 +1175,7 @@ QString WidgetLayout::getMidiControllerInstrument()
 					}
 				}
 			} else {
-				if (widget->getWidgetType()=="BSBButton" &&
+				if (widget->getWidgetTypeID()==QuteWidgetType::BUTTON &&
 						widget->property("CSQT_type").toString().contains("value")) {
 					instrLines += QString ("\tchnset ctrl7:k(%1, %2, 0, %3), \"%4\"\n")
 							.arg(registeredControllers[i].chan)
@@ -1295,8 +1304,8 @@ void WidgetLayout::setFontOffset(double offset)
     m_fontOffset = offset;
     widgetsMutex.lock();
     for (int i=0; i < m_widgets.size(); i++) {
-        if (m_widgets[i]->getWidgetType() == "BSBLabel" ||
-                m_widgets[i]->getWidgetType() == "BSBScrollNumber") {
+        if (m_widgets[i]->getWidgetTypeID() == QuteWidgetType::LABEL ||
+                m_widgets[i]->getWidgetTypeID() == QuteWidgetType::SCROLLNUMBER) {
             static_cast<QuteText *>(m_widgets[i])->setFontOffset(offset);
             m_widgets[i]->applyInternalProperties();
         }
@@ -1309,8 +1318,8 @@ void WidgetLayout::setFontScaling(double scaling)
     m_fontScaling = scaling;
     widgetsMutex.lock();
     for (int i=0; i < m_widgets.size(); i++) {
-        if (m_widgets[i]->getWidgetType() == "BSBLabel" ||
-                m_widgets[i]->getWidgetType() == "BSBScrollNumber") {
+        if (m_widgets[i]->getWidgetTypeID() == QuteWidgetType::LABEL ||
+                m_widgets[i]->getWidgetTypeID() == QuteWidgetType::SCROLLNUMBER) {
             static_cast<QuteText *>(m_widgets[i])->setFontScaling(scaling);
             m_widgets[i]->applyInternalProperties();
         }
@@ -3800,25 +3809,26 @@ void WidgetLayout::savePreset(int num, QString name)
     }
     widgetsMutex.lock();
     for (int i = 0; i < m_widgets.size(); i++) {
-        QString id = m_widgets[i]->getUuid();
-        if (!(m_widgets[i]->getWidgetType() == "BSBLabel")
-                && !(m_widgets[i]->getWidgetType() == "BSBLineEdit")
-                && !(m_widgets[i]->getWidgetType() == "BSBButton")
-                && !(m_widgets[i]->getWidgetType() == "BSBConsole")) {
-            p.addValue(id, m_widgets[i]->getValue());
+        auto w = m_widgets[i];
+        QString id = w->getUuid();
+        auto mtype = w->getWidgetTypeID();
+        if (mtype != QuteWidgetType::LABEL
+                && mtype != QuteWidgetType::LINEEDIT
+                && mtype != QuteWidgetType::BUTTON
+                && mtype != QuteWidgetType::CONSOLE) {
+            p.addValue(id, w->getValue());
         }
-        if (m_widgets[i]->getWidgetType() == "BSBButton") {
+        if (mtype == QuteWidgetType::BUTTON) {
             if (static_cast<QuteButton *>(m_widgets[i])->property("CSQT_latch").toBool()) {
                 p.addValue(id, m_widgets[i]->getValue());
             }
         }
-        if (m_widgets[i]->getWidgetType() == "BSBController"
-                || m_widgets[i]->getWidgetType() == "BSBXYController") {
+        if (mtype == QuteWidgetType::CONTROLLER) {
             p.addValue2(id, m_widgets[i]->getValue2());
         }
-        if (m_widgets[i]->getWidgetType() == "BSBButton"
-                || m_widgets[i]->getWidgetType() == "BSBLineEdit"
-                || m_widgets[i]->getWidgetType() == "BSBDisplay") {
+        if (mtype == QuteWidgetType::BUTTON
+                || mtype == QuteWidgetType::LINEEDIT
+                || mtype == QuteWidgetType::DISPLAY) {
             p.addStringValue(id, m_widgets[i]->getStringValue());
         }
         // Note that BSBLabel is left out from presets

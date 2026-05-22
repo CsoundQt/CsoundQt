@@ -1048,6 +1048,7 @@ QuteScrollNumber::~QuteScrollNumber()
 QuteWidgetType QuteScrollNumber::getWidgetTypeID() { return QuteWidgetType::SCROLLNUMBER; }
 
 
+
 void QuteScrollNumber::setResolution(double resolution)
 {
 	//  qDebug() << "QuteScrollNumber::setResolution " << resolution;

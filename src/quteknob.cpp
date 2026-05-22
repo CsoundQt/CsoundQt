@@ -118,7 +118,6 @@ void drawKnob(QPainter &painter, QVdial *knob, int border, QColor fg, QColor bg,
 void QVdial::paintEvent(QPaintEvent *event) {
     if(!m_flat)
         return this->QDial::paintEvent(event);
-
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     QColor bgcolor = m_color.darker(330);
