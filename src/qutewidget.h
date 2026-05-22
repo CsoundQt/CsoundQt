@@ -34,7 +34,7 @@
 
 enum QuteWidgetType { UNKNOWN=0, SPINBOX=1, LINEEDIT, CHECKBOX, SLIDER, KNOB, SCROLLNUMBER,
                       BUTTON, DROPDOWN, CONTROLLER, GRAPH, SCOPE, CONSOLE,
-                      TABLEDISPLAY };
+                      TABLEDISPLAY, LABEL, DISPLAY };
 
 class QuteWidget : public QWidget
 {
@@ -69,6 +69,7 @@ public:
 
 	QString getUuid();
 	virtual QString getWidgetType() = 0;
+	virtual QuteWidgetType getWidgetTypeID() = 0;
 	virtual void refreshWidget() { ;}
 
 	virtual void applyInternalProperties();

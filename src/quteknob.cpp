@@ -22,7 +22,7 @@
 
 #include "quteknob.h"
 
-QVdial::~QVdial() {};
+QVdial::~QVdial() {}
 
 
 void QVdial::mousePressEvent (QMouseEvent *event) {
@@ -198,6 +198,9 @@ QuteKnob::QuteKnob(QWidget *parent) : QuteWidget(parent)
 
 QuteKnob::~QuteKnob() {}
 
+QuteWidgetType QuteKnob::getWidgetTypeID() { return QuteWidgetType::KNOB; } 
+
+
 void QuteKnob::setRange(double min, double max)
 {
 	// TODO when knob is resized, its internal range should be adjusted...
@@ -233,9 +236,10 @@ void QuteKnob::refreshWidget()
 	widgetLock.lockForRead();
 #endif
     auto w = static_cast<QVdial *>(m_widget);
-	double max = property("CSQT_maximum").toDouble();
-    double min = property("CSQT_minimum").toDouble();
-
+    double min = w->displayMin();
+    double max = w->displayMax();
+    // double max = property("CSQT_maximum").toDouble();
+    // double min = property("CSQT_minimum").toDouble();
     int val = (int)(w->maximum() * (m_value - min)/(max-min));
     m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
@@ -251,6 +255,7 @@ void QuteKnob::applyInternalProperties()
 	QuteWidget::applyInternalProperties();
     setValue(property("CSQT_value").toDouble());
     auto w = static_cast<QVdial*>(m_widget);
+
 
     w->setColor(property("CSQT_color").value<QColor>());
     w->setTextColor(QColor(property("CSQT_textcolor").toString()));

@@ -52,6 +52,9 @@ QuteCheckBox::~QuteCheckBox()
 {
 }
 
+QuteWidgetType QuteCheckBox::getWidgetTypeID() { return QuteWidgetType::CHECKBOX; }
+
+
 void QuteCheckBox::setValue(double value)
 {
 #ifdef  USE_WIDGET_MUTEX

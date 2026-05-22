@@ -54,10 +54,8 @@ QuteSlider::~QuteSlider()
 {
 }
 
-//void QuteSlider::sliderMoved(int value)
-//{
-//  QuteWidget::valueChanged(m_value);
-//}
+QuteWidgetType QuteSlider::getWidgetTypeID() { return QuteWidgetType::SLIDER; } 
+
 
 void QuteSlider::setValue(double value)
 {

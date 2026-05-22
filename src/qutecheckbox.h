@@ -50,6 +50,9 @@ public:
 
 	//    void popUpMenu(QPoint pos);
     virtual void resizeEvent(QResizeEvent *);
+    
+    QuteWidgetType getWidgetTypeID() override;
+	
 
 protected:
 	virtual void applyProperties();

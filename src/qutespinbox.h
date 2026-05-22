@@ -42,6 +42,9 @@ public:
 	virtual QString getWidgetType();
 	virtual QString getCabbageLine();
     virtual QString getQml();
+    
+    QuteWidgetType getWidgetTypeID() override;
+	
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();

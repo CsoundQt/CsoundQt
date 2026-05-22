@@ -66,6 +66,8 @@ public:
 	void setUd(CsoundUserData *ud);
 
 	virtual void applyInternalProperties();
+	QuteWidgetType getWidgetTypeID() override;
+	
 
 protected:
 	//    QString m_type;

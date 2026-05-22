@@ -130,6 +130,9 @@ QuteGraph::QuteGraph(QWidget *parent) : QuteWidget(parent)
 
 }
 
+QuteWidgetType QuteGraph::getWidgetTypeID() { return QuteWidgetType::GRAPH; } 
+
+
 QuteGraph::~QuteGraph()
 {
 }
@@ -167,6 +170,7 @@ QString QuteGraph::getWidgetXmlText()
 	s.writeTextElement("value", QString::number((int)m_value));
 	s.writeTextElement("objectName2", m_channel2);
 	s.writeTextElement("zoomx", QString::number(property("CSQT_zoomx").toDouble(), 'f', 8));
+	s.writeTextElement("zoomx", QString::number(m_zoomx, 'f', 8));
 	s.writeTextElement("zoomy", QString::number(property("CSQT_zoomy").toDouble(), 'f', 8));
 	s.writeTextElement("dispx", QString::number(property("CSQT_dispx").toDouble(), 'f', 8));
 	s.writeTextElement("dispy", QString::number(property("CSQT_dispy").toDouble(), 'f', 8));
@@ -307,7 +311,8 @@ void QuteGraph::keyPressEvent(QKeyEvent *event) {
         event->accept();
         break;
     case Qt::Key_Plus:
-        setProperty("CSQT_zoomx", property("CSQT_zoomx").toDouble()*2);
+        m_zoomx = m_zoomx * 2;
+        setProperty("CSQT_zoomx", m_zoomx);
         applyInternalProperties();
         event->accept();
         break;
@@ -1026,7 +1031,8 @@ void QuteGraph::applyInternalProperties()
 	changeCurve(-2);  // Redraw
     m_drawGrid = property("CSQT_showGrid").toBool();
     m_drawTableInfo = property("CSQT_showTableInfo").toBool();
-
+    m_zoomx = property("CSQT_zoomx").toDouble();
+    m_zoomy = property("CSQT_zoomy").toDouble();
     showScrollbars(property("CSQT_showScrollbars").toBool());
 }
 
@@ -1350,9 +1356,10 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
         auto freq = m_showPeakTemp ? m_showPeakTempFrequency : m_showPeakCenterFrequency;
         double bandwidth;
         if(m_showPeakTemp) {
-            // if using the mouth to point at a near peak, we take zoom into account and
+            // if using the mouse to point at a near peak, we take zoom into account and
             // the bandwidth is a fraction of the displayed frequency range.
-            auto zoomx = property("CSQT_zoomx").toDouble();
+            // auto zoomx = property("CSQT_zoomx").toDouble();
+            auto zoomx = m_zoomx;
             bandwidth = nyquist / zoomx / 8.0;
         }
         else
@@ -1473,8 +1480,10 @@ void QuteGraph::scaleGraph(int index)
 
     double max = curves[index]->get_max();
     double min = curves[index]->get_min();
-	double zoomx = property("CSQT_zoomx").toDouble();
-	double zoomy = property("CSQT_zoomy").toDouble();
+    double zoomx = m_zoomx;
+    double zoomy = m_zoomy;
+	// double zoomx = property("CSQT_zoomx").toDouble();
+	// double zoomy = property("CSQT_zoomy").toDouble();
 	//  double span = max - min;
     //  FIXME implement dispx, dispy and modex, modey
     int size = curve->get_size();
@@ -1549,7 +1558,10 @@ void QuteGraph::showScrollbars(bool show) {
 
 // ----------------------
 QuteTableWidget::~QuteTableWidget() {
-};
+}
+
+
+
 
 void QuteTableWidget::reset() {
     // This needs to be called with the lock
@@ -1650,7 +1662,7 @@ void QuteTableWidget::paintEvent(QPaintEvent *event) {
     painter.setBrush(QColor(24, 24, 24));
     painter.drawRect(this->rect());
     painter.setBrush(Qt::NoBrush);
-    blockSignals(true);
+    // blockSignals(true);
     mutex.lock();
     if(m_showGrid) {
         this->paintGrid(&painter);
@@ -1658,7 +1670,7 @@ void QuteTableWidget::paintEvent(QPaintEvent *event) {
     painter.setPen(QPen(m_color, 0));
     painter.drawPath(m_path);
     mutex.unlock();
-    blockSignals(false);
+    // blockSignals(false);
 }
 
 void QuteTableWidget::setRange(double maxy) {
@@ -1764,7 +1776,7 @@ void QuteTableWidget::updateData(int tabnum) {
 
 // -------------------------
 
-QuteTable::~QuteTable() {};
+QuteTable::~QuteTable() {}
 
 // void QuteTable::mousePressEvent(QMouseEvent *event) {};
 // void QuteTable::mouseReleaseEvent(QMouseEvent *event) {};
@@ -1781,6 +1793,10 @@ QuteTable::QuteTable(QWidget *parent) : QuteWidget(parent) {
     setColor(QColor(255, 193, 3));
     setProperty("CSQT_showGrid", true);
 }
+
+
+QuteWidgetType QuteTable::getWidgetTypeID() { return QuteWidgetType::TABLEDISPLAY; }
+
 
 void QuteTable::setColor(QColor color) {
     setProperty("CSQT_color", color);

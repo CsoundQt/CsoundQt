@@ -224,6 +224,7 @@ public:
 
 private:
 	void setupChannels();
+	void setupCallbacks();
 	QList <int> getAnsiKeySequence(int key);
 
 	QFuture<void> m_msgUpdateThread;

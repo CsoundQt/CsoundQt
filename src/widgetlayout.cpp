@@ -224,6 +224,8 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     m_widgetNameToType["BSBScope"] = QuteWidgetType::SCOPE;
     m_widgetNameToType["BSBConsole"] = QuteWidgetType::CONSOLE;
     m_widgetNameToType["BSBTableDisplay"] = QuteWidgetType::TABLEDISPLAY;
+    m_widgetNameToType["BSBDisplay"] = QuteWidgetType::DISPLAY;
+    m_widgetNameToType["BSBLabel"] = QuteWidgetType::LABEL;
 }
 
 WidgetLayout::~WidgetLayout()
@@ -493,7 +495,7 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
 
 void WidgetLayout::setDisplayValue(QString channelName, double value)
 {
-    if(!controlChannelMap.contains(channelName)) {
+    if(!channelNameToWidgets.contains(channelName)) {
         widgetsMutex.lock();
         for (const auto widget : m_widgets) {
             if(widget->getWidgetType() == "BSBDisplay") {
@@ -504,7 +506,7 @@ void WidgetLayout::setDisplayValue(QString channelName, double value)
         widgetsMutex.unlock();
     } else {
         widgetsMutex.lock();
-        auto widgets = controlChannelMap[channelName];
+        auto widgets = channelNameToWidgets[channelName];
         if(!widgets.isEmpty()) {
             for(const auto &w: widgets) {
                 auto wtype = w->getWidgetType();
@@ -518,38 +520,6 @@ void WidgetLayout::setDisplayValue(QString channelName, double value)
         widgetsMutex.unlock();
     }
      
-}
-
-void WidgetLayout::setValue(QString channelName, double value)
-{
-    if(!controlChannelMap.contains(channelName)) {
-        widgetsMutex.lock();
-        for(int i = 0; i < m_widgets.size(); i++) {
-            if (m_widgets[i]->getChannelName() == channelName) {
-                m_widgets[i]->setValue(value);
-                QDEBUG << "Setting unknown channel:" << channelName << "to" << value << "UUID: " << m_widgets[i]->getUuid();
-            } else if (m_widgets[i]->getChannel2Name() == channelName) {
-                m_widgets[i]->setValue2(value);
-                QDEBUG << "Setting unknown channel 2:" << channelName << "to" << value << "UUID: " << m_widgets[i]->getUuid();
-            }
-        }
-        widgetsMutex.unlock();
-    } else {
-        widgetsMutex.lock();
-        auto widgets = controlChannelMap[channelName];
-        if(!widgets.isEmpty()) {
-            for(auto& w: widgets) {
-                if(w->getChannelName() == channelName) {
-                    w->setValue(value);
-                }
-                else {
-                    w->setValue2(value);
-                }
-            }
-        }
-        // TODO: deal with UUID
-        widgetsMutex.unlock();
-    }
 }
 
 
@@ -576,22 +546,63 @@ void WidgetLayout::setOuterGeometry(QRect r)
 }
 
 
+void WidgetLayout::setValue(QString channelName, double value)
+{
+    auto widgets = channelNameToWidgets.constFind(channelName);
+    if(widgets == channelNameToWidgets.end()) {
+        widgetsMutex.lock();
+        for(int i = 0; i < m_widgets.size(); i++) {
+            auto w = m_widgets[i];
+            if (w->getChannelName() == channelName) {
+                w->setValue(value);
+                channelNameToWidgets.insert(channelName, {w});
+                
+            } else if (w->getChannel2Name() == channelName) {
+                w->setValue2(value);
+                channelNameToWidgets.insert(channelName, {w});
+            } 
+        }
+        widgetsMutex.unlock();
+    } else {
+        widgetsMutex.lock();
+        for(const auto& w: widgets.value()) {
+            if(w->getChannelName() == channelName) {
+                w->setValue(value);
+            }
+            else if (w->getChannel2Name() == channelName){
+                w->setValue2(value);
+            } 
+        }
+        widgetsMutex.unlock();
+        // TODO: deal with UUID
+        
+    }
+}
+
+
 void WidgetLayout::setValue(QString channelName, QString value)
 {
+    auto widgets = channelNameToWidgets.constFind(channelName);
     widgetsMutex.lock();
-    for (int i = 0; i < m_widgets.size(); i++) {
-        if (m_widgets[i]->getChannelName() == channelName) {
-            m_widgets[i]->setValue(value);
+    if(widgets == channelNameToWidgets.end()) {
+        for (int i = 0; i < m_widgets.size(); i++) {
+            auto w = m_widgets[i];
+            if (w->getChannelName() == channelName) {
+                w->setValue(value);
+                channelNameToWidgets.insert(channelName, {w});
+            } else if (w->getUuid() == channelName) {
+                w->setValue(value);
+                break;
+            }    
         }
-        if (m_widgets[i]->getUuid() == channelName) {
-            m_widgets[i]->setValue(value);
-            break;
+    } else {
+        for(const auto& w: widgets.value()) {
+            if(w->getChannelName() == channelName) {
+                w->setValue(value);
+            }
         }
-        //     if (m_widgets[i]->getChannel2Name() == channelName) {
-        //       m_widgets[i]->setValue2(value);
-        //     }
     }
-    widgetsMutex.unlock();
+    widgetsMutex.unlock(); 
 }
 
 void WidgetLayout::setValue(int index, double value)
@@ -632,9 +643,9 @@ QString WidgetLayout::getStringForChannel(QString channelName, bool *modified)
 double WidgetLayout::getValueForChannel(QString channelName, bool *modified, double notfound)
 {
     (void) modified;
-    if(!controlChannelMap.contains(channelName))
+    if(!channelNameToWidgets.contains(channelName))
         return notfound;
-    const auto &widgets = controlChannelMap[channelName];
+    const auto &widgets = channelNameToWidgets[channelName];
     if(widgets.isEmpty()) {
         QDEBUG << "No widgets found for channel " << channelName;
         return notfound;
@@ -2817,6 +2828,8 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
 {
     if (widget != nullptr) {
         //    widgetsMutex.lock();
+        // check if this is an unknown channel
+        
         int index = m_widgets.indexOf(widget);
         if (index >= 0 && editWidgets.size() > index) {
             int newx = widget->x();
@@ -4120,7 +4133,7 @@ void WidgetLayout::newValue(QPair<QString, QString> channelValue)
             if (path == channelName)
                 m_widgets[i]->setValue(channelValue.second);
             else
-                m_widgets[i]->widgetMessage(path,channelValue.second);
+                m_widgets[i]->widgetMessage(path, channelValue.second);
         }
     }
     widgetsMutex.unlock();
@@ -4340,8 +4353,10 @@ void WidgetLayout::updateData()
         return;
 
     refreshWidgets();
+    
     int const refresh_rate = m_updateRate;
     int const msec = 1000 / refresh_rate;
+    
     if (!layoutMutex.tryLock(1)) {
         updateTimer.singleShot(msec, this, SLOT(updateData()));
         return;

@@ -71,6 +71,8 @@ QuteMeter::~QuteMeter()
 {
 }
 
+QuteWidgetType QuteMeter::getWidgetTypeID() { return QuteWidgetType::CONTROLLER; }
+
 
 void QuteMeter::setMidiValue(int value)
 {

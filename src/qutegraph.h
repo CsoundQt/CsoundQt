@@ -72,6 +72,7 @@ public:
     int findCurve(CurveType type, QStringView text);
 	virtual void applyInternalProperties();
     size_t spectrumGetPeak(Curve *curve, double freq, double relativeBandwidth);
+    QuteWidgetType getWidgetTypeID() override;
 
 protected:
 	CsoundUserData *m_ud;
@@ -162,7 +163,8 @@ private:
     double m_dbRange;
     bool m_enableTables;
     bool m_enableDisplays;
-
+    double m_zoomx;
+    double m_zoomy;
 
 signals:
     void requestUpdateCurve(Curve *curve);
@@ -290,6 +292,8 @@ public:
     virtual void setValue(double value);
     virtual void setValue(QString s);
     virtual void setColor(QColor color);
+    QuteWidgetType getWidgetTypeID() override;
+	
     void setTableNumber(int tabnum);
 
 public slots:

@@ -39,6 +39,8 @@ public:
 	virtual QString getWidgetType();
 	virtual void setWidgetGeometry(int x,int y,int width,int height);
 	virtual QString getCabbageLine();
+	QuteWidgetType getWidgetTypeID() override;
+	
 
 	void appendMessage(QString message);
 	void scrollToEnd();

@@ -48,6 +48,8 @@ public:
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
+	QuteWidgetType getWidgetTypeID() override; 
+
 
 protected:
 	virtual void createPropertiesDialog();

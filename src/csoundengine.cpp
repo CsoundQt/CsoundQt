@@ -331,6 +331,7 @@ void CsoundEngine::csThread(void *data)
         writeWidgetValues(udata);
         readWidgetValues(udata);
     }
+    
     if (!(udata->flags & CSQT_NO_RT_EVENTS)) {
         udata->csEngine->processEventQueue();
     }
@@ -434,6 +435,7 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
         } else if (typeName[0] == 'S') {
             char chanString[4096];
             csoundGetStringChannel(ud->csound, name.toLocal8Bit().constData(), chanString);
+            QDEBUG << "String channel" << name << "Value: " << chanString << "Known? " << ud->displayChannelNames.contains(name);
             ud->wl->setValue(name, QString(chanString));
         }
     }
@@ -900,6 +902,7 @@ int CsoundEngine::runCsound()
     ud->outputBufferSize = csoundGetKsmps(ud->csound);
     if (ud->enableWidgets) {
         setupChannels();
+        setupCallbacks();
     }
     // Do not run the performance thread if the piece is an HTML file,
     // the HTML code must do that.
@@ -1023,6 +1026,12 @@ static const QSet<QString> reservedChannels = {
     "_GetPresetName", "_GetPresetNumber"
 };
 
+void CsoundEngine::setupCallbacks()
+{
+    csoundSetInputChannelCallback(ud->csound, &CsoundEngine::inputValueCallback);
+    csoundSetOutputChannelCallback(ud->csound, &CsoundEngine::outputValueCallback);
+    
+}
 
 void CsoundEngine::setupChannels()
 {
@@ -1032,15 +1041,11 @@ void CsoundEngine::setupChannels()
     ud->displayChannelNames.clear();
     ud->previousOutputValues.clear();
     ud->previousStringOutputValues.clear();
-    ud->wl->controlChannelMap.clear();
+    ud->wl->channelNameToWidgets.clear();
     ud->channelPointers.clear();
     ud->outputChannelNamesSet.clear();
     
-    csoundSetInputChannelCallback(ud->csound, &CsoundEngine::inputValueCallback);
-    csoundSetOutputChannelCallback(ud->csound, &CsoundEngine::outputValueCallback);
-    
     QSet<QString>seenChannelNames;
-    
     
     // Create bidirectional Csound channels for every widget directly from the
     // widget list.  This removes the requirement for chn_k / chn_S declarations
@@ -1060,27 +1065,38 @@ void CsoundEngine::setupChannels()
         const QString type    = w->getWidgetType();
         const QString channel = w->getChannelName();
         const QString channel2 = w->getChannel2Name();
+        
+        if(channel.startsWith("_Browse")) {
+            // Force creation of channels for browse widgets if they do not exist
+            if(csoundGetChannelVarType(ud->csound, channel.toLocal8Bit().constData()) == NULL) {
+                csoundGetChannelPtr(ud->csound, (void **) &pvalue, w->getChannelName().toLocal8Bit(),
+                                    CSOUND_INPUT_CHANNEL | CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL);
+                ud->wl->newStringValues.insert(w->getChannelName(), w->getStringValue());
+            }
+            continue;
+        }
 
         if ((channel.size() > 0 && channel[0] == '_' && reservedChannels.contains(channel))
-                || channel.startsWith("_Browse")
                 || type == "BSBLabel"
                 // || type == "BSBGraph"
                 || type == "BSBScope")
             continue;
-        
-        if (ud->wl->controlChannelMap.contains(channel)) {
-            ud->wl->controlChannelMap[channel].append(w);
-        } 
-        else {
-            ud->wl->controlChannelMap.insert(channel, {w});
-        }
+            
+        if(channel != "") {
+            if (ud->wl->channelNameToWidgets.contains(channel)) {
+                ud->wl->channelNameToWidgets[channel].append(w);
+            } 
+            else {
+                ud->wl->channelNameToWidgets.insert(channel, {w});
+            }    
+        }        
         
         if(channel2 != "") {
-            if (ud->wl->controlChannelMap.contains(channel2)) {
-                ud->wl->controlChannelMap[channel2].append(w);
+            if (ud->wl->channelNameToWidgets.contains(channel2)) {
+                ud->wl->channelNameToWidgets[channel2].append(w);
             }
             else {
-                ud->wl->controlChannelMap.insert(channel2, {w});
+                ud->wl->channelNameToWidgets.insert(channel2, {w});
             }        
         }
         
@@ -1135,14 +1151,6 @@ void CsoundEngine::setupChannels()
     }
     ud->outputChannelNamesSet = seenChannelNames;
 
-    // Force creation of string channels for _Browse widgets
-    foreach (QuteWidget *w, widgets) {
-        if (w->getChannelName().startsWith("_Browse")) {
-            csoundGetChannelPtr(ud->csound, (void **) &pvalue, w->getChannelName().toLocal8Bit(),
-                                CSOUND_INPUT_CHANNEL | CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL);
-            ud->wl->newStringValues.insert(w->getChannelName(), w->getStringValue());
-        }
-    }
 }
 
 void CsoundEngine::messageListDispatcher(void *data)

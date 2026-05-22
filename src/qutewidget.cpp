@@ -23,7 +23,8 @@
 #include "qutewidget.h"
 #include "widgetlayout.h"
 
-QuteWidget::QuteWidget(QWidget *parent):
+QuteWidget::
+QuteWidget(QWidget *parent):
 	QWidget(parent), dialog(NULL)
 {
 	propertiesAct = new QAction(tr("&Properties"), this);
@@ -134,8 +135,7 @@ void QuteWidget::widgetMessage(QString path, QString text)
 
 void QuteWidget::widgetMessage(QString path, double value)
 {
-    qDebug() << value;
-	if (property(path.toLocal8Bit()).isValid()) {
+    if (property(path.toLocal8Bit()).isValid()) {
 		setProperty(path.toLocal8Bit(), value);
 		//    applyInternalProperties();
 	}

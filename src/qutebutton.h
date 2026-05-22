@@ -52,6 +52,8 @@ public:
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
+	QuteWidgetType getWidgetTypeID() override;
+	
 
 protected:
 	//    virtual void contextMenuEvent(QContextMenuEvent* event);
@@ -78,6 +80,7 @@ private:
     QIcon onIcon;
 
 	bool m_isPlaying;
+	bool m_latched;
 
     void performAction();
 	bool hasIndefiniteDuration();

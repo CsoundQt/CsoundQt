@@ -45,7 +45,8 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_eventLine", "");
 	setProperty("CSQT_latch", false);
 	setProperty("CSQT_momentaryMidiButton", false); // used for latched button if bound to MIDI controller
-    setProperty("CSQT_latched", false);
+    // setProperty("CSQT_latched", false);
+    m_latched = false;
     setProperty("CSQT_fontsize", 10);
     
 	QPixmap p = QPixmap(8, 8);
@@ -60,6 +61,9 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 QuteButton::~QuteButton()
 {
 }
+
+QuteWidgetType QuteButton::getWidgetTypeID() { return QuteWidgetType::BUTTON; } 
+
 
 void QuteButton::setValue(double value)
 {
@@ -276,7 +280,8 @@ QString QuteButton::getWidgetXmlText()
 	s.writeTextElement("eventLine", property("CSQT_eventLine").toString());
 	s.writeTextElement("latch", property("CSQT_latch").toString());
 	s.writeTextElement("momentaryMidiButton", property("CSQT_momentaryMidiButton").toString());
-	s.writeTextElement("latched", property("CSQT_latched").toString());
+	// s.writeTextElement("latched", property("CSQT_latched").toString());
+	s.writeTextElement("latched", QVariant(m_latched).toString());
     s.writeTextElement("fontsize", QString::number(property("CSQT_fontsize").toInt()));
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
@@ -484,7 +489,8 @@ void QuteButton::refreshWidget()
 	//  setProperty("CSQT_value", m_value);
 	//  setProperty("CSQT_stringvalue", m_stringValue);
 
-	setProperty("CSQT_latched", m_currentValue != 0);
+	// setProperty("CSQT_latched", m_currentValue != 0);
+	m_latched = m_currentValue != 0;
 	m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
