@@ -46,3 +46,4 @@ qcs.pro.user*
 .~*
 .cache
 .clangd
+perf.data*
