@@ -434,9 +434,6 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
         }
         else if (typeName[0] == 'S') {
             csoundGetStringChannel(ud->csound, cname, chanString);
-            
-            auto oldvalue = ud->wl->getStringForChannel(name);
-            QDEBUG << "channel" << name << ", old value: " << oldvalue << ", new value: " << chanString;
             setStringValueIfNecessary(ud, name, QLatin1String(chanString));
             // if(oldvalue != QLatin1StringView(chanString))
             //     ud->wl->setValue(name, QString(chanString));
@@ -448,19 +445,6 @@ void CsoundEngine::writeWidgetValues(CsoundUserData *ud)
         if (name != "" && csoundGetChannelPtr(ud->csound, (void **) &pvalue, cname, CSOUND_OUTPUT_CHANNEL | CSOUND_STRING_CHANNEL) == 0) {
             csoundGetStringChannel(ud->csound, cname, chanString);
             setStringValueIfNecessary(ud, name, QLatin1StringView(chanString));
-            // auto oldvalueit = ud->stringChannelValues.constFind(name);
-            // if(oldvalueit == ud->stringChannelValues.end()) {
-            //     // not cached
-            //     auto qstring = QString(chanString);
-            //     ud->wl->setValue(name, qstring);
-            //     ud->stringChannelValues[name] = qstring;
-            // } else {
-            //     if(oldvalueit.value() != QLatin1StringView(chanString)) {
-            //         auto qstring = QString(chanString);
-            //         ud->wl->setValue(name, qstring);
-            //         ud->stringChannelValues[name] = qstring;
-            //     }
-            // }
         }
     }       
 }
