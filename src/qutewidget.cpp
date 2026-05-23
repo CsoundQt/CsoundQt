@@ -428,9 +428,15 @@ void QuteWidget::createPropertiesDialog()
 //             << dynamicPropertyNames ();
 	int footerRow = 20;
 	dialog = new QDialog(this);
-    dialog->resize(360, 300);
+    dialog->resize(480, 360);
 	//  dialog->setModal(true);
 	layout = new QGridLayout(dialog);
+	layout->setColumnStretch(0, 0);
+	layout->setColumnStretch(1, 0);
+	layout->setColumnStretch(2, 0);
+	layout->setColumnStretch(5, 1);
+	
+	
     QLabel *label;
 
     label = new QLabel("X =", dialog);
@@ -477,8 +483,10 @@ void QuteWidget::createPropertiesDialog()
     layout->addWidget(label, footerRow-2, 0, Qt::AlignRight|Qt::AlignVCenter);
 
     descriptionLineEdit = new QLineEdit(dialog);
-    descriptionLineEdit->setMinimumWidth(300);
-    layout->addWidget(descriptionLineEdit, footerRow-2, 1, 1, 4, Qt::AlignLeft|Qt::AlignVCenter);
+    descriptionLineEdit->setMinimumWidth(240);
+    descriptionLineEdit->setMaximumWidth(960);
+    
+    layout->addWidget(descriptionLineEdit, footerRow-2, 1, 1, -1, Qt::AlignVCenter);
 
 
     if (acceptsMidi()) { // only when MIDI-enabled widgets
@@ -502,14 +510,16 @@ void QuteWidget::createPropertiesDialog()
         midiLearnButton = new QPushButton(tr("MIDI learn"));
 		layout->addWidget(midiLearnButton, midiRow, 4, Qt::AlignLeft|Qt::AlignVCenter);
 	}
-	acceptButton = new QPushButton(tr("Ok"));
-	acceptButton->setDefault(true);
-    layout->addWidget(acceptButton, footerRow, 3, Qt::AlignCenter|Qt::AlignVCenter);
-
+	
     applyButton = new QPushButton(tr("Apply"));
     layout->addWidget(applyButton, footerRow, 1, Qt::AlignCenter|Qt::AlignVCenter);
+	
 	cancelButton = new QPushButton(tr("Cancel"));
     layout->addWidget(cancelButton, footerRow, 2, Qt::AlignCenter|Qt::AlignVCenter);
+    
+    acceptButton = new QPushButton(tr("Ok"));
+	acceptButton->setDefault(true);
+    layout->addWidget(acceptButton, footerRow, 3, Qt::AlignCenter|Qt::AlignVCenter);
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
