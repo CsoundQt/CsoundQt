@@ -60,6 +60,8 @@ QuteSpinBox::QuteSpinBox(QWidget* parent) : QuteText(parent)
 
 QuteSpinBox::~QuteSpinBox() {}
 
+QuteWidgetType QuteSpinBox::getWidgetTypeID() { return QuteWidgetType::SPINBOX; }
+
 void QuteSpinBox::setText(QString text)
 {
 	setValue(text.toDouble());

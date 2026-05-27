@@ -4881,14 +4881,10 @@ void CsoundQt::connectActions()
     DocumentPage * doc = documentPages[curPage];
 
     disconnect(commentAct, 0, 0, 0);
-    //  disconnect(uncommentAct, 0, 0, 0);
     disconnect(indentAct, 0, 0, 0);
     disconnect(unindentAct, 0, 0, 0);
     disconnect(killLineAct, 0, 0, 0);
     disconnect(killToEndAct, 0, 0, 0);
-    // disconnect(gotoLineAct, 0, 0, 0);
-    //  disconnect(findAct, 0, 0, 0);
-    //  disconnect(findAgainAct, 0, 0, 0);
     connect(commentAct, SIGNAL(triggered()), doc, SLOT(comment()));
     //  connect(uncommentAct, SIGNAL(triggered()), doc, SLOT(uncomment()));
     connect(indentAct, SIGNAL(triggered()), doc, SLOT(indent()));
@@ -4919,9 +4915,6 @@ void CsoundQt::connectActions()
     //           doc, SLOT(setMacWidgetsText(QString)) );
 
     // Connect inspector actions to document
-    disconnect(m_inspector, 0, 0, 0);
-    connect(m_inspector, SIGNAL(jumpToLine(int)),
-            doc, SLOT(jumpToLine(int)));
     disconnect(m_inspector, 0, 0, 0);
     connect(m_inspector, SIGNAL(jumpToLine(int)),
             doc, SLOT(jumpToLine(int)));

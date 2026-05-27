@@ -59,6 +59,8 @@ public:
 	virtual void refreshWidget();
 	virtual void applyProperties();
 	void applyInternalProperties();
+	QuteWidgetType getWidgetTypeID() override;
+	
 
 protected:
 

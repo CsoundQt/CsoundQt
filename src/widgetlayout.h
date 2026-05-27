@@ -213,7 +213,7 @@ public:
     QuteWidgetType widgetNameToType(QString widgetName);
     void addCreateWidgetActionsToMenu(QMenu &menu);
     
-    QHash<QString, QList<QuteWidget *>> controlChannelMap;
+    QHash<QString, QList<QuteWidget *>> channelNameToWidgets;
     
 
 public slots:
@@ -309,6 +309,7 @@ public slots:
     void processUpdateCurve(Curve *curve);
 	// Messages
 	void appendMessage(QString message);
+	
 
 
 protected:

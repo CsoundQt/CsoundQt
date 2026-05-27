@@ -56,7 +56,8 @@ public:
 	virtual void applyInternalProperties();
 	virtual QString getCabbageLine();
     virtual QString getQml();
-
+    QuteWidgetType getWidgetTypeID() override;
+	
 	// Configuraion (Not saved)
 	void setFontScaling(double scaling);
 	void setFontOffset(double offset);
@@ -87,6 +88,7 @@ protected:
     QComboBox * vertAlignmentComboBox;
     QHash<QString, QLabel *>labelPtrs;
     int m_precision;
+    QuteWidgetType m_typeid;
 
 private slots:
     // void selectTextColor();
@@ -109,7 +111,8 @@ public:
 	virtual void dropEvent(QDropEvent *event);
 	virtual void applyInternalProperties();
 	virtual QString getCabbageLine();
-
+    QuteWidgetType getWidgetTypeID() override;
+    
 protected:
 	virtual void createPropertiesDialog();
 	//    virtual void applyProperties();
@@ -136,6 +139,8 @@ public:
 
 	virtual void applyInternalProperties();
 	virtual QString getCabbageLine();
+    QuteWidgetType getWidgetTypeID() override; 
+
 
 protected:
 	virtual void refreshWidget();

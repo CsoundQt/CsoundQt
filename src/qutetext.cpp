@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -55,6 +56,7 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	m_fontScaling = 1.0;
 	m_fontOffset = 1.0;
 	m_type = "display";
+	m_typeid = QuteWidgetType::DISPLAY;
     m_precision = 3;
     setProperty("CSQT_precision", m_precision);
 
@@ -63,6 +65,11 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 QuteText::~QuteText()
 {
 }
+
+QuteWidgetType QuteText::getWidgetTypeID() { 
+    return m_typeid;
+} 
+
 
 void QuteText::setValue(double value)
 {
@@ -94,6 +101,15 @@ void QuteText::setValue(QString value)
 void QuteText::setType(QString type)
 {
 	m_type = type;
+	if(type == "label")
+        m_typeid = QuteWidgetType::LABEL;
+    else if(type == "display")
+        m_typeid = QuteWidgetType::DISPLAY;
+    else {
+        qWarning() << "Unknown text widget: " << type;
+        m_typeid = QuteWidgetType::UNKNOWN;
+    }
+        
 }
 
 void QuteText::setTransparentForMouse(bool status)
@@ -715,6 +731,8 @@ QuteLineEdit::QuteLineEdit(QWidget* parent) : QuteText(parent)
 			this, SLOT(textEdited(QString)));
 	//   connect(static_cast<QLineEdit*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 	m_type = "edit";
+	m_typeid = QuteWidgetType::LINEEDIT;
+	
 	setProperty("CSQT_bordermode", QVariant()); // Remove these property
 	setProperty("CSQT_borderradius", QVariant()); // Remove these property
 	setProperty("CSQT_borderwidth", QVariant()); // Remove these property
@@ -731,6 +749,9 @@ QuteLineEdit::QuteLineEdit(QWidget* parent) : QuteText(parent)
 QuteLineEdit::~QuteLineEdit()
 {
 }
+
+QuteWidgetType QuteLineEdit::getWidgetTypeID() { return QuteWidgetType::LINEEDIT; }
+
 
 void QuteLineEdit::setText(QString text)
 {
@@ -1022,6 +1043,11 @@ QuteScrollNumber::QuteScrollNumber(QWidget* parent) : QuteText(parent)
 QuteScrollNumber::~QuteScrollNumber()
 {
 }
+
+
+QuteWidgetType QuteScrollNumber::getWidgetTypeID() { return QuteWidgetType::SCROLLNUMBER; }
+
+
 
 void QuteScrollNumber::setResolution(double resolution)
 {

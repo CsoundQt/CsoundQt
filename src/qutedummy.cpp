@@ -30,6 +30,8 @@ QuteDummy::QuteDummy(QWidget *parent) : QuteWidget(parent)
 	m_widget->setMouseTracking(true); // Necessary to pass mouse tracking to widget panel for _MouseX channels
 }
 
+QuteWidgetType QuteDummy::getWidgetTypeID() { return QuteWidgetType::UNKNOWN; }
+
 QuteDummy::~QuteDummy()
 {
 }

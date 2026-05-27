@@ -57,7 +57,9 @@ public:
         m_display_min = min;
         m_display_max = max;
         max = qAbs(max);
-        if(max < 100)
+        if(max < 10)
+            m_decimals = 3;
+        else if(max < 100)
             m_decimals = 2;
         else if(max < 1000)
             m_decimals = 1;
@@ -94,9 +96,19 @@ public:
         return ((double)this->value()/(double)this->maximum()) *
                 (m_display_max - m_display_min) + m_display_min;
     }
+    
     int getDegreeRange() {
         return m_degrees;
     }
+    
+    double displayMin() { return m_display_min; }
+    double displayMax() { return m_display_max; }
+    
+    QPair<double, double>getDisplayRange() {
+        return QPair(m_display_min, m_display_max);
+    }
+    
+    
 
 protected:
     virtual void mousePressEvent (QMouseEvent *event) override;
@@ -122,6 +134,7 @@ private:
     bool   m_flat;
     int    m_degrees;
     bool   m_intDisplay;
+
 
 signals:
     void doubleClick();
@@ -152,6 +165,8 @@ public:
 
     virtual void setColor(QColor c);
     virtual void setTextColor(QColor c);
+    QuteWidgetType getWidgetTypeID() override;
+	
 
 protected:
 	virtual void createPropertiesDialog();

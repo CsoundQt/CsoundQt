@@ -38,6 +38,7 @@ public:
 	virtual QString getWidgetType();
 	virtual QString getQml();
 	virtual void setMidiValue(int value);
+	QuteWidgetType getWidgetTypeID() override;
 	virtual bool acceptsMidi() {return true;}
 	void setText(QString text);  //Text for this widget is the item list separated by commas
 	void clearItems();

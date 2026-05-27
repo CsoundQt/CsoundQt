@@ -46,6 +46,9 @@ QuteComboBox::~QuteComboBox()
 {
 }
 
+QuteWidgetType QuteComboBox::getWidgetTypeID() { return QuteWidgetType::DROPDOWN; } 
+
+
 QString QuteComboBox::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX

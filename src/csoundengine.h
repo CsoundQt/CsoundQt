@@ -95,7 +95,8 @@ struct CsoundUserData {
 	QList<QString> outputStringChannelNames;
 	QList<QString> displayChannelNames;  // BSBDisplay: polled by type at runtime
 	QList<QVariant> previousOutputValues;
-	QList<QVariant> previousStringOutputValues;
+	// QList<QVariant> stringChannelValues;
+	QHash<QString, QString> stringChannelValues;
 	QHash<QString, MYFLT*> channelPointers;
     QString lastRecordingOutfile;
     QSet<QString> outputChannelNamesSet;
@@ -144,6 +145,7 @@ public:
 
 	static void readWidgetValues(CsoundUserData *ud);
 	static void writeWidgetValues(CsoundUserData *ud);
+	static void setStringValueIfNecessary(CsoundUserData *ud, const QString &channel, QLatin1StringView s);
 
 	//    void setCsoundOptions(const CsoundOptions &options);
 	// Options unsafe to change while running
@@ -224,6 +226,8 @@ public:
 
 private:
 	void setupChannels();
+	void setupCallbacks();
+	
 	QList <int> getAnsiKeySequence(int key);
 
 	QFuture<void> m_msgUpdateThread;

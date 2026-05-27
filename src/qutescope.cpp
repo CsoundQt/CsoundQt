@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -85,6 +86,9 @@ QuteScope::~QuteScope()
 	delete m_scopeData;
 	delete m_params;
 }
+
+QuteWidgetType QuteScope::getWidgetTypeID() { return QuteWidgetType::SCOPE; } 
+
 
 TriggerMode triggerNameToMode(QString s) {
     if(s == "NoTrigger")

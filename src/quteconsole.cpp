@@ -40,6 +40,9 @@ QuteConsole::~QuteConsole()
 {
 }
 
+QuteWidgetType QuteConsole::getWidgetTypeID() { return QuteWidgetType::CONSOLE; }
+
+
 QString QuteConsole::getWidgetLine()
 {
 #ifdef  USE_WIDGET_MUTEX
