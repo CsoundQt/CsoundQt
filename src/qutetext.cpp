@@ -481,15 +481,16 @@ void QuteText::createPropertiesDialog()
 
 	QLabel *label = new QLabel(dialog);
 	label->setText(tr("Text:"));
-	layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignVCenter);
+	layout->addWidget(label, 5, 0, Qt::AlignRight|Qt::AlignTop);
     labelPtrs["text"] = label;
 
 	text = new QTextEdit(dialog);
 	text->setAcceptRichText(false);
 	text->setText(property("CSQT_label").toString());
     text->setMinimumWidth(320);
-    text->setMaximumWidth(740);
-    layout->addWidget(text, 5, 1, 1, 4, Qt::AlignLeft|Qt::AlignVCenter);
+    // text->setMinimumHeight(240);
+    text->setMaximumWidth(8192);
+    layout->addWidget(text, 5, 1, 1, -1);
 
     label = new QLabel(dialog);
 	label->setText(tr("Text Color"));
@@ -498,7 +499,7 @@ void QuteText::createPropertiesDialog()
 
     textColor = new SelectColorButton(dialog);
     textColor->setColor(property("CSQT_color").value<QColor>());
-    layout->addWidget(textColor, 6,1, Qt::AlignLeft|Qt::AlignVCenter);
+    layout->addWidget(textColor, 6, 1, Qt::AlignLeft|Qt::AlignVCenter);
     // connect(textColor, SIGNAL(released()), this, SLOT(selectTextColor()));
 
     bg = new QCheckBox("Background", dialog);
