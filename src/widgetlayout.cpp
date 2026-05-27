@@ -207,7 +207,6 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     // this will cause a crash
     // setWindowTitle("Widgets");
     
-    
     // Set background ON by default, since any change in the app's palette (light/dark
     // mode) will change this background and make many existing scripts/examples
     // unreadable.

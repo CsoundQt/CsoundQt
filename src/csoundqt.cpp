@@ -232,17 +232,16 @@ CsoundQt::CsoundQt(QStringList fileNames)
                 QString::number(m_options->debugPort).toLocal8Bit().data() );
     }
 
-    // csoundHtmlView = new CsoundHtmlView(this);
-    // csoundHtmlView->setFocusPolicy(Qt::NoFocus);
-    // csoundHtmlView->setAllowedAreas(Qt::RightDockWidgetArea |
-    //                                Qt::BottomDockWidgetArea |
-    //                                Qt::LeftDockWidgetArea);
-    // csoundHtmlView->setObjectName("csoundHtmlView");
-    // csoundHtmlView->setWindowTitle(tr("HTML View"));
-    // csoundHtmlView->setOptions(m_options);
-    // addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
-    // csoundHtmlView->hide();
-    csoundHtmlView = nullptr;
+    csoundHtmlView = new CsoundHtmlView(this);
+    csoundHtmlView->setFocusPolicy(Qt::NoFocus);
+    csoundHtmlView->setAllowedAreas(Qt::RightDockWidgetArea |
+                                    Qt::BottomDockWidgetArea |
+                                    Qt::LeftDockWidgetArea);
+    csoundHtmlView->setObjectName("csoundHtmlView");
+    csoundHtmlView->setWindowTitle(tr("HTML View"));
+    csoundHtmlView->setOptions(m_options);
+    addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
+    csoundHtmlView->hide();
     
 #endif
 
@@ -6396,7 +6395,6 @@ void CsoundQt::setCurrentFile(const QString &fileName)
     else
         shownName = strippedName(fileName);
 
-    QDEBUG << "setWindowTitle - setCurrentFile";
     setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("CsoundQt")));
     documentTabs->setTabText(curPage, shownName);
     //  updateWidgets();

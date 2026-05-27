@@ -148,7 +148,6 @@ int main(int argc, char *argv[])
     splash->show();
     splash->raise();
     qapp.processEvents();
-    QThread::msleep(200);
     QSettings qsettings("csoundqt", "csoundqt");
     qsettings.beginGroup("GUI");
     QString language = qsettings.value("language", QLocale::system().name()).toString();

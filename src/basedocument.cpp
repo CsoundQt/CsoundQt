@@ -63,7 +63,8 @@ BaseDocument::~BaseDocument()
 	while (!m_widgetLayouts.isEmpty()) {
 		WidgetLayout *wl = m_widgetLayouts.takeLast();
 		wl->hide();
-        delete wl;
+		wl->deleteLater();
+        // delete wl;
     }
 }
 
@@ -165,7 +166,7 @@ WidgetLayout* BaseDocument::newWidgetLayout()
 	
 	WidgetLayout* wl = new WidgetLayout(0);
     wl->setWindowFlags(Qt::Window | wl->windowFlags());
-    wl->setAttribute(Qt::WA_QuitOnClose, false);
+    // wl->setAttribute(Qt::WA_QuitOnClose, false);
     // Prevent accessibility system from registering this as a top-level window
     // until it is fully initialized
     wl->setAttribute(Qt::WA_ShowWithoutActivating);
@@ -318,11 +319,11 @@ void BaseDocument::stop()
         return;
     }
     
-    QDEBUG << "getting lock";
     if(!mutex.tryLock(200)) {
         QDEBUG << "Could not acquire lock, cannot stop csound";
         return;
     }
+    
     QDEBUG << "locked, stopping engine";
     m_status = PlayStopStatus::Stopping;
 
