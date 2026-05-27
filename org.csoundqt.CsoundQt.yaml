@@ -10,14 +10,16 @@ cleanup-commands:
 
 finish-args:
   - --share=ipc
-  - --socket=x11
+  - --socket=fallback-x11
   - --socket=wayland
+  - --device=dri
   - --socket=pulseaudio
-  - --device=all
-  - --filesystem=xdg-run/pipewire-0
   - --share=network
+  - --device=all
+  - --filesystem=home
+  - --filesystem=xdg-run/pipewire-0
   - --env=QTWEBENGINEPROCESS_PATH=/app/bin/QtWebEngineProcess
-  - --env=QT_ACCESSIBILITY=0
+  # - --env=QT_ACCESSIBILITY=0
   - --env=NO_AT_BRIDGE=1
   - --env=LD_LIBRARY_PATH=/app/lib:/usr/lib/x86_64-linux-gnu
   - --env=AT_SPI_BUS_ADDRESS=disabled
