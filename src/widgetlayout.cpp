@@ -200,16 +200,20 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 
     // Default values for properties
     m_objectName = "";
-    setWindowTitle("Widgets");
     m_uuid = "";
     m_visible = true;
 
+    // We cannot set the title now since the widgetlayout is parentless. In some systems
+    // this will cause a crash
+    // setWindowTitle("Widgets");
+    
     // Set background ON by default, since any change in the app's palette (light/dark
     // mode) will change this background and make many existing scripts/examples
     // unreadable.
     setBackground(true,  isLightTheme ? QColor(240, 240, 240) : QColor(53, 53, 53));
     m_updating = true;
-    updateData(); // Starts updateData timer
+    QTimer::singleShot(500, this, SLOT(updateData())); // Delay first update
+    // updateData(); // Starts updateData timer
 
     m_widgetNameToType["BSBSpinBox"] = QuteWidgetType::SPINBOX;
     m_widgetNameToType["BSBLineEdit"] = QuteWidgetType::LINEEDIT;
@@ -463,7 +467,6 @@ QString WidgetLayout::getMacWidgetsText()
     widgetsMutex.lock();
     for (int i = 0; i < m_widgets.size(); i++) {
         text += m_widgets[i]->getWidgetLine() + "\n";
-        //     qDebug() << m_widgets[i]->getWidgetXmlText();
     }
     widgetsMutex.unlock();
     text += "</MacGUI>";
@@ -824,8 +827,6 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         widget = static_cast<QuteWidget *>(w);
         connect(widget, SIGNAL(newValue(QPair<QString,double>)),
                 this, SLOT(newValue(QPair<QString,double>)));
-        // QDEBUG << "... BSBController new" << std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now()-t0).count() << "ms";
-
     }
     else if (type == "BSBGraph") {
         QuteGraph *w = new QuteGraph(this);
@@ -2945,7 +2946,10 @@ int WidgetLayout::parseXmlNode(QDomNode node)
         //    this->setProperty("CSQT_objectName", node.firstChild().nodeValue());
     }
     else if (name == "label") {
-        this->setWindowTitle(node.firstChild().nodeValue());
+        auto child = node.firstChild();
+        if(!child.isNull()) {
+            this->setWindowTitle(child.nodeValue());
+        }
     }
     else if (name == "x") {
         int newx = node.firstChild().nodeValue().toInt();

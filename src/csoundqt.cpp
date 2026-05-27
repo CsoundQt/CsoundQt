@@ -93,28 +93,24 @@ CsoundQt::CsoundQt(QStringList fileNames)
     //	initialDir = QDir::current().path();
     initialDir = QCoreApplication::applicationDirPath();
     setWindowTitle("CsoundQt[*]");
-    // resize(780,550);
     m_fullScreenComponent = QString();
+    
     setWindowIcon(QIcon(":/images/csoundqt.png"));
     //Does this take care of the decimal separator for different locales?
     QLocale::setDefault(QLocale::system());
     curPage = -1;
     m_options = new Options(&m_configlists);
-
+    
     auto palette = qApp->palette();
     // the palette is dark (dark "theme") if the background is darker than the text
     isDarkPalette = palette.text().color().lightness() > palette.window().color().lightness();
 
     // test detecting theme change: NB! requires Qt 6.5 or newer
-
     connect(qApp->styleHints(), &QStyleHints::colorSchemeChanged,
             this, [this](Qt::ColorScheme scheme){
         QDEBUG << (scheme == Qt::ColorScheme::Dark ? "Dark scheme detected" : "Light scheme detected");
         applyThemeFromSystem(scheme);
     });
-
-
-
 
 #ifdef Q_OS_MAC
     // this->setUnifiedTitleAndToolBarOnMac(true);
@@ -124,20 +120,20 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
 
     // Create GUI panels
-
     helpPanel = new DockHelp(this);
     helpPanel->setAllowedAreas(Qt::RightDockWidgetArea |
                                Qt::BottomDockWidgetArea |
                                Qt::LeftDockWidgetArea);
     helpPanel->setObjectName("helpPanel");
-
+    
     // QLabel *helpTitle = new QLabel("Help", helpPanel);
     // helpTitle->setStyleSheet("qproperty-alignment: AlignCenter; padding: 3px; font-size: 9pt; ");
     // helpPanel->setTitleBarWidget(helpTitle);
 
     helpPanel->show();
+    
     addDockWidget(Qt::RightDockWidgetArea, helpPanel);
-
+    
 #ifdef Q_OS_WIN
     // Call OleInitialize  to enable clipboard together with FLTK libraries
     HRESULT result = OleInitialize(NULL);
@@ -155,7 +151,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // Hide until CsoundQt has finished loading
     widgetPanel->hide();
     // widgetPanel->show();
-
+    
     addDockWidget(Qt::RightDockWidgetArea, widgetPanel);
     tabifyDockWidget(helpPanel, widgetPanel);
 
@@ -170,13 +166,13 @@ CsoundQt::CsoundQt(QStringList fileNames)
     //   m_console->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
     // addDockWidget(Qt::BottomDockWidgetArea, m_console);
     addDockWidget(Qt::RightDockWidgetArea, m_console);
-
+    
     m_inspector = new Inspector(this);
     m_inspector->setObjectName("Inspector");
     m_inspector->parseText(QString());
     addDockWidget(Qt::LeftDockWidgetArea, m_inspector);
     m_inspector->hide();
-
+    
 #ifdef CSQT_DEBUGGER
     m_debugPanel = new DebugPanel(this);
     m_debugPanel->setObjectName("Debug Panel");
@@ -199,10 +195,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_scratchPad = new QDockWidget(this);
     addDockWidget(Qt::LeftDockWidgetArea, m_scratchPad);
     m_scratchPad->setObjectName("Interactive Code Pad");
+    QDEBUG << "setWindowTItle scratchpad";
     m_scratchPad->setWindowTitle(tr("Interactive Code Pad"));
     m_scratchPad->hide();
     connect(helpPanel, SIGNAL(openManualExample(QString)), this, SLOT(openManualExample(QString)));
-
+    
     QSettings settings("csoundqt", "csoundqt");
     settings.beginGroup("GUI");
 
@@ -226,7 +223,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_fileWatcher = new QFileSystemWatcher(this);
     connect(m_fileWatcher, &QFileSystemWatcher::fileChanged,
             this, &CsoundQt::onExternalFileChanged);
-
+    
 #if defined(CSQT_QTHTML)
     //TODO: change it when user changes
     if (m_options->debugPort) {
@@ -238,13 +235,14 @@ CsoundQt::CsoundQt(QStringList fileNames)
     csoundHtmlView = new CsoundHtmlView(this);
     csoundHtmlView->setFocusPolicy(Qt::NoFocus);
     csoundHtmlView->setAllowedAreas(Qt::RightDockWidgetArea |
-                                   Qt::BottomDockWidgetArea |
-                                   Qt::LeftDockWidgetArea);
+                                    Qt::BottomDockWidgetArea |
+                                    Qt::LeftDockWidgetArea);
     csoundHtmlView->setObjectName("csoundHtmlView");
     csoundHtmlView->setWindowTitle(tr("HTML View"));
     csoundHtmlView->setOptions(m_options);
     addDockWidget(Qt::LeftDockWidgetArea, csoundHtmlView);
     csoundHtmlView->hide();
+    
 #endif
 
     focusMapper = new QSignalMapper(this);
@@ -261,7 +259,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     m_midiLearn = new MidiLearnDialog(this);
     m_midiLearn->setModal(false);
     midiHandler->setMidiLearner(m_midiLearn);
-
+    
     // Must be after readSettings() to save last state // was: isVisible()
     // in some reason reported always false
     bool widgetsVisible = !widgetPanel->isHidden();
@@ -499,7 +497,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
             deleteTab(0);
         }
         foreach (QString lastFile, lastFiles) {
-            if (lastFile!="" && !lastFile.startsWith("untitled")) {
+            if (lastFile!="" && !lastFile.startsWith("untitled") && QFile::exists(lastFile)) {
                 loadFile(lastFile);
             }
         }
@@ -524,7 +522,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     m_configlists.refreshModules(); // must happen after UI is created
 
-
+    
 /*
 #ifdef Q_OS_LINUX
     // ---- this is workaround for problem reported by Renè that on first run ival = 16.0/3
@@ -549,7 +547,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
 CsoundQt::~CsoundQt()
 {
-    qDebug() << "CsoundQt::~CsoundQt()";
     // This function is not called... see closeEvent()
 }
 
@@ -570,7 +567,6 @@ void CsoundQt::utilitiesMessageCallback(CSOUND *csound,
     DockConsole *console = (DockConsole *) csoundGetHostData(csound);
     QString msg;
     msg = msg.vasprintf(fmt, args);
-    //  qDebug() << msg;
     console->appendMessage(msg);
 }
 
@@ -752,7 +748,6 @@ void CsoundQt::statusBarMessage(QString message)
 
 void CsoundQt::closeEvent(QCloseEvent *event)
 {
-    qDebug() ;
     m_closing = true;
     // this->showNormal();  // Don't store full screen size in preferences
     qApp->processEvents();
@@ -5223,7 +5218,7 @@ void CsoundQt::fillFileMenu()
 {
     recentMenu->clear();
     for (int i = 0; i < recentFiles.size(); i++) {
-        if (i < recentFiles.size() && recentFiles[i] != "") {
+        if (recentFiles[i] != "" && QFile::exists(recentFiles[i])) {
             QAction *a = recentMenu->addAction(recentFiles[i], this, SLOT(openFromAction()));
             a->setData(recentFiles[i]);
         }
@@ -5454,11 +5449,21 @@ void CsoundQt::readSettings()
     m_options->theme = settings.value("theme", "breeze").toString();
     m_options->themeMode = settings.value("themeMode", "auto").toString();
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
+    if(!pos.isNull()) 
+        move(pos);
+    else
+        QDEBUG << "Settings: invalid pos value";
+        
     QSize size = settings.value("size", QSize(600, 500)).toSize();
-    resize(size); // does not work here for MacOS Mojave
-    move(pos);
+    if(size.isValid())
+        resize(size); // does not work here for MacOS Mojave
+    else
+        QDEBUG << "Settings: invalid size";
+        
     if (settings.contains("dockstate")) {
-        restoreState(settings.value("dockstate").toByteArray());
+        auto dockstate = settings.value("dockstate").toByteArray();
+        if(!dockstate.isEmpty())
+            restoreState(settings.value("dockstate").toByteArray());
     }
     lastUsedDir = settings.value("lastuseddir", "").toString();
     lastFileDir = settings.value("lastfiledir", "").toString();
@@ -5485,9 +5490,6 @@ void CsoundQt::readSettings()
             }
         }
     }
-    // else { // No shortcuts are stored
-    //     setDefaultKeyboardShortcuts();
-    // }
     settings.endGroup();
     settings.beginGroup("Options");
     settings.beginGroup("Editor");
@@ -6261,7 +6263,7 @@ bool CsoundQt::makeNewPage(QString fileName, QString text)
         lastUsedDir = fileName;
         lastUsedDir.resize(fileName.lastIndexOf(QRegularExpression("[/]")) + 1);
     }
-    if (recentFiles.count(fileName) == 0 && fileName!="" && !fileName.startsWith(":/")) {
+    if (fileName != "" && !fileName.startsWith(":/") && recentFiles.count(fileName)) {
         recentFiles.prepend(fileName);
         if (recentFiles.size() > CSQT_MAX_RECENT_FILES)
             recentFiles.removeLast();

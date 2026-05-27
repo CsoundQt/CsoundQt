@@ -17,9 +17,10 @@ finish-args:
   - --filesystem=xdg-run/pipewire-0
   - --share=network
   - --env=QTWEBENGINEPROCESS_PATH=/app/bin/QtWebEngineProcess
-  - --env=QT_NO_ACCESSIBILITY=1
+  - --env=QT_ACCESSIBILITY=0
   - --env=NO_AT_BRIDGE=1
   - --env=LD_LIBRARY_PATH=/app/lib:/usr/lib/x86_64-linux-gnu
+  - --env=AT_SPI_BUS_ADDRESS=disabled
   - --env=QT_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt6/plugins
 
 modules:
@@ -158,6 +159,7 @@ modules:
       - -DUSE_PORTAUDIO=OFF
       - -DUSE_PULSEAUDIO=OFF
       - -DUSE_PIPEWIRE=ON
+      - -DBUILD_OSC_OPCODES=ON
       - -DUSE_FLTK=OFF
       - -DBUILD_VIRTUAL_KEYBOARD=OFF
       - -DBUILD_JAVA_INTERFACE=OFF
@@ -222,7 +224,10 @@ modules:
       # - rmdir /app/bin/bin
       # - cp bin/CsoundQt-d-cs7 /app/bin/CsoundQt-d-cs7
     sources:
-      - type: git
-        url: https://github.com/CsoundQt/CsoundQt
-        branch: csoundqt7
-        disable-shallow-clone: true
+      - type: dir
+        path: .
+        
+      #- type: git
+      #  url: https://github.com/CsoundQt/CsoundQt
+      #  branch: csoundqt7
+      #  disable-shallow-clone: true
