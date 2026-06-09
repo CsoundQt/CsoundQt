@@ -209,6 +209,9 @@ modules:
 
   - name: CsoundQt
     buildsystem: simple
+    sources:
+      - type: dir
+        path: .
     build-commands:
       - which qmake
       - qmake --version  # verify this is 6.8.x before building
@@ -221,15 +224,9 @@ modules:
                 SHARE_DIR=/app/share
       - make -j$(nproc)
       - make install 
-      # - mv /app/bin/bin/CsoundQt-d-cs7 /app/bin/CsoundQt-d-cs7
-      # - mv /app/bin/bin/csoundqt /app/bin/csoundqt
-      # - rmdir /app/bin/bin
-      # - cp bin/CsoundQt-d-cs7 /app/bin/CsoundQt-d-cs7
-    sources:
-      - type: dir
-        path: .
+      #- mkdir -p /app/etc/xdg/
+      #- echo "[Qt]" > /app/etc/xdg/qt6.conf
+      #- echo "Style=Breeze" >> /app/etc/xdg/qt6.conf
+      #- echo "PlatformTheme=gnome" >> /app/etc/xdg/qt6.conf
         
-      #- type: git
-      #  url: https://github.com/CsoundQt/CsoundQt
-      #  branch: csoundqt7
-      #  disable-shallow-clone: true
+      

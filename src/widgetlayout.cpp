@@ -2862,20 +2862,20 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
 
 void WidgetLayout::mousePressEvent(QMouseEvent *event)
 {
-    if (m_editMode && (event->button() & Qt::LeftButton)) {
+    auto evbutton = event->button();
+    if (m_editMode && (evbutton & Qt::LeftButton)) {
         this->setFocus(Qt::MouseFocusReason);
         selectionFrame->show();
-        startx = event->x() + xOffset;
-        starty = event->y() + yOffset;
+        auto pos = event->position();
+        startx = pos.x() + xOffset;
+        starty = pos.y() + yOffset;
         selectionFrame->setGeometry(startx, starty, 0,0);
-        if (event->button() & Qt::LeftButton) {
-            deselectAll();
-        }
+        deselectAll();
     }
     mouseLock.lockForWrite();
-    if (event->button() == Qt::LeftButton)
+    if (evbutton == Qt::LeftButton)
         mouseBut1 = 1;
-    else if (event->button() == Qt::RightButton)
+    else if (evbutton == Qt::RightButton)
         mouseBut2 = 1;
     mouseLock.unlock();
     //  QWidget::mousePressEvent(event);
@@ -2886,24 +2886,29 @@ void WidgetLayout::mouseMoveEvent(QMouseEvent *event)
     //  QWidget::mouseMoveEvent(event);
     int x = startx;
     int y = starty;
-    int width = abs(event->x() - startx + xOffset);
-    int height = abs(event->y() - starty + yOffset);
+    auto relpos = event->position();
+    auto relx = relpos.x();
+    auto rely = relpos.y();
+    
+    int width  = abs(relx - startx + xOffset);
+    int height = abs(rely - starty + yOffset);
     if (event->buttons() & Qt::LeftButton) {
         // Currently dragging selection
-        if (event->x() < (startx - xOffset)) {
-            x = event->x() + xOffset;
+        if (relx < (startx - xOffset)) {
+            x = relx + xOffset;
         }
-        if (event->y() < (starty - yOffset)) {
-            y = event->y() + yOffset;
+        if (rely < (starty - yOffset)) {
+            y = rely + yOffset;
         }
         selectionFrame->setGeometry(x, y, width, height);
         selectionChanged(QRect(x - xOffset, y - yOffset, width, height));
     }
     mouseLock.lockForWrite();
-    mouseX = event->globalX();
-    mouseY = event->globalY();
-    mouseRelX = event->x() + xOffset;
-    mouseRelY = event->y() + yOffset;
+    auto globalpos = event->globalPosition();
+    mouseX = globalpos.x();
+    mouseY = globalpos.y();
+    mouseRelX = relx + xOffset;
+    mouseRelY = rely + yOffset;
     mouseLock.unlock();
 }
 
