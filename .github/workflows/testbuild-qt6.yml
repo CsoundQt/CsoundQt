@@ -79,7 +79,7 @@ jobs:
           key: csound-${{ runner.os }}-${{ steps.csound-hash.outputs.hash }}
       
       - name: linux setup csound7
-        if: runner.os == 'linux' && steps.cache-csound.outputs.cache-hit != 'true'
+        if: runner.os == 'linux' # && steps.cache-csound.outputs.cache-hit != 'true'
         run: |
           # git clone -b develop https://github.com/csound/csound --depth 1
           cd csound
