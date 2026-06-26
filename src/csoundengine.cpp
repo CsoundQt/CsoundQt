@@ -1026,7 +1026,7 @@ void CsoundEngine::cleanupCsound()
 
 static const QSet<QString> reservedChannels = {
     "_Play", "_Stop", "_Pause", "_Render",
-    "_MBrowse", "_SetPreset", "_SetPresetIndex",
+    "_SetPreset", "_SetPresetIndex",
     "_GetPresetName", "_GetPresetNumber"
 };
 
@@ -1071,7 +1071,7 @@ void CsoundEngine::setupChannels()
         const QString channel = w->getChannelName();
         const QString channel2 = w->getChannel2Name();
         
-        if(channel.startsWith("_Browse")) {
+        if(channel.startsWith("_Browse") || channel.startsWith("_MBrowse")) {
             // Force creation of channels for browse widgets if they do not exist
             if(csoundGetChannelVarType(ud->csound, channel.toLocal8Bit().constData()) == NULL) {
                 csoundGetChannelPtr(ud->csound, (void **) &pvalue, w->getChannelName().toLocal8Bit(),
