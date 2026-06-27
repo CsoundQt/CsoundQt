@@ -97,7 +97,7 @@ jobs:
           csound --version
           # strace -f -t -e trace=file csound -+rtaudio=dummy --devices=out | grep "\.so" || echo ok
 
-      - name: Install Qt
+      - name: Install Qt in linux
         if: runner.os == 'linux'
         uses: jurplel/install-qt-action@v4
         with:
@@ -121,5 +121,6 @@ jobs:
           
       - uses: actions/upload-artifact@v4
         with:
-          name: CsoundQt
+          name: CsoundQt-${{ matrix.os }}-${{ strategy.job-index }}
           path: artifacts/*
+
