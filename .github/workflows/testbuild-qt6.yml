@@ -40,7 +40,8 @@ jobs:
           csound_brew_root=$(brew --prefix csound)
           echo "Csound brew root: $csound_brew_root"
           # download missing csPerthread.hpp
-          curl -o $csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers/csPerfThread.hpp https://raw.githubusercontent.com/csound/csound/develop/interfaces/csPerfThread.hpp 
+          mkdir -p "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers"
+          curl -o "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers/csPerfThread.hpp" https://raw.githubusercontent.com/csound/csound/develop/interfaces/csPerfThread.hpp
           
           ls -R "$csound_brew_root"
           
