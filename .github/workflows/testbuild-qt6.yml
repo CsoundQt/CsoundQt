@@ -27,15 +27,39 @@ jobs:
           git submodule update --init --recursive
           git submodule status --recursive
           echo "Finished submodules"
+
+      - name: Cache Homebrew downloads
+        if: runner.os == 'macOS'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/Homebrew
+          key: brew-${{ runner.os }}-${{ hashFiles('.github/workflows/*.yml') }}
+          restore-keys: |
+            brew-${{ runner.os }}-
+
+      - name: macos csound build
+        if: runner.os == 'macOS':
+        run: |
+          cd csound
+          brew install libogg flac lame libvorbis mpg123 opus libsndfile portaudio libsamplerate liblo portmidi
+          brew install bison flex jack
+          rm -fr build-macos
+          mkdir build-macos && cd build-macos
+          # We need a very minimal build
+          cmake .. -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
+          cmake --build . --parallel
+          sudo make install
+                  
       - name: macos build
         if: runner.os == 'macOS'
         run: |
           set -o xtrace   # echo each command before it is executed
 
           brew update
-          brew install csound
-          brew install qt6
-          brew link qt6 --force
+          # homebrew defaults to qt6
+          brew list qt || brew install qt
+          brew link qt --force
 
           csound_brew_root=$(brew --prefix csound)
           echo "Csound brew root: $csound_brew_root"
