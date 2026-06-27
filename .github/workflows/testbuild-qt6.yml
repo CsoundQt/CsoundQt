@@ -39,7 +39,7 @@ jobs:
             brew-${{ runner.os }}-
 
       - name: macos csound build
-        if: runner.os == 'macOS':
+        if: runner.os == 'macOS'
         run: |
           cd csound
           brew install libogg flac lame libvorbis mpg123 opus libsndfile portaudio libsamplerate liblo portmidi
