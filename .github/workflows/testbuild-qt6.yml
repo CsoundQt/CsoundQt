@@ -1,14 +1,14 @@
-name: Test Build qt 6 
-on: 
+name: Test Build qt 6
+on:
   push:
     branches:
       - csoundqt7
-      
+
 env:
   PACKAGENAME: CsoundQt
   APPNAME: CsoundQt-d-cs7
   CSOUND_VERSION: 7
-    
+
 jobs:
   buildjob:
     name: Test Build on ${{ matrix.os }}
@@ -31,27 +31,42 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           set -o xtrace   # echo each command before it is executed
-          
+
           brew update
           brew install csound
           brew install qt6
           brew link qt6 --force
-          
+
           csound_brew_root=$(brew --prefix csound)
           echo "Csound brew root: $csound_brew_root"
           # download missing csPerthread.hpp
           mkdir -p "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers"
           curl -o "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers/csPerfThread.hpp" https://raw.githubusercontent.com/csound/csound/develop/interfaces/csPerfThread.hpp
-          
+
           ls -R "$csound_brew_root"
-          
+
           # qmake CONFIG+=rtmidi CONFIG+=release CSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
           qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
-          make -j$(nproc)
-          
+
+          # --- Portable, safer parallelism for make (macOS-compatible) ---
+          NUM_PROCS=1
+          if command -v nproc >/dev/null 2>&1; then
+            NUM_PROCS=$(nproc)
+          else
+            # macOS: use sysctl to get logical CPU count
+            NUM_PROCS=$(sysctl -n hw.logicalcpu 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+          fi
+          # Use at most half of CPUs (but at least 1), and cap to MAX_JOBS to avoid OOMs
+          NUM_JOBS=$(( NUM_PROCS > 2 ? NUM_PROCS / 2 : NUM_PROCS ))
+          MAX_JOBS=4
+          if [ "$NUM_JOBS" -gt "$MAX_JOBS" ]; then NUM_JOBS=$MAX_JOBS; fi
+          echo "Detected $NUM_PROCS CPUs, using $NUM_JOBS parallel jobs for make"
+          make -j"${NUM_JOBS}"
+          # -------------------------------------------------------------
+
           otool -L bin/${{ env.APPNAME }}.app/Contents/MacOS/${{ env.APPNAME }}
           hdiutil create -fs HFS+ -srcfolder bin/${{ env.APPNAME }}.app -volname CsoundQt CsoundQt.dmg
-          
+
           find .
           echo "Creating artifacts folder"
           mkdir -p artifacts
@@ -60,7 +75,7 @@ jobs:
           echo "Listing artifacts"
           ls artifacts
           echo "ready!"
-          
+
       - name: Checkout Csound
         uses: actions/checkout@v4
         with:
@@ -78,7 +93,7 @@ jobs:
         with:
           path: csound/build
           key: csound-${{ runner.os }}-${{ steps.csound-hash.outputs.hash }}
-      
+
       - name: linux setup csound7
         if: runner.os == 'linux' # && steps.cache-csound.outputs.cache-hit != 'true'
         run: |
@@ -107,20 +122,19 @@ jobs:
           arch: linux_gcc_64
           modules: 'qtwebengine qtwebchannel qtpositioning'  # add extras you need
           cache: true  # caches the Qt install between runs
-      
+
       - name: linux csoundqt7 build
         if: runner.os == 'linux'
         run: |
-          # sudo apt install qt6-base-dev qmake6 qt6-declarative-dev qt6-webengine-dev          
+          # sudo apt install qt6-base-dev qmake6 qt6-declarative-dev qt6-webengine-dev
           qmake --version
           git submodule update --init --recursive
           qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
           make -j$(nproc)
           mkdir -p artifacts
           cp bin/* artifacts
-          
+
       - uses: actions/upload-artifact@v4
         with:
           name: CsoundQt-${{ matrix.os }}-${{ strategy.job-index }}
           path: artifacts/*
-
