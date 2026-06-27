@@ -26,7 +26,7 @@ CSOUND_FRAMEWORK_DIR = /Applications/Csound/CsoundLib64.framework/Versions/Curre
 DEFAULT_CSOUND_API_INCLUDE_DIRS =  $${CSOUND_FRAMEWORK_DIR}/Headers \
         /$${CSOUND_FRAMEWORK_DIR}/Headers \
         $${CSOUND_FRAMEWORK_DIR}/Headers \
-        ~/Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers \
+        $$(HOME)/Library/Frameworks/CsoundLib64.framework/Versions/Current/Headers \
         /usr/local/include/csound \
         /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Headers \
         /opt/homebrew/opt/csound/Frameworks/CsoundLib64.framework/Versions/6.0/Headers \
