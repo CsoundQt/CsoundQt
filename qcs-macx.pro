@@ -58,41 +58,34 @@ for (pyqtdir, PYTHONQT_VARIANTS) {
 
 #PYTHONQT_LIB = PythonQt_QtAll$${DEBUG_EXT}
 PYTHONQT_LIB = PythonQt
+
 # Do configuration step
 include(config.pri)
 
 # Use results from config step
 LIBS *= -L$${CSOUND_LIBRARY_DIR}
 
-
 rtmidi {
-DEFINES += __MACOSX_CORE__
-LIBS += -framework CoreFoundation
-LIBS += -framework CoreMidi -framework CoreAudio
+	DEFINES += __MACOSX_CORE__
+	LIBS += -framework CoreFoundation
+	LIBS += -framework CoreMidi -framework CoreAudio
 }
 
 quteapp_f {
-message(Bundling QuteApp_f)
-RESOURCES += "src/quteapp_f_osx.qrc"
+	message(Bundling QuteApp_f)
+	RESOURCES += "src/quteapp_f_osx.qrc"
 }
 
 quteapp_d {
-message(Bundling QuteApp_d)
-RESOURCES += "src/quteapp_d_osx.qrc"
+	message(Bundling QuteApp_d)
+	RESOURCES += "src/quteapp_d_osx.qrc"
 }
 
-#LIBS += -framework QtCore -framework QtGui -framework QtXml
 #LCSOUND = -F$${HOME_DIRECTORY}/Library/Frameworks -F/Library/Frameworks -F/usr/local/opt/csound/Frameworks -F/opt/homebrew/opt/csound/Frameworks -framework $${MAC_LIB}
-LCSOUND = -F /Applications/Csound -framework $${MAC_LIB}
 
-#clumsy test for github actions homebrew build. needs rewrite and setting different variable for LCSND_DIR
-# exists (/opt/homebrew/opt/csound/lib/libcsnd6.6.0.dylib) {
-#     LCSND = -L/opt/homebrew/opt/csound/lib/ -lcsnd6.6.0
-# } else: exists(/usr/local/lib/libcsnd6.6.0.dylib) {
-#     LCSND = -L/usr/local/lib/ -lcsnd6.6.0
-# } else {
-#     LCSND = -lcsnd6.6.0
-# }
+exists (/Application/Csound) {
+	LCSOUND = -F /Applications/Csound -framework $${MAC_LIB}
+} 
 
 
 QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist

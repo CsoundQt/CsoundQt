@@ -44,8 +44,9 @@ DEFINES += NOMINMAX
 
 
 # Add C++11 support since version 0.9.4
-CONFIG += c++11
+# CONFIG += c++11
 # CONFIG += c++14
+CONFIG += c++23
 
 #for csound7 (was csound6 before). Will not have no meaning in CsoundQt7
 DEFINES += CSOUND7
