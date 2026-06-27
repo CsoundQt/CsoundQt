@@ -9,9 +9,8 @@
 #CONFIG += x86_64
 #QMAKE_CXXFLAGS += -arch x86_64
 
-#Test:
-QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
-
+# QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
+QMAKE_APPLE_DEVICE_ARCHS = arm64
 
 build32: MAC_LIB = CsoundLib
 build64: MAC_LIB = CsoundLib64
