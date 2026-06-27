@@ -164,7 +164,6 @@ html_support: {
 }
 
 LIBS += $${LCSOUND} \
-#	$${LCSND} \ # CS 7
     $${LSNDFILE} \
     $${RTMIDI} \
     $${LPTHREAD}
