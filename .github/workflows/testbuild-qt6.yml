@@ -28,6 +28,24 @@ jobs:
           git submodule status --recursive
           echo "Finished submodules"
 
+      - name: Checkout Csound
+        uses: actions/checkout@v4
+        with:
+          repository: csound/csound
+          path: csound
+          ref: develop
+
+      - name: Get Csound commit hash
+        id: csound-hash
+        run: echo "hash=$(git -C csound rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Cache Csound build
+        id: cache-csound
+        uses: actions/cache@v4
+        with:
+          path: csound/build
+          key: csound-${{ runner.os }}-${{ steps.csound-hash.outputs.hash }}
+
       - name: Cache Homebrew downloads
         if: runner.os == 'macOS'
         uses: actions/cache@v4
@@ -41,9 +59,7 @@ jobs:
       - name: macos csound build
         if: runner.os == 'macOS'
         run: |
-          cd csound
-          git switch develop
-          
+          cd csound    
           brew install libogg flac lame libvorbis mpg123 opus libsndfile portaudio libsamplerate liblo portmidi
           brew install bison flex jack
           rm -fr build-macos
@@ -101,24 +117,6 @@ jobs:
           echo "Listing artifacts"
           ls artifacts
           echo "ready!"
-
-      - name: Checkout Csound
-        uses: actions/checkout@v4
-        with:
-          repository: csound/csound
-          path: csound
-          ref: develop
-
-      - name: Get Csound commit hash
-        id: csound-hash
-        run: echo "hash=$(git -C csound rev-parse HEAD)" >> $GITHUB_OUTPUT
-
-      - name: Cache Csound build
-        id: cache-csound
-        uses: actions/cache@v4
-        with:
-          path: csound/build
-          key: csound-${{ runner.os }}-${{ steps.csound-hash.outputs.hash }}
 
       - name: linux setup csound7
         if: runner.os == 'linux' # && steps.cache-csound.outputs.cache-hit != 'true'
