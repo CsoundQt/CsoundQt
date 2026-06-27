@@ -42,6 +42,8 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           cd csound
+          git switch develop
+          
           brew install libogg flac lame libvorbis mpg123 opus libsndfile portaudio libsamplerate liblo portmidi
           brew install bison flex jack
           rm -fr build-macos
