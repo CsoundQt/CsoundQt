@@ -62,7 +62,13 @@ PYTHONQT_LIB = PythonQt
 include(config.pri)
 
 # Use results from config step
+
 LIBS *= -L$${CSOUND_LIBRARY_DIR}
+
+
+exists ($${HOME_DIRECTORY}/Library/Frameworks/CsoundLib64.framework/CsoundLib64) {
+	LIBS *= -L$${HOME_DIRECTORY}/Library/Frameworks/CsoundLib64.framework/CsoundLib64
+}
 
 rtmidi {
 	DEFINES += __MACOSX_CORE__
