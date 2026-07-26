@@ -117,10 +117,10 @@ modules:
           "$D" "$D" "$D" "$D" "$D" "$D" "$D" > /tmp/merge.mri
         ar -M < /tmp/merge.mri
         mv /app/lib/libsndfile_merged.a /app/lib/libsndfile.a
+    # NOTE: /include and /lib/*.a are cleaned up later, in the csound-plugins
+    # module, because its sndmeta plugin needs sndfile.h and libsndfile.a
     cleanup:
-      - /include
       - /lib/pkgconfig
-      - /lib/*.a
     sources:
       - type: archive
         url: https://github.com/libsndfile/libsndfile/releases/download/1.2.2/libsndfile-1.2.2.tar.xz
@@ -151,16 +151,14 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_PREFIX_PATH=/app
       - -DCMAKE_EXE_LINKER_FLAGS=-static-libgcc -static-libstdc++
-      - -DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc -static-libstdc++
       - -DCMAKE_INSTALL_LIBDIR=lib
       - -DBUILD_PLUGINS=ON
       - -DUSE_LIBLO=ON
       - -DUSE_ALSA=ON
-      - -DUSE_JACK=ON
       - -DUSE_PORTMIDI=ON
       - -DUSE_PORTAUDIO=OFF
       - -DUSE_PULSEAUDIO=OFF
-      - -DUSE_PIPEWIRE=ON
+      - -DUSE_PIPEWIRE=OFF
       - -DBUILD_OSC_OPCODES=ON
       - -DUSE_FLTK=OFF
       - -DBUILD_VIRTUAL_KEYBOARD=OFF
@@ -173,11 +171,51 @@ modules:
       - -DBUILD_TESTS=OFF
       - -DBUILD_INSTALLER=OFF
       - -DBUILD_UTILITIES=OFF
+      - -DUSE_JACK=ON
+      # - -DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc -static-libstdc++
+      # - -DUSE_JACK=ON
+            
     sources:
       - type: git
         url: https://github.com/csound/csound
         branch: develop
         disable-shallow-clone: true
+
+  # External Csound plugins (https://github.com/csound-plugins/csound-plugins)
+  # Built against the csound installed above (headers in /app/include/csound),
+  # so the bundled csound submodule is not needed. Only the jsusfx submodule
+  # (used by the jsfx plugin) is fetched, as a separate source below.
+  # -DPORTABLE=ON avoids the php-cli + nasm generated assembly in jsusfx.
+  - name: csound-plugins
+    buildsystem: simple
+    build-commands:
+      - cmake -B build -S . -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_PREFIX_PATH=/app
+          -DAPIVERSION=7.0
+          -DPORTABLE=ON
+          -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+          -DCMAKE_C_FLAGS=-I/app/include/csound
+          -DCMAKE_CXX_FLAGS=-I/app/include/csound
+      - cmake --build build --parallel
+      # PLUGIN_INSTALL_DIR is hardcoded in the repo to $HOME/.local/... and
+      # cannot be overridden from the command line, but all plugin libraries
+      # are written flat into the build dir, so install them manually next to
+      # csound's own plugins.
+      - install -Dm755 build/*.so -t /app/lib/csound/plugins64-7.0/
+    # deferred from the libsndfile module (sndmeta needs sndfile.h/libsndfile.a)
+    cleanup:
+      - /include
+      - /lib/*.a
+    sources:
+      - type: git
+        url: https://github.com/csound-plugins/csound-plugins
+        # commit: 10c2c585fc1eb000c713d31de05ae71c205c314b
+        disable-submodules: true   # <-- add this
+      - type: git
+        url: https://github.com/asb2m10/jsusfx
+        # commit: bcc9cd7b910ee7bba5b4cd2649448ade2ec15712
+        dest: src/jsfx/jsusfx
 
   - name: metainfo
     buildsystem: simple

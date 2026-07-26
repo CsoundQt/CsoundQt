@@ -52,6 +52,12 @@ static QString which(QString cmd, QString otherwise) {
     return otherwise;
 }
 
+
+bool is_running_in_flatpak() {
+    return std::getenv("FLATPAK_ID") != nullptr;
+}
+
+
 Risset::Risset(QString pythonExe)
 {
     opcodeIndexDone = false;
@@ -96,7 +102,7 @@ Risset::Risset(QString pythonExe)
     auto procOut = proc.readAllStandardOutput();
     m_infoText = QString::fromLocal8Bit(procOut);
     QJsonDocument m_jsonInfo = QJsonDocument::fromJson(procOut);
-    QJsonObject root = m_jsonInfo.object();
+    QJsonObject root = m_jsonInfo.object();          
     rissetVersion = root.value("version").toString();
     if(rissetVersion.isEmpty()) {
         isInstalled = false;
