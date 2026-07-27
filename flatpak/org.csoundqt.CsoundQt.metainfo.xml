@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.csoundqt.CsoundQt</id>
+  <name>CsoundQt</name>
+  <summary>A frontend for Csound</summary>
+  <metadata_license>MIT</metadata_license>
+  <project_license>LGPL-2.1</project_license>
+
+  <description>
+    <p>CsoundQt is a powerful, free, cross-platform frontend for Csound.</p>
+  </description>
+
+  <url type="homepage">https://csoundqt.github.io</url>
+  <url type="bugtracker">https://github.com/CsoundQt/CsoundQt/issues</url>
+
+  <releases>
+    <release version="1.1.0" date="2025-05-16"/>
+  </releases>
+
+  <content_rating type="oars-1.1"/>
+
+  <launchable type="desktop-id">org.csoundqt.CsoundQt.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://csoundqt.github.io/images/screenshot.png</image>
+    </screenshot>
+  </screenshots>
+</component>
