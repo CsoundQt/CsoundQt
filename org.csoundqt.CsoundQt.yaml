@@ -255,11 +255,11 @@ modules:
   - name: CsoundQt
     buildsystem: simple
     sources:
-      - type: dir
-        path: .
+      # - type: dir
+      #  path: .
       - type: git
         url: https://github.com/CsoundQt/CsoundQt.git
-        commit: <FULL-COMMIT-SHA>
+        commit: c6b34e8cce4ae735e61747615409f14143247d1b
     build-commands:
       - which qmake
       - qmake --version  
