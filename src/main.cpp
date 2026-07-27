@@ -84,6 +84,10 @@ int main(int argc, char *argv[])
     qApp->setStyle(QStyleFactory::create("Fusion")); // this is not necessary by Qt 6.8 any more
     QQuickStyle::setStyle(QStringLiteral("Fusion"));
     qDebug() << "QQC2 style requested:" << QQuickStyle::name();
+#elif defined(FLATPAK_BUILD)
+    qDebug() << "Flatpak build, setting style to Fusion";
+    qApp->setStyle(QStyleFactory::create("Fusion"));
+    // QQuickStyle::setStyle(QStringLiteral("Fusion"));
 #endif
 
     bool autoplay = false;

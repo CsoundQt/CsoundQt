@@ -1,9 +1,9 @@
 app-id: org.csoundqt.CsoundQt
 runtime: org.kde.Platform
-runtime-version: '6.8'
+runtime-version: '6.10'
 sdk: org.kde.Sdk
 base: io.qt.qtwebengine.BaseApp
-base-version: '6.8'
+base-version: '6.10'
 command: CsoundQt-d-cs7
 cleanup-commands:
   - /app/cleanup-BaseApp.sh
@@ -29,6 +29,7 @@ modules:
   - name: libogg
     buildsystem: cmake-ninja
     config-opts:
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
       - -DBUILD_SHARED_LIBS=OFF
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
       - -DINSTALL_DOCS=OFF
@@ -44,6 +45,7 @@ modules:
   - name: libvorbis
     buildsystem: cmake-ninja
     config-opts:
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
       - -DBUILD_SHARED_LIBS=OFF
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
     cleanup:
@@ -58,6 +60,7 @@ modules:
   - name: libopus
     buildsystem: cmake-ninja
     config-opts:
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5    
       - -DBUILD_SHARED_LIBS=OFF
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
       - -DOPUS_BUILD_PROGRAMS=OFF
@@ -74,6 +77,7 @@ modules:
   - name: libFLAC
     buildsystem: cmake-ninja
     config-opts:
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5    
       - -DBUILD_SHARED_LIBS=OFF
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
       - -DWITH_OGG=ON
@@ -94,6 +98,7 @@ modules:
     buildsystem: simple
     build-commands:
       - cmake -B build -S .
+          -DCMAKE_POLICY_VERSION_MINIMUM=3.5   
           -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_INSTALL_PREFIX=/app
           -DCMAKE_INSTALL_LIBDIR=lib
@@ -148,6 +153,7 @@ modules:
   - name: csound
     buildsystem: cmake-ninja
     config-opts:
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5    
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_PREFIX_PATH=/app
       - -DCMAKE_EXE_LINKER_FLAGS=-static-libgcc -static-libstdc++
@@ -178,8 +184,9 @@ modules:
     sources:
       - type: git
         url: https://github.com/csound/csound
-        branch: develop
+        # branch: develop
         disable-shallow-clone: true
+        commit: 75537cb944a925bd1545a39e84f2e269fda8c1b6
 
   # External Csound plugins (https://github.com/csound-plugins/csound-plugins)
   # Built against the csound installed above (headers in /app/include/csound),
@@ -210,11 +217,11 @@ modules:
     sources:
       - type: git
         url: https://github.com/csound-plugins/csound-plugins
-        # commit: 10c2c585fc1eb000c713d31de05ae71c205c314b
-        disable-submodules: true   # <-- add this
+        commit: 10c2c585fc1eb000c713d31de05ae71c205c314b
+        disable-submodules: true
       - type: git
         url: https://github.com/asb2m10/jsusfx
-        # commit: bcc9cd7b910ee7bba5b4cd2649448ade2ec15712
+        commit: bcc9cd7b910ee7bba5b4cd2649448ade2ec15712
         dest: src/jsfx/jsusfx
 
   - name: metainfo
@@ -250,12 +257,17 @@ modules:
     sources:
       - type: dir
         path: .
+      - type: git
+        url: https://github.com/CsoundQt/CsoundQt.git
+        commit: <FULL-COMMIT-SHA>
     build-commands:
       - which qmake
-      - qmake --version  # verify this is 6.8.x before building
-      - git submodule update --init --recursive
+      - qmake --version  
+      # - git submodule update --init --recursive
       - export QMAKEPATH=/app &&
-              /usr/bin/qmake6 CONFIG+=rtmidi CONFIG+=release CONFIG+=build64 qcs.pro                           
+              /usr/bin/qmake6 CONFIG+=rtmidi CONFIG+=release CONFIG+=build64 
+                DEFINES+=FLATPAK_BUILD
+                qcs.pro                           
                 CSOUND_API_INCLUDE_DIR=/app/include/csound
                 CSOUND_LIBRARY_DIR=/app/lib
                 INSTALL_DIR=/app
