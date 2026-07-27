@@ -251,13 +251,14 @@ modules:
     sources:
       - type: file
         path: ../org.csoundqt.CsoundQt.desktop
-
+  
   - name: CsoundQt
     buildsystem: simple
     sources:
       - type: git
         url: https://github.com/CsoundQt/CsoundQt.git
         commit: 810a7c4bf87649e497398fb2de20baa485a0adcd
+        
     build-commands:
       - which qmake
       - qmake --version  
@@ -272,9 +273,28 @@ modules:
                 SHARE_DIR=/app/share
       - make -j$(nproc)
       - make install 
-      #- mkdir -p /app/etc/xdg/
-      #- echo "[Qt]" > /app/etc/xdg/qt6.conf
-      #- echo "Style=Breeze" >> /app/etc/xdg/qt6.conf
-      #- echo "PlatformTheme=gnome" >> /app/etc/xdg/qt6.conf
-        
-      
+
+  # Offline Csound manual, installed to /app/share/manual.
+  - name: csound-manual
+    buildsystem: simple
+    build-commands:
+      - rm -rf extracted
+      - mkdir extracted
+      - unzip -q csound7-manual-offline.zip -d extracted
+      - echo "=== Manual archive contents ==="
+      - find extracted -maxdepth 3 -type f | head -50
+      - echo "=== Installing manual ==="
+      - mkdir -p /app/share/manual
+      - cp -a extracted/csound7-manual-offline/. /app/share/manual/
+      - echo "=== Installed manual ==="
+      - find /app/share/manual -maxdepth 3 -type f | head -50
+
+    sources:
+      - type: file
+        url: https://github.com/csound/manual/releases/download/latest/csound7-manual-offline.zip
+        sha256: 7c43f51f752348017afc8905d0c1c0c34fef606640f5c274bfd2eecf91c83cd0
+        dest-filename: csound7-manual-offline.zip
+        x-checker-data:
+          type: html
+          url: https://github.com/csound/manual/releases/tag/latest
+          pattern: 'csound7-manual-offline\.zip'

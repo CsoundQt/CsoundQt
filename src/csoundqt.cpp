@@ -397,6 +397,9 @@ CsoundQt::CsoundQt(QStringList fileNames)
                             << programFilesPathx86 + "/Csound6/doc/manual"
                             << programFilesPath + "/Csound6_x64/doc/manual"
                             << programFilesPath + "/csound/doc/manual";
+#elif defined(FLATPAK_BUILD)
+        // Csound manual is bundled with the flatpak in /app/share/manual
+        possibleDirectories << "/app/share/manual";
 #elif defined(Q_OS_MACOS)
         possibleDirectories << initialDir + QString("/../Frameworks/CsoundLib64.framework/Resources/Manual")
                             << initialDir + QString("/../Resources/Manual")

@@ -38,8 +38,12 @@ text = text[:start] + replacement + text[commit_end:]
 manifest.write_text(text)
 PY
 
+cat "$MANIFEST"
+
 flatpak-builder \
+    --user \
     --force-clean \
+    --install \
     "$ROOT/build-dir" \
     "$MANIFEST"
     
