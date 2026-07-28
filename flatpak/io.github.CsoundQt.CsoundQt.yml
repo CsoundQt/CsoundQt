@@ -209,6 +209,8 @@ modules:
   # (used by the jsfx plugin) is fetched, as a separate source below.
   # -DPORTABLE=ON avoids the php-cli + nasm generated assembly in jsusfx.
   - name: csound-plugins
+    license-files:
+      - LICENSE
     buildsystem: simple
     build-commands:
       - cmake -B build -S . -G Ninja
