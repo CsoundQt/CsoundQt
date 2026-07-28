@@ -5,9 +5,16 @@
   <summary>A frontend for Csound</summary>
   <metadata_license>MIT</metadata_license>
   <project_license>LGPL-2.1</project_license>
-
+  <developer_name>CsoundQt Developers</developer_name>
   <description>
-    <p>CsoundQt is a powerful, free, cross-platform frontend for Csound.</p>
+    <p>CsoundQt is a feature-rich, cross-platform frontend and IDE for csound. csound itself
+    is a powerful sound synthesis and music programming language.</p>
+    <p>It provides a syntax-highlighting code editor with autocomplete,
+    interactive widget panels for real-time control, an integrated debugger,
+    quick access to help for any opcode, MIDI and OSC support and a variety
+    of tools for composing and performing</p>
+    <p>CsoundQt ships with an extensive collection of examples covering everything
+    from basic synthesis techniques to advanced signal processing</p>
   </description>
 
   <url type="homepage">https://csoundqt.github.io</url>
@@ -23,7 +30,15 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://csoundqt.github.io/images/screenshot.png</image>
+      <image>https://github.com/CsoundQt/CsoundQt/blob/csoundqt7/doc/images/screenshot-linux-spectrumanalyzer.jpg</image>
+      <image>https://github.com/CsoundQt/CsoundQt/blob/csoundqt7/doc/images/screenshot1-linux.jpg</image>
+      <image>https://github.com/CsoundQt/CsoundQt/blob/csoundqt7/doc/images/screenshot3-macos.jpg</image>
     </screenshot>
   </screenshots>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#00d400</color>
+    <color type="primary" scheme_preference="dark">#008080</color>
+  </branding>
+  
 </component>

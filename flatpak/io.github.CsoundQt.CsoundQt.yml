@@ -14,16 +14,15 @@ finish-args:
   - --socket=wayland
   - --device=dri
   - --socket=pulseaudio
-  - --share=network
-  - --device=all
-  - --filesystem=home
+  - --share=network    # OSC networking needed
+  - --device=all       # MIDI/audio devices 
+  - --filesystem=home  # required to access user's audiofiles, samples, projects, etc 
   - --filesystem=xdg-run/pipewire-0
   - --env=QTWEBENGINEPROCESS_PATH=/app/bin/QtWebEngineProcess
-  # - --env=QT_ACCESSIBILITY=0
   - --env=NO_AT_BRIDGE=1
-  - --env=LD_LIBRARY_PATH=/app/lib:/usr/lib/x86_64-linux-gnu
+  - --env=LD_LIBRARY_PATH=/app/lib
   - --env=AT_SPI_BUS_ADDRESS=disabled
-  - --env=QT_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt6/plugins
+  # - --env=QT_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt6/plugins
 
 modules:
   - name: libogg
@@ -258,7 +257,7 @@ modules:
       - install -Dm644 csoundqt.png /app/share/icons/hicolor/256x256/apps/io.github.CsoundQt.CsoundQt.png
     sources:
       - type: file
-        path: ../images/csoundqt.png
+        path: csoundqt.png
         # url: https://raw.githubusercontent.com/CsoundQt/CsoundQt/csoundqt7/src/images/csoundqt.png
         # dest-filename: csoundqt.png
 
@@ -269,7 +268,7 @@ modules:
           /app/share/applications/io.github.CsoundQt.CsoundQt.desktop
     sources:
       - type: file
-        path: ../io.github.CsoundQt.CsoundQt.desktop
+        path: io.github.CsoundQt.CsoundQt.desktop
   
   - name: CsoundQt
     buildsystem: simple
