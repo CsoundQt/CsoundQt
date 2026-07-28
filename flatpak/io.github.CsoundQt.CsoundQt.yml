@@ -227,6 +227,8 @@ modules:
       # are written flat into the build dir, so install them manually next to
       # csound's own plugins.
       - install -Dm755 build/*.so -t /app/lib/csound/plugins64-7.0/
+      - install -Dm644 src/jsfx/jsusfx/LICENSE \
+          /app/share/licenses/$FLATPAK_ID/csound-plugins/jsusfx-LICENSE
     # deferred from the libsndfile module (sndmeta needs sndfile.h/libsndfile.a)
     cleanup:
       - /include
@@ -234,7 +236,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/csound-plugins/csound-plugins
-        commit: 10c2c585fc1eb000c713d31de05ae71c205c314b
+        commit: e4e6145c03380521c9f29634976eac2af20705ed
         disable-submodules: true
       - type: git
         url: https://github.com/asb2m10/jsusfx
@@ -253,7 +255,7 @@ modules:
   - name: icon
     buildsystem: simple
     build-commands:
-      - install -Dm644 csoundqt.png /app/share/icons/hicolor/256x256/apps/org.csoundqt.CsoundQt.png
+      - install -Dm644 csoundqt.png /app/share/icons/hicolor/256x256/apps/io.github.CsoundQt.CsoundQt.png
     sources:
       - type: file
         path: ../images/csoundqt.png
@@ -263,11 +265,11 @@ modules:
   - name: desktop-file
     buildsystem: simple
     build-commands:
-      - install -Dm644 org.csoundqt.CsoundQt.desktop
-          /app/share/applications/org.csoundqt.CsoundQt.desktop
+      - install -Dm644 io.github.CsoundQt.CsoundQt.desktop
+          /app/share/applications/io.github.CsoundQt.CsoundQt.desktop
     sources:
       - type: file
-        path: ../org.csoundqt.CsoundQt.desktop
+        path: ../io.github.CsoundQt.CsoundQt.desktop
   
   - name: CsoundQt
     buildsystem: simple
@@ -307,6 +309,8 @@ modules:
       - cp -a extracted/csound7-manual-offline/. /app/share/manual/
       - echo "=== Installed manual ==="
       - find /app/share/manual -maxdepth 3 -type f | head -50
+      - install -Dm644 COPYING \
+                /app/share/licenses/$FLATPAK_ID/csound-manual/COPYING
 
     sources:
       - type: file
@@ -317,3 +321,10 @@ modules:
           type: html
           url: https://github.com/csound/manual/releases/tag/latest
           pattern: 'csound7-manual-offline\.zip'
+
+      - type: file
+        url: https://github.com/csound/csound/raw/75537cb944a925bd1545a39e84f2e269fda8c1b6/COPYING
+        sha256: 277175daefabde6cff3f6dd8ad7a21a2a346b29d3a7d3762367e4354da2ed77d
+        dest-filename: COPYING
+
+      
