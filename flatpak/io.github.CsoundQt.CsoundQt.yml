@@ -28,6 +28,8 @@ finish-args:
 modules:
   - name: libogg
     buildsystem: cmake-ninja
+    license-files:
+      - COPYING
     config-opts:
       - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
       - -DBUILD_SHARED_LIBS=OFF
@@ -44,6 +46,8 @@ modules:
         
   - name: libvorbis
     buildsystem: cmake-ninja
+    license-files:
+      - COPYING
     config-opts:
       - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
       - -DBUILD_SHARED_LIBS=OFF
@@ -59,6 +63,8 @@ modules:
         
   - name: libopus
     buildsystem: cmake-ninja
+    license-files:
+      - COPYING
     config-opts:
       - -DCMAKE_POLICY_VERSION_MINIMUM=3.5    
       - -DBUILD_SHARED_LIBS=OFF
@@ -76,6 +82,9 @@ modules:
         
   - name: libFLAC
     buildsystem: cmake-ninja
+    license-files:
+      - COPYING.GPL
+      - COPYING.LGPL
     config-opts:
       - -DCMAKE_POLICY_VERSION_MINIMUM=3.5    
       - -DBUILD_SHARED_LIBS=OFF
@@ -96,6 +105,8 @@ modules:
         
   - name: libsndfile
     buildsystem: simple
+    license-files:
+      - COPYING
     build-commands:
       - cmake -B build -S .
           -DCMAKE_POLICY_VERSION_MINIMUM=3.5   
@@ -133,6 +144,8 @@ modules:
         
   - name: liblo
     buildsystem: autotools
+    license-files:
+      - COPYING
     config-opts:
       - --enable-static
       - --disable-shared
@@ -152,6 +165,8 @@ modules:
         
   - name: csound
     buildsystem: cmake-ninja
+    license-files:
+      - COPYING
     config-opts:
       - -DCMAKE_POLICY_VERSION_MINIMUM=3.5    
       - -DCMAKE_BUILD_TYPE=Release
@@ -254,6 +269,8 @@ modules:
   
   - name: CsoundQt
     buildsystem: simple
+    license-files:
+      - COPYING
     sources:
       - type: git
         url: https://github.com/CsoundQt/CsoundQt.git
