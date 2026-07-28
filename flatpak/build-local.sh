@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-MANIFEST="$ROOT/flatpak/org.csoundqt.CsoundQt.yaml"
+MANIFEST="$ROOT/flatpak/io.github.CsoundQt.CsoundQt.yml"
 BACKUP="$MANIFEST.bak"
 
 cp "$MANIFEST" "$BACKUP"
