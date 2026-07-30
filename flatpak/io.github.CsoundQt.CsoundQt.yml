@@ -1,9 +1,9 @@
 app-id: io.github.CsoundQt.CsoundQt
 runtime: org.kde.Platform
-runtime-version: '6.10'
+runtime-version: '6.11'
 sdk: org.kde.Sdk
 base: io.qt.qtwebengine.BaseApp
-base-version: '6.10'
+base-version: '6.11'
 command: CsoundQt-d-cs7
 cleanup-commands:
   - /app/cleanup-BaseApp.sh
@@ -242,33 +242,33 @@ modules:
         commit: bcc9cd7b910ee7bba5b4cd2649448ade2ec15712
         dest: src/jsfx/jsusfx
 
-  - name: metainfo
-    buildsystem: simple
-    build-commands:
-      - install -Dm644 io.github.CsoundQt.CsoundQt.metainfo.xml
-          /app/share/metainfo/io.github.CsoundQt.CsoundQt.metainfo.xml
-    sources:
-      - type: file
-        path: io.github.CsoundQt.CsoundQt.metainfo.xml
+#  - name: metainfo
+#    buildsystem: simple
+#    build-commands:
+#      - install -Dm644 io.github.CsoundQt.CsoundQt.metainfo.xml
+#          /app/share/metainfo/io.github.CsoundQt.CsoundQt.metainfo.xml
+#    sources:
+#      - type: file
+#        path: io.github.CsoundQt.CsoundQt.metainfo.xml
 
-  - name: icon
-    buildsystem: simple
-    build-commands:
-      - install -Dm644 csoundqt.png /app/share/icons/hicolor/256x256/apps/io.github.CsoundQt.CsoundQt.png
-    sources:
-      - type: file
-        path: csoundqt.png
-        # url: https://raw.githubusercontent.com/CsoundQt/CsoundQt/csoundqt7/src/images/csoundqt.png
-        # dest-filename: csoundqt.png
+#   - name: icon
+#     buildsystem: simple
+#     build-commands:
+#       - install -Dm644 csoundqt.png /app/share/icons/hicolor/256x256/apps/io.github.CsoundQt.CsoundQt.png
+#     sources:
+#       - type: file
+#         path: csoundqt.png
+#         # url: https://raw.githubusercontent.com/CsoundQt/CsoundQt/csoundqt7/src/images/csoundqt.png
+#         # dest-filename: csoundqt.png
 
-  - name: desktop-file
-    buildsystem: simple
-    build-commands:
-      - install -Dm644 io.github.CsoundQt.CsoundQt.desktop
-          /app/share/applications/io.github.CsoundQt.CsoundQt.desktop
-    sources:
-      - type: file
-        path: io.github.CsoundQt.CsoundQt.desktop
+#  - name: desktop-file
+#    buildsystem: simple
+#    build-commands:
+#      - install -Dm644 io.github.CsoundQt.CsoundQt.desktop
+#          /app/share/applications/io.github.CsoundQt.CsoundQt.desktop
+#    sources:
+#      - type: file
+#        path: io.github.CsoundQt.CsoundQt.desktop
   
   - name: CsoundQt
     buildsystem: simple
@@ -293,6 +293,10 @@ modules:
                 SHARE_DIR=/app/share
       - make -j$(nproc)
       - make install 
+      - install -Dm644 flatpak/io.github.CsoundQt.CsoundQt.metainfo.xml \
+              /app/share/metainfo/io.github.CsoundQt.CsoundQt.metainfo.xml
+      - install -Dm644 flatpak/csoundqt.png /app/share/icons/hicolor/256x256/apps/io.github.CsoundQt.CsoundQt.png
+      - install io.github.CsoundQt.CsoundQt.desktop /app/share/applications/io.github.CsoundQt.CsoundQt.desktop
 
   # Offline Csound manual, installed to /app/share/manual.
   - name: csound-manual
@@ -314,7 +318,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/csound/manual/releases/download/latest/csound7-manual-offline.zip
-        sha256: 7c43f51f752348017afc8905d0c1c0c34fef606640f5c274bfd2eecf91c83cd0
+        sha256: a1eb732942a651635ae838e142f339cde5c3822e33236ffea7c9afca613e932d
         dest-filename: csound7-manual-offline.zip
         x-checker-data:
           type: html
