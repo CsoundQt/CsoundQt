@@ -3,7 +3,8 @@ on:
   push:
     branches:
       - csoundqt7
-
+      - macos-debug
+      
 env:
   PACKAGENAME: CsoundQt
   APPNAME: CsoundQt-d-cs7
