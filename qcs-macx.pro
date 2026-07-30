@@ -86,11 +86,19 @@ quteapp_d {
 	RESOURCES += "src/quteapp_d_osx.qrc"
 }
 
-#LCSOUND = -F$${HOME_DIRECTORY}/Library/Frameworks -F/Library/Frameworks -F/usr/local/opt/csound/Frameworks -F/opt/homebrew/opt/csound/Frameworks -framework $${MAC_LIB}
-
-exists (/Application/Csound) {
-	LCSOUND = -F /Applications/Csound -framework $${MAC_LIB}
-} 
+# Link against the Csound library detected by config.pri.
+# If CSOUND_LIBRARY_DIR points inside a .framework (e.g.
+# ~/Library/Frameworks/CsoundLib64.framework/Versions/Current), link it as a
+# framework; otherwise link a plain dylib (e.g. /usr/local/lib/libCsoundLib64).
+# (dirname() takes a variable name, so this needs intermediate variables.)
+_dir1 = $$dirname(CSOUND_LIBRARY_DIR)
+_dir2 = $$dirname(_dir1)
+CSOUND_FRAMEWORK_ROOT = $$dirname(_dir2)
+exists($${CSOUND_FRAMEWORK_ROOT}/$${MAC_LIB}.framework) {
+    LCSOUND = -F$${CSOUND_FRAMEWORK_ROOT} -framework $${MAC_LIB}
+} else {
+    LCSOUND = -L$${CSOUND_LIBRARY_DIR} -l$${MAC_LIB}
+}
 
 
 QMAKE_INFO_PLIST = $${PWD}/src/MyInfo.plist
