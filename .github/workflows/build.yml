@@ -8,6 +8,8 @@ on:
       
 env:
   PACKAGENAME: CsoundQt
+  APPNAME: CsoundQt-d-cs7
+  CSOUND_VERSION: 7
 jobs:
   buildjob:
     name: Build CsoundQt on ${{ matrix.os }}
@@ -16,13 +18,6 @@ jobs:
       matrix:
         # os: [windows-latest, ubuntu-latest, macos-latest]
         os: [macos-latest]
-        include:
-          #- os: windows-latest
-          #  triplet: x64-windows
-          #- os: ubuntu-latest
-          #  triplet: x64-linux
-          - os: macos-latest
-            triplet: x64-osx
         # os: [windows-2019]
 
     steps:
@@ -39,6 +34,46 @@ jobs:
 
           echo "Finished submodules"
 
+      - name: Checkout Csound
+        uses: actions/checkout@v4
+        with:
+          repository: csound/csound
+          path: csound
+          ref: develop
+
+      - name: Get Csound commit hash
+        id: csound-hash
+        run: echo "hash=$(git -C csound rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Cache Csound build
+        id: cache-csound
+        uses: actions/cache@v4
+        with:
+          path: csound/build
+          key: csound-${{ runner.os }}-${{ steps.csound-hash.outputs.hash }}
+
+      - name: Cache Homebrew downloads
+        if: runner.os == 'macOS'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/Homebrew
+          key: brew-${{ runner.os }}-${{ hashFiles('.github/workflows/*.yml') }}
+          restore-keys: |
+            brew-${{ runner.os }}-
+
+      - name: macos csound build
+        if: runner.os == 'macOS'
+        run: |
+          cd csound    
+          brew install libogg flac lame libvorbis mpg123 opus libsndfile portaudio libsamplerate liblo portmidi
+          brew install bison flex jack
+          rm -fr build-macos
+          mkdir build-macos && cd build-macos
+          # We need a very minimal build
+          cmake .. -DCMAKE_OSX_ARCHITECTURES=arm64 -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
+          cmake --build . --parallel
+          sudo make install
 
       # - uses: lukka/get-cmake@latest
 
@@ -48,51 +83,43 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           set -o xtrace   # echo each command before it is executed
-          
+
           brew update
-          brew install csound
-          brew install qt5
-          brew link qt5 --force
+          # homebrew defaults to qt6
+          brew list qt || brew install qt
+          brew link qt --force
 
-
-          
           csound_brew_root=$(brew --prefix csound)
           echo "Csound brew root: $csound_brew_root"
-
           # download missing csPerthread.hpp
-          curl -o $csound_brew_root/Frameworks/CsoundLib64.framework/Versions/6.0/Headers/csPerfThread.hpp https://raw.githubusercontent.com/csound/csound/master/interfaces/csPerfThread.hpp 
-          
+          mkdir -p "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers"
+          curl -o "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers/csPerfThread.hpp" https://raw.githubusercontent.com/csound/csound/develop/interfaces/csPerfThread.hpp
+
           ls -R "$csound_brew_root"
-          
+
           # qmake CONFIG+=rtmidi CONFIG+=release CSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
           qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
-          make -j4
-          make install_first 
-          make install_pythonlinks
-          # not sure if cocoa and printsupport are necessary any more...
 
-          # remove Csound from bundle
-          rm -fr bin/CsoundQt-d-cs6.app/Contents/Frameworks/CsoundLib64.framework
+          # --- Portable, safer parallelism for make (macOS-compatible) ---
+          NUM_PROCS=1
+          if command -v nproc >/dev/null 2>&1; then
+            NUM_PROCS=$(nproc)
+          else
+            # macOS: use sysctl to get logical CPU count
+            NUM_PROCS=$(sysctl -n hw.logicalcpu 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+          fi
+          # Use at most half of CPUs (but at least 1), and cap to MAX_JOBS to avoid OOMs
+          NUM_JOBS=$(( NUM_PROCS > 2 ? NUM_PROCS / 2 : NUM_PROCS ))
+          MAX_JOBS=4
+          if [ "$NUM_JOBS" -gt "$MAX_JOBS" ]; then NUM_JOBS=$MAX_JOBS; fi
+          echo "Detected $NUM_PROCS CPUs, using $NUM_JOBS parallel jobs for make"
+          make -j"${NUM_JOBS}"
+          # -------------------------------------------------------------
 
-          install_name_tool -change @executable_path/../Frameworks/libcsnd6.6.0.dylib  libcsnd6.6.0.dylib  bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
-          install_name_tool -change /usr/local/opt/csound/Frameworks/CsoundLib64.framework/Versions/6.0/CsoundLib64  CsoundLib64.framework/Versions/6.0/CsoundLib64  bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
-          
-          otool -L bin/CsoundQt-d-cs6.app/Contents/MacOS/CsoundQt-d-cs6
-
-          hdiutil create -fs HFS+ -srcfolder bin/CsoundQt-d-cs6.app -volname CsoundQt CsoundQt.dmg
-          
-          #macdeployqt bin/CsoundQt-d-cs6.app -qmldir=src/QML -dmg
-          
+          otool -L bin/${{ env.APPNAME }}.app/Contents/MacOS/${{ env.APPNAME }}
+          hdiutil create -fs HFS+ -srcfolder bin/${{ env.APPNAME }}.app -volname CsoundQt CsoundQt.dmg
 
           find .
-
-          #echo "mkdir build-macos"
-          #mkdir build-macos
-          #echo "copying app to build-macos"
-          #cp -r bin/CsoundQt-d-cs6.app build-macos
-          #echo "Creating .dmg file"
-          #hdiutil create -fs HFS+ -srcfolder build-macos -volname CsoundQt "CsoundQt.dmg"
-
           echo "Creating artifacts folder"
           mkdir -p artifacts
           echo "Copying .dmg to artifacts"
