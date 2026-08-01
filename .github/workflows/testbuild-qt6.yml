@@ -163,3 +163,56 @@ jobs:
         with:
           name: CsoundQt-${{ matrix.os }}-${{ strategy.job-index }}
           path: artifacts/*
+
+  buildjob-arm64-linux:
+    name: Test Build CsoundQt on Linux arm64
+    runs-on: ubuntu-24.04-arm
+    continue-on-error: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: update submodules
+        run: |
+          git submodule update --init --recursive
+          git submodule status --recursive
+          echo "Finished submodules"
+
+      - name: Checkout Csound
+        uses: actions/checkout@v4
+        with:
+          repository: csound/csound
+          path: csound
+          ref: develop
+
+      - name: linux arm64 setup csound7
+        run: |
+          cd csound
+          sudo apt-get update && sudo apt-get install cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libportmidi-dev default-jdk libpng-dev libgmm++-dev bison flex libportsmf-dev libeigen3-dev libcunit1-dev
+          rm -fr build-linux
+          mkdir build-linux && cd build-linux
+          cmake .. -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
+          cmake --build . --parallel
+          sudo make install
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+          sudo ldconfig
+          csound --version
+
+      - name: Install Qt 6.10 (linux arm64)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.10.*'
+          host: 'linux_arm64'
+          target: 'desktop'
+          arch: 'linux_gcc_arm64'
+          modules: 'qtwebengine qtwebchannel qtpositioning'
+          cache: true
+
+      - name: linux arm64 csoundqt7 build
+        run: |
+          qmake --version
+          git submodule update --init --recursive
+          qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
+          make -j$(nproc)
