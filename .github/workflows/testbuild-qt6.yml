@@ -203,7 +203,7 @@ jobs:
       - name: Install Qt WebEngine system dependencies (linux arm64)
         run: |
           sudo apt-get update
-          sudo apt-get install -y libminizip1t64 libwebp7 libwebpdemux2 libwebpmux3 libsnappy1v5 libopus0 liblcms2-2 libxkbcommon0 libxcb-dri3-0 libnss3 libnspr4 libxcomposite1 libxdamage1 libxrandr2 libxtst6 libgbm1 libasound2 libgl1
+          sudo apt-get install -y libminizip1t64 libwebp7 libwebpdemux2 libwebpmux3 libsnappy1v5 libopus0 liblcms2-2 libxkbcommon0 libxcb-dri3-0 libnss3 libnspr4 libxcomposite1 libxdamage1 libxrandr2 libxtst6 libgbm1 libasound2t64 libgl1
 
       - name: Install Qt 6.10 (linux arm64)
         uses: jurplel/install-qt-action@v4
