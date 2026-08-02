@@ -36,6 +36,13 @@ jobs:
           manifest.write_text(text[:start] + replacement + "\n" + text[commit_end + 1:])
           PY
 
+      - name: Install flatpak tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flatpak flatpak-builder
+          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
+
       - name: Build Flatpak (aarch64)
         uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
