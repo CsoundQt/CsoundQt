@@ -1,0 +1,54 @@
+name: Flatpak Build
+
+on:
+  push:
+    branches:
+      - csoundqt7
+  workflow_dispatch:
+
+jobs:
+  flatpak-aarch64:
+    name: Build Flatpak for aarch64
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 180
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Use local checkout as CsoundQt source
+        run: |
+          python3 - "$GITHUB_WORKSPACE" <<'PY'
+          import sys
+          from pathlib import Path
+
+          manifest = Path("flatpak/io.github.CsoundQt.CsoundQt.yml")
+          root = Path(sys.argv[1]).resolve()
+          text = manifest.read_text()
+
+          old = """      - type: git
+          url: https://github.com/CsoundQt/CsoundQt.git
+          commit:"""
+          start = text.find(old)
+          if start == -1:
+              raise SystemExit("Could not find CsoundQt Git source")
+          commit_end = text.find("\n", start)
+          replacement = f"""      - type: dir
+          path: {root}"""
+          manifest.write_text(text[:start] + replacement + text[commit_end:])
+          PY
+
+      - name: Build Flatpak (aarch64)
+        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: CsoundQt-aarch64.flatpak
+          manifest-path: flatpak/io.github.CsoundQt.CsoundQt.yml
+          arch: aarch64
+
+      - name: Upload Flatpak bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: CsoundQt-aarch64
+          path: CsoundQt-aarch64.flatpak
+          if-no-files-found: error
