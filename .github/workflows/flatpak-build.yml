@@ -50,7 +50,7 @@ jobs:
               }
           });
           EOF
-          sudo systemctl restart polkitd
+          sudo systemctl restart polkitd 2>/dev/null || sudo pkill polkitd || true
 
       - name: Build Flatpak (aarch64)
         uses: flatpak/flatpak-github-actions/flatpak-builder@v6
