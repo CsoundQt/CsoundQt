@@ -117,7 +117,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/csound-plugins/csound-plugins
-        commit: e4e6145c03380521c9f29634976eac2af20705ed
+        commit: 9d8111954c27aca75dbf9e0245833843d2eb0733
         disable-submodules: true
       - type: git
         url: https://github.com/asb2m10/jsusfx
