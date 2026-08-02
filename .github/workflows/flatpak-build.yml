@@ -27,16 +27,13 @@ jobs:
           root = Path(sys.argv[1]).resolve()
           text = manifest.read_text()
 
-          old = """      - type: git
-          url: https://github.com/CsoundQt/CsoundQt.git
-          commit:"""
+          old = "      - type: git\n        url: https://github.com/CsoundQt/CsoundQt.git\n        commit:"
           start = text.find(old)
           if start == -1:
               raise SystemExit("Could not find CsoundQt Git source")
-          commit_end = text.find("\n", start)
-          replacement = f"""      - type: dir
-          path: {root}"""
-          manifest.write_text(text[:start] + replacement + text[commit_end:])
+          commit_end = text.find("\n", start + len(old))
+          replacement = "      - type: dir\n        path: " + str(root)
+          manifest.write_text(text[:start] + replacement + "\n" + text[commit_end + 1:])
           PY
 
       - name: Build Flatpak (aarch64)
