@@ -117,7 +117,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/csound-plugins/csound-plugins
-        commit: 9d8111954c27aca75dbf9e0245833843d2eb0733
+        commit: 558f35036181ec768490005f632ebdf37c451904
         disable-submodules: true
       - type: git
         url: https://github.com/asb2m10/jsusfx
@@ -132,7 +132,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/CsoundQt/CsoundQt.git
-        commit: 2975b658db940bf1b20207fe206dd014e9332b48
+        commit: 8858456135d4e7babc596a28fe249ae7f63657ea
         
     build-commands:
       - which qmake
