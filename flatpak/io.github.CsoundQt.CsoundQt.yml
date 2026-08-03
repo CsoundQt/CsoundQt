@@ -132,7 +132,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/CsoundQt/CsoundQt.git
-        commit: 8858456135d4e7babc596a28fe249ae7f63657ea
+        commit: 2a2b2354abba514fdd7c22c061448fee9f9f2400
         
     build-commands:
       - which qmake
