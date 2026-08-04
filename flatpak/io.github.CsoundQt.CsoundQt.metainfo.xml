@@ -51,15 +51,16 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/CsoundQt/CsoundQt/blob/csoundqt7/doc/images/screenshot-linux-spectrumanalyzer.jpg</image>
+      <image>https://raw.githubusercontent.com/CsoundQt/CsoundQt/43b5cf57c8379b96c80af62f9686496616196392/doc/images/screenshot-linux-spectrumanalyzer.jpg</image>
       <caption>CsoundQt with the spectrum analyzer being shown</caption>
     </screenshot>
     <screenshot>
-      <image>https://github.com/CsoundQt/CsoundQt/blob/csoundqt7/doc/images/screenshot1-linux.jpg</image>
+      <image>https://raw.githubusercontent.com/CsoundQt/CsoundQt/8b310bedad1c8f8034480e75701abd2ce170fe7a/doc/images/screenshot1-linux.jpg</image>
       <caption>A screenshot of CsoundQt on Linux</caption>
     </screenshot>
 	<screenshot>
-	  <image>https://github.com/CsoundQt/CsoundQt/blob/csoundqt7/doc/images/screenshot3-macos.jpg</image>
+	  <image>https://raw.githubusercontent.com/CsoundQt/CsoundQt/8b310bedad1c8f8034480e75701abd2ce170fe7a/doc/images/screenshot3-macos.jpg</image>
+	  <caption>A screenshot of CsoundQt on MacOS</caption>
 	</screenshot>  
   </screenshots>
 
