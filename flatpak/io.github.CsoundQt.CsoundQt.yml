@@ -133,6 +133,8 @@ modules:
       - type: git
         url: https://codeberg.org/dnkl/tllist.git
         tag: "1.1.0"
+    license-files: 
+      - LICENSE
   
   - name: fcft
     buildsystem: meson
@@ -144,6 +146,8 @@ modules:
       - type: git
         url: https://codeberg.org/dnkl/fcft.git
         tag: "3.3.3"
+    license-files:
+      - LICENSE
   
   - name: foot
     buildsystem: meson
@@ -160,6 +164,8 @@ modules:
     depends:
       - fcft
       - tllist
+    license-files:
+      - LICENSE
         
   - name: CsoundQt
     buildsystem: simple
