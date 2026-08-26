@@ -117,7 +117,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/csound-plugins/csound-plugins
-        commit: 558f35036181ec768490005f632ebdf37c451904
+        commit: 9d8111954c27aca75dbf9e0245833843d2eb0733
         disable-submodules: true
       - type: git
         url: https://github.com/asb2m10/jsusfx
@@ -132,7 +132,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/CsoundQt/CsoundQt.git
-        commit: 2a2b2354abba514fdd7c22c061448fee9f9f2400
+        commit: cdc1271dc2fb0c3012392928e41b910475be07a5
         
     build-commands:
       - which qmake
@@ -148,8 +148,7 @@ modules:
                 SHARE_DIR=/app/share
       - make -j$(nproc)
       - make install 
-      - install -Dm644 flatpak/io.github.CsoundQt.CsoundQt.metainfo.xml \
-              /app/share/metainfo/io.github.CsoundQt.CsoundQt.metainfo.xml
+      - install -Dm644 flatpak/io.github.CsoundQt.CsoundQt.metainfo.xml /app/share/metainfo/io.github.CsoundQt.CsoundQt.metainfo.xml
       - install -Dm644 flatpak/csoundqt.png /app/share/icons/hicolor/256x256/apps/io.github.CsoundQt.CsoundQt.png
       - install io.github.CsoundQt.CsoundQt.desktop /app/share/applications/io.github.CsoundQt.CsoundQt.desktop
 
@@ -164,8 +163,7 @@ modules:
       - mkdir -p /app/share/manual
       - cp -a extracted/csound7-manual-offline/. /app/share/manual/
       - find /app/share/manual -maxdepth 3 -type f | head -50
-      - install -Dm644 COPYING \
-                /app/share/licenses/$FLATPAK_ID/csound-manual/COPYING
+      - install -Dm644 COPYING /app/share/licenses/$FLATPAK_ID/csound-manual/COPYING
 
     sources:
       - type: file

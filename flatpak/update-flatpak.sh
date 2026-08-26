@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 MANIFEST="$SCRIPT_DIR/io.github.CsoundQt.CsoundQt.yml"
-DEST_DIR="${1:-$HOME/dev/forks/csoundqt-flathub}"
+DEST_DIR="${1:-$HOME/dev/forks/io.github.CsoundQt.CsoundQt}"
 
 CSOUNDQT_COMMIT="$(git -C "$REPO_DIR" rev-parse HEAD)"
 CSOUND_COMMIT="$(git -C "$HOME/dev/forks/csound" rev-parse HEAD)"
