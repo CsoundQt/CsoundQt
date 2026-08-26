@@ -2283,6 +2283,11 @@ void CsoundQt::runInTerm(bool realtime)
     QString scriptFileName = scriptFile.fileName();
     QStringList args;
     QString termexe = m_options->terminal;
+#if defined(FLATPAK_BUILD)
+    // Inside a flatpak the terminal set in the preferences is not accessible,
+    // so always use the foot terminal bundled with the flatpak.
+    termexe = QStringLiteral(FLATPAK_TERM_EXECUTABLE);
+#endif
 #if defined(Q_OS_MACOS)
     args << "-a" << termexe << scriptFileName;
     termexe = "open";

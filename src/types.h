@@ -45,6 +45,10 @@
 
 #ifdef Q_OS_LINUX
 #define DEFAULT_TERM_EXECUTABLE "/usr/bin/xterm"
+#ifdef FLATPAK_BUILD
+// Terminal bundled with the flatpak, always used for "Run in Terminal"
+#define FLATPAK_TERM_EXECUTABLE "/app/bin/foot"
+#endif
 #define DEFAULT_BROWSER_EXECUTABLE "/usr/bin/firefox"
 #define DEFAULT_WAVEEDITOR_EXECUTABLE "/usr/bin/audacity"
 #define DEFAULT_WAVEPLAYER_EXECUTABLE "/usr/bin/aplay"

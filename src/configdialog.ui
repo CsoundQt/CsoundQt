@@ -2900,7 +2900,7 @@ Default directory for sound files. Used if no full path is given for sound files
               <item row="0" column="0">
                <layout class="QGridLayout" name="_4">
                 <item row="0" column="0">
-                 <widget class="QLabel" name="label_14">
+                 <widget class="QLabel" name="terminalLabel">
                   <property name="text">
                    <string>Terminal</string>
                   </property>

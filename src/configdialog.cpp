@@ -363,6 +363,15 @@ ConfigDialog::ConfigDialog(CsoundQt *parent, Options *options, ConfigLists *conf
 	templateLineEdit->setText(m_options->templateDir);
 
 	TerminalLineEdit->setText(m_options->terminal);
+#if defined(FLATPAK_BUILD)
+    // Inside a flatpak the terminal set here is not accessible; the bundled
+    // terminal is always used. Disable the widgets to make it obvious
+    // that this setting has no effect within a flatpak.
+    TerminalLineEdit->setText(QStringLiteral(FLATPAK_TERM_EXECUTABLE));
+    TerminalLineEdit->setEnabled(false);
+    terminalToolButton->setEnabled(false);
+    terminalLabel->setEnabled(false);
+#endif
 	browserLineEdit->setText(m_options->browser);
 	dotLineEdit->setText(m_options->dot);
 	WaveEditorLineEdit->setText(m_options->waveeditor);
