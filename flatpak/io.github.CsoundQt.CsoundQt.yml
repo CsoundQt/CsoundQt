@@ -124,7 +124,43 @@ modules:
         commit: bcc9cd7b910ee7bba5b4cd2649448ade2ec15712
         dest: src/jsfx/jsusfx
 
+  # dependencies of foot terminal
+  - name: tllist
+    buildsystem: meson
+    config-opts:
+      - --prefix=/app
+    sources:
+      - type: git
+        url: https://codeberg.org/dnkl/tllist.git
+        tag: "1.1.0"
   
+  - name: fcft
+    buildsystem: meson
+    config-opts:
+      - --prefix=/app
+      - -Ddocs=disabled
+      - -Dsystem-nanosvg=disabled  
+    sources:
+      - type: git
+        url: https://codeberg.org/dnkl/fcft.git
+        tag: "3.3.3"
+  
+  - name: foot
+    buildsystem: meson
+    config-opts:
+      - --prefix=/app
+      - -Ddocs=disabled
+      - -Dthemes=false  # was true
+      - -Dterminfo=disabled  # Disable terminfo generation
+      - -Dwerror=false
+    sources:
+      - type: git
+        url: https://codeberg.org/dnkl/foot.git
+        tag: "1.27.0"
+    depends:
+      - fcft
+      - tllist
+        
   - name: CsoundQt
     buildsystem: simple
     license-files:
