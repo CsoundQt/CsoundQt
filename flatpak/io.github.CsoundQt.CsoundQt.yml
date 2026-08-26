@@ -133,6 +133,7 @@ modules:
       - type: git
         url: https://codeberg.org/dnkl/tllist.git
         tag: "1.1.0"
+        commit: 03c24967045431c7441cb3ddad517737e4a3b05f
     license-files: 
       - LICENSE
   
@@ -146,6 +147,7 @@ modules:
       - type: git
         url: https://codeberg.org/dnkl/fcft.git
         tag: "3.3.3"
+        commit: 24591f1bd1c1b3ce670e1fd1ad8ca2392672b687
     license-files:
       - LICENSE
   
@@ -161,9 +163,7 @@ modules:
       - type: git
         url: https://codeberg.org/dnkl/foot.git
         tag: "1.27.0"
-    depends:
-      - fcft
-      - tllist
+        commit: bde83b85825176639c7b53d37aaea49c25273627
     license-files:
       - LICENSE
         
