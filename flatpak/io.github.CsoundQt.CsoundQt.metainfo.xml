@@ -21,6 +21,11 @@
   <url type="bugtracker">https://github.com/CsoundQt/CsoundQt/issues</url>
 
   <releases>
+    <release version="7.0.1" date="2026-08-27">
+      <description>
+        <p>Flatpak version includes a terminal app for "Run in Terminal"</p>
+      </description>
+    </release>
     <release version="7.0.0" date="2026-07-28">
       <description>
         <p>CsoundQt 7 is a major new version with a complete port to Qt 6 and Csound 7, along with many improvements and optimizations:</p>
