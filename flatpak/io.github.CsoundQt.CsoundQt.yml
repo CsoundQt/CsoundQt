@@ -210,7 +210,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/csound/manual/releases/download/latest/csound7-manual-offline.zip
-        sha256: a1eb732942a651635ae838e142f339cde5c3822e33236ffea7c9afca613e932d
+        sha256: 3fee11006de175984b7a67707542cb9b13ced280a366c8d027e53e61bd9a178d
         dest-filename: csound7-manual-offline.zip
         x-checker-data:
           type: html
