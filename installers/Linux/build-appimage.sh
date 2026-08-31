@@ -118,6 +118,7 @@ install_deps() {
         desktop-file-utils flex bison
         libasound2-dev libjack-jackd2-dev libportmidi-dev libsndfile1-dev
         libsamplerate0-dev libcurl4-openssl-dev
+        libgl1-mesa-dev libglu1-mesa-dev libegl1-mesa-dev
         python3 python3-pip
         libnss3
     )
