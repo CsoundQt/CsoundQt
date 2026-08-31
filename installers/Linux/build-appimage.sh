@@ -369,6 +369,13 @@ EOF
         rm -f "$QT_INSTALL_PREFIX/plugins/sqldrivers/libqsqlmimer.so"
     fi
 
+    # The QtPositioning NMEA plugin links libQt6SerialPort.so.6 (GPS over
+    # serial), a module we do not install; drop it so packaging does not fail.
+    if [ -f "$QT_INSTALL_PREFIX/plugins/position/libqtposition_nmea.so" ]; then
+        log "Removing Qt Positioning NMEA plugin (unresolvable dependency libQt6SerialPort.so.6)"
+        rm -f "$QT_INSTALL_PREFIX/plugins/position/libqtposition_nmea.so"
+    fi
+
     export VERSION="$VERSION"
     export QML_SOURCES_PATHS="$ROOT/src/QML"
     export QMAKE="$QMAKE"
