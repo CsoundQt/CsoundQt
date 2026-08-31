@@ -120,7 +120,7 @@ install_deps() {
         libsamplerate0-dev libcurl4-openssl-dev
         libgl1-mesa-dev libglu1-mesa-dev libegl1-mesa-dev
         # Needed by libqxcb.so, which linuxdeploy-plugin-qt always bundles.
-        libxkbcommon-x11-0
+        libxkbcommon-x11-0 libxcb-cursor0
         python3 python3-pip
         libnss3
     )
