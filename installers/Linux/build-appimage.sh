@@ -119,8 +119,14 @@ install_deps() {
         libasound2-dev libjack-jackd2-dev libportmidi-dev libsndfile1-dev
         libsamplerate0-dev libcurl4-openssl-dev
         libgl1-mesa-dev libglu1-mesa-dev libegl1-mesa-dev
-        # Needed by libqxcb.so, which linuxdeploy-plugin-qt always bundles.
-        libxkbcommon-x11-0 libxcb-cursor0
+        # xcb/X11 runtime libs needed by libqxcb.so, which linuxdeploy-plugin-qt
+        # always bundles. GitHub Actions images ship few of these, so list the
+        # whole set to avoid one error per run.
+        libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-image0
+        libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-shape0
+        libxcb-shm0 libxcb-sync1 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1
+        libxcb1 libx11-xcb1 libx11-6 libxau6 libxdmcp6 libxext6 libxfixes3
+        libxi6 libxrender1 libxtst6 libsm6 libice6
         python3 python3-pip
         libnss3
     )
