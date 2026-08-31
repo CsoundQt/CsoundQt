@@ -115,10 +115,12 @@ install_deps() {
     log "Installing system build dependencies (may require sudo)"
     local pkgs=(
         build-essential cmake ninja-build pkg-config git curl wget unzip file
-        desktop-file-utils flex bison
+        ccache desktop-file-utils flex bison
         libasound2-dev libjack-jackd2-dev libportmidi-dev libsndfile1-dev
         libsamplerate0-dev libcurl4-openssl-dev
         libgl1-mesa-dev libglu1-mesa-dev libegl1-mesa-dev
+        # Needed by libqxcb.so, which linuxdeploy-plugin-qt always bundles.
+        libxkbcommon-x11-0
         python3 python3-pip
         libnss3
     )
@@ -186,6 +188,8 @@ build_csound() {
             -DCMAKE_INSTALL_PREFIX="$APPDIR/usr" \
             -DCMAKE_PREFIX_PATH="$APPDIR/usr" \
             -DCMAKE_INSTALL_LIBDIR=lib \
+            -DCMAKE_C_COMPILER_LAUNCHER="$CCACHE_LAUNCHER" \
+            -DCMAKE_CXX_COMPILER_LAUNCHER="$CCACHE_LAUNCHER" \
             -DBUILD_PLUGINS=ON \
             -DUSE_LIBLO=ON \
             -DUSE_ALSA=ON \
@@ -228,7 +232,9 @@ build_csound_plugins() {
             -DPORTABLE=ON \
             -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
             -DCMAKE_C_FLAGS="-I$APPDIR/usr/include/csound" \
-            -DCMAKE_CXX_FLAGS="-I$APPDIR/usr/include/csound"
+            -DCMAKE_CXX_FLAGS="-I$APPDIR/usr/include/csound" \
+            -DCMAKE_C_COMPILER_LAUNCHER="$CCACHE_LAUNCHER" \
+            -DCMAKE_CXX_COMPILER_LAUNCHER="$CCACHE_LAUNCHER"
         cmake --build build-appimage --parallel "$JOBS"
         # Plugin libs are written flat into the build dir; install them next
         # to csound's own plugins (mirrors the Flatpak manifest).
@@ -255,10 +261,15 @@ build_csoundqt() {
         --exclude=build --exclude=build-dir --exclude='build-*' \
         --exclude=bin --exclude=aqtinstall.log \
         -cf - . | tar -C "$src" -xf -
+    local ccache_args=()
+    if [ -n "$CCACHE_LAUNCHER" ]; then
+        ccache_args=(QMAKE_CC="$CCACHE_LAUNCHER gcc" QMAKE_CXX="$CCACHE_LAUNCHER g++")
+    fi
     (
         cd "$src"
         "$QMAKE" qcs.pro \
             CONFIG+=rtmidi CONFIG+=release CONFIG+=build64 \
+            "${ccache_args[@]}" \
             CSOUND_API_INCLUDE_DIR="$APPDIR/usr/include/csound" \
             CSOUND_LIBRARY_DIR="$APPDIR/usr/lib" \
             INSTALL_DIR="$APPDIR/usr" \
@@ -456,6 +467,18 @@ main() {
 
     command -v cmake >/dev/null || die "cmake not found (run with --install-deps)"
     command -v ninja  >/dev/null || die "ninja not found (run with --install-deps)"
+
+    # ccache speeds up rebuilds; used by all three compilers below. Disabled
+    # gracefully when ccache is not installed.
+    if command -v ccache >/dev/null 2>&1; then
+        CCACHE_LAUNCHER="$(command -v ccache)"
+        export CCACHE_DIR="$WORK_DIR/.ccache"
+        export CCACHE_MAXSIZE="${CCACHE_MAXSIZE:-4G}"
+        log "ccache enabled ($CCACHE_DIR)"
+    else
+        CCACHE_LAUNCHER=""
+        log "ccache not found; skipping compiler cache"
+    fi
 
     mkdir -p "$DOWNLOADS_DIR" "$SRC_DIR" "$APPDIR/usr"
 
