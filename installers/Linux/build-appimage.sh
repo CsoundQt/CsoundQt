@@ -352,6 +352,11 @@ export NO_AT_BRIDGE=1
 export AT_SPI_BUS_ADDRESS=disabled
 # Prefer the Wayland platform plugin, fall back to xcb for X11-only sessions.
 export QT_QPA_PLATFORM="${QT_QPA_PLATFORM:-wayland;xcb}"
+# QtWebEngine (Chromium) often cannot initialize GPU/EGL in an AppImage (VM,
+# headless, Wayland without DRM, or a bundled Mesa that clashes with the host
+# driver). Force software rendering; the manual needs no GPU anyway.
+export QTWEBENGINE_CHROMIUM_FLAGS="${QTWEBENGINE_CHROMIUM_FLAGS:---disable-gpu --use-angle=swiftshader}"
+export QTWEBENGINE_DISABLE_SANDBOX=1
 EOF
 
     # Chromium/QtWebEngine runtime bits
