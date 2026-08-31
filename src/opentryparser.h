@@ -65,6 +65,7 @@ private:
 
 	void addOpcode(Opcode opcode);
     void addFlag(QString flag, QString description);
+    QString repairOpcodesXml(const QString &xml);
 
     QHash<QString, Opcode>*m_udosMap;
 

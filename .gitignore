@@ -47,3 +47,5 @@ qcs.pro.user*
 .cache
 .clangd
 perf.data*
+build-appimage
+*.log

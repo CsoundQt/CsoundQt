@@ -489,7 +489,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
     showInspectorAct->setChecked(!m_inspector->isHidden());
     showScratchPadAct->setChecked(!m_scratchPad->isHidden());
 
-    //qDebug()<<"Max thread count: "<< QThreadPool::globalInstance()->maxThreadCount();
     QThreadPool::globalInstance()->setMaxThreadCount(MAX_THREAD_COUNT);
 
     // Open files saved from last session
