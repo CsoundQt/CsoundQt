@@ -28,6 +28,9 @@ HEADERS = "src/about.h" \
     "src/csoundoptions.h" \
     "src/curve.h" \
     "src/dockhelp.h" \
+    "src/litehtmlview.h" \
+    "src/litehtmlcontainer.h" \
+    "src/searchindex.h" \
     "src/documentpage.h" \
     "src/documentview.h" \
     "src/dotgenerator.h" \
@@ -88,6 +91,9 @@ SOURCES = "src/about.cpp" \
     "src/csoundoptions.cpp" \
     "src/curve.cpp" \
     "src/dockhelp.cpp" \
+    "src/litehtmlview.cpp" \
+    "src/litehtmlcontainer.cpp" \
+    "src/searchindex.cpp" \
     "src/documentpage.cpp" \
     "src/documentview.cpp" \
     "src/dotgenerator.cpp" \
@@ -176,6 +182,10 @@ OTHER_FILES += \
     src/QML/Key.qml \
     src/QML/VirtualKeyboard.qml \
     src/QML/Controls.qml
+
+# Bundled litehtml (HTML/CSS renderer) for the documentation viewer.
+# Included last so its SOURCES += appends after the SOURCES = assignments above.
+include($$PWD/../third_party/litehtml.pri)
 
 # Needed for correct deployment on OS X
 QML_IMPORT_PATH =src/QML

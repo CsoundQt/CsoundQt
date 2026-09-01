@@ -40,11 +40,11 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Concurrent Network PrintSupport QuickWidgets WebEngineWidgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Concurrent Network Xml PrintSupport QuickWidgets WebEngineWidgets LinguistTools)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Concurrent Network PrintSupport QuickWidgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Concurrent Network Xml PrintSupport QuickWidgets LinguistTools)
 
 # Validate Qt version
 if(QT_VERSION_MAJOR EQUAL 5)
@@ -89,8 +89,12 @@ target_link_libraries(CsoundQt PRIVATE
   Qt${QT_VERSION_MAJOR}::Xml
   Qt${QT_VERSION_MAJOR}::PrintSupport
   Qt${QT_VERSION_MAJOR}::QuickWidgets
-  Qt${QT_VERSION_MAJOR}::WebEngineWidgets
 )
+
+# Bundled litehtml (HTML/CSS renderer) for the documentation viewer
+add_subdirectory(third_party/litehtml)
+target_link_libraries(CsoundQt PRIVATE litehtml gumbo)
+target_include_directories(CsoundQt PRIVATE third_party/litehtml/include)
 
 if(CSQT_BUILD_DEBUGGER_SUPPORT)
   target_compile_definitions(CsoundQt PRIVATE QCS_DEBUGGER)
