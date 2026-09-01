@@ -168,6 +168,16 @@ LiteHtmlView::LiteHtmlView(QWidget *parent)
     m_flingTimer->setInterval(16);
     connect(m_flingTimer, &QTimer::timeout, this, &LiteHtmlView::onFlingTick);
 
+    // In-panel find box (shown on Ctrl+F / the DockHelp find toggle).
+    m_findEdit = new QLineEdit(this);
+    m_findEdit->setPlaceholderText(tr("Find (Enter next, Shift+Enter previous, Esc close)"));
+    m_findEdit->setVisible(false);
+    connect(m_findEdit, &QLineEdit::textChanged, this, [this](const QString &) {
+        setFindQuery(m_findEdit->text());
+    });
+    connect(m_findEdit, &QLineEdit::returnPressed, this, &LiteHtmlView::findNext);
+    m_findEdit->installEventFilter(this);
+
     m_searchPanel = new QWidget(this);
     m_searchPanel->setObjectName("manualSearchPanel");
     m_searchPanel->setVisible(false);
@@ -330,11 +340,36 @@ void LiteHtmlView::findPrevious()
 
 void LiteHtmlView::clearFind()
 {
+    m_findEdit->blockSignals(true);
+    m_findEdit->clear();
+    m_findEdit->blockSignals(false);
     m_findQuery.clear();
     m_matches.clear();
     m_currentMatch = -1;
     m_searchDirty = false;
+    m_findEdit->setVisible(false);
     update();
+}
+
+void LiteHtmlView::showFindBar()
+{
+    m_findEdit->setVisible(true);
+    m_findEdit->raise();
+    m_findEdit->setFocus();
+    m_findEdit->selectAll();
+}
+
+void LiteHtmlView::hideFindBar()
+{
+    m_findEdit->setVisible(false);
+}
+
+void LiteHtmlView::toggleFindBar(bool show)
+{
+    if (show)
+        showFindBar();
+    else
+        clearFind();
 }
 
 void LiteHtmlView::addSearchRoot(const QString &rootPath, const QString &label)
@@ -530,7 +565,7 @@ void LiteHtmlView::keyPressEvent(QKeyEvent *e)
     }
     if (e->key() == Qt::Key_F && (e->modifiers() & Qt::ControlModifier) && !(e->modifiers() & Qt::ShiftModifier))
     {
-        emit findBarRequested();
+        showFindBar();
         return;
     }
     if (e->key() == Qt::Key_F && (e->modifiers() & Qt::ControlModifier) && (e->modifiers() & Qt::ShiftModifier))
@@ -593,12 +628,39 @@ void LiteHtmlView::onFlingTick()
     m_scrollVelocity *= 0.85;
 }
 
+bool LiteHtmlView::eventFilter(QObject *o, QEvent *ev)
+{
+    if (o == m_findEdit)
+    {
+        if (ev->type() == QEvent::KeyPress)
+        {
+            auto *ke = static_cast<QKeyEvent *>(ev);
+            if (ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter)
+            {
+                if (ke->modifiers() & Qt::ShiftModifier)
+                    findPrevious();
+                else
+                    findNext();
+                return true;
+            }
+            if (ke->key() == Qt::Key_Escape)
+            {
+                clearFind();
+                return true;
+            }
+        }
+    }
+    return QWidget::eventFilter(o, ev);
+}
+
 void LiteHtmlView::resizeEvent(QResizeEvent *)
 {
     relayout();
     m_hbar->resize(qMax(0, width() - m_vbar->width()), m_hbar->height());
     m_hbar->move(0, height() - m_hbar->height());
     m_vbar->move(width() - m_vbar->width(), 0);
+    m_findEdit->resize(300, m_findEdit->height());
+    m_findEdit->move(width() - 300 - 20, 10);
     m_searchPanel->setGeometry(width() - 440 - 20, 40, 440, 360);
     m_searchPanel->raise();
 }

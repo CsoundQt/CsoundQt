@@ -159,84 +159,9 @@
        </item>
       </layout>
      </item>
-    <item>
-     <layout class="QGridLayout" name="findBarGrid">
-      <property name="leftMargin">
-       <number>8</number>
-      </property>
-      <property name="rightMargin">
-       <number>8</number>
-      </property>
-      <property name="verticalSpacing">
-       <number>0</number>
-      </property>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="previousFindButton">
-        <property name="icon">
-         <iconset resource="application.qrc">
-          <normaloff>:/images/br_prev.png</normaloff>:/images/br_prev.png</iconset>
-        </property>
-        <property name="autoRaise">
-         <bool>true</bool>
-        </property>
-        <property name="arrowType">
-         <enum>Qt::NoArrow</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="findLine">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">padding-left: 8px; padding-right: 40px</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="5">
-       <widget class="QCheckBox" name="wholeWordBox">
-        <property name="text">
-         <string>Whole words</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Find:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QToolButton" name="nextFindButton">
-        <property name="icon">
-         <iconset resource="application.qrc">
-          <normaloff>:/images/br_next.png</normaloff>:/images/br_next.png</iconset>
-        </property>
-        <property name="autoRaise">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QCheckBox" name="caseBox">
-        <property name="styleSheet">
-         <string notr="true">padding-right: 8; padding-left: 8;</string>
-        </property>
-        <property name="text">
-         <string>Match Case </string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
-  <action name="nextFindAct">
+    </layout>
+   </widget>
+   <action name="nextFindAct">
    <property name="icon">
     <iconset resource="application.qrc">
      <normaloff>:/images/br_next.png</normaloff>:/images/br_next.png</iconset>

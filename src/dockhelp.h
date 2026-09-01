@@ -51,7 +51,6 @@ private:
 	LiteHtmlView *m_view;
 	virtual void closeEvent(QCloseEvent * event);
     virtual void keyPressEvent(QKeyEvent *event);
-	void findText(QString expr, bool backward = false);
 
 protected:
 	void resizeEvent(QResizeEvent *);
@@ -65,12 +64,6 @@ public slots:
 	void browseForward();
 	void followLink(QUrl url);
 	void copy();
-	void onTextChanged();
-	void onReturnPressed();
-	void onNextButtonPressed();
-	void onPreviousButtonPressed();
-	void onWholeWordBoxChanged(int value);
-	void onCaseBoxChanged(int value);
     void focusText();
     void setVisibleAndRaise(bool show) {
         setVisible(show);
@@ -82,10 +75,6 @@ public slots:
 
 private:
 	Ui::DockHelp *ui;
-
-	bool findCaseSensitive;
-	bool findWholeWords;
-	QString lastFindText;
 
 signals:
 	void Close(bool visible);

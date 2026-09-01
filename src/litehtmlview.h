@@ -16,6 +16,7 @@
 
 #include <QWidget>
 #include <QUrl>
+#include <QLineEdit>
 #include <QStringList>
 #include <QList>
 #include <QVector>
@@ -30,7 +31,6 @@
 class QScrollBar;
 class QTimer;
 class QWidget;
-class QLineEdit;
 class QListWidget;
 class QListWidgetItem;
 class QKeyEvent;
@@ -81,13 +81,17 @@ public:
     qreal zoomFactor() const { return m_zoomFactor; }
     void setZoomFactor(qreal factor);
 
-    // In-page find (the host provides the find-bar UI).
+    // In-page find (hosted as an in-panel box inside the viewer).
     void setFindQuery(const QString &query);
     void findNext();
     void findPrevious();
     void clearFind();
     void setCaseSensitive(bool on);
     void setWholeWords(bool on);
+    void showFindBar();
+    void hideFindBar();
+    void toggleFindBar(bool show);
+    bool isFindBarVisible() const { return m_findEdit && m_findEdit->isVisible(); }
 
     // Whole-manual search (roots are populated lazily on first search).
     void addSearchRoot(const QString &rootPath, const QString &label);
@@ -102,9 +106,7 @@ signals:
     void exampleFileRequested(const QString &filePath);
     // Status messages the host may show (e.g. in the main status bar).
     void statusMessage(const QString &message);
-    // Ctrl+F pressed: the host should show its find bar.
-    void findBarRequested();
-    // Esc pressed in the viewer: the host may hide its find bar.
+    // Esc pressed in the viewer: the host may hide its own overlays.
     void escapePressed();
     void historyChanged();
 
@@ -116,6 +118,7 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
+    bool eventFilter(QObject *o, QEvent *event) override;
 
 private slots:
     void onLink(const QUrl &url);
@@ -146,6 +149,7 @@ private:
     QScrollBar               *m_vbar = nullptr;
     QScrollBar               *m_hbar = nullptr;
     QTimer                   *m_flingTimer = nullptr;
+    QLineEdit                *m_findEdit = nullptr;
     QWidget                  *m_searchPanel = nullptr;
     QLineEdit                *m_searchEdit = nullptr;
     QListWidget              *m_searchList = nullptr;

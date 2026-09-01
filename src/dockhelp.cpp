@@ -33,9 +33,6 @@ DockHelp::DockHelp(QWidget *parent)
 	: QDockWidget(parent), ui(new Ui::DockHelp)
 {
 	ui->setupUi(this);
-    findCaseSensitive = false;
-    findWholeWords = false;
-    lastFindText = "";
     setWindowTitle("Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
 
@@ -49,31 +46,15 @@ DockHelp::DockHelp(QWidget *parent)
     connect(ui->toggleFindButton, SIGNAL(toggled(bool)), this, SLOT(toggleFindBarVisible(bool)));
     connect(ui->backButton, SIGNAL(released()), this, SLOT(browseBack()));
 	connect(ui->forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
-    connect(ui->homeToolButton, SIGNAL(released()), this, SLOT(showManual()));
+	connect(ui->homeToolButton, SIGNAL(released()), this, SLOT(showManual()));
 	connect(ui->searchToolButton, &QToolButton::clicked, m_view, &LiteHtmlView::showSearchPanel);
-	connect(ui->findLine,SIGNAL(returnPressed()),this,SLOT(onReturnPressed()));
-	connect(ui->findLine,SIGNAL(textEdited(QString)),this,SLOT(onTextChanged()));
+
 	ui->findPreviousAct->setShortcut(QKeySequence::FindPrevious);
 	ui->nextFindAct->setShortcut(QKeySequence::FindNext);
-	connect(ui->findPreviousAct,SIGNAL(triggered()),this,SLOT(onPreviousButtonPressed()));
-	connect(ui->nextFindAct,SIGNAL(triggered()),this,SLOT(onNextButtonPressed()));
-	ui->previousFindButton->setDefaultAction(ui->findPreviousAct);
-	ui->nextFindButton->setDefaultAction(ui->nextFindAct);
-
-	connect(ui->caseBox,SIGNAL(stateChanged(int)),this,SLOT(onCaseBoxChanged(int)));
-	connect(ui->wholeWordBox,SIGNAL(stateChanged(int)),this,SLOT(onWholeWordBoxChanged(int)));
-
-	// Whole word search is supported by the LiteHtml finder.
-	ui->wholeWordBox->setEnabled(true);
-	ui->wholeWordBox->setToolTip(tr("Whole word search"));
+	connect(ui->findPreviousAct, &QAction::triggered, m_view, &LiteHtmlView::findPrevious);
+	connect(ui->nextFindAct, &QAction::triggered, m_view, &LiteHtmlView::findNext);
 
     ui->toggleFindButton->setChecked(false);
-    ui->findLine->setVisible(false);
-    ui->caseBox->setVisible(false);
-    ui->wholeWordBox->setVisible(false);
-    ui->label->setVisible(false);
-    ui->nextFindButton->setVisible(false);
-    ui->previousFindButton->setVisible(false);
 
 	// Forward viewer signals to the host app.
 	connect(m_view, &LiteHtmlView::externalLinkRequested, this, &DockHelp::requestExternalBrowser);
@@ -82,7 +63,6 @@ DockHelp::DockHelp(QWidget *parent)
 		if (auto *mw = qobject_cast<QMainWindow *>(window()))
 			mw->statusBar()->showMessage(msg, 5000);
 	});
-	connect(m_view, &LiteHtmlView::findBarRequested, this, [this] { toggleFindBarVisible(true); });
 	connect(m_view, &LiteHtmlView::escapePressed, this, [this] { toggleFindBarVisible(false); });
 }
 
@@ -94,8 +74,7 @@ DockHelp::~DockHelp()
 bool DockHelp::hasFocus()
 {
     return QDockWidget::hasFocus()
-           || m_view->hasFocus()
-           || ui->findLine->hasFocus();
+           || m_view->hasFocus();
 }
 
 void DockHelp::loadFile(QString fileName, QString anchor) {
@@ -108,8 +87,6 @@ void DockHelp::setIconTheme(QString theme)
     ui->forwardButton->setIcon(QIcon(QString(":/themes/%1/browse-next.png").arg(theme)));
     ui->homeToolButton->setIcon(QIcon(QString(":/themes/%1/home.png").arg(theme)));
     ui->toggleFindButton->setIcon(QIcon(QString(":/themes/%1/edit-find.png").arg(theme)));
-    ui->previousFindButton->setIcon(QIcon(QString(":/themes/%1/browse-prev.png").arg(theme)));
-    ui->nextFindButton->setIcon(QIcon(QString(":/themes/%1/browse-next.png").arg(theme)));
 }
 
 void DockHelp::changeFontSize(int change)
@@ -172,62 +149,6 @@ void DockHelp::copy()
 	m_view->copySelection();
 }
 
-void DockHelp::onTextChanged()
-{
-	lastFindText = ui->findLine->text();
-	findText(lastFindText, false);
-}
-
-void DockHelp::onReturnPressed()
-{
-	lastFindText = ui->findLine->text();
-	findText(lastFindText, false);
-}
-
-void DockHelp::onNextButtonPressed()
-{
-	findText(lastFindText, false);
-}
-
-void DockHelp::onPreviousButtonPressed()
-{
-	findText(lastFindText, true);
-}
-
-
-void DockHelp::onCaseBoxChanged(int value)
-{
-	findCaseSensitive = (value != 0);
-	// Re-execute search with new flags if there's a search term
-	if (!lastFindText.isEmpty()) {
-		findText(lastFindText, false);
-	}
-}
-
-void DockHelp::onWholeWordBoxChanged(int value)
-{
-	findWholeWords = (value != 0);
-	// Re-execute search with new flags if there's a search term
-	if (!lastFindText.isEmpty()) {
-		findText(lastFindText, false);
-	}
-}
-
-void DockHelp::findText(QString expr, bool backward)
-{
-	if (expr.isEmpty()) {
-		return;
-	}
-	m_view->setFindQuery(expr);
-	m_view->setCaseSensitive(findCaseSensitive);
-	m_view->setWholeWords(findWholeWords);
-	if (backward) {
-		m_view->findPrevious();
-	} else {
-		m_view->findNext();
-	}
-}
-
 void DockHelp::resizeEvent(QResizeEvent *e)
 {
 	QDockWidget::resizeEvent(e);
@@ -245,14 +166,11 @@ void DockHelp::keyPressEvent(QKeyEvent *event) {
 }
 
 void DockHelp::toggleFindBarVisible(bool show) {
-    ui->findLine->setVisible(show);
-    ui->label->setVisible(show);
-    ui->caseBox->setVisible(show);
-    ui->wholeWordBox->setVisible(show);
-    ui->nextFindButton->setVisible(show);
-    ui->previousFindButton->setVisible(show);
+    ui->toggleFindButton->blockSignals(true);
+    ui->toggleFindButton->setChecked(show);
+    ui->toggleFindButton->blockSignals(false);
     if(show) {
-        ui->findLine->setFocus();
+        m_view->showFindBar();
     } else {
         m_view->clearFind();
     }
