@@ -25,28 +25,12 @@
 
 #include <QDockWidget>
 #include <QUrl>
-#include <QWebEngineView>
-#include <QWebEnginePage>
-#include <QWebEngineSettings>
-#include <QDesktopServices>
+
+#include "litehtmlview.h"
 
 namespace Ui {
 class DockHelp;
 }
-
-class DockHelp;
-
-class HelpPage : public QWebEnginePage {
-    Q_OBJECT
-public:
-    HelpPage(DockHelp* parent);
-
-protected:
-    bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame) override;
-
-private:
-    DockHelp* dock;
-};
 
 class DockHelp : public QDockWidget
 {
@@ -61,10 +45,10 @@ public:
 	QString docDir;
     void setIconTheme(QString theme);
     void changeFontSize(int change);
+    void addSearchRoot(const QString &rootPath, const QString &label);
 
 private:
-	QWebEngineView *webView;
-	HelpPage *helpPage;
+	LiteHtmlView *m_view;
 	virtual void closeEvent(QCloseEvent * event);
     virtual void keyPressEvent(QKeyEvent *event);
 	void findText(QString expr, bool backward = false);

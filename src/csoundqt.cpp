@@ -425,6 +425,15 @@ CsoundQt::CsoundQt(QStringList fileNames)
     helpPanel->docDir = docDir;
     helpPanel->loadFile(docDir + "/index.html");
 
+    // Whole-manual search roots. Registered lazily; parsed on first search.
+    if (QFile::exists(docDir + "/search/search_index.json"))
+        helpPanel->addSearchRoot(docDir, tr("Csound Manual"));
+    if (risset->isInstalled) {
+        QString rissetSite = risset->rissetHtmlDocs.path();
+        if (QFile::exists(rissetSite + "/search/search_index.json"))
+            helpPanel->addSearchRoot(rissetSite, tr("Risset"));
+    }
+
     applySettings();
     // createQuickRefPdf();
 
@@ -3187,9 +3196,10 @@ void CsoundQt::about()
         text += tr("Risset package manager not found. See <center><a href=\"https://github.com/csound-plugins/risset\">github.com/csound-plugins/risset</a></center>");
     }
     text += "<hr>";
+    text += tr("Documentation viewer based on litehtml")+"<br />";
 
-#ifdef CSQT_QHTML
-    text += tr("Html support based on QtWebEngine")+"<br />";
+#ifdef CSQT_QTHTML
+    text += tr("HTML5 GUI support based on QtWebEngine")+"<br />";
 #endif
 
     text += "<br />";

@@ -24,30 +24,9 @@
 #include "ui_dockhelp.h"
 
 #include <QtWidgets>
-
-
-HelpPage::HelpPage(DockHelp* parent) : QWebEnginePage(parent), dock(parent) {}
-
-bool HelpPage::acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame) {
-    if (type == NavigationTypeLinkClicked) {
-        // Check for .csd files (examples)
-        if (url.path().endsWith(".csd", Qt::CaseInsensitive)) {
-            // Only handle local .csd files
-            if (url.isLocalFile()) {
-                QString path = url.toLocalFile();
-                emit dock->openManualExample(path);
-                return false; // Don't navigate in the help panel
-            }
-        }
-        
-        // Handle external links
-        if (url.scheme() == "http" || url.scheme() == "https") {
-            QDesktopServices::openUrl(url);
-            return false; 
-        }
-    }
-    return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
-}
+#include <QMainWindow>
+#include <QStatusBar>
+#include <QFile>
 
 
 DockHelp::DockHelp(QWidget *parent)
@@ -60,17 +39,9 @@ DockHelp::DockHelp(QWidget *parent)
     setWindowTitle("Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
 
-	// Create web engine view and custom page
-	webView = new QWebEngineView(this);
-	helpPage = new HelpPage(this);
-	webView->setPage(helpPage);
-	
-	// Enable cross-origin loading
-	webView->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
-	webView->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls, true);
-
-	// Replace the text widget with webView in the UI
-	ui->verticalLayout->addWidget(webView);
+	// LiteHtml viewer replaces the previous QtWebEngine view.
+	m_view = new LiteHtmlView(this);
+	ui->verticalLayout->addWidget(m_view);
 
     ui->backButton->setIcon(QIcon(":/themes/breeze/br_prev.png"));
     ui->forwardButton->setIcon(QIcon(":/themes/breeze/br_next.png"));
@@ -78,7 +49,8 @@ DockHelp::DockHelp(QWidget *parent)
     connect(ui->toggleFindButton, SIGNAL(toggled(bool)), this, SLOT(toggleFindBarVisible(bool)));
     connect(ui->backButton, SIGNAL(released()), this, SLOT(browseBack()));
 	connect(ui->forwardButton, SIGNAL(released()), this, SLOT(browseForward()));
-	connect(ui->homeToolButton, SIGNAL(released()), this, SLOT(showManual()));
+    connect(ui->homeToolButton, SIGNAL(released()), this, SLOT(showManual()));
+	connect(ui->searchToolButton, &QToolButton::clicked, m_view, &LiteHtmlView::showSearchPanel);
 	connect(ui->findLine,SIGNAL(returnPressed()),this,SLOT(onReturnPressed()));
 	connect(ui->findLine,SIGNAL(textEdited(QString)),this,SLOT(onTextChanged()));
 	ui->findPreviousAct->setShortcut(QKeySequence::FindPrevious);
@@ -91,9 +63,9 @@ DockHelp::DockHelp(QWidget *parent)
 	connect(ui->caseBox,SIGNAL(stateChanged(int)),this,SLOT(onCaseBoxChanged(int)));
 	connect(ui->wholeWordBox,SIGNAL(stateChanged(int)),this,SLOT(onWholeWordBoxChanged(int)));
 
-	// Disable whole word search as it's not supported by QWebEnginePage
-	ui->wholeWordBox->setEnabled(false);
-	ui->wholeWordBox->setToolTip(tr("Whole word search is not available with the web-based help viewer"));
+	// Whole word search is supported by the LiteHtml finder.
+	ui->wholeWordBox->setEnabled(true);
+	ui->wholeWordBox->setToolTip(tr("Whole word search"));
 
     ui->toggleFindButton->setChecked(false);
     ui->findLine->setVisible(false);
@@ -102,30 +74,32 @@ DockHelp::DockHelp(QWidget *parent)
     ui->label->setVisible(false);
     ui->nextFindButton->setVisible(false);
     ui->previousFindButton->setVisible(false);
+
+	// Forward viewer signals to the host app.
+	connect(m_view, &LiteHtmlView::externalLinkRequested, this, &DockHelp::requestExternalBrowser);
+	connect(m_view, &LiteHtmlView::exampleFileRequested, this, &DockHelp::openManualExample);
+	connect(m_view, &LiteHtmlView::statusMessage, this, [this](const QString &msg) {
+		if (auto *mw = qobject_cast<QMainWindow *>(window()))
+			mw->statusBar()->showMessage(msg, 5000);
+	});
+	connect(m_view, &LiteHtmlView::findBarRequested, this, [this] { toggleFindBarVisible(true); });
+	connect(m_view, &LiteHtmlView::escapePressed, this, [this] { toggleFindBarVisible(false); });
 }
 
 DockHelp::~DockHelp()
 {
+	delete ui;
 }
 
 bool DockHelp::hasFocus()
 {
     return QDockWidget::hasFocus()
-           || webView->hasFocus()
+           || m_view->hasFocus()
            || ui->findLine->hasFocus();
 }
 
 void DockHelp::loadFile(QString fileName, QString anchor) {
-    if(!QFile::exists(fileName)) {
-        webView->setHtml(tr("Not Found! Make sure the documentation path is set in the Configuration Dialog."));
-		return;
-	}
-
-    QUrl url = QUrl::fromLocalFile(fileName);
-    if(!anchor.isEmpty()) {
-        url.setFragment(anchor);
-    }
-    webView->setUrl(url);
+    m_view->loadFile(fileName, anchor);
 }
 
 void DockHelp::setIconTheme(QString theme)
@@ -140,10 +114,12 @@ void DockHelp::setIconTheme(QString theme)
 
 void DockHelp::changeFontSize(int change)
 {
-    // Use zoom factor for web engine view
-    qreal currentZoom = webView->zoomFactor();
-    qreal zoomChange = change * 0.1; // 0.1 zoom per point size change
-    webView->setZoomFactor(currentZoom + zoomChange);
+    m_view->setZoomFactor(m_view->zoomFactor() + change * 0.1);
+}
+
+void DockHelp::addSearchRoot(const QString &rootPath, const QString &label)
+{
+    m_view->addSearchRoot(rootPath, label);
 }
 
 void DockHelp::closeEvent(QCloseEvent * /*event*/)
@@ -178,24 +154,22 @@ void DockHelp::showOpcodeQuickRef()
 
 void DockHelp::browseBack()
 {
-	webView->back();
+	m_view->back();
 }
 
 void DockHelp::browseForward()
 {
-	webView->forward();
+	m_view->forward();
 }
 
 void DockHelp::followLink(QUrl url)
 {
-	// This method is deprecated with QWebEngineView
-	// Navigation is now handled by HelpPage::acceptNavigationRequest
-	webView->setUrl(url);
+	m_view->loadFile(url.toLocalFile());
 }
 
 void DockHelp::copy()
 {
-	webView->page()->triggerAction(QWebEnginePage::Copy);
+	m_view->copySelection();
 }
 
 void DockHelp::onTextChanged()
@@ -233,7 +207,6 @@ void DockHelp::onCaseBoxChanged(int value)
 void DockHelp::onWholeWordBoxChanged(int value)
 {
 	findWholeWords = (value != 0);
-	// Note: QWebEnginePage doesn't support FindWholeWords flag
 	// Re-execute search with new flags if there's a search term
 	if (!lastFindText.isEmpty()) {
 		findText(lastFindText, false);
@@ -245,28 +218,24 @@ void DockHelp::findText(QString expr, bool backward)
 	if (expr.isEmpty()) {
 		return;
 	}
-	
-	QWebEnginePage::FindFlags flags = QWebEnginePage::FindFlags();
+	m_view->setFindQuery(expr);
+	m_view->setCaseSensitive(findCaseSensitive);
+	m_view->setWholeWords(findWholeWords);
 	if (backward) {
-		flags |= QWebEnginePage::FindBackward;
+		m_view->findPrevious();
+	} else {
+		m_view->findNext();
 	}
-	if (findCaseSensitive) {
-		flags |= QWebEnginePage::FindCaseSensitively;
-	}
-	
-	webView->findText(expr, flags);
 }
 
 void DockHelp::resizeEvent(QResizeEvent *e)
 {
 	QDockWidget::resizeEvent(e);
-    // ui->backButton->move(frameGeometry().width()/2-25, 0);
-    // ui->forwardButton->move(frameGeometry().width()/2, 0);
 }
 
 
 void DockHelp::focusText() {
-    webView->setFocus();
+    m_view->setFocus();
 }
 
 void DockHelp::keyPressEvent(QKeyEvent *event) {
@@ -284,5 +253,7 @@ void DockHelp::toggleFindBarVisible(bool show) {
     ui->previousFindButton->setVisible(show);
     if(show) {
         ui->findLine->setFocus();
+    } else {
+        m_view->clearFind();
     }
 }
