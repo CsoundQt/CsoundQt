@@ -444,26 +444,30 @@ EOF
         ln -sf libQt6WaylandClient.so.6.11.2 \
             "$APPDIR/usr/lib/libQt6WaylandClient.so.6"
 
-        # Host runtime deps of the Wayland stack. GPU driver libs (libEGL,
-        # libGL, libgbm, libwayland-egl) are intentionally NOT bundled here:
-        # they are removed again below so the host's GPU stack is used.
-        bundle_host_lib "libwayland-client.so.0"
-        bundle_host_lib "libwayland-cursor.so.0"
+        # Host runtime deps of the Wayland stack. The libwayland-* and GL/EGL/
+        # GBM libs are intentionally NOT bundled: they are version-coupled to
+        # the host compositor and GPU stack, so the target system's copies must
+        # be used (see the strip step below).
         bundle_host_lib "libxkbcommon.so.0"
         bundle_host_lib "libffi.so.8"
     fi
 
-    # GL/EGL/GBM driver libraries are tightly coupled to the host GPU stack
-    # (Mesa version, GPU vendor, DRM) and must come from the system the AppImage
-    # runs on. Bundling the build host's copies makes EGL/OpenGL unavailable on
-    # machines with a different driver or Mesa version, which on Wayland stops
-    # any window from being mapped ("no window, not even the splash"). Remove
-    # them so the loader picks up the host's versions.
+    # GL/EGL/GBM driver and libwayland-* libraries are tightly coupled to the
+    # host GPU stack and compositor (Mesa version, GPU vendor, Wayland version)
+    # and must come from the system the AppImage runs on, not from the build
+    # host. Bundling the build host's copies breaks rendering on machines with a
+    # different driver/Mesa/Wayland version (e.g. libEGL_mesa failing to load
+    # with "undefined symbol: wl_fixes_interface" on newer hosts, which on
+    # Wayland stops any window from being mapped). Remove them so the loader
+    # picks up the host's versions.
     rm -f "$APPDIR/usr/lib/libEGL.so.1" \
         "$APPDIR/usr/lib/libGL.so.1" \
         "$APPDIR/usr/lib/libGLX.so.0" \
         "$APPDIR/usr/lib/libGLdispatch.so.0" \
         "$APPDIR/usr/lib/libgbm.so.1" \
+        "$APPDIR/usr/lib/libwayland-client.so.0" \
+        "$APPDIR/usr/lib/libwayland-cursor.so.0" \
+        "$APPDIR/usr/lib/libwayland-server.so.0" \
         "$APPDIR/usr/lib/libwayland-egl.so.1" \
         "$APPDIR"/usr/lib/libdrm*.so*
 
