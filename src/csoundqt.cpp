@@ -423,7 +423,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
         docDir = m_options->csdocdir;
     }
     helpPanel->docDir = docDir;
-    helpPanel->loadFile(docDir + "/index.html");
+    helpPanel->loadFile(docDir + "/reference/opcodesReference.html");
 
     // Whole-manual search roots. Registered lazily; parsed on first search.
     if (QFile::exists(docDir + "/search/search_index.json"))
@@ -3099,7 +3099,7 @@ void CsoundQt::openPdfFile(QString name)
 
 void CsoundQt::openFLOSSManual()
 {
-    openExternalBrowser(QUrl("https://flossmanual.csound.com/"));
+    openExternalBrowser(QUrl("https://flossmanual.csound.com/introduction/preface"));
 }
 
 void CsoundQt::openQuickRef()
@@ -3115,7 +3115,18 @@ void CsoundQt::openOnlineDocumentation()
 
 void CsoundQt::showManualOnline()
 {
-    openExternalBrowser(QUrl("http://csound.com/manual/index.html"));
+    openExternalBrowser(QUrl("https://csound.com/manual"));
+}
+
+void CsoundQt::openLocalManualInBrowser()
+{
+    QString path = helpPanel->docDir + "/index.html";
+    if (QFile::exists(path))
+        openExternalBrowser(QUrl::fromLocalFile(path));
+    else
+        QMessageBox::information(this, tr("Csound Manual"),
+                                 tr("The offline Csound manual was not found.\n"
+                                    "Set the documentation path in Edit → Options → Environment."));
 }
 
 void CsoundQt::resetPreferences()
@@ -4440,14 +4451,19 @@ void CsoundQt::createActions()
     this->addAction(raiseScratchPadAct);
 
     showManualAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("Csound Manual"), this);
-    showManualAct->setStatusTip(tr("Show the Csound manual in the help panel"));
+    showManualAct->setStatusTip(tr("Open the Csound manual (offline index.html) in an external browser"));
     showManualAct->setShortcutContext(Qt::ApplicationShortcut);
-    connect(showManualAct, SIGNAL(triggered()), helpPanel, SLOT(showManual()));
+    connect(showManualAct, SIGNAL(triggered()), this, SLOT(openLocalManualInBrowser()));
 
     showManualOnlineAct = new QAction(tr("Csound Manual Online"), this);
     showManualOnlineAct->setStatusTip(tr("Show the Csound manual online"));
     showManualOnlineAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(showManualOnlineAct, SIGNAL(triggered()), this, SLOT(showManualOnline()));
+
+    showFlossManualAct = new QAction(tr("Csound Floss Manual"), this);
+    showFlossManualAct->setStatusTip(tr("Open the Csound FLOSS manual online"));
+    showFlossManualAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(showFlossManualAct, SIGNAL(triggered()), this, SLOT(openFLOSSManual()));
 
     downloadManualAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */tr("Download Csound Manual"), this);
     downloadManualAct->setStatusTip(tr("Download latest Csound manual"));
@@ -5147,6 +5163,7 @@ void CsoundQt::createMenus()
     helpMenu->addSeparator();
     helpMenu->addAction(showManualAct);
     helpMenu->addAction(showManualOnlineAct);
+    helpMenu->addAction(showFlossManualAct);
     helpMenu->addAction(downloadManualAct);
     helpMenu->addAction(showOverviewAct);
     // helpMenu->addAction(showOpcodeQuickRefAct);

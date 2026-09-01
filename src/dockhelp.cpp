@@ -114,19 +114,19 @@ void DockHelp::showManual()
 void DockHelp::showGen()
 {
 	this->setVisible(true);
-	this->loadFile(docDir + "/ScoreGenRef.html");
+	this->loadFile(docDir + "/reference/genRoutinesRef.html");
 }
 
 void DockHelp::showOverview()
 {
 	this->setVisible(true);
-	this->loadFile(docDir + "/PartOpcodesOverview.html");
+	this->loadFile(docDir + "/opcodesQuickRef.html");
 }
 
 void DockHelp::showOpcodeQuickRef()
 {
 	this->setVisible(true);
-	this->loadFile(docDir + "/MiscQuickref.html");
+	this->loadFile(docDir + "/opcodesQuickRef.html");
 }
 
 void DockHelp::browseBack()

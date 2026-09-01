@@ -261,6 +261,7 @@ private slots:
 	void openQuickRef();
 	void openOnlineDocumentation();
 	void showManualOnline();
+	void openLocalManualInBrowser();
 	void resetPreferences();
 	void reportBug();
     void reportCsoundBug();
@@ -453,6 +454,7 @@ private:
     QAction *raiseHelpAct;
 	QAction *showManualAct;
 	QAction *showManualOnlineAct;
+	QAction *showFlossManualAct;
 	QAction *downloadManualAct;
 	QAction *showGenAct;
 	QAction *showOverviewAct;
