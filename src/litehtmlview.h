@@ -143,6 +143,8 @@ private:
     bool   isFragmentSelected(const TextFragment &f) const;
     QString selectedText() const;
     QRectF rectForMatch(const Match &m) const;
+    int    keyboardLineStep() const;
+    void   moveSearchSelection(int delta);
 
     LiteHtmlContainer         m_container;
     std::shared_ptr<litehtml::document> m_doc;

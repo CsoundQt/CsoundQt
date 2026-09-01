@@ -224,6 +224,7 @@ LiteHtmlView::LiteHtmlView(QWidget *parent)
         runManualSearch();
     });
     connect(m_searchList, &QListWidget::itemActivated, this, &LiteHtmlView::openSearchResult);
+    m_searchEdit->installEventFilter(this);
 
     m_container.setViewport(width(), height());
     m_container.linkClicked = [this](const QUrl &url) { onLink(url); };
@@ -611,6 +612,37 @@ void LiteHtmlView::keyPressEvent(QKeyEvent *e)
         emit escapePressed();
         return;
     }
+    // Keyboard scrolling.
+    if (e->key() == Qt::Key_PageDown)
+    {
+        m_vbar->setValue(m_vbar->value() + m_vbar->pageStep());
+        return;
+    }
+    if (e->key() == Qt::Key_PageUp)
+    {
+        m_vbar->setValue(m_vbar->value() - m_vbar->pageStep());
+        return;
+    }
+    if (e->key() == Qt::Key_Down)
+    {
+        m_vbar->setValue(m_vbar->value() + keyboardLineStep());
+        return;
+    }
+    if (e->key() == Qt::Key_Up)
+    {
+        m_vbar->setValue(m_vbar->value() - keyboardLineStep());
+        return;
+    }
+    if (e->key() == Qt::Key_Home)
+    {
+        m_vbar->setValue(0);
+        return;
+    }
+    if (e->key() == Qt::Key_End)
+    {
+        m_vbar->setValue(m_vbar->maximum());
+        return;
+    }
     QWidget::keyPressEvent(e);
 }
 
@@ -666,6 +698,16 @@ bool LiteHtmlView::eventFilter(QObject *o, QEvent *ev)
                     findNext();
                 return true;
             }
+            if (ke->key() == Qt::Key_Up)
+            {
+                findPrevious();
+                return true;
+            }
+            if (ke->key() == Qt::Key_Down)
+            {
+                findNext();
+                return true;
+            }
             if (ke->key() == Qt::Key_Escape)
             {
                 clearFind();
@@ -673,7 +715,33 @@ bool LiteHtmlView::eventFilter(QObject *o, QEvent *ev)
             }
         }
     }
+    if (o == m_searchEdit)
+    {
+        if (ev->type() == QEvent::KeyPress)
+        {
+            auto *ke = static_cast<QKeyEvent *>(ev);
+            if (ke->key() == Qt::Key_Up)
+            {
+                moveSearchSelection(-1);
+                return true;
+            }
+            if (ke->key() == Qt::Key_Down)
+            {
+                moveSearchSelection(1);
+                return true;
+            }
+        }
+    }
     return QWidget::eventFilter(o, ev);
+}
+
+void LiteHtmlView::moveSearchSelection(int delta)
+{
+    if (m_searchList->count() == 0)
+        return;
+    int row = m_searchList->currentRow();
+    int next = qBound(0, row + delta, m_searchList->count() - 1);
+    m_searchList->setCurrentRow(next);
 }
 
 void LiteHtmlView::resizeEvent(QResizeEvent *)
@@ -871,6 +939,12 @@ void LiteHtmlView::clearSelection()
     m_selAnchor = QPointF();
     m_selCurrent = QPointF();
     update();
+}
+
+int LiteHtmlView::keyboardLineStep() const
+{
+    // A line roughly matches the current default font size (scaled by zoom).
+    return qMax(16, int(m_container.get_default_font_size()) * 15 / 10);
 }
 
 QRectF LiteHtmlView::selectionRect() const
