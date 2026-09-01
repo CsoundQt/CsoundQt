@@ -2,11 +2,7 @@ app-id: io.github.CsoundQt.CsoundQt
 runtime: org.kde.Platform
 runtime-version: '6.11'
 sdk: org.kde.Sdk
-base: io.qt.qtwebengine.BaseApp
-base-version: '6.11'
 command: CsoundQt-d-cs7
-cleanup-commands:
-  - /app/cleanup-BaseApp.sh
 
 finish-args:
   - --share=ipc
@@ -17,7 +13,6 @@ finish-args:
   - --share=network    # OSC networking needed
   - --device=all       # MIDI/audio devices 
   - --filesystem=xdg-run/pipewire-0
-  - --env=QTWEBENGINEPROCESS_PATH=/app/bin/QtWebEngineProcess
   - --env=NO_AT_BRIDGE=1
   - --env=LD_LIBRARY_PATH=/app/lib
   - --env=AT_SPI_BUS_ADDRESS=disabled
