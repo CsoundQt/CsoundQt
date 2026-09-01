@@ -161,6 +161,7 @@ private:
 
     QString                   m_currentPath;
     QString                   m_currentHtml;      // processed article, cached for zoom re-load
+    int                       m_scrollbarWidth = 14;
     QStringList               m_history;
     int                       m_historyPos = -1;
     qreal                     m_zoomFactor = 1.0;

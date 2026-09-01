@@ -15,6 +15,7 @@
 
 #include <QApplication>
 #include <QScrollBar>
+#include <QStyle>
 #include <QPainter>
 #include <QMouseEvent>
 #include <QWheelEvent>
@@ -158,6 +159,10 @@ LiteHtmlView::LiteHtmlView(QWidget *parent)
     setMouseTracking(true);
     setFocusPolicy(Qt::StrongFocus);
 
+    m_scrollbarWidth = style()->pixelMetric(QStyle::PM_ScrollBarExtent, nullptr, this);
+    if (m_scrollbarWidth <= 0)
+        m_scrollbarWidth = 14;
+
     m_hbar = new QScrollBar(Qt::Horizontal, this);
     m_vbar = new QScrollBar(Qt::Vertical, this);
     m_vbar->setRange(0, 0);
@@ -171,6 +176,12 @@ LiteHtmlView::LiteHtmlView(QWidget *parent)
     // In-panel find box (shown on Ctrl+F / the DockHelp find toggle).
     m_findEdit = new QLineEdit(this);
     m_findEdit->setPlaceholderText(tr("Find (Enter next, Shift+Enter previous, Esc close)"));
+    // Keep the box readable regardless of the app's light/dark palette: the
+    // rendered document is always light, so the overlay is too.
+    m_findEdit->setStyleSheet(
+        "QLineEdit { background-color: #ffffff; color: #000000;"
+        "  border: 1px solid #888888; border-radius: 3px; padding: 2px 6px;"
+        "  selection-background-color: #3399ff; selection-color: #ffffff; }");
     m_findEdit->setVisible(false);
     connect(m_findEdit, &QLineEdit::textChanged, this, [this](const QString &) {
         setFindQuery(m_findEdit->text());
@@ -186,7 +197,15 @@ LiteHtmlView::LiteHtmlView(QWidget *parent)
     sl->setSpacing(2);
     m_searchEdit = new QLineEdit(m_searchPanel);
     m_searchEdit->setPlaceholderText(tr("Search manual — Enter to include partial matches"));
+    m_searchEdit->setStyleSheet(
+        "QLineEdit { background-color: #ffffff; color: #000000;"
+        "  border: 1px solid #888888; border-radius: 3px; padding: 2px 6px;"
+        "  selection-background-color: #3399ff; selection-color: #ffffff; }");
     m_searchList = new QListWidget(m_searchPanel);
+    m_searchList->setStyleSheet(
+        "QListWidget { background-color: #ffffff; color: #000000;"
+        "  border: 1px solid #888888; }"
+        "QListWidget::item:selected { background-color: #3399ff; color: #ffffff; }");
     sl->addWidget(m_searchEdit);
     sl->addWidget(m_searchList);
     connect(m_searchEdit, &QLineEdit::textChanged, this, [this](const QString &) {
@@ -348,6 +367,8 @@ void LiteHtmlView::clearFind()
     m_currentMatch = -1;
     m_searchDirty = false;
     m_findEdit->setVisible(false);
+    // Keep the help panel focused when the find box is dismissed.
+    setFocus(Qt::OtherFocusReason);
     update();
 }
 
@@ -362,6 +383,7 @@ void LiteHtmlView::showFindBar()
 void LiteHtmlView::hideFindBar()
 {
     m_findEdit->setVisible(false);
+    setFocus(Qt::OtherFocusReason);
 }
 
 void LiteHtmlView::toggleFindBar(bool show)
@@ -442,9 +464,10 @@ void LiteHtmlView::relayout()
     m_hbar->setValue(oldH);
     m_vbar->setPageStep(height());
     m_hbar->setPageStep(width());
-    m_vbar->resize(m_vbar->width(), height());
-    m_hbar->move(0, height() - m_hbar->height());
-    m_vbar->move(width() - m_vbar->width(), 0);
+    m_vbar->resize(m_scrollbarWidth, height());
+    m_hbar->resize(qMax(0, width() - m_scrollbarWidth), m_scrollbarWidth);
+    m_hbar->move(0, height() - m_scrollbarWidth);
+    m_vbar->move(width() - m_scrollbarWidth, 0);
     m_vbar->setVisible(m_vbar->maximum() > 0);
     m_hbar->setVisible(m_hbar->maximum() > 0);
     update();
@@ -656,9 +679,9 @@ bool LiteHtmlView::eventFilter(QObject *o, QEvent *ev)
 void LiteHtmlView::resizeEvent(QResizeEvent *)
 {
     relayout();
-    m_hbar->resize(qMax(0, width() - m_vbar->width()), m_hbar->height());
-    m_hbar->move(0, height() - m_hbar->height());
-    m_vbar->move(width() - m_vbar->width(), 0);
+    m_hbar->resize(qMax(0, width() - m_scrollbarWidth), m_scrollbarWidth);
+    m_hbar->move(0, height() - m_scrollbarWidth);
+    m_vbar->move(width() - m_scrollbarWidth, 0);
     m_findEdit->resize(300, m_findEdit->height());
     m_findEdit->move(width() - 300 - 20, 10);
     m_searchPanel->setGeometry(width() - 440 - 20, 40, 440, 360);
