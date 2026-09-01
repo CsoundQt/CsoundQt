@@ -444,16 +444,28 @@ EOF
         ln -sf libQt6WaylandClient.so.6.11.2 \
             "$APPDIR/usr/lib/libQt6WaylandClient.so.6"
 
-        # Host runtime deps of the Wayland stack.
+        # Host runtime deps of the Wayland stack. GPU driver libs (libEGL,
+        # libGL, libgbm, libwayland-egl) are intentionally NOT bundled here:
+        # they are removed again below so the host's GPU stack is used.
         bundle_host_lib "libwayland-client.so.0"
         bundle_host_lib "libwayland-cursor.so.0"
-        bundle_host_lib "libwayland-egl.so.1"
         bundle_host_lib "libxkbcommon.so.0"
         bundle_host_lib "libffi.so.8"
-        bundle_host_lib "libEGL.so.1"
-        bundle_host_lib "libGL.so.1"
-        bundle_host_lib "libgbm.so.1"
     fi
+
+    # GL/EGL/GBM driver libraries are tightly coupled to the host GPU stack
+    # (Mesa version, GPU vendor, DRM) and must come from the system the AppImage
+    # runs on. Bundling the build host's copies makes EGL/OpenGL unavailable on
+    # machines with a different driver or Mesa version, which on Wayland stops
+    # any window from being mapped ("no window, not even the splash"). Remove
+    # them so the loader picks up the host's versions.
+    rm -f "$APPDIR/usr/lib/libEGL.so.1" \
+        "$APPDIR/usr/lib/libGL.so.1" \
+        "$APPDIR/usr/lib/libGLX.so.0" \
+        "$APPDIR/usr/lib/libGLdispatch.so.0" \
+        "$APPDIR/usr/lib/libgbm.so.1" \
+        "$APPDIR/usr/lib/libwayland-egl.so.1" \
+        "$APPDIR"/usr/lib/libdrm*.so*
 
     log "Creating final AppImage"
     export ARCH="x86_64"
