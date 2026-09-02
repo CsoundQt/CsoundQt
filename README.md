@@ -18,7 +18,7 @@ For more information visit the [CsoundQt Website](http://csoundqt.github.io).
 Download the latest binary for your platform from the [Releases page](https://github.com/CsoundQt/CsoundQt/releases).
 
 **CsoundQt** requires [Csound](https://github.com/csound/csound/releases) to be installed.
-The current version is compatible with Csound `6.18` and later.
+The current version is compatible with csound `7.0` and later.
 
 ---
 
