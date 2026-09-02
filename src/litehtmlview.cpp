@@ -879,7 +879,7 @@ void LiteHtmlView::rebuildSearch()
                     continue;
                 }
             }
-            m_matches.append({li, from, from + m_findQuery.size()});
+            m_matches.append({li, from, from + static_cast<int>(m_findQuery.size())});
             from += qMax(1, m_findQuery.size());
         }
     }
