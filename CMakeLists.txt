@@ -92,9 +92,9 @@ target_link_libraries(CsoundQt PRIVATE
 )
 
 # Bundled litehtml (HTML/CSS renderer) for the documentation viewer
-add_subdirectory(third_party/litehtml)
+add_subdirectory(litehtml)
 target_link_libraries(CsoundQt PRIVATE litehtml gumbo)
-target_include_directories(CsoundQt PRIVATE third_party/litehtml/include)
+target_include_directories(CsoundQt PRIVATE litehtml/include)
 
 if(CSQT_BUILD_DEBUGGER_SUPPORT)
   target_compile_definitions(CsoundQt PRIVATE QCS_DEBUGGER)

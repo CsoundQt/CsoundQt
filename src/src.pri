@@ -185,7 +185,7 @@ OTHER_FILES += \
 
 # Bundled litehtml (HTML/CSS renderer) for the documentation viewer.
 # Included last so its SOURCES += appends after the SOURCES = assignments above.
-include($$PWD/../third_party/litehtml.pri)
+include($$PWD/../litehtml.pri)
 
 # Needed for correct deployment on OS X
 QML_IMPORT_PATH =src/QML

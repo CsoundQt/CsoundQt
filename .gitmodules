@@ -2,5 +2,5 @@
 	path = rtmidi
 	url = https://github.com/thestk/rtmidi
 [submodule "third_party/litehtml"]
-	path = third_party/litehtml
+	path = litehtml
 	url = https://github.com/litehtml/litehtml.git

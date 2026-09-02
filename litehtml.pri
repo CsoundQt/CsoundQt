@@ -1,5 +1,5 @@
 # qmake integration for the bundled litehtml submodule (and its bundled gumbo parser).
-# Included from CsoundQt's src/src.pri. $$PWD here is third_party/.
+# Included from CsoundQt's src/src.pri. $$PWD here is the project root.
 
 # litehtml compiles against its src/, include/ and include/litehtml/ dirs
 # (mirrors the include dirs in litehtml's own CMakeLists.txt).

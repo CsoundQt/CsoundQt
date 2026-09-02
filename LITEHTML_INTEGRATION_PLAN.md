@@ -5,7 +5,7 @@ Last updated: 2026-09-01
 
 ## Progress log
 
-- **Phase 0 done**: litehtml submodule added at `third_party/litehtml`, pinned to
+- **Phase 0 done**: litehtml submodule added at `litehtml`, pinned to
   `c287df65` (v0.10). Committed (`ddf8fc0f`).
 - **Phase 1 done**: `src/litehtmlcontainer.{h,cpp}`, `src/litehtmlview.{h,cpp}`,
   `src/searchindex.{h,cpp}` ported from the spike, with history/zoom/status-signal
@@ -104,7 +104,7 @@ A working prototype (`liteviewer` + `qt_container` + `search_index`) proved:
 
 ### Vendored dependency
 
-Add **litehtml as a git submodule** at `third_party/litehtml` (matches the existing
+Add **litehtml as a git submodule** at `litehtml` (matches the existing
 `rtmidi` submodule pattern), pinned to the version the spike was built against.
 Bundled `gumbo` is compiled as part of litehtml's build.
 
@@ -112,7 +112,7 @@ Bundled `gumbo` is compiled as part of litehtml's build.
 
 ### Phase 0 — Vendor litehtml
 
-1. `git submodule add https://github.com/litehtml/litehtml.git third_party/litehtml`.
+1. `git submodule add https://github.com/litehtml/litehtml.git litehtml`.
 2. Verify the pinned revision builds the same as the spike (`/tmp/opencode/litehtml`).
 3. Commit the submodule pointer + `.gitmodules` entry.
 
@@ -183,7 +183,7 @@ Keep the public API used by `csoundqt.cpp` (verified callers: lines 123, 201, 42
 
 ### Phase 4 — Build system
 
-**qmake (`qcs.pro`, `src/src.pri`, new `third_party/litehtml/litehtml.pri`):**
+**qmake (`qcs.pro`, `src/src.pri`, new `litehtml.pri`):**
 - New `litehtml.pri` lists all litehtml + gumbo sources, includes, and `-fPIC`
   as needed; include it from `src/src.pri` (like the `rtmidi` block).
 - `qcs.pro`: remove `webenginewidgets` from the unconditional `QT +=` (line 61).
@@ -197,7 +197,7 @@ Keep the public API used by `csoundqt.cpp` (verified callers: lines 123, 201, 42
 - Remove `WebEngineWidgets` from the unconditional `find_package` (lines 46–47)
   and `target_link_libraries` (line 92); keep them inside
   `CSQT_BUILD_HTML_SUPPORT` (lines 139–140).
-- `add_subdirectory(third_party/litehtml)`; link `litehtml` and `gumbo`
+- `add_subdirectory(litehtml)`; link `litehtml` and `gumbo`
   (bundled, `EXTERNAL_GUMBO` stays OFF).
 - Add the three new `.cpp` files to `PROJECT_SOURCES`.
 - Add a CMake option (e.g. `CSQT_BUILD_HTML_SUPPORT`) already exists; keep.
@@ -244,7 +244,7 @@ Manual (test matrix):
 ## 5. Decisions needed before/while implementing
 
 **Resolved (2026-09-01):**
-1. **litehtml vendoring**: git submodule at `third_party/litehtml`.
+1. **litehtml vendoring**: git submodule at `litehtml`.
 2. **Stale help targets** (`showGen/showOverview/showOpcodeQuickRef`): leave
    untouched for now (separate future fix).
 3. **Search UI placement**: inside the `DockHelp` dock (in-dock panel).
