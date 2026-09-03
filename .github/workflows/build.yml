@@ -216,22 +216,22 @@ jobs:
         run: |
           ls -lR artifacts
 
-      - name: Delete previous development release
-        env:
+      - name: Update latest tag
+        env: 
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view latest --json isPrerelease,name >/dev/null 2>&1; then
-            if [ "$(gh release view latest --json isPrerelease --jq .isPrerelease)" = "true" ]; then
-              gh release delete latest --yes --cleanup-tag
-            else
-              echo "Release at tag 'latest' is not a development release, keeping it."
-            fi
+          if gh api --method GET "repos/${GITHUB_REPOSITORY}/git/ref/tags/latest" >/dev/null 2>&1; then
+            gh api --method PATCH "repos/${GITHUB_REPOSITORY}/git/refs/tags/latest" \
+              -f sha="${GITHUB_SHA}" \
+              -F force=true
           fi
-
+        
       - name: Publish Development Build
         uses: softprops/action-gh-release@v3
         with:
+          token: ${{ github.token }}
           tag_name: latest
+          target_commitish: ${{ github.sha }}
           name: Development Build
           prerelease: true
           generate_release_notes: true
