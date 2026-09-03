@@ -29,9 +29,10 @@
 #include <csound.h>
 
 
-
-#define CSQT_VERSION "7.0.0-beta4"
-
+// CSQT_VERSION is added by qmake / cmake, reading the file VERSION
+#ifndef CSQT_VERSION
+    #define CSQT_VERSION "unknown"
+#endif
 
 // Time in milliseconds for widget and console messages updates
 #define CSQT_QUEUETIMER_DEFAULT_TIME 50

@@ -45,7 +45,6 @@ SRC_DIR="$WORK_DIR/src"
 TOOLS_DIR="$WORK_DIR/tools"
 DOWNLOADS_DIR="$WORK_DIR/downloads"
 JOBS="${JOBS:-$(nproc)}"
-VERSION="${VERSION:-7.0.1}"
 
 # --- versions, pinned to the same commits as the Flatpak manifest -----------
 LIBLO_VERSION="0.35"
@@ -479,8 +478,8 @@ EOF
         local produced
         produced="$(ls -1t *.AppImage 2>/dev/null | head -1 || true)"
         [ -n "$produced" ] || die "appimagetool produced no AppImage"
-        if [ "$produced" != "CsoundQt-${VERSION}-x86_64.AppImage" ]; then
-            mv -v "$produced" "CsoundQt-${VERSION}-x86_64.AppImage"
+        if [ "$produced" != "CsoundQt-x86_64.AppImage" ]; then
+            mv -v "$produced" "CsoundQt-x86_64.AppImage"
         fi
     )
 }

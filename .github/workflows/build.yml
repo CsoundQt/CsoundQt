@@ -63,6 +63,9 @@ jobs:
     name: Build macOS DMG
     runs-on: macos-latest
     timeout-minutes: 180
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache-macos
+      CCACHE_MAXSIZE: 2G
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -83,6 +86,10 @@ jobs:
           path: csound
           ref: develop
 
+      - name: Get Xcode version
+        id: xcode-version
+        run: echo "version=$(xcodebuild -version | awk '/Xcode/ {print $2}')" >> "$GITHUB_OUTPUT"
+
       - name: Get Csound commit hash
         id: csound-hash
         run: echo "hash=$(git -C csound rev-parse HEAD)" >> $GITHUB_OUTPUT
@@ -91,8 +98,8 @@ jobs:
         id: cache-csound
         uses: actions/cache@v4
         with:
-          path: csound/build
-          key: csound-${{ runner.os }}-${{ steps.csound-hash.outputs.hash }}
+          path: csound/build-macos
+          key: csound-${{ runner.os }}-${{ steps.xcode-version.outputs.version }}-${{ steps.csound-hash.outputs.hash }}-${{ hashFiles('.github/workflows/build.yml') }}
 
       - name: Cache Homebrew downloads
         uses: actions/cache@v4
@@ -103,15 +110,31 @@ jobs:
           restore-keys: |
             brew-${{ runner.os }}-
 
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.ccache-macos
+          key: ccache-macos-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            ccache-macos-${{ runner.os }}-${{ steps.xcode-version.outputs.version }}-
+            ccache-macos-${{ runner.os }}-
+
+      - name: Install ccache
+        run: brew install ccache
+
       - name: macos csound build
         run: |
           cd csound
           brew install libogg flac lame libvorbis mpg123 opus libsndfile portaudio libsamplerate liblo portmidi
           brew install bison flex jack
-          rm -fr build-macos
-          mkdir build-macos && cd build-macos
+          # Keep the cached build dir on a hit, otherwise build from scratch.
+          if [ "${{ steps.cache-csound.outputs.cache-hit }}" != 'true' ]; then
+            rm -fr build-macos
+            mkdir build-macos
+          fi
+          cd build-macos
           # We need a very minimal build
-          cmake .. -DCMAKE_OSX_ARCHITECTURES=arm64 -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
+          cmake .. -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
           cmake --build . --parallel
           sudo make install
 
@@ -132,8 +155,8 @@ jobs:
 
           ls -R "$csound_brew_root"
 
-          # qmake CONFIG+=rtmidi CONFIG+=release CSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
-          qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
+          ccache_args=(QMAKE_CC="$(command -v ccache) clang" QMAKE_CXX="$(command -v ccache) clang++")
+          qmake CONFIG+=rtmidi CONFIG+=release "${ccache_args[@]}" qcs.pro
 
           # --- Portable, safer parallelism for make (macOS-compatible) ---
           NUM_PROCS=1

@@ -32,7 +32,8 @@
 # qmake qcs.pro INSTALL_DIR=~ SHARE_DIR=~/.local/share
 ################################################################################
 
-
+VER = $$trim($$cat($$PWD/VERSION))
+DEFINES += CSQT_VERSION=\\\"$$VER\\\"
 
 #To prepare for Qt6 build
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
