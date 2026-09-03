@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2026 CsoundQt contributors
 	This file is part of CsoundQt.

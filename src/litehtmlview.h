@@ -109,6 +109,9 @@ signals:
     // Esc pressed in the viewer: the host may hide its own overlays.
     void escapePressed();
     void historyChanged();
+    // Alt+Left/Right pressed: the host performs the help history navigation.
+    void browseBackRequested();
+    void browseForwardRequested();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -116,6 +119,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+    bool event(QEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
     bool eventFilter(QObject *o, QEvent *event) override;

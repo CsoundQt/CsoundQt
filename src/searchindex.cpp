@@ -17,6 +17,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QRegularExpression>
+#include <QSet>
 #include <QDebug>
 #include <algorithm>
 
@@ -170,7 +171,7 @@ QList<SearchResult> SearchIndexManager::search(const QString &query, bool includ
             continue;
 
         QHash<int, double> scores;
-        QHash<int, bool>   hasTitleHit;
+        const QString      needle = query.trimmed().toLower();
         for (const QString &term : terms)
         {
             if (isStopWord(term))
@@ -178,10 +179,7 @@ QList<SearchResult> SearchIndexManager::search(const QString &query, bool includ
             auto it = r.titlePostings.find(term);
             if (it != r.titlePostings.end())
                 for (int doc : it.value())
-                {
                     scores[doc] += 1000.0;
-                    hasTitleHit[doc] = true;
-                }
             it = r.textPostings.find(term);
             if (it != r.textPostings.end())
                 for (int doc : it.value())
@@ -206,6 +204,11 @@ QList<SearchResult> SearchIndexManager::search(const QString &query, bool includ
                 }
             }
         }
+        // Pages whose whole title matches the search string rank highest.
+        if (!needle.isEmpty())
+            for (int doc = 0; doc < r.docs.size(); ++doc)
+                if (r.docs.at(doc).title.toLower() == needle)
+                    scores[doc] += 10000.0;
         if (scores.isEmpty())
             continue;
 
@@ -218,15 +221,30 @@ QList<SearchResult> SearchIndexManager::search(const QString &query, bool includ
         });
 
         int shown = 0;
+        QSet<QString> seenPages; // one match per page: keep the best-ranked entry
         for (int doc : docIds)
         {
             if (shown >= 20)
                 break;
+            const QString pageKey = r.docs.at(doc).location.section('#', 0, 0);
+            if (seenPages.contains(pageKey))
+                continue;
+            seenPages.insert(pageKey);
             SearchResult res;
             res.rootIndex = ri;
             res.title     = r.docs.at(doc).title;
             res.location  = r.docs.at(doc).location;
             res.score     = scores.value(doc);
+            // Find the page-level entry (location without fragment) to show
+            // where the match comes from; fall back to the entry title.
+            res.pageTitle = res.title;
+            if (res.location.contains('#'))
+                for (const auto &d : r.docs)
+                    if (d.location == pageKey)
+                    {
+                        res.pageTitle = d.title;
+                        break;
+                    }
             // snippet around first query-term occurrence
             const QString &plain = r.docs.at(doc).plain;
             int pos = -1;

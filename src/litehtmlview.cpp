@@ -96,7 +96,13 @@ static void flattenTabs(QString &art)
             int bend   = matchDiv(block, bp);
             if (bend == -1)
                 break;
-            contents << block.mid(bstart, bend - bstart);
+            // matchDiv returns one past the tabbed-block's own closing </div>;
+            // the content must exclude that closing tag, otherwise the emitted
+            // HTML is unbalanced and the following tab escapes its container.
+            int cend = block.lastIndexOf("</div>", bend - 1);
+            if (cend == -1 || cend < bstart)
+                cend = bend;
+            contents << block.mid(bstart, cend - bstart);
             bp = block.indexOf("<div class=\"tabbed-block\">", bend);
         }
 
@@ -118,7 +124,11 @@ static QString extractArticle(const QString &html)
         return html.mid(start);
     QString art = html.mid(start, end - start + 10);
     flattenTabs(art);
-    return art;
+    // The article is rendered standalone, without the original <html>/<body>
+    // ancestors. mkdocs-material indents lists and blockquotes only via
+    // [dir=ltr]-scoped selectors (e.g. "[dir=ltr] .md-typeset ul"), so the
+    // wrapper must carry dir="ltr" for nested lists to be indented.
+    return QStringLiteral("<div dir=\"ltr\">") + art + QStringLiteral("</div>");
 }
 
 static QString findSiteRoot(const QString &file)
@@ -196,7 +206,7 @@ LiteHtmlView::LiteHtmlView(QWidget *parent)
     sl->setContentsMargins(0, 0, 0, 0);
     sl->setSpacing(2);
     m_searchEdit = new QLineEdit(m_searchPanel);
-    m_searchEdit->setPlaceholderText(tr("Search manual — Enter to include partial matches"));
+    m_searchEdit->setPlaceholderText(tr("Search manual"));
     m_searchEdit->setStyleSheet(
         "QLineEdit { background-color: #ffffff; color: #000000;"
         "  border: 1px solid #888888; border-radius: 3px; padding: 2px 6px;"
@@ -210,21 +220,22 @@ LiteHtmlView::LiteHtmlView(QWidget *parent)
     sl->addWidget(m_searchList);
     connect(m_searchEdit, &QLineEdit::textChanged, this, [this](const QString &) {
         m_searchPending = m_searchEdit->text();
-        m_searchWithPrefix = false; // exact matches while typing
-        if (!m_searchLoaded)
-        {
-            m_searchList->clear();
-            new QListWidgetItem(tr("Indexing manuals… (first search only)"), m_searchList);
-            QApplication::processEvents();
-        }
+        // Partial (prefix) matches kick in automatically from 3 characters on.
+        m_searchWithPrefix = m_searchPending.trimmed().size() >= 3;
         QTimer::singleShot(0, this, &LiteHtmlView::runManualSearch);
     });
     connect(m_searchEdit, &QLineEdit::returnPressed, this, [this] {
-        m_searchWithPrefix = true; // broaden to partial matches on Enter
-        runManualSearch();
+        // Enter opens the currently highlighted entry right away.
+        if (m_searchResults.isEmpty())
+            return;
+        if (m_searchList->currentRow() < 0)
+            m_searchList->setCurrentRow(0);
+        if (auto *item = m_searchList->currentItem())
+            openSearchResult(item);
     });
     connect(m_searchList, &QListWidget::itemActivated, this, &LiteHtmlView::openSearchResult);
     m_searchEdit->installEventFilter(this);
+    m_searchList->installEventFilter(this);
 
     m_container.setViewport(width(), height());
     m_container.linkClicked = [this](const QUrl &url) { onLink(url); };
@@ -402,10 +413,31 @@ void LiteHtmlView::addSearchRoot(const QString &rootPath, const QString &label)
 
 void LiteHtmlView::showSearchPanel()
 {
-    m_searchPanel->setVisible(true);
-    m_searchPanel->raise();
+    // Start from a clean slate every time the panel is opened.
+    m_searchPending.clear();
+    m_searchWithPrefix = false;
+    m_searchResults.clear();
+    m_searchList->clear();
+    m_searchEdit->clear();
+    // Load the search index before the user starts typing, so the first
+    // keystrokes are not swallowed by the (lengthy) indexing step.
+    if (!m_searchLoaded)
+    {
+        m_searchList->addItem(tr("Indexing manuals… (first search only)"));
+        m_searchPanel->setVisible(true);
+        m_searchPanel->raise();
+        QApplication::processEvents();
+        m_searchLoaded = m_searchManager.ensureLoaded();
+        m_searchList->clear();
+        if (!m_searchLoaded)
+            m_searchList->addItem(tr("No search index found."));
+    }
+    else
+    {
+        m_searchPanel->setVisible(true);
+        m_searchPanel->raise();
+    }
     m_searchEdit->setFocus();
-    m_searchEdit->selectAll();
 }
 
 void LiteHtmlView::copySelection()
@@ -575,6 +607,23 @@ void LiteHtmlView::mouseMoveEvent(QMouseEvent *e)
     }
 }
 
+bool LiteHtmlView::event(QEvent *e)
+{
+    // Claim Alt+Left/Right from the application-wide shortcuts (e.g. the
+    // editor's "go back" and the tab switcher) while this view has focus.
+    if (e->type() == QEvent::ShortcutOverride)
+    {
+        auto *ke = static_cast<QKeyEvent *>(e);
+        if ((ke->modifiers() & Qt::AltModifier)
+            && (ke->key() == Qt::Key_Left || ke->key() == Qt::Key_Right))
+        {
+            e->accept();
+            return true;
+        }
+    }
+    return QWidget::event(e);
+}
+
 void LiteHtmlView::keyPressEvent(QKeyEvent *e)
 {
     if (e->matches(QKeySequence::Copy))
@@ -641,6 +690,18 @@ void LiteHtmlView::keyPressEvent(QKeyEvent *e)
     if (e->key() == Qt::Key_End)
     {
         m_vbar->setValue(m_vbar->maximum());
+        return;
+    }
+    // Alt+Left/Right navigate the help history (Alt+Right also reaches here
+    // only if the Shift state of Right is not otherwise consumed).
+    if (e->key() == Qt::Key_Left && (e->modifiers() & Qt::AltModifier))
+    {
+        emit browseBackRequested();
+        return;
+    }
+    if (e->key() == Qt::Key_Right && (e->modifiers() & Qt::AltModifier))
+    {
+        emit browseForwardRequested();
         return;
     }
     QWidget::keyPressEvent(e);
@@ -732,6 +793,24 @@ bool LiteHtmlView::eventFilter(QObject *o, QEvent *ev)
             }
         }
     }
+    if (o == m_searchList)
+    {
+        if (ev->type() == QEvent::KeyPress)
+        {
+            auto *ke = static_cast<QKeyEvent *>(ev);
+            if (ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter)
+            {
+                if (auto *item = m_searchList->currentItem())
+                    openSearchResult(item);
+                return true;
+            }
+            if (ke->key() == Qt::Key_Escape)
+            {
+                m_searchEdit->setFocus();
+                return true;
+            }
+        }
+    }
     return QWidget::eventFilter(o, ev);
 }
 
@@ -752,40 +831,58 @@ void LiteHtmlView::resizeEvent(QResizeEvent *)
     m_vbar->move(width() - m_scrollbarWidth, 0);
     m_findEdit->resize(300, m_findEdit->height());
     m_findEdit->move(width() - 300 - 20, 10);
-    m_searchPanel->setGeometry(width() - 440 - 20, 40, 440, 360);
+    // Same vertical position as the in-document find box.
+    m_searchPanel->setGeometry(width() - 440 - 20, 10, 440, 360);
     m_searchPanel->raise();
 }
 
 void LiteHtmlView::runManualSearch()
 {
     QString q = m_searchPending.trimmed();
+    int previousRow = m_searchList->currentRow();
     m_searchList->clear();
     m_searchResults.clear();
     if (q.isEmpty())
         return;
     if (!m_searchLoaded)
-        m_searchLoaded = m_searchManager.ensureLoaded();
+        m_searchLoaded = m_searchManager.ensureLoaded(); // normally preloaded by showSearchPanel()
     if (!m_searchLoaded)
     {
         new QListWidgetItem(tr("No search index found."), m_searchList);
         return;
     }
     m_searchResults = m_searchManager.search(q, m_searchWithPrefix);
+    const bool multiRoot = m_searchManager.roots().size() > 1;
     for (int i = 0; i < m_searchResults.size(); ++i)
     {
         const SearchResult &r     = m_searchResults.at(i);
         const QString       label = m_searchManager.roots().at(r.rootIndex).label;
-        auto *item = new QListWidgetItem(QString("%1   [%2]").arg(r.title, label), m_searchList);
+        // Each option shows the matched section and the page it comes from;
+        // roots with an empty label (the Csound manual) get no source tag.
+        QString text = r.title;
+        if (r.pageTitle != r.title)
+            text += QString("   — %1").arg(r.pageTitle);
+        if (!label.isEmpty() && multiRoot)
+            text += QString("   [%1]").arg(label);
+        auto *item = new QListWidgetItem(text, m_searchList);
         item->setToolTip(r.snippet.isEmpty() ? r.location : r.snippet + "\n→ " + r.location);
         item->setData(Qt::UserRole, i);
     }
     if (m_searchResults.isEmpty())
         new QListWidgetItem(tr("No results."), m_searchList);
+    // Select the first result by default so Enter opens it; keep the current
+    // row if it is still valid (arrow-key navigation triggers a re-search).
+    m_searchList->setCurrentRow((previousRow >= 0 && previousRow < m_searchResults.size()) ? previousRow : 0);
 }
 
 void LiteHtmlView::openSearchResult(QListWidgetItem *item)
 {
-    int idx = item->data(Qt::UserRole).toInt();
+    if (!item)
+        return;
+    QVariant data = item->data(Qt::UserRole); // status rows have no result data
+    if (!data.isValid())
+        return;
+    int idx = data.toInt();
     if (idx < 0 || idx >= m_searchResults.size())
         return;
     QString path = m_searchManager.resolvePath(m_searchResults.at(idx));
@@ -801,6 +898,7 @@ void LiteHtmlView::openSearchResult(QListWidgetItem *item)
     if (QFile::exists(path))
         loadFile(path, frag);
     m_searchPanel->setVisible(false);
+    setFocus(); // return focus to the help viewer
 }
 
 void LiteHtmlView::scrollToAnchor(const QString &name)
@@ -865,7 +963,7 @@ void LiteHtmlView::rebuildSearch()
     for (int li = 0; li < m_searchLines.size(); ++li)
     {
         const SearchLine &sl = m_searchLines.at(li);
-        int              from = 0;
+        int from = 0;
         while ((from = sl.text.indexOf(m_findQuery, from, cs)) != -1)
         {
             if (m_findWholeWords)
@@ -879,7 +977,7 @@ void LiteHtmlView::rebuildSearch()
                     continue;
                 }
             }
-            m_matches.append({li, from, from + m_findQuery.size()});
+            m_matches.append({li, from, from + static_cast<int>(m_findQuery.size())});
             from += qMax(1, m_findQuery.size());
         }
     }

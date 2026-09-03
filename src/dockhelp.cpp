@@ -1,3 +1,4 @@
+
 /*
 	Copyright (C) 2008, 2009 Andres Cabrera
 	mantaraya36@gmail.com
@@ -32,6 +33,9 @@
 DockHelp::DockHelp(QWidget *parent)
 	: QDockWidget(parent), ui(new Ui::DockHelp)
 {
+    // QWidget* emptyTitleBar = new QWidget(this);
+    // setTitleBarWidget(emptyTitleBar);
+    
 	ui->setupUi(this);
     setWindowTitle("Help"); // titlebar and overall layout
 	setMinimumSize(400,200);
@@ -64,7 +68,10 @@ DockHelp::DockHelp(QWidget *parent)
 			mw->statusBar()->showMessage(msg, 5000);
 	});
 	connect(m_view, &LiteHtmlView::escapePressed, this, [this] { toggleFindBarVisible(false); });
+	connect(m_view, &LiteHtmlView::browseBackRequested, this, &DockHelp::browseBack);
+	connect(m_view, &LiteHtmlView::browseForwardRequested, this, &DockHelp::browseForward);
 }
+
 
 DockHelp::~DockHelp()
 {
@@ -87,6 +94,8 @@ void DockHelp::setIconTheme(QString theme)
     ui->forwardButton->setIcon(QIcon(QString(":/themes/%1/browse-next.png").arg(theme)));
     ui->homeToolButton->setIcon(QIcon(QString(":/themes/%1/home.png").arg(theme)));
     ui->toggleFindButton->setIcon(QIcon(QString(":/themes/%1/edit-find.png").arg(theme)));
+    ui->searchToolButton->setIcon(QIcon(QString(":/themes/%1/edit-find.png").arg(theme)));
+
 }
 
 void DockHelp::changeFontSize(int change)
@@ -107,7 +116,7 @@ void DockHelp::closeEvent(QCloseEvent * /*event*/)
 void DockHelp::showManual()
 {
 	this->setVisible(true);
-	this->loadFile(docDir + "/index.html");
+	this->loadFile(docDir + "/indexall.html");
 }
 
 

@@ -423,11 +423,16 @@ CsoundQt::CsoundQt(QStringList fileNames)
         docDir = m_options->csdocdir;
     }
     helpPanel->docDir = docDir;
-    helpPanel->loadFile(docDir + "/reference/opcodesReference.html");
+    if(QFile::exists(docDir + "/indexall.html")) {
+        helpPanel->loadFile(docDir + "/indexall.html");
+    } else {
+        helpPanel->loadFile(docDir + "/reference/opcodesReference.html");
+    }
 
     // Whole-manual search roots. Registered lazily; parsed on first search.
+    // The default root (empty label) gets no source tag in the result list.
     if (QFile::exists(docDir + "/search/search_index.json"))
-        helpPanel->addSearchRoot(docDir, tr("Csound Manual"));
+        helpPanel->addSearchRoot(docDir, QString());
     if (risset->isInstalled) {
         QString rissetSite = risset->rissetHtmlDocs.path();
         if (QFile::exists(rissetSite + "/search/search_index.json"))

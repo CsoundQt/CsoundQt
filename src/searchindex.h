@@ -24,8 +24,9 @@
 struct SearchResult
 {
     int     rootIndex = -1;
-    QString title;
-    QString location; // relative to the root; may contain "#fragment"
+    QString title;     // title of the matching index entry (may be a section)
+    QString pageTitle; // title of the page the match comes from
+    QString location;  // relative to the root; may contain "#fragment"
     QString snippet;
     double  score = 0.0;
 };
