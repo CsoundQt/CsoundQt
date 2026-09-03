@@ -4,6 +4,7 @@ on:
     branches:
       - csoundqt7
       - macos-debug
+      - windows-debug
       
 env:
   PACKAGENAME: CsoundQt
