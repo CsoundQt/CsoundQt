@@ -8,6 +8,13 @@ LITEHTML_INCLUDEPATH = $$PWD/litehtml/src $$PWD/litehtml/include $$PWD/litehtml/
 
 INCLUDEPATH += $$LITEHTML_INCLUDEPATH
 
+# The Gumbo parser bundled with litehtml includes the POSIX header
+# <strings.h>, which MSVC does not provide. Add a tiny compatibility shim to
+# the include path when building with MSVC.
+win32-msvc {
+    INCLUDEPATH += $$PWD/src/compat
+}
+
 LITEHTML_SOURCES = \
     $$PWD/litehtml/src/background.cpp \
     $$PWD/litehtml/src/codepoint.cpp \
