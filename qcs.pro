@@ -32,7 +32,7 @@
 # qmake qcs.pro INSTALL_DIR=~ SHARE_DIR=~/.local/share
 ################################################################################
 
-VER = $$trim($$cat($$PWD/VERSION))
+VER = $$cat($$PWD/VERSION)
 DEFINES += CSQT_VERSION=\\\"$$VER\\\"
 
 #To prepare for Qt6 build
