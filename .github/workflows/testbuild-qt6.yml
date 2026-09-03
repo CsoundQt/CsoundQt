@@ -263,7 +263,18 @@ jobs:
           # nmake may report failure only because of qmake's post-build
           # deployment step; the real criterion is the produced executable.
           set +e
-          nmake
+          # Git Bash puts GNU coreutils in PATH, where /usr/bin/link.exe
+          # shadows MSVC's link.exe. Run nmake with a PATH that excludes the
+          # MSYS/Git unix tool dirs so the MSVC toolchain is used exclusively.
+          NMAKE_PATH=""
+          while IFS= read -r p; do
+            case "${p}" in
+              */usr/bin|/usr/bin|*/bin|/bin|*/mingw*/bin) ;;
+              *) NMAKE_PATH="${NMAKE_PATH}:${p}" ;;
+            esac
+          done < <(printf '%s' "${PATH}" | tr ':' '\n')
+          NMAKE_PATH="${NMAKE_PATH#:}"
+          env PATH="${NMAKE_PATH}" nmake
           rc=$?
           set -e
           if [ "${rc}" -ne 0 ]; then
