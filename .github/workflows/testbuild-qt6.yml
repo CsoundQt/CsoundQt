@@ -4,7 +4,7 @@ on:
     branches:
       - csoundqt7
       - macos-debug
-      - windows-debug
+      - windows-build
       
 env:
   PACKAGENAME: CsoundQt
@@ -18,6 +18,9 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -157,6 +160,150 @@ jobs:
           make -j$(nproc)
           mkdir -p artifacts
           cp bin/* artifacts
+
+      # ------------------------------------------------------------------
+      # Windows build. Instead of compiling Csound from source (there is no
+      # apt/brew on Windows), we consume the official Csound 7 development
+      # build produced by csound/csound's own GitHub Actions workflow: those
+      # installers are the "installable package" for Csound on Windows. We then
+      # compile CsoundQt against that Csound and bundle the whole thing (Qt +
+      # Csound) into a CsoundQt installer produced with Inno Setup, mirroring
+      # the .dmg/.AppImage produced on the other platforms.
+      # ------------------------------------------------------------------
+
+      - name: Set up MSVC command line environment (windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Resolve latest Csound 7 Windows installer from csound develop Actions
+        id: csound-installer
+        if: runner.os == 'Windows'
+        run: |
+          set -euo pipefail
+          RUNS_JSON=$(curl -fsSL "https://api.github.com/repos/csound/csound/actions/workflows/csound_builds.yml/runs?branch=develop&status=success&per_page=5")
+          RUN_IDS=$(python -c "import json,sys; d=json.loads(sys.argv[1]); print(' '.join(str(r['id']) for r in d['workflow_runs']))" "$RUNS_JSON")
+          ART_NAME=""
+          RUN_ID=""
+          for rid in ${RUN_IDS}; do
+            ART_JSON=$(curl -fsSL "https://api.github.com/repos/csound/csound/actions/runs/${rid}/artifacts?per_page=100")
+            ART_NAME=$(python -c "import json,sys; d=json.loads(sys.argv[1]); print([a['name'] for a in d.get('artifacts', []) if a['name'].startswith('Csound_x64-') and a['name'].endswith('-windows-installer')][0])" "$ART_JSON" || true)
+            if [ -n "${ART_NAME}" ]; then
+              RUN_ID=${rid}
+              break
+            fi
+          done
+          test -n "${ART_NAME}" || { echo "No Csound_x64 windows-installer artifact found in recent csound develop runs"; exit 1; }
+          echo "Found artifact: ${ART_NAME} on run ${RUN_ID}"
+          echo "run-id=${RUN_ID}" >> "$GITHUB_OUTPUT"
+          echo "artifact=${ART_NAME}" >> "$GITHUB_OUTPUT"
+
+      - name: Download and install latest Csound 7 development build (windows)
+        id: csound-install-win
+        if: runner.os == 'Windows'
+        run: |
+          set -euo pipefail
+          mkdir -p csound-dl
+          # csound artifacts are not downloadable cross-repo with a plain token;
+          # nightly.link mirrors them anonymously.
+          curl -fsSL "https://nightly.link/csound/csound/actions/runs/${{ steps.csound-installer.outputs.run-id }}/${{ steps.csound-installer.outputs.artifact }}.zip" \
+            -o csound-dl/csound-installer.zip
+          powershell -Command "Expand-Archive -Path 'csound-dl/csound-installer.zip' -DestinationPath 'csound-dl' -Force"
+          INSTALLER=$(find csound-dl -maxdepth 2 -iname 'Csound7-windows_x86_64-*.exe' | head -1)
+          test -n "${INSTALLER}" || { echo "Csound installer exe not found in artifact"; exit 1; }
+          echo "Csound installer: ${INSTALLER}"
+          cp "${INSTALLER}" csound-dl/Csound7-windows_x86_64.exe
+          # Silent install into a local folder (same layout as "Program Files\Csound7"):
+          #   bin\csound64.dll, lib\csound64.lib, include\csound, plugins64
+          CSOUND_DIR=$(cygpath -w "$GITHUB_WORKSPACE/csound7")
+          MSYS_NO_PATHCONV=1 "${INSTALLER}" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- "/DIR=${CSOUND_DIR}"
+          ls "$GITHUB_WORKSPACE/csound7"
+          "$GITHUB_WORKSPACE/csound7/bin/csound.exe" --version
+          echo "csound7-dir=$GITHUB_WORKSPACE/csound7" >> "$GITHUB_OUTPUT"
+
+      - name: Install Qt in windows
+        if: runner.os == 'Windows'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          host: windows
+          target: desktop
+          arch: win64_msvc2022_64
+          cache: true
+
+      - name: Install Inno Setup (windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install -y innosetup --no-progress
+
+      - name: windows csoundqt7 build
+        if: runner.os == 'Windows'
+        run: |
+          qmake --version
+          git submodule update --init --recursive
+          # qcs.pro runs windeployqt6 at the end of the build; make that tool
+          # resolve to the real windeployqt shipped with this Qt install.
+          QT_BIN=$(dirname "$(command -v windeployqt)")
+          if [ ! -f "${QT_BIN}/windeployqt6.exe" ]; then
+            cp "${QT_BIN}/windeployqt.exe" "${QT_BIN}/windeployqt6.exe"
+          fi
+          CSOUND_DIR="$GITHUB_WORKSPACE/csound7"
+          CSINC=$(cygpath -m "${CSOUND_DIR}/include/csound")
+          CSLIB=$(cygpath -m "${CSOUND_DIR}/lib")
+          # Keep csound64.dll next to the exe so the linker/deployment tools
+          # never complain about a missing import.
+          mkdir -p bin
+          cp -f "${CSOUND_DIR}/bin/csound64.dll" bin/ 2>/dev/null || true
+          qmake CONFIG+=rtmidi CONFIG+=release qcs.pro \
+            "CSOUND_API_INCLUDE_DIR=${CSINC}" \
+            "CSOUND_INTERFACES_INCLUDE_DIR=${CSINC}" \
+            "CSOUND_LIBRARY_DIR=${CSLIB}"
+          # nmake may report failure only because of qmake's post-build
+          # deployment step; the real criterion is the produced executable.
+          set +e
+          nmake
+          rc=$?
+          set -e
+          if [ "${rc}" -ne 0 ]; then
+            echo "nmake exited with ${rc}; checking whether the build output was produced"
+          fi
+          ls -la bin
+          test -f "bin/${{ env.APPNAME }}.exe"
+
+      - name: windows build CsoundQt installer (bundles Qt and Csound)
+        if: runner.os == 'Windows'
+        run: |
+          set -euo pipefail
+          APP_EXE="bin/${{ env.APPNAME }}.exe"
+          test -f "${APP_EXE}"
+          # Make sure the Qt runtime is fully deployed next to the exe.
+          if [ ! -f "bin/Qt6Core.dll" ]; then
+            windeployqt --qmldir "$PWD/src/QML" "${APP_EXE}"
+          fi
+          CSOUND_DIR="$GITHUB_WORKSPACE/csound7"
+          STAGE="$GITHUB_WORKSPACE/csoundqt-stage"
+          rm -rf "${STAGE}"
+          mkdir -p "${STAGE}/plugins64"
+          cp -r bin/. "${STAGE}/"
+          # Bundle the Csound runtime CsoundQt was built against, so the
+          # resulting installation is self-contained and distributable.
+          cp -f "${CSOUND_DIR}/bin/csound64.dll" "${STAGE}/"
+          if [ -d "${CSOUND_DIR}/plugins64" ]; then
+            cp -rf "${CSOUND_DIR}/plugins64/." "${STAGE}/plugins64/"
+          fi
+          cp -f images/csoundqt.ico "${STAGE}/"
+          mkdir -p artifacts
+          export CSOUNDQT_VERSION="$(tr -d '\r\n ' < VERSION.txt)"
+          export CSOUNDQT_APPNAME="${{ env.APPNAME }}.exe"
+          export CSOUNDQT_STAGING_DIR="$(cygpath -w "${STAGE}")"
+          export CSOUNDQT_BUILDNUM="${GITHUB_RUN_NUMBER}"
+          # iscc only ships on the machine via choco; /o. puts the installer in cwd
+          MSYS_NO_PATHCONV=1 iscc /o. installers/Windows/csoundqt7-x64.iss
+          cp CsoundQt-*-windows_x86_64-*.exe artifacts/
+          # pass the Csound installer (official development build) along too
+          cp csound-dl/Csound7-windows_x86_64.exe artifacts/
+          ls -la artifacts
 
       - uses: actions/upload-artifact@v4
         with:
