@@ -216,6 +216,18 @@ jobs:
         run: |
           ls -lR artifacts
 
+      - name: Delete previous development release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view latest --json isPrerelease,name >/dev/null 2>&1; then
+            if [ "$(gh release view latest --json isPrerelease --jq .isPrerelease)" = "true" ]; then
+              gh release delete latest --yes --cleanup-tag
+            else
+              echo "Release at tag 'latest' is not a development release, keeping it."
+            fi
+          fi
+
       - name: Publish Development Build
         uses: softprops/action-gh-release@v3
         with:
