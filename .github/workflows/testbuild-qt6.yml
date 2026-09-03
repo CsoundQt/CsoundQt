@@ -182,13 +182,14 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           set -euo pipefail
-          RUNS_JSON=$(curl -fsSL "https://api.github.com/repos/csound/csound/actions/workflows/csound_builds.yml/runs?branch=develop&status=success&per_page=5")
-          RUN_IDS=$(python -c "import json,sys; d=json.loads(sys.argv[1]); print(' '.join(str(r['id']) for r in d['workflow_runs']))" "$RUNS_JSON")
+          mkdir -p csound-dl
+          curl -fsSL "https://api.github.com/repos/csound/csound/actions/workflows/csound_builds.yml/runs?branch=develop&status=success&per_page=5" -o csound-dl/runs.json
+          RUN_IDS=$(python -c "import json,sys; d=json.load(open(sys.argv[1])); print(' '.join(str(r['id']) for r in d['workflow_runs']))" csound-dl/runs.json)
           ART_NAME=""
           RUN_ID=""
           for rid in ${RUN_IDS}; do
-            ART_JSON=$(curl -fsSL "https://api.github.com/repos/csound/csound/actions/runs/${rid}/artifacts?per_page=100")
-            ART_NAME=$(python -c "import json,sys; d=json.loads(sys.argv[1]); print([a['name'] for a in d.get('artifacts', []) if a['name'].startswith('Csound_x64-') and a['name'].endswith('-windows-installer')][0])" "$ART_JSON" || true)
+            curl -fsSL "https://api.github.com/repos/csound/csound/actions/runs/${rid}/artifacts?per_page=100" -o csound-dl/artifacts.json
+            ART_NAME=$(python -c "import json,sys; d=json.load(open(sys.argv[1])); print([a['name'] for a in d.get('artifacts', []) if a['name'].startswith('Csound_x64-') and a['name'].endswith('-windows-installer')][0])" csound-dl/artifacts.json || true)
             if [ -n "${ART_NAME}" ]; then
               RUN_ID=${rid}
               break
