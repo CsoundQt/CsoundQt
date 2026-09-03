@@ -26,6 +26,7 @@
 #define BuildSuffix ""
 #endif
 
+AppName={#AppName}
 AppVerName={#AppName} {#AppVersion}
 AppVersion={#AppVersion}
 AppPublisher={#AppPublisher}
