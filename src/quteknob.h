@@ -105,7 +105,7 @@ public:
     double displayMax() { return m_display_max; }
     
     QPair<double, double>getDisplayRange() {
-        return QPair(m_display_min, m_display_max);
+        return QPair<double, double>(m_display_min, m_display_max);
     }
     
     
