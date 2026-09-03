@@ -25,7 +25,6 @@
 #   QT_VERSION          Qt version to download (default: 6.11.2)
 #   WORK_DIR            working directory (default: <repo>/build-appimage)
 #   JOBS                parallel build jobs (default: nproc)
-#   VERSION             version string for the AppImage name
 #
 # glibc requirement: the Qt official binaries used here require glibc >= 2.34
 # (Qt >= 6.9 is built on RHEL 9). Build on a distro with glibc >= 2.34 (e.g.
@@ -380,7 +379,6 @@ EOF
         rm -f "$QT_INSTALL_PREFIX/plugins/position/libqtposition_nmea.so"
     fi
 
-    export VERSION="$VERSION"
     export QML_SOURCES_PATHS="$ROOT/src/QML"
     export QMAKE="$QMAKE"
     # Remove stale Qt artifacts copied into the AppDir by a previous run:
@@ -524,7 +522,7 @@ main() {
     download_tools
     assemble_appimage
 
-    log "Done: $WORK_DIR/CsoundQt-${VERSION}-x86_64.AppImage"
+    log "Done: $WORK_DIR/CsoundQt-x86_64.AppImage"
 }
 
 main "$@"
