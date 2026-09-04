@@ -164,11 +164,9 @@ jobs:
       # ------------------------------------------------------------------
       # Windows build. Instead of compiling Csound from source (there is no
       # apt/brew on Windows), we consume the official Csound 7 development
-      # build produced by csound/csound's own GitHub Actions workflow: those
-      # installers are the "installable package" for Csound on Windows. We then
-      # compile CsoundQt against that Csound and bundle the whole thing (Qt +
-      # Csound) into a CsoundQt installer produced with Inno Setup, mirroring
-      # the .dmg/.AppImage produced on the other platforms.
+      # build produced by csound/csound's own GitHub Actions workflow. We then
+      # compile csoundqt against csound and bundle the whole thing 
+      # into a csoundqt installer via inno setup
       # ------------------------------------------------------------------
 
       - name: Set up MSVC command line environment (windows)

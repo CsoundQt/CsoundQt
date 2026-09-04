@@ -2,9 +2,10 @@ name: Build And Publish
 on:
   push:
     branches:
-      - master
       - develop
       - csoundqt7
+      - windows-build
+
   workflow_dispatch:
 
 env:
@@ -233,6 +234,7 @@ jobs:
           ls -lR artifacts
 
       - name: Update latest tag
+        if: github.ref_name == 'csoundqt7' || github.ref_name == 'develop'
         env: 
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -244,6 +246,7 @@ jobs:
         
       - name: Publish Development Build
         uses: softprops/action-gh-release@v3
+        if: github.ref_name == 'csoundqt7' || github.ref_name == 'develop'
         with:
           token: ${{ github.token }}
           tag_name: latest
