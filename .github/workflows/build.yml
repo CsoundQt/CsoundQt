@@ -163,20 +163,11 @@ jobs:
           ccache_args=(QMAKE_CC="$(command -v ccache) clang" QMAKE_CXX="$(command -v ccache) clang++")
           qmake CONFIG+=rtmidi CONFIG+=release "${ccache_args[@]}" qcs.pro
 
-          # # --- Portable, safer parallelism for make (macOS-compatible) ---
-          # NUM_PROCS=1
-          # if command -v nproc >/dev/null 2>&1; then
-          #   NUM_PROCS=$(nproc)
-          # else
-          #   # macOS: use sysctl to get logical CPU count
-          #   NUM_PROCS=$(sysctl -n hw.logicalcpu 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
-          # fi
-          # # Use at most half of CPUs (but at least 1), and cap to MAX_JOBS to avoid OOMs
-          # NUM_JOBS=$(( NUM_PROCS > 2 ? NUM_PROCS / 2 : NUM_PROCS ))
-          # MAX_JOBS=4
-          # if [ "$NUM_JOBS" -gt "$MAX_JOBS" ]; then NUM_JOBS=$MAX_JOBS; fi
-          # echo "Detected $NUM_PROCS CPUs, using $NUM_JOBS parallel jobs for make"
-          # make -j"${NUM_JOBS}"
+          # half the cpus, at least 1
+          JOBS=$(( ($(sysctl -n hw.logicalcpu) + 1) / 2 )) 
+          [ "$JOBS" -lt 1 ] && JOBS=1
+          make -j"$JOBS"
+
           # -------------------------------------------------------------
 
           # --- Bundle the offline Csound manual into the app bundle ------
