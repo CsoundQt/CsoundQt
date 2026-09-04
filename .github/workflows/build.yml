@@ -225,15 +225,15 @@ jobs:
           export PATH="$HOME/Qt/$QTVERSION/macos/bin:$PATH"
           
           # CsoundQt links the CsoundLib64.framework built in the previous
-          # step (csound_install); headers come from the csound source tree.
-          CSOUND_INCLUDE_DIR="$PWD/csound/include"
-          CSOUND_INTERFACES_INCLUDE_DIR="$PWD/csound/include"
+          # step (csound_install); its Headers dir holds all public headers
+          # incl. generated ones (float-version.h, version.h).
+          CSOUND_FRAMEWORK_HEADERS="$PWD/csound/csound_install/CsoundLib64.framework/Headers"
           CSOUND_LIBRARY_DIR="$PWD/csound/csound_install/CsoundLib64.framework/Versions/7.0"
 
           ccache_args=(QMAKE_CC="$(command -v ccache) clang" QMAKE_CXX="$(command -v ccache) clang++")
           qmake CONFIG+=rtmidi CONFIG+=release \
-            "CSOUND_INCLUDE_DIR=$CSOUND_INCLUDE_DIR" \
-            "CSOUND_INTERFACES_INCLUDE_DIR=$CSOUND_INTERFACES_INCLUDE_DIR" \
+            "CSOUND_INCLUDE_DIR=$CSOUND_FRAMEWORK_HEADERS" \
+            "CSOUND_INTERFACES_INCLUDE_DIR=$CSOUND_FRAMEWORK_HEADERS" \
             "CSOUND_LIBRARY_DIR=$CSOUND_LIBRARY_DIR" \
             "${ccache_args[@]}" qcs.pro
 
