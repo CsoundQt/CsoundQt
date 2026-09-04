@@ -196,15 +196,121 @@ jobs:
           cp -a "$MANUAL_DIR/." "bin/${{ env.APPNAME }}.app/Contents/Resources/Manual/"
           find bin -maxdepth 4 | sort
           otool -L bin/${{ env.APPNAME }}.app/Contents/MacOS/${{ env.APPNAME }}
-          hdiutil create -fs HFS+ -srcfolder bin/${{ env.APPNAME }}.app -volname CsoundQt CsoundQt.dmg
+          test -x bin/${{ env.APPNAME }}.app/Contents/MacOS/${{ env.APPNAME }} \
+            && echo "CsoundQt binary OK"
 
-          find .
+      # ------------------------------------------------------------------
+      # Build the redistributable Csound installer (.pkg), arm64 only.
+      # Ported from csound's .github/workflows/csound_builds.yml
+      # (macos_build_installer), with the architectures trimmed to arm64
+      # and ccache enabled. Uses the same `csound` checkout as the
+      # CsoundQt-linking build above, but a separate build dir/config
+      # (static deps, Release, relocatable framework for /Applications/Csound).
+      # ------------------------------------------------------------------
+      - name: macos csound installer build (arm64)
+        id: csound-installer
+        run: |
+          set -euo pipefail
+
+          CSOUND_VERSION="$(sed -n 's/.*CS_VERSION[[:space:]]*"\([0-9]*\)".*/\1/p' csound/CMakeLists.txt).$(sed -n 's/.*CS_SUBVER[[:space:]]*"\([0-9]*\)".*/\1/p' csound/CMakeLists.txt).$(sed -n 's/.*CS_PATCHLEVEL[[:space:]]*"\([0-9]*\)".*/\1/p' csound/CMakeLists.txt)"
+          echo "version=$CSOUND_VERSION" >> "$GITHUB_OUTPUT"
+          echo "Building Csound installer for version $CSOUND_VERSION"
+
+          cd csound
+
+          # static codec libs for the redistributable framework (arm64 only)
+          cd platform/osx
+          chmod +x build_libsndfile.sh
+          # trim the upstream script down to arm64 only
+          sed -i.bak -e 's/ARCHS=("arm64" "x86_64")/ARCHS=("arm64")/' \
+                      -e 's/ARCHS=("x86_64" "arm64")/ARCHS=("arm64")/' \
+                      -e 's/-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"/-DCMAKE_OSX_ARCHITECTURES="arm64"/' \
+                      build_libsndfile.sh
+          ./build_libsndfile.sh
+          cd ../..
+
+          git clone --depth 1 https://github.com/PortMidi/portmidi.git
+          cmake -S portmidi -B portmidi/build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX="$PWD/portmidi_install"
+          cmake --build portmidi/build
+          cmake --build portmidi/build --target install
+
+          git clone --depth 1 https://github.com/PortAudio/portaudio.git
+          cmake -S portaudio -B portaudio/build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX="$PWD/portaudio_install"
+          cmake --build portaudio/build
+          cmake --build portaudio/build --target install
+
+          git clone --depth 1 https://github.com/libsndfile/libsamplerate
+          cmake -S libsamplerate -B libsamplerate/build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX="$PWD/samplerate_install"
+          cmake --build libsamplerate/build
+          cmake --build libsamplerate/build --target install
+
+          git clone --depth 1 https://github.com/radarsat1/liblo
+          cmake -S liblo/cmake -B liblo/build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX="$PWD/liblo_install"
+          cmake --build liblo/build
+          cmake --build liblo/build --target install
+
+          # static-deps Csound (arm64, Release) into csound_install
+          cmake -B build-installer -DCMAKE_BUILD_TYPE="Release" -DUSE_GETTEXT=0 \
+            -DCMAKE_PREFIX_PATH="$PWD/platform/osx/libsndfile_build/dependencies;$PWD/portmidi_install;$PWD/portaudio_install;$PWD/samplerate_install;$PWD/liblo_install" \
+            -DCMAKE_INSTALL_PREFIX="$PWD/csound_install" -DCS_FRAMEWORK_DEST="$PWD/csound_install" \
+            -DCS_OPCODE_DIR="/Applications/Csound/CsoundLib64.framework/Resources/Opcodes64/" \
+            -DCMAKE_OSX_ARCHITECTURES="arm64" -DUSE_MP3=1 -DCMAKE_VERBOSE_MAKEFILE=1 \
+            -DUSE_STATIC_DEPS=1 -DBUILD_SRC_CONV=0 -DBUILD_OSC_OPCODES=1 -DALIGN_MEMORY=1 \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+          cmake --build build-installer --config Release --parallel
+          cmake --build build-installer --target install
+
+          # relink the framework so it is self-contained under /Applications/Csound
+          sed -i -e 's$ctypes.util.find_library("CsoundLib64")$"/Applications/Csound/Csound64.framework/CsoundLib64"$g' Python/ctcsound.py
+
+          install_name_tool -id /Applications/Csound/CsoundLib64.framework/CsoundLib64 csound_install/CsoundLib64.framework/CsoundLib64
+          install_name_tool -delete_rpath "$PWD/csound_install" csound_install/CsoundLib64.framework/CsoundLib64
+          install_name_tool -change @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 /Applications/Csound/CsoundLib64.framework/Versions/7.0/CsoundLib64 csound_install/bin/csound
+          install_name_tool -change @rpath/libportmidi.2.dylib @loader_path/../../../../libs/libportmidi.dylib csound_install/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/libpmidi.dylib
+          install_name_tool -add_rpath /Applications/Csound/CsoundLib64.framework/libs portmidi_install/lib/libportmidi.dylib
+          install_name_tool -change @rpath/libportaudio.2.dylib @loader_path/../../../../libs/libportaudio.dylib csound_install/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/librtpa.dylib
+          install_name_tool -add_rpath /Applications/Csound/CsoundLib64.framework/libs portaudio_install/lib/libportaudio.dylib
+          install_name_tool -change @rpath/liblo.7.dylib @loader_path/../../../../libs/liblo.dylib csound_install/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/libosc.dylib
+          install_name_tool -add_rpath /Applications/Csound/CsoundLib64.framework/libs liblo_install/lib/liblo.dylib
+
+          # assemble the .pkg (arm64)
+          mkdir -p csound_install/CsoundLib64.framework/Versions/7.0/Resources/Python
+          cp Python/ctcsound.py csound_install/CsoundLib64.framework/Versions/7.0/Resources/Python
+          mkdir -p csound_install/CsoundLib64.framework/libs
+          cp portmidi_install/lib/*.dylib csound_install/CsoundLib64.framework/libs
+          cp portaudio_install/lib/*.dylib csound_install/CsoundLib64.framework/libs
+          cp liblo_install/lib/*.dylib csound_install/CsoundLib64.framework/libs
+          mkdir -p csound_install/CsoundLib64.framework/Versions/7.0/Resources/cmake
+          cp csound_install/share/csound/CsoundConfig.cmake csound_install/CsoundLib64.framework/Versions/7.0/Resources/cmake/
+          cp csound_install/share/csound/CsoundConfigVersion.cmake csound_install/CsoundLib64.framework/Versions/7.0/Resources/cmake/
+          cp csound_install/share/csound/FindCsound.cmake csound_install/CsoundLib64.framework/Versions/7.0/Resources/cmake/
+          mkdir -p csound_install/PkgContents/Applications/Csound
+          mv csound_install/bin/csound csound_install/PkgContents/Applications/Csound/.
+          mv csound_install/CsoundLib64.framework csound_install/PkgContents/Applications/Csound/.
+          pkgbuild --identifier com.csound.csound7Environment.csoundLib64 \
+            --root csound_install/PkgContents "CsoundLib64-${CSOUND_VERSION}-beta-arm64.pkg"
+          ls -lh "CsoundLib64-${CSOUND_VERSION}-beta-arm64.pkg"
+
+      - name: Package macOS DMG
+        run: |
+          set -euo pipefail
+          CSOUND_VERSION="${{ steps.csound-installer.outputs.version }}"
+          PKG="csound/CsoundLib64-${CSOUND_VERSION}-beta-arm64.pkg"
+          test -f "$PKG"
+          echo "Bundling: bin/${{ env.APPNAME }}.app and $PKG"
+
+          STAGE="dmg-staging"
+          mkdir -p "$STAGE"
+          cp -a "bin/${{ env.APPNAME }}.app" "$STAGE/"
+          cp "$PKG" "$STAGE/"
+
+          hdiutil create -fs HFS+ -srcfolder "$STAGE" -volname CsoundQt CsoundQt.dmg
+
           echo "Creating artifacts folder"
           mkdir -p artifacts
           echo "Copying .dmg to artifacts"
           cp CsoundQt.dmg artifacts
-          echo "Listing artifacts"
-          ls artifacts
+          ls -lh artifacts
           echo "ready!"
 
       - name: Upload macOS DMG artifact
