@@ -137,7 +137,7 @@ jobs:
           cmake -B build-macos -DCUSTOM_CMAKE="./platform/osx/custom-osx.cmake" -DBUILD_TESTS=OFF
           # cmake .. -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DUSE_PORTMIDI=ON -DUSE_PORTAUDIO=ON -DUSE_PULSEAUDIO=OFF -DUSE_MP3=ON -DBUILD_OSC_OPCODES=ON -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
           cmake --build build-macos --parallel
-          cmake --install build-macos
+          sudo cmake --install build-macos
 
       - name: macos build
         run: |
