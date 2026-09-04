@@ -100,8 +100,15 @@ jobs:
         id: cache-csound
         uses: actions/cache@v4
         with:
-          path: csound/build-macos
-          key: csound-${{ runner.os }}-${{ steps.xcode-version.outputs.version }}-${{ steps.csound-hash.outputs.hash }}-${{ hashFiles('.github/workflows/build.yml') }}
+          path: |
+            csound/build-installer
+            csound/csound_install
+            csound/platform/osx/libsndfile_build/dependencies
+            csound/portmidi_install
+            csound/portaudio_install
+            csound/samplerate_install
+            csound/liblo_install
+          key: csound-installer-${{ runner.os }}-${{ steps.xcode-version.outputs.version }}-${{ steps.csound-hash.outputs.hash }}-${{ hashFiles('.github/workflows/build.yml') }}
 
       - name: Cache Homebrew downloads
         uses: actions/cache@v4
@@ -124,22 +131,79 @@ jobs:
       - name: Install ccache
         run: brew install ccache
 
-      - name: macos csound build
+      # Single Csound build: static deps, arm64, Release, installed into
+      # csound_install. CsoundQt links against this same framework and the
+      # installer .pkg is assembled from it later. Ported from csound's
+      # .github/workflows/csound_builds.yml (macos_build_installer), trimmed
+      # to arm64 and with ccache enabled.
+      - name: macos csound build (installer, arm64)
+        id: csound-build
         run: |
-          cd csound
-          brew install libogg flac lame libvorbis mpg123 opus libsndfile portaudio libsamplerate liblo portmidi
-          brew install bison flex jack googletest
-          # Keep the cached build dir on a hit, otherwise build from scratch.
-          if [ "${{ steps.cache-csound.outputs.cache-hit }}" != 'true' ]; then
-            rm -fr build-macos
-            mkdir build-macos
-          fi
-          # We need a good build since we might be shipping that with the dmg
-          cmake -B build-macos -DCUSTOM_CMAKE="./platform/osx/custom-osx.cmake" -DBUILD_TESTS=OFF \
-            -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+          set -euo pipefail
 
-          cmake --build build-macos --parallel
-          sudo cmake --install build-macos
+          CSOUND_VERSION="$(sed -n 's/.*CS_VERSION[[:space:]]*"\([0-9]*\)".*/\1/p' csound/CMakeLists.txt).$(sed -n 's/.*CS_SUBVER[[:space:]]*"\([0-9]*\)".*/\1/p' csound/CMakeLists.txt).$(sed -n 's/.*CS_PATCHLEVEL[[:space:]]*"\([0-9]*\)".*/\1/p' csound/CMakeLists.txt)"
+          echo "version=$CSOUND_VERSION" >> "$GITHUB_OUTPUT"
+          echo "Building Csound $CSOUND_VERSION installer (arm64)"
+
+          cd csound
+
+          if [ "${{ steps.cache-csound.outputs.cache-hit }}" != 'true' ]; then
+            brew install bison flex
+
+            # static codec libs (arm64 only)
+            cd platform/osx
+            chmod +x build_libsndfile.sh
+            # trim the upstream script down to arm64 only
+            sed -i.bak -e 's/ARCHS=("arm64" "x86_64")/ARCHS=("arm64")/' \
+                        -e 's/ARCHS=("x86_64" "arm64")/ARCHS=("arm64")/' \
+                        -e 's/-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"/-DCMAKE_OSX_ARCHITECTURES="arm64"/' \
+                        build_libsndfile.sh
+            ./build_libsndfile.sh
+            cd ../..
+
+            git clone --depth 1 https://github.com/PortMidi/portmidi.git
+            cmake -S portmidi -B portmidi/build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX="$PWD/portmidi_install"
+            cmake --build portmidi/build
+            cmake --build portmidi/build --target install
+
+            git clone --depth 1 https://github.com/PortAudio/portaudio.git
+            cmake -S portaudio -B portaudio/build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX="$PWD/portaudio_install"
+            cmake --build portaudio/build
+            cmake --build portaudio/build --target install
+
+            git clone --depth 1 https://github.com/libsndfile/libsamplerate
+            cmake -S libsamplerate -B libsamplerate/build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX="$PWD/samplerate_install"
+            cmake --build libsamplerate/build
+            cmake --build libsamplerate/build --target install
+
+            git clone --depth 1 https://github.com/radarsat1/liblo
+            cmake -S liblo/cmake -B liblo/build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX="$PWD/liblo_install"
+            cmake --build liblo/build
+            cmake --build liblo/build --target install
+
+            # Csound itself: static deps, arm64, Release, into csound_install
+            cmake -B build-installer -DCMAKE_BUILD_TYPE="Release" -DUSE_GETTEXT=0 \
+              -DCMAKE_PREFIX_PATH="$PWD/platform/osx/libsndfile_build/dependencies;$PWD/portmidi_install;$PWD/portaudio_install;$PWD/samplerate_install;$PWD/liblo_install" \
+              -DCMAKE_INSTALL_PREFIX="$PWD/csound_install" -DCS_FRAMEWORK_DEST="$PWD/csound_install" \
+              -DCS_OPCODE_DIR="/Applications/Csound/CsoundLib64.framework/Resources/Opcodes64/" \
+              -DCMAKE_OSX_ARCHITECTURES="arm64" -DUSE_MP3=1 -DCMAKE_VERBOSE_MAKEFILE=1 \
+              -DUSE_STATIC_DEPS=1 -DBUILD_SRC_CONV=0 -DBUILD_OSC_OPCODES=1 -DALIGN_MEMORY=1 \
+              -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+            cmake --build build-installer --config Release --parallel
+            cmake --build build-installer --target install
+
+            # relink for /Applications/Csound - MUST run before CsoundQt links,
+            # so the framework id recorded in CsoundQt is the shipped path
+            install_name_tool -id /Applications/Csound/CsoundLib64.framework/CsoundLib64 csound_install/CsoundLib64.framework/CsoundLib64
+            install_name_tool -delete_rpath "$PWD/csound_install" csound_install/CsoundLib64.framework/CsoundLib64
+            install_name_tool -change @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 /Applications/Csound/CsoundLib64.framework/Versions/7.0/CsoundLib64 csound_install/bin/csound
+            install_name_tool -change @rpath/libportmidi.2.dylib @loader_path/../../../../libs/libportmidi.dylib csound_install/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/libpmidi.dylib
+            install_name_tool -add_rpath /Applications/Csound/CsoundLib64.framework/libs portmidi_install/lib/libportmidi.dylib
+            install_name_tool -change @rpath/libportaudio.2.dylib @loader_path/../../../../libs/libportaudio.dylib csound_install/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/librtpa.dylib
+            install_name_tool -add_rpath /Applications/Csound/CsoundLib64.framework/libs portaudio_install/lib/libportaudio.dylib
+            install_name_tool -change @rpath/liblo.7.dylib @loader_path/../../../../libs/liblo.dylib csound_install/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/libosc.dylib
+            install_name_tool -add_rpath /Applications/Csound/CsoundLib64.framework/libs liblo_install/lib/liblo.dylib
+          fi
 
       - name: Cache Qt
         id: cache-qt
@@ -160,24 +224,21 @@ jobs:
           fi
           export PATH="$HOME/Qt/$QTVERSION/macos/bin:$PATH"
           
-          # brew update
-          # brew list qt || brew install qt
-          # brew link qt --force
-
-          # csound_brew_root=$(brew --prefix csound)
-          # echo "Csound brew root: $csound_brew_root"
-          # download missing csPerthread.hpp
-          # mkdir -p "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers"
-          # curl -o "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers/csPerfThread.hpp" https://raw.githubusercontent.com/csound/csound/develop/interfaces/csPerfThread.hpp
-
-          # ls -R "$csound_brew_root"
+          # CsoundQt links the CsoundLib64.framework built in the previous
+          # step (csound_install); headers come from the csound source tree.
+          CSOUND_INCLUDE_DIR="$PWD/csound/include"
+          CSOUND_INTERFACES_INCLUDE_DIR="$PWD/csound/include"
+          CSOUND_LIBRARY_DIR="$PWD/csound/csound_install/CsoundLib64.framework/Versions/7.0"
 
           ccache_args=(QMAKE_CC="$(command -v ccache) clang" QMAKE_CXX="$(command -v ccache) clang++")
-          qmake CONFIG+=rtmidi CONFIG+=release "${ccache_args[@]}" qcs.pro
+          qmake CONFIG+=rtmidi CONFIG+=release \
+            "CSOUND_INCLUDE_DIR=$CSOUND_INCLUDE_DIR" \
+            "CSOUND_INTERFACES_INCLUDE_DIR=$CSOUND_INTERFACES_INCLUDE_DIR" \
+            "CSOUND_LIBRARY_DIR=$CSOUND_LIBRARY_DIR" \
+            "${ccache_args[@]}" qcs.pro
 
           # half the cpus, at least 1
-          JOBS=$(( ($(sysctl -n hw.logicalcpu) + 1) / 2 )) 
-          [ "$JOBS" -lt 1 ] && JOBS=1
+          JOBS=$(sysctl -n hw.logicalcpu) 
           make -j"$JOBS"
 
           # -------------------------------------------------------------
@@ -200,80 +261,19 @@ jobs:
             && echo "CsoundQt binary OK"
 
       # ------------------------------------------------------------------
-      # Build the redistributable Csound installer (.pkg), arm64 only.
-      # Ported from csound's .github/workflows/csound_builds.yml
-      # (macos_build_installer), with the architectures trimmed to arm64
-      # and ccache enabled. Uses the same `csound` checkout as the
-      # CsoundQt-linking build above, but a separate build dir/config
-      # (static deps, Release, relocatable framework for /Applications/Csound).
+      # Assemble the redistributable Csound installer (.pkg), arm64, from the
+      # already-built and already-relinked csound_install. Copy (not move) into
+      # PkgContents so csound_install stays intact for caching across runs.
       # ------------------------------------------------------------------
-      - name: macos csound installer build (arm64)
-        id: csound-installer
+      - name: macos csound installer pkg (arm64)
         run: |
           set -euo pipefail
-
-          CSOUND_VERSION="$(sed -n 's/.*CS_VERSION[[:space:]]*"\([0-9]*\)".*/\1/p' csound/CMakeLists.txt).$(sed -n 's/.*CS_SUBVER[[:space:]]*"\([0-9]*\)".*/\1/p' csound/CMakeLists.txt).$(sed -n 's/.*CS_PATCHLEVEL[[:space:]]*"\([0-9]*\)".*/\1/p' csound/CMakeLists.txt)"
-          echo "version=$CSOUND_VERSION" >> "$GITHUB_OUTPUT"
-          echo "Building Csound installer for version $CSOUND_VERSION"
-
+          CSOUND_VERSION="${{ steps.csound-build.outputs.version }}"
           cd csound
 
-          # static codec libs for the redistributable framework (arm64 only)
-          cd platform/osx
-          chmod +x build_libsndfile.sh
-          # trim the upstream script down to arm64 only
-          sed -i.bak -e 's/ARCHS=("arm64" "x86_64")/ARCHS=("arm64")/' \
-                      -e 's/ARCHS=("x86_64" "arm64")/ARCHS=("arm64")/' \
-                      -e 's/-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"/-DCMAKE_OSX_ARCHITECTURES="arm64"/' \
-                      build_libsndfile.sh
-          ./build_libsndfile.sh
-          cd ../..
-
-          git clone --depth 1 https://github.com/PortMidi/portmidi.git
-          cmake -S portmidi -B portmidi/build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX="$PWD/portmidi_install"
-          cmake --build portmidi/build
-          cmake --build portmidi/build --target install
-
-          git clone --depth 1 https://github.com/PortAudio/portaudio.git
-          cmake -S portaudio -B portaudio/build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX="$PWD/portaudio_install"
-          cmake --build portaudio/build
-          cmake --build portaudio/build --target install
-
-          git clone --depth 1 https://github.com/libsndfile/libsamplerate
-          cmake -S libsamplerate -B libsamplerate/build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX="$PWD/samplerate_install"
-          cmake --build libsamplerate/build
-          cmake --build libsamplerate/build --target install
-
-          git clone --depth 1 https://github.com/radarsat1/liblo
-          cmake -S liblo/cmake -B liblo/build -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_INSTALL_PREFIX="$PWD/liblo_install"
-          cmake --build liblo/build
-          cmake --build liblo/build --target install
-
-          # static-deps Csound (arm64, Release) into csound_install
-          cmake -B build-installer -DCMAKE_BUILD_TYPE="Release" -DUSE_GETTEXT=0 \
-            -DCMAKE_PREFIX_PATH="$PWD/platform/osx/libsndfile_build/dependencies;$PWD/portmidi_install;$PWD/portaudio_install;$PWD/samplerate_install;$PWD/liblo_install" \
-            -DCMAKE_INSTALL_PREFIX="$PWD/csound_install" -DCS_FRAMEWORK_DEST="$PWD/csound_install" \
-            -DCS_OPCODE_DIR="/Applications/Csound/CsoundLib64.framework/Resources/Opcodes64/" \
-            -DCMAKE_OSX_ARCHITECTURES="arm64" -DUSE_MP3=1 -DCMAKE_VERBOSE_MAKEFILE=1 \
-            -DUSE_STATIC_DEPS=1 -DBUILD_SRC_CONV=0 -DBUILD_OSC_OPCODES=1 -DALIGN_MEMORY=1 \
-            -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-          cmake --build build-installer --config Release --parallel
-          cmake --build build-installer --target install
-
-          # relink the framework so it is self-contained under /Applications/Csound
+          # point ctcsound.py at the fixed framework location
           sed -i -e 's$ctypes.util.find_library("CsoundLib64")$"/Applications/Csound/Csound64.framework/CsoundLib64"$g' Python/ctcsound.py
 
-          install_name_tool -id /Applications/Csound/CsoundLib64.framework/CsoundLib64 csound_install/CsoundLib64.framework/CsoundLib64
-          install_name_tool -delete_rpath "$PWD/csound_install" csound_install/CsoundLib64.framework/CsoundLib64
-          install_name_tool -change @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 /Applications/Csound/CsoundLib64.framework/Versions/7.0/CsoundLib64 csound_install/bin/csound
-          install_name_tool -change @rpath/libportmidi.2.dylib @loader_path/../../../../libs/libportmidi.dylib csound_install/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/libpmidi.dylib
-          install_name_tool -add_rpath /Applications/Csound/CsoundLib64.framework/libs portmidi_install/lib/libportmidi.dylib
-          install_name_tool -change @rpath/libportaudio.2.dylib @loader_path/../../../../libs/libportaudio.dylib csound_install/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/librtpa.dylib
-          install_name_tool -add_rpath /Applications/Csound/CsoundLib64.framework/libs portaudio_install/lib/libportaudio.dylib
-          install_name_tool -change @rpath/liblo.7.dylib @loader_path/../../../../libs/liblo.dylib csound_install/CsoundLib64.framework/Versions/7.0/Resources/Opcodes64/libosc.dylib
-          install_name_tool -add_rpath /Applications/Csound/CsoundLib64.framework/libs liblo_install/lib/liblo.dylib
-
-          # assemble the .pkg (arm64)
           mkdir -p csound_install/CsoundLib64.framework/Versions/7.0/Resources/Python
           cp Python/ctcsound.py csound_install/CsoundLib64.framework/Versions/7.0/Resources/Python
           mkdir -p csound_install/CsoundLib64.framework/libs
@@ -284,17 +284,23 @@ jobs:
           cp csound_install/share/csound/CsoundConfig.cmake csound_install/CsoundLib64.framework/Versions/7.0/Resources/cmake/
           cp csound_install/share/csound/CsoundConfigVersion.cmake csound_install/CsoundLib64.framework/Versions/7.0/Resources/cmake/
           cp csound_install/share/csound/FindCsound.cmake csound_install/CsoundLib64.framework/Versions/7.0/Resources/cmake/
+
+          rm -rf csound_install/PkgContents
           mkdir -p csound_install/PkgContents/Applications/Csound
-          mv csound_install/bin/csound csound_install/PkgContents/Applications/Csound/.
-          mv csound_install/CsoundLib64.framework csound_install/PkgContents/Applications/Csound/.
+          cp -a csound_install/bin/csound csound_install/PkgContents/Applications/Csound/.
+          cp -a csound_install/CsoundLib64.framework csound_install/PkgContents/Applications/Csound/.
+
           pkgbuild --identifier com.csound.csound7Environment.csoundLib64 \
             --root csound_install/PkgContents "CsoundLib64-${CSOUND_VERSION}-beta-arm64.pkg"
           ls -lh "CsoundLib64-${CSOUND_VERSION}-beta-arm64.pkg"
 
+          # keep the cache lean: drop the PkgContents copy again
+          rm -rf csound_install/PkgContents
+
       - name: Package macOS DMG
         run: |
           set -euo pipefail
-          CSOUND_VERSION="${{ steps.csound-installer.outputs.version }}"
+          CSOUND_VERSION="${{ steps.csound-build.outputs.version }}"
           PKG="csound/CsoundLib64-${CSOUND_VERSION}-beta-arm64.pkg"
           test -f "$PKG"
           echo "Bundling: bin/${{ env.APPNAME }}.app and $PKG"
