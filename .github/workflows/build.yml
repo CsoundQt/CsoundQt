@@ -528,25 +528,44 @@ jobs:
         run: |
           ls -lR artifacts
 
-      - name: Update latest tag
+      # Replace any existing development prerelease (title starting with
+      # "Development") with this build, reusing the "latest" tag, and upload
+      # all installers (AppImage, DMG, Windows installers) as release assets.
+      - name: Publish Development Build pre-release
         if: github.ref_name == 'csoundqt7' || github.ref_name == 'develop'
-        env: 
+        env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh api --method GET "repos/${GITHUB_REPOSITORY}/git/ref/tags/latest" >/dev/null 2>&1; then
-            gh api --method PATCH "repos/${GITHUB_REPOSITORY}/git/refs/tags/latest" \
-              -f sha="${GITHUB_SHA}" \
+          set -euo pipefail
+          REPO="${{ github.repository }}"
+          SHA="${{ github.sha }}"
+          TAG="latest"
+          CSQT_VERSION="$(tr -d '\r\n ' < VERSION.txt)"
+          echo "Publishing Development Build ${CSQT_VERSION} as prerelease '${TAG}'"
+
+          # remove every previous prerelease whose title starts with "Development"
+          gh api --paginate "repos/${REPO}/releases?per_page=100" \
+            --jq '.[] | select(.prerelease == true and (.name | startswith("Development"))) | .id' \
+            | while read -r id; do
+                echo "Deleting previous development prerelease (release id ${id})"
+                gh api -X DELETE "repos/${REPO}/releases/${id}"
+              done
+
+          # point the tag at this commit (create it if it does not exist yet)
+          if gh api --method GET "repos/${REPO}/git/ref/tags/${TAG}" >/dev/null 2>&1; then
+            gh api --method PATCH "repos/${REPO}/git/refs/tags/${TAG}" \
+              -f sha="${SHA}" \
               -F force=true
+          else
+            gh api --method POST "repos/${REPO}/git/refs" \
+              -f ref="refs/tags/${TAG}" \
+              -f sha="${SHA}"
           fi
-        
-      - name: Publish Development Build
-        uses: softprops/action-gh-release@v3
-        if: github.ref_name == 'csoundqt7' || github.ref_name == 'develop'
-        with:
-          token: ${{ github.token }}
-          tag_name: latest
-          target_commitish: ${{ github.sha }}
-          name: Development Build
-          prerelease: true
-          generate_release_notes: true
-          files: artifacts/*
+
+          # (re)create the prerelease on that tag and attach all installers
+          gh release create "${TAG}" artifacts/* \
+            --prerelease \
+            --title "Development Build ${CSQT_VERSION}" \
+            --generate-notes \
+            --target "${SHA}"
+          echo "Prerelease '${TAG}' published"
