@@ -67,7 +67,7 @@ jobs:
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache-macos
       CCACHE_MAXSIZE: 2G
-      QTVERSION: 6.8.2
+      QTVERSION: 6.11.2
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
