@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - csoundqt7
-      - macos-debug
-      - windows-build
       
 env:
   PACKAGENAME: CsoundQt

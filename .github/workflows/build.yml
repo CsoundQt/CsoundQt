@@ -2,9 +2,7 @@ name: Build And Publish
 on:
   push:
     branches:
-      - develop
       - csoundqt7
-      - windows-build
 
   workflow_dispatch:
 
