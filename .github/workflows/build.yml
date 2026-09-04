@@ -144,8 +144,9 @@ jobs:
           set -o xtrace   # echo each command before it is executed
 
           pip install aqtinstall
-          aqt install-qt mac desktop 6.8.2 --outputdir ~/Qt
-          export PATH="$HOME/Qt/6.8.3/macos/bin:$PATH"
+          QTVERSION="6.8.2"
+          aqt install-qt mac desktop $QTVERSION --outputdir ~/Qt
+          export PATH="$HOME/Qt/$QTVERSION/macos/bin:$PATH"
           
           # brew update
           # brew list qt || brew install qt
