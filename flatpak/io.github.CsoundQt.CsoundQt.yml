@@ -77,7 +77,7 @@ modules:
         url: https://github.com/csound/csound
         # branch: develop
         disable-shallow-clone: true
-        commit: 609072449df7cce6b1b8f0ba4efc36f97441b52b
+        commit: e1483e1d65dfd20c4cffc0beec6241c9114dcf2f
 
   # External Csound plugins (https://github.com/csound-plugins/csound-plugins)
   # Built against the csound installed above (headers in /app/include/csound),
@@ -170,7 +170,7 @@ modules:
       - type: dir
         path: /home/em/dev/forks/CsoundQt
         url: https://github.com/CsoundQt/CsoundQt.git
-        commit: 5771587188542844d630a9545c108f63be34f36a
+        commit: 4ac47a7996ea0b96bb4792d99fff05f45566894b
         
     build-commands:
       - which qmake
@@ -206,7 +206,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/csound/manual/releases/download/latest/csound7-manual-offline.zip
-        sha256: 1de0c2beff9c9fc03292939745aaed0f4e057b31231d7586b88902e2d4eb5b76
+        sha256: 4ae3d71ead44931d9e7636c4af881d4d0ab5ae064fbc473c46328b9b9bebbb1c
         dest-filename: csound7-manual-offline.zip
         x-checker-data:
           type: html
@@ -214,7 +214,7 @@ modules:
           pattern: 'csound7-manual-offline\.zip'
 
       - type: file
-        url: https://github.com/csound/csound/raw/d34a8e17c00f9233fa2dc3ce9953d57ac32660f0/COPYING
+        url: https://github.com/csound/csound/raw/e1483e1d65dfd20c4cffc0beec6241c9114dcf2f/COPYING
         sha256: 277175daefabde6cff3f6dd8ad7a21a2a346b29d3a7d3762367e4354da2ed77d
         dest-filename: COPYING
 

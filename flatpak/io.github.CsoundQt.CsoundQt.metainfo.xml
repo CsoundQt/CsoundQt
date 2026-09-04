@@ -21,9 +21,10 @@
   <url type="bugtracker">https://github.com/CsoundQt/CsoundQt/issues</url>
 
   <releases>
-    <release version="7.0.1" date="2026-08-27">
+    <release version="7.0.2" date="2026-09-04">
       <description>
         <p>Flatpak version includes a terminal app for "Run in Terminal"</p>
+        <p>Help dock rewritten to drop the qtwebengine (chrome) dependency</p>
       </description>
     </release>
     <release version="7.0.0" date="2026-07-28">
