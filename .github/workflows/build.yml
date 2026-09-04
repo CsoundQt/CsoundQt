@@ -67,6 +67,7 @@ jobs:
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache-macos
       CCACHE_MAXSIZE: 2G
+      QTVERSION: 6.8.2
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -134,18 +135,29 @@ jobs:
             mkdir build-macos
           fi
           # We need a good build since we might be shipping that with the dmg
-          cmake -B build-macos -DCUSTOM_CMAKE="./platform/osx/custom-osx.cmake" -DBUILD_TESTS=OFF
-          # cmake .. -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DUSE_PORTMIDI=ON -DUSE_PORTAUDIO=ON -DUSE_PULSEAUDIO=OFF -DUSE_MP3=ON -DBUILD_OSC_OPCODES=ON -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
+          cmake -B build-macos -DCUSTOM_CMAKE="./platform/osx/custom-osx.cmake" -DBUILD_TESTS=OFF \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+
           cmake --build build-macos --parallel
           sudo cmake --install build-macos
+
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v4
+        with:
+          path: ~/Qt
+          key: qt-${{ runner.os }}-${{ env.QTVERSION }}
 
       - name: macos build
         run: |
           set -o xtrace   # echo each command before it is executed
 
           pip install aqtinstall
-          QTVERSION="6.8.2"
-          aqt install-qt mac desktop $QTVERSION --outputdir ~/Qt
+          # Only install if needed, use the existence of qmake as sign that
+          # qt is in the cache
+          if [ ! -x "$HOME/Qt/$QTVERSION/macos/bin/qmake" ]; then
+            aqt install-qt mac desktop "$QTVERSION" --outputdir ~/Qt
+          fi
           export PATH="$HOME/Qt/$QTVERSION/macos/bin:$PATH"
           
           # brew update
