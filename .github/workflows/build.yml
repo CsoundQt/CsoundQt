@@ -132,47 +132,63 @@ jobs:
             rm -fr build-macos
             mkdir build-macos
           fi
-          cd build-macos
-          # We need a very minimal build
-          cmake .. -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
-          cmake --build . --parallel
-          sudo make install
+          # We need a good build since we might be shipping that with the dmg
+          cmake -B build-macos -DCUSTOM_CMAKE="./platform/osx/custom-osx.cmake"
+          # cmake .. -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DUSE_PORTMIDI=ON -DUSE_PORTAUDIO=ON -DUSE_PULSEAUDIO=OFF -DUSE_MP3=ON -DBUILD_OSC_OPCODES=ON -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
+          cmake --build build-macos --parallel
+          cmake --install build-macos
 
       - name: macos build
         run: |
           set -o xtrace   # echo each command before it is executed
 
-          brew update
-          # homebrew defaults to qt6
-          brew list qt || brew install qt
-          brew link qt --force
+          pip install aqtinstall
+          aqt install-qt mac desktop 6.8.2 --outputdir ~/Qt
+          export PATH="$HOME/Qt/6.8.3/macos/bin:$PATH"
+          
+          # brew update
+          # brew list qt || brew install qt
+          # brew link qt --force
 
-          csound_brew_root=$(brew --prefix csound)
-          echo "Csound brew root: $csound_brew_root"
+          # csound_brew_root=$(brew --prefix csound)
+          # echo "Csound brew root: $csound_brew_root"
           # download missing csPerthread.hpp
-          mkdir -p "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers"
-          curl -o "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers/csPerfThread.hpp" https://raw.githubusercontent.com/csound/csound/develop/interfaces/csPerfThread.hpp
+          # mkdir -p "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers"
+          # curl -o "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers/csPerfThread.hpp" https://raw.githubusercontent.com/csound/csound/develop/interfaces/csPerfThread.hpp
 
-          ls -R "$csound_brew_root"
+          # ls -R "$csound_brew_root"
 
           ccache_args=(QMAKE_CC="$(command -v ccache) clang" QMAKE_CXX="$(command -v ccache) clang++")
           qmake CONFIG+=rtmidi CONFIG+=release "${ccache_args[@]}" qcs.pro
 
-          # --- Portable, safer parallelism for make (macOS-compatible) ---
-          NUM_PROCS=1
-          if command -v nproc >/dev/null 2>&1; then
-            NUM_PROCS=$(nproc)
-          else
-            # macOS: use sysctl to get logical CPU count
-            NUM_PROCS=$(sysctl -n hw.logicalcpu 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
-          fi
-          # Use at most half of CPUs (but at least 1), and cap to MAX_JOBS to avoid OOMs
-          NUM_JOBS=$(( NUM_PROCS > 2 ? NUM_PROCS / 2 : NUM_PROCS ))
-          MAX_JOBS=4
-          if [ "$NUM_JOBS" -gt "$MAX_JOBS" ]; then NUM_JOBS=$MAX_JOBS; fi
-          echo "Detected $NUM_PROCS CPUs, using $NUM_JOBS parallel jobs for make"
-          make -j"${NUM_JOBS}"
+          # # --- Portable, safer parallelism for make (macOS-compatible) ---
+          # NUM_PROCS=1
+          # if command -v nproc >/dev/null 2>&1; then
+          #   NUM_PROCS=$(nproc)
+          # else
+          #   # macOS: use sysctl to get logical CPU count
+          #   NUM_PROCS=$(sysctl -n hw.logicalcpu 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+          # fi
+          # # Use at most half of CPUs (but at least 1), and cap to MAX_JOBS to avoid OOMs
+          # NUM_JOBS=$(( NUM_PROCS > 2 ? NUM_PROCS / 2 : NUM_PROCS ))
+          # MAX_JOBS=4
+          # if [ "$NUM_JOBS" -gt "$MAX_JOBS" ]; then NUM_JOBS=$MAX_JOBS; fi
+          # echo "Detected $NUM_PROCS CPUs, using $NUM_JOBS parallel jobs for make"
+          # make -j"${NUM_JOBS}"
           # -------------------------------------------------------------
+
+          # --- Bundle the offline Csound manual into the app bundle ------
+          # CsoundQt auto-detects it at Contents/Resources/Manual on macOS
+          # (see csoundqt.cpp). Same download as installers/Linux/build-appimage.sh.
+          MANUAL_DIR="manual/csound7-manual-offline"
+          if [ ! -d "$MANUAL_DIR" ]; then
+            mkdir -p manual
+            curl -L --fail --silent --show-error -o manual/csound7-manual-offline.zip \
+              https://github.com/csound/manual/releases/download/latest/csound7-manual-offline.zip
+            unzip -q manual/csound7-manual-offline.zip -d manual
+          fi
+          mkdir -p "bin/${{ env.APPNAME }}.app/Contents/Resources/Manual"
+          cp -a "$MANUAL_DIR/." "bin/${{ env.APPNAME }}.app/Contents/Resources/Manual/"
 
           otool -L bin/${{ env.APPNAME }}.app/Contents/MacOS/${{ env.APPNAME }}
           hdiutil create -fs HFS+ -srcfolder bin/${{ env.APPNAME }}.app -volname CsoundQt CsoundQt.dmg
