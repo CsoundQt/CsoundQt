@@ -191,7 +191,7 @@ jobs:
           fi
           mkdir -p "bin/${{ env.APPNAME }}.app/Contents/Resources/Manual"
           cp -a "$MANUAL_DIR/." "bin/${{ env.APPNAME }}.app/Contents/Resources/Manual/"
-
+          find bin -maxdepth 4 | sort
           otool -L bin/${{ env.APPNAME }}.app/Contents/MacOS/${{ env.APPNAME }}
           hdiutil create -fs HFS+ -srcfolder bin/${{ env.APPNAME }}.app -volname CsoundQt CsoundQt.dmg
 
