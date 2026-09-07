@@ -170,7 +170,7 @@ modules:
       - type: dir
         path: /home/em/dev/forks/CsoundQt
         url: https://github.com/CsoundQt/CsoundQt.git
-        commit: 4ac47a7996ea0b96bb4792d99fff05f45566894b
+        commit: c16abfaa038ad6fb89ee38d6f10dd93fdfddefe2
         
     build-commands:
       - which qmake
