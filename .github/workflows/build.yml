@@ -258,6 +258,24 @@ jobs:
           test -x bin/${{ env.APPNAME }}.app/Contents/MacOS/${{ env.APPNAME }} \
             && echo "CsoundQt binary OK"
 
+      # qcs.pro only runs macdeployqt through an INSTALLS rule (make install),
+      # which the workflow never invokes - so do the deployment explicitly here.
+      # Without it the .app keeps absolute references to the aqt Qt install in
+      # $HOME/Qt and ships without any Qt frameworks (cannot be launched on
+      # machines that do not have that Qt installation).
+      - name: Bundle Qt frameworks into app bundle
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/Qt/${{ env.QTVERSION }}/macos/bin:$PATH"
+          APP="bin/${{ env.APPNAME }}.app"
+          test -d "$APP"
+          macdeployqt "$APP" -qmldir="$PWD/src/QML"
+          # arm64 binaries must carry a signature before they can be launched;
+          # macdeployqt invalidates the Qt frameworks' signatures when it
+          # rewrites their install names, so re-sign everything ad hoc.
+          find "$APP" -type f -name '*.dylib' -exec codesign --force --sign - {} + 2>/dev/null || true
+          codesign --force --deep --sign - "$APP"
+
       # ------------------------------------------------------------------
       # Assemble the redistributable Csound installer (.pkg), arm64, from the
       # already-built and already-relinked csound_install. Copy (not move) into
@@ -294,6 +312,14 @@ jobs:
 
           # keep the cache lean: drop the PkgContents copy again
           rm -rf csound_install/PkgContents
+
+      - name: Smoke test macOS app bundle
+        env:
+          CSOUND_PKG: csound/CsoundLib64-${{ steps.csound-build.outputs.version }}-beta-arm64.pkg
+        run: |
+          set -euo pipefail
+          test -f "${CSOUND_PKG}"
+          bash installers/MacOS/test-app-bundle.sh "bin/${{ env.APPNAME }}.app"
 
       - name: Package macOS DMG
         run: |
