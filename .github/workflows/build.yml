@@ -578,6 +578,10 @@ jobs:
         if: github.ref_name == 'csoundqt7' || github.ref_name == 'develop'
         env:
           GH_TOKEN: ${{ github.token }}
+          # this job does not checkout the repository, so gh cannot discover
+          # the repo from git; point it there explicitly (gh release create
+          # and --generate-notes would otherwise fail with "not a git repository")
+          GH_REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
           REPO="${{ github.repository }}"
