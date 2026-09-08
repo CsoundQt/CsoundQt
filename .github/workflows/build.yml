@@ -263,6 +263,11 @@ jobs:
       # Without it the .app keeps absolute references to the aqt Qt install in
       # $HOME/Qt and ships without any Qt frameworks (cannot be launched on
       # machines that do not have that Qt installation).
+      #
+      # macdeployqt must run WITHOUT signing: its built-in signing is
+      # unreliable and the code it deploys must be signed by hand, inside-out,
+      # because arm64 refuses to load binaries with a missing/invalid
+      # signature. codesign --deep is deprecated by Apple, so sign leaf-by-leaf.
       - name: Bundle Qt frameworks into app bundle
         run: |
           set -euo pipefail
@@ -270,11 +275,23 @@ jobs:
           APP="bin/${{ env.APPNAME }}.app"
           test -d "$APP"
           macdeployqt "$APP" -qmldir="$PWD/src/QML"
-          # arm64 binaries must carry a signature before they can be launched;
-          # macdeployqt invalidates the Qt frameworks' signatures when it
-          # rewrites their install names, so re-sign everything ad hoc.
-          find "$APP" -type f -name '*.dylib' -exec codesign --force --sign - {} + 2>/dev/null || true
-          codesign --force --deep --sign - "$APP"
+
+          # 1. sign every Mach-O leaf (dylibs, framework binaries, plugins,
+          #    QML module plugins) so nothing loads unsigned on arm64
+          while IFS= read -r -d '' f; do
+            case "$(file -b "$f")" in
+              *Mach-O*) codesign --force --sign - "$f" ;;
+            esac
+          done < <(find "$APP" -type f -print0)
+
+          # 2. seal the framework bundles over their (already signed) code
+          while IFS= read -r -d '' fw; do
+            codesign --force --sign - "$fw"
+          done < <(find "$APP/Contents/Frameworks" -maxdepth 1 -name '*.framework' -print0)
+
+          # 3. main executable, then the .app bundle itself
+          codesign --force --sign - "$APP/Contents/MacOS/${{ env.APPNAME }}"
+          codesign --force --sign - "$APP"
 
       # ------------------------------------------------------------------
       # Assemble the redistributable Csound installer (.pkg), arm64, from the
