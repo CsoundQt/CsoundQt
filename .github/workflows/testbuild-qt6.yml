@@ -210,7 +210,7 @@ jobs:
           INSTALLER=$(find csound-dl -maxdepth 2 -iname 'Csound7-windows_x86_64-*.exe' | head -1)
           test -n "${INSTALLER}" || { echo "Csound installer exe not found in artifact"; exit 1; }
           echo "Csound installer: ${INSTALLER}"
-          cp "${INSTALLER}" csound-dl/Csound7-windows_x86_64.exe
+          cp "${INSTALLER}" csound-dl/Csound7-windows-x86_64.exe
           # Silent install into a local folder (same layout as "Program Files\Csound7"):
           #   bin\csound64.dll, lib\csound64.lib, include\csound, plugins64
           CSOUND_DIR=$(cygpath -w "$GITHUB_WORKSPACE/csound7")
@@ -309,7 +309,7 @@ jobs:
           MSYS_NO_PATHCONV=1 iscc /o. installers/Windows/csoundqt7-x64.iss
           cp CsoundQt-windows-x86_64.exe artifacts/
           # pass the Csound installer (official development build) along too
-          cp csound-dl/Csound7-windows_x86_64.exe artifacts/
+          cp csound-dl/Csound7-windows-x86_64.exe artifacts/
           ls -la artifacts
 
       - uses: actions/upload-artifact@v4
