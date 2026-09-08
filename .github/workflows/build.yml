@@ -583,9 +583,7 @@ jobs:
           REPO="${{ github.repository }}"
           SHA="${{ github.sha }}"
           TAG="latest"
-          CSQT_VERSION="$(tr -d '\r\n ' < VERSION.txt)"
-          echo "Publishing Development Build ${CSQT_VERSION} as prerelease '${TAG}'"
-
+          
           # remove every previous prerelease whose title starts with "Development"
           gh api --paginate "repos/${REPO}/releases?per_page=100" \
             --jq '.[] | select(.prerelease == true and (.name | startswith("Development"))) | .id' \
@@ -608,7 +606,7 @@ jobs:
           # (re)create the prerelease on that tag and attach all installers
           gh release create "${TAG}" artifacts/* \
             --prerelease \
-            --title "Development Build ${CSQT_VERSION}" \
+            --title "Development Build" \
             --generate-notes \
             --target "${SHA}"
           echo "Prerelease '${TAG}' published"
