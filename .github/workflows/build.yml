@@ -527,10 +527,9 @@ jobs:
           export CSOUNDQT_VERSION="$(tr -d '\r\n ' < VERSION.txt)"
           export CSOUNDQT_APPNAME="${{ env.APPNAME }}.exe"
           export CSOUNDQT_STAGING_DIR="$(cygpath -w "${STAGE}")"
-          export CSOUNDQT_BUILDNUM="${GITHUB_RUN_NUMBER}"
           # iscc only ships on the machine via choco; /o. puts the installer in cwd
           MSYS_NO_PATHCONV=1 iscc /o. installers/Windows/csoundqt7-x64.iss
-          cp CsoundQt-*-windows_x86_64-*.exe artifacts/
+          cp CsoundQt-windows-x86_64.exe artifacts/
           # pass the Csound installer (official development build) along too
           cp csound-dl/Csound7-windows_x86_64.exe artifacts/
           ls -la artifacts

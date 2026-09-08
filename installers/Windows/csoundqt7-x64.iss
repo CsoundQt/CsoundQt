@@ -8,23 +8,14 @@
 ;   CSOUNDQT_VERSION        e.g. "7.0.2"
 ;   CSOUNDQT_APPNAME        executable file name, e.g. "CsoundQt-d-cs7.exe"
 ;   CSOUNDQT_STAGING_DIR    directory whose content is installed to {app}
-;
-; Optional environment variables:
-;   CSOUNDQT_BUILDNUM       appended to the output file name (e.g. GITHUB_RUN_NUMBER)
 
 [setup]
 #define AppName "CsoundQt"
 #define AppVersion GetEnv("CSOUNDQT_VERSION")
 #define AppExeName GetEnv("CSOUNDQT_APPNAME")
 #define StagingDir GetEnv("CSOUNDQT_STAGING_DIR")
-#define BuildNum GetEnv("CSOUNDQT_BUILDNUM")
 #define AppPublisher "CsoundQt"
 #define AppURL "https://csoundqt.github.io/"
-#if BuildNum != ""
-#define BuildSuffix "-" + BuildNum
-#else
-#define BuildSuffix ""
-#endif
 
 AppName={#AppName}
 AppVerName={#AppName} {#AppVersion}
@@ -40,7 +31,7 @@ AllowNoIcons=yes
 DisableDirPage=no
 LicenseFile="..\..\lgpl-2.1.txt"
 SetupIconFile="..\..\images\csoundqt.ico"
-OutputBaseFilename={#AppName}-{#AppVersion}-windows_x86_64{#BuildSuffix}
+OutputBaseFilename={#AppName}-windows-x86_64
 Compression=lzma2
 SolidCompression=yes
 ArchitecturesAllowed=x64compatible
