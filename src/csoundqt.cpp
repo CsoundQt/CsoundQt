@@ -3151,12 +3151,12 @@ void CsoundQt::resetPreferences()
 
 void CsoundQt::reportBug()
 {
-    openExternalBrowser(QUrl("https://github.com/CsoundQt/CsoundQt/issues/new"));
+    openExternalBrowser(QUrl("https://github.com/CsoundQt/CsoundQt/issues"));
 }
 
 void CsoundQt::reportCsoundBug()
 {
-    openExternalBrowser(QUrl("https://github.com/csound/csound/issues/new"));
+    openExternalBrowser(QUrl("https://github.com/csound/csound/issues"));
 }
 
 void CsoundQt::openShortcutDialog()
