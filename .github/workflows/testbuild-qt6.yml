@@ -1,8 +1,9 @@
 name: Test Build qt 6
 on:
   push:
-    branches:
-      - csoundqt7
+    branches-ignore:
+      - develop
+      - csound7
       
 env:
   PACKAGENAME: CsoundQt
