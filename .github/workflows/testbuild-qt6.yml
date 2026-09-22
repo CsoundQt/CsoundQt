@@ -4,7 +4,11 @@ on:
     branches-ignore:
       - develop
       - csound7
-      
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   PACKAGENAME: CsoundQt
   APPNAME: CsoundQt-d-cs7
@@ -25,6 +29,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
+          fetch-depth: 1
+
       - name: update submodules
         run: |
           echo "Calling git submodule update"
@@ -38,17 +44,36 @@ jobs:
           repository: csound/csound
           path: csound
           ref: develop
+          fetch-depth: 1
 
       - name: Get Csound commit hash
         id: csound-hash
         run: echo "hash=$(git -C csound rev-parse HEAD)" >> $GITHUB_OUTPUT
 
+      # ------------------------------------------------------------------
+      # FIXED Csound cache: correct path, per-arch key, restore-keys so a
+      # new Csound commit still reuses the previous build incrementally.
+      # ------------------------------------------------------------------
       - name: Cache Csound build
         id: cache-csound
+        if: runner.os != 'Windows'
         uses: actions/cache@v4
         with:
-          path: csound/build
-          key: csound-${{ runner.os }}-${{ steps.csound-hash.outputs.hash }}
+          path: |
+            csound/build-macos
+            csound/build-linux
+          key: csound-${{ runner.os }}-${{ runner.arch }}-${{ steps.csound-hash.outputs.hash }}-v2
+          restore-keys: |
+            csound-${{ runner.os }}-${{ runner.arch }}-
+
+      # ccache for the whole job (Linux/macOS). Speeds up both Csound and
+      # CsoundQt rebuilds across runs.
+      - name: Setup ccache
+        if: runner.os != 'Windows'
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ runner.os }}-${{ runner.arch }}-buildjob
+          max-size: 2G
 
       - name: Cache Homebrew downloads
         if: runner.os == 'macOS'
@@ -60,55 +85,66 @@ jobs:
           restore-keys: |
             brew-${{ runner.os }}-
 
-      - name: macos csound build
+      # ---- macOS -------------------------------------------------------
+      - name: macos build deps
         if: runner.os == 'macOS'
         run: |
-          cd csound    
           brew install libogg flac lame libvorbis mpg123 opus libsndfile portaudio libsamplerate liblo portmidi
           brew install bison flex jack
-          rm -fr build-macos
-          mkdir build-macos && cd build-macos
-          # We need a very minimal build
-          cmake .. -DCMAKE_OSX_ARCHITECTURES=arm64 -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
+
+      - name: macos csound build
+        if: runner.os == 'macOS' && steps.cache-csound.outputs.cache-hit != 'true'
+        run: |
+          cd csound
+          mkdir -p build-macos
+          cd build-macos
+          cmake .. -DCMAKE_OSX_ARCHITECTURES=arm64 \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF \
+            -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF \
+            -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF \
+            -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
           cmake --build . --parallel
-          sudo make install
-                  
+
+      - name: macos csound install
+        if: runner.os == 'macOS'
+        run: |
+          cd csound/build-macos
+          # cmake --install does not rebuild first, so cache hits stay fast.
+          sudo cmake --install .
+
       - name: macos build
         if: runner.os == 'macOS'
         run: |
-          set -o xtrace   # echo each command before it is executed
+          set -o xtrace
 
-          brew update
-          # homebrew defaults to qt6
           brew list qt || brew install qt
           brew link qt --force
 
           csound_brew_root=$(brew --prefix csound)
           echo "Csound brew root: $csound_brew_root"
-          # download missing csPerthread.hpp
           mkdir -p "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers"
           curl -o "$csound_brew_root/Frameworks/CsoundLib64.framework/Versions/7.0/Headers/csPerfThread.hpp" https://raw.githubusercontent.com/csound/csound/develop/interfaces/csPerfThread.hpp
 
           ls -R "$csound_brew_root"
 
-          # qmake CONFIG+=rtmidi CONFIG+=release CSOUND_LIBRARY_DIR+="$csound_lib" qcs.pro
-          qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
+          qmake CONFIG+=rtmidi CONFIG+=release \
+            QMAKE_CC="ccache clang" \
+            QMAKE_CXX="ccache clang++" \
+            qcs.pro
 
-          # --- Portable, safer parallelism for make (macOS-compatible) ---
           NUM_PROCS=1
           if command -v nproc >/dev/null 2>&1; then
             NUM_PROCS=$(nproc)
           else
-            # macOS: use sysctl to get logical CPU count
             NUM_PROCS=$(sysctl -n hw.logicalcpu 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
           fi
-          # Use at most half of CPUs (but at least 1), and cap to MAX_JOBS to avoid OOMs
           NUM_JOBS=$(( NUM_PROCS > 2 ? NUM_PROCS / 2 : NUM_PROCS ))
           MAX_JOBS=4
           if [ "$NUM_JOBS" -gt "$MAX_JOBS" ]; then NUM_JOBS=$MAX_JOBS; fi
           echo "Detected $NUM_PROCS CPUs, using $NUM_JOBS parallel jobs for make"
           make -j"${NUM_JOBS}"
-          # -------------------------------------------------------------
 
           otool -L bin/${{ env.APPNAME }}.app/Contents/MacOS/${{ env.APPNAME }}
           hdiutil create -fs HFS+ -srcfolder bin/${{ env.APPNAME }}.app -volname CsoundQt CsoundQt.dmg
@@ -122,23 +158,40 @@ jobs:
           ls artifacts
           echo "ready!"
 
-      - name: linux setup csound7
-        if: runner.os == 'linux' # && steps.cache-csound.outputs.cache-hit != 'true'
+      # ---- Linux -------------------------------------------------------
+      - name: Linux build deps
+        if: runner.os == 'linux'
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: >
+            cmake libsndfile1-dev libasound2-dev libjack-dev
+            portaudio19-dev libportmidi-dev default-jdk libpng-dev
+            libgmm++-dev bison flex libportsmf-dev libeigen3-dev
+            libcunit1-dev
+          version: 1.0
+
+      - name: linux csound build
+        if: runner.os == 'linux' && steps.cache-csound.outputs.cache-hit != 'true'
         run: |
-          # git clone -b develop https://github.com/csound/csound --depth 1
           cd csound
-          sudo apt-get update && sudo apt-get install cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libportmidi-dev default-jdk libpng-dev libgmm++-dev bison flex libportsmf-dev libeigen3-dev libcunit1-dev
-          rm -fr build-linux
-          mkdir build-linux && cd build-linux
-          cmake .. -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
+          mkdir -p build-linux
+          cd build-linux
+          cmake .. \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF \
+            -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF \
+            -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF \
+            -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
           cmake --build . --parallel
-          sudo make install
-          # sudo cmake --install .
-          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
-          echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+
+      - name: linux csound install
+        if: runner.os == 'linux'
+        run: |
+          cd csound/build-linux
+          sudo cmake --install .
           sudo ldconfig
           csound --version
-          # strace -f -t -e trace=file csound -+rtaudio=dummy --devices=out | grep "\.so" || echo ok
 
       - name: Install Qt in linux
         if: runner.os == 'linux'
@@ -148,26 +201,22 @@ jobs:
           host: linux
           target: desktop
           arch: linux_gcc_64
-          cache: true  # caches the Qt install between runs
+          cache: true
 
       - name: linux csoundqt7 build
         if: runner.os == 'linux'
         run: |
           qmake --version
           git submodule update --init --recursive
-          qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
+          qmake CONFIG+=rtmidi CONFIG+=release \
+            QMAKE_CC="ccache gcc" \
+            QMAKE_CXX="ccache g++" \
+            qcs.pro
           make -j$(nproc)
           mkdir -p artifacts
           cp bin/* artifacts
 
-      # ------------------------------------------------------------------
-      # Windows build. Instead of compiling Csound from source (there is no
-      # apt/brew on Windows), we consume the official Csound 7 development
-      # build produced by csound/csound's own GitHub Actions workflow. We then
-      # compile csoundqt against csound and bundle the whole thing 
-      # into a csoundqt installer via inno setup
-      # ------------------------------------------------------------------
-
+      # ---- Windows -----------------------------------------------------
       - name: Set up MSVC command line environment (windows)
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
@@ -197,14 +246,21 @@ jobs:
           echo "run-id=${RUN_ID}" >> "$GITHUB_OUTPUT"
           echo "artifact=${ART_NAME}" >> "$GITHUB_OUTPUT"
 
-      - name: Download and install latest Csound 7 development build (windows)
-        id: csound-install-win
+      # Cache the installed Csound 7 folder keyed by the exact artifact name,
+      # so a new Csound development build invalidates the cache automatically.
+      - name: Cache Csound 7 Windows install
+        id: cache-csound-win
         if: runner.os == 'Windows'
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/csound7
+          key: csound7-win-${{ steps.csound-installer.outputs.artifact }}
+
+      - name: Download and install latest Csound 7 development build (windows)
+        if: runner.os == 'Windows' && steps.cache-csound-win.outputs.cache-hit != 'true'
         run: |
           set -euo pipefail
           mkdir -p csound-dl
-          # csound artifacts are not downloadable cross-repo with a plain token;
-          # nightly.link mirrors them anonymously.
           curl -fsSL "https://nightly.link/csound/csound/actions/runs/${{ steps.csound-installer.outputs.run-id }}/${{ steps.csound-installer.outputs.artifact }}.zip" \
             -o csound-dl/csound-installer.zip
           powershell -Command "Expand-Archive -Path 'csound-dl/csound-installer.zip' -DestinationPath 'csound-dl' -Force"
@@ -212,13 +268,10 @@ jobs:
           test -n "${INSTALLER}" || { echo "Csound installer exe not found in artifact"; exit 1; }
           echo "Csound installer: ${INSTALLER}"
           cp "${INSTALLER}" csound-dl/Csound7-windows-x86_64.exe
-          # Silent install into a local folder (same layout as "Program Files\Csound7"):
-          #   bin\csound64.dll, lib\csound64.lib, include\csound, plugins64
           CSOUND_DIR=$(cygpath -w "$GITHUB_WORKSPACE/csound7")
           MSYS_NO_PATHCONV=1 "${INSTALLER}" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- "/DIR=${CSOUND_DIR}"
           ls "$GITHUB_WORKSPACE/csound7"
           "$GITHUB_WORKSPACE/csound7/bin/csound.exe" --version
-          echo "csound7-dir=$GITHUB_WORKSPACE/csound7" >> "$GITHUB_OUTPUT"
 
       - name: Install Qt in windows
         if: runner.os == 'Windows'
@@ -240,8 +293,6 @@ jobs:
         run: |
           qmake --version
           git submodule update --init --recursive
-          # qcs.pro runs windeployqt6 at the end of the build; make that tool
-          # resolve to the real windeployqt shipped with this Qt install.
           QT_BIN=$(dirname "$(command -v windeployqt)")
           if [ ! -f "${QT_BIN}/windeployqt6.exe" ]; then
             cp "${QT_BIN}/windeployqt.exe" "${QT_BIN}/windeployqt6.exe"
@@ -249,20 +300,13 @@ jobs:
           CSOUND_DIR="$GITHUB_WORKSPACE/csound7"
           CSINC=$(cygpath -m "${CSOUND_DIR}/include/csound")
           CSLIB=$(cygpath -m "${CSOUND_DIR}/lib")
-          # Keep csound64.dll next to the exe so the linker/deployment tools
-          # never complain about a missing import.
           mkdir -p bin
           cp -f "${CSOUND_DIR}/bin/csound64.dll" bin/ 2>/dev/null || true
           qmake CONFIG+=rtmidi CONFIG+=release qcs.pro \
             "CSOUND_API_INCLUDE_DIR=${CSINC}" \
             "CSOUND_INTERFACES_INCLUDE_DIR=${CSINC}" \
             "CSOUND_LIBRARY_DIR=${CSLIB}"
-          # nmake may report failure only because of qmake's post-build
-          # deployment step; the real criterion is the produced executable.
           set +e
-          # Git Bash puts GNU coreutils in PATH, where /usr/bin/link.exe
-          # shadows MSVC's link.exe. Run nmake with a PATH that excludes the
-          # MSYS/Git unix tool dirs so the MSVC toolchain is used exclusively.
           NMAKE_PATH=""
           while IFS= read -r p; do
             case "${p}" in
@@ -286,7 +330,6 @@ jobs:
           set -euo pipefail
           APP_EXE="bin/${{ env.APPNAME }}.exe"
           test -f "${APP_EXE}"
-          # Make sure the Qt runtime is fully deployed next to the exe.
           if [ ! -f "bin/Qt6Core.dll" ]; then
             windeployqt --qmldir "$PWD/src/QML" "${APP_EXE}"
           fi
@@ -295,8 +338,6 @@ jobs:
           rm -rf "${STAGE}"
           mkdir -p "${STAGE}/plugins64"
           cp -r bin/. "${STAGE}/"
-          # Bundle the Csound runtime CsoundQt was built against, so the
-          # resulting installation is self-contained and distributable.
           cp -f "${CSOUND_DIR}/bin/csound64.dll" "${STAGE}/"
           if [ -d "${CSOUND_DIR}/plugins64" ]; then
             cp -rf "${CSOUND_DIR}/plugins64/." "${STAGE}/plugins64/"
@@ -306,11 +347,9 @@ jobs:
           export CSOUNDQT_VERSION="$(tr -d '\r\n ' < VERSION.txt)"
           export CSOUNDQT_APPNAME="${{ env.APPNAME }}.exe"
           export CSOUNDQT_STAGING_DIR="$(cygpath -w "${STAGE}")"
-          # iscc only ships on the machine via choco; /o. puts the installer in cwd
           MSYS_NO_PATHCONV=1 iscc /o. installers/Windows/csoundqt7-x64.iss
           cp CsoundQt-windows-x86_64.exe artifacts/
-          # pass the Csound installer (official development build) along too
-          cp csound-dl/Csound7-windows-x86_64.exe artifacts/
+          cp csound-dl/Csound7-windows-x86_64.exe artifacts/ 2>/dev/null || true
           ls -la artifacts
 
       - uses: actions/upload-artifact@v4
@@ -327,6 +366,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
+          fetch-depth: 1
 
       - name: update submodules
         run: |
@@ -340,17 +380,56 @@ jobs:
           repository: csound/csound
           path: csound
           ref: develop
+          fetch-depth: 1
 
-      - name: linux setup csound7
+      - name: Get Csound commit hash
+        id: csound-hash
+        run: echo "hash=$(git -C csound rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Cache Csound build
+        id: cache-csound
+        uses: actions/cache@v4
+        with:
+          path: csound/build-linux
+          key: csound-${{ runner.os }}-${{ runner.arch }}-${{ steps.csound-hash.outputs.hash }}-v2
+          restore-keys: |
+            csound-${{ runner.os }}-${{ runner.arch }}-
+
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ runner.os }}-${{ runner.arch }}-htmlsupport
+          max-size: 2G
+
+      - name: Linux build deps
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: >
+            cmake libsndfile1-dev libasound2-dev libjack-dev
+            portaudio19-dev libportmidi-dev default-jdk libpng-dev
+            libgmm++-dev bison flex libportsmf-dev libeigen3-dev
+            libcunit1-dev
+          version: 1.0
+
+      - name: linux csound build
+        if: steps.cache-csound.outputs.cache-hit != 'true'
         run: |
           cd csound
-          sudo apt-get update && sudo apt-get install cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libportmidi-dev default-jdk libpng-dev libgmm++-dev bison flex libportsmf-dev libeigen3-dev libcunit1-dev
-          rm -fr build-linux
-          mkdir build-linux && cd build-linux
-          cmake .. -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
+          mkdir -p build-linux
+          cd build-linux
+          cmake .. \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF \
+            -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF \
+            -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF \
+            -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
           cmake --build . --parallel
-          sudo make install
-          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+
+      - name: linux csound install
+        run: |
+          cd csound/build-linux
+          sudo cmake --install .
           sudo ldconfig
           csound --version
 
@@ -368,7 +447,10 @@ jobs:
         run: |
           qmake --version
           git submodule update --init --recursive
-          qmake CONFIG+=rtmidi CONFIG+=html_support CONFIG+=release qcs.pro
+          qmake CONFIG+=rtmidi CONFIG+=html_support CONFIG+=release \
+            QMAKE_CC="ccache gcc" \
+            QMAKE_CXX="ccache g++" \
+            qcs.pro
           make -j$(nproc)
 
   buildjob-arm64-linux:
@@ -380,6 +462,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
+          fetch-depth: 1
 
       - name: update submodules
         run: |
@@ -393,17 +476,56 @@ jobs:
           repository: csound/csound
           path: csound
           ref: develop
+          fetch-depth: 1
 
-      - name: linux arm64 setup csound7
+      - name: Get Csound commit hash
+        id: csound-hash
+        run: echo "hash=$(git -C csound rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Cache Csound build
+        id: cache-csound
+        uses: actions/cache@v4
+        with:
+          path: csound/build-linux
+          key: csound-${{ runner.os }}-${{ runner.arch }}-${{ steps.csound-hash.outputs.hash }}-v2
+          restore-keys: |
+            csound-${{ runner.os }}-${{ runner.arch }}-
+
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ runner.os }}-${{ runner.arch }}-arm64
+          max-size: 2G
+
+      - name: Linux build deps
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: >
+            cmake libsndfile1-dev libasound2-dev libjack-dev
+            portaudio19-dev libportmidi-dev default-jdk libpng-dev
+            libgmm++-dev bison flex libportsmf-dev libeigen3-dev
+            libcunit1-dev
+          version: 1.0
+
+      - name: linux arm64 csound build
+        if: steps.cache-csound.outputs.cache-hit != 'true'
         run: |
           cd csound
-          sudo apt-get update && sudo apt-get install cmake libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libportmidi-dev default-jdk libpng-dev libgmm++-dev bison flex libportsmf-dev libeigen3-dev libcunit1-dev
-          rm -fr build-linux
-          mkdir build-linux && cd build-linux
-          cmake .. -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
+          mkdir -p build-linux
+          cd build-linux
+          cmake .. \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DUSE_PORTMIDI=OFF -DUSE_PORTAUDIO=OFF -DUSE_PULSEAUDIO=OFF \
+            -DUSE_MP3=OFF -DBUILD_OSC_OPCODES=OFF -DBUILD_TESTS=OFF \
+            -DBUILD_JAVA_INTERFACE=OFF -DBUILD_PYTHON_INTERFACE=OFF \
+            -DBUILD_UTILITIES=OFF -DBUILD_PERFTHREAD_CLASS=ON -DBUILD_CSBEATS=OFF
           cmake --build . --parallel
-          sudo make install
-          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+
+      - name: linux arm64 csound install
+        run: |
+          cd csound/build-linux
+          sudo cmake --install .
           sudo ldconfig
           csound --version
 
@@ -420,5 +542,9 @@ jobs:
         run: |
           qmake --version
           git submodule update --init --recursive
-          qmake CONFIG+=rtmidi CONFIG+=release qcs.pro
+          qmake CONFIG+=rtmidi CONFIG+=release \
+            QMAKE_CC="ccache gcc" \
+            QMAKE_CXX="ccache g++" \
+            qcs.pro
           make -j$(nproc)
+          
