@@ -144,6 +144,8 @@ public:
 	// Detects risset (spawns external processes) and augments the opcode tree.
 	// Deferred until after the window is shown; idempotent.
 	void initRisset();
+	// Loads the manual start page the first time the help panel is shown.
+	void loadHelpOnce();
 	void stkCheck();
 	// localServer
 	bool startServer();
@@ -552,6 +554,9 @@ private:
     QString m_fullScreenComponent;
     QDir m_rissetDataPath;
     bool m_rissetInitialized = false;
+    QString m_helpStartPage;
+    bool m_helpLoaded = false;
+    bool m_startupShown = false;
     bool isDarkPalette;
     QStringList m_longOptions = {
         "--syntax-check-only", "--control-rate=", "--messagelevel=",

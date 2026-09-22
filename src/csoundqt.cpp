@@ -405,11 +405,16 @@ CsoundQt::CsoundQt(QStringList fileNames)
         docDir = m_options->csdocdir;
     }
     helpPanel->docDir = docDir;
-    if(QFile::exists(docDir + "/indexall.html")) {
-        helpPanel->loadFile(docDir + "/indexall.html");
-    } else {
-        helpPanel->loadFile(docDir + "/reference/opcodesReference.html");
-    }
+    // Load the manual lazily, the first time the help panel is actually shown,
+    // so parsing a large manual does not delay startup.
+    if (QFile::exists(docDir + "/indexall.html"))
+        m_helpStartPage = docDir + "/indexall.html";
+    else if (QFile::exists(docDir + "/reference/opcodesReference.html"))
+        m_helpStartPage = docDir + "/reference/opcodesReference.html";
+    connect(helpPanel, &QDockWidget::visibilityChanged, this, [this](bool visible) {
+        if (visible && m_startupShown)
+            loadHelpOnce();
+    });
 
     // Whole-manual search roots. Registered lazily; parsed on first search.
     // The default root (empty label) gets no source tag in the result list.
@@ -547,10 +552,23 @@ CsoundQt::~CsoundQt()
 void CsoundQt::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);
+    m_startupShown = true;
     // Start risset detection only once the window is actually shown, so its
     // external processes never delay startup. initRisset() is idempotent.
     if (!m_rissetInitialized)
         QTimer::singleShot(0, this, [this]{ initRisset(); });
+    // If the help panel is already the active dock tab, visibilityChanged never
+    // fires, so load the manual here. loadHelpOnce() is idempotent.
+    if (!m_helpLoaded && helpPanel->isVisible())
+        QTimer::singleShot(0, this, [this]{ loadHelpOnce(); });
+}
+
+void CsoundQt::loadHelpOnce()
+{
+    if (m_helpLoaded || m_helpStartPage.isEmpty())
+        return;
+    m_helpLoaded = true;
+    helpPanel->loadFile(m_helpStartPage);
 }
 
 void CsoundQt::initRisset()
