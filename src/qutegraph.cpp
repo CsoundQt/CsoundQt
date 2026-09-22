@@ -785,8 +785,9 @@ void QuteGraph::clearCurves()
 	m_pageComboBox->blockSignals(false);
 	curves.clear();
     graphtypes.clear();
-	lines.clear();
 	polygons.clear();
+    m_pathItems.clear();
+    m_axisItems.clear();
 	m_gridlines.clear();
     m_gridTextsX.clear();
     m_gridTextsY.clear();
@@ -835,7 +836,6 @@ void QuteGraph::addCurve(Curve * curve)
     view->setHorizontalScrollBarPolicy(scrollbarPolicy);
     view->show();
     scene->setBackgroundBrush(QBrush(Qt::black));
-    lines.append(QVector<QGraphicsLineItem *>());
     QVector<QGraphicsLineItem *> gridLinesVector;
     QVector<QGraphicsTextItem *> gridTextVectorX;
     QVector<QGraphicsTextItem *> gridTextVectorY;
@@ -930,6 +930,21 @@ void QuteGraph::addCurve(Curve * curve)
     item->show();
     polygons.append(item);
     scene->addItem(item);
+
+    // Persistent path items for signal/ftable curves (see header). The axis is
+    // added first so the data path is drawn on top.
+    auto axisItem = new QGraphicsPathItem();
+    axisItem->setPen(QPen(QColor(40, 40, 40), 0));
+    scene->addItem(axisItem);
+    m_axisItems.append(axisItem);
+
+    auto pathItem = new QGraphicsPathItem();
+    auto pathPen = QPen(QColor(255, 193, 7), 0);
+    pathPen.setCosmetic(true);
+    pathItem->setPen(pathPen);
+    scene->addItem(pathItem);
+    m_pathItems.append(pathItem);
+
     view->setResizeAnchor (QGraphicsView::NoAnchor);
     // view->setFocusPolicy(Qt::NoFocus);
 	m_pageComboBox->blockSignals(true);
@@ -1035,19 +1050,7 @@ void QuteGraph::applyInternalProperties()
 
 void QuteGraph::drawFtablePath(Curve *curve, int index) {
     Q_ASSERT(index >= 0);
-    QGraphicsScene *scene = this->getView(index)->scene();
-    // QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
-
-    double max = curve->get_max();
-    max = max == 0 ? 1: max;
     int curveSize = curve->get_size();
-
-    int decimate = curveSize /1024;
-    if (decimate == 0) {
-        decimate = 1;
-    }
-    auto pen = QPen(QColor(255, 255, 50), 0);
-    // auto pen = QPen(QColor(255, 45, 7), 0);
 
     auto rect = this->rect();
     int width = rect.width();
@@ -1060,107 +1063,14 @@ void QuteGraph::drawFtablePath(Curve *curve, int index) {
         double value = curve->get_data(i);
         path.lineTo(QPointF(i, -value));
     }
-    scene->clear();
+    auto pen = QPen(QColor(255, 255, 50), 0);
     if(step > 1) {
         pen.setWidth(0);
     }
-    scene->addPath(path, pen);
+    m_pathItems[index]->setPath(path);
+    m_pathItems[index]->setPen(pen);
 }
 
-
-void QuteGraph::drawFtable(Curve * curve, int index)
-{
-	//  bool live = curve->getOriginal() != 0;
-	Q_ASSERT(index >= 0);
-    QString caption = curve->get_caption();
-    if (caption.isEmpty()) {
-        return;
-    }
-    QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
-    double max = curve->get_max();
-    max = max == 0 ? 1: max;
-    int size = (int) curve->get_size();
-    int decimate = size /1024;
-    if (decimate == 0) {
-        decimate = 1;
-    }
-    auto pen = QPen(QColor(255, 45, 7));
-    pen.setCosmetic(true);
-    if (lines[index].size() != size) {
-        foreach (QGraphicsLineItem *line, lines[index]) {
-            scene->removeItem(line);
-            delete line;
-        }
-        lines[index].clear();
-        for (int i = 0; i < size; i++) {
-            if (decimate == 0 || i%decimate == 0) {
-                QGraphicsLineItem *line = new QGraphicsLineItem(i, 0, i, 0);
-                line->setPen(pen);
-                lines[index].append(line);
-                scene->addItem(line);
-            }
-        }
-    }
-    for (int i = 0; i < lines[index].size(); i++) { //skip first item, which is base line
-        QGraphicsLineItem *line = static_cast<QGraphicsLineItem *>(lines[index][i]);
-        MYFLT value = curve->get_data((i * decimate));
-        line->setLine((i * decimate), 0, (i * decimate),  -value );
-        line->show();
-    }
-    scaleGraph(index);
-}
-
-void QuteGraph::drawSpectrumPath(Curve *curve, int index) {
-    int curveSize = curve->get_size();
-    QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
-    QPainterPath path;
-    double db0 = m_ud->zerodBFS;
-    path.moveTo(0, -20.0*log10(fabs(curve->get_data(0))/db0));
-    for(int i=1; i < curveSize; i++) {
-        double value = 20.0*log10(fabs(curve->get_data(i))/db0);
-        path.lineTo(QPointF(i, -value));
-    }
-    scene->clear();
-    auto pen = QPen(Qt::yellow);
-    pen.setCosmetic(true);
-
-    QPainterPath gridPath;
-    QPainter painter;
-
-    if(m_drawGrid) {
-        int sr = (int)this->getSr();
-        int nyquist = sr / 2;
-        int step = 1000;
-        int numTicksX = nyquist / step;
-        int numTicksY = 7;
-        auto gridPen = QPen(QColor(40, 40, 40));
-        gridPen.setCosmetic(true);
-        auto textColor = QColor(128, 128, 128);
-        qreal curveSizeF = (qreal)curveSize;
-        auto font = QFont("Sans");
-        font.setPixelSize(9);
-        const int maxy = 110;
-        for (int i = 1; i < numTicksX; i++) {
-            qreal freq = i * step;
-            qreal x = freq/nyquist * curveSizeF;
-            gridPath.moveTo(x, 0);
-            gridPath.lineTo(x, maxy);
-            if(i%2 == 0) {
-                auto item = scene->addText(QString::number(freq/1000.0, 'f', 1), font);
-                item->setDefaultTextColor(textColor);
-                item->setPos(x, 0);
-                item->setFlag(item->ItemIgnoresTransformations, true);
-            }
-        }
-        for (int i=1; i < numTicksY-1; i++) {
-            qreal y = (qreal)i/numTicksY * maxy;
-            gridPath.moveTo(0, y);
-            gridPath.lineTo(curveSizeF, y);
-        }
-        scene->addPath(gridPath, gridPen);
-    }
-    scene->addPath(path, pen);
-}
 
 size_t QuteGraph::spectrumGetPeak(Curve *curve, double freq, double bandwidth) {
     qreal sr = this->getSr(44100.);
@@ -1466,40 +1376,42 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
 
 void QuteGraph::drawSignalPath(Curve *curve, int index) {
     int curveSize = curve->get_size();
-    QPainterPath path;
     auto zerodbfs = m_ud->zerodBFS;
-    for(int i=0; i<curveSize; i++) {
-        auto value = curve->get_data(i)/zerodbfs;
-        path.lineTo(i, value);
-    }
-    QPainterPath grid;
-    grid.moveTo(0, 0);
-    grid.lineTo(curveSize, 0);
 
-    QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
-    auto pen = QPen(QColor(255, 193, 7), 0);
-    scene->clear();
-    scene->addPath(grid, QPen(QColor(40, 40, 40), 0));
-    scene->addPath(path, pen);
-}
+    // Keep at most about one point per screen pixel. Unlike the spectrum (a
+    // filled magnitude envelope), an audio waveform needs both its positive and
+    // negative envelope, so emit the min and max of every pixel column.
+    const double scenePerPixel = getView(index)->transform().m11();
+    const int step = scenePerPixel > 0.0 ? qMax(1, int(1.0 / scenePerPixel)) : 1;
 
-void QuteGraph::drawSignal(Curve *curve, int index)
-{
-    int curveSize = curve->get_size();
-    QVector<QPointF> polygonPoints;
-    polygonPoints.resize(curveSize + 2);
-    polygonPoints[0] = QPointF(0,0);
-    for (int i = 0; i < (int) curveSize; i++) {
-        double value = curve->get_data(i)/m_ud->zerodBFS;
-        polygonPoints[i + 1] = QPointF(i, value); //skip first item, which is base line
+    QPainterPath path;
+    bool started = false;
+    for (int i = 0; i < curveSize; i += step) {
+        int end = qMin(i + step, curveSize);
+        double vmax = curve->get_data(i) / zerodbfs;
+        double vmin = vmax;
+        for (int j = i + 1; j < end; j++) {
+            double value = curve->get_data(j) / zerodbfs;
+            if (value > vmax) vmax = value;
+            if (value < vmin) vmin = value;
+        }
+        if (!started) {
+            path.moveTo(i, vmax);
+            started = true;
+        } else {
+            path.lineTo(i, vmax);
+        }
+        if (vmin != vmax)
+            path.lineTo(i, vmin);
     }
-    polygonPoints.back() = QPointF(curveSize - 1,0);
-    polygons[index]->setPolygon(QPolygonF(polygonPoints));
-    auto pen = QPen(QColor(255, 193, 7));
-    pen.setCosmetic(true);
-    polygons[index]->setPen(pen);
-    polygons[index]->setBrush(Qt::NoBrush);
-    m_pageComboBox->setItemText(index, curve->get_caption());
+
+    QPainterPath axis;
+    axis.moveTo(0, 0);
+    axis.lineTo(curveSize, 0);
+
+    m_axisItems[index]->setPath(axis);
+    m_pathItems[index]->setPath(path);
+    m_pathItems[index]->setPen(QPen(QColor(255, 193, 7), 0));
 }
 
 void QuteGraph::scaleGraph(int index)

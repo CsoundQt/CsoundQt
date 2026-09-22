@@ -89,14 +89,18 @@ protected:
     QCheckBox *showScrollbarsCheckBox;
 
 	QVector<Curve *> curves;
-	QVector<QVector <QGraphicsLineItem *> > lines;
 	QVector<QGraphicsPolygonItem *> polygons;
-    QVector<QPainterPath *>painterPaths;
     QVector<GraphType>graphtypes;
 
 	QVector<QVector <QGraphicsLineItem *> > m_gridlines;
     QVector<QVector <QGraphicsTextItem *> > m_gridTextsX;
     QVector<QVector <QGraphicsTextItem *> > m_gridTextsY;
+
+    // Persistent scene items for the signal/ftable paths. They are created once
+    // in addCurve() and redrawn with setPath(), so the scene is not cleared and
+    // rebuilt on every update.
+    QVector<QGraphicsPathItem *> m_pathItems;   // data curve (signal / ftable)
+    QVector<QGraphicsPathItem *> m_axisItems;   // baseline for signal displays
 
     // Cache of the parameters the grid was last built with, per curve index,
     // so the (static) grid items are only touched when something changes.
@@ -115,8 +119,6 @@ protected:
     QVector<QGraphicsRectItem*> m_spectrumPeakMarkers;
 
 
-    QPainterPath *gridPath;
-
 	virtual void refreshWidget();
 	virtual void createPropertiesDialog();
 	virtual void applyProperties();
@@ -131,13 +133,10 @@ public slots:
     void mouseReleased();
 
 private:
-	void drawFtable(Curve * curve, int index);
     void drawFtablePath(Curve * curve, int index);
 
     void drawSpectrum(Curve * curve, int index);
-    void drawSpectrumPath(Curve * curve, int index);
 
-    void drawSignal(Curve * curve, int index);
     void drawSignalPath(Curve * curve, int index);
 
 	void scaleGraph(int index);
