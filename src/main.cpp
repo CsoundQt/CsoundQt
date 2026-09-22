@@ -21,7 +21,9 @@
 */
 
 #include <QApplication>
+#ifndef CSQT_NO_SPLASH
 #include <QSplashScreen>
+#endif
 #include "csoundqt.h"
 #include <QLocalSocket>
 
@@ -144,6 +146,7 @@ int main(int argc, char *argv[])
     FileOpenEater filterObj;
     qapp.installEventFilter(&filterObj);
 
+#ifndef CSQT_NO_SPLASH
     QPixmap pixmap(":/images/splashscreen.png");
 
     QSplashScreen *splash = new QSplashScreen(pixmap);
@@ -152,6 +155,7 @@ int main(int argc, char *argv[])
     splash->show();
     splash->raise();
     qapp.processEvents();
+#endif
     QSettings qsettings("csoundqt", "csoundqt");
     qsettings.beginGroup("GUI");
     QString language = qsettings.value("language", QLocale::system().name()).toString();
@@ -167,11 +171,13 @@ int main(int argc, char *argv[])
     CsoundQt *csoundQt = new CsoundQt(fileNames);
     if (!csoundQt->startServer())
         qDebug()<<"Could not start local server.";
+#ifndef CSQT_NO_SPLASH
     // splash->finish(csoundQt);
     splash->hide();
     delete splash;
     splash = nullptr;
-    
+#endif
+
     // enable widget updates after show
     csoundQt->show();
     

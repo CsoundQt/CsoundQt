@@ -21,6 +21,7 @@
 # To support HTML5 via the <html> element in the csd using the Qt WebEngine
 # (preferably use Qt 5.8 or later):
 # CONFIG+=html_support # NB! before there were options of html_webengine or html_webkit. webkit dropped in v 7.0.0
+# CONFIG+=no_splash    To build without the splash screen
 # OS X only OPTIONS:
 # CONFIG+=universal  #  To build i386/ppc version. Default is x86_64
 # CONFIG+=i386  #  To build i386 version. Default is x86_64
@@ -113,6 +114,12 @@ message("Building html support with QtWebengine")
 DEFINES += CSQT_QTHTML
 QT += network webenginewidgets webchannel
 CONFIG += c++11
+}
+
+# CONFIG+=no_splash disables the splash screen (useful now that startup is fast)
+no_splash {
+    DEFINES += CSQT_NO_SPLASH
+    message("Building without splash screen.")
 }
 
 
