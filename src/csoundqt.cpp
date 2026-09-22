@@ -324,7 +324,6 @@ CsoundQt::CsoundQt(QStringList fileNames)
 
     fillFileMenu();     // Must be placed after readSettings to include recent Files
     fillFavoriteMenu(); // Must be placed after readSettings to know directory
-    risset = new Risset(m_options->pythonExecutable);
     /*
 #if defined(Q_OS_LINUX)
     m_rissetDataPath.setPath(QDir::home().filePath(".local/share/risset"));
@@ -335,28 +334,11 @@ CsoundQt::CsoundQt(QStringList fileNames)
 #endif
     */
     m_opcodeTree = new OpEntryParser(":/opcodes.xml");
-    if(risset->isInstalled) {
-        QString rissetOpcodesXml = risset->rissetOpcodesXml;
-        if(!QFile::exists(rissetOpcodesXml)) {
-            QDEBUG << "opcodes.xml not found, searched: " << rissetOpcodesXml;
-            QDEBUG << "Calling risset to generate opcodes.xml";
-            auto error = risset->generateOpcodesXml();
-            if(error != RissetError::Ok) {
-                QDEBUG << "Could not generate opcodes.xml";
-                rissetOpcodesXml = "";
-            }
-        }
-        if(!rissetOpcodesXml.isEmpty() && QFile::exists(rissetOpcodesXml)) {
-            QDEBUG << "Parsing risset's opcodes.xml:" << rissetOpcodesXml;
-            m_opcodeTree->parseOpcodesXml(rissetOpcodesXml);
-            m_opcodeTree->sortOpcodes();
-            risset->markOpcodeTree(m_opcodeTree);
-        } else {
-            QDEBUG << "Risset's opcodes.xml not found: " << rissetOpcodesXml;
-        }
-    }
-
     m_opcodeTree->setUdos(m_inspector->getUdosMap());
+
+    // Detecting risset spawns external processes (and may generate/fetch data),
+    // which can take seconds. It is started from showEvent() so it never delays
+    // the window from appearing.
 
     LiveCodeEditor *liveeditor = new LiveCodeEditor(m_scratchPad, m_opcodeTree);
     liveeditor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -433,11 +415,7 @@ CsoundQt::CsoundQt(QStringList fileNames)
     // The default root (empty label) gets no source tag in the result list.
     if (QFile::exists(docDir + "/search/search_index.json"))
         helpPanel->addSearchRoot(docDir, QString());
-    if (risset->isInstalled) {
-        QString rissetSite = risset->rissetHtmlDocs.path();
-        if (QFile::exists(rissetSite + "/search/search_index.json"))
-            helpPanel->addSearchRoot(rissetSite, tr("Risset"));
-    }
+    // The risset search root is added by initRisset() once risset is detected.
 
     applySettings();
     // createQuickRefPdf();
@@ -564,6 +542,49 @@ CsoundQt::CsoundQt(QStringList fileNames)
 CsoundQt::~CsoundQt()
 {
     // This function is not called... see closeEvent()
+}
+
+void CsoundQt::showEvent(QShowEvent *event)
+{
+    QMainWindow::showEvent(event);
+    // Start risset detection only once the window is actually shown, so its
+    // external processes never delay startup. initRisset() is idempotent.
+    if (!m_rissetInitialized)
+        QTimer::singleShot(0, this, [this]{ initRisset(); });
+}
+
+void CsoundQt::initRisset()
+{
+    if (m_rissetInitialized)
+        return;
+    m_rissetInitialized = true;
+
+    risset = new Risset(m_options->pythonExecutable);
+    if (risset->isInstalled) {
+        QString rissetOpcodesXml = risset->rissetOpcodesXml;
+        if (!QFile::exists(rissetOpcodesXml)) {
+            QDEBUG << "opcodes.xml not found, searched: " << rissetOpcodesXml;
+            QDEBUG << "Calling risset to generate opcodes.xml";
+            auto error = risset->generateOpcodesXml();
+            if (error != RissetError::Ok) {
+                QDEBUG << "Could not generate opcodes.xml";
+                rissetOpcodesXml = "";
+            }
+        }
+        if (!rissetOpcodesXml.isEmpty() && QFile::exists(rissetOpcodesXml)) {
+            QDEBUG << "Parsing risset's opcodes.xml:" << rissetOpcodesXml;
+            m_opcodeTree->parseOpcodesXml(rissetOpcodesXml);
+            m_opcodeTree->sortOpcodes();
+            risset->markOpcodeTree(m_opcodeTree);
+        } else {
+            QDEBUG << "Risset's opcodes.xml not found: " << rissetOpcodesXml;
+        }
+
+        // Register risset's manual as a search root (parsed lazily on first search)
+        QString rissetSite = risset->rissetHtmlDocs.path();
+        if (QFile::exists(rissetSite + "/search/search_index.json"))
+            helpPanel->addSearchRoot(rissetSite, tr("Risset"));
+    }
 }
 
 void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
@@ -2624,6 +2645,7 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
     }
     QString errmsg;
 
+    initRisset();
     if(risset->isInstalled && risset->opcodeToPlugin.contains(entry)) {
         // Check external help sources
         QDEBUG << "Found an opcode from an external plugin: " << entry;
@@ -3189,6 +3211,7 @@ void CsoundQt::about()
     text += tr("Using Csound version: <strong>%1</strong>, precision: <strong>%2</strong><br/>").arg(
                 QString::number(csoundGetVersion()),
                 csoundGetSizeOfMYFLT() == 8 ? "double (64-bit)" : "float (32-bit)");
+    initRisset();
     if(risset->isInstalled) {
         text += "<hr>";
         text += "<h3>Risset</h3>";

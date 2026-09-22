@@ -140,7 +140,10 @@ public:
 	// Engine
 	CsoundEngine *getEngine(int index = -1);
 	OpEntryParser *m_opcodeTree;
-    Risset *risset;
+    Risset *risset = nullptr;
+	// Detects risset (spawns external processes) and augments the opcode tree.
+	// Deferred until after the window is shown; idempotent.
+	void initRisset();
 	void stkCheck();
 	// localServer
 	bool startServer();
@@ -191,6 +194,7 @@ public slots:
 
 protected:
 	virtual void closeEvent(QCloseEvent *event);
+	virtual void showEvent(QShowEvent *event);
 	//    virtual void keyPressEvent(QKeyEvent *event);
 private slots:
 	void open();
@@ -547,6 +551,7 @@ private:
     QByteArray m_preFullScreenState;
     QString m_fullScreenComponent;
     QDir m_rissetDataPath;
+    bool m_rissetInitialized = false;
     bool isDarkPalette;
     QStringList m_longOptions = {
         "--syntax-check-only", "--control-rate=", "--messagelevel=",
