@@ -790,6 +790,7 @@ void QuteGraph::clearCurves()
 	m_gridlines.clear();
     m_gridTextsX.clear();
     m_gridTextsY.clear();
+    m_gridCache.clear();
     m_spectrumPeakTexts.clear();
     m_spectrumPeakMarkers.clear();
     m_showPeak = false;
@@ -918,6 +919,7 @@ void QuteGraph::addCurve(Curve * curve)
     m_gridlines.append(gridLinesVector);
     m_gridTextsX.append(gridTextVectorX);
     m_gridTextsY.append(gridTextVectorY);
+    m_gridCache.append(GridCache());
 
     graphtypes.append(graphType);
 
@@ -966,14 +968,9 @@ QGraphicsView * QuteGraph::getView(int index) {
 }
 
 void QuteGraph::drawGraph(Curve *curve, int index) {
-    // QString caption = curve->get_caption();
-    // auto view = getView(index);
-    // switch(graphtypes[index]) {
     switch(curve->get_type()) {
     // case GraphType::GRAPH_FTABLE:
     case CurveType::CURVE_FTABLE:
-        // drawFtable(curve, index);
-        // view->setRenderHint(QPainter::Antialiasing);
         drawFtablePath(curve, index);
         scaleGraph(index);
         break;
@@ -1285,26 +1282,37 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
         freezeSpectrum(false);
     // auto view = getView(index);
     // QGraphicsScene *scene = static_cast<QGraphicsView *>(static_cast<StackedLayoutWidget *>(m_widget)->widget(index))->scene();
-    QVector<QPointF> polygonPoints;
-    polygonPoints.resize(curveSize + 2);
+    QGraphicsView *view = getView(index);
     double dbRange = m_dbRange;
-    polygonPoints[0] = QPointF(0, dbRange);
     double db0 = m_ud->zerodBFS;
 
-    if(!m_frozen) {
-        for (int i = 0; i < (int) curveSize; i++) {
-            auto data = curve->get_data(i);
-            double db = data > 0.000001 ? 20.0*log10(data/db0) : -dbRange;
-            // double value = 20.0*log10(fabs(curve->get_data(i))/db0);
-            polygonPoints[i+1] = QPointF(i, -db); //skip first item, which is base line
+    // Draw at most about one polygon point per screen pixel. When the curve has
+    // more bins than the view has pixels, keep the loudest bin per pixel column:
+    // this cuts both the log() work and the rasterized polygon size with no
+    // visible loss at the current zoom (when zoomed in, step is 1 and nothing is
+    // dropped). view->transform().m11() is scene units (bins) per pixel.
+    const double scenePerPixel = view->transform().m11();
+    const int step = scenePerPixel > 0.0 ? qMax(1, int(1.0 / scenePerPixel)) : 1;
+    const int outCount = (curveSize + step - 1) / step;
+
+    QVector<QPointF> polygonPoints;
+    polygonPoints.resize(outCount + 2);
+    polygonPoints[0] = QPointF(0, dbRange);
+
+    int out = 1;
+    for (int i = 0; i < (int) curveSize; i += step) {
+        int end = qMin(i + step, (int) curveSize);
+        double best = m_frozen ? frozenCurve[i] : curve->get_data(i);
+        int bestIndex = i;
+        for (int j = i + 1; j < end; j++) {
+            double data = m_frozen ? frozenCurve[j] : curve->get_data(j);
+            if (data > best) {
+                best = data;
+                bestIndex = j;
+            }
         }
-    } else {
-        for (int i = 0; i < frozenCurve.size(); i++) {
-            auto data = frozenCurve[i];
-            double db = data > 0.000001 ? 20.0*log10(data/db0) : -dbRange;
-            // double value = 20.0*log10(fabs(curve->get_data(i))/db0);
-            polygonPoints[i+1] = QPointF(i, -db); //skip first item, which is base line
-        }
+        double db = best > 0.000001 ? 20.0*log10(best/db0) : -dbRange;
+        polygonPoints[out++] = QPointF(bestIndex, -db); //skip first item, which is base line
     }
 
     polygonPoints.back() = QPointF(curveSize - 1, dbRange);
@@ -1313,43 +1321,60 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
     // m_pageComboBox->setItemText(index, curve->get_caption());
     // draw Grid
     int numTicksY = m_numticksY;
-    auto gridlinesvec = m_gridlines[index];
-    auto gridtextvecx = m_gridTextsX[index];
-    auto gridtextvecy = m_gridTextsY[index];
+    const auto& gridlinesvec = m_gridlines[index];
+    const auto& gridtextvecx = m_gridTextsX[index];
+    const auto& gridtextvecy = m_gridTextsY[index];
     qreal sr = this->getSr(44100.0);
     qreal nyquist = sr * 0.5;
     qreal freqStep = 1000.0;  // TODO: allow to configure this
     int numTicksX = (int)(nyquist / freqStep);
     // TODO: fix y axis
-    if(m_drawGrid) {
-        gridtextvecy[0]->setVisible(true);
-        for (int i = 1; i < numTicksY; i++) {
-            int y = float(i)/(numTicksY) * dbRange;
-            gridlinesvec[i]->setLine(0, y, curveSize, y);
-            gridlinesvec[i]->setVisible(true);
-            gridtextvecy[i]->setPos(0, y);
-            gridtextvecy[i]->setVisible(true);
-        }
+    // The grid items only depend on these parameters, so touch them only when
+    // one of them actually changed instead of on every update.
+    GridCache &gridCache = m_gridCache[index];
+    const bool gridNeedsUpdate = !gridCache.valid
+            || gridCache.drawn != m_drawGrid
+            || gridCache.curveSize != curveSize
+            || gridCache.dbRange != dbRange
+            || gridCache.numTicksY != numTicksY
+            || gridCache.numTicksX != numTicksX;
+    if(gridNeedsUpdate) {
+        if(m_drawGrid) {
+            gridtextvecy[0]->setVisible(true);
+            for (int i = 1; i < numTicksY; i++) {
+                int y = float(i)/(numTicksY) * dbRange;
+                gridlinesvec[i]->setLine(0, y, curveSize, y);
+                gridlinesvec[i]->setVisible(true);
+                gridtextvecy[i]->setPos(0, y);
+                gridtextvecy[i]->setVisible(true);
+            }
 
-        for (int i = 1; i < numTicksX; i++) {
-            // qreal x = i * qreal(curveSize)/numTicksX;
-            qreal freq = i * freqStep;
-            qreal x = freq/nyquist * curveSize;
-            int idx = i + m_numticksY;
-            gridlinesvec[idx]->setLine(x, 0, x, dbRange);
-            gridlinesvec[idx]->setVisible(true);
-            gridtextvecx[i]->setPos(x, 0);
-            gridtextvecx[i]->setVisible(true);
+            for (int i = 1; i < numTicksX; i++) {
+                // qreal x = i * qreal(curveSize)/numTicksX;
+                qreal freq = i * freqStep;
+                qreal x = freq/nyquist * curveSize;
+                int idx = i + m_numticksY;
+                gridlinesvec[idx]->setLine(x, 0, x, dbRange);
+                gridlinesvec[idx]->setVisible(true);
+                gridtextvecx[i]->setPos(x, 0);
+                gridtextvecx[i]->setVisible(true);
+            }
+        } else {
+            for(int i=0; i < numTicksY; i++) {
+                gridlinesvec[i]->setVisible(false);
+                gridtextvecy[i]->setVisible(false);
+            }
+            for (int i = 0; i < numTicksX; i++) {
+                gridlinesvec[i+m_numticksY]->setVisible(false);
+                gridtextvecx[i]->setVisible(false);
+            }
         }
-    } else {
-        for(int i=0; i < numTicksY; i++) {
-            gridlinesvec[i]->setVisible(false);
-            gridtextvecy[i]->setVisible(false);
-        }
-        for (int i = 0; i < numTicksX; i++) {
-            gridlinesvec[i+m_numticksY]->setVisible(false);
-            gridtextvecx[i]->setVisible(false);
-        }
+        gridCache.valid = true;
+        gridCache.drawn = m_drawGrid;
+        gridCache.curveSize = curveSize;
+        gridCache.dbRange = dbRange;
+        gridCache.numTicksY = numTicksY;
+        gridCache.numTicksX = numTicksX;
     }
 
     if(m_showPeak || m_showPeakTemp) {
@@ -1368,7 +1393,6 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
         auto data = m_frozen ? frozenCurve[peakIndex] : curve->get_data(peakIndex);
         double db = data > 0.000001 ? 20.0*log10(data/db0) : -dbRange;
         auto marker = m_spectrumPeakMarkers[index];
-        auto view = this->getView(index);
         auto vcenter = view->mapFromScene(QPointF(peakIndex, -db));
         auto markerLeftTop = view->mapToScene(QPoint(vcenter.x() - 4, vcenter.y()-4));
         auto markerRightBottom = view->mapToScene(vcenter.x() + 4, vcenter.y()+4);
@@ -1420,8 +1444,12 @@ void QuteGraph::drawSpectrum(Curve *curve, int index) {
             // midinote = 0;
             notename = "LOW";
         }
-        markerText->setPlainText(QString("%1 Hz (%2)").arg((int)(peakFreq+0.5)).arg(notename));
-
+        // Rebuilding the text document every update is not cheap, so only set
+        // it when the displayed value actually changed.
+        const QString markerString = QString("%1 Hz (%2)").arg((int)(peakFreq+0.5)).arg(notename);
+        if(markerText->toPlainText() != markerString) {
+            markerText->setPlainText(markerString);
+        }
         marker->setVisible(true);
         markerText->setVisible(true);
         if(m_peakChannelPtr != nullptr) {

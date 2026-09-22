@@ -50,10 +50,17 @@ enum TriggerMode {
 class QuteScope : public QuteWidget
 {
 	Q_OBJECT
+	Q_PROPERTY(double CSQT_zoomx READ zoomx WRITE setZoomx)
+	Q_PROPERTY(double CSQT_zoomy READ zoomy WRITE setZoomy)
 public:
 	QuteScope(QWidget *parent);
 
 	~QuteScope();
+
+	double zoomx() const { return m_zoomx; }
+	double zoomy() const { return m_zoomy; }
+	void setZoomx(double z) { m_zoomx = z; }
+	void setZoomy(double z) { m_zoomy = z; }
 
 	virtual QString getWidgetLine();
 	virtual QString getWidgetXmlText();
@@ -91,6 +98,8 @@ protected:
 
 private:
 	void updateLabel();
+	double m_zoomx = 1.0;
+	double m_zoomy = 1.0;
 
 public slots:
 	void updateData();

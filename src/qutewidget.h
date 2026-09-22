@@ -36,6 +36,11 @@ enum QuteWidgetType { UNKNOWN=0, SPINBOX=1, LINEEDIT, CHECKBOX, SLIDER, KNOB, SC
                       BUTTON, DROPDOWN, CONTROLLER, GRAPH, SCOPE, CONSOLE,
                       TABLEDISPLAY, LABEL, DISPLAY };
 
+// Special channel names that are driven by the mouse position/buttons.
+// Parsed once when the channel names are applied, so the per-frame refresh
+// loop can compare enums instead of strings.
+enum class MouseParam { None, X, Y, RelX, RelY, But1, But2 };
+
 class QuteWidget : public QWidget
 {
 	Q_OBJECT
@@ -74,6 +79,8 @@ public:
 
 	virtual void applyInternalProperties();
 
+	static MouseParam parseMouseParam(const QString& name);
+
 	void createXmlWriter(QXmlStreamWriter &s);
 	void markChanged();
 	void canFocus(bool can);
@@ -101,6 +108,9 @@ public:
 
 	bool m_valueChanged;
 	bool m_value2Changed;
+
+	MouseParam mouseParam1 = MouseParam::None;
+	MouseParam mouseParam2 = MouseParam::None;
 
 
 public slots:

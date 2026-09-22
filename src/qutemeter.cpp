@@ -494,11 +494,11 @@ void QuteMeter::refreshWidget()
 #endif
     double val1 = m_value;
     double val2 = m_value2;
-    if (val1 < property("CSQT_xMin").toDouble()) { // Must check this in case number is -inf
-        val1 =  property("CSQT_xMin").toDouble();
+    if (val1 < xMin()) { // Must check this in case number is -inf
+        val1 =  xMin();
     }
-    if (val2 < property("CSQT_yMin").toDouble()) {
-        val2 =  property("CSQT_yMin").toDouble();
+    if (val2 < yMin()) {
+        val2 =  yMin();
     }
     m_widget->blockSignals(true);
     static_cast<MeterWidget *>(m_widget)->setValues(val1, val2);

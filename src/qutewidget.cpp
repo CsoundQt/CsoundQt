@@ -148,6 +148,17 @@ QString QuteWidget::getChannel2Name()
 	return m_channel2;
 }
 
+MouseParam QuteWidget::parseMouseParam(const QString& name)
+{
+	if (name == "_MouseX")    return MouseParam::X;
+	if (name == "_MouseY")    return MouseParam::Y;
+	if (name == "_MouseRelX") return MouseParam::RelX;
+	if (name == "_MouseRelY") return MouseParam::RelY;
+	if (name == "_MouseBut1") return MouseParam::But1;
+	if (name == "_MouseBut2") return MouseParam::But2;
+	return MouseParam::None;
+}
+
 QString QuteWidget::getCabbageLine()
 {
 	//Widgets return empty strings when not supported
@@ -253,6 +264,8 @@ void QuteWidget::applyInternalProperties()
 	setWidgetGeometry(x,y,width, height);
 	m_channel = property("CSQT_objectName").toString();
     m_channel2 = property("CSQT_objectName2").toString();
+	mouseParam1 = parseMouseParam(m_channel);
+	mouseParam2 = parseMouseParam(m_channel2);
 	m_midicc = property("CSQT_midicc").toInt();
 	m_midichan = property("CSQT_midichan").toInt();
 	setVisible(property("CSQT_visible").toBool());

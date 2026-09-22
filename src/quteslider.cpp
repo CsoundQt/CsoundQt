@@ -84,8 +84,8 @@ void QuteSlider::refreshWidget()
 	widgetLock.lockForRead();
 #endif
 	//  qDebug() << "QuteSlider::refreshWidget " << m_value;
-	double min = property("CSQT_minimum").toDouble();
-	double max = property("CSQT_maximum").toDouble();
+	double min = rangeMin();
+	double max = rangeMax();
 	int val = (int) (m_len * (m_value - min)/(max- min));
 	m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
@@ -317,8 +317,8 @@ void QuteSlider::sliderChanged(int value)
 
 void QuteSlider::setInternalValue(double value)
 {
-	double max = property("CSQT_maximum").toDouble();
-	double min = property("CSQT_minimum").toDouble();
+	double max = rangeMax();
+	double min = rangeMin();
 	if (value > max)
 		m_value = max;
 	else if (value < min)

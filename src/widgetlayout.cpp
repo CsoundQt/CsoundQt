@@ -22,6 +22,7 @@
 
 #include <cstdlib>
 
+#include <QSet>
 #include <QThread>
 
 #include "widgetlayout.h"
@@ -555,8 +556,6 @@ void WidgetLayout::setOuterGeometry(QRect r)
 
 void WidgetLayout::setValue(QString channelName, double value)
 {
-    QDEBUG << "WidgetLayout::setValue channelName:" << channelName << "value:" << value;
-
     QMutexLocker locker(&widgetsMutex);
 
     auto it = channelNameToWidgets.find(channelName);
@@ -1469,7 +1468,6 @@ void WidgetLayout::updateCurve(WINDAT *windat)
 
 void WidgetLayout::processUpdateCurve(Curve *curve) {
     WINDAT *orig = curve->getOriginal();
-    qDebug() << "processUpdateCurve" << orig->npts << orig->caption;
     this->updateCurve(orig);
 }
 
@@ -1554,52 +1552,42 @@ void WidgetLayout::refreshWidgets()
         midiReadCounter = midiReadCounter%CSQT_MAX_MIDI_QUEUE;
     }
     QMutexLocker locker(&widgetsMutex);
+
+    // Fetch mouse values once per refresh if any widget is driven by them.
+    int mouseX = 0, mouseY = 0, mouseRelX = 0, mouseRelY = 0;
+    int mouseBut1 = 0, mouseBut2 = 0;
+    if (m_trackMouse) {
+        mouseX    = getMouseX();
+        mouseY    = getMouseY();
+        mouseRelX = getMouseRelX();
+        mouseRelY = getMouseRelY();
+        mouseBut1 = getMouseBut1();
+        mouseBut2 = getMouseBut2();
+    }
+
+    // the lambda should be inlined and optimized by the compiler, so it should not be a performance issue
+    auto mouseValue = [&](MouseParam p) -> int {
+        switch (p) {
+        case MouseParam::X:    return mouseX;
+        case MouseParam::Y:    return mouseY;
+        case MouseParam::RelX: return mouseRelX;
+        case MouseParam::RelY: return mouseRelY;
+        case MouseParam::But1: return mouseBut1;
+        case MouseParam::But2: return mouseBut2;
+        default:               return 0;
+        }
+    };
+
     for (int i=0; i < m_widgets.size(); i++) {
         if (m_widgets[i]->m_valueChanged || m_widgets[i]->m_value2Changed) {
             m_widgets[i]->refreshWidget();
         }
         if (m_trackMouse) {
-            QString ch1name = m_widgets[i]->getChannelName();
-            if (ch1name.startsWith("_Mouse")) {
-                if (ch1name == "_MouseX") {
-                    m_widgets[i]->setValue(getMouseX());
-                }
-                else if (ch1name == "_MouseY") {
-                    m_widgets[i]->setValue(getMouseY());
-                }
-                else if (ch1name == "_MouseRelX") {
-                    m_widgets[i]->setValue(getMouseRelX());
-                }
-                else if (ch1name == "_MouseRelY") {
-                    m_widgets[i]->setValue(getMouseRelY());
-                }
-                else if (ch1name == "_MouseBut1") {
-                    m_widgets[i]->setValue(getMouseBut1());
-                }
-                else if (ch1name == "_MouseBut2") {
-                    m_widgets[i]->setValue(getMouseBut2());
-                }
+            if (m_widgets[i]->mouseParam1 != MouseParam::None) {
+                m_widgets[i]->setValue(mouseValue(m_widgets[i]->mouseParam1));
             }
-            QString ch2name = m_widgets[i]->getChannel2Name();
-            if (ch2name.startsWith("_Mouse")) {
-                if (ch2name == "_MouseX") {
-                    m_widgets[i]->setValue2(getMouseX());
-                }
-                else if (ch2name == "_MouseY") {
-                    m_widgets[i]->setValue2(getMouseY());
-                }
-                else if (ch2name == "_MouseRelX") {
-                    m_widgets[i]->setValue2(getMouseRelX());
-                }
-                else if (ch2name == "_MouseRelY") {
-                    m_widgets[i]->setValue2(getMouseRelY());
-                }
-                else if (ch2name == "_MouseBut1") {
-                    m_widgets[i]->setValue2(getMouseBut1());
-                }
-                else if (ch2name == "_MouseBut2") {
-                    m_widgets[i]->setValue2(getMouseBut2());
-                }
+            if (m_widgets[i]->mouseParam2 != MouseParam::None) {
+                m_widgets[i]->setValue2(mouseValue(m_widgets[i]->mouseParam2));
             }
         }
     }
@@ -4390,11 +4378,20 @@ void WidgetLayout::updateData()
         Curve * curve = newCurveBuffer.takeFirst();
         newCurve(curve);  // Register new curve
     }
-    // Check for graph updates after creating new curves
+    // Check for graph updates after creating new curves.
+    // Csound calls the draw callback once per display update and reuses the
+    // data buffer, so every queued WINDAT for a curve points at the same latest
+    // data. The buffer is a stack drained newest-first, so keep only the first
+    // (newest) entry per curve instead of redrawing once per queued update.
+    QSet<uintptr_t> updatedCurves;
     while (curveUpdateBufferCount > 0) {
         WINDAT * curveData = &curveUpdateBuffer[curveUpdateBufferCount--];
+        if (updatedCurves.contains(curveData->windid)) {
+            continue;
+        }
+        updatedCurves.insert(curveData->windid);
         Curve *curve = (Curve *) getCurveById(curveData->windid);
-        if (curve != nullptr && curveData != nullptr) {
+        if (curve != nullptr) {
             curve->set_size(curveData->npts);    // number of points
             curve->set_data(curveData->fdata);
             curve->set_caption(curveData->caption);

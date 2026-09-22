@@ -32,10 +32,23 @@
 class QuteMeter : public QuteWidget
 {
 	Q_OBJECT
+	Q_PROPERTY(double CSQT_xMin READ xMin WRITE setXMin)
+	Q_PROPERTY(double CSQT_xMax READ xMax WRITE setXMax)
+	Q_PROPERTY(double CSQT_yMin READ yMin WRITE setYMin)
+	Q_PROPERTY(double CSQT_yMax READ yMax WRITE setYMax)
 public:
 	QuteMeter(QWidget *parent);
 
 	~QuteMeter();
+
+	double xMin() const { return m_xMin; }
+	double xMax() const { return m_xMax; }
+	double yMin() const { return m_yMin; }
+	double yMax() const { return m_yMax; }
+	void setXMin(double v) { m_xMin = v; }
+	void setXMax(double v) { m_xMax = v; }
+	void setYMin(double v) { m_yMin = v; }
+	void setYMax(double v) { m_yMax = v; }
 
 	virtual void setMidiValue(int value);
 	virtual bool acceptsMidi() {return true;}
@@ -83,6 +96,11 @@ private:
     QCheckBox *flatCheckBox;
     QCheckBox *borderCheckBox;
     QCheckBox *bgColorCheckBox;
+
+	double m_xMin = 0.0;
+	double m_xMax = 1.0;
+	double m_yMin = 0.0;
+	double m_yMax = 1.0;
 
 private slots:
     void valueChanged(double value1);

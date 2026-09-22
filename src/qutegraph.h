@@ -98,6 +98,18 @@ protected:
     QVector<QVector <QGraphicsTextItem *> > m_gridTextsX;
     QVector<QVector <QGraphicsTextItem *> > m_gridTextsY;
 
+    // Cache of the parameters the grid was last built with, per curve index,
+    // so the (static) grid items are only touched when something changes.
+    struct GridCache {
+        bool valid = false;
+        bool drawn = false;
+        int curveSize = -1;
+        double dbRange = 0.0;
+        int numTicksY = -1;
+        int numTicksX = -1;
+    };
+    QVector<GridCache> m_gridCache;
+
     // speactrum peak
     QVector<QGraphicsTextItem*> m_spectrumPeakTexts;
     QVector<QGraphicsRectItem*> m_spectrumPeakMarkers;

@@ -71,8 +71,8 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
 
 	// Default properties
 	setProperty("CSQT_type", "scope");
-	setProperty("CSQT_zoomx", 1.0);
-	setProperty("CSQT_zoomy", 1.0);
+	setZoomx(1.0);
+	setZoomy(1.0);
 	setProperty("CSQT_dispx", 1.0);
 	setProperty("CSQT_dispy", 1.0);
 	setProperty("CSQT_mode", "lin");
@@ -116,7 +116,7 @@ QString QuteScope::getWidgetLine()
 #endif
 	QString line = "ioGraph {" + QString::number(x()) + ", " + QString::number(y()) + "} ";
 	line += "{"+ QString::number(width()) +", "+ QString::number(height()) +"} ";
-	line += property("CSQT_type").toString() + " " + QString::number(property("CSQT_zoomx").toDouble(), 'f', 6) + " ";
+	line += property("CSQT_type").toString() + " " + QString::number(zoomx(), 'f', 6) + " ";
 	line += QString::number((int) m_value) + " ";
 	line += m_channel;
 	//   qDebug("QuteScope::getWidgetLine() %s", line.toStdString().c_str());
@@ -137,8 +137,8 @@ QString QuteScope::getWidgetXmlText()
 
 	s.writeTextElement("value", QString::number(m_value, 'f', 8));
 	s.writeTextElement("type", property("CSQT_type").toString());
-	s.writeTextElement("zoomx", QString::number(property("CSQT_zoomx").toDouble(), 'f', 8));
-	s.writeTextElement("zoomy", QString::number(property("CSQT_zoomy").toDouble(), 'f', 8));
+	s.writeTextElement("zoomx", QString::number(zoomx(), 'f', 8));
+	s.writeTextElement("zoomy", QString::number(zoomy(), 'f', 8));
 	s.writeTextElement("dispx", QString::number(property("CSQT_dispx").toDouble(), 'f', 8));
 	s.writeTextElement("dispy", QString::number(property("CSQT_dispy").toDouble(), 'f', 8));
     s.writeTextElement("mode",  QString::number(property("CSQT_mode").toDouble(), 'f', 8));
@@ -252,8 +252,8 @@ void QuteScope::createPropertiesDialog()
 #endif
 	typeComboBox->setCurrentIndex(typeComboBox->findData(QVariant(property("CSQT_type").toString())));
 	channelBox->setCurrentIndex(channelBox->findData(QVariant((int) m_value)));
-	zoomxBox->setValue(property("CSQT_zoomx").toDouble());
-	zoomyBox->setValue(property("CSQT_zoomy").toDouble());
+	zoomxBox->setValue(zoomx());
+	zoomyBox->setValue(zoomy());
 
     label = new QLabel("Trigger");
     layout->addWidget(label, 9, 0, Qt::AlignRight|Qt::AlignVCenter);
@@ -273,8 +273,8 @@ void QuteScope::applyProperties()
 	widgetLock.lockForRead();
 #endif
 	setProperty("CSQT_type", typeComboBox->itemData(typeComboBox->currentIndex()).toString());
-	setProperty("CSQT_zoomx", zoomxBox->value());
-	setProperty("CSQT_zoomy", zoomyBox->value());
+	setZoomx(zoomxBox->value());
+	setZoomy(zoomyBox->value());
 	setProperty("CSQT_value", channelBox->itemData(channelBox->currentIndex()).toInt());
     auto triggerModeStr = triggerBox->currentData().toString();
     setProperty("CSQT_triggermode", triggerModeStr);
@@ -302,8 +302,8 @@ void QuteScope::resizeEvent(QResizeEvent * event)
 void QuteScope::updateData()
 {
     m_dataDisplay->updateData((int) m_value,
-                              property("CSQT_zoomx").toDouble(),
-                              property("CSQT_zoomy").toDouble(),
+                              zoomx(),
+                              zoomy(),
                               static_cast<ScopeWidget *>(m_widget)->freeze);
 }
 
@@ -344,7 +344,7 @@ ScopeData::ScopeData(ScopeParams *params) : DataDisplay(params)
 	curveData.resize(m_params->width + 2);
 	curve = new QGraphicsPolygonItem(/*&curveData*/);
     curve->setPen(QPen(Qt::green, 0));
-    curve->setPen(QPen(QColor("#40FF40"), 0));
+    curve->setPen(QPen(QColor(64, 255, 64), 0));   // "#40FF40"
 
 	curve->hide();
 	m_params->scene->addItem(curve);

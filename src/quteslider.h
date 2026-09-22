@@ -28,10 +28,17 @@
 class QuteSlider : public QuteWidget
 {
 	Q_OBJECT
+	Q_PROPERTY(double CSQT_minimum READ rangeMin WRITE setRangeMin)
+	Q_PROPERTY(double CSQT_maximum READ rangeMax WRITE setRangeMax)
 public:
 	QuteSlider(QWidget *parent);
 
 	~QuteSlider();
+
+	double rangeMin() const { return m_min; }
+	double rangeMax() const { return m_max; }
+	void setRangeMin(double v) { m_min = v; }
+	void setRangeMax(double v) { m_max = v; }
 
 	virtual void setWidgetGeometry(int x, int y, int w, int h);
 	virtual QString getWidgetLine();
@@ -62,6 +69,8 @@ private:
 	QDoubleSpinBox *minSpinBox;
 	QDoubleSpinBox *maxSpinBox;
 	int m_len; //length of the slider
+	double m_min = 0.0;
+	double m_max = 1.0;
 
 private slots:
 	void sliderChanged(int value);

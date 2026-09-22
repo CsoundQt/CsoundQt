@@ -1,4 +1,5 @@
 
+
 /*
 	Copyright (C) 2010 Andres Cabrera
 	mantaraya36@gmail.com
@@ -70,90 +71,173 @@ BaseDocument::~BaseDocument()
 
 /* Returns the number of panels
  */
+// int BaseDocument::parseAndRemoveWidgetText(QString &text)
+// {
+
+// 	QStringList xmlPanels;
+//     while(true) {
+//         auto panelStart = text.indexOf("<bsbPanel");
+//         if(panelStart < 0) {
+//             QDEBUG "Didn't find any more panels";
+//             break;
+//         }
+//         auto panelEnd = text.indexOf("</bsbPanel>", panelStart);
+//         if(panelEnd < 0) {
+//             QDEBUG << "Did not find matching </bsbPanel> tag";
+//             return 0;
+//         }
+//         auto panel = text.mid(panelStart, panelEnd+11-panelStart);
+//         xmlPanels << panel;
+//         text.remove(panelStart, panelEnd+11-panelStart);
+
+//     }
+//     if (!xmlPanels.isEmpty()) {
+// 		//FIXME allow multiple layouts
+//         auto t0 = std::chrono::high_resolution_clock::now();
+//         m_widgetLayouts[0]->loadXmlWidgets(xmlPanels[0]);
+//         auto t1 = std::chrono::high_resolution_clock::now();
+//         auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
+//         QDEBUG << "loadXmlWidgets" << diff << "ms";
+
+//         m_widgetLayouts[0]->markHistory();
+//         auto presetsStart = text.indexOf("<bsbPresets>");
+//         if(presetsStart >= 0) {
+//             auto presetsEnd = text.indexOf("</bsbPresets>", presetsStart);
+//             if(presetsEnd < 0) {
+//                 QDEBUG << "Missing </bsbPresets> tag";
+//             }
+//             else {
+//                 auto presetsSize = presetsEnd - presetsStart + 13;
+//                 auto presets = text.mid(presetsStart, presetsSize);
+//                 m_widgetLayouts[0]->loadXmlPresets(presets);
+//                 text.remove(presetsStart, presetsSize);
+//             }
+//         }
+//         /*
+//         if (text.contains("<bsbPresets>") && text.contains("</bsbPresets>")) {
+// 			QString presets = text.right(text.size()-text.indexOf("<bsbPresets>"));
+// 			presets.resize(presets.indexOf("</bsbPresets>") + 13);
+//             if (text.indexOf("</bsbPresets>") + 13 < text.size() &&
+//                     text[text.indexOf("</bsbPresets>") + 15] == '\n') {
+//                 //remove final line break
+//                 text.remove(text.indexOf("</bsbPresets>") + 15, 1);
+//             }
+//             if (text.indexOf("<bsbPresets>") > 0
+//                     && text[text.indexOf("<bsbPresets>") - 1] == '\n') {
+//                 // remove initial line break
+//                 text.remove(text.indexOf("<bsbPresets>") - 1, 1);
+//             }
+// 			text.remove(text.indexOf("<bsbPresets>"), presets.size());
+//             // FIXME allow multiple
+// 			m_widgetLayouts[0]->loadXmlPresets(presets);
+// 		}
+//         */
+//     }
+//     else {
+//         QString defaultPanel = "<bsbPanel><visible>true</visible><x>100</x><y>100</y>"
+//                                "<width>320</width><height>240</height></bsbPanel>";
+// 		m_widgetLayouts[0]->loadXmlWidgets(defaultPanel);
+// 		m_widgetLayouts[0]->markHistory();
+// 	}
+// 	return xmlPanels.size();
+// }
+
+
 int BaseDocument::parseAndRemoveWidgetText(QString &text)
 {
+    static const QString panelOpen   = QStringLiteral("<bsbPanel");
+    static const QString panelClose  = QStringLiteral("</bsbPanel>");
+    static const QString presetsOpen = QStringLiteral("<bsbPresets>");
+    static const QString presetsClose= QStringLiteral("</bsbPresets>");
 
-	QStringList xmlPanels;
-    while(true) {
-        auto panelStart = text.indexOf("<bsbPanel");
-        if(panelStart < 0) {
-            QDEBUG "Didn't find any more panels";
+    constexpr int panelCloseLen   = 11; // "</bsbPanel>"
+    constexpr int presetsCloseLen = 13; // "</bsbPresets>"
+
+    QString firstPanel;
+    int panelCount = 0;
+
+    int searchFrom = 0;
+    int copyFrom   = 0;
+
+    QString filtered;
+    filtered.reserve(text.size());
+
+    auto appendRange = [](QString &dst, const QString &src, int pos, int len) {
+        if (len > 0)
+            dst.append(src.constData() + pos, len);
+    };
+
+    while (true) {
+        const int panelStart = text.indexOf(panelOpen, searchFrom);
+        if (panelStart < 0)
             break;
-        }
-        auto panelEnd = text.indexOf("</bsbPanel>", panelStart);
-        if(panelEnd < 0) {
+
+        const int panelEnd = text.indexOf(panelClose, panelStart);
+        if (panelEnd < 0) {
             QDEBUG << "Did not find matching </bsbPanel> tag";
+
+            // Preserve original partial-removal behavior:
+            appendRange(filtered, text, copyFrom, panelStart - copyFrom);
+            appendRange(filtered, text, panelStart, text.size() - panelStart);
+            text = std::move(filtered);
             return 0;
         }
-        auto panel = text.mid(panelStart, panelEnd+11-panelStart);
-        xmlPanels << panel;
-        text.remove(panelStart, panelEnd+11-panelStart);
 
+        // Copy text before this panel.
+        appendRange(filtered, text, copyFrom, panelStart - copyFrom);
+
+        const int panelSize = panelEnd + panelCloseLen - panelStart;
+
+        // Only keep the first panel; the original code only used xmlPanels[0].
+        if (panelCount == 0)
+            firstPanel = text.mid(panelStart, panelSize);
+
+        ++panelCount;
+
+        copyFrom   = panelEnd + panelCloseLen;
+        searchFrom = copyFrom;
     }
-    /*
-    while (text.contains("<bsbPanel") && text.contains("</bsbPanel>")) {
-		QString panel = text.right(text.size()-text.indexOf("<bsbPanel"));
-		panel.resize(panel.indexOf("</bsbPanel>") + 11);
-        if (text.indexOf("</bsbPanel>") + 11 < text.size() &&
-                text[text.indexOf("</bsbPanel>") + 13] == '\n')
-			text.remove(text.indexOf("</bsbPanel>") + 13, 1); //remove final line break
-        if (text.indexOf("<bsbPanel") > 0 && text[text.indexOf("<bsbPanel") - 1] == '\n')
-			text.remove(text.indexOf("<bsbPanel") - 1, 1); //remove initial line break
-		text.remove(text.indexOf("<bsbPanel"), panel.size());
-		xmlPanels << panel;
-		// TODO enable creation of several panels
-	}
-    */
-	if (!xmlPanels.isEmpty()) {
-		//FIXME allow multiple layouts
-        auto t0 = std::chrono::high_resolution_clock::now();
-        m_widgetLayouts[0]->loadXmlWidgets(xmlPanels[0]);
-        auto t1 = std::chrono::high_resolution_clock::now();
-        auto diff = std::chrono::duration<double, std::milli>(t1-t0).count();
-        QDEBUG << "loadXmlWidgets" << diff << "ms";
 
+    if (panelCount == 0) {
+        const QString defaultPanel =
+            QStringLiteral("<bsbPanel><visible>true</visible><x>100</x><y>100</y>"
+                           "<width>320</width><height>240</height></bsbPanel>");
+
+        m_widgetLayouts[0]->loadXmlWidgets(defaultPanel);
         m_widgetLayouts[0]->markHistory();
-        auto presetsStart = text.indexOf("<bsbPresets>");
-        if(presetsStart >= 0) {
-            auto presetsEnd = text.indexOf("</bsbPresets>", presetsStart);
-            if(presetsEnd < 0) {
-                QDEBUG << "Missing </bsbPresets> tag";
-            }
-            else {
-                auto presetsSize = presetsEnd - presetsStart + 13;
-                auto presets = text.mid(presetsStart, presetsSize);
-                m_widgetLayouts[0]->loadXmlPresets(presets);
-                text.remove(presetsStart, presetsSize);
-            }
-        }
-        /*
-        if (text.contains("<bsbPresets>") && text.contains("</bsbPresets>")) {
-			QString presets = text.right(text.size()-text.indexOf("<bsbPresets>"));
-			presets.resize(presets.indexOf("</bsbPresets>") + 13);
-            if (text.indexOf("</bsbPresets>") + 13 < text.size() &&
-                    text[text.indexOf("</bsbPresets>") + 15] == '\n') {
-                //remove final line break
-                text.remove(text.indexOf("</bsbPresets>") + 15, 1);
-            }
-            if (text.indexOf("<bsbPresets>") > 0
-                    && text[text.indexOf("<bsbPresets>") - 1] == '\n') {
-                // remove initial line break
-                text.remove(text.indexOf("<bsbPresets>") - 1, 1);
-            }
-			text.remove(text.indexOf("<bsbPresets>"), presets.size());
-            // FIXME allow multiple
-			m_widgetLayouts[0]->loadXmlPresets(presets);
-		}
-        */
+        return 0;
     }
-    else {
-        QString defaultPanel = "<bsbPanel><visible>true</visible><x>100</x><y>100</y>"
-                               "<width>320</width><height>240</height></bsbPanel>";
-		m_widgetLayouts[0]->loadXmlWidgets(defaultPanel);
-		m_widgetLayouts[0]->markHistory();
-	}
-	return xmlPanels.size();
+
+    // Copy the remainder after the last removed panel.
+    appendRange(filtered, text, copyFrom, text.size() - copyFrom);
+    text = std::move(filtered);
+
+    auto *layout = m_widgetLayouts[0];
+
+    auto t0 = std::chrono::high_resolution_clock::now();
+    layout->loadXmlWidgets(firstPanel);
+    auto t1 = std::chrono::high_resolution_clock::now();
+
+    QDEBUG << "loadXmlWidgets"
+           << std::chrono::duration<double, std::milli>(t1 - t0).count() << "ms";
+
+    layout->markHistory();
+
+    const int presetsStart = text.indexOf(presetsOpen);
+    if (presetsStart >= 0) {
+        const int presetsEnd = text.indexOf(presetsClose, presetsStart);
+        if (presetsEnd < 0) {
+            QDEBUG << "Missing </bsbPresets> tag";
+        } else {
+            const int presetsSize = presetsEnd - presetsStart + presetsCloseLen;
+            layout->loadXmlPresets(text.mid(presetsStart, presetsSize));
+            text.remove(presetsStart, presetsSize);
+        }
+    }
+
+    return panelCount;
 }
+
 
 WidgetLayout* BaseDocument::newWidgetLayout()
 {
