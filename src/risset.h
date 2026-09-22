@@ -26,7 +26,7 @@ public:
     void markOpcodeTree(OpEntryParser *tree);
     QString defaultOpcodesXmlPath() { return rissetRoot.filePath("opcodes.xml"); }
 
-    bool isInstalled;
+    bool isInstalled = false;
     QString rissetVersion;
     QDir rissetRoot;
     QString rissetOpcodesXml;

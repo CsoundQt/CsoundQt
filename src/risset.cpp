@@ -109,6 +109,7 @@ Risset::Risset(QString pythonExe)
         QDEBUG << "Risset did not execute correctly: " << proc.errorString();
         return;
     }
+    isInstalled = true;
     m_rissetPath = rissetScriptPath;
     rissetRoot.setPath(root.value("rissetroot").toString());
     rissetHtmlDocs.setPath(root.value("htmldocs").toString());

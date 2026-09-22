@@ -142,8 +142,10 @@ public:
 	OpEntryParser *m_opcodeTree;
     Risset *risset = nullptr;
 	// Detects risset (spawns external processes) and augments the opcode tree.
-	// Deferred until after the window is shown; idempotent.
+	// Detection runs in the background once the window is shown; idempotent.
 	void initRisset();
+	// GUI-thread part: applies the (background) detection result.
+	void applyRisset();
 	// Loads the manual start page the first time the help panel is shown.
 	void loadHelpOnce();
 	void stkCheck();
@@ -554,6 +556,7 @@ private:
     QString m_fullScreenComponent;
     QDir m_rissetDataPath;
     bool m_rissetInitialized = false;
+    bool m_rissetReady = false;
     QString m_helpStartPage;
     bool m_helpLoaded = false;
     bool m_startupShown = false;

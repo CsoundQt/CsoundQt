@@ -23,6 +23,8 @@
 #include <QStyleHints>
 #include <QQmlContext>
 #include <QFileSystemWatcher>
+#include <QFutureWatcher>
+#include <QtConcurrent/QtConcurrentRun>
 
 #include "configdialog.h"
 #include "console.h"
@@ -577,32 +579,50 @@ void CsoundQt::initRisset()
         return;
     m_rissetInitialized = true;
 
-    risset = new Risset(m_options->pythonExecutable);
-    if (risset->isInstalled) {
-        QString rissetOpcodesXml = risset->rissetOpcodesXml;
-        if (!QFile::exists(rissetOpcodesXml)) {
-            QDEBUG << "opcodes.xml not found, searched: " << rissetOpcodesXml;
+    // Risset detection spawns external processes (and may generate/fetch data),
+    // so run it in the background and apply the results on the GUI thread once
+    // it finishes. This keeps both startup and the UI responsive. The worker
+    // only allocates a Risset and does not touch this CsoundQt instance, so
+    // quitting while it runs cannot use freed memory.
+    const QString pythonExe = m_options->pythonExecutable;
+    auto *watcher = new QFutureWatcher<Risset *>(this);
+    connect(watcher, &QFutureWatcher<Risset *>::finished, this, [this, watcher]() {
+        risset = watcher->result();
+        applyRisset();
+        watcher->deleteLater();
+    });
+    watcher->setFuture(QtConcurrent::run([pythonExe]() -> Risset * {
+        auto *r = new Risset(pythonExe);
+        if (r->isInstalled && !QFile::exists(r->rissetOpcodesXml)) {
+            QDEBUG << "opcodes.xml not found, searched: " << r->rissetOpcodesXml;
             QDEBUG << "Calling risset to generate opcodes.xml";
-            auto error = risset->generateOpcodesXml();
-            if (error != RissetError::Ok) {
+            if (r->generateOpcodesXml() != RissetError::Ok)
                 QDEBUG << "Could not generate opcodes.xml";
-                rissetOpcodesXml = "";
-            }
         }
-        if (!rissetOpcodesXml.isEmpty() && QFile::exists(rissetOpcodesXml)) {
-            QDEBUG << "Parsing risset's opcodes.xml:" << rissetOpcodesXml;
-            m_opcodeTree->parseOpcodesXml(rissetOpcodesXml);
-            m_opcodeTree->sortOpcodes();
-            risset->markOpcodeTree(m_opcodeTree);
-        } else {
-            QDEBUG << "Risset's opcodes.xml not found: " << rissetOpcodesXml;
-        }
+        return r;
+    }));
+}
 
-        // Register risset's manual as a search root (parsed lazily on first search)
-        QString rissetSite = risset->rissetHtmlDocs.path();
-        if (QFile::exists(rissetSite + "/search/search_index.json"))
-            helpPanel->addSearchRoot(rissetSite, tr("Risset"));
+void CsoundQt::applyRisset()
+{
+    m_rissetReady = true;
+    if (!risset || !risset->isInstalled)
+        return;
+
+    const QString rissetOpcodesXml = risset->rissetOpcodesXml;
+    if (!rissetOpcodesXml.isEmpty() && QFile::exists(rissetOpcodesXml)) {
+        QDEBUG << "Parsing risset's opcodes.xml:" << rissetOpcodesXml;
+        m_opcodeTree->parseOpcodesXml(rissetOpcodesXml);
+        m_opcodeTree->sortOpcodes();
+        risset->markOpcodeTree(m_opcodeTree);
+    } else {
+        QDEBUG << "Risset's opcodes.xml not found: " << rissetOpcodesXml;
     }
+
+    // Register risset's manual as a search root (parsed lazily on first search)
+    QString rissetSite = risset->rissetHtmlDocs.path();
+    if (QFile::exists(rissetSite + "/search/search_index.json"))
+        helpPanel->addSearchRoot(rissetSite, tr("Risset"));
 }
 
 void CsoundQt::applyThemeFromSystem(Qt::ColorScheme scheme)
@@ -2663,8 +2683,7 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
     }
     QString errmsg;
 
-    initRisset();
-    if(risset->isInstalled && risset->opcodeToPlugin.contains(entry)) {
+    if(m_rissetReady && risset->isInstalled && risset->opcodeToPlugin.contains(entry)) {
         // Check external help sources
         QDEBUG << "Found an opcode from an external plugin: " << entry;
         auto pluginName = risset->opcodeToPlugin[entry];
@@ -3230,7 +3249,7 @@ void CsoundQt::about()
                 QString::number(csoundGetVersion()),
                 csoundGetSizeOfMYFLT() == 8 ? "double (64-bit)" : "float (32-bit)");
     initRisset();
-    if(risset->isInstalled) {
+    if(m_rissetReady && risset->isInstalled) {
         text += "<hr>";
         text += "<h3>Risset</h3>";
         text += tr("Risset package manager found, version: <strong>%1</strong><br/>").arg(risset->rissetVersion);
@@ -3248,7 +3267,7 @@ void CsoundQt::about()
             text += "No plugins installed<br/>";
         }
 
-    } else {
+    } else if(m_rissetReady) {
         text += tr("Risset package manager not found. See <center><a href=\"https://github.com/csound-plugins/risset\">github.com/csound-plugins/risset</a></center>");
     }
     text += "<hr>";
