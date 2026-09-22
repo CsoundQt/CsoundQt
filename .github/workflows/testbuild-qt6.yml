@@ -253,8 +253,10 @@ jobs:
         if: runner.os == 'Windows'
         uses: actions/cache@v4
         with:
-          path: ${{ github.workspace }}/csound7
-          key: csound7-win-${{ steps.csound-installer.outputs.artifact }}
+          path: |
+            ${{ github.workspace }}/csound7
+            ${{ github.workspace }}/csound-dl/Csound7-windows-x86_64.exe
+          key: csound7-win-${{ steps.csound-installer.outputs.run-id }}-${{ steps.csound-installer.outputs.artifact }}
 
       - name: Download and install latest Csound 7 development build (windows)
         if: runner.os == 'Windows' && steps.cache-csound-win.outputs.cache-hit != 'true'
@@ -349,9 +351,10 @@ jobs:
           export CSOUNDQT_STAGING_DIR="$(cygpath -w "${STAGE}")"
           MSYS_NO_PATHCONV=1 iscc /o. installers/Windows/csoundqt7-x64.iss
           cp CsoundQt-windows-x86_64.exe artifacts/
-          cp csound-dl/Csound7-windows-x86_64.exe artifacts/ 2>/dev/null || true
+          test -f csound-dl/Csound7-windows-x86_64.exe
+          cp csound-dl/Csound7-windows-x86_64.exe artifacts/
           ls -la artifacts
-
+          
       - uses: actions/upload-artifact@v4
         with:
           name: CsoundQt-${{ matrix.os }}-${{ strategy.job-index }}
