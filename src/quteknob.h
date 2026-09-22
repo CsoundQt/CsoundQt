@@ -83,6 +83,7 @@ public:
     void setBorder(int width, QColor color) {
         m_border = width;
         m_bordercolor = color;
+        invalidateGeometryCache();
     }
 
     void setValueFromDisplayValue(double display_value) {
@@ -116,8 +117,13 @@ protected:
     virtual void mouseMoveEvent (QMouseEvent *event) override;
     virtual void paintEvent(QPaintEvent *event) override;
     virtual void mouseDoubleClickEvent (QMouseEvent *event) override;
+    virtual void resizeEvent(QResizeEvent *event) override {
+        invalidateGeometryCache();
+        QDial::resizeEvent(event);
+    }
 
 private:
+    
     bool   m_dragging;
     QPoint m_mouse_press_point;
     int    m_base_value;
@@ -134,6 +140,16 @@ private:
     bool   m_flat;
     int    m_degrees;
     bool   m_intDisplay;
+    
+   void drawKnob(QPainter &painter, int border,
+                  QColor fg, QColor bg, QColor borderColor);
+
+    void invalidateGeometryCache() { m_bgPathValid = false; }
+
+    mutable QPainterPath m_bgPath;
+    mutable bool         m_bgPathValid = false;
+    
+    
 
 
 signals:

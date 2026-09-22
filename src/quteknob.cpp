@@ -62,58 +62,56 @@ QPointF find_ellipse_coords(const QRectF &r, qreal angle) {
   return path.currentPosition();
 }
 
-void drawKnob(QPainter &painter, QVdial *knob, int border, QColor fg, QColor bg, QColor borderColor) {
-    int totaldegrees = knob->getDegreeRange();
-    double relvalue = (double)knob->value() / knob->maximum();
-    int steps = (int)(relvalue * totaldegrees);
 
-    int const startAngle360 = 90 + (360 - totaldegrees) / 2;
-    int const startAngle = startAngle360;
-    QPoint center = knob->rect().center();
+void QVdial::drawKnob(QPainter &painter, int border,
+                      QColor fg, QColor bg, QColor borderColor)
+{
+    const int totaldegrees = getDegreeRange();
+    const double relvalue  = static_cast<double>(value()) / maximum();
+    const int steps        = static_cast<int>(relvalue * totaldegrees);
+    const int startAngle   = 90 + (360 - totaldegrees) / 2;
 
-    // fgPen.setCosmetic(true);
-    double r = qMin(knob->rect().height(), knob->rect().width()) / 2.0;
+    const QRect knobRect = rect();
+    const QPoint center  = knobRect.center();
+
+    double r = qMin(knobRect.height(), knobRect.width()) / 2.0;
     r = r * 0.97 - border;
-    double inner_r = r*0.67;
-    QRectF const rect(center.x() - r, center.y() - r, r * 2, r * 2);
-    QRectF outer_rect(center.x() - r, center.y() - r, r * 2, r * 2);
-    QRectF inner_rect(center.x() - inner_r, center.y() - inner_r, inner_r*2, inner_r*2);
+    const double inner_r = r * 0.67;
 
-    // background
-    // this could be cached, since it only changes when the knob is resized
-    QPainterPath bgpath;
+    const QRectF outer_rect(center.x() - r,       center.y() - r,       r * 2,       r * 2);
+    const QRectF inner_rect(center.x() - inner_r, center.y() - inner_r, inner_r * 2, inner_r * 2);
 
-    bgpath.arcMoveTo(outer_rect, -startAngle);
-    bgpath.arcTo(outer_rect, -startAngle, -totaldegrees);
-    bgpath.lineTo(find_ellipse_coords(inner_rect, -startAngle - totaldegrees));
-    bgpath.arcTo(inner_rect, -startAngle-totaldegrees, totaldegrees);
-    bgpath.closeSubpath();
-    painter.fillPath(bgpath, bg);
+    if (!m_bgPathValid) {
+        m_bgPath = QPainterPath();
+        m_bgPath.arcMoveTo(outer_rect, -startAngle);
+        m_bgPath.arcTo    (outer_rect, -startAngle, -totaldegrees);
+        m_bgPath.lineTo   (find_ellipse_coords(inner_rect, -startAngle - totaldegrees));
+        m_bgPath.arcTo    (inner_rect, -startAngle - totaldegrees, totaldegrees);
+        m_bgPath.closeSubpath();
+        m_bgPathValid = true;
+    }
 
-    // foreground
+    painter.fillPath(m_bgPath, bg);
+
     QPainterPath path;
     path.arcMoveTo(outer_rect, -startAngle);
-    path.arcTo(outer_rect, -startAngle, -steps);
-    path.lineTo(find_ellipse_coords(inner_rect, -startAngle - steps));
-    path.arcTo(inner_rect, -startAngle-steps, steps);
+    path.arcTo    (outer_rect, -startAngle, -steps);
+    path.lineTo   (find_ellipse_coords(inner_rect, -startAngle - steps));
+    path.arcTo    (inner_rect, -startAngle - steps, steps);
     path.closeSubpath();
-
     painter.fillPath(path, fg);
 
-    // border at the end
-    if(border) {
+    if (border) {
         QPen borderPen(borderColor, border, Qt::SolidLine, Qt::FlatCap);
-        if(border == 1) {
+        if (border == 1) {
             borderPen.setWidth(0);
             borderPen.setCosmetic(true);
         }
         painter.setPen(borderPen);
-        painter.drawPath(bgpath);
+        painter.drawPath(m_bgPath);
     }
-
-    return ;
-
 }
+
 
 void QVdial::paintEvent(QPaintEvent *event) {
     if(!m_flat)
@@ -122,7 +120,7 @@ void QVdial::paintEvent(QPaintEvent *event) {
     painter.setRenderHint(QPainter::Antialiasing);
     QColor bgcolor = m_color.darker(330);
     double r = qMin(this->rect().height(), this->rect().width()) / 2.0;
-    drawKnob(painter, this, m_border, m_color, bgcolor, m_bordercolor);
+    drawKnob(painter, m_border, m_color, bgcolor, m_bordercolor);
 
     if(m_draw_value && r >= 8) {
         double fvalue = static_cast<double>(this->value());
@@ -202,7 +200,6 @@ QuteWidgetType QuteKnob::getWidgetTypeID() { return QuteWidgetType::KNOB; }
 
 void QuteKnob::setRange(double min, double max)
 {
-	// TODO when knob is resized, its internal range should be adjusted...
 	if (max < min) {
 		double temp = max;
 		max = min;
@@ -210,7 +207,7 @@ void QuteKnob::setRange(double min, double max)
 	}
 	if (m_value > max)
 		m_value =  max;
-	else if (m_value > min)
+	else if (m_value < min)
 		m_value = min;
     setProperty("CSQT_maximum", max);
 	setProperty("CSQT_minimum", min);

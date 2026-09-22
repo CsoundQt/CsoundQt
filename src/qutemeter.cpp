@@ -663,175 +663,118 @@ QColor MeterWidget::getBorderColor()
 }
 
 
-void MeterWidget::setValue(double value)
+
+template <MeterWidget::Axis axis>
+void MeterWidget::updateGeometry()
 {
-    //  qDebug() << "MeterWidget::setValue " <<value;
-    //  if (isnan(value) != 0)
-    //    return;
-    //  if (value > m_xmax) {
-    //    value = m_xmax;
-    //  }
-    //  if (value < m_xmin) {
-    //    value = m_xmin;
-    //  }
-    if (m_value == value) {
-        return;
-    }
-    mutex.lock();
-    m_value = value;
+    const double portionx = (m_value  - m_xmin) / (m_xmax - m_xmin);
+    const double portiony = (m_value2 - m_ymin) / (m_ymax - m_ymin);
+    const double w = width();
+    const double h = height();
+    const double px = portionx * w;
+    const double py = (1.0 - portiony) * h;
 
-    double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
-    double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
-
-    if (m_metertype == MeterWidgetType::Fill && !m_vertical) {
-		m_block->setRect(0, 0, portionx*width(), height());
-	}
-    else if (m_metertype == MeterWidgetType::Llif && !m_vertical) {
-        m_block->setRect(portionx*width(), 0, width(), height());
-	}
-    else if (m_metertype == MeterWidgetType::Line && !m_vertical) {
-        m_vline->setLine(portionx*width(), 0, portionx*width(), height());
-    }
-    else {
-        m_vline->setLine(portionx*width(), 0, portionx*width(), height());
-        m_point->setRect(portionx*width() - m_pointSize/2.0,
-                         height()*(1 - portiony) - m_pointSize/2.0,
+    switch (m_metertype) {
+    case MeterWidgetType::Fill:
+        if (!m_vertical)
+            m_block->setRect(0, 0, px, h);
+        else
+            m_block->setRect(0, py, w, h - py);
+        break;
+    case MeterWidgetType::Llif:
+        if (!m_vertical)
+            m_block->setRect(px, 0, w - px, h);
+        else
+            m_block->setRect(0, 0, w, py);
+        break;
+    case MeterWidgetType::Line:
+        if (!m_vertical)
+            m_vline->setLine(px, 0, px, h);
+        else
+            m_hline->setLine(0, py, w, py);
+        break;
+    case MeterWidgetType::Crosshair:
+    case MeterWidgetType::Point:
+    default:
+        m_vline->setLine(px, 0, px, h);
+        m_hline->setLine(0, py, w, py);
+        m_point->setRect(px - m_pointSize / 2.0,
+                         py - m_pointSize / 2.0,
                          m_pointSize,
                          m_pointSize);
     }
-    mutex.unlock();
-    //  emit valueChanged(m_value);
+}
+
+
+void MeterWidget::setValue(double value)
+{
+    QMutexLocker locker(&mutex);
+    if (m_value == value) return;
+    m_value = value;
+    updateGeometry<Axis::X>();
 }
 
 void MeterWidget::setValue2(double value)
 {
-	//  qDebug() << "MeterWidget::setValue2 " << value;
-	//  if (value > m_ymax) {
-	//    value = m_ymax;
-	//  }
-	//  if (value < m_ymin) {
-	//    value = m_ymin;
-	//  }
-	if (m_value2 == value) {
-		return;
-	}
-	mutex.lock();
-	m_value2 = value;
-	double portionx = (m_value -  m_xmin) / (m_xmax - m_xmin);
-	double portiony = (m_value2 -  m_ymin) / (m_ymax - m_ymin);
-    if (m_metertype == MeterWidgetType::Fill && m_vertical) {
-		m_block->setRect(0, (1-portiony)*height(), width(), height());
-	}
-    else if (m_metertype == MeterWidgetType::Llif && m_vertical) {
-		m_block->setRect(0, 0, width(), (1-portiony)*height());
-	}
-    else if (m_metertype == MeterWidgetType::Line && m_vertical) {
-		m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
-		//    m_hline->setLine(portiony*width(), 0 ,portiony*width(), height());
-	}
-	else {
-		m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
-        m_point->setRect(portionx*width() - m_pointSize/2.0,
-                         (1-portiony)*height() - m_pointSize/2.0,
-                         m_pointSize,
-                         m_pointSize);
-    }
-    mutex.unlock();
-    //  emit value2Changed(m_value2);
+    QMutexLocker locker(&mutex);
+    if (m_value2 == value) return;
+    m_value2 = value;
+    updateGeometry<Axis::Y>();
 }
 
 void MeterWidget::setValues(double value1, double value2)
 {
-    if (m_value2 == value2 && m_value == value1) {
-        return;
-    }
-    mutex.lock();
+    QMutexLocker locker(&mutex);
+    if (m_value == value1 && m_value2 == value2) return;
     m_value = value1;
     m_value2 = value2;
-    double portionx = (m_value - m_xmin) / (m_xmax - m_xmin);
-    double portiony = (m_value2 - m_ymin) / (m_ymax - m_ymin);
-    switch(m_metertype) {
-    case MeterWidgetType::Fill:
-        if (!m_vertical)
-            m_block->setRect(0, 0, portionx*width(), height());
-        else
-            m_block->setRect(0, (1-portiony)*height(), width(), portiony * height());
-        break;
-    case MeterWidgetType::Llif:
-        if (!m_vertical)
-            m_block->setRect(portionx*width(),0, width(), height());
-        else
-            m_block->setRect(0, 0, width(), (1-portiony)*height());
-        break;
-    case MeterWidgetType::Line:
-        if (!m_vertical)
-            m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
-        else
-            m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
-        break;
-    default:
-        m_vline->setLine(portionx*width(), 0 ,portionx*width(), height());
-        m_hline->setLine(0, (1-portiony)*height(), width(), (1-portiony)*height());
-        m_point->setRect(portionx*width() - (m_pointSize/2.0),
-                         (1-portiony)*height() - (m_pointSize/2.0),
-                         m_pointSize,
-                         m_pointSize);
-    }
-    mutex.unlock();
-
+    updateGeometry<Axis::Both>();
 }
+
 
 void MeterWidget::setType(QString type)
 {
-	//   qDebug() << "MeterWidget::setType " << type << m_vertical;
-	if (type == "fill") {
-		m_type = type;
-        m_metertype = MeterWidgetType::Fill;
-		m_block->show();
-		m_point->hide();
-		m_vline->hide();
-		m_hline->hide();
+    m_type = type;
+
+    // For "line", which primitive is visible depends on m_vertical.
+    const bool vertical = m_vertical;
+
+    struct Layout { bool block, point, vline, hline; };
+    Layout layout;
+    MeterWidgetType meterType;
+
+    if (type == "fill") {
+        meterType = MeterWidgetType::Fill;
+        layout = { true,  false, false, false };
         setRenderHint(QPainter::Antialiasing, false);
-	}
-	else if (type == "llif") {
-        m_metertype = MeterWidgetType::Llif;
-		m_type = type;
-		m_block->show();
-		m_point->hide();
-		m_vline->hide();
-		m_hline->hide();
-	}
-	else if (type == "line") {
-        m_metertype = MeterWidgetType::Line;
-		m_type = type;
-		m_block->hide();
-		m_point->hide();
-		if (m_vertical) {
-			m_vline->hide();
-			m_hline->show();
-		}
-		else {
-			m_vline->show();
-			m_hline->hide();
-		}
-	}
-	else if (type == "crosshair") {
-        m_metertype = MeterWidgetType::Crosshair;
-		m_type = type;
-		m_block->hide();
-		m_point->hide();
-		m_vline->show();
-		m_hline->show();
-	}
-	else if (type == "point") {
-        m_metertype = MeterWidgetType::Point;
-		m_type = type;
-		m_block->hide();
-		m_point->show();
-		m_vline->hide();
-		m_hline->hide();
+    }
+    else if (type == "llif") {
+        meterType = MeterWidgetType::Llif;
+        layout = { true,  false, false, false };
+    }
+    else if (type == "line") {
+        meterType = MeterWidgetType::Line;
+        layout = { false, false, !vertical, vertical };
+    }
+    else if (type == "crosshair") {
+        meterType = MeterWidgetType::Crosshair;
+        layout = { false, false, true, true };
+    }
+    else if (type == "point") {
+        meterType = MeterWidgetType::Point;
+        layout = { false, true,  false, false };
         setRenderHints(QPainter::Antialiasing);
     }
+    else {
+        QDEBUG << "MeterWidget::setType: Unknown type" << type;
+        return;   // unknown type — leave state untouched (matches original)
+    }
+
+    m_metertype = meterType;
+    m_block ->setVisible(layout.block);
+    m_point ->setVisible(layout.point);
+    m_vline ->setVisible(layout.vline);
+    m_hline ->setVisible(layout.hline);
 }
 
 void MeterWidget::setRanges(double xmin, double xmax, double ymin, double ymax)
@@ -901,64 +844,49 @@ void MeterWidget::setWidgetGeometry(int x,int y,int width,int height)
     setType(m_type);  // update widgets which depend on verticality
 }
 
-void MeterWidget::mouseMoveEvent(QMouseEvent* event)
+
+void MeterWidget::handlePointerEvent(const QPointF& pos, bool clamp)
 {
-    if (event->buttons() & Qt::LeftButton) {
-        //     if (event->x() > 0 and event->x()< width() and
-        //         event->y() > 0 and event->y()< height())
-        double newhor = m_xmin + (m_xmax - m_xmin) * (double)event->x()/width();
-        double newvert = m_ymin + (m_ymax - m_ymin) * (1-((double)event->y()/height()));
-        if (newhor > m_xmax) {
-            newhor = m_xmax;
-        }
-        else if (newhor < m_xmin) {
-            newhor = m_xmin;
-        }
-        if (newvert > m_ymax) {
-            newvert = m_ymax;
-        }
-        else if (newvert < m_ymin) {
-            newvert = m_ymin;
-        }
-        switch(m_metertype) {
-        case MeterWidgetType::Fill:
-        case MeterWidgetType::Line:
-        case MeterWidgetType::Llif:
-            if (m_vertical)
-                emit newValue2(newvert);
-            else
-                emit newValue1(newhor);
-            break;
-        case MeterWidgetType::Crosshair:
-        case MeterWidgetType::Point:
-            emit newValue1(newhor);
-            emit newValue2(newvert);
-            break;
-        }
+    const double w = width();
+    const double h = height();
+
+    double newhor  = m_xmin + (m_xmax - m_xmin) * (pos.x() / w);
+    double newvert = m_ymin + (m_ymax - m_ymin) * (1.0 - pos.y() / h);
+
+    if (clamp) {
+        newhor  = qBound(m_xmin, newhor,  m_xmax);
+        newvert = qBound(m_ymin, newvert, m_ymax);
+    }
+
+    switch (m_metertype) {
+    case MeterWidgetType::Fill:
+    case MeterWidgetType::Line:
+    case MeterWidgetType::Llif:
+        if (m_vertical) emit newValue2(newvert);
+        else            emit newValue1(newhor);
+        break;
+
+    case MeterWidgetType::Crosshair:
+    case MeterWidgetType::Point:
+        emit newValue1(newhor);
+        emit newValue2(newvert);
+        break;
+
+    default:
+        break;
     }
 }
 
 void MeterWidget::mousePressEvent(QMouseEvent* event)
 {
-    if (event->buttons() & Qt::LeftButton) {
-        //     if (event->x() > 0 and event->x()< width() and
-        //         event->y() > 0 and event->y()< height())
-        double newhor =  m_xmin + (m_xmax - m_xmin) * (double)event->x()/width();
-        double newvert = m_ymin + (m_ymax - m_ymin) * (1-((double)event->y()/height()));
-        switch(m_metertype) {
-        case MeterWidgetType::Fill:
-        case MeterWidgetType::Line:
-        case MeterWidgetType::Llif:
-            if (m_vertical)
-                emit newValue2(newvert);
-            else
-                emit newValue1(newhor);
-            break;
-        case MeterWidgetType::Crosshair:
-        case MeterWidgetType::Point:
-            emit newValue1(newhor);
-            emit newValue2(newvert);
-       }
-    }
+    if (event->button() == Qt::LeftButton)
+        handlePointerEvent(event->position(), false);
 }
+
+void MeterWidget::mouseMoveEvent(QMouseEvent* event)
+{
+    if (event->buttons() & Qt::LeftButton)
+        handlePointerEvent(event->position(), true);
+}
+
 

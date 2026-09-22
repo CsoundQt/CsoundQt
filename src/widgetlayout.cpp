@@ -496,37 +496,39 @@ void WidgetLayout::setKeyRepeatMode(bool repeat)
     m_repeatKeys = repeat;
 }
 
+
 void WidgetLayout::setDisplayValue(QString channelName, double value)
 {
-    if(!channelNameToWidgets.contains(channelName)) {
-        widgetsMutex.lock();
+    // ensures unlock even on exception
+    QMutexLocker locker(&widgetsMutex);
+    
+    auto it = channelNameToWidgets.find(channelName);
+    
+    if (it == channelNameToWidgets.end()) {
+        // First time seeing this channel - discover matching widgets
+        QList<QuteWidget*> matchingWidgets;
+        
         for (const auto widget : m_widgets) {
             auto wtype = widget->getWidgetTypeID();
-            if(wtype == QuteWidgetType::DISPLAY || wtype == QuteWidgetType::TABLEDISPLAY) {
+            if (wtype == QuteWidgetType::DISPLAY || wtype == QuteWidgetType::TABLEDISPLAY) {
                 widget->setValue(value);
-                QDEBUG << "Setting unknown display channel:" << channelName << "to" << value << "UUID: " << widget->getUuid();
-                channelNameToWidgets.insert(channelName, {widget});
+                matchingWidgets.append(widget);
+                QDEBUG << "Setting unknown display channel:" << channelName 
+                       << "to" << value << "UUID: " << widget->getUuid();
             }
         }
-        widgetsMutex.unlock();
+        
+        channelNameToWidgets.insert(channelName, matchingWidgets);
     } else {
-        widgetsMutex.lock();
-        auto widgets = channelNameToWidgets[channelName];
-        if(!widgets.isEmpty()) {
-            for(const auto &w: widgets) {
-                auto wtype = w->getWidgetTypeID();
-                if(wtype ==  QuteWidgetType::DISPLAY || wtype == QuteWidgetType::TABLEDISPLAY) {
-                    // TODO: define a property of qutewidget which sets if it is a unidirectional or bidirectional widget
-                    // instead of checking the widget type
-                    w->setValue(value);
-                }
+        const auto& widgets = it.value();
+        for (const auto& w : widgets) {
+            auto wtype = w->getWidgetTypeID();
+            if (wtype == QuteWidgetType::DISPLAY || wtype == QuteWidgetType::TABLEDISPLAY) {
+                w->setValue(value);
             }
         }
-        widgetsMutex.unlock();
     }
-     
 }
-
 
 void WidgetLayout::setOuterGeometry(QRect r)
 {
@@ -553,34 +555,38 @@ void WidgetLayout::setOuterGeometry(QRect r)
 
 void WidgetLayout::setValue(QString channelName, double value)
 {
-    auto widgets = channelNameToWidgets.constFind(channelName);
-    if(widgets == channelNameToWidgets.end()) {
-        widgetsMutex.lock();
-        for(int i = 0; i < m_widgets.size(); i++) {
-            auto w = m_widgets[i];
+    QDEBUG << "WidgetLayout::setValue channelName:" << channelName << "value:" << value;
+
+    QMutexLocker locker(&widgetsMutex);
+
+    auto it = channelNameToWidgets.find(channelName);
+    if (it == channelNameToWidgets.end()) {
+        // First time: discover all widgets bound to this channel
+        QList<QuteWidget*> matches;
+        matches.reserve(m_widgets.size());
+
+        for (auto* w : m_widgets) {
+            auto match = (w->getChannelName() == channelName) + (w->getChannel2Name() == channelName)*2;
+            if(match > 0) {
+                matches.append(w);
+                if(match & 1)
+                    w->setValue(value);
+                if(match & 2)
+                    w->setValue2(value);
+            }
+        }
+
+        // Insert once with the full list (fixes the overwrite bug)
+        it = channelNameToWidgets.insert(channelName, matches);
+    } else {
+        for (auto* w : it.value()) {
             if (w->getChannelName() == channelName) {
                 w->setValue(value);
-                channelNameToWidgets.insert(channelName, {w});
-                
-            } else if (w->getChannel2Name() == channelName) {
-                w->setValue2(value);
-                channelNameToWidgets.insert(channelName, {w});
-            } 
-        }
-        widgetsMutex.unlock();
-    } else {
-        widgetsMutex.lock();
-        for(const auto& w: widgets.value()) {
-            if(w->getChannelName() == channelName) {
-                w->setValue(value);
             }
-            else if (w->getChannel2Name() == channelName){
+            if (w->getChannel2Name() == channelName) {
                 w->setValue2(value);
-            } 
+            }
         }
-        widgetsMutex.unlock();
-        // TODO: deal with UUID
-        
     }
 }
 

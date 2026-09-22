@@ -135,6 +135,15 @@ protected:
 	//    virtual void mouseReleaseEvent(QMouseEvent* event);
 
 private:
+    
+    
+    enum class Axis { X, Y, Both };
+    
+    template <Axis axis>
+    void updateGeometry();
+    void handlePointerEvent(const QPointF& pos, bool clamp);
+
+
 	double m_value, m_value2;  // value1 is vertical, value2 is horizontal
 	double m_xmin, m_xmax, m_ymin, m_ymax;
     MeterWidgetType m_metertype;
@@ -161,5 +170,7 @@ signals:
 	//    void valueChanged(double value);
 	//    void value2Changed(double value);
 };
+
+
 
 #endif

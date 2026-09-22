@@ -104,14 +104,8 @@ void QuteWidget::setValue2(double value)
 
 void QuteWidget::setValue(QString value)
 {
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.lockForWrite();
-#endif
 	m_stringValue = value;
 	m_valueChanged = true;
-#ifdef  USE_WIDGET_MUTEX
-	widgetLock.unlock();
-#endif
 }
 
 void QuteWidget::setMidiValue(int /* value */)
@@ -124,22 +118,25 @@ void QuteWidget::setMidiValue2(int /* value */)
     qDebug() << "Not available for this widget." << this;
 }
 
-void QuteWidget::widgetMessage(QString path, QString text)
+void QuteWidget::widgetMessage(const QString& path, const QString& text)
 {
-    qDebug() << text;
-	if (property(path.toLocal8Bit()).isValid()) {
-		setProperty(path.toLocal8Bit(), text);
-		//    applyInternalProperties();
-	}
+    const QByteArray name = path.toLatin1();
+    const int idx = metaObject()->indexOfProperty(name.constData());
+    if (idx >= 0) {
+        metaObject()->property(idx).write(this, text);
+    }
 }
 
-void QuteWidget::widgetMessage(QString path, double value)
+void QuteWidget::widgetMessage(const QString& path, double value)
 {
-    if (property(path.toLocal8Bit()).isValid()) {
-		setProperty(path.toLocal8Bit(), value);
-		//    applyInternalProperties();
-	}
+    const QByteArray name = path.toLatin1();
+    const int idx = metaObject()->indexOfProperty(name.constData());
+    if (idx >= 0) {
+        metaObject()->property(idx).write(this, value);
+    }
 }
+
+
 
 QString QuteWidget::getChannelName()
 {
@@ -148,10 +145,7 @@ QString QuteWidget::getChannelName()
 
 QString QuteWidget::getChannel2Name()
 {
-	//  widgetLock.lockForRead();
-	QString name = m_channel2;
-	//  widgetLock.unlock();
-	return name;
+	return m_channel2;
 }
 
 QString QuteWidget::getCabbageLine()

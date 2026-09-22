@@ -52,8 +52,8 @@ public:
 	virtual bool acceptsMidi() {return false;}
 	virtual void setLocked(bool locked) {m_locked = locked;}
 
-	virtual void widgetMessage(QString path, QString text);
-	virtual void widgetMessage(QString path, double value);
+	virtual void widgetMessage(const QString& path, const QString& text);
+	virtual void widgetMessage(const QString& path, double value);
 
 	virtual QString getWidgetLine() = 0;
 	virtual QString getCabbageLine();
