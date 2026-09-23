@@ -56,6 +56,11 @@ QColor saturateColor(QColor color, int percent) {
 }
 
 void Highlighter::setTheme(const QString &theme) {
+    // Re-applying an unchanged theme would force a full rehighlight of the
+    // document. On an already laid-out, visible editor that is extremely
+    // expensive (seconds on large files), so skip it.
+    if (m_themeSet && theme == m_theme)
+        return;
     if(theme == "none") {
         defaultFormat.setForeground(QColor("black"));
         defaultFormat.setBackground(QColor(250, 250, 250));
@@ -328,6 +333,7 @@ void Highlighter::setTheme(const QString &theme) {
     jsKeywordFormat =  krateFormat;// keywordFormat;
 
     m_theme = theme;
+    m_themeSet = true;
     clearTypedVars();
     rehighlight();
     // emit this->rehighlight();

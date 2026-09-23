@@ -173,6 +173,7 @@ private:
     bool m_scoreSyntaxHighlighting;
 
     QString m_theme;
+    bool m_themeSet = false;
 
 	// for html
     QTextCharFormat jsKeywordFormat, htmlTagFormat, attrFormat, tagNameFormat;
