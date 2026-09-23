@@ -1880,19 +1880,32 @@ void WidgetLayout::selectionChanged(QRect selection)
     //   qDebug("WidgetLayout::selectionChanged %i %i %i %i", selection.x(), selection.y(), selection.width(), selection.height());
     if (editWidgets.isEmpty())
         return; //not in edit mode
-    deselectAll();
+
+    // Only toggle widgets whose selection actually changed. Selecting/clearing
+    // selection repolishes the widget's stylesheet, so doing it for every widget
+    // on every mouse move made rubber-band dragging very slow.
+    QVector<int> toSelect;
+    QVector<int> toDeselect;
     widgetsMutex.lock();
     for (int i = 0; i< m_widgets.size(); i++) {
         int x = m_widgets[i]->x();
         int y = m_widgets[i]->y();
         int w = m_widgets[i]->width();
         int h = m_widgets[i]->height();
-        if (x > selection.x() - w && x < selection.x() + selection.width() &&
-                y > selection.y() - h && y < selection.y() + selection.height() ) {
-            editWidgets[i]->select();
-        }
+        bool inSelection = (x > selection.x() - w && x < selection.x() + selection.width() &&
+                            y > selection.y() - h && y < selection.y() + selection.height());
+        if (inSelection && !editWidgets[i]->isSelected())
+            toSelect.append(i);
+        else if (!inSelection && editWidgets[i]->isSelected())
+            toDeselect.append(i);
     }
     widgetsMutex.unlock();
+
+    // Apply outside the lock: select()/deselect() emit signals that may call back.
+    for (int i : toDeselect)
+        editWidgets[i]->deselect();
+    for (int i : toSelect)
+        editWidgets[i]->select();
 }
 
 QString WidgetLayout::createNewSlider(int x, int y, QString channel)
@@ -4303,20 +4316,45 @@ void WidgetLayout::deleteSelected()
 
 void WidgetLayout::moveSelected(int horiz, int vert, int grid) {
     widgetsMutex.lock();
+
+    // Determine a single movement delta for the whole selection by snapping the
+    // bounding-box top-left to the grid. Snapping each widget on its own would
+    // change the relative positions within a multi-widget selection.
+    int minx = 0;
+    int miny = 0;
+    bool anySelected = false;
+    for (int i = 0; i < editWidgets.size(); i++) {
+        if (!editWidgets[i]->isSelected())
+            continue;
+        QPoint pos = m_widgets[i]->pos();
+        if (!anySelected) {
+            minx = pos.x();
+            miny = pos.y();
+            anySelected = true;
+        } else {
+            minx = qMin(minx, pos.x());
+            miny = qMin(miny, pos.y());
+        }
+    }
+    if (!anySelected) {
+        widgetsMutex.unlock();
+        return;
+    }
+
+    int dx = horiz;
+    int dy = vert;
+    if (grid > 1) {
+        dx = int(round((minx + horiz) / (double)grid)) * grid - minx;
+        dy = int(round((miny + vert) / (double)grid)) * grid - miny;
+    }
+
     for (int i = editWidgets.size() - 1; i >= 0 ; i--) {
         if(!editWidgets[i]->isSelected())
             continue;
         widgetsMutex.unlock();
         QPoint pos = m_widgets[i]->pos();
-        int x = pos.x() + horiz;
-        int y = pos.y() + vert;
-        if(grid > 1) {
-            double xq = round(x / (double)grid) * grid;
-            x = (int)xq;
-            double yq = round(y / (double)grid) * grid;
-            y = (int)yq;
-
-        }
+        int x = pos.x() + dx;
+        int y = pos.y() + dy;
         m_widgets[i]->move(x, y);
         editWidgets[i]->move(x, y);
         widgetsMutex.lock();

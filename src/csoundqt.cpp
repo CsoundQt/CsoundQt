@@ -314,11 +314,13 @@ CsoundQt::CsoundQt(QStringList fileNames)
         // Wire the signal mapper to the tab widget index change slot
         connect(mapper, SIGNAL(mappedInt(int)), documentTabs, SLOT(setCurrentIndex(int)));
 #ifdef Q_OS_MACOS
-        QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::META | Qt::Key_Left), this);
-        QShortcut *tabRight = new QShortcut(QKeySequence(Qt::META | Qt::Key_Right), this);
+        QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::META | Qt::SHIFT | Qt::Key_Left), this);
+        QShortcut *tabRight = new QShortcut(QKeySequence(Qt::META | Qt::SHIFT | Qt::Key_Right), this);
 #else
-        QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_Left), this);
-        QShortcut *tabRight = new QShortcut(QKeySequence(Qt::ALT | Qt::Key_Right), this);
+        // Alt+Left/Right is used for fine widget movement in the widget editor,
+        // so cycle tabs with Alt+Shift+Left/Right instead.
+        QShortcut *tabLeft = new QShortcut(QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_Left), this);
+        QShortcut *tabRight = new QShortcut(QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_Right), this);
 #endif
         connect(tabLeft, SIGNAL(activated()), this, SLOT(pageLeft()));
         connect(tabRight, SIGNAL(activated()), this, SLOT(pageRight()));

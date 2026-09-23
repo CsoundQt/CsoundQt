@@ -46,6 +46,8 @@ FrameWidget::~FrameWidget()
 
 void FrameWidget::select()
 {
+	if (m_selected)
+		return;
 	m_selected = true;
     this->setStyleSheet("QFrame, QLabel, QToolTip {color:" + qApp->palette().color(QPalette::WindowText).name() + "; border:3px solid rgb(30, 150, 240);}");
 
@@ -61,6 +63,8 @@ void FrameWidget::setSelected(bool status) {
 
 void FrameWidget::deselect()
 {
+	if (!m_selected)
+		return;
 	m_selected = false;
     this->setStyleSheet("QFrame, QLabel, QToolTip {color:" + qApp->palette().color(QPalette::WindowText).name() + "; border:2px solid green;}");
 	emit widgetUnselected(m_widget);
