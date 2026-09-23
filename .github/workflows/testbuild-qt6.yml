@@ -226,15 +226,19 @@ jobs:
       - name: Resolve latest Csound 7 Windows installer from csound develop Actions
         id: csound-installer
         if: runner.os == 'Windows'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           mkdir -p csound-dl
-          curl -fsSL "https://api.github.com/repos/csound/csound/actions/workflows/csound_builds.yml/runs?branch=develop&status=success&per_page=5" -o csound-dl/runs.json
+          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/csound/csound/actions/workflows/csound_builds.yml/runs?branch=develop&status=success&per_page=5" -o csound-dl/runs.json
           RUN_IDS=$(python -c "import json,sys; d=json.load(open(sys.argv[1])); print(' '.join(str(r['id']) for r in d['workflow_runs']))" csound-dl/runs.json)
           ART_NAME=""
           RUN_ID=""
           for rid in ${RUN_IDS}; do
-            curl -fsSL "https://api.github.com/repos/csound/csound/actions/runs/${rid}/artifacts?per_page=100" -o csound-dl/artifacts.json
+            curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/csound/csound/actions/runs/${rid}/artifacts?per_page=100" -o csound-dl/artifacts.json
             ART_NAME=$(python -c "import json,sys; d=json.load(open(sys.argv[1])); print([a['name'] for a in d.get('artifacts', []) if a['name'].startswith('Csound_x64-') and a['name'].endswith('-windows-installer')][0])" csound-dl/artifacts.json || true)
             if [ -n "${ART_NAME}" ]; then
               RUN_ID=${rid}

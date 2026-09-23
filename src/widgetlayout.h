@@ -303,7 +303,6 @@ public slots:
 
 	void newValue(QPair<QString, double> channelValue);
 	void newValue(QPair<QString, QString> channelValue);
-	void processNewValues();
 	void queueEvent(QString eventLine);
 
     void processUpdateCurve(Curve *curve);
