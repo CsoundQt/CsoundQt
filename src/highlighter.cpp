@@ -746,8 +746,15 @@ void Highlighter::highlightScore(const QString &text, int start, int end) {
 
 void Highlighter::highlightCsoundBlock(const QString &line)
 {
-    QRegularExpression rx;
     QRegularExpressionMatch rxmatch;
+
+    // Constant patterns compiled once instead of on every line.
+    static const QRegularExpression csdtagRx("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>");
+    static const QRegularExpression defineRx("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
+    static const QRegularExpression instOpcodeRx("^\\s*\\b(instr|opcode)\\s+(\\w+)\\b");
+    static const QRegularExpression operatorsRx(R"(&&|==|\|\||<|>|<=|>=|!=|\\)");
+    static const QRegularExpression stringRx("\"[^\"]*\"");
+    static const QRegularExpression labelRx("^\\s*([a-zA-Z]\\w*):\\s*$");
 
 	// text is processed one line at a time
     if(m_theme == "none")
@@ -804,8 +811,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
 
     auto blockdata = static_cast<TextBlockData*>(currentBlockUserData());
 
-    rx.setPattern("^\\s*<\\/?(CsInstruments|CsOptions|CsoundSynthesizer|CsScore|CsFileB|CsLicense|html).*>");
-    rxmatch = rx.match(line);
+    rxmatch = csdtagRx.match(line);
     if(rxmatch.hasMatch() ) {
         if(rxmatch.captured(1) == "CsInstruments" ) {
             blockdata->section = OrchestraSection;
@@ -848,15 +854,13 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         }
 
         // define
-        rx.setPattern("^\\s*#define\\s+[_\\w\\ \\t]*#.*#");
-        rxmatch = rx.match(text);
+        rxmatch = defineRx.match(text);
         if(rxmatch.hasMatch()) {
             setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), macroDefineFormat);
             return;
         }
 
-        rx.setPattern("^\\s*\\b(instr|opcode)\\s+(\\w+)\\b");
-        rxmatch = rx.match(text);
+        rxmatch = instOpcodeRx.match(text);
         if(rxmatch.hasMatch()) {
             //auto group = rxmatch.captured(2);
             setFormat(rxmatch.capturedStart(1), rxmatch.capturedLength(1), instFormat);
@@ -896,9 +900,8 @@ void Highlighter::highlightCsoundBlock(const QString &line)
             }
         }
 
-        rx.setPattern(R"(&&|==|\|\||<|>|<=|>=|!=|\\)");
         index = 0;
-        while((rxmatch=rx.match(text, index)).hasMatch()) {
+        while((rxmatch=operatorsRx.match(text, index)).hasMatch()) {
             length = rxmatch.capturedLength();
             setFormat(rxmatch.capturedStart(), length, operatorFormat);
             index = rxmatch.capturedEnd()+1;
@@ -1077,9 +1080,8 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         }
 
         // string
-        rx.setPattern("\"[^\"]*\"");
         index = 0;
-        while ((rxmatch = rx.match(text, index)).hasMatch()) {
+        while ((rxmatch = stringRx.match(text, index)).hasMatch()) {
             setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), quotationFormat);
             index = rxmatch.capturedEnd();
         }
@@ -1096,8 +1098,7 @@ void Highlighter::highlightCsoundBlock(const QString &line)
         // }
 
         // label (separate)
-        rx.setPattern("^\\s*([a-zA-Z]\\w*):\\s*$");
-        rxmatch = rx.match(text);
+        rxmatch = labelRx.match(text);
 
         if (rxmatch.hasMatch()) {
             setFormat(rxmatch.capturedStart(), rxmatch.capturedLength(), labelFormat);

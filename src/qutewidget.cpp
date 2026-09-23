@@ -244,10 +244,12 @@ QString QuteWidget::getQml()
 
 QString QuteWidget::getUuid()
 {
-	if (property("CSQT_uuid").isValid())
-		return property("CSQT_uuid").toString();
-	else
-		return QString();
+	return m_uuid;
+}
+
+void QuteWidget::setUuid(const QString &uuid)
+{
+	m_uuid = uuid;
 }
 
 void QuteWidget::applyInternalProperties()

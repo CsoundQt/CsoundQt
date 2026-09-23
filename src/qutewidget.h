@@ -44,6 +44,7 @@ enum class MouseParam { None, X, Y, RelX, RelY, But1, But2 };
 class QuteWidget : public QWidget
 {
 	Q_OBJECT
+	Q_PROPERTY(QString CSQT_uuid READ getUuid WRITE setUuid)
 public:
 	QuteWidget(QWidget* parent);
 	~QuteWidget();
@@ -73,6 +74,7 @@ public:
     virtual QString getDescription();
 
 	QString getUuid();
+	void setUuid(const QString &uuid);
 	virtual QString getWidgetType() = 0;
 	virtual QuteWidgetType getWidgetTypeID() = 0;
 	virtual void refreshWidget() { ;}
@@ -139,6 +141,7 @@ protected:
 	bool m_locked; // Allow modification of widget (properties, alignment, etc.)
     CsoundUserData *m_csoundUserData;
     QString m_description;
+    QString m_uuid;
 
 
 #ifdef  USE_WIDGET_MUTEX
