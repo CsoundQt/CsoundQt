@@ -49,3 +49,4 @@ qcs.pro.user*
 perf.data*
 build-appimage
 *.log
+AGENTS.md
