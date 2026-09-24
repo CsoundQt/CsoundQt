@@ -43,9 +43,6 @@ public:
 
 protected:
     virtual void keyPressEvent(QKeyEvent * event);
-
-signals:
-	void keyPressed(QString text); // Used to send both pressed keys and full opcode text to be pasted
 };
 
 class HoverWidget :

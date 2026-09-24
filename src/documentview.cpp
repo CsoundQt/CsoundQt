@@ -108,8 +108,6 @@ DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	syntaxMenu = new MySyntaxMenu(m_mainEditor);
 	//  syntaxMenu->setFocusPolicy(Qt::NoFocus);
 	syntaxMenu->setAutoFillBackground(true);
-    connect(syntaxMenu,SIGNAL(keyPressed(QString)),
-			m_mainEditor, SLOT(insertPlainText(QString)));
 
 	setViewMode(1);
 	setViewMode(0);  // To force a change
@@ -2124,14 +2122,16 @@ void MySyntaxMenu::keyPressEvent(QKeyEvent * event)
         return;
     } else {
 		this->close();
-		if (event->key() != Qt::Key_Backspace) {
-			emit keyPressed(event->text());
-		}
-		else {
-			QObject *par = parent();
-			if (par)
-				par->event(event);
-		}
+		// Forward the whole key event to the editor instead of inserting
+		// event->text() ourselves. event->text() is not guaranteed to be a
+		// printable ASCII character: on some platforms keys that produce no
+		// text (navigation, function and delete keys, dead keys, ...) carry
+		// non-ASCII or private-use characters. The editor knows which keys
+		// insert text and which move the cursor, so let it handle the event.
+		QObject *par = parent();
+		if (par)
+			par->event(event);
+		event->accept();
 	}
     // insertComplete = false;
     // QMenu::keyPressEvent(event);
