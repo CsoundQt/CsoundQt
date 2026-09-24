@@ -47,6 +47,7 @@ public:
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
+	virtual bool applyProperty(const QString &name);
 
 	//    void popUpMenu(QPoint pos);
     virtual void resizeEvent(QResizeEvent *);

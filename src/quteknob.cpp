@@ -246,6 +246,46 @@ void QuteKnob::refreshWidget()
     w->blockSignals(false);
 }
 
+bool QuteKnob::applyProperty(const QString &name)
+{
+	auto w = static_cast<QVdial*>(m_widget);
+	if (name == "CSQT_value") {
+		setValue(property("CSQT_value").toDouble());
+		return true;
+	}
+	if (name == "CSQT_color") {
+		w->setColor(property("CSQT_color").value<QColor>());
+		return true;
+	}
+	if (name == "CSQT_textcolor") {
+		w->setTextColor(QColor(property("CSQT_textcolor").toString()));
+		return true;
+	}
+	if (name == "CSQT_showvalue") {
+		w->setDrawValue(property("CSQT_showvalue").toBool());
+		return true;
+	}
+	if (name == "CSQT_flatstyle") {
+		w->setFlatStyle(property("CSQT_flatstyle").toBool());
+		return true;
+	}
+	if (name == "CSQT_integerMode") {
+		w->setIntegerMode(property("CSQT_integerMode").toBool());
+		return true;
+	}
+	if (name == "CSQT_minimum" || name == "CSQT_maximum") {
+		w->setDisplayRange(property("CSQT_minimum").toDouble(),
+		                   property("CSQT_maximum").toDouble());
+		return true;
+	}
+	if (name == "CSQT_border" || name == "CSQT_borderColor") {
+		w->setBorder(property("CSQT_border").toInt(),
+		             property("CSQT_borderColor").toString());
+		return true;
+	}
+	return QuteWidget::applyProperty(name);
+}
+
 void QuteKnob::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();

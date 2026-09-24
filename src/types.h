@@ -123,6 +123,17 @@ enum viewMode {
 	VIEW_ORC_SCO
 };
 
+// Role/severity of a message shown in the console panel. Determines the colour
+// it is printed in. Auto lets the console infer the colour from the text, which
+// is what Csound's own messages need (they carry no role information).
+enum class MessageRole {
+	Auto = -1, // infer from text (legacy / Csound messages)
+	Debug = 0,
+	Info,
+	Warning,
+	Error
+};
+
 class Opcode
 {
 public:

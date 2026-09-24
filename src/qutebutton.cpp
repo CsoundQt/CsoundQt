@@ -498,6 +498,30 @@ void QuteButton::refreshWidget()
 }
 
 
+bool QuteButton::applyProperty(const QString &name)
+{
+	if (name == "CSQT_pressedValue") {
+		m_value = property("CSQT_pressedValue").toDouble();
+		return true;
+	}
+	if (name == "CSQT_stringvalue") {
+		m_stringValue = property("CSQT_stringvalue").toString();
+		return true;
+	}
+	if (name == "CSQT_text") {
+		static_cast<QPushButton*>(m_widget)->setText(property("CSQT_text").toString());
+		return true;
+	}
+	if (name == "CSQT_latch") {
+		auto w = static_cast<QPushButton*>(m_widget);
+		bool latch = property("CSQT_latch").toBool();
+		w->setCheckable(latch);
+		w->setIcon(latch ? onIcon : QIcon());
+		return true;
+	}
+	return QuteWidget::applyProperty(name);
+}
+
 void QuteButton::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();

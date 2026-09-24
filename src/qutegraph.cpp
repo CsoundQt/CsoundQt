@@ -1032,6 +1032,28 @@ void QuteGraph::setCurveData(Curve * curve)
     view->verticalScrollBar()->setValue(viewPosy);
 }
 
+bool QuteGraph::applyProperty(const QString &name)
+{
+	if (name == "CSQT_showGrid") {
+		m_drawGrid = property("CSQT_showGrid").toBool();
+		update();
+		return true;
+	}
+	if (name == "CSQT_showTableInfo") {
+		m_drawTableInfo = property("CSQT_showTableInfo").toBool();
+		update();
+		return true;
+	}
+	if (name == "CSQT_showSelector") {
+		if (property("CSQT_showSelector").toBool())
+			m_pageComboBox->show();
+		else
+			m_pageComboBox->hide();
+		return true;
+	}
+	return QuteWidget::applyProperty(name);
+}
+
 void QuteGraph::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
@@ -1741,6 +1763,24 @@ QuteWidgetType QuteTable::getWidgetTypeID() { return QuteWidgetType::TABLEDISPLA
 void QuteTable::setColor(QColor color) {
     setProperty("CSQT_color", color);
     static_cast<QuteTableWidget*>(m_widget)->setColor(color);
+}
+
+bool QuteTable::applyProperty(const QString &name)
+{
+	auto w = static_cast<QuteTableWidget*>(m_widget);
+	if (name == "CSQT_color") {
+		w->setColor(property("CSQT_color").value<QColor>());
+		return true;
+	}
+	if (name == "CSQT_range") {
+		w->setRange(property("CSQT_range").toDouble());
+		return true;
+	}
+	if (name == "CSQT_showGrid") {
+		w->showGrid(property("CSQT_showGrid").toBool());
+		return true;
+	}
+	return QuteWidget::applyProperty(name);
 }
 
 void QuteTable::applyInternalProperties() {

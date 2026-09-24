@@ -96,6 +96,19 @@ void QuteSlider::refreshWidget()
 	m_widget->blockSignals(false);
 }
 
+bool QuteSlider::applyProperty(const QString &name)
+{
+	if (name == "CSQT_value") {
+		m_value = property("CSQT_value").toDouble();
+		m_valueChanged = true;
+		return true;
+	}
+	if (name == "CSQT_minimum" || name == "CSQT_maximum") {
+		return true; // only the stored range; nothing to apply to the live slider
+	}
+	return QuteWidget::applyProperty(name);
+}
+
 void QuteSlider::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();

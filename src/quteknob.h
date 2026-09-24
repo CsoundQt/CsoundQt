@@ -65,25 +65,29 @@ public:
             m_decimals = 1;
         else
             m_decimals = 0;
+        update();
     }
-    void setDrawValue(bool enable) { m_draw_value = enable; }
+    void setDrawValue(bool enable) { m_draw_value = enable; update(); }
     void setColor(QColor color) {
         if(!color.isValid()) {
             qDebug() << "QVdial::setColor: invalid color";
             return;
         }
-        m_color = color; }
+        m_color = color;
+        update();
+    }
     QColor getColor() { return m_color; }
-    void setTextColor(QColor c) { m_textcolor = c; }
+    void setTextColor(QColor c) { m_textcolor = c; update(); }
 
     QColor getTextColor() { return m_textcolor; }
 
-    void setFlatStyle(bool enable) { m_flat = enable; }
-    void setIntegerMode(bool enable) { m_intDisplay = enable; }
+    void setFlatStyle(bool enable) { m_flat = enable; update(); }
+    void setIntegerMode(bool enable) { m_intDisplay = enable; update(); }
     void setBorder(int width, QColor color) {
         m_border = width;
         m_bordercolor = color;
         invalidateGeometryCache();
+        update();
     }
 
     void setValueFromDisplayValue(double display_value) {
@@ -178,6 +182,7 @@ public:
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
+	virtual bool applyProperty(const QString &name);
 
     virtual void setColor(QColor c);
     virtual void setTextColor(QColor c);

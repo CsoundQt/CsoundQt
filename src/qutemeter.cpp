@@ -549,6 +549,30 @@ void QuteMeter::setWidgetGeometry(int x,int y,int width,int height)
     m_widget->blockSignals(false);
 }
 
+bool QuteMeter::applyProperty(const QString &name)
+{
+	auto meter = static_cast<MeterWidget *>(m_widget);
+	if (name == "CSQT_color") {
+		meter->setColor(property("CSQT_color").value<QColor>());
+		return true;
+	}
+	if (name == "CSQT_bgcolor") {
+		meter->setBgColor(property("CSQT_bgcolor").value<QColor>());
+		return true;
+	}
+	if (name == "CSQT_xValue") {
+		m_value = property("CSQT_xValue").toDouble();
+		setValue(m_value);
+		return true;
+	}
+	if (name == "CSQT_yValue") {
+		m_value2 = property("CSQT_yValue").toDouble();
+		setValue2(m_value2);
+		return true;
+	}
+	return QuteWidget::applyProperty(name);
+}
+
 void QuteMeter::applyInternalProperties()
 {
     QuteWidget::applyInternalProperties();

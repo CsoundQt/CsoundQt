@@ -276,6 +276,21 @@ void QuteSpinBox::refreshWidget()
 	m_widget->blockSignals(false);
 }
 
+bool QuteSpinBox::applyProperty(const QString &name)
+{
+	auto w = static_cast<QDoubleSpinBox*>(m_widget);
+	if (name == "CSQT_minimum" || name == "CSQT_maximum") {
+		w->setRange(property("CSQT_minimum").toDouble(), property("CSQT_maximum").toDouble());
+		return true;
+	}
+	if (name == "CSQT_value") {
+		m_value = property("CSQT_value").toDouble();
+		m_valueChanged = true;
+		return true;
+	}
+	return QuteWidget::applyProperty(name);
+}
+
 void QuteSpinBox::applyInternalProperties()
 {
     QuteWidget::applyInternalProperties();

@@ -208,6 +208,22 @@ void QuteText::refreshWidget()
 	m_valueChanged = false;
 }
 
+bool QuteText::applyProperty(const QString &name)
+{
+	if (name == "CSQT_label") {
+		m_stringValue = property("CSQT_label").toString();
+		static_cast<QLabel*>(m_widget)->setText(m_stringValue);
+		m_value = m_stringValue.toDouble();
+		m_valueChanged = true;
+		return true;
+	}
+	if (name == "CSQT_color") {
+		setTextColor(property("CSQT_color").value<QColor>());
+		return true;
+	}
+	return QuteWidget::applyProperty(name);
+}
+
 void QuteText::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
@@ -865,6 +881,20 @@ double QuteLineEdit::getValue()
 	return value;
 }
 
+bool QuteLineEdit::applyProperty(const QString &name)
+{
+	if (name == "CSQT_label") {
+		m_stringValue = property("CSQT_label").toString();
+		m_valueChanged = true;
+		return true;
+	}
+	if (name == "CSQT_color") {
+		setTextColor(property("CSQT_color").value<QColor>());
+		return true;
+	}
+	return QuteWidget::applyProperty(name);
+}
+
 void QuteLineEdit::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
@@ -1273,6 +1303,27 @@ void QuteScrollNumber::applyProperties()
 #endif
 	//  setValue(m_value);
 	QuteText::applyProperties();  //Must be last to make sure the widgetChanged signal is last
+}
+
+bool QuteScrollNumber::applyProperty(const QString &name)
+{
+	if (name == "CSQT_value") {
+		setValue(property("CSQT_value").toDouble());
+		return true;
+	}
+	if (name == "CSQT_minimum") {
+		m_min = property("CSQT_minimum").toDouble();
+		return true;
+	}
+	if (name == "CSQT_maximum") {
+		m_max = property("CSQT_maximum").toDouble();
+		return true;
+	}
+	if (name == "CSQT_color") {
+		setTextColor(property("CSQT_color").value<QColor>());
+		return true;
+	}
+	return QuteWidget::applyProperty(name);
 }
 
 void QuteScrollNumber::applyInternalProperties()

@@ -223,6 +223,23 @@ void QuteCheckBox::resizeEvent(QResizeEvent *event) {
 }
 
 
+bool QuteCheckBox::applyProperty(const QString &name)
+{
+	if (name == "CSQT_pressedValue") {
+		m_value = property("CSQT_pressedValue").toDouble();
+		return true;
+	}
+	if (name == "CSQT_selected") {
+		setValue(property("CSQT_selected").toBool() ? 1 : 0);
+		return true;
+	}
+	if (name == "CSQT_label") {
+		setLabel(property("CSQT_label").toString());
+		return true;
+	}
+	return QuteWidget::applyProperty(name);
+}
+
 void QuteCheckBox::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();

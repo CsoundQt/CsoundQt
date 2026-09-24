@@ -724,12 +724,17 @@ int WidgetLayout::getMouseBut2()
 
 void WidgetLayout::setWidgetProperty(QString widgetid, QString property, QVariant value)
 {
+    bool changed = false;
     for (int i = 0; i < m_widgets.size(); i++) {
         if ( (m_widgets[i]->getUuid() == widgetid) || (m_widgets[i]->getChannelName() == widgetid) ) {
             m_widgets[i]->setProperty(property.toLocal8Bit(), value);
             m_widgets[i]->applyInternalProperties();
-            widgetChanged();
+            changed = true;
+            
         }
+    }
+    if(changed) {
+        widgetChanged();
     }
 }
 
@@ -784,6 +789,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         forceBackground = true;
         connect(widget, SIGNAL(newValue(QPair<QString,double>)),
                 this, SLOT(newValue(QPair<QString,double>)));
+        // Caller #2 of WidgetLayout::newValue(QString): the widget emits this from
+        // GUI interaction, so it is delivered on the GUI thread (direct connection).
         connect(widget, SIGNAL(newValue(QPair<QString,QString>)),
                 this, SLOT(newValue(QPair<QString,QString>)));
     }
@@ -815,6 +822,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         widget = static_cast<QuteWidget *>(w);
         connect(widget, SIGNAL(queueEventSignal(QString)),
                 this, SLOT(queueEvent(QString)));
+        // Caller #2 of WidgetLayout::newValue(QString): emitted from GUI interaction,
+        // so delivered on the GUI thread (direct connection).
         connect(widget, SIGNAL(newValue(QPair<QString,QString>)),
                 this, SLOT(newValue(QPair<QString,QString>)));
         connect(widget, SIGNAL(newValue(QPair<QString,double>)),
@@ -969,6 +978,15 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
             }
             widget->setProperty("CSQT_uuid", uuid);
         }
+        else if (nodeName == "widgetName")  {  // STRING type (unique within file, can be empty)
+            QDomNode n = node.firstChild();
+            QString widgetName = n.nodeValue().trimmed();
+            if (!widgetNameFree(widgetName, widget)) {
+                qDebug() << "WidgetLayout::newXmlWidget duplicate widget name" << widgetName << "- clearing it.";
+                widgetName = "";
+            }
+            widget->setProperty("CSQT_widgetName", widgetName);
+        }
         else {  // STRING type (all the rest)
             QDomNode n = node.firstChild();
             nodeName.prepend("CSQT_");
@@ -984,6 +1002,78 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     // QDEBUG << "newXmlWidget type" << type << "took " << diff << "ms";
 
     return ret;
+}
+
+bool WidgetLayout::enqueueOutputValue(const char *channelName, double value)
+{
+	OutputValueUpdate update;
+	strncpy(update.channelName, channelName, sizeof(update.channelName) - 1);
+	update.channelName[sizeof(update.channelName) - 1] = '\0';
+	update.value = value;
+	return m_outputValueQueue.push(update);
+}
+
+bool WidgetLayout::enqueueOutputString(const char *channelName, const char *value)
+{
+	OutputStringUpdate update;
+	strncpy(update.channelName, channelName, sizeof(update.channelName) - 1);
+	update.channelName[sizeof(update.channelName) - 1] = '\0';
+	strncpy(update.value, value, sizeof(update.value) - 1);
+	update.value[sizeof(update.value) - 1] = '\0';
+	return m_outputStringQueue.push(update);
+}
+
+void WidgetLayout::processCsoundUpdates()
+{
+	// Caller #1 of newValue(): runs on the GUI thread, invoked from updateData()
+	// (the GUI update timer). This is where outvalue updates queued by the Csound
+	// performance thread via enqueueOutputValue()/enqueueOutputString() are applied.
+	OutputValueUpdate valueUpdate;
+	while (m_outputValueQueue.pop(valueUpdate)) {
+		newValue(QPair<QString, double>(QString::fromLocal8Bit(valueUpdate.channelName),
+		                                valueUpdate.value));
+	}
+	OutputStringUpdate stringUpdate;
+	while (m_outputStringQueue.pop(stringUpdate)) {
+		newValue(QPair<QString, QString>(QString::fromLocal8Bit(stringUpdate.channelName),
+		                                 QString::fromLocal8Bit(stringUpdate.value)));
+	}
+}
+
+bool WidgetLayout::widgetNameFree(const QString &name, QuteWidget *exclude)
+{
+    if (name.isEmpty()) {
+        return true;
+    }
+    widgetsMutex.lock();
+    auto it = m_widgetNameToWidget.constFind(name);
+    bool isFree = (it == m_widgetNameToWidget.constEnd()) || (it.value() == exclude);
+    widgetsMutex.unlock();
+    return isFree;
+}
+
+bool WidgetLayout::renameWidget(QuteWidget *widget, const QString &newName)
+{
+    if (widget == nullptr) {
+        return false;
+    }
+    widgetsMutex.lock();
+    auto it = m_widgetNameToWidget.constFind(newName);
+    if (!newName.isEmpty() && it != m_widgetNameToWidget.constEnd() && it.value() != widget) {
+        widgetsMutex.unlock();
+        return false; // Name taken by another widget
+    }
+    QString oldName = widget->getWidgetName();
+    if (!oldName.isEmpty() && m_widgetNameToWidget.value(oldName) == widget) {
+        m_widgetNameToWidget.remove(oldName);
+    }
+    if (!newName.isEmpty()) {
+        m_widgetNameToWidget.insert(newName, widget);
+    }
+    widgetsMutex.unlock();
+    widget->setProperty("CSQT_widgetName", newName);
+    widget->setWidgetName(newName);
+    return true;
 }
 
 bool WidgetLayout::uuidFree(QString uuid)
@@ -1082,6 +1172,8 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
     widgetsMutex.lock();
     connect(widget, SIGNAL(widgetChanged(QuteWidget *)),
             this, SLOT(widgetChanged(QuteWidget *)));
+    connect(widget, SIGNAL(widgetPropertyChanged(QuteWidget *, QString)),
+            this, SLOT(widgetPropertyApplied(QuteWidget *, QString)));
     connect(widget, SIGNAL(deleteThisWidget(QuteWidget *)),
             this, SLOT(deleteWidget(QuteWidget *)));
     connect(widget, SIGNAL(propertiesAccepted()),
@@ -1090,7 +1182,13 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
             this, SIGNAL(showMidiLearn(QuteWidget *)));
     connect(widget, SIGNAL(addChn_kSignal(QString)),
             this, SIGNAL(addChn_kSignal(QString)) );
+    // Forward user facing messages from widgets to the Csound console
+    connect(widget, SIGNAL(logMessage(QString,int)),
+            this, SIGNAL(logMessage(QString,int)) );
     m_widgets.append(widget);
+    if (!widget->getWidgetName().isEmpty()) {
+        m_widgetNameToWidget.insert(widget->getWidgetName(), widget);
+    }
     //  qDebug() << "WidgetLayout::registerWidget " << m_widgets.size() << widget;
     if (m_editMode) {
         createEditFrame(widget);
@@ -1207,9 +1305,14 @@ QString WidgetLayout::getMidiControllerInstrument()
 
 void WidgetLayout::appendMessage(QString message)
 {
+    appendMessage(message, (int) MessageRole::Auto);
+}
+
+void WidgetLayout::appendMessage(QString message, int role)
+{
 
     for (int i=0; i < consoleWidgets.size(); i++) {
-        consoleWidgets[i]->appendMessage(message);
+        consoleWidgets[i]->appendMessage(message, role);
         consoleWidgets[i]->scrollToEnd();
     }
 }
@@ -2296,6 +2399,7 @@ void WidgetLayout::clearWidgetLayout()
         delete widget;
     }
     m_widgets.clear();
+    m_widgetNameToWidget.clear();
     foreach (FrameWidget *widget, editWidgets) {
         //     qDebug("WidgetLayout::clearWidgetLayout() removed editWidget");
         delete widget;
@@ -2867,6 +2971,36 @@ void WidgetLayout::widgetChanged(QuteWidget* widget)
     adjustLayoutSize();
 }
 
+void WidgetLayout::widgetPropertyApplied(QuteWidget* widget, const QString &property)
+{
+    // Focused counterpart of widgetChanged() for runtime "<channel>/<property>"
+    // messages. Only the things the changed property can actually affect are
+    // updated, and the document is deliberately NOT marked modified: these are
+    // transient runtime changes (e.g. driven by outvalue), not edits to the file.
+    int index = m_widgets.indexOf(widget);
+    if (index < 0) {
+        return;
+    }
+    if (property == "CSQT_x" || property == "CSQT_y"
+            || property == "CSQT_width" || property == "CSQT_height") {
+        if (editWidgets.size() > index) {
+            editWidgets[index]->move(widget->x(), widget->y());
+            editWidgets[index]->resize(widget->width(), widget->height());
+        }
+        adjustLayoutSize();
+    }
+    else if (property == "CSQT_objectName" || property == "CSQT_objectName2"
+             || property == "CSQT_description") {
+        setWidgetToolTip(widget, m_tooltips);
+    }
+    else if (property == "CSQT_midicc") {
+        registerWidgetController(widget, widget->property("CSQT_midicc").toInt());
+    }
+    else if (property == "CSQT_midichan") {
+        registerWidgetChannel(widget, widget->property("CSQT_midichan").toInt());
+    }
+}
+
 void WidgetLayout::mousePressEvent(QMouseEvent *event)
 {
     auto evbutton = event->button();
@@ -3252,6 +3386,8 @@ QString WidgetLayout::createButton(int x, int y, int width, int height, QString 
         widget->setProperty("CSQT_eventLine", quoteParts[6]);
     }
     connect(widget, SIGNAL(queueEventSignal(QString)), this, SLOT(queueEvent(QString)));
+    // Caller #2 of WidgetLayout::newValue(QString): emitted from GUI interaction,
+    // so delivered on the GUI thread (direct connection).
     connect(widget, SIGNAL(newValue(QPair<QString,QString>)),
             this, SLOT(newValue(QPair<QString,QString>)));
     connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
@@ -4070,6 +4206,10 @@ void WidgetLayout::deleteWidget(QuteWidget *widget)
     m_activeWidgets = index;  // Allow all widgets before this one to be active
     widget->close();
     m_widgets.remove(index);
+    if (!widget->getWidgetName().isEmpty()
+            && m_widgetNameToWidget.value(widget->getWidgetName()) == widget) {
+        m_widgetNameToWidget.remove(widget->getWidgetName());
+    }
     if (!editWidgets.isEmpty()) {
         delete(editWidgets[index]);
         editWidgets.remove(index);
@@ -4091,6 +4231,18 @@ void WidgetLayout::deleteWidget(QuteWidget *widget)
 
 void WidgetLayout::newValue(QPair<QString, double> channelValue)
 {
+    // THREADING CONTRACT: this slot must only be called on the GUI thread.
+    // See the QString overload of newValue() for the full explanation: the Csound
+    // performance thread only enqueues raw values (enqueueOutputValue()), which are
+    // applied later via processCsoundUpdates() on the GUI thread, and widget signals
+    // are emitted during GUI interaction.
+    if (QThread::currentThread() != QCoreApplication::instance()->thread()) {
+        qWarning() << Q_FUNC_INFO << "called from a non-GUI thread!"
+                   << "This should never happen. Dropping update for channel"
+                   << channelValue.first;
+        return;
+    }
+
     auto channelName = channelValue.first;
     if(channelName.isEmpty())
         return;
@@ -4112,23 +4264,33 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
         path = channelName.mid(idx+1);
         channelName = channelName.left(idx);
     }
+
+    // Mirror the string overload of newValue(): when a path is given, e.g.
+    // outvalue "b1/CSQT_x", 10, the value addresses a property of the widget(s)
+    // bound to the channel, not the widget's value.
+    bool sentAsMessage = false;
+    if (!path.isEmpty() && !channelName.isEmpty()) {
+        if (!widgetsMutex.tryLock(1)) {
+            QDEBUG << "Could not acquire widgets lock";
+            return;
+        }
+        for (int i = 0; i < m_widgets.size(); i++) {
+            if (m_widgets[i]->getChannelName() != channelName)
+                continue;
+            m_widgets[i]->widgetMessage(path, channelValue.second);
+            sentAsMessage = true;
+        }
+        widgetsMutex.unlock();
+    }
+
+    if (sentAsMessage) {
+        // A message to the widget, not a value change: do not set the value and
+        // do not feed it back to Csound (mirrors the string overload).
+        return;
+    }
+
     setValue(channelName, channelValue.second);
-    
-    // if (!channelName.isEmpty()) {
-    //     // Pass the value on to the other widgets
-    //     for (int i = 0; i < m_widgets.size(); i++){
-    //         if (m_widgets[i]->getChannelName() == channelName) {
-    //             if (path.isEmpty()) {
-    //                 m_widgets[i]->setValue(channelValue.second);
-    //             }
-    //             else
-    //                 m_widgets[i]->widgetMessage(path,channelValue.second);
-    //         }
-    //         if (m_widgets[i]->getChannel2Name() == channelValue.first) {
-    //             m_widgets[i]->setValue2(channelValue.second);
-    //         }
-    //     }
-    // }
+
     // Now store the value in the changes buffer to read from chnget
     valueMutex.lock();
     if(newValues.contains(channelName))
@@ -4138,10 +4300,25 @@ void WidgetLayout::newValue(QPair<QString, double> channelValue)
     valueMutex.unlock();
 }
 
-//FIXME there's no need to go through here coming from the widgets...
-// at least not to set the widget's value...
 void WidgetLayout::newValue(QPair<QString, QString> channelValue)
 {
+    // THREADING CONTRACT: this slot must only be called on the GUI thread.
+    // There are exactly two kinds of callers, both on the GUI thread:
+    //   1. processCsoundUpdates(), which drains the outvalue queue from updateData()
+    //      (the GUI update timer). The Csound performance thread only enqueues raw
+    //      values (enqueueOutputString()); it never calls this directly.
+    //   2. Signal connections from the widgets themselves (e.g. QuteLineEdit,
+    //      QuteButton, see registerWidget()), which are emitted during GUI
+    //      interaction and therefore also arrive on the GUI thread.
+    // Touching widgets from any other thread is undefined behaviour, so fail loudly
+    // instead of silently corrupting state.
+    if (QThread::currentThread() != QCoreApplication::instance()->thread()) {
+        qWarning() << Q_FUNC_INFO << "called from a non-GUI thread!"
+                   << "This should never happen. Dropping update for channel"
+                   << channelValue.first;
+        return;
+    }
+
     QString channelName = channelValue.first;
     if (channelName.contains("/")) {
         channelName = channelValue.first.left(channelValue.first.indexOf("/"));
@@ -4152,19 +4329,27 @@ void WidgetLayout::newValue(QPair<QString, QString> channelValue)
         QDEBUG << "Could not acquire widgets lock";
         return;
     }
+    bool updateValue = true;
     if (!channelName.isEmpty()) {
         for (int i = 0; i < m_widgets.size(); i++){
             if (m_widgets[i]->getChannelName() != channelName)
                 continue;
             if (path == channelName)
                 m_widgets[i]->setValue(channelValue.second);
-            else
+            else {
+                // A "channel/path" message (e.g. "b1/CSQT_color") modifies the
+                // widget via widgetMessage() -> applyInternalProperties(). Safe
+                // here because of the GUI-thread guard above.
                 m_widgets[i]->widgetMessage(path, channelValue.second);
+                // This is a message to the widget, not a value change, so it must
+                // not be stored in the channel changes buffer below.
+                updateValue = false;
+            }
         }
     }
     widgetsMutex.unlock();
     // Now store the value in the changes buffer to read from chnget
-    if (!channelValue.first.isEmpty()) {
+    if (updateValue && !channelName.isEmpty()) {
         if (!stringValueMutex.tryLock(1)) {
             QDEBUG << "Could not acquire string value mutex";
             return;
@@ -4320,6 +4505,7 @@ void WidgetLayout::updateData()
     if(!m_updating)
         return;
 
+    processCsoundUpdates(); // Apply outvalue updates queued by the performance thread
     refreshWidgets();
     
     int const refresh_rate = m_updateRate;

@@ -26,12 +26,23 @@
 #include <QtWidgets>
 
 
+// Mixes color a towards color b. percentB = 0 gives a, 100 gives b.
+static QColor mixColor(const QColor &a, const QColor &b, int percentB)
+{
+    return QColor(a.red()   + (b.red()   - a.red())   * percentB / 100,
+                  a.green() + (b.green() - a.green()) * percentB / 100,
+                  a.blue()  + (b.blue()  - a.blue())  * percentB / 100);
+}
+
 Console::Console(QWidget *parent) : QTextEdit(parent)
 {
 	error = false;
 	errorLine = false;
 	setReadOnly(true);
     m_warningColor = QColor("orange");
+    m_infoColor = QColor("#006400");
+    m_debugColor = QColor(128, 128, 128);
+    m_pendingRole = (int) MessageRole::Auto;
     rxerr.setPattern("^\\s*error:\\.+line\\ ");
 }
 
@@ -42,8 +53,14 @@ Console::~Console()
 
 void Console::appendMessage(QString msg)
 {
+    appendMessage(msg, (int) MessageRole::Auto);
+}
+
+void Console::appendMessage(QString msg, int role)
+{
     QMutexLocker locker(&consoleLock);
 	logMessage(msg);
+    m_pendingRole = role;
 
     /*
     // Filter unnecessary messages
@@ -65,7 +82,20 @@ void Console::appendMessage(QString msg)
     // if (msg.contains("\n")) {
     if(msg.lastIndexOf(QChar('\n')) >= 0) {
         // line finished, analyze it now
-        if(rxerr.match(messageLine).hasMatch()) {
+        // An explicit role takes precedence over the text-based heuristics below.
+        if (m_pendingRole == (int) MessageRole::Error) {
+            setTextColor(m_errorColor);
+        }
+        else if (m_pendingRole == (int) MessageRole::Warning) {
+            setTextColor(m_warningColor);
+        }
+        else if (m_pendingRole == (int) MessageRole::Debug) {
+            setTextColor(m_debugColor);
+        }
+        else if (m_pendingRole == (int) MessageRole::Info) {
+            setTextColor(m_infoColor);
+        }
+        else if(rxerr.match(messageLine).hasMatch()) {
             errorTexts.append(messageLine);
 			errorTexts.last().remove("\n");
 
@@ -107,6 +137,7 @@ void Console::appendMessage(QString msg)
 		setTextColor(m_textColor);
 		moveCursor(QTextCursor::End);
 		messageLine.clear();
+		m_pendingRole = (int) MessageRole::Auto;
 	}
 }
 
@@ -141,12 +172,16 @@ void Console::setColors(QColor textColor, QColor bgColor)
         // dark text on light background
         m_warningColor = QColor("#AC7F00");
         m_errorColor = QColor("#AC0000");
+        m_infoColor = QColor("#006400"); // dark green
     }
     else {
         // dark background
         m_warningColor = QColor("orange");
         m_errorColor = QColor("#FF4040");
+        m_infoColor = QColor("#90EE90"); // light green
     }
+    // Debug messages are muted towards the background so they stay unobtrusive
+    m_debugColor = mixColor(m_textColor, m_bgColor, 45);
 
     reset(); // at the moment it is easiest just to clear console, not change colors (contents -> appendMessage)
 

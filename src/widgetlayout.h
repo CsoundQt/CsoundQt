@@ -24,6 +24,7 @@
 #define WIDGETLAYOUT_H
 
 #include <QtGui>
+#include <atomic>
 
 #define CSQT_MAX_EVENTS 4096
 #define CSQT_CURVE_BUFFER_MAX 4096
@@ -31,6 +32,42 @@
 #include "qutewidget.h"
 #include "curve.h"
 #include "widgetpreset.h"
+
+// Single-producer / single-consumer lock free ring buffer.
+// Used to hand values from Csound's performance thread to the GUI thread
+// without blocking the audio callback and without allocating.
+template <typename T, unsigned N>
+class CsqtSpscQueue
+{
+public:
+	// Only the producer (audio thread) calls this. Returns false if full.
+	bool push(const T &item) {
+		const unsigned tail = m_tail.load(std::memory_order_relaxed);
+		const unsigned next = (tail + 1) % N;
+		if (next == m_head.load(std::memory_order_acquire)) {
+			return false;
+		}
+		m_data[tail] = item;
+		m_tail.store(next, std::memory_order_release);
+		return true;
+	}
+
+	// Only the consumer (GUI thread) calls this. Returns false if empty.
+	bool pop(T &item) {
+		const unsigned head = m_head.load(std::memory_order_relaxed);
+		if (head == m_tail.load(std::memory_order_acquire)) {
+			return false;
+		}
+		item = m_data[head];
+		m_head.store((head + 1) % N, std::memory_order_release);
+		return true;
+	}
+
+private:
+	T m_data[N];
+	std::atomic<unsigned> m_head{0};
+	std::atomic<unsigned> m_tail{0};
+};
 
 class QuteConsole;
 class QuteGraph;
@@ -116,6 +153,14 @@ public:
 	//                   QVector<QString> *stringValues);
 
 	bool uuidFree(QString uuid);
+	bool widgetNameFree(const QString &name, QuteWidget *exclude = nullptr); // empty names are always free
+	bool renameWidget(QuteWidget *widget, const QString &newName); // Sets the widget name if free, updates the name->widget map. Returns false if the name is taken by another widget.
+
+	// Called from Csound's performance thread (outvalue callback). These only
+	// copy the raw name/value into a lock free queue; the widgets themselves are
+	// updated later on the GUI thread by processCsoundUpdates() (see updateData()).
+	bool enqueueOutputValue(const char *channelName, double value);
+	bool enqueueOutputString(const char *channelName, const char *value);
 	int newXmlWidget(QDomNode node, bool offset = false, bool newId = false);
 	QString newMacWidget(QString widgetLine, bool offset = false);  // Offset is used when pasting duplicated widgets
 	void registerWidget(QuteWidget *widget);
@@ -299,6 +344,7 @@ public slots:
 	void createEditFrame(QuteWidget* widget);
 
 	void widgetChanged(QuteWidget* widget = 0);
+	void widgetPropertyApplied(QuteWidget* widget, const QString &property); // Focused update for a runtime property change (no full widgetChanged)
 	void deleteWidget(QuteWidget *widget);
 
 	void newValue(QPair<QString, double> channelValue);
@@ -308,6 +354,7 @@ public slots:
     void processUpdateCurve(Curve *curve);
 	// Messages
 	void appendMessage(QString message);
+	void appendMessage(QString message, int role);
 	
 
 
@@ -377,7 +424,23 @@ private:
 
 	// Contained Widgets
 	QVector<QuteWidget *> m_widgets;
+	QHash<QString, QuteWidget *> m_widgetNameToWidget; // Per file map of user defined widget name -> widget (names are unique, empty names are not stored)
     QVector<FrameWidget *> editWidgets;
+
+	// Deferred outvalue updates (Csound performance thread -> GUI thread)
+	static const unsigned CSQT_MAX_CHANNEL_NAME = 256;
+	static const unsigned CSQT_MAX_STRING_VALUE = 4096;
+	struct OutputValueUpdate {
+		char channelName[CSQT_MAX_CHANNEL_NAME];
+		double value;
+	};
+	struct OutputStringUpdate {
+		char channelName[CSQT_MAX_CHANNEL_NAME];
+		char value[CSQT_MAX_STRING_VALUE];
+	};
+	CsqtSpscQueue<OutputValueUpdate, 256> m_outputValueQueue;
+	CsqtSpscQueue<OutputStringUpdate, 32> m_outputStringQueue;
+	void processCsoundUpdates(); // GUI thread: drain the queues into newValue()
 	// These vectors must be used with care since they are not reentrant and will
 	// cause problems when accessed simultaneously
 	// They are pointers to widgets already in widgets vector
@@ -443,6 +506,7 @@ signals:
 	void widgetUnselectedSignal(QuteWidget *widget);
 	void showMidiLearn(QuteWidget *);
 	void addChn_kSignal(QString channel);
+	void logMessage(const QString &message, int role); // User facing message from a widget, forwarded to the Csound console (role: MessageRole)
     void windowStatus(bool);
 	//    void setWidgetClipboardSignal(QString text);  // To propagate clipboard for sharing between pages
 };

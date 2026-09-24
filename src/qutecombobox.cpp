@@ -226,6 +226,15 @@ void QuteComboBox::refreshWidget()
 	m_widget->blockSignals(false);
 }
 
+bool QuteComboBox::applyProperty(const QString &name)
+{
+	if (name == "CSQT_selectedIndex") {
+		setValue(property("CSQT_selectedIndex").toInt());
+		return true;
+	}
+	return QuteWidget::applyProperty(name);
+}
+
 void QuteComboBox::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();

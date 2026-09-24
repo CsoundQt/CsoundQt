@@ -42,6 +42,7 @@ QuteWidget(QWidget *parent):
 	m_value2Changed = false;
 	m_locked = false;
     m_description = "";
+    m_widgetName = "";
     // used by all widgets which need access to the api (TableDisplay)
     // TODO: adapt Scope and Graph to use this instead of implementing their own
     m_csoundUserData = nullptr;
@@ -56,6 +57,7 @@ QuteWidget(QWidget *parent):
     setProperty("CSQT_width", 20);
     setProperty("CSQT_height", 20);
     setProperty("CSQT_uuid", QUuid::createUuid().toString());
+    setProperty("CSQT_widgetName", "");
 	setProperty("CSQT_visible", true);
 	setProperty("CSQT_midichan", 0);
 	setProperty("CSQT_midicc", -3);
@@ -118,21 +120,135 @@ void QuteWidget::setMidiValue2(int /* value */)
     qDebug() << "Not available for this widget." << this;
 }
 
+// Returns true for QVariant types that hold a number. A numeric outvalue always
+// reaches us as a double, so those are the values that may need re-typing.
+static bool isNumericVariant(const QVariant &value)
+{
+    switch (value.userType()) {
+    case QMetaType::Int:
+    case QMetaType::UInt:
+    case QMetaType::LongLong:
+    case QMetaType::ULongLong:
+    case QMetaType::Double:
+    case QMetaType::Float:
+    case QMetaType::Short:
+    case QMetaType::UShort:
+        return true;
+    default:
+        return false;
+    }
+}
+
+// Converts a numeric value to the type the property currently holds, so that a
+// bool or integer property is not silently turned into a double. Non numeric
+// properties (QColor, QString, ...) keep the incoming value unchanged.
+static QVariant convertToPropertyType(const QVariant &value, const QVariant &current)
+{
+    switch (current.userType()) {
+    case QMetaType::Bool:      return QVariant(value.toBool());
+    case QMetaType::Int:       return QVariant(value.toInt());
+    case QMetaType::UInt:      return QVariant(value.toUInt());
+    case QMetaType::LongLong:  return QVariant(value.toLongLong());
+    case QMetaType::ULongLong: return QVariant(value.toULongLong());
+    case QMetaType::Double:    return QVariant(value.toDouble());
+    case QMetaType::Float:     return QVariant(value.toFloat());
+    default:                   return value;
+    }
+}
+
+bool QuteWidget::setPropertyIfExists(const QString &name, const QVariant &value)
+{
+    const QByteArray latinName = name.toLatin1();
+    // Only dynamic properties are addressable. Static Q_PROPERTYs (CSQT_uuid,
+    // CSQT_widgetName) must not be set through messages - a rename in particular
+    // has to go through WidgetLayout::renameWidget().
+    if (metaObject()->indexOfProperty(latinName.constData()) >= 0) {
+        return false;
+    }
+    // Only set if the dynamic property already exists, so that a typo in the
+    // name does not silently create a new property.
+    const QVariant current = property(latinName.constData());
+    if (!current.isValid()) {
+        return false;
+    }
+    QVariant newValue = value;
+    if (isNumericVariant(value)) {
+        // Preserve the property's actual type (bool / int / double / ...)
+        newValue = convertToPropertyType(value, current);
+    }
+    setProperty(latinName.constData(), newValue);
+    return true;
+}
+
+// Properties are stored with a "CSQT_" prefix, but messages address them
+// without it (outvalue "<channel>/<property>", e.g. "k1/color"). Prefixing is
+// idempotent so a prefixed name still works.
+static QString csqtPropertyKey(const QString &name)
+{
+    return name.startsWith("CSQT_") ? name : QString("CSQT_") + name;
+}
+
 void QuteWidget::widgetMessage(const QString& path, const QString& text)
 {
-    const QByteArray name = path.toLatin1();
-    const int idx = metaObject()->indexOfProperty(name.constData());
-    if (idx >= 0) {
-        metaObject()->property(idx).write(this, text);
+    const QString propertyKey = csqtPropertyKey(path);
+    if(setPropertyIfExists(propertyKey, text)) {
+        if (!applyProperty(propertyKey)) {
+            // Property not handled individually: fall back to re-applying the
+            // whole bag. Preserve the live values, since the bag's value entries
+            // (CSQT_value, CSQT_label, ...) are stale once the widget was used.
+            double value = m_value, value2 = m_value2;
+            QString stringValue = m_stringValue;
+            applyInternalProperties();
+            m_value = value;
+            m_value2 = value2;
+            m_stringValue = stringValue;
+        }
+        emit widgetPropertyChanged(this, propertyKey);
+    } else {
+        // Unknown property: report it to the user (Csound console) instead of
+        // silently dropping it. The message contains "error" so it is colourised.
+        QString widgetId = m_channel;
+        if (!m_widgetName.isEmpty()) {
+            widgetId += QString(" (name \"%1\")").arg(m_widgetName);
+        }
+        if (widgetId.isEmpty()) {
+            widgetId = tr("(no channel)");
+        }
+        emit logMessage(tr("CsoundQt error: widget \"%1\" has no property \"%2\". Available properties: %3\n")
+                        .arg(widgetId)
+                        .arg(path)
+                        .arg(getAvailableProperties().join(", ")),
+                        (int) MessageRole::Error);
     }
 }
 
 void QuteWidget::widgetMessage(const QString& path, double value)
 {
-    const QByteArray name = path.toLatin1();
-    const int idx = metaObject()->indexOfProperty(name.constData());
-    if (idx >= 0) {
-        metaObject()->property(idx).write(this, value);
+    const QString propertyKey = csqtPropertyKey(path);
+    if (setPropertyIfExists(propertyKey, value)) {
+        if (!applyProperty(propertyKey)) {
+            // See above: fall back to a full apply, preserving the live values
+            double savedValue = m_value, savedValue2 = m_value2;
+            QString savedStringValue = m_stringValue;
+            applyInternalProperties();
+            m_value = savedValue;
+            m_value2 = savedValue2;
+            m_stringValue = savedStringValue;
+        }
+        emit widgetPropertyChanged(this, propertyKey);
+    } else {
+        QString widgetId = m_channel;
+        if (!m_widgetName.isEmpty()) {
+            widgetId += QString(" (name \"%1\")").arg(m_widgetName);
+        }
+        if (widgetId.isEmpty()) {
+            widgetId = tr("(no channel)");
+        }
+        emit logMessage(tr("CsoundQt error: widget \"%1\" has no property \"%2\". Available properties: %3\n")
+                        .arg(widgetId)
+                        .arg(path)
+                        .arg(getAvailableProperties().join(", ")),
+                        (int) MessageRole::Error);
     }
 }
 
@@ -179,6 +295,7 @@ void QuteWidget::createXmlWriter(QXmlStreamWriter &s)
 	s.writeTextElement("width", QString::number(width()));
 	s.writeTextElement("height", QString::number(height()));
 	s.writeTextElement("uuid", property("CSQT_uuid").toString());
+	s.writeTextElement("widgetName", property("CSQT_widgetName").toString());
 	s.writeTextElement("visible", property("CSQT_visible").toBool() ? "true":"false");
 	s.writeTextElement("midichan", QString::number(property("CSQT_midichan").toInt()));
 	s.writeTextElement("midicc", QString::number(property("CSQT_midicc").toInt()));
@@ -252,6 +369,69 @@ void QuteWidget::setUuid(const QString &uuid)
 	m_uuid = uuid;
 }
 
+QString QuteWidget::getWidgetName()
+{
+	return m_widgetName;
+}
+
+void QuteWidget::setWidgetName(const QString &name)
+{
+	m_widgetName = name;
+}
+
+QStringList QuteWidget::getAvailableProperties()
+{
+	// Only dynamic properties are addressable via setPropertyIfExists().
+	// The "CSQT_" prefix is internal; report the names as they are addressed
+	// from Csound, i.e. without it.
+	QStringList properties;
+	const QList<QByteArray> dynamicProperties = dynamicPropertyNames();
+	for (const QByteArray &name : dynamicProperties) {
+		QString property = QString::fromLatin1(name);
+		if (property.startsWith("CSQT_")) {
+			property.remove(0, 5);
+		}
+		properties << property;
+	}
+	properties.sort(Qt::CaseInsensitive);
+	return properties;
+}
+
+void QuteWidget::showAvailableProperties()
+{
+	QDialog propertiesDialog(this);
+	propertiesDialog.setWindowTitle(tr("Properties of %1").arg(
+		m_widgetName.isEmpty() ? (m_channel.isEmpty() ? getWidgetType() : m_channel) : m_widgetName));
+	QVBoxLayout *dialogLayout = new QVBoxLayout(&propertiesDialog);
+
+	QLineEdit *searchLineEdit = new QLineEdit(&propertiesDialog);
+	searchLineEdit->setPlaceholderText(tr("Filter properties..."));
+	searchLineEdit->setClearButtonEnabled(true);
+	dialogLayout->addWidget(searchLineEdit);
+
+	QListWidget *propertiesList = new QListWidget(&propertiesDialog);
+	propertiesList->addItems(getAvailableProperties());
+	propertiesList->setSelectionMode(QAbstractItemView::SingleSelection);
+	dialogLayout->addWidget(propertiesList);
+
+	QPushButton *closeButton = new QPushButton(tr("Close"), &propertiesDialog);
+	closeButton->setDefault(true);
+	dialogLayout->addWidget(closeButton);
+
+	// Incremental filter: hide entries that do not contain the typed text
+	auto filterList = [propertiesList](const QString &filter) {
+		for (int i = 0; i < propertiesList->count(); i++) {
+			QListWidgetItem *item = propertiesList->item(i);
+			item->setHidden(!item->text().contains(filter, Qt::CaseInsensitive));
+		}
+	};
+	connect(searchLineEdit, &QLineEdit::textChanged, &propertiesDialog, filterList);
+	connect(closeButton, SIGNAL(released()), &propertiesDialog, SLOT(accept()));
+
+	propertiesDialog.resize(320, 400);
+	propertiesDialog.exec();
+}
+
 void QuteWidget::applyInternalProperties()
 {
 	//  qDebug() << "QuteWidget::applyInternalProperties()";
@@ -273,9 +453,54 @@ void QuteWidget::applyInternalProperties()
 	setVisible(property("CSQT_visible").toBool());
 	m_valueChanged = true;
     m_description = property("CSQT_description").toString();
+    m_widgetName = property("CSQT_widgetName").toString();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
+}
+
+bool QuteWidget::applyProperty(const QString &name)
+{
+	// Handles the properties common to every widget. Subclasses extend this for
+	// their own properties and fall back to QuteWidget::applyProperty().
+	const QByteArray key = name.toLatin1();
+	const char *cname = key.constData();
+	if (name == "CSQT_x" || name == "CSQT_y"
+		|| name == "CSQT_width" || name == "CSQT_height") {
+		int x = (name == "CSQT_x") ? property(cname).toInt() : this->x();
+		int y = (name == "CSQT_y") ? property(cname).toInt() : this->y();
+		int w = (name == "CSQT_width") ? property(cname).toInt() : this->width();
+		int h = (name == "CSQT_height") ? property(cname).toInt() : this->height();
+		setWidgetGeometry(x, y, w, h);
+		return true;
+	}
+	if (name == "CSQT_visible") {
+		setVisible(property(cname).toBool());
+		return true;
+	}
+	if (name == "CSQT_objectName") {
+		m_channel = property(cname).toString();
+		mouseParam1 = parseMouseParam(m_channel);
+		return true;
+	}
+	if (name == "CSQT_objectName2") {
+		m_channel2 = property(cname).toString();
+		mouseParam2 = parseMouseParam(m_channel2);
+		return true;
+	}
+	if (name == "CSQT_midicc") {
+		m_midicc = property(cname).toInt();
+		return true;
+	}
+	if (name == "CSQT_midichan") {
+		m_midichan = property(cname).toInt();
+		return true;
+	}
+	if (name == "CSQT_description") {
+		m_description = property(cname).toString();
+		return true;
+	}
+	return false;
 }
 
 void QuteWidget::markChanged()
@@ -488,6 +713,18 @@ void QuteWidget::createPropertiesDialog()
 	nameLineEdit->selectAll();
     layout->addWidget(nameLineEdit, 3, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
 
+    label = new QLabel(tr("Name ="), dialog);
+    layout->addWidget(label, footerRow-3, 0, Qt::AlignRight|Qt::AlignVCenter);
+
+    widgetNameLineEdit = new QLineEdit(dialog);
+    widgetNameLineEdit->setToolTip(tr("Optional unique name to address this widget (must be unique within the file)"));
+    layout->addWidget(widgetNameLineEdit, footerRow-3, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
+
+    QPushButton *showPropertiesButton = new QPushButton(tr("Show Properties"), dialog);
+    showPropertiesButton->setToolTip(tr("List the properties that can be addressed via \"channel/property\""));
+    layout->addWidget(showPropertiesButton, footerRow-3, 4, Qt::AlignLeft|Qt::AlignVCenter);
+    connect(showPropertiesButton, SIGNAL(released()), this, SLOT(showAvailableProperties()));
+
     label = new QLabel(tr("Description ="), dialog);
     layout->addWidget(label, footerRow-2, 0, Qt::AlignRight|Qt::AlignVCenter);
 
@@ -538,6 +775,7 @@ void QuteWidget::createPropertiesDialog()
 	wSpinBox->setValue(this->width());
 	hSpinBox->setValue(this->height());
 	nameLineEdit->setText(getChannelName());
+    widgetNameLineEdit->setText(getWidgetName());
     descriptionLineEdit->setText(getDescription());
 	if (acceptsMidi()) {
         midiccSpinBox->setValue(this->m_midicc);
@@ -554,6 +792,20 @@ void QuteWidget::applyProperties()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
+	QString widgetName = widgetNameLineEdit->text().trimmed();
+	WidgetLayout *widgetLayout = static_cast<WidgetLayout *>(parentWidget());
+	if (widgetLayout) {
+		if (!widgetLayout->renameWidget(this, widgetName)) { // Also updates the name->widget map
+			QMessageBox::warning(dialog, tr("Duplicate widget name"),
+								 tr("Another widget already uses the name \"%1\".\n"
+									"Widget names must be unique within a file. "
+									"The previous name has been kept.").arg(widgetName));
+			widgetNameLineEdit->setText(m_widgetName);
+		}
+	}
+	else {
+		setProperty("CSQT_widgetName", widgetName);
+	}
 	setProperty("CSQT_objectName", nameLineEdit->text());
 	setProperty("CSQT_x", xSpinBox->value());
 	setProperty("CSQT_y",ySpinBox->value());

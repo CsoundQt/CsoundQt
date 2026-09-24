@@ -161,8 +161,6 @@ public:
 	int popKeyReleaseEvent();
 
 	void processEventQueue();
-	void passOutValue(QString channelName, double value);
-	void passOutString(QString channelName, QString value);
 	void flushQueues();
 	void queueMessage(QString message);
 
@@ -213,6 +211,7 @@ public slots:
 	//    void unregisterScope(QuteScope *scope);
 	void registerGraph(QuteGraph *scope);
     void requestCsoundUserData(QuteWidget *widget);
+	void logWidgetMessage(QString message, int role); // From widget layout, with an explicit console role
 	void setFlags(PerfFlags flags) {ud->flags = flags;}
 
 	void evaluate(QString code);

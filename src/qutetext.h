@@ -54,6 +54,7 @@ public:
 	virtual void setText(QString text);
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
+	virtual bool applyProperty(const QString &name);
 	virtual QString getCabbageLine();
     virtual QString getQml();
     QuteWidgetType getWidgetTypeID() override;
@@ -110,6 +111,7 @@ public:
 	virtual QString getWidgetType();
 	virtual void dropEvent(QDropEvent *event);
 	virtual void applyInternalProperties();
+	virtual bool applyProperty(const QString &name);
 	virtual QString getCabbageLine();
     QuteWidgetType getWidgetTypeID() override;
     
@@ -138,6 +140,7 @@ public:
 	virtual bool acceptsMidi() {return true;}
 
 	virtual void applyInternalProperties();
+	virtual bool applyProperty(const QString &name);
 	virtual QString getCabbageLine();
     QuteWidgetType getWidgetTypeID() override; 
 

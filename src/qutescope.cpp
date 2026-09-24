@@ -198,6 +198,19 @@ void QuteScope::updateLabel()
 }
 
 
+bool QuteScope::applyProperty(const QString &name)
+{
+	if (name == "CSQT_value") {
+		setValue(property("CSQT_value").toDouble());
+		return true;
+	}
+	if (name == "CSQT_type") {
+		setType(property("CSQT_type").toString());
+		return true;
+	}
+	return QuteWidget::applyProperty(name);
+}
+
 void QuteScope::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();

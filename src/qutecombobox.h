@@ -45,6 +45,7 @@ public:
 	void addItem(QString text, double value, QString stringvalue);
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
+	virtual bool applyProperty(const QString &name);
 
 protected:
 	virtual void applyProperties();

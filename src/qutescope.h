@@ -73,6 +73,7 @@ public:
 	void setUd(CsoundUserData *ud);
 
 	virtual void applyInternalProperties();
+	virtual bool applyProperty(const QString &name);
 	QuteWidgetType getWidgetTypeID() override;
 	
 

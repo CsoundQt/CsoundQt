@@ -27,6 +27,8 @@
 #include <QDockWidget>
 #include <QtGui>
 
+#include "types.h"
+
 
 class Console : public QTextEdit
 {
@@ -47,6 +49,8 @@ public:
 
 public slots:
 	virtual void appendMessage(QString msg);
+	// role is a MessageRole value; Auto (-1) infers the colour from the text
+	virtual void appendMessage(QString msg, int role);
 	void reset();
 
 protected:
@@ -62,6 +66,9 @@ protected:
 	QColor m_bgColor;
     QColor m_warningColor;
     QColor m_errorColor;
+    QColor m_infoColor;
+    QColor m_debugColor;
+    int m_pendingRole; // MessageRole of the line currently being accumulated
 
 	bool m_repeatKeys;
     QMutex consoleLock;

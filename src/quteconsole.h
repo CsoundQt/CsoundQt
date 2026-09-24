@@ -43,6 +43,7 @@ public:
 	
 
 	void appendMessage(QString message);
+	void appendMessage(QString message, int role);
 	void scrollToEnd();
 
 protected:

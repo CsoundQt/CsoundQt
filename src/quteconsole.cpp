@@ -97,7 +97,12 @@ QString QuteConsole::getWidgetType()
 
 void QuteConsole::appendMessage(QString message)
 {
-	static_cast<ConsoleWidget *>(m_widget)->appendMessage(message);
+	appendMessage(message, (int) MessageRole::Auto);
+}
+
+void QuteConsole::appendMessage(QString message, int role)
+{
+	static_cast<ConsoleWidget *>(m_widget)->appendMessage(message, role);
 }
 
 void QuteConsole::scrollToEnd()

@@ -55,6 +55,7 @@ public:
 
 	virtual void refreshWidget();
 	virtual void applyInternalProperties();
+	virtual bool applyProperty(const QString &name);
 	QuteWidgetType getWidgetTypeID() override; 
 
 

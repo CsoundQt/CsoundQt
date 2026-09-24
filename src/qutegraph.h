@@ -71,6 +71,7 @@ public:
     }
     int findCurve(CurveType type, QStringView text);
 	virtual void applyInternalProperties();
+	virtual bool applyProperty(const QString &name);
     size_t spectrumGetPeak(Curve *curve, double freq, double relativeBandwidth);
     QuteWidgetType getWidgetTypeID() override;
 
@@ -296,6 +297,7 @@ public:
     virtual QString getWidgetType() { return QString("BSBTableDisplay"); }
     // virtual void setWidgetGeometry(int x,int y,int width,int height);
     virtual void applyInternalProperties();
+    virtual bool applyProperty(const QString &name);
     virtual void createPropertiesDialog();
     virtual void refreshWidget();
 

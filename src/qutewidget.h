@@ -45,6 +45,7 @@ class QuteWidget : public QWidget
 {
 	Q_OBJECT
 	Q_PROPERTY(QString CSQT_uuid READ getUuid WRITE setUuid)
+	Q_PROPERTY(QString CSQT_widgetName READ getWidgetName WRITE setWidgetName)
 public:
 	QuteWidget(QWidget* parent);
 	~QuteWidget();
@@ -61,6 +62,10 @@ public:
 	virtual void widgetMessage(const QString& path, const QString& text);
 	virtual void widgetMessage(const QString& path, double value);
 
+	// Single place to set a property (static Q_PROPERTY or existing dynamic property).
+	// Returns true if the property existed and was set, false otherwise.
+	bool setPropertyIfExists(const QString &name, const QVariant &value);
+
 	virtual QString getWidgetLine() = 0;
 	virtual QString getCabbageLine();
 	virtual QString getCsladspaLine();
@@ -75,11 +80,18 @@ public:
 
 	QString getUuid();
 	void setUuid(const QString &uuid);
+	QString getWidgetName();
+	void setWidgetName(const QString &name);
+	QStringList getAvailableProperties(); // Widget attributes that can be addressed via "<channel>/<property>"
 	virtual QString getWidgetType() = 0;
 	virtual QuteWidgetType getWidgetTypeID() = 0;
 	virtual void refreshWidget() { ;}
 
 	virtual void applyInternalProperties();
+	// Applies a single property to the live widget. Returns true if the property
+	// was handled. Used by the "<channel>/<property>" message path so that a
+	// runtime change does not have to re-read and re-apply the whole property bag.
+	virtual bool applyProperty(const QString &name);
 
 	static MouseParam parseMouseParam(const QString& name);
 
@@ -126,6 +138,7 @@ protected:
 	QSpinBox *hSpinBox;
 	QLabel *channelLabel;
 	QLineEdit *nameLineEdit;
+    QLineEdit *widgetNameLineEdit;
     QLineEdit *descriptionLineEdit;
 
 	QSpinBox *midiccSpinBox;
@@ -142,6 +155,7 @@ protected:
     CsoundUserData *m_csoundUserData;
     QString m_description;
     QString m_uuid;
+    QString m_widgetName; // Optional user defined unique name (unique within the document)
 
 
 #ifdef  USE_WIDGET_MUTEX
@@ -174,6 +188,7 @@ private:
 
 private slots:
     void addChn_k();
+    void showAvailableProperties(); // Opens a filterable list of the widget's addressable properties
 
 signals:
 	void newValue(QPair<QString,double> channelValue);
@@ -183,6 +198,8 @@ signals:
 	void propertiesAccepted();
 	void showMidiLearn(QuteWidget* widget);
 	void addChn_kSignal(QString channel);
+	void logMessage(const QString &message, int role); // User facing message forwarded to the Csound console (role: MessageRole)
+	void widgetPropertyChanged(QuteWidget *widget, const QString &property); // Focused notification for a runtime property change
 
 };
 
