@@ -36,6 +36,7 @@ HEADERS = "src/about.h" \
     "src/dotgenerator.h" \
     "src/eventsheet.h" \
     "src/findreplace.h" \
+    "src/findbar.h" \
     "src/framewidget.h" \
     "src/graphicwindow.h" \
     "src/highlighter.h" \
@@ -99,6 +100,7 @@ SOURCES = "src/about.cpp" \
     "src/dotgenerator.cpp" \
     "src/eventsheet.cpp" \
     "src/findreplace.cpp" \
+    "src/findbar.cpp" \
     "src/framewidget.cpp" \
     "src/graphicwindow.cpp" \
     "src/highlighter.cpp" \

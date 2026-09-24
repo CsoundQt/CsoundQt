@@ -58,6 +58,8 @@ protected:
 
 };
 
+class FindBar;
+
 class DocumentView : public BaseView
 {
 	Q_OBJECT
@@ -114,6 +116,12 @@ public slots:
 	void inToGet(); // invalue/outvalue to chnget/chnset
 	void insertAutoCompleteText();
     void findString(QString query = QString());
+	void findQueryChanged(const QString &query);
+	void findNext();
+	void findPrevious();
+	void replaceCurrent();
+	void replaceAll();
+	void closeFindBar();
 	void evaluate();
 	void updateContext();
 	void updateOrcContext(QString orc);
@@ -164,6 +172,12 @@ private:
 	QString changeToChnget(QString text);
 	QString changeToInvalue(QString text);
 
+	void ensureFindBar();
+	void collectFindMatches();
+	void updateFindHighlights(bool moveCursor);
+	void updateFindStatus();
+	void refreshFindAfterEdit();
+
 	MySyntaxMenu *syntaxMenu;
 
 	HoverWidget *m_hoverWidget;
@@ -183,6 +197,13 @@ private:
 	bool lastCaseSensitive; // These last three are for search and replace
 	QString lastSearch;
 	QString lastReplace;
+
+	FindBar *m_findBar = nullptr;
+	QList<QTextEdit::ExtraSelection> m_findSelections;
+	QVector<QPair<int, int>> m_findMatches;
+	int m_findCurrent = -1;
+	QString m_findQuery;
+
 	QStringList m_localVariables;
 	QStringList m_globalVariables;
     QTime m_lastWordsUpdate;

@@ -24,6 +24,7 @@
 #include <QQmlContext>
 #include <QFileSystemWatcher>
 #include <QFutureWatcher>
+#include <QShortcut>
 #include <QtConcurrent/QtConcurrentRun>
 
 #include "configdialog.h"
@@ -1923,7 +1924,20 @@ void CsoundQt::findReplace()
 
 void CsoundQt::findString()
 {
+    if(this->helpPanel->hasFocus()) {
+        this->helpPanel->findNext();
+        return;
+    }
     documentPages[curPage]->findString();
+}
+
+void CsoundQt::findPrevious()
+{
+    if(this->helpPanel->hasFocus()) {
+        this->helpPanel->findPrevious();
+        return;
+    }
+    documentPages[curPage]->findPrevious();
 }
 
 bool CsoundQt::join(bool ask)
@@ -3950,6 +3964,7 @@ void CsoundQt::setDefaultKeyboardShortcuts()
     csladspaAct->setShortcut(tr(""));
     findAct->setShortcut(tr("Ctrl+F"));
     findAgainAct->setShortcut(tr("Ctrl+G"));
+    findPreviousAct->setShortcut(QKeySequence("Shift+F3"));
     configureAct->setShortcut(tr("Ctrl+,"));
     editAct->setShortcut(tr("CTRL+E"));
     runAct->setShortcut(tr("CTRL+R"));
@@ -4359,9 +4374,15 @@ void CsoundQt::createActions()
 
     findAgainAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Find again"), this);
     findAgainAct->setStatusTip(tr("Find next appearance of string"));
-    //   findAct->setIconText(tr("Find"));
+    //   findAgainAct->setIconText(tr("Find"));
     findAgainAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(findAgainAct, SIGNAL(triggered()), this, SLOT(findString()));
+
+    findPreviousAct = new QAction(/*QIcon(prefix + "gtk-paste.png"),*/ tr("Find previous"), this);
+    findPreviousAct->setStatusTip(tr("Find previous appearance of string"));
+    findPreviousAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(findPreviousAct, SIGNAL(triggered()), this, SLOT(findPrevious()));
+
 
     configureAct = new QAction(QIcon(prefix + "settings.png"), tr("Configuration"), this);
     configureAct->setStatusTip(tr("Open configuration dialog"));
@@ -4871,6 +4892,13 @@ void CsoundQt::createActions()
     addAction(increaseFontAction);
     addAction(decreaseFontAction);
 
+    // F3 is a fixed alternative for "Find next" (Shift+F3 is on findPreviousAct).
+    // It is a QShortcut rather than an action shortcut because the configurable
+    // shortcuts (restored from settings) would otherwise drop the extra key.
+    auto *findNextShortcut = new QShortcut(QKeySequence("F3"), this);
+    findNextShortcut->setContext(Qt::WindowShortcut);
+    connect(findNextShortcut, &QShortcut::activated, this, &CsoundQt::findString);
+
     setKeyboardShortcutsList();
     setDefaultKeyboardShortcuts();
 }
@@ -4900,6 +4928,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(cabbageAct);
     m_keyActions.append(findAct);
     m_keyActions.append(findAgainAct);
+    m_keyActions.append(findPreviousAct);
     m_keyActions.append(configureAct);
     m_keyActions.append(editAct);
     m_keyActions.append(runAct);
@@ -5131,6 +5160,7 @@ void CsoundQt::createMenus()
     editMenu->addSeparator();
     editMenu->addAction(findAct);
     editMenu->addAction(findAgainAct);
+    editMenu->addAction(findPreviousAct);
     editMenu->addAction(gotoLineAct);
     // editMenu->addAction(goBackAct);
     editMenu->addSeparator();

@@ -80,8 +80,10 @@ DockHelp::~DockHelp()
 
 bool DockHelp::hasFocus()
 {
-    return QDockWidget::hasFocus()
-           || m_view->hasFocus();
+    // Focus may be on a descendant (e.g. the in-page find box or the search
+    // panel), so check the whole widget subtree rather than just this dock.
+    QWidget *focus = QApplication::focusWidget();
+    return focus && (focus == this || isAncestorOf(focus));
 }
 
 void DockHelp::loadFile(QString fileName, QString anchor) {
@@ -183,4 +185,14 @@ void DockHelp::toggleFindBarVisible(bool show) {
     } else {
         m_view->clearFind();
     }
+}
+
+void DockHelp::findNext()
+{
+    m_view->findNext();
+}
+
+void DockHelp::findPrevious()
+{
+    m_view->findPrevious();
 }

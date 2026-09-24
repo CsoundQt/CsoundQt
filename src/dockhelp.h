@@ -71,6 +71,8 @@ public slots:
             raise();
     }
     void toggleFindBarVisible(bool show);
+    void findNext();
+    void findPrevious();
 
 
 private:

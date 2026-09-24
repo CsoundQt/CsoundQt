@@ -230,6 +230,7 @@ private slots:
 	void print();
 	void findReplace();  // Direct to current Page
 	void findString();  // Direct to current Page
+	void findPrevious();  // Direct to current Page
 	bool join(bool ask = true);
 	void showUtilities(bool);
 	void getToIn();
@@ -443,6 +444,7 @@ private:
     QAction *qmlAct;
     QAction *findAct;
 	QAction *findAgainAct;
+	QAction *findPreviousAct;
 	QAction *configureAct;
 	QAction *setShortcutsAct;
 	QAction *editAct;

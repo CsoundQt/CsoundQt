@@ -785,6 +785,11 @@ void DocumentPage::findString()
 	m_view->findString();
 }
 
+void DocumentPage::findPrevious()
+{
+	m_view->findPrevious();
+}
+
 void DocumentPage::getToIn()
 {
 	m_view->getToIn();

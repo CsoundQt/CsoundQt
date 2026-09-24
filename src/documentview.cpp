@@ -21,7 +21,7 @@
 */
 
 #include "documentview.h"
-#include "findreplace.h"
+#include "findbar.h"
 #include "opentryparser.h"
 #include "types.h"
 
@@ -30,6 +30,17 @@
 
 
 static const QStringList tagWords = {"CsInstruments", "CsScore", "CsoundSynthesizer", "CsOptions"};
+
+// Smart case: only match case sensitively when the query itself contains an
+// upper case character, otherwise search case insensitively (like the help
+// panel find box).
+static QTextDocument::FindFlags smartCaseFlags(const QString &query)
+{
+	QTextDocument::FindFlags flags;
+	if (query != query.toLower())
+		flags |= QTextDocument::FindCaseSensitively;
+	return flags;
+}
 
 DocumentView::DocumentView(QWidget * parent, OpEntryParser *opcodeTree) :
 	BaseView(parent,opcodeTree)
@@ -706,6 +717,8 @@ void DocumentView::syntaxCheck()
 	// some corrections by Heinz van Saanen http://qt-apps.org/content/show.php/CLedit?content=125532 ; comments: http://www.qtcentre.org/archive/index.php/t-31084.html
 
 	QList<QTextEdit::ExtraSelection> selections;
+	if (editor == m_mainEditor)
+		selections = m_findSelections; // keep find highlights, if any
 	editor->setExtraSelections(selections);
 
 	TextBlockData *data = static_cast<TextBlockData *>(editor->textCursor().block().userData());
@@ -739,24 +752,21 @@ void DocumentView::syntaxCheck()
     static const QRegularExpression wordBoundary("\\b");
     auto words = cursor.selectedText().split(wordBoundary,
                                              SKIP_EMPTY_PARTS);
-	bool showHover = false;
 	for(int i = 0; i < words.size(); i++) {
         auto word = words[words.size() - i - 1];
 		if (m_opcodeTree->isOpcode(word)) {
             QString syntax = m_opcodeTree->getSyntax(word);
 			if(!syntax.isEmpty()) {
 				emit(opcodeSyntaxSignal(syntax));
-				m_currentOpcodeText = syntax;
-                showHover = i == 0 && editor->textCursor().hasSelection();
+				m_currentOpcodeText = syntax; // used by the parameter-mode hover
                 break;
 			}
 		}
 	}
-	if (showHover) {
-		showHoverText();
-	} else {
-		hideHoverText();
-	}
+	// Do not pop up the hover tooltip when a word is selected (e.g. on double
+	// click): the opcode syntax is already shown in the status bar. The hover
+	// is still used explicitly by parameter mode (showHoverText()).
+	hideHoverText();
 }
 
 // parentheses matching functions -------------
@@ -1108,11 +1118,18 @@ void DocumentView::textChanged() {
 
         // this->autoCompleteAtCursor();
     }
+    if (m_findBar && m_findBar->isVisible() && !m_findQuery.isEmpty()) {
+        refreshFindAfterEdit();
+    }
 }
 
 void DocumentView::escapePressed()
 {
 	// TODO implment for multiple views
+	if (m_findBar && m_findBar->isVisible()) {
+		closeFindBar();
+		return;
+	}
 	if (m_viewMode < 2) {
         if(errorMarked)
             unmarkErrorLines();
@@ -1192,29 +1209,258 @@ void DocumentView::indentNewLine()
 void DocumentView::findReplace()
 {
 	// TODO implment for multiple views
-	internalChange = true;
-	if (m_viewMode < 2) {
-		QTextCursor cursor = m_mainEditor->textCursor();
-		QString word = cursor.selectedText();
-		cursor.select(QTextCursor::WordUnderCursor);
-		QString word2 = cursor.selectedText();
-		if (word == word2 && word!= "") {
-			lastSearch = word;
-		}
-		FindReplace *dialog = new FindReplace(this,
-											  m_mainEditor,
-											  &lastSearch,
-											  &lastReplace,
-											  &lastCaseSensitive);
-		// lastSearch and lastReplace are passed by reference to be
-		// updated by FindReplace dialog
-		connect(dialog, SIGNAL(findString(QString)), this, SLOT(findString(QString)));
-		dialog->show();
-	}
-	else { //  Split view
-		// TODO check properly for line number also from other editors
+	if (m_viewMode >= 2) {
+		// Split view: not implemented for section editors
 		qDebug() << "Not implemented for split view.";
+		return;
 	}
+	ensureFindBar();
+
+	// If a word (or any selection) is selected, use it as the query.
+	QString selection = m_mainEditor->textCursor().selectedText();
+	if (!selection.isEmpty()
+			&& !selection.contains(QChar::ParagraphSeparator)
+			&& selection != m_findBar->query()) {
+		m_findBar->setQuery(selection);
+	}
+	m_findBar->showBar();
+	// Refresh matches for the retained query (the document may have changed).
+	if (!m_findBar->query().isEmpty())
+		findQueryChanged(m_findBar->query());
+}
+
+void DocumentView::ensureFindBar()
+{
+	if (m_findBar)
+		return;
+	m_findBar = new FindBar(m_mainEditor);
+	connect(m_findBar, &FindBar::queryChanged, this, &DocumentView::findQueryChanged);
+	connect(m_findBar, &FindBar::findNextRequested, this, &DocumentView::findNext);
+	connect(m_findBar, &FindBar::findPreviousRequested, this, &DocumentView::findPrevious);
+	connect(m_findBar, &FindBar::replaceRequested, this, &DocumentView::replaceCurrent);
+	connect(m_findBar, &FindBar::replaceAllRequested, this, &DocumentView::replaceAll);
+	connect(m_findBar, &FindBar::closed, this, &DocumentView::closeFindBar);
+}
+
+void DocumentView::collectFindMatches()
+{
+	m_findMatches.clear();
+	if (m_findQuery.isEmpty() || !m_mainEditor)
+		return;
+
+	QTextDocument *doc = m_mainEditor->document();
+	const QTextDocument::FindFlags flags = smartCaseFlags(m_findQuery);
+	QTextCursor cursor(doc);
+	while (true) {
+		cursor = doc->find(m_findQuery, cursor, flags);
+		if (cursor.isNull())
+			break;
+		const int start = cursor.selectionStart();
+		const int length = cursor.selectionEnd() - start;
+		m_findMatches.append(qMakePair(start, length));
+		if (length == 0) // safety net against a zero-length match loop
+			cursor.movePosition(QTextCursor::NextCharacter);
+	}
+}
+
+void DocumentView::updateFindHighlights(bool moveCursor)
+{
+	m_findSelections.clear();
+	if (!m_mainEditor)
+		return;
+
+	QTextDocument *doc = m_mainEditor->document();
+	for (int i = 0; i < m_findMatches.size(); ++i) {
+		const int start = m_findMatches.at(i).first;
+		const int length = m_findMatches.at(i).second;
+		QTextEdit::ExtraSelection selection;
+		QTextCursor cursor(doc);
+		cursor.setPosition(start);
+		cursor.setPosition(start + length, QTextCursor::KeepAnchor);
+		selection.cursor = cursor;
+		selection.format.setBackground(i == m_findCurrent
+									   ? QColor(255, 150, 0, 160)   // current match
+									   : QColor(255, 235, 60, 110)); // other matches
+		m_findSelections.append(selection);
+	}
+
+	if (moveCursor && m_findCurrent >= 0 && m_findCurrent < m_findMatches.size()) {
+		const int start = m_findMatches.at(m_findCurrent).first;
+		const int length = m_findMatches.at(m_findCurrent).second;
+		QTextCursor cursor(doc);
+		cursor.setPosition(start);
+		cursor.setPosition(start + length, QTextCursor::KeepAnchor);
+		m_mainEditor->setTextCursor(cursor);
+		m_mainEditor->ensureCursorVisible();
+	}
+	// Re-apply the highlights together with the parenthesis matching
+	// selections (syntaxCheck seeds its selection list from m_findSelections).
+	syntaxCheck();
+}
+
+void DocumentView::updateFindStatus()
+{
+	if (!m_findBar)
+		return;
+	if (m_findQuery.isEmpty()) {
+		m_findBar->setMatchCount(0, 0);
+		return;
+	}
+	if (m_findMatches.isEmpty()) {
+		m_findBar->setStatus(tr("No matches"));
+		return;
+	}
+	m_findBar->setMatchCount(m_findCurrent + 1, m_findMatches.size());
+}
+
+void DocumentView::refreshFindAfterEdit()
+{
+	if (m_findQuery.isEmpty())
+		return;
+	collectFindMatches();
+	if (m_findMatches.isEmpty())
+		m_findCurrent = -1;
+	else if (m_findCurrent >= m_findMatches.size())
+		m_findCurrent = m_findMatches.size() - 1;
+	else if (m_findCurrent < 0)
+		m_findCurrent = 0;
+	updateFindHighlights(false);
+	updateFindStatus();
+}
+
+void DocumentView::findQueryChanged(const QString &query)
+{
+	m_findQuery = query;
+	m_findCurrent = -1;
+	collectFindMatches();
+	if (!m_findMatches.isEmpty()) {
+		// Start from the first match at or after the cursor; wrap if needed.
+		const int pos = m_mainEditor->textCursor().position();
+		m_findCurrent = 0;
+		for (int i = 0; i < m_findMatches.size(); ++i) {
+			if (m_findMatches.at(i).first >= pos) {
+				m_findCurrent = i;
+				break;
+			}
+		}
+	}
+	updateFindHighlights(true);
+	updateFindStatus();
+}
+
+void DocumentView::findNext()
+{
+	if (m_findMatches.isEmpty())
+		return;
+	m_findCurrent = (m_findCurrent + 1) % m_findMatches.size();
+	updateFindHighlights(true);
+	updateFindStatus();
+}
+
+void DocumentView::findPrevious()
+{
+	ensureFindBar();
+	if (!m_findBar->isVisible()) {
+		// Triggered by a shortcut while the bar is closed: find backwards from
+		// the cursor, wrapping to the end, without asking.
+		const QString query = m_findBar->query();
+		if (query.isEmpty())
+			return;
+		QTextDocument::FindFlags flags = smartCaseFlags(query);
+		flags |= QTextDocument::FindBackward;
+		if (!m_mainEditor->find(query, flags)) {
+			QTextCursor cursor = m_mainEditor->textCursor();
+			cursor.movePosition(QTextCursor::End);
+			m_mainEditor->setTextCursor(cursor);
+			m_mainEditor->find(query, flags);
+		}
+		return;
+	}
+	if (m_findMatches.isEmpty())
+		return;
+	m_findCurrent = (m_findCurrent - 1 + m_findMatches.size()) % m_findMatches.size();
+	updateFindHighlights(true);
+	updateFindStatus();
+}
+
+void DocumentView::replaceCurrent()
+{
+	if (!m_findBar || m_findQuery.isEmpty())
+		return;
+
+	QTextCursor cursor = m_mainEditor->textCursor();
+	bool matches = cursor.hasSelection();
+	if (matches) {
+		const QString selected = cursor.selectedText();
+		if (smartCaseFlags(m_findQuery).testFlag(QTextDocument::FindCaseSensitively))
+			matches = selected == m_findQuery;
+		else
+			matches = QString::compare(selected, m_findQuery, Qt::CaseInsensitive) == 0;
+	}
+	if (matches) {
+		internalChange = true; // suppress autocomplete/syntax work for this edit
+		cursor.insertText(m_findBar->replacement());
+	}
+
+	// Recompute and select the next match at or after the cursor (wraps).
+	collectFindMatches();
+	if (m_findMatches.isEmpty()) {
+		m_findCurrent = -1;
+		updateFindHighlights(false);
+		updateFindStatus();
+		return;
+	}
+	const int pos = m_mainEditor->textCursor().position();
+	m_findCurrent = 0;
+	for (int i = 0; i < m_findMatches.size(); ++i) {
+		if (m_findMatches.at(i).first >= pos) {
+			m_findCurrent = i;
+			break;
+		}
+	}
+	updateFindHighlights(true);
+	updateFindStatus();
+}
+
+void DocumentView::replaceAll()
+{
+	if (!m_findBar || m_findQuery.isEmpty())
+		return;
+
+	QTextDocument *doc = m_mainEditor->document();
+	const QTextDocument::FindFlags flags = smartCaseFlags(m_findQuery);
+	const QString replacement = m_findBar->replacement();
+	QTextCursor cursor(doc);
+	int count = 0;
+	while (true) {
+		cursor = doc->find(m_findQuery, cursor, flags);
+		if (cursor.isNull())
+			break;
+		internalChange = true; // suppress autocomplete/syntax work per edit
+		cursor.insertText(replacement);
+		++count;
+	}
+
+	collectFindMatches();
+	m_findCurrent = m_findMatches.isEmpty() ? -1 : 0;
+	updateFindHighlights(m_findCurrent >= 0);
+	if (count == 0)
+		m_findBar->setStatus(tr("No matches"));
+	else
+		m_findBar->setStatus(tr("Replaced %n occurrence(s)", "", count));
+}
+
+void DocumentView::closeFindBar()
+{
+	if (!m_findBar)
+		return;
+	m_findBar->hideBar();
+	m_findSelections.clear();
+	m_findMatches.clear();
+	m_findCurrent = -1;
+	// Drop the find highlights, keeping any parenthesis highlight.
+	syntaxCheck();
+	m_mainEditor->setFocus();
 }
 
 void DocumentView::gotoLineDialog()
@@ -1347,34 +1593,40 @@ void DocumentView::insertAutoCompleteText()
 void DocumentView::findString(QString query)
 {
 	// TODO search across all editors
-	if (m_viewMode < 2) {
-		if (query == "") {
-			query = lastSearch;
-		}
-		bool found = false;
-        if (lastCaseSensitive) {
-            found = m_mainEditor->find(query,
-									   QTextDocument::FindCaseSensitively);
-		}
-		else
-			found = m_mainEditor->find(query);
-
-		if (!found) {
-			int ret = QMessageBox::question(this, tr("Find and replace"),
-											tr("The string was not found.\n"
-											   "Would you like to start from the top?"),
-											QMessageBox::Yes | QMessageBox::No,
-											QMessageBox::No
-											);
-			if (ret == QMessageBox::Yes) {
-				m_mainEditor->moveCursor(QTextCursor::Start);
-				findString();
-			}
-        }
-	}
-	else { //  Split view
-		// TODO check properly for line number also from other editors
+	if (m_viewMode >= 2) {
+		// Split view: not implemented for section editors
 		qDebug() << "Not implemented for split view.";
+		return;
+	}
+	ensureFindBar();
+	if (!query.isEmpty())
+		m_findBar->setQuery(query);
+
+	const QString currentQuery = m_findBar->query();
+	if (currentQuery.isEmpty())
+		return;
+
+	if (m_findBar->isVisible()) {
+		// Search again from the current position, wrapping silently.
+		if (currentQuery != m_findQuery) {
+			m_findQuery = currentQuery;
+			collectFindMatches();
+			m_findCurrent = -1;
+		}
+		if (m_findMatches.isEmpty())
+			refreshFindAfterEdit();
+		findNext();
+		return;
+	}
+
+	// Bar hidden: find next occurrence from the cursor, wrapping to the top
+	// without asking (unlike the old dialog).
+	const QTextDocument::FindFlags flags = smartCaseFlags(currentQuery);
+	if (!m_mainEditor->find(currentQuery, flags)) {
+		QTextCursor cursor = m_mainEditor->textCursor();
+		cursor.movePosition(QTextCursor::Start);
+		m_mainEditor->setTextCursor(cursor);
+		m_mainEditor->find(currentQuery, flags);
 	}
 }
 

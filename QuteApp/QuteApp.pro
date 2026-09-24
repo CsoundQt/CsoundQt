@@ -36,6 +36,7 @@ SOURCES += "$${QCSPWD}/configlists.cpp" \
     "$${QCSPWD}/baseview.cpp" \
     "$${QCSPWD}/documentview.cpp" \
     "$${QCSPWD}/findreplace.cpp" \
+    "$${QCSPWD}/findbar.cpp" \
     "$${QCSPWD}/framewidget.cpp" \
     "$${QCSPWD}/highlighter.cpp" \ # "$${QCSPWD}/keyboardshortcuts.cpp" \
     "$${QCSPWD}/node.cpp" \
@@ -75,6 +76,7 @@ HEADERS += "$${QCSPWD}/configlists.h" \
     "$${QCSPWD}/baseview.h" \
     "$${QCSPWD}/documentview.h" \
     "$${QCSPWD}/findreplace.h" \
+    "$${QCSPWD}/findbar.h" \
     "$${QCSPWD}/framewidget.h" \
     "$${QCSPWD}/highlighter.h" \ # "$${QCSPWD}/keyboardshortcuts.h" \
     "$${QCSPWD}/node.h" \

@@ -147,6 +147,7 @@ public:
 	void print(QPrinter *printer);
 	void findReplace();
 	void findString();  // For find again
+	void findPrevious();
 	void getToIn();
 	void inToGet();
 	// Widget Layout properties
