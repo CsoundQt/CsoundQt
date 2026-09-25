@@ -24,8 +24,17 @@
 #include <QQmlContext>
 #include <QFileSystemWatcher>
 #include <QFutureWatcher>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QTemporaryDir>
+#include <QTemporaryFile>
+#include <QStandardPaths>
+#include <QProcess>
 #include <QShortcut>
 #include <QtConcurrent/QtConcurrentRun>
+
+#include <memory>
 
 #include "configdialog.h"
 #include "console.h"
@@ -2692,14 +2701,21 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
     if (entry.startsWith('#')) { // For #define and friends
         entry.remove(0,1);
     }
-    QString dir = m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir ;
+    QString dir = external ? m_options->csdocdir
+                           : (m_options->csdocdir.isEmpty() ? helpPanel->docDir : m_options->csdocdir);
+    if (external && (dir.isEmpty() || !QFile::exists(dir + "/index.html"))) {
+        QMessageBox::critical(this, tr("Error"),
+                              tr("HTML Documentation directory is not set or does not contain index.html.\n"
+                                 "Please set it in Settings → Environment → Html Doc Directory."));
+        return;
+    }
     if (entry.startsWith("https://")) {
         openExternalBrowser(QUrl(entry));
         return;
     }
     QString errmsg;
 
-    if(m_rissetReady && risset->isInstalled && risset->opcodeToPlugin.contains(entry)) {
+    if(!external && m_rissetReady && risset->isInstalled && risset->opcodeToPlugin.contains(entry)) {
         // Check external help sources
         QDEBUG << "Found an opcode from an external plugin: " << entry;
         auto pluginName = risset->opcodeToPlugin[entry];
@@ -2757,11 +2773,17 @@ void CsoundQt::helpForEntry(QString entry, bool external) {
         }
         else if (entry.startsWith("chn_"))
             fileName = dir + "/opcodes/chn.html";
-        else if(QFile::exists(dir + "/opcodes/" + entry + ".html")) {
+        else {
             fileName = dir + "/opcodes/" + entry + ".html";
         }
-        else {
+
+        if (!QFile::exists(fileName)) {
             QDEBUG << "Did not find help file for entry" << entry;
+            if (external) {
+                QMessageBox::warning(this, tr("Opcode Entry"),
+                                     tr("Could not find the manual page for '%1' in:\n%2")
+                                         .arg(entry, dir));
+            }
             return;
         }
         openHtmlHelp(fileName, entry, external);
@@ -3206,7 +3228,8 @@ void CsoundQt::openLocalManualInBrowser()
     else
         QMessageBox::information(this, tr("Csound Manual"),
                                  tr("The offline Csound manual was not found.\n"
-                                    "Set the documentation path in Edit → Options → Environment."));
+                                    "Set the documentation path in Edit → Options → Environment.\n"
+                                    "The manual can be downloaded via Help → Download Csound Manual"));
 }
 
 void CsoundQt::resetPreferences()
@@ -3246,10 +3269,193 @@ void CsoundQt::openShortcutDialog()
 
 void CsoundQt::downloadManual()
 {
-    openExternalBrowser(QUrl("https://github.com/csound/manual/releases/download/latest/csound7-manual-offline.zip"));
-    QMessageBox::information(this, tr("Set manual path"),
-                             tr("Unzip the manual to any location and set that path"
-                                " in Configure/Enviromnent/Html doc directory"));
+    if (m_manualDownloadInProgress)
+        return;
+
+    QString dataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    if (dataPath.isEmpty())
+        dataPath = QDir::home().filePath(".local/share");
+    const QString manualParentPath = QDir(dataPath).filePath("csoundqt");
+    const QString installedManualPath = QDir(manualParentPath).filePath("csound-manual");
+    if (!QDir().mkpath(manualParentPath)) {
+        QMessageBox::warning(this, tr("Download Csound Manual"),
+                             tr("Could not create a writable location for the manual."));
+        return;
+    }
+
+    auto *downloadFile = new QTemporaryFile(this);
+    if (!downloadFile->open()) {
+        delete downloadFile;
+        QMessageBox::warning(this, tr("Download Csound Manual"),
+                             tr("Could not create a temporary file for the manual download."));
+        return;
+    }
+
+    m_manualDownloadInProgress = true;
+    downloadManualAct->setEnabled(false);
+    statusBar()->showMessage(tr("Downloading Csound manual..."));
+
+    auto *manager = new QNetworkAccessManager(this);
+    QNetworkRequest request(QUrl("https://github.com/csound/manual/releases/download/latest/csound7-manual-offline.zip"));
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
+                         QNetworkRequest::NoLessSafeRedirectPolicy);
+    QNetworkReply *reply = manager->get(request);
+
+    connect(reply, &QNetworkReply::downloadProgress, this,
+            [this](qint64 received, qint64 total) {
+        if (total > 0) {
+            statusBar()->showMessage(tr("Downloading Csound manual (%1%)")
+                                         .arg(received * 100 / total));
+        }
+    });
+    connect(reply, &QIODevice::readyRead, this, [reply, downloadFile]() {
+        const QByteArray data = reply->readAll();
+        if (downloadFile->write(data) != data.size())
+            reply->abort();
+    });
+    connect(reply, &QNetworkReply::finished, this,
+            [this, manager, reply, downloadFile, manualParentPath, installedManualPath]() {
+        const QByteArray remainingData = reply->readAll();
+        const bool writeFailed = !remainingData.isEmpty()
+                                 && downloadFile->write(remainingData) != remainingData.size();
+        const QString networkError = reply->errorString();
+        const bool requestFailed = reply->error() != QNetworkReply::NoError;
+        reply->deleteLater();
+        manager->deleteLater();
+
+        auto fail = [this, downloadFile](const QString &message) {
+            downloadFile->deleteLater();
+            m_manualDownloadInProgress = false;
+            downloadManualAct->setEnabled(true);
+            statusBar()->showMessage(tr("Csound manual installation failed"), 5000);
+            QMessageBox::warning(this, tr("Download Csound Manual"), message);
+        };
+
+        if (requestFailed || writeFailed || downloadFile->error() != QFileDevice::NoError) {
+            fail(requestFailed ? tr("Could not download the Csound manual: %1").arg(networkError)
+                               : tr("Could not save the downloaded Csound manual."));
+            return;
+        }
+        if (!downloadFile->flush()) {
+            fail(tr("Could not save the downloaded Csound manual."));
+            return;
+        }
+        downloadFile->close();
+
+        const QString extractionTemplate = QDir(manualParentPath).filePath("manual-extract-XXXXXX");
+        auto extractionDir = std::make_shared<QTemporaryDir>(extractionTemplate);
+        if (!extractionDir->isValid()) {
+            fail(tr("Could not create a writable location to extract the manual."));
+            return;
+        }
+
+        statusBar()->showMessage(tr("Download complete; extracting Csound manual..."));
+        auto *extractor = new QProcess(this);
+        connect(extractor,
+                static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+                this, [this, extractor, downloadFile, extractionDir, fail, installedManualPath](int exitCode,
+                                                                           QProcess::ExitStatus exitStatus) {
+            const QString processError = QString::fromLocal8Bit(extractor->readAllStandardError()).trimmed();
+            extractor->deleteLater();
+            downloadFile->deleteLater();
+
+            if (exitStatus != QProcess::NormalExit || exitCode != 0) {
+                fail(tr("Could not extract the Csound manual: %1")
+                         .arg(processError.isEmpty() ? tr("archive extraction failed") : processError));
+                return;
+            }
+
+            QStringList manualDirectories;
+            QDirIterator htmlFiles(extractionDir->path(), {"index.html"}, QDir::Files,
+                                   QDirIterator::Subdirectories);
+            while (htmlFiles.hasNext()) {
+                htmlFiles.next();
+                const QString directory = QFileInfo(htmlFiles.filePath()).absolutePath();
+                if (!manualDirectories.contains(directory))
+                    manualDirectories.append(directory);
+            }
+
+            QString extractedManualPath;
+            const QString expectedFolder = "csound7-manual-offline";
+            for (const QString &directory : manualDirectories) {
+                if (QFileInfo(directory).fileName() == expectedFolder) {
+                    extractedManualPath = directory;
+                    break;
+                }
+            }
+            if (extractedManualPath.isEmpty() && manualDirectories.size() == 1)
+                extractedManualPath = manualDirectories.first();
+
+            if (extractedManualPath.isEmpty()) {
+                extractionDir->setAutoRemove(false);
+                const QString reason = manualDirectories.isEmpty()
+                                           ? tr("The downloaded archive does not contain an index.html file.")
+                                           : tr("The downloaded archive contains multiple possible manual folders.");
+                fail(tr("%1\nThe extracted folder was kept here so you can inspect it:\n%2")
+                         .arg(reason, extractionDir->path()));
+                return;
+            }
+
+            if (QFileInfo::exists(installedManualPath)) {
+                const bool removed = QFileInfo(installedManualPath).isDir()
+                                         ? QDir(installedManualPath).removeRecursively()
+                                         : QFile::remove(installedManualPath);
+                if (!removed) {
+                    fail(tr("Could not replace the previously installed Csound manual."));
+                    return;
+                }
+            }
+            if (!QDir().rename(extractedManualPath, installedManualPath)) {
+                fail(tr("Could not install the downloaded Csound manual."));
+                return;
+            }
+
+            m_options->csdocdir = installedManualPath;
+            helpPanel->docDir = installedManualPath;
+            m_helpStartPage = QFileInfo::exists(QDir(installedManualPath).filePath("indexall.html"))
+                                  ? QDir(installedManualPath).filePath("indexall.html")
+                                  : QDir(installedManualPath).filePath("index.html");
+            helpPanel->addSearchRoot(installedManualPath, QString());
+            if (m_helpLoaded)
+                helpPanel->loadFile(m_helpStartPage);
+            else if (helpPanel->isVisible())
+                loadHelpOnce();
+
+            QSettings settings("csoundqt", "csoundqt");
+            settings.setValue("Options/Environment/csdocdir", installedManualPath);
+            settings.sync();
+
+            m_manualDownloadInProgress = false;
+            downloadManualAct->setEnabled(true);
+            statusBar()->showMessage(tr("Csound manual downloaded and installed."), 5000);
+            QMessageBox::information(this, tr("Download Csound Manual"),
+                                     tr("The Csound manual was downloaded and installed.\n"
+                                        "The Html Doc Directory is now set to:\n%1")
+                                         .arg(installedManualPath));
+        });
+        connect(extractor, &QProcess::errorOccurred, this,
+                [extractor, downloadFile, fail](QProcess::ProcessError error) {
+            if (error != QProcess::FailedToStart)
+                return;
+            extractor->deleteLater();
+            downloadFile->deleteLater();
+            fail(QObject::tr("Could not start the program needed to extract the manual."));
+        });
+
+        QString program;
+        QStringList arguments;
+#if defined(Q_OS_MACOS)
+        program = "/usr/bin/ditto";
+        arguments << "-x" << "-k" << downloadFile->fileName() << extractionDir->path();
+#elif defined(Q_OS_WIN)
+        program = "tar.exe";
+        arguments << "-xf" << downloadFile->fileName() << "-C" << extractionDir->path();
+#else
+        program = "unzip";
+        arguments << "-q" << downloadFile->fileName() << "-d" << extractionDir->path();
+#endif
+        extractor->start(program, arguments);
+    });
 }
 
 void CsoundQt::about()

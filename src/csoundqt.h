@@ -562,6 +562,7 @@ private:
     QString m_helpStartPage;
     bool m_helpLoaded = false;
     bool m_startupShown = false;
+    bool m_manualDownloadInProgress = false;
     bool isDarkPalette;
     QStringList m_longOptions = {
         "--syntax-check-only", "--control-rate=", "--messagelevel=",
