@@ -71,8 +71,14 @@ QuteWidget::~QuteWidget()
 void QuteWidget::setWidgetGeometry(int x, int y, int w, int h)
 {
 	//  qDebug() << "QuteWidget::setWidgetGeometry" <<x<<y<<w<<h;
-	Q_ASSERT(w > 0 && h > 0);
-	//	Q_ASSERT(x > 0 && y > 0 and w > 0 && h > 0);
+	if (w <= 0 || h <= 0) {
+		emit logMessage(tr("CsoundQt error: invalid widget geometry for \"%1\": width = %2, height = %3\n")
+		                .arg(m_channel.isEmpty() ? tr("(no channel)") : m_channel)
+		                .arg(w)
+		                .arg(h),
+		                (int) MessageRole::Error);
+		return;
+	}
 	this->setGeometry(QRect(x,y,w,h));
 	m_widget->blockSignals(true);
 	m_widget->setGeometry(QRect(0,0,w,h));
@@ -471,6 +477,20 @@ bool QuteWidget::applyProperty(const QString &name)
 		int y = (name == "CSQT_y") ? property(cname).toInt() : this->y();
 		int w = (name == "CSQT_width") ? property(cname).toInt() : this->width();
 		int h = (name == "CSQT_height") ? property(cname).toInt() : this->height();
+		// A width/height message can transiently carry 0, e.g. the initial
+		// value Csound sends for a k-rate variable passed to outvalue before
+		// its first k-cycle. A zero-sized widget cannot be represented, so fall
+		// back to the widget's current size and keep the property in sync.
+		if (w <= 0 && this->width() > 0) {
+			w = this->width();
+			setProperty("CSQT_width", w);
+		}
+		if (h <= 0 && this->height() > 0) {
+			h = this->height();
+			setProperty("CSQT_height", h);
+		}
+		if (w <= 0 || h <= 0)
+			return true; // Widget not laid out yet; nothing sensible to apply
 		setWidgetGeometry(x, y, w, h);
 		return true;
 	}
