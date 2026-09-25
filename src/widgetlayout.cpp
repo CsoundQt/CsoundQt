@@ -38,6 +38,7 @@
 #include "quteconsole.h"
 #include "qutegraph.h"
 #include "qutescope.h"
+#include "qutewaveform.h"
 #include "qutedummy.h"
 #include "framewidget.h"
 
@@ -119,6 +120,9 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
 
     createTableDisplayAct = new QAction(tr("Table Plot"), this);
     connect(createTableDisplayAct, SIGNAL(triggered()), this, SLOT(createNewTableDisplay()));
+
+    createWaveformAct = new QAction(tr("Waveform"), this);
+    connect(createWaveformAct, SIGNAL(triggered()), this, SLOT(createNewWaveform()));
 
     propertiesAct = new QAction(tr("Properties"),this);
     connect(propertiesAct, SIGNAL(triggered()), this, SLOT(propertiesDialog()));
@@ -229,6 +233,7 @@ WidgetLayout::WidgetLayout(QWidget* parent) : QWidget(parent)
     m_widgetNameToType["BSBScope"] = QuteWidgetType::SCOPE;
     m_widgetNameToType["BSBConsole"] = QuteWidgetType::CONSOLE;
     m_widgetNameToType["BSBTableDisplay"] = QuteWidgetType::TABLEDISPLAY;
+    m_widgetNameToType["BSBWaveform"] = QuteWidgetType::WAVEFORM;
     m_widgetNameToType["BSBDisplay"] = QuteWidgetType::DISPLAY;
     m_widgetNameToType["BSBLabel"] = QuteWidgetType::LABEL;
 }
@@ -873,6 +878,14 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         widget = static_cast<QuteWidget *>(w);
         emit requestCsoundUserData(w);
     }
+    else if (type == "BSBWaveform") {
+        auto w = new QuteWaveform(this);
+        widget = static_cast<QuteWidget *>(w);
+        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+                this, SLOT(newValue(QPair<QString,double>)));
+        waveformWidgets.append(w);
+        emit requestCsoundUserData(widget);
+    }
     else {
         qDebug() << type << " not implemented";
         //    QuteDummy *w = new QuteDummy(this);
@@ -889,7 +902,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     for (int i = 0; i < childNodes.size() ; i++) {
         QDomElement node = childNodes.item(i).toElement();
         QString nodeName = node.nodeName();
-        if (nodeName == "color" || nodeName == "bgcolor") {  // COLOR type
+        if (nodeName == "color" || nodeName == "bgcolor"
+                || nodeName == "cursorcolor") {  // COLOR type
             if (node.attribute("mode") == "background") {
                 widget->setProperty("CSQT_bgcolormode", true);
             }
@@ -1831,6 +1845,7 @@ void WidgetLayout::addCreateWidgetActionsToMenu(QMenu &menu) {
     menu.addAction(createGraphAct);
     menu.addAction(createScopeAct);
     menu.addAction(createTableDisplayAct);
+    menu.addAction(createWaveformAct);
 }
 
 void WidgetLayout::createContextMenu(QContextMenuEvent *event)
@@ -2359,6 +2374,21 @@ QString WidgetLayout::createNewTableDisplay(int x, int y, QString channel)
     return uuid;
 }
 
+QString WidgetLayout::createNewWaveform(int x, int y, QString channel)
+{
+    Q_UNUSED(channel);
+    const int posx = x >= 0 ? x : currentPosition.x();
+    const int posy = y >= 0 ? y : currentPosition.y();
+    deselectAll();
+    QString uuid = createWaveform(posx, posy, 500, 160, QString());
+    widgetChanged();
+    if (getOpenProperties()) {
+        m_widgets.last()->openProperties();
+    }
+    markHistory();
+    return uuid;
+}
+
 QString WidgetLayout::createNewScope(int x, int y, QString channel)
 {
     QString uuid;
@@ -2408,6 +2438,7 @@ void WidgetLayout::clearWidgetLayout()
     consoleWidgets.clear();
     graphWidgets.clear();
     scopeWidgets.clear();
+    waveformWidgets.clear();
     widgetsMutex.unlock();
 }
 
@@ -3639,6 +3670,25 @@ QString WidgetLayout::createTableDisplay(int x, int y, int width, int height, QS
     return widget->getUuid();
 }
 
+QString WidgetLayout::createWaveform(int x, int y, int width, int height, QString widgetLine) {
+    Q_UNUSED(widgetLine);
+    auto *widget = new QuteWaveform(this);
+    widget->setProperty("CSQT_x", x);
+    widget->setProperty("CSQT_y", y);
+    widget->setProperty("CSQT_width", width);
+    widget->setProperty("CSQT_height", height);
+    const QString base = "wave" + QString::number(m_widgets.size());
+    widget->setProperty("CSQT_objectName", base + "Table");
+    widget->setProperty("CSQT_objectName2", base + "Cursor");
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+            this, SLOT(newValue(QPair<QString,double>)));
+    emit requestCsoundUserData(widget);
+    registerWidget(widget);
+    waveformWidgets.append(widget);
+    widget->applyInternalProperties();
+    return widget->getUuid();
+}
+
 void WidgetLayout::setBackground(bool bg, QColor bgColor)
 {
     QWidget *w;
@@ -4224,6 +4274,9 @@ void WidgetLayout::deleteWidget(QuteWidget *widget)
     index = scopeWidgets.indexOf(dynamic_cast<QuteScope *>(widget));
     if (index >= 0)
         scopeWidgets.remove(index);
+    index = waveformWidgets.indexOf(dynamic_cast<QuteWaveform *>(widget));
+    if (index >= 0)
+        waveformWidgets.remove(index);
     m_activeWidgets = m_widgets.size();  // Allow all widgets again
     widgetsMutex.unlock();
     widgetChanged(widget);
@@ -4547,6 +4600,9 @@ void WidgetLayout::updateData()
     }
     for (int i = 0; i < scopeWidgets.size(); i++) {
         scopeWidgets[i]->updateData();
+    }
+    for (int i = 0; i < waveformWidgets.size(); i++) {
+        waveformWidgets[i]->updateData();
     }
     layoutMutex.unlock();
     closing = 0;

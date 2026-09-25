@@ -1141,7 +1141,7 @@ void CsoundEngine::setupChannels()
                 ud->previousOutputValues << (MYFLT) w->getValue();
             }   
             
-            if (wtype == QuteWidgetType::CONTROLLER) {
+            if (wtype == QuteWidgetType::CONTROLLER || wtype == QuteWidgetType::WAVEFORM) {
                 const QString channel2 = w->getChannel2Name();
                 if (!channel2.isEmpty()) {
                     if (csoundGetChannelPtr(ud->csound, (void **) &pvalue,

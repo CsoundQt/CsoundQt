@@ -55,6 +55,7 @@ HEADERS = "src/about.h" \
     "src/quteknob.h" \
     "src/qutemeter.h" \
     "src/qutescope.h" \
+    "src/qutewaveform.h" \
     "src/quteslider.h" \
     "src/qutespinbox.h" \
     "src/qutetext.h" \
@@ -120,6 +121,7 @@ SOURCES = "src/about.cpp" \
     "src/quteknob.cpp" \
     "src/qutemeter.cpp" \
     "src/qutescope.cpp" \
+    "src/qutewaveform.cpp" \
     "src/quteslider.cpp" \
     "src/qutespinbox.cpp" \
     "src/qutetext.cpp" \

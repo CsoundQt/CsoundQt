@@ -34,7 +34,7 @@
 
 enum QuteWidgetType { UNKNOWN=0, SPINBOX=1, LINEEDIT, CHECKBOX, SLIDER, KNOB, SCROLLNUMBER,
                       BUTTON, DROPDOWN, CONTROLLER, GRAPH, SCOPE, CONSOLE,
-                      TABLEDISPLAY, LABEL, DISPLAY };
+                      TABLEDISPLAY, LABEL, DISPLAY, WAVEFORM };
 
 // Special channel names that are driven by the mouse position/buttons.
 // Parsed once when the channel names are applied, so the per-frame refresh

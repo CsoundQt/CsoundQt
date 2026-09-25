@@ -51,6 +51,7 @@ SOURCES += "$${QCSPWD}/configlists.cpp" \
     "$${QCSPWD}/quteknob.cpp" \
     "$${QCSPWD}/qutemeter.cpp" \
     "$${QCSPWD}/qutescope.cpp" \
+    "$${QCSPWD}/qutewaveform.cpp" \
     "$${QCSPWD}/quteslider.cpp" \
     "$${QCSPWD}/qutespinbox.cpp" \
     "$${QCSPWD}/qutetext.cpp" \
@@ -91,6 +92,7 @@ HEADERS += "$${QCSPWD}/configlists.h" \
     "$${QCSPWD}/quteknob.h" \
     "$${QCSPWD}/qutemeter.h" \
     "$${QCSPWD}/qutescope.h" \
+    "$${QCSPWD}/qutewaveform.h" \
     "$${QCSPWD}/quteslider.h" \
     "$${QCSPWD}/qutespinbox.h" \
     "$${QCSPWD}/qutetext.h" \
