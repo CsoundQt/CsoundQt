@@ -50,6 +50,22 @@ jobs:
         id: csound-hash
         run: echo "hash=$(git -C csound rev-parse HEAD)" >> $GITHUB_OUTPUT
 
+      # The runner image (e.g. ubuntu-latest moving from 22.04 to 24.04) must be
+      # part of the cache key. Otherwise a build dir configured on the old image
+      # is restored on the new one and its cached CMake variables (SndFile_FOUND,
+      # SndFile_INCLUDE_DIR, ...) disagree with what is actually installed.
+      - name: Get OS version
+        id: os-version
+        if: runner.os != 'Windows'
+        run: |
+          value="unknown"
+          if [ -f /etc/os-release ]; then
+            value="$(. /etc/os-release && echo "${VERSION_ID:-unknown}")"
+          elif command -v sw_vers >/dev/null 2>&1; then
+            value="macos-$(sw_vers -productVersion)"
+          fi
+          echo "value=${value}" >> "$GITHUB_OUTPUT"
+
       # ------------------------------------------------------------------
       # FIXED Csound cache: correct path, per-arch key, restore-keys so a
       # new Csound commit still reuses the previous build incrementally.
@@ -62,9 +78,9 @@ jobs:
           path: |
             csound/build-macos
             csound/build-linux
-          key: csound-${{ runner.os }}-${{ runner.arch }}-${{ steps.csound-hash.outputs.hash }}-v2
+          key: csound-${{ runner.os }}-${{ steps.os-version.outputs.value }}-${{ runner.arch }}-${{ steps.csound-hash.outputs.hash }}-v2
           restore-keys: |
-            csound-${{ runner.os }}-${{ runner.arch }}-
+            csound-${{ runner.os }}-${{ steps.os-version.outputs.value }}-${{ runner.arch }}-
 
       # ccache for the whole job (Linux/macOS). Speeds up both Csound and
       # CsoundQt rebuilds across runs.
@@ -159,16 +175,19 @@ jobs:
           echo "ready!"
 
       # ---- Linux -------------------------------------------------------
+      # Install deps directly (as build.yml does). The cached apt action keys
+      # its cache only by the package list and a version string, not by the
+      # runner image, so after ubuntu-latest moved to 24.04 it restored 22.04
+      # packages and libsndfile1-dev's sndfile.h was missing at compile time.
       - name: Linux build deps
         if: runner.os == 'linux'
-        uses: awalsh128/cache-apt-pkgs-action@v1
-        with:
-          packages: >
-            cmake libsndfile1-dev libasound2-dev libjack-dev
-            portaudio19-dev libportmidi-dev default-jdk libpng-dev
-            libgmm++-dev bison flex libportsmf-dev libeigen3-dev
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            cmake pkg-config libsndfile1-dev libasound2-dev libjack-dev \
+            portaudio19-dev libportmidi-dev default-jdk libpng-dev \
+            libgmm++-dev bison flex libportsmf-dev libeigen3-dev \
             libcunit1-dev
-          version: 1.0
 
       - name: linux csound build
         if: runner.os == 'linux' && steps.cache-csound.outputs.cache-hit != 'true'
@@ -393,14 +412,23 @@ jobs:
         id: csound-hash
         run: echo "hash=$(git -C csound rev-parse HEAD)" >> $GITHUB_OUTPUT
 
+      - name: Get OS version
+        id: os-version
+        run: |
+          value="unknown"
+          if [ -f /etc/os-release ]; then
+            value="$(. /etc/os-release && echo "${VERSION_ID:-unknown}")"
+          fi
+          echo "value=${value}" >> "$GITHUB_OUTPUT"
+
       - name: Cache Csound build
         id: cache-csound
         uses: actions/cache@v4
         with:
           path: csound/build-linux
-          key: csound-${{ runner.os }}-${{ runner.arch }}-${{ steps.csound-hash.outputs.hash }}-v2
+          key: csound-${{ runner.os }}-${{ steps.os-version.outputs.value }}-${{ runner.arch }}-${{ steps.csound-hash.outputs.hash }}-v2
           restore-keys: |
-            csound-${{ runner.os }}-${{ runner.arch }}-
+            csound-${{ runner.os }}-${{ steps.os-version.outputs.value }}-${{ runner.arch }}-
 
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1
@@ -409,14 +437,13 @@ jobs:
           max-size: 2G
 
       - name: Linux build deps
-        uses: awalsh128/cache-apt-pkgs-action@v1
-        with:
-          packages: >
-            cmake libsndfile1-dev libasound2-dev libjack-dev
-            portaudio19-dev libportmidi-dev default-jdk libpng-dev
-            libgmm++-dev bison flex libportsmf-dev libeigen3-dev
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            cmake pkg-config libsndfile1-dev libasound2-dev libjack-dev \
+            portaudio19-dev libportmidi-dev default-jdk libpng-dev \
+            libgmm++-dev bison flex libportsmf-dev libeigen3-dev \
             libcunit1-dev
-          version: 1.0
 
       - name: linux csound build
         if: steps.cache-csound.outputs.cache-hit != 'true'
@@ -489,14 +516,23 @@ jobs:
         id: csound-hash
         run: echo "hash=$(git -C csound rev-parse HEAD)" >> $GITHUB_OUTPUT
 
+      - name: Get OS version
+        id: os-version
+        run: |
+          value="unknown"
+          if [ -f /etc/os-release ]; then
+            value="$(. /etc/os-release && echo "${VERSION_ID:-unknown}")"
+          fi
+          echo "value=${value}" >> "$GITHUB_OUTPUT"
+
       - name: Cache Csound build
         id: cache-csound
         uses: actions/cache@v4
         with:
           path: csound/build-linux
-          key: csound-${{ runner.os }}-${{ runner.arch }}-${{ steps.csound-hash.outputs.hash }}-v2
+          key: csound-${{ runner.os }}-${{ steps.os-version.outputs.value }}-${{ runner.arch }}-${{ steps.csound-hash.outputs.hash }}-v2
           restore-keys: |
-            csound-${{ runner.os }}-${{ runner.arch }}-
+            csound-${{ runner.os }}-${{ steps.os-version.outputs.value }}-${{ runner.arch }}-
 
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1
@@ -505,14 +541,13 @@ jobs:
           max-size: 2G
 
       - name: Linux build deps
-        uses: awalsh128/cache-apt-pkgs-action@v1
-        with:
-          packages: >
-            cmake libsndfile1-dev libasound2-dev libjack-dev
-            portaudio19-dev libportmidi-dev default-jdk libpng-dev
-            libgmm++-dev bison flex libportsmf-dev libeigen3-dev
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            cmake pkg-config libsndfile1-dev libasound2-dev libjack-dev \
+            portaudio19-dev libportmidi-dev default-jdk libpng-dev \
+            libgmm++-dev bison flex libportsmf-dev libeigen3-dev \
             libcunit1-dev
-          version: 1.0
 
       - name: linux arm64 csound build
         if: steps.cache-csound.outputs.cache-hit != 'true'
