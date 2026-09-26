@@ -24,15 +24,22 @@
 
 #include "qutewidget.h"
 
+#include <QElapsedTimer>
+#include <QPointer>
+#include <QVector>
+#include <atomic>
+
 class SelectColorButton;
 
 // The actual drawing/zooming/scrolling widget. It lives inside a QuteWaveform
 // (m_widget) and reads the samples of a Csound f-table directly.
 //
 // A Csound table is a flat array of MYFLT, but soundfile tables (gen 1) are
-// interleaved. The number of interleaved channels can be set with setChannels();
-// channels > 1 are drawn overlaid in distinct colours. The cursor and the
-// horizontal axis are in frames (samples per channel).
+// interleaved. The number of interleaved channels is either set explicitly
+// with setChannels(> 0) or auto-detected with the ftchnls opcode when
+// setChannels(0) is used; channels > 1 are drawn stacked in distinct colours,
+// sharing the time axis but each with its own amplitude axis.
+// The cursor and the horizontal axis are in frames (samples per channel).
 class WaveformView : public QAbstractScrollArea
 {
 	Q_OBJECT
@@ -45,6 +52,8 @@ public:
 	void setTableNumber(int tabnum);
 	int tableNumber() const { return m_tabnum; }
 
+	// channels == 0 requests auto-detection via ftchnls(), otherwise the given
+	// number of interleaved channels is used.
 	void setChannels(int channels);
 	int channels() const { return m_channels; }
 
@@ -67,7 +76,13 @@ public:
 
 	// Re-read the table pointer/length from Csound and repaint.
 	void refresh();
-	// Clear the table (called when the performance stops).
+	// Force a repaint on the next refresh (used for in-place table changes).
+	void forceRedraw();
+	// Called by the engine just before the Csound instance is destroyed, while
+	// the table is still valid, to copy it so the waveform can persist after
+	// the performance stops.
+	void persistTable(CSOUND *cs);
+	// Stop displaying live data, falling back to the persisted snapshot.
 	void reset();
 
 	int frameAtX(int x) const;
@@ -92,17 +107,38 @@ private:
 	QColor channelColor(int channel) const;
 	double sampleRate() const;
 	void updateScrollBars();
-	void computeAmplitude(double &miny, double &maxy) const;
+	void applyChannels(int channels);
+	void applyTableSampleRate(int sampleRate);
+	void showSnapshot();
+	void queryTableInfo();
+	static void channelQueryCallback(MYFLT out, void *userdata);
+	static void sampleRateQueryCallback(MYFLT out, void *userdata);
+	// Vertical lane occupied by the given channel when channels are stacked.
+	QRect channelRect(const QRect &waveRect, int channel) const;
+	void computeAmplitudes(QVector<double> &miny, QVector<double> &maxy) const;
 	void drawAxes(QPainter &painter, const QRect &widgetRect, const QRect &waveRect,
-				  double miny, double maxy);
-	void drawWaveform(QPainter &painter, const QRect &waveRect, double miny, double maxy);
+				  const QVector<double> &miny, const QVector<double> &maxy);
+	void drawWaveform(QPainter &painter, const QRect &waveRect,
+					  const QVector<double> &miny, const QVector<double> &maxy);
 
 	CsoundUserData *m_ud = nullptr;
 	bool m_running = false;
 	int m_tabnum = 0;
 	MYFLT *m_data = nullptr;
 	int m_tabsize = 0;    // raw number of MYFLT values
-	int m_channels = 1;   // interleaved channels
+	int m_channelsProperty = 0; // requested channels, 0 = auto-detect
+	int m_channels = 1;   // effective interleaved channels used for drawing
+	int m_tableInfoTable = -1; // table whose properties have been resolved
+	int m_tableInfoAttempt = 0;
+	bool m_tableInfoPending = false;
+	std::atomic<int> m_detectedChannels{0};
+	std::atomic<int> m_detectedSampleRate{0};
+	std::atomic<int> m_tableInfoReadyCount{0};
+	double m_tableSampleRate = 0.0;
+	bool m_forceRedraw = true;
+	QVector<MYFLT> m_snapshot;          // table copy kept after stop
+	std::atomic<int> m_snapshotTabnum{0};
+	QElapsedTimer m_tableTimer;
 	int m_cursor = 0;     // frame
 	double m_zoom = 1.0;
 	int m_viewStart = 0;  // frame
@@ -116,8 +152,7 @@ private:
 	bool m_autoRange = true;
 	double m_range = 1.0;
 
-	bool m_pressed = false;
-	bool m_dragging = false;
+	bool m_panning = false;    // Ctrl + drag to scroll
 	QPoint m_pressPos;
 	int m_pressViewStart = 0;
 };
@@ -151,6 +186,8 @@ public slots:
 
 private:
 	int m_tabnum = 0;
+	bool m_forceRefresh = false;  // negative value requests a redraw
+	QPointer<CsoundEngine> m_registeredEngine;  // engine the snapshot callback is registered with
 	QLineEdit *name2LineEdit = nullptr;
 	SelectColorButton *colorButton = nullptr;
 	SelectColorButton *bgColorButton = nullptr;

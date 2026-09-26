@@ -589,6 +589,33 @@ void CsoundEngine::evaluate(QString code)
     }
 }
 
+void CsoundEngine::addBeforeCleanupCallback(void *key, std::function<void(CSOUND *)> callback)
+{
+    QWriteLocker locker(&m_beforeCleanupLock);
+    m_beforeCleanupCallbacks.insert(key, std::move(callback));
+}
+
+void CsoundEngine::removeBeforeCleanupCallback(void *key)
+{
+    QWriteLocker locker(&m_beforeCleanupLock);
+    m_beforeCleanupCallbacks.remove(key);
+}
+
+void CsoundEngine::runBeforeCleanupCallbacks()
+{
+    if (ud == nullptr || ud->csound == nullptr) {
+        return;
+    }
+    // Hold the read lock for the whole run so a widget cannot be destroyed
+    // while its callback is copying data out of the Csound instance.
+    QReadLocker locker(&m_beforeCleanupLock);
+    for (const auto &callback : m_beforeCleanupCallbacks) {
+        if (callback) {
+            callback(ud->csound);
+        }
+    }
+}
+
 
 int CsoundEngine::popKeyPressEvent()
 {
@@ -951,6 +978,7 @@ void CsoundEngine::stopCsound()
         QThread::msleep(200);
         // QDEBUG << "Destroying csound...";
         // delete pt;
+        runBeforeCleanupCallbacks();
         csoundDestroy(ud->csound);
         // QDEBUG << "Destroyed ok";
         ud->perfThread = nullptr;
@@ -963,6 +991,7 @@ void CsoundEngine::stopCsound()
     pt->Join();
     ud->perfThread = NULL;
     delete pt;
+    runBeforeCleanupCallbacks();
     this->cleanupCsound();
 
 

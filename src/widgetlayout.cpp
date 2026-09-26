@@ -936,6 +936,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
                  || nodeName == "precision"
                  || nodeName == "borderwidth"
                  || nodeName == "borderradius"
+                 || nodeName == "borderWidth"
+                 || nodeName == "borderRadius"
                  || nodeName == "selectedIndex" ) {  // INT type
             QDomNode n = node.firstChild();
             nodeName.prepend("CSQT_");
@@ -952,7 +954,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
             registerWidgetController(widget, value);
         }
         else if (nodeName == "randomizable" || nodeName == "selected"
-                 || nodeName == "visible" ) {  // BOOL type
+                 || nodeName == "visible"
+                 || nodeName == "flatStyle" ) {  // BOOL type
             QDomNode n = node.firstChild();
             if (nodeName == "randomizable") {
                 if (node.attribute("group") != "") {

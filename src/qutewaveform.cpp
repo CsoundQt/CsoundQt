@@ -29,6 +29,7 @@
 #include <QScrollBar>
 #include <QWheelEvent>
 #include <cmath>
+#include <cstring>
 
 namespace {
 
@@ -39,6 +40,21 @@ const QColor channelColors[] = {
 	QColor(90, 230, 220), QColor(255, 120, 120)
 };
 const int channelColorCount = int(sizeof(channelColors) / sizeof(channelColors[0]));
+
+// Csound may load f-tables asynchronously (e.g. gen 1 reading an audio file),
+// so a table's properties can still change right after the table number is
+// assigned. Wait this long before reading them.
+const int tableQueryBaseDelayMs = 50;
+// If the table properties are still not available, retry with a growing delay
+// (x, x*2, x*4) a limited number of times, then give up (a table may never
+// expose them).
+const int tableInfoQueryMaxAttempts = 3;
+
+// Deadline (relative to the table settle timer) for the given attempt.
+int tableInfoQueryDelayMs(int attempt)
+{
+	return tableQueryBaseDelayMs * ((1 << (attempt + 1)) - 1);
+}
 
 // Choose a "nice" step (1, 2, 5 * 10^n) for a range and a target number of ticks.
 double niceStep(double range, int targetTicks)
@@ -80,6 +96,7 @@ WaveformView::WaveformView(QWidget *parent)
 		viewport()->update();
 	});
 	viewport()->setMouseTracking(true);
+	m_tableTimer.start();
 }
 
 int WaveformView::frames() const
@@ -117,6 +134,9 @@ int WaveformView::waveWidth() const
 
 double WaveformView::sampleRate() const
 {
+	if (m_tableSampleRate > 0.0) {
+		return m_tableSampleRate;
+	}
 	if (m_ud != nullptr && m_ud->csound != nullptr) {
 		const double sr = csoundGetSr(m_ud->csound);
 		if (sr > 0.0) {
@@ -157,12 +177,57 @@ void WaveformView::setTableNumber(int tabnum)
 		return;
 	}
 	m_tabnum = tabnum;
+	m_snapshotTabnum.store(tabnum, std::memory_order_relaxed);
+	// A new table replaces the persisted copy from the previous run.
+	m_data = nullptr;
+	m_tabsize = 0;
+	m_snapshot.clear();
+	// The table may still be loading, so restart the settle delay and forget
+	// any properties detected for the previous table.
+	m_tableTimer.restart();
+	m_tableInfoTable = -1;
+	m_tableInfoAttempt = 0;
+	m_tableInfoPending = false;
+	m_detectedChannels.store(0);
+	m_detectedSampleRate.store(0);
+	m_tableInfoReadyCount.store(0);
+	m_tableSampleRate = 0.0;
+	m_forceRedraw = true;
 	if (m_cursor >= frames()) {
 		m_cursor = 0;
 	}
 }
 
 void WaveformView::setChannels(int channels)
+{
+	const int prop = qBound(0, channels, 64);
+	// Ignore repeated assignments of the same value once the table properties
+	// are known; otherwise every outvalue would trigger a new ftchnls/ftsr
+	// query.
+	if (prop == m_channelsProperty && m_tableInfoTable == m_tabnum) {
+		return;
+	}
+	m_channelsProperty = prop;
+	m_tableInfoTable = -1;
+	m_tableInfoAttempt = 0;
+	m_tableInfoPending = false;
+	m_detectedChannels.store(0);
+	m_detectedSampleRate.store(0);
+	m_tableInfoReadyCount.store(0);
+	applyChannels(m_channelsProperty > 0 ? m_channelsProperty : 1);
+}
+
+void WaveformView::applyTableSampleRate(int sampleRate)
+{
+	const double rate = sampleRate > 0 ? double(sampleRate) : 0.0;
+	if (rate == m_tableSampleRate) {
+		return;
+	}
+	m_tableSampleRate = rate;
+	viewport()->update();
+}
+
+void WaveformView::applyChannels(int channels)
 {
 	channels = qBound(1, channels, 64);
 	if (channels == m_channels) {
@@ -176,10 +241,60 @@ void WaveformView::setChannels(int channels)
 	viewport()->update();
 }
 
+void WaveformView::queryTableInfo()
+{
+	if (m_ud == nullptr || m_ud->perfThread == nullptr || m_ud->playMutex == nullptr) {
+		return;
+	}
+	// Do not block the GUI thread while Csound is being torn down.
+	if (!m_ud->playMutex->tryLock(1)) {
+		return;
+	}
+	CsoundPerformanceThread *pt = m_ud->perfThread;
+	if (pt != nullptr && pt->GetStatus() == 0) {
+		const QByteArray channelCode =
+				QStringLiteral("return(ftchnls(%1))").arg(m_tabnum).toLatin1();
+		const QByteArray sampleRateCode =
+				QStringLiteral("return(ftsr(%1))").arg(m_tabnum).toLatin1();
+		m_tableInfoPending = true;
+		pt->EvalCode(channelCode.constData(), &WaveformView::channelQueryCallback, this);
+		pt->EvalCode(sampleRateCode.constData(), &WaveformView::sampleRateQueryCallback, this);
+	}
+	m_ud->playMutex->unlock();
+}
+
+void WaveformView::channelQueryCallback(MYFLT out, void *userdata)
+{
+	// Runs on the performance thread; only touch atomics here.
+	auto *view = static_cast<WaveformView *>(userdata);
+	if (view == nullptr) {
+		return;
+	}
+	view->m_detectedChannels.store(int(out), std::memory_order_relaxed);
+	view->m_tableInfoReadyCount.fetch_add(1, std::memory_order_release);
+}
+
+void WaveformView::sampleRateQueryCallback(MYFLT out, void *userdata)
+{
+	// Runs on the performance thread; only touch atomics here.
+	auto *view = static_cast<WaveformView *>(userdata);
+	if (view == nullptr) {
+		return;
+	}
+	view->m_detectedSampleRate.store(int(out), std::memory_order_relaxed);
+	view->m_tableInfoReadyCount.fetch_add(1, std::memory_order_release);
+}
+
 void WaveformView::setCursor(int pos)
 {
 	const int maxPos = frames() > 0 ? frames() - 1 : 0;
 	m_cursor = qBound(0, pos, maxPos);
+	// If the cursor lies outside the visible range, scroll so that it sits at
+	// the left edge of the view (clamped at the end of the table).
+	const int vis = visibleFrames();
+	if (m_cursor < m_viewStart || m_cursor >= m_viewStart + vis) {
+		setViewStart(m_cursor);
+	}
 	viewport()->update();
 }
 
@@ -195,14 +310,63 @@ void WaveformView::setViewStart(int start)
 	horizontalScrollBar()->setValue(start);
 }
 
+void WaveformView::persistTable(CSOUND *cs)
+{
+	// Called by the engine on the stopping thread, while the Csound instance is
+	// still alive. Copy the table so the display can survive the teardown.
+	const int tabnum = m_snapshotTabnum.load(std::memory_order_relaxed);
+	if (cs == nullptr || tabnum <= 0) {
+		return;
+	}
+	const int len = csoundTableLength(cs, tabnum);
+	MYFLT *data = nullptr;
+	if (len > 0) {
+		csoundGetTable(cs, &data, tabnum);
+	}
+	if (len <= 0 || data == nullptr) {
+		return;
+	}
+	m_snapshot.resize(len);
+	memcpy(m_snapshot.data(), data, size_t(len) * sizeof(MYFLT));
+}
+
+void WaveformView::showSnapshot()
+{
+	if (m_snapshot.isEmpty()) {
+		if (m_data != nullptr || m_tabsize != 0 || m_forceRedraw) {
+			m_data = nullptr;
+			m_tabsize = 0;
+			m_forceRedraw = false;
+			updateScrollBars();
+			viewport()->update();
+		}
+		return;
+	}
+	if (m_data != m_snapshot.data() || m_tabsize != m_snapshot.size()) {
+		m_data = m_snapshot.data();
+		m_tabsize = m_snapshot.size();
+		if (m_cursor >= frames()) {
+			m_cursor = qMax(0, frames() - 1);
+		}
+		m_forceRedraw = false;
+		updateScrollBars();
+		viewport()->update();
+	}
+}
+
 void WaveformView::reset()
 {
-	m_data = nullptr;
-	m_tabsize = 0;
-	m_tabnum = 0;
 	m_running = false;
-	updateScrollBars();
-	viewport()->update();
+	m_tabnum = 0;
+	m_tableInfoTable = -1;
+	m_tableInfoAttempt = 0;
+	m_tableInfoPending = false;
+	m_detectedChannels.store(0);
+	m_detectedSampleRate.store(0);
+	m_tableInfoReadyCount.store(0);
+	// Keep m_channels and m_tableSampleRate so the persisted snapshot keeps
+	// rendering with the same layout and time axis.
+	showSnapshot();
 }
 
 int WaveformView::frameAtX(int x) const
@@ -214,13 +378,46 @@ int WaveformView::frameAtX(int x) const
 void WaveformView::refresh()
 {
 	if (!m_running || m_tabnum <= 0 || m_ud == nullptr || m_ud->csound == nullptr) {
-		if (m_data != nullptr || m_tabsize != 0) {
-			m_data = nullptr;
-			m_tabsize = 0;
-			updateScrollBars();
-		}
+		// Not running (or no live table): keep showing the persisted snapshot.
+		showSnapshot();
+		return;
+	}
+	// Give Csound time to finish (possibly asynchronous) table loading before
+	// reading any property from it.
+	if (!m_tableTimer.hasExpired(tableQueryBaseDelayMs)) {
 		viewport()->update();
 		return;
+	}
+	// Query ftchnls()/ftsr() until the table exposes them, retrying with a
+	// growing, bounded delay (a table may never expose them).
+	if (m_tableInfoTable != m_tabnum) {
+		if (m_tableInfoReadyCount.load(std::memory_order_acquire) >= 2) {
+			m_tableInfoReadyCount.store(0, std::memory_order_relaxed);
+			m_tableInfoPending = false;
+			const int detected = m_detectedChannels.load(std::memory_order_relaxed);
+			const int tableSr = m_detectedSampleRate.load(std::memory_order_relaxed);
+			if (detected >= 0) {
+				m_tableInfoTable = m_tabnum;
+				applyTableSampleRate(tableSr);
+				if (m_channelsProperty == 0) {
+					applyChannels(detected > 0 ? detected : 1);
+				}
+			} else {
+				++m_tableInfoAttempt;
+				if (m_tableInfoAttempt >= tableInfoQueryMaxAttempts) {
+					// No channel information available; stop retrying.
+					m_tableInfoTable = m_tabnum;
+					applyTableSampleRate(tableSr);
+					if (m_channelsProperty == 0) {
+						applyChannels(1);
+					}
+				}
+			}
+		}
+		if (!m_tableInfoPending && m_tableInfoAttempt < tableInfoQueryMaxAttempts
+				&& m_tableTimer.elapsed() >= tableInfoQueryDelayMs(m_tableInfoAttempt)) {
+			queryTableInfo();
+		}
 	}
 	const int len = csoundTableLength(m_ud->csound, m_tabnum);
 	MYFLT *data = nullptr;
@@ -229,18 +426,30 @@ void WaveformView::refresh()
 		result = csoundGetTable(m_ud->csound, &data, m_tabnum);
 	}
 	if (len <= 0 || result <= 0 || data == nullptr) {
-		m_data = nullptr;
-		m_tabsize = 0;
-		updateScrollBars();
-		viewport()->update();
+		// Live table not ready yet: keep the persisted snapshot (if any).
+		showSnapshot();
 		return;
 	}
+	// Repainting scans the whole visible table, which is expensive. Only do it
+	// when the table changed or a redraw was explicitly requested; in-place
+	// table changes are redrawn by sending a negative value to the table
+	// channel.
+	const bool dataChanged = (m_data != data) || (m_tabsize != len);
 	m_data = data;
 	m_tabsize = len;
 	if (m_cursor >= frames()) {
 		m_cursor = qMax(0, frames() - 1);
 	}
-	updateScrollBars();
+	if (dataChanged || m_forceRedraw) {
+		m_forceRedraw = false;
+		updateScrollBars();
+		viewport()->update();
+	}
+}
+
+void WaveformView::forceRedraw()
+{
+	m_forceRedraw = true;
 	viewport()->update();
 }
 
@@ -250,41 +459,60 @@ void WaveformView::resizeEvent(QResizeEvent *event)
 	updateScrollBars();
 }
 
-void WaveformView::computeAmplitude(double &miny, double &maxy) const
+QRect WaveformView::channelRect(const QRect &waveRect, int channel) const
 {
+	if (m_channels <= 1) {
+		return waveRect;
+	}
+	const int gap = 3;
+	const int laneHeight =
+			qMax(1, (waveRect.height() - gap * (m_channels - 1)) / m_channels);
+	const int top = waveRect.top() + channel * (laneHeight + gap);
+	return QRect(waveRect.left(), top, waveRect.width(), laneHeight);
+}
+
+void WaveformView::computeAmplitudes(QVector<double> &miny, QVector<double> &maxy) const
+{
+	const int n = qMax(1, m_channels);
+	miny.resize(n);
+	maxy.resize(n);
 	if (!m_autoRange) {
-		miny = -m_range;
-		maxy = m_range;
-		if (maxy - miny < 1.0e-9) {
-			miny = -1.0;
-			maxy = 1.0;
+		double lo = -m_range;
+		double hi = m_range;
+		if (hi - lo < 1.0e-9) {
+			lo = -1.0;
+			hi = 1.0;
 		}
+		miny.fill(lo);
+		maxy.fill(hi);
 		return;
 	}
 	const int vis = visibleFrames();
 	const int first = m_viewStart;
 	const int last = qMin(frames(), first + vis);
-	miny = 1.0e30;
-	maxy = -1.0e30;
-	for (int f = first; f < last; ++f) {
-		for (int c = 0; c < m_channels; ++c) {
+	for (int c = 0; c < n; ++c) {
+		double lo = 1.0e30;
+		double hi = -1.0e30;
+		for (int f = first; f < last; ++f) {
 			const double v = double(m_data[dataIndex(f, c)]);
-			if (v < miny) miny = v;
-			if (v > maxy) maxy = v;
+			if (v < lo) lo = v;
+			if (v > hi) hi = v;
 		}
-	}
-	if (miny > maxy) {
-		miny = -1.0;
-		maxy = 1.0;
-	}
-	if (maxy - miny < 1.0e-9) {
-		miny -= 0.5;
-		maxy += 0.5;
+		if (lo > hi) {
+			lo = -1.0;
+			hi = 1.0;
+		}
+		if (hi - lo < 1.0e-9) {
+			lo -= 0.5;
+			hi += 0.5;
+		}
+		miny[c] = lo;
+		maxy[c] = hi;
 	}
 }
 
 void WaveformView::drawAxes(QPainter &painter, const QRect &widgetRect, const QRect &waveRect,
-							double miny, double maxy)
+							const QVector<double> &miny, const QVector<double> &maxy)
 {
 	const QFont originalFont = painter.font();
 	QFont f = originalFont;
@@ -298,32 +526,40 @@ void WaveformView::drawAxes(QPainter &painter, const QRect &widgetRect, const QR
 	if (!m_showBackground) {
 		textColor = palette().color(QPalette::WindowText);
 	}
-	const double amp = maxy - miny;
-	auto yOf = [&](double v) { return waveRect.top() + (maxy - v) / amp * (waveRect.height() - 1); };
 	auto xOfFrame = [&](double frame) {
 		return waveRect.left() + (frame - m_viewStart) * double(waveRect.width())
 				/ double(visibleFrames());
 	};
 
-	// --- Amplitude (vertical) axis ---
-	const double astep = niceStep(amp, 4);
+	// --- Amplitude (vertical) axes: one per stacked channel ---
 	QColor ac = axis;
 	ac.setAlpha(90);
-	painter.setPen(QPen(ac, 0));
-	painter.drawLine(waveRect.topLeft(), waveRect.bottomLeft());
-	for (double a = std::ceil(miny / astep) * astep; a <= maxy + 1e-9; a += astep) {
-		const double y = yOf(a);
-		if (m_showGrid) {
-			painter.setPen(QPen(grid, 0));
-			painter.drawLine(QPointF(waveRect.left(), y), QPointF(waveRect.right(), y));
+	for (int c = 0; c < m_channels; ++c) {
+		const QRect lane = channelRect(waveRect, c);
+		const double amp = maxy[c] - miny[c];
+		if (amp < 1.0e-12) {
+			continue;
 		}
-		painter.setPen(textColor);
-		const QString label = QString::number(a, 'g', 3);
-		painter.drawText(QRectF(0, y - 8, waveRect.left() - 4, 16),
-						 Qt::AlignRight | Qt::AlignVCenter, label);
+		auto yOf = [&](double v) {
+			return lane.top() + (maxy[c] - v) / amp * (lane.height() - 1);
+		};
+		painter.setPen(QPen(ac, 0));
+		painter.drawLine(lane.topLeft(), lane.bottomLeft());
+		const double astep = niceStep(amp, 4);
+		for (double a = std::ceil(miny[c] / astep) * astep; a <= maxy[c] + 1e-9; a += astep) {
+			const double y = yOf(a);
+			if (m_showGrid) {
+				painter.setPen(QPen(grid, 0));
+				painter.drawLine(QPointF(lane.left(), y), QPointF(lane.right(), y));
+			}
+			painter.setPen(textColor);
+			const QString label = QString::number(a, 'g', 3);
+			painter.drawText(QRectF(0, y - 8, lane.left() - 4, 16),
+							 Qt::AlignRight | Qt::AlignVCenter, label);
+		}
 	}
 
-	// --- Time (horizontal) axis ---
+	// --- Time (horizontal) axis, shared by all channels ---
 	painter.setPen(QPen(ac, 0));
 	painter.drawLine(waveRect.bottomLeft(), waveRect.bottomRight());
 	const double sr = sampleRate();
@@ -353,31 +589,31 @@ void WaveformView::drawAxes(QPainter &painter, const QRect &widgetRect, const QR
 	painter.setFont(originalFont);
 }
 
-void WaveformView::drawWaveform(QPainter &painter, const QRect &waveRect, double miny, double maxy)
+void WaveformView::drawWaveform(QPainter &painter, const QRect &waveRect,
+								const QVector<double> &miny, const QVector<double> &maxy)
 {
 	const int vis = visibleFrames();
 	const int first = m_viewStart;
 	const int last = qMin(frames(), first + vis + 1);
-	const double xscale = double(waveRect.width()) / double(vis);
-	const double amp = maxy - miny;
-	auto yOf = [&](double v) { return waveRect.top() + (maxy - v) / amp * (waveRect.height() - 1); };
 
 	for (int c = 0; c < m_channels; ++c) {
+		const QRect lane = channelRect(waveRect, c);
+		const double amp = maxy[c] - miny[c];
+		if (amp < 1.0e-12) {
+			continue;
+		}
+		const double xscale = double(lane.width()) / double(vis);
+		auto yOf = [&](double v) {
+			return lane.top() + (maxy[c] - v) / amp * (lane.height() - 1);
+		};
 		const QColor color = channelColor(c);
-		// When several channels are overlaid, draw them translucently so the
-		// overlapping waveforms remain visible instead of hiding each other.
 		QColor stroke = color;
 		QColor fill = color;
-		if (m_channels > 1) {
-			stroke.setAlpha(170);
-			fill.setAlpha(80);
-		} else {
-			fill.setAlpha(110);
-		}
-		if (vis <= waveRect.width()) {
+		fill.setAlpha(110);
+		if (vis <= lane.width()) {
 			QPainterPath path;
 			for (int f = first; f < last; ++f) {
-				const double x = waveRect.left() + (f - first) * xscale;
+				const double x = lane.left() + (f - first) * xscale;
 				const double y = yOf(double(m_data[dataIndex(f, c)]));
 				if (f == first) {
 					path.moveTo(x, y);
@@ -391,9 +627,9 @@ void WaveformView::drawWaveform(QPainter &painter, const QRect &waveRect, double
 		} else {
 			QPolygonF top;
 			QPolygonF bottom;
-			for (int px = 0; px < waveRect.width(); ++px) {
-				int f0 = first + int(double(px) * vis / waveRect.width());
-				int f1 = first + int(double(px + 1) * vis / waveRect.width());
+			for (int px = 0; px < lane.width(); ++px) {
+				int f0 = first + int(double(px) * vis / lane.width());
+				int f1 = first + int(double(px + 1) * vis / lane.width());
 				if (f1 <= f0) {
 					f1 = f0 + 1;
 				}
@@ -409,8 +645,8 @@ void WaveformView::drawWaveform(QPainter &painter, const QRect &waveRect, double
 					if (v < cmin) cmin = v;
 					if (v > cmax) cmax = v;
 				}
-				top.append(QPointF(waveRect.left() + px + 0.5, yOf(cmax)));
-				bottom.prepend(QPointF(waveRect.left() + px + 0.5, yOf(cmin)));
+				top.append(QPointF(lane.left() + px + 0.5, yOf(cmax)));
+				bottom.prepend(QPointF(lane.left() + px + 0.5, yOf(cmin)));
 			}
 			QPolygonF envelope = top;
 			envelope += bottom;
@@ -438,14 +674,12 @@ void WaveformView::paintEvent(QPaintEvent *)
 	const QColor background = m_showBackground ? m_bgcolor : palette().color(QPalette::Base);
 	const QColor statusColor = background.lightness() < 128 ? QColor(220, 220, 220)
 														   : QColor(40, 40, 40);
-	if (!m_running) {
+	if (m_data == nullptr || m_tabsize <= 0) {
+		// A persisted snapshot is kept after stop, so only show a message when
+		// there is nothing at all to draw.
 		painter.setPen(statusColor);
-		painter.drawText(r, Qt::AlignCenter, tr("Stopped"));
-		return;
-	}
-	if (m_tabnum <= 0 || m_data == nullptr || m_tabsize <= 0) {
-		painter.setPen(statusColor);
-		painter.drawText(r, Qt::AlignCenter, tr("Table not set"));
+		painter.drawText(r, Qt::AlignCenter,
+						 m_running ? tr("Table not set") : tr("Stopped"));
 		return;
 	}
 
@@ -457,15 +691,28 @@ void WaveformView::paintEvent(QPaintEvent *)
 	}
 	painter.setRenderHint(QPainter::Antialiasing, true);
 
-	double miny = -1.0, maxy = 1.0;
-	computeAmplitude(miny, maxy);
+	QVector<double> miny;
+	QVector<double> maxy;
+	computeAmplitudes(miny, maxy);
 
 	if (m_showAxes) {
 		drawAxes(painter, r, waveRect, miny, maxy);
 	}
 	drawWaveform(painter, waveRect, miny, maxy);
 
-	// Cursor (in frames).
+	// Channel labels for stacked multichannel tables.
+	if (m_channels > 1) {
+		painter.setFont(QFont(painter.font().family(),
+							  qMax(7.0, painter.font().pointSizeF() - 2.0)));
+		for (int c = 0; c < m_channels; ++c) {
+			const QRect lane = channelRect(waveRect, c);
+			painter.setPen(channelColor(c));
+			painter.drawText(QRect(lane.left() + 4, lane.top() + 2, 40, 16),
+							 Qt::AlignLeft | Qt::AlignTop, QString::number(c + 1));
+		}
+	}
+
+	// Cursor (in frames), spanning all channels.
 	const int vis = visibleFrames();
 	const double xscale = double(waveRect.width()) / double(vis);
 	const double cx = waveRect.left() + double(m_cursor - m_viewStart) * xscale;
@@ -473,29 +720,21 @@ void WaveformView::paintEvent(QPaintEvent *)
 		painter.setPen(QPen(m_cursorColor, 0));
 		painter.drawLine(QPointF(cx, waveRect.top()), QPointF(cx, waveRect.bottom()));
 	}
-
-	// Channel legend for multichannel tables.
-	if (m_channels > 1) {
-		int x = waveRect.left() + 6;
-		const int y = waveRect.top() + 6;
-		painter.setFont(QFont(painter.font().family(),
-							  qMax(7.0, painter.font().pointSizeF() - 2.0)));
-		for (int c = 0; c < m_channels; ++c) {
-			painter.fillRect(QRect(x, y, 10, 10), channelColor(c));
-			painter.setPen(statusColor);
-			painter.drawText(x + 14, y + 10, QString::number(c + 1));
-			x += 34;
-		}
-	}
 }
 
 void WaveformView::mousePressEvent(QMouseEvent *event)
 {
 	if (event->button() == Qt::LeftButton) {
-		m_pressed = true;
-		m_dragging = false;
-		m_pressPos = event->pos();
-		m_pressViewStart = m_viewStart;
+		if (event->modifiers() & Qt::ControlModifier) {
+			// Ctrl + drag scrolls the view.
+			m_panning = true;
+			m_pressPos = event->pos();
+			m_pressViewStart = m_viewStart;
+		} else {
+			// A plain click sets the cursor immediately.
+			setCursor(frameAtX(event->pos().x()));
+			emit cursorChanged(m_cursor);
+		}
 		event->accept();
 		return;
 	}
@@ -504,15 +743,10 @@ void WaveformView::mousePressEvent(QMouseEvent *event)
 
 void WaveformView::mouseMoveEvent(QMouseEvent *event)
 {
-	if (m_pressed && (event->buttons() & Qt::LeftButton)) {
+	if (m_panning && (event->buttons() & Qt::LeftButton)) {
 		const int dx = event->pos().x() - m_pressPos.x();
-		if (!m_dragging && qAbs(dx) > 3) {
-			m_dragging = true;
-		}
-		if (m_dragging) {
-			const double xscale = double(visibleFrames()) / double(waveWidth());
-			horizontalScrollBar()->setValue(m_pressViewStart - int(dx * xscale));
-		}
+		const double xscale = double(visibleFrames()) / double(waveWidth());
+		horizontalScrollBar()->setValue(m_pressViewStart - int(dx * xscale));
 		event->accept();
 		return;
 	}
@@ -521,13 +755,8 @@ void WaveformView::mouseMoveEvent(QMouseEvent *event)
 
 void WaveformView::mouseReleaseEvent(QMouseEvent *event)
 {
-	if (event->button() == Qt::LeftButton && m_pressed) {
-		if (!m_dragging) {
-			setCursor(frameAtX(event->pos().x()));
-			emit cursorChanged(m_cursor);
-		}
-		m_pressed = false;
-		m_dragging = false;
+	if (event->button() == Qt::LeftButton && m_panning) {
+		m_panning = false;
 		event->accept();
 		return;
 	}
@@ -581,7 +810,7 @@ QuteWaveform::QuteWaveform(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_showGrid", false);
 	setProperty("CSQT_showAxes", true);
 	setProperty("CSQT_autoRange", true);
-	setProperty("CSQT_channels", 1);
+	setProperty("CSQT_channels", 0);
 	setProperty("CSQT_range", 1.0);
 	setProperty("CSQT_zoom", 1.0);
 	setProperty("CSQT_offset", 0);
@@ -590,7 +819,12 @@ QuteWaveform::QuteWaveform(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_randomizable", false);
 }
 
-QuteWaveform::~QuteWaveform() {}
+QuteWaveform::~QuteWaveform()
+{
+	if (m_registeredEngine) {
+		m_registeredEngine->removeBeforeCleanupCallback(m_widget);
+	}
+}
 
 void QuteWaveform::setCsoundUserData(CsoundUserData *ud)
 {
@@ -603,6 +837,17 @@ void QuteWaveform::setCsoundUserData(CsoundUserData *ud)
 	view->setUserData(ud);
 	if (ud->csEngine) {
 		connect(ud->csEngine, SIGNAL(stopSignal()), this, SLOT(onStop()), Qt::UniqueConnection);
+		// Copy the table out of Csound just before the instance is destroyed so
+		// the waveform survives the stop.
+		if (m_registeredEngine != ud->csEngine) {
+			if (m_registeredEngine) {
+				m_registeredEngine->removeBeforeCleanupCallback(m_widget);
+			}
+			m_registeredEngine = ud->csEngine;
+			ud->csEngine->addBeforeCleanupCallback(m_widget, [view](CSOUND *cs) {
+				view->persistTable(cs);
+			});
+		}
 	}
 }
 
@@ -614,7 +859,7 @@ void QuteWaveform::setValue(double value)
 		return;
 	}
 	if (value < 0.0) {
-		m_valueChanged = true;
+		m_forceRefresh = true;
 		return;
 	}
 	const int tab = int(value);
@@ -685,6 +930,10 @@ void QuteWaveform::refreshWidget()
 	if (running && m_tabnum > 0 && view->tableNumber() != m_tabnum) {
 		view->setTableNumber(m_tabnum);
 	}
+	if (m_forceRefresh) {
+		m_forceRefresh = false;
+		view->forceRedraw();
+	}
 	view->refresh();
 }
 
@@ -699,6 +948,10 @@ void QuteWaveform::updateData()
 	// performance stopped) would stay empty. Re-apply the last table number.
 	if (running && m_tabnum > 0 && view->tableNumber() != m_tabnum) {
 		view->setTableNumber(m_tabnum);
+	}
+	if (m_forceRefresh) {
+		m_forceRefresh = false;
+		view->forceRedraw();
 	}
 	view->refresh();
 }
@@ -848,10 +1101,12 @@ void QuteWaveform::createPropertiesDialog()
 	layout->addWidget(label, 5, 2, Qt::AlignRight | Qt::AlignVCenter);
 	channelsSpinBox = new QSpinBox(dialog);
 	channelsSpinBox->unsetLocale();
-	channelsSpinBox->setRange(1, 64);
+	channelsSpinBox->setRange(0, 64);
+	channelsSpinBox->setSpecialValueText(tr("Auto"));
 	channelsSpinBox->setToolTip(tr("Number of interleaved channels in the table.\n"
-								   "Soundfile tables (gen 1) are interleaved; set 2 for stereo."));
-	channelsSpinBox->setValue(qMax(1, property("CSQT_channels").toInt()));
+								   "Soundfile tables (gen 1) are interleaved; 0 auto-detects\n"
+								   "the count with ftchnls()."));
+	channelsSpinBox->setValue(qMax(0, property("CSQT_channels").toInt()));
 	layout->addWidget(channelsSpinBox, 5, 3, Qt::AlignLeft | Qt::AlignVCenter);
 
 	label = new QLabel("Waveform color", dialog);

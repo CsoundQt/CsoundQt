@@ -21,10 +21,69 @@
 */
 
 #include "qutebutton.h"
+#include "selectcolorbutton.h"
+
+#include <QPainter>
+
+// ---------------------------------------------------------------------------
+//  QutePushButton
+// ---------------------------------------------------------------------------
+
+void QutePushButton::paintEvent(QPaintEvent *event)
+{
+	if (!m_flat) {
+		QPushButton::paintEvent(event);
+		return;
+	}
+
+	QPainter painter(this);
+	painter.setRenderHint(QPainter::Antialiasing, true);
+
+	const bool pushed = isChecked() || isDown();
+	QColor bg = (pushed && m_pressed.isValid()) ? m_pressed : m_background;
+	if (!bg.isValid()) {
+		bg = palette().color(QPalette::Button);
+	}
+	QColor textColor = (pushed && m_pressedtextcolor.isValid()) ? m_pressedtextcolor : m_textcolor;
+	if (!textColor.isValid()) {
+		textColor = palette().color(QPalette::ButtonText);
+	}
+
+	const double half = m_borderwidth / 2.0;
+	const QRectF r = QRectF(rect()).adjusted(half, half, -half, -half);
+
+	painter.setBrush(bg);
+	if (m_borderwidth > 0 && m_bordercolor.isValid()) {
+		QPen pen(m_bordercolor, m_borderwidth);
+		if (m_borderwidth == 1) {
+			// Cosmetic pen so a 1px border is not thinned by scaling.
+			pen.setWidth(0);
+			pen.setCosmetic(true);
+		}
+		painter.setPen(pen);
+	} else {
+		painter.setPen(Qt::NoPen);
+	}
+	painter.drawRoundedRect(r, m_borderradius, m_borderradius);
+
+	painter.setPen(textColor);
+	painter.drawText(rect(), Qt::AlignCenter | Qt::TextWordWrap, text());
+}
+
+// Pictorial buttons always use the native rendering; the flat style only
+// applies to text buttons.
+static bool isPictButtonType(const QString &type)
+{
+	return type == "pictevent" || type == "pictvalue" || type == "pict";
+}
+
+// ---------------------------------------------------------------------------
+//  QuteButton
+// ---------------------------------------------------------------------------
 
 QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
 {
-    m_widget = new QPushButton(this);
+    m_widget = new QutePushButton(this);
     m_widget->setContextMenuPolicy(Qt::NoContextMenu);
     m_currentValue = 0;
     // Necessary to pass mouse tracking to widget panel for _MouseX channels
@@ -48,7 +107,18 @@ QuteButton::QuteButton(QWidget *parent) : QuteWidget(parent)
     // setProperty("CSQT_latched", false);
     m_latched = false;
     setProperty("CSQT_fontsize", 10);
-    
+
+	// Flat style. Disabled by default, so existing buttons keep the native
+	// look. When enabled the button paints itself (see QutePushButton).
+	setProperty("CSQT_flatStyle", false);
+	setProperty("CSQT_color", m_widget->palette().color(QPalette::Button));
+	setProperty("CSQT_pressedColor", QString()); // empty = same as background
+	setProperty("CSQT_borderColor", m_widget->palette().color(QPalette::Mid).name());
+	setProperty("CSQT_textColor", m_widget->palette().color(QPalette::ButtonText).name());
+	setProperty("CSQT_pressedTextColor", QString()); // empty = same as text
+	setProperty("CSQT_borderWidth", 0);
+	setProperty("CSQT_borderRadius", 3);
+
 	QPixmap p = QPixmap(8, 8);
 	p.fill(QColor(Qt::green));
 	onIcon.addPixmap(p, QIcon::Normal, QIcon::On);
@@ -259,7 +329,14 @@ QString QuteButton::getQml()
 
 }
 
-#define propDouble(prop, decimals) (QString::number(property(prop).toDouble(),'f', decimals))
+static void writeButtonColorElement(QXmlStreamWriter &s, const QString &name, const QColor &color)
+{
+	s.writeStartElement(name);
+	s.writeTextElement("r", QString::number(color.red()));
+	s.writeTextElement("g", QString::number(color.green()));
+	s.writeTextElement("b", QString::number(color.blue()));
+	s.writeEndElement();
+}
 
 QString QuteButton::getWidgetXmlText()
 {
@@ -283,6 +360,14 @@ QString QuteButton::getWidgetXmlText()
 	// s.writeTextElement("latched", property("CSQT_latched").toString());
 	s.writeTextElement("latched", QVariant(m_latched).toString());
     s.writeTextElement("fontsize", QString::number(property("CSQT_fontsize").toInt()));
+	s.writeTextElement("flatStyle", property("CSQT_flatStyle").toBool() ? "true" : "false");
+	writeButtonColorElement(s, "color", property("CSQT_color").value<QColor>());
+	s.writeTextElement("pressedColor", property("CSQT_pressedColor").toString());
+	s.writeTextElement("borderColor", property("CSQT_borderColor").toString());
+	s.writeTextElement("textColor", property("CSQT_textColor").toString());
+	s.writeTextElement("pressedTextColor", property("CSQT_pressedTextColor").toString());
+	s.writeTextElement("borderWidth", QString::number(property("CSQT_borderWidth").toInt()));
+	s.writeTextElement("borderRadius", QString::number(property("CSQT_borderRadius").toInt()));
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -323,6 +408,29 @@ void QuteButton::applyProperties()
 	setProperty("CSQT_latch", latchCheckBox->isChecked());
 	setProperty("CSQT_momentaryMidiButton", useMomentaryMidiButtonCheckBox->isChecked());
     setProperty("CSQT_fontsize", fontSizeSpinBox->value());
+
+	// Flat style
+	setProperty("CSQT_flatStyle", flatStyleCheckBox->isChecked());
+	QColor flatBg = backgroundColorButton->getColor();
+	if (!flatBg.isValid()) {
+		flatBg = m_widget->palette().color(QPalette::Button);
+	}
+	setProperty("CSQT_color", flatBg);
+	QColor flatPressed = pressedColorButton->getColor();
+	setProperty("CSQT_pressedColor",
+				(flatPressed.isValid() && flatPressed != flatBg) ? flatPressed.name() : QString());
+	QColor flatBorder = borderColorButton->getColor();
+	setProperty("CSQT_borderColor", flatBorder.isValid() ? flatBorder.name() : QString());
+	QColor flatText = textColorButton->getColor();
+	if (!flatText.isValid()) {
+		flatText = m_widget->palette().color(QPalette::ButtonText);
+	}
+	setProperty("CSQT_textColor", flatText.name());
+	QColor flatPressedText = pressedTextColorButton->getColor();
+	setProperty("CSQT_pressedTextColor",
+				(flatPressedText.isValid() && flatPressedText != flatText) ? flatPressedText.name() : QString());
+	setProperty("CSQT_borderWidth", borderWidthSpinBox->value());
+	setProperty("CSQT_borderRadius", borderRadiusSpinBox->value());
 
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -411,6 +519,126 @@ void QuteButton::createPropertiesDialog()
     layout->addWidget(line, 9,1,1,3, Qt::AlignLeft|Qt::AlignVCenter);
 	line->setMinimumWidth(320);
 	line->setText(property("CSQT_eventLine").toString());
+
+	// --- Flat style (text buttons only) ---
+	m_flatControls.clear();
+	flatStyleCheckBox = new QCheckBox(tr("Flat"), dialog);
+	flatStyleCheckBox->setToolTip(tr("Draw the button with a flat, platform-independent "
+									 "appearance instead of the native style."));
+	flatStyleCheckBox->setChecked(property("CSQT_flatStyle").toBool());
+	layout->addWidget(flatStyleCheckBox, 10, 1, Qt::AlignLeft|Qt::AlignVCenter);
+
+	m_pressedColorSet = !property("CSQT_pressedColor").toString().isEmpty();
+	m_pressedTextColorSet = !property("CSQT_pressedTextColor").toString().isEmpty();
+
+	QColor flatBg = property("CSQT_color").value<QColor>();
+	if (!flatBg.isValid()) {
+		flatBg = m_widget->palette().color(QPalette::Button);
+	}
+	QColor flatText(property("CSQT_textColor").toString());
+	if (!flatText.isValid()) {
+		flatText = m_widget->palette().color(QPalette::ButtonText);
+	}
+	QColor flatBorder(property("CSQT_borderColor").toString());
+	if (!flatBorder.isValid()) {
+		flatBorder = m_widget->palette().color(QPalette::Mid);
+	}
+
+	label = new QLabel("Background", dialog);
+	layout->addWidget(label, 11, 0, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	backgroundColorButton = new SelectColorButton(dialog);
+	backgroundColorButton->setColor(flatBg);
+	layout->addWidget(backgroundColorButton, 11, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << backgroundColorButton;
+
+	label = new QLabel("Pressed", dialog);
+	label->setToolTip(tr("Background color while the button is pressed/latched. "
+						 "Defaults to the background color."));
+	layout->addWidget(label, 11, 2, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	pressedColorButton = new SelectColorButton(dialog);
+	pressedColorButton->setColor(m_pressedColorSet
+								 ? QColor(property("CSQT_pressedColor").toString()) : flatBg);
+	layout->addWidget(pressedColorButton, 11, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << pressedColorButton;
+
+	label = new QLabel("Text", dialog);
+	layout->addWidget(label, 12, 0, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	textColorButton = new SelectColorButton(dialog);
+	textColorButton->setColor(flatText);
+	layout->addWidget(textColorButton, 12, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << textColorButton;
+
+	label = new QLabel("Pressed text", dialog);
+	label->setToolTip(tr("Text color while the button is pressed/latched. "
+						 "Defaults to the text color."));
+	layout->addWidget(label, 12, 2, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	pressedTextColorButton = new SelectColorButton(dialog);
+	pressedTextColorButton->setColor(m_pressedTextColorSet
+									 ? QColor(property("CSQT_pressedTextColor").toString()) : flatText);
+	layout->addWidget(pressedTextColorButton, 12, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << pressedTextColorButton;
+
+	label = new QLabel("Border", dialog);
+	layout->addWidget(label, 13, 0, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	borderColorButton = new SelectColorButton(dialog);
+	borderColorButton->setColor(flatBorder);
+	layout->addWidget(borderColorButton, 13, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << borderColorButton;
+
+	label = new QLabel("Width", dialog);
+	layout->addWidget(label, 13, 2, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	borderWidthSpinBox = new QSpinBox(dialog);
+	borderWidthSpinBox->unsetLocale();
+	borderWidthSpinBox->setRange(0, 64);
+	borderWidthSpinBox->setValue(property("CSQT_borderWidth").toInt());
+	layout->addWidget(borderWidthSpinBox, 13, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << borderWidthSpinBox;
+
+	label = new QLabel("Radius", dialog);
+	layout->addWidget(label, 14, 0, Qt::AlignRight|Qt::AlignVCenter);
+	m_flatControls << label;
+	borderRadiusSpinBox = new QSpinBox(dialog);
+	borderRadiusSpinBox->unsetLocale();
+	borderRadiusSpinBox->setRange(0, 1000);
+	borderRadiusSpinBox->setValue(property("CSQT_borderRadius").toInt());
+	layout->addWidget(borderRadiusSpinBox, 14, 1, Qt::AlignLeft|Qt::AlignVCenter);
+	m_flatControls << borderRadiusSpinBox;
+
+	auto refreshFlatControls = [this]() {
+		const bool pict = isPictButtonType(typeComboBox->currentText());
+		flatStyleCheckBox->setEnabled(!pict);
+		const bool flat = flatStyleCheckBox->isChecked() && !pict;
+		for (QWidget *w : m_flatControls) {
+			w->setEnabled(flat);
+		}
+	};
+	connect(flatStyleCheckBox, &QCheckBox::toggled, this, refreshFlatControls);
+	connect(typeComboBox, &QComboBox::currentTextChanged, this, refreshFlatControls);
+	refreshFlatControls();
+
+	// While a pressed color is unset it follows the base color.
+	connect(backgroundColorButton, &SelectColorButton::clicked, this, [this]() {
+		if (!m_pressedColorSet) {
+			pressedColorButton->setColor(backgroundColorButton->getColor());
+		}
+	});
+	connect(pressedColorButton, &SelectColorButton::clicked, this, [this]() {
+		m_pressedColorSet = true;
+	});
+	connect(textColorButton, &SelectColorButton::clicked, this, [this]() {
+		if (!m_pressedTextColorSet) {
+			pressedTextColorButton->setColor(textColorButton->getColor());
+		}
+	});
+	connect(pressedTextColorButton, &SelectColorButton::clicked, this, [this]() {
+		m_pressedTextColorSet = true;
+	});
 
 	useMomentaryMidiButtonCheckBox = new QCheckBox(dialog);
 	useMomentaryMidiButtonCheckBox->setText(tr("Momentary"));
@@ -519,6 +747,43 @@ bool QuteButton::applyProperty(const QString &name)
 		w->setIcon(latch ? onIcon : QIcon());
 		return true;
 	}
+	if (name == "CSQT_flatStyle") {
+		button()->setFlatStyle(property("CSQT_flatStyle").toBool()
+							   && !isPictButtonType(property("CSQT_type").toString()));
+		return true;
+	}
+	if (name == "CSQT_color") {
+		QColor bg = property("CSQT_color").value<QColor>();
+		if (!bg.isValid()) {
+			bg = QColor(property("CSQT_color").toString());
+		}
+		button()->setBackgroundColor(bg);
+		return true;
+	}
+	if (name == "CSQT_pressedColor") {
+		button()->setPressedColor(QColor(property("CSQT_pressedColor").toString()));
+		return true;
+	}
+	if (name == "CSQT_borderColor") {
+		button()->setBorderColor(QColor(property("CSQT_borderColor").toString()));
+		return true;
+	}
+	if (name == "CSQT_textColor") {
+		button()->setTextColor(QColor(property("CSQT_textColor").toString()));
+		return true;
+	}
+	if (name == "CSQT_pressedTextColor") {
+		button()->setPressedTextColor(QColor(property("CSQT_pressedTextColor").toString()));
+		return true;
+	}
+	if (name == "CSQT_borderWidth") {
+		button()->setBorderWidth(property("CSQT_borderWidth").toInt());
+		return true;
+	}
+	if (name == "CSQT_borderRadius") {
+		button()->setBorderRadius(property("CSQT_borderRadius").toInt());
+		return true;
+	}
 	return QuteWidget::applyProperty(name);
 }
 
@@ -531,17 +796,28 @@ void QuteButton::applyInternalProperties()
 	m_stringValue = property("CSQT_stringvalue").toString();
 	QString type = property("CSQT_type").toString();
     auto w = static_cast<QPushButton*>(m_widget);
+    QutePushButton *b = button();
     w->setCheckable(property("CSQT_latch").toBool());
-    // Set icon here, because it can be overwritten if button is "pict"
-    if (property("CSQT_latch").toBool()) {
-        w->setIcon(onIcon);
-    } else {
-        w->setIcon(QIcon());
-    }
+
+	// Flat style. Only text buttons take over the painting; pictorial buttons
+	// always use the native look.
+	const bool pict = isPictButtonType(type);
+	QColor bg = property("CSQT_color").value<QColor>();
+	if (!bg.isValid()) {
+		bg = QColor(property("CSQT_color").toString());
+	}
+	b->setBackgroundColor(bg);
+	b->setPressedColor(QColor(property("CSQT_pressedColor").toString()));
+	b->setBorderColor(QColor(property("CSQT_borderColor").toString()));
+	b->setTextColor(QColor(property("CSQT_textColor").toString()));
+	b->setPressedTextColor(QColor(property("CSQT_pressedTextColor").toString()));
+	b->setBorderWidth(property("CSQT_borderWidth").toInt());
+	b->setBorderRadius(property("CSQT_borderRadius").toInt());
+	b->setFlatStyle(property("CSQT_flatStyle").toBool() && !pict);
 
     if (type == "event" || type == "value") {
         icon = QIcon();
-		static_cast<QPushButton *>(m_widget)->setIcon(icon);
+		w->setIcon(icon);
         auto fontsizeProperty = property("CSQT_fontsize");
         if(!fontsizeProperty.isValid()) {
             qDebug() << "Button: fontsize invalid / not present. Setting to default";
@@ -550,20 +826,18 @@ void QuteButton::applyInternalProperties()
             if(fontsize <= 0)
                 qDebug() << "Invalid font size for button, skipping";
             else {
-
-                auto sheet = QString("QPushButton {font-size: %1pt; }").arg(fontsize);
-                w->setStyleSheet(sheet);
+                QFont f = w->font();
+                f.setPointSize(fontsize);
+                w->setFont(f);
             }
         }
         w->setText(property("CSQT_text").toString());
 
-    } else if (type == "pictevent" || type == "pictvalue" || type == "pict") {
-        qDebug() << "///////////////////////////";
-        w->setStyleSheet(nullptr);
+    } else if (pict) {
         w->setText("");
 		icon = QIcon(QPixmap(property("CSQT_image").toString()));
-		static_cast<QPushButton *>(m_widget)->setIcon(icon);
-		static_cast<QPushButton *>(m_widget)->setIconSize(QSize(width(),height()));
+		w->setIcon(icon);
+		w->setIconSize(QSize(width(),height()));
     } else {
         qDebug() << "Warning! QuteButton::applyInternalProperties() unrecognized type:"
                  << type;

@@ -27,6 +27,9 @@
 #include <QTimer>
 #include <QFuture>
 #include <QAtomicInt>
+#include <QReadWriteLock>
+#include <QHash>
+#include <functional>
 
 #include <csound.hpp>
 #include <csPerfThread.hpp>
@@ -216,6 +219,13 @@ public slots:
 
 	void evaluate(QString code);
 
+	// Register a callback invoked synchronously (possibly from a non-GUI thread)
+	// after the performance thread has stopped but before the Csound instance is
+	// reset/destroyed. Callers can use this to copy data (e.g. f-table contents)
+	// out of a performance before it disappears.
+	void addBeforeCleanupCallback(void *key, std::function<void(CSOUND *)> callback);
+	void removeBeforeCleanupCallback(void *key);
+
 public:
     QVector<ConsoleWidget *> consoles;  // Consoles registered for message printing
     int runCsound();
@@ -224,6 +234,11 @@ public:
     int checkSyntax();
 
 private:
+	void runBeforeCleanupCallbacks();
+
+	QReadWriteLock m_beforeCleanupLock;
+	QHash<void *, std::function<void(CSOUND *)> > m_beforeCleanupCallbacks;
+
 	void setupChannels();
 	void setupCallbacks();
 	

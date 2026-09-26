@@ -25,6 +25,42 @@
 
 #include "qutewidget.h"
 
+class SelectColorButton;
+
+// A QPushButton that takes over its own painting when in flat mode, so the
+// appearance (rounded rectangle, colors, border) is identical on every
+// platform instead of depending on the native style. When not flat it simply
+// defers to QPushButton, preserving the native look.
+class QutePushButton : public QPushButton
+{
+public:
+	explicit QutePushButton(QWidget *parent = nullptr) : QPushButton(parent) {}
+
+	void setFlatStyle(bool enable) { m_flat = enable; update(); }
+	// Invalid colors mean "inherit": pressed falls back to the background,
+	// pressed text falls back to the text color.
+	void setBackgroundColor(const QColor &c) { m_background = c; update(); }
+	void setPressedColor(const QColor &c) { m_pressed = c; update(); }
+	void setBorderColor(const QColor &c) { m_bordercolor = c; update(); }
+	void setTextColor(const QColor &c) { m_textcolor = c; update(); }
+	void setPressedTextColor(const QColor &c) { m_pressedtextcolor = c; update(); }
+	void setBorderWidth(int width) { m_borderwidth = width; update(); }
+	void setBorderRadius(int radius) { m_borderradius = radius; update(); }
+
+protected:
+	void paintEvent(QPaintEvent *event) override;
+
+private:
+	bool m_flat = false;
+	QColor m_background = QColor(224, 224, 224);
+	QColor m_pressed;              // invalid = use background
+	QColor m_bordercolor = QColor(128, 128, 128);
+	QColor m_textcolor = QColor(0, 0, 0);
+	QColor m_pressedtextcolor;     // invalid = use text color
+	int m_borderwidth = 0;
+	int m_borderradius = 3;
+};
+
 class QuteButton : public QuteWidget
 {
 	Q_OBJECT
@@ -77,6 +113,19 @@ private:
     QSpinBox  *fontSizeSpinBox;
 	QCheckBox * useMomentaryMidiButtonCheckBox;
 
+	// Flat style controls (only used when flat is selected)
+	QCheckBox *flatStyleCheckBox = nullptr;
+	SelectColorButton *backgroundColorButton = nullptr;
+	SelectColorButton *pressedColorButton = nullptr;
+	SelectColorButton *borderColorButton = nullptr;
+	SelectColorButton *textColorButton = nullptr;
+	SelectColorButton *pressedTextColorButton = nullptr;
+	QSpinBox *borderWidthSpinBox = nullptr;
+	QSpinBox *borderRadiusSpinBox = nullptr;
+	QList<QWidget *> m_flatControls; // widgets enabled only when flat is on
+	bool m_pressedColorSet = false;
+	bool m_pressedTextColorSet = false;
+
 	QIcon icon;
     QIcon onIcon;
 
@@ -85,6 +134,7 @@ private:
 
     void performAction();
 	bool hasIndefiniteDuration();
+	QutePushButton *button() const { return static_cast<QutePushButton *>(m_widget); }
 
 private slots:
 	void buttonPressed();
