@@ -30,7 +30,7 @@ Channels in the widget properties (or leave it at 0 to auto-detect with
 ftchnls()).
 */
 
-giWave ftgen 0, 0, 0, 1, "/home/em/Lib/snd/samples/speech/voiceover.flac", 0, 0, 0
+giWave ftgen 0, 0, 0, 1, "../../SourceMaterials/ClassicalGuitar.wav", 0, 0, 0
 
 instr 1
   ; Tell the widget that the table is interleaved (stereo), select it and put
