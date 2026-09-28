@@ -22,7 +22,8 @@ and experienced Csound users.
 
 ![CsoundQt main window](doc/images/screenshot-linux-spectrumanalyzer.jpg)
 
-![Waveform widget](doc/images/screenshot-waveform-widget.png)
+[![Waveform widget demo](doc/images/screenshot-waveform-widget.png)](https://csoundqt.github.io/videos/csoundqt-waveform2.mp4)
+
 
 ---
 
@@ -43,7 +44,6 @@ and experienced Csound users.
 - **Much faster startup** and widget/channel handling, plus **AppImage** and
   **Flathub** packages that bundle Qt, Csound, the manual and plugins.
 
-[![Waveform widget demo](doc/images/screenshot-waveform-widget.png)](https://csoundqt.github.io/videos/csoundqt-waveform2.mp4)
 [![Widget animation demo](doc/images/video-animation.png)](https://csoundqt.github.io/videos/csoundqt-animation2.mp4)
 
 ## Features
@@ -76,7 +76,6 @@ and experienced Csound users.
 
 ## Screenshots
 
-![Waveform widget](doc/images/screenshot-waveform-widget.png)
 ![Scope widget monitoring a named audio channel](doc/images/screenshot-scope-widget.png)
 ![Whole-manual search](doc/images/screenshot-manual-search.png)
 
