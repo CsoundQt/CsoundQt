@@ -597,18 +597,27 @@ void WidgetLayout::setValue(QString channelName, double value)
 
 void WidgetLayout::setValue(QString channelName, QString value)
 {
-    auto widgets = channelNameToWidgets.constFind(channelName);
     widgetsMutex.lock();
+    auto widgets = channelNameToWidgets.constFind(channelName);
     if(widgets == channelNameToWidgets.end()) {
+        // First time: discover all widgets bound to this channel and cache the
+        // full list. The map is normally built by setupChannels(), but that only
+        // runs when Csound starts, so this path must also work without it.
+        QList<QuteWidget *> matches;
+        bool matchedByUuid = false;
         for (int i = 0; i < m_widgets.size(); i++) {
             auto w = m_widgets[i];
             if (w->getChannelName() == channelName) {
                 w->setValue(value);
-                channelNameToWidgets.insert(channelName, {w});
-            } else if (w->getUuid() == channelName) {
+                matches.append(w);
+            } else if (!matchedByUuid && w->getUuid() == channelName) {
+                // Channel name is a widget uuid: not cached by channel.
                 w->setValue(value);
-                break;
-            }    
+                matchedByUuid = true;
+            }
+        }
+        if (!matches.isEmpty()) {
+            channelNameToWidgets.insert(channelName, matches);
         }
     } else {
         for(const auto& w: widgets.value()) {
@@ -617,7 +626,7 @@ void WidgetLayout::setValue(QString channelName, QString value)
             }
         }
     }
-    widgetsMutex.unlock(); 
+    widgetsMutex.unlock();
 }
 
 void WidgetLayout::setValue(int index, double value)
@@ -784,74 +793,49 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         }
         widget = static_cast<QuteWidget *>(w);
     }
+    // Widgets report value changes through QuteWidget::newValue(); the signals are
+    // connected centrally in registerWidget() so that every creation path (XML
+    // loader and programmatic) is wired the same way.
     else if (type == "BSBSpinBox") {
         widget = static_cast<QuteSpinBox *>(new QuteSpinBox(this));
-        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-                this, SLOT(newValue(QPair<QString,double>)));
     }
     else if (type == "BSBLineEdit") {
         widget = static_cast<QuteLineEdit *>(new QuteLineEdit(this));
         forceBackground = true;
-        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-                this, SLOT(newValue(QPair<QString,double>)));
-        // Caller #2 of WidgetLayout::newValue(QString): the widget emits this from
-        // GUI interaction, so it is delivered on the GUI thread (direct connection).
-        connect(widget, SIGNAL(newValue(QPair<QString,QString>)),
-                this, SLOT(newValue(QPair<QString,QString>)));
     }
     else if (type == "BSBCheckBox") {
         widget = static_cast<QuteWidget *>(new QuteCheckBox(this));
-        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-                this, SLOT(newValue(QPair<QString,double>)));
     }
     else if (type == "BSBSlider" || type == "BSBHSlider" || type == "BSBVSlider") {
         widget = static_cast<QuteWidget *>( new QuteSlider(this));
-        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-                this, SLOT(newValue(QPair<QString,double>)));
     }
     else if (type == "BSBKnob") {
         widget = static_cast<QuteWidget *>(new QuteKnob(this));
-        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-                this, SLOT(newValue(QPair<QString,double>)));
     }
     else if (type == "BSBScrollNumber") {
         QuteScrollNumber *w = new QuteScrollNumber(this);
         w->setFontOffset(m_fontOffset);
         w->setFontScaling(m_fontScaling);
         widget = static_cast<QuteWidget *>(w);
-        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-                this, SLOT(newValue(QPair<QString,double>)));
     }
     else if (type == "BSBButton") {
         QuteButton *w = new QuteButton(this);
         widget = static_cast<QuteWidget *>(w);
         connect(widget, SIGNAL(queueEventSignal(QString)),
                 this, SLOT(queueEvent(QString)));
-        // Caller #2 of WidgetLayout::newValue(QString): emitted from GUI interaction,
-        // so delivered on the GUI thread (direct connection).
-        connect(widget, SIGNAL(newValue(QPair<QString,QString>)),
-                this, SLOT(newValue(QPair<QString,QString>)));
-        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-                this, SLOT(newValue(QPair<QString,double>)));
         emit registerButton(w);
     }
     else if (type == "BSBDropdown") {
         widget = static_cast<QuteWidget *>(new QuteComboBox(this));
-        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-                this, SLOT(newValue(QPair<QString,double>)));
     }
     else if (type == "BSBController") {
         //auto t0 = std::chrono::high_resolution_clock::now();
         auto w = new QuteMeter(this);
         widget = static_cast<QuteWidget *>(w);
-        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-                this, SLOT(newValue(QPair<QString,double>)));
     }
     else if (type == "BSBGraph") {
         QuteGraph *w = new QuteGraph(this);
         widget = static_cast<QuteWidget *>(w);
-        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-                this, SLOT(newValue(QPair<QString,double>)));
         connect(w, SIGNAL(requestUpdateCurve(Curve*)),
                 this, SLOT(processUpdateCurve(Curve*)));
         for (int i = 0; i < curves.size(); i++) {
@@ -871,7 +855,6 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         QuteConsole *w = new QuteConsole(this);
         widget = static_cast<QuteWidget *>(w);
         consoleWidgets.append(w);
-        //    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
     }
     else if (type == "BSBTableDisplay") {
         auto w = new QuteTable(this);
@@ -881,8 +864,6 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
     else if (type == "BSBWaveform") {
         auto w = new QuteWaveform(this);
         widget = static_cast<QuteWidget *>(w);
-        connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-                this, SLOT(newValue(QPair<QString,double>)));
         waveformWidgets.append(w);
         emit requestCsoundUserData(widget);
     }
@@ -903,6 +884,7 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         QDomElement node = childNodes.item(i).toElement();
         QString nodeName = node.nodeName();
         if (nodeName == "color" || nodeName == "bgcolor"
+                || nodeName == "bordercolor"
                 || nodeName == "cursorcolor") {  // COLOR type
             if (node.attribute("mode") == "background") {
                 widget->setProperty("CSQT_bgcolormode", true);
@@ -955,7 +937,8 @@ int WidgetLayout::newXmlWidget(QDomNode mainnode, bool offset, bool newId)
         }
         else if (nodeName == "randomizable" || nodeName == "selected"
                  || nodeName == "visible"
-                 || nodeName == "flatStyle" ) {  // BOOL type
+                 || nodeName == "flatStyle"
+                 || nodeName == "instant" ) {  // BOOL type
             QDomNode n = node.firstChild();
             if (nodeName == "randomizable") {
                 if (node.attribute("group") != "") {
@@ -1202,6 +1185,14 @@ void WidgetLayout::registerWidget(QuteWidget * widget)
     // Forward user facing messages from widgets to the Csound console
     connect(widget, SIGNAL(logMessage(QString,int)),
             this, SIGNAL(logMessage(QString,int)) );
+    // Widgets report value changes (from GUI interaction) through these signals,
+    // and newValue() distributes the value to every widget sharing the channel.
+    // Connected here so all creation paths are wired identically and widget
+    // synchronization works even when Csound is not running.
+    connect(widget, SIGNAL(newValue(QPair<QString,double>)),
+            this, SLOT(newValue(QPair<QString,double>)));
+    connect(widget, SIGNAL(newValue(QPair<QString,QString>)),
+            this, SLOT(newValue(QPair<QString,QString>)));
     m_widgets.append(widget);
     if (!widget->getWidgetName().isEmpty()) {
         m_widgetNameToWidget.insert(widget->getWidgetName(), widget);
@@ -3208,8 +3199,6 @@ QString WidgetLayout::createSlider(int x, int y, int width, int height, QString 
         widget->setProperty("CSQT_objectName", channelName);
     }
     widget->applyInternalProperties();
-    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this,
-            SLOT(newValue(QPair<QString,double>)));
     registerWidget(widget);
     return widget->getUuid();
 }
@@ -3303,8 +3292,6 @@ QString WidgetLayout::createScrollNumber(int x, int y, int width, int height, QS
     widget->setProperty("CSQT_value", labelText.toDouble());
     //  widget->setValue(labelText.toDouble());
     widget->applyInternalProperties();
-    connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-            this, SLOT(newValue(QPair<QString,double>)));
     registerWidget(widget);
     return widget->getUuid();
 }
@@ -3388,7 +3375,6 @@ QString WidgetLayout::createSpinBox(int x, int y, int width, int height, QString
     }
     labelText.chop(1);
     widget->setProperty("CSQT_value", labelText.toDouble());
-    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
     widget->applyInternalProperties();
     registerWidget(widget);
     return widget->getUuid();
@@ -3420,11 +3406,6 @@ QString WidgetLayout::createButton(int x, int y, int width, int height, QString 
         widget->setProperty("CSQT_eventLine", quoteParts[6]);
     }
     connect(widget, SIGNAL(queueEventSignal(QString)), this, SLOT(queueEvent(QString)));
-    // Caller #2 of WidgetLayout::newValue(QString): emitted from GUI interaction,
-    // so delivered on the GUI thread (direct connection).
-    connect(widget, SIGNAL(newValue(QPair<QString,QString>)),
-            this, SLOT(newValue(QPair<QString,QString>)));
-    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
     emit registerButton(widget);
     widget->applyInternalProperties();
     registerWidget(widget);
@@ -3454,7 +3435,6 @@ QString WidgetLayout::createKnob(int x, int y, int width, int height, QString wi
         channelName.chop(1);  //remove last space
         widget->setProperty("CSQT_objectName", channelName);
     }
-    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
     widget->applyInternalProperties();
     registerWidget(widget);
     return widget->getUuid();
@@ -3479,7 +3459,6 @@ QString WidgetLayout::createCheckBox(int x, int y, int width, int height, QStrin
         channelName.chop(1);  //remove last space
         widget->setProperty("CSQT_objectName", channelName);
     }
-    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
     widget->applyInternalProperties();
     registerWidget(widget);
     return widget->getUuid();
@@ -3500,7 +3479,6 @@ QString WidgetLayout::createMenu(int x, int y, int width, int height, QString wi
     widget->setProperty("CSQT_selectedIndex", parts[5].toInt());
 
     widget->setText(quoteParts[1]);
-    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
     widget->applyInternalProperties();
     registerWidget(widget);
     return widget->getUuid();
@@ -3540,7 +3518,6 @@ QString WidgetLayout::createMeter(int x, int y, int width, int height, QString w
     widget->setProperty("CSQT_yMax", 1.0);
     //  widget->setBehavior(parts2[4]);
 
-    connect(widget, SIGNAL(newValue(QPair<QString,double>)), this, SLOT(newValue(QPair<QString,double>)));
     widget->applyInternalProperties();
     registerWidget(widget);
     return widget->getUuid();
@@ -3683,8 +3660,6 @@ QString WidgetLayout::createWaveform(int x, int y, int width, int height, QStrin
     const QString base = "wave" + QString::number(m_widgets.size());
     widget->setProperty("CSQT_objectName", base + "Table");
     widget->setProperty("CSQT_objectName2", base + "Cursor");
-    connect(widget, SIGNAL(newValue(QPair<QString,double>)),
-            this, SLOT(newValue(QPair<QString,double>)));
     emit requestCsoundUserData(widget);
     registerWidget(widget);
     waveformWidgets.append(widget);

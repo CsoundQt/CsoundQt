@@ -73,11 +73,13 @@ protected:
 	//Configuration options
 	double m_fontScaling, m_fontOffset;
 
-	QTextEdit *text;
+    QTextEdit *text;
     // QPushButton *textColor;
     SelectColorButton *textColor;
    //  QPushButton *bgColor;
     SelectColorButton *bgColor;
+    SelectColorButton *borderColor = nullptr; // invalid/empty = follow text color
+    bool m_borderColorSet = false;
     QCheckBox *bg;
     // QCheckBox *border;
 	QSpinBox *borderRadius;
@@ -114,13 +116,19 @@ public:
 	virtual bool applyProperty(const QString &name);
 	virtual QString getCabbageLine();
     QuteWidgetType getWidgetTypeID() override;
-    
+
 protected:
 	virtual void createPropertiesDialog();
-	//    virtual void applyProperties();
+	virtual void applyProperties();
+	bool eventFilter(QObject *obj, QEvent *event) override;
 
-protected slots:
+private:
+	QCheckBox *instantCheckBox = nullptr;
+
+private slots:
 	void textEdited(QString text);
+	void applyText();
+	void escapePressed();
 };
 
 class QuteScrollNumber : public QuteText

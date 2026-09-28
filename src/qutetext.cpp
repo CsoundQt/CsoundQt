@@ -26,6 +26,32 @@
 
 #define USEFONTPIXELSIZE
 
+// Resolve a border color property: an explicit QColor, else a colour string
+// (as sent at runtime via outvalue). An invalid result means "follow the text
+// colour".
+static QColor borderColorFromVariant(const QVariant &value)
+{
+	QColor color = value.value<QColor>();
+	if (!color.isValid() && !value.toString().isEmpty()) {
+		color = QColor(value.toString());
+	}
+	return color;
+}
+
+// Serialize an explicitly set border color. An unset border color is simply not
+// written, so it keeps following the text colour after a reload.
+static void writeBorderColorElement(QXmlStreamWriter &s, const QVariant &value)
+{
+	const QColor color = borderColorFromVariant(value);
+	if (!color.isValid())
+		return;
+	s.writeStartElement("bordercolor");
+	s.writeTextElement("r", QString::number(color.red()));
+	s.writeTextElement("g", QString::number(color.green()));
+	s.writeTextElement("b", QString::number(color.blue()));
+	s.writeEndElement();
+}
+
 QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 {
 	m_value = 0.0;
@@ -49,6 +75,8 @@ QuteText::QuteText(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_bgcolor", qApp->palette().color(QPalette::Window));
 	setProperty("CSQT_bgcolormode", false);
 	setProperty("CSQT_color", qApp->palette().color(QPalette::WindowText));
+	// An invalid border color means "use the text color".
+	setProperty("CSQT_bordercolor", QColor());
 	setProperty("CSQT_bordermode", "noborder");
 	setProperty("CSQT_borderradius", 1);
 	setProperty("CSQT_borderwidth", 1);
@@ -255,7 +283,8 @@ void QuteText::applyInternalProperties()
         align |= Qt::AlignRight;
     }
 	static_cast<QLabel*>(m_widget)->setAlignment(align);
-	setTextColor(property("CSQT_color").value<QColor>());
+	QColor textColor = property("CSQT_color").value<QColor>();
+	setTextColor(textColor);
     int borderWidth = property("CSQT_borderwidth").toInt();
     QString bordermode = property("CSQT_bordermode").toString();
     if(bordermode == "noborder" && borderWidth > 0) {
@@ -265,6 +294,11 @@ void QuteText::applyInternalProperties()
         setProperty("CSQT_bordermode", "noborder");
     }
     QString borderStyle = borderWidth > 0 ? "solid" : "none";
+    // Border color falls back to the text color when not set explicitly.
+    QColor borderCol = borderColorFromVariant(property("CSQT_bordercolor"));
+    if (!borderCol.isValid()) {
+        borderCol = textColor;
+    }
 
     double scaledFontSize = property("CSQT_fontsize").toDouble() * m_fontScaling;
     double fontSize = scaledFontSize + m_fontOffset;
@@ -288,8 +322,8 @@ void QuteText::applyInternalProperties()
             // + "; font-size: " + QString::number(new_fontSize) + "pt"
             + "; font-size: " + QString::number(fontSize) + "px"
             + bgstr
-            + "; color:" + property("CSQT_color").value<QColor>().name()
-            + "; border-color:" + property("CSQT_color").value<QColor>().name()
+            + "; color:" + textColor.name()
+            + "; border-color:" + borderCol.name()
             + "; border-radius:" + QString::number(property("CSQT_borderradius").toInt()) + "px"
             + "; border-width: " + QString::number(borderWidth) + "px"
             + "; border-style: " + borderStyle
@@ -471,6 +505,8 @@ QString QuteText::getWidgetXmlText()
 	s.writeTextElement("b", QString::number(color.blue()));
 	s.writeEndElement();
 
+	// Only persist an explicit border color; an absent one means "text color".
+	writeBorderColorElement(s, property("CSQT_bordercolor"));
 	s.writeTextElement("bordermode", property("CSQT_bordermode").toString());
 	s.writeTextElement("borderradius", QString::number(property("CSQT_borderradius").toInt()));
 	s.writeTextElement("borderwidth", QString::number(property("CSQT_borderwidth").toInt()));
@@ -531,7 +567,27 @@ void QuteText::createPropertiesDialog()
     precisionSpinBox->setValue(property("CSQT_precision").toInt());
     layout->addWidget(precisionSpinBox, 7, 1, Qt::AlignLeft|Qt::AlignVCenter);
 
-
+    label = new QLabel(tr("Border Color"), dialog);
+    label->setToolTip(tr("Color of the border. Defaults to the text color when not set."));
+    layout->addWidget(label, 7, 2, Qt::AlignRight|Qt::AlignVCenter);
+    labelPtrs["borderColor"] = label;
+    borderColor = new SelectColorButton(dialog);
+    {
+        QColor storedBorder = property("CSQT_bordercolor").value<QColor>();
+        m_borderColorSet = storedBorder.isValid();
+        borderColor->setColor(m_borderColorSet ? storedBorder
+                                               : property("CSQT_color").value<QColor>());
+    }
+    layout->addWidget(borderColor, 7, 3, Qt::AlignLeft|Qt::AlignVCenter);
+    // While the border color is unset it follows the text color.
+    connect(textColor, &SelectColorButton::clicked, this, [this]() {
+        if (!m_borderColorSet) {
+            borderColor->setColor(textColor->getColor());
+        }
+    });
+    connect(borderColor, &SelectColorButton::clicked, this, [this]() {
+        m_borderColorSet = true;
+    });
 
     // border = new QCheckBox("Border", dialog);
     // layout->addWidget(border, 7,2, Qt::AlignLeft|Qt::AlignVCenter);
@@ -692,6 +748,9 @@ void QuteText::applyProperties()
     setProperty("CSQT_bgcolormode", bg->isChecked());
     // setProperty("CSQT_color", textColor->palette().color(QPalette::Window));
     setProperty("CSQT_color", textColor->getColor());
+    // Invalid when unset, so the border follows the text color.
+    setProperty("CSQT_bordercolor",
+                (m_borderColorSet && borderColor) ? borderColor->getColor() : QColor());
     setProperty("CSQT_bordermode", borderWidth->value() > 0);
     setProperty("CSQT_borderradius", borderRadius->value());
 	setProperty("CSQT_borderwidth", borderWidth->value());
@@ -746,13 +805,25 @@ QuteLineEdit::QuteLineEdit(QWidget* parent) : QuteText(parent)
 	m_widget->setContextMenuPolicy(Qt::NoContextMenu);
 	connect(static_cast<QLineEdit*>(m_widget), SIGNAL(textEdited(QString)),
 			this, SLOT(textEdited(QString)));
+	// Apply on Enter only (used when CSQT_instant is false). Focus loss must not
+	// apply, otherwise Escape-to-canvas would commit the edit.
+	connect(static_cast<QLineEdit*>(m_widget), SIGNAL(returnPressed()),
+			this, SLOT(applyText()));
+	// Escape is intercepted to move focus to the canvas without applying.
+	m_widget->installEventFilter(this);
 	//   connect(static_cast<QLineEdit*>(m_widget), SIGNAL(popUpMenu(QPoint)), this, SLOT(popUpMenu(QPoint)));
 	m_type = "edit";
 	m_typeid = QuteWidgetType::LINEEDIT;
-	
-	setProperty("CSQT_bordermode", QVariant()); // Remove these property
-	setProperty("CSQT_borderradius", QVariant()); // Remove these property
-	setProperty("CSQT_borderwidth", QVariant()); // Remove these property
+
+	// When true (default) every keystroke is reported to the channel, which was
+	// the behaviour before this option existed. When false, only Enter applies.
+	setProperty("CSQT_instant", true);
+
+	// Border support. Default width/radius 0 keeps the previous borderless,
+	// square look; the user can raise them in the properties dialog.
+	setProperty("CSQT_bordermode", "noborder");
+	setProperty("CSQT_borderradius", 0);
+	setProperty("CSQT_borderwidth", 0);
 
     // Necessary to pass mouse tracking to widget panel for _MouseX channels
     m_widget->setMouseTracking(true);
@@ -773,6 +844,15 @@ QuteWidgetType QuteLineEdit::getWidgetTypeID() { return QuteWidgetType::LINEEDIT
 void QuteLineEdit::setText(QString text)
 {
 	setProperty("CSQT_label", text);
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.lockForWrite();
+#endif
+	// m_stringValue is the applied value (reported to the channel and returned by
+	// getValue()/getStringValue()), so keep it in sync with the displayed text.
+	m_stringValue = text;
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.unlock();
+#endif
 	int cursorPos = static_cast<QLineEdit*>(m_widget)->cursorPosition();
 	m_widget->blockSignals(true);
 	static_cast<QLineEdit*>(m_widget)->setText(text);
@@ -801,7 +881,7 @@ QString QuteLineEdit::getWidgetLine()
 			+ ", " + QString::number(color.blue() * 256) + "} ";
 	line += property("CSQT_bgcolormode").toBool() ? "true":"false";
 	line += "noborder ";
-	line += static_cast<QLineEdit*>(m_widget)->text();
+	line += m_stringValue;
 	//   qDebug("QuteLineEdit::getWidgetLine() %s", line.toStdString().c_str());
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -818,7 +898,9 @@ QString QuteLineEdit::getWidgetXmlText()
 	widgetLock.lockForRead();
 #endif
 
-	s.writeTextElement("label",  static_cast<QLineEdit *>(m_widget)->text());
+	// Persist the applied value, not a live edit that has not been committed.
+	s.writeTextElement("label",  m_stringValue);
+	s.writeTextElement("instant", property("CSQT_instant").toBool() ? "true" : "false");
 	s.writeTextElement("alignment", property("CSQT_alignment").toString());
 
 	s.writeTextElement("font", property("CSQT_font").toString());
@@ -840,11 +922,10 @@ QString QuteLineEdit::getWidgetXmlText()
 	s.writeEndElement();
 
 	s.writeTextElement("background", m_widget->autoFillBackground()? "background":"nobackground");
-	//  s.writeTextElement("border", "border");
-	//
-	//  s.writeTextElement("bordermode", property("CSQT_bordermode").toString());
-	//  s.writeTextElement("borderradius", QString::number(property("CSQT_borderradius").toInt()));
-	//  s.writeTextElement("randomizable", "");
+	writeBorderColorElement(s, property("CSQT_bordercolor"));
+	s.writeTextElement("bordermode", property("CSQT_borderwidth").toInt() > 0 ? "border" : "noborder");
+	s.writeTextElement("borderradius", QString::number(property("CSQT_borderradius").toInt()));
+	s.writeTextElement("borderwidth", QString::number(property("CSQT_borderwidth").toInt()));
 	s.writeEndElement();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
@@ -859,10 +940,12 @@ QString QuteLineEdit::getWidgetType()
 
 QString QuteLineEdit::getStringValue()
 {
+	// Return the applied value, not the (possibly unapplied) live edit, so that
+	// every channel query sees only what the user committed.
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
-	QString stringValue = static_cast<QLineEdit *>(m_widget)->text();
+	QString stringValue = m_stringValue;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -874,7 +957,7 @@ double QuteLineEdit::getValue()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
-	double value = static_cast<QLineEdit *>(m_widget)->text().toDouble();
+	double value = m_stringValue.toDouble();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
@@ -890,6 +973,12 @@ bool QuteLineEdit::applyProperty(const QString &name)
 	}
 	if (name == "CSQT_color") {
 		setTextColor(property("CSQT_color").value<QColor>());
+		return true;
+	}
+	if (name == "CSQT_instant") {
+		// Behaviour is read directly from the property in textEdited(), so there
+		// is nothing to push to the live widget. Handling it here avoids falling
+		// back to a full applyInternalProperties() for a runtime message.
 		return true;
 	}
 	return QuteWidget::applyProperty(name);
@@ -916,8 +1005,16 @@ void QuteLineEdit::applyInternalProperties()
 		align = Qt::AlignRight|Qt::AlignVCenter;
 	}
 	static_cast<QLineEdit*>(m_widget)->setAlignment(align);
-	setTextColor(property("CSQT_color").value<QColor>());
-	QString borderStyle = (property("CSQT_bordermode").toString() == "border" ? "solid": "none");
+	QColor textColor = property("CSQT_color").value<QColor>();
+	setTextColor(textColor);
+	int borderWidth = property("CSQT_borderwidth").toInt();
+	int borderRadius = property("CSQT_borderradius").toInt();
+	QString borderStyle = borderWidth > 0 ? "solid" : "none";
+	// Border color falls back to the text color when not set explicitly.
+	QColor borderCol = borderColorFromVariant(property("CSQT_bordercolor"));
+	if (!borderCol.isValid()) {
+		borderCol = textColor;
+	}
 
 	double fontSize = (property("CSQT_fontsize").toDouble()*m_fontScaling) + m_fontOffset;
 
@@ -926,10 +1023,10 @@ void QuteLineEdit::applyInternalProperties()
                             + "\"; font-size: " + QString::number(fontSize) + "px"
                             + (property("CSQT_bgcolormode").toBool() ?
                                    QString("; background-color:") + property("CSQT_bgcolor").value<QColor>().name() : QString("; "))
-                            + "; color:" + property("CSQT_color").value<QColor>().name()
-                            + "; border-color:" + property("CSQT_color").value<QColor>().name()
-                            + "; border-radius:" + QString::number(property("CSQT_borderradius").toInt()) + "px"
-                            + "; border-width:" + QString::number(property("CSQT_borderwidth").toInt()) + "px"
+                            + "; color:" + textColor.name()
+                            + "; border-color:" + borderCol.name()
+                            + "; border-radius:" + QString::number(borderRadius) + "px"
+                            + "; border-width:" + QString::number(borderWidth) + "px"
                             + "; border-style: " + borderStyle
                             + "; }");
 #else
@@ -946,10 +1043,10 @@ void QuteLineEdit::applyInternalProperties()
 							+ "\"; font-size: " + QString::number(new_fontSize)  + "pt"
 							+ (property("CSQT_bgcolormode").toBool() ?
 								   QString("; background-color:") + property("CSQT_bgcolor").value<QColor>().name() : QString("; "))
-							+ "; color:" + property("CSQT_color").value<QColor>().name()
-							+ "; border-color:" + property("CSQT_color").value<QColor>().name()
-							+ "; border-radius:" + QString::number(property("CSQT_borderradius").toInt()) + "px"
-							+ "; border-width:" + QString::number(property("CSQT_borderwidth").toInt()) + "px"
+							+ "; color:" + textColor.name()
+							+ "; border-color:" + borderCol.name()
+							+ "; border-radius:" + QString::number(borderRadius) + "px"
+							+ "; border-width:" + QString::number(borderWidth) + "px"
 							+ "; border-style: " + borderStyle
 							+ "; }");
 #endif
@@ -990,8 +1087,6 @@ void QuteLineEdit::createPropertiesDialog()
 	//  bg->hide();
 	//  textColor->hide();
 	//  bgColor->hide();
-	borderRadius->hide();
-	borderWidth->hide();
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -999,29 +1094,30 @@ void QuteLineEdit::createPropertiesDialog()
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();
 #endif
+
+	instantCheckBox = new QCheckBox(tr("Instant"), dialog);
+	instantCheckBox->setToolTip(tr("Report every keystroke to the channel. When "
+								   "unchecked, the text is reported only when Enter "
+								   "is pressed; Escape leaves the edited text without "
+								   "applying it."));
+	instantCheckBox->setChecked(property("CSQT_instant").toBool());
+	layout->addWidget(instantCheckBox, 12, 1, Qt::AlignLeft|Qt::AlignVCenter);
 }
 
-//void QuteLineEdit::applyProperties()
-//{
-//  setProperty("CSQT_label", text->toPlainText());
-//  switch (alignment->currentIndex()) {
-//    case 0:
-//      setProperty("CSQT_alignment", "left");
-//      break;
-//    case 1:
-//      setProperty("CSQT_alignment", "center");
-//      break;
-//    case 2:
-//      setProperty("CSQT_alignment", "right");
-//      break;
-//    default:
-//      setProperty("CSQT_alignment", "");
-//  }
-//  QuteWidget::applyProperties();  //Must be last to make sure the widgetChanged signal is last
-//}
+void QuteLineEdit::applyProperties()
+{
+	setProperty("CSQT_instant", instantCheckBox != nullptr && instantCheckBox->isChecked());
+	QuteText::applyProperties();  //Must be last to make sure the widgetChanged signal is last
+}
 
 void QuteLineEdit::textEdited(QString text)
 {
+	if (!property("CSQT_instant").toBool()) {
+		// Non-instant mode: the live edit stays in the QLineEdit but is not
+		// stored as the applied value and is not reported to the channel. It is
+		// committed later by applyText() (Enter).
+		return;
+	}
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.lockForRead();
 #endif
@@ -1032,6 +1128,39 @@ void QuteLineEdit::textEdited(QString text)
 	widgetLock.unlock();
 #endif
 	emit newValue(channelValue);
+}
+
+void QuteLineEdit::applyText()
+{
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.lockForRead();
+#endif
+	m_stringValue = static_cast<QLineEdit *>(m_widget)->text();
+	m_valueChanged = true;
+	QPair<QString, QString> channelValue(m_channel, m_stringValue);
+#ifdef  USE_WIDGET_MUTEX
+	widgetLock.unlock();
+#endif
+	emit newValue(channelValue);
+}
+
+void QuteLineEdit::escapePressed()
+{
+	// Leave the edited text in place (not reverted), just move focus to the
+	// canvas. Since no newValue() is emitted, the change is not applied.
+	parentWidget()->setFocus(Qt::OtherFocusReason);
+}
+
+bool QuteLineEdit::eventFilter(QObject *obj, QEvent *event)
+{
+	if (obj == m_widget && event->type() == QEvent::KeyPress) {
+		QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+		if (keyEvent->key() == Qt::Key_Escape) {
+			escapePressed();
+			return true; // Consume: do not propagate to Csound as key 27
+		}
+	}
+	return QuteText::eventFilter(obj, event);
 }
 
 /* -----------------------------------------------------------------*/
@@ -1191,6 +1320,7 @@ QString QuteScrollNumber::getWidgetXmlText()
 	s.writeTextElement("resolution", QString::number(property("CSQT_resolution").toDouble(), 'f', 8));
 	s.writeTextElement("minimum", QString::number(property("CSQT_minimum").toDouble(), 'f', 8));
 	s.writeTextElement("maximum", QString::number(property("CSQT_maximum").toDouble(), 'f', 8));
+	writeBorderColorElement(s, property("CSQT_bordercolor"));
 	s.writeTextElement("bordermode", property("CSQT_bordermode").toString());
 	s.writeTextElement("borderradius", QString::number(property("CSQT_borderradius").toInt()));
 	s.writeTextElement("borderwidth", QString::number(property("CSQT_borderwidth").toInt()));

@@ -78,6 +78,8 @@ CsoundEngine::~CsoundEngine()
     ud->runDispatcher = false;
     m_msgUpdateThread.waitForFinished(); // Join the message thread
     stop();
+    qDeleteAll(m_audioMonitors);
+    m_audioMonitors.clear();
 #ifndef CSQT_DESTROY_CSOUND
     csoundDestroy(ud->csound);
 #endif
@@ -322,7 +324,9 @@ void CsoundEngine::csThread(void *data)
         // outputBufferSize == ksmps
         long numSamples = udata->outputBufferSize * udata->numChnls;
         udata->audioOutputBuffer.putManyScaled(outputBuffer, numSamples,
-                                               1.0/udata->zerodBFS);       
+                                               1.0/udata->zerodBFS);
+        // Copy named audio channels monitored by scope widgets.
+        udata->csEngine->fillAudioChannelMonitors(udata);
     }
 
     if (udata->enableWidgets) {
@@ -571,6 +575,73 @@ void CsoundEngine::requestCsoundUserData(QuteWidget *widget) {
 void CsoundEngine::registerScope(QuteScope *scope)
 {
     scope->setUd(ud);
+}
+
+AudioChannelMonitor *CsoundEngine::acquireAudioMonitor(const QString &name)
+{
+    QMutexLocker locker(&m_audioMonitorsMutex);
+    auto it = m_audioMonitors.find(name);
+    if (it == m_audioMonitors.end()) {
+        auto *monitor = new AudioChannelMonitor;
+        monitor->nameUtf8 = name.toUtf8();
+        it = m_audioMonitors.insert(name, monitor);
+    }
+    (*it)->refCount++;
+    return *it;
+}
+
+void CsoundEngine::releaseAudioMonitor(AudioChannelMonitor *monitor)
+{
+    if (monitor == nullptr) {
+        return;
+    }
+    QMutexLocker locker(&m_audioMonitorsMutex);
+    if (monitor->refCount > 0) {
+        monitor->refCount--;
+    }
+}
+
+void CsoundEngine::resetAudioMonitors()
+{
+    QMutexLocker locker(&m_audioMonitorsMutex);
+    const auto &monitors = m_audioMonitors;
+    for (AudioChannelMonitor *monitor : monitors) {
+        monitor->buffer.allZero();
+    }
+}
+
+void CsoundEngine::fillAudioChannelMonitors(CsoundUserData *ud)
+{
+    // Runs on the performance thread once per k-cycle. Must stay allocation-free
+    // and non-blocking: if the GUI thread holds the lock, skip this cycle.
+    if (!m_audioMonitorsMutex.tryLock(1)) {
+        return;
+    }
+    const int ksmps = static_cast<int>(ud->outputBufferSize);
+    if (m_audioMonitorScratch.size() < ksmps) {
+        m_audioMonitorScratch.resize(ksmps);
+    }
+    const auto &monitors = m_audioMonitors;
+    for (AudioChannelMonitor *monitor : monitors) {
+        if (monitor->refCount <= 0) {
+            continue;
+        }
+        if (monitor->buffer.availableWriteSpace() < ksmps) {
+            continue;
+        }
+        // Only read channels that currently exist and are audio type; otherwise
+        // csoundGetAudioChannel() would leave stale data in the scratch buffer.
+        const char *typeName = csoundGetChannelVarTypeName(ud->csound,
+                                                           monitor->nameUtf8.constData());
+        if (typeName == nullptr || (typeName[0] != 'a' && typeName[0] != 'A')) {
+            continue;
+        }
+        csoundGetAudioChannel(ud->csound, monitor->nameUtf8.constData(),
+                              m_audioMonitorScratch.data());
+        monitor->buffer.putManyScaled(m_audioMonitorScratch.constData(), ksmps,
+                                      1.0 / ud->zerodBFS);
+    }
+    m_audioMonitorsMutex.unlock();
 }
 
 void CsoundEngine::registerGraph(QuteGraph *graph)
@@ -922,6 +993,10 @@ int CsoundEngine::runCsound()
     ud->sampleRate = csoundGetSr(ud->csound);
     ud->numChnls = csoundGetChannels(ud->csound, 0);
     ud->outputBufferSize = csoundGetKsmps(ud->csound);
+    // Preallocate the scratch used to copy monitored audio channels so the
+    // performance thread never allocates, and clear any stale monitor data.
+    m_audioMonitorScratch.resize(static_cast<int>(ud->outputBufferSize));
+    resetAudioMonitors();
     if (ud->enableWidgets) {
         setupChannels();
         setupCallbacks();

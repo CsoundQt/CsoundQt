@@ -31,6 +31,7 @@ ftchnls()).
 */
 
 giWave ftgen 0, 0, 0, 1, "../../SourceMaterials/ClassicalGuitar.wav", 0, 0, 0
+gk_playing = 0
 
 instr 1
   ; Tell the widget that the table is interleaved (stereo), select it and put
@@ -38,20 +39,28 @@ instr 1
   ; outvalue "waveTable/channels", ftchnls(giWave)
   chnset giWave, "waveTable"
   chnset ftlen(giWave) / 4, "waveCursor"
+  chnset 0, "play"
   turnoff
 endin
 
 instr 2
-  ; Read back the cursor set by the user in the widget.
-  kpos chnget "waveCursor"
-  if metro(2) == 1 then
-    printks "cursor = %.0f samples (%.1f%% of the table)\n", 0,
-            kpos, kpos / ftlen(giWave) * 100
+  kkey, kdown = sensekey()
+  if kkey == 32 && kdown == 1 then
+    kplay = active:k(10) > 0 ? 1 : 0
+    if kplay == 0 then
+      chnset k(1), "play"
+      schedulek 10, 0, -1
+    else 
+      chnset k(0), "play"
+      turnoff2 10, 4, 1
+    endif
   endif
+  
+  
 endin
 
 instr 10
-  itab = giWave
+  itab = chnget("waveTable")
   
   kspeed = chnget("speed")
   kamp = 1.0
@@ -59,8 +68,10 @@ instr 10
   imod = 1 ; loop
   iend = nsamp(itab) / ftsr(itab)
   
+  
 _reset:
   ipos chnget "waveCursor"
+  ilen = nsamp(giWave)
   kpos init ipos
   
   asigs[] loscilx kamp, kspeed, itab, 4, 1, ipos, imod, ipos, iend
@@ -71,6 +82,10 @@ _reset:
   endif
   
   kpos += ksmps * kspeed
+  if kpos > ilen then
+    chnset k(0), "play"
+    turnoff
+  endif
   
   if metro:k(30) == 1 then
     chnset kpos, "waveCursor"
@@ -78,12 +93,17 @@ _reset:
   out asigs
 endin
 
-schedule 1, 1, 1
+schedule 1, 0.1, 1
+schedule 2, 0.5, -1
 
 </CsInstruments>
 <CsScore>
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
 
 
 
@@ -103,9 +123,9 @@ schedule 1, 1, 1
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>240</r>
-  <g>240</g>
-  <b>240</b>
+  <r>38</r>
+  <g>38</g>
+  <b>38</b>
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -126,9 +146,9 @@ schedule 1, 1, 1
   <fontsize>24</fontsize>
   <precision>3</precision>
   <color>
-   <r>67</r>
-   <g>67</g>
-   <b>67</b>
+   <r>221</r>
+   <g>221</g>
+   <b>221</b>
   </color>
   <bgcolor mode="nobackground">
    <r>255</r>
@@ -153,7 +173,7 @@ schedule 1, 1, 1
   <description/>
   <value>101</value>
   <objectName2>waveCursor</objectName2>
-  <cursor>2737512</cursor>
+  <cursor>836474</cursor>
   <color>
    <r>80</r>
    <g>200</g>
@@ -201,9 +221,9 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>52</r>
-   <g>52</g>
-   <b>52</b>
+   <r>221</r>
+   <g>221</g>
+   <b>221</b>
   </color>
   <bgcolor mode="nobackground">
    <r>255</r>
@@ -233,9 +253,9 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
   <fontsize>12</fontsize>
   <precision>3</precision>
   <color>
-   <r>88</r>
-   <g>88</g>
-   <b>88</b>
+   <r>163</r>
+   <g>163</g>
+   <b>163</b>
   </color>
   <bgcolor mode="nobackground">
    <r>49</r>
@@ -249,7 +269,7 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
  <bsbObject type="BSBKnob" version="2">
   <objectName>speed</objectName>
   <x>201</x>
-  <y>418</y>
+  <y>415</y>
   <width>80</width>
   <height>80</height>
   <uuid>{0b2db20b-536c-4814-9953-153944b006ae}</uuid>
@@ -260,7 +280,7 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
   <description/>
   <minimum>0.10000000</minimum>
   <maximum>5.00000000</maximum>
-  <value>0.63214000</value>
+  <value>1.55040000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -271,8 +291,8 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
    <b>0</b>
   </color>
   <textcolor>#f57c00</textcolor>
-  <border>0</border>
-  <borderColor>#512900</borderColor>
+  <border>2</border>
+  <borderColor>#f7a34f</borderColor>
   <showvalue>true</showvalue>
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
@@ -280,9 +300,9 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
  <bsbObject type="BSBButton" version="2">
   <objectName>play</objectName>
   <x>75</x>
-  <y>446</y>
+  <y>429</y>
   <width>100</width>
-  <height>30</height>
+  <height>50</height>
   <uuid>{f8d0095d-f980-424a-aded-e5707096f251}</uuid>
   <widgetName/>
   <visible>true</visible>
@@ -305,10 +325,10 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
    <g>66</g>
    <b>49</b>
   </color>
-  <pressedColor>#7eaf94</pressedColor>
+  <pressedColor>#5c9375</pressedColor>
   <borderColor>#5c9375</borderColor>
   <textColor>#ffffff</textColor>
-  <pressedTextColor>#e2e2e2</pressedTextColor>
+  <pressedTextColor>#000000</pressedTextColor>
   <borderWidth>2</borderWidth>
   <borderRadius>3</borderRadius>
  </bsbObject>

@@ -145,9 +145,6 @@ void QuteButton::setValue(double value)
 		m_value = -value;
 	} else {
 		m_currentValue = value != 0 ? m_value : 0.0;
-		if (property("CSQT_latch").toBool()) {
-			static_cast<QPushButton *>(m_widget)->setChecked(m_currentValue != 0);
-		}
 	}
 	m_valueChanged = true;
 #ifdef  USE_WIDGET_MUTEX
@@ -719,6 +716,16 @@ void QuteButton::refreshWidget()
 
 	// setProperty("CSQT_latched", m_currentValue != 0);
 	m_latched = m_currentValue != 0;
+	// Reflect a value pushed from Csound (chnset) or MIDI on the button. This
+	// runs on the GUI thread (the widget update timer), unlike setValue() which
+	// can be called from the Csound performance thread. Works for both native
+	// and flat buttons: QutePushButton::paintEvent() paints from isChecked().
+	if (property("CSQT_latch").toBool()) {
+		auto w = static_cast<QPushButton *>(m_widget);
+		w->blockSignals(true);
+		w->setChecked(m_currentValue != 0);
+		w->blockSignals(false);
+	}
 	m_valueChanged = false;
 #ifdef  USE_WIDGET_MUTEX
 	widgetLock.unlock();

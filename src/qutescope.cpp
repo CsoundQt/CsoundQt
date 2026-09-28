@@ -77,10 +77,30 @@ QuteScope::QuteScope(QWidget *parent) : QuteWidget(parent)
 	setProperty("CSQT_dispy", 1.0);
 	setProperty("CSQT_mode", "lin");
     setProperty("CSQT_triggermode", "NoTrigger");
+	// Optional audio channel to monitor instead of the audio output. The value
+	// is the name of a Csound audio channel (created from the orchestra with
+	// e.g. "chnset asignal, \"name\""). "channel2" is a friendlier alias of the
+	// canonical "objectName2", so it can be set from Csound via
+	// outvalue "<scope channel>/channel2", "myaudio".
+	setProperty("CSQT_objectName2", QString());
+	setProperty("CSQT_channel2", QString());
+
+	// Release the monitored audio channel when the widget is deleted at
+	// runtime (the engine is still alive here; only teardown skips this).
+	connect(this, &QuteWidget::deleteThisWidget, this, [this](QuteWidget *) {
+		if (m_monitor != nullptr && m_params != nullptr && m_params->ud != nullptr
+		        && m_params->ud->csEngine != nullptr) {
+			m_params->ud->csEngine->releaseAudioMonitor(m_monitor);
+			m_monitor = nullptr;
+		}
+	});
 }
 
 QuteScope::~QuteScope()
 {
+	// Note: the monitor is not released here. During document teardown the
+	// engine is destroyed before its widgets, so touching m_params->ud would be
+	// a use-after-free; the engine frees all monitors in its own destructor.
 	delete m_poincareData;
 	delete m_lissajouData;
 	delete m_scopeData;
@@ -135,6 +155,7 @@ QString QuteScope::getWidgetXmlText()
 	widgetLock.lockForRead();
 #endif
 
+	s.writeTextElement("objectName2", m_channel2);
 	s.writeTextElement("value", QString::number(m_value, 'f', 8));
 	s.writeTextElement("type", property("CSQT_type").toString());
 	s.writeTextElement("zoomx", QString::number(zoomx(), 'f', 8));
@@ -185,7 +206,11 @@ void QuteScope::setUd(CsoundUserData *ud)
 void QuteScope::updateLabel()
 {
 	QString chan;
-	if ((int) m_value < 0) {
+	if (!m_channel2.isEmpty()) {
+		// Monitoring a named audio channel instead of the output.
+		chan = m_channel2;
+	}
+	else if ((int) m_value < 0) {
         chan = tr("all", "meaning 'all' channels in scope, 4 letter max");
 	}
 	else if ((int) m_value <= 0) {
@@ -208,12 +233,22 @@ bool QuteScope::applyProperty(const QString &name)
 		setType(property("CSQT_type").toString());
 		return true;
 	}
+	if (name == "CSQT_objectName2" || name == "CSQT_channel2") {
+		const QByteArray key = name.toLatin1();
+		const QString name2 = property(key.constData()).toString();
+		setProperty("CSQT_objectName2", name2);
+		setProperty("CSQT_channel2", name2);
+		m_channel2 = name2;
+		return true;
+	}
 	return QuteWidget::applyProperty(name);
 }
 
 void QuteScope::applyInternalProperties()
 {
 	QuteWidget::applyInternalProperties();
+	// Keep the "channel2" alias in sync with the canonical objectName2.
+	setProperty("CSQT_channel2", m_channel2);
 	setType(property("CSQT_type").toString());
 	setValue(property("CSQT_value").toDouble());
     m_params->triggerMode = triggerNameToMode(property("CSQT_triggermode").toString());
@@ -248,6 +283,14 @@ void QuteScope::createPropertiesDialog()
     }
     channelBox->addItem("none", QVariant((int) 0));
 	layout->addWidget(channelBox, 6, 3, Qt::AlignLeft|Qt::AlignVCenter);
+	label = new QLabel(tr("Audio Channel"));
+	label->setToolTip(tr("Name of a Csound audio channel (created with e.g. "
+	                     "chnset asignal, \"name\") to monitor instead of the "
+	                     "audio output. Leave empty to scope the output."));
+	layout->addWidget(label, 7, 0, Qt::AlignRight|Qt::AlignVCenter);
+	name2LineEdit = new QLineEdit(dialog);
+	name2LineEdit->setToolTip(label->toolTip());
+	layout->addWidget(name2LineEdit, 7, 1, 1, 3, Qt::AlignLeft|Qt::AlignVCenter);
 	label = new QLabel(dialog);
 	label->setText("Zoom X");
 	layout->addWidget(label, 8, 0, Qt::AlignRight|Qt::AlignVCenter);
@@ -265,6 +308,7 @@ void QuteScope::createPropertiesDialog()
 #endif
 	typeComboBox->setCurrentIndex(typeComboBox->findData(QVariant(property("CSQT_type").toString())));
 	channelBox->setCurrentIndex(channelBox->findData(QVariant((int) m_value)));
+	name2LineEdit->setText(getChannel2Name());
 	zoomxBox->setValue(zoomx());
 	zoomyBox->setValue(zoomy());
 
@@ -289,6 +333,9 @@ void QuteScope::applyProperties()
 	setZoomx(zoomxBox->value());
 	setZoomy(zoomyBox->value());
 	setProperty("CSQT_value", channelBox->itemData(channelBox->currentIndex()).toInt());
+	const QString monitorChannel = name2LineEdit != nullptr ? name2LineEdit->text().trimmed() : QString();
+	setProperty("CSQT_objectName2", monitorChannel);
+	setProperty("CSQT_channel2", monitorChannel);
     auto triggerModeStr = triggerBox->currentData().toString();
     setProperty("CSQT_triggermode", triggerModeStr);
     m_params->triggerMode = triggerNameToMode(triggerModeStr);
@@ -312,9 +359,43 @@ void QuteScope::resizeEvent(QResizeEvent * event)
 	//   static_cast<ScopeWidget *>(m_widget)->setSceneRect(-m_ud->zerodBFS , m_ud->zerodBFS, width() - 5, m_ud->zerodBFS *2);
 }
 
+void QuteScope::updateMonitor()
+{
+    CsoundUserData *ud = m_params->ud;
+    if (ud == nullptr || ud->csEngine == nullptr) {
+        return;
+    }
+    if (m_channel2 == m_activeMonitorName) {
+        return;
+    }
+    if (m_monitor != nullptr) {
+        ud->csEngine->releaseAudioMonitor(m_monitor);
+        m_monitor = nullptr;
+    }
+    m_activeMonitorName = m_channel2;
+    if (!m_activeMonitorName.isEmpty()) {
+        m_monitor = ud->csEngine->acquireAudioMonitor(m_activeMonitorName);
+    }
+    updateLabel();
+}
+
 void QuteScope::updateData()
 {
-    m_dataDisplay->updateData((int) m_value,
+    CsoundUserData *ud = m_params->ud;
+    if (ud == nullptr) {
+        return;
+    }
+    updateMonitor();
+    RingBuffer *buffer = &ud->audioOutputBuffer;
+    int numChnls = ud->numChnls;
+    int channel = (int) m_value;
+    if (m_monitor != nullptr) {
+        // Display the monitored mono audio channel instead of the output.
+        buffer = &m_monitor->buffer;
+        numChnls = 1;
+        channel = 1;
+    }
+    m_dataDisplay->updateData(buffer, numChnls, channel,
                               zoomx(),
                               zoomy(),
                               static_cast<ScopeWidget *>(m_widget)->freeze);
@@ -368,7 +449,8 @@ void ScopeData::resize()
 	curveData.resize(m_params->width + 2);
 }
 
-void ScopeData::updateData(int channel, double zoomx, double zoomy, bool freeze)
+void ScopeData::updateData(RingBuffer *buffer, int numChnls, int channel,
+                           double zoomx, double zoomy, bool freeze)
 {
 	CsoundUserData *ud = m_params->ud;
 	int width = m_params->width;
@@ -378,7 +460,6 @@ void ScopeData::updateData(int channel, double zoomx, double zoomy, bool freeze)
 	if (freeze)
 		return;
 	double value;
-	int numChnls = ud->numChnls;
 	MYFLT newValue;
     if (channel == 0 || channel > numChnls ) {
         return;
@@ -391,50 +472,64 @@ void ScopeData::updateData(int channel, double zoomx, double zoomy, bool freeze)
 #endif
     // FIXME how to make sure the buffer is read before it is flushed when recorded?
     // Have another buffer?
-	RingBuffer *buffer = &ud->audioOutputBuffer;
 	buffer->lock();
 	QList<MYFLT> list = buffer->buffer;
 	buffer->unlock();
 	long listSize = list.size();
-    long offset = buffer->currentPos;
-    long dataToRead = width;
-    // search for trig
-    long trigOffset = 0;
-    double lastValue = 1.0;
-    long maxFrames = width < dataToRead ? width: dataToRead;
+	double factor = numChnls * zoomx;
+	const long span = (long)(width * factor);
+	auto wrapIndex = [listSize](long v) {
+		v %= listSize;
+		if (v < 0) {
+			v += listSize;
+		}
+		return v;
+	};
+	// Anchor the window at the newest samples. currentPos points just past the
+	// most recent sample, so starting there would display the oldest data in the
+	// ring (adding a delay of the whole buffer).
+	long offset = wrapIndex(buffer->currentPos - span);
+    long maxFrames = width;
 
     if(m_params->triggerMode == TriggerMode::TriggerUp) {
-        if(channel >= 0) {
-            for(int i=0; i < maxFrames; i++) {
-                int idx = (int)((offset + (int)(i*numChnls*zoomx) + channel) % listSize);
-                double value = list[idx];
-                if(value >= 0 && lastValue < 0) {
-                    trigOffset = idx - offset - channel;
-                    break;
-                }
-                lastValue = value;
-            }
-        }
-        else {
-            for(int i=0; i < maxFrames; i++) {
-                int baseidx = (int)((offset + (int)(i*numChnls*zoomx)) % listSize);
-                double value = 0;
-                for(int chan = 0; chan < numChnls; chan++) {
-                    double newValue = list[baseidx+chan];
-                    if(fabs(newValue) > fabs(value))
-                        value = newValue;
-                }
-                if(value >= 0 && lastValue < 0) {
-                    trigOffset = baseidx - offset;
-                    break;
-                }
-                lastValue = value;
-            }
+		// Look for the most recent rising edge in the window one span before the
+		// newest samples, so the triggered window still contains a full span of
+		// already-written samples (no wrap-around discontinuity at its end).
+		const long searchStart = wrapIndex(buffer->currentPos - 2 * span);
+		long trigIndex = -1;
+		double lastValue = 1.0;
+		if(channel >= 0) {
+			for(int i=0; i < maxFrames; i++) {
+				int idx = (int)((searchStart + (long)(i*numChnls*zoomx) + channel) % listSize);
+				double value = list[idx];
+				if(value >= 0 && lastValue < 0) {
+					trigIndex = (long)idx - channel;
+					break;
+				}
+				lastValue = value;
+			}
+		}
+		else {
+			for(int i=0; i < maxFrames; i++) {
+				int baseidx = (int)((searchStart + (long)(i*numChnls*zoomx)) % listSize);
+				double value = 0;
+				for(int chan = 0; chan < numChnls; chan++) {
+					double newValue = list[(baseidx+chan) % listSize];
+					if(fabs(newValue) > fabs(value))
+						value = newValue;
+				}
+				if(value >= 0 && lastValue < 0) {
+					trigIndex = baseidx;
+					break;
+				}
+				lastValue = value;
+			}
 
-        }
-        offset += trigOffset;
+		}
+		if (trigIndex >= 0) {
+			offset = wrapIndex(trigIndex);
+		}
     }
-    double factor = numChnls * zoomx;
     int halfheight = height/2;
     if(channel >= 0) {
         for(int i = 0; i < maxFrames; i++) {
@@ -482,7 +577,7 @@ void ScopeData::updateData(int channel, double zoomx, double zoomy, bool freeze)
 	}
     */
     // buffer->currentReadPos += width;
-    buffer->currentReadPos = (offset + dataToRead) % buffer->size;
+    buffer->currentReadPos = (offset + span) % buffer->size;
 	m_params->widget->setSceneRect(0, -height/2, width, height );
 	curveData.last() = QPoint(width-4, 0);
 	curveData.first() = QPoint(0, 0);
@@ -521,7 +616,8 @@ void LissajouData::resize()
 	curve->setSize(m_params->width, m_params->height);
 }
 
-void LissajouData::updateData(int channel, double zoomx, double zoomy, bool freeze)
+void LissajouData::updateData(RingBuffer *buffer, int numChnls, int channel,
+                              double zoomx, double zoomy, bool freeze)
 {
 	// The decimation factor (zoom) is not used here
 	CsoundUserData *ud = m_params->ud;
@@ -532,7 +628,6 @@ void LissajouData::updateData(int channel, double zoomx, double zoomy, bool free
 	if (freeze)
 		return;
 	double x, y;
-	int numChnls = ud->numChnls;
 	// We take two consecutives channels, the first one for abscissas and
 	// the second one for ordinates
     if (channel == 0 || channel >= numChnls || numChnls < 2) {
@@ -543,12 +638,16 @@ void LissajouData::updateData(int channel, double zoomx, double zoomy, bool free
 	QReadWriteLock *mutex = m_params->mutex;
 	mutex->lockForWrite();
 #endif
-	RingBuffer *buffer = &ud->audioOutputBuffer;
 	buffer->lock();
 	QList<MYFLT> list = buffer->buffer;
 	buffer->unlock();
 	long listSize = list.size();
-	long offset = buffer->currentPos;
+	// Anchor at the newest samples (see ScopeData::updateData).
+	long offset = buffer->currentPos - (long)((long)curveData.size() * numChnls);
+	offset %= listSize;
+	if (offset < 0) {
+		offset += listSize;
+	}
 	for (int i = 0; i < curveData.size(); i++) {
 		int bufferIndex = (int)((i*numChnls) + offset + channel) % listSize;
 		x = (double)list[bufferIndex];
@@ -591,7 +690,8 @@ void PoincareData::resize()
 	curve->setSize(m_params->width, m_params->height);
 }
 
-void PoincareData::updateData(int channel, double zoomx, double zoomy, bool freeze)
+void PoincareData::updateData(RingBuffer *buffer, int numChnls, int channel,
+                              double zoomx, double zoomy, bool freeze)
 {
 	CsoundUserData *ud = m_params->ud;
 	int width = m_params->width;
@@ -601,7 +701,6 @@ void PoincareData::updateData(int channel, double zoomx, double zoomy, bool free
 	if (freeze)
 		return;
 	double value;
-	int numChnls = ud->numChnls;
     if (channel == 0 || channel > numChnls) {
         return;
 	}
@@ -610,12 +709,16 @@ void PoincareData::updateData(int channel, double zoomx, double zoomy, bool free
 	QReadWriteLock *mutex = m_params->mutex;
 	mutex->lockForWrite();
 #endif
-	RingBuffer *buffer = &ud->audioOutputBuffer;
 	buffer->lock();
 	QList<MYFLT> list = buffer->buffer;
 	buffer->unlock();
 	long listSize = list.size();
-	long offset = buffer->currentPos;
+	// Anchor at the newest samples (see ScopeData::updateData).
+	long offset = buffer->currentPos - (long)((long)curveData.size() * zoomx * numChnls);
+	offset %= listSize;
+	if (offset < 0) {
+		offset += listSize;
+	}
 	for (int i = 0; i < curveData.size(); i++) {
 		int bufferIndex = (int)((i*zoomx*numChnls) + offset + channel) % listSize;
 		value = (double)list[bufferIndex];

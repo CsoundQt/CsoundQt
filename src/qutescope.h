@@ -85,8 +85,11 @@ protected:
 	QComboBox *typeComboBox;
 	QComboBox *channelBox;
     QComboBox *triggerBox;
+	QLineEdit *name2LineEdit = nullptr;   // names a Csound audio channel to monitor
 	QDoubleSpinBox *zoomxBox;
 	QDoubleSpinBox *zoomyBox;
+	AudioChannelMonitor *m_monitor = nullptr; // acquired for m_channel2
+	QString m_activeMonitorName;
 	ScopeParams *m_params;
 	DataDisplay *m_dataDisplay;
 	ScopeData *m_scopeData;
@@ -99,6 +102,7 @@ protected:
 
 private:
 	void updateLabel();
+	void updateMonitor();
 	double m_zoomx = 1.0;
 	double m_zoomy = 1.0;
 
@@ -213,7 +217,8 @@ public:
 		m_params = params;
 	}
 	virtual void resize() = 0;
-    virtual void updateData(int channel, double zoomx, double zoomy, bool freeze) = 0;
+    virtual void updateData(RingBuffer *buffer, int numChnls, int channel,
+                            double zoomx, double zoomy, bool freeze) = 0;
 	virtual void show() = 0;
 	virtual void hide() = 0;
 
@@ -231,7 +236,8 @@ public:
     ScopeData(ScopeParams *params);
 	virtual ~ScopeData() {}
 	virtual void resize();
-	virtual void updateData(int channel, double zoomx, double zoomy, bool freeze);
+	virtual void updateData(RingBuffer *buffer, int numChnls, int channel,
+	                        double zoomx, double zoomy, bool freeze);
 	virtual void show();
 	virtual void hide();
 
@@ -252,7 +258,8 @@ public:
 	LissajouData(ScopeParams *params);
 	virtual ~LissajouData() {}
 	virtual void resize();
-	virtual void updateData(int channel, double zoomx, double zoomy, bool freeze);
+	virtual void updateData(RingBuffer *buffer, int numChnls, int channel,
+	                        double zoomx, double zoomy, bool freeze);
 	virtual void show();
 	virtual void hide();
 
@@ -271,7 +278,8 @@ public:
 	PoincareData(ScopeParams *params);
 	virtual ~PoincareData() {}
 	virtual void resize();
-	virtual void updateData(int channel, double zoomx, double zoomy, bool freeze);
+	virtual void updateData(RingBuffer *buffer, int numChnls, int channel,
+	                        double zoomx, double zoomy, bool freeze);
 	virtual void show();
 	virtual void hide();
 

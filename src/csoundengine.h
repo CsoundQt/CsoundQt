@@ -29,6 +29,7 @@
 #include <QAtomicInt>
 #include <QReadWriteLock>
 #include <QHash>
+#include <QByteArray>
 #include <functional>
 
 #include <csound.hpp>
@@ -67,6 +68,16 @@ typedef enum {
 	CSQT_NO_CONSOLE_MESSAGES = 4,
 	CSQT_NO_RT_EVENTS = 8
 } PerfFlags;
+
+// A named Csound audio channel (declared/set from the orchestra, e.g. with
+// "chnset asignal, \"name\"") that is monitored by one or more widgets. The
+// performance thread appends ksmps samples per cycle into the ring buffer;
+// widgets read it on the GUI thread.
+struct AudioChannelMonitor {
+	QByteArray nameUtf8;   // cached UTF-8 channel name (no allocation in the audio thread)
+	RingBuffer buffer;
+	int refCount = 0;      // number of widgets currently monitoring the channel
+};
 
 struct CsoundUserData {
 	int result; //result of csoundCompile()
@@ -176,6 +187,14 @@ public:
     CsoundUserData *getUserData();
     void clearConsoles(void);
 
+	// Named audio channel monitoring (used by the scope widget). Acquire/release
+	// are called from the GUI thread; the performance thread fills the buffers.
+	// Monitor objects persist for the lifetime of the engine so widget-held
+	// pointers never dangle.
+	AudioChannelMonitor *acquireAudioMonitor(const QString &name);
+	void releaseAudioMonitor(AudioChannelMonitor *monitor);
+	void resetAudioMonitors();
+
 #ifdef CSQT_DEBUGGER
 	bool m_debugging;
 
@@ -241,7 +260,12 @@ private:
 
 	void setupChannels();
 	void setupCallbacks();
-	
+	void fillAudioChannelMonitors(CsoundUserData *ud);
+
+	QHash<QString, AudioChannelMonitor *> m_audioMonitors;
+	QMutex m_audioMonitorsMutex;
+	QVector<MYFLT> m_audioMonitorScratch;
+
 	QList <int> getAnsiKeySequence(int key);
 
 	QFuture<void> m_msgUpdateThread;
