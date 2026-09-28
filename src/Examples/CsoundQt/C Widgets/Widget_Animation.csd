@@ -105,6 +105,8 @@ i 99 0 3600
 
 
 
+
+
 <bsbPanel>
  <label>Widget Animation</label>
  <objectName/>
@@ -147,6 +149,11 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -179,6 +186,11 @@ i 99 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -203,9 +215,9 @@ i 99 0 3600
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>164</r>
-   <g>92</g>
-   <b>118</b>
+   <r>15</r>
+   <g>10</g>
+   <b>155</b>
   </color>
   <textcolor>#512900</textcolor>
   <border>0</border>
@@ -238,7 +250,7 @@ i 99 0 3600
   <objectName>meter</objectName>
   <x>125</x>
   <y>127</y>
-  <width>223</width>
+  <width>227</width>
   <height>30</height>
   <uuid>{a0000000-0000-4000-8000-000000000005}</uuid>
   <widgetName>meter</widgetName>
@@ -260,9 +272,9 @@ i 99 0 3600
   <bordermode>border</bordermode>
   <borderColor>#5cb490</borderColor>
   <color>
-   <r>164</r>
-   <g>92</g>
-   <b>118</b>
+   <r>15</r>
+   <g>10</g>
+   <b>155</b>
   </color>
   <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
@@ -284,25 +296,30 @@ i 99 0 3600
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description>Elapsed time. Its colour is animated.</description>
-  <label>3.533</label>
+  <label>99.667</label>
   <alignment>center</alignment>
   <valignment>center</valignment>
   <font>Liberation Mono</font>
   <fontsize>18</fontsize>
   <precision>3</precision>
   <color>
-   <r>164</r>
-   <g>92</g>
-   <b>118</b>
+   <r>15</r>
+   <g>10</g>
+   <b>155</b>
   </color>
-  <bgcolor mode="background">
-   <r>221</r>
-   <g>240</g>
-   <b>226</b>
+  <bgcolor mode="nobackground">
+   <r>240</r>
+   <g>132</g>
+   <b>132</b>
   </bgcolor>
-  <bordermode>false</bordermode>
+  <bordercolor>
+   <r>176</r>
+   <g>59</g>
+   <b>59</b>
+  </bordercolor>
+  <bordermode>true</bordermode>
   <borderradius>5</borderradius>
-  <borderwidth>0</borderwidth>
+  <borderwidth>2</borderwidth>
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>pulse</objectName>
@@ -319,18 +336,30 @@ i 99 0 3600
   <type>event</type>
   <pressedValue>1.00000000</pressedValue>
   <stringvalue/>
-  <text>t =  3.5 s</text>
+  <text>t = 99.7 s</text>
   <image>/</image>
   <eventLine>i 2 0 4</eventLine>
   <latch>false</latch>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>12</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>76</r>
+   <g>227</g>
+   <b>111</b>
+  </color>
+  <pressedColor>#143d1d</pressedColor>
+  <borderColor>#a2f178</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor>#c5c5c5</pressedTextColor>
+  <borderWidth>3</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>mover</objectName>
   <x>79</x>
-  <y>200</y>
+  <y>228</y>
   <width>100</width>
   <height>100</height>
   <uuid>{a0000000-0000-4000-8000-000000000008}</uuid>
@@ -347,9 +376,9 @@ i 99 0 3600
   <resolution>0.01000000</resolution>
   <randomizable group="0">false</randomizable>
   <color>
-   <r>1</r>
-   <g>167</g>
-   <b>190</b>
+   <r>38</r>
+   <g>87</g>
+   <b>236</b>
   </color>
   <textcolor>#003040</textcolor>
   <border>2</border>

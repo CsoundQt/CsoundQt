@@ -32,7 +32,7 @@ i 2 0 3600
  <x>383</x>
  <y>118</y>
  <width>401</width>
- <height>606</height>
+ <height>765</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
@@ -367,6 +367,138 @@ Buttons can be set to "latch".</label>
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>15</x>
+  <y>610</y>
+  <width>250</width>
+  <height>29</height>
+  <uuid>{b1a2c3d4-1111-2222-3333-444455556666}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Flat buttons</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Arial</font>
+  <fontsize>20</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>noborder</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>10</x>
+  <y>640</y>
+  <width>375</width>
+  <height>68</height>
+  <uuid>{b1a2c3d4-7777-8888-9999-aaaabbbbcccc}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>Flat buttons are drawn by CsoundQt instead of the native platform style, so they look the same on every platform. Background, pressed background, text, pressed text and border colours, border width and corner radius are configurable (enable "Flat" in the button properties).</label>
+  <alignment>left</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>12</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="background">
+   <r>184</r>
+   <g>195</g>
+   <b>200</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>5</borderradius>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>flatevent</objectName>
+  <x>30</x>
+  <y>716</y>
+  <width>150</width>
+  <height>34</height>
+  <uuid>{c2b3d4e5-1234-5678-9abc-def012345678}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description>Flat event button</description>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Flat Event</text>
+  <image>/</image>
+  <eventLine>i 1 0 3</eventLine>
+  <latch>false</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>12</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>58</r>
+   <g>123</g>
+   <b>213</b>
+  </color>
+  <pressedColor>#2a5aa0</pressedColor>
+  <borderColor>#1f3f73</borderColor>
+  <textColor>#ffffff</textColor>
+  <pressedTextColor>#ffffff</pressedTextColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>10</borderRadius>
+ </bsbObject>
+ <bsbObject type="BSBButton" version="2">
+  <objectName>flatlatch</objectName>
+  <x>200</x>
+  <y>716</y>
+  <width>160</width>
+  <height>34</height>
+  <uuid>{d3c4e5f6-2345-6789-abcd-ef0123456789}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description>Latched flat button: shows the pressed colour while latched</description>
+  <type>event</type>
+  <pressedValue>1.00000000</pressedValue>
+  <stringvalue/>
+  <text>Flat Latched</text>
+  <image>/</image>
+  <eventLine>i1 0 -10</eventLine>
+  <latch>true</latch>
+  <momentaryMidiButton>false</momentaryMidiButton>
+  <latched>false</latched>
+  <fontsize>12</fontsize>
+  <flatStyle>true</flatStyle>
+  <color>
+   <r>232</r>
+   <g>232</g>
+   <b>232</b>
+  </color>
+  <pressedColor>#4caf50</pressedColor>
+  <borderColor>#9e9e9e</borderColor>
+  <textColor>#333333</textColor>
+  <pressedTextColor>#ffffff</pressedTextColor>
+  <borderWidth>1</borderWidth>
+  <borderRadius>17</borderRadius>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
