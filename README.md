@@ -80,6 +80,7 @@ and experienced Csound users.
 ![Whole-manual search](doc/images/screenshot-manual-search.png)
 
 ### Platforms
+
 ![CsoundQt on macOS](doc/images/screenshot3-macos.jpg)
 ![CsoundQt on Windows](doc/images/screenshot5-win.jpg)
 
@@ -115,5 +116,5 @@ pull request. See [`BUILDING.md`](BUILDING.md) and the
 ## License
 
 CsoundQt is licensed under the **GPLv3**, or at your option the **LGPLv2.1**.
-It was originally written by Andrés Cabrera and is maintained by the CsoundQt
-community.
+It was originally written by Andrés Cabrera and is maintained by Eduardo Moguillansky, 
+Tarmo Johannes, Joachim Heintz and the CsoundQt community.
