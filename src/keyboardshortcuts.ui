@@ -18,6 +18,16 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
+    <widget class="QLineEdit" name="filterLineEdit">
+     <property name="placeholderText">
+      <string>Filter shortcuts...</string>
+     </property>
+     <property name="clearButtonEnabled">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QTableWidget" name="tableWidget">
      <property name="minimumSize">
       <size>

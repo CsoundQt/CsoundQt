@@ -30,6 +30,7 @@
 #include <QTemporaryDir>
 #include <QTemporaryFile>
 #include <QStandardPaths>
+#include <QSysInfo>
 #include <QProcess>
 #include <QShortcut>
 #include <QtConcurrent/QtConcurrentRun>
@@ -1378,25 +1379,25 @@ QString CsoundQt::getSaveFileName()
     return fileName;
 }
 
-void CsoundQt::createQuickRefPdf()
-{
-    QString tempFileName(QDir::tempPath() + QDir::separator() +
-                         "QuteCsound Quick Reference.pdf");
-    QString internalFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
-    internalFileName += m_configlists.languageCodes[m_options->language];
-    internalFileName += ".pdf";
-    if (!QFile::exists(internalFileName)) {
-        internalFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
-    }
-    //  qDebug() << "CsoundQt::createQuickRefPdf() Opening " << internalFileName;
-    QFile file(internalFileName);
-    file.open(QIODevice::ReadOnly);
-    QFile quickRefFile(tempFileName);
-    quickRefFile.open(QFile::WriteOnly);
-    QDataStream quickRefIn(&quickRefFile);
-    quickRefIn << file.readAll();
-    quickRefFileName = tempFileName;
-}
+// void CsoundQt::createQuickRefPdf()
+// {
+//     QString tempFileName(QDir::tempPath() + QDir::separator() +
+//                          "QuteCsound Quick Reference.pdf");
+//     QString internalFileName = ":/doc/QuteCsound Quick Reference (0.4)-";
+//     internalFileName += m_configlists.languageCodes[m_options->language];
+//     internalFileName += ".pdf";
+//     if (!QFile::exists(internalFileName)) {
+//         internalFileName = ":/doc/QuteCsound Quick Reference (0.4).pdf";
+//     }
+//     //  qDebug() << "CsoundQt::createQuickRefPdf() Opening " << internalFileName;
+//     QFile file(internalFileName);
+//     file.open(QIODevice::ReadOnly);
+//     QFile quickRefFile(tempFileName);
+//     quickRefFile.open(QFile::WriteOnly);
+//     QDataStream quickRefIn(&quickRefFile);
+//     quickRefIn << file.readAll();
+//     quickRefFileName = tempFileName;
+// }
 
 void CsoundQt::deleteTab(int index)
 {
@@ -2813,7 +2814,7 @@ void CsoundQt::setHelpEntry()
             return helpForEntry(capt);
         }
     }
-    QString word = documentPages[curPage]->wordUnderCursor();
+    QString word = documentPages[curPage]->getView()->helpWordUnderCursor();
     return helpForEntry(word);
 }
 
@@ -3130,22 +3131,99 @@ void CsoundQt::openManualExample(QString fileName)
     loadFile(fileName);
 }
 
+void CsoundQt::reportExternalLaunchFailure(const QString &tool, const QString &toolPath,
+                                           const QUrl &url, const QString &errorString)
+{
+    QStringList lines;
+    lines << QStringLiteral("CsoundQt version: ") + CSQT_VERSION;
+    lines << QStringLiteral("Qt version: ") + QString::fromLatin1(qVersion());
+    lines << QStringLiteral("OS: ") + QSysInfo::prettyProductName()
+                 + QStringLiteral(" (") + QSysInfo::kernelType() + QLatin1Char(' ')
+                 + QSysInfo::kernelVersion() + QLatin1Char(')');
+    lines << QStringLiteral("Action: open ") + tool;
+    lines << QStringLiteral("URL: ") + url.toString();
+    lines << QStringLiteral("Configured ") + tool + QStringLiteral(" path: ")
+                 + (toolPath.isEmpty() ? QStringLiteral("<empty>") : toolPath);
+    if (!toolPath.isEmpty()) {
+        const QFileInfo toolInfo(toolPath);
+        lines << QStringLiteral("  exists=%1 isFile=%2 isDir=%3 isExecutable=%4")
+                     .arg(toolInfo.exists()).arg(toolInfo.isFile())
+                     .arg(toolInfo.isDir()).arg(toolInfo.isExecutable());
+        if (toolInfo.isSymLink()) {
+            lines << QStringLiteral("  symLinkTarget=") + toolInfo.symLinkTarget();
+        }
+    }
+    lines << QStringLiteral("Error: ")
+                 + (errorString.isEmpty() ? QStringLiteral("<none>") : errorString);
+    const QString details = lines.join(QLatin1Char('\n'));
+
+    qWarning().noquote() << "Could not open external" << tool << ":\n" << details;
+    if (logFile.isOpen()) {
+        logFile.write((details + QLatin1Char('\n')).toUtf8());
+        logFile.flush();
+    }
+    if (m_console != nullptr) {
+        m_console->appendMessage(tr("Could not open external %1:\n%2\n").arg(tool, details));
+    }
+
+    // A modal dialog is shown at most once per tool and session, so a broken
+    // configuration is reported without nagging on every invocation.
+    static QSet<QString> reportedTools;
+    if (reportedTools.contains(tool)) {
+        return;
+    }
+    reportedTools.insert(tool);
+
+    QMessageBox box(this);
+    box.setIcon(QMessageBox::Warning);
+    box.setWindowTitle(tr("External program could not be opened"));
+    box.setText(tr("CsoundQt could not open the external %1.").arg(tool));
+    box.setInformativeText(tr("Please expand \"Show Details...\" and copy the information "
+                              "into your bug report."));
+    box.setDetailedText(details);
+    box.setStandardButtons(QMessageBox::Ok);
+    box.exec();
+}
+
 void CsoundQt::openExternalBrowser(QUrl url)
 {
-    QString test = url.toString();
+    if (url.isEmpty()) {
+        return;
+    }
+
     if (!m_options->browser.isEmpty()) {
-        //execute(m_options->browser, "\"" + url.toString() + "\"");
-        startProcess(m_options->browser, QStringList(url.toString()));
-        // execute(m_options->browser, url.toString()); // remove quotes, otherwise wrong with changed QProcess
+        const QFileInfo browserInfo(m_options->browser);
+        QString launchError;
+        if (browserInfo.isExecutable() && !browserInfo.isDir()) {
+            if (startProcess(m_options->browser, QStringList(url.toString()), &launchError) == 0) {
+                return;
+            }
+        } else {
+            // On macOS the default is an .app bundle, which is a directory and
+            // cannot be executed directly by QProcess.
+            launchError = tr("\"%1\" is not an executable file "
+                             "(exists=%2, isFile=%3, isDir=%4, isExecutable=%5)")
+                              .arg(m_options->browser)
+                              .arg(browserInfo.exists())
+                              .arg(browserInfo.isFile())
+                              .arg(browserInfo.isDir())
+                              .arg(browserInfo.isExecutable());
+        }
+        qDebug() << "Configured browser could not be launched, trying default system browser";
+        if (!QDesktopServices::openUrl(url)) {
+            launchError += QLatin1Char('\n')
+                           + tr("The system default browser also failed "
+                                "(QDesktopServices::openUrl() returned false).");
+        }
+        reportExternalLaunchFailure(tr("browser"), m_options->browser, url, launchError);
+        return;
     }
-    else {
-//        QMessageBox::critical(this, tr("Error"),
-//                              tr("Could not open external browser:\n%1\n"
-//                                 "Please check preferences.").arg(m_options->browser));
-        qDebug() << "No browser found from option, trying default system browser";
-        QDesktopServices::openUrl(url);
+
+    qDebug() << "No browser found from option, trying default system browser";
+    if (!QDesktopServices::openUrl(url)) {
+        reportExternalLaunchFailure(tr("browser"), QString(), url,
+                                    tr("QDesktopServices::openUrl() returned false"));
     }
-    //QDesktopServices::openUrl(url); // this opens it twice
 }
 
 void CsoundQt::increaseFontSize()
@@ -3781,6 +3859,14 @@ QPalette CsoundQt::makeAppPalette(bool dark)
         p.setColor(QPalette::Disabled, QPalette::ButtonText, QColor("#7f8c8d"));
     }
 
+    // PlaceholderText is not set above, so it would fall back to a default
+    // that can be unreadable (dark-on-dark). Derive it from the text colour
+    // so it contrasts with the field background in both themes
+    // (cf. FindBar::applyPalette()).
+    QColor placeholder = p.color(QPalette::Text);
+    placeholder.setAlpha(150);
+    p.setColor(QPalette::PlaceholderText, placeholder);
+
     return p;
 }
 
@@ -4312,6 +4398,12 @@ void CsoundQt::autocomplete()
 {
     DocumentPage* page = documentPages[curPage];
     page->autocomplete();
+}
+
+void CsoundQt::insertOpcode()
+{
+    DocumentPage* page = documentPages[curPage];
+    page->insertOpcode();
 }
 
 #ifdef CSQT_DEBUGGER
@@ -4969,7 +5061,7 @@ void CsoundQt::createActions()
     externalBrowserAct->setShortcutContext(Qt::ApplicationShortcut);
 
     connect(externalBrowserAct, &QAction::triggered, this,
-            [this](){this->helpForEntry(documentPages[curPage]->wordUnderCursor(), true);});
+            [this](){this->helpForEntry(documentPages[curPage]->getView()->helpWordUnderCursor(), true);});
 
     openDocumentationAct = new QAction(/*QIcon(prefix + "gtk-info.png"), */ tr("CsoundQt Documentation (online)"), this);
     openDocumentationAct->setStatusTip(tr("open CsoundQt Documentation in browser"));
@@ -5085,6 +5177,10 @@ void CsoundQt::createActions()
     autocompleteAct->setShortcutContext(Qt::ApplicationShortcut);
     connect(autocompleteAct, SIGNAL(triggered()), this, SLOT(autocomplete()));
 
+    insertOpcodeAct = new QAction(tr("Insert Opcode"), this);
+    insertOpcodeAct->setShortcutContext(Qt::ApplicationShortcut);
+    connect(insertOpcodeAct, SIGNAL(triggered()), this, SLOT(insertOpcode()));
+
     //	showParametersAct = new QAction(tr("Show available parameters"),this);
     //	connect(showParametersAct,SIGNAL(triggered()), this, SLOT(showParametersInEditor()));
 
@@ -5163,6 +5259,7 @@ void CsoundQt::setKeyboardShortcutsList()
     m_keyActions.append(showTableEditorAct);
     m_keyActions.append(checkSyntaxAct);
     m_keyActions.append(autocompleteAct);
+    m_keyActions.append(insertOpcodeAct);
 #if defined(CSQT_QTHTML)
     m_keyActions.append(raiseHtml5Act);
 #endif
@@ -5359,6 +5456,7 @@ void CsoundQt::createMenus()
     editMenu->addAction(copyAct);
     editMenu->addAction(pasteAct);
     editMenu->addAction(autocompleteAct);
+    editMenu->addAction(insertOpcodeAct);
     editMenu->addAction(evaluateAct);
     editMenu->addAction(evaluateSectionAct);
     editMenu->addAction(scratchPadCsdModeAct);
@@ -6315,7 +6413,7 @@ void CsoundQt::clearSettings()
     settings.sync();
 }
 
-int CsoundQt::startProcess(QString executable, const QStringList &args) {
+int CsoundQt::startProcess(QString executable, const QStringList &args, QString *errorString) {
     QString path = documentPages[curPage]->getFilePath();
     if (path.startsWith(":", Qt::CaseInsensitive) ) {
         // example or other embedded file
@@ -6329,7 +6427,11 @@ int CsoundQt::startProcess(QString executable, const QStringList &args) {
     }
     p->start();
     if (!p->waitForStarted()) {
-        qDebug() << "Failed to start process:" << executable << args << p->errorString();
+        const QString error = p->errorString();
+        qDebug() << "Failed to start process:" << executable << args << error;
+        if (errorString != nullptr) {
+            *errorString = error;
+        }
         return 1;
     } else {
         qDebug() << "Launched external program with id:" << p->processId();

@@ -131,7 +131,9 @@ void DockHelp::showGen()
 void DockHelp::showOverview()
 {
 	this->setVisible(true);
+	this->raise();
 	this->loadFile(docDir + "/opcodesQuickRef.html");
+	this->focusText();
 }
 
 void DockHelp::showOpcodeQuickRef()

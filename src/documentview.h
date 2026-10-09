@@ -59,6 +59,7 @@ protected:
 };
 
 class FindBar;
+class OpcodeInsertBar;
 
 class DocumentView : public BaseView
 {
@@ -86,6 +87,11 @@ public:
 	QString wordUnderCursor();
     QString lineUnderCursor();
 	QString getActiveSection();
+	// Word for "Opcode Entry" lookup: explicit selection wins, otherwise the
+	// word at the cursor if it names a known opcode, otherwise the nearest
+	// known opcode before the cursor on the same line (the leniency the
+	// status bar signature matching has).
+	QString helpWordUnderCursor();
 	QString getActiveText();
     int currentLineNumber();
 	bool isModified();
@@ -122,6 +128,7 @@ public slots:
 	void replaceCurrent();
 	void replaceAll();
 	void closeFindBar();
+	void showOpcodeInsertBar();
 	void evaluate();
 	void updateContext();
 	void updateOrcContext(QString orc);
@@ -173,6 +180,7 @@ private:
 	QString changeToInvalue(QString text);
 
 	void ensureFindBar();
+	void ensureOpcodeInsertBar();
 	void collectFindMatches();
 	void updateFindHighlights(bool moveCursor);
 	void updateFindStatus();
@@ -199,6 +207,7 @@ private:
 	QString lastReplace;
 
 	FindBar *m_findBar = nullptr;
+	OpcodeInsertBar *m_opcodeInsertBar = nullptr;
 	QList<QTextEdit::ExtraSelection> m_findSelections;
 	QVector<QPair<int, int>> m_findMatches;
 	int m_findCurrent = -1;

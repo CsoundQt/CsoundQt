@@ -183,6 +183,7 @@ public:
     void gotoLineDialog();
     void goBackToPreviousPosition();
     void autocomplete();
+    void insertOpcode();
 
 public slots:
 	virtual int play(CsoundOptions *options);

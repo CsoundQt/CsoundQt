@@ -21,6 +21,7 @@
 */
 
 #include <QApplication>
+#include <QProxyStyle>
 #ifndef CSQT_NO_SPLASH
 #include <QSplashScreen>
 #endif
@@ -59,6 +60,44 @@ BOOL IsWow64() {
 }
 #endif
 
+// Some desktop styles (e.g. Breeze) put themed icons on dialog buttons
+// (Yes/No/Cancel/...). Those icons follow the desktop icon theme rather
+// than the application palette, so they can end up dark-on-dark when
+// CsoundQt uses a dark palette. Use text-only dialog buttons everywhere
+// instead, matching the Fusion style behaviour.
+class DialogButtonStyle : public QProxyStyle
+{
+public:
+    using QProxyStyle::QProxyStyle;
+    QIcon standardIcon(StandardPixmap standardIcon,
+                       const QStyleOption *option = nullptr,
+                       const QWidget *widget = nullptr) const override
+    {
+        switch (standardIcon) {
+        case SP_DialogOkButton:
+        case SP_DialogCancelButton:
+        case SP_DialogCloseButton:
+        case SP_DialogApplyButton:
+        case SP_DialogResetButton:
+        case SP_DialogHelpButton:
+        case SP_DialogSaveButton:
+        case SP_DialogSaveAllButton:
+        case SP_DialogOpenButton:
+        case SP_DialogYesButton:
+        case SP_DialogYesToAllButton:
+        case SP_DialogNoButton:
+        case SP_DialogNoToAllButton:
+        case SP_DialogAbortButton:
+        case SP_DialogRetryButton:
+        case SP_DialogIgnoreButton:
+        case SP_DialogDiscardButton:
+            return QIcon();
+        default:
+            return QProxyStyle::standardIcon(standardIcon, option, widget);
+        }
+    }
+};
+
 int main(int argc, char *argv[])
 {
     int result = 0;
@@ -91,6 +130,11 @@ int main(int argc, char *argv[])
     qApp->setStyle(QStyleFactory::create("Fusion"));
     // QQuickStyle::setStyle(QStringLiteral("Fusion"));
 #endif
+
+    // Strip style-provided dialog button icons (see DialogButtonStyle).
+    // This wraps whatever style is active, so it also applies to the
+    // message boxes shown below and to every dialog in the application.
+    qApp->setStyle(new DialogButtonStyle(qApp->style()));
 
     bool autoplay = false;
     QStringList args = qapp.arguments();

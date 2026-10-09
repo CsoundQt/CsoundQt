@@ -22,6 +22,7 @@
 
 #include "documentview.h"
 #include "findbar.h"
+#include "opcodeinsertbar.h"
 #include "opentryparser.h"
 #include "types.h"
 
@@ -608,6 +609,36 @@ QString DocumentView::wordUnderCursor()
 	return word;
 }
 
+QString DocumentView::helpWordUnderCursor()
+{
+	if (m_viewMode >= 2) {
+		// TODO check properly for line number also from other editors
+		qDebug() << "Not implemented for split view.";
+		return QString();
+	}
+	QTextCursor cursor = m_mainEditor->textCursor();
+	if (cursor.hasSelection())
+		return cursor.selectedText();
+	cursor.select(QTextCursor::WordUnderCursor);
+	QString word = cursor.selectedText();
+	if (m_opcodeTree->isOpcode(word))
+		return word;
+	// Fall back to the nearest known opcode before the cursor on the same
+	// line, mirroring how the status bar signature matching behaves, so
+	// help is found even when the cursor sits on an argument or whitespace
+	// past the opcode.
+	cursor = m_mainEditor->textCursor();
+	cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::MoveAnchor);
+	cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+	static const QRegularExpression wordBoundary("\\b");
+	auto words = cursor.selectedText().split(wordBoundary, SKIP_EMPTY_PARTS);
+	for (int i = words.size() - 1; i >= 0; --i) {
+		if (m_opcodeTree->isOpcode(words[i]))
+			return words[i];
+	}
+	return word;
+}
+
 QString DocumentView::getActiveSection()
 {
 	// Will return all document if there are no ## boundaries (for any kind of file)
@@ -1126,6 +1157,10 @@ void DocumentView::textChanged() {
 void DocumentView::escapePressed()
 {
 	// TODO implment for multiple views
+	if (m_opcodeInsertBar && m_opcodeInsertBar->isVisible()) {
+		m_opcodeInsertBar->hideBar();
+		return;
+	}
 	if (m_findBar && m_findBar->isVisible()) {
 		closeFindBar();
 		return;
@@ -1240,6 +1275,36 @@ void DocumentView::ensureFindBar()
 	connect(m_findBar, &FindBar::replaceRequested, this, &DocumentView::replaceCurrent);
 	connect(m_findBar, &FindBar::replaceAllRequested, this, &DocumentView::replaceAll);
 	connect(m_findBar, &FindBar::closed, this, &DocumentView::closeFindBar);
+}
+
+void DocumentView::ensureOpcodeInsertBar()
+{
+	if (m_opcodeInsertBar)
+		return;
+	m_opcodeInsertBar = new OpcodeInsertBar(m_mainEditor);
+	connect(m_opcodeInsertBar, &OpcodeInsertBar::opcodeChosen, this, [this](const QString &opcode) {
+		if (m_viewMode < 2) {
+			internalChange = true; // suppress autocomplete/syntax work for this edit
+			QTextCursor cursor = m_mainEditor->textCursor();
+			cursor.insertText(opcode);
+			m_mainEditor->setTextCursor(cursor);
+		}
+		else {
+			qDebug() << "Not implemented for split view";
+		}
+		m_opcodeInsertBar->hideBar();
+	});
+}
+
+void DocumentView::showOpcodeInsertBar()
+{
+	if (m_viewMode >= 2) {
+		qDebug() << "Not implemented for split view.";
+		return;
+	}
+	ensureOpcodeInsertBar();
+	m_opcodeInsertBar->setOpcodes(m_opcodeTree->opcodeNameList());
+	m_opcodeInsertBar->showBar();
 }
 
 void DocumentView::collectFindMatches()

@@ -49,6 +49,7 @@ private:
 private slots:
 	void restoreDefaults();
 	void assignShortcut(int row, int column);
+	void filterTable(const QString &filter);
 	QString getShortcut(QString action);
 
 signals:

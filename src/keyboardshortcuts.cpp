@@ -29,10 +29,13 @@ KeyboardShortcuts::KeyboardShortcuts(QWidget *parent, const QVector<QAction *> k
     m_modified = false;
 	setupUi(this);
 	setWindowTitle(tr("Keyboard Shortcuts"));
-	refreshTable();
 	//   QDialog::setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 	connect(restorePushButton, SIGNAL(released()), this, SLOT(restoreDefaults()));
 	connect(tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(assignShortcut(int, int)));
+	// Incremental filter: hide rows that match neither action nor shortcut text,
+	// cf. QuteWidget::showAvailableProperties()
+	connect(filterLineEdit, &QLineEdit::textChanged, this, &KeyboardShortcuts::filterTable);
+	refreshTable();
 }
 
 KeyboardShortcuts::~KeyboardShortcuts()
@@ -62,6 +65,20 @@ void KeyboardShortcuts::refreshTable()
 		key->setText(m_keyActions[i]->shortcut().toString());
 	}
     tableWidget->sortItems(0);
+	filterTable(filterLineEdit->text());
+}
+
+void KeyboardShortcuts::filterTable(const QString &filter)
+{
+	for (int row = 0; row < tableWidget->rowCount(); row++) {
+		QTableWidgetItem *name = tableWidget->item(row, 0);
+		QTableWidgetItem *key = tableWidget->item(row, 1);
+		const QString nameText = name != nullptr ? name->text() : QString();
+		const QString keyText = key != nullptr ? key->text() : QString();
+		const bool match = nameText.contains(filter, Qt::CaseInsensitive)
+			|| keyText.contains(filter, Qt::CaseInsensitive);
+		tableWidget->setRowHidden(row, !match);
+	}
 }
 
 bool KeyboardShortcuts::shortcutTaken(QString shortcut)

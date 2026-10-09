@@ -1291,3 +1291,7 @@ void DocumentPage::parseUdos(bool force) {
 void DocumentPage::autocomplete() {
     m_view->autoCompleteAtCursor();
 }
+
+void DocumentPage::insertOpcode() {
+    m_view->showOpcodeInsertBar();
+}

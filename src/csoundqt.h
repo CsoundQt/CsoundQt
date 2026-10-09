@@ -299,6 +299,7 @@ private slots:
 	void toggleLineArea();
 	void toggleParameterMode();
     void autocomplete();
+    void insertOpcode();
 //	void showParametersInEditor();
 	void onNewConnection(); // when new client is connecting to localServer
 	void onReadyRead(); // when message comes in
@@ -353,7 +354,9 @@ private:
 	void clearSettings();
     void setToolbarIconSize(int size);
     int execute(QString executable, QString options);
-    int startProcess(QString executable, const QStringList &args);
+    int startProcess(QString executable, const QStringList &args, QString *errorString = nullptr);
+    void reportExternalLaunchFailure(const QString &tool, const QString &toolPath,
+                                     const QUrl &url, const QString &errorString);
     //    bool saveCurrent();
 	bool makeNewPage(QString fileName, QString text);
 	bool loadCompanionFile(const QString &fileName);
@@ -365,7 +368,7 @@ private:
 	int isOpen(QString fileName);  // Returns index of document if open -1 if not open
 	//    void markErrorLine();
 	QString getSaveFileName();
-	void createQuickRefPdf();
+	// void createQuickRefPdf();
 	void deleteTab(int index = -1);
 	void openLogFile();
 	void showNewFormatWarning();
@@ -525,6 +528,7 @@ private:
     QAction *lineNumbersAct;
 	QAction *parameterModeAct;
     QAction *autocompleteAct;
+    QAction *insertOpcodeAct;
 //	QAction *showParametersAct;
     QAction *openExamplesFolderAct;
     QAction *increaseFontAction;

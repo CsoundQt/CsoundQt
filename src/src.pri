@@ -43,6 +43,7 @@ HEADERS = "src/about.h" \
     "src/inspector.h" \
     "src/keyboardshortcuts.h" \
     "src/node.h" \
+    "src/opcodeinsertbar.h" \
     "src/opentryparser.h" \
     "src/options.h" \
     "src/qutebutton.h" \
@@ -109,6 +110,7 @@ SOURCES = "src/about.cpp" \
     "src/keyboardshortcuts.cpp" \
     "src/main.cpp" \
     "src/node.cpp" \
+    "src/opcodeinsertbar.cpp" \
     "src/opentryparser.cpp" \
     "src/options.cpp" \
     "src/qutebutton.cpp" \
