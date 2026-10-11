@@ -1,0 +1,26 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+    <file>fonts/Sans/LiberationSans/LiberationSans-Regular.ttf</file>
+    <file>fonts/Sans/LiberationSans/LICENSE</file>
+    <file>fonts/Sans/NotoSans/NotoSans[wdth,wght].ttf</file>
+    <file>fonts/Sans/NotoSans/OFL.txt</file>
+    <file>fonts/Sans/Inter/Inter[opsz,wght].ttf</file>
+    <file>fonts/Sans/Inter/OFL.txt</file>
+    <file>fonts/Sans/SourceSans3/SourceSans3[wght].ttf</file>
+    <file>fonts/Sans/SourceSans3/OFL.txt</file>
+    <file>fonts/Sans/IBMPlexSans/IBMPlexSans[wdth,wght].ttf</file>
+    <file>fonts/Sans/IBMPlexSans/OFL.txt</file>
+    <file>fonts/Serif/IBMPlexSerif/IBMPlexSerif-Regular.ttf</file>
+    <file>fonts/Serif/IBMPlexSerif/OFL.txt</file>
+    <file>fonts/Serif/SourceSerif4/SourceSerif4[opsz,wght].ttf</file>
+    <file>fonts/Serif/SourceSerif4/OFL.txt</file>
+    <file>fonts/Serif/LiberationSerif/LiberationSerif-Regular.ttf</file>
+    <file>fonts/Serif/LiberationSerif/LICENSE</file>
+    <file>fonts/Mono/JetBrainsMono/JetBrainsMono[wght].ttf</file>
+    <file>fonts/Mono/JetBrainsMono/OFL.txt</file>
+    <file>fonts/Mono/IBMPlexMono/IBMPlexMono-Regular.ttf</file>
+    <file>fonts/Mono/IBMPlexMono/OFL.txt</file>
+    <file>fonts/Mono/LiberationMono/LiberationMono-Regular.ttf</file>
+    <file>fonts/Mono/LiberationMono/LICENSE</file>
+</qresource>
+</RCC>
