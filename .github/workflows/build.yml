@@ -305,7 +305,7 @@ jobs:
           cd csound
 
           # point ctcsound.py at the fixed framework location
-          sed -i -e 's$ctypes.util.find_library("CsoundLib64")$"/Applications/Csound/Csound64.framework/CsoundLib64"$g' Python/ctcsound.py
+          # sed -i -e 's$ctypes.util.find_library("CsoundLib64")$"/Applications/Csound/Csound64.framework/CsoundLib64"$g' Python/ctcsound.py
 
           mkdir -p csound_install/CsoundLib64.framework/Versions/7.0/Resources/Python
           cp Python/ctcsound.py csound_install/CsoundLib64.framework/Versions/7.0/Resources/Python
