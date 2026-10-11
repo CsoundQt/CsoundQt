@@ -37,6 +37,8 @@ i 1 0 3600
 </CsoundSynthesizer>
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -47,17 +49,18 @@ i 1 0 3600
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="background">
-  <r>195</r>
-  <g>210</g>
-  <b>220</b>
+  <r>199</r>
+  <g>216</g>
+  <b>225</b>
  </bgcolor>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>82</x>
   <y>5</y>
   <width>211</width>
   <height>40</height>
   <uuid>{8910a9af-b5e5-40df-a55d-f3ccb55c17be}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -78,17 +81,23 @@ i 1 0 3600
    <g>204</g>
    <b>234</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>6</x>
   <y>45</y>
   <width>362</width>
   <height>58</height>
   <uuid>{e525e33c-5cae-41a8-ac9d-80bcae4880c0}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -109,17 +118,23 @@ i 1 0 3600
    <g>195</g>
    <b>200</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>87</x>
   <y>117</y>
   <width>116</width>
   <height>29</height>
   <uuid>{b0670b97-c937-4c65-9751-c2aeaf31107b}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -140,36 +155,23 @@ i 1 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBHSlider">
-  <objectName>tempo</objectName>
-  <x>6</x>
-  <y>153</y>
-  <width>249</width>
-  <height>26</height>
-  <uuid>{e577cd24-27ff-47d4-9e61-8d53430df5f2}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <description/>
-  <minimum>30.00000000</minimum>
-  <maximum>180.00000000</maximum>
-  <value>93.25301205</value>
-  <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
-  <resolution>-1.00000000</resolution>
-  <randomizable group="0">true</randomizable>
- </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>117</x>
   <y>178</y>
   <width>80</width>
   <height>25</height>
   <uuid>{c23fb7ff-a3d4-4e89-9628-1b0f3221e3db}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -190,17 +192,23 @@ i 1 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>326</x>
   <y>153</y>
   <width>49</width>
   <height>25</height>
   <uuid>{5de22031-4f6c-49d1-b5ac-d4512bc4d7ad}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -221,17 +229,23 @@ i 1 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>time</objectName>
   <x>203</x>
   <y>111</y>
   <width>166</width>
   <height>35</height>
   <uuid>{c21e0e5c-fe9a-442a-838c-3cc6a6a79766}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -252,17 +266,23 @@ i 1 0 3600
    <g>240</g>
    <b>226</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>location</objectName>
   <x>10</x>
   <y>205</y>
   <width>367</width>
   <height>48</height>
   <uuid>{12fa0947-bffd-4521-8e3b-93f0a01c7861}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -283,22 +303,28 @@ i 1 0 3600
    <g>55</g>
    <b>60</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBDisplay">
+ <bsbObject type="BSBDisplay" version="2">
   <objectName>tempo</objectName>
   <x>259</x>
   <y>153</y>
   <width>68</width>
   <height>26</height>
   <uuid>{cacc9d21-8be0-474f-a070-8a5be7834973}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
   <description/>
-  <label>93.253</label>
+  <label>0.718</label>
   <alignment>right</alignment>
   <valignment>top</valignment>
   <font>Liberation Sans</font>
@@ -314,9 +340,52 @@ i 1 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBController" version="2">
+  <objectName>tempo</objectName>
+  <x>10</x>
+  <y>153</y>
+  <width>250</width>
+  <height>24</height>
+  <uuid>{829997bc-e773-4bf3-a169-4d5f061f0d94}</uuid>
+  <widgetName/>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <description/>
+  <objectName2/>
+  <xMin>0.00000000</xMin>
+  <xMax>1.00000000</xMax>
+  <yMin>0.00000000</yMin>
+  <yMax>1.00000000</yMax>
+  <xValue>0.71759375</xValue>
+  <yValue>0.00000000</yValue>
+  <type>fill</type>
+  <pointsize>1</pointsize>
+  <fadeSpeed>0.00000000</fadeSpeed>
+  <mouseControl act="press">jump</mouseControl>
+  <bordermode>border</bordermode>
+  <borderColor>#00622f</borderColor>
+  <color>
+   <r>0</r>
+   <g>177</g>
+   <b>83</b>
+  </color>
+  <randomizable group="0" mode="both">false</randomizable>
+  <bgcolor>
+   <r>0</r>
+   <g>65</g>
+   <b>30</b>
+  </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>

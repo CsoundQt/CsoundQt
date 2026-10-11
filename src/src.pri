@@ -37,6 +37,7 @@ HEADERS = "src/about.h" \
     "src/documentpage.h" \
     "src/documentview.h" \
     "src/dotgenerator.h" \
+    "src/externallauncher.h" \
     "src/eventsheet.h" \
     "src/findreplace.h" \
     "src/findbar.h" \
@@ -105,6 +106,7 @@ SOURCES = "src/about.cpp" \
     "src/documentpage.cpp" \
     "src/documentview.cpp" \
     "src/dotgenerator.cpp" \
+    "src/externallauncher.cpp" \
     "src/eventsheet.cpp" \
     "src/findreplace.cpp" \
     "src/findbar.cpp" \

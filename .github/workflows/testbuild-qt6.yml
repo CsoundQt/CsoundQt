@@ -589,4 +589,93 @@ jobs:
             QMAKE_CXX="ccache g++" \
             qcs.pro
           make -j$(nproc)
-          
+
+  # Fast, self-contained tests for opening links / .html files in a configured
+  # browser or the system default application (src/externallauncher.cpp).
+  # No Csound or full CsoundQt build needed, so this covers macOS and Windows
+  # where the behavior differs (e.g. the macOS .app bundle default).
+  external-launch-tests:
+    name: External open tests on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Install Qt in linux
+        if: runner.os == 'linux'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.7.0'
+          host: linux
+          target: desktop
+          arch: linux_gcc_64
+          cache: true
+
+      - name: Install Qt in macOS
+        if: runner.os == 'macOS'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.7.0'
+          host: mac
+          target: desktop
+          arch: clang_64
+          cache: true
+
+      - name: Install Qt in windows
+        if: runner.os == 'Windows'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          host: windows
+          target: desktop
+          arch: win64_msvc2022_64
+          cache: true
+
+      - name: Set up MSVC command line environment (windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Build and run external open tests (unix)
+        if: runner.os != 'Windows'
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          set -euo pipefail
+          qmake --version
+          mkdir -p tests-build
+          cd tests-build
+          qmake ../tests/tests.pro CONFIG+=release
+          if command -v nproc >/dev/null 2>&1; then
+            JOBS=$(nproc)
+          else
+            JOBS=$(sysctl -n hw.logicalcpu)
+          fi
+          make -j"${JOBS}"
+          ./test_externallauncher -v2
+
+      - name: Build and run external open tests (windows)
+        if: runner.os == 'Windows'
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          set -euo pipefail
+          qmake --version
+          mkdir -p tests-build
+          cd tests-build
+          qmake ../tests/tests.pro CONFIG+=release
+          nmake
+          EXE=$(find . -maxdepth 2 -iname 'test_externallauncher*.exe' -type f | head -1)
+          test -n "${EXE}" || { echo "test executable not found"; ls -R .; exit 1; }
+          "${EXE}" -v2
+

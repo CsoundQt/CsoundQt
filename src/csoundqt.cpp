@@ -41,6 +41,7 @@
 #include "console.h"
 #include "dockhelp.h"
 #include "documentpage.h"
+#include "externallauncher.h"
 #include "inspector.h"
 #include "opentryparser.h"
 #include "options.h"
@@ -3191,38 +3192,9 @@ void CsoundQt::openExternalBrowser(QUrl url)
         return;
     }
 
-    if (!m_options->browser.isEmpty()) {
-        const QFileInfo browserInfo(m_options->browser);
-        QString launchError;
-        if (browserInfo.isExecutable() && !browserInfo.isDir()) {
-            if (startProcess(m_options->browser, QStringList(url.toString()), &launchError) == 0) {
-                return;
-            }
-        } else {
-            // On macOS the default is an .app bundle, which is a directory and
-            // cannot be executed directly by QProcess.
-            launchError = tr("\"%1\" is not an executable file "
-                             "(exists=%2, isFile=%3, isDir=%4, isExecutable=%5)")
-                              .arg(m_options->browser)
-                              .arg(browserInfo.exists())
-                              .arg(browserInfo.isFile())
-                              .arg(browserInfo.isDir())
-                              .arg(browserInfo.isExecutable());
-        }
-        qDebug() << "Configured browser could not be launched, trying default system browser";
-        if (!QDesktopServices::openUrl(url)) {
-            launchError += QLatin1Char('\n')
-                           + tr("The system default browser also failed "
-                                "(QDesktopServices::openUrl() returned false).");
-        }
-        reportExternalLaunchFailure(tr("browser"), m_options->browser, url, launchError);
-        return;
-    }
-
-    qDebug() << "No browser found from option, trying default system browser";
-    if (!QDesktopServices::openUrl(url)) {
-        reportExternalLaunchFailure(tr("browser"), QString(), url,
-                                    tr("QDesktopServices::openUrl() returned false"));
+    QString errorString;
+    if (!ExternalLauncher::openBrowser(m_options->browser, url, &errorString)) {
+        reportExternalLaunchFailure(tr("browser"), m_options->browser, url, errorString);
     }
 }
 
@@ -6440,24 +6412,7 @@ int CsoundQt::startProcess(QString executable, const QStringList &args, QString 
         // example or other embedded file
         path = QDir::tempPath();   // copy of example is saved there
     }
-    auto p = new QProcess();
-    p->setProgram(executable);
-    p->setArguments(args);
-    if ( QDir(path).exists()) {
-        p->setWorkingDirectory(path);
-    }
-    p->start();
-    if (!p->waitForStarted()) {
-        const QString error = p->errorString();
-        qDebug() << "Failed to start process:" << executable << args << error;
-        if (errorString != nullptr) {
-            *errorString = error;
-        }
-        return 1;
-    } else {
-        qDebug() << "Launched external program with id:" << p->processId();
-        return 0;
-    }
+    return ExternalLauncher::launchExecutable(executable, args, path, errorString) ? 0 : 1;
 }
 
 int CsoundQt::execute(QString executable, QString options)

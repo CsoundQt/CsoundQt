@@ -42,6 +42,8 @@ i 2 0 1000
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -409,7 +411,7 @@ i 2 0 1000
   <description/>
   <minimum>100.00000000</minimum>
   <maximum>2000.00000000</maximum>
-  <value>1013.52000000</value>
+  <value>776.02000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -526,7 +528,7 @@ i 2 0 1000
  <bsbObject type="BSBKnob" version="2">
   <objectName>db</objectName>
   <x>576</x>
-  <y>87</y>
+  <y>88</y>
   <width>80</width>
   <height>80</height>
   <uuid>{306097e3-bce9-4931-bb48-f487c50cac65}</uuid>
@@ -537,7 +539,7 @@ i 2 0 1000
   <description/>
   <minimum>-60.00000000</minimum>
   <maximum>0.00000000</maximum>
-  <value>-12.00000000</value>
+  <value>-9.00000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>

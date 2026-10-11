@@ -45,6 +45,8 @@ f 0 3600
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -61,11 +63,12 @@ f 0 3600
  </bgcolor>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>83</x>
-  <y>6</y>
+  <x>100</x>
+  <y>5</y>
   <width>197</width>
   <height>41</height>
   <uuid>{2d5f32c3-fe84-423c-bf3a-c17e7e332060}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -86,17 +89,23 @@ f 0 3600
    <g>204</g>
    <b>234</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>23</x>
-  <y>50</y>
+  <x>40</x>
+  <y>49</y>
   <width>291</width>
   <height>104</height>
   <uuid>{f6d0f932-fa22-486e-8167-b37311d339c2}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -117,17 +126,23 @@ f 0 3600
    <g>172</g>
    <b>180</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>5</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>type</objectName>
-  <x>90</x>
-  <y>170</y>
+  <x>107</x>
+  <y>169</y>
   <width>80</width>
   <height>30</height>
   <uuid>{941b60cb-e13f-45c3-b7c3-cba6c825c8bf}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
@@ -154,11 +169,12 @@ f 0 3600
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
-  <x>185</x>
-  <y>170</y>
+  <x>199</x>
+  <y>168</y>
   <width>160</width>
   <height>30</height>
   <uuid>{ada21fd8-091b-4dc6-bc5f-b140c2284ef5}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
@@ -173,14 +189,27 @@ f 0 3600
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>177</r>
+   <g>191</g>
+   <b>200</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#767f85</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBDropdown" version="2">
   <objectName>transp</objectName>
-  <x>90</x>
-  <y>205</y>
+  <x>107</x>
+  <y>204</y>
   <width>80</width>
   <height>30</height>
   <uuid>{39df8add-fa10-4f77-a705-e163fc12ee36}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
@@ -207,11 +236,12 @@ f 0 3600
  </bsbObject>
  <bsbObject type="BSBButton" version="2">
   <objectName>button1</objectName>
-  <x>185</x>
-  <y>205</y>
+  <x>199</x>
+  <y>203</y>
   <width>160</width>
   <height>30</height>
   <uuid>{64b6bf1d-6215-4db6-8d37-8f14cf2fcb38}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
@@ -226,14 +256,27 @@ f 0 3600
   <momentaryMidiButton>false</momentaryMidiButton>
   <latched>false</latched>
   <fontsize>10</fontsize>
+  <flatStyle>false</flatStyle>
+  <color>
+   <r>177</r>
+   <g>191</g>
+   <b>200</b>
+  </color>
+  <pressedColor/>
+  <borderColor>#767f85</borderColor>
+  <textColor>#000000</textColor>
+  <pressedTextColor/>
+  <borderWidth>0</borderWidth>
+  <borderRadius>3</borderRadius>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>35</x>
-  <y>175</y>
+  <x>47</x>
+  <y>172</y>
   <width>56</width>
   <height>25</height>
   <uuid>{78057116-2f3b-472a-bd12-7aa070157cb6}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -254,17 +297,23 @@ f 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
-  <x>15</x>
-  <y>210</y>
-  <width>80</width>
+  <x>13</x>
+  <y>207</y>
+  <width>90</width>
   <height>25</height>
   <uuid>{c3561f00-6a33-4e0a-8274-6b876f838c1b}</uuid>
+  <widgetName/>
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>-3</midicc>
@@ -285,7 +334,12 @@ f 0 3600
    <g>255</g>
    <b>255</b>
   </bgcolor>
-  <bordermode>noborder</bordermode>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
+  <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>

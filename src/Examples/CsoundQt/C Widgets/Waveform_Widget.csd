@@ -13,21 +13,21 @@ nchnls = 2
 Waveform widget example.
 
 The widget draws the samples of a Csound f-table.
-  - Send the table number to its table channel ("waveTable") to select what to
-    display. Send a negative value to redraw the current table.
-  - The cursor position (in samples) is read/written through the cursor channel
-    ("waveCursor"): set it with chnset/outvalue, read it with chnget. Clicking in
+  - Send the table number to its table channel ("waveTable")
+  to select what to display. Send a negative value to redraw
+  the current table.
+  - The cursor position (in samples) is read/written through
+  the cursor channel ("waveCursor"): set it with 
+  chnset/outvalue, read it with chnget. Clicking in
     the widget moves the cursor and updates the channel.
-  - Clicking sets the cursor; Ctrl+drag pans the view; the mouse wheel zooms
-    in/out around the mouse and Shift+wheel scrolls.
-  - The waveform is kept after the performance stops, so it can still be
-    inspected and zoomed.
+  - Clicking sets the cursor. Ctrl+drag pans the view. the mouse
+  wheel zooms in/out around the mouse and Shift+wheel scrolls.
+  - The waveform is kept after the performance stops, so it can
+  still be inspected and zoomed.
 
-The example table is a stereo soundfile (gen 1), so the widget is told that the
-table is interleaved with 2 channels. Channels are drawn stacked, one lane per
-channel, sharing the time axis but with a separate amplitude axis each; set
-Channels in the widget properties (or leave it at 0 to auto-detect with
-ftchnls()).
+The example table is a stereo soundfile (gen 1), so the widget 
+is told that the table is interleaved with 2 channels. Channels are drawn stacked, one lane per channel, sharing the time axis 
+but with a separate amplitude axis each. set Channels in the widget properties (or leave it at 0 to auto-detect with ftchnls()).
 */
 
 giWave ftgen 0, 0, 0, 1, "../../SourceMaterials/ClassicalGuitar.wav", 0, 0, 0
@@ -113,6 +113,8 @@ schedule 2, 0.5, -1
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -155,6 +157,11 @@ schedule 2, 0.5, -1
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
@@ -173,7 +180,7 @@ schedule 2, 0.5, -1
   <description/>
   <value>101</value>
   <objectName2>waveCursor</objectName2>
-  <cursor>836474</cursor>
+  <cursor>302763</cursor>
   <color>
    <r>80</r>
    <g>200</g>
@@ -230,6 +237,11 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
    <g>255</g>
    <b>255</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>3</borderradius>
   <borderwidth>0</borderwidth>
@@ -262,6 +274,11 @@ number of channels (0 = auto); channels are stacked in separate lanes.</label>
    <g>54</g>
    <b>59</b>
   </bgcolor>
+  <bordercolor>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </bordercolor>
   <bordermode>false</bordermode>
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
